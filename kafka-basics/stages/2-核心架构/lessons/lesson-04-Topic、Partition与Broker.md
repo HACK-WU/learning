@@ -57,7 +57,7 @@
 - **Partition（分区）** 是 Topic 的**物理分片**：一个 Topic 由 1~N 个 Partition 组成，每个 Partition 是一个**只追加（append-only）、按 offset 严格有序**的日志。
 - **offset** 是消息在**单个 Partition 内**的位置编号（0,1,2…），单调递增。
 
-![Partition 内部结构](./assets/partition-offset-structure.svg)
+![Partition 内部结构](../assets/partition-offset-structure.svg)
 
 > 这张图就是"文字讲不清、画出来一眼懂"的东西——一个 Partition 就是一串带编号的消息格子，新消息永远追加到末尾。记住：**分区是 Kafka 并行与扩展的基本单位**，后面讲生产者、消费者时，所有"并行度"都绕不开 Partition 数量。
 
@@ -82,7 +82,7 @@
 
 Kafka 把消息按到达顺序**追加到日志末尾**，磁盘磁头顺序移动、无需随机寻道，从而榨干磁盘的顺序吞吐。
 
-![顺序写 vs 随机写](./assets/sequential-vs-random-write.svg)
+![顺序写 vs 随机写](../assets/sequential-vs-random-write.svg)
 
 #### 一句话记住
 
@@ -102,7 +102,7 @@ Kafka 把消息按到达顺序**追加到日志末尾**，磁盘磁头顺序移�
 
 消费者读消息时，若走传统路线，数据要经历「磁盘 → 内核缓冲 → 用户缓冲 → Socket 缓冲 → 网卡」共 4 次拷贝；Kafka 用 **sendfile（零拷贝）**，让内核直接把页缓存里的数据发到网卡，只剩 2 次拷贝，CPU 和内存带宽开销大幅下降。
 
-![零拷贝数据路径](./assets/zero-copy-path.svg)
+![零拷贝数据路径](../assets/zero-copy-path.svg)
 
 #### 一句话记住
 
