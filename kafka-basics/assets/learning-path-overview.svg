@@ -1,72 +1,68 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 440" font-family="-apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif">
-  <rect width="940" height="440" fill="#0d1117"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 450" font-family="-apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="940" height="450" fill="#0d1117"/>
   <text x="40" y="44" fill="#e6edf3" font-size="22" font-weight="700">Kafka 系统学习 · 学习路径总览</text>
   <text x="40" y="68" fill="#8b949e" font-size="13">故事主线：主角「消息的流动」→ 冲突「系统耦合 / 积压 / 丢失 / 扛不住峰值」→ 收束「能设计事件驱动架构 + 写出生产级代码」</text>
 
   <!-- Stage 1 -->
   <g>
-    <rect x="20" y="100" width="210" height="250" rx="10" fill="#161b22" stroke="#58a6ff" stroke-width="2"/>
+    <rect x="20" y="100" width="210" height="260" rx="10" fill="#161b22" stroke="#58a6ff" stroke-width="2"/>
     <text x="125" y="128" fill="#58a6ff" font-size="15" font-weight="700" text-anchor="middle">阶段 1 · 动机</text>
     <text x="125" y="150" fill="#8b949e" font-size="11" text-anchor="middle">「系统开始喘不过气」</text>
     <line x1="40" y1="165" x2="210" y2="165" stroke="#30363d"/>
     <text x="34" y="190" fill="#e6edf3" font-size="12">▸ 课1 为什么需要消息队列</text>
-    <text x="34" y="214" fill="#8b949e" font-size="10.5">  同步调用痛点 / MQ 是什么</text>
-    <text x="34" y="244" fill="#8b949e" font-size="10.5">  削峰·异步·解耦</text>
-    <text x="34" y="278" fill="#e6edf3" font-size="12">▸ 课2 Kafka 是什么</text>
-    <text x="34" y="302" fill="#8b949e" font-size="10.5">  起源定位 / 四大角色</text>
-    <text x="34" y="326" fill="#8b949e" font-size="10.5">  与其他 MQ 对比</text>
+    <text x="34" y="214" fill="#8b949e" font-size="10.5">  痛点 / MQ 是什么 / 三大价值</text>
+    <text x="34" y="248" fill="#e6edf3" font-size="12">▸ 课2 Kafka 是什么</text>
+    <text x="34" y="272" fill="#8b949e" font-size="10.5">  起源定位 / 四大角色</text>
+    <text x="34" y="296" fill="#8b949e" font-size="10.5">  与其他 MQ 对比</text>
   </g>
 
-  <!-- arrow 1->2 -->
-  <path d="M232 225 L246 225" stroke="#8b949e" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M232 230 L246 230" stroke="#8b949e" stroke-width="2" marker-end="url(#arrow)"/>
   <!-- Stage 2 -->
   <g>
-    <rect x="250" y="100" width="210" height="250" rx="10" fill="#161b22" stroke="#3fb950" stroke-width="2"/>
+    <rect x="250" y="100" width="210" height="260" rx="10" fill="#161b22" stroke="#3fb950" stroke-width="2"/>
     <text x="355" y="128" fill="#3fb950" font-size="15" font-weight="700" text-anchor="middle">阶段 2 · 核心架构</text>
     <text x="355" y="150" fill="#8b949e" font-size="11" text-anchor="middle">「认识这套物流系统」</text>
     <line x1="270" y1="165" x2="440" y2="165" stroke="#30363d"/>
-    <text x="264" y="190" fill="#e6edf3" font-size="12">▸ 课3 Topic/Part/Broker</text>
-    <text x="264" y="214" fill="#8b949e" font-size="10.5">  分片模型 / 集群</text>
-    <text x="264" y="244" fill="#8b949e" font-size="10.5">  顺序写·零拷贝</text>
-    <text x="264" y="278" fill="#e6edf3" font-size="12">▸ 课4 生产者 Producer</text>
-    <text x="264" y="302" fill="#8b949e" font-size="10.5">  发送流程 / 分区策略</text>
-    <text x="264" y="326" fill="#8b949e" font-size="10.5">  acks 与可靠性</text>
-    <text x="264" y="356" fill="#e6edf3" font-size="12">▸ 课5 消费者与组</text>
+    <text x="264" y="188" fill="#e6edf3" font-size="12">▸ 课3 起 Kafka + CLI（动手）</text>
+    <text x="264" y="212" fill="#8b949e" font-size="10.5">  KRaft 一键起 / 发收消息</text>
+    <text x="264" y="242" fill="#e6edf3" font-size="12">▸ 课4 Topic/Part/Broker</text>
+    <text x="264" y="266" fill="#8b949e" font-size="10.5">  分片 / 顺序写 / 零拷贝</text>
+    <text x="264" y="296" fill="#e6edf3" font-size="12">▸ 课5 生产者 / 课6 消费者</text>
+    <text x="264" y="320" fill="#8b949e" font-size="10.5">  分区策略 / acks / offset</text>
+    <text x="264" y="344" fill="#8b949e" font-size="10.5">  消费者组 / 再均衡</text>
   </g>
 
-  <!-- arrow 2->3 -->
-  <path d="M462 225 L476 225" stroke="#8b949e" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M462 230 L476 230" stroke="#8b949e" stroke-width="2" marker-end="url(#arrow)"/>
   <!-- Stage 3 -->
   <g>
-    <rect x="480" y="100" width="210" height="250" rx="10" fill="#161b22" stroke="#d29922" stroke-width="2"/>
+    <rect x="480" y="100" width="210" height="260" rx="10" fill="#161b22" stroke="#d29922" stroke-width="2"/>
     <text x="585" y="128" fill="#d29922" font-size="15" font-weight="700" text-anchor="middle">阶段 3 · 可靠高可用</text>
     <text x="585" y="150" fill="#8b949e" font-size="11" text-anchor="middle">「不能丢消息、不能挂」</text>
     <line x1="500" y1="165" x2="670" y2="165" stroke="#30363d"/>
-    <text x="494" y="190" fill="#e6edf3" font-size="12">▸ 课6 副本与 ISR</text>
+    <text x="494" y="190" fill="#e6edf3" font-size="12">▸ 课7 副本与 ISR</text>
     <text x="494" y="214" fill="#8b949e" font-size="10.5">  replica / leader-follower</text>
     <text x="494" y="244" fill="#8b949e" font-size="10.5">  ISR / 控制器选举</text>
-    <text x="494" y="278" fill="#e6edf3" font-size="12">▸ 课7 交付语义与幂等</text>
+    <text x="494" y="278" fill="#e6edf3" font-size="12">▸ 课8 交付语义与幂等</text>
     <text x="494" y="302" fill="#8b949e" font-size="10.5">  at-most/at-least/exactly</text>
-    <text x="494" y="326" fill="#8b949e" font-size="10.5">  幂等 producer</text>
+    <text x="494" y="326" fill="#8b949e" font-size="10.5">  幂等 producer / 事务</text>
   </g>
 
-  <!-- arrow 3->4 -->
-  <path d="M692 225 L706 225" stroke="#8b949e" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M692 230 L706 230" stroke="#8b949e" stroke-width="2" marker-end="url(#arrow)"/>
   <!-- Stage 4 -->
   <g>
-    <rect x="710" y="100" width="210" height="250" rx="10" fill="#161b22" stroke="#bc8cff" stroke-width="2"/>
+    <rect x="710" y="100" width="210" height="260" rx="10" fill="#161b22" stroke="#bc8cff" stroke-width="2"/>
     <text x="815" y="128" fill="#bc8cff" font-size="15" font-weight="700" text-anchor="middle">阶段 4 · 实战落地</text>
     <text x="815" y="150" fill="#8b949e" font-size="11" text-anchor="middle">「把它用进你的项目」</text>
     <line x1="730" y1="165" x2="900" y2="165" stroke="#30363d"/>
-    <text x="724" y="190" fill="#e6edf3" font-size="12">▸ 课8 搭建与 CLI</text>
-    <text x="724" y="214" fill="#8b949e" font-size="10.5">  KRaft 一键起</text>
-    <text x="724" y="244" fill="#8b949e" font-size="10.5">  命令行验证机制</text>
-    <text x="724" y="278" fill="#e6edf3" font-size="12">▸ 课9 代码开发</text>
-    <text x="724" y="302" fill="#8b949e" font-size="10.5">  生产者 / 消费者代码</text>
-    <text x="724" y="336" fill="#e6edf3" font-size="12">▸ 课10 架构设计</text>
+    <text x="724" y="190" fill="#e6edf3" font-size="12">▸ 课9 代码开发</text>
+    <text x="724" y="214" fill="#8b949e" font-size="10.5">  选客户端 / 写生产者</text>
+    <text x="724" y="244" fill="#8b949e" font-size="10.5">  写消费者（位移提交）</text>
+    <text x="724" y="278" fill="#e6edf3" font-size="12">▸ 课10 架构设计</text>
+    <text x="724" y="302" fill="#8b949e" font-size="10.5">  EDA / 常见拓扑</text>
+    <text x="724" y="326" fill="#8b949e" font-size="10.5">  决策清单 / 生态定位</text>
   </g>
 
-  <text x="40" y="400" fill="#6e7681" font-size="11">零基础友好 · 目标：理解架构 → 应用到项目架构 → 实际代码开发 ｜ 共 4 阶段 / 10 课 / 约 30 知识点</text>
+  <text x="40" y="410" fill="#6e7681" font-size="11">零基础友好 · 目标：理解架构 → 应用到项目架构 → 实际代码开发 ｜ 共 4 阶段 / 10 课 / 31 知识点（课3 起真动手）</text>
 
   <defs>
     <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">

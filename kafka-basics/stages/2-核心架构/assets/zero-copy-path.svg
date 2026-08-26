@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" font-family="-apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="720" height="320" fill="#0d1117"/>
+  <text x="30" y="38" fill="#e6edf3" font-size="17" font-weight="700">零拷贝（Zero-Copy）：把数据从磁盘送到网卡的两种路线</text>
+
+  <!-- 左：传统拷贝 -->
+  <g>
+    <rect x="30" y="60" width="320" height="230" rx="10" fill="#161b22" stroke="#f85149" stroke-width="2"/>
+    <text x="190" y="86" fill="#f85149" font-size="14" font-weight="700" text-anchor="middle">传统方式：4 次拷贝 + 4 次上下文切换</text>
+
+    <rect x="150" y="100" width="80" height="34" rx="6" fill="#0d1117" stroke="#30363d"/>
+    <text x="190" y="121" fill="#e6edf3" font-size="12" text-anchor="middle">磁盘文件</text>
+    <path d="M190 134 L190 150" stroke="#f85149" stroke-width="2" marker-end="url(#ca)"/>
+    <rect x="150" y="152" width="80" height="34" rx="6" fill="#0d1117" stroke="#30363d"/>
+    <text x="190" y="173" fill="#e6edf3" font-size="12" text-anchor="middle">内核缓冲区</text>
+    <path d="M190 186 L190 202" stroke="#f85149" stroke-width="2" marker-end="url(#ca)"/>
+    <rect x="150" y="204" width="80" height="34" rx="6" fill="#0d1117" stroke="#30363d"/>
+    <text x="190" y="225" fill="#e6edf3" font-size="12" text-anchor="middle">用户缓冲区</text>
+
+    <rect x="150" y="252" width="80" height="26" rx="6" fill="#0d1117" stroke="#30363d"/>
+    <text x="190" y="269" fill="#8b949e" font-size="11" text-anchor="middle">↓ Socket / 网卡</text>
+  </g>
+
+  <!-- 右：零拷贝 -->
+  <g>
+    <rect x="370" y="60" width="320" height="230" rx="10" fill="#161b22" stroke="#3fb950" stroke-width="2"/>
+    <text x="530" y="86" fill="#3fb950" font-size="14" font-weight="700" text-anchor="middle">零拷贝 sendfile：2 次拷贝、免用户态</text>
+
+    <rect x="490" y="100" width="80" height="34" rx="6" fill="#0d1117" stroke="#30363d"/>
+    <text x="530" y="121" fill="#e6edf3" font-size="12" text-anchor="middle">磁盘文件</text>
+    <path d="M530 134 L530 150" stroke="#3fb950" stroke-width="2" marker-end="url(#cb)"/>
+    <rect x="490" y="152" width="80" height="34" rx="6" fill="#0d1117" stroke="#30363d"/>
+    <text x="530" y="173" fill="#e6edf3" font-size="12" text-anchor="middle">页缓存 Page Cache</text>
+    <path d="M530 186 L530 210" stroke="#3fb950" stroke-width="2" marker-end="url(#cb)"/>
+    <rect x="490" y="212" width="80" height="34" rx="6" fill="#0d1117" stroke="#30363d"/>
+    <text x="530" y="233" fill="#e6edf3" font-size="12" text-anchor="middle">Socket / 网卡</text>
+
+    <text x="530" y="270" fill="#3fb950" font-size="11" text-anchor="middle">跳过「用户缓冲区」这一步，少倒一次手</text>
+  </g>
+
+  <text x="30" y="306" fill="#8b949e" font-size="12">零拷贝：内核直接把页缓存里的数据经 sendfile 发到网卡，不拷贝进应用内存 → 更省 CPU、更快。</text>
+
+  <defs>
+    <marker id="ca" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#f85149"/>
+    </marker>
+    <marker id="cb" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#3fb950"/>
+    </marker>
+  </defs>
+</svg>

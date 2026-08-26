@@ -31,5 +31,5 @@
 
 ## 本阶段产出
 
-- [ ] `lessons/lesson-01-why-message-queue.md`
-- [ ] `lessons/lesson-02-what-is-kafka.md`
+- [x] `lessons/lesson-01-为什么需要消息队列.md`
+- [x] `lessons/lesson-02-Kafka是什么与起源定位.md`

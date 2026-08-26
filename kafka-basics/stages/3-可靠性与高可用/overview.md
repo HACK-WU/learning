@@ -18,12 +18,12 @@
 
 | 知识点 | 所属课 | 学完应能 |
 |--------|--------|----------|
-| 副本与 leader/follower | 课6 | 解释读写都走 leader、follower 只同步 |
-| ISR 机制 | 课6 | 说清 ISR 缩小时会不会丢消息 |
-| 控制器选举与故障转移 | 课6 | 解释 leader 挂了如何恢复 |
-| 三种交付语义 | 课7 | 区分 at-most/at-least/exactly-once |
-| 幂等 producer | 课7 | 解释如何避免重复写入 |
-| 事务简介 | 课7 | 知道事务解决"读-改-写"原子性 |
+| 副本与 leader/follower | 课7 | 解释读写都走 leader、follower 只同步 |
+| ISR 机制 | 课7 | 说清 ISR 缩小时会不会丢消息 |
+| 控制器选举与故障转移 | 课7 | 解释 leader 挂了如何恢复 |
+| 三种交付语义 | 课8 | 区分 at-most/at-least/exactly-once |
+| 幂等 producer | 课8 | 解释如何避免重复写入 |
+| 事务简介 | 课8 | 知道事务解决"读-改-写"原子性 |
 
 ## 🗺️ 本阶段路径图
 
@@ -31,5 +31,5 @@
 
 ## 本阶段产出
 
-- [ ] `lessons/lesson-06-replication-isr.md`
-- [ ] `lessons/lesson-07-delivery-semantics.md`
+- [ ] `lessons/lesson-07-副本机制与故障转移.md`
+- [ ] `lessons/lesson-08-交付语义与幂等.md`

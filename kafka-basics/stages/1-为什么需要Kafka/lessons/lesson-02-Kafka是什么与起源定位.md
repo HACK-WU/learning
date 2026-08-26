@@ -101,18 +101,18 @@ flowchart LR
     T -->|分区存储在| B2[Broker 仓库2]
     B1 -->|拉取| C1[消费者A]
     B2 -->|拉取| C2[消费者B]
-    style T fill:#161b22,stroke:#3fb950
-    style B1 fill:#161b22,stroke:#58a6ff
-    style B2 fill:#161b22,stroke:#58a6ff
+    style T stroke:#3fb950,stroke-width:2px
+    style B1 stroke:#58a6ff,stroke-width:2px
+    style B2 stroke:#58a6ff,stroke-width:2px
 ```
 
 关键点（零基础先记住这 3 条）：
 
 1. **Topic 是"逻辑概念"**，真正的数据被切成若干 **Partition（分区）**，分散存在不同 Broker 上——这叫"分片"，是 Kafka 能横向扩展的根本（下节课细讲）。
 2. **Broker 是服务器进程**，一堆 Broker 凑成**集群**，挂掉几个也不影响整体。
-3. **Consumer 自己记录"读到哪了"**（这个进度叫 offset，第 5 课讲消费者时会细说），所以多个消费者可以**各读各的、互不打扰、还能从开头重读**。
+3. **Consumer 自己记录"读到哪了"**（这个进度叫 offset，第 6 课讲消费者时会细说），所以多个消费者可以**各读各的、互不打扰、还能从开头重读**。
 
-> 💡 历史小注：早期 Kafka 依赖 ZooKeeper 管理集群元数据；**Kafka 4.0（2025 发布）已彻底移除 ZooKeeper，改用内置的 KRaft 模式**（阶段 4 实操会用到）。你只需知道：现在 Kafka 自己管自己，不用再养一个 ZooKeeper 了。
+> 💡 历史小注：早期 Kafka 依赖 ZooKeeper 管理集群元数据；**Kafka 4.0（2025 发布）已彻底移除 ZooKeeper，改用内置的 KRaft 模式**（第 3 课实操会用到）。你只需知道：现在 Kafka 自己管自己，不用再养一个 ZooKeeper 了。
 
 #### 一句话记住
 
@@ -148,7 +148,7 @@ flowchart LR
 
 ## 第四幕：实操验证
 
-> 本课还没装 Kafka（第 8 课才动手），我们用**第一幕的电商场景重构**来验证"四大角色"是否真的解决了锁链问题。
+> 本课还没装 Kafka（第 3 课才动手），我们用**第一幕的电商场景重构**来验证"四大角色"是否真的解决了锁链问题。
 
 把第 1 课那个"下单卡死"的系统，用 Kafka 重画一遍：
 
@@ -173,7 +173,7 @@ flowchart LR
 ## 第五幕：体系收束
 
 > 📍 **全局定位**：Kafka 是本课请出的"主角"——一座可回放、高吞吐的中央数据枢纽。它解决的是第一幕的"系统耦合/积压/丢消息"，方式是把"锁链"改成"中转站 + 多订阅"。
-> 🔗 **下一步**：你现在已经知道 Kafka 是"什么"和"哪四个角色"。下一阶段（阶段 2）我们**走进枢纽内部**，先讲 Topic 怎么被切成 Partition、Broker 怎么组成集群、为什么 Kafka 这么快——也就是《第 3 课：Topic、Partition 与 Broker》。
+> 🔗 **下一步**：你现在已经知道 Kafka 是"什么"和"哪四个角色"。下一阶段（阶段 2）我们**走进枢纽内部**，先动手把 Kafka 跑起来（第 3 课），再讲 Topic 怎么被切成 Partition、Broker 怎么组成集群、为什么 Kafka 这么快（第 4 课）。
 
 ---
 
@@ -182,6 +182,11 @@ flowchart LR
 1. **"Kafka 就是个消息队列，和 RabbitMQ 一样"**：表面都是 MQ，但 Kafka 本质是**分布式提交日志**——消息持久保留、多个消费者各自记录进度**独立重放**，这是 RabbitMQ 的"取走即删"模型没有的。选型时要看"要不要可重放、要不要多订阅者"。
 2. **"Topic 就等于一个 Queue"**：不完全对。Topic 是**逻辑分类**，内部由多个 **Partition（有序日志）** 组成；真正有序的是"单个分区内"，跨分区不保证全局顺序。细节下节课展开。
 3. **"Kafka 默认会丢数据"**：恰恰相反，Kafka 默认把消息落盘。所谓"丢消息"几乎都来自**配置不当**（如生产端 `acks=0`、或副本数设错），可靠性是阶段 3 的主题，别现在就怕。
+
+## 📚 官方文档
+
+- [Apache Kafka 官方文档](https://kafka.apache.org/documentation/)：Kafka 权威文档，涵盖概念、配置、API 与 CLI 工具
+- [Kafka 快速开始](https://kafka.apache.org/quickstart)：官方 Quickstart，第 3 课会用到其中的启动与收发命令
 
 ## 一图总结
 
@@ -231,5 +236,5 @@ flowchart TD
 ```
 继续学 Kafka。我的学习档案在 kafka-basics/00-学习档案.md，
 刚学完阶段 1《为什么需要 Kafka》的课《Kafka 是什么 & 起源与定位》知识点 Kafka起源与定位、四大角色全景、Kafka vs 其他 MQ，
-请按大纲继续讲解下一批知识点（阶段 2 课3：Topic、Partition 与 Broker）。
+请按大纲继续讲解下一批知识点（阶段 2 课3：本地起 Kafka + CLI 快速上手）。
 ```
