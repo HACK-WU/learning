@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 230" font-family="-apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="720" height="230" fill="#fafafa"/>
+  <text x="360" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#1a1a2e">Python 单例的四种实现 · 从简单到复杂</text>
+
+  <!-- 列1：模块级变量（首选，绿色） -->
+  <rect x="20" y="55" width="160" height="130" rx="10" fill="#e8f7ef" stroke="#10b981" stroke-width="1.5"/>
+  <circle cx="100" cy="82" r="15" fill="#10b981"/>
+  <text x="100" y="87" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">首</text>
+  <text x="100" y="115" text-anchor="middle" font-size="13" font-weight="700" fill="#0f5132">模块级变量</text>
+  <text x="100" y="137" text-anchor="middle" font-size="11" fill="#1e6b4f">import 只执行一次</text>
+  <text x="100" y="155" text-anchor="middle" font-size="11" fill="#1e6b4f">全局唯一数据首选</text>
+
+  <line x1="180" y1="120" x2="196" y2="120" stroke="#94a3b8" stroke-width="2" marker-end="url(#a2)"/>
+
+  <!-- 列2：__new__ 拦截 -->
+  <rect x="200" y="55" width="160" height="130" rx="10" fill="#e8f1fb" stroke="#3b82f6" stroke-width="1.5"/>
+  <circle cx="280" cy="82" r="15" fill="#3b82f6"/>
+  <text x="280" y="87" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">2</text>
+  <text x="280" y="115" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a5f">__new__ 拦截</text>
+  <text x="280" y="137" text-anchor="middle" font-size="11" fill="#33557f">需要类形式</text>
+  <text x="280" y="155" text-anchor="middle" font-size="11" fill="#33557f">惰性初始化</text>
+
+  <line x1="360" y1="120" x2="376" y2="120" stroke="#94a3b8" stroke-width="2" marker-end="url(#a2)"/>
+
+  <!-- 列3：元类 -->
+  <rect x="380" y="55" width="160" height="130" rx="10" fill="#e8f1fb" stroke="#3b82f6" stroke-width="1.5"/>
+  <circle cx="460" cy="82" r="15" fill="#3b82f6"/>
+  <text x="460" y="87" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">3</text>
+  <text x="460" y="115" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a5f">元类</text>
+  <text x="460" y="137" text-anchor="middle" font-size="11" fill="#33557f">多个类都要单例</text>
+  <text x="460" y="155" text-anchor="middle" font-size="11" fill="#33557f">统一拦截复用</text>
+
+  <line x1="540" y1="120" x2="556" y2="120" stroke="#94a3b8" stroke-width="2" marker-end="url(#a2)"/>
+
+  <!-- 列4：线程安全 -->
+  <rect x="560" y="55" width="160" height="130" rx="10" fill="#e8f1fb" stroke="#3b82f6" stroke-width="1.5"/>
+  <circle cx="640" cy="82" r="15" fill="#3b82f6"/>
+  <text x="640" y="87" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">4</text>
+  <text x="640" y="115" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a5f">线程安全</text>
+  <text x="640" y="137" text-anchor="middle" font-size="11" fill="#33557f">双重检查锁定</text>
+  <text x="640" y="155" text-anchor="middle" font-size="11" fill="#33557f">高并发创建</text>
+
+  <text x="360" y="212" text-anchor="middle" font-size="12" fill="#666">能用模块就别上类；类形式只在需要惰性初始化 / 继承 / 统一控制实例化时用</text>
+
+  <defs>
+    <marker id="a2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+</svg>

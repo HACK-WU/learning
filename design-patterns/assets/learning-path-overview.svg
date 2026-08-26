@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 720" font-family="-apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="680" height="720" fill="#fafafa"/>
+
+  <!-- 标题 -->
+  <text x="340" y="42" text-anchor="middle" font-size="22" font-weight="700" fill="#1a1a2e">设计模式学习路径总览（Python）</text>
+  <text x="340" y="66" text-anchor="middle" font-size="13" fill="#666">4 阶段 · 12 课 · 从「造对象」到「综合重构」</text>
+
+  <!-- 故事主线横幅 -->
+  <rect x="40" y="90" width="600" height="56" rx="10" fill="#fff4e6" stroke="#f0a04b" stroke-width="1.5"/>
+  <text x="340" y="114" text-anchor="middle" font-size="14" font-weight="700" fill="#b45309">📖 故事主线：订单系统从「面条代码」进化到「清晰架构」</text>
+  <text x="340" y="134" text-anchor="middle" font-size="12" fill="#92400e">冲突：需求不断加码，改一处崩一片 → 收束：能自己看出变化点、选出合适模式</text>
+
+  <!-- 阶段 1 -->
+  <rect x="40" y="170" width="600" height="112" rx="12" fill="#e8f1fb" stroke="#3b82f6" stroke-width="1.5"/>
+  <rect x="40" y="170" width="600" height="34" rx="12" fill="#3b82f6"/>
+  <rect x="40" y="192" width="600" height="12" fill="#3b82f6"/>
+  <text x="60" y="193" font-size="15" font-weight="700" fill="#fff">阶段 1 · 地基与创建型 —— 会造对象，才能优雅地开始</text>
+  <text x="60" y="226" font-size="13" fill="#1e3a5f">课1 为什么需要设计模式（SOLID·坏味道） · 课2 单例 · 课3 工厂方法/抽象工厂 · 课4 建造者/原型</text>
+  <text x="60" y="248" font-size="12" fill="#33557f">🎯 学会：把 <tspan font-weight="700">new</tspan> 藏起来，让「创建对象」这件事可扩展、可复用</text>
+
+  <!-- 箭头 1→2 -->
+  <line x1="340" y1="282" x2="340" y2="310" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="352" y="300" font-size="11" fill="#64748b">先会造对象</text>
+
+  <!-- 阶段 2 -->
+  <rect x="40" y="314" width="600" height="112" rx="12" fill="#eafaf0" stroke="#22c55e" stroke-width="1.5"/>
+  <rect x="40" y="314" width="600" height="34" rx="12" fill="#22c55e"/>
+  <rect x="40" y="336" width="600" height="12" fill="#22c55e"/>
+  <text x="60" y="337" font-size="15" font-weight="700" fill="#fff">阶段 2 · 结构型 —— 把对象优雅地组合起来</text>
+  <text x="60" y="370" font-size="13" fill="#14532d">课5 适配器/外观 · 课6 装饰器/组合 · 课7 代理/桥接</text>
+  <text x="60" y="392" font-size="12" fill="#166534">🎯 学会：用「组合 + 委托」让不一致的接口协同，不靠继承硬套</text>
+
+  <!-- 箭头 2→3 -->
+  <line x1="340" y1="426" x2="340" y2="454" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="352" y="444" font-size="11" fill="#64748b">再会组合对象</text>
+
+  <!-- 阶段 3 -->
+  <rect x="40" y="458" width="600" height="112" rx="12" fill="#fdf2e9" stroke="#f97316" stroke-width="1.5"/>
+  <rect x="40" y="458" width="600" height="34" rx="12" fill="#f97316"/>
+  <rect x="40" y="480" width="600" height="12" fill="#f97316"/>
+  <text x="60" y="481" font-size="15" font-weight="700" fill="#fff">阶段 3 · 行为型 —— 让对象各司其职、松耦合协作</text>
+  <text x="60" y="514" font-size="13" fill="#7c2d12">课8 策略/模板方法 · 课9 观察者/状态 · 课10 命令/责任链 · 课11 迭代器+速览</text>
+  <text x="60" y="536" font-size="12" fill="#9a3412">🎯 学会：把「变化的行为」抽成可替换的策略，用事件/状态机解耦</text>
+
+  <!-- 箭头 3→4 -->
+  <line x1="340" y1="570" x2="340" y2="598" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="352" y="588" font-size="11" fill="#64748b">最后会协作</text>
+
+  <!-- 阶段 4 -->
+  <rect x="40" y="602" width="600" height="92" rx="12" fill="#f3eefe" stroke="#8b5cf6" stroke-width="1.5"/>
+  <rect x="40" y="602" width="600" height="34" rx="12" fill="#8b5cf6"/>
+  <rect x="40" y="624" width="600" height="12" fill="#8b5cf6"/>
+  <text x="60" y="625" font-size="15" font-weight="700" fill="#fff">阶段 4 · 综合实战 —— 把模式串起来，重构真实模块</text>
+  <text x="60" y="660" font-size="13" fill="#4c1d95">课12 用设计模式重构订单处理系统（识别坏味道 → 选模式 → 逐步重构 → 前后对比）</text>
+  <text x="60" y="682" font-size="12" fill="#6d28d9">🎯 收束：不是背模式名，而是能自己看出「变化点」、选出合适模式</text>
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+</svg>

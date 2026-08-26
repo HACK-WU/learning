@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 220" font-family="-apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="680" height="220" fill="#fafafa"/>
+  <text x="340" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#1a1a2e">阶段 3 · 行为型 —— 学习路径</text>
+
+  <rect x="20" y="55" width="150" height="120" rx="10" fill="#fdf2e9" stroke="#f97316" stroke-width="1.5"/>
+  <circle cx="95" cy="82" r="14" fill="#f97316"/>
+  <text x="95" y="87" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">8</text>
+  <text x="95" y="112" text-anchor="middle" font-size="13" font-weight="700" fill="#7c2d12">策略 · 模板方法</text>
+  <text x="95" y="132" text-anchor="middle" font-size="11" fill="#9a3412">算法可替换</text>
+  <text x="95" y="150" text-anchor="middle" font-size="11" fill="#9a3412">一等函数/钩子</text>
+
+  <line x1="170" y1="115" x2="186" y2="115" stroke="#94a3b8" stroke-width="2" marker-end="url(#a3)"/>
+
+  <rect x="190" y="55" width="150" height="120" rx="10" fill="#fdf2e9" stroke="#f97316" stroke-width="1.5"/>
+  <circle cx="265" cy="82" r="14" fill="#f97316"/>
+  <text x="265" y="87" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">9</text>
+  <text x="265" y="112" text-anchor="middle" font-size="13" font-weight="700" fill="#7c2d12">观察者 · 状态</text>
+  <text x="265" y="132" text-anchor="middle" font-size="11" fill="#9a3412">事件驱动</text>
+  <text x="265" y="150" text-anchor="middle" font-size="11" fill="#9a3412">状态机</text>
+
+  <line x1="340" y1="115" x2="356" y2="115" stroke="#94a3b8" stroke-width="2" marker-end="url(#a3)"/>
+
+  <rect x="360" y="55" width="150" height="120" rx="10" fill="#fdf2e9" stroke="#f97316" stroke-width="1.5"/>
+  <circle cx="435" cy="82" r="14" fill="#f97316"/>
+  <text x="435" y="87" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">10</text>
+  <text x="435" y="112" text-anchor="middle" font-size="13" font-weight="700" fill="#7c2d12">命令 · 责任链</text>
+  <text x="435" y="132" text-anchor="middle" font-size="11" fill="#9a3412">请求的封装</text>
+  <text x="435" y="150" text-anchor="middle" font-size="11" fill="#9a3412">请求的流转</text>
+
+  <line x1="510" y1="115" x2="526" y2="115" stroke="#94a3b8" stroke-width="2" marker-end="url(#a3)"/>
+
+  <rect x="530" y="55" width="150" height="120" rx="10" fill="#fdf2e9" stroke="#f97316" stroke-width="1.5"/>
+  <circle cx="605" cy="82" r="14" fill="#f97316"/>
+  <text x="605" y="87" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">11</text>
+  <text x="605" y="112" text-anchor="middle" font-size="13" font-weight="700" fill="#7c2d12">迭代器 · 速览</text>
+  <text x="605" y="132" text-anchor="middle" font-size="11" fill="#9a3412">生成器/协议</text>
+  <text x="605" y="150" text-anchor="middle" font-size="11" fill="#9a3412">备忘录/中介者等</text>
+
+  <text x="340" y="200" text-anchor="middle" font-size="12" fill="#666">算法替换（课8）→ 事件/状态解耦（课9）→ 请求封装流转（课10）→ 遍历+其余收尾（课11）</text>
+
+  <defs>
+    <marker id="a3" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+</svg>

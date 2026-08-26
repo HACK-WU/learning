@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" font-family="-apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="720" height="320" fill="#fafafa"/>
+  <text x="360" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#1a1a2e">三种工厂的演进 · 应对变化的能力递增</text>
+
+  <!-- 台阶3：抽象工厂（最高级） -->
+  <rect x="510" y="90" width="210" height="190" rx="10" fill="#e8f1fb" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="615" y="114" text-anchor="middle" font-size="12" font-weight="700" fill="#3b82f6">Lv.3</text>
+  <text x="615" y="140" text-anchor="middle" font-size="14" font-weight="700" fill="#1e3a5f">抽象工厂</text>
+  <text x="615" y="164" text-anchor="middle" font-size="11" fill="#33557f">成套配发一族对象</text>
+  <text x="615" y="182" text-anchor="middle" font-size="11" fill="#33557f">保证同族兼容</text>
+
+  <!-- 台阶2：工厂方法（中级） -->
+  <rect x="265" y="140" width="210" height="140" rx="10" fill="#e8f1fb" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="370" y="164" text-anchor="middle" font-size="12" font-weight="700" fill="#3b82f6">Lv.2</text>
+  <text x="370" y="188" text-anchor="middle" font-size="14" font-weight="700" fill="#1e3a5f">工厂方法</text>
+  <text x="370" y="212" text-anchor="middle" font-size="11" fill="#33557f">基类定流程 子类定产品</text>
+  <text x="370" y="230" text-anchor="middle" font-size="11" fill="#33557f">加产品 = 加子类</text>
+
+  <!-- 台阶1：简单工厂（最低级） -->
+  <rect x="20" y="190" width="210" height="90" rx="10" fill="#e8f1fb" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="125" y="212" text-anchor="middle" font-size="12" font-weight="700" fill="#3b82f6">Lv.1</text>
+  <text x="125" y="234" text-anchor="middle" font-size="14" font-weight="700" fill="#1e3a5f">简单工厂</text>
+  <text x="125" y="254" text-anchor="middle" font-size="11" fill="#33557f">一个函数 + if-else</text>
+  <text x="125" y="270" text-anchor="middle" font-size="11" fill="#33557f">加产品改函数（违反 O）</text>
+
+  <!-- 演进箭头（斜向上，从低到高） -->
+  <line x1="230" y1="235" x2="265" y2="210" stroke="#94a3b8" stroke-width="2" marker-end="url(#a3)"/>
+  <line x1="475" y1="210" x2="510" y2="185" stroke="#94a3b8" stroke-width="2" marker-end="url(#a3)"/>
+
+  <text x="360" y="306" text-anchor="middle" font-size="12" fill="#666">复杂度与应对变化的能力递增；Python 里「工厂函数 + 字典 / __init_subclass__」往往已够用，不必强行上抽象工厂的类层次</text>
+
+  <defs>
+    <marker id="a3" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+</svg>
