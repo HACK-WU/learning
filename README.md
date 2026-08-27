@@ -2,14 +2,15 @@
 
 > 以「课程制」方式系统学习技术主题：每门课程自带学习档案、路径总览与课件体系，支持断点续学。
 
-[![courses](https://img.shields.io/badge/courses-3-blue)](#课程导航)
+[![courses](https://img.shields.io/badge/courses-4-blue)](#课程导航)
 [![Design Patterns](https://img.shields.io/badge/Design_Patterns-6%2F12-yellowgreen)](design-patterns/02-课程目录.md)
 [![Kafka Basics](https://img.shields.io/badge/Kafka_Basics-5%2F10-yellowgreen)](kafka-basics/02-课程目录.md)
 [![PromQL](https://img.shields.io/badge/PromQL-2%2F12-yellow)](promql/02-课程目录.md)
+[![ZooKeeper](https://img.shields.io/badge/ZooKeeper-1%2F12-yellow)](zookeeper/02-课程目录.md)
 
 ## 概述
 
-本仓库收录三门系统化技术课程，覆盖后端三大常用领域：设计模式（Python 实现）、Kafka 消息队列、PromQL 监控查询语言。
+本仓库收录四门系统化技术课程，覆盖后端常用领域：设计模式（Python 实现）、Kafka 消息队列、PromQL 监控查询语言、ZooKeeper 分布式协调（决策参考导向）。
 
 相比零散笔记，课程制结构解决两个问题：
 
@@ -23,6 +24,7 @@
 | [设计模式](design-patterns/02-课程目录.md) | GoF 设计模式的 Python 惯用实现，以订单系统重构为故事主线 | Python 基础扎实 | 6 / 12 课 | 进行中 |
 | [Kafka 基础](kafka-basics/02-课程目录.md) | 从消息队列概念到集群可靠性，Docker 实操贯穿全程 | 零基础 | 5 / 10 课 | 进行中 |
 | [PromQL](promql/02-课程目录.md) | Prometheus 查询语言，从数据模型到告警规则与 Grafana 面板 | 零基础 | 2 / 12 课 | 进行中 |
+| [ZooKeeper](zookeeper/02-课程目录.md) | 分布式协调服务，从核心机制到选型决策（对比 etcd/Consul） | 入门 | 1 / 12 课 | 进行中 |
 
 > 进度为 2026-08-27 快照，实时状态以各课程 `00-学习档案.md` 为准。
 
@@ -45,7 +47,8 @@ learning/
 │   ├── assets/               # 课程级 SVG 图表
 │   └── stages/               # 4 个阶段目录：overview.md + lessons/lesson-XX.md
 ├── kafka-basics/             # Kafka 基础课程（结构同上，无独立评审清单）
-└── promql/                   # PromQL 课程（结构同上，含 00-评审清单.md）
+├── promql/                   # PromQL 课程（结构同上，含 00-评审清单.md）
+└── zookeeper/                # ZooKeeper 课程（结构同上，含 00-评审清单.md）
 ```
 
 阶段目录命名形如 `stages/1-地基与创建型/`，每个阶段包含一份 `overview.md`（阶段导览）与 `lessons/` 目录（课件正文）；尚未开始的阶段随学习进度逐步落盘（如 `promql/` 当前仅有阶段 1）。
@@ -61,7 +64,7 @@ learning/
 **断点续学**：
 
 1. 先读该课程的 `00-学习档案.md`，定位进度表中第一个未完成项
-2. PromQL 课程另有续学规则：先读 `00-评审清单.md`，存在未勾选条目时先补对应评审，再继续下一批
+2. PromQL 与 ZooKeeper 课程另有续学规则：先读 `00-评审清单.md`，存在未勾选条目时先补对应评审，再继续下一批
 3. 从未完成课继续，完成后将进度回写档案
 
 **课件体例与质量约定**：
