@@ -126,3 +126,13 @@ count(up)
 > ## 👉 进入下一课
 >
 > 完成本课实操任务后，回复「**继续**」进入 **L3《四种指标类型：Counter、Gauge、Histogram、Summary》**——认识程序的四种记账手法，理解为什么 `rate()` 只对 Counter 有意义。
+
+---
+
+## 🧭 课程导航
+
+⬅️ **上一课**：[L1 为什么需要 PromQL](lesson-01-为什么需要PromQL.md)
+
+➡️ **下一课**：[L3 四种指标类型：Counter、Gauge、Histogram、Summary](lesson-03-四种指标类型.md)
+
+📚 **返回目录**：[课程目录](../../02-课程目录.md)
