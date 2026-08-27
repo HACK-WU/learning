@@ -41,5 +41,5 @@
 
 - [x] `lessons/lesson-03-本地起Kafka与CLI快速上手.md`
 - [x] `lessons/lesson-04-Topic、Partition与Broker.md`
-- [ ] `lessons/lesson-05-生产者Producer.md`
+- [x] `lessons/lesson-05-生产者Producer.md`
 - [ ] `lessons/lesson-06-消费者与消费者组.md`
