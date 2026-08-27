@@ -44,6 +44,6 @@
   <text x="840" y="166" text-anchor="middle" font-size="12" fill="#334155"></text>
   <text x="840" y="190" text-anchor="middle" font-size="11" fill="#64748b">产出真实告警与面板</text>
 
-  <text x="480" y="250" text-anchor="middle" font-size="13" fill="#475569">实操环境：play.prometheus.io（官方在线演练场，浏览器打开即用）</text>
+<text x="480" y="250" text-anchor="middle" font-size="13" fill="#475569">实操环境：demo.promlens.com（在线演练场，浏览器打开即用）</text>
   <text x="480" y="274" text-anchor="middle" font-size="12" fill="#94a3b8">2026-08-27 建档 · 零基础 + 实操导向</text>
 </svg>

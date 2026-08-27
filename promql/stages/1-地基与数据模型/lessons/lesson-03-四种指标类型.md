@@ -83,7 +83,7 @@ Gauge 的原始值直接画图就有意义（内存曲线本身就在讲故事�
 
 ## 第五幕（实操）：在 play.prometheus.io 验证四种类型
 
-打开 **https://play.prometheus.io**，全部切到 **Graph** 标签页看曲线形状。
+打开 **https://demo.promlens.com/**，全部切到 **Graph** 标签页看曲线形状。
 
 ### 验证一：Counter 一路爬升
 

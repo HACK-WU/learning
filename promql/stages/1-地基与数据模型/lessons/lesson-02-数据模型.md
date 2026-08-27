@@ -60,7 +60,7 @@ demo_cpu_time_seconds_total{cpu="0", mode="idle"}   @10:00:00 → 101.2
 
 ## 第四幕：动手验证数据模型
 
-打开 **https://play.prometheus.io**，逐一验证上面三个认知。
+打开 **https://demo.promlens.com/**，逐一验证上面三个认知。
 
 ### 验证一：一个指标 = 一族序列
 
