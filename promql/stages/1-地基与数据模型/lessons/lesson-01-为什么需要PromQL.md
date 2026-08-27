@@ -75,7 +75,7 @@ up{job="node", instance="192.168.1.10:9100"}   1   @2026-08-27 03:00:00
 
 ### 步骤 1：打开演练场
 
-浏览器访问 **https://play.prometheus.io**
+浏览器访问 **https://demo.promlens.com/**
 
 这是 Prometheus 官方维护的在线环境，预置了 demo 服务的真实指标数据，页面上方就是查询输入框。（如果打不开，备选方案：本地 Docker 起一套，文末附命令。）
 
