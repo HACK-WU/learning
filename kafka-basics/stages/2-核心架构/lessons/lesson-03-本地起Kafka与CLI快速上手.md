@@ -279,3 +279,11 @@ flowchart LR
 刚学完阶段 2《Kafka 核心架构》的课《本地起 Kafka + CLI 快速上手》知识点 KRaft一键起、创建Topic生产消费、CLI观察Partition，
 请按大纲继续讲解下一批知识点（课4：Topic、Partition 与 Broker）。
 ```
+
+## 🧭 课程导航
+
+⬅️ **上一课**：[课 2：Kafka 是什么 & 起源与定位](../../1-为什么需要Kafka/lessons/lesson-02-Kafka是什么与起源定位.md)
+
+➡️ **下一课**：[课 4：Topic、Partition 与 Broker](lesson-04-Topic、Partition与Broker.md)
+
+📚 **返回目录**：[课程目录](../../../02-课程目录.md)

@@ -242,3 +242,11 @@ flowchart TD
 刚学完阶段 2《Kafka 核心架构》的课《Topic、Partition 与 Broker》知识点 Topic与Partition、顺序写磁盘、零拷贝、Broker与集群，
 请按大纲继续讲解下一批知识点（课5：生产者 Producer）。
 ```
+
+## 🧭 课程导航
+
+⬅️ **上一课**：[课 3：本地起 Kafka + CLI 快速上手](lesson-03-本地起Kafka与CLI快速上手.md)
+
+➡️ **下一课**：[课 5：生产者 Producer](lesson-05-生产者Producer.md)
+
+📚 **返回目录**：[课程目录](../../../02-课程目录.md)
