@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 440" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B"/>
+    </marker>
+  </defs>
+
+  <rect width="1280" height="440" fill="#FFFFFF"/>
+  <text x="640" y="38" text-anchor="middle" font-size="22" font-weight="bold" fill="#1E293B">ZooKeeper 系统学习路径 · 决策参考导向</text>
+  <text x="640" y="62" text-anchor="middle" font-size="13" fill="#64748B">搞懂问题 → 理解机制 → 算清成本 → 做出选型决策（4 阶段 / 12 课）</text>
+
+  <!-- 起点 -->
+  <circle cx="48" cy="230" r="9" fill="#10B981"/>
+  <text x="48" y="262" text-anchor="middle" font-size="12" fill="#475569">开课</text>
+  <line x1="60" y1="230" x2="86" y2="230" stroke="#64748B" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 阶段 1 -->
+  <rect x="92" y="110" width="252" height="250" rx="12" fill="#E8F1FD" stroke="#7BA6DC" stroke-width="1.5"/>
+  <text x="218" y="142" text-anchor="middle" font-size="15" font-weight="bold" fill="#1E3A5F">阶段 1 · 问题与定位</text>
+  <text x="218" y="163" text-anchor="middle" font-size="11.5" fill="#5B7395">它到底解决什么问题</text>
+  <rect x="113" y="180" width="210" height="30" rx="6" fill="#DCFCE7" stroke="#4ADE80" stroke-width="1.2"/>
+  <text x="218" y="199" text-anchor="middle" font-size="12" fill="#166534">L1 为什么需要 ZooKeeper</text>
+  <rect x="113" y="220" width="210" height="30" rx="6" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <text x="218" y="239" text-anchor="middle" font-size="12" fill="#475569">L2 定位与能力地图</text>
+  <text x="218" y="290" text-anchor="middle" font-size="11" fill="#5B7395">故事线：大促夜双主故障</text>
+  <text x="218" y="308" text-anchor="middle" font-size="11" fill="#5B7395">→ 立项评估要不要上 ZK</text>
+
+  <line x1="346" y1="235" x2="380" y2="235" stroke="#64748B" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 阶段 2 -->
+  <rect x="384" y="110" width="252" height="250" rx="12" fill="#E7F4EA" stroke="#82B98C" stroke-width="1.5"/>
+  <text x="510" y="142" text-anchor="middle" font-size="15" font-weight="bold" fill="#1B4D2E">阶段 2 · 核心机制</text>
+  <text x="510" y="163" text-anchor="middle" font-size="11.5" fill="#4E7A5B">它凭什么可靠、能干什么</text>
+  <rect x="405" y="180" width="210" height="30" rx="6" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <text x="510" y="199" text-anchor="middle" font-size="12" fill="#475569">L3 数据模型：ZNode 树</text>
+  <rect x="405" y="220" width="210" height="30" rx="6" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <text x="510" y="239" text-anchor="middle" font-size="12" fill="#475569">L4 集群与 ZAB 协议</text>
+  <rect x="405" y="260" width="210" height="30" rx="6" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <text x="510" y="279" text-anchor="middle" font-size="12" fill="#475569">L5 会话与 Watch 机制</text>
+  <rect x="405" y="300" width="210" height="30" rx="6" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <text x="510" y="319" text-anchor="middle" font-size="12" fill="#475569">L6 四大经典用法</text>
+
+  <line x1="638" y1="235" x2="672" y2="235" stroke="#64748B" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 阶段 3 -->
+  <rect x="676" y="110" width="252" height="250" rx="12" fill="#FDF1E3" stroke="#D9A766" stroke-width="1.5"/>
+  <text x="802" y="142" text-anchor="middle" font-size="15" font-weight="bold" fill="#7A4E12">阶段 3 · 成本与风险</text>
+  <text x="802" y="163" text-anchor="middle" font-size="11.5" fill="#9A7A45">用它要付出什么</text>
+  <rect x="697" y="180" width="210" height="30" rx="6" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <text x="802" y="199" text-anchor="middle" font-size="12" fill="#475569">L7 部署与运维成本</text>
+  <rect x="697" y="220" width="210" height="30" rx="6" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <text x="802" y="239" text-anchor="middle" font-size="12" fill="#475569">L8 经典的坑与故障模式</text>
+  <text x="802" y="290" text-anchor="middle" font-size="11" fill="#9A7A45">算清「协调债」的偿还价码：</text>
+  <text x="802" y="308" text-anchor="middle" font-size="11" fill="#9A7A45">机器、运维、踩坑三本账</text>
+
+  <line x1="930" y1="235" x2="964" y2="235" stroke="#64748B" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 阶段 4 -->
+  <rect x="968" y="110" width="252" height="250" rx="12" fill="#F1EAFB" stroke="#A88CD4" stroke-width="1.5"/>
+  <text x="1094" y="142" text-anchor="middle" font-size="15" font-weight="bold" fill="#4C2E7A">阶段 4 · 对比与决策</text>
+  <text x="1094" y="163" text-anchor="middle" font-size="11.5" fill="#7A6699">怎么选型、怎么汇报</text>
+  <rect x="989" y="180" width="210" height="30" rx="6" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <text x="1094" y="199" text-anchor="middle" font-size="12" fill="#475569">L9 横向对比四候选</text>
+  <rect x="989" y="220" width="210" height="30" rx="6" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <text x="1094" y="239" text-anchor="middle" font-size="12" fill="#475569">L10 生态趋势与未来</text>
+  <rect x="989" y="260" width="210" height="30" rx="6" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <text x="1094" y="279" text-anchor="middle" font-size="12" fill="#475569">L11 选型决策树</text>
+  <rect x="989" y="300" width="210" height="30" rx="6" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <text x="1094" y="319" text-anchor="middle" font-size="12" fill="#475569">L12 场景演练与汇报</text>
+
+  <!-- 终点 -->
+  <line x1="1222" y1="230" x2="1240" y2="230" stroke="#64748B" stroke-width="2" marker-end="url(#arrow)"/>
+  <circle cx="1252" cy="230" r="8" fill="#7C3AED"/>
+  <text x="1252" y="262" text-anchor="middle" font-size="11" fill="#4C2E7A">选型决策</text>
+
+  <!-- 图例 -->
+  <rect x="92" y="392" width="16" height="16" rx="4" fill="#DCFCE7" stroke="#4ADE80" stroke-width="1.2"/>
+  <text x="114" y="405" font-size="12" fill="#475569">已交付</text>
+  <rect x="172" y="392" width="16" height="16" rx="4" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.2"/>
+  <text x="194" y="405" font-size="12" fill="#475569">未开始</text>
+  <text x="1188" y="405" text-anchor="end" font-size="12" fill="#64748B">每课 30–45 分钟 · 实操轻量化（Docker 体验 + 思想实验）</text>
+</svg>
