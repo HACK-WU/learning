@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="820" height="470" fill="#f8fafc"/>
+  <text x="410" y="40" text-anchor="middle" font-size="20" font-weight="bold" fill="#7c3aed">阶段 4 · 决策落地（签字画押）</text>
+
+  <rect x="40" y="80" width="360" height="120" rx="10" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/>
+  <text x="60" y="110" font-size="15" font-weight="bold" fill="#1e293b">课 10 许可证成本与风险</text>
+  <text x="60" y="138" font-size="12" fill="#475569">· BUSL 1.1 深度解读：限制条款 / 4 年转 GPL</text>
+  <text x="60" y="160" font-size="12" fill="#475569">· 运维成本：集群 / 升级 / 监控 / 人力</text>
+  <text x="60" y="182" font-size="12" fill="#475569">· 迁移与退出成本：耦合 / 双跑 / fork 现状</text>
+
+  <line x1="220" y1="200" x2="220" y2="224" stroke="#64748b" stroke-width="2"/>
+  <polygon points="214,222 220,232 226,222" fill="#64748b"/>
+
+  <rect x="40" y="234" width="360" height="120" rx="10" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/>
+  <text x="60" y="264" font-size="15" font-weight="bold" fill="#1e293b">课 11 选型决策框架与场景结论</text>
+  <text x="60" y="292" font-size="12" fill="#475569">· 决策维度清单：需求 / 技术栈 / 运维 / 合规</text>
+  <text x="60" y="314" font-size="12" fill="#475569">· 典型场景结论 + 决策清单与试点路线</text>
+
+  <rect x="440" y="80" width="340" height="274" rx="10" fill="#f5f3ff" stroke="#ddd6fe" stroke-width="1.5"/>
+  <text x="460" y="116" font-size="15" font-weight="bold" fill="#6d28d9">本阶段决策者视角</text>
+  <text x="460" y="150" font-size="13" fill="#334155">① BUSL 对内部使用到底限不限？</text>
+  <text x="460" y="182" font-size="13" fill="#334155">② 三本账：许可证账 / 运维账 / 退出账</text>
+  <text x="460" y="214" font-size="13" fill="#334155">③ 我的场景落在哪个结论区？</text>
+  <text x="460" y="262" font-size="13" fill="#334155">完成标志：产出一张可带进评审会的</text>
+  <text x="460" y="288" font-size="13" fill="#334155">选型决策清单（该用/不该用/怎么试点）</text>
+
+  <rect x="40" y="380" width="740" height="60" rx="10" fill="#faf5ff" stroke="#c4b5fd" stroke-width="1.5"/>
+  <text x="410" y="416" text-anchor="middle" font-size="13" fill="#5b21b6">🏁 收束问题：我的场景该不该用 Consul？用它的哪部分？不用的话换什么？</text>
+</svg>

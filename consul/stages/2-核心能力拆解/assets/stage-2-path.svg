@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 500" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="820" height="500" fill="#f8fafc"/>
+  <text x="410" y="40" text-anchor="middle" font-size="20" font-weight="bold" fill="#059669">阶段 2 · 核心能力拆解（拆开引擎看成色）</text>
+
+  <rect x="40" y="76" width="360" height="88" rx="10" fill="#ffffff" stroke="#059669" stroke-width="2"/>
+  <text x="60" y="106" font-size="15" font-weight="bold" fill="#1e293b">课 4 服务发现与健康检查机制</text>
+  <text x="60" y="130" font-size="12" fill="#475569">· catalog/health API · 六类检查 · 阻塞查询与 watch</text>
+
+  <line x1="220" y1="164" x2="220" y2="188" stroke="#64748b" stroke-width="2"/>
+  <polygon points="214,186 220,196 226,186" fill="#64748b"/>
+
+  <rect x="40" y="198" width="360" height="88" rx="10" fill="#ffffff" stroke="#059669" stroke-width="2"/>
+  <text x="60" y="228" font-size="15" font-weight="bold" fill="#1e293b">课 5 Raft 与 Gossip 一致性成色</text>
+  <text x="60" y="252" font-size="12" fill="#475569">· Raft 写路径 · LAN/WAN Gossip · 三种读模式</text>
+
+  <line x1="220" y1="286" x2="220" y2="310" stroke="#64748b" stroke-width="2"/>
+  <polygon points="214,308 220,318 226,308" fill="#64748b"/>
+
+  <rect x="40" y="320" width="360" height="88" rx="10" fill="#ffffff" stroke="#059669" stroke-width="2"/>
+  <text x="60" y="350" font-size="15" font-weight="bold" fill="#1e293b">课 6 KV 存储与配置管理</text>
+  <text x="60" y="374" font-size="12" fill="#475569">· KV API · 当配置中心的用法与局限 · Template 生态</text>
+
+  <line x1="220" y1="408" x2="220" y2="432" stroke="#64748b" stroke-width="2"/>
+  <polygon points="214,430 220,440 226,430" fill="#64748b"/>
+
+  <rect x="40" y="442" width="360" height="44" rx="10" fill="#ffffff" stroke="#059669" stroke-width="2"/>
+  <text x="60" y="470" font-size="15" font-weight="bold" fill="#1e293b">课 7 多数据中心与服务网格</text>
+
+  <rect x="440" y="76" width="340" height="410" rx="10" fill="#ecfdf5" stroke="#a7f3d0" stroke-width="1.5"/>
+  <text x="460" y="112" font-size="15" font-weight="bold" fill="#047857">本阶段决策者视角</text>
+  <text x="460" y="146" font-size="13" fill="#334155">① 健康检查语义够不够细？</text>
+  <text x="460" y="178" font-size="13" fill="#334155">② CP 成色：Raft 保证什么、不保证什么？</text>
+  <text x="460" y="210" font-size="13" fill="#334155">③ KV 当配置中心，差在哪？</text>
+  <text x="460" y="242" font-size="13" fill="#334155">④ 多 DC 与网格是真需求还是噱头？</text>
+  <text x="460" y="290" font-size="13" fill="#334155">完成标志：拿到"机制语言"，</text>
+  <text x="460" y="316" font-size="13" fill="#334155">能看懂阶段 3 对比矩阵里</text>
+  <text x="460" y="342" font-size="13" fill="#334155">每一格的评判依据</text>
+</svg>

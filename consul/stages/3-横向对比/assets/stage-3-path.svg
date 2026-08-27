@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="820" height="470" fill="#f8fafc"/>
+  <text x="410" y="40" text-anchor="middle" font-size="20" font-weight="bold" fill="#d97706">阶段 3 · 横向对比（候选人同台竞技）</text>
+
+  <rect x="40" y="80" width="360" height="120" rx="10" fill="#ffffff" stroke="#d97706" stroke-width="2"/>
+  <text x="60" y="110" font-size="15" font-weight="bold" fill="#1e293b">课 8 四大竞品逐个看</text>
+  <text x="60" y="138" font-size="12" fill="#475569">· ZooKeeper：Hadoop 出身 / ZAB / 运维重</text>
+  <text x="60" y="160" font-size="12" fill="#475569">· etcd：k8s 基石 / Raft / 纯 KV</text>
+  <text x="60" y="182" font-size="12" fill="#475569">· Nacos：注册+配置二合一 / AP·CP 可切 · Eureka：AP / 2.x 停滞</text>
+
+  <line x1="220" y1="200" x2="220" y2="224" stroke="#64748b" stroke-width="2"/>
+  <polygon points="214,222 220,232 226,222" fill="#64748b"/>
+
+  <rect x="40" y="234" width="360" height="120" rx="10" fill="#ffffff" stroke="#d97706" stroke-width="2"/>
+  <text x="60" y="264" font-size="15" font-weight="bold" fill="#1e293b">课 9 多维对比矩阵</text>
+  <text x="60" y="292" font-size="12" fill="#475569">· 一致性与可用性 · 功能与接口</text>
+  <text x="60" y="314" font-size="12" fill="#475569">· 生态与集成 · 性能与规模（只引用有出处数据）</text>
+
+  <rect x="440" y="80" width="340" height="274" rx="10" fill="#fffbeb" stroke="#fde68a" stroke-width="1.5"/>
+  <text x="460" y="116" font-size="15" font-weight="bold" fill="#b45309">本阶段决策者视角</text>
+  <text x="460" y="150" font-size="13" fill="#334155">① 每位竞品的"一张牌"是什么？</text>
+  <text x="460" y="182" font-size="13" fill="#334155">② 我的机制语言能不能对上号？</text>
+  <text x="460" y="214" font-size="13" fill="#334155">③ 对比矩阵哪几格决定我的选择？</text>
+  <text x="460" y="262" font-size="13" fill="#334155">完成标志：五候选的对比矩阵</text>
+  <text x="460" y="288" font-size="13" fill="#334155">在你的场景里能排出座次</text>
+
+  <rect x="40" y="380" width="740" height="60" rx="10" fill="#fff7ed" stroke="#fdba74" stroke-width="1.5"/>
+  <text x="410" y="416" text-anchor="middle" font-size="13" fill="#9a3412">⚠️ 性能数字必须标注来源与测试口径，无出处的结论一律不进矩阵（大纲评审约定）</text>
+</svg>

@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1140 540" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="1140" height="540" fill="#f8fafc"/>
+  <text x="570" y="42" text-anchor="middle" font-size="26" font-weight="bold" fill="#1e293b">Consul 学习路径 · 一位架构师的选型签字之路</text>
+
+  <!-- 故事主线条 -->
+  <rect x="60" y="66" width="1020" height="74" rx="10" fill="#eef2ff" stroke="#c7d2fe" stroke-width="1.5"/>
+  <text x="80" y="94" font-size="14" fill="#3730a3" font-weight="bold">主角：架构师小林，要为微服务选定"服务寻址 + 配置"底座</text>
+  <text x="80" y="118" font-size="14" fill="#3730a3">冲突：五位候选（Consul / etcd / ZooKeeper / Nacos / Eureka）各执一词，选错迁移成本极高</text>
+  <text x="640" y="118" font-size="14" fill="#3730a3">收束：拿着决策清单，敢在选型评审会上签字</text>
+
+  <!-- 阶段 1 -->
+  <rect x="60" y="170" width="240" height="270" rx="12" fill="#ffffff" stroke="#2563eb" stroke-width="2.5"/>
+  <rect x="60" y="170" width="240" height="52" rx="12" fill="#2563eb"/>
+  <text x="180" y="192" text-anchor="middle" font-size="16" font-weight="bold" fill="#ffffff">阶段 1 认识 Consul</text>
+  <text x="180" y="212" text-anchor="middle" font-size="12" fill="#dbeafe">候选人登场</text>
+  <text x="78" y="252" font-size="13" fill="#1e293b">课 1 为什么需要服务注册与发现</text>
+  <text x="78" y="292" font-size="13" fill="#1e293b">课 2 Consul 是什么与能力全景</text>
+  <text x="78" y="312" font-size="11" fill="#64748b">　　（含 2.x 版本与 BUSL 现状）</text>
+  <text x="78" y="352" font-size="13" fill="#1e293b">课 3 五分钟跑起来看一眼</text>
+  <text x="78" y="372" font-size="11" fill="#64748b">　　（轻量体验，可选跳过）</text>
+  <text x="78" y="418" font-size="12" fill="#2563eb" font-weight="bold">产出：它是什么 / 家世如何</text>
+
+  <!-- 阶段 2 -->
+  <rect x="340" y="170" width="240" height="270" rx="12" fill="#ffffff" stroke="#059669" stroke-width="2.5"/>
+  <rect x="340" y="170" width="240" height="52" rx="12" fill="#059669"/>
+  <text x="460" y="192" text-anchor="middle" font-size="16" font-weight="bold" fill="#ffffff">阶段 2 核心能力拆解</text>
+  <text x="460" y="212" text-anchor="middle" font-size="12" fill="#d1fae5">拆开引擎看成色</text>
+  <text x="358" y="252" font-size="13" fill="#1e293b">课 4 服务发现与健康检查机制</text>
+  <text x="358" y="292" font-size="13" fill="#1e293b">课 5 Raft 与 Gossip 一致性成色</text>
+  <text x="358" y="332" font-size="13" fill="#1e293b">课 6 KV 存储与配置管理</text>
+  <text x="358" y="372" font-size="13" fill="#1e293b">课 7 多数据中心与服务网格</text>
+  <text x="358" y="418" font-size="12" fill="#059669" font-weight="bold">产出：机制语言 / 成色评估</text>
+
+  <!-- 阶段 3 -->
+  <rect x="620" y="170" width="240" height="270" rx="12" fill="#ffffff" stroke="#d97706" stroke-width="2.5"/>
+  <rect x="620" y="170" width="240" height="52" rx="12" fill="#d97706"/>
+  <text x="740" y="192" text-anchor="middle" font-size="16" font-weight="bold" fill="#ffffff">阶段 3 横向对比</text>
+  <text x="740" y="212" text-anchor="middle" font-size="12" fill="#fef3c7">候选人同台竞技</text>
+  <text x="638" y="252" font-size="13" fill="#1e293b">课 8 四大竞品逐个看</text>
+  <text x="638" y="272" font-size="11" fill="#64748b">　　ZK / etcd / Nacos / Eureka</text>
+  <text x="638" y="332" font-size="13" fill="#1e293b">课 9 多维对比矩阵</text>
+  <text x="638" y="352" font-size="11" fill="#64748b">　　一致性 / 功能 / 生态 / 性能</text>
+  <text x="638" y="418" font-size="12" fill="#d97706" font-weight="bold">产出：多维对比矩阵</text>
+
+  <!-- 阶段 4 -->
+  <rect x="900" y="170" width="180" height="270" rx="12" fill="#ffffff" stroke="#7c3aed" stroke-width="2.5"/>
+  <rect x="900" y="170" width="180" height="52" rx="12" fill="#7c3aed"/>
+  <text x="990" y="192" text-anchor="middle" font-size="16" font-weight="bold" fill="#ffffff">阶段 4 决策落地</text>
+  <text x="990" y="212" text-anchor="middle" font-size="12" fill="#ede9fe">签字画押</text>
+  <text x="916" y="252" font-size="13" fill="#1e293b">课 10 许可证成本与风险</text>
+  <text x="916" y="292" font-size="13" fill="#1e293b">课 11 选型决策框架</text>
+  <text x="916" y="312" font-size="11" fill="#64748b">　　与场景结论</text>
+  <text x="916" y="418" font-size="12" fill="#7c3aed" font-weight="bold">产出：决策清单</text>
+
+  <!-- 阶段箭头 -->
+  <line x1="300" y1="305" x2="338" y2="305" stroke="#64748b" stroke-width="2.5"/>
+  <polygon points="338,299 348,305 338,311" fill="#64748b"/>
+  <line x1="580" y1="305" x2="618" y2="305" stroke="#64748b" stroke-width="2.5"/>
+  <polygon points="618,299 628,305 618,311" fill="#64748b"/>
+  <line x1="860" y1="305" x2="898" y2="305" stroke="#64748b" stroke-width="2.5"/>
+  <polygon points="898,299 908,305 898,311" fill="#64748b"/>
+
+  <!-- 底部目标条 -->
+  <rect x="60" y="470" width="1020" height="44" rx="10" fill="#ecfdf5" stroke="#a7f3d0" stroke-width="1.5"/>
+  <text x="570" y="498" text-anchor="middle" font-size="14" fill="#065f46" font-weight="bold">学习目标（决策参考）：我的场景该不该用 Consul？用它的哪部分？不用的话换什么？</text>
+</svg>

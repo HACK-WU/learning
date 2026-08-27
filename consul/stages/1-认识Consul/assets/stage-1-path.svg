@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 470" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="820" height="470" fill="#f8fafc"/>
+  <text x="410" y="40" text-anchor="middle" font-size="20" font-weight="bold" fill="#2563eb">阶段 1 · 认识 Consul（候选人登场）</text>
+
+  <rect x="40" y="80" width="360" height="100" rx="10" fill="#ffffff" stroke="#2563eb" stroke-width="2"/>
+  <text x="60" y="112" font-size="15" font-weight="bold" fill="#1e293b">课 1 为什么需要服务注册与发现</text>
+  <text x="60" y="138" font-size="12" fill="#475569">· 服务寻址难题：从硬编码 IP 到动态世界</text>
+  <text x="60" y="158" font-size="12" fill="#475569">· 客户端发现 vs 服务端发现 · 核心职责与 CAP</text>
+
+  <line x1="220" y1="180" x2="220" y2="208" stroke="#64748b" stroke-width="2"/>
+  <polygon points="214,206 220,216 226,206" fill="#64748b"/>
+
+  <rect x="40" y="218" width="360" height="100" rx="10" fill="#ffffff" stroke="#2563eb" stroke-width="2"/>
+  <text x="60" y="250" font-size="15" font-weight="bold" fill="#1e293b">课 2 Consul 是什么与能力全景</text>
+  <text x="60" y="276" font-size="12" fill="#475569">· 诞生与定位 · 六大能力 · Server/Client/DC</text>
+  <text x="60" y="296" font-size="12" fill="#475569">· 版本与许可证现状（2.x / BUSL 1.1）</text>
+
+  <line x1="220" y1="318" x2="220" y2="346" stroke="#64748b" stroke-width="2"/>
+  <polygon points="214,344 220,354 226,344" fill="#64748b"/>
+
+  <rect x="40" y="356" width="360" height="88" rx="10" fill="#ffffff" stroke="#2563eb" stroke-width="2" stroke-dasharray="6 3"/>
+  <text x="60" y="388" font-size="15" font-weight="bold" fill="#1e293b">课 3 五分钟跑起来看一眼（可选）</text>
+  <text x="60" y="414" font-size="12" fill="#475569">· dev 启动与 UI · 注册与查询 · 健康检查初体验</text>
+
+  <rect x="440" y="80" width="340" height="364" rx="10" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5"/>
+  <text x="460" y="116" font-size="15" font-weight="bold" fill="#1d4ed8">本阶段决策者视角</text>
+  <text x="460" y="150" font-size="13" fill="#334155">① 问题原点：为什么需要注册中心？</text>
+  <text x="460" y="182" font-size="13" fill="#334155">② 它的能力边界：六件事，哪些我要用？</text>
+  <text x="460" y="214" font-size="13" fill="#334155">③ 家世核查：2.x 版本线 + BUSL 许可证</text>
+  <text x="460" y="246" font-size="13" fill="#334155">　（这是选型评审必问项）</text>
+  <text x="460" y="294" font-size="13" fill="#334155">完成标志：能向同事说清</text>
+  <text x="460" y="320" font-size="13" fill="#334155">"Consul 是个啥，它管什么不管什么"</text>
+</svg>
