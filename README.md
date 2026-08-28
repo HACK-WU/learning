@@ -6,7 +6,7 @@
 [![Design Patterns](https://img.shields.io/badge/Design_Patterns-6%2F12-yellowgreen)](design-patterns/02-课程目录.md)
 [![Kafka Basics](https://img.shields.io/badge/Kafka_Basics-5%2F10-yellowgreen)](kafka-basics/02-课程目录.md)
 [![PromQL](https://img.shields.io/badge/PromQL-2%2F12-yellow)](promql/02-课程目录.md)
-[![ZooKeeper](https://img.shields.io/badge/ZooKeeper-1%2F12-yellow)](zookeeper/02-课程目录.md)
+[![ZooKeeper](https://img.shields.io/badge/ZooKeeper-12%2F12-brightgreen)](zookeeper/02-课程目录.md)
 
 ## 概述
 
@@ -24,9 +24,9 @@
 | [设计模式](design-patterns/02-课程目录.md) | GoF 设计模式的 Python 惯用实现，以订单系统重构为故事主线 | Python 基础扎实 | 6 / 12 课 | 进行中 |
 | [Kafka 基础](kafka-basics/02-课程目录.md) | 从消息队列概念到集群可靠性，Docker 实操贯穿全程 | 零基础 | 5 / 10 课 | 进行中 |
 | [PromQL](promql/02-课程目录.md) | Prometheus 查询语言，从数据模型到告警规则与 Grafana 面板 | 零基础 | 2 / 12 课 | 进行中 |
-| [ZooKeeper](zookeeper/02-课程目录.md) | 分布式协调服务，从核心机制到选型决策（对比 etcd/Consul） | 入门 | 1 / 12 课 | 进行中 |
+| [ZooKeeper](zookeeper/02-课程目录.md) | 分布式协调服务，从核心机制到选型决策（对比 etcd/Consul） | 入门 | 12 / 12 课 | ✅ 已完成 |
 
-> 进度为 2026-08-27 快照，实时状态以各课程 `00-学习档案.md` 为准。
+> 进度为 2026-08-28 快照，实时状态以各课程 `00-学习档案.md` 为准。
 
 每门课程的三个入口：
 
