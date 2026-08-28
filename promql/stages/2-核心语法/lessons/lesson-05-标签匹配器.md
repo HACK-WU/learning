@@ -125,7 +125,7 @@ demo_cpu_usage_seconds_total{mode="idle"}
 demo_cpu_usage_seconds_total{mode!="idle"}
 ```
 
-非 idle 的 mode（user、system、iowait……）全在。和验证一对照：一个把 idle 挑出来，一个把 idle 扔掉，两次查询的结果正好把全量分成互补的两半——每个序列要么是 idle，要么不是，不重不漏。
+非 idle 的 mode（user、system）全在。和验证一对照：一个把 idle 挑出来，一个把 idle 扔掉，两次查询的结果正好把全量分成互补的两半——每个序列要么是 idle，要么不是，不重不漏。
 
 ### 验证三：亲手复现第二幕的空表
 

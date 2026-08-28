@@ -252,6 +252,6 @@ up unless up{job="prometheus"}
 
 ⬅️ **上一课**：[L5 标签匹配器四兄弟：= != =~ !~](lesson-05-标签匹配器.md)
 
-➡️ **下一课**：L7《向量匹配：on/ignoring 与 group_left 拼接》（尚未编写，成课后此处更新为链接）
+➡️ **下一课**：[L7 向量匹配：on/ignoring 与 group_left 拼接](lesson-07-向量匹配.md)
 
 📚 **返回目录**：[课程目录](../../02-课程目录.md)
