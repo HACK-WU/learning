@@ -318,6 +318,6 @@ flowchart TD
 
 ⬅️ **上一课**：[课 4：Topic、Partition 与 Broker](lesson-04-Topic、Partition与Broker.md)
 
-➡️ **下一课**：[课 6：消费者与消费者组](lesson-06-消费者与消费者组.md)（待编写）
+➡️ **下一课**：[课 6：消费者与消费者组](lesson-06-消费者与消费者组.md)
 
 📚 **返回目录**：[课程目录](../../../02-课程目录.md)

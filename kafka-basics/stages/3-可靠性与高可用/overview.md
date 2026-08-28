@@ -31,5 +31,5 @@
 
 ## 本阶段产出
 
-- [ ] `lessons/lesson-07-副本机制与故障转移.md`
-- [ ] `lessons/lesson-08-交付语义与幂等.md`
+- [x] `lessons/lesson-07-副本机制与故障转移.md`
+- [x] `lessons/lesson-08-交付语义与幂等.md`

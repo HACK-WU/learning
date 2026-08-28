@@ -30,5 +30,5 @@
 
 ## 本阶段产出
 
-- [ ] `lessons/lesson-09-代码开发实战.md`
-- [ ] `lessons/lesson-10-项目架构设计落地.md`
+- [x] `lessons/lesson-09-代码开发实战.md`
+- [x] `lessons/lesson-10-项目架构设计落地.md`
