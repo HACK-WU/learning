@@ -1,0 +1,10 @@
+{
+  "Name": "web",
+  "Service": {
+    "Service": "web",
+    "Failover": {
+      "NearestN": 1
+    },
+    "OnlyPassing": true
+  }
+}

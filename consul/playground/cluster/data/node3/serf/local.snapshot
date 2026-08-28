@@ -1,0 +1,53 @@
+alive: node3 127.0.0.1:8321
+alive: node1 127.0.0.1:8301
+alive: node2 127.0.0.1:8311
+clock: 2
+clock: 3
+event-clock: 1
+not-alive: node1
+event-clock: 2
+not-alive: node1
+clock: 4
+clock: 5
+clock: 6
+clock: 7
+clock: 8
+clock: 9
+clock: 10
+clock: 11
+clock: 12
+clock: 13
+clock: 14
+clock: 15
+clock: 16
+clock: 17
+clock: 18
+clock: 19
+clock: 20
+alive: node3 127.0.0.1:8321
+alive: node2 127.0.0.1:8311
+clock: 22
+event-clock: 3
+alive: node1 127.0.0.1:8301
+clock: 24
+clock: 25
+not-alive: node1
+clock: 26
+clock: 27
+leave
+clock: 28
+alive: node3 127.0.0.1:8321
+alive: node1 127.0.0.1:8301
+alive: node2 127.0.0.1:8311
+clock: 29
+clock: 31
+event-clock: 1
+not-alive: node1
+clock: 32
+clock: 33
+clock: 34
+event-clock: 2
+clock: 35
+not-alive: node2
+leave
+clock: 36

@@ -1,0 +1,22 @@
+{
+  "datacenter": "dc1",
+  "node_name": "node2",
+  "server": true,
+  "bootstrap_expect": 3,
+  "data_dir": "D:/projects/learning/consul/playground/cluster/data/node2",
+  "bind_addr": "127.0.0.1",
+  "retry_join": ["127.0.0.1:8301", "127.0.0.1:8311", "127.0.0.1:8321"],
+  "disable_update_check": true,
+  "raft_logstore": {
+    "backend": "boltdb"
+  },
+  "ports": {
+    "http": 8510,
+    "dns": 8610,
+    "server": 8310,
+    "serf_lan": 8311,
+    "serf_wan": 8312,
+    "grpc": 8512,
+    "grpc_tls": 8513
+  }
+}

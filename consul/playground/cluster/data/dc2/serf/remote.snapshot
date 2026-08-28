@@ -1,0 +1,23 @@
+alive: dc2-server.dc2 127.0.0.1:8332
+alive: node3.dc1 127.0.0.1:8322
+alive: node1.dc1 127.0.0.1:8302
+alive: node2.dc1 127.0.0.1:8312
+clock: 15
+leave
+clock: 16
+clock: 17
+alive: dc2-server.dc2 127.0.0.1:8332
+alive: dc2-server.dc2 127.0.0.1:8332
+alive: node1.dc1 127.0.0.1:8302
+alive: node2.dc1 127.0.0.1:8312
+alive: node3.dc1 127.0.0.1:8322
+clock: 23
+clock: 24
+not-alive: node1.dc1
+clock: 26
+not-alive: node2.dc1
+clock: 27
+clock: 28
+not-alive: node3.dc1
+leave
+clock: 29

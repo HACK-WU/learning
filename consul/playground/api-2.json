@@ -1,0 +1,16 @@
+{
+  "service": {
+    "id": "api-2",
+    "name": "api",
+    "tags": ["demo"],
+    "address": "127.0.0.1",
+    "port": 9091,
+    "check": {
+      "id": "api-2-tcp",
+      "name": "api-2 TCP check",
+      "tcp": "127.0.0.1:8080",
+      "interval": "5s",
+      "timeout": "2s"
+    }
+  }
+}

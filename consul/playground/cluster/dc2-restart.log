@@ -1,0 +1,155 @@
+==> Starting Consul agent...
+               Version: '2.0.2'
+            Build Date: '2026-07-08 09:22:50 +0000 UTC'
+               Node ID: '9b6100a2-d325-32cd-16ed-d0bb967ad65a'
+             Node name: 'dc2-server'
+            Datacenter: 'dc2' (Segment: '<all>')
+                Server: true (Bootstrap: true)
+           Client Addr: [127.0.0.1] (HTTP: 8530, HTTPS: -1, gRPC: 8532, gRPC-TLS: 8533, DNS: 8630)
+          Cluster Addr: 127.0.0.1 (LAN: 8331, WAN: 8332)
+     Gossip Encryption: false
+      Auto-Encrypt-TLS: false
+           ACL Enabled: false
+     Reporting Enabled: false
+    ACL Default Policy: allow
+             HTTPS TLS: Verify Incoming: false, Verify Outgoing: false, Min Version: TLSv1_2
+              gRPC TLS: Verify Incoming: false, Min Version: TLSv1_2
+      Internal RPC TLS: Verify Incoming: false, Verify Outgoing: false (Verify Hostname: false), Min Version: TLSv1_2
+
+==> Log data will now stream in as it occurs:
+
+2026-08-28T16:48:32.759+0800 [WARN]  agent: BootstrapExpect is set to 1; this is the same as Bootstrap mode.
+2026-08-28T16:48:32.770+0800 [WARN]  agent: bootstrap = true: do not enable unless necessary
+2026-08-28T16:48:32.898+0800 [WARN]  agent.auto_config: BootstrapExpect is set to 1; this is the same as Bootstrap mode.
+2026-08-28T16:48:32.898+0800 [WARN]  agent.auto_config: bootstrap = true: do not enable unless necessary
+2026-08-28T16:48:32.904+0800 [INFO]  agent.server.raft: initial configuration: index=1 servers="[{Suffrage:Voter ID:9b6100a2-d325-32cd-16ed-d0bb967ad65a Address:127.0.0.1:8330}]"
+2026-08-28T16:48:32.904+0800 [INFO]  agent.server.raft: entering follower state: follower="Node at 127.0.0.1:8330 [Follower]" leader-address= leader-id=
+2026-08-28T16:48:32.904+0800 [INFO]  agent.server.serf.wan: serf: EventMemberJoin: dc2-server.dc2 127.0.0.1
+2026-08-28T16:48:32.904+0800 [WARN]  agent.server.serf.wan: serf: Failed to re-join any previously known node
+2026-08-28T16:48:32.905+0800 [INFO]  agent.server.serf.lan: serf: EventMemberJoin: dc2-server 127.0.0.1
+2026-08-28T16:48:32.905+0800 [INFO]  agent.router: Initializing LAN area manager
+2026-08-28T16:48:32.905+0800 [WARN]  agent.server.serf.lan: serf: Failed to re-join any previously known node
+2026-08-28T16:48:32.905+0800 [INFO]  agent.server: Adding LAN server: server="dc2-server (Addr: tcp/127.0.0.1:8330) (DC: dc2)"
+2026-08-28T16:48:32.905+0800 [INFO]  agent.server: Handled event for server in area: event=member-join server=dc2-server.dc2 area=wan
+2026-08-28T16:48:32.905+0800 [INFO]  agent.server.autopilot: reconciliation now disabled
+2026-08-28T16:48:32.907+0800 [INFO]  agent.server.cert-manager: initialized server certificate management
+2026-08-28T16:48:32.908+0800 [INFO]  agent: Started DNS server: address=127.0.0.1:8630 network=udp
+2026-08-28T16:48:32.909+0800 [INFO]  agent: Started DNS server: address=127.0.0.1:8630 network=tcp
+2026-08-28T16:48:32.909+0800 [INFO]  agent.http: Registered resource endpoint: endpoint=/api/demo/v1/executive
+2026-08-28T16:48:32.909+0800 [INFO]  agent.http: Registered resource endpoint: endpoint=/api/demo/v1/recordlabel
+2026-08-28T16:48:32.909+0800 [INFO]  agent.http: Registered resource endpoint: endpoint=/api/demo/v1/artist
+2026-08-28T16:48:32.910+0800 [INFO]  agent.http: Registered resource endpoint: endpoint=/api/demo/v1/album
+2026-08-28T16:48:32.910+0800 [INFO]  agent.http: Registered resource endpoint: endpoint=/api/demo/v1/concept
+2026-08-28T16:48:32.910+0800 [INFO]  agent.http: Registered resource endpoint: endpoint=/api/demo/v2/album
+2026-08-28T16:48:32.910+0800 [INFO]  agent.http: Registered resource endpoint: endpoint=/api/multicluster/v2/namespaceexportedservices
+2026-08-28T16:48:32.910+0800 [INFO]  agent.http: Registered resource endpoint: endpoint=/api/demo/v2/artist
+2026-08-28T16:48:32.910+0800 [INFO]  agent.http: Registered resource endpoint: endpoint=/api/demo/v2/festival
+2026-08-28T16:48:32.910+0800 [INFO]  agent.http: Registered resource endpoint: endpoint=/api/multicluster/v2/exportedservices
+2026-08-28T16:48:32.910+0800 [INFO]  agent.http: Registered resource endpoint: endpoint=/api/multicluster/v2/partitionexportedservices
+2026-08-28T16:48:32.910+0800 [INFO]  agent.http: Registered resource endpoint: endpoint=/api/multicluster/v2/computedexportedservices
+2026-08-28T16:48:32.910+0800 [INFO]  agent.http: Registered resource endpoint: endpoint=/api/internal/v1/tombstone
+2026-08-28T16:48:32.910+0800 [INFO]  agent: Starting server: address=127.0.0.1:8530 network=tcp protocol=http
+2026-08-28T16:48:32.910+0800 [INFO]  agent: Started gRPC listeners: port_name=grpc address=127.0.0.1:8532 network=tcp
+2026-08-28T16:48:32.910+0800 [INFO]  agent: Started gRPC listeners: port_name=grpc_tls address=127.0.0.1:8533 network=tcp
+2026-08-28T16:48:32.910+0800 [INFO]  agent: started state syncer
+2026-08-28T16:48:32.911+0800 [INFO]  agent: Consul agent running!
+2026-08-28T16:48:32.910+0800 [INFO]  agent: Retry join is supported for the following discovery methods: cluster=WAN discovery_methods="aliyun aws azure digitalocean gce k8s linode mdns os packet scaleway softlayer tencentcloud triton vsphere"
+2026-08-28T16:48:32.912+0800 [INFO]  agent: Joining cluster...: cluster=WAN
+2026-08-28T16:48:32.912+0800 [INFO]  agent: (WAN) joining: wan_addresses=["127.0.0.1:8302", "127.0.0.1:8312", "127.0.0.1:8322"]
+2026-08-28T16:48:32.912+0800 [INFO]  agent.server.serf.wan: serf: EventMemberJoin: node1.dc1 127.0.0.1
+2026-08-28T16:48:32.913+0800 [INFO]  agent.server.serf.wan: serf: EventMemberJoin: node2.dc1 127.0.0.1
+2026-08-28T16:48:32.913+0800 [INFO]  agent.server: Handled event for server in area: event=member-join server=node1.dc1 area=wan
+2026-08-28T16:48:32.913+0800 [INFO]  agent.server: Handled event for server in area: event=member-join server=node2.dc1 area=wan
+2026-08-28T16:48:32.913+0800 [INFO]  agent.server.serf.wan: serf: EventMemberJoin: node3.dc1 127.0.0.1
+2026-08-28T16:48:32.913+0800 [WARN]  agent.server.memberlist.wan: memberlist: Refuting a suspect message (from: dc2-server.dc2)
+2026-08-28T16:48:32.913+0800 [INFO]  agent.server: Handled event for server in area: event=member-join server=node3.dc1 area=wan
+2026-08-28T16:48:32.915+0800 [INFO]  agent: (WAN) joined: number_of_nodes=3
+2026-08-28T16:48:32.915+0800 [INFO]  agent: Join cluster completed. Synced with initial agents: cluster=WAN num_agents=3
+2026-08-28T16:48:41.538+0800 [WARN]  agent.server.raft: heartbeat timeout reached, starting election: last-leader-addr= last-leader-id=
+2026-08-28T16:48:41.547+0800 [INFO]  agent.server.raft: entering candidate state: node="Node at 127.0.0.1:8330 [Candidate]" term=4
+2026-08-28T16:48:41.547+0800 [INFO]  agent.server.raft: pre-vote successful, starting election: term=4 tally=1 refused=0 votesNeeded=1
+2026-08-28T16:48:41.550+0800 [INFO]  agent.server.raft: election won: term=4 tally=1
+2026-08-28T16:48:41.550+0800 [INFO]  agent.server.raft: entering leader state: leader="Node at 127.0.0.1:8330 [Leader]"
+2026-08-28T16:48:41.550+0800 [INFO]  agent.server: cluster leadership acquired
+2026-08-28T16:48:41.550+0800 [INFO]  agent.server: New leader elected: payload=dc2-server
+2026-08-28T16:48:41.553+0800 [INFO]  agent.server.autopilot: reconciliation now enabled
+2026-08-28T16:48:41.553+0800 [INFO]  agent.leader: started routine: routine="federation state anti-entropy"
+2026-08-28T16:48:41.553+0800 [INFO]  agent.leader: started routine: routine="federation state pruning"
+2026-08-28T16:48:41.553+0800 [INFO]  agent.leader: started routine: routine="streaming peering resources"
+2026-08-28T16:48:41.553+0800 [INFO]  agent.leader: started routine: routine="metrics for streaming peering resources"
+2026-08-28T16:48:41.553+0800 [INFO]  agent.leader: started routine: routine="peering deferred deletion"
+2026-08-28T16:48:41.553+0800 [INFO]  connect.ca: initialized primary datacenter CA from existing CARoot with provider: provider=consul
+2026-08-28T16:48:41.554+0800 [INFO]  agent.leader: started routine: routine="intermediate cert renew watch"
+2026-08-28T16:48:41.554+0800 [INFO]  agent.leader: started routine: routine="CA root pruning"
+2026-08-28T16:48:41.554+0800 [INFO]  agent.leader: started routine: routine="CA root expiration metric"
+2026-08-28T16:48:41.554+0800 [INFO]  agent.leader: started routine: routine="CA signing expiration metric"
+2026-08-28T16:48:41.554+0800 [INFO]  agent.leader: started routine: routine="virtual IP version check"
+2026-08-28T16:48:41.554+0800 [INFO]  agent.leader: started routine: routine="config entry controllers"
+2026-08-28T16:48:41.554+0800 [INFO]  agent.leader: stopping routine: routine="virtual IP version check"
+2026-08-28T16:48:41.554+0800 [INFO]  agent.leader: stopped routine: routine="virtual IP version check"
+2026-08-28T16:48:42.908+0800 [ERROR] agent.server.autopilot: Failed to reconcile current state with the desired state
+2026-08-28T16:48:44.136+0800 [INFO]  agent: Synced node info
+2026-08-28T16:57:17.905+0800 [INFO]  agent.server.serf.wan: serf: EventMemberLeave: node1.dc1 127.0.0.1
+2026-08-28T16:57:17.915+0800 [INFO]  agent.server: Handled event for server in area: event=member-leave server=node1.dc1 area=wan
+2026-08-28T16:57:31.154+0800 [INFO]  agent.server.serf.wan: serf: EventMemberLeave: node2.dc1 127.0.0.1
+2026-08-28T16:57:31.154+0800 [INFO]  agent.server: Handled event for server in area: event=member-leave server=node2.dc1 area=wan
+2026-08-28T16:57:45.653+0800 [INFO]  agent.server.serf.wan: serf: EventMemberLeave: node3.dc1 127.0.0.1
+2026-08-28T16:57:45.663+0800 [INFO]  agent.server: Handled event for server in area: event=member-leave server=node3.dc1 area=wan
+2026-08-28T16:57:45.663+0800 [INFO]  agent.router.manager: shutting down
+2026-08-28T16:57:57.809+0800 [INFO]  agent.server: server starting leave
+2026-08-28T16:57:57.810+0800 [INFO]  agent.server.serf.wan: serf: EventMemberLeave: dc2-server.dc2 127.0.0.1
+2026-08-28T16:57:57.810+0800 [INFO]  agent.server: Handled event for server in area: event=member-leave server=dc2-server.dc2 area=wan
+2026-08-28T16:57:57.810+0800 [INFO]  agent.router.manager: shutting down
+2026-08-28T16:58:00.811+0800 [INFO]  agent.server.serf.lan: serf: EventMemberLeave: dc2-server 127.0.0.1
+2026-08-28T16:58:00.820+0800 [INFO]  agent.server: Removing LAN server: server="dc2-server (Addr: tcp/127.0.0.1:8330) (DC: dc2)"
+2026-08-28T16:58:00.821+0800 [INFO]  agent.router.manager: shutting down
+2026-08-28T16:58:00.821+0800 [WARN]  agent.server: deregistering self should be done by follower: name=dc2-server partition=default
+2026-08-28T16:58:03.823+0800 [INFO]  agent.server: Waiting to drain RPC traffic: drain_time=5s
+2026-08-28T16:58:08.829+0800 [INFO]  agent: Requesting shutdown
+2026-08-28T16:58:08.839+0800 [INFO]  agent.server: shutting down server
+2026-08-28T16:58:08.839+0800 [INFO]  agent.leader: stopping routine: routine="federation state anti-entropy"
+2026-08-28T16:58:08.839+0800 [INFO]  agent.leader: stopping routine: routine="federation state pruning"
+2026-08-28T16:58:08.840+0800 [INFO]  agent.leader: stopping routine: routine="streaming peering resources"
+2026-08-28T16:58:08.840+0800 [INFO]  agent.leader: stopping routine: routine="intermediate cert renew watch"
+2026-08-28T16:58:08.840+0800 [INFO]  agent.leader: stopping routine: routine="CA root pruning"
+2026-08-28T16:58:08.840+0800 [INFO]  agent.leader: stopping routine: routine="config entry controllers"
+2026-08-28T16:58:08.840+0800 [INFO]  agent.leader: stopping routine: routine="metrics for streaming peering resources"
+2026-08-28T16:58:08.839+0800 [WARN]  agent.server.controller-runtime: error received from watch: controller=consul.io/exported-services-v1-compat managed_type=multicluster.v2.ComputedExportedServices error="rpc error: code = Canceled desc = context canceled"
+2026-08-28T16:58:08.839+0800 [WARN]  agent.server.api_gateway_controller: error watching controller subscription: controller=apiGatewayController topic=APIGateway err="subscription closed by server, server is shutting down"
+2026-08-28T16:58:08.839+0800 [WARN]  agent.server.api_gateway_controller: error watching controller subscription: controller=apiGatewayController topic=BoundAPIGateway err="subscription closed by server, server is shutting down"
+2026-08-28T16:58:08.839+0800 [WARN]  agent.server.api_gateway_controller: error watching controller subscription: controller=apiGatewayController topic=InlineCertificate err="subscription closed by server, server is shutting down"
+2026-08-28T16:58:08.839+0800 [WARN]  agent.server.api_gateway_controller: error watching controller subscription: controller=apiGatewayController topic=JWTProvider err="subscription closed by server, server is shutting down"
+2026-08-28T16:58:08.839+0800 [WARN]  agent.server.api_gateway_controller: error watching controller subscription: controller=apiGatewayController topic=TCPRoute err="subscription closed by server, server is shutting down"
+2026-08-28T16:58:08.839+0800 [WARN]  agent.server.api_gateway_controller: error watching controller subscription: controller=apiGatewayController topic=HTTPRoute err="subscription closed by server, server is shutting down"
+2026-08-28T16:58:08.839+0800 [WARN]  agent.server.controller-runtime: error received from watch: controller=consul.io/reaper-controller managed_type=internal.v1.Tombstone error="rpc error: code = Canceled desc = context canceled"
+2026-08-28T16:58:08.839+0800 [WARN]  agent.server.controller-runtime: error received from watch: controller=consul.io/exported-services-v1-compat managed_type=multicluster.v2.ComputedExportedServices error="rpc error: code = Canceled desc = context canceled"
+2026-08-28T16:58:08.839+0800 [WARN]  agent.server.v2_exports_shim: encountered an error while streaming exported services: error="subscription closed by server, server is shutting down"
+2026-08-28T16:58:08.839+0800 [WARN]  agent.server.controller-runtime: error received from watch: controller=consul.io/exported-services-v1-compat managed_type=multicluster.v2.ComputedExportedServices error="rpc error: code = Canceled desc = context canceled"
+2026-08-28T16:58:08.839+0800 [WARN]  agent.server.controller-runtime: error received from watch: controller=consul.io/exported-services-v1-compat managed_type=multicluster.v2.ComputedExportedServices error="rpc error: code = Canceled desc = context canceled"
+2026-08-28T16:58:08.839+0800 [ERROR] agent.server: error performing anti-entropy sync of federation state: error="context canceled"
+2026-08-28T16:58:08.840+0800 [INFO]  agent.leader: stopped routine: routine="federation state pruning"
+2026-08-28T16:58:08.840+0800 [INFO]  agent.leader: stopped routine: routine="streaming peering resources"
+2026-08-28T16:58:08.840+0800 [INFO]  agent.leader: stopped routine: routine="intermediate cert renew watch"
+2026-08-28T16:58:08.840+0800 [INFO]  agent.leader: stopped routine: routine="CA root pruning"
+2026-08-28T16:58:08.840+0800 [INFO]  agent.leader: stopped routine: routine="config entry controllers"
+2026-08-28T16:58:08.840+0800 [INFO]  agent.leader: stopping routine: routine="peering deferred deletion"
+2026-08-28T16:58:08.840+0800 [INFO]  agent.server.peering_metrics: stopping peering metrics
+2026-08-28T16:58:08.842+0800 [INFO]  agent.leader: stopped routine: routine="federation state anti-entropy"
+2026-08-28T16:58:08.842+0800 [INFO]  agent.leader: stopping routine: routine="CA root expiration metric"
+2026-08-28T16:58:08.842+0800 [INFO]  agent.leader: stopping routine: routine="CA signing expiration metric"
+2026-08-28T16:58:08.843+0800 [INFO]  agent.leader: stopped routine: routine="CA signing expiration metric"
+2026-08-28T16:58:08.842+0800 [INFO]  agent.leader: stopped routine: routine="peering deferred deletion"
+2026-08-28T16:58:08.843+0800 [INFO]  agent.leader: stopping routine: routine="peering deferred deletion"
+2026-08-28T16:58:08.844+0800 [INFO]  agent.leader: stopping routine: routine="metrics for streaming peering resources"
+2026-08-28T16:58:08.842+0800 [INFO]  agent.leader: stopped routine: routine="metrics for streaming peering resources"
+2026-08-28T16:58:08.842+0800 [INFO]  agent.leader: stopped routine: routine="CA root expiration metric"
+2026-08-28T16:58:08.844+0800 [INFO]  agent.leader: stopping routine: routine="CA root expiration metric"
+2026-08-28T16:58:08.844+0800 [INFO]  agent.server.autopilot: reconciliation now disabled
+2026-08-28T16:58:08.856+0800 [INFO]  agent: consul server down
+2026-08-28T16:58:08.857+0800 [INFO]  agent: shutdown complete
+2026-08-28T16:58:08.857+0800 [INFO]  agent.dns: Stopping server: protocol=DNS address=127.0.0.1:8630 network=tcp
+2026-08-28T16:58:08.857+0800 [INFO]  agent.dns: Stopping server: protocol=DNS address=127.0.0.1:8630 network=udp
+2026-08-28T16:58:08.857+0800 [INFO]  agent: Stopping server: address=127.0.0.1:8530 network=tcp protocol=http
+2026-08-28T16:58:08.858+0800 [INFO]  agent: Waiting for endpoints to shut down
+2026-08-28T16:58:08.858+0800 [INFO]  agent: Endpoints down
+2026-08-28T16:58:08.858+0800 [INFO]  agent: Exit code: code=0

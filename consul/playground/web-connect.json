@@ -1,0 +1,12 @@
+{
+  "service": {
+    "id": "web-1",
+    "name": "web",
+    "address": "127.0.0.1",
+    "port": 8080,
+    "tags": ["lesson7"],
+    "connect": {
+      "sidecar_service": {}
+    }
+  }
+}

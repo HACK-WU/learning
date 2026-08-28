@@ -1,0 +1,10 @@
+alive: dc2-server 127.0.0.1:8331
+event-clock: 1
+leave
+clock: 1
+alive: dc2-server 127.0.0.1:8331
+event-clock: 1
+alive: dc2-server 127.0.0.1:8331
+event-clock: 2
+leave
+clock: 2

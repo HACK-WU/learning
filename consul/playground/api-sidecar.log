@@ -1,0 +1,12 @@
+==> Consul Connect proxy starting...
+    Configuration mode: Agent API
+        Sidecar for ID: api-1
+              Proxy ID: api-1-sidecar-proxy
+
+==> Log data will now stream in as it occurs:
+
+    2026-08-28T16:38:30.650+0800 [INFO]  proxy: Proxy loaded config and ready to serve
+    2026-08-28T16:38:30.658+0800 [INFO]  proxy: Parsed TLS identity: uri=spiffe://b56397a3-f9a5-54cf-7528-6f9ce729717a.consul/ns/default/dc/dc1/svc/api
+    2026-08-28T16:38:30.659+0800 [INFO]  proxy: Starting listener: listener="public listener" bind_addr=127.0.0.1:21000
+    2026-08-28T16:38:35.826+0800 [ERROR] proxy.connect: authz call denied: service=api reason="Matched L4 intention: default/web => default/api (ID: 5026c9a9-9721-b188-6b52-f69ad05f3ca6, Precedence: 9, Action: DENY)"
+    2026-08-28T16:44:25.124+0800 [ERROR] proxy.connect: authz call denied: service=api reason="Matched L4 intention: default/web => default/api (ID: 5026c9a9-9721-b188-6b52-f69ad05f3ca6, Precedence: 9, Action: DENY)"

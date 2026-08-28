@@ -1,0 +1,16 @@
+{
+  "service": {
+    "id": "web-1",
+    "name": "web",
+    "tags": ["demo", "v1"],
+    "address": "127.0.0.1",
+    "port": 8080,
+    "check": {
+      "id": "web-1-http",
+      "name": "web-1 HTTP check",
+      "http": "http://127.0.0.1:8080/",
+      "interval": "5s",
+      "timeout": "2s"
+    }
+  }
+}

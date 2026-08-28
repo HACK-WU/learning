@@ -1,0 +1,12 @@
+{
+  "service": {
+    "id": "api-1",
+    "name": "api",
+    "address": "127.0.0.1",
+    "port": 8181,
+    "tags": ["lesson7"],
+    "connect": {
+      "sidecar_service": {}
+    }
+  }
+}

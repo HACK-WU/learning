@@ -1,0 +1,13 @@
+{
+  "ID": "api-1",
+  "Name": "api",
+  "Tags": ["demo"],
+  "Address": "127.0.0.1",
+  "Port": 9090,
+  "Check": {
+    "CheckID": "api-1-ttl",
+    "Name": "api-1 TTL check",
+    "TTL": "15s",
+    "DeregisterCriticalServiceAfter": "1m"
+  }
+}

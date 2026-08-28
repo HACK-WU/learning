@@ -1,0 +1,22 @@
+{
+  "datacenter": "dc1",
+  "node_name": "testc",
+  "server": true,
+  "bootstrap_expect": 1,
+  "data_dir": "C:/Users/v_wypgwu/AppData/Local/Temp/consul-raft-test",
+  "bind_addr": "127.0.0.1",
+  "client_addr": "127.0.0.1",
+  "disable_update_check": true,
+  "raft_logstore": {
+    "backend": "boltdb"
+  },
+  "ports": {
+    "http": 8580,
+    "dns": 8680,
+    "server": 8380,
+    "serf_lan": 8381,
+    "serf_wan": 8382,
+    "grpc": 8582,
+    "grpc_tls": 8583
+  }
+}
