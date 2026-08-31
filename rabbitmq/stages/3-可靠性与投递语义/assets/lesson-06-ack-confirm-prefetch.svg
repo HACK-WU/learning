@@ -1,0 +1,173 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="860" viewBox="0 0 1100 860" font-family="Microsoft YaHei, PingFang SC, SimHei, sans-serif">
+  <rect width="1100" height="860" fill="#ffffff"/>
+
+  <text x="550" y="38" text-anchor="middle" font-size="24" font-weight="bold" fill="#1a1a1a">确认机制与预取 · 三个窗口与三道闸门</text>
+  <text x="550" y="62" text-anchor="middle" font-size="13" fill="#666666">RabbitMQ 4.3.5 + pika 1.4.4 实测（所有数字来自本机验证）</text>
+
+  <!-- ============ 主链路 ============ -->
+  <rect x="40" y="90" width="1020" height="150" fill="#fafafa" stroke="#cccccc" stroke-width="1.5" rx="6"/>
+  <text x="60" y="115" font-size="14" font-weight="bold" fill="#333333">消息从生产到消费：四个可能丢失的窗口</text>
+
+  <!-- 窗口 1 -->
+  <rect x="70" y="135" width="150" height="70" fill="#dae8fc" stroke="#6c8ebf" stroke-width="1.5" rx="4"/>
+  <text x="145" y="158" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a1a1a">① 生产者 → Broker</text>
+  <text x="145" y="176" text-anchor="middle" font-size="11" fill="#333333">发出去但没到</text>
+  <text x="145" y="195" text-anchor="middle" font-size="11" font-weight="bold" fill="#0d5aa7">confirm</text>
+
+  <path d="M220 170 L 285 170" stroke="#666" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 窗口 2 -->
+  <rect x="290" y="135" width="150" height="70" fill="#fff2cc" stroke="#d6b656" stroke-width="1.5" rx="4"/>
+  <text x="365" y="158" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a1a1a">② 交换机 → 队列</text>
+  <text x="365" y="176" text-anchor="middle" font-size="11" fill="#333333">路由不到被丢弃</text>
+  <text x="365" y="195" text-anchor="middle" font-size="11" font-weight="bold" fill="#8a6d0b">mandatory / AE</text>
+
+  <path d="M440 170 L 505 170" stroke="#666" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 窗口 3 -->
+  <rect x="510" y="135" width="150" height="70" fill="#d5e8d4" stroke="#82b366" stroke-width="1.5" rx="4"/>
+  <text x="585" y="158" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a1a1a">③ 队列 → 消费者</text>
+  <text x="585" y="176" text-anchor="middle" font-size="11" fill="#333333">处理中崩溃</text>
+  <text x="585" y="195" text-anchor="middle" font-size="11" font-weight="bold" fill="#2d6a1f">manual ack</text>
+
+  <path d="M660 170 L 725 170" stroke="#666" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 消费者 -->
+  <rect x="730" y="135" width="150" height="70" fill="#e1d5e7" stroke="#9673a6" stroke-width="1.5" rx="4"/>
+  <text x="805" y="158" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a1a1a">消费者</text>
+  <text x="805" y="176" text-anchor="middle" font-size="11" fill="#333333">处理业务逻辑</text>
+  <text x="805" y="195" text-anchor="middle" font-size="11" fill="#333333">写库 / 调接口</text>
+
+  <!-- 窗口 4 -->
+  <rect x="900" y="135" width="140" height="70" fill="#f8cecc" stroke="#b85450" stroke-width="1.5" rx="4"/>
+  <text x="970" y="158" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a1a1a">④ Broker 自身</text>
+  <text x="970" y="176" text-anchor="middle" font-size="11" fill="#333333">重启 / 断电</text>
+  <text x="970" y="195" text-anchor="middle" font-size="11" font-weight="bold" fill="#a03a35">持久化（课 7）</text>
+
+  <path d="M585 205 L 585 230 L 970 230 L 970 210" stroke="#b85450" stroke-width="1.5" fill="none" stroke-dasharray="5,3" marker-end="url(#arrowRed)"/>
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#666"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#b85450"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#0d5aa7"/>
+    </marker>
+  </defs>
+
+  <!-- ============ 知识点 1：消费者确认 ============ -->
+  <rect x="40" y="270" width="330" height="290" fill="#ffffff" stroke="#82b366" stroke-width="2" rx="6"/>
+  <rect x="40" y="270" width="330" height="32" fill="#d5e8d4" stroke="#82b366" stroke-width="2" rx="6"/>
+  <text x="205" y="292" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">知识点 1 · 消费者确认</text>
+
+  <text x="58" y="326" font-size="12" font-weight="bold" fill="#333">auto_ack=True（投递即完成）</text>
+  <rect x="58" y="334" width="294" height="52" fill="#f8cecc" stroke="#b85450" stroke-width="1" rx="3"/>
+  <text x="70" y="352" font-size="11" fill="#333">发 3 条 · 读 1 条 · 崩溃</text>
+  <text x="70" y="370" font-size="11" font-weight="bold" fill="#a03a35">ready=0 unacked=0 → 3 条全丢</text>
+
+  <text x="58" y="410" font-size="12" font-weight="bold" fill="#333">manual ack（处理完才算）</text>
+  <rect x="58" y="418" width="294" height="70" fill="#d5e8d4" stroke="#82b366" stroke-width="1" rx="3"/>
+  <text x="70" y="436" font-size="11" fill="#333">收到未 ack：ready=2 unacked=1</text>
+  <text x="70" y="453" font-size="11" fill="#333">崩溃后：ready=3 unacked=0  ← 回到队列</text>
+  <text x="70" y="470" font-size="11" fill="#333">重投时：redelivered=True</text>
+
+  <rect x="58" y="500" width="294" height="50" fill="#fff2cc" stroke="#d6b656" stroke-width="1" rx="3"/>
+  <text x="70" y="518" font-size="11" font-weight="bold" fill="#8a6d0b">⚠ P0 实测发现</text>
+  <text x="70" y="536" font-size="11" fill="#333">prefetch 对 auto_ack 完全无效（无未确认态）</text>
+
+  <!-- ============ 知识点 2：发布者确认 ============ -->
+  <rect x="385" y="270" width="330" height="290" fill="#ffffff" stroke="#6c8ebf" stroke-width="2" rx="6"/>
+  <rect x="385" y="270" width="330" height="32" fill="#dae8fc" stroke="#6c8ebf" stroke-width="2" rx="6"/>
+  <text x="550" y="292" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">知识点 2 · 发布者确认</text>
+
+  <text x="403" y="326" font-size="12" font-weight="bold" fill="#333">confirm 通过 ≠ 进了队列</text>
+  <rect x="403" y="334" width="294" height="70" fill="#f8cecc" stroke="#b85450" stroke-width="1" rx="3"/>
+  <text x="415" y="352" font-size="11" fill="#333">mandatory=False：路由不到</text>
+  <text x="415" y="369" font-size="11" font-weight="bold" fill="#a03a35">仍被 ack + 静默丢弃</text>
+  <text x="415" y="386" font-size="11" fill="#333">mandatory=True：抛 UnroutableError</text>
+
+  <text x="403" y="428" font-size="12" font-weight="bold" fill="#333">pika 的 confirm 是"假异步"</text>
+  <rect x="403" y="436" width="294" height="86" fill="#fff2cc" stroke="#d6b656" stroke-width="1" rx="3"/>
+  <text x="415" y="454" font-size="11" fill="#333">每条耗时 ÷ 1 次 RTT ≈ 1.0</text>
+  <text x="415" y="471" font-size="11" fill="#333">→ BlockingChannel 逐条等 ack</text>
+  <text x="415" y="488" font-size="11" font-weight="bold" fill="#0d5aa7">协议是异步的，慢在客户端</text>
+  <text x="415" y="505" font-size="11" fill="#333">并发可重叠等待：3865 → 4550 条/秒</text>
+
+  <rect x="403" y="534" width="294" height="18" fill="#e1d5e7" stroke="#9673a6" stroke-width="1" rx="3"/>
+  <text x="415" y="547" font-size="10" fill="#333">confirm 与事务互斥 · 官方：事务降吞吐约 250 倍</text>
+
+  <!-- ============ 知识点 3：预取 ============ -->
+  <rect x="730" y="270" width="330" height="290" fill="#ffffff" stroke="#d6b656" stroke-width="2" rx="6"/>
+  <rect x="730" y="270" width="330" height="32" fill="#fff2cc" stroke="#d6b656" stroke-width="2" rx="6"/>
+  <text x="895" y="292" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">知识点 3 · 预取与公平分发</text>
+
+  <text x="748" y="326" font-size="12" font-weight="bold" fill="#333">两消费者：快 5ms / 慢 150ms，40 条</text>
+
+  <rect x="748" y="334" width="294" height="22" fill="#f8cecc" stroke="#b85450" stroke-width="1" rx="2"/>
+  <text x="758" y="349" font-size="11" fill="#333">不设 prefetch</text>
+  <text x="1032" y="349" text-anchor="end" font-size="11" font-weight="bold" fill="#a03a35">快 0 : 慢 40</text>
+
+  <rect x="748" y="360" width="294" height="22" fill="#d5e8d4" stroke="#82b366" stroke-width="1" rx="2"/>
+  <text x="758" y="375" font-size="11" fill="#333">prefetch=1</text>
+  <text x="1032" y="375" text-anchor="end" font-size="11" font-weight="bold" fill="#2d6a1f">快 38 : 慢 2  （19:1）</text>
+
+  <rect x="748" y="386" width="294" height="22" fill="#d5e8d4" stroke="#82b366" stroke-width="1" rx="2"/>
+  <text x="758" y="401" font-size="11" fill="#333">prefetch=10</text>
+  <text x="1032" y="401" text-anchor="end" font-size="11" font-weight="bold" fill="#2d6a1f">快 30 : 慢 10  （3:1）</text>
+
+  <text x="748" y="436" font-size="12" font-weight="bold" fill="#333">吞吐 vs 预取值（单消费者 300 条）</text>
+  <rect x="748" y="444" width="294" height="106" fill="#fafafa" stroke="#cccccc" stroke-width="1" rx="3"/>
+
+  <rect x="762" y="462" width="18" height="14" fill="#82b366"/>
+  <text x="788" y="473" font-size="11" fill="#333">prefetch=1</text>
+  <text x="1032" y="473" text-anchor="end" font-size="11" fill="#333">4,049 条/秒</text>
+
+  <rect x="762" y="484" width="75" height="14" fill="#82b366"/>
+  <text x="845" y="495" font-size="11" fill="#333">prefetch=20</text>
+  <text x="1032" y="495" text-anchor="end" font-size="11" fill="#333">35,672 条/秒</text>
+
+  <rect x="762" y="506" width="96" height="14" fill="#82b366"/>
+  <text x="866" y="517" font-size="11" fill="#333">prefetch=100</text>
+  <text x="1032" y="517" text-anchor="end" font-size="11" fill="#333">45,549 条/秒</text>
+
+  <rect x="762" y="528" width="95" height="14" fill="#cccccc"/>
+  <text x="865" y="539" font-size="11" fill="#666">无限</text>
+  <text x="1032" y="539" text-anchor="end" font-size="11" fill="#666">45,440 条/秒（无增益）</text>
+
+  <!-- ============ 取值建议 ============ -->
+  <rect x="40" y="580" width="1020" height="110" fill="#fafafa" stroke="#cccccc" stroke-width="1.5" rx="6"/>
+  <text x="60" y="604" font-size="14" font-weight="bold" fill="#333333">prefetch 取值建议（官方建议 + 实测）</text>
+
+  <rect x="70" y="616" width="180" height="56" fill="#ffffff" stroke="#82b366" stroke-width="1.5" rx="4"/>
+  <text x="160" y="636" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a1a1a">1</text>
+  <text x="160" y="654" text-anchor="middle" font-size="10" fill="#555">严格顺序 / 秒级任务</text>
+
+  <rect x="268" y="616" width="180" height="56" fill="#ffffff" stroke="#82b366" stroke-width="1.5" rx="4"/>
+  <text x="358" y="636" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a1a1a">10 ~ 50</text>
+  <text x="358" y="654" text-anchor="middle" font-size="10" fill="#555">毫秒级计算任务</text>
+
+  <rect x="466" y="616" width="180" height="56" fill="#ffffff" stroke="#82b366" stroke-width="1.5" rx="4"/>
+  <text x="556" y="636" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a1a1a">50 ~ 300</text>
+  <text x="556" y="654" text-anchor="middle" font-size="10" fill="#555">IO 密集型（官方最优区）</text>
+
+  <rect x="664" y="616" width="180" height="56" fill="#ffffff" stroke="#b85450" stroke-width="1.5" rx="4"/>
+  <text x="754" y="636" text-anchor="middle" font-size="12" font-weight="bold" fill="#a03a35">硬上限 2000</text>
+  <text x="754" y="654" text-anchor="middle" font-size="10" fill="#555">quorum 队列强制压制</text>
+
+  <rect x="862" y="616" width="180" height="56" fill="#ffffff" stroke="#9673a6" stroke-width="1.5" rx="4"/>
+  <text x="952" y="636" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a1a1a">对 basic.get 无效</text>
+  <text x="952" y="654" text-anchor="middle" font-size="10" fill="#555">仅作用于推送式消费</text>
+
+  <!-- ============ 一句话记住 ============ -->
+  <rect x="40" y="710" width="1020" height="130" fill="#ffffff" stroke="#1a1a1a" stroke-width="2" rx="6"/>
+  <text x="60" y="736" font-size="14" font-weight="bold" fill="#1a1a1a">本课三句话</text>
+
+  <text x="62" y="762" font-size="12.5" fill="#333333">1. 消费端：auto_ack 是"发出即完成"，改手动 ack 才有崩溃保护；prefetch 只对手动 ack 生效。</text>
+  <text x="62" y="786" font-size="12.5" fill="#333333">2. 生产端：confirm 是回执，但"回执通过"不等于"进了队列"——要监控路由得配 mandatory。</text>
+  <text x="62" y="810" font-size="12.5" fill="#333333">3. 预取：既决定公平性（快者多劳），也决定崩溃时的损失规模，取值是吞吐与内存的权衡。</text>
+
+  <text x="550" y="846" text-anchor="middle" font-size="11" fill="#888888">下一课：课 7《持久化与死信》——开了 confirm 和 ack，消息依然可能丢</text>
+</svg>

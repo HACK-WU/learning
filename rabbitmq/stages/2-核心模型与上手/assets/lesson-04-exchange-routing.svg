@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" width="900" height="620" font-family="Segoe UI, Microsoft YaHei, Helvetica, Arial, sans-serif">
+  <rect x="0" y="0" width="900" height="620" fill="#ffffff"/>
+
+  <text x="450" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#1b5e20">课 4 · 四种交换机的路由规则</text>
+  <text x="450" y="50" text-anchor="middle" font-size="12" fill="#666666">同一条消息（routing key = "quick.orange.rabbit"），四种交换机各自送到哪些队列</text>
+
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#555555"/>
+    </marker>
+    <marker id="arrX" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#c62828"/>
+    </marker>
+  </defs>
+
+  <!-- ============ fanout ============ -->
+  <rect x="20" y="70" width="430" height="120" rx="8" fill="#f1f8e9" stroke="#558B2F" stroke-width="2"/>
+  <text x="36" y="92" font-size="13" font-weight="700" fill="#33691E">fanout（广播）</text>
+  <text x="200" y="92" font-size="11" fill="#666666">忽略 routing key，无脑复制给所有绑定的队列</text>
+
+  <rect x="36" y="106" width="86" height="30" rx="4" fill="#ffffff" stroke="#558B2F" stroke-width="1.5"/>
+  <text x="79" y="126" text-anchor="middle" font-size="11" font-weight="700" fill="#33691E">Producer</text>
+  <line x1="124" y1="121" x2="152" y2="121" stroke="#555555" stroke-width="1.6" marker-end="url(#arr)"/>
+
+  <rect x="156" y="102" width="104" height="38" rx="4" fill="#558B2F" stroke="#33691E" stroke-width="1.5"/>
+  <text x="208" y="118" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">amq.fanout</text>
+  <text x="208" y="133" text-anchor="middle" font-size="9" fill="#e8f5e9">fanout</text>
+
+  <line x1="262" y1="112" x2="292" y2="100" stroke="#555555" stroke-width="1.4" marker-end="url(#arr)"/>
+  <line x1="262" y1="121" x2="292" y2="121" stroke="#555555" stroke-width="1.4" marker-end="url(#arr)"/>
+  <line x1="262" y1="130" x2="292" y2="142" stroke="#555555" stroke-width="1.4" marker-end="url(#arr)"/>
+
+  <rect x="296" y="86" width="66" height="26" rx="4" fill="#ffffff" stroke="#888888" stroke-width="1.3"/>
+  <text x="329" y="103" text-anchor="middle" font-size="10" fill="#333333">Q1 ✓</text>
+  <rect x="296" y="114" width="66" height="26" rx="4" fill="#ffffff" stroke="#888888" stroke-width="1.3"/>
+  <text x="329" y="131" text-anchor="middle" font-size="10" fill="#333333">Q2 ✓</text>
+  <rect x="296" y="142" width="66" height="26" rx="4" fill="#ffffff" stroke="#888888" stroke-width="1.3"/>
+  <text x="329" y="159" text-anchor="middle" font-size="10" fill="#333333">Q3 ✓</text>
+
+  <text x="376" y="106" font-size="10" fill="#33691E">绑定 key 被忽略</text>
+  <text x="376" y="122" font-size="10" fill="#33691E">（实测显示为空/</text>
+  <text x="376" y="136" font-size="10" fill="#33691E">队列名，不起作用）</text>
+
+  <!-- ============ direct ============ -->
+  <rect x="470" y="70" width="410" height="120" rx="8" fill="#e8f5e9" stroke="#2E7D32" stroke-width="2"/>
+  <text x="486" y="92" font-size="13" font-weight="700" fill="#1b5e20">direct（精确匹配）</text>
+  <text x="660" y="92" font-size="11" fill="#666666">binding key 与 routing key 完全相等才投递</text>
+
+  <rect x="486" y="106" width="86" height="30" rx="4" fill="#ffffff" stroke="#2E7D32" stroke-width="1.5"/>
+  <text x="529" y="126" text-anchor="middle" font-size="11" font-weight="700" fill="#1b5e20">rk=error</text>
+  <line x1="574" y1="121" x2="600" y2="121" stroke="#555555" stroke-width="1.6" marker-end="url(#arr)"/>
+
+  <rect x="604" y="102" width="96" height="38" rx="4" fill="#2E7D32" stroke="#1b5e20" stroke-width="1.5"/>
+  <text x="652" y="118" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">amq.direct</text>
+  <text x="652" y="133" text-anchor="middle" font-size="9" fill="#e8f5e9">direct</text>
+
+  <line x1="702" y1="112" x2="734" y2="104" stroke="#555555" stroke-width="1.4" marker-end="url(#arr)"/>
+  <line x1="702" y1="130" x2="734" y2="150" stroke="#c62828" stroke-width="1.4" marker-end="url(#arrX)"/>
+
+  <rect x="738" y="90" width="130" height="26" rx="4" fill="#ffffff" stroke="#2E7D32" stroke-width="1.3"/>
+  <text x="803" y="107" text-anchor="middle" font-size="10" fill="#1b5e20">error 队列 ✓ 命中</text>
+  <rect x="738" y="136" width="130" height="26" rx="4" fill="#fafafa" stroke="#bdbdbd" stroke-width="1.3"/>
+  <text x="803" y="153" text-anchor="middle" font-size="10" fill="#999999">info 队列 ✗ 不匹配</text>
+
+  <!-- ============ topic ============ -->
+  <rect x="20" y="204" width="430" height="150" rx="8" fill="#fff8e1" stroke="#F9A825" stroke-width="2"/>
+  <text x="36" y="226" font-size="13" font-weight="700" fill="#e65100">topic（通配符）</text>
+  <text x="196" y="226" font-size="11" fill="#666666">* 匹配恰好一个词，# 匹配零或多个词</text>
+
+  <rect x="36" y="240" width="150" height="30" rx="4" fill="#ffffff" stroke="#F9A825" stroke-width="1.5"/>
+  <text x="111" y="260" text-anchor="middle" font-size="11" font-weight="700" fill="#e65100">quick.orange.rabbit</text>
+  <line x1="188" y1="255" x2="214" y2="255" stroke="#555555" stroke-width="1.6" marker-end="url(#arr)"/>
+
+  <rect x="218" y="246" width="96" height="38" rx="4" fill="#F9A825" stroke="#e65100" stroke-width="1.5"/>
+  <text x="266" y="262" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">amq.topic</text>
+  <text x="266" y="277" text-anchor="middle" font-size="9" fill="#fff8e1">topic</text>
+
+  <line x1="316" y1="250" x2="352" y2="238" stroke="#555555" stroke-width="1.4" marker-end="url(#arr)"/>
+  <line x1="316" y1="268" x2="352" y2="276" stroke="#c62828" stroke-width="1.4" marker-end="url(#arrX)"/>
+
+  <rect x="356" y="224" width="82" height="26" rx="4" fill="#ffffff" stroke="#F9A825" stroke-width="1.3"/>
+  <text x="397" y="241" text-anchor="middle" font-size="10" fill="#e65100">*.orange.*</text>
+  <text x="36" y="290" font-size="10" fill="#e65100">✓ 恰好三段、中间是 orange → 命中</text>
+
+  <rect x="356" y="262" width="82" height="26" rx="4" fill="#fafafa" stroke="#bdbdbd" stroke-width="1.3"/>
+  <text x="397" y="279" text-anchor="middle" font-size="10" fill="#999999">lazy.#</text>
+  <text x="36" y="312" font-size="10" fill="#999999">✗ 首词不是 lazy → 不命中</text>
+
+  <text x="36" y="334" font-size="10" fill="#666666">实测：lazy.# 收下 lazy.orange.elephant / lazy.brown.fox /</text>
+  <text x="36" y="348" font-size="10" fill="#666666">lazy.pink.rabbit / lazy.orange.male.rabbit（共 4 条）</text>
+
+  <!-- ============ headers ============ -->
+  <rect x="470" y="204" width="410" height="150" rx="8" fill="#f3e5f5" stroke="#7B1FA2" stroke-width="2"/>
+  <text x="486" y="226" font-size="13" font-weight="700" fill="#4a148c">headers（属性匹配）</text>
+  <text x="660" y="226" font-size="11" fill="#666666">按消息 headers 匹配，完全忽略 routing key</text>
+
+  <rect x="486" y="240" width="112" height="30" rx="4" fill="#ffffff" stroke="#7B1FA2" stroke-width="1.5"/>
+  <text x="542" y="260" text-anchor="middle" font-size="10" fill="#4a148c">headers: format=pdf</text>
+  <line x1="600" y1="255" x2="624" y2="255" stroke="#555555" stroke-width="1.6" marker-end="url(#arr)"/>
+
+  <rect x="628" y="246" width="100" height="38" rx="4" fill="#7B1FA2" stroke="#4a148c" stroke-width="1.5"/>
+  <text x="678" y="262" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">amq.headers</text>
+  <text x="678" y="277" text-anchor="middle" font-size="9" fill="#f3e5f5">headers</text>
+
+  <line x1="730" y1="250" x2="760" y2="238" stroke="#555555" stroke-width="1.4" marker-end="url(#arr)"/>
+  <line x1="730" y1="268" x2="760" y2="280" stroke="#555555" stroke-width="1.4" marker-end="url(#arr)"/>
+
+  <rect x="764" y="224" width="104" height="26" rx="4" fill="#ffffff" stroke="#7B1FA2" stroke-width="1.3"/>
+  <text x="816" y="241" text-anchor="middle" font-size="10" fill="#4a148c">x-match=any ✓</text>
+  <rect x="764" y="266" width="104" height="26" rx="4" fill="#fafafa" stroke="#bdbdbd" stroke-width="1.3"/>
+  <text x="816" y="283" text-anchor="middle" font-size="10" fill="#999999">x-match=all ✗</text>
+
+  <text x="486" y="300" font-size="10" fill="#4a148c">any：任意一个 header 命中即可（OR）</text>
+  <text x="486" y="316" font-size="10" fill="#999999">all：必须全部命中（AND），type=report 未给 → 落空</text>
+  <text x="486" y="338" font-size="10" fill="#666666">实测：只给 format=pdf 时，any 队列收到、all 队列没收到</text>
+  <text x="486" y="352" font-size="10" fill="#666666">routing key 填什么都不影响（实测填 TOTALLY_IGNORED 照样投递）</text>
+
+  <!-- ============ default exchange ============ -->
+  <rect x="20" y="368" width="860" height="120" rx="8" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="36" y="390" font-size="13" font-weight="700" fill="#0d47a1">默认交换机（名字为空字符串 ""）</text>
+  <text x="330" y="390" font-size="11" fill="#666666">课 3 用的就是它：不声明交换机也能发消息的原因</text>
+
+  <rect x="36" y="404" width="112" height="30" rx="4" fill="#ffffff" stroke="#1565C0" stroke-width="1.5"/>
+  <text x="92" y="424" text-anchor="middle" font-size="10" fill="#0d47a1">exchange=''  rk='hello'</text>
+  <line x1="150" y1="419" x2="180" y2="419" stroke="#555555" stroke-width="1.6" marker-end="url(#arr)"/>
+
+  <rect x="184" y="410" width="120" height="38" rx="4" fill="#1565C0" stroke="#0d47a1" stroke-width="1.5"/>
+  <text x="244" y="426" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">(default exchange)</text>
+  <text x="244" y="441" text-anchor="middle" font-size="9" fill="#e3f2fd">direct，隐身</text>
+
+  <line x1="306" y1="419" x2="340" y2="419" stroke="#555555" stroke-width="1.4" marker-end="url(#arr)"/>
+  <rect x="344" y="404" width="120" height="30" rx="4" fill="#ffffff" stroke="#1565C0" stroke-width="1.3"/>
+  <text x="404" y="424" text-anchor="middle" font-size="10" fill="#0d47a1">queue "hello"</text>
+
+  <text x="36" y="456" font-size="10" fill="#0d47a1">规则：每个队列在创建时，自动以「队列名」为 binding key 绑定到默认交换机</text>
+  <text x="36" y="472" font-size="10" fill="#c62828">限制：不能显式绑定、不能解绑、也不能删除（实测报 ACCESS_REFUSED）</text>
+
+  <!-- ============ unroutable ============ -->
+  <rect x="20" y="502" width="860" height="104" rx="8" fill="#fbe9e7" stroke="#c62828" stroke-width="2"/>
+  <text x="36" y="524" font-size="13" font-weight="700" fill="#b71c1c">无可路由的消息：去了哪里？</text>
+
+  <rect x="36" y="538" width="112" height="30" rx="4" fill="#ffffff" stroke="#c62828" stroke-width="1.5"/>
+  <text x="92" y="558" text-anchor="middle" font-size="10" fill="#b71c1c">routing_key=nosuch</text>
+  <line x1="150" y1="553" x2="180" y2="553" stroke="#555555" stroke-width="1.6" marker-end="url(#arr)"/>
+
+  <rect x="184" y="544" width="120" height="38" rx="4" fill="#c62828" stroke="#b71c1c" stroke-width="1.5"/>
+  <text x="244" y="560" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">无任何队列匹配</text>
+  <text x="244" y="575" text-anchor="middle" font-size="9" fill="#fbe9e7">交换机不存储消息</text>
+
+  <line x1="306" y1="553" x2="340" y2="540" stroke="#c62828" stroke-width="1.4" marker-end="url(#arrX)"/>
+  <line x1="306" y1="558" x2="340" y2="574" stroke="#2E7D32" stroke-width="1.4" marker-end="url(#arr)"/>
+  <line x1="306" y1="563" x2="340" y2="596" stroke="#2E7D32" stroke-width="1.4" marker-end="url(#arr)"/>
+
+  <text x="344" y="540" font-size="10" fill="#b71c1c">默认：静默丢弃（HTTP API 返回 routed:false）</text>
+  <text x="344" y="578" font-size="10" fill="#1b5e20">mandatory=true：退回生产者（312 NO_ROUTE）</text>
+  <text x="344" y="600" font-size="10" fill="#1b5e20">alternate-exchange：转到备用交换机兜底</text>
+
+  <text x="450" y="616" text-anchor="middle" font-size="11" fill="#666666">交换机只做一件事：查路由表、转发。它从不保存消息——这是它与队列的本质区别</text>
+</svg>

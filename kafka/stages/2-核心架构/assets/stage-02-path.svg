@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 520" font-family="-apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="680" height="520" fill="#ffffff"/>
+  <text x="30" y="40" fill="#1a7f37" font-size="18" font-weight="700">阶段 2 · Kafka 核心架构</text>
+  <text x="30" y="62" fill="#57606a" font-size="12">故事章节：「认识这套物流系统」——先动手跑起来，再拆解存储模型、生产、消费</text>
+
+  <rect x="30" y="86" width="620" height="54" rx="8" fill="#f6f8fa" stroke="#d0d7de"/>
+  <text x="46" y="110" fill="#1f2328" font-size="13" font-weight="700">🎯 阶段目标</text>
+  <text x="46" y="130" fill="#57606a" font-size="11.5">用真集群动手：本地起 Kafka、建 Topic 发/收消息，并讲透分片、顺序写+零拷贝、生产者、消费者组四大机制</text>
+
+  <path d="M340 142 L340 162" stroke="#57606a" stroke-width="2" marker-end="url(#a2)"/>
+
+  <rect x="30" y="166" width="620" height="54" rx="8" fill="#f6f8fa" stroke="#1a7f37" stroke-width="2"/>
+  <text x="46" y="190" fill="#1a7f37" font-size="13" font-weight="700">课 3 · 本地起 Kafka + CLI 快速上手（动手）</text>
+  <text x="46" y="212" fill="#57606a" font-size="11">KRaft 一键起（Docker） / 创建 Topic 生产消费 / CLI 观察 Partition</text>
+
+  <path d="M340 222 L340 242" stroke="#57606a" stroke-width="2" marker-end="url(#a2)"/>
+
+  <rect x="30" y="246" width="620" height="54" rx="8" fill="#f6f8fa" stroke="#1a7f37" stroke-width="2"/>
+  <text x="46" y="270" fill="#1a7f37" font-size="13" font-weight="700">课 4 · Topic、Partition 与 Broker</text>
+  <text x="46" y="292" fill="#57606a" font-size="11">Topic 与 Partition / 顺序写磁盘 / 零拷贝 / Broker 与集群</text>
+
+  <path d="M340 302 L340 322" stroke="#57606a" stroke-width="2" marker-end="url(#a2)"/>
+
+  <rect x="30" y="326" width="620" height="54" rx="8" fill="#f6f8fa" stroke="#1a7f37" stroke-width="2"/>
+  <text x="46" y="350" fill="#1a7f37" font-size="13" font-weight="700">课 5 · 生产者 Producer</text>
+  <text x="46" y="372" fill="#57606a" font-size="11">发送流程 / 分区策略（key→分区） / acks 与发送可靠性</text>
+
+  <path d="M340 382 L340 402" stroke="#57606a" stroke-width="2" marker-end="url(#a2)"/>
+
+  <rect x="30" y="406" width="620" height="54" rx="8" fill="#f6f8fa" stroke="#1a7f37" stroke-width="2"/>
+  <text x="46" y="430" fill="#1a7f37" font-size="13" font-weight="700">课 6 · 消费者与消费者组</text>
+  <text x="46" y="452" fill="#57606a" font-size="11">消费模型与位移 offset / 消费者组与再均衡</text>
+  <text x="46" y="470" fill="#57606a" font-size="11">位移提交方式（自动/手动）与重复消费/消息丢失</text>
+
+  <defs>
+    <marker id="a2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#57606a"/>
+    </marker>
+  </defs>
+</svg>

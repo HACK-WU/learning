@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="900" height="560" font-family="Segoe UI, Microsoft YaHei, Helvetica, Arial, sans-serif">
+  <rect x="0" y="0" width="900" height="560" fill="#ffffff"/>
+
+  <text x="450" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#1a237e">RabbitMQ vs Kafka：两种设计哲学</text>
+  <text x="450" y="50" text-anchor="middle" font-size="12" fill="#666666">同样被叫做"消息队列"，但一个负责派发任务，一个负责留存日志</text>
+
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#555555"/>
+    </marker>
+  </defs>
+
+  <!-- 左：RabbitMQ -->
+  <rect x="20" y="68" width="420" height="200" rx="8" fill="#e8f0fe" stroke="#1565C0" stroke-width="2"/>
+  <text x="230" y="92" text-anchor="middle" font-size="15" font-weight="700" fill="#1565C0">RabbitMQ</text>
+  <text x="230" y="110" text-anchor="middle" font-size="11" fill="#444444">智能 broker / 哑消费者</text>
+
+  <rect x="40" y="140" width="70" height="32" rx="4" fill="#ffffff" stroke="#1565C0" stroke-width="1.5"/>
+  <text x="75" y="161" text-anchor="middle" font-size="12" fill="#333333">生产者</text>
+
+  <rect x="130" y="140" width="90" height="32" rx="4" fill="#fff4e5" stroke="#EF6C00" stroke-width="1.5"/>
+  <text x="175" y="161" text-anchor="middle" font-size="12" fill="#333333">交换机</text>
+
+  <rect x="250" y="124" width="80" height="26" rx="4" fill="#ffffff" stroke="#1565C0" stroke-width="1.5"/>
+  <text x="290" y="142" text-anchor="middle" font-size="11" fill="#333333">队列 A</text>
+  <rect x="250" y="162" width="80" height="26" rx="4" fill="#ffffff" stroke="#1565C0" stroke-width="1.5"/>
+  <text x="290" y="180" text-anchor="middle" font-size="11" fill="#333333">队列 B</text>
+
+  <rect x="360" y="148" width="62" height="24" rx="4" fill="#ffffff" stroke="#1565C0" stroke-width="1.5"/>
+  <text x="391" y="164" text-anchor="middle" font-size="11" fill="#333333">消费者</text>
+
+  <line x1="112" y1="156" x2="128" y2="156" stroke="#555555" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="222" y1="152" x2="248" y2="140" stroke="#555555" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="222" y1="160" x2="248" y2="174" stroke="#555555" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="332" y1="140" x2="358" y2="156" stroke="#555555" stroke-width="1.5" marker-end="url(#ar)"/>
+
+  <text x="40" y="212" font-size="11" fill="#0d47a1">broker 负责：路由分发、复制投递、追踪每条消息的投递状态、确认后删除</text>
+  <text x="40" y="232" font-size="11" fill="#0d47a1">消费者只负责：收消息 → 处理 → 回一个 ack</text>
+  <text x="40" y="252" font-size="11" font-style="italic" fill="#666666">消息被消费后从队列消失，想"再看一遍"就得重发</text>
+
+  <!-- 右：Kafka -->
+  <rect x="460" y="68" width="420" height="200" rx="8" fill="#e6f4ea" stroke="#2E7D32" stroke-width="2"/>
+  <text x="670" y="92" text-anchor="middle" font-size="15" font-weight="700" fill="#2E7D32">Kafka</text>
+  <text x="670" y="110" text-anchor="middle" font-size="11" fill="#444444">哑 broker / 智能消费者</text>
+
+  <rect x="480" y="148" width="70" height="32" rx="4" fill="#ffffff" stroke="#2E7D32" stroke-width="1.5"/>
+  <text x="515" y="169" text-anchor="middle" font-size="12" fill="#333333">生产者</text>
+
+  <rect x="575" y="120" width="180" height="76" rx="4" fill="#ffffff" stroke="#2E7D32" stroke-width="1.5"/>
+  <text x="665" y="116" text-anchor="middle" font-size="11" fill="#2E7D32">Topic（分区日志）</text>
+  <rect x="583" y="126" width="164" height="20" rx="2" fill="#f1f8e9" stroke="#7cb342" stroke-width="1"/>
+  <text x="665" y="140" text-anchor="middle" font-size="10" fill="#333333">P0 ▮▮▮▮▮▮▮ 已写入，读完不删</text>
+  <rect x="583" y="150" width="164" height="20" rx="2" fill="#f1f8e9" stroke="#7cb342" stroke-width="1"/>
+  <text x="665" y="164" text-anchor="middle" font-size="10" fill="#333333">P1 ▮▮▮▮▮</text>
+  <rect x="583" y="174" width="164" height="20" rx="2" fill="#f1f8e9" stroke="#7cb342" stroke-width="1"/>
+  <text x="665" y="188" text-anchor="middle" font-size="10" fill="#333333">P2 ▮▮▮▮▮▮▮▮</text>
+
+  <rect x="785" y="132" width="78" height="26" rx="4" fill="#ffffff" stroke="#2E7D32" stroke-width="1.5"/>
+  <text x="824" y="149" text-anchor="middle" font-size="10" fill="#333333">消费者组 A</text>
+  <rect x="785" y="170" width="78" height="26" rx="4" fill="#ffffff" stroke="#2E7D32" stroke-width="1.5"/>
+  <text x="824" y="187" text-anchor="middle" font-size="10" fill="#333333">消费者组 B</text>
+
+  <line x1="552" y1="164" x2="573" y2="164" stroke="#555555" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="757" y1="150" x2="783" y2="146" stroke="#555555" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="757" y1="170" x2="783" y2="180" stroke="#555555" stroke-width="1.5" marker-end="url(#ar)"/>
+
+  <text x="480" y="212" font-size="11" fill="#1b5e20">broker 只负责：追加写入日志、按保留期整段删除</text>
+  <text x="480" y="232" font-size="11" fill="#1b5e20">消费者自己负责：offset 读到哪、要不要重放、rebalance 怎么分</text>
+  <text x="480" y="252" font-size="11" font-style="italic" fill="#666666">消息读完仍在，新来的服务可以从头把历史事件再消费一遍</text>
+
+  <!-- 对比表 -->
+  <rect x="20" y="290" width="210" height="30" fill="#1565C0"/>
+  <text x="125" y="310" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">对比维度</text>
+  <rect x="230" y="290" width="325" height="30" fill="#1976D2"/>
+  <text x="392" y="310" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">RabbitMQ</text>
+  <rect x="555" y="290" width="325" height="30" fill="#2E7D32"/>
+  <text x="717" y="310" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">Kafka</text>
+
+  <rect x="20" y="320" width="210" height="28" fill="#f5f5f5" stroke="#dddddd" stroke-width="1"/>
+  <text x="32" y="339" font-size="11" font-weight="700" fill="#333333">数据模型</text>
+  <rect x="230" y="320" width="325" height="28" fill="#ffffff" stroke="#dddddd" stroke-width="1"/>
+  <text x="242" y="339" font-size="11" fill="#333333">队列 + 交换机路由</text>
+  <rect x="555" y="320" width="325" height="28" fill="#ffffff" stroke="#dddddd" stroke-width="1"/>
+  <text x="567" y="339" font-size="11" fill="#333333">分区追加日志（Partition Log）</text>
+
+  <rect x="20" y="348" width="210" height="28" fill="#f5f5f5" stroke="#dddddd" stroke-width="1"/>
+  <text x="32" y="367" font-size="11" font-weight="700" fill="#333333">消息生命周期</text>
+  <rect x="230" y="348" width="325" height="28" fill="#ffffff" stroke="#dddddd" stroke-width="1"/>
+  <text x="242" y="367" font-size="11" fill="#333333">消费者确认后删除</text>
+  <rect x="555" y="348" width="325" height="28" fill="#ffffff" stroke="#dddddd" stroke-width="1"/>
+  <text x="567" y="367" font-size="11" fill="#333333">按保留期保留，与是否被消费无关</text>
+
+  <rect x="20" y="376" width="210" height="28" fill="#f5f5f5" stroke="#dddddd" stroke-width="1"/>
+  <text x="32" y="395" font-size="11" font-weight="700" fill="#333333">路由能力</text>
+  <rect x="230" y="376" width="325" height="28" fill="#ffffff" stroke="#dddddd" stroke-width="1"/>
+  <text x="242" y="395" font-size="11" fill="#333333">强：fanout / direct / topic / headers</text>
+  <rect x="555" y="376" width="325" height="28" fill="#ffffff" stroke="#dddddd" stroke-width="1"/>
+  <text x="567" y="395" font-size="11" fill="#333333">弱：按 topic + 分区键，过滤靠应用层</text>
+
+  <rect x="20" y="404" width="210" height="28" fill="#f5f5f5" stroke="#dddddd" stroke-width="1"/>
+  <text x="32" y="423" font-size="11" font-weight="700" fill="#333333">消费状态谁维护</text>
+  <rect x="230" y="404" width="325" height="28" fill="#ffffff" stroke="#dddddd" stroke-width="1"/>
+  <text x="242" y="423" font-size="11" fill="#333333">broker 追踪（unacked → ack）</text>
+  <rect x="555" y="404" width="325" height="28" fill="#ffffff" stroke="#dddddd" stroke-width="1"/>
+  <text x="567" y="423" font-size="11" fill="#333333">消费者自持 offset</text>
+
+  <rect x="20" y="432" width="210" height="28" fill="#f5f5f5" stroke="#dddddd" stroke-width="1"/>
+  <text x="32" y="451" font-size="11" font-weight="700" fill="#333333">历史重放</text>
+  <rect x="230" y="432" width="325" height="28" fill="#ffffff" stroke="#dddddd" stroke-width="1"/>
+  <text x="242" y="451" font-size="11" fill="#333333">队列不支持；4.x 的 streams 补位</text>
+  <rect x="555" y="432" width="325" height="28" fill="#ffffff" stroke="#dddddd" stroke-width="1"/>
+  <text x="567" y="451" font-size="11" fill="#333333">原生支持，重置 offset 即可</text>
+
+  <rect x="20" y="460" width="210" height="28" fill="#f5f5f5" stroke="#dddddd" stroke-width="1"/>
+  <text x="32" y="479" font-size="11" font-weight="700" fill="#333333">吞吐 / 延迟取向</text>
+  <rect x="230" y="460" width="325" height="28" fill="#ffffff" stroke="#dddddd" stroke-width="1"/>
+  <text x="242" y="479" font-size="11" fill="#333333">吞吐中等，延迟低（毫秒级以内）</text>
+  <rect x="555" y="460" width="325" height="28" fill="#ffffff" stroke="#dddddd" stroke-width="1"/>
+  <text x="567" y="479" font-size="11" fill="#333333">吞吐极高，延迟毫秒级（批量换吞吐）</text>
+
+  <rect x="20" y="488" width="210" height="28" fill="#f5f5f5" stroke="#dddddd" stroke-width="1"/>
+  <text x="32" y="507" font-size="11" font-weight="700" fill="#333333">典型场景</text>
+  <rect x="230" y="488" width="325" height="28" fill="#ffffff" stroke="#dddddd" stroke-width="1"/>
+  <text x="242" y="507" font-size="11" fill="#333333">任务分发、复杂路由、RPC</text>
+  <rect x="555" y="488" width="325" height="28" fill="#ffffff" stroke="#dddddd" stroke-width="1"/>
+  <text x="567" y="507" font-size="11" fill="#333333">日志埋点、流处理、事件溯源</text>
+
+  <text x="450" y="538" text-anchor="middle" font-size="10" fill="#888888">吞吐数字为社区经验量级，非官方基准测试；实际值随消息大小、持久化、副本数、客户端实现差异极大</text>
+</svg>

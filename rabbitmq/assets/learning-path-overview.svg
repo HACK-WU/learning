@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 320" width="1000" height="320" font-family="Segoe UI, Microsoft YaHei, Helvetica, Arial, sans-serif">
+  <rect x="0" y="0" width="1000" height="320" fill="#ffffff"/>
+
+  <text x="500" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#1a237e">RabbitMQ 系统学习路径</text>
+  <text x="500" y="59" text-anchor="middle" font-size="13" fill="#555555">主角：一条消息的旅程 ｜ 冲突：同步调用撞墙 ｜ 收束：能设计可靠的异步架构，并说清该不该用 RabbitMQ</text>
+
+  <!-- 阶段 1 -->
+  <rect x="24" y="90" width="220" height="110" rx="8" fill="#e8f0fe" stroke="#1565C0" stroke-width="2"/>
+  <text x="134" y="116" text-anchor="middle" font-size="12" font-weight="700" fill="#1565C0">阶段 1</text>
+  <text x="134" y="140" text-anchor="middle" font-size="15" font-weight="700" fill="#1a237e">为什么需要消息队列</text>
+  <text x="134" y="162" text-anchor="middle" font-size="12" fill="#333333">课 1–2</text>
+  <text x="134" y="180" text-anchor="middle" font-size="12" fill="#333333">同步调用的困境 · MQ 本质</text>
+  <text x="134" y="228" text-anchor="middle" font-size="12" font-style="italic" fill="#666666">章节：同步调用撞墙</text>
+
+  <!-- 阶段 2 -->
+  <rect x="268" y="90" width="220" height="110" rx="8" fill="#e6f4ea" stroke="#2E7D32" stroke-width="2"/>
+  <text x="378" y="116" text-anchor="middle" font-size="12" font-weight="700" fill="#2E7D32">阶段 2</text>
+  <text x="378" y="140" text-anchor="middle" font-size="15" font-weight="700" fill="#1b5e20">核心模型与动手上手</text>
+  <text x="378" y="162" text-anchor="middle" font-size="12" fill="#333333">课 3–5</text>
+  <text x="378" y="180" text-anchor="middle" font-size="12" fill="#333333">起服务 · 交换机路由 · 队列类型</text>
+  <text x="378" y="228" text-anchor="middle" font-size="12" font-style="italic" fill="#666666">章节：让消息跑起来</text>
+
+  <!-- 阶段 3 -->
+  <rect x="512" y="90" width="220" height="110" rx="8" fill="#fff4e5" stroke="#EF6C00" stroke-width="2"/>
+  <text x="622" y="116" text-anchor="middle" font-size="12" font-weight="700" fill="#EF6C00">阶段 3</text>
+  <text x="622" y="140" text-anchor="middle" font-size="15" font-weight="700" fill="#7f3f00">可靠性与投递语义</text>
+  <text x="622" y="162" text-anchor="middle" font-size="12" fill="#333333">课 6–8</text>
+  <text x="622" y="180" text-anchor="middle" font-size="12" fill="#333333">确认 · 持久化 · 死信 · 幂等</text>
+  <text x="622" y="228" text-anchor="middle" font-size="12" font-style="italic" fill="#666666">章节：消息为什么还会丢</text>
+
+  <!-- 阶段 4 -->
+  <rect x="756" y="90" width="220" height="110" rx="8" fill="#f3e8fd" stroke="#6A1B9A" stroke-width="2"/>
+  <text x="866" y="116" text-anchor="middle" font-size="12" font-weight="700" fill="#6A1B9A">阶段 4</text>
+  <text x="866" y="140" text-anchor="middle" font-size="15" font-weight="700" fill="#4a148c">进阶与工程落地</text>
+  <text x="866" y="162" text-anchor="middle" font-size="12" fill="#333333">课 9–12</text>
+  <text x="866" y="180" text-anchor="middle" font-size="12" fill="#333333">客户端 · 高级特性 · 集群 · 选型</text>
+  <text x="866" y="228" text-anchor="middle" font-size="12" font-style="italic" fill="#666666">章节：把它用进生产</text>
+
+  <!-- 依赖箭头 -->
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#555555"/>
+    </marker>
+  </defs>
+  <line x1="248" y1="145" x2="264" y2="145" stroke="#555555" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="492" y1="145" x2="508" y2="145" stroke="#555555" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="736" y1="145" x2="752" y2="145" stroke="#555555" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <line x1="24" y1="262" x2="976" y2="262" stroke="#dddddd" stroke-width="1"/>
+  <text x="500" y="288" text-anchor="middle" font-size="12" fill="#666666">箭头表示前置依赖：阶段 2 默认你会起服务，阶段 3 默认你懂交换机与队列，阶段 4 默认你已能跑通可靠收发</text>
+  <text x="500" y="308" text-anchor="middle" font-size="12" fill="#666666">全程实操基于 Python + pika（核查于 2026-08，当前稳定系列 RabbitMQ 4.3.x）</text>
+</svg>

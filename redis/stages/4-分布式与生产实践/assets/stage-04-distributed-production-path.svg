@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="560" viewBox="0 0 880 560" font-family="'Microsoft YaHei','PingFang SC','Helvetica Neue',Arial,sans-serif">
+  <defs>
+    <marker id="a4" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+      <path d="M0,0 L0,10 L9,5 z" fill="#90A4AE"/>
+    </marker>
+  </defs>
+  <rect width="880" height="560" fill="#ffffff"/>
+  <text x="440" y="34" text-anchor="middle" font-size="19" font-weight="700" fill="#4A148C">阶段 4 · 分布式与生产实践 — 学习路径</text>
+  <text x="440" y="57" text-anchor="middle" font-size="12.5" fill="#546E7A">故事章节「单机不够用了」：数据量超内存、缓存雪崩、Redis 到底该不该上</text>
+
+  <rect x="40" y="86" width="255" height="62" rx="7" fill="#F3E5F5" stroke="#6A1B9A" stroke-width="1.5"/>
+  <text x="60" y="110" font-size="14" font-weight="700" fill="#4A148C">课 7　分片与集群</text>
+  <text x="60" y="133" font-size="12" fill="#546E7A">机制层：哈希槽 / 伸缩 / 限制</text>
+
+  <rect x="313" y="86" width="255" height="62" rx="7" fill="#F3E5F5" stroke="#6A1B9A" stroke-width="1.5"/>
+  <text x="333" y="110" font-size="14" font-weight="700" fill="#4A148C">课 8　缓存设计</text>
+  <text x="333" y="133" font-size="12" fill="#546E7A">设计层：三大问题 / 一致性 / 淘汰</text>
+
+  <rect x="586" y="86" width="255" height="62" rx="7" fill="#F3E5F5" stroke="#6A1B9A" stroke-width="1.5"/>
+  <text x="606" y="110" font-size="14" font-weight="700" fill="#4A148C">课 9　生产实践与选型</text>
+  <text x="606" y="133" font-size="12" fill="#546E7A">定位层：诊断 / 安全 / 选型</text>
+
+  <line x1="295" y1="117" x2="303" y2="117" stroke="#90A4AE" stroke-width="2" marker-end="url(#a4)"/>
+  <line x1="568" y1="117" x2="576" y2="117" stroke="#90A4AE" stroke-width="2" marker-end="url(#a4)"/>
+
+  <rect x="40" y="176" width="800" height="112" rx="7" fill="#FAFAFA" stroke="#BDBDBD" stroke-width="1"/>
+  <text x="62" y="201" font-size="13.5" font-weight="700" fill="#37474F">课 7 的 3 个知识点</text>
+  <circle cx="74" cy="228" r="4" fill="#6A1B9A"/><text x="88" y="232" font-size="12.5" fill="#37474F">哈希槽与 CRC16：16384 个槽的取模分配，以及为什么不用一致性哈希</text>
+  <circle cx="74" cy="252" r="4" fill="#6A1B9A"/><text x="88" y="256" font-size="12.5" fill="#37474F">集群伸缩与重定向：MOVED 与 ASK 的区别，扩容时数据怎么搬</text>
+  <circle cx="74" cy="276" r="4" fill="#6A1B9A"/><text x="88" y="280" font-size="12.5" fill="#37474F">集群下的多 key 与 Lua 限制：key 不在同一槽会怎样、hash tag 怎么用</text>
+
+  <rect x="40" y="304" width="800" height="112" rx="7" fill="#FAFAFA" stroke="#BDBDBD" stroke-width="1"/>
+  <text x="62" y="329" font-size="13.5" font-weight="700" fill="#37474F">课 8 的 3 个知识点</text>
+  <circle cx="74" cy="356" r="4" fill="#6A1B9A"/><text x="88" y="360" font-size="12.5" fill="#37474F">穿透 / 击穿 / 雪崩：三种故障的成因不同，解法也不同（别混为一谈）</text>
+  <circle cx="74" cy="380" r="4" fill="#6A1B9A"/><text x="88" y="384" font-size="12.5" fill="#37474F">缓存与数据库一致性：Cache Aside、先更库还是先删缓存、延迟双删的真相</text>
+  <circle cx="74" cy="404" r="4" fill="#6A1B9A"/><text x="88" y="408" font-size="12.5" fill="#37474F">内存淘汰与过期策略：8 种淘汰策略怎么选、惰性删除 + 定期删除</text>
+
+  <rect x="40" y="432" width="800" height="88" rx="7" fill="#FAFAFA" stroke="#BDBDBD" stroke-width="1"/>
+  <text x="62" y="457" font-size="13.5" font-weight="700" fill="#37474F">课 9 的 3 个知识点</text>
+  <circle cx="74" cy="484" r="4" fill="#6A1B9A"/><text x="88" y="488" font-size="12.5" fill="#37474F">性能诊断：慢查询日志、大 key 与热 key 的定位</text>
+  <circle cx="74" cy="506" r="4" fill="#6A1B9A"/><text x="88" y="510" font-size="12.5" fill="#37474F">安全与运维基线：不暴露公网、高危命令、ACL 与监控指标</text>
+
+  <rect x="40" y="534" width="800" height="20" rx="4" fill="#F3E5F5" stroke="#6A1B9A" stroke-width="0.8"/>
+  <text x="60" y="548" font-size="12" fill="#4A148C">学完本阶段你应该能：设计缓存方案、定位大 key 与慢查询，并判断该不该用 Redis</text>
+</svg>

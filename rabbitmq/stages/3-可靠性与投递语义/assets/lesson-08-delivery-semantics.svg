@@ -1,0 +1,178 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1560" width="1200" height="1560" font-family="'PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <defs>
+    <linearGradient id="gTitle" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1a237e"/>
+      <stop offset="100%" stop-color="#3949ab"/>
+    </linearGradient>
+    <linearGradient id="gK1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e3f2fd"/>
+      <stop offset="100%" stop-color="#bbdefb"/>
+    </linearGradient>
+    <linearGradient id="gK2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f3e5f5"/>
+      <stop offset="100%" stop-color="#ce93d8"/>
+    </linearGradient>
+    <linearGradient id="gK3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e8f5e9"/>
+      <stop offset="100%" stop-color="#a5d6a7"/>
+    </linearGradient>
+    <linearGradient id="gWarn" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff3e0"/>
+      <stop offset="100%" stop-color="#ffcc80"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#455a64"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="1560" fill="#fafafa"/>
+
+  <rect x="0" y="0" width="1200" height="76" fill="url(#gTitle)"/>
+  <text x="600" y="36" font-size="27" font-weight="bold" fill="#ffffff" text-anchor="middle">第 8 课 · 交付语义与幂等</text>
+  <text x="600" y="62" font-size="15" fill="#c5cae9" text-anchor="middle">RabbitMQ 4.3.5 / pika 1.4.4 实测 · 阶段 3《可靠性与投递语义》收官</text>
+
+  <text x="600" y="112" font-size="20" font-weight="bold" fill="#1a237e" text-anchor="middle">可靠性的三个维度：不丢 · 不重 · 不乱</text>
+  <text x="600" y="138" font-size="14" fill="#546e7a" text-anchor="middle">前三课解决了「不丢」，本课承认代价是「会重」，并厘清「不乱」的边界</text>
+
+  <rect x="60" y="158" width="330" height="96" rx="8" fill="#e8f5e9" stroke="#43a047" stroke-width="2"/>
+  <text x="225" y="184" font-size="16" font-weight="bold" fill="#2e7d32" text-anchor="middle">不丢（课 6/7 已解决）</text>
+  <text x="225" y="208" font-size="13" fill="#33691e" text-anchor="middle">ack + confirm + 三层持久化</text>
+  <text x="225" y="230" font-size="13" fill="#33691e" text-anchor="middle">+ TTL/死信兜底</text>
+  <text x="225" y="248" font-size="12" font-weight="bold" fill="#1b5e20" text-anchor="middle">✔ 已达成</text>
+
+  <rect x="435" y="158" width="330" height="96" rx="8" fill="#f3e5f5" stroke="#8e24aa" stroke-width="2"/>
+  <text x="600" y="184" font-size="16" font-weight="bold" fill="#6a1b9a" text-anchor="middle">不重（本课知识点 1/2）</text>
+  <text x="600" y="208" font-size="13" fill="#4a148c" text-anchor="middle">RabbitMQ 不保证</text>
+  <text x="600" y="230" font-size="13" fill="#4a148c" text-anchor="middle">必须业务幂等兜住</text>
+  <text x="600" y="248" font-size="12" font-weight="bold" fill="#4a148c" text-anchor="middle">⚠ 需自己造</text>
+
+  <rect x="810" y="158" width="330" height="96" rx="8" fill="#e3f2fd" stroke="#1e88e5" stroke-width="2"/>
+  <text x="975" y="184" font-size="16" font-weight="bold" fill="#1565c0" text-anchor="middle">不乱（本课知识点 3）</text>
+  <text x="975" y="208" font-size="13" fill="#0d47a1" text-anchor="middle">只保证 FIFO 投递</text>
+  <text x="975" y="230" font-size="13" fill="#0d47a1" text-anchor="middle">不保证处理完成顺序</text>
+  <text x="975" y="248" font-size="12" font-weight="bold" fill="#0d47a1" text-anchor="middle">⚠ 需额外设计</text>
+
+  <rect x="40" y="282" width="1120" height="330" rx="10" fill="url(#gK1)" stroke="#1565c0" stroke-width="2"/>
+  <text x="60" y="312" font-size="19" font-weight="bold" fill="#0d47a1">知识点 1 · 三种交付语义</text>
+  <text x="60" y="335" font-size="13" fill="#37474f">RabbitMQ 落在「至少一次」——宁可重复，绝不丢失</text>
+
+  <rect x="62" y="352" width="340" height="110" rx="7" fill="#ffffff" stroke="#e53935" stroke-width="2"/>
+  <text x="232" y="376" font-size="15" font-weight="bold" fill="#c62828" text-anchor="middle">至多一次 at-most-once</text>
+  <text x="232" y="398" font-size="12" fill="#455a64" text-anchor="middle">auto_ack=True（投递即确认）</text>
+  <text x="232" y="420" font-size="12" font-weight="bold" fill="#c62828" text-anchor="middle">实测：回调跑 1 条 → 丢 100 条</text>
+  <text x="232" y="440" font-size="11" fill="#c62828" text-anchor="middle">★丢失放大：broker 已推的全丢</text>
+  <text x="232" y="456" font-size="11" fill="#795548" text-anchor="middle">prefetch=1 也救不了</text>
+
+  <rect x="420" y="352" width="340" height="110" rx="7" fill="#ffffff" stroke="#43a047" stroke-width="3"/>
+  <text x="590" y="376" font-size="15" font-weight="bold" fill="#2e7d32" text-anchor="middle">至少一次 at-least-once ✔推荐</text>
+  <text x="590" y="398" font-size="12" fill="#455a64" text-anchor="middle">auto_ack=False + 手动 ack</text>
+  <text x="590" y="420" font-size="12" font-weight="bold" fill="#2e7d32" text-anchor="middle">实测：崩溃 → 丢失 0/100 条</text>
+  <text x="590" y="440" font-size="11" fill="#2e7d32" text-anchor="middle">代价：消息会重投（重复）</text>
+  <text x="590" y="456" font-size="11" fill="#795548" text-anchor="middle">这是 RabbitMQ 的默认档位</text>
+
+  <rect x="778" y="352" width="360" height="110" rx="7" fill="#ffffff" stroke="#8e24aa" stroke-width="2"/>
+  <text x="958" y="376" font-size="15" font-weight="bold" fill="#6a1b9a" text-anchor="middle">恰好一次 exactly-once</text>
+  <text x="958" y="398" font-size="12" fill="#455a64" text-anchor="middle">RabbitMQ 不直接提供</text>
+  <text x="958" y="420" font-size="12" font-weight="bold" fill="#6a1b9a" text-anchor="middle">= 至少一次 + 业务幂等</text>
+  <text x="958" y="440" font-size="11" fill="#6a1b9a" text-anchor="middle">组合出来的效果，非 broker 能力</text>
+  <text x="958" y="456" font-size="11" fill="#795548" text-anchor="middle">见知识点 2</text>
+
+  <rect x="62" y="478" width="1076" height="50" rx="7" fill="url(#gWarn)" stroke="#ef6c00" stroke-width="2"/>
+  <text x="76" y="500" font-size="14" font-weight="bold" fill="#e65100">⚠ 丢失放大效应（本课最反直觉的发现）</text>
+  <text x="76" y="519" font-size="12" fill="#5d4037">auto_ack=True 时崩溃丢失的是「broker 已推送、业务未处理」的全部，不是「正在处理的 1 条」。它们在 pika 接收缓冲区里阵亡，业务代码根本没见过。队列积压越多损失越大。</text>
+
+  <rect x="62" y="538" width="1076" height="60" rx="7" fill="#ffffff" stroke="#90a4ae" stroke-width="1.5"/>
+  <text x="76" y="558" font-size="13" font-weight="bold" fill="#37474f">实测对照（100 条消息，回调执行 1 条后崩溃）</text>
+  <text x="76" y="578" font-size="12" fill="#455a64">A 组 auto_ack=True            → 队列剩 0 条 / 丢失 100 条</text>
+  <text x="620" y="578" font-size="12" fill="#455a64">B 组 +prefetch=1  → 剩 0 条 / 丢失 100 条（无效）</text>
+  <text x="76" y="594" font-size="12" fill="#2e7d32">C 组 手动 ack +prefetch=1  → 剩 100 条 / 丢失 0 条 ✔</text>
+
+  <rect x="40" y="638" width="1120" height="430" rx="10" fill="url(#gK2)" stroke="#6a1b9a" stroke-width="2"/>
+  <text x="60" y="668" font-size="19" font-weight="bold" fill="#4a148c">知识点 2 · 重复来源与幂等设计</text>
+  <text x="60" y="691" font-size="13" fill="#37474f">重复有四个来源，其中一种 broker 完全不标记 —— 只能靠业务单号识别</text>
+
+  <rect x="62" y="706" width="255" height="112" rx="7" fill="#ffffff" stroke="#7b1fa2" stroke-width="1.5"/>
+  <text x="189" y="728" font-size="14" font-weight="bold" fill="#6a1b9a" text-anchor="middle">S1 处理完但 ack 前崩溃</text>
+  <text x="189" y="750" font-size="11.5" fill="#455a64" text-anchor="middle">业务做完了，进程挂了</text>
+  <text x="189" y="768" font-size="11.5" fill="#455a64" text-anchor="middle">ack 没发出去</text>
+  <text x="189" y="792" font-size="11" font-weight="bold" fill="#2e7d32" text-anchor="middle">redelivered=True ✔可感知</text>
+
+  <rect x="333" y="706" width="255" height="112" rx="7" fill="#ffffff" stroke="#7b1fa2" stroke-width="1.5"/>
+  <text x="460" y="728" font-size="14" font-weight="bold" fill="#6a1b9a" text-anchor="middle">S2 ack 在网络中丢失</text>
+  <text x="460" y="750" font-size="11.5" fill="#455a64" text-anchor="middle">进程没崩，网络闪断</text>
+  <text x="460" y="768" font-size="11.5" fill="#455a64" text-anchor="middle">broker 没收到 ack</text>
+  <text x="460" y="792" font-size="11" font-weight="bold" fill="#2e7d32" text-anchor="middle">redelivered=True ✔可感知</text>
+
+  <rect x="604" y="706" width="255" height="112" rx="7" fill="#ffffff" stroke="#7b1fa2" stroke-width="1.5"/>
+  <text x="731" y="728" font-size="14" font-weight="bold" fill="#6a1b9a" text-anchor="middle">S3 nack(requeue=True)</text>
+  <text x="731" y="750" font-size="11.5" fill="#455a64" text-anchor="middle">显式要求重投</text>
+  <text x="731" y="768" font-size="11.5" fill="#455a64" text-anchor="middle">实测 3 次：[False,True,True]</text>
+  <text x="731" y="792" font-size="11" font-weight="bold" fill="#2e7d32" text-anchor="middle">redelivered=True ✔可感知</text>
+
+  <rect x="875" y="706" width="263" height="112" rx="7" fill="#ffebee" stroke="#c62828" stroke-width="2.5"/>
+  <text x="1006" y="728" font-size="14" font-weight="bold" fill="#b71c1c" text-anchor="middle">S4 ★发布者超时重发</text>
+  <text x="1006" y="750" font-size="11.5" fill="#455a64" text-anchor="middle">broker 收到的是两条</text>
+  <text x="1006" y="768" font-size="11.5" fill="#455a64" text-anchor="middle">完全独立的消息</text>
+  <text x="1006" y="792" font-size="11" font-weight="bold" fill="#c62828" text-anchor="middle">redelivered 全 False ✗无标记</text>
+
+  <rect x="62" y="834" width="1076" height="52" rx="7" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="76" y="856" font-size="13.5" font-weight="bold" fill="#b71c1c">★ 本课最危险的一条：redelivered 不是可靠的去重依据</text>
+  <text x="76" y="875" font-size="12" fill="#5d4037">它只能识别消费侧重复（S1/S2/S3）。生产侧重复（S4）在 broker 眼里是两条全新消息，没有任何标记，唯一能识别它们的是消息体里的业务单号。</text>
+
+  <text x="62" y="912" font-size="14" font-weight="bold" fill="#4a148c">幂等三要素：幂等键 + 原子去重 + 失败释放</text>
+
+  <rect x="62" y="924" width="348" height="86" rx="7" fill="#ffffff" stroke="#8e24aa" stroke-width="1.5"/>
+  <text x="236" y="946" font-size="13.5" font-weight="bold" fill="#6a1b9a" text-anchor="middle">① 选幂等键</text>
+  <text x="236" y="968" font-size="11.5" fill="#455a64" text-anchor="middle">业务单号 / UUID / 内容哈希</text>
+  <text x="236" y="986" font-size="11.5" fill="#455a64" text-anchor="middle">要求：同一业务重发 N 次键不变</text>
+  <text x="236" y="1002" font-size="11" fill="#c62828" text-anchor="middle">✗ 时间戳（每次都不同）</text>
+
+  <rect x="426" y="924" width="348" height="86" rx="7" fill="#ffffff" stroke="#8e24aa" stroke-width="1.5"/>
+  <text x="600" y="946" font-size="13.5" font-weight="bold" fill="#6a1b9a" text-anchor="middle">② 原子去重（不能先查再插）</text>
+  <text x="600" y="968" font-size="11.5" fill="#455a64" text-anchor="middle">Redis SETNX / DB 唯一索引 / 乐观锁</text>
+  <text x="600" y="986" font-size="11.5" fill="#455a64" text-anchor="middle">避免 check-then-act 竞态</text>
+  <text x="600" y="1002" font-size="11" fill="#2e7d32" text-anchor="middle">✔ 强一致：唯一索引 + 事务</text>
+
+  <rect x="790" y="924" width="348" height="86" rx="7" fill="#ffffff" stroke="#8e24aa" stroke-width="1.5"/>
+  <text x="964" y="946" font-size="13.5" font-weight="bold" fill="#6a1b9a" text-anchor="middle">③ 失败必须释放标记</text>
+  <text x="964" y="968" font-size="11.5" fill="#455a64" text-anchor="middle">不释放 → 重试被误判"已处理"跳过</text>
+  <text x="964" y="986" font-size="11.5" fill="#c62828" text-anchor="middle">消息实质丢失，且极难排查</text>
+  <text x="964" y="1002" font-size="11" fill="#795548" text-anchor="middle">（日志还显示"成功跳过"）</text>
+
+  <rect x="62" y="1022" width="1076" height="34" rx="7" fill="#e8f5e9" stroke="#43a047" stroke-width="1.5"/>
+  <text x="76" y="1044" font-size="12.5" fill="#1b5e20">实测效果：发布 3 条同单号消息 → 不幂等扣款 3 次 ✗ ｜ 幂等后扣款 1 次 ✔（去重表挡住 2 次重复）</text>
+
+  <rect x="40" y="1094" width="1120" height="330" rx="10" fill="url(#gK3)" stroke="#2e7d32" stroke-width="2"/>
+  <text x="60" y="1124" font-size="19" font-weight="bold" fill="#1b5e20">知识点 3 · 顺序性</text>
+  <text x="60" y="1147" font-size="13" fill="#37474f">RabbitMQ 保证 FIFO 投递顺序，不保证处理完成顺序</text>
+
+  <rect x="62" y="1162" width="530" height="150" rx="7" fill="#ffffff" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="327" y="1184" font-size="14" font-weight="bold" fill="#1b5e20" text-anchor="middle">顺序杀手 ①：并发消费</text>
+  <text x="327" y="1207" font-size="11.5" fill="#455a64" text-anchor="middle">快的消费者先完成，与投递顺序无关</text>
+  <text x="327" y="1232" font-size="11.5" fill="#2e7d32" text-anchor="middle">✔ 单消费者：msg-01→02→...→12 顺序保持</text>
+  <text x="327" y="1254" font-size="11.5" fill="#c62828" text-anchor="middle">✗ 3 消费者：[1,3,4,2,6,5,8,10,7,9,11,12] 乱序</text>
+  <text x="327" y="1278" font-size="11" fill="#795548" text-anchor="middle">C0(快)/C1(中)/C2(慢) 并发 → 完成顺序取决于速度</text>
+  <text x="327" y="1300" font-size="11" fill="#37474f" text-anchor="middle">多消费者必然乱序，无法避免</text>
+
+  <rect x="608" y="1162" width="530" height="150" rx="7" fill="#fff3e0" stroke="#ef6c00" stroke-width="2"/>
+  <text x="873" y="1184" font-size="14" font-weight="bold" fill="#e65100" text-anchor="middle">顺序杀手 ②：失败重投 ★易忽略</text>
+  <text x="873" y="1207" font-size="11.5" fill="#455a64" text-anchor="middle">单消费者也中招！取决于队列是否有积压</text>
+  <text x="873" y="1232" font-size="11.5" fill="#2e7d32" text-anchor="middle">场景A 无积压(p=1)：msg-03 插回原位，顺序侥幸保持</text>
+  <text x="873" y="1254" font-size="11.5" fill="#c62828" text-anchor="middle">场景B 有积压(p=8)：msg-03 被挤到第 8 位，顺序破坏</text>
+  <text x="873" y="1278" font-size="11" fill="#e65100" text-anchor="middle">完成顺序：msg-01 02 04 05 06 07 08 03</text>
+  <text x="873" y="1300" font-size="11" fill="#37474f" text-anchor="middle">prefetch 越大 / 积压越多 → 破坏越严重</text>
+
+  <rect x="62" y="1326" width="1076" height="86" rx="7" fill="#ffffff" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="76" y="1348" font-size="13.5" font-weight="bold" fill="#1b5e20">保序方案：三种取舍</text>
+  <text x="76" y="1370" font-size="11.5" fill="#455a64">① 单消费者 + prefetch=1　　：严格保序，吞吐最低（实测 3716 条/秒）</text>
+  <text x="76" y="1388" font-size="11.5" fill="#455a64">② 单消费者 + prefetch=50　 ：仍保序，吞吐提升约 8.5 倍（31721 条/秒），但重投乱序风险升高</text>
+  <text x="76" y="1406" font-size="11.5" fill="#2e7d32">③ ★按业务键分队列（推荐）：同键串行、不同键并行 —— 兼顾顺序与吞吐</text>
+
+  <rect x="40" y="1448" width="1120" height="92" rx="10" fill="#eceff1" stroke="#546e7a" stroke-width="2"/>
+  <text x="60" y="1472" font-size="15" font-weight="bold" fill="#263238">本课最重要的三句话</text>
+  <text x="60" y="1495" font-size="12.5" fill="#37474f">1. RabbitMQ 只保证「至少一次」—— 宁可重复，绝不丢失；「不重」必须业务兜住</text>
+  <text x="60" y="1515" font-size="12.5" fill="#37474f">2. 生产侧重复没有任何标记 —— redelivered 只能识别消费侧，只能靠业务单号识别</text>
+  <text x="60" y="1535" font-size="12.5" fill="#37474f">3. 顺序有两个杀手 —— 并发消费和失败重投（后者常被忽略）；真要保序就按业务键分队列</text>
+
+  <text x="600" y="1552" font-size="11" fill="#78909c" text-anchor="middle">实测于 RabbitMQ 4.3.5 / pika 1.4.4 · 2026-08-31 · 守护脚本 l8-guard-facts.py 6/6 通过</text>
+</svg>

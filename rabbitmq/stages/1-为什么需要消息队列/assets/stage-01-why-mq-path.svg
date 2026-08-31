@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 250" width="900" height="250" font-family="Segoe UI, Microsoft YaHei, Helvetica, Arial, sans-serif">
+  <rect x="0" y="0" width="900" height="250" fill="#ffffff"/>
+
+  <text x="450" y="32" text-anchor="middle" font-size="17" font-weight="700" fill="#1a237e">阶段 1 · 为什么需要消息队列</text>
+  <text x="450" y="54" text-anchor="middle" font-size="12" fill="#666666">章节：同步调用撞墙 —— 先搞清楚为什么要引入一个中间件</text>
+
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#555555"/>
+    </marker>
+  </defs>
+
+  <rect x="30" y="74" width="410" height="140" rx="8" fill="#e8f0fe" stroke="#1565C0" stroke-width="2"/>
+  <text x="235" y="100" text-anchor="middle" font-size="12" font-weight="700" fill="#1565C0">课 1</text>
+  <text x="235" y="124" text-anchor="middle" font-size="15" font-weight="700" fill="#1a237e">为什么需要消息队列</text>
+  <text x="235" y="150" text-anchor="middle" font-size="12" fill="#333333">· 同步调用的四个困境</text>
+  <text x="235" y="170" text-anchor="middle" font-size="12" fill="#333333">· 消息队列的本质</text>
+  <text x="235" y="190" text-anchor="middle" font-size="12" fill="#333333">· 引入 MQ 的代价</text>
+
+  <rect x="460" y="74" width="410" height="140" rx="8" fill="#e8f0fe" stroke="#1565C0" stroke-width="2"/>
+  <text x="665" y="100" text-anchor="middle" font-size="12" font-weight="700" fill="#1565C0">课 2</text>
+  <text x="665" y="124" text-anchor="middle" font-size="15" font-weight="700" fill="#1a237e">RabbitMQ 是什么与起源定位</text>
+  <text x="665" y="150" text-anchor="middle" font-size="12" fill="#333333">· 起源与 AMQP 协议</text>
+  <text x="665" y="170" text-anchor="middle" font-size="12" fill="#333333">· 核心角色与 AMQP 模型</text>
+  <text x="665" y="190" text-anchor="middle" font-size="12" fill="#333333">· 定位与直觉对比</text>
+
+  <line x1="444" y1="144" x2="456" y2="144" stroke="#555555" stroke-width="2" marker-end="url(#a)"/>
+
+  <text x="450" y="238" text-anchor="middle" font-size="12" fill="#666666">学完本阶段：能说清「为什么不能直接同步调用」，并知道什么情况下不该上 MQ</text>
+</svg>

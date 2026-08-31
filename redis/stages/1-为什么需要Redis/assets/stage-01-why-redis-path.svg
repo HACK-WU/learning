@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="470" viewBox="0 0 880 470" font-family="'Microsoft YaHei','PingFang SC','Helvetica Neue',Arial,sans-serif">
+  <defs>
+    <marker id="a1" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+      <path d="M0,0 L0,10 L9,5 z" fill="#90A4AE"/>
+    </marker>
+  </defs>
+  <rect width="880" height="470" fill="#ffffff"/>
+  <text x="440" y="34" text-anchor="middle" font-size="19" font-weight="700" fill="#0D47A1">阶段 1 · 为什么需要 Redis — 学习路径</text>
+  <text x="440" y="57" text-anchor="middle" font-size="12.5" fill="#546E7A">故事章节「磁盘太慢了」：先搞懂它为什么被发明出来，再把本机跑起来</text>
+
+  <rect x="60" y="86" width="340" height="62" rx="7" fill="#E3F2FD" stroke="#1565C0" stroke-width="1.5"/>
+  <text x="80" y="110" font-size="14.5" font-weight="700" fill="#0D47A1">课 1　Redis 是什么</text>
+  <text x="80" y="133" font-size="12" fill="#546E7A">概念层：诞生动机 / 数据结构服务器 / 不是什么</text>
+
+  <rect x="480" y="86" width="340" height="62" rx="7" fill="#E3F2FD" stroke="#1565C0" stroke-width="1.5"/>
+  <text x="500" y="110" font-size="14.5" font-weight="700" fill="#0D47A1">课 2　跑起来第一个 Redis</text>
+  <text x="500" y="133" font-size="12" fill="#546E7A">实操层：安装 / 五种类型 / key 设计与过期</text>
+
+  <line x1="400" y1="117" x2="470" y2="117" stroke="#90A4AE" stroke-width="2" marker-end="url(#a1)"/>
+
+  <rect x="60" y="176" width="760" height="112" rx="7" fill="#FAFAFA" stroke="#BDBDBD" stroke-width="1"/>
+  <text x="82" y="201" font-size="13.5" font-weight="700" fill="#37474F">课 1 的 3 个知识点（认知阶梯：起源 → 概念 → 边界）</text>
+  <circle cx="94" cy="228" r="4" fill="#1565C0"/><text x="108" y="232" font-size="12.5" fill="#37474F">Redis 的诞生动机：MySQL 磁盘 IO 瓶颈（起源事实已联网核查）</text>
+  <circle cx="94" cy="252" r="4" fill="#1565C0"/><text x="108" y="256" font-size="12.5" fill="#37474F">内存数据结构服务器：不只是 KV，而是把数据结构搬到服务器端</text>
+  <circle cx="94" cy="276" r="4" fill="#1565C0"/><text x="108" y="280" font-size="12.5" fill="#37474F">Redis 不是什么：不替代数据库、不保证强一致、不适合大对象</text>
+
+  <rect x="60" y="304" width="760" height="112" rx="7" fill="#FAFAFA" stroke="#BDBDBD" stroke-width="1"/>
+  <text x="82" y="329" font-size="13.5" font-weight="700" fill="#37474F">课 2 的 3 个知识点（认知阶梯：装起来 → 用起来 → 不乱用）</text>
+  <circle cx="94" cy="356" r="4" fill="#1565C0"/><text x="108" y="360" font-size="12.5" fill="#37474F">安装与启动：官方 apt 源装 Redis 8，redis-cli 连上第一个实例</text>
+  <circle cx="94" cy="380" r="4" fill="#1565C0"/><text x="108" y="384" font-size="12.5" fill="#37474F">五种基础类型与通用命令：string / list / hash / set / zset 各练一遍</text>
+  <circle cx="94" cy="404" r="4" fill="#1565C0"/><text x="108" y="408" font-size="12.5" fill="#37474F">key 设计与过期：命名规范、TTL、以及 KEYS 为什么不能在生产跑</text>
+
+  <rect x="60" y="434" width="760" height="26" rx="4" fill="#E3F2FD" stroke="#1565C0" stroke-width="0.8"/>
+  <text x="80" y="452" font-size="12" fill="#0D47A1">学完本阶段你应该能：说清 Redis 解决的痛点 + 本机跑通 Redis 8 + 说出 3 种不该用 Redis 的场景</text>
+</svg>

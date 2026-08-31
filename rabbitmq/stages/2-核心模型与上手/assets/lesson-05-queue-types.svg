@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 720" width="1000" height="720" font-family="Microsoft YaHei, PingFang SC, Helvetica, Arial, sans-serif">
+  <rect width="1000" height="720" fill="#fbfcfe"/>
+
+  <text x="500" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#1a237e">RabbitMQ 队列三型对照：存储 · 复制 · 消费语义</text>
+  <text x="500" y="56" text-anchor="middle" font-size="12.5" fill="#5c6b7a">实测环境 RabbitMQ 4.3.5（核查于 2026-08）｜ 内存为空队列多次取样实测值</text>
+
+  <!-- ============ 列 1：classic ============ -->
+  <g>
+    <rect x="24" y="80" width="304" height="432" rx="10" fill="#e8f1fb" stroke="#1565C0" stroke-width="2"/>
+    <rect x="24" y="80" width="304" height="42" rx="10" fill="#1565C0"/>
+    <rect x="24" y="108" width="304" height="14" fill="#1565C0"/>
+    <text x="176" y="107" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">classic（经典队列）</text>
+    <text x="176" y="146" text-anchor="middle" font-size="12" fill="#1565C0">单副本 · 非复制 · 默认类型</text>
+
+    <text x="44" y="176" font-size="13" font-weight="bold" fill="#0d47a1">存储与复制</text>
+    <text x="44" y="198" font-size="12.5" fill="#333">消息只存在 1 个节点</text>
+    <text x="44" y="218" font-size="12.5" fill="#333">该节点宕机 → 队列不可用</text>
+
+    <text x="44" y="248" font-size="13" font-weight="bold" fill="#0d47a1">消费语义</text>
+    <rect x="44" y="258" width="264" height="30" rx="5" fill="#fff3e0" stroke="#ef6c00" stroke-width="1.2"/>
+    <text x="176" y="278" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#e65100">破坏性消费（消费即删除）</text>
+
+    <text x="44" y="308" font-size="13" font-weight="bold" fill="#0d47a1">特性支持</text>
+    <text x="44" y="330" font-size="12.5" fill="#2e7d32">✅ 优先级 / TTL / 死信 / 长度限制</text>
+    <text x="44" y="350" font-size="12.5" fill="#2e7d32">✅ 排它队列 / 非持久化队列</text>
+    <text x="44" y="370" font-size="12.5" fill="#2e7d32">✅ 延迟最低、吞吐最高</text>
+
+    <text x="44" y="400" font-size="13" font-weight="bold" fill="#0d47a1">实测内存（空队列）</text>
+    <text x="44" y="422" font-size="12.5" fill="#333">13,984 B（约 14 KB，多次取样稳定）</text>
+    <text x="44" y="442" font-size="12" fill="#666">三种类型中最省内存</text>
+
+    <rect x="44" y="458" width="264" height="38" rx="6" fill="#fff" stroke="#90a4ae" stroke-width="1.2" stroke-dasharray="4,3"/>
+    <text x="176" y="475" text-anchor="middle" font-size="12" font-weight="bold" fill="#455a64">适合：低延迟 / 非关键数据</text>
+    <text x="176" y="491" text-anchor="middle" font-size="12" fill="#455a64">临时队列 / 大 fanout 扇出</text>
+  </g>
+
+  <!-- ============ 列 2：quorum ============ -->
+  <g>
+    <rect x="348" y="80" width="304" height="432" rx="10" fill="#e8f5e9" stroke="#2E7D32" stroke-width="2"/>
+    <rect x="348" y="80" width="304" height="42" rx="10" fill="#2E7D32"/>
+    <rect x="348" y="108" width="304" height="14" fill="#2E7D32"/>
+    <text x="500" y="107" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">quorum（仲裁队列）</text>
+    <text x="500" y="146" text-anchor="middle" font-size="12" fill="#2E7D32">Raft 多数派复制 · 数据安全优先</text>
+
+    <text x="368" y="176" font-size="13" font-weight="bold" fill="#1b5e20">存储与复制</text>
+    <text x="368" y="198" font-size="12.5" fill="#333">Leader + Follower，写需多数派确认</text>
+    <text x="368" y="218" font-size="12.5" fill="#333">容忍 (N-1)/2 节点故障（N≥3）</text>
+
+    <text x="368" y="248" font-size="13" font-weight="bold" fill="#1b5e20">消费语义</text>
+    <rect x="368" y="258" width="264" height="30" rx="5" fill="#fff3e0" stroke="#ef6c00" stroke-width="1.2"/>
+    <text x="500" y="278" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#e65100">破坏性消费（消费即删除）</text>
+
+    <text x="368" y="308" font-size="13" font-weight="bold" fill="#1b5e20">特性支持</text>
+    <text x="368" y="330" font-size="12.5" fill="#2e7d32">✅ 毒丸消息处理 / 至少一次死信</text>
+    <text x="368" y="350" font-size="12.5" fill="#2e7d32">✅ 严格优先级（4.3 起，0-31）</text>
+    <text x="368" y="370" font-size="12.5" fill="#c62828">❌ 不能排它 / 不能非持久化</text>
+    <text x="368" y="390" font-size="12" fill="#666">始终持久化，延迟高于 classic</text>
+
+    <text x="368" y="418" font-size="13" font-weight="bold" fill="#1b5e20">实测内存（空队列）</text>
+    <text x="368" y="440" font-size="12.5" fill="#333">39,492 B → 47,412 B（15 秒后，仍在涨）</text>
+    <text x="368" y="460" font-size="12" fill="#666">约为 classic 的 2.8~3.4 倍（Raft 持续开销）</text>
+
+    <rect x="368" y="476" width="264" height="36" rx="6" fill="#fff" stroke="#90a4ae" stroke-width="1.2" stroke-dasharray="4,3"/>
+    <text x="500" y="492" text-anchor="middle" font-size="12" font-weight="bold" fill="#455a64">适合：订单 / 支付等关键业务</text>
+    <text x="500" y="507" text-anchor="middle" font-size="12" fill="#455a64">需要复制且不能丢消息</text>
+  </g>
+
+  <!-- ============ 列 3：stream ============ -->
+  <g>
+    <rect x="672" y="80" width="304" height="432" rx="10" fill="#f3e5f5" stroke="#6A1B9A" stroke-width="2"/>
+    <rect x="672" y="80" width="304" height="42" rx="10" fill="#6A1B9A"/>
+    <rect x="672" y="108" width="304" height="14" fill="#6A1B9A"/>
+    <text x="824" y="107" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">stream（流队列）</text>
+    <text x="824" y="146" text-anchor="middle" font-size="12" fill="#6A1B9A">追加日志 · 可回放 · 非破坏性</text>
+
+    <text x="692" y="176" font-size="13" font-weight="bold" fill="#4a148c">存储与复制</text>
+    <text x="692" y="198" font-size="12.5" fill="#333">append-only 日志，按 offset 寻址</text>
+    <text x="692" y="218" font-size="12.5" fill="#333">保留到过期策略触发才删除</text>
+
+    <text x="692" y="248" font-size="13" font-weight="bold" fill="#4a148c">消费语义</text>
+    <rect x="692" y="258" width="264" height="30" rx="5" fill="#e8f5e9" stroke="#2E7D32" stroke-width="1.6"/>
+    <text x="824" y="278" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#1b5e20">非破坏性消费（读完仍在）</text>
+
+    <text x="692" y="308" font-size="13" font-weight="bold" fill="#4a148c">特性支持</text>
+    <text x="692" y="330" font-size="12.5" fill="#2e7d32">✅ 任意 offset 重放 / 多消费者独立读</text>
+    <text x="692" y="350" font-size="12.5" fill="#c62828">❌ 不支持 TTL / 优先级 / auto-delete</text>
+    <text x="692" y="370" font-size="12.5" fill="#c62828">❌ AMQP basic.get 不支持</text>
+    <text x="692" y="390" font-size="12" fill="#666">须用 stream 协议（端口 5552）</text>
+
+    <text x="692" y="418" font-size="13" font-weight="bold" fill="#4a148c">实测内存（空队列）</text>
+    <text x="692" y="440" font-size="12.5" fill="#333">34,704 B（约 34 KB）</text>
+    <text x="692" y="460" font-size="12" fill="#666">空队列不占优，优势在海量消息时</text>
+
+    <rect x="692" y="476" width="264" height="36" rx="6" fill="#fff" stroke="#90a4ae" stroke-width="1.2" stroke-dasharray="4,3"/>
+    <text x="824" y="492" text-anchor="middle" font-size="12" font-weight="bold" fill="#455a64">适合：事件溯源 / 日志管道</text>
+    <text x="824" y="507" text-anchor="middle" font-size="12" fill="#455a64">多消费者独立读同一份数据</text>
+  </g>
+
+  <!-- ============ 底部：选型判定 ============ -->
+  <rect x="24" y="532" width="952" height="166" rx="10" fill="#fffde7" stroke="#f9a825" stroke-width="2"/>
+  <text x="500" y="558" text-anchor="middle" font-size="15" font-weight="bold" fill="#e65100">选型三问（按顺序自问，命中即停）</text>
+
+  <g font-size="12.5" fill="#333">
+    <circle cx="52" cy="586" r="13" fill="#f9a825"/>
+    <text x="52" y="591" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff">1</text>
+    <text x="76" y="591">需要「多个消费者各自独立读同一份消息」或「事后重放」吗？</text>
+    <text x="76" y="611" fill="#6A1B9A" font-weight="bold">是 → stream</text>
+    <text x="196" y="611" fill="#666">（classic / quorum 消费即删，做不到）</text>
+
+    <circle cx="52" cy="640" r="13" fill="#f9a825"/>
+    <text x="52" y="645" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff">2</text>
+    <text x="76" y="645">消息丢了会造成业务损失吗（订单 / 支付 / 库存）？</text>
+    <text x="76" y="665" fill="#2E7D32" font-weight="bold">是 → quorum</text>
+    <text x="196" y="665" fill="#666">（代价：延迟更高、内存更大、不能排它）</text>
+
+    <circle cx="52" cy="690" r="13" fill="#f9a825"/>
+    <text x="52" y="695" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff">3</text>
+    <text x="76" y="695">以上都不是（低延迟优先 / 临时队列 / 数据可重建）？</text>
+    <text x="76" y="715" fill="#1565C0" font-weight="bold">→ classic</text>
+    <text x="196" y="715" fill="#666">（也是未指定类型时的默认类型，实测确认）</text>
+  </g>
+</svg>

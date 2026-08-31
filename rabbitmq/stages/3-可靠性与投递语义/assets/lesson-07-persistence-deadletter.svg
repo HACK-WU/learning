@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="1420" viewBox="0 0 1160 1420" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+<rect width="1160" height="1420" fill="#fbfaf7"/>
+<text x="580" y="42" text-anchor="middle" font-size="26" font-weight="bold" fill="#1a3a5c">第 7 课：持久化与死信 · 全景图</text>
+<text x="580" y="70" text-anchor="middle" font-size="14" fill="#5a6a7a">RabbitMQ 4.3.5 本机实测 · 三个知识点：三层持久化 / 持久化的真实程度 / TTL 与死信队列</text>
+
+<rect x="24" y="92" width="1112" height="248" rx="8" fill="#eef4fa" stroke="#4a86c8" stroke-width="2"/>
+<text x="44" y="120" font-size="18" font-weight="bold" fill="#1a3a5c">一、三层持久化：三个开关，缺一不可</text>
+<text x="44" y="142" font-size="12.5" fill="#5a6a7a">交换机 durable → 队列 durable → 消息 delivery_mode=2。消息是唯一能真正救回内容的开关。</text>
+
+<rect x="48" y="158" width="330" height="86" rx="6" fill="#ffffff" stroke="#4a86c8"/>
+<text x="66" y="180" font-size="14" font-weight="bold" fill="#1a3a5c">① 交换机 durable=True</text>
+<text x="66" y="200" font-size="12" fill="#444444">交换机与绑定关系写入元数据</text>
+<text x="66" y="220" font-size="12" fill="#c0392b">缺了：重启后交换机与绑定消失</text>
+<text x="66" y="238" font-size="11.5" fill="#7a8a9a">实测：4.3 用 Khepri 存元数据，</text>
+<text x="66" y="253" font-size="11.5" fill="#7a8a9a">transient 交换机也活过真实宕机</text>
+
+<rect x="404" y="158" width="330" height="86" rx="6" fill="#ffffff" stroke="#4a86c8"/>
+<text x="422" y="180" font-size="14" font-weight="bold" fill="#1a3a5c">② 队列 durable=True</text>
+<text x="422" y="200" font-size="12" fill="#444444">容器（队列定义）活过重启</text>
+<text x="422" y="220" font-size="12" fill="#c0392b">缺了：容器没了，内容随之消失</text>
+<text x="422" y="238" font-size="11.5" fill="#7a8a9a">关键：队列持久化 ≠ 消息持久化</text>
+<text x="422" y="253" font-size="11.5" fill="#7a8a9a">4.3 上 durable=False 直接报 541</text>
+
+<rect x="760" y="158" width="340" height="86" rx="6" fill="#ffffff" stroke="#4a86c8"/>
+<text x="778" y="180" font-size="14" font-weight="bold" fill="#1a3a5c">③ 消息 delivery_mode=2</text>
+<text x="778" y="200" font-size="12" fill="#444444">内容（消息本身）写入磁盘</text>
+<text x="778" y="220" font-size="12" fill="#c0392b">缺了：容器还在，内容清空</text>
+<text x="778" y="238" font-size="11.5" fill="#7a8a9a">实测：kill -9 后 delivery_mode=1</text>
+<text x="778" y="253" font-size="11.5" fill="#7a8a9a">消息 1 条 → 0 条（真丢失）</text>
+
+<rect x="48" y="256" width="1052" height="70" rx="6" fill="#fff8e6" stroke="#d4a017" stroke-width="1.5"/>
+<text x="66" y="278" font-size="13" font-weight="bold" fill="#8a6510">实测对照（docker kill -s KILL 真实宕机，非优雅关机）</text>
+<text x="66" y="298" font-size="12" fill="#444444">三层全开 → 交换机在 / 队列在 / 消息 1 条（存活）　｜　消息非持久化 → 交换机在 / 队列在 / 消息 0 条（丢失）</text>
+<text x="66" y="317" font-size="11.5" fill="#7a8a9a">方法教训：docker restart 是优雅关机（会落盘，测不出差异）；容器内 pkill 杀不掉 PID=1 的 broker。必须用 docker kill -s KILL。</text>
+
+<rect x="24" y="356" width="1112" height="336" rx="8" fill="#f0f7ef" stroke="#4a9c68" stroke-width="2"/>
+<text x="44" y="384" font-size="18" font-weight="bold" fill="#1a5c3a">二、持久化的真实程度：ack 不等于绝对安全</text>
+<text x="44" y="406" font-size="12.5" fill="#5a6a7a">官方定性：classic 队列发出 confirm 前不执行 fsync；quorum 队列确认前已 fsync 到多数派。</text>
+
+<rect x="48" y="422" width="516" height="120" rx="6" fill="#ffffff" stroke="#4a9c68"/>
+<text x="66" y="444" font-size="14" font-weight="bold" fill="#1a5c3a">classic 队列：批量落盘，有窗口</text>
+<text x="66" y="466" font-size="12" fill="#444444">消息在内存停留毫秒级，绝对不超过 200ms</text>
+<text x="66" y="486" font-size="12" fill="#444444">后批量写入磁盘；confirm 在"写盘"或</text>
+<text x="66" y="504" font-size="12" fill="#444444">"被消费并 ack"时发出，取先到者</text>
+<text x="66" y="526" font-size="11.5" fill="#c0392b">风险：已收到 confirm 的消息，若 broker 硬崩</text>
+<text x="66" y="543" font-size="11.5" fill="#c0392b">仍可能丢（fsync 未完成）</text>
+
+<rect x="588" y="422" width="512" height="120" rx="6" fill="#ffffff" stroke="#4a9c68"/>
+<text x="606" y="444" font-size="14" font-weight="bold" fill="#1a5c3a">quorum 队列：确认前已 fsync</text>
+<text x="606" y="466" font-size="12" fill="#444444">消息写入磁盘并在多数派节点 fsync 完成后</text>
+<text x="606" y="486" font-size="12" fill="#444444">才发 confirm，单节点崩溃不丢已确认消息</text>
+<text x="606" y="504" font-size="12" fill="#444444">代价：每条都 fsync，吞吐明显更低</text>
+<text x="606" y="526" font-size="11.5" fill="#1a5c3a">要强一致就用 quorum；可容忍极短窗口且</text>
+<text x="606" y="543" font-size="11.5" fill="#1a5c3a">追求吞吐才用 classic</text>
+
+<rect x="48" y="554" width="1052" height="124" rx="6" fill="#ffffff" stroke="#4a9c68"/>
+<text x="66" y="576" font-size="13" font-weight="bold" fill="#1a5c3a">本机实测数据（RabbitMQ 4.3.5，本机 SSD）</text>
+<text x="66" y="598" font-size="12" fill="#444444">• 落盘延迟：发布 3000 条持久化消息后，messages_persistent 在 100ms 内即追平 messages（3000 / 3000），</text>
+<text x="82" y="616" font-size="12" fill="#444444">未落盘数 = 0 —— 印证"亚秒级批量落盘"，也解释了为何按秒级粒度采样测不出丢失窗口</text>
+<text x="66" y="638" font-size="12" fill="#444444">• 吞吐代价：发布 500 条，classic 0.245s / quorum 0.903s，quorum 约为 classic 的 3.7 倍耗时</text>
+<text x="66" y="660" font-size="11.5" fill="#7a8a9a">• 重要：测不出丢失 ≠ 不存在窗口。要可靠复现需在毫秒级时间窗内 kill，并按"停止写入后再读"的口径计数。</text>
+
+<rect x="24" y="708" width="1112" height="400" rx="8" fill="#fdf0f5" stroke="#c84a86" stroke-width="2"/>
+<text x="44" y="736" font-size="18" font-weight="bold" fill="#8a1a5c">三、TTL 与死信队列：延迟、重试、兜底的公共基础设施</text>
+
+<text x="44" y="762" font-size="13.5" font-weight="bold" fill="#8a1a5c">两种 TTL（同时存在时取较小值）</text>
+<rect x="48" y="772" width="516" height="52" rx="5" fill="#ffffff" stroke="#c84a86"/>
+<text x="66" y="792" font-size="12.5" font-weight="bold" fill="#444444">队列级 x-message-ttl</text>
+<text x="66" y="812" font-size="11.5" fill="#666666">整个队列统一过期时间，写在 queue_declare 的 arguments 里</text>
+<rect x="588" y="772" width="512" height="52" rx="5" fill="#ffffff" stroke="#c84a86"/>
+<text x="606" y="792" font-size="12.5" font-weight="bold" fill="#444444">消息级 expiration</text>
+<text x="606" y="812" font-size="11.5" fill="#666666">每条消息各自设置，实测：队列 3s + 消息 10s → 按 3s 过期</text>
+
+<text x="44" y="846" font-size="13.5" font-weight="bold" fill="#8a1a5c">三种死信来源（死信化才写 x-death 头）</text>
+<rect x="48" y="856" width="340" height="60" rx="5" fill="#ffffff" stroke="#c84a86"/>
+<text x="66" y="876" font-size="12.5" font-weight="bold" fill="#444444">rejected（被拒）</text>
+<text x="66" y="896" font-size="11.5" fill="#666666">basic.reject / basic.nack 且</text>
+<text x="66" y="911" font-size="11.5" fill="#666666">requeue=False → 实测死信 +1</text>
+<rect x="404" y="856" width="330" height="60" rx="5" fill="#ffffff" stroke="#c84a86"/>
+<text x="422" y="876" font-size="12.5" font-weight="bold" fill="#444444">expired（过期）</text>
+<text x="422" y="896" font-size="11.5" fill="#666666">TTL 到期 → 实测死信再 +1</text>
+<text x="422" y="911" font-size="11.5" fill="#666666">注意：只有队首消息过期才被移除</text>
+<rect x="760" y="856" width="340" height="60" rx="5" fill="#ffffff" stroke="#c84a86"/>
+<text x="778" y="876" font-size="12.5" font-weight="bold" fill="#444444">maxlen（超长）</text>
+<text x="778" y="896" font-size="11.5" fill="#666666">超 x-max-length → 实测 x-max-length=2</text>
+<text x="778" y="911" font-size="11.5" fill="#666666">发 4 条，2 条保留、2 条进死信</text>
+
+<rect x="48" y="928" width="1052" height="86" rx="6" fill="#fff8e6" stroke="#d4a017" stroke-width="1.5"/>
+<text x="66" y="950" font-size="13" font-weight="bold" fill="#8a6510">⚠ 惰性过期（最容易踩的坑，四组对照实测）</text>
+<text x="66" y="972" font-size="12" fill="#444444">只有消息到达队首时才被真正移除。短 TTL 消息排在长 TTL 消息后面时，即使已过期也不会消失，</text>
+<text x="66" y="992" font-size="12" fill="#444444">要等前面的消息先被消费。实测：A(10s) 在前 B(1s) 在后，3.3 秒后深度仍为 2；取出 A 后 B 立即消失。</text>
+<text x="66" y="1010" font-size="11.5" fill="#7a8a9a">推论：同一队列混合不同 TTL 是不好的设计，会让过期时间失去意义。按延迟时长分队列才是正解。</text>
+
+<text x="44" y="1044" font-size="13.5" font-weight="bold" fill="#8a1a5c">延迟重试链路（TTL + DLX 闭环，实测跑通）</text>
+<rect x="48" y="1054" width="1052" height="42" rx="5" fill="#ffffff" stroke="#c84a86"/>
+<text x="70" y="1078" font-size="12" fill="#444444">l7.work（业务队列）── 失败 nack(requeue=False) ──► l7.dlx2 ──► l7.retry.wait（TTL=3s）── 3 秒后过期 ──► 回到 l7.work 重投</text>
+<text x="70" y="1092" font-size="11.5" fill="#7a8a9a">实测：t=0.3s 进入等待队列 → t=4.3s 重新出现在业务队列 → 再次消费成功并 ack，链路闭环</text>
+
+<rect x="24" y="1124" width="1112" height="270" rx="8" fill="#f7f5ef" stroke="#8a7a5a" stroke-width="2"/>
+<text x="44" y="1152" font-size="18" font-weight="bold" fill="#5c4a1a">四、速查卡 · 本课结论与易错点</text>
+
+<rect x="48" y="1168" width="516" height="208" rx="6" fill="#ffffff" stroke="#8a7a5a"/>
+<text x="66" y="1190" font-size="13.5" font-weight="bold" fill="#5c4a1a">✅ 结论速记</text>
+<text x="66" y="1212" font-size="12" fill="#444444">1. 交换机 durable → 拓扑在；队列 durable →</text>
+<text x="82" y="1229" font-size="12" fill="#444444">容器在；消息 delivery_mode=2 → 内容在</text>
+<text x="66" y="1250" font-size="12" fill="#444444">2. 持久化 ≠ 绝对不丢：classic 队在 confirm</text>
+<text x="82" y="1267" font-size="12" fill="#444444">前不 fsync，硬崩仍可能丢已确认消息</text>
+<text x="66" y="1288" font-size="12" fill="#444444">3. 要强一致选 quorum（确认前已 fsync 到多数派），</text>
+<text x="82" y="1305" font-size="12" fill="#444444">代价是吞吐约为 classic 的 1/3 到 1/4</text>
+<text x="66" y="1326" font-size="12" fill="#444444">4. 死信三来源：rejected / expired / maxlen；</text>
+<text x="82" y="1343" font-size="12" fill="#444444">只有死信化才写 x-death，requeue=True 不写</text>
+<text x="66" y="1364" font-size="12" fill="#444444">5. TTL 是惰性过期，只有队首到期才被移除</text>
+
+<rect x="588" y="1168" width="512" height="208" rx="6" fill="#ffffff" stroke="#8a7a5a"/>
+<text x="606" y="1190" font-size="13.5" font-weight="bold" fill="#8a1a1a">🐞 易错点（前 3 条为本课实测纠正）</text>
+<text x="606" y="1212" font-size="12" fill="#444444">1. 用 docker restart 验证持久化 → 优雅关机</text>
+<text x="622" y="1229" font-size="12" fill="#444444">会落盘，连 transient 交换机都存活，结论失真</text>
+<text x="606" y="1250" font-size="12" fill="#444444">2. 容器内 pkill -9 beam.smp → broker 是 PID 1，</text>
+<text x="622" y="1267" font-size="12" fill="#444444">杀不掉，进程从未中断却以为宕机了</text>
+<text x="606" y="1288" font-size="12" fill="#444444">3. 以为 durable=False 交换机重启必消失 → 4.3</text>
+<text x="622" y="1305" font-size="12" fill="#444444">用 Khepri 存元数据，实测仍存活</text>
+<text x="606" y="1326" font-size="12" fill="#444444">4. 用 x-death 给 requeue=True 做重试计数 →</text>
+<text x="622" y="1343" font-size="12" fill="#444444">恒为 0，会造出无限重试（课 6 已证）</text>
+<text x="606" y="1364" font-size="12" fill="#444444">5. 队列已存在时改 durable / 类型 → 报 inequivalent</text>
+
+<text x="580" y="1412" text-anchor="middle" font-size="11.5" fill="#7a8a9a">全部结论均在本机 RabbitMQ 4.3.5 + pika 1.4.4 实测验证 · 复现脚本见 playground/l7-*.py 与 l7-verify.sh</text>
+</svg>

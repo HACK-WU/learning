@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" font-family="-apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="720" height="300" fill="#ffffff"/>
+  <text x="30" y="38" fill="#1f2328" font-size="17" font-weight="700">为什么 Kafka 用「顺序写」而不是「随机写」</text>
+
+  <!-- 左：顺序写 -->
+  <g>
+    <rect x="30" y="60" width="320" height="200" rx="10" fill="#f6f8fa" stroke="#1a7f37" stroke-width="2"/>
+    <text x="190" y="86" fill="#1a7f37" font-size="14" font-weight="700" text-anchor="middle">顺序写（快）· 顺序追加</text>
+
+    <!-- track -->
+    <rect x="55" y="120" width="270" height="18" rx="4" fill="#ffffff" stroke="#d0d7de"/>
+    <rect x="57" y="122" width="150" height="14" rx="3" fill="#1a7f37"/>
+    <text x="190" y="166" fill="#57606a" font-size="11" text-anchor="middle">磁头沿一个方向一路往下写，无需来回寻道</text>
+    <path d="M150 178 L150 200 L320 200" stroke="#0969da" stroke-width="2" fill="none" marker-end="url(#sa)"/>
+    <text x="155" y="196" fill="#0969da" font-size="11">磁头移动路径（笔直）</text>
+    <text x="190" y="234" fill="#1f2328" font-size="12" text-anchor="middle">机械盘顺序 I/O 吞吐可达数百 MB/s</text>
+  </g>
+
+  <!-- 右：随机写 -->
+  <g>
+    <rect x="370" y="60" width="320" height="200" rx="10" fill="#f6f8fa" stroke="#cf222e" stroke-width="2"/>
+    <text x="530" y="86" fill="#cf222e" font-size="14" font-weight="700" text-anchor="middle">随机写（慢）· 到处跳</text>
+
+    <rect x="395" y="120" width="270" height="18" rx="4" fill="#ffffff" stroke="#d0d7de"/>
+    <rect x="398" y="122" width="40" height="14" rx="3" fill="#cf222e"/>
+    <rect x="480" y="122" width="40" height="14" rx="3" fill="#cf222e"/>
+    <rect x="560" y="122" width="40" height="14" rx="3" fill="#cf222e"/>
+    <rect x="440" y="122" width="30" height="14" rx="3" fill="#cf222e"/>
+
+    <path d="M418 140 L440 140 L455 160 L480 160 L500 140 L560 140" stroke="#0969da" stroke-width="2" fill="none"/>
+    <text x="430" y="200" fill="#0969da" font-size="11">磁头在盘面来回跳跃（折返）</text>
+    <text x="530" y="234" fill="#1f2328" font-size="12" text-anchor="middle">随机 I/O 频繁寻道，吞吐骤降</text>
+  </g>
+
+  <text x="30" y="286" fill="#57606a" font-size="12">Kafka 把所有消息都往日志末尾追加，把「零散的随机写」变成了「一整条顺序写」。</text>
+
+  <defs>
+    <marker id="sa" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#0969da"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 250" width="900" height="250" font-family="Segoe UI, Microsoft YaHei, Helvetica, Arial, sans-serif">
+  <rect x="0" y="0" width="900" height="250" fill="#ffffff"/>
+
+  <text x="450" y="32" text-anchor="middle" font-size="17" font-weight="700" fill="#4a148c">阶段 4 · 进阶与工程落地</text>
+  <text x="450" y="54" text-anchor="middle" font-size="12" fill="#666666">章节：把它用进生产 —— 从能跑通，到能扛事、能决策</text>
+
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#555555"/>
+    </marker>
+  </defs>
+
+  <rect x="30" y="74" width="195" height="140" rx="8" fill="#f3e8fd" stroke="#6A1B9A" stroke-width="2"/>
+  <text x="127" y="100" text-anchor="middle" font-size="12" font-weight="700" fill="#6A1B9A">课 9</text>
+  <text x="127" y="124" text-anchor="middle" font-size="13" font-weight="700" fill="#4a148c">Python 客户端工程实践</text>
+  <text x="127" y="150" text-anchor="middle" font-size="12" fill="#333333">· 连接与信道管理</text>
+  <text x="127" y="170" text-anchor="middle" font-size="12" fill="#333333">· 生产者模板</text>
+  <text x="127" y="188" text-anchor="middle" font-size="12" fill="#333333">· 消费者模板</text>
+
+  <rect x="245" y="74" width="195" height="140" rx="8" fill="#f3e8fd" stroke="#6A1B9A" stroke-width="2"/>
+  <text x="342" y="100" text-anchor="middle" font-size="12" font-weight="700" fill="#6A1B9A">课 10</text>
+  <text x="342" y="124" text-anchor="middle" font-size="13" font-weight="700" fill="#4a148c">高级特性</text>
+  <text x="342" y="150" text-anchor="middle" font-size="12" fill="#333333">· 延迟消息与延迟重试</text>
+  <text x="342" y="170" text-anchor="middle" font-size="12" fill="#333333">· 优先级队列</text>
+  <text x="342" y="188" text-anchor="middle" font-size="12" fill="#333333">· 流控与资源水位</text>
+
+  <rect x="460" y="74" width="195" height="140" rx="8" fill="#f3e8fd" stroke="#6A1B9A" stroke-width="2"/>
+  <text x="557" y="100" text-anchor="middle" font-size="12" font-weight="700" fill="#6A1B9A">课 11</text>
+  <text x="557" y="124" text-anchor="middle" font-size="13" font-weight="700" fill="#4a148c">集群与高可用</text>
+  <text x="557" y="150" text-anchor="middle" font-size="12" fill="#333333">· 集群基础</text>
+  <text x="557" y="170" text-anchor="middle" font-size="12" fill="#333333">· 复制型队列</text>
+  <text x="557" y="188" text-anchor="middle" font-size="12" fill="#333333">· 故障与网络分区</text>
+
+  <rect x="675" y="74" width="195" height="140" rx="8" fill="#f3e8fd" stroke="#6A1B9A" stroke-width="2"/>
+  <text x="772" y="100" text-anchor="middle" font-size="12" font-weight="700" fill="#6A1B9A">课 12</text>
+  <text x="772" y="124" text-anchor="middle" font-size="13" font-weight="700" fill="#4a148c">架构落地与选型决策</text>
+  <text x="772" y="150" text-anchor="middle" font-size="12" fill="#333333">· 典型消息模式</text>
+  <text x="772" y="170" text-anchor="middle" font-size="12" fill="#333333">· 选型对比</text>
+  <text x="772" y="188" text-anchor="middle" font-size="12" fill="#333333">· 生产落地清单</text>
+
+  <line x1="229" y1="144" x2="241" y2="144" stroke="#555555" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="444" y1="144" x2="456" y2="144" stroke="#555555" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="659" y1="144" x2="671" y2="144" stroke="#555555" stroke-width="2" marker-end="url(#a)"/>
+
+  <text x="450" y="238" text-anchor="middle" font-size="12" fill="#666666">学完本阶段：能写出生产级收发代码、画出高可用拓扑，并回答「这个场景该不该用 RabbitMQ」</text>
+</svg>

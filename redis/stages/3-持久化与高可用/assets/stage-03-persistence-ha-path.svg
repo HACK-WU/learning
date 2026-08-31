@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="470" viewBox="0 0 880 470" font-family="'Microsoft YaHei','PingFang SC','Helvetica Neue',Arial,sans-serif">
+  <defs>
+    <marker id="a3" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+      <path d="M0,0 L0,10 L9,5 z" fill="#90A4AE"/>
+    </marker>
+  </defs>
+  <rect width="880" height="470" fill="#ffffff"/>
+  <text x="440" y="34" text-anchor="middle" font-size="19" font-weight="700" fill="#E65100">阶段 3 · 持久化与高可用 — 学习路径</text>
+  <text x="440" y="57" text-anchor="middle" font-size="12.5" fill="#546E7A">故事章节「内存会失忆」：断电数据全没，主库挂了全站停摆</text>
+
+  <rect x="60" y="86" width="340" height="62" rx="7" fill="#FFF3E0" stroke="#EF6C00" stroke-width="1.5"/>
+  <text x="80" y="110" font-size="14.5" font-weight="700" fill="#E65100">课 5　RDB 与 AOF 持久化</text>
+  <text x="80" y="133" font-size="12" fill="#546E7A">机制层：快照 fork / 写后日志 / 选型</text>
+
+  <rect x="480" y="86" width="340" height="62" rx="7" fill="#FFF3E0" stroke="#EF6C00" stroke-width="1.5"/>
+  <text x="500" y="110" font-size="14.5" font-weight="700" fill="#E65100">课 6　主从复制与哨兵</text>
+  <text x="500" y="133" font-size="12" fill="#546E7A">机制层：复制 / 故障转移 / 数据丢失</text>
+
+  <line x1="400" y1="117" x2="470" y2="117" stroke="#90A4AE" stroke-width="2" marker-end="url(#a3)"/>
+
+  <rect x="60" y="176" width="760" height="112" rx="7" fill="#FAFAFA" stroke="#BDBDBD" stroke-width="1"/>
+  <text x="82" y="201" font-size="13.5" font-weight="700" fill="#37474F">课 5 的 3 个知识点</text>
+  <circle cx="94" cy="228" r="4" fill="#EF6C00"/><text x="108" y="232" font-size="12.5" fill="#37474F">RDB fork 与写时复制：快照之间有一个会丢数据的窗口</text>
+  <circle cx="94" cy="252" r="4" fill="#EF6C00"/><text x="108" y="256" font-size="12.5" fill="#37474F">AOF 写后日志与三种刷盘策略：always / everysec / no 的取舍</text>
+  <circle cx="94" cy="276" r="4" fill="#EF6C00"/><text x="108" y="280" font-size="12.5" fill="#37474F">持久化选型决策：混合持久化，以及纯缓存场景干脆关掉</text>
+
+  <rect x="60" y="304" width="760" height="112" rx="7" fill="#FAFAFA" stroke="#BDBDBD" stroke-width="1"/>
+  <text x="82" y="329" font-size="13.5" font-weight="700" fill="#37474F">课 6 的 3 个知识点</text>
+  <circle cx="94" cy="356" r="4" fill="#EF6C00"/><text x="108" y="360" font-size="12.5" fill="#37474F">全量与增量复制：RDB 快照传输 + 复制积压缓冲区的断点续传</text>
+  <circle cx="94" cy="380" r="4" fill="#EF6C00"/><text x="108" y="384" font-size="12.5" fill="#37474F">哨兵故障转移：监控 / 通知 / 选主，三个哨兵才安全</text>
+  <circle cx="94" cy="404" r="4" fill="#EF6C00"/><text x="108" y="408" font-size="12.5" fill="#37474F">哨兵解决不了的丢数据：异步复制 + 脑裂，能丢多少要说清</text>
+
+  <rect x="60" y="434" width="760" height="26" rx="4" fill="#FFF3E0" stroke="#EF6C00" stroke-width="0.8"/>
+  <text x="80" y="452" font-size="12" fill="#E65100">学完本阶段你应该能：配持久化、搭一主两从三哨兵，并准确说出这套配置会丢多少数据</text>
+</svg>

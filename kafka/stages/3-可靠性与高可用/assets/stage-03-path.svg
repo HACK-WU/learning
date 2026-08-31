@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 400" font-family="-apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="680" height="400" fill="#ffffff"/>
+  <text x="30" y="40" fill="#9a6700" font-size="18" font-weight="700">阶段 3 · 可靠性与高可用</text>
+  <text x="30" y="62" fill="#57606a" font-size="12">故事章节：「系统不能丢消息、不能挂」——副本、ISR 与交付语义</text>
+
+  <rect x="30" y="86" width="620" height="54" rx="8" fill="#f6f8fa" stroke="#d0d7de"/>
+  <text x="46" y="110" fill="#1f2328" font-size="13" font-weight="700">🎯 阶段目标</text>
+  <text x="46" y="130" fill="#57606a" font-size="11.5">理解副本如何保证不丢数据、ISR 如何平衡可靠与可用；说清三种交付语义与幂等 producer 的作用</text>
+
+  <path d="M340 142 L340 162" stroke="#57606a" stroke-width="2" marker-end="url(#a3)"/>
+
+  <rect x="30" y="166" width="620" height="64" rx="8" fill="#f6f8fa" stroke="#9a6700" stroke-width="2"/>
+  <text x="46" y="190" fill="#9a6700" font-size="13" font-weight="700">课 7 · 副本机制与故障转移</text>
+  <text x="46" y="212" fill="#57606a" font-size="11">知识点：① 副本 replica 与 leader/follower ② ISR（In-Sync Replicas）机制</text>
+  <text x="46" y="230" fill="#57606a" font-size="11">③ 控制器 Controller 选举与故障转移</text>
+
+  <path d="M340 232 L340 252" stroke="#57606a" stroke-width="2" marker-end="url(#a3)"/>
+
+  <rect x="30" y="256" width="620" height="64" rx="8" fill="#f6f8fa" stroke="#9a6700" stroke-width="2"/>
+  <text x="46" y="280" fill="#9a6700" font-size="13" font-weight="700">课 8 · 交付语义与幂等</text>
+  <text x="46" y="302" fill="#57606a" font-size="11">知识点：① 三种交付语义（at-most/at-least/exactly-once） ② 幂等 producer</text>
+  <text x="46" y="320" fill="#57606a" font-size="11">③ 事务简介（生产级不深入）</text>
+
+  <defs>
+    <marker id="a3" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#57606a"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="700" viewBox="0 0 920 700" font-family="'Microsoft YaHei','PingFang SC','Helvetica Neue',Arial,sans-serif">
+  <defs>
+    <marker id="arrowDown" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+      <path d="M0,0 L0,10 L9,5 z" fill="#90A4AE"/>
+    </marker>
+  </defs>
+
+  <rect width="920" height="700" fill="#ffffff"/>
+
+  <text x="460" y="38" text-anchor="middle" font-size="21" font-weight="700" fill="#1a237e">Redis 系统学习路径</text>
+  <text x="460" y="63" text-anchor="middle" font-size="13" fill="#546E7A">主角：一个电商网站的数据层 ｜ 冲突：磁盘太慢 → 内存会失忆 → 单机不够用 ｜ 收束：又快又稳、能扩、知边界</text>
+
+  <rect x="70" y="88" width="780" height="112" rx="8" fill="#E3F2FD" stroke="#1565C0" stroke-width="1.5"/>
+  <circle cx="108" cy="130" r="21" fill="#1565C0"/>
+  <text x="108" y="137" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">1</text>
+  <text x="145" y="117" font-size="16" font-weight="700" fill="#0D47A1">为什么需要 Redis</text>
+  <text x="145" y="138" font-size="12.5" fill="#546E7A">故事章节：「磁盘太慢了」——MySQL 每次读写都要碰磁盘，网站卡死</text>
+  <text x="145" y="161" font-size="12.5" fill="#37474F">课 1 Redis 是什么 · 课 2 跑起来第一个 Redis</text>
+  <text x="145" y="183" font-size="12" fill="#78909C">核心产出：能说清 Redis 解决的痛点 + 本机跑通 Redis 8</text>
+
+  <line x1="460" y1="200" x2="460" y2="222" stroke="#90A4AE" stroke-width="2" marker-end="url(#arrowDown)"/>
+
+  <rect x="70" y="224" width="780" height="112" rx="8" fill="#E8F5E9" stroke="#2E7D32" stroke-width="1.5"/>
+  <circle cx="108" cy="266" r="21" fill="#2E7D32"/>
+  <text x="108" y="273" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">2</text>
+  <text x="145" y="253" font-size="16" font-weight="700" fill="#1B5E20">数据结构与命令</text>
+  <text x="145" y="274" font-size="12.5" fill="#546E7A">故事章节：「不只是 get/set」——排行榜、队列、UV 都能用原生结构做</text>
+  <text x="145" y="297" font-size="12.5" fill="#37474F">课 3 List 与 Hash · 课 4 Set、ZSet 与特殊类型</text>
+  <text x="145" y="319" font-size="12" fill="#78909C">核心产出：面对一个需求能选对结构，而不是一律 String 硬塞</text>
+
+  <line x1="460" y1="336" x2="460" y2="358" stroke="#90A4AE" stroke-width="2" marker-end="url(#arrowDown)"/>
+
+  <rect x="70" y="360" width="780" height="112" rx="8" fill="#FFF3E0" stroke="#EF6C00" stroke-width="1.5"/>
+  <circle cx="108" cy="402" r="21" fill="#EF6C00"/>
+  <text x="108" y="409" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">3</text>
+  <text x="145" y="389" font-size="16" font-weight="700" fill="#E65100">持久化与高可用</text>
+  <text x="145" y="410" font-size="12.5" fill="#546E7A">故事章节：「内存会失忆」——断电数据全没，主库挂了全站不可用</text>
+  <text x="145" y="433" font-size="12.5" fill="#37474F">课 5 RDB 与 AOF 持久化 · 课 6 主从复制与哨兵</text>
+  <text x="145" y="455" font-size="12" fill="#78909C">核心产出：能配持久化策略、搭主从 + 哨兵，并说清会丢多少数据</text>
+
+  <line x1="460" y1="472" x2="460" y2="494" stroke="#90A4AE" stroke-width="2" marker-end="url(#arrowDown)"/>
+
+  <rect x="70" y="496" width="780" height="112" rx="8" fill="#F3E5F5" stroke="#6A1B9A" stroke-width="1.5"/>
+  <circle cx="108" cy="538" r="21" fill="#6A1B9A"/>
+  <text x="108" y="545" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">4</text>
+  <text x="145" y="525" font-size="16" font-weight="700" fill="#4A148C">分布式与生产实践</text>
+  <text x="145" y="546" font-size="12.5" fill="#546E7A">故事章节：「单机不够用了」——数据量超内存、缓存雪崩、Redis 该不该上</text>
+  <text x="145" y="569" font-size="12.5" fill="#37474F">课 7 分片与集群 · 课 8 缓存设计 · 课 9 生产实践与选型</text>
+  <text x="145" y="591" font-size="12" fill="#78909C">核心产出：能设计缓存方案、定位大 key 慢查询，并判断该不该用 Redis</text>
+
+  <rect x="70" y="630" width="780" height="52" rx="6" fill="#FAFAFA" stroke="#BDBDBD" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="88" y="650" font-size="12.5" font-weight="700" fill="#37474F">学完这四阶段你要能回答的大问题</text>
+  <text x="88" y="670" font-size="12.5" fill="#546E7A">这个数据该不该放 Redis？放进去怎么保证不丢、不雪崩、不把数据库拖垮？什么时候该换掉它？</text>
+</svg>

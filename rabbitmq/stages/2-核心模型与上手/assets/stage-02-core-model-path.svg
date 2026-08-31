@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 250" width="900" height="250" font-family="Segoe UI, Microsoft YaHei, Helvetica, Arial, sans-serif">
+  <rect x="0" y="0" width="900" height="250" fill="#ffffff"/>
+
+  <text x="450" y="32" text-anchor="middle" font-size="17" font-weight="700" fill="#1b5e20">阶段 2 · 核心模型与动手上手</text>
+  <text x="450" y="54" text-anchor="middle" font-size="12" fill="#666666">章节：让消息跑起来 —— 从零起服务，到跑通「发 → 路由 → 收」</text>
+
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#555555"/>
+    </marker>
+  </defs>
+
+  <rect x="30" y="74" width="266" height="140" rx="8" fill="#e6f4ea" stroke="#2E7D32" stroke-width="2"/>
+  <text x="163" y="100" text-anchor="middle" font-size="12" font-weight="700" fill="#2E7D32">课 3</text>
+  <text x="163" y="124" text-anchor="middle" font-size="14" font-weight="700" fill="#1b5e20">起 RabbitMQ 与发第一条消息</text>
+  <text x="163" y="150" text-anchor="middle" font-size="12" fill="#333333">· Docker 起服务与端口</text>
+  <text x="163" y="170" text-anchor="middle" font-size="12" fill="#333333">· Management UI 巡礼</text>
+  <text x="163" y="188" text-anchor="middle" font-size="12" fill="#333333">· Python 发第一条消息</text>
+
+  <rect x="316" y="74" width="266" height="140" rx="8" fill="#e6f4ea" stroke="#2E7D32" stroke-width="2"/>
+  <text x="449" y="100" text-anchor="middle" font-size="12" font-weight="700" fill="#2E7D32">课 4</text>
+  <text x="449" y="124" text-anchor="middle" font-size="14" font-weight="700" fill="#1b5e20">交换机与路由</text>
+  <text x="449" y="150" text-anchor="middle" font-size="12" fill="#333333">· 交换机为什么存在</text>
+  <text x="449" y="170" text-anchor="middle" font-size="12" fill="#333333">· fanout 与 direct</text>
+  <text x="449" y="188" text-anchor="middle" font-size="12" fill="#333333">· topic 与 headers</text>
+
+  <rect x="602" y="74" width="266" height="140" rx="8" fill="#e6f4ea" stroke="#2E7D32" stroke-width="2"/>
+  <text x="735" y="100" text-anchor="middle" font-size="12" font-weight="700" fill="#2E7D32">课 5</text>
+  <text x="735" y="124" text-anchor="middle" font-size="14" font-weight="700" fill="#1b5e20">队列与消息的属性</text>
+  <text x="735" y="150" text-anchor="middle" font-size="12" fill="#333333">· 队列的属性</text>
+  <text x="735" y="170" text-anchor="middle" font-size="12" fill="#333333">· 消息的属性</text>
+  <text x="735" y="188" text-anchor="middle" font-size="12" fill="#333333">· 队列类型三分</text>
+
+  <line x1="300" y1="144" x2="312" y2="144" stroke="#555555" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="586" y1="144" x2="598" y2="144" stroke="#555555" stroke-width="2" marker-end="url(#a)"/>
+
+  <text x="450" y="238" text-anchor="middle" font-size="12" fill="#666666">学完本阶段：能自己起服务跑通 Python 收发 demo，并画出完整的数据流图</text>
+</svg>
