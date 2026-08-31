@@ -2,7 +2,7 @@
 
 > 以「课程制」方式系统学习技术主题：每门课程自带学习档案、路径总览与课件体系，支持断点续学。
 
-[![courses](https://img.shields.io/badge/courses-9-blue)](#课程导航)
+[![courses](https://img.shields.io/badge/courses-12-blue)](#课程导航)
 [![Celery + Django](https://img.shields.io/badge/Celery%2B_Django-10%2F10-yellowgreen)](celery-django/02-课程目录.md)
 [![Consul](https://img.shields.io/badge/Consul-7%2F11-yellow)](consul/02-课程目录.md)
 [![Design Patterns](https://img.shields.io/badge/Design_Patterns-12%2F12-yellowgreen)](design-patterns/02-课程目录.md)
@@ -11,11 +11,19 @@
 [![Kafka](https://img.shields.io/badge/Kafka-10%2F10-yellowgreen)](kafka/02-课程目录.md)
 [![PromQL](https://img.shields.io/badge/PromQL-12%2F12-yellowgreen)](promql/02-课程目录.md)
 [![RabbitMQ](https://img.shields.io/badge/RabbitMQ-4%2F12-yellow)](rabbitmq/02-课程目录.md)
+[![Redis](https://img.shields.io/badge/Redis-3%2F9-yellow)](redis/02-课程目录.md)
 [![ZooKeeper](https://img.shields.io/badge/ZooKeeper-15%2F15-brightgreen)](zookeeper/02-课程目录.md)
+[![JavaScript Core](https://img.shields.io/badge/JavaScript_Core-3%2F12-yellow)](frontend/javascript-core/02-课程目录.md)
+[![TypeScript](https://img.shields.io/badge/TypeScript-1%2F15-yellow)](frontend/typescript-core/02-课程目录.md)
 
 ## 概述
 
-本仓库收录九门系统化技术课程，覆盖后端常用领域：Celery + Django 异步任务、Consul 服务注册发现、设计模式（Python 实现）、Elasticsearch 搜索、InfluxDB 时序数据库、Kafka 消息队列、PromQL 监控查询语言、RabbitMQ 消息中间件、ZooKeeper 分布式协调。
+本仓库收录**十二门**系统化技术课程，覆盖后端基础设施与前端语言两大方向：
+
+- **后端 / 基础设施**：Celery + Django 异步任务、Consul 服务注册发现、设计模式（Python 实现）、Elasticsearch 搜索、InfluxDB 时序数据库、Kafka 消息队列、PromQL 监控查询语言、RabbitMQ 消息中间件、Redis 缓存与数据结构服务器、ZooKeeper 分布式协调
+- **前端（`frontend/`）**：JavaScript 语言核心（ES6+）、TypeScript 类型系统
+
+> JS 与 TS 两门课互补且互相引用：`javascript-core` 在课 12 讲「该不该上 TypeScript」的选型条件，`typescript-core` 则把 JavaScript 语言核心列为**前置假设**（ES6 基础），不重复讲解法。
 
 相比零散笔记，课程制结构解决两个问题：
 
@@ -34,7 +42,15 @@
 | [Kafka 基础](kafka/02-课程目录.md) | 从消息队列概念到集群可靠性与事件驱动架构，Docker 实操贯穿全程 | 零基础 | 10 / 10 课 | 🔶 收尾中 |
 | [PromQL](promql/02-课程目录.md) | Prometheus 查询语言，从数据模型到告警规则与 Grafana 面板，含 SLO 实战项目 | 零基础 | 12 / 12 课 | 🔶 收尾中 |
 | [RabbitMQ 基础](rabbitmq/02-课程目录.md) | 从「为什么需要消息队列」到生产落地，Python（pika）实操贯穿全程，止于选型决策 | 零基础 | 4 / 12 课 | 🔄 进行中 |
+| [Redis](redis/02-课程目录.md) | 从「为什么需要 Redis」到数据结构、持久化、主从哨兵、分片集群与缓存设计，WSL + Redis 8 实操贯穿全程 | 零基础 | 3 / 9 课 | 🔄 进行中 |
 | [ZooKeeper](zookeeper/02-课程目录.md) | 分布式协调服务，从零基础上手到核心机制、选型决策，含结课实战项目与排障手册 | 零基础→入门 | 15 / 15 课 | ✅ 已完成 |
+
+### 前端方向（`frontend/`）
+
+| 课程 | 主题 | 基础要求 | 进度 | 状态 |
+|------|------|----------|------|------|
+| [JavaScript 语言核心](frontend/javascript-core/02-课程目录.md) | ES6+ 语言核心：值与作用域 → 函数与对象 → 异步与现代语法 → 工程化与运行时，以「一段诡异代码的侦探之旅」为主线 | 入门（写过 JS / jQuery） | 3 / 12 课 | 🔄 进行中 |
+| [TypeScript](frontend/typescript-core/02-课程目录.md) | 类型系统的身份蜕变「注释 → 契约 → 可编程约束」：类型思维启蒙 → 收窄与控制流 → 泛型与类型编程 → 工程化 → 架构与选型 | 零基础 TS（需 ES6 基础） | 1 / 15 课 | 🔄 进行中 |
 
 > 进度为 2026-08-31 快照，实时状态以各课程 `00-学习档案.md` 为准。
 >
@@ -60,10 +76,17 @@ learning/
 ├── consul/                   # Consul 课程（4 阶段 11 课，含 payloads/ 与 projects/）
 ├── design-patterns/          # 设计模式课程（4 阶段 12 课，Python）
 ├── elasticsearch/            # Elasticsearch 课程（5 阶段 14 课，含 playground/ 实测脚本）
+├── frontend/                 # 前端课程目录（2 门课）
+│   ├── javascript-core/      # JavaScript 语言核心 ES6+（4 阶段 12 课 36 知识点）
+│   │   ├── 00-学习档案.md / 00-评审清单.md / 01-学习路径总览.md / 02-课程目录.md
+│   │   ├── assets/           # 课程级 SVG（学习路径总览）
+│   │   └── stages/           # 4 个阶段：值与作用域 / 函数与对象 / 异步与现代语法 / 工程化与运行时
+│   └── typescript-core/      # TypeScript 类型系统（5 阶段 15 课 49 知识点，含 playground/）
 ├── influxdb/                 # InfluxDB 3 课程（6 阶段 19 课）
 ├── kafka/                    # Kafka 基础课程（4 阶段 10 课，含 final-课程手册.md）
 ├── promql/                   # PromQL 课程（4 阶段 12 课，含 projects/ 可观测性体系）
 ├── rabbitmq/                 # RabbitMQ 课程（4 阶段 12 课，含 playground/ 实测脚本）
+├── redis/                    # Redis 课程（4 阶段 9 课，含 playground/ 实测脚本）
 └── zookeeper/                # ZooKeeper 课程（5 阶段 15 课，含结课项目与排障手册）
 ```
 
@@ -82,7 +105,7 @@ learning/
 **断点续学**：
 
 1. 先读该课程的 `00-学习档案.md`，定位进度表中第一个未完成项
-2. 九门课程均含 `00-评审清单.md`：先读它，存在未勾选条目时先补对应评审，再继续下一批
+2. 各课程均含 `00-评审清单.md`：先读它，存在未勾选条目时先补对应评审，再继续下一批
 3. 从未完成课继续，完成后将进度回写档案
 
 **课件体例与质量约定**：
