@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500" font-family="system-ui, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect width="800" height="500" fill="#ffffff"/>
+
+  <!-- 标题 -->
+  <text x="400" y="34" text-anchor="middle" font-size="19" font-weight="700" fill="#0f172a">ES 与关系数据库的数据层级对照</text>
+  <text x="400" y="56" text-anchor="middle" font-size="12.5" fill="#64748b">左半边你熟，右半边是新东西 · 对照着记，但别等同</text>
+
+  <!-- 左列标题：RDBMS -->
+  <rect x="40" y="78" width="320" height="30" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="200" y="98" text-anchor="middle" font-size="14" font-weight="700" fill="#1d4ed8">关系数据库（MySQL / PostgreSQL）</text>
+
+  <!-- 右列标题：ES -->
+  <rect x="440" y="78" width="320" height="30" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="600" y="98" text-anchor="middle" font-size="14" font-weight="700" fill="#15803d">Elasticsearch</text>
+
+  <!-- 层级 1 -->
+  <rect x="60" y="122" width="280" height="42" rx="5" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.2"/>
+  <text x="76" y="140" font-size="12" fill="#64748b">层级 1</text>
+  <text x="76" y="157" font-size="14.5" font-weight="600" fill="#0f172a">Database 数据库</text>
+
+  <rect x="460" y="122" width="280" height="42" rx="5" fill="#f0fdf4" stroke="#86efac" stroke-width="1.2"/>
+  <text x="476" y="140" font-size="12" fill="#64748b">层级 1</text>
+  <text x="476" y="157" font-size="14.5" font-weight="600" fill="#0f172a">Index 索引　如 shop</text>
+
+  <line x1="360" y1="143" x2="440" y2="143" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="4 3"/>
+  <polygon points="440,143 432,139 432,147" fill="#94a3b8"/>
+
+  <!-- 层级 2 -->
+  <rect x="60" y="176" width="280" height="42" rx="5" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.2"/>
+  <text x="76" y="194" font-size="12" fill="#64748b">层级 2</text>
+  <text x="76" y="211" font-size="14.5" font-weight="600" fill="#0f172a">Table 表</text>
+
+  <rect x="460" y="176" width="280" height="42" rx="5" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.2"/>
+  <text x="476" y="194" font-size="12" fill="#b91c1c">⚠ 这一层已经没了</text>
+  <text x="476" y="211" font-size="14.5" font-weight="600" fill="#7f1d1d">Type 类型 · 7.x 废弃，8.x 移除</text>
+
+  <line x1="360" y1="197" x2="440" y2="197" stroke="#f87171" stroke-width="1.6"/>
+  <text x="400" y="190" text-anchor="middle" font-size="15" font-weight="700" fill="#dc2626">✕</text>
+
+  <!-- 层级 3 -->
+  <rect x="60" y="230" width="280" height="42" rx="5" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.2"/>
+  <text x="76" y="248" font-size="12" fill="#64748b">层级 3</text>
+  <text x="76" y="265" font-size="14.5" font-weight="600" fill="#0f172a">Row 行（结构固定）</text>
+
+  <rect x="460" y="230" width="280" height="42" rx="5" fill="#f0fdf4" stroke="#86efac" stroke-width="1.2"/>
+  <text x="476" y="248" font-size="12" fill="#64748b">层级 3</text>
+  <text x="476" y="265" font-size="14.5" font-weight="600" fill="#0f172a">Document 文档（JSON）</text>
+
+  <line x1="360" y1="251" x2="440" y2="251" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="4 3"/>
+  <polygon points="440,251 432,247 432,255" fill="#94a3b8"/>
+
+  <!-- 层级 4 -->
+  <rect x="60" y="284" width="280" height="42" rx="5" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.2"/>
+  <text x="76" y="302" font-size="12" fill="#64748b">层级 4</text>
+  <text x="76" y="319" font-size="14.5" font-weight="600" fill="#0f172a">Column 列（先定义才写）</text>
+
+  <rect x="460" y="284" width="280" height="42" rx="5" fill="#f0fdf4" stroke="#86efac" stroke-width="1.2"/>
+  <text x="476" y="302" font-size="12" fill="#64748b">层级 4</text>
+  <text x="476" y="319" font-size="14.5" font-weight="600" fill="#0f172a">Field 字段（可边写边猜）</text>
+
+  <line x1="360" y1="305" x2="440" y2="305" stroke="#94a3b8" stroke-width="1.4" stroke-dasharray="4 3"/>
+  <polygon points="440,305 432,301 432,309" fill="#94a3b8"/>
+
+  <!-- 文档示例 -->
+  <rect x="460" y="340" width="280" height="52" rx="5" fill="#0f172a"/>
+  <text x="476" y="358" font-size="11.5" fill="#4ade80">// 一条文档（JSON）</text>
+  <text x="476" y="375" font-size="11.5" fill="#e2e8f0">{ "name": "iPhone 15", "price": 5999 }</text>
+  <text x="476" y="388" font-size="11" fill="#94a3b8">每条文档的字段可以不一样</text>
+
+  <rect x="60" y="340" width="280" height="52" rx="5" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="76" y="358" font-size="11.5" fill="#475569">每行结构必须一致，缺列补 NULL</text>
+  <text x="76" y="375" font-size="11.5" fill="#475569">改结构要 ALTER TABLE</text>
+
+  <!-- 类比失效提示 -->
+  <rect x="40" y="410" width="720" height="72" rx="6" fill="#fffbeb" stroke="#fbbf24" stroke-width="1.5"/>
+  <text x="60" y="432" font-size="13" font-weight="700" fill="#b45309">⚠ 类比在哪失效</text>
+  <text x="60" y="452" font-size="12.5" fill="#78350f">① 索引不是"表"，是"分片包裹的 Lucene 索引集合"，共享同一套字段定义（Mapping）</text>
+  <text x="60" y="470" font-size="12.5" fill="#78350f">② 文档不是"行"，写入后经分词进倒排索引，且默认 1 秒后才能被搜到（近实时，课 4 讲为什么）</text>
+</svg>

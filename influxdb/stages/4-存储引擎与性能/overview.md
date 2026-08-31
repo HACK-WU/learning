@@ -1,7 +1,7 @@
 # 阶段 4 · 存储引擎与性能
 
 > 所属课程：[InfluxDB 3 系统学习](../02-课程目录.md) ｜ 水平：入门 → 进阶
-> 本阶段：**3 课 / 9 知识点** ｜ 状态：⬜ 未开始
+> 本阶段：**3 课 / 9 知识点** ｜ 状态：🔄 进行中（3 / 9 知识点，L10 已交付）
 
 ![阶段 4 路径图](assets/stage-04-path.svg)
 
@@ -24,13 +24,29 @@
 
 ## 📚 必须掌握的知识点
 
-### L10 · 存储引擎：WAL、Parquet 与压实 ⬜
+### L10 · 存储引擎：WAL、Parquet 与压实 ✅
 
 | 知识点 | 关键点 |
 |--------|--------|
 | ① 写入路径：WAL 与内存缓冲 | 先落 WAL 保持久，再攒批刷 Parquet |
 | ② Parquet 持久化与压实 | compactor 的作用；**Core 为什么没有 compactor**（回扣 L2 SKU 选型） |
 | ③ 对象存储与无盘架构 | 存储与计算分离；本地盘模式 |
+
+> 🔴 **本课最重要的一条**：**Core 确实没有 compactor**，三处官方证据——①Core storage engine 页直接否定句 *"InfluxDB 3 Core **does not include it**"*；②Core 的 durability / storage-engine / data-retention **三页搜不到 compact 一词**；③配置页 `gen1-duration` 原文把 compactor 明确归属 Enterprise（*"generation 1 files that the **compactor in InfluxDB 3 Enterprise** can merge into larger generations"*）。
+>
+> 📊 **量化后果**：每 10 分钟持久化一次 → 每天 144 个 Parquet 文件 → **90 天约 12,960 个，永不合并**。→ **长周期查询慢的根因是「要打开的文件多」，不是「数据量大」**；官方 `query-file-limit` 的存在正是这个约束的体现，**且这是架构天花板，调参解决不了**（`gen1-duration` 仅 1m/5m/10m 三档，10m 已是文件最少档）。
+>
+> 🛤️ **写入五站与默认参数**：写校验+内存缓冲 → **WAL 每 1 秒** → 可查缓冲（**最多 900 个 WAL 文件 = 15 分钟**）→ **Parquet 每 10 分钟**（持久化**最老**的，**保留最近 5 分钟在内存**）→ Parquet 内存缓存。→ **「刚写就能查」的上界是 15 分钟**。
+>
+> ⚠️ **`no_sync=false` 是默认值**（表示"WAL 落盘才 ACK"）；改成 `true` 是**用持久性换延迟**，官方措辞为 *"acknowledge the write without waiting for persistence"*。
+>
+> 💡 **两条易混**：**WAL tail "is durable"**（WAL 每秒刷对象存储，所以在 WAL 里影响的是**查询路径**而非**持久性**）；**持久化的是最老的数据，最新 5 分钟留在内存**（新数据被查概率最高）。
+>
+> 🗄️ **对象存储**：`--object-store` 共 **6 种取值**——`memory` / `memory-throttled`（二者**重启即丢**）/ `file`（**本课程环境**，须配 `--data-dir`）/ `s3` / `google` / `azure`。**`memory-throttled` 是被低估的本地开发选项**（注入接近真实对象存储的延迟，避免对性能产生错误预期）。
+>
+> 🔧 **运维三条硬规则**：①`--node-id` 在共享同一 object store 时**必须唯一**（相同会静默互相覆盖）；②停机用 **SIGTERM**（`docker stop`）而非 SIGKILL，否则**绕过刷 WAL**；③Core 节点状态**只有 running / stopped 两种**（`stopping`/`removing` 属 Enterprise 集群）。
+>
+> 🧪 **本课的实操补充**：含一个**本机实跑验证的写入路径与持久性模拟器**（6 场景真实输出），见[课件实验 A](lessons/lesson-10-存储引擎-WAL-Parquet与压实.md)。
 
 ### L11 · 向量化执行：列存为什么快 ⬜
 

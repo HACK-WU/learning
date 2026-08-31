@@ -1,0 +1,40 @@
+{
+  "pipeline": {
+    "description": "解析 Apache 访问日志",
+    "processors": [
+      {
+        "grok": {
+          "field": "message",
+          "patterns": ["%{COMMONAPACHELOG}"]
+        }
+      },
+      {
+        "date": {
+          "field": "timestamp",
+          "formats": ["dd/MMM/yyyy:HH:mm:ss Z"],
+          "timezone": "Asia/Shanghai",
+          "target_field": "@timestamp"
+        }
+      },
+      {
+        "convert": {
+          "field": "response",
+          "type": "integer"
+        }
+      },
+      {
+        "convert": {
+          "field": "bytes",
+          "type": "integer"
+        }
+      }
+    ]
+  },
+  "docs": [
+    {
+      "_source": {
+        "message": "127.0.0.1 - - [31/Aug/2026:10:35:00 +0800] \"GET /api/search?q=es HTTP/1.1\" 200 1234"
+      }
+    }
+  ]
+}

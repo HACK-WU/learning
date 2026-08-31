@@ -1,0 +1,14 @@
+{
+  "script": {
+    "source": "ctx._source.price = ctx._source.price + params.inc; ctx._source.updated = true",
+    "lang": "painless",
+    "params": {
+      "inc": 100
+    }
+  },
+  "query": {
+    "range": {
+      "price": { "gte": 1 }
+    }
+  }
+}

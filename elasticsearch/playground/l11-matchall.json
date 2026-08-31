@@ -1,0 +1,4 @@
+{
+  "query": { "match_all": {} },
+  "sort": [{ "price": { "order": "asc" } }]
+}

@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" width="900" height="620" font-family="system-ui, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect width="900" height="620" fill="#ffffff"/>
+
+  <text x="450" y="28" text-anchor="middle" font-size="19" font-weight="700" fill="#0f172a">BM25：分数 = boost × IDF × TF，三个因子各管一件事</text>
+  <text x="450" y="49" text-anchor="middle" font-size="12.5" fill="#64748b">数据来自本课实测：索引 l7_news（6 篇文章），查询词「苹果」，explain 输出经手工复算验证</text>
+
+  <!-- 公式 -->
+  <rect x="24" y="64" width="852" height="62" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="450" y="88" text-anchor="middle" font-size="15" font-weight="700" fill="#0f172a">score = boost × idf × tf</text>
+  <text x="450" y="111" text-anchor="middle" font-size="12" fill="#475569">boost = k1 + 1 = 2.2（常数，可乘字段权重）　｜　idf = 词有多稀有　｜　tf = 词频 + 长度惩罚</text>
+
+  <!-- 因子1：IDF -->
+  <rect x="24" y="140" width="272" height="252" rx="6" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.4"/>
+  <text x="40" y="163" font-size="14" font-weight="700" fill="#1d4ed8">① IDF：稀有度</text>
+  <text x="40" y="181" font-size="11" fill="#64748b">词在多少篇文档里出现过</text>
+
+  <rect x="40" y="190" width="240" height="44" rx="4" fill="#ffffff" stroke="#93c5fd" stroke-width="1"/>
+  <text x="50" y="207" font-size="10.5" fill="#64748b">idf = log(1 + (N - n + 0.5) / (n + 0.5))</text>
+  <text x="50" y="225" font-size="10.5" fill="#64748b">N = 文档总数，n = 含该词的文档数</text>
+
+  <text x="40" y="252" font-size="11.5" font-weight="700" fill="#334155">实测（N = 6）：</text>
+  <text x="40" y="272" font-size="11.5" fill="#15803d">「雷」n=1　idf = 1.5404　← 罕见词，加成大</text>
+  <text x="40" y="292" font-size="11.5" fill="#b91c1c">「手机」n=4　idf = 0.4418　← 常见词，加成小</text>
+  <text x="40" y="312" font-size="11.5" fill="#b91c1c">「苹果」n=4　idf = 0.4418</text>
+
+  <rect x="40" y="324" width="240" height="56" rx="4" fill="#fffbeb" stroke="#fbbf24" stroke-width="1"/>
+  <text x="50" y="341" font-size="10.5" fill="#b45309">直觉：</text>
+  <text x="50" y="357" font-size="10.5" fill="#334155">搜「的」「手机」这种到处都是的词，</text>
+  <text x="50" y="372" font-size="10.5" fill="#334155">区分度低；搜「雷军」这种独一份的，</text>
+  <text x="50" y="374" font-size="10.5" fill="#334155">一搜一个准。</text>
+
+  <!-- 因子2：TF -->
+  <rect x="314" y="140" width="272" height="252" rx="6" fill="#f0fdf4" stroke="#4ade80" stroke-width="1.4"/>
+  <text x="330" y="163" font-size="14" font-weight="700" fill="#15803d">② TF：词频（有饱和）</text>
+  <text x="330" y="181" font-size="11" fill="#64748b">词在这篇文档里出现几次</text>
+
+  <rect x="330" y="190" width="240" height="44" rx="4" fill="#ffffff" stroke="#86efac" stroke-width="1"/>
+  <text x="340" y="207" font-size="10.5" fill="#64748b">tf = freq / (freq + k1 × (…))</text>
+  <text x="340" y="225" font-size="10.5" fill="#64748b">k1 = 1.2，控制饱和速度</text>
+
+  <text x="330" y="252" font-size="11.5" font-weight="700" fill="#334155">实测（搜「苹果」，idf 相同 = 0.4418）：</text>
+  <text x="330" y="272" font-size="11.5" fill="#334155">freq=3, dl=12　tf = 0.7659</text>
+  <text x="330" y="289" font-size="11.5" fill="#334155">freq=4, dl=23　tf = 0.7295</text>
+  <text x="330" y="306" font-size="11.5" fill="#334155">freq=3, dl=18　tf = 0.7099</text>
+  <text x="330" y="323" font-size="10.5" fill="#15803d">注意：出现 4 次的 tf 反而低于出现 3 次的</text>
+  <text x="330" y="338" font-size="10.5" fill="#15803d">——因为它的字段更长，被 ③ 惩罚了</text>
+
+  <rect x="330" y="348" width="240" height="34" rx="4" fill="#fffbeb" stroke="#fbbf24" stroke-width="1"/>
+  <text x="340" y="362" font-size="10.5" fill="#b45309">直觉：堆词能提分，但会饱和——</text>
+  <text x="340" y="376" font-size="10.5" fill="#334155">出现 20 次和 1000 次，差别很小。</text>
+
+  <!-- 因子3：长度 -->
+  <rect x="604" y="140" width="272" height="252" rx="6" fill="#fef2f2" stroke="#f87171" stroke-width="1.4"/>
+  <text x="620" y="163" font-size="14" font-weight="700" fill="#b91c1c">③ 长度归一化</text>
+  <text x="620" y="181" font-size="11" fill="#64748b">字段越长，命中一词越"不值钱"</text>
+
+  <rect x="620" y="190" width="240" height="44" rx="4" fill="#ffffff" stroke="#fca5a5" stroke-width="1"/>
+  <text x="630" y="207" font-size="10.5" fill="#64748b">…× k1 × (1 - b + b × dl / avgdl)</text>
+  <text x="630" y="225" font-size="10.5" fill="#64748b">b = 0.75，dl = 该字段总词项数</text>
+
+  <text x="620" y="252" font-size="11.5" font-weight="700" fill="#334155">实测（avgdl = 17.5）：</text>
+  <text x="620" y="272" font-size="11.5" fill="#334155">doc6　dl=12　短 → tf 高（0.7659）</text>
+  <text x="620" y="289" font-size="11.5" fill="#334155">doc4　dl=18　≈平均 → tf 中（0.7099）</text>
+  <text x="620" y="306" font-size="11.5" fill="#334155">doc1　dl=23　长 → tf 低（0.7295）</text>
+  <text x="620" y="323" font-size="10.5" fill="#b91c1c">dl 是"总词项数"（含重复），不是去重后</text>
+  <text x="620" y="338" font-size="10.5" fill="#b91c1c">的词数：doc1 去重 18 个、实际 dl=23</text>
+
+  <rect x="620" y="348" width="240" height="34" rx="4" fill="#fffbeb" stroke="#fbbf24" stroke-width="1"/>
+  <text x="630" y="362" font-size="10.5" fill="#b45309">直觉：一篇 300 页文档提到你一次，</text>
+  <text x="630" y="376" font-size="10.5" fill="#334155">不如一条微博提到你一次。</text>
+
+  <!-- 手算验证 -->
+  <rect x="24" y="406" width="852" height="150" rx="6" fill="#f0fdfa" stroke="#5eead4" stroke-width="1.4"/>
+  <text x="40" y="428" font-size="14" font-weight="700" fill="#0f766e">手算验证（doc1：搜「苹果」，freq=4，dl=23，avgdl=17.5）</text>
+
+  <text x="40" y="452" font-size="12" fill="#334155">idf = log(1 + (6 - 4 + 0.5) / (4 + 0.5)) = log(1 + 0.5556) = <tspan font-weight="700">0.441833</tspan></text>
+  <text x="40" y="472" font-size="12" fill="#334155">tf  = 4 / (4 + 1.2 × (1 - 0.75 + 0.75 × 23 / 17.5)) = <tspan font-weight="700">0.729547</tspan></text>
+  <text x="40" y="494" font-size="13" font-weight="700" fill="#0f766e">score = 2.2 × 0.441833 × 0.729547 = 0.709143</text>
+  <text x="40" y="514" font-size="12" fill="#0f766e">ES 的 explain 返回：<tspan font-weight="700">0.7091</tspan>　→ 完全吻合 ✅</text>
+
+  <rect x="470" y="440" width="392" height="96" rx="4" fill="#ffffff" stroke="#99f6e4" stroke-width="1"/>
+  <text x="482" y="458" font-size="11" font-weight="700" fill="#0f766e">explain 原文（ES 9.5.1 实测）</text>
+  <text x="482" y="476" font-size="10.5" fill="#334155">boost → 2.2</text>
+  <text x="482" y="492" font-size="10.5" fill="#334155">idf → 0.4418　（n=4, N=6）</text>
+  <text x="482" y="508" font-size="10.5" fill="#334155">tf → 0.7295　（freq=4.0, k1=1.2, b=0.75）</text>
+  <text x="482" y="524" font-size="10.5" fill="#334155">dl=23.0　avgdl=17.5</text>
+
+  <!-- 三句话 -->
+  <rect x="24" y="570" width="852" height="38" rx="6" fill="#fffbeb" stroke="#fbbf24" stroke-width="1.2"/>
+  <text x="40" y="594" font-size="12" font-weight="700" fill="#b45309">调优抓手</text>
+  <text x="112" y="594" font-size="11.5" fill="#334155">改 <tspan font-weight="700">boost</tspan> 调字段权重（title^3）　｜　IDF/TF 由数据决定，改不了　｜　要干预排序用 function_score</text>
+</svg>

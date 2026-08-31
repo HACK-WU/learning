@@ -1,0 +1,6 @@
+{"index":{"_index":"l11_shop","_id":"1"}}
+{"brand":"apple","price_str":"8999"}
+{"index":{"_index":"l11_shop","_id":"2"}}
+{"brand":"xiaomi","price_str":"2999"}
+{"index":{"_index":"l11_shop","_id":"3"}}
+{"brand":"huawei","price_str":"不是数字"}

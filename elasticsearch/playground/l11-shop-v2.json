@@ -1,0 +1,16 @@
+{
+  "settings": {
+    "number_of_shards": 3,
+    "number_of_replicas": 1
+  },
+  "mappings": {
+    "properties": {
+      "brand": { "type": "keyword" },
+      "price": { "type": "integer" },
+      "price_level": { "type": "keyword" },
+      "stage_default": { "type": "keyword" },
+      "migrated_from": { "type": "keyword" },
+      "updated": { "type": "boolean" }
+    }
+  }
+}

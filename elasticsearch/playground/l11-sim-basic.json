@@ -1,0 +1,39 @@
+{
+  "pipeline": {
+    "description": "set / rename / remove / convert 四件套",
+    "processors": [
+      {
+        "set": {
+          "field": "ingest_time",
+          "value": "2026-08-31T10:35:00"
+        }
+      },
+      {
+        "rename": {
+          "field": "old_name",
+          "target_field": "new_name"
+        }
+      },
+      {
+        "remove": {
+          "field": "temp_field"
+        }
+      },
+      {
+        "convert": {
+          "field": "price_str",
+          "type": "integer"
+        }
+      }
+    ]
+  },
+  "docs": [
+    {
+      "_source": {
+        "old_name": "手机",
+        "temp_field": "用完就扔",
+        "price_str": "1999"
+      }
+    }
+  ]
+}

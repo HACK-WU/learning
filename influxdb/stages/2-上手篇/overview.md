@@ -1,7 +1,7 @@
 # 阶段 2 · 上手篇
 
 > 所属课程：[InfluxDB 3 系统学习](../02-课程目录.md) ｜ 水平：零基础
-> 本阶段：**3 课 / 9 知识点** ｜ 状态：🔄 进行中（2 / 3 课已交付）
+> 本阶段：**3 课 / 9 知识点** ｜ 状态：✅ **已完成**（3 / 3 课，9 / 9 知识点）
 > **环境方式：Docker 为主线 + 原生安装备选**（2026-08-31 确定）
 
 ![阶段 2 路径图](assets/stage-02-path.svg)
@@ -47,13 +47,17 @@
 > ① `accept_partial=true`（默认）时 **HTTP 400 ≠ 失败**——合法行已写入，监控告警不能只看状态码
 > ② `auto` 精度检测的三个阈值（5e9 秒 / 5e12 毫秒 / 5e15 微秒）**对齐到同一时刻 2128 年**，常规范围内可靠，真正的坑是小数值与 1970 年前数据
 
-### L5 · Python 客户端与 CLI 工具 ⬜
+### L5 · Python 客户端与 CLI 工具 [→ 课件](lessons/lesson-05-Python客户端与CLI工具.md) ✅
 
 | 知识点 | 关键点 |
 |--------|--------|
-| ① Python 客户端 `influxdb3-python` | `InfluxDBClient3` / `Point` / 三种写入模式 |
-| ② `influx3` CLI | 输出格式 json / jsonl / csv / pretty |
-| ③ Flight SQL 客户端 | 零拷贝取数到 Pandas |
+| ① Python 客户端 `influxdb3-python` | `InfluxDBClient3` / `Point` / 三种写入模式（同步/批量/异步废弃）/ 四种查询形态 |
+| ② `influx3` CLI | 随 Python 包附带、**仅 `query` 一个子命令**、输出格式 json(默认)/jsonl/csv/pretty |
+| ③ Flight SQL 客户端 | 写入走 HTTP、查询走 gRPC Flight；Arrow 列存零拷贝转 pandas/polars；**只读 + 需 HTTP/2** |
+
+> 🎯 **本课最重要的一条**：**客户端默认不走 L4 学的 V3 端点**——`WriteOptions.use_v2_api` 默认 `True`，数据写往 `/api/v2/write`；且 `no_sync` 与之互斥（抛 `ValueError`）。想用 V3 端点或 `no_sync` 必须先 `use_v2_api=False`。
+>
+> 🐞 **头号踩坑**：`host` **必须写全 `http://`**。写 `host="localhost:8181"` 会在**构造阶段**就抛 `ArrowInvalid: Cannot parse URI: 'grpc+tcp://localhost:8181:443'`（报错里的 443 你从没写过）。官方 Core 文档示例确有此简写（面向云端），本地部署必须补 scheme。
 
 ## 🔗 已核实的前置事实
 
@@ -66,7 +70,12 @@
 | **性能数字出处** | <10ms = **LVC**、~30ms = **DVC**，二者**需主动配置**才生效，默认状态达不到 |
 | 端口 | HTTP **8181**（3.x）；**8086 = 1.x/2.x**，是版本指纹 |
 | token | `create token --admin` **只显示一次、无法找回**；第一个 admin token 即 operator token |
-| `influxdb3-python` | 最新 **0.20.0**（2026-06-11）；要求 Python ≥ 3.9（建议 3.11+） |
+| `influxdb3-python` | 最新 **0.21.0**（本机 2026-08-31 实测；档案原记 0.20.0 已订正）；要求 Python ≥ 3.9（建议 3.11+） |
+| 客户端默认写入端点 | 🔴 **`/api/v2/write`**（`use_v2_api=True`），非 V3 端点；`no_sync` 须先设 `use_v2_api=False` |
+| 客户端 `host` 写法 | 🔴 **必须带 `http://`/`https://`**，否则构造即抛 `ArrowInvalid`（拼出 `:443` 畸形连接串） |
+| Flight 端口 | Core **与 HTTP 共用 8181**；8082 属 3 开源社区版/IOx |
+| `influx3` CLI | 随 Python 包附带，**仅 `query` 子命令**，默认输出 json |
+| 本课环境 | 编写环境无 Docker；**改用本机 venv 实装客户端 + `inspect` 核验 API**（详见档案评审记录） |
 | Line Protocol 数据类型 | float（默认）/ integer（`i` 尾缀）/ uinteger（`u`）/ string（双引号）/ boolean（不加引号） |
 
 > 📌 **L5 备课待办**：`/api/v3/write_lp` 已核实（L4 用）；**Flight SQL 客户端部分尚未专项核实**，开讲前需补一次。

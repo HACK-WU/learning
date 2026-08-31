@@ -1,0 +1,7 @@
+{
+  "indices": "l9_orders",
+  "ignore_unavailable": true,
+  "include_global_state": false,
+  "rename_pattern": "l9_orders",
+  "rename_replacement": "restored_on_9200"
+}

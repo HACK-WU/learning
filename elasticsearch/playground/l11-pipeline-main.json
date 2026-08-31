@@ -1,0 +1,43 @@
+{
+  "description": "课11 主管道：写入前加工",
+  "processors": [
+    {
+      "set": {
+        "field": "stage_default",
+        "value": "default已执行"
+      }
+    },
+    {
+      "uppercase": {
+        "field": "brand"
+      }
+    },
+    {
+      "convert": {
+        "field": "price_str",
+        "type": "integer",
+        "target_field": "price",
+        "on_failure": [
+          {
+            "set": {
+              "field": "price",
+              "value": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "remove": {
+        "field": "price_str"
+      }
+    },
+    {
+      "script": {
+        "description": "按价格打标",
+        "lang": "painless",
+        "source": "ctx.price_level = ctx.price >= 5000 ? 'high' : 'low'"
+      }
+    }
+  ]
+}

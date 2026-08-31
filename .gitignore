@@ -1,133 +1,90 @@
-# ============================================================
-# 学习仓库忽略规则
-# 保留：.md/.svg/.py/.sh/.json/.hcl/.tpl/.yaml 等学习资料
-# 忽略：构建产物、运行日志、中间件发行版与运行时数据
-# ============================================================
-
-# ---------- 系统与编辑器 ----------
+# ---- 系统与编辑器 ----
 .DS_Store
-._*
-.Spotlight-V100
-.Trashes
 Thumbs.db
-ehthumbs.db
-desktop.ini
-*~
 *.swp
 *.swo
-
-# ---------- IDE / 工具数据 ----------
-.vscode/
 .idea/
-*.iml
-*.iws
-*.ipr
-.workbuddy/
-.codebuddy/
+.vscode/
+*.tmp
 
-# ---------- Python ----------
+# ---- 通用过程残留 ----
+*.log
+logs/
+dump.rdb
+
+# Python 依赖与缓存（仓库中实际存在，非教学源码）
 __pycache__/
 *.py[cod]
-*$py.class
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-sdist/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
 .venv/
-venv/
-env/
-ENV/
 .pytest_cache/
-.mypy_cache/
-.ruff_cache/
-.tox/
-.nox/
-htmlcov/
-.coverage
-.coverage.*
-coverage.xml
-.hypothesis/
 
-# Celery / Django 运行时
-celerybeat-schedule
-celerybeat-schedule.*
-celerybeat.pid
-*.sqlite3
-db.sqlite3
-media/
-staticfiles/
-
-# ---------- Node（图表 / 文档工具） ----------
-node_modules/
-npm-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-
-# ---------- 运行日志与临时文件 ----------
-*.log
-*.out
-*.err
-*.pid
-*.tmp
-*.temp
-*.bak
-*.orig
-nohup.out
-
-# ---------- 二进制与安装包 ----------
-*.exe
-*.msi
-*.dll
-*.dylib
-*.so
-*.class
-*.jar
-*.war
-*.jmod
-*.tar.gz
-*.tgz
-hs_err_pid*.log
-replay_pid*.log
-
-# ---------- 证书与密钥（本地自签测试材料） ----------
+# ---- 本地配置与密钥（绝不入库）----
+.env
+.env.local
+.env.*.local
 *.pem
 *.key
-*.crt
-*.csr
-*.p12
-*.jks
-*.keystore
 
-# ---------- 中间件发行版解压目录 ----------
-# 注意：统一以 [0-9] 版本号约束，避免误伤 kafka-basics 之类的学习目录
-elasticsearch-[0-9]*/
-elasticsearch-*.zip
-kafka_[0-9]*/
-kafka-[0-9]*/
-apache-kafka-[0-9]*/
-apache-zookeeper-[0-9]*/
-zookeeper-[0-9]*/
-influxdb-[0-9]*/
-redis-[0-9]*/
+# ---- 教学实操环境：RabbitMQ 运行时数据（rabbitmq 课程）----
+# 风险点：阶段 4 起做集群/镜像实操时，若在仓库目录内启动节点，
+# Mnesia/Khepri 数据库与日志会就地生成（体积大、可再生），需忽略。
 rabbitmq_server-[0-9]*/
+**/playground/**/mnesia/
+**/playground/**/khepri/
 
-# ---------- 中间件运行时数据 ----------
-**/cluster/data/
-**/cluster/logs/
-**/playground/**/data/
-**/playground/**/logs/
-*.snapshot
-raft.db
-peers.info
-node-id
+# ---- 下载的工具二进制（非教学内容，可重新下载）----
+*.exe
+*.zip
 
-# ---------- 下载的第三方工具 ----------
-/consul/playground/tools/
+# ---- 教学压缩包例外（必须放在 *.zip 之后：Git 后置规则优先）----
+# *.zip 用于忽略下载的中间件发行版，但教学自制的数据包/素材包要保留。
+!rabbitmq/**/*.zip
+!*-教学素材.zip
+
+# ---- 教学实操环境：ES 发行包与集群数据目录 ----
+# 说明：这些是解压/运行产生的二进制运行时（约 4 GB），不是教学内容。
+# 教学产物是下面的 stages/ 与各主题根目录下的 *.md / assets/*.svg，
+# 以及 playground/ 顶层被讲义引用的 *.json / *.ndjson / *.ps1 载荷。
+elasticsearch/playground/l9-cluster/
+elasticsearch/playground/elasticsearch-9.5.1/
+elasticsearch/playground/snapshots/
+elasticsearch/playground/backup-*/
+elasticsearch-9.5.1-*.zip
+
+# ---- 教学实操环境：Redis 运行时数据（redis 课程）----
+# 风险点：redis.conf 的 dir 默认值是 ./（即启动 redis-server 时的当前目录）。
+# 若在仓库目录内直接启动而未指定 --dir，RDB 快照与 AOF 会就地生成，
+# 与上面的 dump.rdb 属于同一类过程残留，只是覆盖了自定义文件名与 Redis 7+ 多段 AOF。
+*.rdb
+appendonlydir/
+*.aof
+# Redis Cluster 自动生成的节点状态文件（阶段 4 分布式实践会产生）
+nodes-[0-9]*.conf
+
+# ---- 教学实操环境：Node 依赖目录（typescript-core 课程）----
+# 说明：课 1 的 npm i -D typescript 会就地生成 node_modules/（数百至数千个文件），
+# 它不是教学内容，可由 package.json 随时重新安装。
+# 教学产物是 playground 下的 .ts 源码与各主题目录下的 *.md / assets/*.svg。
+# 注意：不要加 *.js —— playground/scenario.js 是讲义引用的手写 JS 源文件，必须保留。
+node_modules/
+
+# ---- 教学实操环境：Consul 运行时数据（consul 课程）----
+# 风险点：lesson-05 的集群配置里 data_dir 直指仓库内的 playground/cluster/data/，
+# 节点一启动就地生成 raft.db、serf 快照、node-id、services 元数据（可再生，约 1 MB）。
+# 教学产物是同目录下的 *.json 配置（node1.json / dc2.json 等），继续跟踪，不受影响。
+consul/playground/cluster/data/
+
+# consul-template 渲染产物：*.tpl / *.hcl 是教学载荷，渲染出来的 .out 不是
+consul/playground/*.out
+
+# ---- 下载的工具存放目录（consul 课程）----
+# lesson-06 让学员把 consul / consul-template 二进制下载到这里；
+# 二进制本体已被上面的 *.exe 忽略，剩下的第三方 LICENSE.txt 也不是教学内容。
+consul/playground/tools/
+
+# ---- 前端课程：Node 依赖目录（frontend/ 下 JS / TS 课程）----
+# 风险点：模块化、实战项目等章节一旦执行 npm install，node_modules/ 会就地生成
+# （数万文件、体积大、可再生）。npm-debug.log* 已被上面的 *.log 覆盖。
+# 教学产物是各主题下的 *.md / assets/*.svg / 实现/ 里的源码，继续跟踪，不受影响。
+node_modules/
+.workbuddy/

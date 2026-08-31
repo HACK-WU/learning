@@ -107,7 +107,7 @@ flowchart TB
 - 名字由来（作者自述）：当时 Yahoo 内部项目几乎全用动物命名（Pig、Hive……），有经理开玩笑"再这样我们要成动物园了"。大家一拍即合：分布式系统本身就是个动物园（混乱难管）——那就叫 ZooKeeper，看动物园的人。官网老标语呼应至今："Coordinating distributed systems is a Zoo"
 - 生态位：它不跟 MySQL/Redis 抢"存数据的位"，站的是分布式技术栈里"**协调内核**"的位——官网原话："a proven coordination kernel trusted by Kafka, Hadoop, HBase, and many other distributed systems"（被 Kafka、Hadoop、HBase 等众多分布式系统信赖的协调内核）
 
-学过 kafka-basics 的你对最后一条应该有体感：老版 Kafka 的 broker 注册、controller 选举全在 ZK 上——那就是"协调内核"在打工。KRaft 时代 Kafka 自研了 Raft 模块，等于把内核职能"内化自建"了，但"协调内核"这个岗位本身没有消失（L10 专门展开）。
+学过 kafka 的你对最后一条应该有体感：老版 Kafka 的 broker 注册、controller 选举全在 ZK 上——那就是"协调内核"在打工。KRaft 时代 Kafka 自研了 Raft 模块，等于把内核职能"内化自建"了，但"协调内核"这个岗位本身没有消失（L10 专门展开）。
 
 **小而 CP 的设计哲学。**
 

@@ -1,0 +1,16 @@
+{
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0,
+    "default_pipeline": "l11_main"
+  },
+  "mappings": {
+    "properties": {
+      "brand": { "type": "keyword" },
+      "price": { "type": "integer" },
+      "price_level": { "type": "keyword" },
+      "stage_default": { "type": "keyword" },
+      "stage_final": { "type": "keyword" }
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "pipeline": {
+    "description": "grok 失败时不丢弃文档，而是打标并保留原文",
+    "processors": [
+      {
+        "grok": {
+          "field": "message",
+          "patterns": ["%{COMMONAPACHELOG}"],
+          "on_failure": [
+            {
+              "set": {
+                "field": "_index",
+                "value": "failed-logs"
+              }
+            },
+            {
+              "set": {
+                "field": "grok_error",
+                "value": "{{ _ingest.on_failure_message }}"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "docs": [
+    {
+      "_source": {
+        "message": "127.0.0.1 - - [31/Aug/2026:10:35:00 +0800] \"GET /api/search?q=es HTTP/1.1\" 200 1234"
+      }
+    },
+    {
+      "_source": {
+        "message": "这是一条完全不规范的日志"
+      }
+    }
+  ]
+}

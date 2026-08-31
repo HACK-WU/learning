@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 560" width="820" height="560" font-family="system-ui, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect width="820" height="560" fill="#ffffff"/>
+
+  <text x="410" y="32" text-anchor="middle" font-size="19" font-weight="700" fill="#0f172a">倒排索引：把「文档 → 词」翻过来，变成「词 → 文档」</text>
+  <text x="410" y="54" text-anchor="middle" font-size="12.5" fill="#64748b">数据来自本课实测：3 条中文文档经 standard 逐字分词后的真实结果</text>
+
+  <!-- 左：原始文档 -->
+  <rect x="30" y="74" width="330" height="196" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="46" y="96" font-size="13.5" font-weight="700" fill="#334155">① 原始文档（人看的样子）</text>
+
+  <rect x="46" y="108" width="298" height="34" rx="4" fill="#eff6ff" stroke="#93c5fd" stroke-width="1"/>
+  <text x="58" y="123" font-size="11" fill="#64748b">doc 1</text>
+  <text x="58" y="137" font-size="13.5" fill="#0f172a">中国人民银行发行数字货币</text>
+
+  <rect x="46" y="150" width="298" height="34" rx="4" fill="#eff6ff" stroke="#93c5fd" stroke-width="1"/>
+  <text x="58" y="165" font-size="11" fill="#64748b">doc 2</text>
+  <text x="58" y="179" font-size="13.5" fill="#0f172a">人工智能改变世界</text>
+
+  <rect x="46" y="192" width="298" height="34" rx="4" fill="#eff6ff" stroke="#93c5fd" stroke-width="1"/>
+  <text x="58" y="207" font-size="11" fill="#64748b">doc 3</text>
+  <text x="58" y="221" font-size="13.5" fill="#0f172a">银行利率下调</text>
+
+  <text x="46" y="252" font-size="11.5" fill="#64748b">如果按「文档 → 词」存（正排），</text>
+  <text x="46" y="266" font-size="11.5" fill="#64748b">找"人民"就得把每篇都扫一遍。</text>
+
+  <!-- 中间箭头 -->
+  <path d="M 195 278 L 195 300" stroke="#16a34a" stroke-width="2" marker-end="url(#arw)"/>
+  <defs><marker id="arw" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+    <polygon points="0,0 9,4.5 0,9" fill="#16a34a"/></marker></defs>
+  <text x="205" y="294" font-size="12" font-weight="600" fill="#15803d">逐字分词</text>
+
+  <!-- 左：分词结果 -->
+  <rect x="30" y="304" width="330" height="180" rx="6" fill="#f0fdf4" stroke="#86efac" stroke-width="1.2"/>
+  <text x="46" y="326" font-size="13.5" font-weight="700" fill="#15803d">② 分词结果（机器存的样子）</text>
+
+  <text x="46" y="350" font-size="11" fill="#64748b">doc 1</text>
+  <text x="90" y="350" font-size="12.5" fill="#0f172a">中 国 人 民 银 行 发 行 数 字 货 币</text>
+  <text x="46" y="372" font-size="11" fill="#64748b">doc 2</text>
+  <text x="90" y="372" font-size="12.5" fill="#0f172a">人 工 智 能 改 变 世 界</text>
+  <text x="46" y="394" font-size="11" fill="#64748b">doc 3</text>
+  <text x="90" y="394" font-size="12.5" fill="#0f172a">银 行 利 率 下 调</text>
+
+  <line x1="46" y1="410" x2="344" y2="410" stroke="#86efac" stroke-width="1"/>
+  <text x="46" y="430" font-size="11.5" fill="#166534">注意：全被切成了单字。</text>
+  <text x="46" y="446" font-size="11.5" fill="#166534">「人」在 doc1 和 doc2 都出现，</text>
+  <text x="46" y="462" font-size="11.5" fill="#166534">「银」「行」在 doc1 和 doc3 都有，</text>
+  <text x="46" y="478" font-size="11.5" fill="#b45309">→ 这正是中文搜索不准的根源。</text>
+
+  <!-- 右：倒排索引 -->
+  <rect x="382" y="74" width="408" height="410" rx="6" fill="#fffbeb" stroke="#fbbf24" stroke-width="1.4"/>
+  <text x="398" y="96" font-size="13.5" font-weight="700" fill="#b45309">③ 倒排索引（Term → 文档列表）</text>
+  <text x="398" y="115" font-size="11" fill="#78350f">左侧是词项字典，右侧是倒排列表（含词频）</text>
+
+  <!-- 表头 -->
+  <text x="400" y="140" font-size="11" font-weight="700" fill="#64748b">词</text>
+  <text x="470" y="140" font-size="11" font-weight="700" fill="#64748b">出现在哪些文档</text>
+  <text x="606" y="140" font-size="11" font-weight="700" fill="#64748b">词</text>
+  <text x="676" y="140" font-size="11" font-weight="700" fill="#64748b">出现在哪些文档</text>
+  <line x1="398" y1="148" x2="774" y2="148" stroke="#fbbf24" stroke-width="1"/>
+
+  <!-- 左列 12 行 -->
+  <g font-size="12" fill="#0f172a">
+    <text x="400" y="168">中</text><text x="470" y="168" fill="#334155">[1]</text>
+    <text x="400" y="188">国</text><text x="470" y="188" fill="#334155">[1]</text>
+    <text x="400" y="208">人</text><text x="470" y="208" fill="#b91c1c" font-weight="700">[1, 2]</text>
+    <text x="400" y="228">民</text><text x="470" y="228" fill="#b91c1c" font-weight="700">[1, 3]</text>
+    <text x="400" y="248">银</text><text x="470" y="248" fill="#b91c1c" font-weight="700">[1, 3]</text>
+    <text x="400" y="268">行</text><text x="470" y="268" fill="#b91c1c" font-weight="700">[1×2, 3]</text>
+    <text x="400" y="288">发</text><text x="470" y="288" fill="#334155">[1]</text>
+    <text x="400" y="308">数</text><text x="470" y="308" fill="#334155">[1]</text>
+    <text x="400" y="328">字</text><text x="470" y="328" fill="#334155">[1]</text>
+    <text x="400" y="348">货</text><text x="470" y="348" fill="#334155">[1]</text>
+    <text x="400" y="368">币</text><text x="470" y="368" fill="#334155">[1]</text>
+    <text x="400" y="388">工</text><text x="470" y="388" fill="#334155">[2]</text>
+  </g>
+
+  <!-- 右列 12 行 -->
+  <g font-size="12" fill="#0f172a">
+    <text x="606" y="168">智</text><text x="676" y="168" fill="#334155">[2]</text>
+    <text x="606" y="188">能</text><text x="676" y="188" fill="#334155">[2]</text>
+    <text x="606" y="208">改</text><text x="676" y="208" fill="#334155">[2]</text>
+    <text x="606" y="228">变</text><text x="676" y="228" fill="#334155">[2]</text>
+    <text x="606" y="248">世</text><text x="676" y="248" fill="#334155">[2]</text>
+    <text x="606" y="268">界</text><text x="676" y="268" fill="#334155">[2]</text>
+    <text x="606" y="288">利</text><text x="676" y="288" fill="#334155">[3]</text>
+    <text x="606" y="308">率</text><text x="676" y="308" fill="#334155">[3]</text>
+    <text x="606" y="328">下</text><text x="676" y="328" fill="#334155">[3]</text>
+    <text x="606" y="348">调</text><text x="676" y="348" fill="#334155">[3]</text>
+  </g>
+
+  <line x1="398" y1="404" x2="774" y2="404" stroke="#fbbf24" stroke-width="1"/>
+  <text x="398" y="424" font-size="11.5" fill="#78350f">「行」在 doc1 出现 2 次（发行、银行），所以记为 [1×2, 3]</text>
+  <text x="398" y="442" font-size="11.5" fill="#78350f">这就是倒排索引里的「词频」，相关性打分要用（课 7）</text>
+  <text x="398" y="466" font-size="12" font-weight="700" fill="#b91c1c">搜「人民」＝ 人[1,2] ∪ 民[1,3] ＝ 1、2、3 全命中</text>
+
+  <!-- 底部结论 -->
+  <rect x="30" y="504" width="760" height="40" rx="6" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="46" y="522" font-size="12.5" fill="#334155">倒排索引为什么快：搜索时直接按词查表拿文档列表，不用逐篇扫描。</text>
+  <text x="46" y="538" font-size="12.5" fill="#334155">但它只认「词」——所以分词的粒度，直接决定了搜索准不准。</text>
+</svg>

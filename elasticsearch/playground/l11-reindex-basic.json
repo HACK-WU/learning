@@ -1,0 +1,11 @@
+{
+  "source": {
+    "index": "l11_shop"
+  },
+  "dest": {
+    "index": "l11_shop_v2"
+  },
+  "script": {
+    "source": "ctx._source.migrated_from = 'l11_shop'"
+  }
+}

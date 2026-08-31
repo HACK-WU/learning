@@ -8,9 +8,9 @@
 [![Design Patterns](https://img.shields.io/badge/Design_Patterns-12%2F12-yellowgreen)](design-patterns/02-课程目录.md)
 [![Elasticsearch](https://img.shields.io/badge/Elasticsearch-7%2F14-yellow)](elasticsearch/02-课程目录.md)
 [![InfluxDB](https://img.shields.io/badge/InfluxDB-4%2F19-yellow)](influxdb/02-课程目录.md)
-[![Kafka Basics](https://img.shields.io/badge/Kafka_Basics-10%2F10-yellowgreen)](kafka-basics/02-课程目录.md)
+[![Kafka](https://img.shields.io/badge/Kafka-10%2F10-yellowgreen)](kafka/02-课程目录.md)
 [![PromQL](https://img.shields.io/badge/PromQL-12%2F12-yellowgreen)](promql/02-课程目录.md)
-[![RabbitMQ Basics](https://img.shields.io/badge/RabbitMQ_Basics-4%2F12-yellow)](rabbitmq-basics/02-课程目录.md)
+[![RabbitMQ](https://img.shields.io/badge/RabbitMQ-4%2F12-yellow)](rabbitmq/02-课程目录.md)
 [![ZooKeeper](https://img.shields.io/badge/ZooKeeper-15%2F15-brightgreen)](zookeeper/02-课程目录.md)
 
 ## 概述
@@ -31,9 +31,9 @@
 | [设计模式](design-patterns/02-课程目录.md) | GoF 设计模式的 Python 惯用实现，以订单系统重构为故事主线 | Python 基础扎实 | 12 / 12 课 | 🔶 收尾中 |
 | [Elasticsearch](elasticsearch/02-课程目录.md) | 从「数据库为什么搞不定搜索」到查询聚合、分布式与选型，附认证备考映射 | 零基础 | 7 / 14 课 | 🔄 进行中 |
 | [InfluxDB](influxdb/02-课程目录.md) | InfluxDB 3 时序数据库，从「为什么不用 MySQL」到生产落地与选型决策 | 零基础 | 4 / 19 课 | 🔄 进行中 |
-| [Kafka 基础](kafka-basics/02-课程目录.md) | 从消息队列概念到集群可靠性与事件驱动架构，Docker 实操贯穿全程 | 零基础 | 10 / 10 课 | 🔶 收尾中 |
+| [Kafka 基础](kafka/02-课程目录.md) | 从消息队列概念到集群可靠性与事件驱动架构，Docker 实操贯穿全程 | 零基础 | 10 / 10 课 | 🔶 收尾中 |
 | [PromQL](promql/02-课程目录.md) | Prometheus 查询语言，从数据模型到告警规则与 Grafana 面板，含 SLO 实战项目 | 零基础 | 12 / 12 课 | 🔶 收尾中 |
-| [RabbitMQ 基础](rabbitmq-basics/02-课程目录.md) | 从「为什么需要消息队列」到生产落地，Python（pika）实操贯穿全程，止于选型决策 | 零基础 | 4 / 12 课 | 🔄 进行中 |
+| [RabbitMQ 基础](rabbitmq/02-课程目录.md) | 从「为什么需要消息队列」到生产落地，Python（pika）实操贯穿全程，止于选型决策 | 零基础 | 4 / 12 课 | 🔄 进行中 |
 | [ZooKeeper](zookeeper/02-课程目录.md) | 分布式协调服务，从零基础上手到核心机制、选型决策，含结课实战项目与排障手册 | 零基础→入门 | 15 / 15 课 | ✅ 已完成 |
 
 > 进度为 2026-08-31 快照，实时状态以各课程 `00-学习档案.md` 为准。
@@ -61,9 +61,9 @@ learning/
 ├── design-patterns/          # 设计模式课程（4 阶段 12 课，Python）
 ├── elasticsearch/            # Elasticsearch 课程（5 阶段 14 课，含 playground/ 实测脚本）
 ├── influxdb/                 # InfluxDB 3 课程（6 阶段 19 课）
-├── kafka-basics/             # Kafka 基础课程（4 阶段 10 课，含 final-课程手册.md）
+├── kafka/                    # Kafka 基础课程（4 阶段 10 课，含 final-课程手册.md）
 ├── promql/                   # PromQL 课程（4 阶段 12 课，含 projects/ 可观测性体系）
-├── rabbitmq-basics/          # RabbitMQ 课程（4 阶段 12 课，含 playground/ 实测脚本）
+├── rabbitmq/                 # RabbitMQ 课程（4 阶段 12 课，含 playground/ 实测脚本）
 └── zookeeper/                # ZooKeeper 课程（5 阶段 15 课，含结课项目与排障手册）
 ```
 

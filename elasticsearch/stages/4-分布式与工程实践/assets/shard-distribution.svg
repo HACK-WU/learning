@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="640" viewBox="0 0 1000 640" font-family="'Microsoft YaHei','PingFang SC','Segoe UI',sans-serif">
+  <rect width="1000" height="640" fill="#ffffff"/>
+  <text x="500" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#1a1a1a">分片与副本：一个索引如何散布到 3 个节点</text>
+  <text x="500" y="56" text-anchor="middle" font-size="13" fill="#666666">索引 l9_orders ｜ 3 主分片 + 1 副本 ｜ 数字为本机 3 节点集群实测</text>
+
+  <!-- 索引层 -->
+  <rect x="60" y="84" width="880" height="52" rx="8" fill="#e8f0fe" stroke="#4a7fd4" stroke-width="2"/>
+  <text x="500" y="107" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a4b8f">索引 l9_orders</text>
+  <text x="500" y="127" text-anchor="middle" font-size="12" fill="#3a5f8f">number_of_shards: 3（建后不可改） ｜ number_of_replicas: 1（随时可改）</text>
+
+  <!-- 箭头 -->
+  <path d="M500 140 L500 168" stroke="#888888" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="512" y="160" font-size="11" fill="#888888">按 routing 取模路由</text>
+
+  <!-- 分片层 -->
+  <rect x="60" y="178" width="270" height="70" rx="8" fill="#fff4e0" stroke="#e0a020" stroke-width="2"/>
+  <text x="195" y="203" text-anchor="middle" font-size="14" font-weight="bold" fill="#8a5a00">主分片 P0</text>
+  <text x="195" y="224" text-anchor="middle" font-size="12" fill="#8a5a00">hash(routing) % 3 = 0</text>
+  <text x="195" y="240" text-anchor="middle" font-size="11" fill="#a08040">实测承载 6 条</text>
+
+  <rect x="365" y="178" width="270" height="70" rx="8" fill="#fff4e0" stroke="#e0a020" stroke-width="2"/>
+  <text x="500" y="203" text-anchor="middle" font-size="14" font-weight="bold" fill="#8a5a00">主分片 P1</text>
+  <text x="500" y="224" text-anchor="middle" font-size="12" fill="#8a5a00">hash(routing) % 3 = 1</text>
+  <text x="500" y="240" text-anchor="middle" font-size="11" fill="#a08040">实测承载 2 条</text>
+
+  <rect x="670" y="178" width="270" height="70" rx="8" fill="#fff4e0" stroke="#e0a020" stroke-width="2"/>
+  <text x="805" y="203" text-anchor="middle" font-size="14" font-weight="bold" fill="#8a5a00">主分片 P2</text>
+  <text x="805" y="224" text-anchor="middle" font-size="12" fill="#8a5a00">hash(routing) % 3 = 2</text>
+  <text x="805" y="240" text-anchor="middle" font-size="11" fill="#a08040">实测承载 4 条</text>
+
+  <!-- 副本箭头 -->
+  <path d="M195 248 L195 288" stroke="#3aa76d" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrowG)"/>
+  <path d="M500 248 L500 288" stroke="#3aa76d" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrowG)"/>
+  <path d="M805 248 L805 288" stroke="#3aa76d" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arrowG)"/>
+  <text x="640" y="272" font-size="11" fill="#2d7d52">复制一份（副本数可动态改）</text>
+
+  <!-- 副本层 -->
+  <rect x="60" y="296" width="270" height="52" rx="8" fill="#e6f7ee" stroke="#3aa76d" stroke-width="2"/>
+  <text x="195" y="317" text-anchor="middle" font-size="13" font-weight="bold" fill="#1d6b42">副本 R0</text>
+  <text x="195" y="336" text-anchor="middle" font-size="11" fill="#2d7d52">P0 的完整拷贝</text>
+
+  <rect x="365" y="296" width="270" height="52" rx="8" fill="#e6f7ee" stroke="#3aa76d" stroke-width="2"/>
+  <text x="500" y="317" text-anchor="middle" font-size="13" font-weight="bold" fill="#1d6b42">副本 R1</text>
+  <text x="500" y="336" text-anchor="middle" font-size="11" fill="#2d7d52">P1 的完整拷贝</text>
+
+  <rect x="670" y="296" width="270" height="52" rx="8" fill="#e6f7ee" stroke="#3aa76d" stroke-width="2"/>
+  <text x="805" y="317" text-anchor="middle" font-size="13" font-weight="bold" fill="#1d6b42">副本 R2</text>
+  <text x="805" y="336" text-anchor="middle" font-size="11" fill="#2d7d52">P2 的完整拷贝</text>
+
+  <!-- 节点层 -->
+  <rect x="40" y="392" width="290" height="150" rx="10" fill="#f5f7fa" stroke="#8a9bb0" stroke-width="2"/>
+  <text x="185" y="416" text-anchor="middle" font-size="14" font-weight="bold" fill="#2c3e50">node-1（9201）</text>
+  <text x="185" y="436" text-anchor="middle" font-size="11" fill="#6a7b90">master + data</text>
+  <rect x="60" y="448" width="120" height="34" rx="5" fill="#fff4e0" stroke="#e0a020"/>
+  <text x="120" y="470" text-anchor="middle" font-size="12" font-weight="bold" fill="#8a5a00">P2（主）</text>
+  <rect x="192" y="448" width="120" height="34" rx="5" fill="#e6f7ee" stroke="#3aa76d"/>
+  <text x="252" y="470" text-anchor="middle" font-size="12" font-weight="bold" fill="#1d6b42">R0（副）</text>
+  <text x="185" y="504" text-anchor="middle" font-size="11" fill="#6a7b90">2 个分片</text>
+  <text x="185" y="526" text-anchor="middle" font-size="10" fill="#8a9bb0">实测：stop 后接管 P1</text>
+
+  <rect x="355" y="392" width="290" height="150" rx="10" fill="#f5f7fa" stroke="#8a9bb0" stroke-width="2"/>
+  <text x="500" y="416" text-anchor="middle" font-size="14" font-weight="bold" fill="#2c3e50">node-2（9202）</text>
+  <text x="500" y="436" text-anchor="middle" font-size="11" fill="#6a7b90">master + data</text>
+  <rect x="375" y="448" width="120" height="34" rx="5" fill="#fff4e0" stroke="#e0a020"/>
+  <text x="435" y="470" text-anchor="middle" font-size="12" font-weight="bold" fill="#8a5a00">P0（主）</text>
+  <rect x="507" y="448" width="120" height="34" rx="5" fill="#e6f7ee" stroke="#3aa76d"/>
+  <text x="567" y="470" text-anchor="middle" font-size="12" font-weight="bold" fill="#1d6b42">R1（副）</text>
+  <text x="500" y="504" text-anchor="middle" font-size="11" fill="#6a7b90">2 个分片</text>
+  <text x="500" y="526" text-anchor="middle" font-size="10" fill="#8a9bb0">实测：stop 后接管 P2</text>
+
+  <rect x="670" y="392" width="290" height="150" rx="10" fill="#faf0f0" stroke="#c06060" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="815" y="416" text-anchor="middle" font-size="14" font-weight="bold" fill="#8a3030">node-3（9203）</text>
+  <text x="815" y="436" text-anchor="middle" font-size="11" fill="#a07070">master + data</text>
+  <rect x="690" y="448" width="120" height="34" rx="5" fill="#fff4e0" stroke="#e0a020"/>
+  <text x="750" y="470" text-anchor="middle" font-size="12" font-weight="bold" fill="#8a5a00">P1（主）</text>
+  <rect x="822" y="448" width="120" height="34" rx="5" fill="#e6f7ee" stroke="#3aa76d"/>
+  <text x="882" y="470" text-anchor="middle" font-size="12" font-weight="bold" fill="#1d6b42">R2（副）</text>
+  <text x="815" y="504" text-anchor="middle" font-size="11" fill="#a07070">2 个分片</text>
+  <text x="815" y="526" text-anchor="middle" font-size="10" font-weight="bold" fill="#c06060">实测：被 stop，副本升主</text>
+
+  <!-- 铁律 -->
+  <rect x="40" y="566" width="920" height="54" rx="8" fill="#fdf3e0" stroke="#d9a441" stroke-width="2"/>
+  <text x="60" y="588" font-size="13" font-weight="bold" fill="#8a5a00">铁律：副本绝不与自己的主分片待在同一节点</text>
+  <text x="60" y="608" font-size="12" fill="#8a6a20">否则节点一挂，主副本同归于尽 —— 副本就失去了全部意义。ES 会强制分开放置。</text>
+
+  <text x="500" y="634" text-anchor="middle" font-size="11" fill="#998877">注：分片的具体落点由 ES 按集群状态动态计算，节点重启后会重新均衡。要记的是规律，不是这张图上的节点名。</text>
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#888888"/>
+    </marker>
+    <marker id="arrowG" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#3aa76d"/>
+    </marker>
+  </defs>
+</svg>

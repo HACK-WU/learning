@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 720" width="1000" height="720" font-family="'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#546E7A"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#C62828"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#2E7D32"/>
+    </marker>
+  </defs>
+
+  <!-- 背景 -->
+  <rect width="1000" height="720" fill="#FAFBFC"/>
+
+  <!-- 标题 -->
+  <text x="500" y="34" text-anchor="middle" font-size="23" font-weight="bold" fill="#1A2733">集群健康三色与排障决策</text>
+  <text x="500" y="58" text-anchor="middle" font-size="13" fill="#5A6B7A">区分三色的唯一字段：unassigned_primary_shards（未分配主分片数）</text>
+
+  <!-- ============ 上部：三色定义 ============ -->
+
+  <!-- GREEN -->
+  <rect x="40" y="86" width="290" height="150" rx="10" fill="#E8F5E9" stroke="#2E7D32" stroke-width="2"/>
+  <circle cx="72" cy="114" r="10" fill="#2E7D32"/>
+  <text x="92" y="120" font-size="17" font-weight="bold" fill="#1B5E20">GREEN 绿</text>
+  <text x="60" y="150" font-size="13.5" fill="#2F3E4A">unassigned_primary_shards =</text>
+  <text x="285" y="150" font-size="15" font-weight="bold" fill="#2E7D32" text-anchor="end">0</text>
+  <text x="60" y="174" font-size="13.5" fill="#2F3E4A">unassigned_shards =</text>
+  <text x="285" y="174" font-size="15" font-weight="bold" fill="#2E7D32" text-anchor="end">0</text>
+  <rect x="60" y="188" width="250" height="32" rx="5" fill="#FFFFFF" stroke="#A5D6A7" stroke-width="1"/>
+  <text x="185" y="209" text-anchor="middle" font-size="13" fill="#1B5E20">主分片与副本全部就位</text>
+
+  <!-- YELLOW -->
+  <rect x="355" y="86" width="290" height="150" rx="10" fill="#FFF8E1" stroke="#F9A825" stroke-width="2"/>
+  <circle cx="387" cy="114" r="10" fill="#F9A825"/>
+  <text x="407" y="120" font-size="17" font-weight="bold" fill="#E65100">YELLOW 黄</text>
+  <text x="375" y="150" font-size="13.5" fill="#2F3E4A">unassigned_primary_shards =</text>
+  <text x="600" y="150" font-size="15" font-weight="bold" fill="#2E7D32" text-anchor="end">0</text>
+  <text x="375" y="174" font-size="13.5" fill="#2F3E4A">unassigned_shards &gt;</text>
+  <text x="600" y="174" font-size="15" font-weight="bold" fill="#E65100" text-anchor="end">0</text>
+  <rect x="375" y="188" width="250" height="32" rx="5" fill="#FFFFFF" stroke="#FFE082" stroke-width="1"/>
+  <text x="500" y="209" text-anchor="middle" font-size="13" fill="#E65100">主分片都在，副本没地方放</text>
+
+  <!-- RED -->
+  <rect x="670" y="86" width="290" height="150" rx="10" fill="#FFEBEE" stroke="#C62828" stroke-width="2"/>
+  <circle cx="702" cy="114" r="10" fill="#C62828"/>
+  <text x="722" y="120" font-size="17" font-weight="bold" fill="#B71C1C">RED 红</text>
+  <text x="690" y="150" font-size="13.5" fill="#2F3E4A">unassigned_primary_shards &gt;</text>
+  <text x="915" y="150" font-size="15" font-weight="bold" fill="#C62828" text-anchor="end">0</text>
+  <text x="690" y="174" font-size="13.5" fill="#2F3E4A">unassigned_shards &gt;</text>
+  <text x="915" y="174" font-size="15" font-weight="bold" fill="#C62828" text-anchor="end">0</text>
+  <rect x="690" y="188" width="250" height="32" rx="5" fill="#FFFFFF" stroke="#EF9A9A" stroke-width="1"/>
+  <text x="815" y="209" text-anchor="middle" font-size="13" fill="#B71C1C">主分片缺失，那部分数据真丢了</text>
+
+  <!-- 三色箭头指向中部 -->
+  <line x1="185" y1="236" x2="185" y2="266" stroke="#2E7D32" stroke-width="2" marker-end="url(#arrowGreen)"/>
+  <line x1="500" y1="236" x2="500" y2="266" stroke="#F9A825" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="815" y1="236" x2="815" y2="266" stroke="#C62828" stroke-width="2" marker-end="url(#arrowRed)"/>
+
+  <!-- 关键分隔线：数据是否可读 -->
+  <rect x="40" y="268" width="920" height="40" rx="8" fill="#ECEFF1" stroke="#B0BEC5" stroke-width="1.5"/>
+  <text x="60" y="294" font-size="14" font-weight="bold" fill="#37474F">green 与 yellow：数据一条不少，全部可读</text>
+  <text x="940" y="294" font-size="14" font-weight="bold" fill="#B71C1C" text-anchor="end">red：主分片缺失，那部分读不到</text>
+
+  <!-- ============ 中部：red 恢复决策树 ============ -->
+  <text x="40" y="342" font-size="17" font-weight="bold" fill="#1A2733">RED 状态：三条恢复路径与代价</text>
+
+  <!-- 路径1 快照 -->
+  <rect x="40" y="360" width="290" height="112" rx="9" fill="#E8F5E9" stroke="#2E7D32" stroke-width="2.5"/>
+  <text x="60" y="386" font-size="14.5" font-weight="bold" fill="#1B5E20">① 快照恢复（推荐）</text>
+  <text x="60" y="409" font-size="12.5" fill="#37474F">从最近快照还原该索引</text>
+  <text x="60" y="430" font-size="12.5" fill="#37474F">ES 官方原文建议：</text>
+  <text x="60" y="449" font-size="12" font-style="italic" fill="#2E7D32">restore from a recent snapshot</text>
+  <rect x="60" y="456" width="250" height="0" fill="none"/>
+  <text x="310" y="386" font-size="12" font-weight="bold" fill="#2E7D32" text-anchor="end">不丢数据</text>
+  <text x="60" y="466" font-size="12" fill="#5A6B7A">→ 详见课 11《数据管道与备份》</text>
+
+  <!-- 路径2 stale -->
+  <rect x="355" y="360" width="290" height="112" rx="9" fill="#FFF8E1" stroke="#F9A825" stroke-width="2.5"/>
+  <text x="375" y="386" font-size="14.5" font-weight="bold" fill="#E65100">② allocate_stale_primary</text>
+  <text x="375" y="409" font-size="12.5" fill="#37474F">用磁盘上残存的旧副本顶上</text>
+  <text x="375" y="430" font-size="12.5" fill="#37474F">需显式声明</text>
+  <text x="375" y="449" font-size="12" font-family="monospace" fill="#E65100">accept_data_loss: true</text>
+  <text x="625" y="386" font-size="12" font-weight="bold" fill="#E65100" text-anchor="end">可能丢部分</text>
+  <text x="375" y="466" font-size="12" fill="#5A6B7A">实测报错：No data for shard ... found</text>
+
+  <!-- 路径3 empty -->
+  <rect x="670" y="360" width="290" height="112" rx="9" fill="#FFEBEE" stroke="#C62828" stroke-width="2.5"/>
+  <text x="690" y="386" font-size="14.5" font-weight="bold" fill="#B71C1C">③ allocate_empty_primary</text>
+  <text x="690" y="409" font-size="12.5" fill="#37474F">放弃该分片全部数据，空壳顶替</text>
+  <text x="690" y="430" font-size="12.5" fill="#37474F">集群会变绿，</text>
+  <text x="690" y="449" font-size="12.5" font-weight="bold" fill="#B71C1C">但不留任何痕迹</text>
+  <text x="940" y="386" font-size="12" font-weight="bold" fill="#C62828" text-anchor="end">必丢全部</text>
+  <text x="690" y="466" font-size="12" fill="#5A6B7A">最后手段，用前先记录丢了什么</text>
+
+  <!-- 路径选择箭头 -->
+  <text x="340" y="416" font-size="15" fill="#90A4AE" text-anchor="middle">→</text>
+  <text x="655" y="416" font-size="15" fill="#90A4AE" text-anchor="middle">→</text>
+  <text x="500" y="340" font-size="11.5" fill="#5A6B7A" text-anchor="middle">无快照时依次尝试，危险程度递增</text>
+
+  <!-- ============ 下部左：实测对照 ============ -->
+  <text x="40" y="512" font-size="17" font-weight="bold" fill="#1A2733">本机实测：节点数据永久销毁后</text>
+
+  <rect x="40" y="528" width="450" height="164" rx="9" fill="#FFFFFF" stroke="#CFD8DC" stroke-width="1.5"/>
+  <text x="58" y="554" font-size="13" font-weight="bold" fill="#37474F">0 副本索引 → 数据永久消失</text>
+  <line x1="58" y1="564" x2="472" y2="564" stroke="#E0E0E0" stroke-width="1"/>
+  <text x="58" y="586" font-size="12" fill="#78909C">索引</text>
+  <text x="200" y="586" font-size="12" fill="#78909C" text-anchor="end">销毁前</text>
+  <text x="290" y="586" font-size="12" fill="#78909C" text-anchor="end">销毁后</text>
+  <text x="380" y="586" font-size="12" fill="#78909C" text-anchor="end">丢失</text>
+  <text x="58" y="608" font-size="12.5" font-family="monospace" fill="#37474F">l9_hi</text>
+  <text x="200" y="608" font-size="12.5" fill="#37474F" text-anchor="end">300</text>
+  <text x="290" y="608" font-size="12.5" fill="#C62828" text-anchor="end">197</text>
+  <text x="380" y="608" font-size="12.5" font-weight="bold" fill="#C62828" text-anchor="end">-103</text>
+  <text x="58" y="628" font-size="12.5" font-family="monospace" fill="#37474F">l9_trap2</text>
+  <text x="200" y="628" font-size="12.5" fill="#37474F" text-anchor="end">1245</text>
+  <text x="290" y="628" font-size="12.5" fill="#C62828" text-anchor="end">830</text>
+  <text x="380" y="628" font-size="12.5" font-weight="bold" fill="#C62828" text-anchor="end">-415</text>
+  <text x="58" y="648" font-size="12.5" font-family="monospace" fill="#37474F">l9_trap</text>
+  <text x="200" y="648" font-size="12.5" fill="#37474F" text-anchor="end">63</text>
+  <text x="290" y="648" font-size="12.5" fill="#C62828" text-anchor="end">42</text>
+  <text x="380" y="648" font-size="12.5" font-weight="bold" fill="#C62828" text-anchor="end">-21</text>
+  <text x="58" y="672" font-size="12.5" fill="#5A6B7A">报错原文：</text>
+  <text x="140" y="672" font-size="11.5" font-family="monospace" fill="#C62828">no_shard_available_action_exception</text>
+
+  <!-- ============ 下部右：有副本对照 ============ -->
+  <rect x="510" y="528" width="450" height="164" rx="9" fill="#F1F8E9" stroke="#7CB342" stroke-width="2"/>
+  <text x="528" y="554" font-size="13" font-weight="bold" fill="#33691E">1 副本索引 → 一条不少</text>
+  <line x1="528" y1="564" x2="942" y2="564" stroke="#C5E1A5" stroke-width="1"/>
+  <text x="528" y="592" font-size="12.5" font-family="monospace" fill="#37474F">l9_orders（number_of_replicas = 1）</text>
+  <text x="528" y="620" font-size="13" fill="#37474F">销毁前：</text>
+  <text x="620" y="620" font-size="15" font-weight="bold" fill="#33691E">22 条</text>
+  <text x="528" y="646" font-size="13" fill="#37474F">销毁后：</text>
+  <text x="620" y="646" font-size="15" font-weight="bold" fill="#2E7D32">22 条</text>
+  <text x="700" y="646" font-size="13" font-weight="bold" fill="#2E7D32">零丢失 ✓</text>
+  <text x="528" y="674" font-size="12" fill="#558B2F">副本 = 数据的第二份存在，不是性能优化</text>
+
+  <!-- 底部结论条 -->
+  <rect x="40" y="700" width="920" height="0" fill="none"/>
+</svg>

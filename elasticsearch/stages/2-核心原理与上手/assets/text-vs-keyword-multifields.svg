@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 620" width="860" height="620" font-family="system-ui, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect width="860" height="620" fill="#ffffff"/>
+
+  <text x="430" y="32" text-anchor="middle" font-size="19" font-weight="700" fill="#0f172a">同一个字段，两种身份：text 用来搜，keyword 用来算</text>
+  <text x="430" y="54" text-anchor="middle" font-size="12.5" fill="#64748b">数据来自本课实测：title = "中国人民银行发行数字货币"，主字段 ik_max_word，子字段 raw 为 keyword</text>
+
+  <!-- 顶部：原始值 -->
+  <rect x="250" y="72" width="360" height="46" rx="6" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.2"/>
+  <text x="430" y="92" text-anchor="middle" font-size="12" fill="#64748b">写入的 JSON 值</text>
+  <text x="430" y="110" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">"title": "中国人民银行发行数字货币"</text>
+
+  <!-- 分叉箭头 -->
+  <path d="M 380 118 L 230 152" stroke="#64748b" stroke-width="1.6" marker-end="url(#arw2)"/>
+  <path d="M 480 118 L 630 152" stroke="#64748b" stroke-width="1.6" marker-end="url(#arw2)"/>
+  <defs><marker id="arw2" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+    <polygon points="0,0 9,4.5 0,9" fill="#64748b"/></marker></defs>
+
+  <!-- 左：text 分支 -->
+  <rect x="30" y="158" width="390" height="300" rx="6" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.4"/>
+  <text x="46" y="180" font-size="14" font-weight="700" fill="#1d4ed8">身份一：text（被分词）</text>
+  <text x="46" y="199" font-size="11.5" fill="#3b82f6">analyzer: ik_max_word → 切成一串词</text>
+
+  <rect x="46" y="210" width="358" height="86" rx="4" fill="#ffffff" stroke="#93c5fd" stroke-width="1"/>
+  <text x="58" y="228" font-size="11" fill="#64748b">索引里实际存的 term（实测 12 个）</text>
+  <text x="58" y="247" font-size="12.5" fill="#0f172a">中国人民银行 | 中国人民 | 中国人 | 中国 |</text>
+  <text x="58" y="266" font-size="12.5" fill="#0f172a">国人 | 人民银行 | 人民 | 银行 | 发行 |</text>
+  <text x="58" y="285" font-size="12.5" fill="#b45309">行数 | 数字 | 货币</text>
+
+  <text x="46" y="320" font-size="12" font-weight="700" fill="#1d4ed8">能做什么</text>
+  <text x="46" y="339" font-size="11.5" fill="#334155">✅ match 全文搜索（搜「人民」能命中）</text>
+  <text x="46" y="357" font-size="11.5" fill="#334155">✅ 相关性打分（按词频、位置算分）</text>
+  <text x="46" y="375" font-size="11.5" fill="#334155">✅ 高亮、短语查询</text>
+
+  <text x="46" y="400" font-size="12" font-weight="700" fill="#b91c1c">不能做什么</text>
+  <text x="46" y="419" font-size="11.5" fill="#b91c1c">❌ 聚合（Fielddata is disabled）</text>
+  <text x="46" y="437" font-size="11.5" fill="#b91c1c">❌ 排序（同上原因）</text>
+  <text x="46" y="452" font-size="10.5" fill="#64748b">　 实测报错原文见讲义知识点 1</text>
+
+  <!-- 右：keyword 分支 -->
+  <rect x="440" y="158" width="390" height="300" rx="6" fill="#f0fdf4" stroke="#4ade80" stroke-width="1.4"/>
+  <text x="456" y="180" font-size="14" font-weight="700" fill="#15803d">身份二：title.raw（keyword，不分词）</text>
+  <text x="456" y="199" font-size="11.5" fill="#16a34a">整句原样存成一个 term</text>
+
+  <rect x="456" y="210" width="358" height="86" rx="4" fill="#ffffff" stroke="#86efac" stroke-width="1"/>
+  <text x="468" y="228" font-size="11" fill="#64748b">索引里实际存的 term（实测 1 个）</text>
+  <text x="468" y="256" font-size="13.5" font-weight="700" fill="#0f172a">中国人民银行发行数字货币</text>
+  <text x="468" y="280" font-size="11" fill="#166534">一整句就是一个词，一字不差才算命中</text>
+
+  <text x="456" y="320" font-size="12" font-weight="700" fill="#15803d">能做什么</text>
+  <text x="456" y="339" font-size="11.5" fill="#334155">✅ term 精确匹配（整句相等才中）</text>
+  <text x="456" y="357" font-size="11.5" fill="#334155">✅ 聚合（按品牌、状态分组统计）</text>
+  <text x="456" y="375" font-size="11.5" fill="#334155">✅ 排序（按字母/字典序）</text>
+
+  <text x="456" y="400" font-size="12" font-weight="700" fill="#b45309">注意</text>
+  <text x="456" y="419" font-size="11.5" fill="#b45309">⚠️ 搜「中国人民银行」→ 0 条（不相等）</text>
+  <text x="456" y="437" font-size="11.5" fill="#b45309">⚠️ 超过 ignore_above 的值不进索引</text>
+  <text x="456" y="452" font-size="10.5" fill="#64748b">　 实测：tag 设 ignore_above=5，10 字符搜不到</text>
+
+  <!-- 底部对照表 -->
+  <rect x="30" y="478" width="800" height="118" rx="6" fill="#fffbeb" stroke="#fbbf24" stroke-width="1.2"/>
+  <text x="46" y="500" font-size="13" font-weight="700" fill="#b45309">选型口诀：要「搜」用 text，要「算」用 keyword，两个都要就上 multi-fields</text>
+
+  <text x="46" y="524" font-size="11" font-weight="700" fill="#64748b">场景</text>
+  <text x="300" y="524" font-size="11" font-weight="700" fill="#64748b">该用</text>
+  <text x="560" y="524" font-size="11" font-weight="700" fill="#64748b">原因</text>
+  <line x1="46" y1="530" x2="814" y2="530" stroke="#fbbf24" stroke-width="1"/>
+
+  <text x="46" y="549" font-size="11.5" fill="#334155">商品名称、文章内容、日志正文</text>
+  <text x="300" y="549" font-size="11.5" font-weight="700" fill="#1d4ed8">text</text>
+  <text x="560" y="549" font-size="11.5" fill="#334155">要分词、要模糊匹配、要算相关性</text>
+
+  <text x="46" y="569" font-size="11.5" fill="#334155">品牌、状态、ID、标签、省份</text>
+  <text x="300" y="569" font-size="11.5" font-weight="700" fill="#15803d">keyword</text>
+  <text x="560" y="569" font-size="11.5" fill="#334155">要精确筛选、分组统计、排序</text>
+
+  <text x="46" y="589" font-size="11.5" fill="#334155">既要全文搜索又要聚合排序</text>
+  <text x="300" y="589" font-size="11.5" font-weight="700" fill="#b45309">multi-fields</text>
+  <text x="560" y="589" font-size="11.5" fill="#334155">同一份数据，两种索引方式</text>
+</svg>

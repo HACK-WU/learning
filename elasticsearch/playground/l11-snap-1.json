@@ -1,0 +1,9 @@
+{
+  "indices": "l11_shop_v2,l9_orders",
+  "ignore_unavailable": true,
+  "include_global_state": false,
+  "metadata": {
+    "taken_by": "lesson-11",
+    "reason": "verify snapshot restore"
+  }
+}
