@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 470" width="980" height="470" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="980" height="470" fill="#fafafa"/>
+  <text x="24" y="32" font-size="17" font-weight="700" fill="#1a237e">阶段 4 路径 · 定时、编排与生产运维</text>
+  <text x="24" y="54" font-size="12.5" fill="#555">四课两条支线：7–8 是"让任务按时跑、按序跑"；9–10 是"让它稳、看得见"</text>
+
+  <!-- 课 7 -->
+  <rect x="24" y="76" width="452" height="140" rx="9" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.5"/>
+  <rect x="24" y="76" width="452" height="30" rx="9" fill="#1565C0"/>
+  <rect x="24" y="94" width="452" height="12" fill="#1565C0"/>
+  <text x="40" y="97" font-size="13.5" font-weight="700" fill="#ffffff">课 7 · beat 与周期性任务</text>
+  <rect x="40" y="116" width="420" height="27" rx="5" fill="#ffffff" stroke="#90caf9"/>
+  <text x="52" y="134" font-size="12" fill="#1b1b1b">① beat 调度器与 crontab 表达式</text>
+  <rect x="40" y="147" width="420" height="27" rx="5" fill="#ffffff" stroke="#90caf9"/>
+  <text x="52" y="165" font-size="12" fill="#1b1b1b">② django-celery-beat 数据库调度</text>
+  <rect x="40" y="178" width="420" height="27" rx="5" fill="#ffffff" stroke="#90caf9"/>
+  <text x="52" y="196" font-size="12" fill="#1b1b1b">③ 定时任务的可靠性（单点 / 时区 / 重叠）</text>
+
+  <!-- 课 8 -->
+  <rect x="504" y="76" width="452" height="140" rx="9" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <rect x="504" y="76" width="452" height="30" rx="9" fill="#2e7d32"/>
+  <rect x="504" y="94" width="452" height="12" fill="#2e7d32"/>
+  <text x="520" y="97" font-size="13.5" font-weight="700" fill="#ffffff">课 8 · canvas 任务编排</text>
+  <rect x="520" y="116" width="420" height="27" rx="5" fill="#ffffff" stroke="#a5d6a7"/>
+  <text x="532" y="134" font-size="12" fill="#1b1b1b">① signature 与不可变签名（s / si）</text>
+  <rect x="520" y="147" width="420" height="27" rx="5" fill="#ffffff" stroke="#a5d6a7"/>
+  <text x="532" y="165" font-size="12" fill="#1b1b1b">② group / chain / chord 三件套</text>
+  <rect x="520" y="178" width="420" height="27" rx="5" fill="#ffffff" stroke="#a5d6a7"/>
+  <text x="532" y="196" font-size="12" fill="#1b1b1b">③ 编排的可靠性边界</text>
+
+  <!-- 课 9 -->
+  <rect x="24" y="240" width="452" height="140" rx="9" fill="#fff3e0" stroke="#ef6c00" stroke-width="1.5"/>
+  <rect x="24" y="240" width="452" height="30" rx="9" fill="#ef6c00"/>
+  <rect x="24" y="258" width="452" height="12" fill="#ef6c00"/>
+  <text x="40" y="261" font-size="13.5" font-weight="700" fill="#ffffff">课 9 · 生产部署与并发模型</text>
+  <rect x="40" y="280" width="420" height="27" rx="5" fill="#ffffff" stroke="#ffcc80"/>
+  <text x="52" y="298" font-size="12" fill="#1b1b1b">① 并发模型选型（prefork / threads / gevent / solo）</text>
+  <rect x="40" y="311" width="420" height="27" rx="5" fill="#ffffff" stroke="#ffcc80"/>
+  <text x="52" y="329" font-size="12" fill="#1b1b1b">② 进程管理与优雅停机（soft shutdown / REMAP_SIGTERM）</text>
+  <rect x="40" y="342" width="420" height="27" rx="5" fill="#ffffff" stroke="#ffcc80"/>
+  <text x="52" y="360" font-size="12" fill="#1b1b1b">③ 路由与队列隔离（task_routes / 优先级 / rate_limit）</text>
+
+  <!-- 课 10 -->
+  <rect x="504" y="240" width="452" height="140" rx="9" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="1.5"/>
+  <rect x="504" y="240" width="452" height="30" rx="9" fill="#6a1b9a"/>
+  <rect x="504" y="258" width="452" height="12" fill="#6a1b9a"/>
+  <text x="520" y="261" font-size="13.5" font-weight="700" fill="#ffffff">课 10 · 监控、排查与上线清单</text>
+  <rect x="520" y="280" width="420" height="27" rx="5" fill="#ffffff" stroke="#ce93d8"/>
+  <text x="532" y="298" font-size="12" fill="#1b1b1b">① 可观测性（Flower / events / 结构化日志）</text>
+  <rect x="520" y="311" width="420" height="27" rx="5" fill="#ffffff" stroke="#ce93d8"/>
+  <text x="532" y="329" font-size="12" fill="#1b1b1b">② 常见故障排查（堆积 / 假死 / 泄漏 / NotRegistered）</text>
+  <rect x="520" y="342" width="420" height="27" rx="5" fill="#ffffff" stroke="#ce93d8"/>
+  <text x="532" y="360" font-size="12" fill="#1b1b1b">③ 安全与上线运维清单（pickle 风险 / broker 鉴权）</text>
+
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#455a64" stroke="none"/>
+    </marker>
+  </defs>
+  <!-- 横向箭头 7→8 -->
+  <path d="M480 158 L500 158" stroke="#455a64" stroke-width="2" marker-end="url(#a)"/>
+  <!-- 纵向箭头 7→9 -->
+  <path d="M250 220 L250 236" stroke="#455a64" stroke-width="2" marker-end="url(#a)"/>
+  <!-- 纵向箭头 8→10 -->
+  <path d="M730 220 L730 236" stroke="#455a64" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- 收束 -->
+  <rect x="24" y="398" width="932" height="56" rx="8" fill="#eceff1" stroke="#b0bec5"/>
+  <text x="40" y="422" font-size="13" font-weight="700" fill="#37474f">🎯 阶段收束：交付一套「定时可靠 · 编排可控 · 发版不丢 · 故障可查」的异步任务体系</text>
+  <text x="40" y="443" font-size="12" fill="#546e7a">课 7–8 是能力扩展（可按需跳学）；课 9–10 是上线必修，不建议跳过。</text>
+</svg>

@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 330" width="860" height="330" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="860" height="330" fill="#fafafa"/>
+  <text x="26" y="32" font-size="17" font-weight="700" fill="#1a237e">阶段 2 路径 · Django 集成与任务基础</text>
+  <text x="26" y="54" font-size="12.5" fill="#555">本阶段结束时应有一个真跑得起来的 Django + Celery 项目</text>
+
+  <!-- 课 3 -->
+  <rect x="26" y="76" width="380" height="212" rx="9" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <rect x="26" y="76" width="380" height="32" rx="9" fill="#2e7d32"/>
+  <rect x="26" y="96" width="380" height="12" fill="#2e7d32"/>
+  <text x="42" y="99" font-size="14" font-weight="700" fill="#ffffff">课 3 · 第一个 Celery + Django 项目</text>
+  <text x="42" y="130" font-size="12" fill="#1b5e20">认知层级：机制 → 实操</text>
+
+  <rect x="42" y="144" width="348" height="30" rx="5" fill="#ffffff" stroke="#a5d6a7"/>
+  <text x="54" y="164" font-size="12.5" fill="#1b1b1b">① 环境与 Broker 选型（Redis vs RabbitMQ）</text>
+  <rect x="42" y="180" width="348" height="30" rx="5" fill="#ffffff" stroke="#a5d6a7"/>
+  <text x="54" y="200" font-size="12.5" fill="#1b1b1b">② Django 标准集成姿势（celery.py / 自动发现）</text>
+  <rect x="42" y="216" width="348" height="30" rx="5" fill="#ffffff" stroke="#a5d6a7"/>
+  <text x="54" y="236" font-size="12.5" fill="#1b1b1b">③ @shared_task 与常用任务参数</text>
+
+  <rect x="42" y="256" width="348" height="24" rx="5" fill="#e8f5e9"/>
+  <text x="54" y="273" font-size="11.5" fill="#1b5e20">🔧 动手：从零搭骨架并发通第一个任务</text>
+
+  <!-- 课 4 -->
+  <rect x="440" y="76" width="394" height="212" rx="9" fill="#fff3e0" stroke="#ef6c00" stroke-width="1.5"/>
+  <rect x="440" y="76" width="394" height="32" rx="9" fill="#ef6c00"/>
+  <rect x="440" y="96" width="394" height="12" fill="#ef6c00"/>
+  <text x="456" y="99" font-size="14" font-weight="700" fill="#ffffff">课 4 · 调用任务与取回结果</text>
+  <text x="456" y="130" font-size="12" fill="#e65100">认知层级：实操 → 定位</text>
+
+  <rect x="456" y="144" width="362" height="30" rx="5" fill="#ffffff" stroke="#ffcc80"/>
+  <text x="468" y="164" font-size="12.5" fill="#1b1b1b">① delay 与 apply_async（countdown / eta / expires）</text>
+  <rect x="456" y="180" width="362" height="30" rx="5" fill="#ffffff" stroke="#ffcc80"/>
+  <text x="468" y="200" font-size="12.5" fill="#1b1b1b">② AsyncResult 与结果查询（含 get() 反模式）</text>
+  <rect x="456" y="216" width="362" height="30" rx="5" fill="#ffffff" stroke="#ffcc80"/>
+  <text x="468" y="236" font-size="12.5" fill="#1b1b1b">③ 任务信号与自定义 Task 基类</text>
+
+  <rect x="456" y="256" width="362" height="24" rx="5" fill="#fff3e0"/>
+  <text x="468" y="273" font-size="11.5" fill="#e65100">🔧 动手：延迟任务 + 前端轮询进度条跑通</text>
+
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#455a64" stroke="none"/>
+    </marker>
+  </defs>
+  <path d="M410 182 L436 182" stroke="#455a64" stroke-width="2" marker-end="url(#a)"/>
+
+  <rect x="26" y="300" width="808" height="20" rx="5" fill="#eceff1"/>
+  <text x="40" y="314" font-size="11.5" fill="#455a64">学完能独立搭骨架、精确控制投递时机，并判断是否需要 result backend</text>
+</svg>

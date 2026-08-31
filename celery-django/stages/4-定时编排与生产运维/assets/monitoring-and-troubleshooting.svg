@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1140" height="860" viewBox="0 0 1140 860" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#475569"/>
+    </marker>
+    <marker id="arG" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#16a34a"/>
+    </marker>
+    <marker id="arR" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+
+  <rect width="1140" height="860" fill="#ffffff"/>
+  <text x="570" y="32" text-anchor="middle" font-size="21" font-weight="700" fill="#0f172a">第 10 课 · 监控、排查与上线清单（全课程收束）</text>
+  <text x="570" y="53" text-anchor="middle" font-size="12" fill="#64748b">Celery 5.6.3 + Redis 7.0.15 + Flower 2.1.0 · WSL2 实测数据</text>
+
+  <!-- ========== 左：可观测性 ========== -->
+  <rect x="22" y="72" width="540" height="330" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="38" y="97" font-size="15" font-weight="700" fill="#0f172a">① 可观测性：Flower 的数据从哪来</text>
+
+  <!-- 事件链路 -->
+  <rect x="38" y="112" width="112" height="42" rx="6" fill="#1e293b"/>
+  <text x="94" y="130" text-anchor="middle" font-size="12" font-weight="600" fill="#ffffff">任务执行</text>
+  <text x="94" y="146" text-anchor="middle" font-size="10.5" fill="#cbd5e1">received/started</text>
+
+  <line x1="150" y1="133" x2="186" y2="133" stroke="#475569" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <rect x="188" y="112" width="128" height="42" rx="6" fill="#334155"/>
+  <text x="252" y="130" text-anchor="middle" font-size="12" font-weight="600" fill="#ffffff">events 事件流</text>
+  <text x="252" y="146" text-anchor="middle" font-size="10.5" fill="#cbd5e1">默认关闭！需 -E</text>
+
+  <line x1="316" y1="133" x2="352" y2="133" stroke="#475569" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <rect x="354" y="112" width="128" height="42" rx="6" fill="#1d4ed8"/>
+  <text x="418" y="130" text-anchor="middle" font-size="12" font-weight="600" fill="#ffffff">celeryev 交换机</text>
+  <text x="418" y="146" text-anchor="middle" font-size="10.5" fill="#dbeafe">广播（fanout）</text>
+
+  <line x1="482" y1="133" x2="516" y2="133" stroke="#475569" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <rect x="518" y="112" width="30" height="42" rx="6" fill="#16a34a"/>
+  <text x="533" y="138" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">UI</text>
+
+  <!-- 开关对照 -->
+  <rect x="38" y="168" width="240" height="82" rx="8" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="52" y="188" font-size="12" font-weight="700" fill="#b91c1c">✗ 不开 -E（默认）</text>
+  <text x="52" y="207" font-size="11" fill="#78350f">事件行数：10（仅心跳）</text>
+  <text x="52" y="223" font-size="11" fill="#78350f">heartbeat: active=2, processed=5</text>
+  <text x="52" y="241" font-size="10.5" font-weight="600" fill="#b91c1c">→ Flower 任务列表空白</text>
+
+  <rect x="296" y="168" width="252" height="82" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="310" y="188" font-size="12" font-weight="700" fill="#15803d">✓ 开 -E</text>
+  <text x="310" y="207" font-size="11" fill="#166534">事件行数：27（完整事件流）</text>
+  <text x="310" y="223" font-size="11" fill="#166534">task received → started → succeeded</text>
+  <text x="310" y="241" font-size="10.5" font-weight="600" fill="#15803d">→ Flower 看到全部任务</text>
+
+  <!-- 关键指标 -->
+  <rect x="38" y="262" width="510" height="126" rx="8" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.5"/>
+  <text x="52" y="282" font-size="12" font-weight="700" fill="#92400e">该盯的四个指标（别只盯 CPU/内存）</text>
+  <text x="52" y="302" font-size="11" fill="#78350f"><tspan font-weight="700">队列长度　</tspan>redis-cli LLEN celery　·　持续上涨 = 堵了</text>
+  <text x="52" y="320" font-size="11" fill="#78350f"><tspan font-weight="700">队列年龄　</tspan>最老任务等了多久　·　⭐ 比长度更准（分不清峰值/故障）</text>
+  <text x="52" y="338" font-size="11" fill="#78350f"><tspan font-weight="700">失败率　　</tspan>failed / (succeeded + failed)　·　阈值 &lt; 1%</text>
+  <text x="52" y="356" font-size="11" fill="#78350f"><tspan font-weight="700">运行时长　</tspan>events 里的 runtime 字段　·　看 P99 突变</text>
+  <text x="52" y="376" font-size="10.5" font-weight="600" fill="#b45309">＋ 把 task_id 打进每条日志 —— 出事后唯一能串联全链路的钥匙</text>
+
+  <!-- ========== 右上：故障排查 ========== -->
+  <rect x="578" y="72" width="540" height="330" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="594" y="97" font-size="15" font-weight="700" fill="#0f172a">② 五类高频故障：症状 → 定位 → 修复</text>
+
+  <!-- 假死 -->
+  <rect x="594" y="112" width="508" height="66" rx="8" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="608" y="131" font-size="12" font-weight="700" fill="#b91c1c">🔴 worker 假死（僵尸任务）</text>
+  <text x="608" y="149" font-size="10.5" fill="#78350f">症状：任务停在 STARTED 不动，槽位被占满，新任务排不进（实测：快任务 6s 拿不到结果）</text>
+  <text x="608" y="167" font-size="10.5" font-weight="600" fill="#15803d">修复：soft_time_limit=3 → 实测 3.1s 自动解除，槽位释放 active=0</text>
+
+  <!-- 堆积 -->
+  <rect x="594" y="184" width="508" height="66" rx="8" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.5"/>
+  <text x="608" y="203" font-size="12" font-weight="700" fill="#92400e">🟡 任务堆积</text>
+  <text x="608" y="221" font-size="10.5" fill="#78350f">定位：消费能力 = worker数 × 并发数 ÷ 单任务耗时；与生产速度比大小（算账，不是猜）</text>
+  <text x="608" y="239" font-size="10.5" font-weight="600" fill="#b45309">修复：加并发 / 换 gevent / 拆队列（课 9 实测：10.03s → 0.51s） / 限流削峰</text>
+
+  <!-- 泄漏 -->
+  <rect x="594" y="256" width="508" height="58" rx="8" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="608" y="275" font-size="12" font-weight="700" fill="#1d4ed8">🟡 内存泄漏</text>
+  <text x="608" y="293" font-size="10.5" fill="#334155">根因：DB 连接未释放 / 全局缓存无限增长 / C 扩展泄漏</text>
+  <text x="608" y="307" font-size="10.5" font-weight="600" fill="#1d4ed8">修复：--max-tasks-per-child=1000（课 9 实测：PID 定期更换）</text>
+
+  <!-- NotRegistered -->
+  <rect x="594" y="320" width="250" height="76" rx="8" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="1.5"/>
+  <text x="608" y="339" font-size="12" font-weight="700" fill="#6d28d9">🟡 NotRegistered</text>
+  <text x="608" y="357" font-size="10.5" fill="#4c1d95">定位：celery inspect registered</text>
+  <text x="608" y="373" font-size="10.5" fill="#4c1d95">⭐ 一半是 ImportError 伪装</text>
+  <text x="608" y="389" font-size="10" font-weight="600" fill="#6d28d9">→ 先看 worker 启动日志</text>
+
+  <!-- backend -->
+  <rect x="852" y="320" width="250" height="76" rx="8" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="866" y="339" font-size="12" font-weight="700" fill="#b91c1c">🔴 backend 撑爆</text>
+  <text x="866" y="357" font-size="10.5" fill="#78350f">实测：300 任务 = 300 条 key</text>
+  <text x="866" y="373" font-size="10.5" fill="#78350f">328 bytes/条，默认 TTL≈24h</text>
+  <text x="866" y="389" font-size="10" font-weight="600" fill="#15803d">→ ignore_result=True + expires</text>
+
+  <!-- ========== 下：安全与上线清单 ========== -->
+  <rect x="22" y="420" width="1096" height="420" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="38" y="446" font-size="15" font-weight="700" fill="#0f172a">③ 安全与上线清单：worker 无条件信任 broker 里的消息</text>
+
+  <!-- 安全模型 -->
+  <rect x="38" y="460" width="530" height="170" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="52" y="480" font-size="12.5" font-weight="700" fill="#0f172a">安全模型：防线只有两处</text>
+
+  <rect x="52" y="492" width="240" height="58" rx="6" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="172" y="511" text-anchor="middle" font-size="11.5" font-weight="700" fill="#b91c1c">防线① 谁能往 broker 写</text>
+  <text x="64" y="529" font-size="10.5" fill="#78350f">· 网络隔离：只监听内网 + 防火墙白名单</text>
+  <text x="64" y="544" font-size="10.5" fill="#78350f">· 强密码：别用默认 guest/guest</text>
+
+  <rect x="308" y="492" width="246" height="58" rx="6" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="431" y="511" text-anchor="middle" font-size="11.5" font-weight="700" fill="#b91c1c">防线② worker 接受什么格式</text>
+  <text x="320" y="529" font-size="10.5" fill="#78350f">· accept_content = ['json'] ← 真防线</text>
+  <text x="320" y="544" font-size="10.5" fill="#78350f">· 只配 serializer 不够！三个一起配</text>
+
+  <text x="52" y="570" font-size="11" font-weight="700" fill="#b91c1c">⚠ pickle 风险：反序列化即执行代码 → RCE</text>
+  <text x="52" y="588" font-size="10.5" fill="#78350f">Celery &lt;4.0 默认 pickle；≥4.0 默认 json —— 但 accept_content 不配就仍有风险</text>
+  <text x="52" y="606" font-size="10.5" fill="#78350f">攻击链：能访问 broker → 塞恶意 pickle → worker 反序列化 → 整台机器沦陷</text>
+  <text x="52" y="624" font-size="10.5" font-weight="600" fill="#b45309">三行必配：task_serializer / result_serializer / accept_content 全设 json</text>
+
+  <!-- 快速自检 -->
+  <rect x="586" y="460" width="518" height="170" rx="8" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.5"/>
+  <text x="600" y="480" font-size="12.5" font-weight="700" fill="#92400e">上线前 5 分钟自检（脚本见正文）</text>
+  <text x="600" y="500" font-size="11" fill="#78350f">🔴 安全：accept_content 无 pickle ｜ broker 有密码 ｜ Flower 有鉴权</text>
+  <text x="600" y="519" font-size="11" fill="#78350f">🔴 可靠：acks_late ｜ reject_on_worker_lost ｜ 幂等 ｜ on_commit ｜ 超时</text>
+  <text x="600" y="538" font-size="11" fill="#78350f">🟡 可观测：开了 -E ｜ 日志带 task_id ｜ 队列+失败率告警 ｜ beat 心跳</text>
+  <text x="600" y="557" font-size="11" fill="#78350f">🟡 运维：systemd 托管 ｜ TimeoutStopSec &gt; soft 超时 ｜ 日志轮转 ｜ 队列隔离</text>
+  <text x="600" y="576" font-size="11" fill="#78350f">⚪ 结果：ignore_result=True ｜ result_expires 已设</text>
+  <text x="600" y="600" font-size="10.5" font-weight="600" fill="#b45309">坑：CELERY_WORKER_SOFT_SHUTDOWN_TIMEOUT 走环境变量会静默失效（课 9 实测）</text>
+  <text x="600" y="618" font-size="10.5" font-weight="600" fill="#b45309">坑：REMAP_SIGTERM 反过来 —— 只能是环境变量，写进 settings.py 无效</text>
+
+  <!-- 全课程收束 -->
+  <rect x="38" y="648" width="1066" height="176" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
+  <text x="52" y="670" font-size="12.5" font-weight="700" fill="#15803d">🎉 全课程收束：10 课其实只讲了一件事</text>
+  <text x="52" y="692" font-size="11.5" fill="#166534">把「至少一次投递」这个承诺，变成「业务上真正不出错」—— 每课的"兜底"都是同一思路：<tspan font-weight="700">承认系统会出错，提前配好退路</tspan></text>
+
+  <text x="52" y="716" font-size="11" fill="#166534">课 5 幂等 → 兜住重复执行　　课 6 on_commit → 兜住事务边界　　课 7 心跳 → 兜住静默故障</text>
+  <text x="52" y="735" font-size="11" fill="#166534">课 9 优雅停机 → 兜住发版丢任务　　课 10 超时 → 兜住僵尸任务　　课 10 清单 → 兜住上线遗漏</text>
+
+  <line x1="52" y1="748" x2="1090" y2="748" stroke="#86efac" stroke-width="1"/>
+  <text x="52" y="768" font-size="11.5" font-weight="700" fill="#15803d">下一步（知识讲完 ≠ 学完）：</text>
+  <text x="52" y="787" font-size="11" fill="#166534">· Phase 3 综合实战项目（默认必做）：跨阶段整合 + ≥2 个设计决策权衡 + 反例对照 + 验收清单</text>
+  <text x="52" y="805" font-size="11" fill="#166534">· Phase 5 实战经验 + 排障速查手册：一份"坐着读"的经验 + 一份"崩了翻"的 QRH 手册</text>
+  <text x="52" y="823" font-size="11" fill="#166534">· 或先「考我一下 Celery」：针对 30 个知识点做一次知识点对齐</text>
+</svg>

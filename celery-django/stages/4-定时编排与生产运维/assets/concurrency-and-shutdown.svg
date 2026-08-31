@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="720" viewBox="0 0 1100 720" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#475569"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#dc2626"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#16a34a"/>
+    </marker>
+  </defs>
+
+  <rect width="1100" height="720" fill="#ffffff"/>
+  <text x="550" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#0f172a">第 9 课 · 并发模型选型与停机决策</text>
+  <text x="550" y="56" text-anchor="middle" font-size="12" fill="#64748b">Celery 5.6.3 + Redis 7.0.15 · WSL2 实测数据</text>
+
+  <!-- ============ 左：并发模型选型 ============ -->
+  <rect x="24" y="80" width="500" height="300" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="40" y="106" font-size="15" font-weight="700" fill="#0f172a">① 并发模型怎么选</text>
+
+  <!-- 决策分叉 -->
+  <rect x="40" y="122" width="200" height="34" rx="6" fill="#1e293b"/>
+  <text x="140" y="144" text-anchor="middle" font-size="13" font-weight="600" fill="#ffffff">任务是什么脾气？</text>
+
+  <line x1="140" y1="156" x2="110" y2="182" stroke="#475569" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <line x1="140" y1="156" x2="260" y2="182" stroke="#475569" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <text x="72" y="176" font-size="11" font-weight="600" fill="#b91c1c">CPU 密集</text>
+  <text x="266" y="176" font-size="11" font-weight="600" fill="#15803d">IO 密集</text>
+
+  <!-- CPU 分支 -->
+  <rect x="40" y="184" width="200" height="86" rx="8" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="140" y="204" text-anchor="middle" font-size="13" font-weight="700" fill="#b91c1c">prefork（多进程）</text>
+  <text x="140" y="223" text-anchor="middle" font-size="11" fill="#475569">并发 ≈ CPU 核数</text>
+  <text x="140" y="240" text-anchor="middle" font-size="11" fill="#475569">真并行，绕开 GIL</text>
+  <text x="140" y="259" text-anchor="middle" font-size="10.5" fill="#b91c1c" font-weight="600">别用 threads：慢 4.4×</text>
+
+  <!-- IO 分支 -->
+  <rect x="256" y="184" width="248" height="86" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="380" y="204" text-anchor="middle" font-size="13" font-weight="700" fill="#15803d">gevent / threads</text>
+  <text x="380" y="223" text-anchor="middle" font-size="11" fill="#475569">并发拉到几十 ~ 几百</text>
+  <text x="380" y="240" text-anchor="middle" font-size="11" fill="#475569">等待时不占 CPU</text>
+  <text x="380" y="259" text-anchor="middle" font-size="10.5" fill="#15803d" font-weight="600">prefetch=1 必配</text>
+
+  <!-- 实测数据块 -->
+  <rect x="40" y="286" width="464" height="78" rx="8" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.5"/>
+  <text x="52" y="305" font-size="11.5" font-weight="700" fill="#92400e">实测（200 个 IO 任务，0.5s/个）</text>
+  <text x="52" y="323" font-size="11" fill="#78350f">同为 -c 8：prefork 12.62s ｜ gevent 12.89s ｜ threads 19.69s</text>
+  <text x="52" y="339" font-size="11" fill="#78350f">拉到 -c 200：gevent 0.91s ｜ threads 0.92s（快 14 倍）</text>
+  <text x="52" y="356" font-size="10.5" font-weight="600" fill="#b45309">→ 收益来自「并发数」，不是「池类型」</text>
+
+  <!-- ============ 右：停机四阶段 ============ -->
+  <rect x="544" y="80" width="532" height="300" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="560" y="106" font-size="15" font-weight="700" fill="#0f172a">② 停机四阶段（信号 → 行为）</text>
+
+  <!-- warm -->
+  <rect x="560" y="122" width="248" height="58" rx="8" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="574" y="142" font-size="12.5" font-weight="700" fill="#1d4ed8">Warm ｜ TERM</text>
+  <text x="574" y="159" font-size="11" fill="#475569">等任务全部跑完才退出</text>
+  <text x="574" y="174" font-size="10.5" fill="#1d4ed8" font-weight="600">实测：12s 任务跑完 12/12</text>
+
+  <!-- cold -->
+  <rect x="820" y="122" width="240" height="58" rx="8" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="834" y="142" font-size="12.5" font-weight="700" fill="#b91c1c">Cold ｜ QUIT</text>
+  <text x="834" y="159" font-size="11" fill="#475569">立刻终止正在跑的任务</text>
+  <text x="834" y="174" font-size="10.5" fill="#b91c1c" font-weight="600">实测：停在第 3/12 秒</text>
+
+  <line x1="684" y1="180" x2="684" y2="200" stroke="#475569" stroke-width="1.5"/>
+  <line x1="684" y1="200" x2="700" y2="200" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- soft -->
+  <rect x="560" y="192" width="500" height="72" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
+  <text x="574" y="212" font-size="12.5" font-weight="700" fill="#15803d">Soft（5.5+）｜ 限时宽限 + 归还任务</text>
+  <text x="574" y="230" font-size="11" fill="#475569">worker_soft_shutdown_timeout=N 秒，到点转 cold，期间未完成任务重新入队</text>
+  <text x="574" y="248" font-size="10.5" fill="#15803d" font-weight="600">实测日志：Initiating Soft Shutdown, terminating in 15.0s</text>
+  <text x="574" y="262" font-size="10.5" fill="#15803d" font-weight="600">　　　　　Restoring 1 unacknowledged message(s) ← 不丢</text>
+
+  <!-- 容器配置 -->
+  <rect x="560" y="276" width="500" height="88" rx="8" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.5"/>
+  <text x="574" y="295" font-size="11.5" font-weight="700" fill="#92400e">⚠ 容器 / systemd 必配（否则超时被 KILL）</text>
+  <text x="574" y="313" font-size="11" fill="#78350f">REMAP_SIGTERM=SIGQUIT　（环境变量，写 settings.py 无效）</text>
+  <text x="574" y="330" font-size="11" fill="#78350f">TimeoutStopSec / terminationGracePeriodSeconds ＞ soft 超时</text>
+  <text x="574" y="352" font-size="10.5" font-weight="600" fill="#b45309">task_acks_late=True（重入队的前提）+ 幂等（重跑不出错的前提）</text>
+
+  <!-- ============ 下：队列隔离 ============ -->
+  <rect x="24" y="400" width="1052" height="300" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="40" y="426" font-size="15" font-weight="700" fill="#0f172a">③ 队列隔离：路由表只管「发到哪」，专属 worker 才管「多久被处理」</text>
+
+  <!-- 场景 A -->
+  <text x="44" y="454" font-size="12.5" font-weight="700" fill="#b91c1c">✗ 场景 A：全部堆默认队列（队头阻塞）</text>
+  <rect x="44" y="464" width="470" height="70" rx="8" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <rect x="56" y="482" width="300" height="26" rx="4" fill="#dc2626"/>
+  <text x="206" y="500" text-anchor="middle" font-size="11" font-weight="600" fill="#ffffff">慢任务 × 20（每个 2s）</text>
+  <rect x="360" y="482" width="52" height="26" rx="4" fill="#fbbf24"/>
+  <text x="386" y="500" text-anchor="middle" font-size="10" font-weight="700" fill="#78350f">快任务</text>
+  <text x="56" y="527" font-size="11" fill="#78350f">毫秒级的快任务，被排在慢任务后面</text>
+  <rect x="290" y="514" width="150" height="20" rx="4" fill="#b91c1c"/>
+  <text x="365" y="528" text-anchor="middle" font-size="11.5" font-weight="700" fill="#ffffff">等待 10.03s</text>
+
+  <!-- 场景 B -->
+  <text x="560" y="454" font-size="12.5" font-weight="700" fill="#15803d">✓ 场景 B：快慢分队列 + 专属 worker</text>
+  <rect x="560" y="464" width="500" height="70" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <rect x="572" y="480" width="180" height="26" rx="4" fill="#dc2626"/>
+  <text x="662" y="498" text-anchor="middle" font-size="10.5" font-weight="600" fill="#ffffff">bulk：慢任务 × 20</text>
+  <rect x="572" y="510" width="180" height="16" rx="3" fill="#94a3b8"/>
+  <text x="662" y="522" text-anchor="middle" font-size="10" fill="#ffffff">worker -Q bulk</text>
+
+  <rect x="790" y="480" width="120" height="26" rx="4" fill="#fbbf24"/>
+  <text x="850" y="498" text-anchor="middle" font-size="10.5" font-weight="700" fill="#78350f">fast：快任务</text>
+  <rect x="790" y="510" width="120" height="16" rx="3" fill="#94a3b8"/>
+  <text x="850" y="522" text-anchor="middle" font-size="10" fill="#ffffff">worker -Q fast</text>
+  <rect x="930" y="490" width="120" height="24" rx="4" fill="#16a34a"/>
+  <text x="990" y="506" text-anchor="middle" font-size="11.5" font-weight="700" fill="#ffffff">等待 0.51s</text>
+
+  <!-- 箭头：A -> B -->
+  <line x1="524" y1="499" x2="556" y2="499" stroke="#16a34a" stroke-width="2.5" marker-end="url(#arrowGreen)"/>
+  <rect x="524" y="536" width="90" height="20" rx="4" fill="#16a34a"/>
+  <text x="569" y="550" text-anchor="middle" font-size="11.5" font-weight="700" fill="#ffffff">快 20 倍</text>
+
+  <!-- 三条铁律 -->
+  <rect x="44" y="556" width="1016" height="128" rx="8" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="60" y="578" font-size="12.5" font-weight="700" fill="#0f172a">队列隔离三条铁律</text>
+
+  <text x="60" y="601" font-size="11.5" fill="#334155"><tspan font-weight="700" fill="#b91c1c">① 路由表 ≠ 消费者　</tspan>配了 task_routes 却没有 worker 用 -Q 消费该队列 → 任务躺着没人管（LLEN 能看到堆积）</text>
+  <text x="60" y="622" font-size="11.5" fill="#334155"><tspan font-weight="700" fill="#b91c1c">② -Q fast,bulk ≠ fast 优先　</tspan>是多队列轮流取；延迟保证来自「专属 worker 只消费 fast」</text>
+  <text x="60" y="643" font-size="11.5" fill="#334155"><tspan font-weight="700" fill="#b91c1c">③ Redis 优先级只是近似　</tspan>不配 queue_order_strategy + prefetch=1 就静默失效；真要优先级用 RabbitMQ</text>
+  <text x="60" y="668" font-size="11.5" fill="#334155"><tspan font-weight="700" fill="#15803d">✓ 诊断顺序　</tspan>redis-cli LLEN &lt;队列&gt;（任务进对了吗）→ celery inspect active_queues（有人消费吗）</text>
+</svg>

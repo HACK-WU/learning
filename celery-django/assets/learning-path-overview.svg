@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 470" width="1040" height="470" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="1040" height="470" fill="#fafafa"/>
+
+  <!-- 标题 -->
+  <text x="30" y="36" font-size="21" font-weight="700" fill="#1a237e">Celery + Django 学习路径</text>
+  <text x="30" y="60" font-size="13" fill="#555">主线：一个「本该在后台跑的慢活儿」，从卡死 HTTP 请求，到被治理成可运维的异步体系</text>
+
+  <!-- 故事 spine 条 -->
+  <rect x="30" y="74" width="980" height="26" rx="6" fill="#e8eaf6"/>
+  <text x="44" y="92" font-size="12.5" fill="#283593">主角：慢活儿（发信 / 报表 / 第三方调用）　→　冲突：卡在请求线程里，扔给线程又管不住　→　收束：不丢、不重、可观测、可伸缩</text>
+
+  <!-- 阶段 1 -->
+  <rect x="30" y="122" width="220" height="252" rx="10" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.5"/>
+  <rect x="30" y="122" width="220" height="34" rx="10" fill="#1565C0"/>
+  <rect x="30" y="146" width="220" height="10" fill="#1565C0"/>
+  <text x="46" y="146" font-size="14" font-weight="700" fill="#ffffff">阶段 1 · 动因与全景</text>
+  <text x="46" y="178" font-size="12" font-style="italic" fill="#0d47a1">「转圈的提交按钮」</text>
+  <text x="46" y="204" font-size="12.5" fill="#1b1b1b">· 同步请求里的慢活儿</text>
+  <text x="46" y="226" font-size="12.5" fill="#1b1b1b">· threading / cron 为何不够</text>
+  <text x="46" y="248" font-size="12.5" fill="#1b1b1b">· Celery 的诞生与定位</text>
+  <text x="46" y="270" font-size="12.5" fill="#1b1b1b">· Producer / Broker / Worker</text>
+  <text x="46" y="292" font-size="12.5" fill="#1b1b1b">· 一次 delay() 的完整旅程</text>
+  <text x="46" y="314" font-size="12.5" fill="#1b1b1b">· Result Backend 与状态机</text>
+  <line x1="46" y1="330" x2="234" y2="330" stroke="#90caf9" stroke-width="1"/>
+  <text x="46" y="352" font-size="12" font-weight="700" fill="#0d47a1">产出：说清 Celery 解决什么问题</text>
+
+  <!-- 阶段 2 -->
+  <rect x="280" y="122" width="220" height="252" rx="10" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <rect x="280" y="122" width="220" height="34" rx="10" fill="#2e7d32"/>
+  <rect x="280" y="146" width="220" height="10" fill="#2e7d32"/>
+  <text x="296" y="146" font-size="14" font-weight="700" fill="#ffffff">阶段 2 · 集成与基础</text>
+  <text x="296" y="178" font-size="12" font-style="italic" fill="#1b5e20">「把活儿交出去」</text>
+  <text x="296" y="204" font-size="12.5" fill="#1b1b1b">· 环境与 Broker 选型</text>
+  <text x="296" y="226" font-size="12.5" fill="#1b1b1b">· Django 标准集成姿势</text>
+  <text x="296" y="248" font-size="12.5" fill="#1b1b1b">· @shared_task 与任务参数</text>
+  <text x="296" y="270" font-size="12.5" fill="#1b1b1b">· delay / apply_async</text>
+  <text x="296" y="292" font-size="12.5" fill="#1b1b1b">· AsyncResult 取结果</text>
+  <text x="296" y="314" font-size="12.5" fill="#1b1b1b">· 信号与自定义 Task 基类</text>
+  <line x1="296" y1="330" x2="484" y2="330" stroke="#a5d6a7" stroke-width="1"/>
+  <text x="296" y="352" font-size="12" font-weight="700" fill="#1b5e20">产出：跑通一个完整 Django 项目</text>
+
+  <!-- 阶段 3 -->
+  <rect x="530" y="122" width="220" height="252" rx="10" fill="#fff3e0" stroke="#ef6c00" stroke-width="1.5"/>
+  <rect x="530" y="122" width="220" height="34" rx="10" fill="#ef6c00"/>
+  <rect x="530" y="146" width="220" height="10" fill="#ef6c00"/>
+  <text x="546" y="146" font-size="14" font-weight="700" fill="#ffffff">阶段 3 · 可靠性与幂等</text>
+  <text x="546" y="178" font-size="12" font-style="italic" fill="#e65100">「半夜丢单的告警」</text>
+  <text x="546" y="204" font-size="12.5" fill="#1b1b1b">· ack 时机与可见性超时</text>
+  <text x="546" y="226" font-size="12.5" fill="#1b1b1b">· 重试：backoff / jitter</text>
+  <text x="546" y="248" font-size="12.5" fill="#1b1b1b">· 幂等性设计</text>
+  <text x="546" y="270" font-size="12.5" fill="#1b1b1b">· on_commit 再发任务</text>
+  <text x="546" y="292" font-size="12.5" fill="#1b1b1b">· 传 id 不传模型实例</text>
+  <text x="546" y="314" font-size="12.5" fill="#1b1b1b">· worker 数据库连接管理</text>
+  <line x1="546" y1="330" x2="734" y2="330" stroke="#ffcc80" stroke-width="1"/>
+  <text x="546" y="352" font-size="12" font-weight="700" fill="#e65100">产出：任务不丢、不重、事务安全</text>
+
+  <!-- 阶段 4 -->
+  <rect x="780" y="122" width="220" height="252" rx="10" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="1.5"/>
+  <rect x="780" y="122" width="220" height="34" rx="10" fill="#6a1b9a"/>
+  <rect x="780" y="146" width="220" height="10" fill="#6a1b9a"/>
+  <text x="796" y="146" font-size="14" font-weight="700" fill="#ffffff">阶段 4 · 定时编排与运维</text>
+  <text x="796" y="178" font-size="12" font-style="italic" fill="#4a148c">「上线之后才是开始」</text>
+  <text x="796" y="204" font-size="12.5" fill="#1b1b1b">· beat / crontab / 时区坑</text>
+  <text x="796" y="226" font-size="12.5" fill="#1b1b1b">· django-celery-beat 库调度</text>
+  <text x="796" y="248" font-size="12.5" fill="#1b1b1b">· canvas：group/chain/chord</text>
+  <text x="796" y="270" font-size="12.5" fill="#1b1b1b">· 并发模型与优雅停机</text>
+  <text x="796" y="292" font-size="12.5" fill="#1b1b1b">· 路由隔离 / 优先级 / 限流</text>
+  <text x="796" y="314" font-size="12.5" fill="#1b1b1b">· 监控 · 排查 · 上线清单</text>
+  <line x1="796" y1="330" x2="984" y2="330" stroke="#ce93d8" stroke-width="1"/>
+  <text x="796" y="352" font-size="12" font-weight="700" fill="#4a148c">产出：一套可运维的任务体系</text>
+
+  <!-- 阶段间箭头 -->
+  <g stroke="#455a64" stroke-width="2" fill="#455a64">
+    <path d="M252 248 L276 248" marker-end="url(#arrow)"/>
+    <path d="M502 248 L526 248" marker-end="url(#arrow)"/>
+    <path d="M752 248 L776 248" marker-end="url(#arrow)"/>
+  </g>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#455a64" stroke="none"/>
+    </marker>
+  </defs>
+
+  <!-- 前置依赖说明 -->
+  <text x="140" y="392" font-size="11" fill="#607d8b" text-anchor="middle">前置</text>
+  <text x="390" y="392" font-size="11" fill="#607d8b" text-anchor="middle">前置</text>
+  <text x="640" y="392" font-size="11" fill="#607d8b" text-anchor="middle">前置</text>
+
+  <!-- 收束条 -->
+  <rect x="30" y="406" width="980" height="46" rx="8" fill="#eceff1" stroke="#b0bec5"/>
+  <text x="46" y="428" font-size="13" font-weight="700" fill="#37474f">🎯 学完全程你能回答的大问题：如何为 Django 项目设计一套「不丢、不重、可观测、可伸缩」的异步任务体系？</text>
+  <text x="46" y="447" font-size="12" fill="#546e7a">阶段 1–2 是必修地基；阶段 3 决定线上是否敢用；阶段 4 决定能否扛住规模。</text>
+</svg>
