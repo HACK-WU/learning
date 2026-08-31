@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="320" viewBox="0 0 900 320" font-family="-apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect width="900" height="320" fill="#fafafa"/>
+  <text x="30" y="30" font-size="17" font-weight="bold" fill="#0d47a1">阶段 1：类型思维启蒙 · 课与知识点顺序</text>
+  <text x="30" y="52" font-size="12" fill="#666">箭头 = 前置依赖；地基课 → 日常最常用 → 视角从「单个值」抬到「形状」</text>
+
+  <!-- 课 1 -->
+  <rect x="30" y="72" width="250" height="196" rx="10" fill="#e8f1fb" stroke="#1565c0" stroke-width="2"/>
+  <rect x="30" y="72" width="250" height="34" rx="10" fill="#1565c0"/>
+  <rect x="30" y="94" width="250" height="12" fill="#1565c0"/>
+  <text x="46" y="95" font-size="15" font-weight="bold" fill="#ffffff">课 1 · TypeScript 到底是什么</text>
+  <circle cx="52" cy="136" r="4" fill="#1565c0"/>
+  <text x="66" y="140" font-size="12.5" fill="#333">TS 的本质：擦除式类型超集</text>
+  <text x="66" y="157" font-size="11" fill="#777">类型擦除 · 超集关系 · 编译期</text>
+  <circle cx="52" cy="182" r="4" fill="#1565c0"/>
+  <text x="66" y="186" font-size="12.5" fill="#333">静态类型的价值与代价</text>
+  <text x="66" y="203" font-size="11" fill="#777">错误左移 · 类型即文档 · 成本</text>
+  <circle cx="52" cy="228" r="4" fill="#1565c0"/>
+  <text x="66" y="232" font-size="12.5" fill="#333">第一个 TS 程序与编译流程</text>
+  <text x="66" y="249" font-size="11" fill="#777">装 TS7 · tsc 编译 · 最小 tsconfig</text>
+
+  <line x1="284" y1="170" x2="316" y2="170" stroke="#1565c0" stroke-width="2.5"/>
+  <polygon points="324,170 312,164 312,176" fill="#1565c0"/>
+
+  <!-- 课 2 -->
+  <rect x="328" y="72" width="250" height="196" rx="10" fill="#e8f1fb" stroke="#1565c0" stroke-width="2"/>
+  <rect x="328" y="72" width="250" height="34" rx="10" fill="#1565c0"/>
+  <rect x="328" y="94" width="250" height="12" fill="#1565c0"/>
+  <text x="344" y="95" font-size="15" font-weight="bold" fill="#ffffff">课 2 · 基础类型标注与推导</text>
+  <circle cx="350" cy="136" r="4" fill="#1565c0"/>
+  <text x="364" y="140" font-size="12.5" fill="#333">原始类型标注与类型推导</text>
+  <text x="364" y="157" font-size="11" fill="#777">注解 vs 推导 · 何时必须显式</text>
+  <circle cx="350" cy="182" r="4" fill="#1565c0"/>
+  <text x="364" y="186" font-size="12.5" fill="#333">数组、元组与只读</text>
+  <text x="364" y="203" font-size="11" fill="#777">T[] · 元组 · readonly / as const</text>
+  <circle cx="350" cy="228" r="4" fill="#1565c0"/>
+  <text x="364" y="232" font-size="12.5" fill="#333">函数类型标注</text>
+  <text x="364" y="249" font-size="11" fill="#777">参数返回 · 可选默认 · void / never</text>
+
+  <line x1="582" y1="170" x2="614" y2="170" stroke="#1565c0" stroke-width="2.5"/>
+  <polygon points="622,170 610,164 610,176" fill="#1565c0"/>
+
+  <!-- 课 3 -->
+  <rect x="626" y="72" width="250" height="196" rx="10" fill="#e8f1fb" stroke="#1565c0" stroke-width="2"/>
+  <rect x="626" y="72" width="250" height="34" rx="10" fill="#1565c0"/>
+  <rect x="626" y="94" width="250" height="12" fill="#1565c0"/>
+  <text x="642" y="95" font-size="15" font-weight="bold" fill="#ffffff">课 3 · 对象类型与结构化类型</text>
+  <circle cx="648" cy="136" r="4" fill="#1565c0"/>
+  <text x="662" y="140" font-size="12.5" fill="#333">对象类型：interface 与 type</text>
+  <text x="662" y="157" font-size="11" fill="#777">可选只读 · 索引签名 · 声明合并</text>
+  <circle cx="648" cy="182" r="4" fill="#1565c0"/>
+  <text x="662" y="186" font-size="12.5" fill="#333">结构化类型系统</text>
+  <text x="662" y="203" font-size="11" fill="#777">鸭子类型 · 兼容规则 · 多余属性检查</text>
+  <circle cx="648" cy="228" r="4" fill="#1565c0"/>
+  <text x="662" y="232" font-size="12.5" fill="#333">类型断言与 satisfies</text>
+  <text x="662" y="249" font-size="11" fill="#777">as 的边界 · ! 的陷阱 · as const</text>
+
+  <text x="30" y="298" font-size="12" fill="#555">💡 课 1 不学 = 只会抄语法；课 3 的「结构化类型」是理解后面所有兼容性报错的钥匙。</text>
+</svg>

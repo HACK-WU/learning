@@ -65,8 +65,15 @@ nodes-[0-9]*.conf
 # 说明：课 1 的 npm i -D typescript 会就地生成 node_modules/（数百至数千个文件），
 # 它不是教学内容，可由 package.json 随时重新安装。
 # 教学产物是 playground 下的 .ts 源码与各主题目录下的 *.md / assets/*.svg。
-# 注意：不要加 *.js —— playground/scenario.js 是讲义引用的手写 JS 源文件，必须保留。
 node_modules/
+
+# ---- 教学实操环境：TS 编译产物（typescript-core 课程）----
+# 说明：tsc 默认与源文件同目录产出 .js，属编译产物而非教学内容，
+# 可由 npx tsc 一条命令重新生成。
+# ⚠️ 陷阱：不能裸写 *.js —— playground/scenario.js 是课 1 讲义引用的手写 JS 源文件。
+# 后续若再新增手写 .js 示例，同样要在此加一条 ! 例外，否则会被连带吞掉。
+/frontend/typescript-core/playground/*.js
+!/frontend/typescript-core/playground/scenario.js
 
 # ---- 教学实操环境：Consul 运行时数据（consul 课程）----
 # 风险点：lesson-05 的集群配置里 data_dir 直指仓库内的 playground/cluster/data/，

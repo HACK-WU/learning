@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 320" width="980" height="320" font-family="'Microsoft YaHei','PingFang SC','Segoe UI',sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#78909c"/>
+    </marker>
+  </defs>
+  <rect width="980" height="320" fill="#fafafa"/>
+
+  <text x="490" y="32" text-anchor="middle" font-size="18" font-weight="bold" fill="#1a237e">阶段 4 · 工程化与运行时 · 学习路径</text>
+  <text x="490" y="54" text-anchor="middle" font-size="12.5" fill="#5f6368">本阶段回答：从一个文件到一个项目，中间缺了什么？｜ 3 课 · 9 知识点</text>
+
+  <rect x="30" y="80" width="290" height="190" rx="8" fill="#ffffff" stroke="#2E7D32" stroke-width="1.5"/>
+  <path d="M 30 88 a 8 8 0 0 1 8 -8 h 274 a 8 8 0 0 1 8 8 v 26 h -290 z" fill="#2E7D32"/>
+  <text x="48" y="104" font-size="14.5" font-weight="bold" fill="#ffffff">课 10 · 模块化</text>
+  <text x="302" y="104" text-anchor="end" font-size="11.5" fill="#e8f5e9">3 知识点</text>
+  <text x="48" y="132" font-size="12.5" font-weight="bold" fill="#2E7D32">① CommonJS 与 ESM</text>
+  <text x="60" y="150" font-size="11.5" fill="#555555">加载时机 / 值拷贝 vs 实时绑定</text>
+  <text x="48" y="178" font-size="12.5" font-weight="bold" fill="#2E7D32">② import·export 全语法</text>
+  <text x="60" y="196" font-size="11.5" fill="#555555">命名·默认·转发 / 只读绑定 / 单例</text>
+  <text x="48" y="224" font-size="12.5" font-weight="bold" fill="#2E7D32">③ 循环依赖与动态导入</text>
+  <text x="60" y="242" font-size="11.5" fill="#555555">ESM 为何不报错 / 破环 / import()</text>
+
+  <line x1="324" y1="175" x2="342" y2="175" stroke="#78909c" stroke-width="2" marker-end="url(#ar)"/>
+
+  <rect x="345" y="80" width="290" height="190" rx="8" fill="#ffffff" stroke="#2E7D32" stroke-width="1.5"/>
+  <path d="M 345 88 a 8 8 0 0 1 8 -8 h 274 a 8 8 0 0 1 8 8 v 26 h -290 z" fill="#2E7D32"/>
+  <text x="363" y="104" font-size="14.5" font-weight="bold" fill="#ffffff">课 11 · 错误处理与调试</text>
+  <text x="617" y="104" text-anchor="end" font-size="11.5" fill="#e8f5e9">3 知识点</text>
+  <text x="363" y="132" font-size="12.5" font-weight="bold" fill="#2E7D32">① Error 体系与 throw</text>
+  <text x="375" y="150" font-size="11.5" fill="#555555">内置错误类型 / cause 链 / 自定义错误</text>
+  <text x="363" y="178" font-size="12.5" font-weight="bold" fill="#2E7D32">② try·catch·finally 与异步错误</text>
+  <text x="375" y="196" font-size="11.5" fill="#555555">finally 覆盖 / 全局兜底 / 该不该 catch</text>
+  <text x="363" y="224" font-size="12.5" font-weight="bold" fill="#2E7D32">③ 调试工具链与 Source Map</text>
+  <text x="375" y="242" font-size="11.5" fill="#555555">console 坑 / debugger / 生产环境策略</text>
+
+  <line x1="639" y1="175" x2="657" y2="175" stroke="#78909c" stroke-width="2" marker-end="url(#ar)"/>
+
+  <rect x="660" y="80" width="290" height="190" rx="8" fill="#ffffff" stroke="#2E7D32" stroke-width="1.5"/>
+  <path d="M 660 88 a 8 8 0 0 1 8 -8 h 274 a 8 8 0 0 1 8 8 v 26 h -290 z" fill="#2E7D32"/>
+  <text x="678" y="104" font-size="14.5" font-weight="bold" fill="#ffffff">课 12 · 内存·性能与选型收束</text>
+  <text x="932" y="104" text-anchor="end" font-size="11.5" fill="#e8f5e9">3 知识点</text>
+  <text x="678" y="132" font-size="12.5" font-weight="bold" fill="#2E7D32">① 垃圾回收机制</text>
+  <text x="690" y="150" font-size="11.5" fill="#555555">可达性 / 标记清除 / 分代与增量</text>
+  <text x="678" y="178" font-size="12.5" font-weight="bold" fill="#2E7D32">② 常见内存泄漏与排查</text>
+  <text x="690" y="196" font-size="11.5" fill="#555555">四种典型 / WeakMap 解法 / DevTools</text>
+  <text x="678" y="224" font-size="12.5" font-weight="bold" fill="#2E7D32">③ 选型收束</text>
+  <text x="690" y="242" font-size="11.5" fill="#555555">JS vs TS / 运行时 / 工具链决策清单</text>
+
+  <text x="490" y="298" text-anchor="middle" font-size="11.5" fill="#78909c">箭头 = 学习顺序（前置 → 后置）· 课 12 之后进入 Phase 3 综合实战项目</text>
+</svg>

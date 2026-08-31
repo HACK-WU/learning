@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="340" viewBox="0 0 900 340" font-family="-apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect width="900" height="340" fill="#fafafa"/>
+  <text x="30" y="30" font-size="17" font-weight="bold" fill="#0d47a1">阶段 3：泛型与类型编程 · 课与知识点顺序</text>
+  <text x="30" y="52" font-size="12" fill="#666">课 8 打底（泛型基本用法）→ 课 9 跃迁（类型编程）；课 9 的「条件类型与 infer」允许先跳过</text>
+
+  <!-- 课 8 -->
+  <rect x="30" y="80" width="390" height="216" rx="10" fill="#e8f1fb" stroke="#1565c0" stroke-width="2"/>
+  <rect x="30" y="80" width="390" height="34" rx="10" fill="#1565c0"/>
+  <rect x="30" y="102" width="390" height="12" fill="#1565c0"/>
+  <text x="46" y="103" font-size="15" font-weight="bold" fill="#ffffff">课 8 · 泛型基础</text>
+  <circle cx="52" cy="146" r="4" fill="#1565c0"/>
+  <text x="66" y="150" font-size="12.5" fill="#333">泛型函数与类型参数推导</text>
+  <text x="66" y="168" font-size="11" fill="#777">为什么需要泛型 · 调用时推导 · 显式指定 · 不是 any</text>
+  <circle cx="52" cy="196" r="4" fill="#1565c0"/>
+  <text x="66" y="200" font-size="12.5" fill="#333">泛型约束与 keyof</text>
+  <text x="66" y="218" font-size="11" fill="#777">extends 约束 · keyof · 索引访问 T[K] · 常见错误</text>
+  <circle cx="52" cy="246" r="4" fill="#1565c0"/>
+  <text x="66" y="250" font-size="12.5" fill="#333">泛型类型：接口、别名与默认值</text>
+  <text x="66" y="268" font-size="11" fill="#777">泛型接口 / 别名 · 默认类型参数 · 多参数依赖</text>
+  <rect x="52" y="278" width="346" height="1" fill="#c5d9f0"/>
+  <text x="52" y="294" font-size="11" fill="#0d47a1">💡 核心认知：泛型 = 推迟确定，any = 放弃检查</text>
+
+  <line x1="424" y1="188" x2="476" y2="188" stroke="#1565c0" stroke-width="2.5"/>
+  <polygon points="484,188 472,182 472,194" fill="#1565c0"/>
+
+  <!-- 课 9 -->
+  <rect x="480" y="80" width="390" height="216" rx="10" fill="#e8f1fb" stroke="#1565c0" stroke-width="2"/>
+  <rect x="480" y="80" width="390" height="34" rx="10" fill="#1565c0"/>
+  <rect x="480" y="102" width="390" height="12" fill="#1565c0"/>
+  <text x="496" y="103" font-size="15" font-weight="bold" fill="#ffffff">课 9 · 类型编程三件套与内置工具类型</text>
+  <circle cx="502" cy="146" r="4" fill="#1565c0"/>
+  <text x="516" y="150" font-size="12.5" fill="#333">映射类型</text>
+  <text x="516" y="168" font-size="11" fill="#777">in 遍历 · +? / -readonly 修饰符 · as 键重映射</text>
+  <circle cx="502" cy="196" r="4" fill="#c62828"/>
+  <text x="516" y="200" font-size="12.5" fill="#333">条件类型与 infer（最难，允许后补）</text>
+  <text x="516" y="218" font-size="11" fill="#777">extends 三元 · 裸类型参数分发 · infer 提取</text>
+  <circle cx="502" cy="246" r="4" fill="#1565c0"/>
+  <text x="516" y="250" font-size="12.5" fill="#333">内置工具类型全景与手写实现</text>
+  <text x="516" y="268" font-size="11" fill="#777">Partial / Pick / Omit / ReturnType … 逐个手写</text>
+  <circle cx="502" cy="288" r="4" fill="#1565c0"/>
+  <text x="516" y="292" font-size="12.5" fill="#333">泛型的实际设计场景</text>
+  <text x="516" y="308" font-size="11" fill="#777">API 包装 · 事件总线 · 表单映射 · 滥用信号</text>
+</svg>

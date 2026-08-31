@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 700" width="1040" height="700" font-family="'Microsoft YaHei','PingFang SC','Segoe UI',sans-serif">
+  <defs>
+    <marker id="arrowDown" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#78909c"/>
+    </marker>
+  </defs>
+
+  <rect width="1040" height="700" fill="#fafafa"/>
+
+  <text x="520" y="36" text-anchor="middle" font-size="22" font-weight="bold" fill="#1a237e">JavaScript 语言核心（ES6+）· 学习路径</text>
+  <text x="520" y="60" text-anchor="middle" font-size="13" fill="#5f6368">4 阶段 · 12 课 · 36 知识点 ｜ 故事主线：一段「看起来对、跑起来错」的代码，侦探到底</text>
+
+  <!-- 阶段 1 -->
+  <rect x="40" y="76" width="960" height="118" rx="8" fill="#ffffff" stroke="#1565C0" stroke-width="1.5"/>
+  <path d="M 40 84 a 8 8 0 0 1 8 -8 h 944 a 8 8 0 0 1 8 8 v 24 h -960 z" fill="#1565C0"/>
+  <text x="58" y="100" font-size="16" font-weight="bold" fill="#ffffff">阶段 1 · 值与作用域</text>
+  <text x="982" y="100" text-anchor="end" font-size="13" fill="#e3f2fd">章节：看清脚下的地</text>
+
+  <rect x="56" y="130" width="296" height="52" rx="6" fill="#ffffff" stroke="#1565C0" stroke-width="1.2"/>
+  <text x="204" y="150" text-anchor="middle" font-size="12" fill="#1565C0">课 1</text>
+  <text x="204" y="171" text-anchor="middle" font-size="13.5" fill="#333333">变量与类型</text>
+  <rect x="372" y="130" width="296" height="52" rx="6" fill="#ffffff" stroke="#1565C0" stroke-width="1.2"/>
+  <text x="520" y="150" text-anchor="middle" font-size="12" fill="#1565C0">课 2</text>
+  <text x="520" y="171" text-anchor="middle" font-size="13.5" fill="#333333">值的复制与比较</text>
+  <rect x="688" y="130" width="296" height="52" rx="6" fill="#ffffff" stroke="#1565C0" stroke-width="1.2"/>
+  <text x="836" y="150" text-anchor="middle" font-size="12" fill="#1565C0">课 3</text>
+  <text x="836" y="171" text-anchor="middle" font-size="13.5" fill="#333333">作用域与闭包</text>
+
+  <line x1="520" y1="196" x2="520" y2="230" stroke="#78909c" stroke-width="2" marker-end="url(#arrowDown)"/>
+
+  <!-- 阶段 2 -->
+  <rect x="40" y="232" width="960" height="118" rx="8" fill="#ffffff" stroke="#6A1B9A" stroke-width="1.5"/>
+  <path d="M 40 240 a 8 8 0 0 1 8 -8 h 944 a 8 8 0 0 1 8 8 v 24 h -960 z" fill="#6A1B9A"/>
+  <text x="58" y="256" font-size="16" font-weight="bold" fill="#ffffff">阶段 2 · 函数与对象</text>
+  <text x="982" y="256" text-anchor="end" font-size="13" fill="#f3e5f5">章节：JS 的两根支柱（课 6 是全程最难）</text>
+
+  <rect x="56" y="286" width="296" height="52" rx="6" fill="#ffffff" stroke="#6A1B9A" stroke-width="1.2"/>
+  <text x="204" y="306" text-anchor="middle" font-size="12" fill="#6A1B9A">课 4</text>
+  <text x="204" y="327" text-anchor="middle" font-size="13.5" fill="#333333">函数是一等公民</text>
+  <rect x="372" y="286" width="296" height="52" rx="6" fill="#ffffff" stroke="#6A1B9A" stroke-width="1.2"/>
+  <text x="520" y="306" text-anchor="middle" font-size="12" fill="#6A1B9A">课 5</text>
+  <text x="520" y="327" text-anchor="middle" font-size="13.5" fill="#333333">this 到底指向谁</text>
+  <rect x="688" y="286" width="296" height="52" rx="6" fill="#ffffff" stroke="#6A1B9A" stroke-width="1.2"/>
+  <text x="836" y="306" text-anchor="middle" font-size="12" fill="#6A1B9A">课 6</text>
+  <text x="836" y="327" text-anchor="middle" font-size="13.5" fill="#333333">原型与类</text>
+
+  <line x1="520" y1="352" x2="520" y2="386" stroke="#78909c" stroke-width="2" marker-end="url(#arrowDown)"/>
+
+  <!-- 阶段 3 -->
+  <rect x="40" y="388" width="960" height="118" rx="8" fill="#ffffff" stroke="#EF6C00" stroke-width="1.5"/>
+  <path d="M 40 396 a 8 8 0 0 1 8 -8 h 944 a 8 8 0 0 1 8 8 v 24 h -960 z" fill="#EF6C00"/>
+  <text x="58" y="412" font-size="16" font-weight="bold" fill="#ffffff">阶段 3 · 异步与现代语法</text>
+  <text x="982" y="412" text-anchor="end" font-size="13" fill="#fff3e0">章节：与时间打交道</text>
+
+  <rect x="56" y="442" width="296" height="52" rx="6" fill="#ffffff" stroke="#EF6C00" stroke-width="1.2"/>
+  <text x="204" y="462" text-anchor="middle" font-size="12" fill="#EF6C00">课 7</text>
+  <text x="204" y="483" text-anchor="middle" font-size="13.5" fill="#333333">事件循环</text>
+  <rect x="372" y="442" width="296" height="52" rx="6" fill="#ffffff" stroke="#EF6C00" stroke-width="1.2"/>
+  <text x="520" y="462" text-anchor="middle" font-size="12" fill="#EF6C00">课 8</text>
+  <text x="520" y="483" text-anchor="middle" font-size="13.5" fill="#333333">Promise 与 async/await</text>
+  <rect x="688" y="442" width="296" height="52" rx="6" fill="#ffffff" stroke="#EF6C00" stroke-width="1.2"/>
+  <text x="836" y="462" text-anchor="middle" font-size="12" fill="#EF6C00">课 9</text>
+  <text x="836" y="483" text-anchor="middle" font-size="13.5" fill="#333333">现代语法与内置数据结构</text>
+
+  <line x1="520" y1="508" x2="520" y2="542" stroke="#78909c" stroke-width="2" marker-end="url(#arrowDown)"/>
+
+  <!-- 阶段 4 -->
+  <rect x="40" y="544" width="960" height="118" rx="8" fill="#ffffff" stroke="#2E7D32" stroke-width="1.5"/>
+  <path d="M 40 552 a 8 8 0 0 1 8 -8 h 944 a 8 8 0 0 1 8 8 v 24 h -960 z" fill="#2E7D32"/>
+  <text x="58" y="568" font-size="16" font-weight="bold" fill="#ffffff">阶段 4 · 工程化与运行时</text>
+  <text x="982" y="568" text-anchor="end" font-size="13" fill="#e8f5e9">章节：从一个文件到一个项目</text>
+
+  <rect x="56" y="598" width="296" height="52" rx="6" fill="#ffffff" stroke="#2E7D32" stroke-width="1.2"/>
+  <text x="204" y="618" text-anchor="middle" font-size="12" fill="#2E7D32">课 10</text>
+  <text x="204" y="639" text-anchor="middle" font-size="13.5" fill="#333333">模块化</text>
+  <rect x="372" y="598" width="296" height="52" rx="6" fill="#ffffff" stroke="#2E7D32" stroke-width="1.2"/>
+  <text x="520" y="618" text-anchor="middle" font-size="12" fill="#2E7D32">课 11</text>
+  <text x="520" y="639" text-anchor="middle" font-size="13.5" fill="#333333">错误处理与调试</text>
+  <rect x="688" y="598" width="296" height="52" rx="6" fill="#ffffff" stroke="#2E7D32" stroke-width="1.2"/>
+  <text x="836" y="618" text-anchor="middle" font-size="12" fill="#2E7D32">课 12</text>
+  <text x="836" y="639" text-anchor="middle" font-size="13.5" fill="#333333">内存·性能与选型收束</text>
+
+  <text x="520" y="688" text-anchor="middle" font-size="12" fill="#78909c">箭头 = 前置依赖（上一阶段是下一阶段的基础）· 实操环境：Node.js v22.14.0</text>
+</svg>

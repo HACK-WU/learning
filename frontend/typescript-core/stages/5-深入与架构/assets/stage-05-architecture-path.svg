@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="360" viewBox="0 0 900 360" font-family="-apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect width="900" height="360" fill="#fafafa"/>
+  <text x="30" y="30" font-size="17" font-weight="bold" fill="#0d47a1">阶段 5：深入与架构 · 课与知识点顺序</text>
+  <text x="30" y="52" font-size="12" fill="#666">探天花板（类型体操）→ 看引擎盖底下（编译器）→ 回到工程决策（架构与选型）</text>
+
+  <!-- 课 13 -->
+  <rect x="30" y="72" width="270" height="248" rx="10" fill="#e8f1fb" stroke="#1565c0" stroke-width="2"/>
+  <rect x="30" y="72" width="270" height="34" rx="10" fill="#1565c0"/>
+  <rect x="30" y="94" width="270" height="12" fill="#1565c0"/>
+  <text x="44" y="95" font-size="14" font-weight="bold" fill="#ffffff">课 13 · 类型体操进阶</text>
+  <circle cx="50" cy="138" r="4" fill="#1565c0"/>
+  <text x="62" y="142" font-size="12" fill="#333">递归条件类型与字符串操作</text>
+  <text x="62" y="158" font-size="10.5" fill="#777">递归深度限制 · 模板字面量 + infer</text>
+  <circle cx="50" cy="180" r="4" fill="#1565c0"/>
+  <text x="62" y="184" font-size="12" fill="#333">高级推断技巧</text>
+  <text x="62" y="200" font-size="10.5" fill="#777">多次 infer · 变元组 · NoInfer · const 参数</text>
+  <circle cx="50" cy="222" r="4" fill="#c62828"/>
+  <text x="62" y="226" font-size="12" fill="#333">类型体操的代价与可读性底线</text>
+  <text x="62" y="242" font-size="10.5" fill="#777">编译耗时 · 报错可读性 · 放弃标准</text>
+  <rect x="44" y="262" width="242" height="1" fill="#c5d9f0"/>
+  <text x="44" y="280" font-size="10.5" fill="#c62828">🔴 本课核心：会写 ≠ 该写</text>
+
+  <line x1="304" y1="196" x2="320" y2="196" stroke="#1565c0" stroke-width="2.5"/>
+  <polygon points="328,196 316,190 316,202" fill="#1565c0"/>
+
+  <!-- 课 14 -->
+  <rect x="332" y="72" width="270" height="248" rx="10" fill="#e8f1fb" stroke="#1565c0" stroke-width="2"/>
+  <rect x="332" y="72" width="270" height="34" rx="10" fill="#1565c0"/>
+  <rect x="332" y="94" width="270" height="12" fill="#1565c0"/>
+  <text x="346" y="95" font-size="14" font-weight="bold" fill="#ffffff">课 14 · 编译器原理与类型检查</text>
+  <circle cx="352" cy="138" r="4" fill="#1565c0"/>
+  <text x="364" y="142" font-size="12" fill="#333">编译流程全景</text>
+  <text x="364" y="158" font-size="10.5" fill="#777">Scanner→Parser→Binder→Checker→Emitter</text>
+  <circle cx="352" cy="180" r="4" fill="#1565c0"/>
+  <text x="364" y="184" font-size="12" fill="#333">可赋值性与变体</text>
+  <text x="364" y="200" font-size="10.5" fill="#777">协变逆变 · strictFunctionTypes</text>
+  <circle cx="352" cy="222" r="4" fill="#1565c0"/>
+  <text x="364" y="226" font-size="12" fill="#333">为什么慢 &amp; 怎么提速</text>
+  <text x="364" y="242" font-size="10.5" fill="#777">复杂度来源 · 并行检查器 · 性能杀手</text>
+  <circle cx="352" cy="264" r="4" fill="#1565c0"/>
+  <text x="364" y="268" font-size="12" fill="#333">读懂复杂类型报错</text>
+  <text x="364" y="284" font-size="10.5" fill="#777">报错结构 · 逐层展开 · 简化验证</text>
+
+  <line x1="606" y1="196" x2="622" y2="196" stroke="#1565c0" stroke-width="2.5"/>
+  <polygon points="630,196 618,190 618,202" fill="#1565c0"/>
+
+  <!-- 课 15 -->
+  <rect x="634" y="72" width="270" height="248" rx="10" fill="#e8f1fb" stroke="#1565c0" stroke-width="2"/>
+  <rect x="634" y="72" width="270" height="34" rx="10" fill="#1565c0"/>
+  <rect x="634" y="94" width="270" height="12" fill="#1565c0"/>
+  <text x="648" y="95" font-size="14" font-weight="bold" fill="#ffffff">课 15 · 大型项目类型架构与选型</text>
+  <circle cx="654" cy="138" r="4" fill="#1565c0"/>
+  <text x="666" y="142" font-size="12" fill="#333">类型的分层与放置</text>
+  <text x="666" y="158" font-size="10.5" fill="#777">领域 / 边界 / DTO · 避免类型意大利面</text>
+  <circle cx="654" cy="180" r="4" fill="#1565c0"/>
+  <text x="666" y="184" font-size="12" fill="#333">公开 API 的类型设计</text>
+  <text x="666" y="200" font-size="10.5" fill="#777">泛型 API 原则 · 导出边界 · 版本兼容</text>
+  <circle cx="654" cy="222" r="4" fill="#1565c0"/>
+  <text x="666" y="226" font-size="12" fill="#333">JS → TS 渐进迁移</text>
+  <text x="666" y="242" font-size="10.5" fill="#777">allowJs / checkJs · 叶子模块优先</text>
+  <circle cx="654" cy="264" r="4" fill="#c62828"/>
+  <text x="666" y="268" font-size="12" fill="#333">决策收束：什么时候不该上 TS</text>
+  <text x="666" y="284" font-size="10.5" fill="#777">成本收益 · 项目规模 · 替代方案</text>
+</svg>

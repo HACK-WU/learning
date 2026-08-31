@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 320" width="980" height="320" font-family="'Microsoft YaHei','PingFang SC','Segoe UI',sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#78909c"/>
+    </marker>
+  </defs>
+  <rect width="980" height="320" fill="#fafafa"/>
+
+  <text x="490" y="32" text-anchor="middle" font-size="18" font-weight="bold" fill="#1a237e">阶段 2 · 函数与对象 · 学习路径</text>
+  <text x="490" y="54" text-anchor="middle" font-size="12.5" fill="#5f6368">本阶段回答：函数怎么调？对象怎么连？｜ 3 课 · 9 知识点 ｜ ⚠ 课 6 全程最难</text>
+
+  <rect x="30" y="80" width="290" height="190" rx="8" fill="#ffffff" stroke="#6A1B9A" stroke-width="1.5"/>
+  <path d="M 30 88 a 8 8 0 0 1 8 -8 h 274 a 8 8 0 0 1 8 8 v 26 h -290 z" fill="#6A1B9A"/>
+  <text x="48" y="104" font-size="14.5" font-weight="bold" fill="#ffffff">课 4 · 函数是一等公民</text>
+  <text x="302" y="104" text-anchor="end" font-size="11.5" fill="#f3e5f5">3 知识点</text>
+  <text x="48" y="132" font-size="12.5" font-weight="bold" fill="#6A1B9A">① 函数的四种定义方式</text>
+  <text x="60" y="150" font-size="11.5" fill="#555555">提升差异 / 箭头函数的三条限制</text>
+  <text x="48" y="178" font-size="12.5" font-weight="bold" fill="#6A1B9A">② 参数机制</text>
+  <text x="60" y="196" font-size="11.5" fill="#555555">默认参数 / 剩余参数 vs arguments</text>
+  <text x="48" y="224" font-size="12.5" font-weight="bold" fill="#6A1B9A">③ 高阶函数与回调</text>
+  <text x="60" y="242" font-size="11.5" fill="#555555">map·filter·reduce / 回调地狱 / 纯函数</text>
+
+  <line x1="324" y1="175" x2="342" y2="175" stroke="#78909c" stroke-width="2" marker-end="url(#ar)"/>
+
+  <rect x="345" y="80" width="290" height="190" rx="8" fill="#ffffff" stroke="#6A1B9A" stroke-width="1.5"/>
+  <path d="M 345 88 a 8 8 0 0 1 8 -8 h 274 a 8 8 0 0 1 8 8 v 26 h -290 z" fill="#6A1B9A"/>
+  <text x="363" y="104" font-size="14.5" font-weight="bold" fill="#ffffff">课 5 · this 到底指向谁</text>
+  <text x="617" y="104" text-anchor="end" font-size="11.5" fill="#f3e5f5">3 知识点</text>
+  <text x="363" y="132" font-size="12.5" font-weight="bold" fill="#6A1B9A">① this 的四种绑定规则</text>
+  <text x="375" y="150" font-size="11.5" fill="#555555">默认·隐式·显式·new 与优先级</text>
+  <text x="363" y="178" font-size="12.5" font-weight="bold" fill="#6A1B9A">② 箭头函数的 this</text>
+  <text x="375" y="196" font-size="11.5" fill="#555555">词法 this / 与四规则无关 / 常见误用</text>
+  <text x="363" y="224" font-size="12.5" font-weight="bold" fill="#6A1B9A">③ 手写 call·apply·bind</text>
+  <text x="375" y="242" font-size="11.5" fill="#555555">手写揭示机制 / new 的四步过程</text>
+
+  <line x1="639" y1="175" x2="657" y2="175" stroke="#78909c" stroke-width="2" marker-end="url(#ar)"/>
+
+  <rect x="660" y="80" width="290" height="190" rx="8" fill="#ffffff" stroke="#6A1B9A" stroke-width="1.5"/>
+  <path d="M 660 88 a 8 8 0 0 1 8 -8 h 274 a 8 8 0 0 1 8 8 v 26 h -290 z" fill="#6A1B9A"/>
+  <text x="678" y="104" font-size="14.5" font-weight="bold" fill="#ffffff">课 6 · 原型与类</text>
+  <text x="932" y="104" text-anchor="end" font-size="11.5" fill="#f3e5f5">3 知识点</text>
+  <text x="678" y="132" font-size="12.5" font-weight="bold" fill="#6A1B9A">① 原型与原型链</text>
+  <text x="690" y="150" font-size="11.5" fill="#555555">prototype·__proto__ / 属性查找兜底</text>
+  <text x="678" y="178" font-size="12.5" font-weight="bold" fill="#6A1B9A">② class 语法与本质</text>
+  <text x="690" y="196" font-size="11.5" fill="#555555">是语法糖的证据 / 静态·私有字段</text>
+  <text x="678" y="224" font-size="12.5" font-weight="bold" fill="#6A1B9A">③ 继承的五种写法与取舍</text>
+  <text x="690" y="242" font-size="11.5" fill="#555555">各自缺陷 / 组合优于继承</text>
+
+  <text x="490" y="298" text-anchor="middle" font-size="11.5" fill="#78909c">箭头 = 学习顺序（前置 → 后置）· 课 6 建议分两次学：先用 class 写代码，再拆开看原型</text>
+</svg>

@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="700" viewBox="0 0 900 700" font-family="-apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect width="900" height="700" fill="#fafafa"/>
+
+  <!-- 顶部说明 -->
+  <text x="40" y="24" font-size="13" fill="#666">箭头 = 前置依赖，阶段自上而下推进 ｜ 右侧 = 该阶段在故事主线中的「身份蜕变」</text>
+
+  <!-- ===== 阶段 1 ===== -->
+  <rect x="40" y="40" width="520" height="96" rx="10" fill="#e8f1fb" stroke="#1565c0" stroke-width="2"/>
+  <circle cx="80" cy="88" r="22" fill="#1565c0"/>
+  <text x="80" y="95" font-size="20" font-weight="bold" fill="#ffffff" text-anchor="middle">1</text>
+  <text x="115" y="78" font-size="20" font-weight="bold" fill="#0d47a1">类型思维启蒙</text>
+  <text x="115" y="104" font-size="13" fill="#555">课 1-3 · 9 知识点 ｜ 类型是什么、不是什么</text>
+  <text x="115" y="124" font-size="12" fill="#777">本质与擦除 · 基础标注与推导 · 结构化类型</text>
+  <line x1="560" y1="88" x2="598" y2="88" stroke="#1565c0" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <rect x="600" y="58" width="262" height="60" rx="8" fill="#fff8e1" stroke="#ef6c00" stroke-width="1.5"/>
+  <text x="614" y="80" font-size="13" font-weight="bold" fill="#6d3800">身份：注释</text>
+  <text x="614" y="102" font-size="12" fill="#8a4b00">类型第一次进代码，只为了让人看懂</text>
+
+  <line x1="300" y1="136" x2="300" y2="168" stroke="#1565c0" stroke-width="2.5"/>
+  <polygon points="300,176 294,164 306,164" fill="#1565c0"/>
+
+  <!-- ===== 阶段 2 ===== -->
+  <rect x="40" y="180" width="520" height="96" rx="10" fill="#e8f1fb" stroke="#1565c0" stroke-width="2"/>
+  <circle cx="80" cy="228" r="22" fill="#1565c0"/>
+  <text x="80" y="235" font-size="20" font-weight="bold" fill="#ffffff" text-anchor="middle">2</text>
+  <text x="115" y="218" font-size="20" font-weight="bold" fill="#0d47a1">收窄与控制流</text>
+  <text x="115" y="244" font-size="13" fill="#555">课 4-7 · 12 知识点 ｜ 全课程最重的一段</text>
+  <text x="115" y="264" font-size="12" fill="#777">联合与字面量 · 类型收窄 · 安全边界 · 类与接口</text>
+  <line x1="560" y1="228" x2="598" y2="228" stroke="#1565c0" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <rect x="600" y="198" width="262" height="60" rx="8" fill="#fff8e1" stroke="#ef6c00" stroke-width="1.5"/>
+  <text x="614" y="220" font-size="13" font-weight="bold" fill="#6d3800">身份：活约束</text>
+  <text x="614" y="242" font-size="12" fill="#8a4b00">写个 if，类型自己变窄——契约开始生效</text>
+
+  <line x1="300" y1="276" x2="300" y2="308" stroke="#1565c0" stroke-width="2.5"/>
+  <polygon points="300,316 294,304 306,304" fill="#1565c0"/>
+
+  <!-- ===== 阶段 3 ===== -->
+  <rect x="40" y="320" width="520" height="96" rx="10" fill="#e8f1fb" stroke="#1565c0" stroke-width="2"/>
+  <circle cx="80" cy="368" r="22" fill="#1565c0"/>
+  <text x="80" y="375" font-size="20" font-weight="bold" fill="#ffffff" text-anchor="middle">3</text>
+  <text x="115" y="358" font-size="20" font-weight="bold" fill="#0d47a1">泛型与类型编程</text>
+  <text x="115" y="384" font-size="13" fill="#555">课 8-9 · 7 知识点 ｜ 抽象度最高</text>
+  <text x="115" y="404" font-size="12" fill="#777">泛型与约束 · 映射类型 · 条件类型 · 工具类型手写</text>
+  <line x1="560" y1="368" x2="598" y2="368" stroke="#1565c0" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <rect x="600" y="338" width="262" height="60" rx="8" fill="#fff8e1" stroke="#ef6c00" stroke-width="1.5"/>
+  <text x="614" y="360" font-size="13" font-weight="bold" fill="#6d3800">身份：可编程</text>
+  <text x="614" y="382" font-size="12" fill="#8a4b00">类型能被计算、推导、组合，一份适配无数形状</text>
+
+  <line x1="300" y1="416" x2="300" y2="448" stroke="#1565c0" stroke-width="2.5"/>
+  <polygon points="300,456 294,444 306,444" fill="#1565c0"/>
+
+  <!-- ===== 阶段 4 ===== -->
+  <rect x="40" y="460" width="520" height="96" rx="10" fill="#e8f1fb" stroke="#1565c0" stroke-width="2"/>
+  <circle cx="80" cy="508" r="22" fill="#1565c0"/>
+  <text x="80" y="515" font-size="20" font-weight="bold" fill="#ffffff" text-anchor="middle">4</text>
+  <text x="115" y="498" font-size="20" font-weight="bold" fill="#0d47a1">工程化与类型声明</text>
+  <text x="115" y="524" font-size="13" fill="#555">课 10-12 · 10 知识点 ｜ 按 TypeScript 7 讲</text>
+  <text x="115" y="544" font-size="12" fill="#777">tsconfig 新默认 · 声明文件 · 工具链与 CI</text>
+  <line x1="560" y1="508" x2="598" y2="508" stroke="#1565c0" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <rect x="600" y="478" width="262" height="60" rx="8" fill="#fff8e1" stroke="#ef6c00" stroke-width="1.5"/>
+  <text x="614" y="500" font-size="13" font-weight="bold" fill="#6d3800">身份：团队契约</text>
+  <text x="614" y="522" font-size="12" fill="#8a4b00">契约走出单文件，在工程与 CI 里被强制执行</text>
+
+  <line x1="300" y1="556" x2="300" y2="588" stroke="#1565c0" stroke-width="2.5"/>
+  <polygon points="300,596 294,584 306,584" fill="#1565c0"/>
+
+  <!-- ===== 阶段 5 ===== -->
+  <rect x="40" y="600" width="520" height="96" rx="10" fill="#e8f1fb" stroke="#1565c0" stroke-width="2"/>
+  <circle cx="80" cy="648" r="22" fill="#1565c0"/>
+  <text x="80" y="655" font-size="20" font-weight="bold" fill="#ffffff" text-anchor="middle">5</text>
+  <text x="115" y="638" font-size="20" font-weight="bold" fill="#0d47a1">深入与架构</text>
+  <text x="115" y="664" font-size="13" fill="#555">课 13-15 · 11 知识点 ｜ 天花板与地板</text>
+  <text x="115" y="684" font-size="12" fill="#777">类型体操代价 · 编译器原理 · 架构与选型收束</text>
+  <line x1="560" y1="648" x2="598" y2="648" stroke="#1565c0" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <rect x="600" y="618" width="262" height="60" rx="8" fill="#fff8e1" stroke="#ef6c00" stroke-width="1.5"/>
+  <text x="614" y="640" font-size="13" font-weight="bold" fill="#6d3800">身份：被治理的对象</text>
+  <text x="614" y="662" font-size="12" fill="#8a4b00">知道它能挡住什么、代价是什么、何时该收手</text>
+</svg>

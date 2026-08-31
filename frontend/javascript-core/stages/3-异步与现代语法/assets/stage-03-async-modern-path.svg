@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 320" width="980" height="320" font-family="'Microsoft YaHei','PingFang SC','Segoe UI',sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#78909c"/>
+    </marker>
+  </defs>
+  <rect width="980" height="320" fill="#fafafa"/>
+
+  <text x="490" y="32" text-anchor="middle" font-size="18" font-weight="bold" fill="#1a237e">阶段 3 · 异步与现代语法 · 学习路径</text>
+  <text x="490" y="54" text-anchor="middle" font-size="12.5" fill="#5f6368">本阶段回答：JS 怎么处理「时间」？｜ 3 课 · 9 知识点</text>
+
+  <rect x="30" y="80" width="290" height="190" rx="8" fill="#ffffff" stroke="#EF6C00" stroke-width="1.5"/>
+  <path d="M 30 88 a 8 8 0 0 1 8 -8 h 274 a 8 8 0 0 1 8 8 v 26 h -290 z" fill="#EF6C00"/>
+  <text x="48" y="104" font-size="14.5" font-weight="bold" fill="#ffffff">课 7 · 事件循环</text>
+  <text x="302" y="104" text-anchor="end" font-size="11.5" fill="#fff3e0">3 知识点</text>
+  <text x="48" y="132" font-size="12.5" font-weight="bold" fill="#EF6C00">① 单线程与调用栈</text>
+  <text x="60" y="150" font-size="11.5" fill="#555555">为什么单线程 / 栈溢出 / 阻塞代价</text>
+  <text x="48" y="178" font-size="12.5" font-weight="bold" fill="#EF6C00">② 宏任务与微任务</text>
+  <text x="60" y="196" font-size="11.5" fill="#555555">两级队列 / 各归哪一类 / 清空时机</text>
+  <text x="48" y="224" font-size="12.5" font-weight="bold" fill="#EF6C00">③ 事件循环全流程</text>
+  <text x="60" y="242" font-size="11.5" fill="#555555">一次 tick 的顺序推演 / setTimeout 0</text>
+
+  <line x1="324" y1="175" x2="342" y2="175" stroke="#78909c" stroke-width="2" marker-end="url(#ar)"/>
+
+  <rect x="345" y="80" width="290" height="190" rx="8" fill="#ffffff" stroke="#EF6C00" stroke-width="1.5"/>
+  <path d="M 345 88 a 8 8 0 0 1 8 -8 h 274 a 8 8 0 0 1 8 8 v 26 h -290 z" fill="#EF6C00"/>
+  <text x="363" y="104" font-size="14.5" font-weight="bold" fill="#ffffff">课 8 · Promise 与 async/await</text>
+  <text x="617" y="104" text-anchor="end" font-size="11.5" fill="#fff3e0">3 知识点</text>
+  <text x="363" y="132" font-size="12.5" font-weight="bold" fill="#EF6C00">① Promise 状态机</text>
+  <text x="375" y="150" font-size="11.5" fill="#555555">三态不可逆 / 链式 / 值穿透与冒泡</text>
+  <text x="363" y="178" font-size="12.5" font-weight="bold" fill="#EF6C00">② 错误处理与组合方法</text>
+  <text x="375" y="196" font-size="11.5" fill="#555555">all·allSettled·race·any 语义差异</text>
+  <text x="363" y="224" font-size="12.5" font-weight="bold" fill="#EF6C00">③ async/await</text>
+  <text x="375" y="242" font-size="11.5" fill="#555555">语法糖本质 / 串行 vs 并发 / 顶层 await</text>
+
+  <line x1="639" y1="175" x2="657" y2="175" stroke="#78909c" stroke-width="2" marker-end="url(#ar)"/>
+
+  <rect x="660" y="80" width="290" height="190" rx="8" fill="#ffffff" stroke="#EF6C00" stroke-width="1.5"/>
+  <path d="M 660 88 a 8 8 0 0 1 8 -8 h 274 a 8 8 0 0 1 8 8 v 26 h -290 z" fill="#EF6C00"/>
+  <text x="678" y="104" font-size="14.5" font-weight="bold" fill="#ffffff">课 9 · 现代语法与内置数据结构</text>
+  <text x="932" y="104" text-anchor="end" font-size="11.5" fill="#fff3e0">3 知识点</text>
+  <text x="678" y="132" font-size="12.5" font-weight="bold" fill="#EF6C00">① 解构·展开·模板字符串</text>
+  <text x="690" y="150" font-size="11.5" fill="#555555">默认值与重命名 / 浅拷贝 / 标签模板</text>
+  <text x="678" y="178" font-size="12.5" font-weight="bold" fill="#EF6C00">② Map·Set·WeakMap·WeakSet</text>
+  <text x="690" y="196" font-size="11.5" fill="#555555">选型 / 弱引用 / 私有数据与缓存</text>
+  <text x="678" y="224" font-size="12.5" font-weight="bold" fill="#EF6C00">③ 迭代器·生成器·可选链</text>
+  <text x="690" y="242" font-size="11.5" fill="#555555">Symbol.iterator / yield / ?. 与 ??</text>
+
+  <text x="490" y="298" text-anchor="middle" font-size="11.5" fill="#78909c">箭头 = 学习顺序（前置 → 后置）· 课 7 只借 Promise.then 外壳举例，机制留到课 8 展开</text>
+</svg>

@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="360" viewBox="0 0 900 360" font-family="-apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect width="900" height="360" fill="#fafafa"/>
+  <text x="30" y="30" font-size="17" font-weight="bold" fill="#0d47a1">阶段 4：工程化与类型声明 · 课与知识点顺序</text>
+  <text x="30" y="52" font-size="12" fill="#666">配置核心 → 对外接口 → 团队流程；全部按 TypeScript 7.0 讲（照 5.x 老教程配置会撞墙）</text>
+
+  <!-- 课 10 -->
+  <rect x="30" y="72" width="270" height="248" rx="10" fill="#e8f1fb" stroke="#1565c0" stroke-width="2"/>
+  <rect x="30" y="72" width="270" height="34" rx="10" fill="#1565c0"/>
+  <rect x="30" y="94" width="270" height="12" fill="#1565c0"/>
+  <text x="44" y="95" font-size="14" font-weight="bold" fill="#ffffff">课 10 · tsconfig 与编译配置</text>
+  <circle cx="50" cy="138" r="4" fill="#c62828"/>
+  <text x="62" y="142" font-size="12" fill="#333">TS7 的新默认与硬错误</text>
+  <text x="62" y="158" font-size="10.5" fill="#777">strict 默认开 · rootDir / types 变了</text>
+  <circle cx="50" cy="180" r="4" fill="#1565c0"/>
+  <text x="62" y="184" font-size="12" fill="#333">目标与模块配置</text>
+  <text x="62" y="200" font-size="10.5" fill="#777">target · module · moduleResolution</text>
+  <circle cx="50" cy="222" r="4" fill="#1565c0"/>
+  <text x="62" y="226" font-size="12" fill="#333">严格性开关族与渐进收紧</text>
+  <text x="62" y="242" font-size="10.5" fill="#777">strict 子项 · noUncheckedIndexedAccess</text>
+  <circle cx="50" cy="264" r="4" fill="#1565c0"/>
+  <text x="62" y="268" font-size="12" fill="#333">构建性能与项目引用</text>
+  <text x="62" y="284" font-size="10.5" fill="#777">--build · --checkers · --builders</text>
+  <rect x="44" y="292" width="242" height="1" fill="#c5d9f0"/>
+  <text x="44" y="308" font-size="10.5" fill="#c62828">🔴 头号重点：7.0 默认值变了</text>
+
+  <line x1="304" y1="196" x2="320" y2="196" stroke="#1565c0" stroke-width="2.5"/>
+  <polygon points="328,196 316,190 316,202" fill="#1565c0"/>
+
+  <!-- 课 11 -->
+  <rect x="332" y="72" width="270" height="248" rx="10" fill="#e8f1fb" stroke="#1565c0" stroke-width="2"/>
+  <rect x="332" y="72" width="270" height="34" rx="10" fill="#1565c0"/>
+  <rect x="332" y="94" width="270" height="12" fill="#1565c0"/>
+  <text x="346" y="95" font-size="14" font-weight="bold" fill="#ffffff">课 11 · 模块与声明文件</text>
+  <circle cx="352" cy="138" r="4" fill="#1565c0"/>
+  <text x="364" y="142" font-size="12" fill="#333">模块解析与路径别名</text>
+  <text x="364" y="158" font-size="10.5" fill="#777">解析流程 · paths · baseUrl 已移除</text>
+  <circle cx="352" cy="180" r="4" fill="#1565c0"/>
+  <text x="364" y="184" font-size="12" fill="#333">声明文件 .d.ts 与 declare</text>
+  <text x="364" y="200" font-size="10.5" fill="#777">全局 / 模块声明 · 补类型 · 声明合并</text>
+  <circle cx="352" cy="222" r="4" fill="#1565c0"/>
+  <text x="364" y="226" font-size="12" fill="#333">@types 生态与 types·lib</text>
+  <text x="364" y="242" font-size="10.5" fill="#777">DefinitelyTyped · types 默认 [] · lib</text>
+  <rect x="346" y="262" width="242" height="1" fill="#c5d9f0"/>
+  <text x="346" y="280" font-size="10.5" fill="#0d47a1">💡 声明文件 = 类型的对外接口</text>
+
+  <line x1="606" y1="196" x2="622" y2="196" stroke="#1565c0" stroke-width="2.5"/>
+  <polygon points="630,196 618,190 618,202" fill="#1565c0"/>
+
+  <!-- 课 12 -->
+  <rect x="634" y="72" width="270" height="248" rx="10" fill="#e8f1fb" stroke="#1565c0" stroke-width="2"/>
+  <rect x="634" y="72" width="270" height="34" rx="10" fill="#1565c0"/>
+  <rect x="634" y="94" width="270" height="12" fill="#1565c0"/>
+  <text x="648" y="95" font-size="14" font-weight="bold" fill="#ffffff">课 12 · 工具链集成与团队协作</text>
+  <circle cx="654" cy="138" r="4" fill="#1565c0"/>
+  <text x="666" y="142" font-size="12" fill="#333">运行与构建工具分工</text>
+  <text x="666" y="158" font-size="10.5" fill="#777">tsc / tsx / esbuild / swc / Vite</text>
+  <circle cx="654" cy="180" r="4" fill="#1565c0"/>
+  <text x="666" y="184" font-size="12" fill="#333">ESLint 与 typescript-eslint</text>
+  <text x="666" y="200" font-size="10.5" fill="#777">TS7 无 API → typescript6 并存</text>
+  <circle cx="654" cy="222" r="4" fill="#1565c0"/>
+  <text x="666" y="226" font-size="12" fill="#333">类型检查进 CI 与团队规范</text>
+  <text x="666" y="242" font-size="10.5" fill="#777">--noEmit · pre-commit · 严格度约定</text>
+  <rect x="648" y="262" width="242" height="1" fill="#c5d9f0"/>
+  <text x="648" y="280" font-size="10.5" fill="#0d47a1">💡 检查别被构建工具悄悄跳过</text>
+</svg>

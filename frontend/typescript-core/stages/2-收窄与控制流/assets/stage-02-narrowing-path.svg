@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="560" viewBox="0 0 900 560" font-family="-apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect width="900" height="560" fill="#fafafa"/>
+  <text x="30" y="30" font-size="17" font-weight="bold" fill="#0d47a1">阶段 2：收窄与控制流 · 课与知识点顺序</text>
+  <text x="30" y="52" font-size="12" fill="#666">课 4 → 5 → 6 是强依赖链（没有联合就没有收窄，没有收窄就用不了 unknown）；课 7 相对独立</text>
+
+  <!-- 课 4 -->
+  <rect x="30" y="90" width="390" height="180" rx="10" fill="#e8f1fb" stroke="#1565c0" stroke-width="2"/>
+  <rect x="30" y="90" width="390" height="34" rx="10" fill="#1565c0"/>
+  <rect x="30" y="112" width="390" height="12" fill="#1565c0"/>
+  <text x="46" y="113" font-size="15" font-weight="bold" fill="#ffffff">课 4 · 联合类型与字面量类型</text>
+  <circle cx="52" cy="156" r="4" fill="#1565c0"/>
+  <text x="66" y="160" font-size="12.5" fill="#333">联合类型</text>
+  <text x="66" y="178" font-size="11" fill="#777">集合语义 · 属性访问规则 · 判别式联合 · 交叉类型</text>
+  <circle cx="52" cy="202" r="4" fill="#1565c0"/>
+  <text x="66" y="206" font-size="12.5" fill="#333">字面量类型与模板字面量类型</text>
+  <text x="66" y="224" font-size="11" fill="#777">字面量来源 · as const · 模板字面量 · TS7 码点变化</text>
+  <circle cx="52" cy="248" r="4" fill="#1565c0"/>
+  <text x="66" y="252" font-size="12.5" fill="#333">枚举与替代方案</text>
+  <text x="66" y="270" font-size="11" fill="#777">enum 运行时产物 · const enum · 取舍</text>
+
+  <line x1="424" y1="180" x2="476" y2="180" stroke="#1565c0" stroke-width="2.5"/>
+  <polygon points="484,180 472,174 472,186" fill="#1565c0"/>
+
+  <!-- 课 5 -->
+  <rect x="480" y="90" width="390" height="180" rx="10" fill="#e8f1fb" stroke="#1565c0" stroke-width="2"/>
+  <rect x="480" y="90" width="390" height="34" rx="10" fill="#1565c0"/>
+  <rect x="480" y="112" width="390" height="12" fill="#1565c0"/>
+  <text x="496" y="113" font-size="15" font-weight="bold" fill="#ffffff">课 5 · 类型收窄（本阶段核心 · 分水岭）</text>
+  <circle cx="502" cy="156" r="4" fill="#1565c0"/>
+  <text x="516" y="160" font-size="12.5" fill="#333">内置收窄手段</text>
+  <text x="516" y="178" font-size="11" fill="#777">typeof · 真值 · 相等 · instanceof · in</text>
+  <circle cx="502" cy="202" r="4" fill="#1565c0"/>
+  <text x="516" y="206" font-size="12.5" fill="#333">自定义类型守卫与断言函数</text>
+  <text x="516" y="224" font-size="11" fill="#777">x is T · asserts x is T · 守卫说谎的后果</text>
+  <circle cx="502" cy="248" r="4" fill="#1565c0"/>
+  <text x="516" y="252" font-size="12.5" fill="#333">控制流分析与穷尽性检查</text>
+  <text x="516" y="270" font-size="11" fill="#777">收窄传播 · never 兜底 · switch 穷尽 · 闭包重置</text>
+
+  <!-- 课 5 -> 课 6 折线 -->
+  <path d="M 675 274 L 675 300 L 225 300 L 225 336" fill="none" stroke="#1565c0" stroke-width="2.5"/>
+  <polygon points="225,344 219,332 231,332" fill="#1565c0"/>
+
+  <!-- 课 6 -->
+  <rect x="30" y="350" width="390" height="180" rx="10" fill="#e8f1fb" stroke="#1565c0" stroke-width="2"/>
+  <rect x="30" y="350" width="390" height="34" rx="10" fill="#1565c0"/>
+  <rect x="30" y="372" width="390" height="12" fill="#1565c0"/>
+  <text x="46" y="373" font-size="15" font-weight="bold" fill="#ffffff">课 6 · any·unknown·never 与信任边界</text>
+  <circle cx="52" cy="416" r="4" fill="#1565c0"/>
+  <text x="66" y="420" font-size="12.5" fill="#333">any：逃生舱与传染性</text>
+  <text x="66" y="438" font-size="11" fill="#777">关闭检查并扩散 · 合理临时用法 · lint 拦截</text>
+  <circle cx="52" cy="462" r="4" fill="#1565c0"/>
+  <text x="66" y="466" font-size="12.5" fill="#333">unknown：安全的顶层类型</text>
+  <text x="66" y="484" font-size="11" fill="#777">必须先收窄 · 对比 any · JSON.parse / catch</text>
+  <circle cx="52" cy="508" r="4" fill="#1565c0"/>
+  <text x="66" y="512" font-size="12.5" fill="#333">信任边界：类型从哪来</text>
+  <text x="66" y="530" font-size="11" fill="#777">断言不是校验 · 外部数据必须运行时校验</text>
+
+  <line x1="424" y1="440" x2="476" y2="440" stroke="#1565c0" stroke-width="2.5"/>
+  <polygon points="484,440 472,434 472,446" fill="#1565c0"/>
+
+  <!-- 课 7 -->
+  <rect x="480" y="350" width="390" height="180" rx="10" fill="#e8f1fb" stroke="#1565c0" stroke-width="2"/>
+  <rect x="480" y="350" width="390" height="34" rx="10" fill="#1565c0"/>
+  <rect x="480" y="372" width="390" height="12" fill="#1565c0"/>
+  <text x="496" y="373" font-size="15" font-weight="bold" fill="#ffffff">课 7 · 类与接口的类型世界</text>
+  <circle cx="502" cy="416" r="4" fill="#1565c0"/>
+  <text x="516" y="420" font-size="12.5" fill="#333">类的成员与修饰符</text>
+  <text x="516" y="438" font-size="11" fill="#777">public / private / protected · 参数属性 · #private</text>
+  <circle cx="502" cy="462" r="4" fill="#1565c0"/>
+  <text x="516" y="466" font-size="12.5" fill="#333">抽象类与 implements</text>
+  <text x="516" y="484" font-size="11" fill="#777">abstract · extends vs implements · 接口约束形状</text>
+  <circle cx="502" cy="508" r="4" fill="#1565c0"/>
+  <text x="516" y="512" font-size="12.5" fill="#333">类的结构化兼容与 this 类型</text>
+  <text x="516" y="530" font-size="11" fill="#777">结构化比较 · 私有成员破坏兼容 · 链式调用</text>
+</svg>
