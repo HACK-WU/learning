@@ -1,0 +1,120 @@
+# 预聚合规则 · demo 服务可观测性体系
+
+> **为什么要预聚合**：面板每 30 秒刷新一次，每次都把 P95 流水线完整重算一遍。
+> L12 实测：P95 流水线单步读 14,040 样本，6h@60s 面板单次 **5,068,440 样本**，5s 刷新 = 每分钟 6,000 万+ 样本。
+> **算一次存下来，大家读现成的**——这就是 recording rule。
+
+## 设计原则
+
+1. **只预聚合「重且稳定」的**：计算昂贵 + 被多处复用（≥2 处）的才做
+2. **命名规范**：`级别:名字:窗口`（冒号分段，业界惯例）
+3. **保留业务维度**：预聚合后仍要能按 `path` / `method` 切片，否则面板失去定位能力
+4. **不预聚合的东西**：Gauge 类（内存/磁盘，本身就读几十条序列）、`ALERTS`（个位数序列）
+
+> ⚠️ **环境说明**：演示环境**没有 recording rules**（实测 rules API 仅返回 1 组 5 条 alerting）。本文件为纸面交付物，需在自有 Prometheus 加载。
+
+---
+
+## 规则文件
+
+```yaml
+groups:
+  - name: demo-service-precompute
+    interval: 15s          # 与抓取间隔对齐；预聚合引入最多 15s 延迟
+    rules:
+
+      # ─────────────────────────────────────────
+      # 1. 请求速率（QPS）—— 被面板 1/2、告警、容量分析复用
+      # ─────────────────────────────────────────
+      - record: demo:api_requests:rate5m
+        expr: sum by (job, method, path, status) (rate(demo_api_request_duration_seconds_count{job="demo"}[5m]))
+        # 成本对比：单步 540 样本（27 序列 × 20 点）→ 读预聚合序列约 27 条
+        # 💡 保留 method/path/status 三个维度，下游可自由再聚合
+
+      # ─────────────────────────────────────────
+      # 2. 分路径错误率（%）—— 面板 3 + 告警共用，保证"面板与告警同源"
+      # ─────────────────────────────────────────
+      - record: demo:api_error_rate:ratio_rate5m
+        expr: |
+          sum by (method, path) (rate(demo_api_request_duration_seconds_count{job="demo",status=~"5.."}[5m]))
+            / sum by (method, path) (rate(demo_api_request_duration_seconds_count{job="demo"}[5m])) * 100
+        # 💡 关键价值：面板与告警读同一条序列 → 不会出现"面板显示 2.5% 但告警不响"的漂移
+        # 实测：POST /api/foo 2.56%  POST /api/bar 2.24%  GET /api/foo 0.74%  GET /api/bar 0.38%
+
+      # ─────────────────────────────────────────
+      # 3. 分路径 P95 延迟（秒）—— 全场最贵的一条，必须预聚合
+      # ─────────────────────────────────────────
+      - record: demo:api_latency_p95_seconds:histogram_quantile
+        expr: histogram_quantile(0.95, sum by (le, path) (rate(demo_api_request_duration_seconds_bucket{job="demo"}[5m])))
+        # 成本对比：单步 14,040 样本（702 序列 × 20 点）→ 读预聚合序列 3 条
+        # ⚠️ 降幅约 3 个数量级。实测：/api/bar 62.5ms  /api/foo 27.2ms  /api/nonexistent 0.1ms
+
+      # ─────────────────────────────────────────
+      # 4. 分路径 SLO 合规率（%）—— 项目核心指标，面板 5 + 告警共用
+      # ─────────────────────────────────────────
+      - record: demo:api_latency_slo_compliance:ratio_rate5m
+        expr: |
+          sum by (path) (rate(demo_api_request_duration_seconds_bucket{job="demo",le="0.09852612533569335"}[5m]))
+            / sum by (path) (rate(demo_api_request_duration_seconds_count{job="demo"}[5m])) * 100
+        # 实测：/api/foo 100%  /api/nonexistent 100%  /api/bar 97.66%（唯一不达标）
+
+      # ─────────────────────────────────────────
+      # 5. CPU 使用率（%）—— group_left 广播，每次重算都要做向量匹配
+      # ─────────────────────────────────────────
+      - record: demo:cpu_usage:ratio_rate5m
+        expr: |
+          sum by (instance) (rate(demo_cpu_usage_seconds_total{mode!="idle"}[5m]))
+            / on (instance) group_left demo_num_cpus * 100
+        # 实测：约 49.4%~50.0%（3 实例）
+        # 💡 预聚合后，下游客服不再需要理解 group_left 为什么这么写
+```
+
+---
+
+## 📊 预聚合前后成本对比
+
+| 查询 | 预聚合前（单步样本） | 预聚合后 | 降幅 |
+|------|------------------|---------|------|
+| P95 延迟 | 14,040 | ~3 条序列 | **~3 个数量级** |
+| SLO 合规率 | ~1,080 | ~3 条序列 | ~2 个数量级 |
+| 错误率 | ~1,080 | ~4 条序列 | ~2 个数量级 |
+| QPS | 540 | ~27 条序列 | ~1 个数量级 |
+| CPU 使用率 | ~30 + 向量匹配 | 3 条序列 | 小（但省掉匹配开销） |
+
+> 📌 单步看着都不多，但**乘以 361 个评估步、再乘以每分钟 2 次刷新**，差距就是每分钟几百万到几千万样本。
+
+---
+
+## ⚠️ 预聚合的三个代价（必须知道）
+
+1. **数据延迟**：预聚合结果最多滞后一个 `interval`（本项目 15s）。对秒级熔断类告警不适用——那条要改回直算。
+2. **查询与规则可能漂移**：改了 expr 忘了改规则（或反之），面板与告警会给出不同数字。**本项目用「面板与告警读同一条预聚合序列」来根治这个问题**（见规则 2 与 4 的设计意图）。
+3. **存储开销**：每条预聚合序列都要按 15s 存一份。规则 1 保留 method×path×status 三个维度 → 27 条新序列，规模随维度组合增长。**保留维度要克制**。
+
+---
+
+## 🔍 如何在自己的环境验证
+
+```bash
+# 1. 加载规则（prometheus.yml 的 rule_files 配置后）
+# 2. 检查规则是否被 Prometheus 接受
+curl -s http://localhost:9090/api/v1/rules | jq '.data.groups[] | select(.name=="demo-service-precompute")'
+
+# 3. 确认预聚合序列已产生
+curl -s 'http://localhost:9090/api/v1/query?query=demo:api_latency_p95_seconds:histogram_quantile'
+
+# 4. 用 stats 看成本降幅（L12 教的测量工具）
+curl -s 'http://localhost:9090/api/v1/query?stats=all' \
+  --data-urlencode 'query=demo:api_latency_p95_seconds:histogram_quantile' \
+  | jq '.data.stats.samples.totalQueryableSamples'
+```
+
+> 💡 第 4 步是关键：用 `?stats=all` 拿到 `totalQueryableSamples`，与预聚合前的 14,040 对比——**优化效果要量出来，不能靠感觉**。
+
+---
+
+## 📚 知识点回指
+
+- **recording rule 语法**：与告警规则同构（`groups → rules`），`record` 替代 `alert`，无 `for`/`labels`/`annotations` — [L12](../stages/4-实战应用/lessons/lesson-12-实战二-Grafana面板套路与查询优化.md)
+- **成本第一定律**：账单按读取样本数算，不按输出行数算 — [L12](../stages/4-实战应用/lessons/lesson-12-实战二-Grafana面板套路与查询优化.md)
+- **`ALERTS` 是内置合成序列的活例**：告警状态本身就是被预聚合出来的指标 — [L11](../stages/4-实战应用/lessons/lesson-11-实战一-从查询到告警规则.md)

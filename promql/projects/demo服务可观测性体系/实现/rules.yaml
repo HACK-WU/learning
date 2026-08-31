@@ -1,0 +1,183 @@
+# 告警规则 · demo 服务可观测性体系
+
+> **设计原则**：分级（critical/warning）+ 分路径粒度 + 每条都带 `for` 与降噪理由。
+> 全部 expr 已在演练场实测（当前环境健康，故所有规则**均不触发**——这是正确形态）。
+> 演练场无法加载自定义规则，本文件与预置的 5 条生产规则对照学习。
+
+## 规则组：demo-service-slo
+
+```yaml
+groups:
+  - name: demo-service-slo
+    interval: 15s
+    rules:
+
+      # ─────────────────────────────────────────────
+      # 第一层：服务没了（三种死法三条防线）
+      # ─────────────────────────────────────────────
+
+      - alert: DemoServiceInstanceDown
+        expr: up{job="demo"} == 0
+        for: 1m
+        labels:
+          severity: warning
+          layer: availability
+        annotations:
+          summary: "demo 实例 {{ $labels.instance }} 失联"
+          description: "该实例已连续 1 分钟抓取失败，剩余 {{ $value | printf \"%.0f\" }} 状态未知"
+        # 降噪理由：单实例挂掉未必影响业务（还有 2 个实例），故 warning + for:1m
+
+      - alert: DemoServiceAllInstancesDown
+        expr: sum without (instance) (up{job="demo"}) == 0
+        for: 30s
+        labels:
+          severity: critical
+          layer: availability
+        annotations:
+          summary: "demo 服务全部实例失联"
+          description: "所有实例抓取失败，服务完全不可用"
+        # 降噪理由：全挂是最高紧急度，for 缩短到 30s（实测 sum without(instance) = 3，全挂时为 0）
+
+      - alert: DemoServiceAbsent
+        expr: absent(up{job="demo"})
+        for: 1m
+        labels:
+          severity: critical
+          layer: availability
+        annotations:
+          summary: "demo 服务指标消失"
+          description: "连 up 序列都没有了 —— 可能是抓取配置被删或服务整体下线"
+        # 💡 压轴防线：服务彻底消失时，前两条都会因为"序列不存在"而集体哑火（L11 悖论）
+        #    实测 absent(up{job="demo"}) 当前返回 0 行（序列存在）—— 正确形态
+
+      # ─────────────────────────────────────────────
+      # 第二层：错误率（分路径粒度）
+      # ─────────────────────────────────────────────
+
+      - alert: DemoServiceHighErrorRate
+        expr: |
+          sum by (method, path) (rate(demo_api_request_duration_seconds_count{job="demo",status=~"5.."}[5m]))
+            / sum by (method, path) (rate(demo_api_request_duration_seconds_count{job="demo"}[5m])) * 100 > 5
+        for: 5m
+        labels:
+          severity: critical
+          layer: errors
+        annotations:
+          summary: "{{ $labels.method }} {{ $labels.path }} 错误率 {{ $value | printf \"%.2f\" }}%"
+          description: "5 分钟窗口内错误率持续超过 5%（SLO 阈值 1%）"
+        # 降噪理由 1：分路径粒度 —— 实测全站 0.83% 会把 POST 的 2.56% 稀释掉
+        # 降噪理由 2：阈值 5% 远高于当前水位（最高 2.56%），留 2 倍安全边际（L11）
+        # 降噪理由 3：for:5m —— 部署抖动、依赖瞬时超时都能被吸收
+        # 对照演练场预置规则：阈值 0.5%、窗口 [1m]、for:1m —— 那是"教学演示环境"，故意敏感
+
+      - alert: DemoServiceElevatedErrorRate
+        expr: |
+          sum by (method, path) (rate(demo_api_request_duration_seconds_count{job="demo",status=~"5.."}[5m]))
+            / sum by (method, path) (rate(demo_api_request_duration_seconds_count{job="demo"}[5m])) * 100 > 1
+        for: 15m
+        labels:
+          severity: warning
+          layer: errors
+        annotations:
+          summary: "{{ $labels.method }} {{ $labels.path }} 错误率偏高 {{ $value | printf \"%.2f\" }}%"
+          description: "错误率持续 15 分钟超过 SLO 阈值 1%，尚未到 critical"
+        # 降噪理由：warning 级用更长 for（15m）换取更稳的信号 —— 慢但准，白天处理即可
+
+      # ─────────────────────────────────────────────
+      # 第三层：延迟 SLO（桶占比口径，可聚合）
+      # ─────────────────────────────────────────────
+
+      - alert: DemoServiceLatencySLOBreach
+        expr: |
+          100 - sum by (path) (rate(demo_api_request_duration_seconds_bucket{job="demo",le="0.09852612533569335"}[5m]))
+            / sum by (path) (rate(demo_api_request_duration_seconds_count{job="demo"}[5m])) * 100 > 5
+        for: 10m
+        labels:
+          severity: critical
+          layer: latency
+        annotations:
+          summary: "{{ $labels.path }} 延迟 SLO 违规率 {{ $value | printf \"%.2f\" }}%"
+          description: "超过 5% 的请求慢于约 100ms（SLO 目标 99% 合规）"
+        # 💡 用桶占比而非 P95：① 可加可聚合 ② 桶边界无精确 0.1，P95 口径会失真
+        #    实测：全站违规 0.88%，分路径 /api/bar = 2.34% 违规（97.66% 合规）
+        #    阈值 5% vs 当前最高 2.34% → 约 2 倍安全边际
+
+      - alert: DemoServiceHighP99Latency
+        expr: |
+          histogram_quantile(0.99, sum by (le, path) (rate(demo_api_request_duration_seconds_bucket{job="demo"}[5m]))) > 0.2
+        for: 5m
+        labels:
+          severity: warning
+          layer: latency
+        annotations:
+          summary: "{{ $labels.path }} P99 延迟 {{ $value | humanizeDuration }}"
+          description: "P99 持续超过 200ms"
+        # 对照演练场预置规则：DemoServiceHighLatency 正是 P99 > 0.2 / for:1m（实测曾 firing）
+        # 差异：本规则加 by (path) 定位到路径，for 放宽到 5m
+
+      # ─────────────────────────────────────────────
+      # 第四层：容量与健康度（预警类）
+      # ─────────────────────────────────────────────
+
+      - alert: DemoServiceDiskFillingUp
+        expr: |
+          sum by (instance) (demo_disk_usage_bytes) / on (instance) group_left sum by (instance) (demo_disk_total_bytes) * 100 > 85
+        for: 30m
+        labels:
+          severity: warning
+          layer: capacity
+        annotations:
+          summary: "{{ $labels.instance }} 磁盘水位 {{ $value | printf \"%.1f\" }}%"
+          description: "磁盘使用率超过 85%，持续 30 分钟"
+        # 实测当前 82.0%~82.1% —— 距离阈值 3 个点，是"预警而非告警"的典型
+
+      - alert: DemoServiceCardinalityExplosion
+        expr: count(demo_api_request_duration_seconds_count{job="demo"}) > 50
+        for: 10m
+        labels:
+          severity: critical
+          layer: meta
+        annotations:
+          summary: "demo 请求指标序列数达 {{ $value }}"
+          description: "远超基线 27 —— 极可能是某个标签塞进了高基数字段（如 user_id）"
+        # 💡 元告警：监控系统的自我保护。实测当前 27（安全），返回 0 行
+        #    L2 埋过的炸弹：「历史上多次 Prometheus OOM 事故的根因就是某个标签基数失控」
+
+      - alert: DemoServiceNoTraffic
+        expr: sum(rate(demo_api_request_duration_seconds_count{job="demo"}[5m])) < 1
+        for: 10m
+        labels:
+          severity: warning
+          layer: traffic
+        annotations:
+          summary: "demo 服务几乎没有流量（{{ $value | printf \"%.2f\" }} QPS）"
+          description: "流量跌到近乎为零，可能是上游摘流或入口故障"
+        # 实测当前约 130 QPS，返回 0 行 —— 正确形态
+        # 💡 与 QPS 突增告警配套：流量异常两个方向都要看
+```
+
+---
+
+## 📋 规则设计自检表
+
+| 检查项 | 本项目做法 |
+|--------|-----------|
+| 每条都带 `for`？ | ✅ 最短 30s（全挂），最长 30m（磁盘） |
+| 每条都带 `severity`？ | ✅ critical 5 条 / warning 5 条 |
+| 阈值有安全边际？ | ✅ 错误率 5% vs 水位 2.56%（约 2 倍）；SLO 5% vs 水位 2.34% |
+| 分路径粒度？ | ✅ 错误率与延迟均 `by (path)` 或 `by (method, path)` |
+| 有「服务消失」的防线？ | ✅ `absent()` 兜底（L11 压轴悖论） |
+| 有元告警（监控自身）？ | ✅ 基数爆炸检测 |
+| annotations 模板化？ | ✅ 全部用 `{{ $labels.x }}` 与 `{{ $value }}` |
+
+## 🆚 与演练场预置规则的对照
+
+| 维度 | 演练场预置（5 条） | 本项目（10 条） |
+|------|------------------|----------------|
+| 错误率阈值 | 0.5%（教学演示，故意敏感） | critical 5% / warning 1%（生产思路） |
+| 错误率窗口 | `[1m]`（4 个样本点，毛刺多） | `[5m]`（20 个点，平滑） |
+| 延迟口径 | P99 > 0.2 | P99 > 0.2 **+ 桶占比 SLO 违规率** |
+| 粒度 | `sum without (status, instance)` 保留 method/path | 同，另加路径级 SLO |
+| 覆盖层 | 可用性 + 错误 + 延迟 | + 容量 + 基数 + 流量（3 层扩展为 4 层） |
+
+> 💡 演练场预置规则是**优秀的教学范本**（实测 5 条全为生产级结构），阈值刻意敏感是为了让你能看到告警 firing。本项目在其基础上补了生产环境真正需要的：安全边际、容量预警、元告警。
