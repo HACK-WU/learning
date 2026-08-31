@@ -1,0 +1,133 @@
+# ============================================================
+# 学习仓库忽略规则
+# 保留：.md/.svg/.py/.sh/.json/.hcl/.tpl/.yaml 等学习资料
+# 忽略：构建产物、运行日志、中间件发行版与运行时数据
+# ============================================================
+
+# ---------- 系统与编辑器 ----------
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+desktop.ini
+*~
+*.swp
+*.swo
+
+# ---------- IDE / 工具数据 ----------
+.vscode/
+.idea/
+*.iml
+*.iws
+*.ipr
+.workbuddy/
+.codebuddy/
+
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+sdist/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.venv/
+venv/
+env/
+ENV/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+.hypothesis/
+
+# Celery / Django 运行时
+celerybeat-schedule
+celerybeat-schedule.*
+celerybeat.pid
+*.sqlite3
+db.sqlite3
+media/
+staticfiles/
+
+# ---------- Node（图表 / 文档工具） ----------
+node_modules/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ---------- 运行日志与临时文件 ----------
+*.log
+*.out
+*.err
+*.pid
+*.tmp
+*.temp
+*.bak
+*.orig
+nohup.out
+
+# ---------- 二进制与安装包 ----------
+*.exe
+*.msi
+*.dll
+*.dylib
+*.so
+*.class
+*.jar
+*.war
+*.jmod
+*.tar.gz
+*.tgz
+hs_err_pid*.log
+replay_pid*.log
+
+# ---------- 证书与密钥（本地自签测试材料） ----------
+*.pem
+*.key
+*.crt
+*.csr
+*.p12
+*.jks
+*.keystore
+
+# ---------- 中间件发行版解压目录 ----------
+# 注意：统一以 [0-9] 版本号约束，避免误伤 kafka-basics 之类的学习目录
+elasticsearch-[0-9]*/
+elasticsearch-*.zip
+kafka_[0-9]*/
+kafka-[0-9]*/
+apache-kafka-[0-9]*/
+apache-zookeeper-[0-9]*/
+zookeeper-[0-9]*/
+influxdb-[0-9]*/
+redis-[0-9]*/
+rabbitmq_server-[0-9]*/
+
+# ---------- 中间件运行时数据 ----------
+**/cluster/data/
+**/cluster/logs/
+**/playground/**/data/
+**/playground/**/logs/
+*.snapshot
+raft.db
+peers.info
+node-id
+
+# ---------- 下载的第三方工具 ----------
+/consul/playground/tools/
