@@ -1,0 +1,4 @@
+[配置] 已从 Consul 加载：{'feature_flag': 'on', 'greeting': 'Hot-reloaded value!', 'leader': None}
+[注册] demo-svc-1 已注册到 Consul（端口 18081，TTL 15s）
+[服务] 监听 http://127.0.0.1:18081/  （Ctrl+C 退出）
+[配置] 检测到变更并热更新：{'feature_flag': 'on', 'greeting': 'Hot-reloaded OK!', 'leader': None}
