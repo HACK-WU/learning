@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 350" width="920" height="350" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#57606a"/>
+    </marker>
+  </defs>
+
+  <rect width="920" height="350" fill="#ffffff"/>
+
+  <text x="460" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#111827">阶段 4 · 存储引擎与性能</text>
+  <text x="460" y="54" text-anchor="middle" font-size="12.5" fill="#57606a">3 课 / 9 知识点 · 章节定位：探原理 —— 为什么快、慢在哪、边界在哪</text>
+
+  <rect x="24" y="68" width="872" height="38" rx="8" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="40" y="86" font-size="12" font-weight="700" fill="#7f1d1d">🎬 本章节的故事转折</text>
+  <text x="40" y="102" font-size="11.5" fill="#1f2937">从"能用对"到"知道边界"　│　⚡ 本阶段的 L11 回扣开课时的概念澄清：「向量化执行」≠ 向量数据库</text>
+
+  <!-- L10 -->
+  <rect x="24" y="122" width="288" height="164" rx="10" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+  <text x="40" y="147" font-size="13.5" font-weight="700" fill="#7f1d1d">L10 · 存储引擎：WAL、Parquet 与压实</text>
+  <rect x="40" y="158" width="256" height="44" rx="6" fill="#ffffff" stroke="#fca5a5"/>
+  <text x="52" y="175" font-size="11" font-weight="700" fill="#b91c1c">① 写入路径：WAL 与内存缓冲</text>
+  <text x="52" y="191" font-size="10" fill="#1f2937">先落 WAL 保命，再攒批刷 Parquet</text>
+  <rect x="40" y="208" width="256" height="44" rx="6" fill="#ffffff" stroke="#fca5a5"/>
+  <text x="52" y="225" font-size="11" font-weight="700" fill="#b91c1c">② Parquet 持久化与压实</text>
+  <text x="52" y="241" font-size="10" fill="#1f2937">compactor 的作用（Core 为何没有）</text>
+  <rect x="40" y="258" width="256" height="20" rx="5" fill="#ffffff" stroke="#fca5a5"/>
+  <text x="52" y="272" font-size="10" fill="#57606a">③ 对象存储与无盘架构</text>
+
+  <!-- L11 -->
+  <rect x="326" y="122" width="288" height="164" rx="10" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+  <text x="342" y="147" font-size="13.5" font-weight="700" fill="#7f1d1d">L11 · 向量化执行：列存为什么快</text>
+  <rect x="342" y="158" width="256" height="44" rx="6" fill="#ffffff" stroke="#fca5a5"/>
+  <text x="354" y="175" font-size="11" font-weight="700" fill="#b91c1c">① 列存与向量化执行</text>
+  <text x="354" y="191" font-size="10" fill="#1f2937">SIMD 批处理 vs 逐行处理</text>
+  <rect x="342" y="208" width="256" height="44" rx="6" fill="#ffffff" stroke="#fca5a5"/>
+  <text x="354" y="225" font-size="11" font-weight="700" fill="#b91c1c">② 谓词下推与分区裁剪</text>
+  <text x="354" y="241" font-size="10" fill="#1f2937">少读数据 = 快</text>
+  <rect x="342" y="258" width="256" height="20" rx="5" fill="#ffffff" stroke="#fca5a5"/>
+  <text x="354" y="272" font-size="10" fill="#57606a">③ last-value 查询为何 &lt;10ms</text>
+
+  <!-- L12 -->
+  <rect x="628" y="122" width="268" height="164" rx="10" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+  <text x="644" y="147" font-size="13.5" font-weight="700" fill="#7f1d1d">L12 · 写入与查询性能调优</text>
+  <rect x="644" y="158" width="236" height="44" rx="6" fill="#ffffff" stroke="#fca5a5"/>
+  <text x="656" y="175" font-size="11" font-weight="700" fill="#b91c1c">① 批量写入与压缩</text>
+  <text x="656" y="191" font-size="10" fill="#1f2937">批次大小与 flush 间隔的权衡</text>
+  <rect x="644" y="208" width="236" height="44" rx="6" fill="#ffffff" stroke="#fca5a5"/>
+  <text x="656" y="225" font-size="11" font-weight="700" fill="#b91c1c">② 查询性能调优</text>
+  <text x="656" y="241" font-size="10" fill="#1f2937">时间范围收窄、避免 SELECT *</text>
+  <rect x="644" y="258" width="236" height="20" rx="5" fill="#ffffff" stroke="#fca5a5"/>
+  <text x="656" y="272" font-size="10" fill="#57606a">③ 慢查询诊断</text>
+
+  <line x1="316" y1="204" x2="324" y2="204" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="618" y1="204" x2="626" y2="204" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="24" y="300" width="872" height="34" rx="8" fill="#f6f8fa" stroke="#d0d7de"/>
+  <text x="40" y="322" font-size="11.5" fill="#1f2937">➡️ 本阶段出口能力：能解释"为什么这个查询慢"并给出调优动作　│　下一阶段：阶段 5《生产落地》</text>
+</svg>

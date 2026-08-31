@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 350" width="920" height="350" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#57606a"/>
+    </marker>
+  </defs>
+
+  <rect width="920" height="350" fill="#ffffff"/>
+
+  <text x="460" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#111827">阶段 3 · 数据模型与查询</text>
+  <text x="460" y="54" text-anchor="middle" font-size="12.5" fill="#57606a">4 课 / 12 知识点 · 章节定位：学会设计 —— schema 与 SQL 写对</text>
+
+  <rect x="24" y="68" width="872" height="38" rx="8" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+  <text x="40" y="86" font-size="12" font-weight="700" fill="#78350f">🎬 本章节的故事转折</text>
+  <text x="40" y="102" font-size="11.5" fill="#1f2937">从"能操作"到"能用对"　│　状态变化：能操作它 → 能设计出合理的 schema 并写出正确的查询</text>
+
+  <!-- L6 -->
+  <rect x="24" y="122" width="212" height="164" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="40" y="147" font-size="13" font-weight="700" fill="#78350f">L6 · 数据模型四要素</text>
+  <rect x="40" y="158" width="180" height="44" rx="6" fill="#ffffff" stroke="#fcd34d"/>
+  <text x="52" y="175" font-size="10.5" font-weight="700" fill="#b45309">① table/tag/field/ts</text>
+  <text x="52" y="191" font-size="9.5" fill="#1f2937">measurement 已改称 table</text>
+  <rect x="40" y="208" width="180" height="44" rx="6" fill="#ffffff" stroke="#fcd34d"/>
+  <text x="52" y="225" font-size="10.5" font-weight="700" fill="#b45309">② schema-on-write</text>
+  <text x="52" y="241" font-size="9.5" fill="#1f2937">自动建表 + 后续校验</text>
+  <rect x="40" y="258" width="180" height="20" rx="5" fill="#ffffff" stroke="#fcd34d"/>
+  <text x="52" y="272" font-size="9.5" fill="#57606a">③ 命名限制与转义</text>
+
+  <!-- L7 -->
+  <rect x="248" y="122" width="212" height="164" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="264" y="147" font-size="13" font-weight="700" fill="#78350f">L7 · Schema 与基数</text>
+  <rect x="264" y="158" width="180" height="44" rx="6" fill="#ffffff" stroke="#fcd34d"/>
+  <text x="276" y="175" font-size="10.5" font-weight="700" fill="#b45309">① 基数（cardinality）</text>
+  <text x="276" y="191" font-size="9.5" fill="#1f2937">series 数量 = 各 tag 取值乘积</text>
+  <rect x="264" y="208" width="180" height="44" rx="6" fill="#ffffff" stroke="#fcd34d"/>
+  <text x="276" y="225" font-size="10.5" font-weight="700" fill="#b45309">② tag vs field 抉择</text>
+  <text x="276" y="241" font-size="9.5" fill="#1f2937">过滤分组用 tag，计算用 field</text>
+  <rect x="264" y="258" width="180" height="20" rx="5" fill="#ffffff" stroke="#fcd34d"/>
+  <text x="276" y="272" font-size="9.5" fill="#57606a">③ 四大设计反模式</text>
+
+  <!-- L8 -->
+  <rect x="472" y="122" width="212" height="164" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="488" y="147" font-size="13" font-weight="700" fill="#78350f">L8 · SQL 查询</text>
+  <rect x="488" y="158" width="180" height="44" rx="6" fill="#ffffff" stroke="#fcd34d"/>
+  <text x="500" y="175" font-size="10.5" font-weight="700" fill="#b45309">① DataFusion SQL 基础</text>
+  <text x="500" y="191" font-size="9.5" fill="#1f2937">标准 SQL + 时序扩展函数</text>
+  <rect x="488" y="208" width="180" height="44" rx="6" fill="#ffffff" stroke="#fcd34d"/>
+  <text x="500" y="225" font-size="10.5" font-weight="700" fill="#b45309">② DATE_BIN 时间分组</text>
+  <text x="500" y="241" font-size="9.5" fill="#1f2937">时序查询的核心函数</text>
+  <rect x="488" y="258" width="180" height="20" rx="5" fill="#ffffff" stroke="#fcd34d"/>
+  <text x="500" y="272" font-size="9.5" fill="#57606a">③ 聚合 / 窗口 / CTE</text>
+
+  <!-- L9 -->
+  <rect x="696" y="122" width="200" height="164" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="712" y="147" font-size="13" font-weight="700" fill="#78350f">L9 · InfluxQL 与 Flux</text>
+  <rect x="712" y="158" width="168" height="44" rx="6" fill="#ffffff" stroke="#fcd34d"/>
+  <text x="724" y="175" font-size="10.5" font-weight="700" fill="#b45309">① InfluxQL 兼容层</text>
+  <text x="724" y="191" font-size="9.5" fill="#1f2937">老代码还能跑</text>
+  <rect x="712" y="208" width="168" height="44" rx="6" fill="#ffffff" stroke="#fcd34d"/>
+  <text x="724" y="225" font-size="10.5" font-weight="700" fill="#b45309">② Flux 为何被弃</text>
+  <text x="724" y="241" font-size="9.5" fill="#1f2937">学习曲线 + 高基数未解</text>
+  <rect x="712" y="258" width="168" height="20" rx="5" fill="#ffffff" stroke="#fcd34d"/>
+  <text x="724" y="272" font-size="9.5" fill="#57606a">③ SQL 迁移对照表</text>
+
+  <line x1="238" y1="204" x2="246" y2="204" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="462" y1="204" x2="470" y2="204" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="686" y1="204" x2="694" y2="204" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="24" y="300" width="872" height="34" rx="8" fill="#f6f8fa" stroke="#d0d7de"/>
+  <text x="40" y="322" font-size="11.5" fill="#1f2937">➡️ 本阶段出口能力：能设计出基数可控的 schema，并用 SQL 写出时间分组聚合查询　│　下一阶段：阶段 4《存储引擎与性能》</text>
+</svg>

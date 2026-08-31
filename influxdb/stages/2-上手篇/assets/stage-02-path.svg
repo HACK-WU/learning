@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 350" width="920" height="350" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#57606a"/>
+    </marker>
+  </defs>
+
+  <rect width="920" height="350" fill="#ffffff"/>
+
+  <text x="460" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#111827">阶段 2 · 上手篇</text>
+  <text x="460" y="54" text-anchor="middle" font-size="12.5" fill="#57606a">3 课 / 9 知识点 · 章节定位：装起来 —— 亲手跑通写入与查询</text>
+
+  <rect x="24" y="68" width="872" height="38" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="40" y="86" font-size="12" font-weight="700" fill="#14532d">🎬 本章节的故事转折</text>
+  <text x="40" y="102" font-size="11.5" fill="#1f2937">从"听说过"到"能操作"　│　状态变化：知道为什么需要它 → 能亲手把它跑起来</text>
+
+  <!-- L3 -->
+  <rect x="24" y="122" width="288" height="164" rx="10" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="40" y="147" font-size="13.5" font-weight="700" fill="#14532d">L3 · 环境搭建与第一次写入</text>
+  <text x="252" y="147" font-size="11" font-weight="700" fill="#15803d">✅ 已交付</text>
+  <rect x="40" y="158" width="256" height="44" rx="6" fill="#ffffff" stroke="#86efac"/>
+  <text x="52" y="175" font-size="11" font-weight="700" fill="#15803d">① 安装方式与启动参数</text>
+  <text x="52" y="191" font-size="10" fill="#1f2937">Docker / 原生 / 关键启动参数</text>
+  <rect x="40" y="208" width="256" height="44" rx="6" fill="#ffffff" stroke="#86efac"/>
+  <text x="52" y="225" font-size="11" font-weight="700" fill="#15803d">② 第一次写入与查询</text>
+  <text x="52" y="241" font-size="10" fill="#1f2937">line protocol 写入 → SQL 查回</text>
+  <rect x="40" y="258" width="256" height="20" rx="5" fill="#ffffff" stroke="#86efac"/>
+  <text x="52" y="272" font-size="10" fill="#57606a">③ 目录结构与配置文件</text>
+
+  <!-- L4 -->
+  <rect x="326" y="122" width="288" height="164" rx="10" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="342" y="147" font-size="13.5" font-weight="700" fill="#14532d">L4 · Line Protocol 与写入基本功</text>
+  <text x="554" y="147" font-size="11" font-weight="700" fill="#15803d">✅ 已交付</text>
+  <rect x="342" y="158" width="256" height="44" rx="6" fill="#ffffff" stroke="#86efac"/>
+  <text x="354" y="175" font-size="11" font-weight="700" fill="#15803d">① Line Protocol 语法全解</text>
+  <text x="354" y="191" font-size="10" fill="#1f2937">四要素 · 两个空格的分隔语义</text>
+  <rect x="342" y="208" width="256" height="44" rx="6" fill="#ffffff" stroke="#86efac"/>
+  <text x="354" y="225" font-size="11" font-weight="700" fill="#15803d">② 数据类型与精度陷阱</text>
+  <text x="354" y="241" font-size="10" fill="#1f2937">1 是 float、1i 是 integer</text>
+  <rect x="342" y="258" width="256" height="20" rx="5" fill="#ffffff" stroke="#86efac"/>
+  <text x="354" y="272" font-size="10" fill="#57606a">③ HTTP API 与批量写入</text>
+
+  <!-- L5 -->
+  <rect x="628" y="122" width="268" height="164" rx="10" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="644" y="147" font-size="13.5" font-weight="700" fill="#14532d">L5 · Python 客户端与 CLI 工具</text>
+  <rect x="644" y="158" width="236" height="44" rx="6" fill="#ffffff" stroke="#86efac"/>
+  <text x="656" y="175" font-size="11" font-weight="700" fill="#15803d">① Python 客户端</text>
+  <text x="656" y="191" font-size="10" fill="#1f2937">influxdb3-python 0.20.0</text>
+  <rect x="644" y="208" width="236" height="44" rx="6" fill="#ffffff" stroke="#86efac"/>
+  <text x="656" y="225" font-size="11" font-weight="700" fill="#15803d">② influx3 CLI</text>
+  <text x="656" y="241" font-size="10" fill="#1f2937">json/jsonl/csv/pretty</text>
+  <rect x="644" y="258" width="236" height="20" rx="5" fill="#ffffff" stroke="#86efac"/>
+  <text x="656" y="272" font-size="10" fill="#57606a">③ Flight SQL 客户端</text>
+
+  <line x1="316" y1="204" x2="324" y2="204" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="618" y1="204" x2="626" y2="204" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="24" y="300" width="872" height="34" rx="8" fill="#f6f8fa" stroke="#d0d7de"/>
+  <text x="40" y="322" font-size="11.5" fill="#1f2937">➡️ 本阶段出口能力：能独立起一个 InfluxDB 3、用三种方式写数据并查回来　│　下一阶段：阶段 3《数据模型与查询》</text>
+</svg>

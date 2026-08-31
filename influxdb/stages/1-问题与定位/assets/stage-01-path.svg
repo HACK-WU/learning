@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 430" width="920" height="430" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#57606a"/>
+    </marker>
+  </defs>
+
+  <rect width="920" height="430" fill="#ffffff"/>
+
+  <!-- 标题 -->
+  <text x="460" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#111827">阶段 1 · 问题与定位</text>
+  <text x="460" y="54" text-anchor="middle" font-size="12.5" fill="#57606a">2 课 / 6 知识点 · 章节定位：认冲突 —— 三笔账算清楚，InfluxDB 登场</text>
+
+  <!-- 章节定位条 -->
+  <rect x="24" y="68" width="872" height="38" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="40" y="86" font-size="12" font-weight="700" fill="#1e3a8a">🎬 本章节的故事转折</text>
+  <text x="40" y="102" font-size="11.5" fill="#1f2937">主角「时间」在 MySQL 里只是普通字段 → 三笔账同时到期 → InfluxDB 作为解药登场　│　状态变化：听说过 → 知道为什么需要它</text>
+
+  <!-- ===== L1 卡片 ===== -->
+  <rect x="24" y="122" width="428" height="248" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="40" y="147" font-size="14" font-weight="700" fill="#1e3a8a">L1 · 为什么需要时序数据库</text>
+  <text x="264" y="147" font-size="11" font-weight="700" fill="#15803d">✅ 已交付</text>
+
+  <!-- 知识点 1 -->
+  <rect x="40" y="160" width="396" height="62" rx="6" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="52" y="178" font-size="11.5" font-weight="700" fill="#1e40af">① 时序数据的四个特征</text>
+  <text x="52" y="195" font-size="10.5" fill="#1f2937">关键点：时间为主索引 · 追加写为主 · 近似有序到达 · 价值随时间衰减</text>
+  <text x="52" y="211" font-size="10.5" fill="#57606a">认知层：感知层 → 概念层（先认出它，再理解它）</text>
+
+  <!-- 知识点 2 -->
+  <rect x="40" y="230" width="396" height="62" rx="6" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="52" y="248" font-size="11.5" font-weight="700" fill="#1e40af">② MySQL / PostgreSQL 为什么扛不住</text>
+  <text x="52" y="265" font-size="10.5" fill="#1f2937">关键点：空间放大 · 删除昂贵 · 聚合缓慢（三笔账，非"写不进去"）</text>
+  <text x="52" y="281" font-size="10.5" fill="#57606a">认知层：机制层（逐项拆解每字节，可自行验算）</text>
+
+  <!-- 知识点 3 -->
+  <rect x="40" y="300" width="396" height="62" rx="6" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="52" y="318" font-size="11.5" font-weight="700" fill="#1e40af">③ TSDB 的五项专属优化</text>
+  <text x="52" y="335" font-size="10.5" fill="#1f2937">关键点：列式压缩 · 时间分区 · 追加写路径 · tag 索引 · 降采样</text>
+  <text x="52" y="351" font-size="10.5" fill="#57606a">认知层：机制层 → 定位层（五招分别治哪一账）</text>
+
+  <!-- ===== L2 卡片 ===== -->
+  <rect x="468" y="122" width="428" height="248" rx="10" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="484" y="147" font-size="14" font-weight="700" fill="#14532d">L2 · InfluxDB 是什么：三代演进与生态位</text>
+  <text x="836" y="147" font-size="11" font-weight="700" fill="#15803d">✅ 已交付</text>
+
+  <!-- 知识点 1 -->
+  <rect x="484" y="160" width="396" height="62" rx="6" fill="#ffffff" stroke="#86efac"/>
+  <text x="496" y="178" font-size="11.5" font-weight="700" fill="#15803d">① 一句话定位与能力地图</text>
+  <text x="496" y="195" font-size="10.5" fill="#1f2937">关键点：写（Line Protocol）· 查（SQL）· 存（Parquet）· 扩（Python VM）</text>
+  <text x="496" y="211" font-size="10.5" fill="#57606a">认知层：概念层（它是什么、能干什么）</text>
+
+  <!-- 知识点 2 -->
+  <rect x="484" y="230" width="396" height="62" rx="6" fill="#ffffff" stroke="#86efac"/>
+  <text x="496" y="248" font-size="11.5" font-weight="700" fill="#15803d">② 三代演进：TSM / Flux → FDAP</text>
+  <text x="496" y="265" font-size="10.5" fill="#1f2937">关键点：1.x InfluxQL · 2.x Flux（已废弃）· 3.x Rust+FDAP+SQL</text>
+  <text x="496" y="281" font-size="10.5" fill="#57606a">认知层：机制层 → 定位层（两次推倒重来的动因）</text>
+
+  <!-- 知识点 3 -->
+  <rect x="484" y="300" width="396" height="62" rx="6" fill="#ffffff" stroke="#86efac"/>
+  <text x="496" y="318" font-size="11.5" font-weight="700" fill="#15803d">③ 三个 SKU 与生态位</text>
+  <text x="496" y="335" font-size="10.5" fill="#1f2937">关键点：Core 单机无 compactor · Enterprise 集群 · Cloud 托管</text>
+  <text x="496" y="351" font-size="10.5" fill="#57606a">认知层：定位层（与 Prometheus 的分工边界）</text>
+
+  <!-- 箭头 -->
+  <line x1="456" y1="246" x2="464" y2="246" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 本阶段出口 -->
+  <rect x="24" y="386" width="872" height="34" rx="8" fill="#f6f8fa" stroke="#d0d7de"/>
+  <text x="40" y="408" font-size="11.5" fill="#1f2937">➡️ 本阶段出口能力：能向同事讲清「为什么监控数据不该存 MySQL」+「InfluxDB 三代差异与 SKU 选择」　│　下一阶段：阶段 2《上手篇》（建立手感）</text>
+</svg>
