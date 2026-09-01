@@ -32,8 +32,8 @@
 
 ## 本阶段产出
 
-- [ ] `lessons/lesson-05-RDB与AOF持久化.md`
-- [ ] `lessons/lesson-06-主从复制与哨兵.md`
+- [x] [课 5《RDB 与 AOF 持久化》](lessons/lesson-05-RDB与AOF持久化.md)（2026-09-01，评审 P0=0）
+- [x] [课 6《主从复制与哨兵》](lessons/lesson-06-主从复制与哨兵.md)（2026-09-01，评审 P0=0）
 
 ---
 

@@ -33,7 +33,7 @@
 ## 本阶段产出
 
 - [x] [课 3《List 与 Hash》](lessons/lesson-03-List与Hash.md)（2026-08-31，评审 P0=0）
-- [ ] `lessons/lesson-04-Set、ZSet与特殊类型.md`
+- [x] [课 4《Set、ZSet 与特殊类型》](lessons/lesson-04-Set、ZSet与特殊类型.md)（2026-09-01，评审 P0=0）
 
 ---
 

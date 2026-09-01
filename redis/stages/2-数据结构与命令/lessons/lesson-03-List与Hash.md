@@ -720,6 +720,6 @@ graph TD
 
 ⬅️ **上一课**：[课 2：跑起来第一个 Redis](../1-为什么需要Redis/lessons/lesson-02-跑起来第一个Redis.md)
 
-➡️ **下一课**：课 4：Set、ZSet 与特殊类型（待编写）
+➡️ **下一课**：[课 4：Set、ZSet 与特殊类型](lesson-04-Set、ZSet与特殊类型.md)
 
 📚 **返回目录**：[课程目录](../../02-课程目录.md)
