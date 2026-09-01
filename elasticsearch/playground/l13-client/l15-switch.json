@@ -1,0 +1,6 @@
+{
+  "actions": [
+    { "remove": { "index": "l15-shop-000001", "alias": "l15-shop" } },
+    { "add":    { "index": "l15-shop-000002", "alias": "l15-shop" } }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "index_patterns": ["l15-shop-*"],
+  "priority": 200,
+  "composed_of": ["l15_shop_settings", "l15_shop_mappings"],
+  "template": {
+    "aliases": { "l15-shop": {} }
+  }
+}

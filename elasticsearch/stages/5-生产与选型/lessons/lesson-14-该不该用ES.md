@@ -783,8 +783,9 @@ l10_shard_1  amount  value_count=3000  ✅ 成功，amount=1 → doubled=2
 **方向 A · 备考冲刺**：
 
 ```
-我已完成 Elasticsearch 全部课程（5 阶段 / 14 课 / 42 知识点），
-学习档案在 elasticsearch/00-学习档案.md，最后一课是课 14《该不该用 ES》。
+我已完成 Elasticsearch 全部课程（5 阶段 / 15 课 / 46 知识点），
+学习档案在 elasticsearch/00-学习档案.md，最后一课是课 14《该不该用 ES》
+（课 15《索引管理与生命周期策略》为随后增补，属阶段 4）。
 
 现在准备考 Elastic Certified Engineer（9.3 考纲，2026-09-01 起生效）。
 请用我本机环境为我出一套限时模拟题，要求：
@@ -812,7 +813,7 @@ l10_shard_1  amount  value_count=3000  ✅ 成功，amount=1 → doubled=2
 **方向 B · 实战项目**：
 
 ```
-我已学完 Elasticsearch 全部课程（5 阶段 / 14 课 / 42 知识点），
+我已学完 Elasticsearch 全部课程（5 阶段 / 15 课 / 46 知识点），
 学习档案在 elasticsearch/00-学习档案.md。
 
 想做一个真实项目把知识用起来，请帮我规划一个端到端方案：

@@ -1,0 +1,9 @@
+{
+  "index_patterns": ["l15-shop-*"],
+  "priority": 200,
+  "composed_of": ["l15_shop_settings", "l15_shop_mappings"],
+  "template": {
+    "settings": { "index.lifecycle.name": "l15_shop_policy",
+                  "index.lifecycle.rollover_alias": "l15-shop" }
+  }
+}
