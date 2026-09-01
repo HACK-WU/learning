@@ -1,0 +1,25 @@
+# Python 缓存与虚拟环境
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+env/
+
+# 编辑器与系统
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# 实验临时产物
+# 说明：playground/ 下的脚本本身需要版本管理（是教学的一部分），
+#       但运行过程中产生的日志、导出数据不入库。
+playground/**/*.log
+playground/**/tmp_*
+playground/**/output_*
+*.log

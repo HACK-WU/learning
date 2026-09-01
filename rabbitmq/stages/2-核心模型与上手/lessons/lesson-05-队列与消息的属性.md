@@ -871,4 +871,4 @@ rabbitmq-plugins enable rabbitmq_stream rabbitmq_stream_management
 
 ➡️ **下一课**：[课 6：确认机制与预取](../../3-可靠性与投递语义/lessons/lesson-06-确认机制与预取.md)
 
-📚 **返回目录**：[课程目录](../../02-课程目录.md)
+📚 **返回目录**：[课程目录](../../../02-课程目录.md)
