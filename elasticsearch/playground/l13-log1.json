@@ -1,0 +1,1 @@
+{ "@timestamp": "2026-09-01T02:40:00Z", "message": "User login succeeded", "level": "INFO", "service": "auth" }
