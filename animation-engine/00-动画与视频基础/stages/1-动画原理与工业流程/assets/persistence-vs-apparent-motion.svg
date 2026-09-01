@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 400" width="700" height="400">
+  <rect width="700" height="400" fill="#ffffff"/>
+
+  <text x="350" y="30" text-anchor="middle" font-family="Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="bold" fill="#1a237e">视觉暂留 vs 似动现象：两件事，别混为一谈</text>
+
+  <!-- 左：视觉暂留 -->
+  <rect x="24" y="52" width="316" height="230" rx="8" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="182" y="80" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="14" font-weight="bold" fill="#0d47a1">视觉暂留（余晖效应）</text>
+
+  <circle cx="90" cy="150" r="18" fill="#1565C0"/>
+  <circle cx="140" cy="150" r="18" fill="#1565C0" opacity="0.55"/>
+  <circle cx="190" cy="150" r="18" fill="#1565C0" opacity="0.30"/>
+  <circle cx="240" cy="150" r="18" fill="#1565C0" opacity="0.14"/>
+  <text x="90" y="192" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="11" fill="#333">画面出现</text>
+  <text x="215" y="192" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="11" fill="#555">画面消失后印象仍在衰减</text>
+
+  <text x="182" y="222" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#333">光刺激停止后，视觉印象仍保留</text>
+  <text x="182" y="241" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#333">约 0.1–0.4 秒（1824 年 Roget 提出）</text>
+  <text x="182" y="268" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" font-weight="bold" fill="#0d47a1">它解决：画面之间「接得上、不闪」</text>
+
+  <!-- 右：似动 -->
+  <rect x="360" y="52" width="316" height="230" rx="8" fill="#fff3e0" stroke="#ef6c00" stroke-width="2"/>
+  <text x="518" y="80" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="14" font-weight="bold" fill="#e65100">似动现象（beta 运动）</text>
+
+  <rect x="386" y="112" width="66" height="66" rx="4" fill="#ffffff" stroke="#bbb" stroke-width="1"/>
+  <circle cx="405" cy="145" r="12" fill="#ef6c00"/>
+  <text x="419" y="192" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="11" fill="#333">帧 1</text>
+
+  <rect x="472" y="112" width="66" height="66" rx="4" fill="#ffffff" stroke="#bbb" stroke-width="1"/>
+  <circle cx="505" cy="145" r="12" fill="#ef6c00"/>
+  <text x="505" y="192" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="11" fill="#333">帧 2</text>
+
+  <rect x="558" y="112" width="66" height="66" rx="4" fill="#ffffff" stroke="#bbb" stroke-width="1"/>
+  <circle cx="605" cy="145" r="12" fill="#ef6c00"/>
+  <text x="591" y="192" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="11" fill="#333">帧 3</text>
+
+  <line x1="405" y1="145" x2="605" y2="145" stroke="#ef6c00" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.7"/>
+  <text x="505" y="222" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#333">位置不同的画面先后出现，</text>
+  <text x="505" y="241" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#333">大脑自动补出「中间过程」</text>
+  <text x="518" y="268" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" font-weight="bold" fill="#e65100">它解决：「看起来在动」</text>
+
+  <!-- 底部结论 -->
+  <rect x="24" y="296" width="652" height="82" rx="6" fill="#fafafa" stroke="#bdbdbd" stroke-width="1"/>
+  <text x="350" y="322" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="13" font-weight="bold" fill="#1a237e">结论：动画的「动」来自似动；视觉暂留 / 闪烁融合解决的是「不闪」</text>
+  <text x="350" y="346" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#444">所以「动画靠视觉暂留」是简化的流行说法——它解释不了为什么画面会「移动」</text>
+  <text x="350" y="368" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#444">工程含义：帧率要够高才「不闪」，但「动得自不自然」取决于帧与帧之间的位置差（间距）</text>
+</svg>

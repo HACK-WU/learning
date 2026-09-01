@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 360" width="980" height="360">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1565C0"/>
+    </marker>
+  </defs>
+
+  <rect width="980" height="360" fill="#ffffff"/>
+
+  <text x="490" y="32" text-anchor="middle" font-family="Microsoft YaHei, PingFang SC, sans-serif" font-size="19" font-weight="bold" fill="#1a237e">2D 动画与视频基础 · 学习路径</text>
+  <text x="490" y="56" text-anchor="middle" font-family="Microsoft YaHei, PingFang SC, sans-serif" font-size="13" fill="#555">主角：一根静止的线条　|　冲突：不会动、动起来就抖、导不出文件</text>
+
+  <!-- 阶段 1 -->
+  <rect x="24" y="86" width="218" height="126" rx="8" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="133" y="112" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="14" font-weight="bold" fill="#0d47a1">阶段 1 · 动画原理与工业流程</text>
+  <text x="133" y="134" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#333">章节：线条第一次动起来</text>
+  <text x="133" y="155" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#333">3 课 / 10 知识点</text>
+  <text x="133" y="179" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#555">帧与帧率 · 关键帧中割 · 律表</text>
+  <text x="133" y="197" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#555">分层赛璐珞 · 动画十二原则</text>
+
+  <!-- 阶段 2 -->
+  <rect x="262" y="86" width="218" height="126" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="371" y="112" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="14" font-weight="bold" fill="#1b5e20">阶段 2 · 图形数学基础</text>
+  <text x="371" y="134" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#333">章节：不用手画了，用数字算</text>
+  <text x="371" y="155" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#333">3 课 / 10 知识点</text>
+  <text x="371" y="179" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#555">向量 · 仿射变换 · 齐次坐标</text>
+  <text x="371" y="197" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#555">插值 · 缓动 · 贝塞尔曲线</text>
+
+  <!-- 阶段 3 -->
+  <rect x="500" y="86" width="218" height="126" rx="8" fill="#fff3e0" stroke="#ef6c00" stroke-width="2"/>
+  <text x="609" y="112" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="14" font-weight="bold" fill="#e65100">阶段 3 · 渲染与合成基础</text>
+  <text x="609" y="134" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#333">章节：算出来了，怎么变成画面</text>
+  <text x="609" y="155" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#333">2 课 / 7 知识点</text>
+  <text x="609" y="179" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#555">光栅 vs 矢量 · 图层模型</text>
+  <text x="609" y="197" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#555">alpha 合成 · z-buffer 深度排序</text>
+
+  <!-- 阶段 4 -->
+  <rect x="738" y="86" width="218" height="126" rx="8" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2"/>
+  <text x="847" y="112" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="14" font-weight="bold" fill="#6a1b9a">阶段 4 · 视频编码与导出</text>
+  <text x="847" y="134" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#333">章节：画面出来了，怎么变成文件</text>
+  <text x="847" y="155" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#333">2 课 / 6 知识点</text>
+  <text x="847" y="179" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#555">分辨率 · 帧率 · 码率 · GOP</text>
+  <text x="847" y="197" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#555">容器与编解码器 · MP4 / GIF</text>
+
+  <!-- 阶段间箭头 -->
+  <line x1="242" y1="149" x2="260" y2="149" stroke="#1565C0" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <line x1="480" y1="149" x2="498" y2="149" stroke="#1565C0" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <line x1="718" y1="149" x2="736" y2="149" stroke="#1565C0" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- 底部管线 -->
+  <rect x="24" y="240" width="932" height="46" rx="6" fill="#fafafa" stroke="#bdbdbd" stroke-width="1"/>
+  <text x="490" y="269" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="13" fill="#333">数据（结构化矩阵）→ 数学（变换 / 插值）→ 像素（合成 / 深度）→ 文件（编码）</text>
+
+  <text x="490" y="317" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="13" font-weight="bold" fill="#1a237e">收束：能用「数据 + 数学 + 合成规则 + 编码」把一根静止线条变成可播放的动画视频</text>
+  <text x="490" y="342" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#666">每个阶段是故事的一个章节，阶段间为前置依赖（后一阶段依赖前一阶段的概念）</text>
+</svg>

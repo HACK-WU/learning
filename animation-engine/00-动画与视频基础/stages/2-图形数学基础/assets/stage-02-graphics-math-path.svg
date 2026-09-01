@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 230" width="780" height="230">
+  <defs>
+    <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2e7d32"/>
+    </marker>
+  </defs>
+
+  <rect width="780" height="230" fill="#ffffff"/>
+  <text x="390" y="30" text-anchor="middle" font-family="Microsoft YaHei, PingFang SC, sans-serif" font-size="17" font-weight="bold" fill="#1b5e20">阶段 2 路径 · 图形数学基础</text>
+  <text x="390" y="52" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#666">章节：不用手画了，用数字算</text>
+
+  <rect x="24" y="70" width="216" height="118" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="132" y="96" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="14" font-weight="bold" fill="#1b5e20">课 4 · 点与向量</text>
+  <text x="132" y="119" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#333">2 知识点</text>
+  <text x="132" y="145" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#555">画布与坐标系</text>
+  <text x="132" y="167" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#555">向量与位移</text>
+
+  <rect x="282" y="70" width="216" height="118" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="390" y="96" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="14" font-weight="bold" fill="#1b5e20">课 5 · 变换的矩阵表示</text>
+  <text x="390" y="119" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#333">4 知识点（拆 2 批）</text>
+  <text x="390" y="142" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#555">仿射变换的直觉</text>
+  <text x="390" y="161" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#555">2D 变换矩阵 · 齐次坐标</text>
+  <text x="390" y="180" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#555">绕任意点与层级变换</text>
+
+  <rect x="540" y="70" width="216" height="118" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="648" y="96" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="14" font-weight="bold" fill="#1b5e20">课 6 · 插值、缓动与贝塞尔</text>
+  <text x="648" y="119" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#333">4 知识点（拆 2 批）</text>
+  <text x="648" y="142" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#555">插值与关键帧补间</text>
+  <text x="648" y="161" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#555">缓动函数</text>
+  <text x="648" y="180" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#555">贝塞尔 · 沿路径运动</text>
+
+  <line x1="240" y1="129" x2="280" y2="129" stroke="#2e7d32" stroke-width="2.5" marker-end="url(#a2)"/>
+  <line x1="498" y1="129" x2="538" y2="129" stroke="#2e7d32" stroke-width="2.5" marker-end="url(#a2)"/>
+
+  <rect x="24" y="200" width="732" height="24" rx="4" fill="#fafafa" stroke="#e0e0e0"/>
+  <text x="390" y="217" text-anchor="middle" font-family="Microsoft YaHei, sans-serif" font-size="12" fill="#444">先有点与位移 → 再有变换算子 → 最后让"中间帧"由函数算出来</text>
+</svg>
