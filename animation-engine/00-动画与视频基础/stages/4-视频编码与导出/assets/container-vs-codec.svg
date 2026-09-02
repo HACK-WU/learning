@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 320" width="500" height="320">
+  <!-- 标题 -->
+  <text x="250" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">容器 ≠ 编解码器：盒子 vs 装法</text>
+  <text x="250" y="40" text-anchor="middle" font-size="11" fill="#666">同一盒子可以装不同的压缩方法 —— 「mp4 打不开」有三种排查路径</text>
+
+  <!-- 左侧：盒子（容器） -->
+  <g transform="translate(40, 70)">
+    <rect x="0" y="0" width="180" height="100" fill="#fff" stroke="#285bc8" stroke-width="2" rx="6"/>
+    <text x="90" y="22" text-anchor="middle" font-size="13" font-weight="bold" fill="#285bc8">.mp4 容器（盒子）</text>
+
+    <!-- 三个流（视频/音频/字幕）-->
+    <rect x="14" y="36" width="50" height="24" fill="#fce4b0" stroke="#d49000"/>
+    <text x="39" y="52" text-anchor="middle" font-size="10" font-weight="bold" fill="#a06000">视频</text>
+
+    <rect x="68" y="36" width="50" height="24" fill="#d8f0d8" stroke="#3ca05a"/>
+    <text x="93" y="52" text-anchor="middle" font-size="10" font-weight="bold" fill="#1a6b2a">音频</text>
+
+    <rect x="122" y="36" width="44" height="24" fill="#f4d4d4" stroke="#c83c3c"/>
+    <text x="144" y="52" text-anchor="middle" font-size="10" font-weight="bold" fill="#802020">字幕</text>
+
+    <text x="90" y="80" text-anchor="middle" font-size="9" fill="#666">每个流可独立编码</text>
+  </g>
+
+  <!-- 右侧：装法（编解码器） -->
+  <g transform="translate(260, 70)">
+    <text x="100" y="14" text-anchor="middle" font-size="13" font-weight="bold" fill="#c83c3c">视频流可选的编解码器</text>
+
+    <g transform="translate(0, 30)">
+      <rect x="0" y="0" width="200" height="22" fill="#fff" stroke="#c83c3c" stroke-width="1.5" rx="3"/>
+      <text x="100" y="15" text-anchor="middle" font-size="11" font-weight="bold" fill="#c83c3c">H.264 / AVC（最普及）</text>
+    </g>
+    <g transform="translate(0, 60)">
+      <rect x="0" y="0" width="200" height="22" fill="#fff" stroke="#d49000" stroke-width="1.5" rx="3"/>
+      <text x="100" y="15" text-anchor="middle" font-size="11" font-weight="bold" fill="#d49000">H.265 / HEVC（高压缩）</text>
+    </g>
+    <g transform="translate(0, 90)">
+      <rect x="0" y="0" width="200" height="22" fill="#fff" stroke="#3ca05a" stroke-width="1.5" rx="3"/>
+      <text x="100" y="15" text-anchor="middle" font-size="11" font-weight="bold" fill="#3ca05a">AV1（开源新生代）</text>
+    </g>
+    <g transform="translate(0, 120)">
+      <rect x="0" y="0" width="200" height="22" fill="#fff" stroke="#888" stroke-width="1.5" rx="3"/>
+      <text x="100" y="15" text-anchor="middle" font-size="11" font-weight="bold" fill="#555">VP9（WebM 用）</text>
+    </g>
+  </g>
+
+  <!-- 箭头连接 -->
+  <line x1="220" y1="120" x2="260" y2="120" stroke="#666" stroke-width="1.5" marker-end="url(#arr)"/>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#666"/>
+    </marker>
+  </defs>
+
+  <!-- 三种排查路径 -->
+  <text x="20" y="208" font-size="11" font-weight="bold" fill="#222">「mp4 打不开」的三种原因：</text>
+  <text x="32" y="226" font-size="10" fill="#c83c3c">① 容器问题（moov 头错位、文件截断）→ ffmpeg -c copy 重新封装</text>
+  <text x="32" y="242" font-size="10" fill="#d49000">② 编解码器问题（profile 不兼容）→ 重新编码为兼容 profile</text>
+  <text x="32" y="258" font-size="10" fill="#3ca05a">③ 播放器问题（缺 codec 解码器）→ 安装对应解码器</text>
+
+  <!-- GIF 256 色提示 -->
+  <rect x="20" y="278" width="460" height="30" fill="#fffde8" stroke="#d4b92a" rx="4"/>
+  <text x="32" y="298" font-size="10" font-weight="bold" fill="#a08000">⚠ GIF 硬限制 256 色（调色板）→ 渐变必须靠色带或抖动妥协；MP4 不支持 alpha（要 WebM/VP9）</text>
+</svg>

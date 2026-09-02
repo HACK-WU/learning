@@ -1,0 +1,81 @@
+{
+  "_comment": "模拟 AI 输出的矢量节点数据 —— 对应需求文档的 {matrix_data, z_depth, frame} 结构。本文件是整条流水线的**唯一输入**，pipeline 脚本只读它、不硬编码任何画面。z_depth 越大越靠前（渲染时自底向上 over）。",
+
+  "meta": {
+    "width": 640,
+    "height": 480,
+    "fps": 24,
+    "total_frames": 72,
+    "supersample": 3,
+    "background": [250, 250, 250]
+  },
+
+  "layers": [
+    {
+      "id": "sky",
+      "z_depth": 0,
+      "type": "gradient_rect",
+      "top": [120, 190, 235],
+      "bottom": [232, 244, 250]
+    },
+    {
+      "id": "mountains",
+      "z_depth": 1,
+      "type": "polygons",
+      "parallax": 0.12,
+      "shapes": [
+        { "color": [110, 130, 150], "points": [[0, 380], [110, 220], [215, 380]] },
+        { "color": [96, 116, 136], "points": [[170, 380], [300, 190], [440, 380]] },
+        { "color": [112, 132, 152], "points": [[380, 380], [500, 235], [640, 380]] }
+      ]
+    },
+    {
+      "id": "ground",
+      "z_depth": 2,
+      "type": "solid_rect",
+      "rect": [0, 380, 640, 480],
+      "color": [120, 172, 96]
+    },
+    {
+      "id": "tree",
+      "z_depth": 3,
+      "type": "tree",
+      "base": [150, 392],
+      "trunk": [118, 58],
+      "crown_radius": 62,
+      "crown_color": [64, 140, 80],
+      "trunk_color": [110, 78, 48]
+    },
+    {
+      "id": "character",
+      "z_depth": 4,
+      "type": "stick_figure",
+      "color": [225, 80, 70],
+      "head_radius": 20,
+      "head_color": [240, 206, 140],
+      "path": {
+        "_comment": "三次贝塞尔控制点：主角沿这条路径运动（课 6）。y 保持在 300~380，贴近地面",
+        "p0": [70, 352],
+        "p1": [230, 302],
+        "p2": [420, 372],
+        "p3": [580, 338]
+      },
+      "keyframes": [
+        { "frame": 0,  "angle": -18, "scale": 0.92, "arm_swing": -30 },
+        { "frame": 24, "angle": 6,   "scale": 1.12, "arm_swing": 25 },
+        { "frame": 48, "angle": 14,  "scale": 0.88, "arm_swing": 40 },
+        { "frame": 71, "angle": -10, "scale": 1.05, "arm_swing": -20 }
+      ],
+      "easing": "ease_in_out_cubic"
+    },
+    {
+      "id": "grass",
+      "z_depth": 5,
+      "type": "grass",
+      "parallax": 0.45,
+      "color": [54, 128, 58],
+      "blade_count": 34,
+      "sway_amp": 9
+    }
+  ]
+}

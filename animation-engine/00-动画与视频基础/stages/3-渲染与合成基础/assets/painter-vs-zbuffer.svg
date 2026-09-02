@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 330" width="500" height="330">
+  <defs>
+    <clipPath id="leftHalf">
+      <rect x="0" y="0" width="95" height="120"/>
+    </clipPath>
+    <clipPath id="rightHalf">
+      <rect x="95" y="0" width="95" height="120"/>
+    </clipPath>
+  </defs>
+
+  <!-- 标题 -->
+  <text x="250" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">画家算法 vs z-buffer：循环重叠时整层排序必败</text>
+  <text x="250" y="40" text-anchor="middle" font-size="11" fill="#666">让每根长条的 z 沿 x 线性变化 → 左右「谁在前」相反 → 整层排序无法表达</text>
+
+  <!-- 深度图（上方） -->
+  <text x="20" y="72" font-size="11" font-weight="bold" fill="#222">深度 z 沿 x 的变化：</text>
+  <g transform="translate(40, 82)">
+    <line x1="0"   y1="60" x2="190" y2="60" stroke="#999" stroke-width="1"/>
+    <line x1="0"   y1="0"  x2="0"   y2="60" stroke="#999" stroke-width="1"/>
+    <!-- 橙线 z_A: 0.15 → 0.85（越靠上 = z 越大 = 越近） -->
+    <line x1="0"   y1="51" x2="190" y2="9"  stroke="#c83c3c" stroke-width="2"/>
+    <!-- 蓝线 z_B: 0.85 → 0.15 -->
+    <line x1="0"   y1="9"  x2="190" y2="51" stroke="#285bc8" stroke-width="2"/>
+    <text x="4"    y="48"  font-size="9" fill="#c83c3c">z_A（橙）</text>
+    <text x="4"    y="18"  font-size="9" fill="#285bc8">z_B（蓝）</text>
+    <text x="95"   y="74"  font-size="9" fill="#666" text-anchor="middle">中点交叉</text>
+    <text x="0"    y="74"  font-size="9" fill="#666" text-anchor="start">x=0</text>
+    <text x="190"  y="74"  font-size="9" fill="#666" text-anchor="end">x=W</text>
+  </g>
+
+  <!-- 两种结果对比（下方） -->
+  <text x="20" y="178" font-size="11" font-weight="bold" fill="#222">渲染结果对比：</text>
+
+  <!-- ===== 左：画家算法（错）===== -->
+  <g transform="translate(40, 192)">
+    <text x="0" y="0" font-size="10" font-weight="bold" fill="#c83c3c">❌ 画家算法（整层一个 z）</text>
+    <!-- 先画蓝 B，再画橙 A → A 整根压在 B 上 -->
+    <line x1="0"   y1="80" x2="190" y2="20" stroke="#285bc8" stroke-width="15" opacity="0.95"/>
+    <line x1="0"   y1="20" x2="190" y2="80" stroke="#c83c3c" stroke-width="15" opacity="0.95"/>
+    <!-- 高亮画错区域：左半段（该蓝在前却显示橙在前）-->
+    <rect x="2" y="42" width="90" height="34" fill="none" stroke="#f0a500" stroke-width="2"
+          stroke-dasharray="4,2"/>
+    <text x="47" y="112" font-size="9" fill="#c83c3c" text-anchor="middle">左半段画错（该蓝在前）</text>
+  </g>
+
+  <!-- ===== 右：z-buffer（正确）===== -->
+  <g transform="translate(280, 192)">
+    <text x="0" y="0" font-size="10" font-weight="bold" fill="#3ca05a">✅ z-buffer（逐像素比较）</text>
+    <!-- 左半：先橙后蓝 → 蓝在上 -->
+    <g clip-path="url(#leftHalf)">
+      <line x1="0"   y1="20" x2="190" y2="80" stroke="#c83c3c" stroke-width="15"/>
+      <line x1="0"   y1="80" x2="190" y2="20" stroke="#285bc8" stroke-width="15"/>
+    </g>
+    <!-- 右半：先蓝后橙 → 橙在上 -->
+    <g clip-path="url(#rightHalf)">
+      <line x1="0"   y1="80" x2="190" y2="20" stroke="#285bc8" stroke-width="15"/>
+      <line x1="0"   y1="20" x2="190" y2="80" stroke="#c83c3c" stroke-width="15"/>
+    </g>
+    <line x1="95" y1="14" x2="95" y2="86" stroke="#555" stroke-width="0.8" stroke-dasharray="3,2"/>
+    <text x="47"  y="112" font-size="9" fill="#285bc8" text-anchor="middle">左半 B 在前</text>
+    <text x="142" y="112" font-size="9" fill="#c83c3c" text-anchor="middle">右半 A 在前</text>
+  </g>
+
+  <!-- 底部结论 -->
+  <text x="20" y="316" font-size="10" fill="#222">💡 平均 z 都是 0.5（平手）→ 画家算法只能二选一 → 约一半区域错（实测 48.2%）</text>
+</svg>

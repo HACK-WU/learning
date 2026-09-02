@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 360" width="460" height="360">
+  <!-- Title -->
+  <text x="230" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">光栅 vs 矢量：两种「图形世界观」</text>
+  <text x="230" y="40" text-anchor="middle" font-size="11" fill="#666">像素即图形 vs 数据即图形 —— 各司其职</text>
+
+  <!-- ================== 左：光栅 ================== -->
+  <text x="20" y="68" font-size="12" font-weight="bold" fill="#222">① 光栅 = 像素即图形</text>
+  <text x="20" y="84" font-size="10" fill="#666">存的是「结果」——一个 W×H 的色块阵列</text>
+
+  <!-- 像素网格（12×8） -->
+  <g transform="translate(40, 100)">
+    <!-- 行 1 -->
+    <rect x="0"   y="0"   width="4" height="4" fill="#c83c3c" stroke="#fff" stroke-width="0.5"/>
+    <rect x="4"   y="0"   width="4" height="4" fill="#c83c3c" stroke="#fff" stroke-width="0.5"/>
+    <rect x="8"   y="0"   width="4" height="4" fill="#c83c3c" stroke="#fff" stroke-width="0.5"/>
+    <rect x="12"  y="0"   width="4" height="4" fill="#ddd" stroke="#fff" stroke-width="0.5"/>
+    <rect x="16"  y="0"   width="4" height="4" fill="#ddd" stroke="#fff" stroke-width="0.5"/>
+    <rect x="20"  y="0"   width="4" height="4" fill="#ddd" stroke="#fff" stroke-width="0.5"/>
+    <rect x="24"  y="0"   width="4" height="4" fill="#ddd" stroke="#fff" stroke-width="0.5"/>
+    <rect x="28"  y="0"   width="4" height="4" fill="#ddd" stroke="#fff" stroke-width="0.5"/>
+    <rect x="32"  y="0"   width="4" height="4" fill="#ddd" stroke="#fff" stroke-width="0.5"/>
+    <rect x="36"  y="0"   width="4" height="4" fill="#ddd" stroke="#fff" stroke-width="0.5"/>
+    <rect x="40"  y="0"   width="4" height="4" fill="#ddd" stroke="#fff" stroke-width="0.5"/>
+    <rect x="44"  y="0"   width="4" height="4" fill="#ddd" stroke="#fff" stroke-width="0.5"/>
+    <!-- 行 2 -->
+    <rect x="0"   y="4"   width="4" height="4" fill="#c83c3c" stroke="#fff" stroke-width="0.5"/>
+    <rect x="4"   y="4"   width="4" height="4" fill="#c83c3c" stroke="#fff" stroke-width="0.5"/>
+    <rect x="8"   y="4"   width="4" height="4" fill="#c83c3c" stroke="#fff" stroke-width="0.5"/>
+    <rect x="12"  y="4"   width="4" height="4" fill="#c83c3c" stroke="#fff" stroke-width="0.5"/>
+    <rect x="16"  y="4"   width="4" height="4" fill="#ddd" stroke="#fff" stroke-width="0.5"/>
+    <rect x="20"  y="4"   width="4" height="4" fill="#ddd" stroke="#fff" stroke-width="0.5"/>
+    <rect x="24"  y="4"   width="4" height="4" fill="#ddd" stroke="#fff" stroke-width="0.5"/>
+    <rect x="28"  y="4"   width="4" height="4" fill="#ddd" stroke="#fff" stroke-width="0.5"/>
+    <rect x="32"  y="4"   width="4" height="4" fill="#ddd" stroke="#fff" stroke-width="0.5"/>
+    <rect x="36"  y="4"   width="4" height="4" fill="#ddd" stroke="#fff" stroke-width="0.5"/>
+    <rect x="40"  y="4"   width="4" height="4" fill="#ddd" stroke="#fff" stroke-width="0.5"/>
+    <rect x="44"  y="4"   width="4" height="4" fill="#ddd" stroke="#fff" stroke-width="0.5"/>
+    <!-- 行 3 -->
+    <rect x="0"   y="8"   width="4" height="4" fill="#c83c3c" stroke="#fff" stroke-width="0.5"/>
+    <rect x="4"   y="8"   width="4" height="4" fill="#c83c3c" stroke="#fff" stroke-width="0.5"/>
+    <rect x="8"   y="8"   width="4" height="4" fill="#ddd" stroke="#fff" stroke-width="0.5"/>
+    <rect x="12"  y="8"   width="4" height="4" fill="#ddd" stroke="#fff" stroke-width="0.5"/>
+    <rect x="16"  y="8"   width="4" height="4" fill="#ddd" stroke="#fff" stroke-width="0.5"/>
+    <rect x="20"  y="8"   width="4" height="4" fill="#ddd" stroke="#fff" stroke-width="0.5"/>
+    <rect x="24"  y="8"   width="4" height="4" fill="#ddd" stroke="#fff" stroke-width="0.5"/>
+    <rect x="28"  y="8"   width="4" height="4" fill="#ddd" stroke="#fff" stroke-width="0.5"/>
+    <rect x="32"  y="8"   width="4" height="4" fill="#ddd" stroke="#fff" stroke-width="0.5"/>
+    <rect x="36"  y="8"   width="4" height="4" fill="#ddd" stroke="#fff" stroke-width="0.5"/>
+    <rect x="40"  y="8"   width="4" height="4" fill="#ddd" stroke="#fff" stroke-width="0.5"/>
+    <rect x="44"  y="8"   width="4" height="4" fill="#ddd" stroke="#fff" stroke-width="0.5"/>
+  </g>
+
+  <text x="40" y="120" font-size="10" fill="#666">「45° 直线」的像素阵列 → 阶梯状锯齿</text>
+  <text x="20" y="148" font-size="10" fill="#444">存储量：W×H×4 字节</text>
+  <text x="20" y="162" font-size="10" fill="#444">放大：像素格子变大，必模糊</text>
+  <text x="20" y="176" font-size="10" fill="#c83c3c">⚠ 锯齿 = 光栅化的本质产物</text>
+
+  <!-- ================== 右：矢量 ================== -->
+  <text x="240" y="68" font-size="12" font-weight="bold" fill="#222">② 矢量 = 数据即图形</text>
+  <text x="240" y="84" font-size="10" fill="#666">存的是「画法」——路径 + 控制点 + 描边/填充</text>
+
+  <!-- 矢量示意：45° 直线 + +控制点 -->
+  <g transform="translate(260, 100)">
+    <!-- 一条带控制点的曲线 -->
+    <line x1="0"   y1="20" x2="48" y2="20" stroke="#bbb" stroke-width="1" stroke-dasharray="3,2"/>
+    <circle cx="0"  cy="20" r="4" fill="none" stroke="#285bc8" stroke-width="2"/>
+    <circle cx="48" cy="20" r="4" fill="none" stroke="#285bc8" stroke-width="2"/>
+    <text x="6"  y="14" font-size="9" fill="#285bc8">P₀</text>
+    <text x="44" y="14" font-size="9" fill="#285bc8">P₁</text>
+
+    <line x1="56"  y1="14" x2="100" y2="2"  stroke="#bbb" stroke-width="1" stroke-dasharray="3,2"/>
+    <line x1="56"  y1="2"  x2="100" y2="14" stroke="#bbb" stroke-width="1" stroke-dasharray="3,2"/>
+    <circle cx="56" cy="2"  r="4" fill="none" stroke="#285bc8" stroke-width="2"/>
+    <circle cx="100" cy="2" r="4" fill="none" stroke="#285bc8" stroke-width="2"/>
+    <text x="62" y="-4" font-size="9" fill="#285bc8">C₁</text>
+
+    <line x1="108" y1="14" x2="152" y2="2"  stroke="#bbb" stroke-width="1" stroke-dasharray="3,2"/>
+    <line x1="108" y1="2"  x2="152" y2="14" stroke="#bbb" stroke-width="1" stroke-dasharray="3,2"/>
+    <circle cx="108" cy="2" r="4" fill="none" stroke="#285bc8" stroke-width="2"/>
+    <circle cx="152" cy="2" r="4" fill="none" stroke="#285bc8" stroke-width="2"/>
+    <text x="114" y="-4" font-size="9" fill="#285bc8">C₂</text>
+
+    <line x1="160" y1="20" x2="208" y2="20" stroke="#bbb" stroke-width="1" stroke-dasharray="3,2"/>
+    <circle cx="160" cy="20" r="4" fill="none" stroke="#285bc8" stroke-width="2"/>
+    <circle cx="208" cy="20" r="4" fill="none" stroke="#285bc8" stroke-width="2"/>
+    <text x="166" y="14" font-size="9" fill="#285bc8">P₃</text>
+
+    <!-- 实际的贝塞尔曲线（控制多边形 + 曲线） -->
+    <path d="M 0,20 C 56,2 152,2 208,20"
+          fill="none" stroke="#c83c3c" stroke-width="2.5"/>
+  </g>
+
+  <text x="240" y="148" font-size="10" fill="#444">存储量：几个数字 + 几个控制点</text>
+  <text x="240" y="162" font-size="10" fill="#444">放大：重新求值，永不失真</text>
+  <text x="240" y="176" font-size="10" fill="#3ca05a">✓ 分辨率无关</text>
+
+  <!-- ================== 底部：抗锯齿 ================== -->
+  <rect x="20" y="200" width="420" height="146" fill="#f9f9f9" stroke="#ccc" rx="3"/>
+  <text x="30" y="220" font-size="12" font-weight="bold" fill="#222">③ 抗锯齿（anti-aliasing）—— 桥接两者的关键</text>
+
+  <!-- 锯齿边缘（左） -->
+  <text x="30" y="244" font-size="10" fill="#c83c3c">❌ 无抗锯齿：边缘非黑即白</text>
+  <g transform="translate(30, 252)">
+    <rect x="0"  y="0" width="4" height="12" fill="#000"/>
+    <rect x="4"  y="0" width="4" height="12" fill="#000"/>
+    <rect x="8"  y="0" width="4" height="12" fill="#fff"/>
+    <rect x="12" y="0" width="4" height="12" fill="#fff"/>
+    <rect x="16" y="0" width="4" height="12" fill="#000"/>
+    <rect x="20" y="0" width="4" height="12" fill="#000"/>
+    <rect x="24" y="0" width="4" height="12" fill="#fff"/>
+    <rect x="28" y="0" width="4" height="12" fill="#fff"/>
+    <rect x="32" y="0" width="4" height="12" fill="#000"/>
+    <text x="40" y="10" font-size="9" fill="#666">阶梯状</text>
+  </g>
+
+  <!-- 抗锯齿边缘（右） -->
+  <text x="240" y="244" font-size="10" fill="#3ca05a">✅ 抗锯齿：边缘按覆盖率取中间色</text>
+  <g transform="translate(240, 252)">
+    <rect x="0"  y="0" width="4" height="12" fill="#000"/>
+    <rect x="4"  y="0" width="4" height="12" fill="#000"/>
+    <rect x="8"  y="0" width="4" height="12" fill="#333"/>
+    <rect x="12" y="0" width="4" height="12" fill="#999"/>
+    <rect x="16" y="0" width="4" height="12" fill="#bbb"/>
+    <rect x="20" y="0" width="4" height="12" fill="#ddd"/>
+    <rect x="24" y="0" width="4" height="12" fill="#fff"/>
+    <rect x="28" y="0" width="4" height="12" fill="#fff"/>
+    <rect x="32" y="0" width="4" height="12" fill="#ddd"/>
+    <text x="40" y="10" font-size="9" fill="#666">平滑过渡</text>
+  </g>
+
+  <text x="30" y="296" font-size="10" fill="#444">超采样做法：按 4× 画 → LANCZOS 缩回 → 边缘得到加权平均</text>
+  <text x="30" y="310" font-size="10" fill="#444">本质：边缘像素按覆盖率 α 取中间色 = src·α + dst·(1-α)（课 8 主题）</text>
+  <text x="30" y="328" font-size="10" font-weight="bold" fill="#222">总结：矢量存储（引擎内部） → 光栅化+抗锯齿 → 输出像素</text>
+</svg>

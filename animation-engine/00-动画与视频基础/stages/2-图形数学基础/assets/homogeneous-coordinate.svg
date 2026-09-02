@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 320" width="460" height="320">
+  <defs>
+    <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#3a3a3a"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="230" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">齐次坐标：用第 3 个分量区分点与向量</text>
+  <text x="230" y="40" text-anchor="middle" font-size="11" fill="#666">点 w=1（被平移影响）｜ 向量 w=0（平移不变性）</text>
+
+  <!-- ================== 左侧：点 w=1 ================== -->
+  <text x="20" y="68" font-size="12" font-weight="bold" fill="#285bc8">① 点 w=1 —— 被平移影响</text>
+
+  <!-- 坐标轴 -->
+  <line x1="50"  y1="84" x2="50"  y2="220" stroke="#ccc" stroke-width="1"/>
+  <line x1="50"  y1="200" x2="220" y2="200" stroke="#ccc" stroke-width="1"/>
+  <text x="38"  y="92"  font-size="10" fill="#999">↑y</text>
+  <text x="220" y="214" font-size="10" fill="#999">x→</text>
+  <text x="40"  y="218" font-size="9"  fill="#999">原点</text>
+
+  <!-- 原点处的灰色点 -->
+  <circle cx="120" cy="150" r="4" fill="#bbb"/>
+  <text x="128" y="146" font-size="10" fill="#bbb">P = (30, 40, 1)</text>
+
+  <!-- 平移后的蓝色点 -->
+  <circle cx="180" cy="110" r="5" fill="#285bc8"/>
+  <text x="188" y="106" font-size="10" font-weight="bold" fill="#285bc8">P' = (90, 20, 1)</text>
+
+  <!-- 平移向量 -->
+  <line x1="120" y1="150" x2="180" y2="110" stroke="#285bc8" stroke-width="1.5" marker-end="url(#arrow2)"/>
+  <text x="138" y="140" font-size="10" fill="#285bc8">T(60,-20)</text>
+
+  <text x="50" y="240" font-size="10" fill="#666">第三列 × w=1 生效 → 位置真变了</text>
+
+  <!-- ================== 右侧：向量 w=0 ================== -->
+  <text x="260" y="68" font-size="12" font-weight="bold" fill="#3ca05a">② 向量 w=0 —— 纹丝不动</text>
+
+  <!-- 坐标轴 -->
+  <line x1="280" y1="84" x2="280" y2="220" stroke="#ccc" stroke-width="1"/>
+  <line x1="280" y1="200" x2="450" y2="200" stroke="#ccc" stroke-width="1"/>
+  <text x="268" y="92"  font-size="10" fill="#999">↑y</text>
+  <text x="450" y="214" font-size="10" fill="#999">x→</text>
+
+  <!-- 原向量（画在某个起点，无几何意义，只为可视化） -->
+  <line x1="320" y1="180" x2="350" y2="140" stroke="#bbb" stroke-width="1.5" marker-end="url(#arrow2)"/>
+  <text x="358" y="144" font-size="10" fill="#bbb">v = (30, 40, 0)</text>
+
+  <!-- 平移后的向量（完全重合，画粗一点） -->
+  <line x1="320" y1="180" x2="350" y2="140" stroke="#3ca05a" stroke-width="3" marker-end="url(#arrow2)"/>
+  <text x="358" y="166" font-size="10" font-weight="bold" fill="#3ca05a">v' = (30, 40, 0)  ← 完全没动！</text>
+
+  <text x="280" y="240" font-size="10" fill="#666">第三列 × w=0 = 0 → 平移贡献被屏蔽</text>
+
+  <!-- 底部：3×3 平移矩阵的形式 -->
+  <rect x="20" y="258" width="420" height="50" fill="#f5f5f5" stroke="#ccc" rx="3"/>
+  <text x="30" y="276" font-size="11" font-weight="bold" fill="#222">齐次坐标下，平移矩阵的第 3 列就是 (tx, ty, 1)ᵀ：</text>
+  <text x="30" y="298" font-size="11" fill="#222">T = ⎡ 1  0  tx ⎤     作用在 w=1 的点上 → 位置 +t    ｜   作用在 w=0 的向量上 → 抵消为 0</text>
+</svg>

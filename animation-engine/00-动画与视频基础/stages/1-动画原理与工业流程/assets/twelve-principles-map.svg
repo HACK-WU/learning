@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" width="640" height="360">
+  <!-- Title -->
+  <text x="320" y="20" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">动画十二原则：可算法化 vs 需人工审美</text>
+  <text x="320" y="38" text-anchor="middle" font-size="11" fill="#666">Johnston &amp; Thomas 1981《The Illusion of Life》｜ 4×3 网格按原书顺序 1–12 排列，配色表示归属</text>
+
+  <!-- Legend -->
+  <rect x="176" y="52" width="16" height="10" fill="#3ca05a" rx="2"/>
+  <text x="198" y="61" font-size="11" fill="#222">🟢 可算法化（4 条）</text>
+  <rect x="312" y="52" width="16" height="10" fill="#d4a017" rx="2"/>
+  <text x="334" y="61" font-size="11" fill="#222">🟡 部分可（2 条）</text>
+  <rect x="448" y="52" width="16" height="10" fill="#c83c3c" rx="2"/>
+  <text x="470" y="61" font-size="11" fill="#222">🔴 需人工审美（6 条）</text>
+
+  <!-- Row 1 -->
+  <!-- 1 挤压拉伸 (🟡) -->
+  <rect x="20" y="76" width="132" height="72" fill="#fdf6e3" stroke="#d4a017" rx="4"/>
+  <text x="30" y="92"  font-size="11" font-weight="bold" fill="#222">1  挤压拉伸</text>
+  <text x="30" y="107" font-size="9" fill="#555">形变公式清楚</text>
+  <text x="30" y="119" font-size="9" fill="#555">rx·ry = R²（面积守恒）</text>
+  <text x="30" y="133" font-size="9" font-weight="bold" fill="#a07800">但「幅度」是审美</text>
+
+  <!-- 2 预备动作 (🔴) -->
+  <rect x="176" y="76" width="132" height="72" fill="#fbeaea" stroke="#c83c3c" rx="4"/>
+  <text x="186" y="92"  font-size="11" font-weight="bold" fill="#222">2  预备动作</text>
+  <text x="186" y="107" font-size="9" fill="#555">反方向多大？几帧？</text>
+  <text x="186" y="119" font-size="9" fill="#555">决定「观众能否预期」</text>
+  <text x="186" y="133" font-size="9" font-weight="bold" fill="#a02020">需要分寸感</text>
+
+  <!-- 3 演出布局 (🔴) -->
+  <rect x="332" y="76" width="132" height="72" fill="#fbeaea" stroke="#c83c3c" rx="4"/>
+  <text x="342" y="92"  font-size="11" font-weight="bold" fill="#222">3  演出布局</text>
+  <text x="342" y="107" font-size="9" fill="#555">镜头、构图、表演</text>
+  <text x="342" y="119" font-size="9" fill="#555">是否清晰可读</text>
+  <text x="342" y="133" font-size="9" font-weight="bold" fill="#a02020">导演 / 分镜师定</text>
+
+  <!-- 4 连续/姿态对应 (🔴) -->
+  <rect x="488" y="76" width="132" height="72" fill="#fbeaea" stroke="#c83c3c" rx="4"/>
+  <text x="498" y="92"  font-size="11" font-weight="bold" fill="#222">4  连续 / 姿态</text>
+  <text x="498" y="107" font-size="9" fill="#555">Straight Ahead</text>
+  <text x="498" y="119" font-size="9" fill="#555">vs Pose to Pose</text>
+  <text x="498" y="133" font-size="9" font-weight="bold" fill="#a02020">哪种更好看场景</text>
+
+  <!-- Row 2 -->
+  <!-- 5 跟随/重叠 (🟡) -->
+  <rect x="20" y="160" width="132" height="72" fill="#fdf6e3" stroke="#d4a017" rx="4"/>
+  <text x="30" y="176" font-size="11" font-weight="bold" fill="#222">5  跟随 / 重叠</text>
+  <text x="30" y="191" font-size="9" fill="#555">延迟 + 过冲是公式</text>
+  <text x="30" y="203" font-size="9" fill="#555">可用 delay 参数化</text>
+  <text x="30" y="217" font-size="9" font-weight="bold" fill="#a07800">但曲线形状是审美</text>
+
+  <!-- 6 慢入慢出 (🟢) -->
+  <rect x="176" y="160" width="132" height="72" fill="#eaf6ec" stroke="#3ca05a" rx="4"/>
+  <text x="186" y="176" font-size="11" font-weight="bold" fill="#222">6  慢入慢出</text>
+  <text x="186" y="191" font-size="9" fill="#555">缓动函数</text>
+  <text x="186" y="203" font-size="9" fill="#555">smoothstep / bezier</text>
+  <text x="186" y="217" font-size="9" font-weight="bold" fill="#1e6b33">确定性 → 课 6</text>
+
+  <!-- 7 弧线运动 (🟢) -->
+  <rect x="332" y="160" width="132" height="72" fill="#eaf6ec" stroke="#3ca05a" rx="4"/>
+  <text x="342" y="176" font-size="11" font-weight="bold" fill="#222">7  弧线运动</text>
+  <text x="342" y="191" font-size="9" fill="#555">路径是数学曲线</text>
+  <text x="342" y="203" font-size="9" fill="#555">圆弧 / 贝塞尔</text>
+  <text x="342" y="217" font-size="9" font-weight="bold" fill="#1e6b33">确定性 → 课 6</text>
+
+  <!-- 8 次要动作 (🟢) -->
+  <rect x="488" y="160" width="132" height="72" fill="#eaf6ec" stroke="#3ca05a" rx="4"/>
+  <text x="498" y="176" font-size="11" font-weight="bold" fill="#222">8  次要动作</text>
+  <text x="498" y="191" font-size="9" fill="#555">层级变换 + 时间偏移</text>
+  <text x="498" y="203" font-size="9" fill="#555">父子矩阵连乘</text>
+  <text x="498" y="217" font-size="9" font-weight="bold" fill="#1e6b33">确定性 → 课 5</text>
+
+  <!-- Row 3 -->
+  <!-- 9 节奏 (🟢) -->
+  <rect x="20" y="244" width="132" height="72" fill="#eaf6ec" stroke="#3ca05a" rx="4"/>
+  <text x="30" y="260"  font-size="11" font-weight="bold" fill="#222">9  节奏 Timing</text>
+  <text x="30" y="275"  font-size="9" fill="#555">fps × duration</text>
+  <text x="30" y="287"  font-size="9" fill="#555">纯参数</text>
+  <text x="30" y="301"  font-size="9" font-weight="bold" fill="#1e6b33">确定性 → 课 1</text>
+
+  <!-- 10 夸张 (🔴) -->
+  <rect x="176" y="244" width="132" height="72" fill="#fbeaea" stroke="#c83c3c" rx="4"/>
+  <text x="186" y="260" font-size="11" font-weight="bold" fill="#222">10  夸张</text>
+  <text x="186" y="275" font-size="9" fill="#555">1.2× 还是 1.5×？</text>
+  <text x="186" y="287" font-size="9" fill="#555">是连续参数</text>
+  <text x="186" y="301" font-size="9" font-weight="bold" fill="#a02020">风格判断</text>
+
+  <!-- 11 立体造型 (🔴) -->
+  <rect x="332" y="244" width="132" height="72" fill="#fbeaea" stroke="#c83c3c" rx="4"/>
+  <text x="342" y="260" font-size="11" font-weight="bold" fill="#222">11  立体造型</text>
+  <text x="342" y="275" font-size="9" fill="#555">体积感、透视正确</text>
+  <text x="342" y="287" font-size="9" fill="#555">需要造型功底</text>
+  <text x="342" y="301" font-size="9" font-weight="bold" fill="#a02020">美术定</text>
+
+  <!-- 12 吸引力 (🔴) -->
+  <rect x="488" y="244" width="132" height="72" fill="#fbeaea" stroke="#c83c3c" rx="4"/>
+  <text x="498" y="260" font-size="11" font-weight="bold" fill="#222">12  吸引力</text>
+  <text x="498" y="275" font-size="9" fill="#555">角色好不好看？</text>
+  <text x="498" y="287" font-size="9" fill="#555">动作有没有性格？</text>
+  <text x="498" y="301" font-size="9" font-weight="bold" fill="#a02020">审美，无公认算法</text>
+
+  <!-- 底部判断依据 -->
+  <rect x="20" y="330" width="600" height="22" fill="#f5f5f5" stroke="#ccc" rx="3"/>
+  <text x="320" y="345" text-anchor="middle" font-size="11" fill="#222">判断依据：<tspan font-weight="bold">给定输入 → 输出唯一，则可算法化</tspan>；存在多个合理答案、取决于风格与分寸 → 需人工</text>
+</svg>

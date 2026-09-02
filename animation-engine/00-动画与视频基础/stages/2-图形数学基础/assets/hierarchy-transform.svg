@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 320" width="460" height="320">
+  <defs>
+    <marker id="arrow3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#3a3a3a"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="230" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">层级变换：父的世界变换 × 子的局部变换</text>
+  <text x="230" y="40" text-anchor="middle" font-size="11" fill="#666">骨骼动画的数学基础 —— 一条链上的"父动 → 子跟着动"</text>
+
+  <!-- ================== 左：层级链图示 ================== -->
+  <text x="20" y="68" font-size="12" font-weight="bold" fill="#222">① 父子层级（肩 → 肘 → 腕 → 指尖）</text>
+
+  <!-- 肩（根） -->
+  <circle cx="70" cy="200" r="7" fill="#285bc8"/>
+  <text x="80" y="204" font-size="11" font-weight="bold" fill="#285bc8">肩（根）</text>
+
+  <!-- 上臂 -->
+  <line x1="70" y1="200" x2="140" y2="170" stroke="#285bc8" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="140" cy="170" r="6" fill="#3a7ad6"/>
+  <text x="150" y="166" font-size="10" fill="#222">肘</text>
+
+  <!-- 前臂 -->
+  <line x1="140" y1="170" x2="200" y2="140" stroke="#5a92e3" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="200" cy="140" r="5" fill="#7aaae8"/>
+  <text x="210" y="136" font-size="10" fill="#222">腕</text>
+
+  <!-- 手 -->
+  <line x1="200" y1="140" x2="240" y2="120" stroke="#9abfee" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="240" cy="120" r="4" fill="#b8d2f3"/>
+  <text x="250" y="116" font-size="10" fill="#222">指尖</text>
+
+  <!-- 父子箭头标注 -->
+  <line x1="100" y1="208" x2="100" y2="190" stroke="#888" stroke-width="1" marker-end="url(#arrow3)"/>
+  <text x="105" y="220" font-size="9" fill="#666">父</text>
+
+  <line x1="160" y1="178" x2="160" y2="160" stroke="#888" stroke-width="1" marker-end="url(#arrow3)"/>
+  <text x="165" y="190" font-size="9" fill="#666">父</text>
+
+  <line x1="215" y1="148" x2="215" y2="130" stroke="#888" stroke-width="1" marker-end="url(#arrow3)"/>
+  <text x="220" y="160" font-size="9" fill="#666">父</text>
+
+  <text x="20" y="250" font-size="10" fill="#666">父动 → 整条链上的子都跟着动</text>
+
+  <!-- ================== 右：矩阵连乘 ================== -->
+  <text x="260" y="68" font-size="12" font-weight="bold" fill="#222">② 子世界变换 = 父世界变换 × 子局部</text>
+
+  <text x="260" y="92" font-size="11" font-weight="bold" fill="#222">肩的根矩阵：</text>
+  <text x="260" y="108" font-size="10" font-family="monospace" fill="#333">M_肩 = T(肩位置)</text>
+
+  <text x="260" y="128" font-size="11" font-weight="bold" fill="#222">上臂世界矩阵：</text>
+  <text x="260" y="144" font-size="10" font-family="monospace" fill="#333">M_上臂 = M_肩 · R(θ₁)</text>
+
+  <text x="260" y="164" font-size="11" font-weight="bold" fill="#222">前臂世界矩阵：</text>
+  <text x="260" y="180" font-size="10" font-family="monospace" fill="#333">M_前臂 = M_上臂 · T(臂长) · R(θ₂)</text>
+
+  <text x="260" y="200" font-size="11" font-weight="bold" fill="#222">手的世界矩阵：</text>
+  <text x="260" y="216" font-size="10" font-family="monospace" fill="#333">M_手 = M_前臂 · T(前臂长) · R(θ₃)</text>
+
+  <text x="260" y="244" font-size="10" font-weight="bold" fill="#c83c3c">⚠ 顺序从右往左："父 → 子局部"</text>
+  <text x="260" y="258" font-size="10" fill="#666">反过来的 M_子 · M_父 会得到完全不同的位置</text>
+
+  <!-- 底部关键 insight -->
+  <rect x="20" y="280" width="420" height="32" fill="#f5f5f5" stroke="#ccc" rx="3"/>
+  <text x="30" y="298" font-size="11" fill="#222">关键 insight：每一级只关心"父在哪"+"自己怎么动"——把这条链编成矩阵栈就是骨骼动画的雏形</text>
+</svg>

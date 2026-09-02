@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 220" width="360" height="220">
+  <!-- Title -->
+  <text x="180" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">2 张原画 vs 3 张原画</text>
+
+  <!-- ================== Top scene: 2 keyframes (linear) ================== -->
+  <text x="20" y="50" font-size="12" fill="#444">2 张原画 → 直线</text>
+
+  <!-- The horizontal line connecting A and C -->
+  <line x1="60" y1="90" x2="300" y2="90" stroke="#bbb" stroke-width="1" stroke-dasharray="3,2"/>
+
+  <!-- Intermediate dots (inbetweens) -->
+  <circle cx="100" cy="90" r="2" fill="#bbb"/>
+  <circle cx="140" cy="90" r="2" fill="#bbb"/>
+  <circle cx="180" cy="90" r="2" fill="#bbb"/>
+  <circle cx="220" cy="90" r="2" fill="#bbb"/>
+  <circle cx="260" cy="90" r="2" fill="#bbb"/>
+
+  <!-- Keyframe A -->
+  <circle cx="60" cy="90" r="5" fill="none" stroke="#c83c3c" stroke-width="2"/>
+  <text x="55" y="108" font-size="12" font-weight="bold" fill="#c83c3c">A</text>
+
+  <!-- Keyframe C -->
+  <circle cx="300" cy="90" r="5" fill="none" stroke="#c83c3c" stroke-width="2"/>
+  <text x="294" y="108" font-size="12" font-weight="bold" fill="#c83c3c">C</text>
+
+  <text x="180" y="120" text-anchor="middle" font-size="10" fill="#888">中割（由算法按线性插值补出）</text>
+
+  <!-- Divider -->
+  <line x1="20" y1="135" x2="340" y2="135" stroke="#ddd" stroke-width="1"/>
+
+  <!-- ================== Bottom scene: 3 keyframes (with breakdown) ================== -->
+  <text x="20" y="155" font-size="12" fill="#444">3 张原画（含小原画 B）→ 弧线</text>
+
+  <!-- The polyline A→B→C -->
+  <polyline points="60,195 180,165 300,195" stroke="#bbb" stroke-width="1" stroke-dasharray="3,2" fill="none"/>
+
+  <!-- Keyframe A -->
+  <circle cx="60" cy="195" r="5" fill="none" stroke="#c83c3c" stroke-width="2"/>
+  <text x="55" y="213" font-size="12" font-weight="bold" fill="#c83c3c">A</text>
+
+  <!-- Keyframe B (breakdown) -->
+  <circle cx="180" cy="165" r="5" fill="none" stroke="#3ca05a" stroke-width="2"/>
+  <text x="174" y="158" font-size="12" font-weight="bold" fill="#3ca05a">B</text>
+  <text x="190" y="160" font-size="10" fill="#3ca05a">小原画 (breakdown)</text>
+
+  <!-- Keyframe C -->
+  <circle cx="300" cy="195" r="5" fill="none" stroke="#c83c3c" stroke-width="2"/>
+  <text x="294" y="213" font-size="12" font-weight="bold" fill="#c83c3c">C</text>
+</svg>

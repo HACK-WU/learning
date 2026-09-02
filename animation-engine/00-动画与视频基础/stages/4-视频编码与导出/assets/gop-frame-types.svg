@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 340" width="500" height="340">
+  <!-- 标题 -->
+  <text x="250" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">I/P/B 帧：稳定画面压得小，闪烁画面压不动</text>
+  <text x="250" y="40" text-anchor="middle" font-size="11" fill="#666">P/B 帧只存「与参考帧的残差」——稳定画面残差≈0，闪烁画面残差≈噪点</text>
+
+  <!-- 三种帧示意（左侧） -->
+  <text x="20" y="74" font-size="11" font-weight="bold" fill="#222">三种帧：</text>
+
+  <!-- I 帧 -->
+  <g transform="translate(20, 86)">
+    <rect x="0" y="0" width="120" height="60" fill="#fff" stroke="#c83c3c" stroke-width="2"/>
+    <text x="60" y="20" text-anchor="middle" font-size="11" font-weight="bold" fill="#c83c3c">I 帧</text>
+    <text x="60" y="36" text-anchor="middle" font-size="9" fill="#444">完整图像</text>
+    <text x="60" y="50" text-anchor="middle" font-size="9" fill="#444">独立解码</text>
+  </g>
+  <text x="68" y="160" font-size="9" text-anchor="middle" fill="#666">大</text>
+
+  <!-- P 帧 -->
+  <g transform="translate(160, 86)">
+    <rect x="0" y="0" width="120" height="60" fill="#fff" stroke="#d49000" stroke-width="2"/>
+    <text x="60" y="20" text-anchor="middle" font-size="11" font-weight="bold" fill="#d49000">P 帧</text>
+    <text x="60" y="36" text-anchor="middle" font-size="9" fill="#444">运动矢量 + 残差</text>
+    <text x="60" y="50" text-anchor="middle" font-size="9" fill="#444">与前一帧</text>
+  </g>
+  <text x="220" y="160" font-size="9" text-anchor="middle" fill="#666">中</text>
+
+  <!-- B 帧 -->
+  <g transform="translate(300, 86)">
+    <rect x="0" y="0" width="120" height="60" fill="#fff" stroke="#3ca05a" stroke-width="2"/>
+    <text x="360" y="20" text-anchor="middle" font-size="11" font-weight="bold" fill="#3ca05a">B 帧</text>
+    <text x="360" y="36" text-anchor="middle" font-size="9" fill="#444">运动矢量 + 残差</text>
+    <text x="360" y="50" text-anchor="middle" font-size="9" fill="#444">与前后两帧</text>
+  </g>
+  <text x="360" y="160" font-size="9" text-anchor="middle" fill="#666">小</text>
+
+  <!-- GOP 序列示意 -->
+  <text x="20" y="190" font-size="11" font-weight="bold" fill="#222">GOP 序列（GOP = 12）：</text>
+
+  <g transform="translate(20, 200)">
+    <g><rect x="0"   y="0" width="36" height="28" fill="#c83c3c" stroke="#a02020"/><text x="18" y="19" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">I</text></g>
+    <g><rect x="36"  y="0" width="36" height="28" fill="#f8e0b0" stroke="#d49000"/><text x="54" y="19" text-anchor="middle" font-size="11" font-weight="bold" fill="#a06000">P</text></g>
+    <g><rect x="72"  y="0" width="36" height="28" fill="#f8e0b0" stroke="#d49000"/><text x="90" y="19" text-anchor="middle" font-size="11" font-weight="bold" fill="#a06000">P</text></g>
+    <g><rect x="108" y="0" width="36" height="28" fill="#d8f0d8" stroke="#3ca05a"/><text x="126" y="19" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a6b2a">B</text></g>
+    <g><rect x="144" y="0" width="36" height="28" fill="#d8f0d8" stroke="#3ca05a"/><text x="162" y="19" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a6b2a">B</text></g>
+    <g><rect x="180" y="0" width="36" height="28" fill="#f8e0b0" stroke="#d49000"/><text x="198" y="19" text-anchor="middle" font-size="11" font-weight="bold" fill="#a06000">P</text></g>
+    <g><rect x="216" y="0" width="36" height="28" fill="#d8f0d8" stroke="#3ca05a"/><text x="234" y="19" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a6b2a">B</text></g>
+    <g><rect x="252" y="0" width="36" height="28" fill="#d8f0d8" stroke="#3ca05a"/><text x="270" y="19" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a6b2a">B</text></g>
+    <g><rect x="288" y="0" width="36" height="28" fill="#f8e0b0" stroke="#d49000"/><text x="306" y="19" text-anchor="middle" font-size="11" font-weight="bold" fill="#a06000">P</text></g>
+    <g><rect x="324" y="0" width="36" height="28" fill="#d8f0d8" stroke="#3ca05a"/><text x="342" y="19" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a6b2a">B</text></g>
+    <g><rect x="360" y="0" width="36" height="28" fill="#d8f0d8" stroke="#3ca05a"/><text x="378" y="19" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a6b2a">B</text></g>
+    <g><rect x="396" y="0" width="36" height="28" fill="#c83c3c" stroke="#a02020"/><text x="414" y="19" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">I</text></g>
+
+    <line x1="0" y1="34" x2="432" y2="34" stroke="#285bc8" stroke-width="1"/>
+    <text x="220" y="50" font-size="10" text-anchor="middle" fill="#285bc8">← 一个 GOP = 12 帧 →</text>
+  </g>
+
+  <!-- 闪烁 vs 稳定 -->
+  <text x="20" y="280" font-size="11" font-weight="bold" fill="#222">为什么闪烁压不动：</text>
+  <text x="32" y="298" font-size="10" fill="#3ca05a">稳定画面：残差 ≈ 0（只有少量移动的圆） → 残差极易压缩 → 文件小</text>
+  <text x="32" y="314" font-size="10" fill="#c83c3c">闪烁画面：残差 ≈ 随机噪点（每帧像素都跳）→ 残差压不动 → 文件大 18×</text>
+  <text x="32" y="330" font-size="9" fill="#666">💡 需求文档的「帧间一致性」不只是为了好看，更是压缩率的前提</text>
+</svg>

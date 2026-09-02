@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 360" width="460" height="360">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#3a3a3a"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="230" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">点 vs 向量：长得一样、代数不同</text>
+  <text x="230" y="40" text-anchor="middle" font-size="11" fill="#666">点 = 位置，向量 = 位移；点 + 向量 = 新点（平移）</text>
+
+  <!-- Left diagram: P + v = P' -->
+  <text x="20" y="68" font-size="12" font-weight="bold" fill="#444">点 + 向量 = 新的点（平移）</text>
+
+  <!-- Coordinate axes (math style: y up) -->
+  <line x1="40"  y1="80"  x2="40"  y2="220" stroke="#888" stroke-width="1" marker-end="url(#arrow)"/>
+  <line x1="40"  y1="220" x2="200" y2="220" stroke="#888" stroke-width="1" marker-end="url(#arrow)"/>
+  <text x="28"  y="86"  font-size="10" fill="#666">↑y</text>
+  <text x="200" y="234" font-size="10" fill="#666">x→</text>
+  <text x="30"  y="232" font-size="9"  fill="#666">原点</text>
+
+  <!-- Point P at (60, 100) -->
+  <circle cx="60" cy="120" r="5" fill="#c83c3c"/>
+  <text x="68" y="116" font-size="11" font-weight="bold" fill="#c83c3c">P</text>
+  <text x="68" y="129" font-size="9"  fill="#c83c3c">(60, 100)</text>
+
+  <!-- Vector v = (90, 40) starting at P -->
+  <line x1="60" y1="120" x2="150" y2="80" stroke="#285bc8" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="105" y="98" font-size="11" font-weight="bold" fill="#285bc8">v</text>
+  <text x="160" y="80" font-size="9"  fill="#285bc8">(90, 40)</text>
+
+  <!-- New point P' = (150, 60) -->
+  <circle cx="150" cy="80" r="5" fill="#3ca05a"/>
+  <text x="158" y="76" font-size="11" font-weight="bold" fill="#3ca05a">P'</text>
+  <text x="158" y="89" font-size="9"  fill="#3ca05a">(150, 60)</text>
+
+  <text x="40" y="250" font-size="11" fill="#222">P' = P + v = (60+90, 100+40) = (150, 60)</text>
+  <text x="40" y="266" font-size="10" fill="#666">这就是课 1 关键帧 + 课 2 中割的数学版本</text>
+
+  <!-- Right diagram: P2 - P1 = v -->
+  <text x="20" y="298" font-size="12" font-weight="bold" fill="#444">点 − 点 = 向量（位移）</text>
+
+  <line x1="40"  y1="305" x2="40"  y2="340" stroke="#888" stroke-width="1" marker-end="url(#arrow)"/>
+  <text x="28"  y="312" font-size="10" fill="#666">y</text>
+
+  <circle cx="60"  cy="335" r="4" fill="#c83c3c"/>
+  <text x="50"  y="350" font-size="10" fill="#c83c3c">P1</text>
+
+  <circle cx="150" cy="315" r="4" fill="#3ca05a"/>
+  <text x="158" y="313" font-size="10" fill="#3ca05a">P2</text>
+
+  <line x1="60" y1="335" x2="150" y2="315" stroke="#3a3a3a" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="105" y="328" font-size="10" font-weight="bold" fill="#222">v = P2 − P1</text>
+</svg>

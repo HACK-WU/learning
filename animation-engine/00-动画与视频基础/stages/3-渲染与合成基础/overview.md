@@ -34,5 +34,5 @@
 
 ## 本阶段产出
 
-- [ ] `lessons/lesson-07-光栅与矢量.md`
-- [ ] `lessons/lesson-08-图层alpha与深度排序.md`
+- [x] `lessons/lesson-07-光栅与矢量.md`（**已完成**——光栅图像、矢量图形、两种表示在引擎中的分工）
+- [x] `lessons/lesson-08-图层alpha与深度排序.md`（**全部 4 知识点已完成**——图层模型、alpha 与颜色合成、深度与遮挡、颜色还原与语义标签）

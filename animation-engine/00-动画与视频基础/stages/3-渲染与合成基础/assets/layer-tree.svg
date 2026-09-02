@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 340" width="460" height="340">
+  <!-- 标题 -->
+  <text x="230" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">图层树与 group：百年赛璐珞的代码化</text>
+  <text x="230" y="40" text-anchor="middle" font-size="11" fill="#666">每层 = 一张独立 RGBA 数组，group = 装订夹，整组可操作、组内保 z 顺序</text>
+
+  <!-- 图层树主体 -->
+  <!-- 根：scene -->
+  <rect x="20" y="60" width="80" height="24" fill="#285bc8" stroke="#1a3a7e" rx="2"/>
+  <text x="60" y="76" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">scene</text>
+
+  <!-- 4 个 group：background / midground / actors / foreground -->
+  <!-- background -->
+  <line x1="60" y1="84" x2="60" y2="100" stroke="#666" stroke-width="1"/>
+  <line x1="100" y1="100" x2="160" y2="100" stroke="#666" stroke-width="1"/>
+  <line x1="130" y1="100" x2="130" y2="112" stroke="#666" stroke-width="1"/>
+  <rect x="90" y="112" width="80" height="22" fill="#e0e8f5" stroke="#285bc8" rx="2"/>
+  <text x="130" y="127" text-anchor="middle" font-size="10" fill="#1a3a7e">background</text>
+  <line x1="130" y1="134" x2="130" y2="148" stroke="#666" stroke-width="1"/>
+  <rect x="100" y="148" width="60" height="20" fill="#fff" stroke="#666" rx="1"/>
+  <text x="130" y="162" text-anchor="middle" font-size="9" fill="#333">ground (z=0)</text>
+
+  <!-- midground -->
+  <line x1="130" y1="100" x2="130" y2="112" stroke="#666" stroke-width="1"/>
+  <rect x="170" y="112" width="80" height="22" fill="#e0e8f5" stroke="#285bc8" rx="2"/>
+  <text x="210" y="127" text-anchor="middle" font-size="10" fill="#1a3a7e">midground</text>
+  <line x1="210" y1="134" x2="210" y2="148" stroke="#666" stroke-width="1"/>
+  <rect x="180" y="148" width="60" height="20" fill="#fff" stroke="#666" rx="1"/>
+  <text x="210" y="162" text-anchor="middle" font-size="9" fill="#333">mountain (z=1)</text>
+
+  <!-- actors -->
+  <line x1="210" y1="100" x2="210" y2="112" stroke="#666" stroke-width="1"/>
+  <rect x="250" y="112" width="80" height="22" fill="#e0e8f5" stroke="#285bc8" rx="2"/>
+  <text x="290" y="127" text-anchor="middle" font-size="10" fill="#1a3a7e">actors</text>
+  <line x1="290" y1="134" x2="290" y2="148" stroke="#666" stroke-width="1"/>
+  <rect x="260" y="148" width="60" height="20" fill="#fff" stroke="#666" rx="1"/>
+  <text x="290" y="162" text-anchor="middle" font-size="9" fill="#333">character (z=2)</text>
+
+  <!-- foreground -->
+  <line x1="290" y1="100" x2="290" y2="112" stroke="#666" stroke-width="1"/>
+  <line x1="300" y1="100" x2="360" y2="100" stroke="#666" stroke-width="1"/>
+  <line x1="330" y1="100" x2="330" y2="112" stroke="#666" stroke-width="1"/>
+  <rect x="330" y="112" width="80" height="22" fill="#e0e8f5" stroke="#285bc8" rx="2"/>
+  <text x="370" y="127" text-anchor="middle" font-size="10" fill="#1a3a7e">foreground</text>
+  <line x1="370" y1="134" x2="370" y2="148" stroke="#666" stroke-width="1"/>
+  <rect x="340" y="148" width="60" height="20" fill="#fff" stroke="#666" rx="1"/>
+  <text x="370" y="162" text-anchor="middle" font-size="9" fill="#333">grass (z=3)</text>
+
+  <!-- z 顺序箭头（右侧） -->
+  <line x1="420" y1="158" x2="420" y2="92" stroke="#3ca05a" stroke-width="2" marker-end="url(#arrUp)"/>
+  <text x="430" y="124" font-size="10" fill="#3ca05a">z 值越大</text>
+  <text x="430" y="138" font-size="10" fill="#3ca05a">越在上</text>
+
+  <defs>
+    <marker id="arrUp" viewBox="0 0 10 10" refX="5" refY="2" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,8 L5,0 L10,8 Z" fill="#3ca05a"/>
+    </marker>
+  </defs>
+
+  <!-- 底部：group 的作用 + 合成流程 -->
+  <rect x="20" y="190" width="420" height="130" fill="#f9f9f9" stroke="#ccc" rx="3"/>
+  <text x="32" y="210" font-size="11" font-weight="bold" fill="#222">group 的作用（赛璐珞的"装订夹"）：</text>
+  <text x="44" y="228" font-size="10" fill="#444">• 整组移动 / 显隐 / 改不透明度（不用逐层改）</text>
+  <text x="44" y="244" font-size="10" fill="#444">• 组内仍保各自 z 顺序（组与组之间按组的 z 排序）</text>
+  <text x="44" y="260" font-size="10" fill="#444">• 复用：整组可复制（如森林 100 棵树 = 1 个 group × 100）</text>
+
+  <text x="32" y="286" font-size="11" font-weight="bold" fill="#222">合成流程（自底向上反复 over）：</text>
+  <text x="44" y="302" font-size="10" fill="#285bc8">final = ground</text>
+  <text x="160" y="302" font-size="10" fill="#666">→</text>
+  <text x="178" y="302" font-size="10" fill="#285bc8">over(mountain)</text>
+  <text x="284" y="302" font-size="10" fill="#666">→</text>
+  <text x="302" y="302" font-size="10" fill="#285bc8">over(character)</text>
+  <text x="400" y="302" font-size="10" fill="#666">→</text>
+  <text x="412" y="302" font-size="10" fill="#3ca05a">over(grass)</text>
+</svg>

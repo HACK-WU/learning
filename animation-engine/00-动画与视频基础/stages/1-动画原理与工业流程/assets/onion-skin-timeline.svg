@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 200" width="460" height="200">
+  <!-- Title -->
+  <text x="230" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">洋葱皮 Onion Skin</text>
+  <text x="230" y="40" text-anchor="middle" font-size="11" fill="#666">把前后几帧半透明叠加，看到"动作的来龙去脉"</text>
+
+  <!-- Timeline: t-2, t-1, t (current), t+1, t+2 -->
+  <g transform="translate(30, 90)">
+    <!-- Baseline -->
+    <line x1="20" y1="0" x2="300" y2="0" stroke="#ddd" stroke-width="1" stroke-dasharray="3,2"/>
+
+    <!-- t-2 (lightest green) -->
+    <circle cx="40" cy="0" r="12" fill="rgb(170, 230, 190)" opacity="0.4"/>
+    <text x="40" y="35" text-anchor="middle" font-size="10" fill="#666">t-2</text>
+
+    <!-- t-1 (darker green) -->
+    <circle cx="100" cy="0" r="12" fill="rgb(120, 200, 150)" opacity="0.7"/>
+    <text x="100" y="35" text-anchor="middle" font-size="10" fill="#666">t-1</text>
+
+    <!-- t (current, solid black with red highlight) -->
+    <circle cx="160" cy="0" r="14" fill="#222" stroke="#c83c3c" stroke-width="2.5"/>
+    <text x="160" y="35" text-anchor="middle" font-size="10" font-weight="bold" fill="#222">t（当前）</text>
+
+    <!-- t+1 (red) -->
+    <circle cx="220" cy="0" r="12" fill="rgb(240, 140, 140)" opacity="0.7"/>
+    <text x="220" y="35" text-anchor="middle" font-size="10" fill="#666">t+1</text>
+
+    <!-- t+2 (lightest red) -->
+    <circle cx="280" cy="0" r="12" fill="rgb(250, 180, 180)" opacity="0.4"/>
+    <text x="280" y="35" text-anchor="middle" font-size="10" fill="#666">t+2</text>
+  </g>
+
+  <!-- Color legend -->
+  <text x="80" y="68" text-anchor="middle" font-size="10" fill="#3ca05a" font-weight="bold">绿色 = 过去的帧</text>
+  <text x="240" y="68" text-anchor="middle" font-size="10" fill="#c83c3c" font-weight="bold">红色 = 未来的帧</text>
+
+  <!-- Why & how -->
+  <text x="30" y="150" font-size="11" fill="#222">解决什么问题：中割师画第 t 帧时，看不到前后帧在哪就容易画偏</text>
+  <text x="30" y="170" font-size="11" fill="#222">物理实现（1930s）：灯箱 + 几张赛璐珞片叠在一起</text>
+  <text x="30" y="186" font-size="11" fill="#222">数字实现：编辑界面半透明叠加，<tspan font-weight="bold" fill="#c83c3c">最终输出里没有</tspan>绿/红</text>
+</svg>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 260" width="460" height="260">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#c83c3c"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="230" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">律表 Exposure Sheet</text>
+  <text x="230" y="40" text-anchor="middle" font-size="11" fill="#666">行 = 帧号，列 = 图层 / 字段；格子 = 数据</text>
+
+  <!-- ================== Table ================== -->
+  <!-- Outer border -->
+  <rect x="20" y="60" width="280" height="180" fill="none" stroke="#999" stroke-width="1"/>
+
+  <!-- Header row background -->
+  <rect x="20" y="60" width="280" height="36" fill="#f0f0f0"/>
+  <line x1="20" y1="96" x2="300" y2="96" stroke="#999"/>
+
+  <!-- Column dividers -->
+  <line x1="90" y1="60" x2="90" y2="240" stroke="#999"/>
+  <line x1="160" y1="60" x2="160" y2="240" stroke="#999"/>
+  <line x1="230" y1="60" x2="230" y2="240" stroke="#999"/>
+
+  <!-- Row dividers -->
+  <line x1="20" y1="132" x2="300" y2="132" stroke="#999"/>
+  <line x1="20" y1="168" x2="300" y2="168" stroke="#999"/>
+  <line x1="20" y1="204" x2="300" y2="204" stroke="#999"/>
+
+  <!-- Header text -->
+  <text x="55" y="83" text-anchor="middle" font-size="12" font-weight="bold" fill="#222">帧号</text>
+  <text x="125" y="83" text-anchor="middle" font-size="12" font-weight="bold" fill="#222">动作</text>
+  <text x="195" y="83" text-anchor="middle" font-size="12" font-weight="bold" fill="#222">摄影</text>
+  <text x="265" y="83" text-anchor="middle" font-size="12" font-weight="bold" fill="#222">备注</text>
+
+  <!-- Data row 1 -->
+  <text x="55" y="119" text-anchor="middle" font-size="11" fill="#222">1</text>
+  <text x="125" y="119" text-anchor="middle" font-size="11" fill="#222">抬腿</text>
+  <text x="195" y="119" text-anchor="middle" font-size="11" fill="#222">静止</text>
+  <text x="265" y="119" text-anchor="middle" font-size="11" fill="#aaa"></text>
+
+  <!-- Data row 2 -->
+  <text x="55" y="155" text-anchor="middle" font-size="11" fill="#222">2</text>
+  <text x="125" y="155" text-anchor="middle" font-size="11" fill="#222">抬腿</text>
+  <text x="195" y="155" text-anchor="middle" font-size="11" fill="#222">静止</text>
+  <text x="265" y="155" text-anchor="middle" font-size="11" fill="#aaa"></text>
+
+  <!-- Highlighted data row 3 (selected) -->
+  <rect x="20" y="168" width="280" height="36" fill="#fff8dc" stroke="#c83c3c" stroke-width="2"/>
+  <text x="55" y="191" text-anchor="middle" font-size="11" fill="#222">3</text>
+  <text x="125" y="191" text-anchor="middle" font-size="11" fill="#222">落脚</text>
+  <text x="195" y="191" text-anchor="middle" font-size="11" fill="#222">推</text>
+  <text x="265" y="191" text-anchor="middle" font-size="11" fill="#aaa"></text>
+
+  <!-- Data row 4 -->
+  <text x="55" y="227" text-anchor="middle" font-size="11" fill="#222">4</text>
+  <text x="125" y="227" text-anchor="middle" font-size="11" fill="#222">张嘴</text>
+  <text x="195" y="227" text-anchor="middle" font-size="11" fill="#222">静止</text>
+  <text x="265" y="227" text-anchor="middle" font-size="11" fill="#aaa"></text>
+
+  <!-- ================== Arrow from row 3 to rendered frame ================== -->
+  <line x1="305" y1="186" x2="355" y2="186" stroke="#c83c3c" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ================== Rendered frame preview ================== -->
+  <rect x="365" y="150" width="80" height="80" fill="#fff" stroke="#999"/>
+  <!-- ground -->
+  <rect x="365" y="215" width="80" height="15" fill="#b4dcb4"/>
+  <!-- prop -->
+  <rect x="395" y="190" width="20" height="25" fill="#3c6dc8"/>
+  <!-- character (ball, higher position = "落脚" / "推") -->
+  <circle cx="405" cy="180" r="6" fill="#1e1e1e"/>
+  <text x="405" y="244" text-anchor="middle" font-size="10" fill="#666">渲染第 3 帧</text>
+</svg>

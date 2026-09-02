@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 360" width="460" height="360">
+  <!-- Title -->
+  <text x="230" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#222">变换顺序不可交换</text>
+  <text x="230" y="40" text-anchor="middle" font-size="11" fill="#666">R·T·P = R·P + R·t  ≠  T·R·P = R·P + t  （除非 t = 0）</text>
+
+  <!-- ================== 上：T·R (先旋转后平移) ================== -->
+  <text x="20" y="68" font-size="12" font-weight="bold" fill="#285bc8">上：先旋转后平移  T·R·P</text>
+  <text x="20" y="84" font-size="10" fill="#666">P 先绕原点转，再加 t → R·P + t</text>
+
+  <g transform="translate(20, 100)">
+    <!-- 原点 -->
+    <circle cx="0" cy="100" r="3" fill="#444"/>
+    <text x="-4" y="118" font-size="9" fill="#444">O</text>
+
+    <!-- P 原位置 -->
+    <circle cx="0" cy="60" r="3" fill="#bbb"/>
+    <text x="-12" y="56" font-size="9" fill="#bbb">P</text>
+
+    <!-- 平移向量 t（不动） -->
+    <line x1="0" y1="60" x2="40" y2="60" stroke="#888" stroke-width="1" stroke-dasharray="3,2"/>
+    <polygon points="40,60 36,57 36,63" fill="#888"/>
+    <text x="14" y="54" font-size="9" fill="#888">t</text>
+
+    <!-- R(45°)(P) = 旋转 45° 后的 P -->
+    <g transform="rotate(45 0 60)">
+      <circle cx="0" cy="60" r="3" fill="#bbb"/>
+    </g>
+    <text x="40" y="40" font-size="9" fill="#bbb">R(P)</text>
+
+    <!-- 加上 t（在水平方向） -->
+    <g transform="translate(40, 0)">
+      <g transform="rotate(45 0 60)">
+        <circle cx="0" cy="60" r="4" fill="#285bc8"/>
+      </g>
+      <text x="22" y="62" font-size="9" font-weight="bold" fill="#285bc8">P'=R(P)+t</text>
+    </g>
+  </g>
+
+  <!-- ================== 下：R·T (先平移后旋转) ================== -->
+  <text x="20" y="208" font-size="12" font-weight="bold" fill="#c83c3c">下：先平移后旋转  R·T·P</text>
+  <text x="20" y="224" font-size="10" fill="#666">P 先加 t，再整体旋转 → R·(P + t) = R·P + R·t</text>
+
+  <g transform="translate(20, 240)">
+    <!-- 原点 -->
+    <circle cx="0" cy="100" r="3" fill="#444"/>
+    <text x="-4" y="118" font-size="9" fill="#444">O</text>
+
+    <!-- P 原位置 -->
+    <circle cx="0" cy="60" r="3" fill="#bbb"/>
+    <text x="-12" y="56" font-size="9" fill="#bbb">P</text>
+
+    <!-- 平移向量 t（不动） -->
+    <line x1="0" y1="60" x2="40" y2="60" stroke="#888" stroke-width="1" stroke-dasharray="3,2"/>
+    <polygon points="40,60 36,57 36,63" fill="#888"/>
+    <text x="14" y="54" font-size="9" fill="#888">t</text>
+
+    <!-- 整组：先平移再旋转 45° -->
+    <g transform="rotate(45 0 60) translate(40 0)">
+      <circle cx="0" cy="60" r="4" fill="#c83c3c"/>
+    </g>
+    <!-- 注意：旋转是绕原点(0,60) 转的，所以 R(t) 是个 45° 方向的向量 -->
+    <text x="50" y="14" font-size="9" fill="#c83c3c">P'=R(P+t)</text>
+    <text x="50" y="28" font-size="9" fill="#c83c3c">= R(P)+R(t)</text>
+  </g>
+
+  <!-- 标注：两个 P' 位置不同 -->
+  <line x1="270" y1="190" x2="380" y2="190" stroke="#a0a0a0" stroke-width="1" stroke-dasharray="4,2"/>
+  <text x="325" y="184" text-anchor="middle" font-size="10" fill="#a0a0a0">两个 P' 位置不同</text>
+  <text x="325" y="200" text-anchor="middle" font-size="10" fill="#a0a0a0" font-weight="bold">差 = R(t) − t</text>
+
+  <!-- 底部结论 -->
+  <rect x="20" y="320" width="420" height="32" fill="#f5f5f5" stroke="#ccc" rx="3"/>
+  <text x="30" y="336" font-size="10" fill="#222">关键：R·T·P = R·P + <tspan font-weight="bold" fill="#c83c3c">R·t</tspan>  （平移向量 t 也被转了）</text>
+  <text x="30" y="348" font-size="10" fill="#222">骨骼动画、角色挂载、世界变换的层级关系，<tspan font-weight="bold">全靠"顺序"</tspan>工作 —— 不可交换是基础</text>
+</svg>
