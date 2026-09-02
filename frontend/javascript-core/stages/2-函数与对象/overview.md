@@ -47,8 +47,8 @@
 
 ## 本阶段产出
 
-- [ ] `lessons/lesson-04-函数是一等公民.md`
-- [ ] `lessons/lesson-05-this到底指向谁.md`
-- [ ] `lessons/lesson-06-原型与类.md`
+- [x] `lessons/lesson-04-函数是一等公民.md` ✅（2026-09-02）
+- [x] `lessons/lesson-05-this到底指向谁.md` ✅（2026-09-02）
+- [x] `lessons/lesson-06-原型与类.md` ✅（2026-09-02，阶段 2 收官）
 
 > 实操环境：Node.js v22.14.0（Windows PowerShell）。涉及浏览器行为的示例另行标注。

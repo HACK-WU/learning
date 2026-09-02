@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="970" height="520" viewBox="0 0 970 520" font-family="'Microsoft YaHei','PingFang SC','Helvetica Neue',Arial,sans-serif">
+  <rect x="0" y="0" width="970" height="520" fill="#ffffff"/>
+
+  <text x="20" y="32" font-size="18" font-weight="700" fill="#1f2937">一次事件循环的分步推演：同步 → 清空微任务 → 取一个宏任务</text>
+
+  <!-- 示例代码 -->
+  <rect x="20" y="46" width="930" height="82" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="36" y="68" font-size="12.5" font-family="Consolas,Monaco,monospace" fill="#1e293b">console.log('start');</text>
+  <text x="36" y="86" font-size="12.5" font-family="Consolas,Monaco,monospace" fill="#1e293b">setTimeout(() =&gt; console.log('timeout'), 0);   <tspan fill="#dc2626">// 宏任务</tspan></text>
+  <text x="36" y="104" font-size="12.5" font-family="Consolas,Monaco,monospace" fill="#1e293b">Promise.resolve().then(() =&gt; console.log('promise'));   <tspan fill="#16a34a">// 微任务</tspan></text>
+  <text x="36" y="122" font-size="12.5" font-family="Consolas,Monaco,monospace" fill="#1e293b">console.log('end');</text>
+
+  <!-- ===== 步骤 1 ===== -->
+  <rect x="20" y="146" width="228" height="252" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="34" y="170" font-size="13.5" font-weight="700" fill="#1e3a8a">步骤 1 · 跑同步代码</text>
+  <rect x="32" y="182" width="204" height="46" rx="5" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+  <text x="42" y="200" font-size="10.5" fill="#64748b">调用栈</text>
+  <text x="42" y="218" font-size="11.5" font-family="Consolas,Monaco,monospace" fill="#1e293b">[ 整个 script ]</text>
+  <rect x="32" y="235" width="204" height="46" rx="5" fill="#f0fdf4" stroke="#16a34a" stroke-width="1"/>
+  <text x="42" y="253" font-size="10.5" fill="#15803d">微任务队列（登记中）</text>
+  <text x="42" y="271" font-size="11.5" font-family="Consolas,Monaco,monospace" fill="#1e293b">[ then 回调 ]</text>
+  <rect x="32" y="288" width="204" height="46" rx="5" fill="#fef2f2" stroke="#dc2626" stroke-width="1"/>
+  <text x="42" y="306" font-size="10.5" fill="#b91c1c">宏任务队列（登记中）</text>
+  <text x="42" y="324" font-size="11.5" font-family="Consolas,Monaco,monospace" fill="#1e293b">[ timeout 回调 ]</text>
+  <rect x="32" y="342" width="204" height="44" rx="5" fill="#1e293b"/>
+  <text x="42" y="360" font-size="10.5" fill="#94a3b8">输出</text>
+  <text x="42" y="378" font-size="11.5" font-family="Consolas,Monaco,monospace" fill="#ffffff">start / end</text>
+
+  <!-- ===== 步骤 2 ===== -->
+  <rect x="262" y="146" width="228" height="252" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="276" y="170" font-size="13.5" font-weight="700" fill="#14532d">步骤 2 · 清空微任务</text>
+  <rect x="274" y="182" width="204" height="46" rx="5" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+  <text x="284" y="200" font-size="10.5" fill="#64748b">调用栈</text>
+  <text x="284" y="218" font-size="11.5" font-family="Consolas,Monaco,monospace" fill="#1e293b">[ then 回调 ]</text>
+  <rect x="274" y="235" width="204" height="46" rx="5" fill="#f0fdf4" stroke="#16a34a" stroke-width="1"/>
+  <text x="284" y="253" font-size="10.5" fill="#15803d">微任务队列（已清空）</text>
+  <text x="284" y="271" font-size="11.5" font-family="Consolas,Monaco,monospace" fill="#1e293b">[ ] ← 全走完才罢休</text>
+  <rect x="274" y="288" width="204" height="46" rx="5" fill="#fef2f2" stroke="#dc2626" stroke-width="1"/>
+  <text x="284" y="306" font-size="10.5" fill="#b91c1c">宏任务队列（还没轮到）</text>
+  <text x="284" y="324" font-size="11.5" font-family="Consolas,Monaco,monospace" fill="#1e293b">[ timeout 回调 ]</text>
+  <rect x="274" y="342" width="204" height="44" rx="5" fill="#1e293b"/>
+  <text x="284" y="360" font-size="10.5" fill="#94a3b8">输出</text>
+  <text x="284" y="378" font-size="11.5" font-family="Consolas,Monaco,monospace" fill="#ffffff">promise</text>
+
+  <!-- ===== 步骤 3 ===== -->
+  <rect x="504" y="146" width="228" height="252" rx="8" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="518" y="170" font-size="13.5" font-weight="700" fill="#7f1d1d">步骤 3 · 取一个宏任务</text>
+  <rect x="516" y="182" width="204" height="46" rx="5" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+  <text x="526" y="200" font-size="10.5" fill="#64748b">调用栈</text>
+  <text x="526" y="218" font-size="11.5" font-family="Consolas,Monaco,monospace" fill="#1e293b">[ timeout 回调 ]</text>
+  <rect x="516" y="235" width="204" height="46" rx="5" fill="#f0fdf4" stroke="#16a34a" stroke-width="1"/>
+  <text x="526" y="253" font-size="10.5" fill="#15803d">微任务队列</text>
+  <text x="526" y="271" font-size="11.5" font-family="Consolas,Monaco,monospace" fill="#1e293b">[ ] （空也要再查一次）</text>
+  <rect x="516" y="288" width="204" height="46" rx="5" fill="#fef2f2" stroke="#dc2626" stroke-width="1"/>
+  <text x="526" y="306" font-size="10.5" fill="#b91c1c">宏任务队列</text>
+  <text x="526" y="324" font-size="11.5" font-family="Consolas,Monaco,monospace" fill="#1e293b">[ ] ← 每次只取一个</text>
+  <rect x="516" y="342" width="204" height="44" rx="5" fill="#1e293b"/>
+  <text x="526" y="360" font-size="10.5" fill="#94a3b8">输出</text>
+  <text x="526" y="378" font-size="11.5" font-family="Consolas,Monaco,monospace" fill="#ffffff">timeout</text>
+
+  <!-- ===== 步骤 4 ===== -->
+  <rect x="746" y="146" width="204" height="252" rx="8" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+  <text x="760" y="170" font-size="13.5" font-weight="700" fill="#334155">步骤 4 · 循环继续</text>
+  <rect x="758" y="182" width="180" height="46" rx="5" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+  <text x="768" y="200" font-size="10.5" fill="#64748b">调用栈</text>
+  <text x="768" y="218" font-size="11.5" font-family="Consolas,Monaco,monospace" fill="#1e293b">[ ] （空）</text>
+  <rect x="758" y="235" width="180" height="46" rx="5" fill="#f0fdf4" stroke="#16a34a" stroke-width="1"/>
+  <text x="768" y="253" font-size="10.5" fill="#15803d">微任务队列</text>
+  <text x="768" y="271" font-size="11.5" font-family="Consolas,Monaco,monospace" fill="#1e293b">[ ]</text>
+  <rect x="758" y="288" width="180" height="46" rx="5" fill="#fef2f2" stroke="#dc2626" stroke-width="1"/>
+  <text x="768" y="306" font-size="10.5" fill="#b91c1c">宏任务队列</text>
+  <text x="768" y="324" font-size="11.5" font-family="Consolas,Monaco,monospace" fill="#1e293b">[ ]</text>
+  <rect x="758" y="342" width="180" height="44" rx="5" fill="#1e293b"/>
+  <text x="768" y="360" font-size="10.5" fill="#94a3b8">输出</text>
+  <text x="768" y="378" font-size="11.5" font-family="Consolas,Monaco,monospace" fill="#ffffff">（结束）</text>
+
+  <!-- 步骤间箭头 -->
+  <defs>
+    <marker id="step" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+  </defs>
+  <path d="M 252 272 L 258 272" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#step)"/>
+  <path d="M 494 272 L 500 272" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#step)"/>
+  <path d="M 736 272 L 742 272" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#step)"/>
+
+  <!-- 结论 -->
+  <rect x="20" y="414" width="930" height="92" rx="8" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.2"/>
+  <text x="36" y="438" font-size="12.5" font-weight="700" fill="#78350f">🔑 三步走（所有输出顺序题都是这一套）</text>
+  <text x="36" y="460" font-size="11.5" fill="#78350f">① 先跑完所有同步代码，遇到异步就按类型「登记」到对应队列（宏 / 微），<tspan font-weight="700">不执行</tspan>。</text>
+  <text x="36" y="480" font-size="11.5" fill="#78350f">② 同步栈一清空，立刻<tspan font-weight="700">把微任务队列整个清空</tspan>——包括清空过程中新产生的微任务。</text>
+  <text x="36" y="500" font-size="11.5" fill="#78350f">③ 微任务空了，才取<tspan font-weight="700">一个</tspan>宏任务执行；执行完再回头清空微任务，如此循环。</text>
+</svg>

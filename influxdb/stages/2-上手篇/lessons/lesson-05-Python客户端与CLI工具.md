@@ -811,7 +811,7 @@ flowchart TD
 ### 🔗 下一步
 
 - **立即可做**：阶段 2 出口检查（下方清单）
-- **下一课**：[第 6 课《数据模型：table、tag、field、timestamp》](../../../stages/3-数据模型与查询/lessons/lesson-06-数据模型.md)
+- **下一课**：[第 6 课《数据模型：table、tag、field、timestamp》](../../3-数据模型与查询/lessons/lesson-06-数据模型-table-tag-field-timestamp.md)
 
 ### 🎯 落地视角小结
 

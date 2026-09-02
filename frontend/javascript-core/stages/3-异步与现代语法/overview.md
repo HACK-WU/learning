@@ -47,7 +47,7 @@
 
 ## 本阶段产出
 
-- [ ] `lessons/lesson-07-事件循环.md`
+- [x] `lessons/lesson-07-事件循环.md` ✅（2026-09-02）
 - [ ] `lessons/lesson-08-Promise与async-await.md`
 - [ ] `lessons/lesson-09-现代语法与内置数据结构.md`
 

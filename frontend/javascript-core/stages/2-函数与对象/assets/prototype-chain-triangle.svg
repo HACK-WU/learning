@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="500" viewBox="0 0 940 500" font-family="'Microsoft YaHei','PingFang SC','Helvetica Neue',Arial,sans-serif">
+  <rect x="0" y="0" width="940" height="500" fill="#ffffff"/>
+
+  <text x="24" y="34" font-size="18" font-weight="700" fill="#1f2937">原型链：实例 → 构造函数.prototype → Object.prototype → null</text>
+  <text x="24" y="56" font-size="12" fill="#64748b">上排是「查找链」（对象 → 对象），下排是「三角关系」（构造函数 ↔ 原型对象）</text>
+
+  <!-- ===== 上排：原型链 ===== -->
+  <!-- 实例 s -->
+  <rect x="30" y="86" width="190" height="96" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="46" y="108" font-size="13" font-weight="700" fill="#1e3a8a">实例 s</text>
+  <text x="46" y="130" font-size="11.5" font-family="Consolas,Monaco,monospace" fill="#1e293b">Student { name: '小明' }</text>
+  <text x="46" y="152" font-size="11" fill="#475569">自身属性：只有 name</text>
+  <text x="46" y="171" font-size="11" fill="#b45309">hasOwnProperty('say') = false</text>
+
+  <path d="M 224 134 L 262 134" fill="none" stroke="#dc2626" stroke-width="2" marker-end="url(#rarr)"/>
+  <text x="226" y="127" font-size="10.5" fill="#dc2626">[[Prototype]]</text>
+
+  <!-- Student.prototype -->
+  <rect x="270" y="86" width="230" height="96" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="286" y="108" font-size="13" font-weight="700" fill="#14532d">Student.prototype</text>
+  <text x="286" y="130" font-size="11.5" font-family="Consolas,Monaco,monospace" fill="#1e293b">{ constructor, say() {...} }</text>
+  <text x="286" y="152" font-size="11" fill="#475569">所有 Student 实例共享这一份</text>
+  <text x="286" y="171" font-size="11" fill="#b45309">方法在这里，不在实例上</text>
+
+  <path d="M 504 134 L 542 134" fill="none" stroke="#dc2626" stroke-width="2" marker-end="url(#rarr)"/>
+  <text x="506" y="127" font-size="10.5" fill="#dc2626">[[Prototype]]</text>
+
+  <!-- Object.prototype -->
+  <rect x="550" y="86" width="210" height="96" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text x="566" y="108" font-size="13" font-weight="700" fill="#78350f">Object.prototype</text>
+  <text x="566" y="130" font-size="11.5" font-family="Consolas,Monaco,monospace" fill="#1e293b">{ toString, valueOf,</text>
+  <text x="566" y="146" font-size="11.5" font-family="Consolas,Monaco,monospace" fill="#1e293b">  hasOwnProperty, ... }</text>
+  <text x="566" y="168" font-size="11" fill="#475569">所有普通对象的最终兜底</text>
+
+  <path d="M 764 134 L 802 134" fill="none" stroke="#dc2626" stroke-width="2" marker-end="url(#rarr)"/>
+
+  <!-- null -->
+  <rect x="810" y="106" width="100" height="56" rx="8" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+  <text x="826" y="130" font-size="15" font-weight="700" fill="#334155">null</text>
+  <text x="826" y="150" font-size="11" fill="#64748b">链的终点</text>
+
+  <!-- ===== 下排：三角关系 ===== -->
+  <!-- 构造函数 Student -->
+  <rect x="270" y="238" width="230" height="82" rx="8" fill="#e0e7ff" stroke="#4f46e5" stroke-width="1.5"/>
+  <text x="286" y="260" font-size="13" font-weight="700" fill="#312e81">构造函数 Student</text>
+  <text x="286" y="282" font-size="11.5" font-family="Consolas,Monaco,monospace" fill="#1e293b">class Student { ... }</text>
+  <text x="286" y="304" font-size="11" fill="#475569">typeof Student === 'function'</text>
+
+  <defs>
+    <marker id="rarr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#dc2626"/>
+    </marker>
+    <marker id="barr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4f46e5"/>
+    </marker>
+  </defs>
+
+  <!-- .prototype 箭头（下 → 上） -->
+  <path d="M 340 238 L 340 190" fill="none" stroke="#4f46e5" stroke-width="2" marker-end="url(#barr)"/>
+  <text x="348" y="216" font-size="11" font-weight="700" fill="#4f46e5">.prototype</text>
+  <!-- .constructor 箭头（上 → 下） -->
+  <path d="M 448 182 L 448 236" fill="none" stroke="#4f46e5" stroke-width="2" marker-end="url(#barr)"/>
+  <text x="352" y="200" font-size="11" font-weight="700" fill="#4f46e5">.constructor</text>
+
+  <!-- ===== 结论 ===== -->
+  <rect x="30" y="352" width="880" height="128" rx="8" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.2"/>
+  <text x="46" y="376" font-size="12.5" font-weight="700" fill="#0f172a">🔑 三条铁律</text>
+  <text x="46" y="400" font-size="11.5" fill="#334155">① 读属性：沿 [[Prototype]] 一层层往上找，<tspan font-weight="700">找到即停</tspan>；整条链都没有就返回 <tspan font-weight="700">undefined</tspan>（不是报错）。</text>
+  <text x="46" y="422" font-size="11.5" fill="#334155">② 写属性：<tspan font-weight="700">永远写在自身</tspan>，只「遮蔽」原型上的同名属性，<tspan font-weight="700" fill="#dc2626">绝不修改原型</tspan>（实测：pa.n = 99 之后，pb.n 仍是 1）。</text>
+  <text x="46" y="444" font-size="11.5" fill="#334155">③ 原型上的属性是<tspan font-weight="700" fill="#dc2626">共享</tspan>的：引用类型（数组 / 对象）放上去，一个实例改了，所有实例跟着变 —— 这是继承缺陷的根源。</text>
+  <text x="46" y="466" font-size="11.5" fill="#334155">④ 推荐 API：读用 <tspan font-family="Consolas,Monaco,monospace">Object.getPrototypeOf()</tspan>，建用 <tspan font-family="Consolas,Monaco,monospace">Object.create()</tspan>；<tspan font-family="Consolas,Monaco,monospace">__proto__</tspan> 只是历史遗留的访问器。</text>
+</svg>

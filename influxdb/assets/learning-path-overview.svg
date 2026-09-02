@@ -10,7 +10,7 @@
 
   <!-- 标题 -->
   <text x="500" y="34" text-anchor="middle" font-size="22" font-weight="700" fill="#111827">InfluxDB 3 学习路径总览</text>
-  <text x="500" y="58" text-anchor="middle" font-size="13" fill="#57606a">6 阶段 / 19 课 / 55 知识点 · 动手实操 + 决策参考导向 · 基于 InfluxDB 3 Core 3.11</text>
+  <text x="500" y="58" text-anchor="middle" font-size="13" fill="#57606a">6 阶段 / 19 课 / 57 知识点 · 动手实操 + 决策参考导向 · 基于 InfluxDB 3 Core 3.11</text>
 
   <!-- 故事主线条 -->
   <rect x="24" y="74" width="952" height="42" rx="8" fill="#f6f8fa" stroke="#d0d7de"/>
