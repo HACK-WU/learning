@@ -6,14 +6,14 @@
 [![Celery + Django](https://img.shields.io/badge/Celery%2B_Django-10%2F10-yellowgreen)](celery-django/02-课程目录.md)
 [![Consul](https://img.shields.io/badge/Consul-7%2F11-yellow)](consul/02-课程目录.md)
 [![Design Patterns](https://img.shields.io/badge/Design_Patterns-12%2F12-yellowgreen)](design-patterns/02-课程目录.md)
-[![Elasticsearch](https://img.shields.io/badge/Elasticsearch-7%2F14-yellow)](elasticsearch/02-课程目录.md)
-[![InfluxDB](https://img.shields.io/badge/InfluxDB-4%2F19-yellow)](influxdb/02-课程目录.md)
+[![Elasticsearch](https://img.shields.io/badge/Elasticsearch-15%2F15-brightgreen)](elasticsearch/02-课程目录.md)
+[![InfluxDB](https://img.shields.io/badge/InfluxDB-19%2F19-brightgreen)](influxdb/02-课程目录.md)
 [![Kafka](https://img.shields.io/badge/Kafka-10%2F10-yellowgreen)](kafka/02-课程目录.md)
 [![PromQL](https://img.shields.io/badge/PromQL-12%2F12-yellowgreen)](promql/02-课程目录.md)
-[![RabbitMQ](https://img.shields.io/badge/RabbitMQ-4%2F12-yellow)](rabbitmq/02-课程目录.md)
-[![Redis](https://img.shields.io/badge/Redis-3%2F9-yellow)](redis/02-课程目录.md)
+[![RabbitMQ](https://img.shields.io/badge/RabbitMQ-12%2F12-brightgreen)](rabbitmq/02-课程目录.md)
+[![Redis](https://img.shields.io/badge/Redis-9%2F9-brightgreen)](redis/02-课程目录.md)
 [![ZooKeeper](https://img.shields.io/badge/ZooKeeper-15%2F15-brightgreen)](zookeeper/02-课程目录.md)
-[![JavaScript Core](https://img.shields.io/badge/JavaScript_Core-3%2F12-yellow)](frontend/javascript-core/02-课程目录.md)
+[![JavaScript Core](https://img.shields.io/badge/JavaScript_Core-7%2F12-yellow)](frontend/javascript-core/02-课程目录.md)
 [![TypeScript](https://img.shields.io/badge/TypeScript-1%2F15-yellow)](frontend/typescript-core/02-课程目录.md)
 
 ## 概述
@@ -37,22 +37,24 @@
 | [Celery + Django](celery-django/02-课程目录.md) | Celery 异步任务体系与 Django 集成，从异步化动因、可靠性幂等到并发模型、编排与生产运维 | Django 熟，Celery 入门 | 10 / 10 课 | 🔶 收尾中 |
 | [Consul](consul/02-课程目录.md) | 服务注册发现与配置中心，从能力拆解到横向对比与选型决策（决策参考导向） | 入门 | 7 / 11 课 | 🔄 进行中 |
 | [设计模式](design-patterns/02-课程目录.md) | GoF 设计模式的 Python 惯用实现，以订单系统重构为故事主线 | Python 基础扎实 | 12 / 12 课 | 🔶 收尾中 |
-| [Elasticsearch](elasticsearch/02-课程目录.md) | 从「数据库为什么搞不定搜索」到查询聚合、分布式与选型，附认证备考映射 | 零基础 | 7 / 14 课 | 🔄 进行中 |
-| [InfluxDB](influxdb/02-课程目录.md) | InfluxDB 3 时序数据库，从「为什么不用 MySQL」到生产落地与选型决策 | 零基础 | 4 / 19 课 | 🔄 进行中 |
+| [Elasticsearch](elasticsearch/02-课程目录.md) | 从「数据库为什么搞不定搜索」到查询聚合、分布式与选型，附认证备考映射 | 零基础 | 15 / 15 课 | ✅ 已完成 |
+| [InfluxDB](influxdb/02-课程目录.md) | InfluxDB 3 时序数据库，从「为什么不用 MySQL」到生产落地与选型决策 | 零基础 | 19 / 19 课 | ✅ 已完成 |
 | [Kafka 基础](kafka/02-课程目录.md) | 从消息队列概念到集群可靠性与事件驱动架构，Docker 实操贯穿全程 | 零基础 | 10 / 10 课 | 🔶 收尾中 |
 | [PromQL](promql/02-课程目录.md) | Prometheus 查询语言，从数据模型到告警规则与 Grafana 面板，含 SLO 实战项目 | 零基础 | 12 / 12 课 | 🔶 收尾中 |
-| [RabbitMQ 基础](rabbitmq/02-课程目录.md) | 从「为什么需要消息队列」到生产落地，Python（pika）实操贯穿全程，止于选型决策 | 零基础 | 4 / 12 课 | 🔄 进行中 |
-| [Redis](redis/02-课程目录.md) | 从「为什么需要 Redis」到数据结构、持久化、主从哨兵、分片集群与缓存设计，WSL + Redis 8 实操贯穿全程 | 零基础 | 3 / 9 课 | 🔄 进行中 |
+| [RabbitMQ 基础](rabbitmq/02-课程目录.md) | 从「为什么需要消息队列」到生产落地，Python（pika）实操贯穿全程，止于选型决策 | 零基础 | 12 / 12 课 | ✅ 已完成 |
+| [Redis](redis/02-课程目录.md) | 从「为什么需要 Redis」到数据结构、持久化、主从哨兵、分片集群与缓存设计，WSL + Redis 8 实操贯穿全程 | 零基础 | 9 / 9 课 | ✅ 已完成 |
 | [ZooKeeper](zookeeper/02-课程目录.md) | 分布式协调服务，从零基础上手到核心机制、选型决策，含结课实战项目与排障手册 | 零基础→入门 | 15 / 15 课 | ✅ 已完成 |
 
 ### 前端方向（`frontend/`）
 
 | 课程 | 主题 | 基础要求 | 进度 | 状态 |
 |------|------|----------|------|------|
-| [JavaScript 语言核心](frontend/javascript-core/02-课程目录.md) | ES6+ 语言核心：值与作用域 → 函数与对象 → 异步与现代语法 → 工程化与运行时，以「一段诡异代码的侦探之旅」为主线 | 入门（写过 JS / jQuery） | 3 / 12 课 | 🔄 进行中 |
+| [JavaScript 语言核心](frontend/javascript-core/02-课程目录.md) | ES6+ 语言核心：值与作用域 → 函数与对象 → 异步与现代语法 → 工程化与运行时，以「一段诡异代码的侦探之旅」为主线 | 入门（写过 JS / jQuery） | 7 / 12 课 | 🔄 进行中 |
 | [TypeScript](frontend/typescript-core/02-课程目录.md) | 类型系统的身份蜕变「注释 → 契约 → 可编程约束」：类型思维启蒙 → 收窄与控制流 → 泛型与类型编程 → 工程化 → 架构与选型 | 零基础 TS（需 ES6 基础） | 1 / 15 课 | 🔄 进行中 |
 
-> 进度为 2026-08-31 快照，实时状态以各课程 `00-学习档案.md` 为准。
+> 进度为 2026-09-02 快照，实时状态以各课程 `00-学习档案.md` 为准。
+>
+> 当前 12 门课中 **5 门已真正结课**（Elasticsearch / InfluxDB / RabbitMQ / Redis / ZooKeeper），**4 门课时讲完、收尾环节待生成**（Celery + Django / 设计模式 / Kafka / PromQL），**3 门仍在推进**（Consul / JavaScript / TypeScript，其未讲课时仅落盘占位骨架或详细大纲，不计入进度）。
 >
 > 状态图例：✅ 已完成 = 全部课时与收尾环节（结课项目 / 课程手册 / 排障手册）均交付；🔶 收尾中 = 全部课时讲完，收尾环节待生成；🔄 进行中 = 尚有课时未编写。
 
@@ -75,14 +77,14 @@ learning/
 │   └── stages/               # 4 个阶段目录：overview.md + lessons/lesson-XX.md
 ├── consul/                   # Consul 课程（4 阶段 11 课，含 payloads/ 与 projects/）
 ├── design-patterns/          # 设计模式课程（4 阶段 12 课，Python）
-├── elasticsearch/            # Elasticsearch 课程（5 阶段 14 课，含 playground/ 实测脚本）
+├── elasticsearch/            # Elasticsearch 课程（5 阶段 15 课，含 final-课程手册.md 与 playground/ 实测脚本）
 ├── frontend/                 # 前端课程目录（2 门课）
-│   ├── javascript-core/      # JavaScript 语言核心 ES6+（4 阶段 12 课 36 知识点）
+│   ├── javascript-core/      # JavaScript 语言核心 ES6+（4 阶段 12 课 36 知识点，已讲 7 课）
 │   │   ├── 00-学习档案.md / 00-评审清单.md / 01-学习路径总览.md / 02-课程目录.md
 │   │   ├── assets/           # 课程级 SVG（学习路径总览）
 │   │   └── stages/           # 4 个阶段：值与作用域 / 函数与对象 / 异步与现代语法 / 工程化与运行时
-│   └── typescript-core/      # TypeScript 类型系统（5 阶段 15 课 49 知识点，含 playground/）
-├── influxdb/                 # InfluxDB 3 课程（6 阶段 19 课）
+│   └── typescript-core/      # TypeScript 类型系统（5 阶段 15 课 49 知识点，已讲 1 课，含 playground/）
+├── influxdb/                 # InfluxDB 3 课程（6 阶段 19 课 57 知识点，含 final-课程手册.md 与 projects/）
 ├── kafka/                    # Kafka 基础课程（4 阶段 10 课，含 final-课程手册.md）
 ├── promql/                   # PromQL 课程（4 阶段 12 课，含 projects/ 可观测性体系）
 ├── rabbitmq/                 # RabbitMQ 课程（4 阶段 12 课，含 playground/ 实测脚本）
@@ -92,7 +94,7 @@ learning/
 
 各课程内部体例一致：`00-学习档案.md`（进度与评审）、`00-评审清单.md`（待办勾选）、`01-学习路径总览.md`、`02-课程目录.md`、`assets/`（SVG）、`stages/`（阶段与课件）。部分课程另有扩展目录：`playground/`（本机实测脚本）、`projects/`（结课实战项目）、`08-实战经验.md` 与 `09-排障速查手册.md`（收尾产物）。
 
-阶段目录命名形如 `stages/1-地基与创建型/`，每个阶段包含一份 `overview.md`（阶段导览）与 `lessons/` 目录（课件正文）；尚未开讲的阶段随学习进度逐步落盘课件（如 `elasticsearch/` 阶段 4-5、`influxdb/` 阶段 3-6 目前只有阶段导览）。
+> 阶段目录命名形如 `stages/1-地基与创建型/`，每个阶段包含一份 `overview.md`（阶段导览）与 `lessons/` 目录（课件正文）；尚未开讲的阶段随学习进度逐步落盘课件（如 `consul/` 阶段 3-4、`frontend/javascript-core/` 阶段 3-4、`frontend/typescript-core/` 阶段 1-5 目前只有占位骨架或详细大纲，均未计入上表进度）。
 
 ## 如何学习
 

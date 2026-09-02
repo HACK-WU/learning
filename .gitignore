@@ -95,3 +95,83 @@ consul/playground/tools/
 # 教学产物是各主题下的 *.md / assets/*.svg / 实现/ 里的源码，继续跟踪，不受影响。
 node_modules/
 .workbuddy/
+
+# ---- npm 锁文件（elasticsearch 课程 l12-client / l13-client）----
+# 风险点：这两个目录是「客户端实操」的临时项目，npm install 会就地生成
+# package-lock.json（数百 KB、随依赖版本频繁变动、可 100% 由 npm install 重建）。
+# 教学产物是里面的 *.js 脚本（讲义第四幕直接引用），继续跟踪，不受影响。
+# 若将来这些目录升级为「需要锁定依赖版本的可复现教学项目」，再移除本条。
+**/l12-client/package-lock.json
+**/l13-client/package-lock.json
+
+# ---- 教学实操环境：动画课程运行产物（animation-engine 课程）----
+# 风险点：playground/ 下的脚本跑一次会生成九百多张 PNG 帧序列 + 导出成品。
+# 实测分布（2026-09-02）：
+#   帧序列  912 张 —— 位于 playground/<lesson>/<序列目录>/*.png（35 个序列目录）
+#   对比图   25 张 —— 位于 playground/<lesson>/*.png（讲义「怎么翻看」表格直接引用）
+# 因此按**层级**区分：只忽略"再深一层"的帧序列，保留顶层单张对比图
+# （*.gitignore 中 * 不跨 /，故 */*/*.png 恰好只匹配第 3 层）
+#
+# 继续跟踪的教学产物：
+#   - playground 下的 *.py 源码
+#   - playground/<lesson>/*.png 单张对比图（含 capstone/verification_report.png）
+#   - capstone/ai_nodes.json 输入数据
+#   - 各主题目录下的 *.md / assets/*.svg
+animation-engine/*/playground/*/*/*.png
+
+# ffmpeg 导出成品（课 10 与结课实战产出，重跑即可再生）
+animation-engine/*/playground/**/*.mp4
+animation-engine/*/playground/**/*.gif
+
+# ---- 教学实操环境：ES 结课实战项目的 npm 锁文件（elasticsearch 课程）----
+# 风险点：在 projects/商品搜索服务/实现/ 下执行 npm install 会就地生成
+# package-lock.json（随依赖版本频繁变动、可 100% 由 npm install 重建）。
+# 本项目只有一个依赖，且版本已用精确版本钉死在 package.json
+# （"@elastic/elasticsearch": "9.5.1"），锁文件对可复现性没有额外贡献。
+# 用 **/ 而不是写死中文目录名，避免 .gitignore 里出现中文路径带来的编码风险。
+# 教学产物是 实现/ 下的全部源码与 data/keyword.txt，继续跟踪，不受影响。
+elasticsearch/projects/**/package-lock.json
+
+# ---- 教学产物例外：elasticsearch/playground 中被讲义直接引用的文件（2026-09-02 清理时确认）----
+# 背景：playground/* 会忽略整个实操沙盒，但其中 48 个文件被讲义正文直接引用，形式是
+#   curl.exe ... --data-binary @D:/projects/learning/elasticsearch/playground/xxx.json
+#   // playground/l13-client/02-vector.js
+# 这些文件丢了，读者照抄讲义会直接失败 —— 课 15 评审就踩过"讲义引用的 6 个
+# l15-*.json 根本不存在"这个坑。
+# 处置：这 48 个文件**保持已跟踪状态**（.gitignore 对已跟踪文件不生效，故无需写 ! 例外，
+# 也避免为了开例外而取消 l13-client/ 目录的忽略、导致验证脚本重新冒出来）。
+# 同目录下的其余 85 个一次性验证脚本已于 2026-09-02 用 git rm --cached 移出索引，
+# 讲义正文已含完整命令，丢了课程依然完整。下面按"课程编号通配 + 逐条"精确忽略它们，
+# 不用 elasticsearch/playground/* 一刀切 —— 否则会连带吞掉上面那 48 个教学产物
+# （已跟踪文件短期不受影响，但将来一旦删了重建就会被忽略，属于埋雷）。
+# 课 5-11：整门课的 playground 脚本都没被讲义引用，按编号通配忽略
+elasticsearch/playground/l5-*.sh
+elasticsearch/playground/l6-*.sh
+elasticsearch/playground/l7-*.sh
+elasticsearch/playground/l8-*.sh
+elasticsearch/playground/l9_trap2_*
+elasticsearch/playground/l10-*.ps1
+# 课 11 / 课 13：与保留文件同前缀，只能逐条
+elasticsearch/playground/l11-matchall.json
+elasticsearch/playground/l11-newdoc.json
+elasticsearch/playground/l11-replicas0.json
+elasticsearch/playground/l13-log2.json
+elasticsearch/playground/l13-log3.json
+elasticsearch/playground/l13-search-errors.json
+# 运行残留
+elasticsearch/playground/node-3-r2.err
+# l13-client：一次性验证 / 评审 / 清理脚本（与保留的 14-templates.js、15-alias.js、
+# 16-ilm-lifecycle.js、17-ops.js、20-verify-l15-json.js、26-verify-l15-ilm.js 同名段交错，逐条列）
+elasticsearch/playground/l13-client/review-*.js
+elasticsearch/playground/l13-client/08-verify.js
+elasticsearch/playground/l13-client/09-verify2.js
+elasticsearch/playground/l13-client/10-verify3.js
+elasticsearch/playground/l13-client/11-verify4.js
+elasticsearch/playground/l13-client/12-final.js
+elasticsearch/playground/l13-client/13-consistency.js
+elasticsearch/playground/l13-client/14b-simulate.js
+elasticsearch/playground/l13-client/15b-alias-check.js
+elasticsearch/playground/l13-client/16b-cleanup.js
+elasticsearch/playground/l13-client/18-phase5-probe.js
+elasticsearch/playground/l13-client/19-consistency.js
+elasticsearch/playground/l13-client/21-cleanup-l15.js
