@@ -5,7 +5,7 @@
 [![courses](https://img.shields.io/badge/courses-12-blue)](#课程导航)
 [![Celery + Django](https://img.shields.io/badge/Celery%2B_Django-10%2F10-brightgreen)](celery-django/02-课程目录.md)
 [![Consul](https://img.shields.io/badge/Consul-7%2F11-yellow)](consul/02-课程目录.md)
-[![Design Patterns](https://img.shields.io/badge/Design_Patterns-12%2F12-yellowgreen)](design-patterns/02-课程目录.md)
+[![Design Patterns](https://img.shields.io/badge/Design_Patterns-12%2F12-brightgreen)](design-patterns/02-课程目录.md)
 [![Elasticsearch](https://img.shields.io/badge/Elasticsearch-15%2F15-brightgreen)](elasticsearch/02-课程目录.md)
 [![InfluxDB](https://img.shields.io/badge/InfluxDB-19%2F19-brightgreen)](influxdb/02-课程目录.md)
 [![Kafka](https://img.shields.io/badge/Kafka-10%2F10-brightgreen)](kafka/02-课程目录.md)
@@ -36,7 +36,7 @@
 |------|------|----------|------|------|
 | [Celery + Django](celery-django/02-课程目录.md) | Celery 异步任务体系与 Django 集成，从异步化动因、可靠性幂等到并发模型、编排与生产运维 | Django 熟，Celery 入门 | 10 / 10 课 | ✅ 已完成 |
 | [Consul](consul/02-课程目录.md) | 服务注册发现与配置中心，从能力拆解到横向对比与选型决策（决策参考导向） | 入门 | 7 / 11 课 | 🔄 进行中 |
-| [设计模式](design-patterns/02-课程目录.md) | GoF 设计模式的 Python 惯用实现，以订单系统重构为故事主线 | Python 基础扎实 | 12 / 12 课 | 🔶 收尾中 |
+| [设计模式](design-patterns/02-课程目录.md) | GoF 设计模式的 Python 惯用实现，以订单系统重构为故事主线 | Python 基础扎实 | 12 / 12 课 | ✅ 已完成 |
 | [Elasticsearch](elasticsearch/02-课程目录.md) | 从「数据库为什么搞不定搜索」到查询聚合、分布式与选型，附认证备考映射 | 零基础 | 15 / 15 课 | ✅ 已完成 |
 | [InfluxDB](influxdb/02-课程目录.md) | InfluxDB 3 时序数据库，从「为什么不用 MySQL」到生产落地与选型决策 | 零基础 | 19 / 19 课 | ✅ 已完成 |
 | [Kafka 基础](kafka/02-课程目录.md) | 从消息队列概念到集群可靠性与事件驱动架构，Docker 实操贯穿全程 | 零基础 | 10 / 10 课 | ✅ 已完成 |
@@ -54,7 +54,7 @@
 
 > 进度为 2026-09-02 快照，实时状态以各课程 `00-学习档案.md` 为准。
 >
-> 当前 12 门课中 **8 门已真正结课**（Celery + Django / Elasticsearch / InfluxDB / Kafka / PromQL / RabbitMQ / Redis / ZooKeeper），**1 门课时讲完、收尾环节待生成**（设计模式），**3 门仍在推进**（Consul / JavaScript / TypeScript，其未讲课时仅落盘占位骨架或详细大纲，不计入进度）。
+> 当前 12 门课中 **9 门已真正结课**（Celery + Django / Design Patterns / Elasticsearch / InfluxDB / Kafka / PromQL / RabbitMQ / Redis / ZooKeeper），**3 门仍在推进**（Consul / JavaScript / TypeScript，其未讲课时仅落盘占位骨架或详细大纲，不计入进度）。
 >
 > 状态图例：✅ 已完成 = 全部课时与收尾环节（结课项目 / 课程手册 / 排障手册）均交付；🔶 收尾中 = 全部课时讲完，收尾环节待生成；🔄 进行中 = 尚有课时未编写。
 
