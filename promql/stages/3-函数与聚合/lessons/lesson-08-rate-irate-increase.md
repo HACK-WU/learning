@@ -224,8 +224,8 @@ Gauge 想看窗口内的均值另有专门的 `avg_over_time` 函数族，本课
 
 ## 🧭 课程导航
 
-⬅️ **上一课**：[L7 向量匹配：on/ignoring 与 group_left 拼接](../2-核心语法/lessons/lesson-07-向量匹配.md)
+⬅️ **上一课**：[L7 向量匹配：on/ignoring 与 group_left 拼接](../../2-核心语法/lessons/lesson-07-向量匹配.md)
 
 ➡️ **下一课**：[L9 聚合全家桶：sum/avg/topk 与 by/without](lesson-09-聚合全家桶.md)
 
-📚 **返回目录**：[课程目录](../../02-课程目录.md)
+📚 **返回目录**：[课程目录](../../../02-课程目录.md)

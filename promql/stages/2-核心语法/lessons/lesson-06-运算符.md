@@ -254,4 +254,4 @@ up unless up{job="prometheus"}
 
 ➡️ **下一课**：[L7 向量匹配：on/ignoring 与 group_left 拼接](lesson-07-向量匹配.md)
 
-📚 **返回目录**：[课程目录](../../02-课程目录.md)
+📚 **返回目录**：[课程目录](../../../02-课程目录.md)

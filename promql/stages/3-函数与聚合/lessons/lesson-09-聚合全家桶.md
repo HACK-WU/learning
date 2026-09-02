@@ -256,4 +256,4 @@ sum without (mode) (rate(demo_cpu_usage_seconds_total[5m]))
 
 ➡️ **下一课**：[L10 histogram_quantile：算出 P95 延迟](lesson-10-histogram-quantile.md)
 
-📚 **返回目录**：[课程目录](../../02-课程目录.md)
+📚 **返回目录**：[课程目录](../../../02-课程目录.md)

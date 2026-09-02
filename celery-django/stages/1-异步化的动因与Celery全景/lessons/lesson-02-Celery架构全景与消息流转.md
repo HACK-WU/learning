@@ -808,4 +808,4 @@ flowchart TB
 
 ➡️ **下一课**：[第 3 课：第一个 Celery + Django 项目](../../2-Django集成与任务基础/lessons/lesson-03-第一个Celery+Django项目.md)
 
-📚 **返回目录**：[课程目录](../../02-课程目录.md)
+📚 **返回目录**：[课程目录](../../../02-课程目录.md)

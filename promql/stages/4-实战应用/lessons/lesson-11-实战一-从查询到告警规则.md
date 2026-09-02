@@ -297,8 +297,8 @@ groups:
 
 ## 🧭 课程导航
 
-⬅️ **上一课**：[L10 histogram_quantile：算出 P95 延迟](../3-函数与聚合/lessons/lesson-10-histogram-quantile.md)
+⬅️ **上一课**：[L10 histogram_quantile：算出 P95 延迟](../../3-函数与聚合/lessons/lesson-10-histogram-quantile.md)
 
-➡️ **下一课**：[L12 实战二：Grafana 面板套路与查询优化](../4-实战应用/lessons/lesson-12-实战二-Grafana面板套路与查询优化.md)
+➡️ **下一课**：[L12 实战二：Grafana 面板套路与查询优化](../../4-实战应用/lessons/lesson-12-实战二-Grafana面板套路与查询优化.md)
 
-📚 **返回目录**：[课程目录](../../02-课程目录.md)
+📚 **返回目录**：[课程目录](../../../02-课程目录.md)

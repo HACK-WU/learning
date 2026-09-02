@@ -832,7 +832,7 @@ CELERY_TASK_ROUTES = ([
 
 > 🖥️ **本课实操环境**：WSL2 Ubuntu（Python 3.12.3）+ Celery **5.6.3** + kombu 5.6.2 + Redis **7.0.15**（端口 6380，与本机 6379 上的既有实例隔离）。
 > **本课必须在 Linux 上做** —— Windows 没有 `fork()`（prefork 不可用），也没有 POSIX 信号（停机行为不可测）。
-> 验证脚本都在 [`playground/`](../../../../playground/) 目录，可直接运行。
+> 验证脚本都在 [`playground/`](../../../playground/) 目录，可直接运行。
 
 ### ① 复现并解决队头阻塞（回扣第一幕）
 
@@ -1157,4 +1157,4 @@ celery -A proj inspect active_queues      # ② 有 worker 在消费它吗？→
 
 ➡️ **下一课**：[第 10 课：监控、排查与上线清单](lesson-10-监控、排查与上线清单.md)
 
-📚 **返回目录**：[课程目录](../../02-课程目录.md)
+📚 **返回目录**：[课程目录](../../../02-课程目录.md)

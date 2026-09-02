@@ -241,6 +241,6 @@ demo_memory_usage_bytes{type="used"} / ignoring(type) (demo_memory_usage_bytes{t
 
 ⬅️ **上一课**：[L6 运算符：算术、比较、逻辑与 bool 修饰符](lesson-06-运算符.md)
 
-➡️ **下一课**：[L8 rate/irate/increase：Counter 的正确打开方式](../3-函数与聚合/lessons/lesson-08-rate-irate-increase.md)
+➡️ **下一课**：[L8 rate/irate/increase：Counter 的正确打开方式](../../3-函数与聚合/lessons/lesson-08-rate-irate-increase.md)
 
-📚 **返回目录**：[课程目录](../../02-课程目录.md)
+📚 **返回目录**：[课程目录](../../../02-课程目录.md)

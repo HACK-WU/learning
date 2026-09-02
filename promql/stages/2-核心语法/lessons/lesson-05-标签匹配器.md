@@ -190,4 +190,4 @@ demo_api_request_duration_seconds_count{method="POST", status!~"200"}
 
 ➡️ **下一课**：[L6 运算符：算术、比较、逻辑与 bool 修饰符](lesson-06-运算符.md)
 
-📚 **返回目录**：[课程目录](../../02-课程目录.md)
+📚 **返回目录**：[课程目录](../../../02-课程目录.md)

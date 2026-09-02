@@ -313,10 +313,12 @@ flowchart TB
 
 | 阶段 | 覆盖知识点 | 项目落点 |
 |------|-----------|---------|
-| 阶段 1（3 点） | 三大价值 · MQ 对比 · Kafka 定位 | 订单服务改发事件；选 Kafka 因为一份数据 3 下游 + 可回放 |
-| 阶段 2（5 点） | Topic 与分区 · 分区策略 · acks · 消费者组 · 位移提交 | `user_id` 作 key 保序；`acks='all'`；3 个服务 = 3 个 group；手动提交 |
-| 阶段 3（3 点） | ISR · 交付语义 · 幂等 / 事务 | 取「至少一次 + 消费端幂等」；风控用事务实现原子 |
-| 阶段 4（5 点） | 生产者/消费者代码 · EDA · 拓扑 · 决策清单 | 代码基于课 9 骨架；事件命名用过去式；按业务事件建 topic |
+| 阶段 1（2 点） | 三大价值 · Kafka vs 其他 MQ 对比 | 订单服务改发事件；选 Kafka 因为一份数据 3 下游 + 可回放 |
+| 阶段 2（6 点） | 创建 Topic 与 CLI 观察 · Topic 与分区 · 分区策略 · acks · 消费者组 · 位移提交 | 初始化 3 个 topic；`user_id` 作 key 保序；`acks='all'`；3 个服务 = 3 个 group；手动提交 |
+| 阶段 3（4 点） | ISR · 三种交付语义 · 幂等 · 事务 | 取「至少一次 + 消费端幂等」；风控用事务实现原子 |
+| 阶段 4（4 点） | 生产者/消费者代码 · EDA · 拓扑 · 决策清单 | 代码基于课 9 骨架；事件命名用过去式；按业务事件建 topic |
+
+> 合计 16 个知识点落点（2 + 6 + 4 + 4），与 [项目 README 知识点地图](projects/电商订单事件中心/README.md) 逐行一致；不等同于全课程 31 个知识点（部分知识点属认知铺垫，未落地为本项目代码）。
 
 ### 代码结构
 
@@ -327,7 +329,7 @@ projects/电商订单事件中心/
 ├── 反例对照.md          # "能跑但很糟"的版本，逐条对照
 ├── 验收清单.md          # 逐项勾选的验收标准
 └── 实现/
-    ├── init_topics.py      # 初始化 orders / orders.DLQ / orders.retry
+    ├── init_topics.py      # 初始化 orders / orders.DLQ / risk.result
     ├── order_producer.py   # 订单服务：三种事件 + 故意制造的坏消息
     ├── points_consumer.py  # 积分服务：幂等记账 + 坏消息进 DLQ
     ├── risk_consumer.py    # 风控服务：事务消费-处理-生产
@@ -353,11 +355,13 @@ python3.11.exe 实现\risk_consumer.py
 python3.11.exe 实现\audit_consumer.py
 ```
 
-看全局进度：
+看全局进度（改 `--group` 即可看另外两个服务：`risk-service` / `audit-service`）：
 
 ```powershell
 docker exec kafka /opt/kafka/bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --describe --group points-service
 ```
+
+> 重点看 `LAG` 列：**持续上涨 = 消费能力不足**（扩容消费者，但上限是分区数）；**某一分区 LAG 卡死不动 = 毒药消息**（转 [09 手册第 2 条](09-排障速查手册.md)）。
 
 **建议路径**：先读 [设计决策.md](projects/电商订单事件中心/设计决策.md)（理解为什么这么选）→ 再读 [反例对照.md](projects/电商订单事件中心/反例对照.md)（看"能跑但很糟"长什么样）→ 跑起来后逐项勾选 [验收清单.md](projects/电商订单事件中心/验收清单.md)。
 

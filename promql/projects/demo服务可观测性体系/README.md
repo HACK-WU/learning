@@ -31,18 +31,18 @@
 
 | # | 知识点 | 所属阶段 / 课 | 本项目用在何处 | 回指 |
 |---|--------|--------------|---------------|------|
-| 1 | 时间序列四要素（指标名+标签+时间戳+值） | 阶段 1 · L2 | 埋点设计：哪些维度进标签 | [lesson-02](../stages/1-地基与数据模型/lessons/lesson-02-数据模型.md) |
-| 2 | 四种指标类型选型 | 阶段 1 · L3 | 请求数用 Counter、延迟用 Histogram、内存用 Gauge | [lesson-03](../stages/1-地基与数据模型/lessons/lesson-03-四种指标类型.md) |
-| 3 | 高基数陷阱 | 阶段 1 · L2 | 埋点决策 1：`user_id` 绝不能进标签 | [lesson-02](../stages/1-地基与数据模型/lessons/lesson-02-数据模型.md) |
-| 4 | 瞬时/范围向量 | 阶段 2 · L4 | 面板要 range、告警要 instant | [lesson-04](../stages/2-核心语法/lessons/lesson-04-瞬时向量与范围向量.md) |
-| 5 | 正则匹配器 `=~` | 阶段 2 · L5 | 错误率筛 `status=~"5.."` | [lesson-05](../stages/2-核心语法/lessons/lesson-05-标签匹配器.md) |
-| 6 | 比较运算符的过滤语义 | 阶段 2 · L6 | 告警 `expr` 靠「行消失/出现」触发 | [lesson-06](../stages/2-核心语法/lessons/lesson-06-运算符.md) |
-| 7 | 向量匹配 `on`/`group_left` | 阶段 2 · L7 | CPU 使用率：使用率 / 核数（多对一广播） | [lesson-07](../stages/2-核心语法/lessons/lesson-07-向量匹配.md) |
-| 8 | `rate()` 与窗口下限 | 阶段 3 · L8 | 全部速率类查询统一 `[5m]`（抓取间隔 15s 的 20 倍） | [lesson-08](../stages/3-函数与聚合/lessons/lesson-08-rate-irate-increase.md) |
-| 9 | 聚合 `sum by` / `without` | 阶段 3 · L9 | 错误率两侧标签对齐、面板压到业务维度 | [lesson-09](../stages/3-函数与聚合/lessons/lesson-09-聚合全家桶.md) |
-| 10 | `histogram_quantile` 与桶 | 阶段 3 · L10 | P95 面板 + **桶分辨率天花板**的发现 | [lesson-10](../stages/3-函数与聚合/lessons/lesson-10-histogram-quantile.md) |
-| 11 | 告警规则与状态机 | 阶段 4 · L11 | 分级规则、`for` 防抖、三层防线 | [lesson-11](../stages/4-实战应用/lessons/lesson-11-实战一-从查询到告警规则.md) |
-| 12 | 面板套路与查询成本 | 阶段 4 · L12 | 面板规格表 + 成本审计 + recording rules | [lesson-12](../stages/4-实战应用/lessons/lesson-12-实战二-Grafana面板套路与查询优化.md) |
+| 1 | 时间序列四要素（指标名+标签+时间戳+值） | 阶段 1 · L2 | 埋点设计：哪些维度进标签 | [lesson-02](../../stages/1-地基与数据模型/lessons/lesson-02-数据模型.md) |
+| 2 | 四种指标类型选型 | 阶段 1 · L3 | 请求数用 Counter、延迟用 Histogram、内存用 Gauge | [lesson-03](../../stages/1-地基与数据模型/lessons/lesson-03-四种指标类型.md) |
+| 3 | 高基数陷阱 | 阶段 1 · L2 | 埋点决策 1：`user_id` 绝不能进标签 | [lesson-02](../../stages/1-地基与数据模型/lessons/lesson-02-数据模型.md) |
+| 4 | 瞬时/范围向量 | 阶段 2 · L4 | 面板要 range、告警要 instant | [lesson-04](../../stages/2-核心语法/lessons/lesson-04-瞬时向量与范围向量.md) |
+| 5 | 正则匹配器 `=~` | 阶段 2 · L5 | 错误率筛 `status=~"5.."` | [lesson-05](../../stages/2-核心语法/lessons/lesson-05-标签匹配器.md) |
+| 6 | 比较运算符的过滤语义 | 阶段 2 · L6 | 告警 `expr` 靠「行消失/出现」触发 | [lesson-06](../../stages/2-核心语法/lessons/lesson-06-运算符.md) |
+| 7 | 向量匹配 `on`/`group_left` | 阶段 2 · L7 | CPU 使用率：使用率 / 核数（多对一广播） | [lesson-07](../../stages/2-核心语法/lessons/lesson-07-向量匹配.md) |
+| 8 | `rate()` 与窗口下限 | 阶段 3 · L8 | 全部速率类查询统一 `[5m]`（抓取间隔 15s 的 20 倍） | [lesson-08](../../stages/3-函数与聚合/lessons/lesson-08-rate-irate-increase.md) |
+| 9 | 聚合 `sum by` / `without` | 阶段 3 · L9 | 错误率两侧标签对齐、面板压到业务维度 | [lesson-09](../../stages/3-函数与聚合/lessons/lesson-09-聚合全家桶.md) |
+| 10 | `histogram_quantile` 与桶 | 阶段 3 · L10 | P95 面板 + **桶分辨率天花板**的发现 | [lesson-10](../../stages/3-函数与聚合/lessons/lesson-10-histogram-quantile.md) |
+| 11 | 告警规则与状态机 | 阶段 4 · L11 | 分级规则、`for` 防抖、三层防线 | [lesson-11](../../stages/4-实战应用/lessons/lesson-11-实战一-从查询到告警规则.md) |
+| 12 | 面板套路与查询成本 | 阶段 4 · L12 | 面板规格表 + 成本审计 + recording rules | [lesson-12](../../stages/4-实战应用/lessons/lesson-12-实战二-Grafana面板套路与查询优化.md) |
 
 **跨阶段校验**：阶段 1（3 项）+ 阶段 2（3 项）+ 阶段 3（3 项）+ 阶段 4（3 项）= **覆盖 4 个阶段** ✅
 

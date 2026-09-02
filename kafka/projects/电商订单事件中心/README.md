@@ -1,6 +1,6 @@
 # 综合实战项目：电商订单事件中心（Order Event Hub）
 
-> 所属课程：[Kafka 系统学习](../00-学习档案.md)｜ 项目类型：技术域 · 多文件工程 ｜ 难度：结课级
+> 所属课程：[Kafka 系统学习](../../00-学习档案.md)｜ 项目类型：技术域 · 多文件工程 ｜ 难度：结课级
 > 事实核查：kafka-python 3.x 事务 API、DLQ 实践、share groups 状态均已联网核实（核查于 2026-08）
 
 ## 一句话需求
@@ -22,7 +22,7 @@
 |--------|---------------|-----------|
 | 削峰·异步·解耦三大价值 | 阶段 1 / 课 1 | 订单服务不再同步调用积分/风控，改为发事件 |
 | Kafka vs 其他 MQ 对比 | 阶段 1 / 课 2 | 为什么选 Kafka：一份数据 3 个下游 + 可回放 |
-| 创建 Topic + CLI 观察 | 阶段 2 / 课 3 | 初始化 4 个 topic（含 DLQ、重试） |
+| 创建 Topic + CLI 观察 | 阶段 2 / 课 3 | 初始化 3 个 topic（主干 orders / 死信 orders.DLQ / 风控输出 risk.result） |
 | Topic 与 Partition | 阶段 2 / 课 4 | 分区数 = 并行度上限，决定消费者扩容天花板 |
 | 分区策略（key 保序） | 阶段 2 / 课 5 | 用 `user_id` 作 key，保证同一用户订单有序 |
 | acks 与发送可靠性 | 阶段 2 / 课 5 | `acks='all'` + 幂等，不丢消息 |
@@ -37,7 +37,7 @@
 | 常见拓扑 | 阶段 4 / 课 10 | 本项目 = 事件主干 + 多个下游（日志管道雏形）|
 | 决策清单（Topic 设计三原则） | 阶段 4 / 课 10 | 按业务事件建 topic，不按消费方建 |
 
-> **跨阶段统计**：阶段 1（3 点）/ 阶段 2（5 点）/ 阶段 3（3 点）/ 阶段 4（5 点）——**4 个阶段全覆盖**，满足跨阶段整合门槛。
+> **跨阶段统计**：阶段 1（2 点）/ 阶段 2（6 点）/ 阶段 3（4 点）/ 阶段 4（4 点）——共 **16 个知识点落点，4 个阶段全覆盖**，满足跨阶段整合门槛。
 
 ## 运行方式
 
@@ -73,7 +73,7 @@ docker exec kafka /opt/kafka/bin/kafka-consumer-groups.sh --bootstrap-server loc
 
 ```
 实现/
-├── init_topics.py       # 一次性初始化 topic（orders / orders.DLQ / orders.retry）
+├── init_topics.py       # 一次性初始化 3 个 topic（orders / orders.DLQ / risk.result）
 ├── order_producer.py    # 订单服务：发三种事件，含故意制造的坏消息
 ├── points_consumer.py   # 积分服务：幂等记账 + 坏消息进 DLQ
 ├── risk_consumer.py     # 风控服务：事务消费-处理-生产
