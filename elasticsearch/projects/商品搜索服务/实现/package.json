@@ -1,0 +1,24 @@
+{
+  "name": "cap-product-search",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Elasticsearch 结课综合实战项目：商品搜索服务（中文全文检索 + 分面统计 + 深分页 + 零停机重建索引）",
+  "scripts": {
+    "init": "node es/schema.js",
+    "init:v2": "node es/schema.js --to=v2",
+    "reset": "node es/schema.js --reset",
+    "sync": "node sync/sync.js",
+    "sync:dirty": "node sync/sync.js --with-dirty",
+    "search": "node search/search.js",
+    "facets": "node search/facets.js",
+    "pages": "node search/paging.js",
+    "switch": "node ops/reindex-switch.js",
+    "health": "node ops/health.js",
+    "security": "node ops/security.js",
+    "demo": "node demo.js"
+  },
+  "dependencies": {
+    "@elastic/elasticsearch": "9.5.1"
+  }
+}

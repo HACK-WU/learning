@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="640" viewBox="0 0 1100 640" font-family="Microsoft YaHei, PingFang SC, Segoe UI, sans-serif">
+  <rect x="0" y="0" width="1100" height="640" fill="#ffffff"/>
+
+  <!-- 标题区 -->
+  <text x="550" y="42" text-anchor="middle" font-size="24" font-weight="bold" fill="#1e293b">Elasticsearch 学习路径 · 5 阶段 / 15 课 / 46 知识点</text>
+  <text x="550" y="70" text-anchor="middle" font-size="14" fill="#64748b">故事主线：一个「搜索框」的自我修养 —— 从写 SQL 的人，成长为懂搜索的人</text>
+  <line x1="60" y1="88" x2="1040" y2="88" stroke="#e2e8f0" stroke-width="1.5"/>
+
+  <!-- 阶段 1 -->
+  <g>
+    <rect x="10" y="120" width="200" height="300" rx="10" fill="#e8f0fe" stroke="#1a4b8f" stroke-width="1.5"/>
+    <rect x="10" y="120" width="200" height="36" rx="10" fill="#1a4b8f"/>
+    <rect x="10" y="146" width="200" height="10" fill="#1a4b8f"/>
+    <text x="110" y="145" text-anchor="middle" font-size="15" font-weight="bold" fill="#ffffff">阶段 1 · 动机</text>
+    <text x="110" y="186" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a4b8f">为什么需要 ES</text>
+    <text x="110" y="210" text-anchor="middle" font-size="12" fill="#475569">课 1-2 ｜ 6 知识点</text>
+    <line x1="30" y1="226" x2="190" y2="226" stroke="#c7d9f5" stroke-width="1"/>
+    <text x="30" y="252" font-size="12" fill="#1e293b">· 数据库为什么搞不定搜索</text>
+    <text x="30" y="276" font-size="12" fill="#1e293b">· 搜索引擎是什么</text>
+    <text x="30" y="300" font-size="12" fill="#1e293b">· ES 的起源与定位</text>
+    <text x="30" y="324" font-size="12" fill="#1e293b">· ES vs 数据库与其他方案</text>
+    <rect x="30" y="348" width="160" height="52" rx="6" fill="#ffffff" stroke="#c7d9f5"/>
+    <text x="110" y="370" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#1a4b8f">这一阶段回答</text>
+    <text x="110" y="389" text-anchor="middle" font-size="11.5" fill="#475569">认清问题、建立定位</text>
+  </g>
+
+  <!-- 阶段 2 -->
+  <g>
+    <rect x="230" y="120" width="200" height="300" rx="10" fill="#e6f4ea" stroke="#1d6b42" stroke-width="1.5"/>
+    <rect x="230" y="120" width="200" height="36" rx="10" fill="#1d6b42"/>
+    <rect x="230" y="146" width="200" height="10" fill="#1d6b42"/>
+    <text x="330" y="145" text-anchor="middle" font-size="15" font-weight="bold" fill="#ffffff">阶段 2 · 原理</text>
+    <text x="330" y="186" text-anchor="middle" font-size="15" font-weight="bold" fill="#1d6b42">核心原理与上手</text>
+    <text x="330" y="210" text-anchor="middle" font-size="12" fill="#475569">课 3-5 ｜ 9 知识点</text>
+    <line x1="250" y1="226" x2="410" y2="226" stroke="#c3e6cf" stroke-width="1"/>
+    <text x="250" y="252" font-size="12" fill="#1e293b">· 本机安装与首次启动</text>
+    <text x="250" y="276" font-size="12" fill="#1e293b">· 倒排索引与分词</text>
+    <text x="250" y="300" font-size="12" fill="#1e293b">· 中文分词与 IK</text>
+    <text x="250" y="324" font-size="12" fill="#1e293b">· 映射 Mapping 设计</text>
+    <rect x="250" y="348" width="160" height="52" rx="6" fill="#ffffff" stroke="#c3e6cf"/>
+    <text x="330" y="370" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#1d6b42">这一阶段回答</text>
+    <text x="330" y="389" text-anchor="middle" font-size="11.5" fill="#475569">凭什么这么快</text>
+  </g>
+
+  <!-- 阶段 3 -->
+  <g>
+    <rect x="450" y="120" width="200" height="300" rx="10" fill="#fff4e5" stroke="#b45309" stroke-width="1.5"/>
+    <rect x="450" y="120" width="200" height="36" rx="10" fill="#b45309"/>
+    <rect x="450" y="146" width="200" height="10" fill="#b45309"/>
+    <text x="550" y="145" text-anchor="middle" font-size="15" font-weight="bold" fill="#ffffff">阶段 3 · 检索</text>
+    <text x="550" y="186" text-anchor="middle" font-size="15" font-weight="bold" fill="#b45309">查询与聚合</text>
+    <text x="550" y="210" text-anchor="middle" font-size="12" fill="#475569">课 6-8 ｜ 9 知识点</text>
+    <line x1="470" y1="226" x2="630" y2="226" stroke="#f5dcb8" stroke-width="1"/>
+    <text x="470" y="252" font-size="12" fill="#1e293b">· Query DSL 结构</text>
+    <text x="470" y="276" font-size="12" fill="#1e293b">· 全文查询 vs 词项查询</text>
+    <text x="470" y="300" font-size="12" fill="#1e293b">· BM25 相关性打分</text>
+    <text x="470" y="324" font-size="12" fill="#1e293b">· 聚合与 ES|QL</text>
+    <rect x="470" y="348" width="160" height="52" rx="6" fill="#ffffff" stroke="#f5dcb8"/>
+    <text x="550" y="370" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#b45309">这一阶段回答</text>
+    <text x="550" y="389" text-anchor="middle" font-size="11.5" fill="#475569">怎么问、怎么统计</text>
+  </g>
+
+  <!-- 阶段 4 -->
+  <g>
+    <rect x="670" y="120" width="200" height="300" rx="10" fill="#f3e8ff" stroke="#7e22ce" stroke-width="1.5"/>
+    <rect x="670" y="120" width="200" height="36" rx="10" fill="#7e22ce"/>
+    <rect x="670" y="146" width="200" height="10" fill="#7e22ce"/>
+    <text x="770" y="145" text-anchor="middle" font-size="15" font-weight="bold" fill="#ffffff">阶段 4 · 分布式</text>
+    <text x="770" y="186" text-anchor="middle" font-size="15" font-weight="bold" fill="#7e22ce">分布式与工程实践</text>
+    <text x="770" y="210" text-anchor="middle" font-size="12" fill="#475569">课 9-12、15 ｜ 16 知识点</text>
+    <line x1="690" y1="226" x2="850" y2="226" stroke="#e0ccf7" stroke-width="1"/>
+    <text x="690" y="252" font-size="12" fill="#1e293b">· 分片与副本机制</text>
+    <text x="690" y="276" font-size="12" fill="#1e293b">· 集群健康与排障</text>
+    <text x="690" y="300" font-size="12" fill="#1e293b">· 管道 · 备份 · 客户端</text>
+    <text x="690" y="324" font-size="12" fill="#1e293b">· 索引管理与 ILM</text>
+    <rect x="690" y="348" width="160" height="52" rx="6" fill="#ffffff" stroke="#e0ccf7"/>
+    <text x="770" y="370" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#7e22ce">这一阶段回答</text>
+    <text x="770" y="389" text-anchor="middle" font-size="11.5" fill="#475569">挂了怎么办、怎么接</text>
+  </g>
+
+  <!-- 阶段 5 -->
+  <g>
+    <rect x="890" y="120" width="200" height="300" rx="10" fill="#fde8e8" stroke="#b91c1c" stroke-width="1.5"/>
+    <rect x="890" y="120" width="200" height="36" rx="10" fill="#b91c1c"/>
+    <rect x="890" y="146" width="200" height="10" fill="#b91c1c"/>
+    <text x="990" y="145" text-anchor="middle" font-size="15" font-weight="bold" fill="#ffffff">阶段 5 · 选型</text>
+    <text x="990" y="186" text-anchor="middle" font-size="15" font-weight="bold" fill="#b91c1c">生产与选型</text>
+    <text x="990" y="210" text-anchor="middle" font-size="12" fill="#475569">课 13-14 ｜ 6 知识点</text>
+    <line x1="910" y1="226" x2="1070" y2="226" stroke="#f6cccc" stroke-width="1"/>
+    <text x="910" y="252" font-size="12" fill="#1e293b">· 日志 / 可观测</text>
+    <text x="910" y="276" font-size="12" fill="#1e293b">· 向量检索与 RAG</text>
+    <text x="910" y="300" font-size="12" fill="#1e293b">· 安全与权限 RBAC</text>
+    <text x="910" y="324" font-size="12" fill="#1e293b">· 该不该用 ES · 认证</text>
+    <rect x="910" y="348" width="160" height="52" rx="6" fill="#ffffff" stroke="#f6cccc"/>
+    <text x="990" y="370" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#b91c1c">这一阶段回答</text>
+    <text x="990" y="389" text-anchor="middle" font-size="11.5" fill="#475569">该不该用、怎么证明</text>
+  </g>
+
+  <!-- 阶段间箭头 -->
+  <g stroke="#94a3b8" stroke-width="2.5" fill="none">
+    <path d="M 215 270 L 225 270" marker-end="url(#arrow)"/>
+    <path d="M 435 270 L 445 270" marker-end="url(#arrow)"/>
+    <path d="M 655 270 L 665 270" marker-end="url(#arrow)"/>
+    <path d="M 875 270 L 885 270" marker-end="url(#arrow)"/>
+  </g>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+
+  <!-- 主线带 -->
+  <rect x="10" y="470" width="1080" height="70" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="550" y="496" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#334155">五个台阶一条主线</text>
+  <text x="550" y="522" text-anchor="middle" font-size="16" font-weight="bold" fill="#1e293b">动机（为什么） → 原理（凭什么快） → 检索（怎么问） → 分布式（怎么扛） → 选型（该不该用）</text>
+
+  <!-- 底部说明 -->
+  <rect x="10" y="556" width="1080" height="64" rx="10" fill="#ffffff" stroke="#e2e8f0"/>
+  <text x="30" y="580" font-size="12.5" fill="#334155">四大目标全覆盖：① 理解概念　② 动手实操（每课可运行命令，基于本机 ES 9.5.1 原生 zip 实测）　③ 应试认证（Elastic Certified Engineer，2026-09-01 考纲升级至 9.3）　④ 决策参考</text>
+  <text x="30" y="604" font-size="12.5" fill="#64748b">实操环境：Windows 11 ｜ ES 9.5.1 windows-x86_64.zip ｜ 单节点 https://localhost:9200 + 三节点学习集群 http://localhost:9201-9203 ｜ 请求工具统一 curl.exe</text>
+
+</svg>
