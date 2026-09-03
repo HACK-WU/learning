@@ -1,0 +1,9 @@
+global:
+  resolve_timeout: 5m
+route:
+  receiver: 'devnull'
+  group_wait: 5s
+  group_interval: 10s
+  repeat_interval: 30s
+receivers:
+  - name: 'devnull'

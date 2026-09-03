@@ -2,7 +2,7 @@
 
 > 以「课程制」方式系统学习技术主题：每门课程自带学习档案、路径总览与课件体系，支持断点续学。
 
-[![courses](https://img.shields.io/badge/courses-12-blue)](#课程导航)
+[![courses](https://img.shields.io/badge/courses-13-blue)](#课程导航)
 [![Celery + Django](https://img.shields.io/badge/Celery%2B_Django-10%2F10-brightgreen)](celery-django/02-课程目录.md)
 [![Consul](https://img.shields.io/badge/Consul-7%2F11-yellow)](consul/02-课程目录.md)
 [![Design Patterns](https://img.shields.io/badge/Design_Patterns-12%2F12-brightgreen)](design-patterns/02-课程目录.md)
@@ -13,14 +13,15 @@
 [![RabbitMQ](https://img.shields.io/badge/RabbitMQ-12%2F12-brightgreen)](rabbitmq/02-课程目录.md)
 [![Redis](https://img.shields.io/badge/Redis-9%2F9-brightgreen)](redis/02-课程目录.md)
 [![ZooKeeper](https://img.shields.io/badge/ZooKeeper-15%2F15-brightgreen)](zookeeper/02-课程目录.md)
+[![VictoriaMetrics](https://img.shields.io/badge/VictoriaMetrics-12%2F12-brightgreen)](victoriametrics/02-课程目录.md)
 [![JavaScript Core](https://img.shields.io/badge/JavaScript_Core-7%2F12-yellow)](frontend/javascript-core/02-课程目录.md)
 [![TypeScript](https://img.shields.io/badge/TypeScript-1%2F15-yellow)](frontend/typescript-core/02-课程目录.md)
 
 ## 概述
 
-本仓库收录**十二门**系统化技术课程，覆盖后端基础设施与前端语言两大方向：
+本仓库收录**十三门**系统化技术课程，覆盖后端基础设施与前端语言两大方向：
 
-- **后端 / 基础设施**：Celery + Django 异步任务、Consul 服务注册发现、设计模式（Python 实现）、Elasticsearch 搜索、InfluxDB 时序数据库、Kafka 消息队列、PromQL 监控查询语言、RabbitMQ 消息中间件、Redis 缓存与数据结构服务器、ZooKeeper 分布式协调
+- **后端 / 基础设施**：Celery + Django 异步任务、Consul 服务注册发现、设计模式（Python 实现）、Elasticsearch 搜索、InfluxDB 时序数据库、Kafka 消息队列、PromQL 监控查询语言、RabbitMQ 消息中间件、Redis 缓存与数据结构服务器、VictoriaMetrics 时序数据库、ZooKeeper 分布式协调
 - **前端（`frontend/`）**：JavaScript 语言核心（ES6+）、TypeScript 类型系统
 
 > JS 与 TS 两门课互补且互相引用：`javascript-core` 在课 12 讲「该不该上 TypeScript」的选型条件，`typescript-core` 则把 JavaScript 语言核心列为**前置假设**（ES6 基础），不重复讲解法。
@@ -43,6 +44,7 @@
 | [PromQL](promql/02-课程目录.md) | Prometheus 查询语言，从数据模型到告警规则与 Grafana 面板，含 SLO 实战项目 | 零基础 | 12 / 12 课 | ✅ 已完成 |
 | [RabbitMQ 基础](rabbitmq/02-课程目录.md) | 从「为什么需要消息队列」到生产落地，Python（pika）实操贯穿全程，止于选型决策 | 零基础 | 12 / 12 课 | ✅ 已完成 |
 | [Redis](redis/02-课程目录.md) | 从「为什么需要 Redis」到数据结构、持久化、主从哨兵、分片集群与缓存设计，WSL + Redis 8 实操贯穿全程 | 零基础 | 9 / 9 课 | ✅ 已完成 |
+| [VictoriaMetrics](victoriametrics/02-课程目录.md) | 时序数据库与 Prometheus 长期存储，从单机天花板到 MergeSet 存储引擎、集群三件套与生产链路，Docker 实操贯穿全程，止于选型决策 | 入门（需 Prometheus / PromQL 基础） | 12 / 12 课 | ✅ 已完成 |
 | [ZooKeeper](zookeeper/02-课程目录.md) | 分布式协调服务，从零基础上手到核心机制、选型决策，含结课实战项目与排障手册 | 零基础→入门 | 15 / 15 课 | ✅ 已完成 |
 
 ### 前端方向（`frontend/`）
@@ -52,9 +54,9 @@
 | [JavaScript 语言核心](frontend/javascript-core/02-课程目录.md) | ES6+ 语言核心：值与作用域 → 函数与对象 → 异步与现代语法 → 工程化与运行时，以「一段诡异代码的侦探之旅」为主线 | 入门（写过 JS / jQuery） | 7 / 12 课 | 🔄 进行中 |
 | [TypeScript](frontend/typescript-core/02-课程目录.md) | 类型系统的身份蜕变「注释 → 契约 → 可编程约束」：类型思维启蒙 → 收窄与控制流 → 泛型与类型编程 → 工程化 → 架构与选型 | 零基础 TS（需 ES6 基础） | 1 / 15 课 | 🔄 进行中 |
 
-> 进度为 2026-09-02 快照，实时状态以各课程 `00-学习档案.md` 为准。
+> 进度为 2026-09-03 快照，实时状态以各课程 `00-学习档案.md` 为准。
 >
-> 当前 12 门课中 **9 门已真正结课**（Celery + Django / Design Patterns / Elasticsearch / InfluxDB / Kafka / PromQL / RabbitMQ / Redis / ZooKeeper），**3 门仍在推进**（Consul / JavaScript / TypeScript，其未讲课时仅落盘占位骨架或详细大纲，不计入进度）。
+> 当前 13 门课中 **10 门已真正结课**（Celery + Django / Design Patterns / Elasticsearch / InfluxDB / Kafka / PromQL / RabbitMQ / Redis / VictoriaMetrics / ZooKeeper），**3 门仍在推进**（Consul / JavaScript / TypeScript，其未讲课时仅落盘占位骨架或详细大纲，不计入进度）。
 >
 > 状态图例：✅ 已完成 = 全部课时与收尾环节（结课项目 / 课程手册 / 排障手册）均交付；🔶 收尾中 = 全部课时讲完，收尾环节待生成；🔄 进行中 = 尚有课时未编写。
 
@@ -89,6 +91,7 @@ learning/
 ├── promql/                   # PromQL 课程（4 阶段 12 课，含 projects/ 可观测性体系）
 ├── rabbitmq/                 # RabbitMQ 课程（4 阶段 12 课，含 playground/ 实测脚本）
 ├── redis/                    # Redis 课程（4 阶段 9 课，含 playground/ 实测脚本）
+├── victoriametrics/          # VictoriaMetrics 课程（5 阶段 12 课 35 知识点，含 final-课程手册.md、projects/ 与 playground/ 实测脚本）
 └── zookeeper/                # ZooKeeper 课程（5 阶段 15 课，含结课项目与排障手册）
 ```
 

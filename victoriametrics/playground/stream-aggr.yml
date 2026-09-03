@@ -1,0 +1,4 @@
+- match: '{__name__="up"}'
+  interval: 30s
+  outputs: [sum_samples]
+  keep_metric_names: true

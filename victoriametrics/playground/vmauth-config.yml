@@ -1,0 +1,54 @@
+# vmauth 配置：按 Basic Auth 身份路由到固定租户
+#
+# ⚠️ 核心规则：最终路径 = url_prefix + 原始请求路径
+#    集群版路径含 /prometheus 或 /influx 段，url_prefix 必须补齐
+
+users:
+  # 租户 A：后端团队 → tenant 100
+  - username: "backend"
+    password: "backend-pass-123"
+    url_map:
+      # 写入：客户端访问 /write（Influx 行协议）
+      - src_paths: ["/write"]
+        url_prefix: ["http://vminsert-learn:8480/insert/100/influx"]
+      # 写入：客户端访问 /api/v1/write（Prometheus remote write）
+      - src_paths: ["/api/v1/write"]
+        url_prefix: ["http://vminsert-learn:8480/insert/100/prometheus"]
+      # 查询：负载均衡到两个 vmselect
+      - src_paths:
+          - "/api/v1/query"
+          - "/api/v1/query_range"
+          - "/api/v1/labels"
+          - "/api/v1/label/.+/values"
+          - "/api/v1/status/tsdb"
+        url_prefix:
+          - "http://vmselect-learn:8481/select/100/prometheus"
+          - "http://vmsel-dedup:8481/select/100/prometheus"
+
+  # 租户 B：前端团队 → tenant 200
+  - username: "frontend"
+    password: "frontend-pass-456"
+    url_map:
+      - src_paths: ["/write"]
+        url_prefix: ["http://vminsert-learn:8480/insert/200/influx"]
+      - src_paths: ["/api/v1/write"]
+        url_prefix: ["http://vminsert-learn:8480/insert/200/prometheus"]
+      - src_paths:
+          - "/api/v1/query"
+          - "/api/v1/query_range"
+          - "/api/v1/labels"
+          - "/api/v1/label/.+/values"
+          - "/api/v1/status/tsdb"
+        url_prefix:
+          - "http://vmselect-learn:8481/select/200/prometheus"
+          - "http://vmsel-dedup:8481/select/200/prometheus"
+
+  # 只读观察者 → 只能查 tenant 100，无写入路由
+  - username: "viewer"
+    password: "viewer-pass-000"
+    url_map:
+      - src_paths:
+          - "/api/v1/query"
+          - "/api/v1/query_range"
+        url_prefix:
+          - "http://vmselect-learn:8481/select/200/prometheus"

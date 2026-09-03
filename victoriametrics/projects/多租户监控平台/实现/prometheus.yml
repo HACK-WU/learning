@@ -1,0 +1,81 @@
+# ============================================================
+# 综合实战项目 · 多租户监控平台 —— vmagent 抓取配置
+# VictoriaMetrics v1.151.0
+#
+# 关键设计：external_labels 区分租户
+#   tenant-a（backend  团队）-> accountID 100
+#   tenant-b（frontend 团队）-> accountID 200
+#
+# 为什么用两个 job 而不是一个 job 加标签？
+#   因为 vmagent 的 remoteWrite.url 是按 job 分组发送的前提是
+#   每个 job 可以独立配置 remoteWrite（VM 支持 job 级 remote_write 覆盖），
+#   但更清晰的做法是：单 vmagent 写入集群时靠 URL 的 accountID 路由。
+#   本项目采用「单 vmagent + 全局 remoteWrite」，靠 relabeling 无法改 accountID，
+#   所以真正落地的是下方 实现/ 里的一键脚本：
+#   每个租户一个 vmagent 实例，各自 -remoteWrite.url 指向不同 accountID。
+#
+# 本文件是「单 vmagent 演示版」用的抓取配置，用于阶段 2 的抓取与 relabel 验证。
+# ============================================================
+
+global:
+  scrape_interval: 5s
+  # 抓取超时必须小于抓取间隔，否则串行 target 会互相拖累
+  scrape_timeout: 4s
+  external_labels:
+    cluster: capstone
+    env: lab
+
+scrape_configs:
+  # ---------- tenant-a：backend 团队 ----------
+  - job_name: tenant-a-app
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - "capstone-exporter-a:9100"
+        labels:
+          tenant: tenant-a
+          team: backend
+    # 写入前做基数治理：这些标签绝不该进存储
+    # ⚠ 关键区分（课 4 的 relabeling 阶段）：
+    #   relabel_configs        —— 作用于「抓谁、怎么抓」的 target 标签
+    #   metric_relabel_configs —— 作用于「抓回来的指标自带的标签」
+    #   user_id 由导出器指标自带，必须写在 metric_relabel_configs 里，
+    #   写在 relabel_configs 里不报错但也不生效（静默失败）。
+    relabel_configs:
+      # 把 target 的 IP:Port 收敛成有语义的实例名
+      - source_labels: [__address__]
+        target_label: instance
+        regex: "capstone-exporter-a:9100"
+        replacement: "backend-01"
+
+    metric_relabel_configs:
+      # 高基数红线：这三类标签绝不该进存储
+      # ⚠ 括号不能省！relabel 的 regex 是隐式全匹配（自动 ^(...)$）
+      - action: labeldrop
+        regex: "(user_id|request_id|trace_id)"
+
+  # ---------- tenant-b：frontend 团队 ----------
+  - job_name: tenant-b-app
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - "capstone-exporter-b:9100"
+        labels:
+          tenant: tenant-b
+          team: frontend
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        regex: "capstone-exporter-b:9100"
+        replacement: "web-01"
+      - action: labeldrop
+        regex: "user_id|request_id|trace_id"
+
+  # ---------- 自监控：vmagent 抓自己 ----------
+  - job_name: vmagent-self
+    static_configs:
+      - targets:
+          - "localhost:8429"
+        labels:
+          tenant: platform
+          team: sre

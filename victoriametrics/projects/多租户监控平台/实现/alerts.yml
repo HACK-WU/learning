@@ -1,0 +1,122 @@
+# ============================================================
+# 综合实战项目 · 多租户告警规则（vmalert）
+#
+# 设计原则（来自 promql 课程 L11 的教训）：
+#   1. 每条规则必须有 for —— 防抖动，避免「狼来了」
+#   2. 按「业务维度」而非「全站」聚合 —— 全站口径会稀释掉问题接口
+#   3. 阈值必须留 ≥2 倍安全边际 —— 不能贴着水位线设
+#
+# 租户用 %TENANT% 占位符，由启动脚本按租户渲染成实际值。
+# ============================================================
+
+groups:
+  - name: capstone-%TENANT%-slo
+    interval: 15s
+    rules:
+      # ---------- 1. 服务存活 ----------
+      - alert: ServiceDown
+        expr: |
+          up{tenant="%TENANT%"} == 0
+        for: 30s
+        labels:
+          severity: critical
+          tenant: %TENANT%
+        annotations:
+          summary: "租户 %TENANT% 的实例 {{ $labels.instance }} 已掉线"
+          description: "up==0 持续 30s。先查导出器进程，再查网络，最后查 vmagent 的 target 状态。"
+
+      # ---------- 2. 错误率（按接口，不是全站） ----------
+      - alert: HighErrorRate
+        expr: |
+          (
+            sum by (tenant, path) (
+              rate(http_requests_total{tenant="%TENANT%",status=~"5.."}[2m])
+            )
+            /
+            sum by (tenant, path) (
+              rate(http_requests_total{tenant="%TENANT%"}[2m])
+            )
+          ) > 0.02
+        for: 30s
+        labels:
+          severity: warning
+          tenant: %TENANT%
+        annotations:
+          summary: "接口 {{ $labels.path }} 5xx 占比超过 2%"
+          description: |
+            当前 {{ $value | printf "%.2f" }}%。
+            ⚠ 这里刻意按 path 聚合：全站口径会被健康接口稀释
+            （实测 tenant-a 全站错误率仅 2.5%，但 /api/orders 高达 5%）。
+
+      # ---------- 3. 延迟 SLO（桶占比口径，可加） ----------
+      - alert: LatencySLOBreach
+        expr: |
+          (
+            sum(increase(http_request_duration_seconds_bucket{tenant="%TENANT%",le="0.1"}[5m]))
+            /
+            sum(increase(http_request_duration_seconds_count{tenant="%TENANT%"}[5m]))
+          ) < 0.95
+        for: 1m
+        labels:
+          severity: warning
+          tenant: %TENANT%
+        annotations:
+          summary: "延迟 SLO 违规：95%% 的请求未在 100ms 内完成"
+          description: |
+            当前合规率 {{ $value | printf "%.2f" }}。
+            用桶占比而非 P95，因为分位数不可加 —— 先算各实例 P95 再平均是错的。
+
+      # ---------- 4. 高基数红线 ----------
+      - alert: HighCardinalityRisk
+        expr: |
+          count(count by (user_id) (app_user_activity_total{tenant="%TENANT%"})) > 100
+        for: 2m
+        labels:
+          severity: warning
+          tenant: %TENANT%
+        annotations:
+          summary: "user_id 标签基数超过 100（当前 {{ $value }}）"
+          description: |
+            user_id 这类高基数字段绝不该进指标标签。
+            应通过 relabeling 的 labeldrop 在写入前剔除，
+            用户维度信息应放到日志与链路追踪里查。
+
+      # ---------- 5. 采集中断（自监控） ----------
+      # ⚠ 这里有一个极易踩的坑，也是本项目的实测发现之一：
+      #   不能写成 absent(up{tenant="%TENANT%"})。
+      #   absent() 只在「完全查不到匹配的序列」时为 1。
+      #   而 vmagent 停止采集后，历史 up 样本仍留在时序库里，
+      #   序列依然能被匹配到 —— absent() 恒为 0，告警永不触发。
+      #   （实测：停掉 vmagent-a 后 100 秒，absent() 仍无结果）
+      #
+      # 正确写法：判断「最近窗口内有没有新样本」，而不是「序列存不存在」。
+      - alert: ScrapeStalled
+        expr: |
+          absent(last_over_time(up{tenant="%TENANT%"}[2m]))
+        for: 1m
+        labels:
+          severity: critical
+          tenant: %TENANT%
+        annotations:
+          summary: "租户 %TENANT% 最近 2 分钟没有新样本"
+          description: |
+            采集中断检测。注意与 ServiceDown 的区别：
+              ServiceDown   = 探针在、服务挂了（up==0）
+              ScrapeStalled = 连探针都没了（vmagent 挂了 / 配置被删）
+            用 last_over_time 包裹后再 absent，才能检出「序列存在但不再更新」。
+
+      # ---------- 6. 采集滞后（补充：用时间戳差判断） ----------
+      - alert: ScrapeLagging
+        expr: |
+          time() - max by (tenant) (timestamp(up{tenant="%TENANT%"})) > 120
+        for: 1m
+        labels:
+          severity: warning
+          tenant: %TENANT%
+        annotations:
+          summary: "租户 %TENANT% 最新样本滞后超过 120 秒"
+          description: |
+            与 ScrapeStalled 是同一问题的两种判据：
+              ScrapeStalled 用 absent(last_over_time(...)) —— 窗口内无样本
+              ScrapeLagging 用 time() - timestamp(...)   —— 能直接看到滞后了多少秒
+            后者在排查时更有用（能读出具体滞后时长），前者更省资源。

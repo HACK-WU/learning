@@ -1,0 +1,46 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+  # 多 Prometheus 实例写入同一 VM 时必须加 external_labels 区分来源
+  external_labels:
+    datacenter: dc-learn
+    prom_id: prom-01
+
+remote_write:
+  - url: http://localhost:8428/api/v1/write
+    name: victoria-metrics
+    queue_config:
+      max_samples_per_send: 2000
+      capacity: 5000
+      max_shards: 10
+    # 写入前过滤：丢弃高基数低价值指标（本课知识点 3 会实测这个）
+    write_relabel_configs:
+      # 丢弃 go_gc 相关的一批指标，演示 drop 效果
+      - source_labels: [__name__]
+        regex: 'go_gc_.*'
+        action: drop
+
+scrape_configs:
+  # Prometheus 抓自己
+  - job_name: prometheus
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # 抓 VM 自己的 /metrics
+  - job_name: victoriametrics
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['localhost:8428']
+    # 演示 relabel：给这批指标加固定标签
+    relabel_configs:
+      - target_label: source
+        replacement: vm-internal
+
+  # 演示 metric_relabel_configs：抓取后、写入前丢弃指标（对 remote write 同样生效）
+  - job_name: prometheus-filtered
+    static_configs:
+      - targets: ['localhost:9090']
+    metric_relabel_configs:
+      - source_labels: [__name__]
+        regex: 'prometheus_http_request_duration_seconds_.*'
+        action: drop

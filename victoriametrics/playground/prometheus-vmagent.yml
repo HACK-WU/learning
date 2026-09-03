@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: 'vmagent-self'
+    static_configs:
+      - targets: ['localhost:8429']
+  - job_name: 'vmsingle'
+    static_configs:
+      - targets: ['172.17.0.3:8428']
+  - job_name: 'vmselect'
+    static_configs:
+      - targets: ['vmselect-learn:8481']

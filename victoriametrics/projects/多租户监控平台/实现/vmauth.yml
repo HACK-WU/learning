@@ -1,0 +1,71 @@
+# ============================================================
+# 综合实战项目 · vmauth 多租户路由配置
+#
+# 核心机制：一个 vmauth 端口对外，按 Basic Auth 身份映射到不同 accountID
+#   backend  团队 -> accountID 100（读写）
+#   frontend 团队 -> accountID 200（读写）
+#   viewer        -> accountID 100（只读，且无 /api/v1/import 类写入路径）
+#
+# ⚠ 关键规则（课 10 实测结论）：
+#   最终路径 = url_prefix + 原始请求路径
+#   所以 url_prefix 必须把 /prometheus 或 /influx 段落补齐，
+#   否则请求会被拼成 /select/100/api/v1/query 这种错误路径。
+# ============================================================
+
+users:
+  # ---------- tenant-a：backend 团队 ----------
+  - username: "backend"
+    password: "backend-pass-123"
+    url_map:
+      # 写入：Prometheus remote write
+      - src_paths: ["/api/v1/write"]
+        url_prefix:
+          - "http://capstone-vminsert:8480/insert/100/prometheus"
+      # 查询：负载均衡到两个 vmselect
+      - src_paths:
+          - "/api/v1/query"
+          - "/api/v1/query_range"
+          - "/api/v1/series"
+          - "/api/v1/labels"
+          - "/api/v1/label/.+/values"
+          - "/api/v1/status/tsdb"
+          - "/api/v1/series/count"
+        url_prefix:
+          - "http://capstone-vmselect:8481/select/100/prometheus"
+
+  # ---------- tenant-b：frontend 团队 ----------
+  - username: "frontend"
+    password: "frontend-pass-456"
+    url_map:
+      - src_paths: ["/api/v1/write"]
+        url_prefix:
+          - "http://capstone-vminsert:8480/insert/200/prometheus"
+      - src_paths:
+          - "/api/v1/query"
+          - "/api/v1/query_range"
+          - "/api/v1/series"
+          - "/api/v1/labels"
+          - "/api/v1/label/.+/values"
+          - "/api/v1/status/tsdb"
+          - "/api/v1/series/count"
+        url_prefix:
+          - "http://capstone-vmselect:8481/select/200/prometheus"
+
+  # ---------- viewer：只读观察者 ----------
+  # 只给了查询路径，没有 /api/v1/write —— 写入会被 vmauth 直接拒绝
+  - username: "viewer"
+    password: "viewer-pass-000"
+    url_map:
+      - src_paths:
+          - "/api/v1/query"
+          - "/api/v1/query_range"
+          - "/api/v1/labels"
+          - "/api/v1/label/.+/values"
+        url_prefix:
+          - "http://capstone-vmselect:8481/select/100/prometheus"
+
+# ⚠ 刻意不配 unauthorized_user。
+# 原因：一旦配了它，未授权请求会被「兜底路由」到某个后端，
+# 返回 200 + 空结果，而不是 401 —— 这会让「密码错了」这类故障
+# 表现为「查不到数据」，排查方向被带偏到数据链路上。
+# 不配时，vmauth 对无匹配 user 的请求直接返回 401。

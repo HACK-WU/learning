@@ -1,0 +1,10 @@
+groups:
+  - name: l11-mql
+    interval: 10s
+    rules:
+      - record: l11:mql:topk
+        expr: topk_avg(1, sum by (job) (up), "job")
+      - record: l11:mql:lag
+        expr: lag(up{job="vmsingle"})
+      - record: l11:reload:proof
+        expr: 1

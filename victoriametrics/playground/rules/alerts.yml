@@ -1,0 +1,19 @@
+groups:
+  - name: l11-basic
+    rules:
+      - alert: TargetDown
+        expr: up == 0
+        for: 10s
+        labels:
+          severity: critical
+        annotations:
+          summary: "抓取目标 {{ $labels.instance }} 已下线"
+          description: "job={{ $labels.job }} 已经连续 10 秒 up==0"
+
+      - alert: VmagentQueueBackedUp
+        expr: vmagent_remotewrite_pending_data_bytes > 100
+        for: 5s
+        labels:
+          severity: warning
+        annotations:
+          summary: "vmagent 持久化队列积压 {{ $value }} 字节"

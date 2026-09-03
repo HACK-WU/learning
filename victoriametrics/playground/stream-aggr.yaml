@@ -1,0 +1,13 @@
+# VictoriaMetrics 流式聚合配置
+# 作用：数据落盘前就聚合，从源头减少序列数和样本数
+# 启动参数：-streamAggr.config=/path/to/stream-aggr.yaml
+
+- match: 'l04_highcard'
+  interval: 1m
+  without: [user_id]
+  outputs: [sum_samples]
+
+- match: 'l04_lowcard'
+  interval: 1m
+  by: [region]
+  outputs: [sum_samples]

@@ -1,0 +1,12 @@
+# VictoriaMetrics relabel 配置（全局，对所有写入协议生效）
+# 作用：写入前丢弃高基数标签，从源头止血
+# 启动参数：-relabelConfig=/path/to/relabel.yaml
+
+# 丢弃 user_id 标签（保留指标，只去掉这个标签）
+- action: labeldrop
+  regex: user_id
+
+# 整条丢弃某个高基数指标
+# - action: drop
+#   source_labels: [__name__]
+#   regex: 'l04_highcard'

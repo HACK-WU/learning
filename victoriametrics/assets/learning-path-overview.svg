@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="760" viewBox="0 0 1180 760" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="1180" height="760" fill="#ffffff"/>
+  <text x="590" y="42" text-anchor="middle" font-size="24" font-weight="bold" fill="#1f2937">VictoriaMetrics 学习路径（5 阶段 / 12 课 / 35 知识点）</text>
+  <text x="590" y="70" text-anchor="middle" font-size="14" fill="#6b7280">故事主线：主角 = 一条时间序列 ｜ 冲突 = 数据量只增不减，Prometheus 单机撞天花板 ｜ 收束 = 能设计并取舍一套监控存储</text>
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+
+  <rect x="60" y="100" width="1060" height="96" rx="10" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="80" y="130" font-size="16" font-weight="bold" fill="#1e40af">阶段 1 · 为什么需要 VictoriaMetrics</text>
+  <text x="80" y="154" font-size="13" fill="#1f2937">课 1 Prometheus 的天花板与 VM 的诞生</text>
+  <text x="80" y="176" font-size="13" fill="#1f2937">课 2 跑起来第一个 VictoriaMetrics</text>
+  <text x="860" y="145" font-size="13" fill="#1e40af">关键词</text>
+  <text x="860" y="168" font-size="13" fill="#1f2937">五个天花板 / 生态位</text>
+
+  <line x1="590" y1="196" x2="590" y2="232" stroke="#6b7280" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="60" y="236" width="1060" height="96" rx="10" fill="#f0fdf4" stroke="#22c55e" stroke-width="2"/>
+  <text x="80" y="266" font-size="16" font-weight="bold" fill="#15803d">阶段 2 · 数据怎么进来、怎么查</text>
+  <text x="80" y="290" font-size="13" fill="#1f2937">课 3 MetricsQL：站在 PromQL 肩膀上</text>
+  <text x="80" y="312" font-size="13" fill="#1f2937">课 4 写入协议全家桶与基数治理</text>
+  <text x="860" y="281" font-size="13" fill="#15803d">关键词</text>
+  <text x="860" y="304" font-size="13" fill="#1f2937">remote write / 基数</text>
+
+  <line x1="590" y1="332" x2="590" y2="368" stroke="#6b7280" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="60" y="372" width="1060" height="112" rx="10" fill="#fefce8" stroke="#eab308" stroke-width="2"/>
+  <text x="80" y="402" font-size="16" font-weight="bold" fill="#a16207">阶段 3 · 凭什么快、凭什么省</text>
+  <text x="80" y="426" font-size="13" fill="#1f2937">课 5 存储引擎：MergeSet 与磁盘结构</text>
+  <text x="80" y="448" font-size="13" fill="#1f2937">课 6 压缩：为什么能省 7 倍空间</text>
+  <text x="80" y="470" font-size="13" fill="#1f2937">课 7 内存模型与容量规划</text>
+  <text x="860" y="433" font-size="13" fill="#a16207">关键词</text>
+  <text x="860" y="456" font-size="13" fill="#1f2937">TSID / 列存 / 压缩率</text>
+
+  <line x1="590" y1="484" x2="590" y2="520" stroke="#6b7280" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="60" y="524" width="1060" height="112" rx="10" fill="#fdf4ff" stroke="#a855f7" stroke-width="2"/>
+  <text x="80" y="554" font-size="16" font-weight="bold" fill="#7e22ce">阶段 4 · 怎么横向扩展</text>
+  <text x="80" y="578" font-size="13" fill="#1f2937">课 8 集群三件套与最小集群实战</text>
+  <text x="80" y="600" font-size="13" fill="#1f2937">课 9 复制、去重与高可用</text>
+  <text x="80" y="622" font-size="13" fill="#1f2937">课 10 多租户与 vmauth</text>
+  <text x="860" y="585" font-size="13" fill="#7e22ce">关键词</text>
+  <text x="860" y="608" font-size="13" fill="#1f2937">vminsert / vmselect / 复制因子</text>
+
+  <line x1="590" y1="636" x2="590" y2="672" stroke="#6b7280" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="60" y="676" width="1060" height="62" rx="10" fill="#fef2f2" stroke="#ef4444" stroke-width="2"/>
+  <text x="80" y="702" font-size="16" font-weight="bold" fill="#b91c1c">阶段 5 · 生产落地</text>
+  <text x="80" y="726" font-size="13" fill="#1f2937">课 11 vmagent 与 vmalert ｜ 课 12 备份恢复、迁移与选型决策</text>
+
+  <text x="60" y="96" font-size="12" fill="#9ca3af">阶段间为递进依赖：先懂单机引擎，才懂集群分片；先会查询，才懂调优</text>
+</svg>

@@ -123,6 +123,36 @@ animation-engine/*/playground/*/*/*.png
 animation-engine/*/playground/**/*.mp4
 animation-engine/*/playground/**/*.gif
 
+# ---- 教学实操环境：VictoriaMetrics 运行时数据（victoriametrics 课程）----
+# 风险点：课 5 起讲存储内部结构，讲义要求学员 ls / xxd 翻看 indexdb 的 index.bin /
+# items.bin / metaindex.bin（zstd 魔数 28 b5 2f fd，实测 739 个 .bin 共约 35 MB）。
+# 这些是 -storageDataPath 就地生成的存储文件，随每次写入/合并变化，
+# 学员照讲义重启一次就能重建，不是教学内容。
+# 教学产物是同目录外的 playground 顶层 *.sh / *.py / *.yml 脚本（讲义正文直接引用）
+# 以及 stages/ 与各主题根目录下的 *.md / assets/*.svg，继续跟踪，不受影响。
+# 用目录级 + 扩展名级双保险：目录级拦住 parts.json / metadata.json / flock.lock /
+# .vm_app_running 等同批残留；扩展名级防将来换 -storageDataPath 又冒出新目录。
+victoriametrics/playground/cluster-data/
+victoriametrics/playground/data/
+victoriametrics/playground/*-data/
+*.bin
+
+# ---- 教学实操环境：VictoriaMetrics vmbackup 快照与 vmrestore 工作目录 ----
+# 背景：2026-09-03 卫生检查（Phase 5 收尾）发现，既有 `*-data/` 规则只覆盖到
+# `vmagent-data` / `vmagent-q50-data` 这类单层后缀，而课 11 的流聚合对照实验按
+# 「每组一个 -remoteWrite.tmpDataPath」生成了 vmagent-aggr-data / -2 / -3 / -4
+# 四个带数字后缀的目录（`*-data/` 匹配不到 `-data2`），共 12 个文件漏网。
+# 同理，课 12 的 vmbackup / vmrestore 实操产出 l12-backup/（6.7M，41 个文件，
+# 含 data/indexdb/**/metadata.json 与 backup_complete.ignore）与 l12-restore/
+# （restore-in-progress、flock.lock），均为跑一次即再生的快照与临时工作目录。
+# 教学产物不受影响：讲义正文只引用 `-dst=l12-backup` 这类命令用法（vmbackup /
+# vmrestore 关键词命中 10 / 9 个文件，指向的是命令讲解而非快照内容本身），
+# 快照本体删掉后学员照讲义重跑一条 vmbackup 即可重建。
+# 用 **/ 前缀匹配任意层级，且避开中文目录名带来的编码风险（同 ES 分节做法）。
+victoriametrics/playground/*-data*/
+victoriametrics/playground/l12-backup/
+victoriametrics/playground/l12-restore/
+
 # ---- 教学实操环境：ES 结课实战项目的 npm 锁文件（elasticsearch 课程）----
 # 风险点：在 projects/商品搜索服务/实现/ 下执行 npm install 会就地生成
 # package-lock.json（随依赖版本频繁变动、可 100% 由 npm install 重建）。

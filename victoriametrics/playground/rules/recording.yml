@@ -1,0 +1,8 @@
+groups:
+  - name: l11-recording
+    interval: 10s
+    rules:
+      - record: job:up:sum
+        expr: sum by (job) (up)
+      - record: job:scrape_samples:avg
+        expr: avg by (job) (scrape_samples_scraped)
