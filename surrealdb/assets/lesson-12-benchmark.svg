@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="860" viewBox="0 0 1120 860" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <defs>
+    <marker id="ar" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#546e7a"/>
+    </marker>
+  </defs>
+  <rect width="1120" height="860" fill="#fbfcfd"/>
+
+  <text x="560" y="38" text-anchor="middle" font-size="24" font-weight="bold" fill="#1a2b3c">课 12 · 四库横向对比：同一数据集、同一查询、同机实测</text>
+  <text x="560" y="62" text-anchor="middle" font-size="13" fill="#607d8b">SurrealDB 3.2.4 / PostgreSQL 16+pgvector / MongoDB 7 / Neo4j 5 — 2026-09-03 本机 WSL2（20 核 32G）</text>
+
+  <!-- 数据集 -->
+  <rect x="40" y="84" width="1040" height="46" rx="6" fill="#e8f1f8" stroke="#90a4ae"/>
+  <text x="56" y="112" font-size="14" fill="#1a2b3c">数据集：user 200 · product 50（64 维向量）· order 400 · 关系边 777</text>
+  <text x="700" y="112" font-size="13" fill="#c62828">⚠ 绝对值不可跨机比较；有信息量的是同一行内的数量级差异</text>
+
+  <!-- 表头 -->
+  <rect x="40" y="146" width="1040" height="34" rx="4" fill="#37474f"/>
+  <text x="60" y="169" font-size="14" font-weight="bold" fill="#ffffff">查询</text>
+  <text x="300" y="169" font-size="14" font-weight="bold" fill="#ffffff">SurrealDB（服务端自报）</text>
+  <text x="530" y="169" font-size="14" font-weight="bold" fill="#ffffff">PostgreSQL</text>
+  <text x="690" y="169" font-size="14" font-weight="bold" fill="#ffffff">MongoDB</text>
+  <text x="850" y="169" font-size="14" font-weight="bold" fill="#ffffff">Neo4j</text>
+  <text x="1000" y="169" font-size="14" font-weight="bold" fill="#ffffff">结论</text>
+
+  <!-- Q1 -->
+  <rect x="40" y="186" width="1040" height="56" fill="#ffffff" stroke="#cfd8dc"/>
+  <text x="60" y="208" font-size="14" font-weight="bold" fill="#1a2b3c">Q1 主键点查</text>
+  <text x="60" y="228" font-size="11" fill="#78909c">关系型主场</text>
+  <text x="300" y="214" font-size="15" fill="#37474f">1.73 ms</text>
+  <text x="530" y="214" font-size="15" font-weight="bold" fill="#2e7d32">0.17 ms</text>
+  <text x="690" y="214" font-size="15" fill="#37474f">0.38 ms</text>
+  <text x="850" y="214" font-size="15" fill="#37474f">3.68 ms</text>
+  <text x="960" y="208" font-size="12" fill="#c62828">PG 快约 10x</text>
+  <text x="960" y="226" font-size="12" fill="#78909c">但都是毫秒级</text>
+
+  <!-- Q2 -->
+  <rect x="40" y="242" width="1040" height="56" fill="#fafafa" stroke="#cfd8dc"/>
+  <text x="60" y="264" font-size="14" font-weight="bold" fill="#1a2b3c">Q2 分组聚合</text>
+  <text x="60" y="284" font-size="11" fill="#78909c">关系型主场</text>
+  <text x="300" y="270" font-size="15" fill="#37474f">3.49 ms</text>
+  <text x="530" y="270" font-size="15" font-weight="bold" fill="#2e7d32">0.27 ms</text>
+  <text x="690" y="270" font-size="15" fill="#37474f">0.92 ms</text>
+  <text x="850" y="270" font-size="15" fill="#37474f">7.54 ms</text>
+  <text x="960" y="264" font-size="12" fill="#c62828">PG 快约 13x</text>
+  <text x="960" y="282" font-size="12" fill="#78909c">且随数据量线性劣化</text>
+
+  <!-- Q3 -->
+  <rect x="40" y="298" width="1040" height="56" fill="#ffffff" stroke="#cfd8dc"/>
+  <text x="60" y="320" font-size="14" font-weight="bold" fill="#1a2b3c">Q3 两跳图遍历</text>
+  <text x="60" y="340" font-size="11" fill="#78909c">图数据库主场？</text>
+  <text x="300" y="326" font-size="15" fill="#37474f">1.68 ms</text>
+  <text x="530" y="326" font-size="15" fill="#37474f">0.56 ms（两次 JOIN）</text>
+  <text x="690" y="326" font-size="15" fill="#37474f">1.81 ms（两次 $lookup）</text>
+  <text x="850" y="326" font-size="15" fill="#37474f">3.98 ms</text>
+  <text x="950" y="320" font-size="12" fill="#ef6c00">⚠ 反直觉：PG 的 JOIN 更快</text>
+  <text x="950" y="338" font-size="12" fill="#78909c">图库优势在深度不在两跳</text>
+
+  <!-- Q4 -->
+  <rect x="40" y="354" width="1040" height="56" fill="#fff8e1" stroke="#ffb300"/>
+  <text x="60" y="376" font-size="14" font-weight="bold" fill="#1a2b3c">Q4 向量 + 过滤</text>
+  <text x="60" y="396" font-size="11" fill="#78909c">SurrealDB 声称的主场</text>
+  <text x="300" y="382" font-size="15" fill="#37474f">2.00 ms</text>
+  <text x="530" y="382" font-size="15" fill="#37474f">0.23 ms（pgvector）</text>
+  <text x="690" y="382" font-size="13" fill="#c62828">不支持原生向量索引</text>
+  <text x="850" y="382" font-size="13" fill="#c62828">本机镜像未启用</text>
+  <text x="950" y="376" font-size="12" fill="#2e7d32">✓ 一次查询完成混合检索</text>
+  <text x="950" y="394" font-size="12" fill="#78909c">Mongo/Neo4j 需外接检索</text>
+
+  <!-- 关键修正 -->
+  <rect x="40" y="428" width="1040" height="92" rx="6" fill="#ffebee" stroke="#ef5350" stroke-width="2"/>
+  <text x="60" y="452" font-size="15" font-weight="bold" fill="#c62828">⚠ 测量陷阱：SurrealDB 走 HTTP，26 ms 里有 22～25 ms 是往返开销，不是查询慢</text>
+  <text x="60" y="476" font-size="13" fill="#37474f">空操作基线（只发一条 USE + RETURN 1）：22.97 ms　|　扣除基线后 Q1 仅 0.09 ms　|　服务端自报 1.73 ms</text>
+  <text x="60" y="498" font-size="13" fill="#37474f">教训：拿客户端 wall time 直接和驱动直连的 Postgres 比，会得出「慢 100 倍」的错误结论（实际约 10 倍，且绝对值都在毫秒级）。</text>
+  <text x="60" y="514" font-size="12" fill="#c62828">三个观测点必须对齐：HTTP 往返基线 / 服务端自报时间 / 驱动直连时间。</text>
+
+  <!-- 写入对比 -->
+  <text x="40" y="556" font-size="17" font-weight="bold" fill="#1a2b3c">写入路径：SurrealDB 反而更快</text>
+  <rect x="40" y="568" width="1040" height="76" fill="#e8f5e9" stroke="#66bb6a"/>
+  <text x="60" y="592" font-size="13" fill="#1a2b3c">灌 8 万行：SurrealDB 1.8 s　|　PostgreSQL 9.3 s（LSM 顺序写 vs B-tree 随机写 + WAL）</text>
+  <text x="60" y="614" font-size="13" fill="#1a2b3c">单行 INSERT 2000 次：SurrealDB 48.9 s（24.4 ms/次，全是 HTTP 往返）　|　一次批量 INSERT 2000 行：0.052 s（0.026 ms/行）</text>
+  <text x="60" y="636" font-size="13" font-weight="bold" fill="#2e7d32">结论：SurrealDB 必须批量写入，逐行 INSERT 的瓶颈在协议不在引擎（差距约 900 倍）。</text>
+
+  <!-- 规模敏感性 -->
+  <text x="40" y="676" font-size="17" font-weight="bold" fill="#1a2b3c">规模敏感性：聚合是「全表扫描 + 内存聚合」</text>
+  <rect x="40" y="688" width="1040" height="60" fill="#fafafa" stroke="#cfd8dc"/>
+  <text x="60" y="710" font-size="13" fill="#37474f">5 千行 6.9 ms　→　2 万行 19.0 ms（数据 4x、耗时 2.8x）　→　8 万行 60.2 ms（数据 16x、耗时 8.7x）</text>
+  <text x="60" y="734" font-size="13" fill="#c62828">近线性增长 = 没走预聚合/列存。同期 PostgreSQL 8 万行仅 7.3 ms（16x 数据、5.7x 耗时，且常数小一个量级）。</text>
+
+  <!-- 选型结论 -->
+  <text x="40" y="782" font-size="17" font-weight="bold" fill="#1a2b3c">由此得出的选型判断（不是功能清单，是边界）</text>
+  <rect x="40" y="794" width="1040" height="56" fill="#e3f2fd" stroke="#42a5f5"/>
+  <text x="60" y="816" font-size="13" fill="#1a2b3c">选 SurrealDB：多形状数据要一起查（图 + 文档 + 向量一次查询）、要逻辑下推（函数/端点/权限都在库内）、写多读少、数据量在单机容量内。</text>
+  <text x="60" y="838" font-size="13" fill="#1a2b3c">别选 SurrealDB：以聚合分析为主（OLAP）、深图遍历（扇出^深度会爆炸）、超单机容量（只能 TiKV）、要成熟生态与运维工具链。</text>
+</svg>

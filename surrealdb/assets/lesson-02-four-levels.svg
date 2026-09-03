@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 660" width="1120" height="660" font-family="'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="ca" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="660" fill="#ffffff"/>
+  <text x="560" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#0f172a">SurrealDB 四级层级：Namespace → Database → Table → Record</text>
+  <text x="560" y="56" text-anchor="middle" font-size="12.5" fill="#64748b">NS 与 DB 是物理隔离边界，不是文件夹；Table 与 Record 才是数据建模层</text>
+
+  <!-- 四级 -->
+  <g>
+    <rect x="40" y="82" width="240" height="150" rx="10" fill="#f1f5f9" stroke="#64748b" stroke-width="1.6"/>
+    <text x="160" y="108" text-anchor="middle" font-size="16" font-weight="bold" fill="#0f172a">Namespace (NS)</text>
+    <text x="160" y="130" text-anchor="middle" font-size="11.5" fill="#dc2626" font-weight="bold">物理隔离边界</text>
+    <text x="60" y="154" font-size="11.5" fill="#334155">· 最高层，通常对应「租户」</text>
+    <text x="60" y="174" font-size="11.5" fill="#334155">· 一个 NS 下的 DB 互相不可见</text>
+    <text x="60" y="194" font-size="11.5" fill="#334155">· 各自有独立的 DB 用户与权限</text>
+    <text x="60" y="216" font-size="11" fill="#059669">USE NS learn;</text>
+
+    <rect x="300" y="82" width="240" height="150" rx="10" fill="#f1f5f9" stroke="#64748b" stroke-width="1.6"/>
+    <text x="420" y="108" text-anchor="middle" font-size="16" font-weight="bold" fill="#0f172a">Database (DB)</text>
+    <text x="420" y="130" text-anchor="middle" font-size="11.5" fill="#dc2626" font-weight="bold">物理隔离边界</text>
+    <text x="320" y="154" font-size="11.5" fill="#334155">· 通常对应「环境 / 项目」</text>
+    <text x="320" y="174" font-size="11.5" fill="#334155">· 表、索引、函数、权限都在这一层</text>
+    <text x="320" y="194" font-size="11.5" fill="#334155">· 事务边界在 DB 内</text>
+    <text x="320" y="216" font-size="11" fill="#059669">USE DB shop;</text>
+
+    <rect x="560" y="82" width="240" height="150" rx="10" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.6"/>
+    <text x="680" y="108" text-anchor="middle" font-size="16" font-weight="bold" fill="#1e3a8a">Table</text>
+    <text x="680" y="130" text-anchor="middle" font-size="11.5" fill="#2563eb">数据建模层</text>
+    <text x="580" y="154" font-size="11.5" fill="#334155">· SCHEMALESS / SCHEMAFULL</text>
+    <text x="580" y="174" font-size="11.5" fill="#334155">· 挂 PERMISSIONS、INDEX、EVENT</text>
+    <text x="580" y="194" font-size="11.5" fill="#334155">· 可以无预定义模式直接用</text>
+    <text x="580" y="216" font-size="11" fill="#059669">CREATE product ...</text>
+
+    <rect x="820" y="82" width="260" height="150" rx="10" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.6"/>
+    <text x="950" y="108" text-anchor="middle" font-size="16" font-weight="bold" fill="#1e3a8a">Record</text>
+    <text x="950" y="130" text-anchor="middle" font-size="11.5" fill="#2563eb">数据建模层</text>
+    <text x="840" y="154" font-size="11.5" fill="#334155">· id = table:id，全局唯一</text>
+    <text x="840" y="174" font-size="11.5" fill="#334155">· 可嵌套对象与数组</text>
+    <text x="840" y="194" font-size="11.5" fill="#334155">· 可被其他记录直接引用</text>
+    <text x="840" y="216" font-size="11" fill="#059669">product:sku_8848</text>
+  </g>
+
+  <g stroke="#475569" stroke-width="2" marker-end="url(#ca)">
+    <line x1="284" y1="157" x2="296" y2="157"/>
+    <line x1="544" y1="157" x2="556" y2="157"/>
+    <line x1="804" y1="157" x2="816" y2="157"/>
+  </g>
+
+  <!-- 隔离说明 -->
+  <rect x="40" y="252" width="1040" height="106" rx="10" fill="#fef2f2" stroke="#f87171" stroke-width="1.5"/>
+  <text x="62" y="278" font-size="15" font-weight="bold" fill="#7f1d1d">实测证据：NS 之间数据完全不可见（本机 3.2.4 验证）</text>
+  <g font-family="monospace" font-size="11.5" fill="#334155">
+    <text x="62" y="302">USE NS other_tenant; USE DB shop;</text>
+    <text x="62" y="322">CREATE product:sku_0001 SET name = 'Should Not Leak';</text>
+    <text x="62" y="342">USE NS learn; USE DB shop; SELECT * FROM product;</text>
+  </g>
+  <text x="620" y="316" font-size="12" fill="#b91c1c">→ 只返回 learn 下的商品，</text>
+  <text x="620" y="336" font-size="12" fill="#b91c1c">   other_tenant 的数据一条都看不到</text>
+
+  <!-- 键结构 -->
+  <rect x="40" y="378" width="1040" height="130" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.4"/>
+  <text x="62" y="402" font-size="15" font-weight="bold" fill="#0f172a">底层键结构：四级层级直接编码进 KV 键前缀</text>
+  <g font-family="monospace" font-size="13">
+    <rect x="62" y="418" width="150" height="34" rx="4" fill="#dbeafe" stroke="#3b82f6"/>
+    <text x="137" y="440" text-anchor="middle">*</text>
+    <rect x="220" y="418" width="150" height="34" rx="4" fill="#dbeafe" stroke="#3b82f6"/>
+    <text x="295" y="440" text-anchor="middle">learn</text>
+    <rect x="378" y="418" width="150" height="34" rx="4" fill="#dbeafe" stroke="#3b82f6"/>
+    <text x="453" y="440" text-anchor="middle">shop</text>
+    <rect x="536" y="418" width="150" height="34" rx="4" fill="#dbeafe" stroke="#3b82f6"/>
+    <text x="611" y="440" text-anchor="middle">product</text>
+    <rect x="694" y="418" width="150" height="34" rx="4" fill="#dbeafe" stroke="#3b82f6"/>
+    <text x="769" y="440" text-anchor="middle">sku_8848 00</text>
+    <rect x="852" y="418" width="206" height="34" rx="4" fill="#dcfce7" stroke="#22c55e"/>
+    <text x="955" y="440" text-anchor="middle">{name:..., price:...}</text>
+  </g>
+  <g font-size="10.5" fill="#64748b" text-anchor="middle">
+    <text x="137" y="466">类型标记</text>
+    <text x="295" y="466">NS</text>
+    <text x="453" y="466">DB</text>
+    <text x="611" y="466">Table</text>
+    <text x="769" y="466">Record ID</text>
+    <text x="955" y="466">值（文档体）</text>
+  </g>
+  <text x="62" y="492" font-size="11.5" fill="#475569">推论：因为键按字节有序，「同一 NS 下同一 DB 的某张表的所有记录」天然是连续区间 —— 这就是课 1 说的"区间扫描"能成立的原因。</text>
+
+  <!-- 常见误区 -->
+  <rect x="40" y="528" width="1040" height="112" rx="10" fill="#fffbeb" stroke="#fbbf24" stroke-width="1.5"/>
+  <text x="62" y="552" font-size="15" font-weight="bold" fill="#78350f">两个最容易踩的误区</text>
+  <g font-size="12" fill="#57534e">
+    <text x="62" y="576">❌ 把 NS 当「文件夹」、把 DB 当「业务模块」 → ✅ NS/DB 是<tspan font-weight="bold" fill="#b91c1c">物理隔离边界</tspan>。跨 NS 查不了、跨 DB 事务不生效。分模块请用 Table。</text>
+    <text x="62" y="600">❌ 以为 USE NS 需要先 DEFINE NAMESPACE → ✅ 3.x 实测<tspan font-weight="bold" fill="#059669">USE NS 会自动创建</tspan>该命名空间（DEFINE NAMESPACE 可省略）。</text>
+    <text x="62" y="624">❌ 裸写 SELECT 1; 测连通性 → ✅ SurrealQL 要求 FROM，会报 <tspan font-family="monospace">expected FROM</tspan>。测连通请用 <tspan font-family="monospace" fill="#059669">INFO FOR DB;</tspan> 或 <tspan font-family="monospace" fill="#059669">RETURN 1;</tspan></text>
+  </g>
+</svg>

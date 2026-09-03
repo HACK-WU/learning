@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="760" viewBox="0 0 1040 760" font-family="PingFang SC, Microsoft YaHei, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <rect width="1040" height="760" fill="#ffffff"/>
+  <text x="520" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#1e293b">多租户两种方案：隔离边界在哪一层</text>
+  <text x="520" y="58" text-anchor="middle" font-size="13" fill="#64748b">SurrealDB 3.2.4 实测 · 方案 A（NS/DB 分库）vs 方案 B（单库 + tenant 字段）</text>
+
+  <rect x="30" y="82" width="470" height="330" rx="12" fill="#f8fafc" stroke="#0ea5e9" stroke-width="2"/>
+  <rect x="30" y="82" width="470" height="34" rx="12" fill="#0ea5e9"/>
+  <text x="265" y="105" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">方案 A · NS / DB 双级物理隔离</text>
+
+  <rect x="52" y="134" width="200" height="52" rx="8" fill="#e0f2fe" stroke="#0284c7" stroke-width="1.4"/>
+  <text x="152" y="158" text-anchor="middle" font-size="13" font-weight="700" fill="#0c4a6e">Namespace: mt_ns</text>
+  <text x="152" y="176" text-anchor="middle" font-size="11.5" fill="#075985">（一个大客户一层）</text>
+
+  <rect x="272" y="134" width="200" height="52" rx="8" fill="#e0f2fe" stroke="#0284c7" stroke-width="1.4"/>
+  <text x="372" y="158" text-anchor="middle" font-size="13" font-weight="700" fill="#0c4a6e">Database: mt_tenantA</text>
+  <text x="372" y="176" text-anchor="middle" font-size="11.5" fill="#075985">（一个租户一个库）</text>
+
+  <line x1="252" y1="160" x2="268" y2="160" stroke="#475569" stroke-width="1.4" marker-end="url(#ar)"/>
+
+  <text x="52" y="216" font-size="13" font-weight="700" fill="#0f172a">隔离机制：token 里绑定了 NS/DB</text>
+  <text x="52" y="240" font-size="12.5" fill="#334155">· 签发时写入 NS / DB / AC / ID 四个声明</text>
+  <text x="52" y="262" font-size="12.5" fill="#334155">· 之后改 URL 参数也切不走（实测）</text>
+  <text x="52" y="284" font-size="12.5" fill="#334155">· 查询里 USE 切库 → 明确报权限不足</text>
+
+  <rect x="52" y="300" width="420" height="96" rx="8" fill="#ecfdf5" stroke="#059669" stroke-width="1.4"/>
+  <text x="66" y="322" font-size="12.5" font-weight="700" fill="#065f46">✅ 实测越权尝试全部失败</text>
+  <text x="66" y="344" font-size="12" fill="#065f46">· URL 改 db=mt_tenantB → 仍返回 A 的数据</text>
+  <text x="66" y="364" font-size="12" fill="#065f46">· USE NS mt_ns DB mt_tenantB → 权限不足被拒</text>
+  <text x="66" y="384" font-size="12" fill="#065f46">· 跨 NS 查询 → 仍返回 A 的库</text>
+
+  <text x="52" y="428" font-size="12.5" font-weight="700" fill="#b45309">代价：租户数 ↑ → 库数 ↑，备份/迁移/DDL 都要逐个做</text>
+
+  <rect x="540" y="82" width="470" height="330" rx="12" fill="#f8fafc" stroke="#8b5cf6" stroke-width="2"/>
+  <rect x="540" y="82" width="470" height="34" rx="12" fill="#8b5cf6"/>
+  <text x="775" y="105" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">方案 B · 单库 + tenant 字段 + PERMISSIONS</text>
+
+  <rect x="562" y="134" width="426" height="52" rx="8" fill="#f3e8ff" stroke="#7c3aed" stroke-width="1.4"/>
+  <text x="775" y="158" text-anchor="middle" font-size="13" font-weight="700" fill="#4c1d95">Database: app（所有租户混在一起）</text>
+  <text x="775" y="176" text-anchor="middle" font-size="11.5" fill="#5b21b6">每条记录带 tenant 字段 + 表级 PERMISSIONS 兜底</text>
+
+  <text x="562" y="216" font-size="13" font-weight="700" fill="#0f172a">隔离机制：靠表达式每一行都判</text>
+  <text x="562" y="240" font-size="12.5" fill="#334155">· PERMISSIONS FOR select WHERE tenant = $auth.tenant</text>
+  <text x="562" y="262" font-size="12.5" fill="#334155">· 四种动作必须逐个写，漏一个 = NONE</text>
+  <text x="562" y="284" font-size="12.5" fill="#334155">· 建议给 tenant 建普通索引</text>
+
+  <rect x="562" y="300" width="426" height="96" rx="8" fill="#fef2f2" stroke="#dc2626" stroke-width="1.4"/>
+  <text x="576" y="322" font-size="12.5" font-weight="700" fill="#991b1b">⚠️ 实测：配置漏一处就越权</text>
+  <text x="576" y="344" font-size="12" fill="#7f1d1d">· select 写成 FULL → 看到全部租户数据</text>
+  <text x="576" y="364" font-size="12" fill="#7f1d1d">· 漏写 FOR create → 建不了；漏写别的同理</text>
+  <text x="576" y="384" font-size="12" fill="#7f1d1d">· 字段默认 FULL → 敏感字段全裸</text>
+
+  <text x="562" y="428" font-size="12.5" font-weight="700" fill="#15803d">代价：省运维，但每次改表都要复核权限表达式</text>
+
+  <rect x="30" y="436" width="980" height="86" rx="10" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.4"/>
+  <text x="52" y="462" font-size="13.5" font-weight="700" fill="#0f172a">共同底座：$auth 是实时读库的（本课决定性实验）</text>
+  <text x="52" y="486" font-size="12.5" fill="#334155">root 把某用户 disabled 改为 true → 同一个旧 token 下一次查询立刻被拒；改回 false 立刻恢复。</text>
+  <text x="52" y="508" font-size="12.5" fill="#334155">含义：吊销不用等 token 过期，但前提是权限表达式里真的引用了这个字段（不引用就无效，实测对照确认）。</text>
+
+  <rect x="30" y="544" width="980" height="192" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="52" y="570" font-size="14" font-weight="700" fill="#0f172a">决策树：怎么选</text>
+
+  <rect x="52" y="586" width="440" height="60" rx="8" fill="#ecfdf5" stroke="#059669" stroke-width="1.4"/>
+  <text x="70" y="608" font-size="12.5" font-weight="700" fill="#065f46">选方案 A，如果……</text>
+  <text x="70" y="630" font-size="12" fill="#065f46">租户数少（几十内）· 有合规/物理隔离要求 · 单租户数据量大</text>
+
+  <rect x="548" y="586" width="440" height="60" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.4"/>
+  <text x="566" y="608" font-size="12.5" font-weight="700" fill="#1e3a8a">选方案 B，如果……</text>
+  <text x="566" y="630" font-size="12" fill="#1e3a8a">租户数多（成百上千）· 单租户数据量小 · 需要跨租户统计</text>
+
+  <rect x="52" y="658" width="936" height="60" rx="8" fill="#fffbeb" stroke="#d97706" stroke-width="1.4"/>
+  <text x="70" y="680" font-size="12.5" font-weight="700" fill="#92400e">可以混用（工程上最常见的落点）</text>
+  <text x="70" y="702" font-size="12" fill="#92400e">按「合规等级」分库（大客户独立 NS/DB），库内再用 tenant 字段切分小客户 —— 隔离强度与运维成本各取一半。</text>
+</svg>

@@ -1,0 +1,140 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="880" viewBox="0 0 1180 880" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="1180" height="880" fill="#fbfaf8"/>
+
+  <!-- ===== 标题 ===== -->
+  <text x="30" y="42" font-size="24" font-weight="700" fill="#1a1a1a">课 7 · 混合检索与 Graph RAG 链路</text>
+  <text x="30" y="68" font-size="13" fill="#6b6b6b">SurrealDB 3.2.4 实测 · 两路各查各的 → RRF 按排名融合 → 图遍历扩展上下文</text>
+  <line x1="30" y1="82" x2="1150" y2="82" stroke="#d8d4cc" stroke-width="1.5"/>
+
+  <!-- ===== 顶部：为什么不能加权平均 ===== -->
+  <rect x="30" y="100" width="1120" height="86" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="48" y="124" font-size="15" font-weight="700" fill="#991b1b">为什么不能直接把两路分数加权平均？</text>
+  <text x="48" y="148" font-size="12" fill="#7f1d1d">BM25 分数域 0~20（unbounded），余弦相似度域 0~1。直接相加必须先归一化，而"把 0~20 压到 0~1"这个动作本身</text>
+  <text x="48" y="168" font-size="12" fill="#7f1d1d">就武断地决定了谁的话语权更大；换个语料 BM25 范围变了，辛苦调的权重就废了。</text>
+  <text x="48" y="188" font-size="12.5" font-weight="700" fill="#991b1b">RRF 的解法：根本不看分数，只看排名。 RRF(d) = Σ 1/(k + rank_i(d))，k=60 来自 2009 年 Cormack 等人原始论文</text>
+
+  <!-- ===== 主链路 ===== -->
+  <text x="30" y="222" font-size="16" font-weight="700" fill="#7c3aed">主链路（实测跑通）</text>
+
+  <!-- Step 1: 两路召回 -->
+  <rect x="30" y="238" width="330" height="196" rx="10" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="48" y="262" font-size="14" font-weight="700" fill="#1e40af">Step 1 · 两路各查各的</text>
+  <line x1="48" y1="272" x2="342" y2="272" stroke="#bfdbfe" stroke-width="1"/>
+
+  <text x="48" y="294" font-size="11.5" font-weight="700" fill="#1e3a8a">① 向量召回（语义）</text>
+  <text x="48" y="312" font-size="10.5" font-family="monospace" fill="#1e3a8a">LET $vs = (SELECT id,</text>
+  <text x="48" y="328" font-size="10.5" font-family="monospace" fill="#1e3a8a">  vector::distance::knn() AS d</text>
+  <text x="48" y="344" font-size="10.5" font-family="monospace" fill="#1e3a8a">  FROM chunk</text>
+  <text x="48" y="360" font-size="10.5" font-family="monospace" fill="#1e3a8a">  WHERE embedding &lt;|5,40|&gt; $qv</text>
+  <text x="48" y="376" font-size="10.5" font-family="monospace" fill="#1e3a8a">  ORDER BY d ASC);</text>
+  <text x="48" y="396" font-size="10.5" fill="#1e40af">→ [c2, c1, c5, c6, c3]</text>
+
+  <line x1="48" y1="406" x2="342" y2="406" stroke="#bfdbfe" stroke-width="1"/>
+  <text x="48" y="424" font-size="11.5" font-weight="700" fill="#1e3a8a">② 全文召回（字面）</text>
+  <text x="48" y="442" font-size="10.5" font-family="monospace" fill="#1e3a8a">WHERE body @0@ $q</text>
+  <text x="48" y="458" font-size="10.5" font-family="monospace" fill="#1e3a8a">ORDER BY search::score(0) DESC LIMIT 5</text>
+  <text x="48" y="478" font-size="10.5" fill="#1e40af">→ [c2]（只有 1 条命中）</text>
+
+  <!-- 箭头 1 -->
+  <path d="M 366 336 L 400 336" stroke="#a78bfa" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#a78bfa"/>
+    </marker>
+  </defs>
+
+  <!-- Step 2: RRF -->
+  <rect x="406" y="238" width="300" height="196" rx="10" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="1.5"/>
+  <text x="424" y="262" font-size="14" font-weight="700" fill="#5b21b6">Step 2 · RRF 按排名融合</text>
+  <line x1="424" y1="272" x2="688" y2="272" stroke="#ddd6fe" stroke-width="1"/>
+  <text x="424" y="296" font-size="11" font-family="monospace" fill="#4c1d95">search::rrf([$vs, $ft], 5, 60)</text>
+  <text x="424" y="318" font-size="10.5" font-weight="700" fill="#be123c">⚠ 签名 (lists, limit, k)</text>
+  <text x="424" y="336" font-size="10.5" fill="#5b21b6">第 2 参是 limit，第 3 参才是 k（默认 60）</text>
+  <text x="424" y="354" font-size="10.5" fill="#5b21b6">官方两处文档说法相反，由决定性实验判定</text>
+  <line x1="424" y1="368" x2="688" y2="368" stroke="#ddd6fe" stroke-width="1"/>
+  <text x="424" y="388" font-size="10.5" font-weight="700" fill="#5b21b6">决定性实验（候选 6 条，互换取值）：</text>
+  <text x="424" y="406" font-size="10" font-family="monospace" fill="#4c1d95">rrf(.., 2, 60) → 2 条, Top1 0.0164=1/61</text>
+  <text x="424" y="422" font-size="10" font-family="monospace" fill="#4c1d95">rrf(.., 60, 2) → 6 条, Top1 0.3333=1/3</text>
+
+  <!-- 箭头 2 -->
+  <path d="M 712 336 L 746 336" stroke="#a78bfa" stroke-width="3" fill="none" marker-end="url(#arrow2)"/>
+  <defs>
+    <marker id="arrow2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#a78bfa"/>
+    </marker>
+  </defs>
+
+  <!-- Step 3: 图扩展 -->
+  <rect x="752" y="238" width="398" height="196" rx="10" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="1.5"/>
+  <text x="770" y="262" font-size="14" font-weight="700" fill="#065f46">Step 3 · 图遍历扩展上下文（课 5 的 → 在这里回收）</text>
+  <line x1="770" y1="272" x2="1132" y2="272" stroke="#a7f3d0" stroke-width="1"/>
+  <text x="770" y="294" font-size="10.5" font-weight="700" fill="#064e3b">一跳：命中的 chunk 属于哪篇文档</text>
+  <text x="770" y="312" font-size="10.5" font-family="monospace" fill="#064e3b">-&gt;belongs_to-&gt;doc.title</text>
+  <text x="770" y="334" font-size="10.5" font-weight="700" fill="#064e3b">两跳：那篇文档又引用了谁</text>
+  <text x="770" y="352" font-size="10.5" font-family="monospace" fill="#064e3b">-&gt;belongs_to-&gt;doc-&gt;cites-&gt;doc.title</text>
+  <line x1="770" y1="366" x2="1132" y2="366" stroke="#a7f3d0" stroke-width="1"/>
+  <text x="770" y="388" font-size="10.5" font-weight="700" fill="#065f46">实测输出（节选）：</text>
+  <text x="770" y="406" font-size="10" font-family="monospace" fill="#064e3b">{"body":"HNSW is a graph based vector index.",</text>
+  <text x="770" y="420" font-size="10" font-family="monospace" fill="#064e3b"> "cited_docs":["Indexes in SurrealDB"],</text>
+  <text x="770" y="434" font-size="10" font-family="monospace" fill="#064e3b"> "doc_title":["Vector Search Guide"],</text>
+  <text x="770" y="448" font-size="10" font-family="monospace" fill="#064e3b"> "id":"chunk:c2","rrf_score":0.3333}</text>
+
+  <!-- ===== 中间：共存矩阵 ===== -->
+  <text x="30" y="470" font-size="16" font-weight="700" fill="#b91c1c">⚠ 共存矩阵：KNN 能和谁写在同一个 WHERE 里？</text>
+
+  <rect x="30" y="486" width="1120" height="150" rx="10" fill="#ffffff" stroke="#e4e0d8" stroke-width="1.5"/>
+
+  <!-- 表头 -->
+  <rect x="48" y="498" width="1084" height="24" fill="#f4f2ee" rx="4"/>
+  <text x="60" y="515" font-size="11" font-weight="700" fill="#3f3f46">WHERE 条件</text>
+  <text x="560" y="515" font-size="11" font-weight="700" fill="#3f3f46">实测结果</text>
+  <text x="980" y="515" font-size="11" font-weight="700" fill="#3f3f46">性质</text>
+
+  <!-- 行 1 -->
+  <text x="60" y="538" font-size="11" font-family="monospace" fill="#3f3f46">embedding &lt;|3,40|&gt; $v</text>
+  <text x="560" y="538" font-size="11" fill="#15803d">3 条，dist 正常</text>
+  <text x="980" y="538" font-size="11" fill="#15803d">✅ 基准</text>
+
+  <!-- 行 2 高亮 -->
+  <rect x="50" y="546" width="1080" height="22" fill="#f0fdf4" rx="3"/>
+  <text x="60" y="561" font-size="11" font-family="monospace" fill="#15803d">embedding &lt;|3,40|&gt; $v AND cat = "tech"</text>
+  <text x="560" y="561" font-size="11" fill="#15803d" font-weight="700">满 5 条 tech（过滤已下推到 HNSW 遍历）</text>
+  <text x="980" y="561" font-size="11" fill="#15803d" font-weight="700">✅ 可用</text>
+
+  <!-- 行 3 -->
+  <text x="60" y="583" font-size="11" font-family="monospace" fill="#3f3f46">embedding &lt;|3,40|&gt; $v AND cat="tech" AND pub=2025</text>
+  <text x="560" y="583" font-size="11" fill="#15803d">与上式语义一致，多条件同样下推</text>
+  <text x="980" y="583" font-size="11" fill="#15803d">✅ 可用</text>
+
+  <!-- 行 4 红色 -->
+  <rect x="50" y="592" width="1080" height="22" fill="#fef2f2" rx="3"/>
+  <text x="60" y="607" font-size="11" font-family="monospace" fill="#b91c1c">embedding &lt;|3,40|&gt; $v AND body @0@ "vector"</text>
+  <text x="560" y="607" font-size="11" fill="#b91c1c" font-weight="700">[] 空，不报错（换顺序也一样为空）</text>
+  <text x="980" y="607" font-size="11" fill="#b91c1c" font-weight="700">❌ 不可用</text>
+
+  <text x="48" y="632" font-size="10.5" fill="#6b6b6b">结论：KNN 与结构化条件共存没问题（还下推，与官方博客"必须独占 WHERE"的说法相反）；与全文匹配符 @N@ 则静默返回空。正确做法就是两路分开查再融合 —— 这本来也符合 RRF 的设计前提。</text>
+
+  <!-- ===== 底部左：linear 签名 ===== -->
+  <text x="30" y="676" font-size="15" font-weight="700" fill="#0369a1">search::linear() 签名（逐个参数试出来的）</text>
+  <rect x="30" y="690" width="545" height="152" rx="10" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="48" y="714" font-size="10.5" font-family="monospace" fill="#b91c1c">linear([$vs,$ft], 0.5)          → weights must be an array</text>
+  <text x="48" y="732" font-size="10.5" font-family="monospace" fill="#b91c1c">linear([$vs,$ft], [0.5,0.5])     → limit must be a number</text>
+  <text x="48" y="750" font-size="10.5" font-family="monospace" fill="#b91c1c">linear([$vs,$ft], [0.5,0.5], 5)  → norm must be a string</text>
+  <text x="48" y="772" font-size="11" font-family="monospace" fill="#15803d" font-weight="700">linear([$vs,$ft], [0.5,0.5], 5, 'minmax')  ✅</text>
+  <line x1="48" y1="784" x2="557" y2="784" stroke="#bfdbfe" stroke-width="1"/>
+  <text x="48" y="804" font-size="10.5" fill="#1e40af">归一化不是等价选择：minmax 值域 [0,1]；zscore 可正可负且排序不同（Top3 由 doc:e 变 doc:b）</text>
+  <text x="48" y="822" font-size="10.5" fill="#1e40af">默认没有归一化方式，必须显式给 → 想要"某一路更重要"时才用 linear，否则用 rrf（零调参）</text>
+
+  <!-- ===== 底部右：边界 ===== -->
+  <text x="605" y="676" font-size="15" font-weight="700" fill="#9f1239">SurrealDB vs 专用向量库（接课 6 的边界对照）</text>
+  <rect x="605" y="690" width="545" height="152" rx="10" fill="#fffbeb" stroke="#fbbf24" stroke-width="1.5"/>
+  <text x="623" y="714" font-size="11" font-weight="700" fill="#15803d">SurrealDB 明显领先：</text>
+  <text x="623" y="732" font-size="10.5" fill="#78350f">与主数据同库 —— 无同步延迟、无一致性问题、无额外运维</text>
+  <text x="623" y="750" font-size="10.5" fill="#78350f">混合检索 + 图扩展能在一条查询内完成，无需应用层编排</text>
+  <text x="623" y="774" font-size="11" font-weight="700" fill="#b91c1c">专用库明显领先：</text>
+  <text x="623" y="792" font-size="10.5" fill="#78350f">量化/压缩策略、分片与水平扩展、GPU 加速、成熟调优工具链</text>
+  <text x="623" y="812" font-size="10.5" fill="#78350f">⚠ HNSW 常驻内存；EF/召回率调优经验远不如专用库成熟</text>
+  <text x="623" y="832" font-size="10.5" fill="#92400e">判断线：百万级内且本来就要存文档和图 → 用 SurrealDB 省掉一整个系统</text>
+
+  <text x="30" y="866" font-size="10.5" fill="#8a8a8a">⚠ 本课实例未接入任何嵌入模型，所有向量为手工构造的 4 维数组，用于验证语法与执行链路；规模量级为工程经验判断，未做基准测试</text>
+</svg>

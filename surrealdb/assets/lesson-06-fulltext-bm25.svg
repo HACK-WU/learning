@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 600" width="940" height="600" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <rect width="940" height="600" fill="#fbfaf7"/>
+  <text x="24" y="36" font-size="21" font-weight="700" fill="#1f2d3d">全文检索：FULLTEXT ANALYZER 与 BM25（3.2.4 实测）</text>
+
+  <!-- 三段式配置 -->
+  <g transform="translate(30,58)">
+    <text x="0" y="0" font-size="15" font-weight="600" fill="#2c3e50">全文检索是"三段拼装"，缺一段就跑不起来</text>
+
+    <rect x="0" y="12" width="290" height="140" rx="7" fill="#eaf2f8" stroke="#2e86c1" stroke-width="1.6"/>
+    <text x="14" y="34" font-size="13" font-weight="600" fill="#154360">① ANALYZER（怎么切词）</text>
+    <text x="14" y="54" font-size="11" fill="#1f2d3d" font-family="Consolas,monospace">DEFINE ANALYZER az</text>
+    <text x="14" y="70" font-size="11" fill="#1f2d3d" font-family="Consolas,monospace">  TOKENIZERS class</text>
+    <text x="14" y="86" font-size="11" fill="#1f2d3d" font-family="Consolas,monospace">  FILTERS lowercase, ascii;</text>
+    <text x="14" y="108" font-size="11.5" fill="#c0392b">⚠️ 必须显式定义</text>
+    <text x="14" y="126" font-size="11.5" fill="#5d4037">不写 ANALYZER 会默认用</text>
+    <text x="14" y="142" font-size="11.5" fill="#5d4037">不存在的 like → 查询全报错</text>
+
+    <rect x="308" y="12" width="300" height="140" rx="7" fill="#e8f6f3" stroke="#16a085" stroke-width="1.6"/>
+    <text x="322" y="34" font-size="13" font-weight="600" fill="#0e6251">② INDEX（挂在哪 + 怎么打分）</text>
+    <text x="322" y="54" font-size="11" fill="#1f2d3d" font-family="Consolas,monospace">DEFINE INDEX ft ON article</text>
+    <text x="322" y="70" font-size="11" fill="#1f2d3d" font-family="Consolas,monospace">  COLUMNS title</text>
+    <text x="322" y="86" font-size="11" fill="#1f2d3d" font-family="Consolas,monospace">  FULLTEXT ANALYZER az</text>
+    <text x="322" y="102" font-size="11" fill="#1f2d3d" font-family="Consolas,monospace">  BM25 HIGHLIGHTS;</text>
+    <text x="322" y="124" font-size="11.5" fill="#0b5345">BM25 → 才能用 search::score</text>
+    <text x="322" y="142" font-size="11.5" fill="#0b5345">HIGHLIGHTS → 才能用 highlight</text>
+
+    <rect x="626" y="12" width="286" height="140" rx="7" fill="#fdf2d9" stroke="#b7950b" stroke-width="1.6"/>
+    <text x="640" y="34" font-size="13" font-weight="600" fill="#7d6608">③ QUERY（@N@ 编号绑定）</text>
+    <text x="640" y="54" font-size="11" fill="#1f2d3d" font-family="Consolas,monospace">WHERE title @0@ "search"</text>
+    <text x="640" y="70" font-size="11" fill="#1f2d3d" font-family="Consolas,monospace">   OR body @1@ "search"</text>
+    <text x="640" y="92" font-size="11" fill="#1f2d3d" font-family="Consolas,monospace">search::score(0)*2</text>
+    <text x="640" y="108" font-size="11" fill="#1f2d3d" font-family="Consolas,monospace">  + search::score(1)</text>
+    <text x="640" y="130" font-size="11.5" fill="#7d6608">编号让不同字段分开打分、</text>
+    <text x="640" y="146" font-size="11.5" fill="#7d6608">再按权重合并排序</text>
+  </g>
+
+  <!-- 最大坑：score 恒为 0 -->
+  <g transform="translate(30,216)">
+    <rect x="0" y="0" width="912" height="150" rx="8" fill="#fdecea" stroke="#e74c3c" stroke-width="1.8"/>
+    <text x="16" y="26" font-size="15" font-weight="700" fill="#922b21">⚠️ 本课最大的坑：文档太少时 search::score() 恒返回 0</text>
+
+    <text x="16" y="50" font-size="12" fill="#5d1a15">同一份数据（"aeon aeon aeon" vs 长文档里 1 次 aeon），只改变表里的噪声文档数量：</text>
+
+    <text x="30" y="76" font-size="12" fill="#1f2d3d" font-family="Consolas,monospace">2 条文档（仅目标 2 条）</text>
+    <text x="360" y="76" font-size="12" fill="#c0392b" font-family="Consolas,monospace">sc = 0          sc = 0</text>
+
+    <text x="30" y="98" font-size="12" fill="#1f2d3d" font-family="Consolas,monospace">3 条（加 1 条噪声）</text>
+    <text x="360" y="98" font-size="12" fill="#0b5345" font-family="Consolas,monospace">sc = 0.511      sc = 0.191</text>
+
+    <text x="30" y="120" font-size="12" fill="#1f2d3d" font-family="Consolas,monospace">12 条（加 10 条噪声）</text>
+    <text x="360" y="120" font-size="12" fill="#0b5345" font-family="Consolas,monospace">sc = 1.993      sc = 0.631</text>
+
+    <text x="30" y="142" font-size="12" fill="#1f2d3d" font-family="Consolas,monospace">52 条（加 50 条噪声）</text>
+    <text x="360" y="142" font-size="12" fill="#0b5345" font-family="Consolas,monospace">sc = 4.476      sc = 1.466</text>
+
+    <text x="620" y="76" font-size="11.5" fill="#922b21">BM25 的 IDF 依赖语料统计：</text>
+    <text x="620" y="94" font-size="11.5" fill="#5d4037">文档太少时逆文档频率为负或</text>
+    <text x="620" y="112" font-size="11.5" fill="#5d4037">被截断 → 分数被压成 0。</text>
+    <text x="620" y="134" font-size="11.5" fill="#0b5345">✅ 验证打分前先灌足数据，</text>
+    <text x="620" y="150" font-size="11.5" fill="#0b5345">别用 2-3 条就下"打分坏了"的结论。</text>
+  </g>
+
+  <!-- 匹配语义 -->
+  <g transform="translate(30,382)">
+    <text x="0" y="0" font-size="15" font-weight="600" fill="#2c3e50">匹配语义实测对照</text>
+
+    <rect x="0" y="12" width="450" height="132" rx="7" fill="#eaf2f8" stroke="#2e86c1" stroke-width="1.6"/>
+    <text x="14" y="34" font-size="12.5" font-weight="600" fill="#154360">操作符：@@ / @AND@ / @OR@</text>
+    <text x="14" y="56" font-size="11.5" fill="#1f2d3d" font-family="Consolas,monospace">@@ "rare personal"  → 命中（要求全词）</text>
+    <text x="14" y="76" font-size="11.5" fill="#1f2d3d" font-family="Consolas,monospace">@AND@ "rare personal" → 命中（等价 @@）</text>
+    <text x="14" y="96" font-size="11.5" fill="#1f2d3d" font-family="Consolas,monospace">@OR@ "rare zzzz"  → 命中（任一即可）</text>
+    <text x="14" y="116" font-size="11.5" fill="#c0392b">@AND@ "rare zzzz"  → 空（缺一词即无）</text>
+    <text x="14" y="136" font-size="11.5" fill="#7f8c8d">⚠️ 与 ES 的 operator 参数直觉不同，务必实测</text>
+
+    <rect x="470" y="12" width="442" height="132" rx="7" fill="#fff8e1" stroke="#f39c12" stroke-width="1.6"/>
+    <text x="484" y="34" font-size="12.5" font-weight="600" fill="#7e5109">中文分词：class tokenizer 不按词切</text>
+    <text x="484" y="56" font-size="11.5" fill="#5d4037">数据："中文分词测试"</text>
+    <text x="484" y="78" font-size="11.5" fill="#0b5345">@0@ "中文" → 命中</text>
+    <text x="484" y="96" font-size="11.5" fill="#c0392b">@0@ "分词" → 空　@0@ "文分" → 空</text>
+    <text x="484" y="118" font-size="11.5" fill="#5d4037">即：整串被当作一个 token，只有整串查询才命中</text>
+    <text x="484" y="138" font-size="11.5" fill="#7f8c8d">→ 中文场景需自定义分析器或外接分词（课 7 延伸）</text>
+  </g>
+
+  <text x="30" y="556" font-size="12.5" fill="#7f8c8d">图中结论均来自本机 SurrealDB 3.2.4 实测（playground/l06-verify-62*.surql）</text>
+  <text x="30" y="576" font-size="12" fill="#7f8c8d">"52 条"实验沿用官方 scoring-and-ranking 示例的构造方式，分数趋势与官方一致</text>
+</svg>

@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="1020" viewBox="0 0 1180 1020">
+  <defs>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#475569"/>
+    </marker>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#dc2626"/>
+    </marker>
+    <style>
+      .t { font-family: "Microsoft YaHei","PingFang SC",sans-serif; }
+      .h { font-size: 20px; font-weight: bold; fill: #0f172a; }
+      .sh { font-size: 15px; font-weight: bold; fill: #1e293b; }
+      .b { font-size: 13px; fill: #334155; }
+      .sm { font-size: 12px; fill: #475569; }
+      .mono { font-family: Consolas,"Courier New",monospace; font-size: 12.5px; fill: #0f172a; }
+      .warn { font-size: 12.5px; fill: #b91c1c; font-weight: bold; }
+    </style>
+  </defs>
+
+  <rect width="1180" height="1020" fill="#f8fafc"/>
+  <text class="t h" x="24" y="34">课 8 · LIVE SELECT 实时订阅：推送格式、过滤语义与生命周期</text>
+  <text class="t sm" x="24" y="56">SurrealDB 3.2.4 实测（本机 WSL）· 结论来自 8 个探针脚本</text>
+
+  <!-- 左：协议与建立 -->
+  <rect x="24" y="74" width="540" height="300" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
+  <text class="t sh" x="40" y="100">① 建立订阅：只有 WebSocket 这条路</text>
+
+  <text class="t mono" x="40" y="130">ws://host:8000/rpc   →   LIVE SELECT * FROM sensor;</text>
+  <text class="t mono" x="40" y="152">返回：一个 UUID（不是结果集）</text>
+
+  <rect x="40" y="168" width="240" height="52" rx="6" fill="#dcfce7" stroke="#16a34a"/>
+  <text class="t b" x="52" y="188">WebSocket /rpc</text>
+  <text class="t sm" x="52" y="208">✓ 返回 live UUID，可收推送</text>
+
+  <rect x="300" y="168" width="240" height="52" rx="6" fill="#fee2e2" stroke="#dc2626"/>
+  <text class="t b" x="312" y="188">HTTP /sql</text>
+  <text class="t sm" x="312" y="208">✗ LiveQueryNotSupported</text>
+
+  <text class="t b" x="40" y="250">好消息：HTTP 是明确报错，不是静默失败。</text>
+  <text class="t sm" x="40" y="272">报错原文：Unable to perform the realtime query（kind: Configuration）</text>
+
+  <text class="t b" x="40" y="300">表不存在时：LIVE 立刻报 The table 'x' does not exist</text>
+  <text class="t sm" x="40" y="322">→ 这也是少数「LIVE 不静默」的地方，值得记牢</text>
+
+  <rect x="40" y="336" width="500" height="26" rx="4" fill="#fef9c3" stroke="#ca8a04"/>
+  <text class="t sm" x="52" y="353">订阅本质是「一条 WS 连接 + 一个 UUID」，不是服务端常驻对象</text>
+
+  <!-- 右：推送格式 -->
+  <rect x="588" y="74" width="568" height="300" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
+  <text class="t sh" x="604" y="100">② 推送格式：服务端给 5 个字段</text>
+
+  <rect x="604" y="118" width="536" height="130" rx="6" fill="#0f172a"/>
+  <text class="t mono" x="618" y="140" fill="#e2e8f0">{"action":"UPDATE",</text>
+  <text class="t mono" x="618" y="160" fill="#e2e8f0"> "id":"5c1fbaba-...",        ← 订阅 UUID</text>
+  <text class="t mono" x="618" y="180" fill="#e2e8f0"> "record":"person:alice",    ← 记录 ID</text>
+  <text class="t mono" x="618" y="200" fill="#e2e8f0"> "result":{...},             ← 内容或 DIFF 补丁</text>
+  <text class="t mono" x="618" y="220" fill="#e2e8f0"> "session":"25d3148b-..."}   ← 来源会话</text>
+  <text class="t sm" x="618" y="242" fill="#94a3b8">session 可用来排除自己的变更（LIVE 不自动排除）</text>
+
+  <text class="t b" x="604" y="278">action 取值：CREATE / UPDATE / DELETE / KILLED</text>
+
+  <rect x="604" y="290" width="536" height="72" rx="6" fill="#fee2e2" stroke="#dc2626"/>
+  <text class="t warn" x="616" y="310">⚠ P0：Python SDK 的 subscribe_live() 只透传 result，把 action 丢了</text>
+  <text class="t sm" x="616" y="330">于是 CREATE 与 DELETE 长得一模一样，本系列第六次静默失败</text>
+  <text class="t sm" x="616" y="350">对策：需要区分动作时，用原始 WebSocket JSON-RPC 自己接</text>
+
+  <!-- 中下：DIFF -->
+  <rect x="24" y="392" width="540" height="230" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
+  <text class="t sh" x="40" y="418">③ DIFF 模式：LIVE SELECT DIFF</text>
+  <text class="t sm" x="40" y="438">result 从「完整记录」变成 JSON Patch 数组</text>
+
+  <text class="t mono" x="40" y="466">CREATE → [{"op":"replace","path":"","value":{...}}]</text>
+  <text class="t mono" x="40" y="490">UPDATE → [{"op":"replace","path":"/age","value":41}]</text>
+  <text class="t mono" x="40" y="514">DELETE → [{"op":"replace","path":"","value":null}]</text>
+
+  <text class="t b" x="40" y="546">非 DIFF 模式：result 就是整条记录，三种 action 长得一样</text>
+  <text class="t sm" x="40" y="568">DELETE 推的是「被删掉的那条内容」，不是 null</text>
+
+  <rect x="40" y="582" width="500" height="26" rx="4" fill="#eff6ff" stroke="#2563eb"/>
+  <text class="t sm" x="52" y="599">需要增量同步前端状态时用 DIFF；只想刷新整块就用默认</text>
+
+  <!-- 右下：WHERE 语义 -->
+  <rect x="588" y="392" width="568" height="230" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
+  <text class="t sh" x="604" y="418">④ WHERE 语义：只过滤「变更后」的状态（决定性实验）</text>
+
+  <rect x="604" y="434" width="536" height="176" rx="6" fill="#ffffff" stroke="#94a3b8"/>
+  <text class="t mono" x="616" y="456">订阅：LIVE SELECT * FROM sensor WHERE temp &gt; 50;</text>
+  <line x1="616" y1="466" x2="1124" y2="466" stroke="#e2e8f0"/>
+
+  <text class="t b" x="616" y="488">新建 temp=30（不满足）</text>
+  <text class="t b" x="900" y="488">→ 不推</text>
+  <text class="t b" x="616" y="510">新建 temp=80（满足）</text>
+  <text class="t b" x="900" y="510">→ 推 CREATE</text>
+  <text class="t b" x="616" y="532">s1: 20 → 90（跨入）</text>
+  <text class="t b" x="900" y="532">→ 推 UPDATE</text>
+  <text class="t b" x="616" y="554">s1: 90 → 10（跌出）</text>
+  <text class="t b" x="900" y="554">→ 不推</text>
+  <text class="t b" x="616" y="576">s3: 80 → 85（仍在内）</text>
+  <text class="t b" x="900" y="576">→ 推 UPDATE</text>
+
+  <text class="t warn" x="616" y="600">不是「跨越阈值才推」，是「变更后仍在窗口内才推」</text>
+
+  <!-- 底部：生命周期 -->
+  <rect x="24" y="640" width="1132" height="330" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
+  <text class="t sh" x="40" y="666">⑤ 生命周期：三个必须自己处理的坑（实测）</text>
+
+  <rect x="40" y="684" width="356" height="120" rx="8" fill="#fef2f2" stroke="#fca5a5"/>
+  <text class="t b" x="56" y="708" font-weight="bold">坑 1 · 断连即死，且不补发</text>
+  <text class="t sm" x="56" y="730">断连期间写入 3 条 → 重连后 0 条</text>
+  <text class="t sm" x="56" y="750">服务端随连接清理订阅（KILL 旧 uid</text>
+  <text class="t sm" x="56" y="768">报 Cannot execute KILL statement）</text>
+  <text class="t warn" x="56" y="790">重连 = 新 UUID，必须自己补初值</text>
+
+  <rect x="412" y="684" width="356" height="120" rx="8" fill="#fef2f2" stroke="#fca5a5"/>
+  <text class="t b" x="428" y="708" font-weight="bold">坑 2 · 重连后没有初值</text>
+  <text class="t sm" x="428" y="730">订阅只推送「之后」的变更</text>
+  <text class="t sm" x="428" y="750">存量 5 条一条都不推</text>
+  <text class="t sm" x="428" y="768">标准做法：先 SELECT 拉全量</text>
+  <text class="t sm" x="428" y="788">→ 再 LIVE 订阅增量 → 自行去重合并</text>
+
+  <rect x="784" y="684" width="356" height="120" rx="8" fill="#fef2f2" stroke="#fca5a5"/>
+  <text class="t b" x="800" y="708" font-weight="bold">坑 3 · 会收到自己的变更</text>
+  <text class="t sm" x="800" y="730">同一连接写 + 订阅，照样推给自己</text>
+  <text class="t sm" x="800" y="750">LIVE 不自动排除发起者</text>
+  <text class="t sm" x="800" y="768">用通知里的 session 字段比对</text>
+  <text class="t sm" x="800" y="788">自己的会话 ID 则跳过</text>
+
+  <rect x="40" y="822" width="1100" height="132" rx="8" fill="#0f172a"/>
+  <text class="t sh" x="60" y="848" fill="#f8fafc">正确的重连姿势（伪代码）</text>
+  <text class="t mono" x="60" y="874" fill="#e2e8f0">snapshot = SELECT * FROM sensor;          // ① 先拉全量快照，记住版本</text>
+  <text class="t mono" x="60" y="896" fill="#e2e8f0">uid      = LIVE SELECT * FROM sensor;     // ② 再订阅增量</text>
+  <text class="t mono" x="60" y="918" fill="#e2e8f0">on_reconnect: 回到 ① ，不要指望服务端替你补</text>
+  <text class="t mono" x="60" y="940" fill="#94a3b8">// 断连窗口内的变更永久丢失 —— 这是 LIVE 与 MQ 的第一条分水岭</text>
+
+  <text class="t sm" x="24" y="1000">实测环境：SurrealDB 3.2.4+20260803 · WSL Ubuntu 24.04 · 延迟数据仅示趋势，不可外推生产</text>
+</svg>

@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 860" width="1080" height="860" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="ar2" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#475569"/>
+    </marker>
+    <linearGradient id="gh2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#334155"/>
+    </linearGradient>
+    <filter id="sh2" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.14"/>
+    </filter>
+  </defs>
+
+  <rect width="1080" height="860" fill="#f8fafc"/>
+  <rect x="0" y="0" width="1080" height="62" fill="url(#gh2)"/>
+  <text x="26" y="26" fill="#f1f5f9" font-size="19" font-weight="700">备份、恢复与可观测：一条命令的两种结局</text>
+  <text x="26" y="48" fill="#94a3b8" font-size="12.5">SurrealDB 3.2.4 本机实测 · 2026-09-03 · 图中结论均可复现</text>
+
+  <!-- 上半：export/import -->
+  <text x="26" y="94" fill="#0f172a" font-size="15.5" font-weight="700">一、导出与导入（export / import）</text>
+
+  <rect x="26" y="108" width="330" height="130" rx="9" fill="#f0fdf4" stroke="#86efac" stroke-width="1.8" filter="url(#sh2)"/>
+  <text x="46" y="132" fill="#15803d" font-size="13.5" font-weight="700">surreal export（总是成功）</text>
+  <text x="46" y="156" fill="#334155" font-size="11.8">产出 .surql 文本，分段注释清晰</text>
+  <text x="46" y="176" fill="#334155" font-size="11.8">OPTION IMPORT; → ACCESSES →</text>
+  <text x="46" y="194" fill="#334155" font-size="11.8">FUNCTIONS → ANALYZERS → TABLE</text>
+  <text x="46" y="212" fill="#334155" font-size="11.8">→ TABLE DATA（INSERT 语句）</text>
+  <text x="46" y="230" fill="#15803d" font-size="11.5" font-weight="600">实测：rc=0，含 access/函数/analyzer</text>
+
+  <line x1="356" y1="173" x2="424" y2="173" stroke="#475569" stroke-width="2" marker-end="url(#ar2)"/>
+  <text x="390" y="164" fill="#475569" font-size="11" text-anchor="middle">文件</text>
+
+  <rect x="428" y="108" width="330" height="130" rx="9" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.8" filter="url(#sh2)"/>
+  <text x="448" y="132" fill="#b45309" font-size="13.5" font-weight="700">surreal import（两种结局）</text>
+  <text x="448" y="156" fill="#334155" font-size="11.8">目标库<b>为空 / 不存在</b>：</text>
+  <text x="448" y="175" fill="#15803d" font-size="11.8" font-weight="700">✓ rc=0「Import executed with no errors」</text>
+  <text x="448" y="196" fill="#334155" font-size="11.8">目标库<b>已有相同 id 的数据</b>：</text>
+  <text x="448" y="215" fill="#b91c1c" font-size="11.8" font-weight="700">✗ rc=1「Surreal import failed」</text>
+  <text x="448" y="234" fill="#7f1d1d" font-size="11.2">整批回滚，数据保持原样（不是部分导入）</text>
+
+  <rect x="782" y="108" width="272" height="130" rx="9" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.8" filter="url(#sh2)"/>
+  <text x="802" y="132" fill="#b91c1c" font-size="13.5" font-weight="700">根因：导出用的是 INSERT</text>
+  <text x="802" y="158" fill="#334155" font-size="11.8">INSERT 遇已存在 id：</text>
+  <text x="802" y="177" fill="#b91c1c" font-size="11.8" font-weight="600">Database record `t:1` already exists</text>
+  <text x="802" y="200" fill="#334155" font-size="11.8">→ 整批失败回滚</text>
+  <text x="802" y="222" fill="#334155" font-size="11.8">对比：UPSERT 同 id → 直接覆盖成功</text>
+  <text x="802" y="238" fill="#7f1d1d" font-size="11.2">这是静默失败链第十四次</text>
+
+  <!-- 三个反直觉 -->
+  <rect x="26" y="256" width="1028" height="112" rx="9" fill="#fff" stroke="#cbd5e1" stroke-width="1.6" filter="url(#sh2)"/>
+  <text x="46" y="281" fill="#0f172a" font-size="13.5" font-weight="700">三个反直觉的实测结论</text>
+
+  <rect x="46" y="292" width="322" height="62" rx="7" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.3"/>
+  <text x="60" y="312" fill="#0369a1" font-size="12" font-weight="700">① import 会自建 NS 和 DB</text>
+  <text x="60" y="330" fill="#334155" font-size="11">目标库不存在也 rc=0，ghostns 被自动建出</text>
+  <text x="60" y="346" fill="#b45309" font-size="10.8">与 USE NS（只建 NS 不建 DB）行为相反</text>
+
+  <rect x="382" y="292" width="322" height="62" rx="7" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.3"/>
+  <text x="396" y="312" fill="#0369a1" font-size="12" font-weight="700">② 重复导入不幂等，但也不脏</text>
+  <text x="396" y="330" fill="#334155" font-size="11">导两次都是 rc=1，记录数不变（3→3）</text>
+  <text x="396" y="346" fill="#15803d" font-size="10.8">安全：不会翻倍；麻烦：看起来像失败</text>
+
+  <rect x="718" y="292" width="322" height="62" rx="7" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.3"/>
+  <text x="732" y="312" fill="#0369a1" font-size="12" font-weight="700">③ 导出会补出 JWT 密钥</text>
+  <text x="732" y="330" fill="#334155" font-size="11">原定义没写，导出后多了 WITH JWT ... KEY</text>
+  <text x="732" y="346" fill="#b45309" font-size="10.8">意味着密钥随备份走，备份文件即凭证</text>
+
+  <!-- 下半：可观测 -->
+  <text x="26" y="404" fill="#0f172a" font-size="15.5" font-weight="700">二、可观测性：实际可用的观测点（实测）</text>
+
+  <rect x="26" y="418" width="1028" height="196" rx="9" fill="#fff" stroke="#cbd5e1" stroke-width="1.6" filter="url(#sh2)"/>
+  <line x1="26" y1="446" x2="1054" y2="446" stroke="#e2e8f0" stroke-width="1.4"/>
+  <text x="50" y="440" fill="#475569" font-size="12" font-weight="700">观测点</text>
+  <text x="290" y="440" fill="#475569" font-size="12" font-weight="700">实测结果</text>
+  <text x="760" y="440" fill="#475569" font-size="12" font-weight="700">怎么用</text>
+
+  <text x="50" y="470" fill="#0f172a" font-size="12" font-weight="600">GET /health</text>
+  <text x="290" y="470" fill="#15803d" font-size="11.6">200，body 为空</text>
+  <text x="760" y="470" fill="#334155" font-size="11.6">探活；⚠️ 只证明端口活着，不证明是 SurrealDB</text>
+
+  <text x="50" y="494" fill="#0f172a" font-size="12" font-weight="600">GET /status</text>
+  <text x="290" y="494" fill="#15803d" font-size="11.6">200，body 为空</text>
+  <text x="760" y="494" fill="#334155" font-size="11.6">当前无实质内容，不能当监控数据源</text>
+
+  <text x="50" y="518" fill="#0f172a" font-size="12" font-weight="600">GET /metrics</text>
+  <text x="290" y="518" fill="#b45309" font-size="11.6">200，Prometheus 格式，仅 5 个指标</text>
+  <text x="760" y="518" fill="#334155" font-size="11.6">只有进程级：uptime / 内存 / CPU / build_info</text>
+
+  <text x="50" y="542" fill="#0f172a" font-size="12" font-weight="600">--slow-log-threshold</text>
+  <text x="290" y="542" fill="#15803d" font-size="11.6">生效，必须带单位（1ms，写 1 会报错）</text>
+  <text x="760" y="542" fill="#334155" font-size="11.6">输出完整 SQL + 参数占位符</text>
+
+  <text x="50" y="566" fill="#0f172a" font-size="12" font-weight="600">--log-format json</text>
+  <text x="290" y="566" fill="#15803d" font-size="11.6">生效，timestamp/level/fields/target</text>
+  <text x="760" y="566" fill="#334155" font-size="11.6">接入 ELK / Loki 的入口</text>
+
+  <text x="50" y="590" fill="#0f172a" font-size="12" font-weight="600">--log-file-enabled</text>
+  <text x="290" y="590" fill="#15803d" font-size="11.6">生效，自动加日期后缀 l11.log.2026-09-03</text>
+  <text x="760" y="590" fill="#334155" font-size="11.6">按日切分（--log-file-rotation daily）</text>
+
+  <text x="50" y="608" fill="#b91c1c" font-size="11.4" font-weight="600">查询级指标（QPS / 延迟 / 慢查数）实测缺失</text>
+
+  <!-- 身份泄露 -->
+  <rect x="26" y="626" width="500" height="112" rx="9" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.8"/>
+  <text x="46" y="650" fill="#b91c1c" font-size="13.2" font-weight="700">默认带身份头（信息泄露面）</text>
+  <text x="46" y="674" fill="#334155" font-size="11.6">server: SurrealDB</text>
+  <text x="46" y="692" fill="#334155" font-size="11.6">surreal-version: surrealdb/3.2.4+20260803.93ab219</text>
+  <text x="46" y="714" fill="#15803d" font-size="11.6" font-weight="600">--no-identification-headers 后两者均消失</text>
+  <text x="46" y="732" fill="#7f1d1d" font-size="10.8">生产建议：加上这个参数，别把精确版本号暴露给公网</text>
+
+  <rect x="554" y="626" width="500" height="112" rx="9" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.8"/>
+  <text x="574" y="650" fill="#b45309" font-size="13.2" font-weight="700">慢查询日志会打印完整 SQL</text>
+  <text x="574" y="674" fill="#334155" font-size="11.6">实测输出：Slow query detected - time: 3.35ms -</text>
+  <text x="574" y="692" fill="#334155" font-size="11.6">query: INSERT INTO t (id, v) VALUES (t:1, 1), ...</text>
+  <text x="574" y="714" fill="#b45309" font-size="11.6" font-weight="600">敏感值会进日志，用 --slow-log-param-deny 脱敏</text>
+  <text x="574" y="732" fill="#78350f" font-size="10.8">对应参数：--slow-log-param-allow / --slow-log-param-deny</text>
+
+  <!-- 底部箴言 -->
+  <rect x="26" y="756" width="1028" height="82" rx="9" fill="#0f172a" filter="url(#sh2)"/>
+  <text x="540" y="784" fill="#f8fafc" font-size="14" font-weight="700" text-anchor="middle">备份的三条铁律（本课实测得出）</text>
+  <text x="540" y="808" fill="#cbd5e1" font-size="12" text-anchor="middle">① 恢复演练必须落到空库——非空库 import 会整批回滚且只报一句失败</text>
+  <text x="540" y="828" fill="#cbd5e1" font-size="12" text-anchor="middle">② 备份文件含 access 的 JWT 密钥，按凭证级别保管　③ /metrics 只有 5 个进程指标，别指望它做容量规划</text>
+</svg>

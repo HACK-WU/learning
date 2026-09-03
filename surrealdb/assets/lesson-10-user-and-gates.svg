@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="700" viewBox="0 0 1040 700" font-family="PingFang SC, Microsoft YaHei, Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#eef2ff"/>
+      <stop offset="100%" stop-color="#e0e7ff"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <rect width="1040" height="700" fill="#ffffff"/>
+  <text x="520" y="34" text-anchor="middle" font-size="21" font-weight="700" fill="#1e293b">SurrealDB 3.2.4 · 两类用户与三条权限闸门</text>
+  <text x="520" y="58" text-anchor="middle" font-size="13" fill="#64748b">本课实测：SurrealDB 3.2.4（2026-08-03）/ WSL Ubuntu 24.04</text>
+
+  <rect x="30" y="80" width="300" height="150" rx="10" fill="url(#g1)" stroke="#6366f1" stroke-width="1.5"/>
+  <text x="180" y="106" text-anchor="middle" font-size="15" font-weight="700" fill="#3730a3">系统用户（DEFINE USER）</text>
+  <text x="46" y="132" font-size="12.5" fill="#334155">· ROOT / NAMESPACE / DATABASE 三级</text>
+  <text x="46" y="152" font-size="12.5" fill="#334155">· 用角色（OWNER / EDITOR / VIEWER）</text>
+  <text x="46" y="172" font-size="12.5" fill="#334155">· 3.x 仍可定义，但已不推荐</text>
+  <text x="46" y="196" font-size="12.5" font-weight="700" fill="#b91c1c">· 不受表级/字段级 PERMISSIONS 约束</text>
+  <text x="46" y="216" font-size="12.5" fill="#334155">  （实测：root 可读 PERMISSIONS NONE 表）</text>
+
+  <rect x="370" y="80" width="300" height="150" rx="10" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="520" y="106" text-anchor="middle" font-size="15" font-weight="700" fill="#166534">记录用户（DEFINE ACCESS TYPE RECORD）</text>
+  <text x="386" y="132" font-size="12.5" fill="#334155">· 用户就是表里的一条记录</text>
+  <text x="386" y="152" font-size="12.5" fill="#334155">· SIGNUP / SIGNIN 自定义逻辑</text>
+  <text x="386" y="172" font-size="12.5" fill="#334155">· 返回 JWT（默认 HS512）</text>
+  <text x="386" y="196" font-size="12.5" font-weight="700" fill="#15803d">· 受 PERMISSIONS 约束（本课主体）</text>
+  <text x="386" y="216" font-size="12.5" fill="#334155">· $auth = 该记录（实时读取）</text>
+
+  <rect x="710" y="80" width="300" height="150" rx="10" fill="#fff7ed" stroke="#ea580c" stroke-width="1.5"/>
+  <text x="860" y="106" text-anchor="middle" font-size="15" font-weight="700" fill="#9a3412">游客与机器（匿名 / BEARER）</text>
+  <text x="726" y="132" font-size="12.5" fill="#334155">· 匿名：默认被拒 403</text>
+  <text x="726" y="152" font-size="12.5" fill="#334155">  Anonymous access not allowed</text>
+  <text x="726" y="176" font-size="12.5" fill="#334155">· TYPE BEARER：给外部系统发密钥</text>
+  <text x="726" y="196" font-size="12.5" fill="#334155">  可审计、可吊销（ACCESS 语句）</text>
+  <text x="726" y="216" font-size="12.5" fill="#334155">· TYPE JWT：对接已有身份提供方</text>
+
+  <line x1="330" y1="155" x2="366" y2="155" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="670" y1="155" x2="706" y2="155" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="30" y="262" width="980" height="46" rx="8" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.2"/>
+  <text x="520" y="291" text-anchor="middle" font-size="14.5" font-weight="700" fill="#0f172a">一次查询要过的三道闸门（记录用户视角，实测验证）</text>
+
+  <rect x="40" y="330" width="300" height="200" rx="10" fill="#ffffff" stroke="#0891b2" stroke-width="1.8"/>
+  <rect x="40" y="330" width="300" height="32" rx="10" fill="#0891b2"/>
+  <text x="190" y="352" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">闸门 1 · 表级 PERMISSIONS</text>
+  <text x="56" y="382" font-size="12.5" fill="#334155">作用：决定「这条记录能不能碰」</text>
+  <text x="56" y="404" font-size="12.5" fill="#334155">四种动作：select / create / update / delete</text>
+  <text x="56" y="426" font-size="12.5" fill="#334155">省略不写 → NONE（拒）</text>
+  <text x="56" y="452" font-size="12.5" font-weight="700" fill="#b91c1c">被拒表现：返回 []，不报错</text>
+  <text x="56" y="474" font-size="12.5" fill="#b91c1c">（静默，最难自查）</text>
+  <text x="56" y="500" font-size="12.5" fill="#334155">表达式：$auth.id / owner / tenant</text>
+  <text x="56" y="520" font-size="12.5" fill="#334155">系统用户不受此闸门约束</text>
+
+  <rect x="370" y="330" width="300" height="200" rx="10" fill="#ffffff" stroke="#7c3aed" stroke-width="1.8"/>
+  <rect x="370" y="330" width="300" height="32" rx="10" fill="#7c3aed"/>
+  <text x="520" y="352" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">闸门 2 · 字段级 PERMISSIONS</text>
+  <text x="386" y="382" font-size="12.5" fill="#334155">作用：决定「这个字段能不能看/改」</text>
+  <text x="386" y="404" font-size="12.5" fill="#334155">只有三种动作：select / create / update</text>
+  <text x="386" y="426" font-size="12.5" fill="#334155">（delete 不属于字段）</text>
+  <text x="386" y="452" font-size="12.5" font-weight="700" fill="#b91c1c">被拒表现：select → 字段变 null</text>
+  <text x="386" y="474" font-size="12.5" font-weight="700" fill="#b91c1c">update → 该字段丢弃，其余照改</text>
+  <text x="386" y="500" font-size="12.5" fill="#334155">默认 FULL（与表级相反！）</text>
+  <text x="386" y="520" font-size="12.5" fill="#334155">系统用户同样不受约束</text>
+
+  <rect x="700" y="330" width="300" height="200" rx="10" fill="#ffffff" stroke="#db2777" stroke-width="1.8"/>
+  <rect x="700" y="330" width="300" height="32" rx="10" fill="#db2777"/>
+  <text x="850" y="352" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">闸门 3 · 令牌与会话</text>
+  <text x="716" y="382" font-size="12.5" fill="#334155">作用：决定「你是谁、到什么时候」</text>
+  <text x="716" y="404" font-size="12.5" fill="#334155">DURATION FOR TOKEN / SESSION / GRANT</text>
+  <text x="716" y="426" font-size="12.5" font-weight="700" fill="#b91c1c">3.2 起 RECORD 令牌必须设过期</text>
+  <text x="716" y="448" font-size="12.5" fill="#334155">  TOKEN NONE 会被明确拒绝</text>
+  <text x="716" y="474" font-size="12.5" fill="#334155">WITH REFRESH → {access, refresh}</text>
+  <text x="716" y="496" font-size="12.5" fill="#334155">  刷新时轮换，旧 refresh 立刻失效</text>
+  <text x="716" y="520" font-size="12.5" fill="#334155">官方标注：实验特性，勿用于生产</text>
+
+  <rect x="30" y="556" width="980" height="120" rx="10" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="52" y="582" font-size="14" font-weight="700" fill="#991b1b">⚠️ 本课实测确认的两条反直觉结论</text>
+  <text x="52" y="606" font-size="12.5" fill="#7f1d1d">1. $auth 不是 token 里带的快照，而是每次查询实时读取的用户记录 —— root 改一行，权限立刻生效，旧 token 无需等过期。</text>
+  <text x="52" y="628" font-size="12.5" fill="#7f1d1d">2. 表级省略 PERMISSIONS = NONE（拒），字段级省略 PERMISSIONS = FULL（放）—— 两者默认值正好相反。</text>
+  <text x="52" y="652" font-size="12.5" fill="#7f1d1d">3. 字段级 update 被拒时，UPDATE 仍返回成功与原记录，只有那一个字段没改 —— 静默失败第十二次。</text>
+</svg>

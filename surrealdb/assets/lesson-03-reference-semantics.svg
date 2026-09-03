@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 700" width="1120" height="700" font-family="'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <rect x="0" y="0" width="1120" height="700" fill="#ffffff"/>
+  <text x="560" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#0f172a">REFERENCE 的真实语义：不是外键，是"反向索引 + 删除策略"</text>
+  <text x="560" y="56" text-anchor="middle" font-size="12.5" fill="#64748b">本机 3.2.4 实测 + 官方文档核对：它不校验目标是否存在，只登记"谁指向我"并决定删除时怎么办</text>
+
+  <!-- 左：普通记录链接 -->
+  <rect x="40" y="80" width="490" height="290" rx="10" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/>
+  <text x="285" y="106" text-anchor="middle" font-size="15" font-weight="bold" fill="#334155">普通记录链接（无 REFERENCE）</text>
+  <text x="285" y="126" text-anchor="middle" font-size="11" fill="#64748b">TYPE record&lt;person&gt;</text>
+
+  <rect x="70" y="146" width="150" height="44" rx="6" fill="#dbeafe" stroke="#3b82f6"/>
+  <text x="145" y="174" text-anchor="middle" font-family="monospace" font-size="12">post:p1</text>
+  <line x1="224" y1="168" x2="286" y2="168" stroke="#475569" stroke-width="2"/>
+  <text x="255" y="160" text-anchor="middle" font-size="10" fill="#475569">author</text>
+
+  <rect x="290" y="146" width="150" height="44" rx="6" fill="#dcfce7" stroke="#22c55e"/>
+  <text x="365" y="174" text-anchor="middle" font-family="monospace" font-size="12">person:alice</text>
+
+  <g font-size="11.5" fill="#334155">
+    <text x="70" y="220">· 只能「正向」查：post → person</text>
+    <text x="70" y="242">· 用 FETCH 可展开成完整对象（实测有效）</text>
+    <text x="70" y="264">· 目标不存在也能写入（悬空引用）</text>
+    <text x="70" y="286">· 删掉 person，post 里的 id 依然留着</text>
+  </g>
+
+  <rect x="70" y="304" width="430" height="50" rx="6" fill="#fef2f2" stroke="#f87171"/>
+  <text x="84" y="324" font-size="11.5" fill="#7f1d1d" font-weight="bold">实测：author = person:nobody 写入成功</text>
+  <text x="84" y="344" font-family="monospace" font-size="11" fill="#b91c1c">→ {"author":"person:nobody","id":"post:p2"}</text>
+
+  <!-- 右：REFERENCE -->
+  <rect x="590" y="80" width="490" height="290" rx="10" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.6"/>
+  <text x="835" y="106" text-anchor="middle" font-size="15" font-weight="bold" fill="#1e3a8a">加了 REFERENCE（3.0 起）</text>
+  <text x="835" y="126" text-anchor="middle" font-size="11" fill="#2563eb">TYPE record&lt;person&gt; REFERENCE</text>
+
+  <rect x="620" y="146" width="130" height="44" rx="6" fill="#dbeafe" stroke="#3b82f6"/>
+  <text x="685" y="174" text-anchor="middle" font-family="monospace" font-size="12">comment:c1</text>
+  <line x1="754" y1="164" x2="816" y2="164" stroke="#475569" stroke-width="2" marker-end="url(#ra)"/>
+  <line x1="816" y1="180" x2="754" y2="180" stroke="#2563eb" stroke-width="2" stroke-dasharray="4"/>
+  <text x="785" y="200" text-anchor="middle" font-size="10" fill="#2563eb">反向可见</text>
+
+  <rect x="820" y="146" width="150" height="44" rx="6" fill="#dcfce7" stroke="#22c55e"/>
+  <text x="895" y="174" text-anchor="middle" font-family="monospace" font-size="12">person:alice</text>
+
+  <text x="620" y="228" font-size="11.5" fill="#1e3a8a" font-weight="bold">它做了两件事（且只做这两件事）：</text>
+  <g font-size="11.5" fill="#334155">
+    <text x="620" y="250">1. 登记反向引用 → 让"谁指向我"可查询</text>
+    <text x="620" y="272">2. 提供 ON DELETE 策略 → 决定删目标时怎么办</text>
+  </g>
+
+  <rect x="620" y="288" width="430" height="66" rx="6" fill="#fffbeb" stroke="#fbbf24"/>
+  <text x="634" y="308" font-size="11.5" fill="#78350f" font-weight="bold">⚠ 它不做的事（这是最大的误解）</text>
+  <text x="634" y="328" font-size="11" fill="#57534e">不校验目标是否存在 —— 实测 <tspan font-family="monospace">person:nobody</tspan> 依然写进去了</text>
+  <text x="634" y="346" font-size="11" fill="#57534e">想要外键约束？用 <tspan font-family="monospace" font-weight="bold">ON DELETE REJECT</tspan> + 存在性检查，或课 5 的 RELATE</text>
+
+  <!-- 五种策略 -->
+  <rect x="40" y="392" width="1040" height="150" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.4"/>
+  <text x="62" y="416" font-size="15" font-weight="bold" fill="#0f172a">ON DELETE 五种策略（四种已在本机实测，标注实测）</text>
+
+  <g font-size="11.5">
+    <rect x="62" y="428" width="190" height="100" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="157" y="448" text-anchor="middle" font-weight="bold" fill="#0f172a">IGNORE（默认）</text>
+    <text x="157" y="470" text-anchor="middle" font-size="11" fill="#475569">什么都不做</text>
+    <text x="157" y="490" text-anchor="middle" font-size="11" fill="#475569">引用变悬空</text>
+    <text x="157" y="514" text-anchor="middle" font-size="10" fill="#059669" font-weight="bold">✅ INFO 实测默认</text>
+
+    <rect x="266" y="428" width="190" height="100" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="361" y="448" text-anchor="middle" font-weight="bold" fill="#0f172a">CASCADE</text>
+    <text x="361" y="470" text-anchor="middle" font-size="11" fill="#475569">删掉引用方记录</text>
+    <text x="361" y="490" text-anchor="middle" font-size="11" fill="#475569">（连带删除）</text>
+    <text x="361" y="514" text-anchor="middle" font-size="10" fill="#059669" font-weight="bold">✅ 实测 c1 被删</text>
+
+    <rect x="470" y="428" width="190" height="100" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="565" y="448" text-anchor="middle" font-weight="bold" fill="#0f172a">REJECT</text>
+    <text x="565" y="470" text-anchor="middle" font-size="11" fill="#475569">阻止删除被引用记录</text>
+    <text x="565" y="490" text-anchor="middle" font-size="11" fill="#475569">（最接近外键）</text>
+    <text x="565" y="514" text-anchor="middle" font-size="10" fill="#059669" font-weight="bold">✅ bob 保住了</text>
+
+    <rect x="674" y="428" width="190" height="100" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="769" y="448" text-anchor="middle" font-weight="bold" fill="#0f172a">UNSET</text>
+    <text x="769" y="470" text-anchor="middle" font-size="11" fill="#475569">把字段置空</text>
+    <text x="769" y="490" text-anchor="middle" font-size="11" fill="#475569">引用方保留</text>
+    <text x="769" y="514" text-anchor="middle" font-size="10" fill="#059669" font-weight="bold">✅ 实测 author 消失</text>
+
+    <rect x="878" y="428" width="182" height="100" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="969" y="448" text-anchor="middle" font-weight="bold" fill="#0f172a">THEN { ... }</text>
+    <text x="969" y="470" text-anchor="middle" font-size="11" fill="#475569">自定义清理逻辑</text>
+    <text x="969" y="490" text-anchor="middle" font-size="11" fill="#475569">$this / $reference</text>
+    <text x="969" y="514" text-anchor="middle" font-size="10" fill="#059669" font-weight="bold">✅ 实测 body 被改</text>
+  </g>
+
+  <!-- 实测证据 -->
+  <rect x="40" y="562" width="1040" height="122" rx="10" fill="#fef2f2" stroke="#f87171" stroke-width="1.5"/>
+  <text x="62" y="586" font-size="15" font-weight="bold" fill="#7f1d1d">关键实测证据：REJECT 真的拦住了删除</text>
+  <g font-family="monospace" font-size="11.5" fill="#334155">
+    <text x="62" y="610">DELETE person:bob;</text>
+  </g>
+  <text x="300" y="610" font-size="11.5" fill="#b91c1c" font-weight="bold">→ Cannot delete `person:bob` as it is referenced by `c3:r1` with an ON DELETE REJECT clause</text>
+  <text x="62" y="636" font-size="11.5" fill="#059669">随后 SELECT * FROM person 确认：<tspan font-weight="bold">bob 仍在</tspan>（删除被拦截，不是删了再回滚）</text>
+  <text x="62" y="662" font-size="11.5" fill="#57534e">💡 反向查询 <tspan font-family="monospace">id.refs()</tspan> 在本机报 <tspan fill="#b91c1c">no such method found for the record type</tspan> —— 该功能需 <tspan font-family="monospace" font-weight="bold">--allow-experimental record_references</tspan> 启动标志，本课实例未开启。</text>
+</svg>

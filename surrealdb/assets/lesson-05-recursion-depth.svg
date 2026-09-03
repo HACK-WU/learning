@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 600" width="940" height="600" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <rect width="940" height="600" fill="#fbfaf7"/>
+  <text x="24" y="36" font-size="21" font-weight="700" fill="#1f2d3d">递归遍历与深度控制：四种写法，两种结果形状（3.2.4 实测）</text>
+
+  <!-- 数据：4 层组织架构 -->
+  <g transform="translate(30,66)">
+    <text x="0" y="0" font-size="14" font-weight="600" fill="#2c3e50">测试数据：CEO → 2 VP → 4 Manager → 8 Employee</text>
+    <ellipse cx="60" cy="42" rx="44" ry="22" fill="#d6eaf8" stroke="#2e86c1" stroke-width="1.8"/>
+    <text x="60" y="47" font-size="12" text-anchor="middle" fill="#154360">ceo</text>
+    <ellipse cx="180" cy="20" rx="40" ry="20" fill="#e8f6f3" stroke="#16a085" stroke-width="1.6"/>
+    <text x="180" y="25" font-size="12" text-anchor="middle" fill="#0b5345">vp1</text>
+    <ellipse cx="180" cy="66" rx="40" ry="20" fill="#e8f6f3" stroke="#16a085" stroke-width="1.6"/>
+    <text x="180" y="71" font-size="12" text-anchor="middle" fill="#0b5345">vp2</text>
+    <ellipse cx="300" cy="20" rx="34" ry="18" fill="#fdf2d9" stroke="#b7950b" stroke-width="1.4"/>
+    <text x="300" y="25" font-size="11" text-anchor="middle" fill="#7d6608">m1 m2</text>
+    <ellipse cx="300" cy="66" rx="34" ry="18" fill="#fdf2d9" stroke="#b7950b" stroke-width="1.4"/>
+    <text x="300" y="71" font-size="11" text-anchor="middle" fill="#7d6608">m3 m4</text>
+    <ellipse cx="410" cy="20" rx="40" ry="18" fill="#f5eef8" stroke="#8e44ad" stroke-width="1.4"/>
+    <text x="410" y="25" font-size="11" text-anchor="middle" fill="#5b2c6f">e1…e4</text>
+    <ellipse cx="410" cy="66" rx="40" ry="18" fill="#f5eef8" stroke="#8e44ad" stroke-width="1.4"/>
+    <text x="410" y="71" font-size="11" text-anchor="middle" fill="#5b2c6f">e5…e8</text>
+    <path d="M 100 40 L 145 26 M 100 44 L 145 62 M 216 20 L 270 20 M 216 66 L 270 66 M 330 20 L 372 20 M 330 66 L 372 66"
+          stroke="#7f8c8d" stroke-width="1.4" fill="none"/>
+  </g>
+
+  <!-- 四种写法 -->
+  <g transform="translate(30,160)">
+    <text x="0" y="0" font-size="15" font-weight="600" fill="#2c3e50">四种深度写法与实测结果</text>
+
+    <rect x="0" y="14" width="450" height="118" rx="7" fill="#eaf2f8" stroke="#2e86c1" stroke-width="1.6"/>
+    <text x="14" y="36" font-size="13" font-weight="600" fill="#154360">① 固定深度（精确第 N 层，不是 1..N）</text>
+    <text x="14" y="56" font-size="11.5" fill="#1f2d3d" font-family="Consolas,monospace">-&gt;manages-&gt;person.{2}(-&gt;manages-&gt;person)</text>
+    <text x="14" y="78" font-size="12" fill="#0b5345">实测：d1 = 4（vp/m 层）　d2 = 8（e 层）　d3 = 0（超出即空）</text>
+    <text x="14" y="100" font-size="12" fill="#c0392b">⚠️ {N} 是"恰好第 N 跳"，不是"最多 N 跳"</text>
+    <text x="14" y="120" font-size="12" fill="#7f8c8d">结果：扁平数组（同一层的所有节点）</text>
+
+    <rect x="470" y="14" width="440" height="118" rx="7" fill="#e8f6f3" stroke="#16a085" stroke-width="1.6"/>
+    <text x="484" y="36" font-size="13" font-weight="600" fill="#0e6251">② 树形递归（保留层级结构）</text>
+    <text x="484" y="56" font-size="11.5" fill="#1f2d3d" font-family="Consolas,monospace">.{1..3}.{ title, then: -&gt;manages-&gt;person.@ }</text>
+    <text x="484" y="78" font-size="12" fill="#0b5345">实测：返回嵌套 tree，每层含 title + then 子数组</text>
+    <text x="484" y="100" font-size="12" fill="#0b5345">@ 表示"在这里继续沿同一条路径往下走"</text>
+    <text x="484" y="120" font-size="12" fill="#c0392b">⚠️ 超出实际深度不报错，末层 then 为 []</text>
+  </g>
+
+  <g transform="translate(30,296)">
+    <rect x="0" y="0" width="450" height="104" rx="7" fill="#fdecea" stroke="#e74c3c" stroke-width="1.6"/>
+    <text x="14" y="24" font-size="13" font-weight="600" fill="#922b21">③ 已废弃：旧式 @{depth} 语法</text>
+    <text x="14" y="46" font-size="11.5" fill="#1f2d3d" font-family="Consolas,monospace">-&gt;manages-&gt;person.@{2}</text>
+    <text x="14" y="68" font-size="12" fill="#c0392b">实测 3.2.4：Parse error: Unexpected token `{`</text>
+    <text x="14" y="90" font-size="12" fill="#5d4037">骨架里写的 @{depth} 已不可用，请用 .{N}()</text>
+
+    <rect x="470" y="0" width="440" height="104" rx="7" fill="#fdecea" stroke="#e74c3c" stroke-width="1.6"/>
+    <text x="484" y="24" font-size="13" font-weight="600" fill="#922b21">④ 会踩坑的"看起来对"的写法</text>
+    <text x="484" y="46" font-size="11.5" fill="#1f2d3d" font-family="Consolas,monospace">-&gt;manages-&gt;person.{1..3}   /   .{..}</text>
+    <text x="484" y="68" font-size="12" fill="#c0392b">实测：两者都返回 []，不报错</text>
+    <text x="484" y="90" font-size="12" fill="#5d4037">范围深度必须配 .{…} 结构才有输出（见 ②）</text>
+  </g>
+
+  <!-- 循环图 -->
+  <g transform="translate(30,416)">
+    <rect x="0" y="0" width="450" height="120" rx="7" fill="#fff8e1" stroke="#f39c12" stroke-width="1.6"/>
+    <text x="14" y="24" font-size="13" font-weight="600" fill="#7e5109">⚠️ 循环图不会自动去重，也不会无限展开</text>
+    <text x="14" y="46" font-size="11.5" fill="#5d4037" font-family="Consolas,monospace">环 a→b→c→a，查 .{1..20}</text>
+    <text x="14" y="68" font-size="12" fill="#5d4037">实测：正常返回，同一节点在树上重复出现 20 层</text>
+    <text x="14" y="90" font-size="12" fill="#c0392b">深度上限保护生效（不爆栈），但结果会"重复计数"</text>
+    <text x="14" y="110" font-size="12" fill="#5d4037">要去重需自行 array::distinct + 逐层展开</text>
+
+    <rect x="470" y="0" width="440" height="120" rx="7" fill="#eaf2f8" stroke="#2e86c1" stroke-width="1.6"/>
+    <text x="484" y="24" font-size="13" font-weight="600" fill="#154360">性能边界：成本 = 扇出 ^ 深度</text>
+    <text x="484" y="46" font-size="12" fill="#1f2d3d">实测本例：depth1 = 4 节点，depth2 = 8 节点</text>
+    <text x="484" y="68" font-size="12" fill="#1f2d3d">树形递归 1..4 的顶层分支数 = 2（随扇出指数增长）</text>
+    <text x="484" y="90" font-size="12" fill="#c0392b">"图数据库"不等于"多跳一定快"</text>
+    <text x="484" y="110" font-size="12" fill="#5d4037">深翻页与深递归的解法在阶段 3 索引课回收</text>
+  </g>
+
+  <text x="30" y="566" font-size="12.5" fill="#7f8c8d">图中所有数字均来自本机 SurrealDB 3.2.4 实测（playground/l05-verify-53*.surql）</text>
+</svg>

@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 640" width="1120" height="640" font-family="'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <rect x="0" y="0" width="1120" height="640" fill="#ffffff"/>
+  <text x="560" y="32" text-anchor="middle" font-size="21" font-weight="bold" fill="#0f172a">UPDATE 与 UPSERT：2.0 起最关键的一次语义分裂</text>
+  <text x="560" y="54" text-anchor="middle" font-size="12.5" fill="#64748b">本机 3.2.4 实测（2026-09-02）——注意"不存在时"这一列的真实行为与很多人的预期不同</text>
+
+  <!-- 对比表 -->
+  <rect x="40" y="74" width="1040" height="200" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+
+  <!-- 表头 -->
+  <rect x="40" y="74" width="1040" height="34" rx="10" fill="#e2e8f0"/>
+  <text x="70" y="96" font-size="13" font-weight="bold" fill="#0f172a">语句</text>
+  <text x="270" y="96" font-size="13" font-weight="bold" fill="#0f172a">记录【存在】时</text>
+  <text x="600" y="96" font-size="13" font-weight="bold" fill="#0f172a">记录【不存在】时</text>
+  <text x="900" y="96" font-size="13" font-weight="bold" fill="#0f172a">实测结论</text>
+
+  <line x1="40" y1="108" x2="1080" y2="108" stroke="#cbd5e1"/>
+
+  <!-- UPDATE 行 -->
+  <text x="70" y="136" font-family="monospace" font-size="13" fill="#1e40af" font-weight="bold">UPDATE</text>
+  <text x="270" y="136" font-size="12" fill="#334155">按 SET 改指定字段</text>
+  <text x="600" y="132" font-size="12" fill="#b91c1c" font-weight="bold">不报错！返回空数组 []</text>
+  <text x="600" y="150" font-size="11" fill="#64748b">（静默无操作，容易误判为成功）</text>
+  <text x="900" y="136" font-size="12" fill="#b91c1c" font-weight="bold">⚠ 不是"失败"</text>
+
+  <line x1="40" y1="162" x2="1080" y2="162" stroke="#e2e8f0"/>
+
+  <!-- UPSERT 行 -->
+  <text x="70" y="192" font-family="monospace" font-size="13" fill="#047857" font-weight="bold">UPSERT</text>
+  <text x="270" y="192" font-size="12" fill="#334155">按 SET 改指定字段（保留其他）</text>
+  <text x="600" y="192" font-size="12" fill="#047857" font-weight="bold">创建该记录</text>
+  <text x="900" y="192" font-size="12" fill="#047857" font-weight="bold">✅ 有则改、无则建</text>
+
+  <line x1="40" y1="212" x2="1080" y2="212" stroke="#e2e8f0"/>
+
+  <!-- CREATE 行 -->
+  <text x="70" y="240" font-family="monospace" font-size="13" fill="#0f172a">CREATE</text>
+  <text x="270" y="240" font-size="12" fill="#b91c1c">报 AlreadyExists</text>
+  <text x="600" y="240" font-size="12" fill="#334155">创建该记录</text>
+  <text x="900" y="240" font-size="12" fill="#334155">只建不改</text>
+
+  <line x1="40" y1="258" x2="1080" y2="258" stroke="#cbd5e1"/>
+  <text x="70" y="268" font-size="11" fill="#57534e">⚠ 实测要点：UPDATE 不存在的记录【不报错】——它只是什么都没做。这会掩盖 bug（见下方"隐形的坑"）。</text>
+
+  <!-- SET / CONTENT / MERGE -->
+  <rect x="40" y="292" width="1040" height="172" rx="10" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="62" y="316" font-size="15" font-weight="bold" fill="#1e3a8a">三种写入方式：SET / CONTENT / MERGE（实测对照）</text>
+
+  <text x="62" y="342" font-size="12" fill="#334155">初始记录：</text>
+  <text x="150" y="342" font-family="monospace" font-size="12" fill="#0f172a">book:hp4 = { title: 'Goblet of Fire', year: 2000, price: 48.0 }</text>
+
+  <!-- SET -->
+  <rect x="62" y="356" width="310" height="94" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="78" y="376" font-family="monospace" font-size="12" font-weight="bold" fill="#0f172a">SET price = 50.0</text>
+  <text x="78" y="398" font-size="11" fill="#475569">只改指定字段，其余保留</text>
+  <text x="78" y="420" font-family="monospace" font-size="11" fill="#047857">→ { title, year:2000,</text>
+  <text x="78" y="437" font-family="monospace" font-size="11" fill="#047857">     price:50.0 }</text>
+
+  <!-- CONTENT -->
+  <rect x="392" y="356" width="310" height="94" rx="6" fill="#ffffff" stroke="#f87171" stroke-width="1.6"/>
+  <text x="408" y="376" font-family="monospace" font-size="12" font-weight="bold" fill="#b91c1c">CONTENT { title, year }</text>
+  <text x="408" y="398" font-size="11" fill="#475569">整体替换，未提及字段消失</text>
+  <text x="408" y="420" font-family="monospace" font-size="11" fill="#b91c1c">→ { title, year:2000 }</text>
+  <text x="408" y="437" font-family="monospace" font-size="11" fill="#b91c1c">    ⚠ price 没了！</text>
+
+  <!-- MERGE -->
+  <rect x="722" y="356" width="336" height="94" rx="6" fill="#ffffff" stroke="#22c55e"/>
+  <text x="738" y="376" font-family="monospace" font-size="12" font-weight="bold" fill="#047857">MERGE { price: 52.0 }</text>
+  <text x="738" y="398" font-size="11" fill="#475569">与现有内容合并</text>
+  <text x="738" y="420" font-family="monospace" font-size="11" fill="#047857">→ { title, year:2000,</text>
+  <text x="738" y="437" font-family="monospace" font-size="11" fill="#047857">     price:52.0 }</text>
+
+  <text x="62" y="472" font-size="11.5" fill="#57534e">实测顺序：CREATE hp4 → UPSERT SET price=50（保留 title/year）→ UPSERT CONTENT（price 消失）→ UPSERT MERGE price=52（title/year 仍在）</text>
+
+  <!-- 四种 RETURN -->
+  <rect x="40" y="480" width="1040" height="144" rx="10" fill="#faf5ff" stroke="#a855f7" stroke-width="1.5"/>
+  <text x="62" y="504" font-size="15" font-weight="bold" fill="#581c87">DELETE / UPDATE 的四种 RETURN 模式（实测）</text>
+
+  <g font-size="11">
+    <rect x="62" y="516" width="240" height="92" rx="6" fill="#ffffff" stroke="#d8b4fe"/>
+    <text x="182" y="536" text-anchor="middle" font-weight="bold" font-family="monospace" fill="#581c87">RETURN BEFORE</text>
+    <text x="182" y="556" text-anchor="middle" font-size="10.5" fill="#475569">返回改动【前】的完整记录</text>
+    <text x="182" y="578" text-anchor="middle" font-family="monospace" font-size="10" fill="#047857">{id, price:10, title:'Temp One'}</text>
+    <text x="182" y="598" text-anchor="middle" font-size="10" fill="#64748b">用途：审计 / 备份旧值</text>
+
+    <rect x="318" y="516" width="240" height="92" rx="6" fill="#ffffff" stroke="#d8b4fe"/>
+    <text x="438" y="536" text-anchor="middle" font-weight="bold" font-family="monospace" fill="#581c87">RETURN AFTER</text>
+    <text x="438" y="556" text-anchor="middle" font-size="10.5" fill="#475569">返回改动【后】的完整记录</text>
+    <text x="438" y="578" text-anchor="middle" font-family="monospace" font-size="10" fill="#b91c1c">[null]</text>
+    <text x="438" y="598" text-anchor="middle" font-size="10" fill="#64748b">删除后无记录 → null</text>
+
+    <rect x="574" y="516" width="240" height="92" rx="6" fill="#ffffff" stroke="#d8b4fe"/>
+    <text x="694" y="536" text-anchor="middle" font-weight="bold" font-family="monospace" fill="#581c87">RETURN DIFF</text>
+    <text x="694" y="556" text-anchor="middle" font-size="10.5" fill="#475569">返回 JSON Patch 差异</text>
+    <text x="694" y="578" text-anchor="middle" font-family="monospace" font-size="10" fill="#047857">[{op:'replace', path:'/price',</text>
+    <text x="694" y="592" text-anchor="middle" font-family="monospace" font-size="10" fill="#047857">  value:47.0}]</text>
+    <text x="694" y="606" text-anchor="middle" font-size="10" fill="#64748b">用途：增量同步 / 审计</text>
+
+    <rect x="830" y="516" width="228" height="92" rx="6" fill="#ffffff" stroke="#d8b4fe"/>
+    <text x="944" y="536" text-anchor="middle" font-weight="bold" font-family="monospace" fill="#581c87">RETURN NONE</text>
+    <text x="944" y="556" text-anchor="middle" font-size="10.5" fill="#475569">什么都不返回</text>
+    <text x="944" y="578" text-anchor="middle" font-family="monospace" font-size="10" fill="#64748b">[]</text>
+    <text x="944" y="598" text-anchor="middle" font-size="10" fill="#64748b">用途：批量删除省带宽</text>
+  </g>
+</svg>

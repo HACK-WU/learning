@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="900" viewBox="0 0 1180 900" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="1180" height="900" fill="#fbfaf8"/>
+
+  <!-- ===== 标题 ===== -->
+  <text x="30" y="42" font-size="24" font-weight="700" fill="#1a1a1a">课 7 · 向量索引与 KNN 查询全景</text>
+  <text x="30" y="68" font-size="13" fill="#6b6b6b">SurrealDB 3.2.4 实测 · 两种索引 × 两种查询写法 × 执行计划判读</text>
+  <line x1="30" y1="82" x2="1150" y2="82" stroke="#d8d4cc" stroke-width="1.5"/>
+
+  <!-- ===== 左：索引定义 ===== -->
+  <text x="30" y="116" font-size="16" font-weight="700" fill="#7c3aed">① 索引定义（两条路）</text>
+
+  <!-- HNSW 卡片 -->
+  <rect x="30" y="132" width="545" height="272" rx="10" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="1.5"/>
+  <text x="48" y="158" font-size="15" font-weight="700" fill="#5b21b6">HNSW — 近似，快（数据量大时用）</text>
+  <text x="48" y="182" font-size="12" font-family="monospace" fill="#4c1d95">DEFINE INDEX ix ON TABLE doc</text>
+  <text x="48" y="200" font-size="12" font-family="monospace" fill="#4c1d95">  FIELDS embedding</text>
+  <text x="48" y="218" font-size="12" font-family="monospace" fill="#4c1d95">  HNSW DIMENSION 4 DIST COSINE</text>
+  <text x="48" y="236" font-size="12" font-family="monospace" fill="#4c1d95">  TYPE F32 EFC 150 M 12;</text>
+
+  <text x="48" y="264" font-size="12.5" font-weight="700" fill="#be123c">⚠ 不写 DIST 默认是 EUCLIDEAN，不是 COSINE</text>
+
+  <line x1="48" y1="280" x2="557" y2="280" stroke="#ddd6fe" stroke-width="1"/>
+  <text x="48" y="300" font-size="12" font-weight="700" fill="#5b21b6">参数速查（默认值）</text>
+  <text x="48" y="320" font-size="11.5" fill="#3f3f46">DIMENSION 必填 · 必须等于嵌入维度，不符报 Incorrect vector dimension</text>
+  <text x="48" y="338" font-size="11.5" fill="#3f3f46">DIST  默认 EUCLIDEAN ｜ COSINE / MANHATTAN / MINKOWSKI &lt;阶数&gt;</text>
+  <text x="48" y="356" font-size="11.5" fill="#3f3f46">TYPE  默认 F32 ｜ F64 / I64 / I32 / I16</text>
+  <text x="48" y="374" font-size="11.5" fill="#3f3f46">EFC 150 建索引力度（只影响构建）｜ M 12 · M0 24 连接数</text>
+  <text x="48" y="392" font-size="11.5" fill="#3f3f46">LM 0.4024… 由其他参数算出，官方建议不要手改</text>
+
+  <!-- DISKANN 卡片 -->
+  <rect x="30" y="418" width="545" height="118" rx="10" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="1.5"/>
+  <text x="48" y="442" font-size="15" font-weight="700" fill="#065f46">DISKANN — 3.1+ 新增，内存装不下时用</text>
+  <text x="48" y="466" font-size="12" font-family="monospace" fill="#064e3b">DEFINE INDEX ix ON TABLE doc FIELDS e DISKANN DIMENSION 4 DIST COSINE;</text>
+  <text x="48" y="490" font-size="11.5" fill="#065f46">回显默认：TYPE F32 DEGREE 64 L_BUILD 100 ALPHA 1.2</text>
+  <text x="48" y="510" font-size="11.5" fill="#065f46">图与全精度向量放 KV 层靠缓存换页 ｜ TYPE 更省：F32/F16/I8/U8</text>
+  <text x="48" y="528" font-size="11.5" fill="#9f1239">⚠ 本课只验可用性与默认值，未做性能对比</text>
+
+  <!-- MTREE -->
+  <rect x="30" y="550" width="545" height="72" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="48" y="574" font-size="14" font-weight="700" fill="#991b1b">❌ MTREE 在 3.0 已移除（不是"废弃但能用"）</text>
+  <text x="48" y="596" font-size="11.5" font-family="monospace" fill="#7f1d1d">DEFINE INDEX ix ON doc FIELDS e MTREE DIMENSION 4;</text>
+  <text x="48" y="614" font-size="11.5" fill="#991b1b">→ Parse error: Unexpected token 'an identifier', expected Eof（箭头指向 MTREE）</text>
+
+  <!-- ===== 右：查询写法 ===== -->
+  <text x="605" y="116" font-size="16" font-weight="700" fill="#0369a1">② 查询写法（必须与索引配对）</text>
+
+  <rect x="605" y="132" width="545" height="150" rx="10" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="623" y="156" font-size="14.5" font-weight="700" fill="#1e40af">有 HNSW 索引 → &lt;|K, EF|&gt;（近似）</text>
+  <text x="623" y="180" font-size="12" font-family="monospace" fill="#1e3a8a">WHERE embedding &lt;|5,40|&gt; $qv</text>
+  <text x="623" y="204" font-size="11.5" fill="#1e40af">K = 返回几条（硬上限，LIMIT 突破不了）</text>
+  <text x="623" y="224" font-size="11.5" fill="#1e40af">EF = 找得多仔细（太小会真的漏结果）</text>
+  <text x="623" y="248" font-size="11.5" fill="#b45309">⚠ 骨架写 &lt;|DIM,EFC|&gt; 两个都错：维度在索引里，EFC 是构建参数</text>
+  <text x="623" y="270" font-size="11.5" fill="#1e40af">分数用 vector::distance::knn() 取（索引算好的，不重算）</text>
+
+  <rect x="605" y="294" width="545" height="130" rx="10" fill="#f0fdfa" stroke="#5eead4" stroke-width="1.5"/>
+  <text x="623" y="318" font-size="14.5" font-weight="700" fill="#115e59">无索引 → &lt;|K, 距离度量|&gt;（暴力精确）</text>
+  <text x="623" y="342" font-size="12" font-family="monospace" fill="#134e4a">WHERE point &lt;|2, COSINE|&gt; $qv</text>
+  <text x="623" y="366" font-size="11.5" fill="#115e59">可写 COSINE / EUCLIDEAN / MANHATTAN 等度量名</text>
+  <text x="623" y="388" font-size="11.5" fill="#115e59">小数据集或要拿真值做基准时用 —— 一定找得准，但全表扫</text>
+  <text x="623" y="410" font-size="11.5" fill="#115e59">另可 vector::similarity::cosine(a,b) 全表精算（不靠索引）</text>
+
+  <!-- 静默失败警示 -->
+  <rect x="605" y="438" width="545" height="184" rx="10" fill="#fffbeb" stroke="#fbbf24" stroke-width="2.5"/>
+  <text x="623" y="464" font-size="15" font-weight="700" fill="#92400e">⚠ 本课最危险的坑：写错配对 → 静默降级</text>
+  <text x="623" y="490" font-size="12" font-family="monospace" fill="#78350f">无索引却写 &lt;|10,40|&gt; + AND category="book"</text>
+  <text x="623" y="512" font-size="11.5" fill="#92400e">→ 不报错，条数可能还对（因为过滤恰好筛出 K 条），</text>
+  <text x="623" y="530" font-size="11.5" fill="#92400e">　 但 dist 全为 null，KNN 被整个忽略</text>
+  <line x1="623" y1="546" x2="1132" y2="546" stroke="#fde68a" stroke-width="1"/>
+  <text x="623" y="568" font-size="12" font-weight="700" fill="#92400e">排查唯一手段：EXPLAIN 里找算子</text>
+  <text x="623" y="590" font-size="11.5" font-family="monospace" fill="#78350f">KnnScan [index: hn, k: 5, ef: 40, …]   ← 有索引 ✅</text>
+  <text x="623" y="608" font-size="11.5" font-family="monospace" fill="#78350f">KnnTopK [field: point, k: 2, distance: Cosine] ← 暴力 ✅</text>
+  <text x="623" y="626" font-size="11.5" font-family="monospace" fill="#b91c1c">TableScan [table: pts, predicate: …]  ← 无 KNN ❌</text>
+
+  <!-- ===== 底部：EF 对照实验 ===== -->
+  <text x="30" y="668" font-size="16" font-weight="700" fill="#9f1239">③ EF 的作用：小样本看不出，300 条数据才露馅</text>
+
+  <rect x="30" y="684" width="1120" height="176" rx="10" fill="#ffffff" stroke="#e4e0d8" stroke-width="1.5"/>
+  <text x="48" y="708" font-size="12" font-weight="700" fill="#3f3f46">300 条 8 维向量，以暴力搜索 Top10 为"真值"（真值 = i 值 296, 94, 195, 262, 161, 60, 228, 26, 127, 194）</text>
+
+  <!-- 表头 -->
+  <rect x="48" y="720" width="1084" height="26" fill="#f4f2ee" rx="4"/>
+  <text x="60" y="738" font-size="11.5" font-weight="700" fill="#3f3f46">EF</text>
+  <text x="130" y="738" font-size="11.5" font-weight="700" fill="#3f3f46">召回的 i 值</text>
+  <text x="880" y="738" font-size="11.5" font-weight="700" fill="#3f3f46">判定</text>
+  <text x="1010" y="738" font-size="11.5" font-weight="700" fill="#3f3f46">耗时</text>
+
+  <!-- 行 1 -->
+  <text x="60" y="758" font-size="11" fill="#b91c1c" font-weight="700">1</text>
+  <text x="130" y="758" font-size="10.5" font-family="monospace" fill="#b91c1c">[85, 186, 287]</text>
+  <text x="880" y="758" font-size="10.5" fill="#b91c1c">❌ 只召回 3 条且全错</text>
+  <text x="1010" y="758" font-size="10.5" fill="#3f3f46">507µs</text>
+
+  <!-- 行 2 -->
+  <text x="60" y="778" font-size="11" fill="#b45309">5</text>
+  <text x="130" y="778" font-size="10.5" font-family="monospace" fill="#b45309">[85, 186, 287, 152, 253, 51, 219, 118, 17, 185]</text>
+  <text x="880" y="778" font-size="10.5" fill="#b45309">❌ 条数够但结果完全不同</text>
+  <text x="1010" y="778" font-size="10.5" fill="#3f3f46">199µs</text>
+
+  <!-- 行 3 -->
+  <text x="60" y="798" font-size="11" fill="#b45309">10</text>
+  <text x="130" y="798" font-size="10.5" font-family="monospace" fill="#b45309">同 EF=5</text>
+  <text x="880" y="798" font-size="10.5" fill="#b45309">❌ 同上</text>
+  <text x="1010" y="798" font-size="10.5" fill="#3f3f46">98µs</text>
+
+  <!-- 行 4 高亮 -->
+  <rect x="50" y="806" width="1080" height="22" fill="#f0fdf4" rx="3"/>
+  <text x="60" y="820" font-size="11" fill="#15803d" font-weight="700">40</text>
+  <text x="130" y="820" font-size="10.5" font-family="monospace" fill="#15803d">[296, 94, 195, 262, 161, 60, 228, 26, 127, 194]</text>
+  <text x="880" y="820" font-size="10.5" fill="#15803d" font-weight="700">✅ 完全命中真值（收敛点）</text>
+  <text x="1010" y="820" font-size="10.5" fill="#3f3f46">137µs</text>
+
+  <!-- 行 5 -->
+  <text x="60" y="840" font-size="11" fill="#3f3f46">100</text>
+  <text x="130" y="840" font-size="10.5" font-family="monospace" fill="#3f3f46">同 EF=40</text>
+  <text x="880" y="840" font-size="10.5" fill="#3f3f46">✅ 不变，只增开销</text>
+  <text x="1010" y="840" font-size="10.5" fill="#3f3f46">104µs</text>
+
+  <text x="48" y="856" font-size="10.5" fill="#6b6b6b">⚠ 8 条数据时 EF=1 与 EF=40 结果完全相同 —— 差点误判"EF 没用"。课 6 教训：规模相关机制前先问数据量够不够。以上为单次测量，仅示趋势，不可外推生产性能。</text>
+
+  <text x="30" y="888" font-size="10.5" fill="#8a8a8a">注：DIMENSION 不符会明确报 Incorrect vector dimension (3). Expected a vector of 4 dimension. —— 这点 SurrealDB 做得很好</text>
+</svg>

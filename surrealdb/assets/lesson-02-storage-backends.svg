@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 620" width="1120" height="620" font-family="'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="ba" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="620" fill="#ffffff"/>
+  <text x="560" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#0f172a">存储后端选型：同一个二进制，五种落地方式</text>
+  <text x="560" y="56" text-anchor="middle" font-size="12.5" fill="#64748b">选型的第一个问题不是"哪个快"，而是"要不要持久化、要不要分布式"</text>
+
+  <!-- 后端卡片 -->
+  <g>
+    <rect x="40" y="80" width="196" height="196" rx="10" fill="#fef2f2" stroke="#f87171" stroke-width="1.6"/>
+    <text x="138" y="106" text-anchor="middle" font-size="15" font-weight="bold" fill="#7f1d1d">memory</text>
+    <text x="138" y="126" text-anchor="middle" font-size="11" fill="#b91c1c">内存 · 不持久化</text>
+    <text x="58" y="150" font-size="11.5" fill="#334155">✅ 启动最快，零配置</text>
+    <text x="58" y="170" font-size="11.5" fill="#334155">✅ 单元/集成测试首选</text>
+    <text x="58" y="190" font-size="11.5" fill="#334155">✅ 默认后端</text>
+    <text x="58" y="214" font-size="11.5" fill="#dc2626">❌ 进程退出即丢数据</text>
+    <text x="58" y="234" font-size="11.5" fill="#dc2626">❌ 数据超内存会 OOM</text>
+    <text x="58" y="258" font-size="11" fill="#059669">surreal start memory</text>
+
+    <rect x="248" y="80" width="196" height="196" rx="10" fill="#ecfdf5" stroke="#34d399" stroke-width="1.6"/>
+    <text x="346" y="106" text-anchor="middle" font-size="15" font-weight="bold" fill="#065f46">rocksdb</text>
+    <text x="346" y="126" text-anchor="middle" font-size="11" fill="#047857">单节点磁盘 · 生产推荐</text>
+    <text x="266" y="150" font-size="11.5" fill="#334155">✅ LSM-tree，成熟稳定</text>
+    <text x="266" y="170" font-size="11.5" fill="#334155">✅ 落盘持久化</text>
+    <text x="266" y="190" font-size="11.5" fill="#334155">✅ 单节点生产首选</text>
+    <text x="266" y="214" font-size="11.5" fill="#78716c">⚠ 单节点，无分片与副本</text>
+    <text x="266" y="234" font-size="11.5" fill="#78716c">⚠ 不支持时间旅行</text>
+    <text x="266" y="258" font-size="11" fill="#059669">rocksdb:/abs/path</text>
+
+    <rect x="456" y="80" width="196" height="196" rx="10" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.6"/>
+    <text x="554" y="106" text-anchor="middle" font-size="15" font-weight="bold" fill="#1e3a8a">surrealkv</text>
+    <text x="554" y="126" text-anchor="middle" font-size="11" fill="#2563eb">自研 · 支持时间旅行</text>
+    <text x="474" y="150" font-size="11.5" fill="#334155">✅ VART + LSM，内置 MVCC</text>
+    <text x="474" y="170" font-size="11.5" fill="#334155">✅ 唯一支持 VERSION 查询</text>
+    <text x="474" y="190" font-size="11.5" fill="#334155">✅ 3.0 起为默认持久化</text>
+    <text x="474" y="214" font-size="11.5" fill="#78716c">⚠ 官方标注 beta</text>
+    <text x="474" y="234" font-size="11.5" fill="#78716c">⚠ 时间旅行需显式开启</text>
+    <text x="474" y="258" font-size="11" fill="#059669">?versioned=true</text>
+
+    <rect x="664" y="80" width="196" height="196" rx="10" fill="#f5f3ff" stroke="#a78bfa" stroke-width="1.6"/>
+    <text x="762" y="106" text-anchor="middle" font-size="15" font-weight="bold" fill="#4c1d95">tikv</text>
+    <text x="762" y="126" text-anchor="middle" font-size="11" fill="#7c3aed">分布式 · 存算分离</text>
+    <text x="682" y="150" font-size="11.5" fill="#334155">✅ 自动分片、水平扩展</text>
+    <text x="682" y="170" font-size="11.5" fill="#334155">✅ 高可用，只读副本</text>
+    <text x="682" y="190" font-size="11.5" fill="#334155">✅ 独立扩计算或存储</text>
+    <text x="682" y="214" font-size="11.5" fill="#78716c">⚠ 运维复杂度显著上升</text>
+    <text x="682" y="234" font-size="11.5" fill="#78716c">⚠ 需额外部署 PD 集群</text>
+    <text x="682" y="258" font-size="11" fill="#059669">tikv://host:2379</text>
+
+    <rect x="872" y="80" width="208" height="196" rx="10" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.6"/>
+    <text x="976" y="106" text-anchor="middle" font-size="15" font-weight="bold" fill="#334155">indxdb</text>
+    <text x="976" y="126" text-anchor="middle" font-size="11" fill="#64748b">索引式 · 浏览器/WASM</text>
+    <text x="890" y="150" font-size="11.5" fill="#334155">✅ 浏览器内持久化</text>
+    <text x="890" y="170" font-size="11.5" fill="#334155">✅ 基于 IndexedDB</text>
+    <text x="890" y="190" font-size="11.5" fill="#334155">✅ 前端离线应用</text>
+    <text x="890" y="214" font-size="11.5" fill="#78716c">⚠ 场景限定</text>
+    <text x="890" y="234" font-size="11.5" fill="#78716c">⚠ 非服务端常规选择</text>
+    <text x="890" y="258" font-size="11" fill="#059669">indxdb://db</text>
+  </g>
+
+  <!-- 路径坑 -->
+  <rect x="40" y="296" width="1040" height="120" rx="10" fill="#fef2f2" stroke="#f87171" stroke-width="1.5"/>
+  <text x="62" y="322" font-size="15" font-weight="bold" fill="#7f1d1d">⚠ 头号坑：相对路径 vs 绝对路径（本机 3.2.4 实测）</text>
+  <g font-family="monospace" font-size="12">
+    <text x="62" y="348" fill="#334155">cd /tmp</text>
+    <text x="62" y="370" fill="#334155">surreal start rocksdb:reldemo</text>
+  </g>
+  <text x="400" y="356" font-size="13" fill="#b91c1c" font-weight="bold">→ 数据落在 /tmp/reldemo（当前工作目录下）</text>
+  <text x="400" y="378" font-size="12" fill="#57534e">不是落在你以为的"安装目录"或"家目录"，而是<tspan font-weight="bold">进程启动时所在的 CWD</tspan></text>
+  <text x="62" y="404" font-size="12" fill="#059669" font-family="monospace">正确做法：永远写绝对路径 → rocksdb:/mnt/d/projects/learning/surrealdb/playground/data/mydb</text>
+
+  <!-- 决策流 -->
+  <rect x="40" y="436" width="1040" height="164" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.4"/>
+  <text x="62" y="460" font-size="15" font-weight="bold" fill="#0f172a">选型决策流：三个问题定后端</text>
+
+  <g font-size="12.5">
+    <rect x="62" y="476" width="220" height="50" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="172" y="497" text-anchor="middle" font-weight="bold" fill="#0f172a">Q1 数据要留着吗？</text>
+    <text x="172" y="517" text-anchor="middle" font-size="11.5" fill="#475569">否 → memory</text>
+
+    <rect x="300" y="476" width="220" height="50" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="410" y="497" text-anchor="middle" font-weight="bold" fill="#0f172a">Q2 要多机扩展吗？</text>
+    <text x="410" y="517" text-anchor="middle" font-size="11.5" fill="#475569">否 → rocksdb / surrealkv</text>
+
+    <rect x="538" y="476" width="220" height="50" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="648" y="497" text-anchor="middle" font-weight="bold" fill="#0f172a">Q3 要时间旅行吗？</text>
+    <text x="648" y="517" text-anchor="middle" font-size="11.5" fill="#475569">是 → surrealkv + versioned</text>
+
+    <rect x="776" y="476" width="284" height="50" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="918" y="497" text-anchor="middle" font-weight="bold" fill="#0f172a">要分片/副本/高可用？</text>
+    <text x="918" y="517" text-anchor="middle" font-size="11.5" fill="#475569">是 → tikv</text>
+  </g>
+
+  <g stroke="#475569" stroke-width="1.8" marker-end="url(#ba)">
+    <line x1="286" y1="501" x2="296" y2="501"/>
+    <line x1="524" y1="501" x2="534" y2="501"/>
+    <line x1="762" y1="501" x2="772" y2="501"/>
+  </g>
+
+  <text x="62" y="552" font-size="12" fill="#78716c">补充：FoundationDB 后端 <tspan font-weight="bold" fill="#b91c1c">自 3.0 起已弃用</tspan>，2.x 用它的话需要迁移到 RocksDB / SurrealKV / TiKV。</text>
+  <text x="62" y="576" font-size="12" fill="#78716c">课程默认：实操一律用 <tspan font-family="monospace" font-weight="bold">rocksdb</tspan>（持久化，方便你随时回头看数据）；临时验证用 <tspan font-family="monospace" font-weight="bold">memory</tspan>。</text>
+</svg>

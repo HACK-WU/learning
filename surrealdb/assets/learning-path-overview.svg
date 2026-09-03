@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 720" width="1100" height="720" font-family="'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#475569"/>
+    </marker>
+    <marker id="arrowW" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#ffffff"/>
+    </marker>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#e0f2fe"/>
+      <stop offset="100%" stop-color="#bae6fd"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#dcfce7"/>
+      <stop offset="100%" stop-color="#bbf7d0"/>
+    </linearGradient>
+    <linearGradient id="g3" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#fef3c7"/>
+      <stop offset="100%" stop-color="#fde68a"/>
+    </linearGradient>
+    <linearGradient id="g4" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#fae8ff"/>
+      <stop offset="100%" stop-color="#f5d0fe"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="1100" height="720" fill="#ffffff"/>
+
+  <text x="550" y="38" text-anchor="middle" font-size="24" font-weight="bold" fill="#0f172a">SurrealDB 学习路径总览</text>
+  <text x="550" y="62" text-anchor="middle" font-size="13" fill="#64748b">4 阶段 / 12 课 / 40 知识点 · 基准版本 3.2.4（2026-08）</text>
+
+  <!-- 痛点 -->
+  <rect x="380" y="88" width="340" height="46" rx="8" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="550" y="109" text-anchor="middle" font-size="14" font-weight="bold" fill="#991b1b">痛点：一个应用被迫拆成五个数据库</text>
+  <text x="550" y="127" text-anchor="middle" font-size="11.5" fill="#b91c1c">关系 · 文档 · 图 · 搜索 · 向量 → 五套运维，改一次数据跨五系统同步</text>
+
+  <line x1="550" y1="134" x2="550" y2="163" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 阶段 1 -->
+  <rect x="40" y="165" width="1020" height="118" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2"/>
+  <rect x="40" y="165" width="1020" height="30" rx="10" fill="url(#g1)"/>
+  <rect x="40" y="183" width="1020" height="12" fill="url(#g1)"/>
+  <text x="60" y="186" font-size="15" font-weight="bold" fill="#0c4a6e">阶段 1 · 为什么需要 SurrealDB</text>
+  <text x="300" y="186" font-size="12" fill="#0369a1">「数据形状战争」</text>
+  <text x="960" y="186" font-size="11.5" fill="#475569">2 课 / 8 知识点</text>
+
+  <rect x="62" y="208" width="450" height="58" rx="6" fill="#ffffff" stroke="#7dd3fc" stroke-width="1.2"/>
+  <text x="78" y="228" font-size="13" font-weight="bold" fill="#0f172a">课1 一个应用，五个数据库</text>
+  <text x="78" y="248" font-size="11" fill="#475569">多模型困境 · 核心定位 · 起源与生态现状</text>
+  <text x="78" y="263" font-size="10.5" fill="#94a3b8">感知 → 概念</text>
+
+  <rect x="588" y="208" width="450" height="58" rx="6" fill="#ffffff" stroke="#7dd3fc" stroke-width="1.2"/>
+  <text x="604" y="228" font-size="13" font-weight="bold" fill="#0f172a">课2 跑起来：安装与第一次查询</text>
+  <text x="604" y="248" font-size="11" fill="#475569">安装启动 · 三种客户端 · SDK 上手 · 四级层级</text>
+  <text x="604" y="263" font-size="10.5" fill="#94a3b8">实操</text>
+
+  <line x1="512" y1="237" x2="586" y2="237" stroke="#475569" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <line x1="550" y1="283" x2="550" y2="308" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 阶段 2 -->
+  <rect x="40" y="310" width="1020" height="118" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2"/>
+  <rect x="40" y="310" width="1020" height="30" rx="10" fill="url(#g2)"/>
+  <rect x="40" y="328" width="1020" height="12" fill="url(#g2)"/>
+  <text x="60" y="331" font-size="15" font-weight="bold" fill="#14532d">阶段 2 · 核心数据模型与 SurrealQL</text>
+  <text x="330" y="331" font-size="12" fill="#15803d">「一条数据的多种活法」</text>
+  <text x="960" y="331" font-size="11.5" fill="#475569">3 课 / 11 知识点</text>
+
+  <rect x="62" y="353" width="310" height="58" rx="6" fill="#ffffff" stroke="#86efac" stroke-width="1.2"/>
+  <text x="78" y="373" font-size="13" font-weight="bold" fill="#0f172a">课3 记录 ID 与数据建模</text>
+  <text x="78" y="393" font-size="11" fill="#475569">记录 ID · 类型系统 · Schema 模式 · 字段与 REFERENCE</text>
+  <text x="78" y="408" font-size="10.5" fill="#94a3b8">概念 → 机制</text>
+
+  <rect x="397" y="353" width="310" height="58" rx="6" fill="#ffffff" stroke="#86efac" stroke-width="1.2"/>
+  <text x="413" y="373" font-size="13" font-weight="bold" fill="#0f172a">课4 CRUD 与查询子句</text>
+  <text x="413" y="393" font-size="11" fill="#475569">CREATE/SELECT/UPDATE/UPSERT/DELETE · 子句 · 参数与事务</text>
+  <text x="413" y="408" font-size="10.5" fill="#94a3b8">实操</text>
+
+  <rect x="732" y="353" width="306" height="58" rx="6" fill="#ffffff" stroke="#86efac" stroke-width="1.2"/>
+  <text x="748" y="373" font-size="13" font-weight="bold" fill="#0f172a">课5 图：RELATE 与遍历</text>
+  <text x="748" y="393" font-size="11" fill="#475569">边即记录 · 遍历语法 → 与 &lt;- · 递归与深度控制</text>
+  <text x="748" y="408" font-size="10.5" fill="#94a3b8">机制 → 实操</text>
+
+  <line x1="372" y1="382" x2="395" y2="382" stroke="#475569" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <line x1="707" y1="382" x2="730" y2="382" stroke="#475569" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <line x1="550" y1="428" x2="550" y2="453" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 阶段 3 -->
+  <rect x="40" y="455" width="1020" height="118" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2"/>
+  <rect x="40" y="455" width="1020" height="30" rx="10" fill="url(#g3)"/>
+  <rect x="40" y="473" width="1020" height="12" fill="url(#g3)"/>
+  <text x="60" y="476" font-size="15" font-weight="bold" fill="#78350f">阶段 3 · 搜索、实时与逻辑下推</text>
+  <text x="315" y="476" font-size="12" fill="#a16207">「数据库不只是存」</text>
+  <text x="960" y="476" font-size="11.5" fill="#475569">4 课 / 15 知识点</text>
+
+  <rect x="62" y="498" width="235" height="58" rx="6" fill="#ffffff" stroke="#fcd34d" stroke-width="1.2"/>
+  <text x="78" y="518" font-size="13" font-weight="bold" fill="#0f172a">课6 索引与全文检索</text>
+  <text x="78" y="538" font-size="11" fill="#475569">索引类型 · FULLTEXT · BM25</text>
+  <text x="78" y="553" font-size="10.5" fill="#94a3b8">机制 · EXPLAIN</text>
+
+  <rect x="312" y="498" width="235" height="58" rx="6" fill="#ffffff" stroke="#fcd34d" stroke-width="1.2"/>
+  <text x="328" y="518" font-size="13" font-weight="bold" fill="#0f172a">课7 向量与混合检索</text>
+  <text x="328" y="538" font-size="11" fill="#475569">HNSW · KNN · 混合检索</text>
+  <text x="328" y="553" font-size="10.5" fill="#94a3b8">Graph RAG</text>
+
+  <rect x="562" y="498" width="235" height="58" rx="6" fill="#ffffff" stroke="#fcd34d" stroke-width="1.2"/>
+  <text x="578" y="518" font-size="13" font-weight="bold" fill="#0f172a">课8 实时：LIVE 与 EVENT</text>
+  <text x="578" y="538" font-size="11" fill="#475569">LIVE SELECT · EVENT · 边界</text>
+  <text x="578" y="553" font-size="10.5" fill="#94a3b8">机制 → 定位</text>
+
+  <rect x="812" y="498" width="226" height="58" rx="6" fill="#ffffff" stroke="#fcd34d" stroke-width="1.2"/>
+  <text x="828" y="518" font-size="13" font-weight="bold" fill="#0f172a">课9 逻辑下推</text>
+  <text x="828" y="538" font-size="11" fill="#475569">函数 · DEFINE API · 视图</text>
+  <text x="828" y="553" font-size="10.5" fill="#94a3b8">GraphQL</text>
+
+  <line x1="297" y1="527" x2="310" y2="527" stroke="#475569" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <line x1="547" y1="527" x2="560" y2="527" stroke="#475569" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <line x1="797" y1="527" x2="810" y2="527" stroke="#475569" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <line x1="550" y1="573" x2="550" y2="598" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 阶段 4 -->
+  <rect x="40" y="600" width="1020" height="94" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2"/>
+  <rect x="40" y="600" width="1020" height="30" rx="10" fill="url(#g4)"/>
+  <rect x="40" y="618" width="1020" height="12" fill="url(#g4)"/>
+  <text x="60" y="621" font-size="15" font-weight="bold" fill="#701a75">阶段 4 · 权限、部署与生产决策</text>
+  <text x="325" y="621" font-size="12" fill="#a21caf">「敢不敢上生产」</text>
+  <text x="960" y="621" font-size="11.5" fill="#475569">3 课 / 10 知识点</text>
+
+  <rect x="62" y="643" width="310" height="38" rx="6" fill="#ffffff" stroke="#f0abfc" stroke-width="1.2"/>
+  <text x="78" y="660" font-size="12.5" font-weight="bold" fill="#0f172a">课10 权限与多租户</text>
+  <text x="78" y="675" font-size="10.5" fill="#475569">ACCESS · PERMISSIONS · 多租户隔离</text>
+
+  <rect x="397" y="643" width="310" height="38" rx="6" fill="#ffffff" stroke="#f0abfc" stroke-width="1.2"/>
+  <text x="413" y="660" font-size="12.5" font-weight="bold" fill="#0f172a">课11 存储后端与部署</text>
+  <text x="413" y="675" font-size="10.5" fill="#475569">后端选型 · 时间旅行 · 部署模型 · 备份观测</text>
+
+  <rect x="732" y="643" width="306" height="38" rx="6" fill="#ffffff" stroke="#f0abfc" stroke-width="1.2"/>
+  <text x="748" y="660" font-size="12.5" font-weight="bold" fill="#0f172a">课12 选型决策与收束</text>
+  <text x="748" y="675" font-size="10.5" fill="#475569">横向对比 · 适用边界 · 知识地图</text>
+
+  <line x1="372" y1="662" x2="395" y2="662" stroke="#475569" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <line x1="707" y1="662" x2="730" y2="662" stroke="#475569" stroke-width="1.8" marker-end="url(#arrow)"/>
+</svg>

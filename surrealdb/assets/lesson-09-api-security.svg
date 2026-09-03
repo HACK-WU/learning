@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="600" viewBox="0 0 920 600">
+  <rect width="920" height="600" fill="#0f1420"/>
+  <text x="24" y="34" fill="#e8ecf4" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="19" font-weight="700">课 9 · DEFINE API 请求生命周期与三道闸门</text>
+  <text x="24" y="56" fill="#8b96ab" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="12">一次 HTTP 调用要穿过哪些检查，以及在哪一层会被拦下（SurrealDB 3.2.4 实测）</text>
+
+  <rect x="24" y="76" width="140" height="52" rx="7" fill="#16203a" stroke="#3d5a9e" stroke-width="1.5"/>
+  <text x="94" y="98" fill="#7aa2f7" text-anchor="middle" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="12" font-weight="600">客户端</text>
+  <text x="94" y="117" fill="#8b96ab" text-anchor="middle" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">curl / fetch</text>
+
+  <path d="M164 102 L206 102" stroke="#4a5a7a" stroke-width="2" marker-end="url(#ar)"/>
+  <defs>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#4a5a7a"/>
+    </marker>
+  </defs>
+
+  <rect x="212" y="76" width="230" height="52" rx="7" fill="#16203a" stroke="#3d5a9e" stroke-width="1.5"/>
+  <text x="327" y="98" fill="#7aa2f7" text-anchor="middle" font-family="Consolas,monospace" font-size="11">/api/:ns/:db/:端点名</text>
+  <text x="327" y="117" fill="#8b96ab" text-anchor="middle" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">ns/db 来自 URL，不是来自 token</text>
+
+  <path d="M442 102 L484 102" stroke="#4a5a7a" stroke-width="2" marker-end="url(#ar)"/>
+
+  <rect x="490" y="70" width="200" height="64" rx="7" fill="#2a2416" stroke="#8a6a2a" stroke-width="2"/>
+  <text x="590" y="90" fill="#e0af68" text-anchor="middle" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="12" font-weight="600">闸门 ① 路由查找</text>
+  <text x="590" y="109" fill="#c9d4e6" text-anchor="middle" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">端点不存在 → 404 Not found</text>
+  <text x="590" y="126" fill="#c9d4e6" text-anchor="middle" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">方法不匹配 → 404（不是 405）</text>
+
+  <path d="M690 102 L732 102" stroke="#4a5a7a" stroke-width="2" marker-end="url(#ar)"/>
+
+  <rect x="738" y="70" width="158" height="64" rx="7" fill="#2a2416" stroke="#8a6a2a" stroke-width="2"/>
+  <text x="817" y="90" fill="#e0af68" text-anchor="middle" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="12" font-weight="600">闸门 ② 权限</text>
+  <text x="817" y="109" fill="#c9d4e6" text-anchor="middle" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">PERMISSIONS 表达式</text>
+  <text x="817" y="126" fill="#c9d4e6" text-anchor="middle" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">不满足 → 403</text>
+
+  <path d="M817 134 L817 168" stroke="#4a5a7a" stroke-width="2" marker-end="url(#ar)"/>
+
+  <rect x="560" y="174" width="336" height="76" rx="7" fill="#16203a" stroke="#3d5a9e" stroke-width="1.5"/>
+  <text x="576" y="194" fill="#7aa2f7" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="12" font-weight="600">执行 THEN 块（以系统权限）</text>
+  <text x="576" y="213" fill="#c9d4e6" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">可读写任意表，包括 PERMISSIONS NONE 的表</text>
+  <text x="576" y="230" fill="#f7768e" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">这就是「默认 FULL」的最大风险所在</text>
+  <text x="576" y="244" fill="#8b96ab" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="9">（实测：匿名调用读到 PERMISSIONS NONE 表的数据）</text>
+
+  <path d="M560 212 L520 212" stroke="#4a5a7a" stroke-width="2" marker-end="url(#ar)"/>
+
+  <rect x="24" y="176" width="480" height="74" rx="7" fill="#2a1f1f" stroke="#8a4a4a" stroke-width="1.5"/>
+  <text x="40" y="196" fill="#f7768e" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="12" font-weight="600">⚠ 返回值的两个硬约束（实测踩坑）</text>
+  <text x="40" y="215" fill="#c9d4e6" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">1. body 只允许 NONE / bytes / string</text>
+  <text x="40" y="232" fill="#c9d4e6" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">   直接给对象或数组 → HTTP 500 Invalid API response</text>
+  <text x="40" y="245" fill="#e0af68" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="9">   （官方文档示例直接跑会 500；api::invoke 内调用却正常）</text>
+
+  <line x1="24" y1="274" x2="896" y2="274" stroke="#2a3446" stroke-width="1"/>
+
+  <text x="24" y="300" fill="#e8ecf4" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="14" font-weight="600">实测对照：收紧 PERMISSIONS 前后的行为差异</text>
+
+  <rect x="24" y="312" width="432" height="118" rx="7" fill="#1a1218" stroke="#8a3a4a" stroke-width="1.5"/>
+  <text x="40" y="332" fill="#f7768e" font-family="Consolas,monospace" font-size="11">DEFINE API "/x" FOR GET PERMISSIONS FULL THEN ...</text>
+  <text x="40" y="356" fill="#c9d4e6" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">匿名 GET   → HTTP 200  {"secret":[{"v":"top-secret"}]}</text>
+  <text x="40" y="376" fill="#c9d4e6" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">root  GET   → HTTP 200  同上</text>
+  <text x="40" y="400" fill="#f7768e" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">任何人都能调，且能读 PERMISSIONS NONE 的表</text>
+  <text x="40" y="419" fill="#8b96ab" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">—— 这是 DEFINE API 的默认行为，不是配置失误</text>
+
+  <rect x="468" y="312" width="428" height="118" rx="7" fill="#12201a" stroke="#3a8a4a" stroke-width="1.5"/>
+  <text x="484" y="332" fill="#9ece6a" font-family="Consolas,monospace" font-size="11">... PERMISSIONS WHERE $auth != NONE THEN ...</text>
+  <text x="484" y="356" fill="#c9d4e6" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">匿名 GET   → HTTP 403  Permission denied</text>
+  <text x="484" y="376" fill="#c9d4e6" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">低权限用户 → HTTP 200（自己范围）/ 403（跨租户）</text>
+  <text x="484" y="400" fill="#9ece6a" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">收紧后匿名与外部用户均被挡在端点之外</text>
+  <text x="484" y="419" fill="#8b96ab" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">PERMISSIONS NONE 则连 root 也是 403</text>
+
+  <line x1="24" y1="452" x2="896" y2="452" stroke="#2a3446" stroke-width="1"/>
+
+  <text x="24" y="478" fill="#e8ecf4" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="14" font-weight="600">CVE-2026-63735（跨命名空间调用）在本机的验证结果</text>
+
+  <rect x="24" y="490" width="432" height="88" rx="7" fill="#12201a" stroke="#3a8a4a" stroke-width="1.5"/>
+  <text x="40" y="510" fill="#9ece6a" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11" font-weight="600">/api 端点：已修复 ✓</text>
+  <text x="40" y="530" fill="#c9d4e6" font-family="Consolas,monospace" font-size="10">租户A用户 → /api/tenantA/app/leak  → 200 TENANT_A</text>
+  <text x="40" y="548" fill="#c9d4e6" font-family="Consolas,monospace" font-size="10">租户A用户 → /api/tenantB/app/leak  → 403 denied</text>
+  <text x="40" y="567" fill="#8b96ab" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">3.2.4 已按公告修复，URL 上的 ns/db 被校验</text>
+
+  <rect x="468" y="490" width="428" height="88" rx="7" fill="#2a2416" stroke="#8a6a2a" stroke-width="1.5"/>
+  <text x="484" y="510" fill="#e0af68" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11" font-weight="600">/sql 端点：按 token 会话执行（不看 URL）⚠</text>
+  <text x="484" y="530" fill="#c9d4e6" font-family="Consolas,monospace" font-size="10">租户A用户 → /sql?ns=tenantA  → TENANT_A</text>
+  <text x="484" y="548" fill="#c9d4e6" font-family="Consolas,monospace" font-size="10">租户A用户 → /sql?ns=tenantB  → TENANT_A（还是 A）</text>
+  <text x="484" y="567" fill="#8b96ab" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">修复是「端点层」的，不要把 /sql 直接暴露给租户</text>
+</svg>

@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="560" viewBox="0 0 960 560">
+  <rect width="960" height="560" fill="#0f1420"/>
+  <text x="24" y="34" fill="#e8ecf4" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="19" font-weight="700">课 9 · 逻辑下推的四条路径：代码该放在哪一层</text>
+  <text x="24" y="56" fill="#8b96ab" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="12">SurrealDB 3.2.4 本机实测 · 同一份逻辑可以下推到四个不同位置，代价与边界各不相同</text>
+
+  <line x1="24" y1="72" x2="936" y2="72" stroke="#2a3446" stroke-width="1"/>
+
+  <text x="24" y="98" fill="#c9d4e6" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="13" font-weight="600">① DEFINE FUNCTION —— 复用逻辑，但不提权</text>
+  <rect x="24" y="108" width="220" height="86" rx="8" fill="#16203a" stroke="#3d5a9e" stroke-width="1.5"/>
+  <text x="38" y="128" fill="#7aa2f7" font-family="Consolas,monospace" font-size="11">DEFINE FUNCTION fn::x()</text>
+  <text x="38" y="146" fill="#7aa2f7" font-family="Consolas,monospace" font-size="11">{ ... } PERMISSIONS FULL;</text>
+  <text x="38" y="168" fill="#e8ecf4" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">函数体可执行 CREATE/UPDATE</text>
+  <text x="38" y="185" fill="#f7768e" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">⚠ 以「调用者」权限运行</text>
+
+  <rect x="264" y="108" width="200" height="86" rx="8" fill="#1a2a1e" stroke="#4d7a4a" stroke-width="1.5"/>
+  <text x="278" y="128" fill="#9ece6a" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11" font-weight="600">实测：不是后门</text>
+  <text x="278" y="148" fill="#c9d4e6" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">低权限用户调 fn::read_vault()</text>
+  <text x="278" y="165" fill="#c9d4e6" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">→ [] （与直接查一致）</text>
+  <text x="278" y="183" fill="#9ece6a" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">vault 未被污染，写入也被拒</text>
+
+  <rect x="484" y="108" width="228" height="86" rx="8" fill="#2a1f1f" stroke="#8a4a4a" stroke-width="1.5"/>
+  <text x="498" y="128" fill="#f7768e" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11" font-weight="600">⚠ 动态作用域（实测陷阱）</text>
+  <text x="498" y="148" fill="#c9d4e6" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">函数体能读到「调用者」的 LET</text>
+  <text x="498" y="165" fill="#c9d4e6" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">fn::who() 返回 ctx_A / ctx_B</text>
+  <text x="498" y="183" fill="#e0af68" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">同一函数，不同调用环境结果不同</text>
+
+  <line x1="24" y1="214" x2="936" y2="214" stroke="#2a3446" stroke-width="1"/>
+
+  <text x="24" y="240" fill="#c9d4e6" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="13" font-weight="600">② DEFINE API —— 把查询发布成 HTTP 端点</text>
+  <rect x="24" y="250" width="228" height="98" rx="8" fill="#16203a" stroke="#3d5a9e" stroke-width="1.5"/>
+  <text x="38" y="270" fill="#7aa2f7" font-family="Consolas,monospace" font-size="11">DEFINE API "/x" FOR GET</text>
+  <text x="38" y="288" fill="#7aa2f7" font-family="Consolas,monospace" font-size="11">PERMISSIONS FULL</text>
+  <text x="38" y="306" fill="#7aa2f7" font-family="Consolas,monospace" font-size="11">THEN { {status,body,headers} };</text>
+  <text x="38" y="330" fill="#e8ecf4" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">路径 /api/:ns/:db/端点名</text>
+  <text x="38" y="346" fill="#8b96ab" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">骨架的 METHOD GET 已改为 FOR</text>
+
+  <rect x="264" y="250" width="200" height="98" rx="8" fill="#2a1f1f" stroke="#8a4a4a" stroke-width="1.5"/>
+  <text x="278" y="270" fill="#f7768e" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11" font-weight="600">⚠ 两个必须知道的坑</text>
+  <text x="278" y="290" fill="#c9d4e6" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">1. body 只能字符串/字节</text>
+  <text x="278" y="307" fill="#c9d4e6" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">   官方示例走 HTTP 报 500</text>
+  <text x="278" y="324" fill="#e0af68" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">   须 encoding::json::encode()</text>
+  <text x="278" y="341" fill="#c9d4e6" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">2. $request.body 是字节数组</text>
+
+  <rect x="484" y="250" width="228" height="98" rx="8" fill="#2a2416" stroke="#8a6a2a" stroke-width="1.5"/>
+  <text x="498" y="270" fill="#e0af68" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11" font-weight="600">🔒 默认 PERMISSIONS FULL 很危险</text>
+  <text x="498" y="290" fill="#c9d4e6" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">匿名可调，且以系统权限运行</text>
+  <text x="498" y="307" fill="#f7768e" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">实测：读到 PERMISSIONS NONE 的表</text>
+  <text x="498" y="325" fill="#9ece6a" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">收紧后：匿名 403 / root 200</text>
+  <text x="498" y="342" fill="#9ece6a" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">CVE-2026-63735 跨租户已修复</text>
+
+  <line x1="24" y1="368" x2="936" y2="368" stroke="#2a3446" stroke-width="1"/>
+
+  <text x="24" y="394" fill="#c9d4e6" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="13" font-weight="600">③ COMPUTED 字段 vs VIEW —— 写入时算，还是读取时算</text>
+  <rect x="24" y="404" width="228" height="104" rx="8" fill="#16203a" stroke="#3d5a9e" stroke-width="1.5"/>
+  <text x="38" y="424" fill="#7aa2f7" font-family="Consolas,monospace" font-size="11">DEFINE FIELD subtotal ON t</text>
+  <text x="38" y="442" fill="#7aa2f7" font-family="Consolas,monospace" font-size="11">TYPE number COMPUTED price*qty;</text>
+  <text x="38" y="466" fill="#e8ecf4" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">✓ 读取时重算（不落盘）</text>
+  <text x="38" y="483" fill="#f7768e" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">✗ 不能建索引（明确报错）</text>
+  <text x="38" y="500" fill="#e0af68" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">⚠ 裸写 @this 被解析成 @.this</text>
+
+  <rect x="264" y="404" width="200" height="104" rx="8" fill="#16203a" stroke="#3d5a9e" stroke-width="1.5"/>
+  <text x="278" y="424" fill="#7aa2f7" font-family="Consolas,monospace" font-size="11">DEFINE TABLE v AS</text>
+  <text x="278" y="442" fill="#7aa2f7" font-family="Consolas,monospace" font-size="11">SELECT ... FROM src WHERE ...</text>
+  <text x="278" y="466" fill="#e8ecf4" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">✓ 随源表实时变化</text>
+  <text x="278" y="483" fill="#9ece6a" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">✓ 可建索引且真被用上</text>
+  <text x="278" y="500" fill="#f7768e" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">✗ 只读（写入明确报错）</text>
+
+  <rect x="484" y="404" width="228" height="104" rx="8" fill="#1a2a1e" stroke="#4d7a4a" stroke-width="1.5"/>
+  <text x="498" y="424" fill="#9ece6a" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11" font-weight="600">课 8 遗留问题的定论</text>
+  <text x="498" y="444" fill="#c9d4e6" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">COMPUTED time::now() →</text>
+  <text x="498" y="461" fill="#f7768e" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">每次读都变，不能当 updated_at</text>
+  <text x="498" y="479" fill="#c9d4e6" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">VALUE time::now() → 写入时一次</text>
+  <text x="498" y="497" fill="#9ece6a" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">这才是 created_at 的正确写法</text>
+
+  <rect x="732" y="108" width="204" height="400" rx="8" fill="#16203a" stroke="#3d5a9e" stroke-width="1.5"/>
+  <text x="746" y="130" fill="#7aa2f7" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="12" font-weight="600">④ GraphQL</text>
+  <text x="746" y="150" fill="#7aa2f7" font-family="Consolas,monospace" font-size="10">DEFINE CONFIG GRAPHQL AUTO;</text>
+  <text x="746" y="168" fill="#8b96ab" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">骨架说「无需开关」不完整，</text>
+  <text x="746" y="183" fill="#8b96ab" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">实测须显式 DEFINE CONFIG</text>
+  <line x1="746" y1="194" x2="922" y2="194" stroke="#2a3446"/>
+  <text x="746" y="212" fill="#e8ecf4" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">schema 由表/字段定义生成</text>
+  <text x="746" y="230" fill="#f7768e" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">SCHEMALESS 表 → 无字段可查</text>
+  <text x="746" y="248" fill="#9ece6a" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">SCHEMAFULL 表 → 字段齐全</text>
+  <line x1="746" y1="260" x2="922" y2="260" stroke="#2a3446"/>
+  <text x="746" y="278" fill="#7aa2f7" font-family="Consolas,monospace" font-size="10">{ gqBooks(limit:1) { title } }</text>
+  <text x="746" y="296" fill="#8b96ab" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">表名转驼峰</text>
+  <text x="746" y="313" fill="#8b96ab" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">复数=列表 单数=单条(只需ID部分)</text>
+  <text x="746" y="330" fill="#8b96ab" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">order: {desc: year}</text>
+  <line x1="746" y1="342" x2="922" y2="342" stroke="#2a3446"/>
+  <text x="746" y="360" fill="#9ece6a" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">✓ 受表级权限约束</text>
+  <text x="746" y="377" fill="#9ece6a" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">✓ 匿名访问被拒</text>
+  <text x="746" y="394" fill="#e0af68" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">⚠ 错误也返回 HTTP 200</text>
+  <text x="746" y="411" fill="#8b96ab" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">须解析 errors 字段</text>
+  <line x1="746" y1="423" x2="922" y2="423" stroke="#2a3446"/>
+  <text x="746" y="441" fill="#c9d4e6" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">选型：前端要灵活取字段 → GraphQL</text>
+  <text x="746" y="458" fill="#c9d4e6" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">内部固定形状 → DEFINE API</text>
+  <text x="746" y="475" fill="#c9d4e6" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="10">服务端复杂逻辑 → SurrealQL</text>
+
+  <text x="24" y="534" fill="#8b96ab" font-family="Segoe UI,Microsoft YaHei,sans-serif" font-size="11">口诀：函数复用不提权 · API 端点默认裸奔要收紧 · 字段算不了索引就上 VIEW · GraphQL 省事但要 SCHEMAFULL</text>
+</svg>

@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 700" width="1120" height="700" font-family="'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="ra" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="700" fill="#ffffff"/>
+  <text x="560" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#0f172a">记录 ID：既是主键，也是地址</text>
+  <text x="560" y="56" text-anchor="middle" font-size="12.5" fill="#64748b">普通数据库的主键只是一个"值"；SurrealDB 的主键是数据结构——它携带信息，且能被区间扫描</text>
+
+  <!-- 四列 -->
+  <g>
+    <rect x="40" y="80" width="248" height="212" rx="10" fill="#f1f5f9" stroke="#64748b" stroke-width="1.6"/>
+    <text x="164" y="106" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">字符串 / 数字 ID</text>
+    <text x="164" y="126" text-anchor="middle" font-size="11" fill="#64748b">最常见的形态</text>
+    <g font-family="monospace" font-size="11.5" fill="#334155">
+      <text x="58" y="152">city:london</text>
+      <text x="58" y="172">sensor:42</text>
+      <text x="58" y="192">user:`john-doe`</text>
+    </g>
+    <text x="58" y="216" font-size="11.5" fill="#059669">✅ 含特殊字符用反引号</text>
+    <text x="58" y="236" font-size="11.5" fill="#dc2626">⚠ `1` 与 1 是两条记录</text>
+    <text x="58" y="256" font-size="11.5" fill="#475569">→ 主键 = 一个标识值</text>
+    <text x="58" y="278" font-size="11" fill="#64748b">对应：传统数据库主键</text>
+
+    <rect x="304" y="80" width="248" height="212" rx="10" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.6"/>
+    <text x="428" y="106" text-anchor="middle" font-size="15" font-weight="bold" fill="#1e3a8a">数组 ID（复合键）</text>
+    <text x="428" y="126" text-anchor="middle" font-size="11" fill="#2563eb">时序 / 分桶的核心</text>
+    <g font-family="monospace" font-size="11.5" fill="#334155">
+      <text x="322" y="152">temperature:[</text>
+      <text x="340" y="170">'London',</text>
+      <text x="340" y="188">d'2026-09-02'</text>
+      <text x="322" y="206">]</text>
+    </g>
+    <text x="322" y="230" font-size="11.5" fill="#059669">✅ 按前缀做区间扫描</text>
+    <text x="322" y="250" font-size="11.5" fill="#059669">✅ 天然按城市+日期聚簇</text>
+    <text x="322" y="270" font-size="11.5" fill="#475569">→ 主键 = 复合坐标</text>
+    <text x="322" y="286" font-size="11" fill="#64748b">对应：Cassandra 聚簇键</text>
+
+    <rect x="568" y="80" width="248" height="212" rx="10" fill="#f5f3ff" stroke="#a78bfa" stroke-width="1.6"/>
+    <text x="692" y="106" text-anchor="middle" font-size="15" font-weight="bold" fill="#4c1d95">对象 ID</text>
+    <text x="692" y="126" text-anchor="middle" font-size="11" fill="#7c3aed">具名复合键</text>
+    <g font-family="monospace" font-size="11.5" fill="#334155">
+      <text x="586" y="152">reading:{</text>
+      <text x="604" y="170">sensor: 42,</text>
+      <text x="604" y="188">ts: d'2026-09-02'</text>
+      <text x="586" y="206">}</text>
+    </g>
+    <text x="586" y="230" font-size="11.5" fill="#059669">✅ 字段有名字，自解释</text>
+    <text x="586" y="250" font-size="11.5" fill="#dc2626">⚠ 实测键顺序不敏感</text>
+    <text x="586" y="270" font-size="11.5" fill="#475569">→ 主键 = 具名元组</text>
+    <text x="586" y="286" font-size="11" fill="#64748b">对应：无直接对应物</text>
+
+    <rect x="832" y="80" width="248" height="212" rx="10" fill="#ecfdf5" stroke="#34d399" stroke-width="1.6"/>
+    <text x="956" y="106" text-anchor="middle" font-size="15" font-weight="bold" fill="#065f46">ID 即地址</text>
+    <text x="956" y="126" text-anchor="middle" font-size="11" fill="#047857">直接取值，无需索引</text>
+    <g font-family="monospace" font-size="11.5" fill="#334155">
+      <text x="850" y="152">SELECT *</text>
+      <text x="850" y="172">FROM temperature:[</text>
+      <text x="868" y="190">'London', d'2026-09-02'</text>
+      <text x="850" y="208">];</text>
+    </g>
+    <text x="850" y="232" font-size="11.5" fill="#059669">✅ 可直接按 ID 取单条</text>
+    <text x="850" y="252" font-size="11.5" fill="#059669">✅ id[0] / id[1] 取分量</text>
+    <text x="850" y="272" font-size="11.5" fill="#475569">→ 主键 = 可直接寻址</text>
+    <text x="850" y="288" font-size="11" fill="#64748b">对应：KV 的 key 直查</text>
+  </g>
+
+  <!-- 区间扫描 -->
+  <rect x="40" y="310" width="1040" height="150" rx="10" fill="#fef2f2" stroke="#f87171" stroke-width="1.5"/>
+  <text x="62" y="336" font-size="15" font-weight="bold" fill="#7f1d1d">杀手锏：数组 ID 的区间扫描（本机 3.2.4 实测）</text>
+
+  <g font-family="monospace" font-size="11.5" fill="#334155">
+    <text x="62" y="360">SELECT * FROM temperature:['London', d'2026-09-01']..=['London', d'2026-09-04'];</text>
+  </g>
+
+  <text x="62" y="388" font-size="12" fill="#0f172a" font-weight="bold">实测返回 3 条（09-01 / 09-02 / 09-03，09-05 被排除）：</text>
+
+  <g font-size="11.5">
+    <rect x="62" y="400" width="150" height="30" rx="4" fill="#dcfce7" stroke="#22c55e"/>
+    <text x="137" y="420" text-anchor="middle" font-family="monospace">09-01  17f</text>
+    <rect x="222" y="400" width="150" height="30" rx="4" fill="#dcfce7" stroke="#22c55e"/>
+    <text x="297" y="420" text-anchor="middle" font-family="monospace">09-02  18.5f</text>
+    <rect x="382" y="400" width="150" height="30" rx="4" fill="#dcfce7" stroke="#22c55e"/>
+    <text x="457" y="420" text-anchor="middle" font-family="monospace">09-03  19f</text>
+    <rect x="542" y="400" width="150" height="30" rx="4" fill="#f1f5f9" stroke="#94a3b8" stroke-dasharray="4"/>
+    <text x="617" y="420" text-anchor="middle" font-family="monospace" fill="#94a3b8">09-05  21f</text>
+  </g>
+  <text x="710" y="412" font-size="11.5" fill="#b91c1c">← 超出上界，未返回</text>
+  <text x="710" y="432" font-size="11" fill="#475569">`..=` 含上界，`..` 不含上界（实测已验证）</text>
+
+  <text x="62" y="450" font-size="11.5" fill="#57534e">为什么快：键按字节有序，同一城市同一时间段的记录在物理上连续 → 顺序 I/O，不是全表扫描</text>
+
+  <!-- 陷阱区 -->
+  <rect x="40" y="478" width="1040" height="200" rx="10" fill="#fffbeb" stroke="#fbbf24" stroke-width="1.5"/>
+  <text x="62" y="502" font-size="15" font-weight="bold" fill="#78350f">四个实测陷阱（全部在本机 3.2.4 验证）</text>
+
+  <g font-size="12" fill="#57534e">
+    <text x="62" y="528">❌ <tspan font-family="monospace">CREATE t_demo:'1' ...</tspan></text>
+    <text x="62" y="546"><tspan fill="#b91c1c">→ Parse error: Unexpected token `a strand`</tspan></text>
+    <text x="420" y="537"><tspan fill="#059669">✅ 带引号的 ID 必须用反引号：</tspan><tspan font-family="monospace" fill="#059669">CREATE t_demo:`1`</tspan></text>
+
+    <text x="62" y="574">❌ 以为 <tspan font-family="monospace">`1`</tspan> 和 <tspan font-family="monospace">1</tspan> 是同一条</text>
+    <text x="420" y="574"><tspan fill="#059669">✅ 实测是两条独立记录，类型敏感</tspan></text>
+
+    <text x="62" y="602">❌ 以为对象 ID <tspan font-family="monospace">{a:1,b:2}</tspan> 与 <tspan font-family="monospace">{b:2,a:1}</tspan> 不同</text>
+    <text x="420" y="602"><tspan fill="#b91c1c">✅ 实测是同一条</tspan>（第二次 CREATE 报 AlreadyExists）— 键顺序不敏感</text>
+
+    <text x="62" y="630">❌ 用 <tspan font-family="monospace">CREATE TABLE</tspan> 建表</text>
+    <text x="420" y="630"><tspan fill="#059669">✅ SurrealQL 用 </tspan><tspan font-family="monospace" fill="#059669">DEFINE TABLE</tspan><tspan fill="#059669">，CREATE 是插数据</tspan></text>
+
+    <text x="62" y="658">💡 前缀扫描技巧：只给第一个元素 <tspan font-family="monospace">temperature:['London']..=['London', d'2026-09-09']</tspan></text>
+    <text x="420" y="658"><tspan fill="#059669">→ 实测返回该城市全部 4 条</tspan></text>
+  </g>
+</svg>

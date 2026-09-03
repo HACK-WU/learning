@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 640" width="940" height="640" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <rect width="940" height="640" fill="#fbfaf7"/>
+  <text x="24" y="36" font-size="21" font-weight="700" fill="#1f2d3d">四种索引与 EXPLAIN 判读（SurrealDB 3.2.4 实测）</text>
+
+  <!-- 四种索引 -->
+  <g transform="translate(30,58)">
+    <text x="0" y="0" font-size="15" font-weight="600" fill="#2c3e50">四种索引：写法与实测行为</text>
+
+    <rect x="0" y="12" width="220" height="132" rx="7" fill="#eaf2f8" stroke="#2e86c1" stroke-width="1.6"/>
+    <text x="12" y="34" font-size="13" font-weight="600" fill="#154360">① 普通索引</text>
+    <text x="12" y="54" font-size="11" fill="#1f2d3d" font-family="Consolas,monospace">DEFINE INDEX idx</text>
+    <text x="12" y="70" font-size="11" fill="#1f2d3d" font-family="Consolas,monospace">ON book FIELDS year;</text>
+    <text x="12" y="92" font-size="12" fill="#0b5345">实测：IndexScan idx_year</text>
+    <text x="12" y="112" font-size="12" fill="#0b5345">access: = 1960</text>
+    <text x="12" y="132" font-size="11.5" fill="#7f8c8d">等值 / 范围 / 排序都可用</text>
+
+    <rect x="240" y="12" width="220" height="132" rx="7" fill="#e8f6f3" stroke="#16a085" stroke-width="1.6"/>
+    <text x="252" y="34" font-size="13" font-weight="600" fill="#0e6251">② UNIQUE 唯一索引</text>
+    <text x="252" y="54" font-size="11" fill="#1f2d3d" font-family="Consolas,monospace">COLUMNS isbn UNIQUE</text>
+    <text x="252" y="74" font-size="12" fill="#0b5345">实测堵住三类写入</text>
+    <text x="252" y="94" font-size="11.5" fill="#0b5345">• CREATE 重复 → 拒</text>
+    <text x="252" y="112" font-size="11.5" fill="#0b5345">• UPSERT 撞别人值 → 拒</text>
+    <text x="252" y="130" font-size="11.5" fill="#5d4037">• UPSERT 改自己 → 放行</text>
+
+    <rect x="480" y="12" width="220" height="132" rx="7" fill="#fdf2d9" stroke="#b7950b" stroke-width="1.6"/>
+    <text x="492" y="34" font-size="13" font-weight="600" fill="#7d6608">③ 复合索引（左前缀）</text>
+    <text x="492" y="54" font-size="11" fill="#1f2d3d" font-family="Consolas,monospace">COLUMNS author, year</text>
+    <text x="492" y="76" font-size="12" fill="#0b5345">实测：author+year → 命中</text>
+    <text x="492" y="94" font-size="12" fill="#0b5345">只 author → 命中</text>
+    <text x="492" y="112" font-size="12" fill="#c0392b">只 year（跳前导列）</text>
+    <text x="492" y="130" font-size="12" fill="#c0392b">→ TableScan 全表</text>
+
+    <rect x="720" y="12" width="192" height="132" rx="7" fill="#f5eef8" stroke="#8e44ad" stroke-width="1.6"/>
+    <text x="732" y="34" font-size="13" font-weight="600" fill="#5b2c6f">④ COUNT 索引</text>
+    <text x="732" y="54" font-size="11" fill="#1f2d3d" font-family="Consolas,monospace">ON big COUNT</text>
+    <text x="732" y="76" font-size="12" fill="#5b2c6f">⚠️ 不能写 FIELDS</text>
+    <text x="732" y="94" font-size="11.5" fill="#c0392b">写 FIELDS id COUNT 报错</text>
+    <text x="732" y="116" font-size="12" fill="#0b5345">实测 300 行：124µs</text>
+    <text x="732" y="134" font-size="12" fill="#7f8c8d">无索引对照：431µs</text>
+  </g>
+
+  <!-- EXPLAIN 判读 -->
+  <g transform="translate(30,214)">
+    <text x="0" y="0" font-size="15" font-weight="600" fill="#2c3e50">EXPLAIN 输出怎么读：看 operator 与 access</text>
+
+    <rect x="0" y="12" width="450" height="112" rx="7" fill="#e8f6f3" stroke="#16a085" stroke-width="1.6"/>
+    <text x="14" y="34" font-size="12.5" font-weight="600" fill="#0e6251">✅ 命中索引（好）</text>
+    <text x="14" y="56" font-size="11" fill="#1f2d3d" font-family="Consolas,monospace">SelectProject [ctx: Db] [projections: *]</text>
+    <text x="14" y="74" font-size="11" fill="#1f2d3d" font-family="Consolas,monospace">    IndexScan [index: idx_year, access: = 1960]</text>
+    <text x="14" y="96" font-size="12" fill="#0b5345">关键信号：IndexScan + 出现 index 名与 access</text>
+    <text x="14" y="114" font-size="12" fill="#7f8c8d">access 里能看到实际用于查找的值</text>
+
+    <rect x="470" y="12" width="442" height="112" rx="7" fill="#fdecea" stroke="#e74c3c" stroke-width="1.6"/>
+    <text x="484" y="34" font-size="12.5" font-weight="600" fill="#922b21">❌ 未命中（全表扫描）</text>
+    <text x="484" y="56" font-size="11" fill="#1f2d3d" font-family="Consolas,monospace">SelectProject [ctx: Db] [projections: *]</text>
+    <text x="484" y="74" font-size="11" fill="#1f2d3d" font-family="Consolas,monospace">    TableScan [table: book, predicate: price = 25]</text>
+    <text x="484" y="96" font-size="12" fill="#922b21">关键信号：TableScan + predicate</text>
+    <text x="484" y="114" font-size="12" fill="#5d4037">数据量大时这是首要优化目标</text>
+  </g>
+
+  <!-- 四类失效原因 -->
+  <g transform="translate(30,344)">
+    <text x="0" y="0" font-size="15" font-weight="600" fill="#2c3e50">四种典型的索引未命中（全部实测）</text>
+
+    <rect x="0" y="12" width="225" height="94" rx="7" fill="#fff8e1" stroke="#f39c12" stroke-width="1.6"/>
+    <text x="12" y="32" font-size="12.5" font-weight="600" fill="#7e5109">① 跳过了复合索引前导列</text>
+    <text x="12" y="52" font-size="11" fill="#5d4037" font-family="Consolas,monospace">COLUMNS author, year</text>
+    <text x="12" y="70" font-size="11" fill="#5d4037" font-family="Consolas,monospace">WHERE year = 1960</text>
+    <text x="12" y="92" font-size="11.5" fill="#c0392b">→ TableScan</text>
+
+    <rect x="240" y="12" width="225" height="94" rx="7" fill="#fff8e1" stroke="#f39c12" stroke-width="1.6"/>
+    <text x="252" y="32" font-size="12.5" font-weight="600" fill="#7e5109">② 函数包裹了字段</text>
+    <text x="252" y="52" font-size="11" fill="#5d4037" font-family="Consolas,monospace">WHERE lowercase(author)=…</text>
+    <text x="252" y="72" font-size="11.5" fill="#c0392b">→ TableScan</text>
+    <text x="252" y="92" font-size="11" fill="#7f8c8d">pre_decode_filter: no</text>
+
+    <rect x="480" y="12" width="225" height="94" rx="7" fill="#eaf2f8" stroke="#2e86c1" stroke-width="1.6"/>
+    <text x="492" y="32" font-size="12.5" font-weight="600" fill="#154360">③ 类型不匹配（意外）</text>
+    <text x="492" y="52" font-size="11" fill="#1f2d3d" font-family="Consolas,monospace">WHERE year = "1960"</text>
+    <text x="492" y="72" font-size="11.5" fill="#0b5345">⚠️ 实测仍走 IndexScan</text>
+    <text x="492" y="92" font-size="11" fill="#7f8c8d">access: = '1960'，结果可能不对</text>
+
+    <rect x="720" y="12" width="192" height="94" rx="7" fill="#fff8e1" stroke="#f39c12" stroke-width="1.6"/>
+    <text x="732" y="32" font-size="12.5" font-weight="600" fill="#7e5109">④ 字段根本没索引</text>
+    <text x="732" y="52" font-size="11" fill="#5d4037" font-family="Consolas,monospace">WHERE price = 25</text>
+    <text x="732" y="72" font-size="11.5" fill="#c0392b">→ TableScan</text>
+    <text x="732" y="92" font-size="11" fill="#5d4037">补索引或对查询降频</text>
+  </g>
+
+  <!-- 底部：3.x 语法变更 -->
+  <g transform="translate(30,458)">
+    <rect x="0" y="0" width="912" height="120" rx="8" fill="#fdecea" stroke="#e74c3c" stroke-width="1.8"/>
+    <text x="16" y="26" font-size="14" font-weight="600" fill="#922b21">⚠️ 3.x 的 EXPLAIN 语法变了（骨架与多数网上示例仍是旧写法）</text>
+
+    <text x="16" y="50" font-size="12" fill="#5d1a15">旧（2.x / 很多教程还在写）：</text>
+    <text x="230" y="50" font-size="11.5" fill="#1f2d3d" font-family="Consolas,monospace">SELECT … WHERE … EXPLAIN;      SELECT … EXPLAIN FULL;</text>
+
+    <text x="16" y="72" font-size="12" fill="#0b5345">新（3.x 实测可用）：</text>
+    <text x="230" y="72" font-size="11.5" fill="#1f2d3d" font-family="Consolas,monospace">EXPLAIN SELECT …;                      （前缀式）</text>
+    <text x="230" y="90" font-size="11.5" fill="#1f2d3d" font-family="Consolas,monospace">EXPLAIN ANALYZE SELECT …;      （带执行指标 rows/elapsed）</text>
+    <text x="230" y="108" font-size="11.5" fill="#1f2d3d" font-family="Consolas,monospace">EXPLAIN FORMAT JSON SELECT …;  （结构化输出）</text>
+
+    <text x="16" y="128" font-size="11.5" fill="#922b21">实测：EXPLAIN FULL SELECT … 报 Parse error（3.0 起 FULL 改为 ANALYZE，且 EXPLAIN 移到句首）</text>
+  </g>
+
+  <text x="30" y="606" font-size="12.5" fill="#7f8c8d">图中所有结论均来自本机 SurrealDB 3.2.4 实测（playground/l06-verify-6*.surql）</text>
+  <text x="30" y="626" font-size="12" fill="#7f8c8d">COUNT 索引耗时为 300 行单次测量，仅示趋势，非基准测试</text>
+</svg>

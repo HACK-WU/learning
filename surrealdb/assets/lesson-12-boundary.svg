@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="940" viewBox="0 0 1120 940" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="1120" height="940" fill="#fbfcfd"/>
+
+  <text x="560" y="38" text-anchor="middle" font-size="24" font-weight="bold" fill="#1a2b3c">课 12 · 适用边界：四类反模式的实测边界值</text>
+  <text x="560" y="62" text-anchor="middle" font-size="13" fill="#607d8b">不是「快不快」，而是「到什么规模就不能用」— 全部为本机 3.2.4 实测</text>
+
+  <!-- A 深图遍历 -->
+  <rect x="40" y="84" width="530" height="230" rx="6" fill="#fff3e0" stroke="#ff9800"/>
+  <text x="58" y="110" font-size="16" font-weight="bold" fill="#e65100">A. 深图遍历爆炸（扇出^深度）</text>
+  <text x="58" y="134" font-size="12" fill="#5d4037">确定性图：扇出 5、深度 5、节点 3906、边 3905（RELATE 建边）</text>
+  <text x="58" y="160" font-size="13" font-family="Consolas, monospace" fill="#37474f">深度 1 →      5 条   1.96 ms</text>
+  <text x="58" y="180" font-size="13" font-family="Consolas, monospace" fill="#37474f">深度 2 →     25 条   1.70 ms</text>
+  <text x="58" y="200" font-size="13" font-family="Consolas, monospace" fill="#37474f">深度 3 →    125 条   3.09 ms</text>
+  <text x="58" y="220" font-size="13" font-family="Consolas, monospace" fill="#37474f">深度 4 →    625 条   4.14 ms</text>
+  <text x="58" y="240" font-size="13" font-family="Consolas, monospace" fill="#c62828">深度 5 →  3 125 条  23.68 ms  ← 拐点</text>
+  <text x="58" y="266" font-size="12" fill="#5d4037">条数 = 扇出^深度，耗时在第 5 跳陡增 5.7 倍。</text>
+  <text x="58" y="288" font-size="12" font-weight="bold" fill="#c62828">边界：扇出 10 时第 5 跳 = 10 万条。必须加 LIMIT 或用图算法，不能裸遍历。</text>
+
+  <!-- B 聚合 -->
+  <rect x="590" y="84" width="490" height="230" rx="6" fill="#fce4ec" stroke="#ec407a"/>
+  <text x="608" y="110" font-size="16" font-weight="bold" fill="#ad1457">B. 聚合 / 分析型负载</text>
+  <text x="608" y="134" font-size="12" fill="#4a148c">两边灌到完全相同的行数后对比（GROUP BY uid）</text>
+  <text x="608" y="160" font-size="13" font-family="Consolas, monospace" fill="#37474f">  5 000 行   Surreal 6.9 ms  |  PG 1.28 ms</text>
+  <text x="608" y="180" font-size="13" font-family="Consolas, monospace" fill="#37474f"> 20 000 行   Surreal 19.0 ms |  PG 2.38 ms</text>
+  <text x="608" y="200" font-size="13" font-family="Consolas, monospace" fill="#c62828"> 80 000 行   Surreal 60.2 ms |  PG 7.27 ms  ← 8x</text>
+  <text x="608" y="226" font-size="12" fill="#4a148c">数据 16x → 耗时 8.7x：近线性，确认全表扫描 + 内存聚合。</text>
+  <text x="608" y="248" font-size="12" fill="#4a148c">没有列存、没有预聚合、没有物化视图自动重写。</text>
+  <text x="608" y="272" font-size="12" font-weight="bold" fill="#c62828">边界：OLAP / 报表 / 多维分析场景请交给专用引擎。</text>
+  <text x="608" y="294" font-size="12" fill="#6a1b9a">（写入反过来：8 万行 SurrealDB 1.8 s vs PG 9.3 s，写多读少是它的强项）</text>
+
+  <!-- C 无索引 -->
+  <rect x="40" y="330" width="530" height="196" rx="6" fill="#e8f5e9" stroke="#66bb6a"/>
+  <text x="58" y="356" font-size="16" font-weight="bold" fill="#2e7d32">C. 索引仍然有效（10 万行实测）</text>
+  <text x="58" y="380" font-size="13" font-family="Consolas, monospace" fill="#37474f">无索引过滤 v=42    16.93 ms</text>
+  <text x="58" y="400" font-size="13" font-family="Consolas, monospace" fill="#37474f">全表 count()        7.28 ms</text>
+  <text x="58" y="420" font-size="13" font-family="Consolas, monospace" fill="#2e7d32">建索引后 v=42       7.15 ms  → 加速 2.4x</text>
+  <text x="58" y="444" font-size="12" fill="#1b5e20">索引生效，但加速比不算惊艳（PG 同场景 0.36 ms）。</text>
+  <text x="58" y="466" font-size="12" fill="#1b5e20">写入 10 万行仅 3.6 s，LSM 顺序写入是真的快。</text>
+  <text x="58" y="492" font-size="12" font-weight="bold" fill="#2e7d32">结论：索引该建还是要建，但别指望它把 OLAP 变成 OLTP。</text>
+
+  <!-- D 写入 -->
+  <rect x="590" y="330" width="490" height="196" rx="6" fill="#e3f2fd" stroke="#42a5f5"/>
+  <text x="608" y="356" font-size="16" font-weight="bold" fill="#1565c0">D. 逐行写入是协议瓶颈，不是引擎瓶颈</text>
+  <text x="608" y="380" font-size="13" font-family="Consolas, monospace" fill="#37474f">2000 次单行 INSERT   48.89 s</text>
+  <text x="608" y="400" font-size="13" font-family="Consolas, monospace" fill="#c62828">                → 24.44 ms/次（几乎全是 HTTP 往返）</text>
+  <text x="608" y="420" font-size="13" font-family="Consolas, monospace" fill="#2e7d32">一次批量 INSERT 2000 行  0.052 s</text>
+  <text x="608" y="440" font-size="13" font-family="Consolas, monospace" fill="#2e7d32">                → 0.026 ms/行（快约 940 倍）</text>
+  <text x="608" y="466" font-size="12" fill="#0d47a1">同样的引擎、同样的数据，换种写法差三个数量级。</text>
+  <text x="608" y="490" font-size="12" font-weight="bold" fill="#1565c0">规矩：批量写用 INSERT [...]，逐行写只在交互式调试时用。</text>
+
+  <!-- 静默失败 -->
+  <rect x="40" y="542" width="1040" height="150" rx="6" fill="#ffebee" stroke="#ef5350" stroke-width="2"/>
+  <text x="60" y="570" font-size="17" font-weight="bold" fill="#c62828">本课新增三次静默失败（累计第十八次）</text>
+  <text x="60" y="596" font-size="13" font-family="Consolas, monospace" fill="#37474f">第十七次 · INSERT INTO edge [{in:…, out:…}] 在 TYPE RELATION 表上不报错但一条都没写</text>
+  <text x="60" y="616" font-size="13" fill="#5d4037">　　　　　　　→ 边必须用 RELATE 建。本课前四个图遍历实验因此全部返回 0 条而白跑。</text>
+  <text x="60" y="640" font-size="13" font-family="Consolas, monospace" fill="#37474f">第十八次 · api::invoke() 把端点的 500 伪装成 HTTP 200 返回（错误藏在 body 里）</text>
+  <text x="60" y="660" font-size="13" fill="#5d4037">　　　　　　　→ 课 9「响应 body 支持 NONE」的错误结论正源于此。端点必须走真实 HTTP 验证。</text>
+  <text x="60" y="684" font-size="13" font-family="Consolas, monospace" fill="#37474f">　　　　　　　→ 真实形态：RETURN NONE 走 HTTP 是 500；必须 RETURN { body: … }。</text>
+
+  <!-- 选型决策树 -->
+  <text x="40" y="726" font-size="17" font-weight="bold" fill="#1a2b3c">收束：一页决策树</text>
+  <rect x="40" y="738" width="1040" height="184" fill="#fafafa" stroke="#cfd8dc"/>
+
+  <rect x="60" y="754" width="200" height="34" rx="4" fill="#ffe082" stroke="#f9a825"/>
+  <text x="160" y="776" text-anchor="middle" font-size="13" font-weight="bold" fill="#5d4037">数据是否多形状？</text>
+  <text x="272" y="776" font-size="13" fill="#37474f">否（纯表 / 纯文档 / 纯时序）→ 用专用库，不要为「统一」付出成熟度代价</text>
+
+  <rect x="60" y="800" width="200" height="34" rx="4" fill="#ffe082" stroke="#f9a825"/>
+  <text x="160" y="822" text-anchor="middle" font-size="13" font-weight="bold" fill="#5d4037">主负载是聚合分析？</text>
+  <text x="272" y="822" font-size="13" fill="#37474f">是 → 交给 OLAP 引擎（Doris/ClickHouse），SurrealDB 差约 8 倍且线性劣化</text>
+
+  <rect x="60" y="846" width="200" height="34" rx="4" fill="#ffe082" stroke="#f9a825"/>
+  <text x="160" y="868" text-anchor="middle" font-size="13" font-weight="bold" fill="#5d4037">会做深图遍历？</text>
+  <text x="272" y="868" font-size="13" fill="#37474f">是且深度 ≥4 → 必须加 LIMIT；扇出大时改用图算法或专用图库</text>
+
+  <rect x="60" y="892" width="200" height="22" rx="4" fill="#c8e6c9" stroke="#66bb6a"/>
+  <text x="160" y="908" text-anchor="middle" font-size="13" font-weight="bold" fill="#2e7d32">其余 → 适合</text>
+  <text x="272" y="908" font-size="13" fill="#37474f">多形状关联查询、逻辑下推、写多读少、实时推送、单机容量内 — SurrealDB 是合理选择</text>
+</svg>

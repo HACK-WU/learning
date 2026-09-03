@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="1080" viewBox="0 0 1180 1080">
+  <defs>
+    <marker id="ar2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#475569"/>
+    </marker>
+    <style>
+      .t { font-family: "Microsoft YaHei","PingFang SC",sans-serif; }
+      .h { font-size: 20px; font-weight: bold; fill: #0f172a; }
+      .sh { font-size: 15px; font-weight: bold; fill: #1e293b; }
+      .b { font-size: 13px; fill: #334155; }
+      .sm { font-size: 12px; fill: #475569; }
+      .mono { font-family: Consolas,"Courier New",monospace; font-size: 12.5px; fill: #0f172a; }
+      .warn { font-size: 12.5px; fill: #b91c1c; font-weight: bold; }
+      .ok { font-size: 12.5px; fill: #15803d; font-weight: bold; }
+    </style>
+  </defs>
+
+  <rect width="1180" height="1080" fill="#f8fafc"/>
+  <text class="t h" x="24" y="34">课 8 · EVENT 触发器与实时边界：EVENT 怎么工作，LIVE 什么时候别用</text>
+  <text class="t sm" x="24" y="56">SurrealDB 3.2.4 实测 · 与 RabbitMQ 4.3 对照 · 结论来自 12 个探针脚本</text>
+
+  <!-- 左上：EVENT 结构 -->
+  <rect x="24" y="74" width="560" height="336" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
+  <text class="t sh" x="40" y="100">① DEFINE EVENT：WHEN-THEN 与四个内置变量</text>
+
+  <rect x="40" y="116" width="528" height="112" rx="6" fill="#0f172a"/>
+  <text class="t mono" x="54" y="138" fill="#e2e8f0">DEFINE EVENT ev_drop ON TABLE m86</text>
+  <text class="t mono" x="54" y="160" fill="#fbbf24">  WHEN  $event = "UPDATE" AND $after.v &lt; $before.v</text>
+  <text class="t mono" x="54" y="182" fill="#e2e8f0">  THEN  ( CREATE lg86 SET from = $before.v, to = $after.v );</text>
+  <text class="t mono" x="54" y="206" fill="#94a3b8">  ↑ 条件在「变更后」求值  ↑ 副作用写在 THEN 块</text>
+
+  <text class="t b" x="40" y="252">四个内置变量（实测可用性）</text>
+
+  <rect x="40" y="266" width="256" height="40" rx="4" fill="#dcfce7" stroke="#16a34a"/>
+  <text class="t mono" x="52" y="291">$event = CREATE/UPDATE/DELETE</text>
+
+  <rect x="308" y="266" width="260" height="40" rx="4" fill="#dcfce7" stroke="#16a34a"/>
+  <text class="t mono" x="320" y="291">$this = 当前记录的 RecordID</text>
+
+  <rect x="40" y="314" width="256" height="40" rx="4" fill="#dcfce7" stroke="#16a34a"/>
+  <text class="t mono" x="52" y="339">$before = 变更前（DELETE 时唯一可用）</text>
+
+  <rect x="308" y="314" width="260" height="40" rx="4" fill="#fee2e2" stroke="#dc2626"/>
+  <text class="t mono" x="320" y="339">$after = DELETE 时为 NONE</text>
+
+  <rect x="40" y="364" width="528" height="34" rx="4" fill="#fef9c3" stroke="#ca8a04"/>
+  <text class="t sm" x="52" y="385">$value 实测为 NONE（3.2.4）；要判断删除内容请用 $before 而不是 $after</text>
+
+  <!-- 右上：递归 -->
+  <rect x="604" y="74" width="552" height="336" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
+  <text class="t sh" x="620" y="100">② 最大陷阱：THEN 里改自己 = 递归爆炸</text>
+
+  <rect x="620" y="116" width="520" height="86" rx="6" fill="#fee2e2" stroke="#dc2626"/>
+  <text class="t mono" x="634" y="138">DEFINE EVENT ev_self ON TABLE counter</text>
+  <text class="t mono" x="634" y="158">  WHEN $event = "UPDATE"</text>
+  <text class="t mono" x="634" y="178" fill="#b91c1c">  THEN ( UPDATE $this SET touches += 1 );   ← 又触发自己</text>
+
+  <text class="t warn" x="620" y="226">实测结果：嵌套 23 层后报 Reached excessive computation depth</text>
+  <text class="t sm" x="620" y="248">报错原文重复 23 次 "Error while processing event ev_self"，kind: Internal</text>
+  <text class="t warn" x="620" y="270">更严重的是：原始 UPDATE 被整体回滚（v 仍为 1，touches 没写进去）</text>
+
+  <line x1="620" y1="284" x2="1140" y2="284" stroke="#e2e8f0"/>
+  <text class="t ok" x="620" y="306">✓ 解法：加守卫条件，让第二次不再满足 WHEN</text>
+
+  <rect x="620" y="314" width="520" height="82" rx="6" fill="#0f172a"/>
+  <text class="t mono" x="634" y="336" fill="#e2e8f0">DEFINE EVENT ev_guard ON TABLE counter2</text>
+  <text class="t mono" x="634" y="356" fill="#fbbf24">  WHEN $event = "UPDATE" AND $before.touches IS NONE</text>
+  <text class="t mono" x="634" y="378" fill="#e2e8f0">  THEN ( UPDATE $this SET touches = 1 );   ← 第二次 touches 已存在</text>
+  <text class="t sm" x="634" y="398" fill="#94a3b8">实测：UPDATE 成功，touches=1，无递归</text>
+
+  <!-- 左下：失败语义 -->
+  <rect x="24" y="428" width="560" height="230" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
+  <text class="t sh" x="40" y="454">③ 事件失败会连带回滚主写入（实测）</text>
+
+  <text class="t mono" x="40" y="482">THEN ( THROW "event failed on purpose" );</text>
+  <text class="t sm" x="40" y="504">→ CREATE 报 Internal 错误，记录没写进去（SELECT 为空）</text>
+
+  <text class="t mono" x="40" y="532">BEGIN; CREATE t85:b1; COMMIT;   （事件里 THROW）</text>
+  <text class="t sm" x="40" y="554">→ Cannot COMMIT: the transaction was aborted due to a prior error</text>
+
+  <rect x="40" y="568" width="528" height="76" rx="6" fill="#eff6ff" stroke="#2563eb"/>
+  <text class="t b" x="52" y="590">这意味着 EVENT 是强一致的一部分，不是事后补偿</text>
+  <text class="t sm" x="52" y="612">想要「主写入成功、副作用失败也无所谓」→ 用 ASYNC</text>
+  <text class="t mono" x="52" y="634">DEFINE EVENT ... THEN ( ... ) ASYNC;</text>
+
+  <!-- 右下：ASYNC 回显 -->
+  <rect x="604" y="428" width="552" height="230" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
+  <text class="t sh" x="620" y="454">④ ASYNC 事件的真实默认值（INFO 回显）</text>
+
+  <rect x="620" y="470" width="520" height="70" rx="6" fill="#0f172a"/>
+  <text class="t mono" x="634" y="492" fill="#e2e8f0">DEFINE EVENT ev_async ON async82 ASYNC</text>
+  <text class="t mono" x="634" y="514" fill="#fbbf24">  RETRY 1 MAXDEPTH 3   ← 服务端补的默认值，骨架没写</text>
+  <text class="t mono" x="634" y="532" fill="#e2e8f0">  WHEN $event = 'CREATE' THEN ( ... )</text>
+
+  <text class="t b" x="620" y="562">ASYNC = 提交后异步执行，不阻塞写入路径</text>
+  <text class="t sm" x="620" y="584">代价：副作用与主写入不再同生共死，失败要靠 RETRY 兜</text>
+  <text class="t sm" x="620" y="606">典型用途：审计日志、派生数据、外部通知</text>
+
+  <rect x="620" y="620" width="520" height="28" rx="4" fill="#fef9c3" stroke="#ca8a04"/>
+  <text class="t sm" x="632" y="638">同一表多事件按定义顺序执行（实测 ev_a 先于 ev_b）</text>
+
+  <!-- 底：LIVE vs MQ -->
+  <rect x="24" y="676" width="1132" height="386" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
+  <text class="t sh" x="40" y="702">⑤ LIVE 与消息队列的分工线（本课最重要的输出）</text>
+
+  <rect x="40" y="718" width="540" height="326" rx="8" fill="#f0fdf4" stroke="#16a34a"/>
+  <text class="t b" x="56" y="742" font-weight="bold" fill="#15803d">LIVE SELECT = 数据变更订阅（广播 · 易失）</text>
+
+  <text class="t sm" x="56" y="768">✓ 消费者离线期间写入 5 条 → 上线后补发 0 条</text>
+  <text class="t sm" x="56" y="790">✓ 两个订阅者 → 各收一份（广播，非竞争消费）</text>
+  <text class="t sm" x="56" y="812">✓ 无 ACK、无重试、无死信、无持久化</text>
+  <text class="t sm" x="56" y="834">✓ 订阅绑定到连接：连接断 = 订阅亡</text>
+  <text class="t sm" x="56" y="856">✓ 400 个订阅实测全部建立成功，未见硬上限</text>
+  <text class="t sm" x="56" y="878">✓ 扇出成本存在但很弱：0→120 订阅约 1.2x（仅示趋势）</text>
+
+  <line x1="56" y1="894" x2="568" y2="894" stroke="#bbf7d0"/>
+  <text class="t ok" x="56" y="916">适合：在线协作、实时看板、缓存失效通知</text>
+  <text class="t ok" x="56" y="938">前提：能容忍丢、离线后能靠 SELECT 重建</text>
+
+  <rect x="612" y="718" width="520" height="326" rx="8" fill="#eff6ff" stroke="#2563eb"/>
+  <text class="t b" x="628" y="742" font-weight="bold" fill="#1d4ed8">消息队列（RabbitMQ 等）= 可靠任务分发</text>
+
+  <text class="t sm" x="628" y="768">✓ 消息持久化到磁盘，消费者离线也不丢</text>
+  <text class="t sm" x="628" y="790">✓ ACK / NACK / 重试 / 死信队列</text>
+  <text class="t sm" x="628" y="812">✓ 竞争消费：一条消息只给一个消费者</text>
+  <text class="t sm" x="628" y="834">✓ 削峰填谷：生产快于消费时压在队列里</text>
+  <text class="t sm" x="628" y="856">✓ 跨服务解耦：生产者不认识消费者</text>
+  <text class="t sm" x="628" y="878">✓ 与数据库无关，可跨系统</text>
+
+  <line x1="628" y1="894" x2="1108" y2="894" stroke="#bfdbfe"/>
+  <text class="t b" x="628" y="916" fill="#1d4ed8">适合：订单履约、异步任务、跨服务集成</text>
+  <text class="t b" x="628" y="938" fill="#1d4ed8">前提：能接受多部署一个组件</text>
+
+  <text class="t warn" x="40" y="1040">判定口诀：要「现在在线的人看到最新状态」→ LIVE；要「这条工作一定得有人做完」→ 消息队列。</text>
+  <text class="t warn" x="40" y="1058">反过来用都会痛：拿 LIVE 发任务会丢，拿 MQ 做变更同步要自己维护双写一致性。</text>
+
+  <text class="t sm" x="24" y="1066">RabbitMQ 4.3 镜像在本机可用（rabbitmq 课程遗留），对照结论基于语义分析而非本次实测，已在正文标注</text>
+</svg>

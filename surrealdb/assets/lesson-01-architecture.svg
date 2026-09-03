@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 700" width="1120" height="700" font-family="'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="sa" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="700" fill="#ffffff"/>
+  <text x="560" y="36" text-anchor="middle" font-size="23" font-weight="bold" fill="#0f172a">SurrealDB 架构：一个 KV 底座上，长出五种数据模型</text>
+  <text x="560" y="58" text-anchor="middle" font-size="12.5" fill="#64748b">「多模型」不是五个引擎拼一拼，而是同一份有序字节流上的五种查询方式</text>
+
+  <!-- 查询层 -->
+  <rect x="60" y="80" width="1000" height="86" rx="10" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.4"/>
+  <text x="80" y="104" font-size="15" font-weight="bold" fill="#0f172a">查询层（Query Layer / Compute）</text>
+  <text x="80" y="124" font-size="11.5" fill="#475569">解析 SurrealQL · 认证与会话 · 表级/字段级 PERMISSIONS · 索引规划 · 事务协调</text>
+
+  <g font-size="10.5" fill="#334155">
+    <rect x="80" y="134" width="150" height="22" rx="4" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="155" y="149" text-anchor="middle">SurrealQL</text>
+    <rect x="240" y="134" width="150" height="22" rx="4" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="315" y="149" text-anchor="middle">HTTP / REST</text>
+    <rect x="400" y="134" width="150" height="22" rx="4" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="475" y="149" text-anchor="middle">WebSocket (RPC)</text>
+    <rect x="560" y="134" width="150" height="22" rx="4" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="635" y="149" text-anchor="middle">GraphQL</text>
+    <rect x="720" y="134" width="150" height="22" rx="4" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="795" y="149" text-anchor="middle">MCP（3.1+）</text>
+    <rect x="880" y="134" width="150" height="22" rx="4" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="955" y="149" text-anchor="middle">SDK 嵌入</text>
+  </g>
+
+  <line x1="560" y1="166" x2="560" y2="196" stroke="#475569" stroke-width="2" marker-end="url(#sa)"/>
+  <text x="574" y="188" font-size="11.5" fill="#475569">统一事务接口：任一引擎都满足「单键 / 键区间的事务读写」这一份契约</text>
+
+  <!-- 模型层 -->
+  <rect x="60" y="200" width="1000" height="200" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.4"/>
+  <text x="80" y="224" font-size="15" font-weight="bold" fill="#0f172a">五种模型 = 同一键空间上的五种键布局与索引</text>
+
+  <g font-size="11.5">
+    <rect x="80" y="240" width="185" height="140" rx="6" fill="#eff6ff" stroke="#60a5fa"/>
+    <text x="172" y="262" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e3a8a">文档 / 关系</text>
+    <text x="96" y="284" fill="#1d4ed8">键前缀</text>
+    <text x="96" y="304" font-family="monospace" font-size="11">* NS · DB · user 00 · tobie 00</text>
+    <text x="96" y="328" fill="#1d4ed8">值</text>
+    <text x="96" y="346" font-size="11">完整文档体 {name:"Tobie"}</text>
+    <text x="96" y="368" font-size="10.5" fill="#64748b">任意深度嵌套对象与数组</text>
+
+    <rect x="277" y="240" width="185" height="140" rx="6" fill="#fefce8" stroke="#facc15"/>
+    <text x="369" y="262" text-anchor="middle" font-size="13" font-weight="bold" fill="#713f12">图（边即记录）</text>
+    <text x="293" y="284" fill="#a16207">键前缀</text>
+    <text x="293" y="304" font-family="monospace" font-size="11">~ NS · DB · 表 · 出边</text>
+    <text x="293" y="328" fill="#a16207">值</text>
+    <text x="293" y="346" font-size="11">空（关系已编码进键本身）</text>
+    <text x="293" y="368" font-size="10.5" fill="#64748b">遍历 = 连续键区间前缀扫描</text>
+
+    <rect x="474" y="240" width="185" height="140" rx="6" fill="#f5f3ff" stroke="#a78bfa"/>
+    <text x="566" y="262" text-anchor="middle" font-size="13" font-weight="bold" fill="#4c1d95">向量</text>
+    <text x="490" y="284" fill="#7c3aed">索引类型</text>
+    <text x="490" y="304" font-family="monospace" font-size="11">HNSW (3.0 起)</text>
+    <text x="490" y="328" fill="#7c3aed">度量</text>
+    <text x="490" y="346" font-size="11">cosine / euclidean / manhattan</text>
+    <text x="490" y="368" font-size="10.5" fill="#64748b">3.1 起另有 DISKANN</text>
+
+    <rect x="671" y="240" width="185" height="140" rx="6" fill="#fef2f2" stroke="#f87171"/>
+    <text x="763" y="262" text-anchor="middle" font-size="13" font-weight="bold" fill="#7f1d1d">全文</text>
+    <text x="695" y="284" fill="#b91c1c">索引类型</text>
+    <text x="695" y="304" font-family="monospace" font-size="11">倒排 + BM25</text>
+    <text x="695" y="328" fill="#b91c1c">3.0 起改名</text>
+    <text x="695" y="346" font-size="11">FULLTEXT ANALYZER</text>
+    <text x="695" y="368" font-size="10.5" fill="#64748b">原 SEARCH ANALYZER 已废弃</text>
+
+    <rect x="868" y="240" width="172" height="140" rx="6" fill="#ecfdf5" stroke="#34d399"/>
+    <text x="954" y="262" text-anchor="middle" font-size="13" font-weight="bold" fill="#065f46">时序 / 地理</text>
+    <text x="884" y="284" fill="#047857">靠原生类型落地</text>
+    <text x="884" y="304" font-family="monospace" font-size="11">datetime / duration</text>
+    <text x="884" y="322" font-family="monospace" font-size="11">geometry（点线面）</text>
+    <text x="884" y="346" fill="#047857">有序记录 ID</text>
+    <text x="884" y="364" font-size="10.5" fill="#64748b">时间窗查询 = 区间读</text>
+  </g>
+
+  <line x1="560" y1="400" x2="560" y2="428" stroke="#475569" stroke-width="2" marker-end="url(#sa)"/>
+  <text x="574" y="420" font-size="11.5" fill="#475569">全部编译成二进制 KV 对</text>
+
+  <!-- KV 底座 -->
+  <rect x="60" y="432" width="1000" height="70" rx="10" fill="#0f172a"/>
+  <text x="560" y="460" text-anchor="middle" font-size="16" font-weight="bold" fill="#ffffff">统一键值底座（有序字节流）</text>
+  <text x="560" y="483" text-anchor="middle" font-size="12" fill="#cbd5e1">文档 · 图边 · 索引条目 · 元数据 —— 全部是同一个已排序键空间里的 KV 对，子系统之间没有序列化边界</text>
+
+  <line x1="560" y1="502" x2="560" y2="530" stroke="#475569" stroke-width="2" marker-end="url(#sa)"/>
+
+  <!-- 存储引擎 -->
+  <rect x="60" y="534" width="1000" height="112" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.4"/>
+  <text x="80" y="558" font-size="15" font-weight="bold" fill="#0f172a">可插拔存储引擎（同样的查询，同样的 ACID 事务）</text>
+
+  <g font-size="11.5">
+    <rect x="80" y="572" width="185" height="56" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="172" y="592" text-anchor="middle" font-size="12.5" font-weight="bold">SurrealKV</text>
+    <text x="172" y="610" text-anchor="middle" font-size="10.5" fill="#475569">VART + LSM，内置 MVCC</text>
+    <text x="172" y="624" text-anchor="middle" font-size="10.5" fill="#059669">支持时间旅行</text>
+
+    <rect x="277" y="572" width="185" height="56" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="369" y="592" text-anchor="middle" font-size="12.5" font-weight="bold">RocksDB</text>
+    <text x="369" y="610" text-anchor="middle" font-size="10.5" fill="#475569">LSM-tree，成熟稳定</text>
+    <text x="369" y="624" text-anchor="middle" font-size="10.5" fill="#2563eb">单节点生产推荐</text>
+
+    <rect x="474" y="572" width="185" height="56" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="566" y="592" text-anchor="middle" font-size="12.5" font-weight="bold">memory / SurrealMX</text>
+    <text x="566" y="610" text-anchor="middle" font-size="10.5" fill="#475569">内存，可选日志持久化</text>
+    <text x="566" y="624" text-anchor="middle" font-size="10.5" fill="#64748b">测试与临时环境</text>
+
+    <rect x="671" y="572" width="185" height="56" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="763" y="592" text-anchor="middle" font-size="12.5" font-weight="bold">TiKV</text>
+    <text x="763" y="610" text-anchor="middle" font-size="10.5" fill="#475569">分布式，存算分离</text>
+    <text x="763" y="624" text-anchor="middle" font-size="10.5" fill="#64748b">自动分片与只读副本</text>
+
+    <rect x="868" y="572" width="172" height="56" rx="6" fill="#e2e8f0" stroke="#94a3b8"/>
+    <text x="954" y="592" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#475569">FoundationDB</text>
+    <text x="954" y="610" text-anchor="middle" font-size="10.5" fill="#b91c1c">3.0 起已弃用</text>
+    <text x="954" y="624" text-anchor="middle" font-size="10.5" fill="#64748b">需迁移</text>
+  </g>
+
+  <text x="60" y="676" font-size="12" fill="#78716c">代价提示：统一 KV 底座带来「一份数据、一个事务」的好处，也意味着单一引擎要在五种查询模式上都做到「够好」——这正是课 12 选型讨论的核心。</text>
+</svg>
