@@ -1,0 +1,51 @@
+# Agent 层 Collector（结课实战项目）
+#
+# 两层拓扑（课 11 实证）：agent 贴应用部署，只做轻量处理与转发；
+# 重治理（脱敏、限流、路由）集中在 gateway，便于统一改配置而不重启应用侧。
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  memory_limiter:
+    check_interval: 1s
+    limit_percentage: 80
+    spike_limit_percentage: 25
+
+  batch:
+    timeout: 5s
+
+  # agent 层做本地富化：补主机名，便于定位是哪台机器
+  resource:
+    attributes:
+      - key: host.name
+        value: capstone-agent-01
+        action: upsert
+
+exporters:
+  otlp/gateway:
+    endpoint: capstone-gateway:4317
+    tls:
+      insecure: true
+
+  debug:
+    verbosity: basic
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, resource, batch]
+      exporters: [otlp/gateway]
+    metrics:
+      receivers: [otlp]
+      processors: [memory_limiter, resource, batch]
+      exporters: [otlp/gateway]
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, resource, batch]
+      exporters: [otlp/gateway]

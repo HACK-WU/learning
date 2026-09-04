@@ -1,0 +1,105 @@
+# Gateway 层 Collector（结课实战项目）
+#
+# 设计要点（来自课 10 / 课 11 实测）：
+# - memory_limiter 必须是管道第一个 processor（课 11 实证）
+# - 在容器里 limit 必须用百分比：写死 limit_mib 读的是宿主机内存而非容器限额
+# - transform 做重命名（attributes processor 在 0.160.0 无 rename action）
+# - 脱敏必须在 transform 之后执行，否则会漏掉 transform 新创建的属性（课 10 e4b 实证）
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  memory_limiter:
+    check_interval: 1s
+    limit_percentage: 80
+    spike_limit_percentage: 25
+
+  batch:
+    send_batch_size: 512
+    timeout: 5s
+
+  # 统一补充部署环境属性。
+  # 坑：upsert 只在「键已存在」时覆盖，键不存在时**不插入**。
+  # 服务的 resource 里没有 deployment.environment.name，用 upsert 会静默不生效
+  # （本课实测：Jaeger 里该属性为 null）。无条件写入必须用 insert。
+  resource:
+    attributes:
+      - key: deployment.environment.name
+        value: capstone-lab
+        action: insert
+      - key: service.namespace
+        value: capstone
+        action: insert
+
+  # 脱敏：抹掉可能携带 PII 的查询串。
+  # 注意顺序——本 processor 在 transform 之后运行，
+  # 才能覆盖到 transform 新产出的 url.query。
+  redaction:
+    allow_all_keys: false
+    allowed_keys:
+      - db.system
+      - db.namespace
+      - db.rows_scanned
+      - db.index_used
+      - db.query.duration_ms
+      - user.id
+      - user.level
+      - order.id
+      - order.amount
+      - risk.pass
+      - risk.mode
+      - risk.rules_checked
+      - risk.db_roundtrips
+      - payment.amount
+      - payment.paid
+      - payment.pool_exhausted
+      - error.type
+      - http.method
+      - http.route
+      - http.status_code
+      - service.name
+      - service.version
+      - deployment.environment.name
+      - service.namespace
+      - telemetry.sdk.language
+      - telemetry.sdk.name
+      - telemetry.sdk.version
+
+exporters:
+  # trace → Jaeger
+  otlp/jaeger:
+    endpoint: jaeger-lab03:4317
+    tls:
+      insecure: true
+
+  # metric → Prometheus（由 Prometheus 主动来 scrape，见 prometheus.yml）
+  prometheus:
+    endpoint: 0.0.0.0:8889
+
+  # log → 文件。Jaeger 不接受日志（/v1/logs 返回 404 Unimplemented），
+  # 本机无 Loki/ES，故日志只能落地到文件验证。
+  file/logs:
+    path: /var/tmp/capstone/logs.json
+
+  debug:
+    verbosity: basic
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, resource, batch]
+      exporters: [otlp/jaeger, debug]
+    metrics:
+      receivers: [otlp]
+      processors: [memory_limiter, resource, batch]
+      exporters: [prometheus, debug]
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, resource, batch]
+      exporters: [file/logs]
