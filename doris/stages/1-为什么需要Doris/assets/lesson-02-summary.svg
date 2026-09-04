@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 560" width="1040" height="560" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="1040" height="560" fill="#fbfbfb"/>
+  <text x="520" y="30" text-anchor="middle" font-size="19" font-weight="700" fill="#1a237e">课 2 一图总结：Doris 只有两个进程，以及你亲手跑出来的数字</text>
+
+  <!-- 左侧：架构 -->
+  <rect x="25" y="50" width="500" height="290" rx="10" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="275" y="76" text-anchor="middle" font-size="15" font-weight="700" fill="#0d47a1">Doris 极简架构：只有 FE 和 BE 两类进程</text>
+
+  <!-- 客户端 -->
+  <rect x="45" y="92" width="180" height="42" rx="8" fill="#fff" stroke="#666"/>
+  <text x="135" y="112" text-anchor="middle" font-size="12" font-weight="700" fill="#333">客户端 / BI 工具</text>
+  <text x="135" y="128" text-anchor="middle" font-size="10.5" fill="#777">mysql 客户端直连 9030</text>
+
+  <line x1="225" y1="113" x2="290" y2="113" stroke="#666" stroke-width="2" marker-end="url(#a1)"/>
+
+  <!-- FE -->
+  <rect x="295" y="86" width="210" height="180" rx="8" fill="#fff" stroke="#1565C0" stroke-width="2"/>
+  <text x="400" y="106" text-anchor="middle" font-size="13" font-weight="700" fill="#0d47a1">FE（大脑）</text>
+  <text x="400" y="124" text-anchor="middle" font-size="10.5" fill="#777">不存数据，只管调度</text>
+  <text x="308" y="146" font-size="11" fill="#333">· 接收请求（9030）</text>
+  <text x="308" y="164" font-size="11" fill="#333">· 解析 SQL、生成执行计划</text>
+  <text x="308" y="182" font-size="11" fill="#333">· 管理元数据</text>
+  <text x="308" y="200" font-size="11" fill="#333">· 管理节点（心跳）</text>
+  <rect x="308" y="212" width="184" height="44" rx="6" fill="#fff3e0" stroke="#EF6C00"/>
+  <text x="400" y="228" text-anchor="middle" font-size="10.5" font-weight="700" fill="#e65100">三角色</text>
+  <text x="400" y="244" text-anchor="middle" font-size="10" fill="#333">Master(写) / Follower / Observer</text>
+
+  <!-- BE -->
+  <rect x="45" y="180" width="235" height="86" rx="8" fill="#fff" stroke="#2E7D32" stroke-width="2"/>
+  <text x="162" y="200" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">BE（肌肉）</text>
+  <text x="162" y="218" text-anchor="middle" font-size="11" fill="#333">· 存数据（tablet 为单位）</text>
+  <text x="162" y="236" text-anchor="middle" font-size="11" fill="#333">· 执行具体计算任务</text>
+  <text x="162" y="256" text-anchor="middle" font-size="10.5" fill="#777">HTTP 8040 / 心跳 9050</text>
+
+  <line x1="295" y1="200" x2="285" y2="200" stroke="#666" stroke-width="2" marker-end="url(#a1)"/>
+  <text x="270" y="290" text-anchor="middle" font-size="10.5" fill="#777">FE 下发计划 → BE 执行并回报</text>
+
+  <rect x="45" y="288" width="460" height="40" rx="6" fill="#fff8e1" stroke="#F9A825"/>
+  <text x="275" y="305" text-anchor="middle" font-size="11" fill="#8d6e00">FE 之间靠类 Raft 协议选主同步元数据，BE 之间靠 FE 协调</text>
+  <text x="275" y="321" text-anchor="middle" font-size="11" font-weight="700" fill="#8d6e00">→ 不依赖 ZooKeeper 等任何外部服务</text>
+
+  <!-- 右侧：实测对比 -->
+  <rect x="545" y="50" width="470" height="290" rx="10" fill="#ffffff" stroke="#bdbdbd" stroke-width="1.5"/>
+  <text x="780" y="76" text-anchor="middle" font-size="15" font-weight="700" fill="#1a237e">本机实测：同一批 2050 万行数据</text>
+
+  <text x="565" y="102" font-size="11" font-weight="700" fill="#777">查询</text>
+  <text x="790" y="102" font-size="11" font-weight="700" fill="#c62828">MySQL</text>
+  <text x="890" y="102" font-size="11" font-weight="700" fill="#2E7D32">Doris</text>
+  <text x="975" y="102" font-size="11" font-weight="700" fill="#1565C0">倍数</text>
+  <line x1="565" y1="108" x2="1000" y2="108" stroke="#ddd"/>
+
+  <text x="565" y="128" font-size="11" fill="#333">Q1 按省聚合</text>
+  <text x="790" y="128" font-size="11" fill="#c62828">3.36 s</text>
+  <text x="890" y="128" font-size="11" fill="#2E7D32">0.14 s</text>
+  <text x="975" y="128" font-size="11" font-weight="700" fill="#1565C0">24×</text>
+
+  <text x="565" y="150" font-size="11" fill="#333">Q2 按品类聚合</text>
+  <text x="790" y="150" font-size="11" fill="#c62828">9.36 s</text>
+  <text x="890" y="150" font-size="11" fill="#2E7D32">0.13 s</text>
+  <text x="975" y="150" font-size="11" font-weight="700" fill="#1565C0">72×</text>
+
+  <text x="565" y="172" font-size="11" fill="#333">Q3 省 × 品类</text>
+  <text x="790" y="172" font-size="11" fill="#c62828">11.94 s</text>
+  <text x="890" y="172" font-size="11" fill="#2E7D32">0.16 s</text>
+  <text x="975" y="172" font-size="11" font-weight="700" fill="#1565C0">75×</text>
+
+  <text x="565" y="194" font-size="11" fill="#333">Q4 时间过滤聚合</text>
+  <text x="790" y="194" font-size="11" fill="#c62828">5.58 s</text>
+  <text x="890" y="194" font-size="11" fill="#2E7D32">0.12 s</text>
+  <text x="975" y="194" font-size="11" font-weight="700" fill="#1565C0">47×</text>
+
+  <line x1="565" y1="206" x2="1000" y2="206" stroke="#ddd"/>
+  <text x="565" y="228" font-size="11" fill="#333">Q5 单值过滤（Doris 无索引）</text>
+  <text x="790" y="228" font-size="11" fill="#c62828">0.13 s</text>
+  <text x="890" y="228" font-size="11" fill="#2E7D32">0.12 s</text>
+  <text x="975" y="228" font-size="11" fill="#888">平手</text>
+
+  <rect x="565" y="244" width="430" height="82" rx="6" fill="#e8f5e9" stroke="#2E7D32"/>
+  <text x="780" y="266" text-anchor="middle" font-size="12" font-weight="700" fill="#1b5e20">存储体积：3472 MB → 215 MB，压缩比 16 倍</text>
+  <text x="780" y="288" text-anchor="middle" font-size="11" fill="#333">导入 2050 万行耗时 21 秒，零过滤行</text>
+  <text x="780" y="308" text-anchor="middle" font-size="10.5" fill="#777">MySQL 侧已含联合索引；Doris 侧未建任何索引</text>
+
+  <!-- 底部：三个端口 -->
+  <rect x="25" y="360" width="990" height="80" rx="10" fill="#fff" stroke="#1565C0" stroke-width="1.5"/>
+  <text x="520" y="384" text-anchor="middle" font-size="14" font-weight="700" fill="#0d47a1">记住三个端口，本机就能玩转</text>
+
+  <rect x="60" y="396" width="290" height="32" rx="6" fill="#e3f2fd"/>
+  <text x="205" y="417" text-anchor="middle" font-size="11.5" fill="#0d47a1">9030 = 查询端口（mysql 客户端连这个）</text>
+
+  <rect x="375" y="396" width="290" height="32" rx="6" fill="#e3f2fd"/>
+  <text x="520" y="417" text-anchor="middle" font-size="11.5" fill="#0d47a1">8030 = FE Web UI（看集群状态）</text>
+
+  <rect x="690" y="396" width="290" height="32" rx="6" fill="#e3f2fd"/>
+  <text x="835" y="417" text-anchor="middle" font-size="11.5" fill="#0d47a1">8040 = BE HTTP（Stream Load 走这个）</text>
+
+  <!-- 底部：踩坑 -->
+  <rect x="25" y="455" width="990" height="85" rx="10" fill="#ffebee" stroke="#C62828" stroke-width="1.5"/>
+  <text x="520" y="479" text-anchor="middle" font-size="14" font-weight="700" fill="#b71c1c">本课亲手踩到的坑（你很可能也会遇到）</text>
+  <text x="55" y="502" font-size="11.5" fill="#333">① 分桶键基数太低会倾斜：按 province 分 8 桶，但只有 8 个省 → 8 个 tablet 里 4 个是空的，最大的装了 768 万行</text>
+  <text x="55" y="522" font-size="11.5" fill="#333">② 单机必须设 replication_num=1：默认的 3 副本在没有 3 台 BE 时会导致建表后写入失败</text>
+  <text x="55" y="542" font-size="10.5" fill="#777">③ all-in-one 镜像把 FE 和 BE 塞进同一容器，只为学习方便；生产环境必须分开部署</text>
+
+  <defs>
+    <marker id="a1" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#666"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 330" width="960" height="330" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="960" height="330" fill="#fafafa"/>
+  <text x="480" y="34" text-anchor="middle" font-size="18" font-weight="700" fill="#1a237e">阶段 4 · 分布式运维与生产落地</text>
+  <text x="480" y="55" text-anchor="middle" font-size="12.5" fill="#555">章节：撑住生产——不丢数据、不被拖垮、知道该不该用</text>
+
+  <defs>
+    <marker id="a4" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#666"/>
+    </marker>
+  </defs>
+
+  <!-- 课 9 -->
+  <rect x="30" y="80" width="215" height="180" rx="10" fill="#e8f5e9" stroke="#2E7D32" stroke-width="2"/>
+  <rect x="30" y="80" width="215" height="32" rx="10" fill="#2E7D32"/>
+  <rect x="30" y="102" width="215" height="10" fill="#2E7D32"/>
+  <text x="137" y="102" text-anchor="middle" font-size="13.5" font-weight="700" fill="#fff">课 9　副本与扩缩容</text>
+  <text x="46" y="135" font-size="11" font-weight="600" fill="#1b5e20">数据不丢</text>
+  <text x="46" y="158" font-size="11.5" fill="#333">① 多副本与自动修复</text>
+  <text x="46" y="178" font-size="11.5" fill="#333">② FE 高可用</text>
+  <text x="46" y="198" font-size="11.5" fill="#333">③ 扩缩容与数据均衡</text>
+  <text x="46" y="232" font-size="10.5" fill="#555">⚠️ 副本语义：存算一体架构</text>
+  <text x="46" y="248" font-size="10.5" fill="#555">　 存算分离见课 12</text>
+
+  <!-- 课 10 -->
+  <rect x="260" y="80" width="215" height="180" rx="10" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <rect x="260" y="80" width="215" height="32" rx="10" fill="#1565C0"/>
+  <rect x="260" y="102" width="215" height="10" fill="#1565C0"/>
+  <text x="367" y="102" text-anchor="middle" font-size="13.5" font-weight="700" fill="#fff">课 10　资源隔离</text>
+  <text x="276" y="135" font-size="11" font-weight="600" fill="#0d47a1">不被拖垮</text>
+  <text x="276" y="158" font-size="11.5" fill="#333">① Workload Group</text>
+  <text x="276" y="178" font-size="11.5" fill="#333">② 内存与 Spill to Disk</text>
+  <text x="276" y="198" font-size="11.5" fill="#333">③ 并发与队列控制</text>
+  <text x="276" y="232" font-size="10.5" fill="#555">一个失控大查询能拖垮</text>
+  <text x="276" y="248" font-size="10.5" fill="#555">整个集群</text>
+
+  <!-- 课 11 -->
+  <rect x="490" y="80" width="215" height="180" rx="10" fill="#fff8e1" stroke="#F9A825" stroke-width="2"/>
+  <rect x="490" y="80" width="215" height="32" rx="10" fill="#F9A825"/>
+  <rect x="490" y="102" width="215" height="10" fill="#F9A825"/>
+  <text x="597" y="102" text-anchor="middle" font-size="13.5" font-weight="700" fill="#fff">课 11　日常运维</text>
+  <text x="506" y="135" font-size="11" font-weight="600" fill="#8d6e00">改得动、救得回</text>
+  <text x="506" y="158" font-size="11.5" fill="#333">① Schema Change</text>
+  <text x="506" y="178" font-size="11.5" fill="#333">② 备份与恢复</text>
+  <text x="506" y="198" font-size="11.5" fill="#333">③ 监控告警与升级</text>
+  <text x="506" y="232" font-size="10.5" fill="#555">Schema Change 是生产</text>
+  <text x="506" y="248" font-size="10.5" fill="#555">高频操作，异步执行</text>
+
+  <!-- 课 12 -->
+  <rect x="720" y="80" width="215" height="180" rx="10" fill="#fce4ec" stroke="#C2185B" stroke-width="2"/>
+  <rect x="720" y="80" width="215" height="32" rx="10" fill="#C2185B"/>
+  <rect x="720" y="102" width="215" height="10" fill="#C2185B"/>
+  <text x="827" y="102" text-anchor="middle" font-size="13.5" font-weight="700" fill="#fff">课 12　选型与落地</text>
+  <text x="736" y="135" font-size="11" font-weight="600" fill="#880e4f">知道该不该用</text>
+  <text x="736" y="158" font-size="11.5" fill="#333">① 与同类系统对比</text>
+  <text x="736" y="178" font-size="11.5" fill="#333">② 存算分离架构</text>
+  <text x="736" y="198" font-size="11.5" fill="#333">③ 场景架构与反模式</text>
+  <text x="736" y="232" font-size="10.5" fill="#555">"不该用"比"怎么用"</text>
+  <text x="736" y="248" font-size="10.5" fill="#555">更值钱</text>
+
+  <line x1="247" y1="170" x2="256" y2="170" stroke="#666" stroke-width="2" marker-end="url(#a4)"/>
+  <line x1="477" y1="170" x2="486" y2="170" stroke="#666" stroke-width="2" marker-end="url(#a4)"/>
+  <line x1="707" y1="170" x2="716" y2="170" stroke="#666" stroke-width="2" marker-end="url(#a4)"/>
+
+  <!-- 底部 -->
+  <rect x="30" y="278" width="905" height="38" rx="8" fill="#ffffff" stroke="#bdbdbd" stroke-dasharray="4 3"/>
+  <text x="50" y="295" font-size="11.5" fill="#444">四条线并行推进：可靠性（课 9）→ 稳定性（课 10）→ 可维护性（课 11）→ 决策力（课 12）。</text>
+  <text x="50" y="310" font-size="11.5" fill="#444">⚠️ 课 9 副本机制基于存算一体；读到课 12 存算分离时回头交叉验证。</text>
+</svg>

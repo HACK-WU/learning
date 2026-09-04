@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1180" viewBox="0 0 1000 1180" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#546e7a"/>
+    </marker>
+    <style>
+      .t { font-size:20px; font-weight:bold; fill:#1a237e; }
+      .s { font-size:14px; fill:#37474f; }
+      .sm { font-size:12px; fill:#546e7a; }
+      .box { fill:#ffffff; stroke:#90a4ae; stroke-width:1.5; rx:6; }
+      .hl { fill:#fff8e1; stroke:#ffa000; stroke-width:2; }
+      .good { fill:#e8f5e9; stroke:#43a047; stroke-width:2; }
+      .bad { fill:#ffebee; stroke:#e53935; stroke-width:2; }
+      .be { fill:#e3f2fd; stroke:#1e88e5; stroke-width:1.5; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1000" height="1180" fill="#fafafa"/>
+  <text x="500" y="38" text-anchor="middle" class="t" font-size="24">分布式 Join 的四条路：数据怎么搬？</text>
+  <text x="500" y="62" text-anchor="middle" class="sm">Doris 4.1.3 单机单 BE 实测 · join op 字段是唯一的确定性证据</text>
+
+  <!-- ============ 1. Broadcast ============ -->
+  <text x="30" y="100" class="t">1. Broadcast Join — 小表复制到每个节点</text>
+  <rect x="30" y="112" width="940" height="150" class="box"/>
+
+  <rect x="60" y="140" width="180" height="50" class="be"/>
+  <text x="150" y="162" text-anchor="middle" class="s" font-weight="bold">BE1 有订单表分片</text>
+  <text x="150" y="180" text-anchor="middle" class="sm">2150 万行</text>
+
+  <rect x="60" y="205" width="180" height="40" class="be"/>
+  <text x="150" y="230" text-anchor="middle" class="s">BE2 / BE3 同理</text>
+
+  <rect x="300" y="140" width="150" height="80" class="hl"/>
+  <text x="375" y="170" text-anchor="middle" class="s" font-weight="bold">维度表</text>
+  <text x="375" y="192" text-anchor="middle" class="sm">12 行</text>
+
+  <path d="M450,160 L560,160" stroke="#ffa000" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <path d="M450,180 L560,190" stroke="#ffa000" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <path d="M450,200 L560,220" stroke="#ffa000" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="505" y="128" text-anchor="middle" class="sm" fill="#ef6c00">复制 3 份</text>
+
+  <rect x="565" y="140" width="180" height="40" class="be"/>
+  <text x="655" y="165" text-anchor="middle" class="s">小表副本</text>
+  <rect x="565" y="185" width="180" height="40" class="be"/>
+  <text x="655" y="210" text-anchor="middle" class="s">小表副本</text>
+  <rect x="565" y="230" width="180" height="40" class="be"/>
+  <text x="655" y="255" text-anchor="middle" class="s">小表副本</text>
+
+  <text x="790" y="165" class="s" font-weight="bold">网络代价</text>
+  <text x="790" y="190" class="sm">小表 × 节点数</text>
+  <text x="790" y="215" class="sm" fill="#43a047">小表够小才划算</text>
+  <text x="790" y="240" class="sm">默认阈值 0.8</text>
+
+  <text x="60" y="278" class="sm">EXPLAIN 标记：<tspan font-family="monospace" fill="#d32f2f">join op: INNER JOIN(BROADCAST)[]</tspan></text>
+
+  <!-- ============ 2. Shuffle ============ -->
+  <text x="30" y="322" class="t">2. Shuffle Join — 两边都按 Join 键重分布</text>
+  <rect x="30" y="334" width="940" height="150" class="box"/>
+
+  <rect x="60" y="365" width="200" height="50" class="be"/>
+  <text x="160" y="387" text-anchor="middle" class="s" font-weight="bold">大表 A（2150 万）</text>
+  <text x="160" y="405" text-anchor="middle" class="sm">按 user_id 哈希重分布</text>
+
+  <rect x="60" y="425" width="200" height="45" class="be"/>
+  <text x="160" y="447" text-anchor="middle" class="s" font-weight="bold">大表 B（2050 万）</text>
+  <text x="160" y="462" text-anchor="middle" class="sm">同样按 user_id 重分布</text>
+
+  <path d="M270,390 L400,400" stroke="#e53935" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <path d="M270,448 L400,415" stroke="#e53935" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <rect x="405" y="365" width="180" height="95" class="bad"/>
+  <text x="495" y="392" text-anchor="middle" class="s" font-weight="bold">网络 Shuffle</text>
+  <text x="495" y="415" text-anchor="middle" class="sm">两边全量数据都要搬</text>
+  <text x="495" y="436" text-anchor="middle" class="sm" fill="#c62828">最贵，但没有选择时</text>
+
+  <path d="M590,412 L680,412" stroke="#e53935" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <rect x="685" y="380" width="150" height="65" class="be"/>
+  <text x="760" y="410" text-anchor="middle" class="s" font-weight="bold">同键值</text>
+  <text x="760" y="430" text-anchor="middle" class="sm">落到同一节点</text>
+
+  <text x="60" y="500" class="sm">EXPLAIN 标记：<tspan font-family="monospace" fill="#d32f2f">join op: INNER JOIN(PARTITIONED)[]</tspan></text>
+
+  <!-- ============ 3. Bucket Shuffle ============ -->
+  <text x="30" y="544" class="t">3. Bucket Shuffle Join — 只搬右表，按左表的桶分布</text>
+  <rect x="30" y="556" width="940" height="150" class="box"/>
+
+  <rect x="60" y="590" width="200" height="80" class="be"/>
+  <text x="160" y="615" text-anchor="middle" class="s" font-weight="bold">左表（大，8 桶）</text>
+  <text x="160" y="638" text-anchor="middle" class="sm">分桶键 = province</text>
+  <text x="160" y="656" text-anchor="middle" class="sm">原地不动</text>
+
+  <rect x="310" y="590" width="200" height="80" class="hl"/>
+  <text x="410" y="615" text-anchor="middle" class="s" font-weight="bold">右表按左表桶规则</text>
+  <text x="410" y="638" text-anchor="middle" class="sm">发到对应节点</text>
+  <text x="410" y="656" text-anchor="middle" class="sm" fill="#ef6c00">只搬右表</text>
+
+  <path d="M270,630 L305,630" stroke="#ffa000" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <rect x="570" y="590" width="180" height="80" class="good"/>
+  <text x="660" y="615" text-anchor="middle" class="s" font-weight="bold">网络代价</text>
+  <text x="660" y="640" text-anchor="middle" class="sm">只有右表一份</text>
+  <text x="660" y="658" text-anchor="middle" class="sm" fill="#2e7d32">比 Shuffle 省一半</text>
+
+  <text x="790" y="615" class="s" font-weight="bold">前提</text>
+  <text x="790" y="640" class="sm">Join 键 = 左表分桶键</text>
+  <text x="790" y="660" class="sm">右表不分桶也行</text>
+
+  <text x="60" y="722" class="sm">EXPLAIN 标记：<tspan font-family="monospace" fill="#d32f2f">join op: INNER JOIN(BUCKET_SHUFFLE)[]</tspan></text>
+
+  <!-- ============ 4. Colocate ============ -->
+  <text x="30" y="766" class="t">4. Colocate Join — 同组同桶，数据本来就在同一节点</text>
+  <rect x="30" y="778" width="940" height="150" class="box"/>
+
+  <rect x="60" y="812" width="230" height="80" class="good"/>
+  <text x="175" y="836" text-anchor="middle" class="s" font-weight="bold">Colocation Group</text>
+  <text x="175" y="858" text-anchor="middle" class="sm">两张表：同分桶键、同桶数、</text>
+  <text x="175" y="876" text-anchor="middle" class="sm">同副本数，IsStable=true</text>
+
+  <rect x="340" y="805" width="170" height="45" class="be"/>
+  <text x="425" y="833" text-anchor="middle" class="s">orders 桶 0-7</text>
+  <rect x="340" y="855" width="170" height="40" class="be"/>
+  <text x="425" y="880" text-anchor="middle" class="s">fact_prov 桶 0-7</text>
+
+  <text x="575" y="825" class="s" font-weight="bold">BE1：桶 0,1,2,3</text>
+  <text x="575" y="850" class="sm">orders 桶0 ↔ fact_prov 桶0</text>
+  <text x="575" y="872" class="sm">同号桶永远在同一 BE</text>
+
+  <rect x="790" y="805" width="150" height="90" class="good"/>
+  <text x="865" y="832" text-anchor="middle" class="s" font-weight="bold">网络代价</text>
+  <text x="865" y="855" text-anchor="middle" class="s" font-size="16" fill="#2e7d32">零</text>
+  <text x="865" y="878" text-anchor="middle" class="sm">本地 Join</text>
+
+  <text x="60" y="944" class="sm">EXPLAIN 标记：<tspan font-family="monospace" fill="#d32f2f">join op: INNER JOIN(COLOCATE[])[]</tspan> ＋ 计划里没有 EXCHANGE 节点</text>
+
+  <!-- ============ 选型决策 ============ -->
+  <text x="30" y="998" class="t">怎么选：三个问题定策略</text>
+  <rect x="30" y="1010" width="940" height="150" class="box"/>
+
+  <rect x="60" y="1035" width="280" height="100" class="hl"/>
+  <text x="200" y="1060" text-anchor="middle" class="s" font-weight="bold">问 1：右表多大？</text>
+  <text x="200" y="1085" text-anchor="middle" class="sm">小于阈值（默认 0.8）</text>
+  <text x="200" y="1105" text-anchor="middle" class="s" fill="#ef6c00">→ Broadcast</text>
+  <text x="200" y="1125" text-anchor="middle" class="sm">超过了就往下问</text>
+
+  <rect x="365" y="1035" width="280" height="100" class="bad"/>
+  <text x="505" y="1060" text-anchor="middle" class="s" font-weight="bold">问 2：Join 键是分桶键吗？</text>
+  <text x="505" y="1085" text-anchor="middle" class="sm">是 → Bucket Shuffle</text>
+  <text x="505" y="1105" text-anchor="middle" class="sm" fill="#c62828">不是 → Shuffle（最贵）</text>
+  <text x="505" y="1125" text-anchor="middle" class="sm">两边全量重分布</text>
+
+  <rect x="670" y="1035" width="275" height="100" class="good"/>
+  <text x="807" y="1060" text-anchor="middle" class="s" font-weight="bold">问 3：能建 Colocate 吗？</text>
+  <text x="807" y="1085" text-anchor="middle" class="sm">同分桶键 + 同桶数 + 同副本</text>
+  <text x="807" y="1105" text-anchor="middle" class="sm" fill="#2e7d32">→ 零网络，最快</text>
+  <text x="807" y="1125" text-anchor="middle" class="sm">代价是牺牲分桶自由度</text>
+
+  <text x="500" y="1170" text-anchor="middle" class="sm">单机单 BE 测不出耗时差异（网络代价恒为 0），所以用 join op 字段做证据；多 BE 集群上这四者的差距会真正体现</text>
+</svg>

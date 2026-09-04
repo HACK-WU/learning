@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 300" width="920" height="300" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="920" height="300" fill="#fafafa"/>
+  <text x="460" y="34" text-anchor="middle" font-size="18" font-weight="700" fill="#1a237e">阶段 1 · 为什么需要 Doris</text>
+  <text x="460" y="55" text-anchor="middle" font-size="12.5" fill="#555">章节：报表跑 3 分钟——从认清困境，到自己跑起集群</text>
+
+  <defs>
+    <marker id="a1" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#666"/>
+    </marker>
+  </defs>
+
+  <!-- 课 1 -->
+  <rect x="50" y="85" width="340" height="175" rx="10" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <rect x="50" y="85" width="340" height="32" rx="10" fill="#1565C0"/>
+  <rect x="50" y="107" width="340" height="10" fill="#1565C0"/>
+  <text x="220" y="107" text-anchor="middle" font-size="14.5" font-weight="700" fill="#fff">课 1　数据分析的困境与 Doris 的诞生</text>
+  <text x="70" y="140" font-size="12.5" font-weight="600" fill="#0d47a1">先搞清楚"为什么慢"</text>
+  <text x="70" y="165" font-size="12" fill="#333">① OLTP 与 OLAP 的鸿沟</text>
+  <text x="70" y="188" font-size="12" fill="#333">② Doris 是什么</text>
+  <text x="70" y="211" font-size="12" fill="#333">③ Doris 的典型场景</text>
+  <text x="70" y="243" font-size="11.5" fill="#555">认知阶梯：感知 → 概念 → 定位</text>
+
+  <!-- 课 2 -->
+  <rect x="500" y="85" width="370" height="175" rx="10" fill="#e8f5e9" stroke="#2E7D32" stroke-width="2"/>
+  <rect x="500" y="85" width="370" height="32" rx="10" fill="#2E7D32"/>
+  <rect x="500" y="107" width="370" height="10" fill="#2E7D32"/>
+  <text x="685" y="107" text-anchor="middle" font-size="14.5" font-weight="700" fill="#fff">课 2　跑起来第一个 Doris</text>
+  <text x="520" y="140" font-size="12.5" font-weight="600" fill="#1b5e20">再亲手验证"快是真的"</text>
+  <text x="520" y="165" font-size="12" fill="#333">① FE 与 BE 架构</text>
+  <text x="520" y="188" font-size="12" fill="#333">② 用 Docker 起集群</text>
+  <text x="520" y="211" font-size="12" fill="#333">③ 第一张表与第一条查询</text>
+  <text x="520" y="243" font-size="11.5" fill="#555">认知阶梯：概念 → 机制 → 实操</text>
+
+  <line x1="392" y1="172" x2="496" y2="172" stroke="#666" stroke-width="2" marker-end="url(#a1)"/>
+  <text x="444" y="163" text-anchor="middle" font-size="11" fill="#666">先懂原理</text>
+
+  <!-- 底部出口 -->
+  <rect x="50" y="275" width="820" height="0" fill="none"/>
+  <text x="460" y="288" text-anchor="middle" font-size="12" fill="#444">出口：集群跑起来了，接下来学阶段 2「怎么把表设计好」</text>
+</svg>

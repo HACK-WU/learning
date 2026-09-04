@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="760" viewBox="0 0 1180 760" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <defs>
+    <marker id="ar" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#4a5568"/>
+    </marker>
+    <marker id="arB" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#2b6cb0"/>
+    </marker>
+    <marker id="arR" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#c53030"/>
+    </marker>
+  </defs>
+
+  <rect width="1180" height="760" fill="#f7fafc"/>
+  <text x="590" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#1a365d">一条 SQL 在 Doris 里的完整旅程：从文本到结果</text>
+  <text x="590" y="56" text-anchor="middle" font-size="13" fill="#4a5568">Doris 4.1.3 单机单 BE 实测 · QueryID 经 /api/profile 抓取</text>
+
+  <!-- FE 阶段 -->
+  <rect x="24" y="74" width="240" height="196" rx="10" fill="#ebf8ff" stroke="#2b6cb0" stroke-width="2"/>
+  <text x="144" y="98" text-anchor="middle" font-size="16" font-weight="bold" fill="#2b6cb0">FE（协调者·只动脑）</text>
+
+  <rect x="42" y="110" width="204" height="34" rx="6" fill="#fff" stroke="#90cdf4" stroke-width="1.5"/>
+  <text x="54" y="131" font-size="13" fill="#2d3748">① 解析 Parse</text>
+  <text x="228" y="131" text-anchor="end" font-size="11" fill="#718096">0ms</text>
+
+  <rect x="42" y="150" width="204" height="34" rx="6" fill="#fff" stroke="#90cdf4" stroke-width="1.5"/>
+  <text x="54" y="171" font-size="13" fill="#2d3748">② 规划 Nereids Plan</text>
+  <text x="228" y="171" text-anchor="end" font-size="11" fill="#718096">4ms</text>
+
+  <rect x="42" y="190" width="204" height="34" rx="6" fill="#fff" stroke="#90cdf4" stroke-width="1.5"/>
+  <text x="54" y="211" font-size="13" fill="#2d3748">③ 切分 Fragment</text>
+  <text x="228" y="211" text-anchor="end" font-size="11" fill="#718096">1ms</text>
+
+  <rect x="42" y="230" width="204" height="30" rx="6" fill="#fefcbf" stroke="#d69e2e" stroke-width="1.5"/>
+  <text x="54" y="250" font-size="12.5" fill="#744210">④ 分发 Schedule</text>
+  <text x="228" y="250" text-anchor="end" font-size="11" fill="#975a16">3ms</text>
+
+  <!-- 箭头 FE -> BE -->
+  <line x1="266" y1="172" x2="330" y2="172" stroke="#2b6cb0" stroke-width="2.5" marker-end="url(#arB)"/>
+  <text x="298" y="164" text-anchor="middle" font-size="11" fill="#2b6cb0">RPC</text>
+
+  <!-- BE 阶段 -->
+  <rect x="336" y="74" width="330" height="196" rx="10" fill="#f0fff4" stroke="#276749" stroke-width="2"/>
+  <text x="501" y="98" text-anchor="middle" font-size="16" font-weight="bold" fill="#276749">BE（执行者·只动手）</text>
+
+  <rect x="354" y="110" width="294" height="34" rx="6" fill="#fff" stroke="#9ae6b4" stroke-width="1.5"/>
+  <text x="366" y="131" font-size="13" fill="#2d3748">⑤ 扫描 Scan（列存 + 向量化）</text>
+  <text x="630" y="131" text-anchor="end" font-size="11" fill="#718096">163ms</text>
+
+  <rect x="354" y="150" width="294" height="34" rx="6" fill="#fff" stroke="#9ae6b4" stroke-width="1.5"/>
+  <text x="366" y="171" font-size="13" fill="#2d3748">⑥ 本地预聚合 Partial Agg</text>
+  <text x="630" y="171" text-anchor="end" font-size="11" fill="#718096">3.5ms</text>
+
+  <rect x="354" y="190" width="294" height="34" rx="6" fill="#fff" stroke="#9ae6b4" stroke-width="1.5"/>
+  <text x="366" y="211" font-size="13" fill="#2d3748">⑦ Exchange 网络交换</text>
+  <text x="630" y="211" text-anchor="end" font-size="11" fill="#718096">0.04ms</text>
+
+  <rect x="354" y="230" width="294" height="30" rx="6" fill="#fefcbf" stroke="#d69e2e" stroke-width="1.5"/>
+  <text x="366" y="250" font-size="12.5" fill="#744210">⑧ 全局合并 Merge Finalize</text>
+  <text x="630" y="250" text-anchor="end" font-size="11" fill="#975a16">0.06ms</text>
+
+  <!-- 结果 -->
+  <rect x="676" y="74" width="150" height="196" rx="10" fill="#fffaf0" stroke="#c05621" stroke-width="2"/>
+  <text x="751" y="108" text-anchor="middle" font-size="15" font-weight="bold" fill="#c05621">结果回传</text>
+  <text x="751" y="140" text-anchor="middle" font-size="12" fill="#2d3748">ResultSink</text>
+  <text x="751" y="162" text-anchor="middle" font-size="12" fill="#2d3748">MySQL 协议</text>
+  <text x="751" y="196" text-anchor="middle" font-size="12" fill="#2d3748">Wait&amp;Fetch</text>
+  <text x="751" y="214" text-anchor="middle" font-size="11" fill="#718096">21ms</text>
+  <text x="751" y="248" text-anchor="middle" font-size="12" font-weight="bold" fill="#c05621">Total 192ms</text>
+
+  <line x1="668" y1="172" x2="672" y2="172" stroke="#c05621" stroke-width="2.5" marker-end="url(#arR)"/>
+
+  <!-- Pipeline 拆解 -->
+  <rect x="24" y="292" width="1132" height="196" rx="10" fill="#fff" stroke="#a0aec0" stroke-width="1.5"/>
+  <text x="44" y="316" font-size="15" font-weight="bold" fill="#2d3748">Pipeline 执行模型：Fragment 切成 Pipeline，Pipeline 再复制出多个 Instance 并行跑</text>
+  <text x="44" y="336" font-size="12" fill="#718096">实测 SELECT COUNT(*), SUM(LENGTH(pad1)+LENGTH(pad2)+LENGTH(pad3)) FROM perf_wide（200 万行）</text>
+
+  <!-- Fragment 0 -->
+  <rect x="42" y="348" width="530" height="126" rx="8" fill="#ebf8ff" stroke="#2b6cb0" stroke-width="1.5"/>
+  <text x="56" y="368" font-size="13.5" font-weight="bold" fill="#2b6cb0">Fragment 0（汇聚层 · 1 个节点）</text>
+  <rect x="56" y="378" width="240" height="40" rx="5" fill="#fff" stroke="#90cdf4"/>
+  <text x="66" y="395" font-size="11.5" fill="#2d3748">Pipeline 0 · instance_num=1</text>
+  <text x="66" y="411" font-size="11" fill="#718096">ResultSink + AGG(merge)</text>
+  <rect x="308" y="378" width="250" height="40" rx="5" fill="#fff" stroke="#90cdf4"/>
+  <text x="318" y="395" font-size="11.5" fill="#2d3748">Pipeline 1 · instance_num=1</text>
+  <text x="318" y="411" font-size="11" fill="#718096">AGG_SINK + EXCHANGE</text>
+  <text x="56" y="438" font-size="11.5" fill="#2d3748">AGGREGATION 等待上游数据：</text>
+  <text x="56" y="455" font-size="11.5" font-weight="bold" fill="#c53030">WaitForDependency 185.9ms ← 全查询最大等待</text>
+
+  <!-- Fragment 1 -->
+  <rect x="586" y="348" width="556" height="126" rx="8" fill="#f0fff4" stroke="#276749" stroke-width="1.5"/>
+  <text x="600" y="368" font-size="13.5" font-weight="bold" fill="#276749">Fragment 1（扫描层 · 可并行）</text>
+  <rect x="600" y="378" width="172" height="40" rx="5" fill="#fff" stroke="#9ae6b4"/>
+  <text x="608" y="395" font-size="11.5" fill="#2d3748">Pipeline 0 · ×10</text>
+  <text x="608" y="411" font-size="11" fill="#718096">DATA_STREAM_SINK</text>
+  <rect x="782" y="378" width="172" height="40" rx="5" fill="#fff" stroke="#9ae6b4"/>
+  <text x="790" y="395" font-size="11.5" fill="#2d3748">Pipeline 1 · ×10</text>
+  <text x="790" y="411" font-size="11" fill="#718096">AGG_SINK + LOCAL_EXCH</text>
+  <rect x="964" y="378" width="164" height="40" rx="5" fill="#fed7d7" stroke="#c53030" stroke-width="2"/>
+  <text x="972" y="395" font-size="11.5" font-weight="bold" fill="#c53030">Pipeline 2 · ×1</text>
+  <text x="972" y="411" font-size="11" fill="#742a2a">OLAP_SCAN 163ms ← 瓶颈</text>
+  <text x="600" y="438" font-size="11.5" fill="#2d3748">扫描层 ExecTime 随并行度下降：1 核 16.26ms → 4 核 5.78ms → 8 核 2.85ms</text>
+  <text x="600" y="455" font-size="11.5" fill="#975a16">但查询总耗时几乎不变（192ms → 191ms）：单机只有 1 个 BE，扫描器仍只有 1 个</text>
+
+  <!-- 三层关键指标 -->
+  <rect x="24" y="504" width="1132" height="238" rx="10" fill="#fff" stroke="#a0aec0" stroke-width="1.5"/>
+  <text x="44" y="528" font-size="15" font-weight="bold" fill="#2d3748">Profile 三层结构：对着它说出"时间花在哪"</text>
+
+  <rect x="42" y="542" width="362" height="182" rx="8" fill="#ebf8ff" stroke="#2b6cb0" stroke-width="1.5"/>
+  <text x="56" y="564" font-size="14" font-weight="bold" fill="#2b6cb0">第 1 层 · Execution Summary</text>
+  <text x="56" y="586" font-size="11.5" fill="#2d3748">回答：时间花在「计划」还是「执行」</text>
+  <text x="56" y="608" font-size="11.5" fill="#2d3748">· Parse SQL Time：0ms</text>
+  <text x="56" y="626" font-size="11.5" fill="#2d3748">· Plan Time：4ms（Nereids 优化器）</text>
+  <text x="56" y="644" font-size="11.5" fill="#2d3748">· Schedule Time：3ms（分发给 BE）</text>
+  <text x="56" y="662" font-size="11.5" fill="#2d3748">· Wait and Fetch Result：21ms</text>
+  <text x="56" y="684" font-size="11.5" fill="#c53030">· Total：192ms</text>
+  <text x="56" y="708" font-size="11" fill="#718096">若 Plan ≫ Schedule，瓶颈在优化器</text>
+
+  <rect x="416" y="542" width="362" height="182" rx="8" fill="#f0fff4" stroke="#276749" stroke-width="1.5"/>
+  <text x="430" y="564" font-size="14" font-weight="bold" fill="#276749">第 2 层 · MergedProfile / Fragment</text>
+  <text x="430" y="586" font-size="11.5" fill="#2d3748">回答：时间花在「哪个 Fragment」</text>
+  <text x="430" y="608" font-size="11.5" fill="#2d3748">· Fragment 0：汇聚，instance_num=1</text>
+  <text x="430" y="626" font-size="11.5" fill="#2d3748">· Fragment 1：扫描，instance_num=10</text>
+  <text x="430" y="644" font-size="11.5" fill="#2d3748">· Pipeline：Fragment 内的执行链</text>
+  <text x="430" y="662" font-size="11.5" fill="#2d3748">· instance_num：该 Pipeline 并行份数</text>
+  <text x="430" y="684" font-size="11.5" fill="#276749">· 找出 ExecTime 最大的 Pipeline</text>
+  <text x="430" y="708" font-size="11" fill="#718096">多 BE 时还能看 Instances Num Per BE 是否倾斜</text>
+
+  <rect x="790" y="542" width="366" height="182" rx="8" fill="#fffaf0" stroke="#c05621" stroke-width="1.5"/>
+  <text x="804" y="564" font-size="14" font-weight="bold" fill="#c05621">第 3 层 · Operator（算子）</text>
+  <text x="804" y="586" font-size="11.5" fill="#2d3748">回答：时间花在「哪个算子的哪一步」</text>
+  <text x="804" y="608" font-size="11.5" fill="#2d3748">· ExecTime：算子自己干活的时间</text>
+  <text x="804" y="626" font-size="11.5" fill="#2d3748">· WaitForDependency：等上游的时间</text>
+  <text x="804" y="644" font-size="11.5" fill="#2d3748">· ScanBytes：从磁盘读了多少</text>
+  <text x="804" y="662" font-size="11.5" fill="#2d3748">· RowsProduced：产出了多少行</text>
+  <text x="804" y="684" font-size="11.5" font-weight="bold" fill="#c53030">· OLAP_SCAN 163ms / 192ms = 85%</text>
+  <text x="804" y="708" font-size="11" fill="#718096">ExecTime 大=自己慢；Wait 大=上游慢</text>
+
+</svg>

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 320" width="940" height="320" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="940" height="320" fill="#fafafa"/>
+  <text x="470" y="34" text-anchor="middle" font-size="18" font-weight="700" fill="#1a237e">阶段 2 · 数据建模</text>
+  <text x="470" y="55" text-anchor="middle" font-size="12.5" fill="#555">章节：把表重新设计一遍——选模型 → 切数据 → 建索引</text>
+
+  <defs>
+    <marker id="a2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#666"/>
+    </marker>
+  </defs>
+
+  <!-- 课 3 -->
+  <rect x="40" y="80" width="270" height="170" rx="10" fill="#e8f5e9" stroke="#2E7D32" stroke-width="2"/>
+  <rect x="40" y="80" width="270" height="32" rx="10" fill="#2E7D32"/>
+  <rect x="40" y="102" width="270" height="10" fill="#2E7D32"/>
+  <text x="175" y="102" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">课 3　三种数据模型</text>
+  <text x="58" y="135" font-size="11.5" font-weight="600" fill="#1b5e20">选模型（最核心决策）</text>
+  <text x="58" y="158" font-size="12" fill="#333">① Duplicate 明细模型</text>
+  <text x="58" y="180" font-size="12" fill="#333">② Aggregate 聚合模型</text>
+  <text x="58" y="202" font-size="12" fill="#333">③ Unique 主键模型</text>
+  <text x="58" y="232" font-size="11" fill="#555">选错 = 后面怎么调都救不回</text>
+
+  <!-- 课 4 -->
+  <rect x="335" y="80" width="270" height="170" rx="10" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <rect x="335" y="80" width="270" height="32" rx="10" fill="#1565C0"/>
+  <rect x="335" y="102" width="270" height="10" fill="#1565C0"/>
+  <text x="470" y="102" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">课 4　分区与分桶</text>
+  <text x="353" y="135" font-size="11.5" font-weight="600" fill="#0d47a1">切数据（让查询扫得少）</text>
+  <text x="353" y="158" font-size="12" fill="#333">① 分区（按时间整块跳过）</text>
+  <text x="353" y="180" font-size="12" fill="#333">② 分桶（块内切份并行）</text>
+  <text x="353" y="202" font-size="12" fill="#333">③ 分区分桶裁剪</text>
+  <text x="353" y="232" font-size="11" fill="#555">EXPLAIN 验证只扫 1%</text>
+
+  <!-- 课 5 -->
+  <rect x="630" y="80" width="270" height="170" rx="10" fill="#fff8e1" stroke="#F9A825" stroke-width="2"/>
+  <rect x="630" y="80" width="270" height="32" rx="10" fill="#F9A825"/>
+  <rect x="630" y="102" width="270" height="10" fill="#F9A825"/>
+  <text x="765" y="102" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">课 5　键列、索引与 Rollup</text>
+  <text x="648" y="135" font-size="11.5" font-weight="600" fill="#8d6e00">建索引（精确定位到行）</text>
+  <text x="648" y="158" font-size="12" fill="#333">① Key 列排序与前缀索引</text>
+  <text x="648" y="180" font-size="12" fill="#333">② 索引家族（Bloom/倒排）</text>
+  <text x="648" y="202" font-size="12" fill="#333">③ 同步物化视图 Rollup</text>
+  <text x="648" y="232" font-size="11" fill="#555">不是越多越好，乱加拖慢导入</text>
+
+  <line x1="312" y1="165" x2="331" y2="165" stroke="#666" stroke-width="2" marker-end="url(#a2)"/>
+  <line x1="607" y1="165" x2="626" y2="165" stroke="#666" stroke-width="2" marker-end="url(#a2)"/>
+
+  <!-- 底部三级漏斗 -->
+  <rect x="40" y="268" width="860" height="38" rx="8" fill="#ffffff" stroke="#bdbdbd" stroke-dasharray="4 3"/>
+  <text x="60" y="285" font-size="11.5" fill="#444">三层递进：先决定"数据怎么存"（课 3）→ 再决定"怎么切"（课 4）→ 最后"怎么精确定位"（课 5）。顺序不可调换。</text>
+  <text x="60" y="300" font-size="11.5" fill="#444">⚠️ 课 5 的同步 Rollup 与阶段 3 课 8 的异步物化视图不是一回事，勿混。</text>
+</svg>

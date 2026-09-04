@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 740" width="1060" height="740" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="1060" height="740" fill="#fbfbfb"/>
+  <text x="530" y="28" text-anchor="middle" font-size="19" font-weight="700" fill="#1a237e">课 5 一图总结：先在分区内精确定位到行，再决定要不要加索引</text>
+
+  <!-- 知识点1 -->
+  <rect x="25" y="44" width="325" height="272" rx="10" fill="#e8f5e9" stroke="#2E7D32" stroke-width="2"/>
+  <text x="187" y="70" text-anchor="middle" font-size="15" font-weight="700" fill="#1b5e20">知识点 1：Key 列排序与前缀索引</text>
+  <text x="187" y="90" text-anchor="middle" font-size="11.5" fill="#555">建表时列的顺序，就是数据的排序顺序</text>
+
+  <text x="42" y="116" font-size="11.5" font-weight="700" fill="#333">数据按 Key 列有序存储：</text>
+  <rect x="42" y="126" width="290" height="60" rx="4" fill="#fff"/>
+  <text x="55" y="148" font-size="10.5" fill="#333">Key(order_date, province, city) 时：</text>
+  <text x="55" y="166" font-size="10.5" fill="#2E7D32">2025-01-01｜广东｜深圳 → 2025-01-01｜广东｜广州</text>
+  <text x="55" y="181" font-size="10.5" fill="#2E7D32">→ 2025-01-02｜北京｜... （先按日期排）</text>
+
+  <rect x="42" y="194" width="290" height="52" rx="4" fill="#fff"/>
+  <text x="55" y="212" font-size="10.5" font-weight="700" fill="#333">前缀索引：每 1024 行记一个"路标"</text>
+  <text x="55" y="229" font-size="10.5" fill="#555">只记前 36 字节 → 能覆盖开头的几列</text>
+  <text x="55" y="242" font-size="10.5" fill="#555">查询命中"前缀"才能快速定位</text>
+
+  <rect x="42" y="252" width="290" height="50" rx="4" fill="#ffebee"/>
+  <text x="55" y="270" font-size="10.5" font-weight="700" fill="#C62828">⚠️ 硬约束（实测踩到）：</text>
+  <text x="55" y="287" font-size="10" fill="#333">Key 列必须是建表语句的前几列，顺序一致</text>
+
+  <!-- 知识点2 -->
+  <rect x="365" y="44" width="325" height="272" rx="10" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="527" y="70" text-anchor="middle" font-size="15" font-weight="700" fill="#0d47a1">知识点 2：索引家族</text>
+  <text x="527" y="90" text-anchor="middle" font-size="11.5" fill="#555">按需选择，不是越多越好</text>
+
+  <rect x="382" y="102" width="291" height="40" rx="4" fill="#fff"/>
+  <text x="394" y="118" font-size="10.5" font-weight="700" fill="#1565C0">ZoneMap（自动，免费）</text>
+  <text x="394" y="134" font-size="10" fill="#555">每个 block 记 min/max，范围查询自动跳过</text>
+
+  <rect x="382" y="146" width="291" height="40" rx="4" fill="#fff"/>
+  <text x="394" y="162" font-size="10.5" font-weight="700" fill="#1565C0">BloomFilter（等值 / IN）</text>
+  <text x="394" y="178" font-size="10" fill="#555">"这个 block 里肯定没有这个值" → 跳过</text>
+
+  <rect x="382" y="190" width="291" height="40" rx="4" fill="#fff"/>
+  <text x="394" y="206" font-size="10.5" font-weight="700" fill="#1565C0">倒排索引（全文检索）</text>
+  <text x="394" y="222" font-size="10" fill="#555">MATCH_ANY / MATCH_ALL 关键词搜索</text>
+
+  <rect x="382" y="234" width="291" height="40" rx="4" fill="#fff"/>
+  <text x="394" y="250" font-size="10.5" font-weight="700" fill="#1565C0">NGram BloomFilter（LIKE）</text>
+  <text x="394" y="266" font-size="10" fill="#555">把文本切 3 字一组建过滤器，加速 %xxx%</text>
+
+  <rect x="382" y="278" width="291" height="28" rx="4" fill="#ffebee"/>
+  <text x="394" y="296" font-size="10.5" font-weight="700" fill="#C62828">实测代价：2 个索引让存储从 150MB → 578MB</text>
+
+  <!-- 知识点3 -->
+  <rect x="705" y="44" width="330" height="272" rx="10" fill="#f3e5f5" stroke="#7B1FA2" stroke-width="2"/>
+  <text x="870" y="70" text-anchor="middle" font-size="15" font-weight="700" fill="#4a148c">知识点 3：同步物化视图（Rollup）</text>
+  <text x="870" y="90" text-anchor="middle" font-size="11.5" fill="#555">与基表强绑定，导入时同步更新</text>
+
+  <rect x="722" y="102" width="296" height="46" rx="4" fill="#fff"/>
+  <text x="734" y="118" font-size="10.5" font-weight="700" fill="#4a148c">两种形态（本课实测）</text>
+  <text x="734" y="134" font-size="10" fill="#333">① 列裁剪 Rollup：只存部分列，行数不变</text>
+  <text x="734" y="146" font-size="10" fill="#333">② 聚合 Rollup：预聚合，行数大幅减少</text>
+
+  <rect x="722" y="152" width="296" height="46" rx="4" fill="#fff"/>
+  <text x="734" y="168" font-size="10.5" font-weight="700" fill="#4a148c">命中条件</text>
+  <text x="734" y="184" font-size="10" fill="#333">查询的列和聚合方式，要与 Rollup 定义一致</text>
+  <text x="734" y="196" font-size="10" fill="#333">多一个维度就不命中</text>
+
+  <rect x="722" y="202" width="296" height="46" rx="4" fill="#e8f5e9"/>
+  <text x="734" y="218" font-size="10.5" font-weight="700" fill="#2E7D32">✅ 实测命中证据（EXPLAIN）</text>
+  <text x="734" y="234" font-size="10" fill="#333">TABLE: rollup_demo(rollup_pc) ← 走了 Rollup</text>
+  <text x="734" y="246" font-size="10" fill="#333">avgRowSize 33.57 → 14.43，少读 57%</text>
+
+  <rect x="722" y="252" width="296" height="54" rx="4" fill="#fff3e0"/>
+  <text x="734" y="268" font-size="10.5" font-weight="700" fill="#e65100">与异步物化视图（课 8）的区别</text>
+  <text x="734" y="284" font-size="10" fill="#333">Rollup 与基表强一致、无延迟</text>
+  <text x="734" y="296" font-size="10" fill="#333">异步 MV 独立存储、定时刷新、支持多表</text>
+
+  <!-- 中文分词陷阱 -->
+  <rect x="25" y="330" width="1010" height="118" rx="10" fill="#ffebee" stroke="#C62828" stroke-width="2"/>
+  <text x="530" y="356" text-anchor="middle" font-size="15" font-weight="700" fill="#b71c1c">⚠️ 本课最重要的实战坑：倒排索引的中文分词</text>
+
+  <text x="55" y="382" font-size="11.5" fill="#333">实测：查 remark MATCH_ANY '广东'，期望命中"广东"的行，结果：</text>
+  <text x="55" y="402" font-size="11" fill="#333">province='广东' 的真实行数 = <tspan font-weight="700">2,817,491</tspan>　但 MATCH_ANY '广东' 返回 <tspan font-weight="700" fill="#C62828">5,624,176</tspan>（恰好两倍）</text>
+  <text x="55" y="422" font-size="11" fill="#333">被误匹配的：山东 <tspan font-weight="700" fill="#C62828">2,806,685</tspan> 行 —— unicode parser 把"广东"拆成单字，"山东"的"东"也被匹配上了</text>
+  <text x="55" y="440" font-size="11.5" font-weight="700" fill="#b71c1c">→ 中文场景要用 MATCH_ALL（AND 语义）缩小范围，或改用更合适的 parser，不能默认分词是对的</text>
+
+  <!-- 存储代价 -->
+  <rect x="25" y="462" width="495" height="118" rx="10" fill="#fff3e0" stroke="#EF6C00" stroke-width="1.5"/>
+  <text x="272" y="488" text-anchor="middle" font-size="14" font-weight="700" fill="#e65100">索引的存储代价（实测）</text>
+  <text x="55" y="512" font-size="11" fill="#333">idx_demo（2050 万行，含 remark 文本列）：</text>
+  <text x="55" y="531" font-size="11" fill="#333">无索引基线　　　　≈ 150 MB</text>
+  <text x="55" y="550" font-size="11" fill="#333">+ 倒排索引　　　　<tspan font-weight="700">302 MB</tspan>（+152 MB）</text>
+  <text x="55" y="569" font-size="11" fill="#333">+ NGram BF　　　　<tspan font-weight="700" fill="#C62828">578 MB</tspan>（再 +276 MB，共增 3.9 倍）</text>
+
+  <!-- 结论 -->
+  <rect x="535" y="462" width="500" height="118" rx="10" fill="#e8eaf6" stroke="#3F51B5" stroke-width="1.5"/>
+  <text x="785" y="488" text-anchor="middle" font-size="14" font-weight="700" fill="#1a237e">本课核心判断</text>
+  <text x="560" y="512" font-size="11" fill="#333">1. 先把 Key 列顺序排对（免费，最容易被忽略）</text>
+  <text x="560" y="531" font-size="11" fill="#333">2. 再用 ZoneMap / 前缀索引（自动生效，零成本）</text>
+  <text x="560" y="550" font-size="11" fill="#333">3. 索引要加就加在"高频查询且高选择性"的列上</text>
+  <text x="560" y="569" font-size="11" font-weight="700" fill="#C62828">索引不是越多越好——实测 2 个索引让存储增 3.9 倍</text>
+
+  <!-- 底部 -->
+  <rect x="25" y="594" width="1010" height="62" rx="10" fill="#fff" stroke="#999" stroke-width="1.5"/>
+  <text x="530" y="618" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1a237e">⚠️ 本课的方法论提醒：小数据量 + 单机测不出耗时差异</text>
+  <text x="530" y="638" text-anchor="middle" font-size="11" fill="#333">固定开销约 0.12–0.15 秒主导了一切（查空表也是这个数）。分区裁剪、前缀索引、Rollup 的实际耗时差异都被吃掉了</text>
+  <text x="530" y="655" text-anchor="middle" font-size="11" fill="#333">但 EXPLAIN 给出的 avgRowSize、TABLE 选择、存储大小是确定性证据——用它们判断，而不是用秒表</text>
+</svg>

@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="900" viewBox="0 0 1080 900" font-family="'PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#eef2f7"/>
+    </linearGradient>
+    <marker id="ar2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#475569"/>
+    </marker>
+    <filter id="sh2" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.10"/>
+    </filter>
+  </defs>
+
+  <rect width="1080" height="900" fill="url(#bg2)"/>
+  <text x="540" y="42" text-anchor="middle" font-size="25" font-weight="700" fill="#0f172a">Workload Group 三类配额与内存落盘机制</text>
+  <text x="540" y="68" text-anchor="middle" font-size="14" fill="#64748b">课 10 速览 · Doris 4.1.3 实测 · 属性名已逐个验证</text>
+
+  <!-- 第一块：三类配额 -->
+  <g filter="url(#sh2)">
+    <rect x="40" y="92" width="1000" height="230" rx="14" fill="#fff" stroke="#cbd5e1"/>
+  </g>
+  <text x="64" y="126" font-size="18" font-weight="700" fill="#0f172a">一、Workload Group 的三类配额</text>
+
+  <!-- CPU -->
+  <g>
+    <rect x="64" y="146" width="312" height="156" rx="10" fill="#eff6ff" stroke="#60a5fa"/>
+    <text x="220" y="174" text-anchor="middle" font-size="16" font-weight="700" fill="#1e40af">CPU 配额</text>
+    <text x="80" y="204" font-size="13" fill="#1e3a8a" font-weight="600">属性</text>
+    <text x="80" y="224" font-size="12" fill="#334155">min_cpu_percent / max_cpu_percent</text>
+    <text x="80" y="252" font-size="13" fill="#1e3a8a" font-weight="600">含义</text>
+    <text x="80" y="272" font-size="12" fill="#334155">软限：空闲时可超；忙时按权重分</text>
+    <text x="80" y="294" font-size="12" fill="#b91c1c" font-weight="700">⚠ 实测：容器 cgroup 只读，不生效</text>
+  </g>
+
+  <!-- 内存 -->
+  <g>
+    <rect x="394" y="146" width="312" height="156" rx="10" fill="#f5f3ff" stroke="#a78bfa"/>
+    <text x="550" y="174" text-anchor="middle" font-size="16" font-weight="700" fill="#5b21b6">内存配额</text>
+    <text x="410" y="204" font-size="13" fill="#5b21b6" font-weight="600">属性</text>
+    <text x="410" y="224" font-size="12" fill="#334155">min/max_memory_percent、高低水位</text>
+    <text x="410" y="252" font-size="13" fill="#5b21b6" font-weight="600">含义</text>
+    <text x="410" y="272" font-size="12" fill="#334155">超限 → 暂停查询、触发落盘或报错</text>
+    <text x="410" y="294" font-size="12" fill="#b45309" font-weight="700">⚠ memory_limit 属性已废弃</text>
+  </g>
+
+  <!-- 并发 -->
+  <g>
+    <rect x="724" y="146" width="292" height="156" rx="10" fill="#ecfdf5" stroke="#34d399"/>
+    <text x="870" y="174" text-anchor="middle" font-size="16" font-weight="700" fill="#065f46">并发配额</text>
+    <text x="740" y="204" font-size="13" fill="#065f46" font-weight="600">属性</text>
+    <text x="740" y="224" font-size="12" fill="#334155">max_concurrency / max_queue_size</text>
+    <text x="740" y="248" font-size="13" fill="#065f46" font-weight="600">+ queue_timeout</text>
+    <text x="740" y="272" font-size="12" fill="#334155">超限 → 排队，队列满 → 直接拒绝</text>
+    <text x="740" y="294" font-size="12" fill="#065f46" font-weight="700">✅ 实测：三条全部真生效</text>
+  </g>
+
+  <!-- 第二块：并发三选一 -->
+  <g filter="url(#sh2)">
+    <rect x="40" y="342" width="1000" height="196" rx="14" fill="#fff" stroke="#cbd5e1"/>
+  </g>
+  <text x="64" y="376" font-size="18" font-weight="700" fill="#0f172a">二、并发超限时的三种处置（实测对照）</text>
+
+  <g font-size="13">
+    <!-- A -->
+    <rect x="64" y="394" width="312" height="126" rx="10" fill="#fef2f2" stroke="#f87171"/>
+    <text x="220" y="420" text-anchor="middle" font-size="15" font-weight="700" fill="#991b1b">① 直接拒绝</text>
+    <text x="80" y="446" font-size="12" fill="#334155">max_concurrency=1, queue=0</text>
+    <text x="80" y="470" font-size="13" font-weight="700" fill="#991b1b">3 个并发 → 2 个立刻被拒</text>
+    <text x="80" y="492" font-size="11" fill="#7f1d1d">query waiting queue is full,</text>
+    <text x="80" y="508" font-size="11" fill="#7f1d1d">queue capacity=0</text>
+
+    <!-- B -->
+    <rect x="394" y="394" width="312" height="126" rx="10" fill="#f0fdf4" stroke="#4ade80"/>
+    <text x="550" y="420" text-anchor="middle" font-size="15" font-weight="700" fill="#166534">② 排队等待</text>
+    <text x="410" y="446" font-size="12" fill="#334155">max_concurrency=1, queue=5</text>
+    <text x="410" y="470" font-size="13" font-weight="700" fill="#166534">3 个串行：0.97 / 1.75 / 2.64 s</text>
+    <text x="410" y="492" font-size="11" fill="#14532d">谁都没失败，只是后来的多等</text>
+    <text x="410" y="508" font-size="11" fill="#14532d">总耗时≈单条×3</text>
+
+    <!-- C -->
+    <rect x="724" y="394" width="292" height="126" rx="10" fill="#fffbeb" stroke="#fbbf24"/>
+    <text x="870" y="420" text-anchor="middle" font-size="15" font-weight="700" fill="#92400e">③ 排队后超时</text>
+    <text x="740" y="446" font-size="12" fill="#334155">queue=5, queue_timeout=1000</text>
+    <text x="740" y="470" font-size="13" font-weight="700" fill="#92400e">等 1 秒还没轮到 → 被拒</text>
+    <text x="740" y="492" font-size="11" fill="#78350f">query queue timeout,</text>
+    <text x="740" y="508" font-size="11" fill="#78350f">timeout: 1000 ms</text>
+  </g>
+
+  <!-- 第三块：内存与落盘 -->
+  <g filter="url(#sh2)">
+    <rect x="40" y="558" width="1000" height="216" rx="14" fill="#fff" stroke="#cbd5e1"/>
+  </g>
+  <text x="64" y="592" font-size="18" font-weight="700" fill="#0f172a">三、内存超限与 Spill to Disk：保命，不是加速</text>
+
+  <!-- 时间线 -->
+  <line x1="80" y1="640" x2="1000" y2="640" stroke="#cbd5e1" stroke-width="3"/>
+
+  <g>
+    <circle cx="180" cy="640" r="9" fill="#3b82f6"/>
+    <text x="180" y="624" text-anchor="middle" font-size="13" font-weight="600" fill="#1e40af">查询启动</text>
+    <text x="180" y="666" text-anchor="middle" font-size="11" fill="#64748b">内存随数据增长</text>
+  </g>
+  <g>
+    <circle cx="420" cy="640" r="9" fill="#f59e0b"/>
+    <text x="420" y="624" text-anchor="middle" font-size="13" font-weight="600" fill="#b45309">接近上限</text>
+    <text x="420" y="666" text-anchor="middle" font-size="11" fill="#64748b">达到低水位，开始回收</text>
+  </g>
+  <g>
+    <circle cx="680" cy="640" r="9" fill="#dc2626"/>
+    <text x="680" y="624" text-anchor="middle" font-size="13" font-weight="600" fill="#991b1b">撞到上限</text>
+    <text x="680" y="666" text-anchor="middle" font-size="11" fill="#64748b">分水岭：spill 开没开</text>
+  </g>
+
+  <!-- 分支 -->
+  <line x1="680" y1="650" x2="680" y2="676" stroke="#475569" stroke-width="2" marker-end="url(#ar2)"/>
+
+  <rect x="560" y="680" width="240" height="76" rx="10" fill="#fef2f2" stroke="#f87171"/>
+  <text x="680" y="704" text-anchor="middle" font-size="13" font-weight="700" fill="#991b1b">spill=OFF（默认）</text>
+  <text x="680" y="726" text-anchor="middle" font-size="12" fill="#7f1d1d">查询被杀，报 MEM_LIMIT_EXCEEDED</text>
+  <text x="680" y="744" text-anchor="middle" font-size="11" fill="#7f1d1d">实测：0.20–0.25 s 就失败</text>
+
+  <line x1="680" y1="676" x2="880" y2="676" stroke="#475569" stroke-width="2"/>
+  <line x1="880" y1="676" x2="880" y2="680" stroke="#475569" stroke-width="2" marker-end="url(#ar2)"/>
+
+  <rect x="80" y="680" width="440" height="76" rx="10" fill="#f0fdf4" stroke="#4ade80"/>
+  <text x="300" y="704" text-anchor="middle" font-size="13" font-weight="700" fill="#166534">spill=ON</text>
+  <text x="300" y="726" text-anchor="middle" font-size="12" fill="#14532d">中间结果写磁盘，跑完但慢很多</text>
+  <text x="300" y="744" text-anchor="middle" font-size="11" fill="#14532d">实测：8.8–13.8 s，落盘峰值 36 MB / 40 个文件</text>
+
+  <!-- 底部结论 -->
+  <g filter="url(#sh2)">
+    <rect x="40" y="794" width="1000" height="86" rx="14" fill="#0f172a"/>
+  </g>
+  <text x="540" y="824" text-anchor="middle" font-size="16" font-weight="700" fill="#fbbf24">保命而非加速：慢 40 倍，但「能跑完」和「报错失败」是两回事</text>
+  <text x="540" y="850" text-anchor="middle" font-size="13" fill="#cbd5e1">不开 spill：0.23 s 就失败　｜　开 spill：11 s 跑完，落盘 36 MB　｜　不限制内存：0.9 s 跑完</text>
+  <text x="540" y="872" text-anchor="middle" font-size="12" fill="#94a3b8">所以 spill 的正确定位是「兜底」，而不是「调优手段」——真正的解法是给够内存或改写 SQL</text>
+</svg>

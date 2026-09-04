@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 620" width="960" height="620" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <rect width="960" height="620" fill="#fbfcfe"/>
+
+  <text x="480" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#1a2b45">Doris 数据导入全家桶：四种方式的选型地图</text>
+  <text x="480" y="56" text-anchor="middle" font-size="12" fill="#5b6b82">实测环境：Doris 4.1.3 单节点 · 所有数字来自本机实测（2026-09-02）</text>
+
+  <rect x="30" y="74" width="212" height="200" rx="10" fill="#e8f4ff" stroke="#3b82c4" stroke-width="2"/>
+  <text x="136" y="100" text-anchor="middle" font-size="16" font-weight="bold" fill="#1d4e89">Stream Load</text>
+  <text x="136" y="120" text-anchor="middle" font-size="12" fill="#3b6ea5">你推给它 · 同步返回</text>
+  <line x1="52" y1="132" x2="220" y2="132" stroke="#3b82c4" stroke-width="1"/>
+  <text x="52" y="154" font-size="12" fill="#26405c">协议：HTTP PUT</text>
+  <text x="52" y="174" font-size="12" fill="#26405c">触发：客户端主动推</text>
+  <text x="52" y="194" font-size="12" fill="#26405c">返回：等导入完才回</text>
+  <text x="52" y="216" font-size="12" font-weight="bold" fill="#a8621b">实测 1 万行：0.17 秒</text>
+  <text x="52" y="236" font-size="12" fill="#26405c">其中提交发布 15 ms</text>
+  <text x="52" y="258" font-size="12" fill="#1d4e89">场景：单次文件 / 脚本</text>
+
+  <rect x="262" y="74" width="212" height="200" rx="10" fill="#e8f8ee" stroke="#2f9e5f" stroke-width="2"/>
+  <text x="368" y="100" text-anchor="middle" font-size="16" font-weight="bold" fill="#1a6b3c">Routine Load</text>
+  <text x="368" y="120" text-anchor="middle" font-size="12" fill="#2f7d52">常驻订阅 · 持续消费</text>
+  <line x1="284" y1="132" x2="452" y2="132" stroke="#2f9e5f" stroke-width="1"/>
+  <text x="284" y="154" font-size="12" fill="#1f4d33">协议：Kafka 消费者</text>
+  <text x="284" y="174" font-size="12" fill="#1f4d33">触发：FE 常驻任务轮询</text>
+  <text x="284" y="194" font-size="12" fill="#1f4d33">位点：随事务一起提交</text>
+  <text x="284" y="216" font-size="12" font-weight="bold" fill="#1a6b3c">实测：暂停 Lag=300</text>
+  <text x="284" y="236" font-size="12" fill="#1f4d33">恢复后补消费，Lag 归 0</text>
+  <text x="284" y="258" font-size="12" fill="#1a6b3c">场景：实时流 · 7×24</text>
+
+  <rect x="494" y="74" width="212" height="200" rx="10" fill="#fff4e0" stroke="#d19028" stroke-width="2"/>
+  <text x="600" y="100" text-anchor="middle" font-size="16" font-weight="bold" fill="#8a5a12">Broker Load</text>
+  <text x="600" y="120" text-anchor="middle" font-size="12" fill="#9a6a1e">它去拉 · 异步批量</text>
+  <line x1="516" y1="132" x2="684" y2="132" stroke="#d19028" stroke-width="1"/>
+  <text x="516" y="154" font-size="12" fill="#6a4a10">协议：S3 / HDFS 读</text>
+  <text x="516" y="174" font-size="12" fill="#6a4a10">触发：提交作业异步跑</text>
+  <text x="516" y="194" font-size="12" fill="#6a4a10">支持：通配符批量拉</text>
+  <text x="516" y="216" font-size="12" font-weight="bold" fill="#8a5a12">实测 1 万行：0.19 秒</text>
+  <text x="516" y="236" font-size="12" fill="#6a4a10">目录 2 万行：0.18 秒</text>
+  <text x="516" y="258" font-size="12" fill="#8a5a12">场景：对象存储批量</text>
+
+  <rect x="726" y="74" width="212" height="200" rx="10" fill="#fdeaea" stroke="#c44848" stroke-width="2"/>
+  <text x="832" y="100" text-anchor="middle" font-size="16" font-weight="bold" fill="#8f2626">INSERT INTO</text>
+  <text x="832" y="120" text-anchor="middle" font-size="12" fill="#a03a3a">SQL 写入 · 事务封装</text>
+  <line x1="748" y1="132" x2="916" y2="132" stroke="#c44848" stroke-width="1"/>
+  <text x="748" y="154" font-size="12" fill="#7a2020">协议：MySQL 协议</text>
+  <text x="748" y="174" font-size="12" fill="#7a2020">触发：每条 SQL 一事务</text>
+  <text x="748" y="194" font-size="12" fill="#7a2020">底层：与导入同一引擎</text>
+  <text x="748" y="216" font-size="12" font-weight="bold" fill="#8f2626">单行×1000：34.42 秒</text>
+  <text x="748" y="236" font-size="12" fill="#7a2020">批量 1000 行：1.03 秒</text>
+  <text x="748" y="258" font-size="12" fill="#8f2626">场景：小数据 / 表间搬</text>
+
+  <text x="480" y="308" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a2b45">核心决策链：先问「谁主动」，再问「一次还是常驻」</text>
+
+  <rect x="30" y="324" width="908" height="128" rx="8" fill="#ffffff" stroke="#c0cbd9" stroke-width="1"/>
+  <text x="52" y="350" font-size="13" font-weight="bold" fill="#26405c">第 1 问：数据现在在哪？</text>
+  <text x="52" y="374" font-size="12.5" fill="#3d5570">本地文件 / 应用内存  →  Stream Load（你推）      Kafka / 消息队列  →  Routine Load（常驻订阅）</text>
+  <text x="52" y="396" font-size="12.5" fill="#3d5570">对象存储 / HDFS  →  Broker Load（它拉）      Doris 表内 / 少量测试数据  →  INSERT INTO</text>
+  <text x="52" y="420" font-size="13" font-weight="bold" fill="#26405c">第 2 问：一次任务，还是要一直跑？</text>
+  <text x="52" y="442" font-size="12.5" fill="#3d5570">一次  →  Stream Load / Broker Load        一直跑  →  Routine Load（这是唯一常驻的选项）</text>
+
+  <text x="480" y="482" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a2b45">为什么小批量高频写入会拖垮集群（实测对比）</text>
+
+  <rect x="30" y="496" width="908" height="108" rx="8" fill="#ffffff" stroke="#c0cbd9" stroke-width="1"/>
+  <text x="52" y="520" font-size="12.5" font-weight="bold" fill="#3d5570">同样写入 1000 行，三种写法的实测耗时：</text>
+
+  <text x="60" y="546" font-size="12.5" fill="#3d5570">1000 次单行 INSERT</text>
+  <rect x="240" y="534" width="600" height="15" fill="#e05c5c"/>
+  <text x="852" y="546" font-size="12.5" font-weight="bold" fill="#a02020">34.42 秒</text>
+
+  <text x="60" y="572" font-size="12.5" fill="#3d5570">1 次批量 INSERT（1000 行）</text>
+  <rect x="240" y="560" width="18" height="15" fill="#4a9e5f"/>
+  <text x="270" y="572" font-size="12.5" font-weight="bold" fill="#1a6b3c">1.03 秒</text>
+
+  <text x="60" y="596" font-size="12.5" fill="#3d5570">1 次 Stream Load（1 万行，10 倍数据）</text>
+  <rect x="300" y="584" width="3" height="15" fill="#2f6ea5"/>
+  <text x="315" y="596" font-size="12.5" font-weight="bold" fill="#1d4e89">0.17 秒（数据量还多 10 倍）</text>
+</svg>

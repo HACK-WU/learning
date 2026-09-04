@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 720" width="1060" height="720" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="1060" height="720" fill="#fbfbfb"/>
+  <text x="530" y="28" text-anchor="middle" font-size="19" font-weight="700" fill="#1a237e">课 4 一图总结：分区是"按范围切大块"，分桶是"按哈希切小块"</text>
+
+  <!-- 分区 -->
+  <rect x="25" y="46" width="490" height="300" rx="10" fill="#e8f5e9" stroke="#2E7D32" stroke-width="2"/>
+  <text x="270" y="72" text-anchor="middle" font-size="16" font-weight="700" fill="#1b5e20">分区 Partition</text>
+  <text x="270" y="94" text-anchor="middle" font-size="12" fill="#555">按范围切大块 · 通常是时间 · 可自动增删</text>
+
+  <text x="45" y="122" font-size="12" font-weight="700" fill="#333">怎么切：PARTITION BY RANGE(order_date)</text>
+  <!-- 分区示意条 -->
+  <rect x="45" y="132" width="100" height="34" rx="3" fill="#a5d6a7" stroke="#2E7D32"/>
+  <text x="95" y="153" text-anchor="middle" font-size="10.5" fill="#1b5e20">p202501</text>
+  <rect x="150" y="132" width="100" height="34" rx="3" fill="#a5d6a7" stroke="#2E7D32"/>
+  <text x="200" y="153" text-anchor="middle" font-size="10.5" fill="#1b5e20">p202502</text>
+  <rect x="255" y="132" width="100" height="34" rx="3" fill="#fff59d" stroke="#F9A825" stroke-width="2"/>
+  <text x="305" y="153" text-anchor="middle" font-size="10.5" fill="#f57f17">p202503</text>
+  <rect x="360" y="132" width="100" height="34" rx="3" fill="#a5d6a7" stroke="#2E7D32"/>
+  <text x="410" y="153" text-anchor="middle" font-size="10.5" fill="#1b5e20">p202504</text>
+  <text x="470" y="153" font-size="13" fill="#999">...</text>
+  <text x="45" y="182" font-size="10.5" fill="#f57f17">↑ 查 3 月时，只有这一块被读取，其余直接跳过</text>
+
+  <rect x="45" y="194" width="450" height="66" rx="6" fill="#fff"/>
+  <text x="60" y="214" font-size="11.5" font-weight="700" fill="#333">核心能力：分区裁剪（跳过整个分区）</text>
+  <text x="60" y="232" font-size="11" fill="#555">查 2025-06 的数据 → partitions=1/45</text>
+  <text x="60" y="250" font-size="11" fill="#555">扫描量 2050 万 → 84 万行，减少 24.3 倍</text>
+
+  <rect x="45" y="266" width="450" height="66" rx="6" fill="#fff"/>
+  <text x="60" y="286" font-size="11.5" font-weight="700" fill="#333">典型用途：按时间管理生命周期</text>
+  <text x="60" y="304" font-size="11" fill="#555">动态分区自动建未来分区、自动删过期分区</text>
+  <text x="60" y="322" font-size="11" fill="#555">冷数据转冷存、按分区整块备份与恢复</text>
+
+  <!-- 分桶 -->
+  <rect x="545" y="46" width="490" height="300" rx="10" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="790" y="72" text-anchor="middle" font-size="16" font-weight="700" fill="#0d47a1">分桶 Bucket（Tablet）</text>
+  <text x="790" y="94" text-anchor="middle" font-size="12" fill="#555">按哈希切小块 · 分散到各 BE · 并行单位</text>
+
+  <text x="565" y="122" font-size="12" font-weight="700" fill="#333">怎么切：DISTRIBUTED BY HASH(col) BUCKETS n</text>
+
+  <!-- 分桶示意：好的 -->
+  <text x="565" y="146" font-size="11" font-weight="700" fill="#2E7D32">✓ 好键（user_id，183 万不同值）：8 桶均匀</text>
+  <rect x="565" y="154" width="54" height="30" rx="3" fill="#90caf9" stroke="#1565C0"/>
+  <rect x="623" y="154" width="54" height="30" rx="3" fill="#90caf9" stroke="#1565C0"/>
+  <rect x="681" y="154" width="54" height="30" rx="3" fill="#90caf9" stroke="#1565C0"/>
+  <rect x="739" y="154" width="54" height="30" rx="3" fill="#90caf9" stroke="#1565C0"/>
+  <rect x="797" y="154" width="54" height="30" rx="3" fill="#90caf9" stroke="#1565C0"/>
+  <rect x="855" y="154" width="54" height="30" rx="3" fill="#90caf9" stroke="#1565C0"/>
+  <rect x="913" y="154" width="54" height="30" rx="3" fill="#90caf9" stroke="#1565C0"/>
+  <rect x="971" y="154" width="54" height="30" rx="3" fill="#90caf9" stroke="#1565C0"/>
+  <text x="790" y="196" text-anchor="middle" font-size="10.5" fill="#2E7D32">实测每桶 255.5 万 ~ 256.9 万行，倾斜比 1.006</text>
+
+  <!-- 分桶示意：坏的 -->
+  <text x="565" y="220" font-size="11" font-weight="700" fill="#C62828">✗ 坏键（province，8 个不同值）：哈希冲突，4 个桶空了</text>
+  <rect x="565" y="228" width="54" height="42" rx="3" fill="#ef9a9a" stroke="#C62828"/>
+  <text x="592" y="253" text-anchor="middle" font-size="9.5" fill="#b71c1c">768万</text>
+  <rect x="623" y="228" width="54" height="28" rx="3" fill="#ffcdd2" stroke="#C62828"/>
+  <text x="650" y="245" text-anchor="middle" font-size="9.5" fill="#b71c1c">512万</text>
+  <rect x="681" y="228" width="54" height="28" rx="3" fill="#ffcdd2" stroke="#C62828"/>
+  <text x="708" y="245" text-anchor="middle" font-size="9.5" fill="#b71c1c">512万</text>
+  <rect x="739" y="228" width="54" height="14" rx="3" fill="#ffcdd2" stroke="#C62828"/>
+  <text x="766" y="239" text-anchor="middle" font-size="9" fill="#b71c1c">256万</text>
+  <rect x="797" y="228" width="54" height="4" rx="1" fill="#e0e0e0" stroke="#999"/>
+  <rect x="855" y="228" width="54" height="4" rx="1" fill="#e0e0e0" stroke="#999"/>
+  <rect x="913" y="228" width="54" height="4" rx="1" fill="#e0e0e0" stroke="#999"/>
+  <rect x="971" y="228" width="54" height="4" rx="1" fill="#e0e0e0" stroke="#999"/>
+  <text x="790" y="284" text-anchor="middle" font-size="10.5" fill="#C62828">课 2 踩的坑：一半 BE 闲着，最大/最小差 3 倍</text>
+
+  <rect x="565" y="294" width="450" height="42" rx="6" fill="#fff"/>
+  <text x="580" y="312" font-size="11.5" font-weight="700" fill="#333">分桶数估算：每 tablet 目标 1–10 GB</text>
+  <text x="580" y="330" font-size="11" fill="#555">分桶数 ≈ 数据量 / 目标 tablet 大小 / 分区数，且 ≥ BE 核数的一半</text>
+
+  <!-- 裁剪 -->
+  <rect x="25" y="360" width="1010" height="120" rx="10" fill="#fff" stroke="#7B1FA2" stroke-width="1.5"/>
+  <text x="530" y="386" text-anchor="middle" font-size="14" font-weight="700" fill="#4a148c">知识点 3：两种裁剪，用 EXPLAIN 看得见</text>
+
+  <rect x="45" y="398" width="480" height="66" rx="6" fill="#f3e5f5"/>
+  <text x="285" y="418" text-anchor="middle" font-size="12" font-weight="700" fill="#4a148c">分区裁剪</text>
+  <text x="285" y="437" text-anchor="middle" font-size="11" fill="#333">WHERE 命中分区列 → 跳过整个分区</text>
+  <text x="285" y="455" text-anchor="middle" font-size="11" fill="#333">EXPLAIN 看 partitions=1/45</text>
+
+  <rect x="540" y="398" width="475" height="66" rx="6" fill="#f3e5f5"/>
+  <text x="777" y="418" text-anchor="middle" font-size="12" font-weight="700" fill="#4a148c">分桶裁剪</text>
+  <text x="777" y="437" text-anchor="middle" font-size="11" fill="#333">WHERE 命中分桶键等值 → 只查对应桶</text>
+  <text x="777" y="455" text-anchor="middle" font-size="11" fill="#333">EXPLAIN 看 tablets=1/8</text>
+
+  <!-- 粒度权衡 -->
+  <rect x="25" y="494" width="1010" height="112" rx="10" fill="#fff3e0" stroke="#EF6C00" stroke-width="1.5"/>
+  <text x="530" y="520" text-anchor="middle" font-size="14" font-weight="700" fill="#e65100">关键权衡：分区不是越细越好（本课实测）</text>
+
+  <text x="45" y="544" font-size="11.5" font-weight="700" fill="#333">查 2025 年 6 月这一整个月的数据：</text>
+  <text x="45" y="564" font-size="11" fill="#333">按天分区（365 分区）：扫 30/365 个分区、240 个 tablet ｜ tablet 总数 2920</text>
+  <text x="45" y="582" font-size="11" fill="#333">按月分区（45 分区）：扫 1/45 个分区、8 个 tablet ｜ tablet 总数 360</text>
+  <text x="45" y="600" font-size="11.5" font-weight="700" fill="#C62828">→ 查一个月，按天比按月多扫 30 倍的 tablet，元数据还膨胀 8 倍</text>
+
+  <!-- 坑 -->
+  <rect x="25" y="620" width="1010" height="82" rx="10" fill="#ffebee" stroke="#C62828" stroke-width="1.5"/>
+  <text x="530" y="646" text-anchor="middle" font-size="14" font-weight="700" fill="#b71c1c">⚠️ 本课实测踩到的生产级大坑</text>
+  <text x="55" y="668" font-size="11.5" fill="#333">动态分区按"今天"建范围（本课建了 p202609 起 49 个分区），而数据在 2025-01 ~ 2026-12 → 25 个月数据全部落在范围外</text>
+  <text x="55" y="687" font-size="11.5" fill="#333">批量 INSERT ... SELECT 时被 strict mode <tspan font-weight="700">静默过滤，0 行导入且无任何报错</tspan>；单行插入才报 no partition for this tuple</text>
+</svg>

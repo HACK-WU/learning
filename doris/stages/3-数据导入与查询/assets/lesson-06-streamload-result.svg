@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="900" height="520" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <rect width="900" height="520" fill="#fbfcfe"/>
+
+  <text x="450" y="32" text-anchor="middle" font-size="19" font-weight="bold" fill="#1a2b45">Stream Load 的返回结果怎么读：从 Status 到脏数据追踪</text>
+  <text x="450" y="52" text-anchor="middle" font-size="12" fill="#5b6b82">实测环境：Doris 4.1.3 · 图中数字均来自本机真实返回结果</text>
+
+  <rect x="30" y="70" width="400" height="180" rx="8" fill="#eef6ff" stroke="#3b82c4" stroke-width="1.5"/>
+  <text x="50" y="94" font-size="14" font-weight="bold" fill="#1d4e89">① 先看 Status（三种取值）</text>
+  <text x="50" y="120" font-size="12.5" fill="#26405c">Success        → 导入成功，看 NumberLoadedRows</text>
+  <text x="50" y="146" font-size="12.5" fill="#26405c">Label Already Exists → 幂等拦截，TxnId = -1</text>
+  <text x="50" y="172" font-size="12.5" fill="#a02020">Fail           → 整批回滚，一条都没进</text>
+  <text x="50" y="204" font-size="12" fill="#3b6ea5">实测：换 Label 重导同样 1 万行</text>
+  <text x="50" y="224" font-size="12" fill="#3b6ea5">→ 行数从 10000 变 20000（不去重）</text>
+
+  <rect x="470" y="70" width="400" height="180" rx="8" fill="#fff8ec" stroke="#d19028" stroke-width="1.5"/>
+  <text x="490" y="94" font-size="14" font-weight="bold" fill="#8a5a12">② 再看四个 Row 计数（关键）</text>
+  <text x="490" y="120" font-size="12.5" fill="#6a4a10">NumberTotalRows  → 文件里读到的总行数</text>
+  <text x="490" y="146" font-size="12.5" fill="#6a4a10">NumberLoadedRows → 真正落库的行数</text>
+  <text x="490" y="172" font-size="12.5" fill="#a02020">NumberFilteredRows → 被过滤掉的脏数据</text>
+  <text x="490" y="198" font-size="12.5" fill="#6a4a10">NumberUnselectedRows → 被 where 条件筛掉</text>
+  <text x="490" y="228" font-size="12" fill="#8a5a12">实测 1000 行含 50 行脏：Total=1000</text>
+  <text x="490" y="246" font-size="12" fill="#8a5a12">Loaded=950  Filtered=50</text>
+
+  <rect x="30" y="272" width="840" height="128" rx="8" fill="#fdeaea" stroke="#c44848" stroke-width="1.5"/>
+  <text x="50" y="296" font-size="14" font-weight="bold" fill="#8f2626">③ 最危险的坑：Status=Success 不代表数据是对的</text>
+  <text x="50" y="322" font-size="12.5" fill="#7a2020">默认 strict_mode=false：脏值被静默转成 NULL，不算 Filtered，Status 仍是 Success</text>
+  <text x="50" y="346" font-size="12.5" fill="#7a2020">实测：amount='NOT_A_NUMBER' 导入后 → amount=NULL，返回 Success、Filtered=0</text>
+  <text x="50" y="372" font-size="12.5" font-weight="bold" fill="#8f2626">对策：生产环境设 strict_mode=true，让脏数据变成 Filtered 被计数，而不是静默变 NULL</text>
+  <text x="50" y="392" font-size="12.5" fill="#7a2020">实测对比：strict_mode=true 时同一行 NumberLoadedRows=0、NumberFilteredRows=1</text>
+
+  <rect x="30" y="418" width="840" height="86" rx="8" fill="#eef6ee" stroke="#4a9e5f" stroke-width="1.5"/>
+  <text x="50" y="442" font-size="14" font-weight="bold" fill="#1a6b3c">④ 脏数据去哪了：ErrorURL 追踪</text>
+  <text x="50" y="466" font-size="12.5" fill="#1f4d33">返回结果里的 ErrorURL 可直接 curl，拿到每一行的失败原因：</text>
+  <text x="50" y="490" font-size="12" font-family="monospace" fill="#2f6b40">Reason: column(amount) value is incorrect while strict mode is true, src value is NOT_A_NUMBER.</text>
+</svg>

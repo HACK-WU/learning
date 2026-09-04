@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="640" viewBox="0 0 1000 640" font-family="Microsoft YaHei, SimHei, sans-serif">
+  <rect width="1000" height="640" fill="#fbfcfe"/>
+  <text x="500" y="32" text-anchor="middle" font-size="20" font-weight="bold" fill="#1a2740">课 11 一图总结：日常运维的三件事</text>
+
+  <!-- 第一块：备份恢复 -->
+  <rect x="40" y="54" width="920" height="176" rx="8" fill="#eef4fb" stroke="#3a6ea5" stroke-width="2"/>
+  <text x="60" y="80" font-size="16" font-weight="bold" fill="#1f4e79">① 备份与恢复：仓库是"门"，快照是"货"</text>
+
+  <rect x="62" y="94" width="170" height="56" rx="5" fill="#ffffff" stroke="#3a6ea5"/>
+  <text x="147" y="116" text-anchor="middle" font-size="13" font-weight="bold" fill="#1f4e79">CREATE REPOSITORY</text>
+  <text x="147" y="136" text-anchor="middle" font-size="11" fill="#4a5a6a">建一次，长期复用</text>
+
+  <line x1="232" y1="122" x2="272" y2="122" stroke="#3a6ea5" stroke-width="2" marker-end="url(#ar)"/>
+
+  <rect x="272" y="94" width="170" height="56" rx="5" fill="#ffffff" stroke="#3a6ea5"/>
+  <text x="357" y="116" text-anchor="middle" font-size="13" font-weight="bold" fill="#1f4e79">BACKUP SNAPSHOT</text>
+  <text x="357" y="136" text-anchor="middle" font-size="11" fill="#4a5a6a">100 万行 17–18 秒</text>
+
+  <line x1="442" y1="122" x2="482" y2="122" stroke="#3a6ea5" stroke-width="2" marker-end="url(#ar)"/>
+
+  <rect x="482" y="94" width="170" height="56" rx="5" fill="#ffffff" stroke="#3a6ea5"/>
+  <text x="567" y="116" text-anchor="middle" font-size="13" font-weight="bold" fill="#1f4e79">SHOW SNAPSHOT</text>
+  <text x="567" y="136" text-anchor="middle" font-size="11" fill="#4a5a6a">取 backup_timestamp</text>
+
+  <line x1="652" y1="122" x2="692" y2="122" stroke="#3a6ea5" stroke-width="2" marker-end="url(#ar)"/>
+
+  <rect x="692" y="94" width="170" height="56" rx="5" fill="#ffffff" stroke="#3a6ea5"/>
+  <text x="777" y="116" text-anchor="middle" font-size="13" font-weight="bold" fill="#1f4e79">RESTORE SNAPSHOT</text>
+  <text x="777" y="136" text-anchor="middle" font-size="11" fill="#4a5a6a">21 秒，须带副本数</text>
+
+  <rect x="62" y="162" width="800" height="54" rx="5" fill="#fdeeea" stroke="#c05a3a"/>
+  <text x="78" y="182" font-size="12" font-weight="bold" fill="#8f3d24">三个必踩的坑</text>
+  <text x="78" y="200" font-size="11.5" fill="#5a2a18">① 一个库同一时刻只能跑一个 backup/restore 作业　② replication_num 不写默认是 3，2 台 BE 直接报 CANCELLED</text>
+  <text x="78" y="214" font-size="11.5" fill="#5a2a18">③ 验证恢复结果不能用 COUNT(*)，要走 SUM / 明细（COUNT 走元数据优化，不扫数据）</text>
+
+  <!-- 第二块：监控 -->
+  <rect x="40" y="246" width="920" height="176" rx="8" fill="#f4f0fa" stroke="#6a4a9c" stroke-width="2"/>
+  <text x="60" y="272" font-size="16" font-weight="bold" fill="#3d2a5c">② 监控指标：分 FE 和 BE 两端看</text>
+
+  <rect x="62" y="286" width="430" height="122" rx="5" fill="#ffffff" stroke="#6a4a9c"/>
+  <text x="78" y="306" font-size="13" font-weight="bold" fill="#3d2a5c">FE 端（:8030/metrics）</text>
+  <text x="78" y="328" font-size="11.5" fill="#1a2740">doris_fe_qps　　　　　查询吞吐</text>
+  <text x="78" y="346" font-size="11.5" fill="#1a2740">doris_fe_query_err_rate　错误率</text>
+  <text x="78" y="364" font-size="11.5" fill="#1a2740">doris_fe_max_journal_id　元数据进度</text>
+  <text x="78" y="382" font-size="11.5" fill="#1a2740">tablet_max_compaction_score　合并压力</text>
+  <text x="78" y="400" font-size="11.5" fill="#6a4a9c">实测值：qps 0.0–0.375，err_rate 0.0，score 7</text>
+
+  <rect x="508" y="286" width="430" height="122" rx="5" fill="#ffffff" stroke="#6a4a9c"/>
+  <text x="524" y="306" font-size="13" font-weight="bold" fill="#3d2a5c">BE 端（:8040/metrics）</text>
+  <text x="524" y="328" font-size="11.5" fill="#1a2740">disks_avail / total_capacity　磁盘水位</text>
+  <text x="524" y="346" font-size="11.5" fill="#1a2740">workload_group_mem_used_bytes　内存</text>
+  <text x="524" y="364" font-size="11.5" fill="#1a2740">process_fd_num_used / limit　句柄</text>
+  <text x="524" y="382" font-size="11.5" fill="#1a2740">query_scan_bytes / rows　　扫描量</text>
+  <text x="524" y="400" font-size="11.5" fill="#6a4a9c">实测值：磁盘 19.8%，FD 2513/1048576</text>
+
+  <!-- 第三块：升级 -->
+  <rect x="40" y="438" width="920" height="176" rx="8" fill="#eaf7ee" stroke="#4a9c68" stroke-width="2"/>
+  <text x="60" y="464" font-size="16" font-weight="bold" fill="#2d6b42">③ 集群升级：先 BE 后 FE，FE 里先 Observer 后 Master</text>
+
+  <rect x="62" y="478" width="176" height="56" rx="5" fill="#ffffff" stroke="#4a9c68"/>
+  <text x="150" y="500" text-anchor="middle" font-size="13" font-weight="bold" fill="#2d6b42">1. 升级前体检</text>
+  <text x="150" y="520" text-anchor="middle" font-size="11" fill="#4a7a58">版本一致 / 副本健康</text>
+
+  <line x1="238" y1="506" x2="266" y2="506" stroke="#4a9c68" stroke-width="2" marker-end="url(#ag)"/>
+
+  <rect x="266" y="478" width="176" height="56" rx="5" fill="#ffffff" stroke="#4a9c68"/>
+  <text x="354" y="500" text-anchor="middle" font-size="13" font-weight="bold" fill="#2d6b42">2. 先升 BE</text>
+  <text x="354" y="520" text-anchor="middle" font-size="11" fill="#4a7a58">逐台，FE 兼容旧 BE</text>
+
+  <line x1="442" y1="506" x2="470" y2="506" stroke="#4a9c68" stroke-width="2" marker-end="url(#ag)"/>
+
+  <rect x="470" y="478" width="176" height="56" rx="5" fill="#ffffff" stroke="#4a9c68"/>
+  <text x="558" y="500" text-anchor="middle" font-size="13" font-weight="bold" fill="#2d6b42">3. 升 Observer</text>
+  <text x="558" y="520" text-anchor="middle" font-size="11" fill="#4a7a58">不投票，挂了不影响</text>
+
+  <line x1="646" y1="506" x2="674" y2="506" stroke="#4a9c68" stroke-width="2" marker-end="url(#ag)"/>
+
+  <rect x="674" y="478" width="176" height="56" rx="5" fill="#ffffff" stroke="#4a9c68"/>
+  <text x="762" y="500" text-anchor="middle" font-size="13" font-weight="bold" fill="#2d6b42">4. 升 Follower</text>
+  <text x="762" y="520" text-anchor="middle" font-size="11" fill="#4a7a58">留够多数派</text>
+
+  <line x1="850" y1="506" x2="878" y2="506" stroke="#4a9c68" stroke-width="2" marker-end="url(#ag)"/>
+
+  <rect x="878" y="478" width="60" height="56" rx="5" fill="#d6f0dd" stroke="#2d6b42" stroke-width="2"/>
+  <text x="908" y="500" text-anchor="middle" font-size="12" font-weight="bold" fill="#2d6b42">Master</text>
+  <text x="908" y="520" text-anchor="middle" font-size="10.5" fill="#2d6b42">最后</text>
+
+  <rect x="62" y="546" width="876" height="52" rx="5" fill="#ffffff" stroke="#4a9c68"/>
+  <text x="78" y="566" font-size="12" font-weight="bold" fill="#2d6b42">顺序为什么是这样：Master 唯一可写，最后动它才能把写中断压到最短</text>
+  <text x="78" y="584" font-size="11.5" fill="#1a2740">⚠️ 本机只有 1 FE + 2 BE（伪多节点，host 都是 127.0.0.1），滚动升级无法真机演练 —— 本块为 🟡 原理推演</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 z" fill="#3a6ea5"/>
+    </marker>
+    <marker id="ag" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 z" fill="#4a9c68"/>
+    </marker>
+  </defs>
+</svg>

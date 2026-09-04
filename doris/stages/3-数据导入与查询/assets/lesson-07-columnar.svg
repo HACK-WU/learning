@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="700" viewBox="0 0 1160 700" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <rect width="1160" height="700" fill="#f7fafc"/>
+  <text x="580" y="32" text-anchor="middle" font-size="21" font-weight="bold" fill="#1a365d">列存 + 向量化：为什么 SELECT * 比 SELECT 一列慢 13 倍</text>
+  <text x="580" y="54" text-anchor="middle" font-size="13" fill="#4a5568">同一张表 perf_wide（200 万行），只改 SELECT 的列，其余完全相同</text>
+
+  <!-- 左：行存 -->
+  <rect x="28" y="76" width="520" height="240" rx="10" fill="#fff5f5" stroke="#c53030" stroke-width="2"/>
+  <text x="288" y="100" text-anchor="middle" font-size="16" font-weight="bold" fill="#c53030">❌ 行存：只要 1 列，也得读完一整行</text>
+
+  <text x="48" y="126" font-size="12.5" fill="#2d3748">磁盘上的一行（1508 字节）：</text>
+  <g font-family="monospace" font-size="12">
+    <rect x="48" y="136" width="86" height="28" fill="#fed7d7" stroke="#c53030"/>
+    <text x="91" y="154" text-anchor="middle" fill="#742a2a">id</text>
+    <rect x="134" y="136" width="86" height="28" fill="#fed7d7" stroke="#c53030"/>
+    <text x="177" y="154" text-anchor="middle" fill="#742a2a">province</text>
+    <rect x="220" y="136" width="86" height="28" fill="#fed7d7" stroke="#c53030"/>
+    <text x="263" y="154" text-anchor="middle" fill="#742a2a">city</text>
+    <rect x="306" y="136" width="86" height="28" fill="#c6f6d5" stroke="#276749" stroke-width="2"/>
+    <text x="349" y="154" text-anchor="middle" fill="#22543d" font-weight="bold">amount</text>
+    <rect x="392" y="136" width="86" height="28" fill="#fed7d7" stroke="#c53030"/>
+    <text x="435" y="154" text-anchor="middle" fill="#742a2a">pad1</text>
+    <rect x="478" y="136" width="60" height="28" fill="#fed7d7" stroke="#c53030"/>
+    <text x="508" y="154" text-anchor="middle" fill="#742a2a">...</text>
+  </g>
+  <text x="48" y="184" font-size="12.5" fill="#c53030">读 amount 这一列，必须把 pad1/pad2/pad3（1500 字节）也一起读进来</text>
+  <text x="48" y="206" font-size="12.5" fill="#2d3748">→ 99.5% 的磁盘 IO 是浪费的</text>
+
+  <text x="48" y="236" font-size="12.5" fill="#2d3748">逐行处理（一次一行）：</text>
+  <g font-family="monospace" font-size="11.5">
+    <rect x="48" y="246" width="200" height="26" fill="#fff" stroke="#c53030"/>
+    <text x="58" y="263" fill="#742a2a">取第 1 行 → 解引用 → 求和</text>
+    <rect x="258" y="246" width="200" height="26" fill="#fff" stroke="#c53030"/>
+    <text x="268" y="263" fill="#742a2a">取第 2 行 → 解引用 → 求和</text>
+    <rect x="48" y="278" width="200" height="26" fill="#fff" stroke="#c53030"/>
+    <text x="58" y="295" fill="#742a2a">取第 3 行 → 解引用 → 求和</text>
+  </g>
+  <text x="48" y="326" font-size="12" fill="#718096">每行一次函数调用，200 万次</text>
+
+  <!-- 右：列存 -->
+  <rect x="576" y="76" width="556" height="240" rx="10" fill="#f0fff4" stroke="#276749" stroke-width="2"/>
+  <text x="854" y="100" text-anchor="middle" font-size="16" font-weight="bold" fill="#276749">✅ 列存：要几列就读几列</text>
+
+  <text x="596" y="126" font-size="12.5" fill="#2d3748">磁盘上按列连续存放，各列独立压缩：</text>
+  <g font-family="monospace" font-size="12">
+    <rect x="596" y="136" width="200" height="26" fill="#fff" stroke="#cbd5e0"/>
+    <text x="606" y="153" fill="#718096">id 列：200 万值连续</text>
+    <rect x="806" y="136" width="200" height="26" fill="#fff" stroke="#cbd5e0"/>
+    <text x="816" y="153" fill="#718096">city 列：200 万值连续</text>
+    <rect x="596" y="168" width="200" height="26" fill="#fff" stroke="#cbd5e0"/>
+    <text x="606" y="185" fill="#718096">province 列：8 个不同值</text>
+    <rect x="806" y="168" width="200" height="26" fill="#c6f6d5" stroke="#276749" stroke-width="2"/>
+    <text x="816" y="185" fill="#22543d" font-weight="bold">amount 列：只读这一列</text>
+    <rect x="596" y="200" width="200" height="26" fill="#fff" stroke="#cbd5e0"/>
+    <text x="606" y="217" fill="#718096">pad1 列：不读</text>
+    <rect x="806" y="200" width="200" height="26" fill="#fff" stroke="#cbd5e0"/>
+    <text x="816" y="217" fill="#718096">pad2 列：不读</text>
+  </g>
+  <text x="596" y="250" font-size="12.5" fill="#276749">实测：整表 200 万行磁盘只占 5.17 MB（逻辑 2.86 GB）</text>
+  <text x="596" y="270" font-size="12.5" fill="#276749">压缩约 550 倍 —— 因为 pad 列是重复字符，压缩率极高</text>
+
+  <text x="596" y="298" font-size="12.5" fill="#2d3748">向量化：一次处理一批（Block）</text>
+  <g font-family="monospace" font-size="11.5">
+    <rect x="596" y="306" width="500" height="24" fill="#c6f6d5" stroke="#276749" stroke-width="2"/>
+    <text x="606" y="322" fill="#22543d">取 8160 行 → 循环内无分支 → SIMD 一次算完 → 产出一个 Block</text>
+  </g>
+  <text x="596" y="350" font-size="12" fill="#718096">实测：200 万行被切成 264 个 Block（约 7575 行/块，接近 batch_size 上限 8160）</text>
+
+  <!-- 实测对比条 -->
+  <rect x="28" y="336" width="520" height="150" rx="10" fill="#fff" stroke="#a0aec0" stroke-width="1.5"/>
+  <text x="48" y="358" font-size="14" font-weight="bold" fill="#2d3748">实测对比：改一个 SELECT 列，耗时差 13 倍</text>
+  <text x="48" y="382" font-size="12.5" fill="#2d3748">扫 amount（1 个窄列）</text>
+  <rect x="48" y="390" width="60" height="22" rx="3" fill="#68d391"/>
+  <text x="118" y="406" font-size="13" font-weight="bold" fill="#22543d">15 ms</text>
+  <text x="48" y="430" font-size="12.5" fill="#2d3748">扫 pad1+pad2+pad3（3 个 500 字节宽列）</text>
+  <rect x="48" y="438" width="460" height="22" rx="3" fill="#fc8181"/>
+  <text x="518" y="454" font-size="13" font-weight="bold" fill="#742a2a">192 ms</text>
+  <text x="48" y="478" font-size="11.5" fill="#718096">同样 200 万行、同样 COUNT+SUM，只有被扫描的列不同</text>
+
+  <!-- 关键数字 -->
+  <rect x="28" y="504" width="1104" height="180" rx="10" fill="#fff" stroke="#a0aec0" stroke-width="1.5"/>
+  <text x="48" y="528" font-size="15" font-weight="bold" fill="#2d3748">Profile 里的三个数字，一眼看穿扫描瓶颈</text>
+
+  <rect x="48" y="542" width="348" height="126" rx="8" fill="#ebf8ff" stroke="#2b6cb0" stroke-width="1.5"/>
+  <text x="62" y="564" font-size="13.5" font-weight="bold" fill="#2b6cb0">ScanBytes（从磁盘读）</text>
+  <text x="62" y="590" font-size="12" fill="#2d3748">窄列：15.26 MB</text>
+  <text x="62" y="610" font-size="12" fill="#2d3748">宽列：22.92 MB</text>
+  <text x="62" y="636" font-size="12" fill="#975a16">磁盘读只差 1.5 倍，耗时却差 13 倍</text>
+  <text x="62" y="656" font-size="11.5" fill="#718096">说明瓶颈不在磁盘 IO</text>
+
+  <rect x="408" y="542" width="348" height="126" rx="8" fill="#fffaf0" stroke="#c05621" stroke-width="1.5"/>
+  <text x="422" y="564" font-size="13.5" font-weight="bold" fill="#c05621">OutputBlockBytes（送出去）</text>
+  <text x="422" y="590" font-size="12" fill="#2d3748">窄列：15.26 MB</text>
+  <text x="422" y="610" font-size="12" font-weight="bold" fill="#c53030">宽列：2.82 GB</text>
+  <text x="422" y="636" font-size="12" fill="#975a16">解压后放大 123 倍</text>
+  <text x="422" y="656" font-size="11.5" fill="#718096">多出的 2.8 GB 要解压、拷贝、过内存</text>
+
+  <rect x="768" y="542" width="364" height="126" rx="8" fill="#f0fff4" stroke="#276749" stroke-width="1.5"/>
+  <text x="782" y="564" font-size="13.5" font-weight="bold" fill="#276749">结论：钱花在哪</text>
+  <text x="782" y="588" font-size="12" fill="#2d3748">ScanBytes ↑ 1.5 倍 → 不是瓶颈</text>
+  <text x="782" y="608" font-size="12" fill="#2d3748">OutputBlockBytes ↑ 185 倍 → 是真瓶颈</text>
+  <text x="782" y="632" font-size="12.5" font-weight="bold" fill="#276749">→ 只 SELECT 需要的列</text>
+  <text x="782" y="652" font-size="11.5" fill="#718096">这是列存上收益最大的一条优化</text>
+
+</svg>

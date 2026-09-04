@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 620" width="1040" height="620" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="1040" height="620" fill="#fbfbfb"/>
+  <text x="520" y="32" text-anchor="middle" font-size="19" font-weight="700" fill="#1a237e">课 1 一图总结：OLTP 与 OLAP 的鸿沟，以及 Doris 的位置</text>
+
+  <!-- 左：行存 -->
+  <rect x="30" y="60" width="470" height="230" rx="10" fill="#ffebee" stroke="#C62828" stroke-width="2"/>
+  <text x="265" y="88" text-anchor="middle" font-size="15" font-weight="700" fill="#b71c1c">行存（MySQL / OLTP）：一整行一整行地读</text>
+  <text x="265" y="110" text-anchor="middle" font-size="12" fill="#c62828">查询只要 province + amount 两列，却要把整行读出来</text>
+
+  <text x="48" y="140" font-size="11.5" fill="#555">磁盘上的页（每页 16KB，装满了完整的行）：</text>
+  <rect x="48" y="152" width="434" height="26" fill="#fff" stroke="#ef9a9a"/>
+  <text x="56" y="170" font-size="11" fill="#333">id | date | province | city | user_id | product_id | category | qty | amount | ... | remark(48B)</text>
+  <rect x="48" y="180" width="434" height="26" fill="#fff" stroke="#ef9a9a"/>
+  <text x="56" y="198" font-size="11" fill="#333">id | date | province | city | user_id | product_id | category | qty | amount | ... | remark(48B)</text>
+  <rect x="48" y="208" width="434" height="26" fill="#fff" stroke="#ef9a9a"/>
+  <text x="56" y="226" font-size="11" fill="#333">id | date | province | city | user_id | product_id | category | qty | amount | ... | remark(48B)</text>
+
+  <rect x="48" y="246" width="434" height="30" rx="6" fill="#ffcdd2" stroke="#C62828"/>
+  <text x="265" y="266" text-anchor="middle" font-size="12" font-weight="700" fill="#b71c1c">实测：每行 165 字节，真正需要的只有 20 字节 → 读取放大 8 倍</text>
+
+  <!-- 右：列存 -->
+  <rect x="540" y="60" width="470" height="230" rx="10" fill="#e8f5e9" stroke="#2E7D32" stroke-width="2"/>
+  <text x="775" y="88" text-anchor="middle" font-size="15" font-weight="700" fill="#1b5e20">列存（Doris / OLAP）：一列一列地读</text>
+  <text x="775" y="110" text-anchor="middle" font-size="12" fill="#2E7D32">只把查询用到的那两列读出来，其余列留在磁盘上</text>
+
+  <text x="558" y="140" font-size="11.5" fill="#555">磁盘上的列块（每列单独连续存放、单独压缩）：</text>
+  <rect x="558" y="152" width="200" height="26" fill="#fff" stroke="#a5d6a7"/>
+  <text x="658" y="170" text-anchor="middle" font-size="11" fill="#333">province 列块（连续 + 压缩）</text>
+  <rect x="558" y="180" width="200" height="26" fill="#fff" stroke="#a5d6a7"/>
+  <text x="658" y="198" text-anchor="middle" font-size="11" fill="#333">amount 列块（连续 + 压缩）</text>
+  <rect x="558" y="208" width="434" height="26" fill="#f5f5f5" stroke="#bdbdbd" stroke-dasharray="4 3"/>
+  <text x="775" y="226" text-anchor="middle" font-size="11" fill="#888">其余 13 列：不读，留在磁盘上</text>
+
+  <rect x="558" y="246" width="434" height="30" rx="6" fill="#c8e6c9" stroke="#2E7D32"/>
+  <text x="775" y="266" text-anchor="middle" font-size="12" font-weight="700" fill="#1b5e20">只扫描需要的列 + 高压缩比（同类值放一起更好压）</text>
+
+  <!-- 中间箭头 -->
+  <defs>
+    <marker id="c1" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#666"/>
+    </marker>
+  </defs>
+  <line x1="505" y1="175" x2="535" y2="175" stroke="#666" stroke-width="2" marker-end="url(#c1)"/>
+
+  <!-- 下左：实测成绩单 -->
+  <rect x="30" y="310" width="470" height="150" rx="10" fill="#ffffff" stroke="#bdbdbd" stroke-width="1.5"/>
+  <text x="265" y="334" text-anchor="middle" font-size="14" font-weight="700" fill="#1a237e">本机实测成绩单（MySQL 8.0，2000 万行）</text>
+  <text x="48" y="358" font-size="11.5" fill="#333">主键点查（OLTP 主场）　　　　　　　　0.12 秒　✅ 极快</text>
+  <text x="48" y="378" font-size="11.5" fill="#333">按省分组聚合（无索引）　　　　　　　7.62 秒　❌ 慢</text>
+  <text x="48" y="398" font-size="11.5" fill="#333">按省分组聚合（加了联合索引）　　　　2.64 秒　⚠️ 有代价</text>
+  <text x="48" y="418" font-size="11.5" fill="#333">按品类分组聚合（索引失效）　　　　　8.61 秒　❌ 慢</text>
+  <text x="48" y="438" font-size="11.5" fill="#333">省 × 品类二维聚合　　　　　　　　　11.32 秒　❌ 更慢</text>
+  <text x="48" y="456" font-size="11" fill="#777">索引代价：建索引 39 秒，插 50 万行从 2.75 秒 → 80 秒</text>
+
+  <!-- 下右：访问模式对照 -->
+  <rect x="540" y="310" width="470" height="150" rx="10" fill="#ffffff" stroke="#bdbdbd" stroke-width="1.5"/>
+  <text x="775" y="334" text-anchor="middle" font-size="14" font-weight="700" fill="#1a237e">两种访问模式，两种设计目标</text>
+  <text x="558" y="356" font-size="11.5" fill="#333">OLTP：一次碰几条记录，要写对、要并发　→ 行存 + B+ 树索引</text>
+  <text x="558" y="380" font-size="11.5" fill="#333">OLAP：一次扫几千万行，只读少数几列　→ 列存 + 分区分桶裁剪</text>
+  <text x="558" y="404" font-size="11.5" fill="#333">OLTP 的"少数几列"由索引决定，换维度就失效</text>
+  <text x="558" y="424" font-size="11.5" fill="#333">OLAP 不赌"你会按哪个维度查"，直接把全表扫快</text>
+  <text x="558" y="448" font-size="11" fill="#777">索引是"抄近道"，列存是"把路修宽"——分析场景该修路</text>
+
+  <!-- 底部：Doris 的定位 -->
+  <rect x="30" y="480" width="980" height="120" rx="10" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="520" y="506" text-anchor="middle" font-size="15" font-weight="700" fill="#0d47a1">Doris 站在哪：为 OLAP 而生的 MPP 实时分析型数据库</text>
+
+  <rect x="60" y="520" width="220" height="62" rx="8" fill="#fff" stroke="#1565C0"/>
+  <text x="170" y="542" text-anchor="middle" font-size="12" font-weight="700" fill="#0d47a1">列式存储</text>
+  <text x="170" y="560" text-anchor="middle" font-size="11" fill="#333">只读需要的列 + 高压缩比</text>
+  <text x="170" y="575" text-anchor="middle" font-size="10.5" fill="#777">解决"读得多"</text>
+
+  <rect x="300" y="520" width="220" height="62" rx="8" fill="#fff" stroke="#1565C0"/>
+  <text x="410" y="542" text-anchor="middle" font-size="12" font-weight="700" fill="#0d47a1">MPP 并行</text>
+  <text x="410" y="560" text-anchor="middle" font-size="11" fill="#333">多台机器一起算同一条 SQL</text>
+  <text x="410" y="575" text-anchor="middle" font-size="10.5" fill="#777">解决"算得慢"</text>
+
+  <rect x="540" y="520" width="220" height="62" rx="8" fill="#fff" stroke="#1565C0"/>
+  <text x="650" y="542" text-anchor="middle" font-size="12" font-weight="700" fill="#0d47a1">向量化执行</text>
+  <text x="650" y="560" text-anchor="middle" font-size="11" fill="#333">一批一批算，吃满 CPU</text>
+  <text x="650" y="575" text-anchor="middle" font-size="10.5" fill="#777">解决"CPU 闲着"</text>
+
+  <rect x="780" y="520" width="200" height="62" rx="8" fill="#fff" stroke="#1565C0"/>
+  <text x="880" y="542" text-anchor="middle" font-size="12" font-weight="700" fill="#0d47a1">MySQL 协议兼容</text>
+  <text x="880" y="560" text-anchor="middle" font-size="11" fill="#333">客户端/BI 工具无缝对接</text>
+  <text x="880" y="575" text-anchor="middle" font-size="10.5" fill="#777">解决"迁不动"</text>
+</svg>

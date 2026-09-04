@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="760" viewBox="0 0 1080 760" font-family="'PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#eef2f7"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#475569"/>
+    </marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.10"/>
+    </filter>
+  </defs>
+
+  <rect width="1080" height="760" fill="url(#bg)"/>
+  <text x="540" y="42" text-anchor="middle" font-size="25" font-weight="700" fill="#0f172a">一个集群，两类负载：资源隔离在挡什么</text>
+  <text x="540" y="68" text-anchor="middle" font-size="14" fill="#64748b">课 10 实测数据 · Doris 4.1.3 · 1 FE + 2 BE（伪多节点）</text>
+
+  <!-- 左侧：没有隔离 -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="100" width="470" height="290" rx="14" fill="#fff" stroke="#fca5a5" stroke-width="2"/>
+  </g>
+  <text x="275" y="132" text-anchor="middle" font-size="19" font-weight="700" fill="#b91c1c">❌ 没有隔离：一条大 SQL 拖垮所有人</text>
+
+  <!-- 三个大查询箭头 -->
+  <g font-size="13">
+    <rect x="62" y="156" width="120" height="40" rx="8" fill="#fee2e2" stroke="#f87171"/>
+    <text x="122" y="181" text-anchor="middle" fill="#991b1b" font-weight="600">大查询 A</text>
+    <rect x="196" y="156" width="120" height="40" rx="8" fill="#fee2e2" stroke="#f87171"/>
+    <text x="256" y="181" text-anchor="middle" fill="#991b1b" font-weight="600">大查询 B</text>
+    <rect x="330" y="156" width="120" height="40" rx="8" fill="#fee2e2" stroke="#f87171"/>
+    <text x="390" y="181" text-anchor="middle" fill="#991b1b" font-weight="600">大查询 C</text>
+  </g>
+
+  <line x1="122" y1="198" x2="122" y2="232" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="256" y1="198" x2="256" y2="232" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="390" y1="198" x2="390" y2="232" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 共享池被占满 -->
+  <rect x="62" y="234" width="388" height="48" rx="10" fill="#dc2626"/>
+  <text x="256" y="258" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">同一个资源池：CPU / 内存 / 并发全被占满</text>
+  <text x="256" y="275" text-anchor="middle" font-size="12" fill="#fecaca">3 条大查询各跑约 1 秒，互相抢同一份资源</text>
+
+  <!-- 小查询被堵 -->
+  <rect x="150" y="300" width="212" height="44" rx="10" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+  <text x="256" y="328" text-anchor="middle" font-size="14" font-weight="700" fill="#92400e">报表小查询：只能排队等</text>
+
+  <line x1="256" y1="284" x2="256" y2="298" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 实测结果 -->
+  <rect x="62" y="356" width="388" height="26" rx="6" fill="#fee2e2"/>
+  <text x="256" y="374" text-anchor="middle" font-size="13" font-weight="700" fill="#991b1b">实测 5 轮：1223 / 1260 / 1476 / 1492 / 1719 ms</text>
+
+  <!-- 右侧：有隔离 -->
+  <g filter="url(#shadow)">
+    <rect x="570" y="100" width="470" height="290" rx="14" fill="#fff" stroke="#86efac" stroke-width="2"/>
+  </g>
+  <text x="805" y="132" text-anchor="middle" font-size="19" font-weight="700" fill="#166534">✅ 有隔离：大查询自己排队，报表照常跑</text>
+
+  <g font-size="13">
+    <rect x="592" y="156" width="120" height="40" rx="8" fill="#dcfce7" stroke="#4ade80"/>
+    <text x="652" y="181" text-anchor="middle" fill="#166534" font-weight="600">大查询 A</text>
+    <rect x="726" y="156" width="120" height="40" rx="8" fill="#e5e7eb" stroke="#9ca3af"/>
+    <text x="786" y="181" text-anchor="middle" fill="#4b5563" font-weight="600">B：排队中</text>
+    <rect x="860" y="156" width="120" height="40" rx="8" fill="#e5e7eb" stroke="#9ca3af"/>
+    <text x="920" y="181" text-anchor="middle" fill="#4b5563" font-weight="600">C：排队中</text>
+  </g>
+
+  <line x1="652" y1="198" x2="652" y2="232" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 两个隔离的组 -->
+  <rect x="592" y="234" width="186" height="48" rx="10" fill="#dc2626"/>
+  <text x="685" y="258" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">big_etl 组</text>
+  <text x="685" y="275" text-anchor="middle" font-size="12" fill="#fecaca">并发上限 1，其余排队</text>
+
+  <rect x="794" y="234" width="186" height="48" rx="10" fill="#16a34a"/>
+  <text x="887" y="258" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">fast_report 组</text>
+  <text x="887" y="275" text-anchor="middle" font-size="12" fill="#bbf7d0">独立并发额度，秒回</text>
+
+  <line x1="880" y1="198" x2="880" y2="232" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="794" y="300" width="186" height="44" rx="10" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+  <text x="887" y="328" text-anchor="middle" font-size="14" font-weight="700" fill="#166534">报表小查询：秒回</text>
+
+  <line x1="887" y1="284" x2="887" y2="298" stroke="#475569" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="592" y="356" width="388" height="26" rx="6" fill="#dcfce7"/>
+  <text x="786" y="374" text-anchor="middle" font-size="13" font-weight="700" fill="#166534">实测 5 轮：212 / 212 / 218 / 233 / 265 ms</text>
+
+  <!-- 对比条 -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="416" width="1000" height="120" rx="14" fill="#fff" stroke="#cbd5e1"/>
+  </g>
+  <text x="540" y="446" text-anchor="middle" font-size="17" font-weight="700" fill="#0f172a">同一条报表查询的耗时对比（实测，5 轮取范围）</text>
+
+  <text x="60" y="482" font-size="13" fill="#475569" font-weight="600">无干扰基线</text>
+  <rect x="180" y="470" width="28" height="18" rx="4" fill="#94a3b8"/>
+  <text x="216" y="484" font-size="12" fill="#475569">147 – 171 ms</text>
+
+  <text x="60" y="510" font-size="13" fill="#475569" font-weight="600">无隔离（被拖）</text>
+  <rect x="180" y="498" width="700" height="18" rx="4" fill="#dc2626"/>
+  <text x="890" y="512" font-size="12" font-weight="700" fill="#991b1b">1223 – 1719 ms</text>
+
+  <text x="60" y="538" font-size="13" fill="#475569" font-weight="600">有隔离（受保护）</text>
+  <rect x="180" y="526" width="100" height="18" rx="4" fill="#16a34a"/>
+  <text x="290" y="540" font-size="12" font-weight="700" fill="#166534">212 – 265 ms　≈ 快 6 倍</text>
+
+  <!-- 结论 -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="556" width="1000" height="176" rx="14" fill="#0f172a"/>
+  </g>
+  <text x="540" y="590" text-anchor="middle" font-size="18" font-weight="700" fill="#fbbf24">核心结论：隔离不是让大查询变快，是让它别抢别人的</text>
+
+  <g font-size="14" fill="#e2e8f0">
+    <text x="72" y="624">• 大查询本身没变快——它该跑多久还是多久，超出并发的那几条还得排队</text>
+    <text x="72" y="652">• 小查询从「看大查询脸色」变成「有自己的额度」：1223–1719 ms → 212–265 ms</text>
+    <text x="72" y="680">• 排队比压垮好：排队是「等一会儿」，压垮是「所有人一起超时」</text>
+    <text x="72" y="708">• 实测边界：max_concurrency 真生效（报错原文 query waiting queue is full）</text>
+  </g>
+</svg>

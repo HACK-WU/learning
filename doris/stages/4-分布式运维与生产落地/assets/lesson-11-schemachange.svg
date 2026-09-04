@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="520" viewBox="0 0 1000 520" font-family="Microsoft YaHei, SimHei, sans-serif">
+  <rect width="1000" height="520" fill="#fbfcfe"/>
+  <text x="500" y="34" text-anchor="middle" font-size="20" font-weight="bold" fill="#1a2740">Schema Change 的两条路径：改元数据 vs 重写数据</text>
+
+  <!-- 入口 -->
+  <rect x="400" y="58" width="200" height="46" rx="6" fill="#1a2740"/>
+  <text x="500" y="86" text-anchor="middle" font-size="15" fill="#ffffff">ALTER TABLE ...</text>
+
+  <!-- 箭头分叉 -->
+  <line x1="500" y1="104" x2="500" y2="130" stroke="#8899aa" stroke-width="2"/>
+  <line x1="240" y1="130" x2="760" y2="130" stroke="#8899aa" stroke-width="2"/>
+  <line x1="240" y1="130" x2="240" y2="156" stroke="#8899aa" stroke-width="2"/>
+  <line x1="760" y1="130" x2="760" y2="156" stroke="#8899aa" stroke-width="2"/>
+
+  <!-- 左：Light -->
+  <rect x="80" y="156" width="320" height="300" rx="8" fill="#eaf7ee" stroke="#4a9c68" stroke-width="2"/>
+  <text x="240" y="184" text-anchor="middle" font-size="17" font-weight="bold" fill="#2d6b42">Light Schema Change</text>
+  <text x="240" y="206" text-anchor="middle" font-size="13" fill="#4a7a58">light_schema_change = true（默认）</text>
+
+  <rect x="104" y="222" width="272" height="42" rx="5" fill="#ffffff" stroke="#4a9c68"/>
+  <text x="240" y="248" text-anchor="middle" font-size="13" fill="#1a2740">只改 FE 元数据，不动数据文件</text>
+
+  <rect x="104" y="276" width="272" height="42" rx="5" fill="#ffffff" stroke="#4a9c68"/>
+  <text x="240" y="302" text-anchor="middle" font-size="13" fill="#1a2740">实测 271–304 ms，ALTER 返回即生效</text>
+
+  <rect x="104" y="330" width="272" height="42" rx="5" fill="#ffffff" stroke="#4a9c68"/>
+  <text x="240" y="356" text-anchor="middle" font-size="13" fill="#1a2740">旧数据读时补默认值，新数据直接写</text>
+
+  <rect x="104" y="384" width="272" height="52" rx="5" fill="#d6f0dd" stroke="#2d6b42" stroke-width="2"/>
+  <text x="240" y="406" text-anchor="middle" font-size="13" font-weight="bold" fill="#2d6b42">查询：立即可用</text>
+  <text x="240" y="426" text-anchor="middle" font-size="12" fill="#2d6b42">SHOW ALTER 显示 FINISHED</text>
+
+  <!-- 右：Heavy -->
+  <rect x="600" y="156" width="320" height="300" rx="8" fill="#fdeeea" stroke="#c05a3a" stroke-width="2"/>
+  <text x="760" y="184" text-anchor="middle" font-size="17" font-weight="bold" fill="#8f3d24">Heavy Schema Change</text>
+  <text x="760" y="206" text-anchor="middle" font-size="13" fill="#8a5240">改 Key / 改类型 / 关了 light 开关</text>
+
+  <rect x="624" y="222" width="272" height="42" rx="5" fill="#ffffff" stroke="#c05a3a"/>
+  <text x="760" y="248" text-anchor="middle" font-size="13" fill="#1a2740">后台重写全部数据文件</text>
+
+  <rect x="624" y="276" width="272" height="42" rx="5" fill="#ffffff" stroke="#c05a3a"/>
+  <text x="760" y="302" text-anchor="middle" font-size="13" fill="#1a2740">ALTER 返回 108–143 ms，但没做完</text>
+
+  <rect x="624" y="330" width="272" height="42" rx="5" fill="#ffffff" stroke="#c05a3a"/>
+  <text x="760" y="356" text-anchor="middle" font-size="13" fill="#1a2740">500 万行实测 1–3 秒才 FINISHED</text>
+
+  <rect x="624" y="384" width="272" height="52" rx="5" fill="#f8d5ca" stroke="#8f3d24" stroke-width="2"/>
+  <text x="760" y="406" text-anchor="middle" font-size="13" font-weight="bold" fill="#8f3d24">查询：Unknown column 'xxx'</text>
+  <text x="760" y="426" text-anchor="middle" font-size="12" fill="#8f3d24">异步！要等 SHOW ALTER 转 FINISHED</text>
+
+  <!-- 底部结论 -->
+  <rect x="80" y="472" width="840" height="34" rx="6" fill="#1a2740"/>
+  <text x="500" y="494" text-anchor="middle" font-size="13" fill="#ffffff">判据不是「ALTER 跑没跑完」，是「SHOW ALTER TABLE COLUMN 的 State 是不是 FINISHED」</text>
+</svg>

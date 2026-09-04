@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1240" viewBox="0 0 1000 1240" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#546e7a"/>
+    </marker>
+    <style>
+      .t { font-size:20px; font-weight:bold; fill:#1a237e; }
+      .s { font-size:14px; fill:#37474f; }
+      .sm { font-size:12px; fill:#546e7a; }
+      .box { fill:#ffffff; stroke:#90a4ae; stroke-width:1.5; rx:6; }
+      .hl { fill:#fff8e1; stroke:#ffa000; stroke-width:2; }
+      .good { fill:#e8f5e9; stroke:#43a047; stroke-width:2; }
+      .bad { fill:#ffebee; stroke:#e53935; stroke-width:2; }
+      .be { fill:#e3f2fd; stroke:#1e88e5; stroke-width:1.5; }
+      .tab { fill:#f3e5f5; stroke:#8e24aa; stroke-width:1.5; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1000" height="1240" fill="#fafafa"/>
+  <text x="500" y="38" text-anchor="middle" class="t" font-size="24">Tablet 与 Replica：数据是怎么"切"和"抄"的</text>
+  <text x="500" y="62" text-anchor="middle" class="sm">Doris 4.1.3 双 BE 实测 · 分区是横切、分桶是竖切、副本是抄写</text>
+
+  <!-- ============ 1. 三层切分 ============ -->
+  <text x="30" y="100" class="t">1. 一张表落到集群，要经历三次"切"</text>
+  <rect x="30" y="112" width="940" height="230" class="box"/>
+
+  <text x="55" y="140" class="s" font-weight="bold">原始表 orders（2150 万行）</text>
+
+  <rect x="55" y="155" width="180" height="70" class="hl"/>
+  <text x="145" y="180" text-anchor="middle" class="s" font-weight="bold">① 分区 Partition</text>
+  <text x="145" y="200" text-anchor="middle" class="sm">按时间横切</text>
+  <text x="145" y="216" text-anchor="middle" class="sm">2025-01 / 2025-02 ...</text>
+
+  <rect x="265" y="155" width="180" height="70" class="tab"/>
+  <text x="355" y="180" text-anchor="middle" class="s" font-weight="bold">② 分桶 Bucket</text>
+  <text x="355" y="200" text-anchor="middle" class="sm">按 Hash 竖切</text>
+  <text x="355" y="216" text-anchor="middle" class="sm">HASH(province) × 8</text>
+
+  <rect x="475" y="155" width="180" height="70" class="be"/>
+  <text x="565" y="180" text-anchor="middle" class="s" font-weight="bold">③ 副本 Replica</text>
+  <text x="565" y="200" text-anchor="middle" class="sm">每桶抄 N 份</text>
+  <text x="565" y="216" text-anchor="middle" class="sm">replication_num</text>
+
+  <rect x="685" y="155" width="260" height="70" class="good"/>
+  <text x="815" y="180" text-anchor="middle" class="s" font-weight="bold">最终结果：Tablet</text>
+  <text x="815" y="200" text-anchor="middle" class="sm">分区数 × 分桶数 = Tablet 数</text>
+  <text x="815" y="216" text-anchor="middle" class="sm">每个 Tablet 有 N 个 Replica</text>
+
+  <text x="55" y="255" class="sm" font-weight="bold">实测：orders 的 SHOW PARTITIONS 输出</text>
+  <text x="55" y="278" class="sm" font-family="monospace">DistributionKey=province   Buckets=8   ReplicationNum=1   RowCount=21500001</text>
+  <text x="55" y="300" class="sm" font-family="monospace">SHOW PROC '/statistic' →  shop 库：TabletNum=643   ReplicaNum=643</text>
+  <text x="55" y="322" class="sm" font-weight="bold" fill="#c62828">⚠ ReplicaNum 恰好等于 TabletNum —— 说明本机所有表实际都是 1 副本，"3 副本"只是建表时的请求</text>
+
+  <!-- ============ 2. 副本分布 ============ -->
+  <text x="30" y="382" class="t">2. 副本怎么放：反亲和是硬规则</text>
+  <rect x="30" y="394" width="940" height="215" class="box"/>
+
+  <text x="55" y="422" class="s" font-weight="bold">理想情况（3 台不同物理机）</text>
+  <rect x="55" y="436" width="110" height="46" class="be"/>
+  <text x="110" y="456" text-anchor="middle" class="s" font-weight="bold">BE1</text>
+  <text x="110" y="472" text-anchor="middle" class="sm">副本 A</text>
+  <rect x="180" y="436" width="110" height="46" class="be"/>
+  <text x="235" y="456" text-anchor="middle" class="s" font-weight="bold">BE2</text>
+  <text x="235" y="472" text-anchor="middle" class="sm">副本 A'</text>
+  <rect x="305" y="436" width="110" height="46" class="be"/>
+  <text x="360" y="456" text-anchor="middle" class="s" font-weight="bold">BE3</text>
+  <text x="360" y="472" text-anchor="middle" class="sm">副本 A''</text>
+  <text x="435" y="456" class="s">✅ 一台机器挂了，另外两台还有完整数据</text>
+  <text x="435" y="476" class="sm">副本放不同机器，才能扛住"机器"级故障</text>
+
+  <line x1="55" y1="505" x2="945" y2="505" stroke="#cfd8dc" stroke-width="1"/>
+
+  <text x="55" y="532" class="s" font-weight="bold">本机实测（2 个 BE 都在 127.0.0.1）</text>
+  <rect x="55" y="546" width="110" height="46" class="bad"/>
+  <text x="110" y="566" text-anchor="middle" class="s" font-weight="bold">BE1</text>
+  <text x="110" y="582" text-anchor="middle" class="sm">127.0.0.1</text>
+  <rect x="180" y="546" width="110" height="46" class="bad"/>
+  <text x="235" y="566" text-anchor="middle" class="s" font-weight="bold">BE2</text>
+  <text x="235" y="582" text-anchor="middle" class="sm">同一台机器</text>
+  <text x="305" y="560" class="s" fill="#c62828" font-weight="bold">✗ 报错：Failed to find enough backend ...</text>
+  <text x="305" y="580" class="sm" font-family="monospace">or maybe all be on same host.</text>
+  <text x="700" y="560" class="sm" font-weight="bold">反亲和：同一台物理机上</text>
+  <text x="700" y="578" class="sm" font-weight="bold">不放同一个 Tablet 的两个副本</text>
+
+  <!-- ============ 3. 宕机发生了什么 ============ -->
+  <text x="30" y="655" class="t">3. 宕机那一分钟：心跳、判定、报错</text>
+  <rect x="30" y="667" width="940" height="240" class="box"/>
+
+  <rect x="55" y="690" width="200" height="70" class="be"/>
+  <text x="155" y="712" text-anchor="middle" class="s" font-weight="bold">T+0s　BE2 进程被 kill</text>
+  <text x="155" y="732" text-anchor="middle" class="sm">进程没了，但 FE 还不知道</text>
+  <text x="155" y="748" text-anchor="middle" class="sm">SHOW BACKENDS 仍 Alive=true</text>
+
+  <line x1="255" y1="725" x2="290" y2="725" stroke="#546e7a" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="292" y="690" width="200" height="70" class="hl"/>
+  <text x="392" y="712" text-anchor="middle" class="s" font-weight="bold">T+0~10s　心跳窗口</text>
+  <text x="392" y="732" text-anchor="middle" class="sm">heartbeat_interval_second=10</text>
+  <text x="392" y="748" text-anchor="middle" class="sm">此时查询会撞上"僵死"连接</text>
+
+  <line x1="492" y1="725" x2="527" y2="725" stroke="#546e7a" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="529" y="690" width="200" height="70" class="bad"/>
+  <text x="629" y="712" text-anchor="middle" class="s" font-weight="bold">T+10s+　判定死亡</text>
+  <text x="629" y="732" text-anchor="middle" class="sm">max_backend_heartbeat_</text>
+  <text x="629" y="746" text-anchor="middle" class="sm">failure_tolerance_count=1</text>
+
+  <line x1="729" y1="725" x2="764" y2="725" stroke="#546e7a" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="766" y="690" width="180" height="70" class="good"/>
+  <text x="856" y="712" text-anchor="middle" class="s" font-weight="bold">调度器开始修</text>
+  <text x="856" y="732" text-anchor="middle" class="sm">把副本补到别的节点</text>
+  <text x="856" y="748" text-anchor="middle" class="sm">history_tablets 计数上升</text>
+
+  <rect x="55" y="778" width="890" height="112" class="bad"/>
+  <text x="72" y="802" class="s" font-weight="bold" fill="#c62828">实测报错原文（数据在宕机节点上、且只有 1 副本时）：</text>
+  <text x="72" y="826" class="sm" font-family="monospace">errCode = 2, detailMessage = tablet 1788336178413 has no queryable replicas.</text>
+  <text x="72" y="846" class="sm" font-family="monospace">err: replica 1788336178414's backend 1788336178366 ... does not exist or not alive</text>
+  <text x="72" y="872" class="sm" font-weight="bold">→ 而 orders（副本恰好都在存活的 BE1 上）照常返回 2150 万行</text>
+
+  <!-- ============ 4. 结论 ============ -->
+  <text x="30" y="955" class="t">4. 一句话结论</text>
+  <rect x="30" y="967" width="940" height="120" class="good"/>
+  <text x="500" y="1000" text-anchor="middle" class="s" font-size="17" font-weight="bold">"查询没断"不是 Doris 神奇，是因为那份数据恰好没住在宕机的机器上</text>
+  <text x="500" y="1030" text-anchor="middle" class="s">副本是"数据住在哪"的保险，不是"查询一定成功"的保证：</text>
+  <text x="500" y="1055" text-anchor="middle" class="s">1 副本 = 数据只住一处，那一处挂了就查不了；N 副本 = 同一份数据住 N 处，挂 N-1 处仍能查。</text>
+  <text x="500" y="1077" text-anchor="middle" class="sm">代价是存储成本 × N —— 用钱换可用性，这是副本最本质的权衡</text>
+
+  <text x="500" y="1135" text-anchor="middle" class="sm">教材实测环境：Doris 4.1.3（doris-4.1.3-rc02-7126cf65d96）· 1 FE + 2 BE（同主机伪多节点）· 2026-09-03</text>
+  <text x="500" y="1160" text-anchor="middle" class="sm">⚠ 同主机反亲和规则使本机无法真正验证"多副本扛宕机"，该结论为原理推演 + 单副本宕机实测反证</text>
+  <text x="500" y="1185" text-anchor="middle" class="sm">FE 高可用（Master/Follower/Observer）因单机限制仅验证命令语法，选举过程未实测</text>
+  <text x="500" y="1210" text-anchor="middle" class="sm">扩缩容与数据均衡已实测：DECOMMISSION 触发迁移、可 CANCEL、在线查询 128-159ms 无抖动</text>
+</svg>

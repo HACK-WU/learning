@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="700" viewBox="0 0 1080 700" font-family="Microsoft YaHei, SimHei, sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#546e7a"/>
+    </marker>
+    <marker id="arrowg" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#2e7d32"/>
+    </marker>
+    <marker id="arrowo" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#ef6c00"/>
+    </marker>
+    <marker id="arrowr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#c62828"/>
+    </marker>
+  </defs>
+
+  <rect width="1080" height="700" fill="#fafafa"/>
+  <text x="540" y="38" text-anchor="middle" font-size="24" font-weight="bold" fill="#263238">能力边界：Doris 擅长什么、不擅长什么（本机实测）</text>
+  <text x="540" y="62" text-anchor="middle" font-size="13" fill="#607d8b">同一台机器、同一份数据测出来的，不是厂商跑分</text>
+
+  <!-- 横轴：延迟 -->
+  <line x1="90" y1="640" x2="1020" y2="640" stroke="#90a4ae" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="1025" y="645" font-size="13" fill="#546e7a">单次耗时</text>
+  <text x="90" y="662" font-size="12" fill="#78909c">0.1 ms</text>
+  <text x="330" y="662" font-size="12" fill="#78909c">5 ms</text>
+  <text x="620" y="662" font-size="12" fill="#78909c">150 ms</text>
+  <text x="900" y="662" font-size="12" fill="#78909c">600 ms</text>
+
+  <!-- 绿色区：擅长 -->
+  <rect x="90" y="90" width="290" height="520" fill="#e8f5e9" stroke="#a5d6a7" stroke-width="1" rx="6"/>
+  <text x="235" y="118" text-anchor="middle" font-size="18" font-weight="bold" fill="#2e7d32">✅ Doris 的主场</text>
+
+  <!-- 条目 1：单列聚合 -->
+  <rect x="110" y="140" width="250" height="72" fill="#fff" stroke="#66bb6a" stroke-width="2" rx="5"/>
+  <text x="124" y="163" font-size="14" font-weight="bold" fill="#2e7d32">扫 1 列聚合</text>
+  <text x="124" y="184" font-size="12" fill="#455a64">SUM(amount) 2150 万行</text>
+  <text x="124" y="202" font-size="12" fill="#455a64">0.13 ~ 0.14 秒</text>
+  <rect x="110" y="212" width="250" height="6" fill="#e0e0e0" rx="3"/>
+  <rect x="110" y="212" width="36" height="6" fill="#66bb6a" rx="3"/>
+
+  <!-- 条目 2：分组聚合 -->
+  <rect x="110" y="240" width="250" height="72" fill="#fff" stroke="#66bb6a" stroke-width="2" rx="5"/>
+  <text x="124" y="263" font-size="14" font-weight="bold" fill="#2e7d32">GROUP BY 聚合</text>
+  <text x="124" y="284" font-size="12" fill="#455a64">314 万行按省分组</text>
+  <text x="124" y="302" font-size="12" fill="#455a64">0.16 ~ 0.20 秒</text>
+  <rect x="110" y="312" width="250" height="6" fill="#e0e0e0" rx="3"/>
+  <rect x="110" y="312" width="50" height="6" fill="#66bb6a" rx="3"/>
+
+  <!-- 条目 3：倒排索引检索 -->
+  <rect x="110" y="340" width="250" height="72" fill="#fff" stroke="#66bb6a" stroke-width="2" rx="5"/>
+  <text x="124" y="363" font-size="14" font-weight="bold" fill="#2e7d32">倒排索引检索</text>
+  <text x="124" y="384" font-size="12" fill="#455a64">20 万行命中 2 万条</text>
+  <text x="124" y="402" font-size="12" fill="#455a64">0.14 ~ 0.18 秒</text>
+  <rect x="110" y="412" width="250" height="6" fill="#e0e0e0" rx="3"/>
+  <rect x="110" y="412" width="45" height="6" fill="#66bb6a" rx="3"/>
+
+  <!-- 条目 4：批量导入 -->
+  <rect x="110" y="440" width="250" height="72" fill="#fff" stroke="#66bb6a" stroke-width="2" rx="5"/>
+  <text x="124" y="463" font-size="14" font-weight="bold" fill="#2e7d32">批量导入</text>
+  <text x="124" y="484" font-size="12" fill="#455a64">314 万行导出 parquet</text>
+  <text x="124" y="502" font-size="12" fill="#455a64">0.88 秒（约 33 MB/s）</text>
+  <rect x="110" y="512" width="250" height="6" fill="#e0e0e0" rx="3"/>
+  <rect x="110" y="512" width="220" height="6" fill="#66bb6a" rx="3"/>
+
+  <!-- 黄色区：能做但要小心 -->
+  <rect x="395" y="90" width="300" height="520" fill="#fff8e1" stroke="#ffe082" stroke-width="1" rx="6"/>
+  <text x="545" y="118" text-anchor="middle" font-size="18" font-weight="bold" fill="#ef6c00">⚠️ 能做，但有前提</text>
+
+  <!-- 条目：宽表扫描 -->
+  <rect x="415" y="140" width="260" height="72" fill="#fff" stroke="#ffa726" stroke-width="2" rx="5"/>
+  <text x="429" y="163" font-size="14" font-weight="bold" fill="#ef6c00">宽表全列扫描</text>
+  <text x="429" y="184" font-size="12" fill="#455a64">扫 13 列（vs 扫 1 列）</text>
+  <text x="429" y="202" font-size="12" fill="#455a64">0.51 ~ 0.60 秒（慢 4 倍）</text>
+  <rect x="415" y="212" width="260" height="6" fill="#e0e0e0" rx="3"/>
+  <rect x="415" y="212" width="150" height="6" fill="#ffa726" rx="3"/>
+
+  <!-- 条目：共享存储明细 -->
+  <rect x="415" y="240" width="260" height="72" fill="#fff" stroke="#ffa726" stroke-width="2" rx="5"/>
+  <text x="429" y="263" font-size="14" font-weight="bold" fill="#ef6c00">共享存储明细扫描</text>
+  <text x="429" y="284" font-size="12" fill="#455a64">跨网络读 parquet</text>
+  <text x="429" y="302" font-size="12" fill="#455a64">0.40 ~ 0.42 秒（慢 3 倍）</text>
+  <rect x="415" y="312" width="260" height="6" fill="#e0e0e0" rx="3"/>
+  <rect x="415" y="312" width="125" height="6" fill="#ffa726" rx="3"/>
+
+  <!-- 条目：低频单行更新 -->
+  <rect x="415" y="340" width="260" height="72" fill="#fff" stroke="#ffa726" stroke-width="2" rx="5"/>
+  <text x="429" y="363" font-size="14" font-weight="bold" fill="#ef6c00">低频单行 UPDATE</text>
+  <text x="429" y="384" font-size="12" fill="#455a64">标记删除 + compaction</text>
+  <text x="429" y="402" font-size="12" fill="#455a64">能跑，代价藏在后续查询</text>
+  <rect x="415" y="412" width="260" height="6" fill="#e0e0e0" rx="3"/>
+  <rect x="415" y="412" width="30" height="6" fill="#ffa726" rx="3"/>
+
+  <!-- 条目：全文检索 -->
+  <rect x="415" y="440" width="260" height="72" fill="#fff" stroke="#ffa726" stroke-width="2" rx="5"/>
+  <text x="429" y="463" font-size="14" font-weight="bold" fill="#ef6c00">中文全文检索</text>
+  <text x="429" y="484" font-size="12" fill="#455a64">需先装 jieba 字典</text>
+  <text x="429" y="502" font-size="12" fill="#c62828">本机缺字典 → 直接报错</text>
+  <rect x="415" y="512" width="260" height="6" fill="#e0e0e0" rx="3"/>
+  <rect x="415" y="512" width="8" height="6" fill="#c62828" rx="3"/>
+
+  <!-- 红色区：不该做 -->
+  <rect x="710" y="90" width="310" height="520" fill="#ffebee" stroke="#ef9a9a" stroke-width="1" rx="6"/>
+  <text x="865" y="118" text-anchor="middle" font-size="18" font-weight="bold" fill="#c62828">❌ 不该用 Doris 做</text>
+
+  <!-- 条目：高频点查 -->
+  <rect x="730" y="140" width="270" height="86" fill="#fff" stroke="#ef5350" stroke-width="2" rx="5"/>
+  <text x="744" y="163" font-size="14" font-weight="bold" fill="#c62828">高频单行点查（KV）</text>
+  <text x="744" y="184" font-size="12" fill="#455a64">单次 5 ~ 7 ms，约 160 QPS</text>
+  <text x="744" y="202" font-size="12" fill="#455a64">Redis 约 0.1 ms → 差 50 倍</text>
+  <text x="744" y="220" font-size="12" font-weight="bold" fill="#c62828">→ 改用 Redis / HBase</text>
+  <rect x="730" y="226" width="270" height="6" fill="#e0e0e0" rx="3"/>
+  <rect x="730" y="226" width="16" height="6" fill="#ef5350" rx="3"/>
+
+  <!-- 条目：事务 -->
+  <rect x="730" y="250" width="270" height="86" fill="#fff" stroke="#ef5350" stroke-width="2" rx="5"/>
+  <text x="744" y="273" font-size="14" font-weight="bold" fill="#c62828">多语句事务（OLTP）</text>
+  <text x="744" y="294" font-size="12" fill="#455a64">ROLLBACK 静默无效！</text>
+  <text x="744" y="312" font-size="12" fill="#455a64">转账：钱扣了账加了撤不回</text>
+  <text x="744" y="330" font-size="12" font-weight="bold" fill="#c62828">→ 改用 MySQL / PG</text>
+  <rect x="730" y="336" width="270" height="6" fill="#e0e0e0" rx="3"/>
+  <rect x="730" y="336" width="10" height="6" fill="#ef5350" rx="3"/>
+
+  <!-- 条目：高频删改 -->
+  <rect x="730" y="360" width="270" height="86" fill="#fff" stroke="#ef5350" stroke-width="2" rx="5"/>
+  <text x="744" y="383" font-size="14" font-weight="bold" fill="#c62828">高频单行删改</text>
+  <text x="744" y="404" font-size="12" fill="#455a64">标记堆积 → compaction 跟不上</text>
+  <text x="744" y="422" font-size="12" fill="#455a64">查询被 delete 标记拖慢</text>
+  <text x="744" y="440" font-size="12" font-weight="bold" fill="#c62828">→ 攒批 / UPSERT / 换分区</text>
+  <rect x="730" y="446" width="270" height="6" fill="#e0e0e0" rx="3"/>
+  <rect x="730" y="446" width="12" height="6" fill="#ef5350" rx="3"/>
+
+  <!-- 条目：复杂检索 -->
+  <rect x="730" y="470" width="270" height="86" fill="#fff" stroke="#ef5350" stroke-width="2" rx="5"/>
+  <text x="744" y="493" font-size="14" font-weight="bold" fill="#c62828">复杂相关性打分</text>
+  <text x="744" y="514" font-size="12" fill="#455a64">BM25 调优、高亮、嵌套桶</text>
+  <text x="744" y="532" font-size="12" fill="#455a64">MATCH_PHRASE 要求严格相邻</text>
+  <text x="744" y="550" font-size="12" font-weight="bold" fill="#c62828">→ 改用 Elasticsearch</text>
+  <rect x="730" y="556" width="270" height="6" fill="#e0e0e0" rx="3"/>
+  <rect x="730" y="556" width="8" height="6" fill="#ef5350" rx="3"/>
+
+  <!-- 底部结论 -->
+  <rect x="90" y="676" width="930" height="0" fill="none"/>
+  <text x="540" y="690" text-anchor="middle" font-size="13" fill="#37474f">判据不是「快不快」，而是「这个查询模式是不是吞吐型、批量型」—— 是就用，不是就换工具</text>
+</svg>

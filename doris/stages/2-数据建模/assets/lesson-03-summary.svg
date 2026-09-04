@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 620" width="1040" height="620" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="1040" height="620" fill="#fbfbfb"/>
+  <text x="520" y="28" text-anchor="middle" font-size="19" font-weight="700" fill="#1a237e">课 3 一图总结：三种数据模型 = 三种"存数据时的态度"</text>
+
+  <!-- 三卡片 -->
+  <!-- Duplicate -->
+  <rect x="25" y="46" width="320" height="270" rx="10" fill="#e8f5e9" stroke="#2E7D32" stroke-width="2"/>
+  <text x="185" y="72" text-anchor="middle" font-size="15" font-weight="700" fill="#1b5e20">Duplicate 明细模型</text>
+  <text x="185" y="92" text-anchor="middle" font-size="11.5" fill="#555">"存进去什么，就原样留着"</text>
+
+  <rect x="42" y="104" width="286" height="60" rx="6" fill="#fff"/>
+  <text x="56" y="124" font-size="11" font-weight="700" fill="#333">态度：不做任何加工</text>
+  <text x="56" y="142" font-size="10.5" fill="#555">来一条存一条，重复的也照留</text>
+  <text x="56" y="158" font-size="10.5" fill="#555">→ 所有原始信息都还在</text>
+
+  <rect x="42" y="172" width="286" height="60" rx="6" fill="#fff"/>
+  <text x="56" y="192" font-size="11" font-weight="700" fill="#333">适合：原始日志、订单流水</text>
+  <text x="56" y="210" font-size="10.5" fill="#555">需要回溯单条记录、维度未定</text>
+  <text x="56" y="226" font-size="10.5" fill="#555">→ 拿不准时选它，最安全</text>
+
+  <rect x="42" y="240" width="286" height="60" rx="6" fill="#f1f8e9"/>
+  <text x="56" y="260" font-size="11" font-weight="700" fill="#33691e">实测：2050 万行</text>
+  <text x="56" y="278" font-size="10.5" fill="#333">存储 214 MB ｜ 能查到单笔订单</text>
+  <text x="56" y="294" font-size="10.5" fill="#333">8 并发查询 0.81 秒</text>
+
+  <!-- Aggregate -->
+  <rect x="360" y="46" width="320" height="270" rx="10" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="520" y="72" text-anchor="middle" font-size="15" font-weight="700" fill="#0d47a1">Aggregate 聚合模型</text>
+  <text x="520" y="92" text-anchor="middle" font-size="11.5" fill="#555">"边存边算，只留结果"</text>
+
+  <rect x="377" y="104" width="286" height="60" rx="6" fill="#fff"/>
+  <text x="391" y="124" font-size="11" font-weight="700" fill="#333">态度：导入时就预聚合</text>
+  <text x="391" y="142" font-size="10.5" fill="#555">Key 相同的行按 SUM/MAX/REPLACE 合并</text>
+  <text x="391" y="158" font-size="10.5" fill="#555">→ 明细被"烧掉"，拿不回来</text>
+
+  <rect x="377" y="172" width="286" height="60" rx="6" fill="#fff"/>
+  <text x="391" y="192" font-size="11" font-weight="700" fill="#333">适合：固定报表、指标看板</text>
+  <text x="391" y="210" font-size="10.5" fill="#555">查询维度提前确定，只要汇总值</text>
+  <text x="391" y="226" font-size="10.5" fill="#555">→ 换维度就得重建表</text>
+
+  <rect x="377" y="240" width="286" height="60" rx="6" fill="#e1f5fe"/>
+  <text x="391" y="260" font-size="11" font-weight="700" fill="#01579b">实测：2050 万行 → 18.8 万行</text>
+  <text x="391" y="278" font-size="10.5" fill="#333">存储 214 MB → 1.5 MB（141 倍）</text>
+  <text x="391" y="294" font-size="10.5" fill="#333">8 并发查询 0.17 秒（快 4.8 倍）</text>
+
+  <!-- Unique -->
+  <rect x="695" y="46" width="320" height="270" rx="10" fill="#fff3e0" stroke="#EF6C00" stroke-width="2"/>
+  <text x="855" y="72" text-anchor="middle" font-size="15" font-weight="700" fill="#e65100">Unique 主键模型</text>
+  <text x="855" y="92" text-anchor="middle" font-size="11.5" fill="#555">"同一主键，只留最新那条"</text>
+
+  <rect x="712" y="104" width="286" height="60" rx="6" fill="#fff"/>
+  <text x="726" y="124" font-size="11" font-weight="700" fill="#333">态度：后写的覆盖先写的</text>
+  <text x="726" y="142" font-size="10.5" fill="#555">主键相同 → 整行替换（upsert）</text>
+  <text x="726" y="158" font-size="10.5" fill="#555">→ 天然支持实时更新</text>
+
+  <rect x="712" y="172" width="286" height="60" rx="6" fill="#fff"/>
+  <text x="726" y="192" font-size="11" font-weight="700" fill="#333">适合：维表、状态表、CDC 同步</text>
+  <text x="726" y="210" font-size="10.5" fill="#555">需要按业务主键做更新</text>
+  <text x="726" y="226" font-size="10.5" fill="#555">→ 默认 MOW（4.x 起）</text>
+
+  <rect x="712" y="240" width="286" height="60" rx="6" fill="#fff8e1"/>
+  <text x="726" y="260" font-size="11" font-weight="700" fill="#8d6e00">实测：6 批覆盖导入 30 万行</text>
+  <text x="726" y="278" font-size="10.5" fill="#333">MOW 结果 14,659 行（导入即合并）</text>
+  <text x="726" y="294" font-size="10.5" fill="#333">MOR 物理行 29,104（查询时才合并）</text>
+
+  <!-- 决策流 -->
+  <rect x="25" y="330" width="990" height="96" rx="10" fill="#fff" stroke="#7B1FA2" stroke-width="1.5"/>
+  <text x="520" y="354" text-anchor="middle" font-size="14" font-weight="700" fill="#4a148c">怎么选：三个问题，按顺序问</text>
+
+  <rect x="50" y="366" width="300" height="46" rx="6" fill="#f3e5f5"/>
+  <text x="200" y="384" text-anchor="middle" font-size="11.5" font-weight="700" fill="#4a148c">① 要按主键更新数据吗？</text>
+  <text x="200" y="402" text-anchor="middle" font-size="11" fill="#333">要 → Unique</text>
+
+  <rect x="370" y="366" width="300" height="46" rx="6" fill="#f3e5f5"/>
+  <text x="520" y="384" text-anchor="middle" font-size="11.5" font-weight="700" fill="#4a148c">② 查询维度固定、只要汇总？</text>
+  <text x="520" y="402" text-anchor="middle" font-size="11" fill="#333">是 → Aggregate</text>
+
+  <rect x="690" y="366" width="300" height="46" rx="6" fill="#f3e5f5"/>
+  <text x="840" y="384" text-anchor="middle" font-size="11.5" font-weight="700" fill="#4a148c">③ 都不是 / 拿不准？</text>
+  <text x="840" y="402" text-anchor="middle" font-size="11" fill="#333">→ Duplicate（默认安全牌）</text>
+
+  <!-- 重要提醒 -->
+  <rect x="25" y="440" width="990" height="76" rx="10" fill="#ffebee" stroke="#C62828" stroke-width="1.5"/>
+  <text x="520" y="464" text-anchor="middle" font-size="14" font-weight="700" fill="#b71c1c">⚠️ 本课实测打脸了两个想当然</text>
+  <text x="55" y="486" font-size="11.5" fill="#333">① 单机单 BE 下，聚合表查询只快一点点——因为固定开销约 0.13 秒（查 3 行的空表也要这么久），把扫描的差距吃掉了</text>
+  <text x="55" y="506" font-size="11.5" fill="#333">② 聚合表真正的收益在存储和并发：存储 141 倍压缩，8 并发下快 4.8 倍。单机测不出差距 ≠ 生产没价值</text>
+
+  <!-- 版本差异 -->
+  <rect x="25" y="530" width="990" height="72" rx="10" fill="#e8eaf6" stroke="#3F51B5" stroke-width="1.5"/>
+  <text x="520" y="554" text-anchor="middle" font-size="14" font-weight="700" fill="#1a237e">MOW vs MOR：区别在"什么时候合并"</text>
+  <text x="55" y="576" font-size="11.5" fill="#333">MOW（Merge-on-Write，4.x 默认）：导入时就查重覆盖 → 物理行数 = 真实键数，查询无需额外合并，查得快、写得慢</text>
+  <text x="55" y="596" font-size="11.5" fill="#333">MOR（Merge-on-Read）：导入时只追加 → 物理行数 &gt; 真实键数，查询时才合并，写得快、查得慢（且 COUNT(*) 会虚高）</text>
+</svg>

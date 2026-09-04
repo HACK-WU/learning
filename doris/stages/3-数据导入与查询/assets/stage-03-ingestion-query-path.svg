@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 320" width="940" height="320" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="940" height="320" fill="#fafafa"/>
+  <text x="470" y="34" text-anchor="middle" font-size="18" font-weight="700" fill="#1a237e">阶段 3 · 数据导入与查询</text>
+  <text x="470" y="55" text-anchor="middle" font-size="12.5" fill="#555">章节：数据进来、结果出去——从 Kafka 到亚秒级报表</text>
+
+  <defs>
+    <marker id="a3" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#666"/>
+    </marker>
+  </defs>
+
+  <!-- 课 6 -->
+  <rect x="40" y="80" width="270" height="170" rx="10" fill="#fff8e1" stroke="#F9A825" stroke-width="2"/>
+  <rect x="40" y="80" width="270" height="32" rx="10" fill="#F9A825"/>
+  <rect x="40" y="102" width="270" height="10" fill="#F9A825"/>
+  <text x="175" y="102" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">课 6　数据导入全家桶</text>
+  <text x="58" y="135" font-size="11.5" font-weight="600" fill="#8d6e00">数据怎么进来</text>
+  <text x="58" y="158" font-size="12" fill="#333">① Stream Load（同步推）</text>
+  <text x="58" y="180" font-size="12" fill="#333">② Routine Load（订阅 Kafka）</text>
+  <text x="58" y="202" font-size="12" fill="#333">③ Broker Load / INSERT INTO</text>
+  <text x="58" y="232" font-size="11" fill="#555">选错 → 小文件 / 事务堆积</text>
+
+  <!-- 课 7 -->
+  <rect x="335" y="80" width="270" height="170" rx="10" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <rect x="335" y="80" width="270" height="32" rx="10" fill="#1565C0"/>
+  <rect x="335" y="102" width="270" height="10" fill="#1565C0"/>
+  <text x="470" y="102" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">课 7　查询引擎与执行计划</text>
+  <text x="353" y="135" font-size="11.5" font-weight="600" fill="#0d47a1">结果怎么算出来</text>
+  <text x="353" y="158" font-size="12" fill="#333">① MPP 执行流程</text>
+  <text x="353" y="180" font-size="12" fill="#333">② 向量化执行与列存</text>
+  <text x="353" y="202" font-size="12" fill="#333">③ EXPLAIN 与 Profile</text>
+  <text x="353" y="232" font-size="11" fill="#555">看 Profile 定位，不靠猜</text>
+
+  <!-- 课 8 -->
+  <rect x="630" y="80" width="270" height="170" rx="10" fill="#fce4ec" stroke="#C2185B" stroke-width="2"/>
+  <rect x="630" y="80" width="270" height="32" rx="10" fill="#C2185B"/>
+  <rect x="630" y="102" width="270" height="10" fill="#C2185B"/>
+  <text x="765" y="102" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">课 8　多表关联与高级 SQL</text>
+  <text x="648" y="135" font-size="11.5" font-weight="600" fill="#880e4f">复杂查询怎么优化</text>
+  <text x="648" y="158" font-size="12" fill="#333">① Join 与分布式 Join 策略</text>
+  <text x="648" y="180" font-size="12" fill="#333">② 复杂类型与半结构化</text>
+  <text x="648" y="202" font-size="12" fill="#333">③ 异步物化视图与改写</text>
+  <text x="648" y="232" font-size="11" fill="#555">大表 Join 大表 = 性能杀手</text>
+
+  <line x1="312" y1="165" x2="331" y2="165" stroke="#666" stroke-width="2" marker-end="url(#a3)"/>
+  <line x1="607" y1="165" x2="626" y2="165" stroke="#666" stroke-width="2" marker-end="url(#a3)"/>
+
+  <!-- 底部 -->
+  <rect x="40" y="268" width="860" height="38" rx="8" fill="#ffffff" stroke="#bdbdbd" stroke-dasharray="4 3"/>
+  <text x="60" y="285" font-size="11.5" fill="#444">递进：先有数据可查（课 6）→ 再看懂单次查询怎么执行（课 7）→ 最后优化复杂查询（课 8）。</text>
+  <text x="60" y="300" font-size="11.5" fill="#444">⚠️ 课 8 的异步物化视图与阶段 2 课 5 的同步 Rollup 不同：独立存储 + 定时刷新 + 支持自动改写。</text>
+</svg>

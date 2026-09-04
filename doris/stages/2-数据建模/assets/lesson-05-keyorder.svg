@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 470" width="1000" height="470" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="1000" height="470" fill="#fbfbfb"/>
+  <text x="500" y="28" text-anchor="middle" font-size="16" font-weight="700" fill="#1a237e">Key 列顺序决定了数据怎么排序，也就决定了哪些查询能被加速</text>
+  <text x="500" y="48" text-anchor="middle" font-size="11.5" fill="#777">同一份 2050 万行数据，只有 Key 列顺序不同（实测于 Doris 4.1.3）</text>
+
+  <!-- 左：k_date_first -->
+  <text x="240" y="82" text-anchor="middle" font-size="13" font-weight="700" fill="#1565C0">DUPLICATE KEY(order_date, province, city)</text>
+
+  <rect x="60" y="94" width="360" height="150" rx="4" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.5"/>
+  <text x="240" y="112" text-anchor="middle" font-size="10.5" fill="#555">数据按这个顺序排：</text>
+
+  <text x="72" y="134" font-size="10.5" fill="#333">2025-01-01｜广东｜深圳</text>
+  <text x="72" y="152" font-size="10.5" fill="#333">2025-01-01｜广东｜广州</text>
+  <text x="72" y="170" font-size="10.5" fill="#333">2025-01-01｜山东｜青岛</text>
+  <text x="72" y="188" font-size="10.5" fill="#999">2025-01-02｜北京｜...</text>
+  <text x="72" y="206" font-size="10.5" fill="#999">2025-01-02｜广东｜...</text>
+  <text x="72" y="224" font-size="10.5" fill="#999">2025-01-03｜...</text>
+
+  <rect x="72" y="234" width="336" height="4" rx="2" fill="#90caf9"/>
+
+  <text x="72" y="256" font-size="10" fill="#666">日期相同的一批里，才会按省份排</text>
+
+  <text x="240" y="288" text-anchor="middle" font-size="11" font-weight="700" fill="#2E7D32">✅ 查 order_date（第 1 列）</text>
+  <text x="240" y="306" text-anchor="middle" font-size="10.5" fill="#333">前缀索引直接定位 → 快</text>
+  <text x="240" y="326" text-anchor="middle" font-size="11" font-weight="700" fill="#C62828">❌ 查 province（第 2 列）</text>
+  <text x="240" y="344" text-anchor="middle" font-size="10.5" fill="#333">前面挡着 order_date，无法定位</text>
+  <text x="240" y="362" text-anchor="middle" font-size="10.5" fill="#333">"广东"散落在每个日期块里</text>
+
+  <!-- 右：k_prov_first -->
+  <text x="760" y="82" text-anchor="middle" font-size="13" font-weight="700" fill="#2E7D32">DUPLICATE KEY(province, city, order_date)</text>
+
+  <rect x="580" y="94" width="360" height="150" rx="4" fill="#e8f5e9" stroke="#2E7D32" stroke-width="1.5"/>
+  <text x="760" y="112" text-anchor="middle" font-size="10.5" fill="#555">数据按这个顺序排：</text>
+
+  <text x="592" y="134" font-size="10.5" fill="#333">广东｜深圳｜2025-01-01</text>
+  <text x="592" y="152" font-size="10.5" fill="#333">广东｜深圳｜2025-01-02</text>
+  <text x="592" y="170" font-size="10.5" fill="#333">广东｜广州｜2025-01-01</text>
+  <text x="592" y="188" font-size="10.5" fill="#999">山东｜青岛｜2025-01-01</text>
+  <text x="592" y="206" font-size="10.5" fill="#999">山东｜青岛｜2025-01-02</text>
+  <text x="592" y="224" font-size="10.5" fill="#999">北京｜...</text>
+
+  <rect x="592" y="234" width="336" height="4" rx="2" fill="#a5d6a6"/>
+
+  <text x="592" y="256" font-size="10" fill="#666">省份相同的一批里，才会按日期排</text>
+
+  <text x="760" y="288" text-anchor="middle" font-size="11" font-weight="700" fill="#2E7D32">✅ 查 province（第 1 列）</text>
+  <text x="760" y="306" text-anchor="middle" font-size="10.5" fill="#333">前缀索引直接定位 → 快</text>
+  <text x="760" y="326" text-anchor="middle" font-size="11" font-weight="700" fill="#C62828">❌ 查 order_date（第 3 列）</text>
+  <text x="760" y="344" text-anchor="middle" font-size="10.5" fill="#333">前面挡着 province 和 city</text>
+  <text x="760" y="362" text-anchor="middle" font-size="10.5" fill="#333">某个日期散落在每个省份块里</text>
+
+  <!-- 中间 -->
+  <text x="500" y="180" text-anchor="middle" font-size="22" fill="#999">↔</text>
+  <text x="500" y="202" text-anchor="middle" font-size="10" fill="#777">只有顺序不同</text>
+
+  <!-- 底部结论 -->
+  <rect x="60" y="384" width="880" height="68" rx="8" fill="#e8eaf6" stroke="#3F51B5" stroke-width="1.5"/>
+  <text x="500" y="408" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1a237e">结论：Key 列顺序 = 数据排序顺序，把最高频的查询列放在最前面</text>
+  <text x="500" y="428" text-anchor="middle" font-size="11" fill="#333">两张表查出的数据完全相同（广东都是 2,560,989 行、总额 6,426,550,858），差异只在"能不能用前缀索引定位"</text>
+  <text x="500" y="446" text-anchor="middle" font-size="11" fill="#C62828">⚠️ 硬约束：Key 列必须是建表语句里最前面的几列，顺序要一致，否则报错 Key columns should be a ordered prefix</text>
+</svg>
