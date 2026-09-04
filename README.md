@@ -2,27 +2,36 @@
 
 > 以「课程制」方式系统学习技术主题：每门课程自带学习档案、路径总览与课件体系，支持断点续学。
 
-[![courses](https://img.shields.io/badge/courses-13-blue)](#课程导航)
+[![courses](https://img.shields.io/badge/courses-21-blue)](#课程导航)
+[![Bash](https://img.shields.io/badge/Bash-0%2F13-yellow)](shell/02-课程目录.md)
 [![Celery + Django](https://img.shields.io/badge/Celery%2B_Django-10%2F10-brightgreen)](celery-django/02-课程目录.md)
 [![Consul](https://img.shields.io/badge/Consul-7%2F11-yellow)](consul/02-课程目录.md)
 [![Design Patterns](https://img.shields.io/badge/Design_Patterns-12%2F12-brightgreen)](design-patterns/02-课程目录.md)
+[![Django 进阶](https://img.shields.io/badge/Django-22%2F22-brightgreen)](django/02-课程目录.md)
+[![Doris](https://img.shields.io/badge/Doris-12%2F12-brightgreen)](doris/02-课程目录.md)
 [![Elasticsearch](https://img.shields.io/badge/Elasticsearch-15%2F15-brightgreen)](elasticsearch/02-课程目录.md)
+[![Grafana](https://img.shields.io/badge/Grafana-12%2F12-yellow)](grafana/02-课程目录.md)
 [![InfluxDB](https://img.shields.io/badge/InfluxDB-19%2F19-brightgreen)](influxdb/02-课程目录.md)
 [![Kafka](https://img.shields.io/badge/Kafka-10%2F10-brightgreen)](kafka/02-课程目录.md)
+[![OpenTelemetry](https://img.shields.io/badge/OpenTelemetry-12%2F12-brightgreen)](opentelemetry/02-课程目录.md)
+[![Prometheus](https://img.shields.io/badge/Prometheus-4%2F12-yellow)](prometheus/02-课程目录.md)
 [![PromQL](https://img.shields.io/badge/PromQL-12%2F12-brightgreen)](promql/02-课程目录.md)
 [![RabbitMQ](https://img.shields.io/badge/RabbitMQ-12%2F12-brightgreen)](rabbitmq/02-课程目录.md)
 [![Redis](https://img.shields.io/badge/Redis-9%2F9-brightgreen)](redis/02-课程目录.md)
+[![SurrealDB](https://img.shields.io/badge/SurrealDB-12%2F12-brightgreen)](surrealdb/02-课程目录.md)
 [![ZooKeeper](https://img.shields.io/badge/ZooKeeper-15%2F15-brightgreen)](zookeeper/02-课程目录.md)
 [![VictoriaMetrics](https://img.shields.io/badge/VictoriaMetrics-12%2F12-brightgreen)](victoriametrics/02-课程目录.md)
+[![动画与视频基础](https://img.shields.io/badge/Animation_Engine-10%2F10-yellow)](animation-engine/00-动画与视频基础/02-课程目录.md)
 [![JavaScript Core](https://img.shields.io/badge/JavaScript_Core-7%2F12-yellow)](frontend/javascript-core/02-课程目录.md)
-[![TypeScript](https://img.shields.io/badge/TypeScript-1%2F15-yellow)](frontend/typescript-core/02-课程目录.md)
+[![TypeScript](https://img.shields.io/badge/TypeScript-15%2F15-brightgreen)](frontend/typescript-core/02-课程目录.md)
 
 ## 概述
 
-本仓库收录**十三门**系统化技术课程，覆盖后端基础设施与前端语言两大方向：
+本仓库收录**二十一门**系统化技术课程，覆盖后端基础设施、前端语言与图形媒体三大方向：
 
-- **后端 / 基础设施**：Celery + Django 异步任务、Consul 服务注册发现、设计模式（Python 实现）、Elasticsearch 搜索、InfluxDB 时序数据库、Kafka 消息队列、PromQL 监控查询语言、RabbitMQ 消息中间件、Redis 缓存与数据结构服务器、VictoriaMetrics 时序数据库、ZooKeeper 分布式协调
+- **后端 / 基础设施**：Bash 脚本编程（进阶向）、Celery + Django 异步任务、Consul 服务注册发现、设计模式（Python 实现）、Django 进阶（前后端分离）、Doris 实时数仓（OLAP）、Elasticsearch 搜索、Grafana 可视化、InfluxDB 时序数据库、Kafka 消息队列、OpenTelemetry 可观测性、Prometheus 监控、PromQL 监控查询语言、RabbitMQ 消息中间件、Redis 缓存与数据结构服务器、SurrealDB 多模型数据库、VictoriaMetrics 时序数据库、ZooKeeper 分布式协调
 - **前端（`frontend/`）**：JavaScript 语言核心（ES6+）、TypeScript 类型系统
+- **图形媒体（`animation-engine/`）**：动画引擎与视频基础
 
 > JS 与 TS 两门课互补且互相引用：`javascript-core` 在课 12 讲「该不该上 TypeScript」的选型条件，`typescript-core` 则把 JavaScript 语言核心列为**前置假设**（ES6 基础），不重复讲解法。
 
@@ -35,15 +44,22 @@
 
 | 课程 | 主题 | 基础要求 | 进度 | 状态 |
 |------|------|----------|------|------|
+| [Bash 脚本编程](shell/02-课程目录.md) | 进阶向：解析链路与展开、数据结构与 fd、进程边界与 trap、严格模式与可观测、安全性能与选型，以「一段 2000 行的 deploy.sh」为主线，WSL Ubuntu 24.04 + bash 5.2.21 实操贯穿全程 | 进阶（已写过 2000+ 行 shell） | 0 / 13 课 | 🔄 进行中 |
 | [Celery + Django](celery-django/02-课程目录.md) | Celery 异步任务体系与 Django 集成，从异步化动因、可靠性幂等到并发模型、编排与生产运维 | Django 熟，Celery 入门 | 10 / 10 课 | ✅ 已完成 |
 | [Consul](consul/02-课程目录.md) | 服务注册发现与配置中心，从能力拆解到横向对比与选型决策（决策参考导向） | 入门 | 7 / 11 课 | 🔄 进行中 |
 | [设计模式](design-patterns/02-课程目录.md) | GoF 设计模式的 Python 惯用实现，以订单系统重构为故事主线 | Python 基础扎实 | 12 / 12 课 | ✅ 已完成 |
+| [Django 进阶](django/02-课程目录.md) | 前后端分离架构下的 Django 进阶：DRF 三件套 → 认证权限 → 数据层纵深 → 性能异步 → 工程化生产，贯穿「不报错的错误」暗线，含 OrderFlow 结课项目与收尾三件套 | Django 熟（前后端分离为背景裁剪条件，非学习目标） | 22 / 22 课 | ✅ 已完成 |
+| [Doris](doris/02-课程目录.md) | Apache Doris 实时数仓（OLAP）：从「MySQL 报表为什么慢」到建模、导入、查询引擎与分布式运维，Docker 集群 + 2150 万行数据实操贯穿全程，含电商实时数仓结课项目 | 零基础 | 12 / 12 课 | ✅ 已完成 |
 | [Elasticsearch](elasticsearch/02-课程目录.md) | 从「数据库为什么搞不定搜索」到查询聚合、分布式与选型，附认证备考映射 | 零基础 | 15 / 15 课 | ✅ 已完成 |
+| [Grafana](grafana/02-课程目录.md) | Grafana 可视化与面板设计，含 playground 实操环境 | 入门（需 Prometheus / PromQL 基础） | 12 / 12 课 | 🔶 收尾中 |
 | [InfluxDB](influxdb/02-课程目录.md) | InfluxDB 3 时序数据库，从「为什么不用 MySQL」到生产落地与选型决策 | 零基础 | 19 / 19 课 | ✅ 已完成 |
 | [Kafka 基础](kafka/02-课程目录.md) | 从消息队列概念到集群可靠性与事件驱动架构，Docker 实操贯穿全程 | 零基础 | 10 / 10 课 | ✅ 已完成 |
+| [OpenTelemetry](opentelemetry/02-课程目录.md) | 可观测性标准：从三大信号（Trace / Metrics / Logs）到采集、处理与生产落地，含 capstone 结课项目与收尾四件套 | 入门（需后端服务经验） | 12 / 12 课 | ✅ 已完成 |
+| [Prometheus](prometheus/02-课程目录.md) | Prometheus 监控体系：数据模型、抓取与存储、告警与生产实践，含 labs 动手实验 | 进阶（已学完 PromQL 课程） | 4 / 12 课 | 🔄 进行中 |
 | [PromQL](promql/02-课程目录.md) | Prometheus 查询语言，从数据模型到告警规则与 Grafana 面板，含 SLO 实战项目 | 零基础 | 12 / 12 课 | ✅ 已完成 |
 | [RabbitMQ 基础](rabbitmq/02-课程目录.md) | 从「为什么需要消息队列」到生产落地，Python（pika）实操贯穿全程，止于选型决策 | 零基础 | 12 / 12 课 | ✅ 已完成 |
 | [Redis](redis/02-课程目录.md) | 从「为什么需要 Redis」到数据结构、持久化、主从哨兵、分片集群与缓存设计，WSL + Redis 8 实操贯穿全程 | 零基础 | 9 / 9 课 | ✅ 已完成 |
+| [SurrealDB](surrealdb/02-课程目录.md) | SurrealDB 多模型数据库：从数据建模到查询、事务与生产落地，含技术文档问答系统结课项目与收尾四件套 | 零基础 | 12 / 12 课 | ✅ 已完成 |
 | [VictoriaMetrics](victoriametrics/02-课程目录.md) | 时序数据库与 Prometheus 长期存储，从单机天花板到 MergeSet 存储引擎、集群三件套与生产链路，Docker 实操贯穿全程，止于选型决策 | 入门（需 Prometheus / PromQL 基础） | 12 / 12 课 | ✅ 已完成 |
 | [ZooKeeper](zookeeper/02-课程目录.md) | 分布式协调服务，从零基础上手到核心机制、选型决策，含结课实战项目与排障手册 | 零基础→入门 | 15 / 15 课 | ✅ 已完成 |
 
@@ -52,11 +68,19 @@
 | 课程 | 主题 | 基础要求 | 进度 | 状态 |
 |------|------|----------|------|------|
 | [JavaScript 语言核心](frontend/javascript-core/02-课程目录.md) | ES6+ 语言核心：值与作用域 → 函数与对象 → 异步与现代语法 → 工程化与运行时，以「一段诡异代码的侦探之旅」为主线 | 入门（写过 JS / jQuery） | 7 / 12 课 | 🔄 进行中 |
-| [TypeScript](frontend/typescript-core/02-课程目录.md) | 类型系统的身份蜕变「注释 → 契约 → 可编程约束」：类型思维启蒙 → 收窄与控制流 → 泛型与类型编程 → 工程化 → 架构与选型 | 零基础 TS（需 ES6 基础） | 1 / 15 课 | 🔄 进行中 |
+| [TypeScript](frontend/typescript-core/02-课程目录.md) | 类型系统的身份蜕变「注释 → 契约 → 可编程约束」：类型思维启蒙 → 收窄与控制流 → 泛型与类型编程 → 工程化 → 架构与选型 | 零基础 TS（需 ES6 基础） | 15 / 15 课 | ✅ 已完成 |
 
-> 进度为 2026-09-03 快照，实时状态以各课程 `00-学习档案.md` 为准。
+### 图形媒体方向（`animation-engine/`）
+
+| 课程 | 主题 | 基础要求 | 进度 | 状态 |
+|------|------|----------|------|------|
+| [动画与视频基础](animation-engine/00-动画与视频基础/02-课程目录.md) | 动画原理与视频编码基础，以 playground 逐帧生成与对比实验贯穿全程 | 零基础 | 10 / 10 课 | 🔶 收尾中 |
+
+> ⚠️ 本门课的目录层级比其他课程多一层（`animation-engine/00-动画与视频基础/`），其 `02-课程目录.md` 位于子目录下，链接需带上中间层。
+
+> 进度为 2026-09-04 快照，实时状态以各课程 `00-学习档案.md` 为准。
 >
-> 当前 13 门课中 **10 门已真正结课**（Celery + Django / Design Patterns / Elasticsearch / InfluxDB / Kafka / PromQL / RabbitMQ / Redis / VictoriaMetrics / ZooKeeper），**3 门仍在推进**（Consul / JavaScript / TypeScript，其未讲课时仅落盘占位骨架或详细大纲，不计入进度）。
+> 当前 21 门课中 **15 门已真正结课**（Celery + Django / Design Patterns / Django 进阶 / Doris / Elasticsearch / InfluxDB / Kafka / OpenTelemetry / PromQL / RabbitMQ / Redis / SurrealDB / TypeScript / VictoriaMetrics / ZooKeeper），**2 门课时已讲完但收尾产物待生成**（Grafana / 动画与视频基础），**4 门仍在推进**（Bash / Consul / Prometheus / JavaScript，其未讲课时仅落盘占位骨架或详细大纲，不计入进度）。
 >
 > 状态图例：✅ 已完成 = 全部课时与收尾环节（结课项目 / 课程手册 / 排障手册）均交付；🔶 收尾中 = 全部课时讲完，收尾环节待生成；🔄 进行中 = 尚有课时未编写。
 
@@ -79,25 +103,39 @@ learning/
 │   └── stages/               # 4 个阶段目录：overview.md + lessons/lesson-XX.md
 ├── consul/                   # Consul 课程（4 阶段 11 课，含 payloads/ 与 projects/）
 ├── design-patterns/          # 设计模式课程（4 阶段 12 课，Python）
+├── django/                   # Django 进阶课程（6 阶段 22 课 66 知识点，含 final-课程手册.md、08/09/10 收尾三件套与 projects/orderflow/ 结课项目）
+├── doris/                    # Apache Doris 课程（4 阶段 12 课 36 知识点，含 final-课程手册.md、projects/ 与 assets/ 实测脚本）
 ├── elasticsearch/            # Elasticsearch 课程（5 阶段 15 课，含 final-课程手册.md 与 playground/ 实测脚本）
+├── grafana/                  # Grafana 课程（含 playground/ 实操环境）
+├── opentelemetry/            # OpenTelemetry 课程（4 阶段 12 课 42 知识点，含 final-课程手册.md、08/09/10 收尾三件套与 projects/capstone/）
+├── prometheus/               # Prometheus 课程（4 阶段 12 课 36 知识点，含 labs/ 动手实验）
+├── surrealdb/                # SurrealDB 课程（4 阶段 12 课 40 知识点，含 final-课程手册.md、收尾四件套与 projects/）
+├── animation-engine/         # 动画与视频基础（10 课，目录层级多一层：00-动画与视频基础/）
 ├── frontend/                 # 前端课程目录（2 门课）
 │   ├── javascript-core/      # JavaScript 语言核心 ES6+（4 阶段 12 课 36 知识点，已讲 7 课）
 │   │   ├── 00-学习档案.md / 00-评审清单.md / 01-学习路径总览.md / 02-课程目录.md
 │   │   ├── assets/           # 课程级 SVG（学习路径总览）
 │   │   └── stages/           # 4 个阶段：值与作用域 / 函数与对象 / 异步与现代语法 / 工程化与运行时
-│   └── typescript-core/      # TypeScript 类型系统（5 阶段 15 课 49 知识点，已讲 1 课，含 playground/）
+│   └── typescript-core/      # TypeScript 类型系统（5 阶段 15 课 49 知识点，已全部讲完，含 playground/、projects/ 与 08/09/10 收尾三件套）
 ├── influxdb/                 # InfluxDB 3 课程（6 阶段 19 课 57 知识点，含 final-课程手册.md 与 projects/）
 ├── kafka/                    # Kafka 基础课程（4 阶段 10 课，含 final-课程手册.md）
 ├── promql/                   # PromQL 课程（4 阶段 12 课，含 projects/ 可观测性体系）
 ├── rabbitmq/                 # RabbitMQ 课程（4 阶段 12 课，含 playground/ 实测脚本）
 ├── redis/                    # Redis 课程（4 阶段 9 课，含 playground/ 实测脚本）
-├── victoriametrics/          # VictoriaMetrics 课程（5 阶段 12 课 35 知识点，含 final-课程手册.md、projects/ 与 playground/ 实测脚本）
-└── zookeeper/                # ZooKeeper 课程（5 阶段 15 课，含结课项目与排障手册）
+├── shell/                      # Bash 脚本编程课程（进阶向，4 阶段 13 课 39 知识点）
+│   ├── 00-学习档案.md / 00-评审清单.md
+│   ├── 01-学习路径总览.md / 02-课程目录.md
+│   ├── assets/                 # 课程级 SVG（学习路径总览）
+│   └── stages/                 # 4 个阶段目录：overview.md + assets/ + lessons/lesson-XX.md
+├── victoriametrics/            # VictoriaMetrics 课程（5 阶段 12 课 35 知识点，含 final-课程手册.md、projects/ 与 playground/ 实测脚本）
+└── zookeeper/                  # ZooKeeper 课程（5 阶段 15 课，含结课项目与排障手册）
 ```
 
 各课程内部体例一致：`00-学习档案.md`（进度与评审）、`00-评审清单.md`（待办勾选）、`01-学习路径总览.md`、`02-课程目录.md`、`assets/`（SVG）、`stages/`（阶段与课件）。部分课程另有扩展目录：`playground/`（本机实测脚本）、`projects/`（结课实战项目）、`08-实战经验.md` 与 `09-排障速查手册.md`（收尾产物）。
 
-> 阶段目录命名形如 `stages/1-地基与创建型/`，每个阶段包含一份 `overview.md`（阶段导览）与 `lessons/` 目录（课件正文）；尚未开讲的阶段随学习进度逐步落盘课件（如 `consul/` 阶段 3-4、`frontend/javascript-core/` 阶段 3-4、`frontend/typescript-core/` 阶段 1-5 目前只有占位骨架或详细大纲，均未计入上表进度）。
+> `.review/` 目录存放写课过程的评审文档与一次性探针：`pedagogy-review-*.md` / `learner-review-*.md` 是双视角评审的凭证，**随课程一并留档**；`probe_*.py`、`check_links.py`、`final_check.py` 等一次性脚本与开发库 `db.sqlite3` 属过程残留，已按课程分别写入 `.gitignore`（见 `django/` 相关规则段）。
+
+> 阶段目录命名形如 `stages/1-地基与创建型/`，每个阶段包含一份 `overview.md`（阶段导览）与 `lessons/` 目录（课件正文）；尚未开讲的阶段随学习进度逐步落盘课件（如 `consul/` 阶段 3-4、`frontend/javascript-core/` 阶段 3-4 目前只有占位骨架或详细大纲，均未计入上表进度）。
 
 ## 如何学习
 

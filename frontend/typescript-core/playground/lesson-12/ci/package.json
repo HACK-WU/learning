@@ -1,0 +1,16 @@
+{
+  "name": "lesson12-ci",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "esbuild src/checkout.ts --bundle --platform=node --format=esm --outfile=dist/checkout.js",
+    "ci": "npm run typecheck && npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^26.4.1",
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2"
+  }
+}

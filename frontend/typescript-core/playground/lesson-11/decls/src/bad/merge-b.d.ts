@@ -1,0 +1,3 @@
+interface AppPlugin {
+  version: string;
+}

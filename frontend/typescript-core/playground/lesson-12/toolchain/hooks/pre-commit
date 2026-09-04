@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+# 启用方式（仓库根目录执行）：
+#   git config core.hooksPath hooks
+#
+# 分工原则：
+#   pre-commit → 快，只拦住最常见的低级错误（类型 + lint）
+#   CI         → 全，typecheck / lint / build / test 一道都不能少
+#
+# ⚠️ 纪律：不要用 `|| true`、`|| exit 0` 把失败吞掉。
+#    exit code 是提交门禁唯一的语言，吞掉它等于取消门禁。
+
+set -e
+
+echo "[pre-commit] tsc --noEmit"
+npm run typecheck

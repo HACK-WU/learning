@@ -38,9 +38,9 @@
 
 ## 本阶段产出
 
-- [ ] `lessons/lesson-01-TypeScript到底是什么.md`
-- [ ] `lessons/lesson-02-基础类型标注与推导.md`
-- [ ] `lessons/lesson-03-对象类型与结构化类型.md`
+- [x] `lessons/lesson-01-TypeScript到底是什么.md`
+- [x] `lessons/lesson-02-基础类型标注与推导.md`
+- [x] `lessons/lesson-03-对象类型与结构化类型.md`
 
 ## 🔗 下一步
 

@@ -1,0 +1,19 @@
+{
+  "name": "schema-guard",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "typecheck:lib": "tsc -p tsconfig.src.json",
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && node dist/test/run.js",
+    "demo": "npm run build && node dist/examples/demo.js",
+    "bad": "npm run build && node dist/examples/bad-schema-guard.js",
+    "ci": "npm run typecheck && npm run typecheck:lib && npm run test"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2",
+    "@types/node": "^22.0.0"
+  }
+}

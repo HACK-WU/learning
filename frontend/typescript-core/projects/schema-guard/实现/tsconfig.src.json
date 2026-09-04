@@ -1,0 +1,31 @@
+/**
+ * 库的「纯净度」校验：只编译 src/，并且 **types: []、lib 只有 esnext**。
+ *
+ * 用途：`npm run typecheck:lib`
+ *
+ * 为什么要单独一份配置？
+ *   默认配置为了跑测试必须引入 @types/node，而一旦引入，src/ 就可以
+ *   不知不觉用上 Node 的 API（process、Buffer…），库就再也不能在浏览器里跑了。
+ *   这份配置把 ambient 类型全部关掉，等于给「库是环境无关的」加了一道编译期闸门 ——
+ *   这正是课 15「类型分层」里「边界类型不该渗进领域层」的编译器版本。
+ *
+ * 它不产出文件（noEmit），纯粹是一道检查。
+ */
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    "noEmit": true,
+    "types": [],
+    "lib": ["esnext"],
+    "skipLibCheck": true,
+    "verbatimModuleSyntax": true
+  },
+  "include": ["./src"]
+}

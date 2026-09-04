@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "strict": true,
+    "types": [],
+    "lib": ["esnext"],
+    "noEmit": true
+  },
+  "include": ["./src"]
+}

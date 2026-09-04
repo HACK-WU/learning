@@ -1,0 +1,18 @@
+{
+  "name": "lesson12-toolchain",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build:tsc": "tsc",
+    "build:esbuild": "esbuild src/app.ts --bundle --platform=node --format=esm --outfile=dist-esbuild/app.js",
+    "start:tsx": "tsx src/app.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^26.4.1",
+    "esbuild": "^0.28.2",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.23.13"
+  }
+}

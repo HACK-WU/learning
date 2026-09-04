@@ -41,9 +41,9 @@
 
 ## 本阶段产出
 
-- [ ] `lessons/lesson-13-类型体操进阶.md`
-- [ ] `lessons/lesson-14-编译器原理与类型检查机制.md`
-- [ ] `lessons/lesson-15-大型项目类型架构与选型收束.md`
+- [x] `lessons/lesson-13-类型体操进阶.md`
+- [x] `lessons/lesson-14-编译器原理与类型检查机制.md`
+- [x] `lessons/lesson-15-大型项目类型架构与选型收束.md`
 
 ## 🔗 下一步
 

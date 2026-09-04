@@ -37,8 +37,8 @@
 
 ## 本阶段产出
 
-- [ ] `lessons/lesson-08-泛型基础.md`
-- [ ] `lessons/lesson-09-类型编程三件套与内置工具类型.md`
+- [x] `lessons/lesson-08-泛型基础.md`
+- [x] `lessons/lesson-09-类型编程三件套与内置工具类型.md`
 
 ## ⚠️ 难度提示
 

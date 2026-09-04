@@ -1,0 +1,8 @@
+{
+  "name": "lesson14-pipeline",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^26.4.1"
+  }
+}

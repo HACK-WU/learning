@@ -1,0 +1,11 @@
+{
+  "name": "lesson12-lint-naive",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "devDependencies": {
+    "eslint": "^10.9.1",
+    "typescript": "^7.0.2",
+    "typescript-eslint": "^8.69.0"
+  }
+}

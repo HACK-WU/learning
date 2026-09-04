@@ -1,0 +1,32 @@
+/**
+ * 默认配置：编译「全部」代码（src + test + examples），供开发、测试、CI 使用。
+ *
+ * 这里的 `types: ["node"]` 是必需的：test/ 与 examples/ 要用 `node:assert`、
+ * `console`、`process`。TS 7 的 `types` 默认是 `[]`（课 11 实测），
+ * 不显式写出来就会看到 TS2591 / TS2584 这一串报错。
+ *
+ * 但**库本身不该依赖任何环境类型** —— 那份保证由 `tsconfig.src.json` 单独验证。
+ */
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    "declaration": true,
+    "outDir": "./dist",
+
+    "types": ["node"],
+    "lib": ["esnext"],
+    "skipLibCheck": true,
+    "verbatimModuleSyntax": true
+  },
+  "include": ["./src", "./test", "./examples"]
+  // 不设 rootDir：让 src / test / examples 按原目录层级落到 dist/ 下，
+  // 这样测试里的 `../src/index.js` 在编译后依然指向 dist/src/index.js。
+  // 真正要交付的产物是 dist/src/index.d.ts（公开 API 边界见 src/index.ts）。
+}

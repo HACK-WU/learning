@@ -1,0 +1,15 @@
+# ❌ 反例：只跑构建，不跑类型检查
+# 构建工具（esbuild / swc / Vite）只做转译，一个类型错误都不会报 —— CI 全绿，线上全红
+name: CI (bad)
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npm run build:esbuild      # 类型错误从这里溜过去
+      - run: npm test

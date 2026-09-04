@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "strict": true,
+    "types": [],
+    "lib": ["esnext"],
+    "skipLibCheck": true,
+    "noEmit": true,
+    "paths": {
+      "order-sdk": ["../lib/v2/dist/index.d.ts"]
+    }
+  },
+  "include": ["./src"]
+}

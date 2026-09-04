@@ -75,6 +75,20 @@ node_modules/
 /frontend/typescript-core/playground/*.js
 !/frontend/typescript-core/playground/scenario.js
 
+# ---- 教学实操环境：TS 编译产物目录（typescript-core 课程）----
+# 背景：课 10 起的多个 playground 与实战项目 schema-guard 用 "outDir": "dist"
+#   集中输出 tsc 编译产物（.js + .d.ts）；课 12 工具链对比用 dist-tsc/ dist-esbuild/，
+#   课 14 编译流水线用 dist-syntax/ dist-type/。均属编译产物而非教学内容，
+#   可由 npx tsc / esbuild 一条命令重新生成，源文件在产物目录外的 src/ examples/ 等。
+# ⚠️ 只锚定 typescript-core 主题；dist/ 与 dist-*/ 分开写，避免 dist* 误伤未来
+#   可能出现的 distribution / distributed 等同名手写目录。
+frontend/typescript-core/**/dist/
+frontend/typescript-core/**/dist-*/
+# tsbuildinfo 是 tsc --build / --incremental 的增量编译缓存（JSON），与 dist 同类，
+# 位于 tsconfig 同级（lesson-10/refs、lesson-15/layering 等 packages 下），可 100% 复现。
+# 用全局 *.tsbuildinfo 而非锚定本主题：任何 TS 项目（含未来其他课程）都会生成。
+*.tsbuildinfo
+
 # ---- 教学实操环境：Consul 运行时数据（consul 课程）----
 # 风险点：lesson-05 的集群配置里 data_dir 直指仓库内的 playground/cluster/data/，
 # 节点一启动就地生成 raft.db、serf 快照、node-id、services 元数据（可再生，约 1 MB）。
@@ -205,3 +219,317 @@ elasticsearch/playground/l13-client/16b-cleanup.js
 elasticsearch/playground/l13-client/18-phase5-probe.js
 elasticsearch/playground/l13-client/19-consistency.js
 elasticsearch/playground/l13-client/21-cleanup-l15.js
+
+# ---- 教学实操环境：SurrealDB 运行时数据与一次性验证脚本（surrealdb 课程）----
+# 背景：2026-09-03 卫生检查（Phase 5 收尾）发现三类过程残留：
+#   1. playground/data/mydb —— RocksDB 存储目录，63 MB（其中 000004.log 62 MB）。
+#      讲义 lesson-02 只把它当作 `surreal start rocksdb:<绝对路径>` 的示例路径引用，
+#      引用的是「绝对路径的写法」而非目录内容；学员照讲义敲一条命令即可重建。
+#   2. playground/history.txt —— `surreal sql` REPL 自动追加的命令历史（30 行 USE NS / INFO），
+#      无教学价值且会随每次实操持续增长。
+#   3. playground 下 283 个一次性探针 / 验证脚本（l0X-probe-*.py、l0X-verify-*.surql 等），
+#      实测数字均已写进讲义与 final-课程手册，脚本本身未被任何讲义正文引用。
+#      .venv/ 与 __pycache__/ 已被上方仓库根通用规则覆盖，此处不重复添加。
+# 继续跟踪的教学产物（讲义正文直接引用，丢了读者照抄会失败，共 14 个）：
+#   l02-install.sh / l02-sdk-demo.py / l03-verify-31.surql / l03-verify-objid.surql
+#   l04-tx-throw.surql / l04-verify-41.surql / l09-probe-91a.surql / l09-run.py
+#   l10-run.py / l11-lib.py / l11-run.py / l12-up.sh / cap-probe5-zh2.py / l10lib.py
+#   另有 p60-p64 五个核查脚本被 收尾产物评审记录.md 引用 7 处，属证据链资产，一并保留。
+# ⚠️ 采用「编号通配忽略 + 逐条例外」而非 `surrealdb/playground/` 一刀切，
+#    正是为了避免连带吞掉上面这些教学产物（ES 课 15 踩过「讲义引用的 6 个 json 不存在」的坑）。
+surrealdb/playground/data/
+surrealdb/playground/history.txt
+surrealdb/playground/l[0-9][0-9]-*
+!surrealdb/playground/l10lib.py
+surrealdb/playground/cap-*
+!surrealdb/playground/l02-install.sh
+!surrealdb/playground/l02-sdk-demo.py
+!surrealdb/playground/l03-verify-31.surql
+!surrealdb/playground/l03-verify-objid.surql
+!surrealdb/playground/l04-tx-throw.surql
+!surrealdb/playground/l04-verify-41.surql
+!surrealdb/playground/l08-lesson-codes.surql
+!surrealdb/playground/l08-probe-82h-fixed.py
+!surrealdb/playground/l08-probe-82i-this-semantics.py
+!surrealdb/playground/l08-probe-82j-verify-this.py
+!surrealdb/playground/l08-run-codes-check.py
+!surrealdb/playground/l09-probe-91a.surql
+!surrealdb/playground/l09-run.py
+!surrealdb/playground/l10-run.py
+!surrealdb/playground/l11-lib.py
+!surrealdb/playground/l11-run.py
+!surrealdb/playground/l12-up.sh
+!surrealdb/playground/cap-probe5-zh2.py
+# ---- 教学实操环境：Doris 一次性探针 / 非最终迭代脚本（doris 课程）----
+# 背景：2026-09-03 卫生检查（Phase 5 收尾）发现 doris/assets/ 累积 299 个 .sh，
+# 其中大部分是写课过程的一次性探针（probe / diag / final-check / deep-dive ...）
+# 与非最终迭代版（-2 / -3 / -4）。实测数字早已固化进讲义与 final-课程手册，
+# 这些脚本未被任何讲义正文引用，丢了课程依然完整。
+# ⚠️ 不用 doris/assets/ 一刀切 —— 会连带吞掉讲义引用的 66 个教学脚本
+#    （setup / stepN / cleanup / lab / taskN），读者照抄讲义会直接失败。
+# 采用「精确语义通配」只忽略探针类，保留全部 setup/step/cleanup/lab/bench 系列。
+doris/assets/lesson[0-9][0-9]-*probe*.sh
+doris/assets/lesson[0-9][0-9]-*diag*.sh
+doris/assets/lesson[0-9][0-9]-final-check.sh
+doris/assets/lesson[0-9][0-9]-final-measure.sh
+doris/assets/lesson[0-9][0-9]-pre-check.sh
+doris/assets/lesson[0-9][0-9]-deep-*.sh
+doris/assets/lesson[0-9][0-9]-confirm-*.sh
+doris/assets/lesson[0-9][0-9]-recheck-*.sh
+doris/assets/lesson[0-9][0-9]-append-conclusion.sh
+doris/assets/lesson[0-9][0-9]-fix-verify.sh
+doris/assets/lesson[0-9][0-9]-env-probe.sh
+doris/assets/lesson[0-9][0-9]-summarize.sh
+doris/assets/lesson[0-9][0-9]-refill*.sh
+doris/assets/lesson[0-9][0-9]-linkcheck.sh
+doris/assets/lesson[0-9][0-9]-profile-lab*.sh
+# ⚠️ lab 系列（block-lab / vec-lab）是可复现实操脚本，不忽略 —— 曾误伤后回退
+doris/assets/lesson[0-9][0-9]-partition-count.sh
+doris/assets/lesson[0-9][0-9]-profile-rows.sh
+doris/assets/lesson[0-9][0-9]-concurrent.sh
+# 非最终迭代版（-2 / -3 / -4 / -5 ...），讲义只引用最终交付版
+# 卫生检查自身产物
+# 非最终迭代版：仅忽略「短横 + 纯数字」结尾（lesson05-rollup-v2.sh 之类中间带数字的不受影响）
+doris/assets/lesson[0-9][0-9]-*-[0-9].sh
+doris/assets/lesson[0-9][0-9]-*-[0-9][0-9].sh
+# ⚠️ 上面的规则会误伤 step3 / bench2 这类「合法编号」的教学脚本
+#    （2026-09-03 校验时抓到 lesson12-step3.sh 被吞），故逐条例外：
+!doris/assets/lesson01-bench2.sh
+!doris/assets/lesson01-bench3.sh
+!doris/assets/lesson02-stream-load.sh
+!doris/assets/lesson03-mow-mor2.sh
+!doris/assets/lesson06-broker-load5.sh
+!doris/assets/lesson06-stream-load-lab2.sh
+!doris/assets/lesson06-routine-load2.sh
+!doris/assets/lesson07-step2.sh
+!doris/assets/lesson07-step3.sh
+!doris/assets/lesson07-step4.sh
+!doris/assets/lesson07-step5.sh
+!doris/assets/lesson07-step6.sh
+!doris/assets/lesson07-step7.sh
+!doris/assets/lesson08-step2.sh
+!doris/assets/lesson08-step3.sh
+!doris/assets/lesson08-step4.sh
+!doris/assets/lesson08-step5.sh
+!doris/assets/lesson08-step6.sh
+!doris/assets/lesson08-step7.sh
+!doris/assets/lesson09-step4.sh
+!doris/assets/lesson09-step5.sh
+!doris/assets/lesson10-step1.sh
+!doris/assets/lesson10-step2.sh
+!doris/assets/lesson10-step3.sh
+!doris/assets/lesson11-step1.sh
+!doris/assets/lesson11-step2.sh
+!doris/assets/lesson11-step3.sh
+!doris/assets/lesson12-step1.sh
+!doris/assets/lesson12-step2.sh
+!doris/assets/lesson12-step3.sh
+!doris/assets/phase3-task1-setup.sh
+!doris/assets/phase3-task2-load.sh
+!doris/assets/phase3-task3-tune.sh
+!doris/assets/phase3-task4-prod.sh
+!doris/assets/phase3-task5-accept.sh
+doris/assets/hygiene-*
+
+# phase3 系列：5 个 taskN 脚本是讲义/项目正文引用的教学产物（已在上方例外），
+# 其余 linkcheck / final-check 等核查脚本属一次性工具，忽略。
+doris/assets/phase3-linkcheck.sh
+doris/assets/phase3-final-check.sh
+
+# 二次清理（同批次）补录：同族迭代版——讲义只引用最终版（broker-load5 / profile.sh / routine-load2 ...），
+# 中间的 1/2/3/4 写课过程产物一并忽略，避免将来重跑时又冒出来。
+doris/assets/lesson06-broker-load.sh
+doris/assets/lesson06-broker-load[234].sh
+doris/assets/lesson06-routine-load.sh
+doris/assets/lesson06-stream-load-lab.sh
+doris/assets/lesson06-kafka-net.sh
+doris/assets/lesson06-final-bench.sh
+doris/assets/lesson06-schema-try.sh
+doris/assets/lesson06-verify.ps1
+doris/assets/lesson06-update-todo.py.sh
+doris/assets/lesson06-write-archives*.py.sh
+doris/assets/lesson07-profile[2-6].sh
+doris/assets/lesson07-profile-lab*.sh
+doris/assets/lesson05-index-bench.sh
+doris/assets/lesson05-rollup-bench.sh
+doris/assets/lesson05-rollup-v2.sh
+doris/assets/lesson05-verify-index.sh
+doris/assets/lesson05-fix-verify.sh
+doris/assets/lesson03-mow-mor.sh
+
+# ---- 生成物例外：TypeScript 课 15 分层成本测量用的两个 monorepo（2026-09-04）----
+# 背景：lesson-15/layering/gen.cjs 会生成 godtypes/ 与 layered/ 两个各约 2500 文件的
+#   对照 monorepo，用于测量「改一个类型要重建多少」。同样可一键复现。
+# ⚠️ 只忽略这两个生成目录，gen.cjs / measure.cjs 与其余手写示例都要保留。
+/frontend/typescript-core/playground/lesson-15/layering/godtypes/
+/frontend/typescript-core/playground/lesson-15/layering/layered/
+
+# ---- 生成物例外：TypeScript 课 14 并行度测量用的大项目产出（2026-09-04）----
+# 背景：lesson-14/perf/gen.cjs 会生成 300 个文件（约 3.5MB）用于测量各阶段耗时。
+#   同样可由脚本一键复现，讲义附录给了命令。
+/frontend/typescript-core/playground/lesson-14/perf/src/
+
+# ---- 生成物例外：TypeScript 课 13 递归深度扫描与编译耗时对照的产出（2026-09-04）----
+# 背景：lesson-13/cost/gen.js 会生成 simple/ 与 gym/ 两个各 200 文件的对照项目，
+#   recursion/gen.js 与 gen-str.js 会生成数十个深度探测文件，合计约 440 个。
+#   它们全部可由脚本一键复现（讲义附录给了命令），属于一次性的测量产物。
+# ⚠️ 只忽略这四个「纯生成目录」，生成器脚本、手写示例与 baseline/ 都要保留。
+/frontend/typescript-core/playground/lesson-13/cost/simple/
+/frontend/typescript-core/playground/lesson-13/cost/gym/
+/frontend/typescript-core/playground/lesson-13/recursion/depth/
+/frontend/typescript-core/playground/lesson-13/recursion/strdepth/
+
+# ---- 教学产物例外：TypeScript 课 11 模块解析 / @types 演示用的手写「假包」（2026-09-04）----
+# 背景：课 11 要演示「裸标识符 → node_modules → package.json exports」这条解析链，
+#   以及 @types 包如何被 types 字段加载，因此 playground/lesson-11 下有几个手写的
+#   极简假包（每个只含 package.json + 一两个 .js / .d.ts），被讲义正文逐行引用。
+# 风险点：node_modules/ 是全局忽略规则，必须先把目录本身取反，其内部文件才会重新参与匹配。
+# ⚠️ 不要扩大范围 —— 只放行 lesson-11 下这一层，其余 node_modules 仍应被忽略。
+!/frontend/typescript-core/playground/lesson-11/*/node_modules/
+
+# ---- 教学实操环境：JS 课程运行时诊断产物（frontend/javascript-core 课程）----
+# 背景：2026-09-04 卫生检查（Phase 5 收尾）实测确认该目录**当前零残留**
+#   （无 node_modules / *.log / *.tmp / .DS_Store；projects/ 下 14 个文件全是教学产物）。
+#   但课程有两处教学活动会就地生成大文件，属"学员照讲义做一次就必然复现"的过程残留：
+#   1. 课 12《内存·性能与选型收束》讲堆快照排查内存泄漏，正文教 v8.writeHeapSnapshot()，
+#      实测产出 88.17 MB 的 .heapsnapshot。
+#   2. Phase 5《排障速查手册》条目 2 教 node --cpu-prof 抓 CPU 热点，
+#      实测产出 18 KB 的 .cpuprofile。
+# 二者均可一条命令重建，不是教学内容；讲义引用的是**命令用法**而非产物本体。
+# ⚠️ 用目录前缀锚定到本主题，且模式内不含中文（同 ES / VictoriaMetrics 分节做法，
+#    避免 .gitignore 里出现中文路径带来的编码风险）。
+# 教学产物（*.md / assets/*.svg / projects/ 实现/ 下的源码）不受影响，继续跟踪。
+frontend/javascript-core/**/*.heapsnapshot
+frontend/javascript-core/**/*.cpuprofile
+
+# ---- 写课过程的一次性脚本目录（跨主题共享，2026-09-04 卫生检查补录）----
+# 背景：.probe/ 是仓库根下的临时脚本目录，用于存放写课过程中的探测 / 校验 / 回写脚本
+#   及其输出日志（*.sh / *.py / *.log / 抓取的 *.html / 下载的 *.tar.gz 等）。
+#   它是**跨主题共享**的：文件名以课时前缀（l07-l12）与批次前缀（p0-p42）命名，
+#   覆盖 opentelemetry / elasticsearch / surrealdb 等多门课程，**不属于任何单一主题**。
+# 判据：这些脚本跑完即弃，讲义引用的是**命令用法与实测结论**，从不引用脚本文件本体
+#   （实测：opentelemetry 主题下 37 个 .md 中，零处引用 .probe/ 路径）。
+#   文件丢了课程仍完整 —— 过程残留，不是教学产物。
+# 现状：2026-09-04 实测 364 个文件 / 4.9 MB，且此前**无任何忽略规则**，
+#   git status 会把它整块列出来，git add . 会把 4.9 MB 临时脚本与抓取的 HTML 提进仓库。
+# ⚠️ 用 / 锚定仓库根 —— 只有根目录这一个实例，不会波及任何主题目录
+#   （各主题自己的一次性探针脚本另由 doris/ surrealdb/ 等分节规则处理）。
+/.probe/
+
+# ---- 教学实操环境：Django 课程运行时数据（django 课程，2026-09-04 卫生检查）----
+# 背景：Phase 4 汇总手册收尾时的卫生检查发现三类过程残留：
+#   1. projects/orderflow/db.sqlite3 —— 开发库。README「五分钟跑起来」第 2 步
+#      就是 `python manage.py migrate`，学员照做即可重建，不是教学内容。
+#   2. default_1/2/3.sqlite3 —— 课 20 实测 `--parallel` 时按 worker 数生成的
+#      并行测试分库（该课结论：低于盈亏平衡点反而更慢）。同理可再生。
+#   3. .review_backup_db_*.sqlite3 —— 清理探针数据前的自动备份，纯保险产物。
+# ⚠️ schema.yaml 是交付物而非产物：ci_check.sh 第 63 行执行
+#    `exportdocs --file schema.yaml --check` 校验它与代码是否同步，
+#    属于 CI 门禁的输入，必须留在仓库里，故不在此忽略。
+# 继续跟踪的教学产物：projects/orderflow/ 下全部源码，以及
+#   README.md / 22课能力索引.md / ci_check.sh / deploy.sh / schema.yaml。
+django/projects/orderflow/db.sqlite3
+django/projects/orderflow/default_[0-9]*.sqlite3
+django/projects/orderflow/.review_backup_db_*.sqlite3
+
+# ---- 写课过程的一次性探针与中间产物（django/.review/，2026-09-04 卫生检查）----
+# 背景：.review/ 下混着两类东西，按「过程态 vs 终态」区分而非「是否 AI 所建」：
+#   (a) 终态（保留）：pedagogy-review-*.md / learner-review-*.md —— 每课两份，
+#       是「双视角评审 P0 清零」这一质量门禁的凭证；_backup_lesson14_placeholder.md
+#       是被删占位文件的留档。
+#   (b) 过程态（忽略）：probe_N.py / probeN.log / check_links.py / final_check.py /
+#       patch_archive.py / cleanup_probe_data*.py / _env*.txt / t_*.txt /
+#       _cleanup_final.txt / _diag_seed.txt / _final_out*.txt / _last_run.txt /
+#       _links_out.txt —— 跑完即弃，实测数字早已固化进讲义与手册
+#       （见 final-课程手册.md §6 关键量化结论表）。
+# ⚠️ 一个需要留意的地方：00-学习档案.md / 00-评审清单.md 有 20+ 处按路径描述
+#    `.review/phase5/probe_6~11`、`.review/phase5/probe1-5.log` 等，
+#    作为「实测数字可溯源」的证据说明。这些引述指向的是「探针曾运行并产出数字」
+#    这一事实，并非要求脚本文件本身入库——与 surrealdb / doris 课程忽略
+#    playground 探针而保留讲义的做法一致。
+# 用精确语义匹配只忽略探针类，评审 md 与占位备份一律保留。
+django/.review/**/probe_*.py
+django/.review/**/probe[0-9]*.log
+django/.review/**/check_links.py
+django/.review/**/final_check.py
+django/.review/**/patch_archive.py
+django/.review/**/cleanup_probe_data*.py
+django/.review/**/_env[0-9]*.txt
+django/.review/**/t_*.txt
+django/.review/**/_cleanup_final.txt
+django/.review/**/_diag_seed.txt
+django/.review/**/_final_out*.txt
+django/.review/**/_last_run.txt
+django/.review/**/_links_out.txt
+
+# 说明：`**` 组合未按预期匹配，改为目录级显式锚定（2026-09-04 校验后修正）
+
+# 探针本体与日志（目录级显式锚定，** 组合不按预期匹配，故逐目录写）
+django/.review/phase3/probe_*.py
+django/.review/phase3/probe[0-9]*.log
+django/.review/phase5/probe_*.py
+django/.review/phase5/probe[0-9]*.log
+django/.review/phase5/probe1.log
+django/.review/phase5/base_test.log
+
+# 一次性校验 / 清理 / 环境探测脚本
+django/.review/phase3/check_links.py
+django/.review/phase3/final_check.py
+django/.review/phase5/check_links.py
+django/.review/phase5/final_check.py
+django/.review/phase5/patch_archive.py
+django/.review/phase5/cleanup_probe_data.py
+django/.review/phase5/cleanup_probe_data2.py
+django/.review/lesson12/check_links.py
+django/.review/lesson13/check_links.py
+django/.review/lesson14/check_links.py
+django/.review/lesson15/check_links.py
+django/.review/lesson16/check_links.py
+django/.review/lesson16/final_check.py
+django/.review/lesson17/check_links.py
+django/.review/lesson17/final_check.py
+django/.review/lesson18/check_links.py
+django/.review/lesson18/final_check.py
+django/.review/lesson19/check_links.py
+django/.review/lesson19/final_check.py
+django/.review/lesson20/check_links.py
+django/.review/lesson20/final_check.py
+django/.review/lesson20/patch_archive.py
+django/.review/lesson21/check_links.py
+django/.review/lesson21/final_check.py
+django/.review/lesson22/final_check.py
+
+# 运行抓屏 / 中间输出文本
+django/.review/lesson22/_env[0-9]*.txt
+django/.review/phase3/_cleanup_final.txt
+django/.review/phase3/_diag_seed.txt
+django/.review/phase3/_final_out.txt
+django/.review/phase3/_final_out2.txt
+django/.review/phase3/_last_run.txt
+django/.review/phase3/_links_out.txt
+django/.review/phase5/t_hello.txt
+django/.review/phase5/t_skip.txt
+django/.review/lesson22/_env.txt
+
+# ---- 写课过程的一次性探针与中间版脚本（grafana 课程，2026-09-04 课 1 交付后卫生检查）----
+# 背景：课 1 写课过程在 grafana/playground/ 下累积了 13 个 shell 脚本 + 1 个 python 脚本。
+#   按「讲义正文是否引用」逐条甄别，分三类：
+#   (a) 终态·保留（讲义或档案逐字引用，丢了读者照抄会失败）：
+#       l00-env-up.sh（环境启动，档案「实验环境资产」表引用）
+#       l01-forms.py（课 1 第四幕实验，讲义逐字引用其命令与输出）
+#       prometheus.yml（实验环境配置，讲义与档案引用）
+#       l01-verify.sh（交付校验，评审证据链）
+#       l01-verify-diag.sh / l01-hygiene.sh（假报警判定与卫生检查证据链）
+#   (b) 过程态·忽略：冒烟探针与被取代的中间版，实测数字已固化进讲义与档案。
+#   (c) ⚠️ 存疑·不加规则（保持未跟踪，由用户决定）：
+#       l00-gfcheck.sh / l00-portcheck.sh / l00-linkcheck.sh —— 属排障与校验工具，
+#       后续课可能直接复用（如课 2 验数据源、阶段 3 起新容器前的端口排查），
+#       本轮判不准，按「不确定时不加」原则保留未跟踪状态。
+# ⚠️ 不写 grafana/playground/ 一刀切 —— 会连带吞掉 (a) 类教学产物
+#    （ES 课 15 踩过「讲义引用的 6 个 json 不存在」的坑，本仓库通用教训）。
+grafana/playground/l00-smoke.sh
+grafana/playground/l00-smoke2.sh
+grafana/playground/l01-probe-store.sh
+grafana/playground/l01-probe-store2.sh
+grafana/playground/l01-forms.sh
+grafana/playground/l01-forms2.sh

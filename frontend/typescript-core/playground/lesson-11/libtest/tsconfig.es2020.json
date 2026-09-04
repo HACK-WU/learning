@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "strict": true,
+    "types": [],
+    "skipLibCheck": true,
+    "noEmit": true,
+    "lib": ["es2020"]
+  },
+  "include": ["./src/es2022-api.ts"]
+}

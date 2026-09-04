@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "strict": true,
+    "types": [],
+    "lib": ["esnext"],
+    "rootDir": "./",
+    "outDir": "./dist-syntax"
+  },
+  "include": ["./syntax-error.ts"]
+}

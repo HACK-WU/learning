@@ -1,0 +1,16 @@
+{
+  "name": "lesson12-lint",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@typescript/native": "npm:typescript@^7.0.2",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
+    "eslint": "^10.9.1",
+    "typescript-eslint": "^8.69.0"
+  }
+}

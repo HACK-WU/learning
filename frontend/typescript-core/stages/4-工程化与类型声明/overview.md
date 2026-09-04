@@ -40,9 +40,9 @@
 
 ## 本阶段产出
 
-- [ ] `lessons/lesson-10-tsconfig与编译配置.md`
-- [ ] `lessons/lesson-11-模块与声明文件.md`
-- [ ] `lessons/lesson-12-工具链集成与团队协作.md`
+- [x] `lessons/lesson-10-tsconfig与编译配置.md`
+- [x] `lessons/lesson-11-模块与声明文件.md`
+- [x] `lessons/lesson-12-工具链集成与团队协作.md`
 
 ## ⚠️ 时效性提示
 

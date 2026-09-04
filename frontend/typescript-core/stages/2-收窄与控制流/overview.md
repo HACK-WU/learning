@@ -44,10 +44,10 @@
 
 ## 本阶段产出
 
-- [ ] `lessons/lesson-04-联合类型与字面量类型.md`
-- [ ] `lessons/lesson-05-类型收窄.md`
-- [ ] `lessons/lesson-06-any·unknown·never与信任边界.md`
-- [ ] `lessons/lesson-07-类与接口的类型世界.md`
+- [x] `lessons/lesson-04-联合类型与字面量类型.md`
+- [x] `lessons/lesson-05-类型收窄.md`
+- [x] `lessons/lesson-06-any·unknown·never与信任边界.md`
+- [x] `lessons/lesson-07-类与接口的类型世界.md`
 
 ## ⚠️ 难度提示
 
