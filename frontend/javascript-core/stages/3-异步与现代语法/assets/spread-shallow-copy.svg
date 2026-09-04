@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="452" viewBox="0 0 960 452" font-family="'Microsoft YaHei','PingFang SC','Helvetica Neue',Arial,sans-serif">
+  <rect x="0" y="0" width="960" height="452" fill="#ffffff"/>
+
+  <text x="24" y="34" font-size="18" font-weight="700" fill="#1f2937">展开运算符只拷一层：顶层是副本，嵌套是共享</text>
+  <text x="24" y="56" font-size="12" fill="#64748b">const copy = { ...defaults } —— 代码短了，但共享关系没变（回扣课 2 的「钥匙」模型）</text>
+
+  <!-- defaults -->
+  <rect x="40" y="80" width="280" height="104" rx="8" fill="#f8fafc" stroke="#334155" stroke-width="1.5"/>
+  <text x="56" y="104" font-size="13.5" font-weight="700" fill="#0f172a">defaults</text>
+  <rect x="56" y="114" width="248" height="26" rx="4" fill="#dbeafe" stroke="#2563eb" stroke-width="1"/>
+  <text x="66" y="132" font-size="11.5" font-family="Consolas,Monaco,monospace" fill="#1e3a8a">host: 'localhost'</text>
+  <text x="288" y="132" font-size="10.5" fill="#475569">（原始值）</text>
+  <rect x="56" y="146" width="248" height="26" rx="4" fill="#fee2e2" stroke="#dc2626" stroke-width="1"/>
+  <text x="66" y="164" font-size="11.5" font-family="Consolas,Monaco,monospace" fill="#7f1d1d">nested:</text>
+  <text x="150" y="164" font-size="10.5" fill="#7f1d1d">（引用值 → 另一间柜子）</text>
+
+  <!-- copy -->
+  <rect x="640" y="80" width="280" height="104" rx="8" fill="#f8fafc" stroke="#334155" stroke-width="1.5"/>
+  <text x="656" y="104" font-size="13.5" font-weight="700" fill="#0f172a">copy = { ...defaults }</text>
+  <rect x="656" y="114" width="248" height="26" rx="4" fill="#dcfce7" stroke="#16a34a" stroke-width="1"/>
+  <text x="666" y="132" font-size="11.5" font-family="Consolas,Monaco,monospace" fill="#14532d">host: 'localhost'</text>
+  <text x="800" y="132" font-size="10.5" fill="#475569">✅ 独立副本</text>
+  <rect x="656" y="146" width="248" height="26" rx="4" fill="#fee2e2" stroke="#dc2626" stroke-width="1"/>
+  <text x="666" y="164" font-size="11.5" font-family="Consolas,Monaco,monospace" fill="#7f1d1d">nested:</text>
+  <text x="750" y="164" font-size="10.5" fill="#7f1d1d">⚠️ 同一把钥匙</text>
+
+  <!-- 共享的嵌套对象 -->
+  <defs>
+    <marker id="ref" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+  <rect x="380" y="238" width="200" height="92" rx="8" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
+  <text x="396" y="262" font-size="12.5" font-weight="700" fill="#7f1d1d">被共享的嵌套对象</text>
+  <text x="396" y="286" font-size="11.5" font-family="Consolas,Monaco,monospace" fill="#1e293b">{ retries: 3,</text>
+  <text x="396" y="306" font-size="11.5" font-family="Consolas,Monaco,monospace" fill="#1e293b">  timeout: 30 }</text>
+
+  <path d="M 180 172 C 180 210, 420 200, 440 234" fill="none" stroke="#dc2626" stroke-width="2" marker-end="url(#ref)"/>
+  <path d="M 780 172 C 780 210, 540 200, 520 234" fill="none" stroke="#dc2626" stroke-width="2" marker-end="url(#ref)"/>
+  <text x="300" y="216" font-size="11" font-weight="700" fill="#dc2626">两条引用指向同一个对象</text>
+
+  <!-- 两条后果 -->
+  <rect x="40" y="196" width="240" height="46" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.2"/>
+  <text x="54" y="216" font-size="11.5" font-weight="700" fill="#14532d">✅ 改 copy.host</text>
+  <text x="54" y="234" font-size="11" fill="#14532d">defaults.host 不受影响</text>
+
+  <rect x="680" y="196" width="240" height="46" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="1.2"/>
+  <text x="694" y="216" font-size="11.5" font-weight="700" fill="#7f1d1d">⚠️ 改 copy.nested.retries</text>
+  <text x="694" y="234" font-size="11" fill="#7f1d1d">defaults.nested 跟着变</text>
+
+  <!-- 结论 -->
+  <rect x="24" y="356" width="912" height="80" rx="8" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.2"/>
+  <text x="40" y="380" font-size="12.5" font-weight="700" fill="#78350f">🔑 两条推论</text>
+  <text x="40" y="402" font-size="11.5" fill="#78350f">① `{ ...defaults, ...options }` <tspan font-weight="700">不是「深合并」</tspan>：同名的嵌套键会被整个替换，而不是逐层合并（实测 timeout 直接消失）。</text>
+  <text x="40" y="424" font-size="11.5" fill="#78350f">② 想逐层合并就手动再展开一层：<tspan font-family="Consolas,Monaco,monospace">nested: { ...defaults.nested, ...options.nested }</tspan>；层数不定则改用 structuredClone（课 2）或递归深合并。</text>
+</svg>

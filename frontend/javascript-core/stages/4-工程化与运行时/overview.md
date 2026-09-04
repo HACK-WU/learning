@@ -34,7 +34,7 @@
 |--------|--------|----------|
 | CommonJS 与 ESM | 课 10 | 说清"实时绑定"与"值拷贝"的差异及后果；解释为什么 tree-shaking 只在 ESM 上成立 |
 | import·export 全语法 | 课 10 | 用命名导出 / 默认导出 / 转发写出多模块项目；解释导入绑定为什么是只读的 |
-| 循环依赖与动态导入 | 课 10 | 解释 ESM 循环依赖为何不报错却拿到 `undefined`；给出破环手段；用 `import()` 做代码分割 |
+| 循环依赖与动态导入 | 课 10 | 解释 ESM 循环依赖的**三种**表现（`const` + 同步访问会**抛 ReferenceError**（TDZ）；`var` 才是 `undefined`；延迟访问正常）；给出破环手段；用 `import()` 做代码分割 |
 | Error 体系与 throw | 课 11 | 区分 `TypeError` / `RangeError` / `SyntaxError`；用 `cause` 串起错误链 |
 | try·catch·finally 与异步错误 | 课 11 | 解释 `finally` 的覆盖行为；为 `unhandledrejection` 写全局兜底；说清什么时候该 catch、什么时候该往上抛 |
 | 调试工具链与 Source Map | 课 11 | 说出 `console.log` 调试的三个坑；用 `debugger` 和断点定位问题；说清生产环境 Source Map 的取舍 |
@@ -50,8 +50,8 @@
 
 ## 本阶段产出
 
-- [ ] `lessons/lesson-10-模块化.md`
-- [ ] `lessons/lesson-11-错误处理与调试.md`
-- [ ] `lessons/lesson-12-内存性能与选型收束.md`
+- [x] `lessons/lesson-10-模块化.md` ✅（2026-09-03，含「决策参考」专项）
+- [x] `lessons/lesson-11-错误处理与调试.md` ✅（2026-09-03）
+- [x] `lessons/lesson-12-内存性能与选型收束.md` ✅（2026-09-03，含「决策参考」专项；**全部 12 课收官**）
 
 > 实操环境：Node.js v22.14.0 / npm 10.9.2（Windows PowerShell）。课 11、课 12 会用到 Chrome/Edge DevTools。

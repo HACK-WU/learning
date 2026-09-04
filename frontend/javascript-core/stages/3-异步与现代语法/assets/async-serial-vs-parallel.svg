@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="512" viewBox="0 0 940 512" font-family="'Microsoft YaHei','PingFang SC','Helvetica Neue',Arial,sans-serif">
+  <rect x="0" y="0" width="940" height="512" fill="#ffffff"/>
+
+  <text x="20" y="32" font-size="18" font-weight="700" fill="#1f2937">await 在循环里会退化成串行：同样的 5 个请求，535ms vs 109ms</text>
+  <text x="20" y="52" font-size="11.5" fill="#64748b">每个请求耗时 100ms。横轴为时间（100ms = 80px），实测于 Node v22.14.0。</text>
+
+  <!-- 时间刻度（贯穿两块） -->
+  <g stroke="#cbd5e1" stroke-width="1" stroke-dasharray="3 3">
+    <line x1="140" y1="66" x2="140" y2="356"/>
+    <line x1="220" y1="66" x2="220" y2="356"/>
+    <line x1="300" y1="66" x2="300" y2="356"/>
+    <line x1="380" y1="66" x2="380" y2="356"/>
+    <line x1="460" y1="66" x2="460" y2="356"/>
+    <line x1="540" y1="66" x2="540" y2="356"/>
+  </g>
+  <g font-size="10.5" fill="#94a3b8">
+    <text x="132" y="374">0</text>
+    <text x="208" y="374">100</text>
+    <text x="288" y="374">200</text>
+    <text x="368" y="374">300</text>
+    <text x="448" y="374">400</text>
+    <text x="528" y="374">500 ms</text>
+  </g>
+
+  <!-- ===== 串行 ===== -->
+  <text x="20" y="86" font-size="14" font-weight="700" fill="#7f1d1d">① 串行：for + await（每一轮都在等上一轮）</text>
+  <g>
+    <rect x="140" y="100" width="76" height="16" rx="3" fill="#ef4444"/>
+    <text x="20" y="113" font-size="11" fill="#475569">请求 1</text>
+    <rect x="220" y="122" width="76" height="16" rx="3" fill="#ef4444"/>
+    <text x="20" y="135" font-size="11" fill="#475569">请求 2</text>
+    <rect x="300" y="144" width="76" height="16" rx="3" fill="#ef4444"/>
+    <text x="20" y="157" font-size="11" fill="#475569">请求 3</text>
+    <rect x="380" y="166" width="76" height="16" rx="3" fill="#ef4444"/>
+    <text x="20" y="179" font-size="11" fill="#475569">请求 4</text>
+    <rect x="460" y="188" width="76" height="16" rx="3" fill="#ef4444"/>
+    <text x="20" y="201" font-size="11" fill="#475569">请求 5</text>
+  </g>
+  <path d="M 140 216 L 536 216" stroke="#dc2626" stroke-width="2"/>
+  <path d="M 140 210 L 140 222" stroke="#dc2626" stroke-width="2"/>
+  <path d="M 536 210 L 536 222" stroke="#dc2626" stroke-width="2"/>
+  <text x="548" y="220" font-size="13" font-weight="700" fill="#dc2626">≈ 535 ms</text>
+
+  <!-- ===== 并发 ===== -->
+  <text x="20" y="266" font-size="14" font-weight="700" fill="#14532d">② 并发：Promise.all（5 个同时发出，只等最慢的那个）</text>
+  <g>
+    <rect x="140" y="280" width="76" height="16" rx="3" fill="#22c55e"/>
+    <text x="20" y="293" font-size="11" fill="#475569">请求 1</text>
+    <rect x="140" y="302" width="76" height="16" rx="3" fill="#22c55e"/>
+    <text x="20" y="315" font-size="11" fill="#475569">请求 2</text>
+    <rect x="140" y="324" width="76" height="16" rx="3" fill="#22c55e"/>
+    <text x="20" y="337" font-size="11" fill="#475569">请求 3</text>
+    <rect x="140" y="346" width="76" height="16" rx="3" fill="#22c55e"/>
+    <text x="20" y="359" font-size="11" fill="#475569">请求 4</text>
+    <rect x="140" y="368" width="76" height="16" rx="3" fill="#22c55e"/>
+    <text x="20" y="381" font-size="11" fill="#475569">请求 5</text>
+  </g>
+  <path d="M 140 396 L 216 396" stroke="#16a34a" stroke-width="2"/>
+  <path d="M 140 390 L 140 402" stroke="#16a34a" stroke-width="2"/>
+  <path d="M 216 390 L 216 402" stroke="#16a34a" stroke-width="2"/>
+  <text x="228" y="400" font-size="13" font-weight="700" fill="#16a34a">≈ 109 ms</text>
+
+  <!-- 结论 -->
+  <rect x="20" y="424" width="900" height="74" rx="8" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.2"/>
+  <text x="36" y="446" font-size="12.5" font-weight="700" fill="#78350f">🔑 await 到底"停"住了谁？</text>
+  <text x="36" y="468" font-size="11.5" fill="#78350f">它只暂停<tspan font-weight="700">当前这个 async 函数</tspan>，并把后面的代码排进微任务队列 —— <tspan font-weight="700">没有阻塞整个线程</tspan>。</text>
+  <text x="36" y="488" font-size="11.5" fill="#78350f">所以「并发」不是 await 变快了，而是<tspan font-weight="700">先把所有请求一次性发出去，再统一 await 它们</tspan>（Promise.all 干的正是这件事）。</text>
+</svg>

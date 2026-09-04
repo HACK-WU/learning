@@ -48,7 +48,7 @@
 ## 本阶段产出
 
 - [x] `lessons/lesson-07-事件循环.md` ✅（2026-09-02）
-- [ ] `lessons/lesson-08-Promise与async-await.md`
-- [ ] `lessons/lesson-09-现代语法与内置数据结构.md`
+- [x] `lessons/lesson-08-Promise与async-await.md` ✅（2026-09-03）
+- [x] `lessons/lesson-09-现代语法与内置数据结构.md` ✅（2026-09-03，阶段 3 收官）
 
 > 实操环境：Node.js v22.14.0（Windows PowerShell）。

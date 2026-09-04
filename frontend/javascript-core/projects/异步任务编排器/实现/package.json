@@ -1,0 +1,15 @@
+{
+  "name": "async-task-orchestrator",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "JS 语言核心（ES6+）结课实战项目：跨阶段整合的异步任务编排器（零依赖）",
+  "scripts": {
+    "demo": "node examples/demo.js",
+    "test": "node test/run.js",
+    "bad": "node examples/bad-queue.js"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
