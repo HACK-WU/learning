@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="1000" height="560" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="1000" height="560" fill="#ffffff"/>
+  <text x="500" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">N+1 到底长什么样：同样是查 20 篇文章的评论数</text>
+  <text x="500" y="54" text-anchor="middle" font-size="13" fill="#666666">左：annotate 预计算（1 次查询）　右：SerializerMethodField（41 次查询）</text>
+
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#666666"/>
+    </marker>
+  </defs>
+
+  <!-- ================= 左：annotate ================= -->
+  <rect x="30" y="76" width="450" height="330" rx="10" fill="#f1f8e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="255" y="104" text-anchor="middle" font-size="16" font-weight="700" fill="#1b5e20">✅ annotate 预计算</text>
+  <text x="255" y="124" text-anchor="middle" font-size="12" fill="#33691e">Article.objects.annotate(comment_count=Count("comments"))</text>
+
+  <!-- 1 次查询 -->
+  <rect x="70" y="146" width="370" height="42" rx="6" fill="#ffffff" stroke="#81c784" stroke-width="1.5"/>
+  <text x="255" y="165" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">第 1 次查询（唯一一次）</text>
+  <text x="255" y="182" text-anchor="middle" font-size="11" fill="#424242">SELECT ... COUNT(comments) ... GROUP BY article</text>
+
+  <line x1="255" y1="188" x2="255" y2="214" stroke="#2e7d32" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="70" y="220" width="370" height="42" rx="6" fill="#e8f5e9" stroke="#81c784" stroke-width="1.5"/>
+  <text x="255" y="239" text-anchor="middle" font-size="12.5" fill="#33691e">一次拿到 20 篇 + 每篇的评论数</text>
+  <text x="255" y="256" text-anchor="middle" font-size="11" fill="#424242">序列化阶段：0 次额外查询（值已经在对象上了）</text>
+
+  <rect x="70" y="286" width="370" height="60" rx="6" fill="#ffffff" stroke="#a5d6a7" stroke-width="1.5"/>
+  <text x="255" y="308" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">总查询次数 = 1</text>
+  <text x="255" y="328" text-anchor="middle" font-size="11.5" fill="#424242">数据量翻倍到 40 篇 → 仍然 1 次</text>
+
+  <text x="255" y="374" text-anchor="middle" font-size="12" fill="#2e7d32">数据量的增长与查询次数无关</text>
+
+  <!-- ================= 右：SerializerMethodField ================= -->
+  <rect x="520" y="76" width="450" height="330" rx="10" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="745" y="104" text-anchor="middle" font-size="16" font-weight="700" fill="#b71c1c">❌ SerializerMethodField</text>
+  <text x="745" y="124" text-anchor="middle" font-size="12" fill="#8e2b2b">def get_comment_count(self, obj): return obj.comments.count()</text>
+
+  <!-- 第 1 次 -->
+  <rect x="560" y="146" width="370" height="42" rx="6" fill="#ffffff" stroke="#ef9a9a" stroke-width="1.5"/>
+  <text x="745" y="165" text-anchor="middle" font-size="13" font-weight="700" fill="#b71c1c">第 1 次查询：拿到 20 篇文章</text>
+  <text x="745" y="182" text-anchor="middle" font-size="11" fill="#424242">SELECT ... FROM articles_article</text>
+
+  <!-- 扇出线 -->
+  <path d="M745 188 L745 202" stroke="#c62828" stroke-width="1.5"/>
+  <path d="M745 202 L600 236" stroke="#c62828" stroke-width="1"/>
+  <path d="M745 202 L672 236" stroke="#c62828" stroke-width="1"/>
+  <path d="M745 202 L745 236" stroke="#c62828" stroke-width="1"/>
+  <path d="M745 202 L818 236" stroke="#c62828" stroke-width="1"/>
+  <path d="M745 202 L890 236" stroke="#c62828" stroke-width="1"/>
+
+  <!-- 扇出的查询块 -->
+  <rect x="552" y="240" width="60" height="26" rx="4" fill="#ffffff" stroke="#ef9a9a" stroke-width="1"/>
+  <text x="582" y="257" text-anchor="middle" font-size="10" fill="#b71c1c">第1篇</text>
+  <rect x="624" y="240" width="60" height="26" rx="4" fill="#ffffff" stroke="#ef9a9a" stroke-width="1"/>
+  <text x="654" y="257" text-anchor="middle" font-size="10" fill="#b71c1c">第2篇</text>
+  <rect x="715" y="240" width="60" height="26" rx="4" fill="#ffffff" stroke="#ef9a9a" stroke-width="1"/>
+  <text x="745" y="257" text-anchor="middle" font-size="10" fill="#b71c1c">…</text>
+  <rect x="788" y="240" width="60" height="26" rx="4" fill="#ffffff" stroke="#ef9a9a" stroke-width="1"/>
+  <text x="818" y="257" text-anchor="middle" font-size="10" fill="#b71c1c">…</text>
+  <rect x="860" y="240" width="60" height="26" rx="4" fill="#ffffff" stroke="#ef9a9a" stroke-width="1"/>
+  <text x="890" y="257" text-anchor="middle" font-size="10" fill="#b71c1c">第20篇</text>
+
+  <text x="745" y="292" text-anchor="middle" font-size="11.5" fill="#8e2b2b">每序列化 1 篇 → 触发 2 次查询（评论数 + 作者名）</text>
+
+  <rect x="560" y="308" width="370" height="60" rx="6" fill="#ffffff" stroke="#ef9a9a" stroke-width="1.5"/>
+  <text x="745" y="330" text-anchor="middle" font-size="13" font-weight="700" fill="#b71c1c">总查询次数 = 1 + 20×2 = 41</text>
+  <text x="745" y="350" text-anchor="middle" font-size="11.5" fill="#424242">数据量翻倍到 40 篇 → 81 次（线性增长）</text>
+
+  <text x="745" y="396" text-anchor="middle" font-size="12" fill="#c62828">接口随数据量线性变慢，且本地小数据集完全测不出来</text>
+
+  <!-- ================= 底部：对比条 ================= -->
+  <rect x="30" y="426" width="940" height="118" rx="10" fill="#f5f9fd" stroke="#90caf9" stroke-width="1.5"/>
+  <text x="500" y="452" text-anchor="middle" font-size="15" font-weight="700" fill="#0d47a1">实测 SQL 查询次数（本课实验 5，用 CaptureQueriesContext 数出来的）</text>
+
+  <!-- 表头 -->
+  <line x1="60" y1="464" x2="940" y2="464" stroke="#90caf9" stroke-width="1"/>
+  <text x="70" y="480" font-size="12" font-weight="700" fill="#0d47a1">方案</text>
+  <text x="600" y="480" font-size="12" font-weight="700" fill="#0d47a1">20 篇</text>
+  <text x="760" y="480" font-size="12" font-weight="700" fill="#0d47a1">40 篇</text>
+  <text x="860" y="480" font-size="12" font-weight="700" fill="#0d47a1">随数据量变化</text>
+  <line x1="60" y1="488" x2="940" y2="488" stroke="#90caf9" stroke-width="1"/>
+
+  <!-- 行 1 -->
+  <text x="70" y="506" font-size="12" fill="#b71c1c">❌ SerializerMethodField（隐式 N+1）</text>
+  <text x="600" y="506" font-size="12" font-weight="700" fill="#b71c1c">41 次</text>
+  <text x="760" y="506" font-size="12" font-weight="700" fill="#b71c1c">81 次</text>
+  <text x="860" y="506" font-size="12" fill="#b71c1c">线性增长 +40</text>
+
+  <!-- 行 2 -->
+  <text x="70" y="526" font-size="12" fill="#1b5e20">✅ annotate + select_related</text>
+  <text x="600" y="526" font-size="12" font-weight="700" fill="#1b5e20">1 次</text>
+  <text x="760" y="526" font-size="12" font-weight="700" fill="#1b5e20">1 次</text>
+  <text x="860" y="526" font-size="12" fill="#1b5e20">恒定不变 +0</text>
+
+  <!-- 行 3 -->
+  <text x="70" y="544" font-size="12" fill="#e65100">⚠️ prefetch_related + len()</text>
+  <text x="600" y="544" font-size="12" font-weight="700" fill="#e65100">2 次</text>
+  <text x="760" y="544" font-size="12" fill="#9e9e9e">（未测）</text>
+  <text x="860" y="544" font-size="12" fill="#e65100">恒定，但内存占用高</text>
+</svg>

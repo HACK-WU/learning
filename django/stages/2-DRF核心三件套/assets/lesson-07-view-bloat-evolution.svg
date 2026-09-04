@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 540" width="1000" height="540" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="1000" height="540" fill="#ffffff"/>
+  <text x="500" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">view 是怎么变胖的：四个需求迭代下来，两种归属的差别</text>
+  <text x="500" y="54" text-anchor="middle" font-size="13" fill="#666666">同一个「发布文章」功能，每次加一条业务规则，代码往哪儿长？</text>
+
+  <!-- ================= 左：逻辑放 view ================= -->
+  <rect x="40" y="84" width="440" height="330" rx="10" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="260" y="110" text-anchor="middle" font-size="15" font-weight="700" fill="#b71c1c">❌ 逻辑全塞 view（胖视图）</text>
+  <text x="260" y="130" text-anchor="middle" font-size="11.5" fill="#8e2b2b">每加一个需求，view 就长一截</text>
+
+  <!-- 迭代 1 -->
+  <text x="60" y="162" font-size="11.5" fill="#424242">需求① 改状态</text>
+  <rect x="170" y="150" width="50" height="20" rx="3" fill="#ef9a9a" stroke="#c62828" stroke-width="1"/>
+  <text x="232" y="165" font-size="11" fill="#b71c1c">view 开始长</text>
+
+  <!-- 迭代 2 -->
+  <text x="60" y="204" font-size="11.5" fill="#424242">需求② 加已归档校验</text>
+  <rect x="170" y="192" width="95" height="20" rx="3" fill="#ef9a9a" stroke="#c62828" stroke-width="1"/>
+  <text x="277" y="207" font-size="11" fill="#b71c1c">+45</text>
+
+  <!-- 迭代 3 -->
+  <text x="60" y="246" font-size="11.5" fill="#424242">需求③ 幂等</text>
+  <rect x="170" y="234" width="140" height="20" rx="3" fill="#ef9a9a" stroke="#c62828" stroke-width="1"/>
+  <text x="322" y="249" font-size="11" fill="#b71c1c">再 +45</text>
+
+  <!-- 迭代 4 -->
+  <text x="60" y="288" font-size="11.5" fill="#424242">需求④ 记审计日志</text>
+  <rect x="170" y="276" width="185" height="20" rx="3" fill="#e57373" stroke="#b71c1c" stroke-width="1.5"/>
+  <text x="367" y="291" font-size="11" font-weight="700" fill="#b71c1c">还在长</text>
+
+  <!-- 结局 -->
+  <rect x="60" y="320" width="400" height="76" rx="8" fill="#ffffff" stroke="#ef9a9a" stroke-width="1.5"/>
+  <text x="76" y="342" font-size="12" font-weight="700" fill="#b71c1c">四个需求之后</text>
+  <text x="76" y="362" font-size="11.5" fill="#424242">· view 里混着「取参数 / 业务规则 / 副作用 / 包响应」四件事</text>
+  <text x="76" y="380" font-size="11.5" fill="#424242">· 换一个入口（定时任务、后台批量）→ 这段逻辑要重写一遍</text>
+  <text x="76" y="398" font-size="11.5" fill="#b71c1c">· 想单测？必须构造 request、走 URL 路由与认证</text>
+
+  <!-- ================= 右：逻辑放 service ================= -->
+  <rect x="520" y="84" width="440" height="330" rx="10" fill="#f1f8e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="740" y="110" text-anchor="middle" font-size="15" font-weight="700" fill="#1b5e20">✅ 逻辑放 service（瘦视图）</text>
+  <text x="740" y="130" text-anchor="middle" font-size="11.5" fill="#33691e">view 一直这么短，长的是 service</text>
+
+  <!-- 迭代 1 -->
+  <text x="540" y="162" font-size="11.5" fill="#424242">需求① 改状态</text>
+  <rect x="650" y="150" width="30" height="20" rx="3" fill="#a5d6a7" stroke="#2e7d32" stroke-width="1"/>
+  <text x="690" y="158" font-size="10" fill="#33691e">view</text>
+  <rect x="720" y="150" width="40" height="20" rx="3" fill="#81c784" stroke="#2e7d32" stroke-width="1"/>
+  <text x="770" y="158" font-size="10" fill="#1b5e20">service</text>
+
+  <!-- 迭代 2 -->
+  <text x="540" y="204" font-size="11.5" fill="#424242">需求② 加已归档校验</text>
+  <rect x="650" y="192" width="30" height="20" rx="3" fill="#a5d6a7" stroke="#2e7d32" stroke-width="1"/>
+  <text x="690" y="200" font-size="10" fill="#33691e">view</text>
+  <rect x="720" y="192" width="85" height="20" rx="3" fill="#81c784" stroke="#2e7d32" stroke-width="1"/>
+  <text x="815" y="200" font-size="10" fill="#1b5e20">service +45</text>
+
+  <!-- 迭代 3 -->
+  <text x="540" y="246" font-size="11.5" fill="#424242">需求③ 幂等</text>
+  <rect x="650" y="234" width="30" height="20" rx="3" fill="#a5d6a7" stroke="#2e7d32" stroke-width="1"/>
+  <text x="690" y="242" font-size="10" fill="#33691e">view</text>
+  <rect x="720" y="234" width="130" height="20" rx="3" fill="#81c784" stroke="#2e7d32" stroke-width="1"/>
+  <text x="860" y="242" font-size="10" fill="#1b5e20">+45</text>
+
+  <!-- 迭代 4 -->
+  <text x="540" y="288" font-size="11.5" fill="#424242">需求④ 记审计日志</text>
+  <rect x="650" y="276" width="30" height="20" rx="3" fill="#a5d6a7" stroke="#2e7d32" stroke-width="1"/>
+  <text x="690" y="284" font-size="10" fill="#33691e">view</text>
+  <rect x="720" y="276" width="175" height="20" rx="3" fill="#66bb6a" stroke="#1b5e20" stroke-width="1.5"/>
+  <text x="905" y="284" font-size="10" fill="#1b5e20">+45</text>
+
+  <!-- 结局 -->
+  <rect x="540" y="320" width="400" height="76" rx="8" fill="#ffffff" stroke="#a5d6a7" stroke-width="1.5"/>
+  <text x="556" y="342" font-size="12" font-weight="700" fill="#1b5e20">四个需求之后</text>
+  <text x="556" y="362" font-size="11.5" fill="#424242">· view 只剩三件事：取参数 → 调 service → 包响应</text>
+  <text x="556" y="380" font-size="11.5" fill="#424242">· 换入口？直接调同一个 service，零重复</text>
+  <text x="556" y="398" font-size="11.5" fill="#1b5e20">· 单测就是一行：ArticleService.publish(article)</text>
+
+  <!-- 底部结论 -->
+  <rect x="40" y="434" width="920" height="86" rx="10" fill="#f5f9fd" stroke="#90caf9" stroke-width="1.5"/>
+  <text x="500" y="458" text-anchor="middle" font-size="14" font-weight="700" fill="#0d47a1">关键差别不是"代码放哪"，而是"这段逻辑能不能脱离 HTTP 存在"</text>
+  <text x="500" y="482" text-anchor="middle" font-size="12" fill="#424242">view 里的代码被 HTTP 绑死：想复用要重写，想测试要模拟 request</text>
+  <text x="500" y="504" text-anchor="middle" font-size="12" fill="#424242">service 里的代码是普通 Python：任何入口都能调，任何测试都能直接断言</text>
+</svg>

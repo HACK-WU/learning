@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 330" width="1400" height="330" font-family="Microsoft YaHei, PingFang SC, Helvetica, Arial, sans-serif">
+  <rect width="1400" height="330" fill="#fbfcfe"/>
+  <text x="700" y="32" text-anchor="middle" font-size="18" font-weight="bold" fill="#1a1a2e">阶段 6 · 工程化与生产</text>
+  <text x="700" y="52" text-anchor="middle" font-size="12" fill="#5a6b7d">收尾 —— 能验证、能追溯、能上线</text>
+
+  <defs>
+    <marker id="a6" markerWidth="10" markerHeight="10" refX="8" refY="3.5" orient="auto">
+      <path d="M0,0 L8,3.5 L0,7 z" fill="#455a64"/>
+    </marker>
+  </defs>
+
+  <rect x="20" y="76" width="252" height="198" rx="9" fill="#f3e5f5" stroke="#9c27b0" stroke-width="2"/>
+  <rect x="20" y="76" width="252" height="30" rx="9" fill="#9c27b0"/>
+  <rect x="20" y="96" width="252" height="10" fill="#9c27b0"/>
+  <text x="146" y="97" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">课 18　中间件与请求链路</text>
+  <text x="36" y="130" font-size="11.5" fill="#4a148c">① 中间件执行顺序与自定义</text>
+  <text x="36" y="150" font-size="11.5" fill="#4a148c">② trace_id 与链路串联</text>
+  <text x="36" y="170" font-size="11.5" fill="#4a148c">③ 结构化日志与慢查询</text>
+  <line x1="33" y1="184" x2="259" y2="184" stroke="#e1bee7" stroke-width="1"/>
+  <text x="36" y="204" font-size="11" fill="#5a6b7d">产出：一个请求全链路可追溯</text>
+  <text x="36" y="222" font-size="11" fill="#5a6b7d">产出：慢 SQL 能被发现</text>
+  <text x="36" y="246" font-size="11" fill="#c62828">⚠️ 误区：中间件顺序无所谓</text>
+  <text x="36" y="264" font-size="11" fill="#c62828">⚠️ 误区：日志打印出来就行</text>
+
+  <rect x="292" y="76" width="252" height="198" rx="9" fill="#ede7f6" stroke="#7e57c2" stroke-width="2"/>
+  <rect x="292" y="76" width="252" height="30" rx="9" fill="#7e57c2"/>
+  <rect x="292" y="96" width="252" height="10" fill="#7e57c2"/>
+  <text x="418" y="97" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">课 19　文件 · 存储 · Admin</text>
+  <text x="308" y="130" font-size="11.5" fill="#4527a0">① 文件上传与 STORAGES</text>
+  <text x="308" y="150" font-size="11.5" fill="#4527a0">② Admin 定制与安全收敛</text>
+  <text x="308" y="170" font-size="11.5" fill="#4527a0">③ staticfiles 的真实归属</text>
+  <line x1="305" y1="184" x2="531" y2="184" stroke="#d1c4e9" stroke-width="1"/>
+  <text x="308" y="204" font-size="11" fill="#5a6b7d">产出：文件走独立上传通道</text>
+  <text x="308" y="222" font-size="11" fill="#5a6b7d">产出：Admin 不再是安全短板</text>
+  <text x="308" y="246" font-size="11" fill="#c62828">⚠️ 误区：分离了还要 collectstatic</text>
+  <text x="308" y="264" font-size="11" fill="#c62828">⚠️ 误区：Admin 不用做权限收敛</text>
+
+  <rect x="564" y="76" width="252" height="198" rx="9" fill="#e8f5e9" stroke="#43a047" stroke-width="2"/>
+  <rect x="564" y="76" width="252" height="30" rx="9" fill="#43a047"/>
+  <rect x="564" y="96" width="252" height="10" fill="#43a047"/>
+  <text x="690" y="97" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">课 20　测试提速与文档</text>
+  <text x="580" y="130" font-size="11.5" fill="#1b5e20">① API 测试策略与工具</text>
+  <text x="580" y="150" font-size="11.5" fill="#1b5e20">② 测试提速</text>
+  <text x="580" y="170" font-size="11.5" fill="#1b5e20">③ OpenAPI 自动生成</text>
+  <line x1="577" y1="184" x2="803" y2="184" stroke="#c8e6c9" stroke-width="1"/>
+  <text x="580" y="204" font-size="11" fill="#5a6b7d">产出：测试套件跑得动</text>
+  <text x="580" y="222" font-size="11" fill="#5a6b7d">产出：文档不手写也不脱节</text>
+  <text x="580" y="246" font-size="11" fill="#c62828">⚠️ 误区：测试太慢就少写点</text>
+  <text x="580" y="264" font-size="11" fill="#c62828">⚠️ 误区：文档有空再补</text>
+
+  <rect x="836" y="76" width="252" height="198" rx="9" fill="#e0f7fa" stroke="#0097a7" stroke-width="2"/>
+  <rect x="836" y="76" width="252" height="30" rx="9" fill="#0097a7"/>
+  <rect x="836" y="96" width="252" height="10" fill="#0097a7"/>
+  <text x="962" y="97" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">课 21　管理命令与 checks</text>
+  <text x="852" y="130" font-size="11.5" fill="#006064">① 自定义管理命令</text>
+  <text x="852" y="150" font-size="11.5" fill="#006064">② System checks 框架</text>
+  <text x="852" y="170" font-size="11.5" fill="#006064">③ 命令与检查的测试与 CI</text>
+  <line x1="849" y1="184" x2="1075" y2="184" stroke="#b2ebf2" stroke-width="1"/>
+  <text x="852" y="204" font-size="11" fill="#5a6b7d">产出：运维动作可重复可调度</text>
+  <text x="852" y="222" font-size="11" fill="#5a6b7d">产出：团队约定进 CI</text>
+  <text x="852" y="246" font-size="11" fill="#c62828">⚠️ 误区：约定写 wiki 就够了</text>
+  <text x="852" y="264" font-size="11" fill="#c62828">⚠️ 误区：check 不必跑在 CI</text>
+
+  <rect x="1108" y="76" width="252" height="198" rx="9" fill="#fce4ec" stroke="#d81b60" stroke-width="2"/>
+  <rect x="1108" y="76" width="252" height="30" rx="9" fill="#d81b60"/>
+  <rect x="1108" y="96" width="252" height="10" fill="#d81b60"/>
+  <text x="1234" y="97" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">课 22　部署与运维</text>
+  <text x="1124" y="130" font-size="11.5" fill="#880e4f">① 配置管理与密钥</text>
+  <text x="1124" y="150" font-size="11.5" fill="#880e4f">② 静态资源与联调部署</text>
+  <text x="1124" y="170" font-size="11.5" fill="#880e4f">③ 生产部署与上线清单</text>
+  <line x1="1121" y1="184" x2="1347" y2="184" stroke="#f8bbd0" stroke-width="1"/>
+  <text x="1124" y="204" font-size="11" fill="#5a6b7d">产出：密钥不进仓库</text>
+  <text x="1124" y="222" font-size="11" fill="#5a6b7d">产出：上线有可执行清单</text>
+  <text x="1124" y="246" font-size="11" fill="#c62828">⚠️ 误区：私有仓库可以放密钥</text>
+  <text x="1124" y="264" font-size="11" fill="#c62828">⚠️ 误区：上线再配监控</text>
+
+  <line x1="274" y1="175" x2="288" y2="175" stroke="#455a64" stroke-width="2.5" marker-end="url(#a6)"/>
+  <line x1="546" y1="175" x2="560" y2="175" stroke="#455a64" stroke-width="2.5" marker-end="url(#a6)"/>
+  <line x1="818" y1="175" x2="832" y2="175" stroke="#455a64" stroke-width="2.5" marker-end="url(#a6)"/>
+  <line x1="1090" y1="175" x2="1104" y2="175" stroke="#455a64" stroke-width="2.5" marker-end="url(#a6)"/>
+
+  <rect x="20" y="290" width="660" height="30" rx="6" fill="#e3f2fd" stroke="#90caf9"/>
+  <text x="350" y="310" text-anchor="middle" font-size="11.5" fill="#0d47a1">前置：阶段 4 的连接池与迁移治理、阶段 5 的缓存与任务</text>
+
+  <rect x="700" y="290" width="660" height="30" rx="6" fill="#ede7f6" stroke="#b39ddb"/>
+  <text x="1030" y="310" text-anchor="middle" font-size="11.5" fill="#311b92">后续：Phase 3 结课实战项目 → Phase 5 三件套</text>
+</svg>

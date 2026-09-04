@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 580" width="1000" height="580" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="1000" height="580" fill="#ffffff"/>
+  <text x="500" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">三个视图抽象层级：你写的越来越少，框架给的越来越多</text>
+  <text x="500" y="54" text-anchor="middle" font-size="13" fill="#666666">可调用成员实测：APIView 34 → GenericAPIView 42 → ModelViewSet 55</text>
+
+  <!-- 抽象程度条 -->
+  <rect x="60" y="72" width="880" height="26" rx="13" fill="#eceff1"/>
+  <rect x="60" y="72" width="293" height="26" rx="13" fill="#90caf9"/>
+  <rect x="353" y="72" width="294" height="26" fill="#ffcc80"/>
+  <rect x="647" y="72" width="293" height="26" rx="13" fill="#a5d6a7"/>
+  <text x="206" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="#0d47a1">抽象程度递增 →</text>
+  <text x="500" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="#e65100">你手写的越来越少</text>
+  <text x="793" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="#1b5e20">框架给的越来越多</text>
+
+  <!-- ============ 列 1：APIView ============ -->
+  <rect x="60" y="116" width="286" height="420" rx="10" fill="#e3f2fd" stroke="#1976d2" stroke-width="2"/>
+  <text x="203" y="144" text-anchor="middle" font-size="16" font-weight="700" fill="#0d47a1">APIView</text>
+  <text x="203" y="164" text-anchor="middle" font-size="11.5" fill="#1565c0">继承 Django 的 View</text>
+
+  <text x="80" y="192" font-size="12.5" font-weight="700" fill="#0d47a1">你写</text>
+  <text x="80" y="212" font-size="11.5" fill="#424242">· get / post / put / patch / delete</text>
+  <text x="80" y="230" font-size="11.5" fill="#424242">· 自己取 queryset、自己调 serializer</text>
+  <text x="80" y="248" font-size="11.5" fill="#424242">· 自己处理 is_valid、自己定状态码</text>
+
+  <text x="80" y="278" font-size="12.5" font-weight="700" fill="#0d47a1">框架给</text>
+  <text x="80" y="298" font-size="11.5" fill="#424242">· DRF 的 Request / Response</text>
+  <text x="80" y="316" font-size="11.5" fill="#424242">· 内容协商（渲染器/解析器）</text>
+  <text x="80" y="334" font-size="11.5" fill="#424242">· APIException 转错误响应</text>
+  <text x="80" y="352" font-size="11.5" fill="#424242">· 认证 / 权限 / 限流钩子</text>
+
+  <text x="80" y="382" font-size="12.5" font-weight="700" fill="#0d47a1">路由</text>
+  <text x="80" y="402" font-size="11.5" fill="#424242">手写 path(...)</text>
+
+  <text x="80" y="432" font-size="12.5" font-weight="700" fill="#2e7d32">适合</text>
+  <text x="80" y="452" font-size="11.5" fill="#33691e">· 非标准资源（仪表盘、统计）</text>
+  <text x="80" y="470" font-size="11.5" fill="#33691e">· 一次性的动作接口（发验证码）</text>
+  <text x="80" y="488" font-size="11.5" fill="#33691e">· 逻辑特殊、塞不进 CRUD</text>
+
+  <text x="80" y="516" font-size="12.5" font-weight="700" fill="#b71c1c">坑</text>
+  <text x="80" y="536" font-size="11.5" fill="#8e2b2b">样板代码多，5 个接口写 5 遍</text>
+
+  <!-- ============ 列 2：GenericAPIView + Mixin ============ -->
+  <rect x="360" y="116" width="286" height="420" rx="10" fill="#fff8e1" stroke="#f57c00" stroke-width="2"/>
+  <text x="503" y="144" text-anchor="middle" font-size="16" font-weight="700" fill="#e65100">GenericAPIView + Mixin</text>
+  <text x="503" y="164" text-anchor="middle" font-size="11.5" fill="#ef6c00">ListCreateAPIView / RetrieveUpdateDestroyAPIView …</text>
+
+  <text x="380" y="192" font-size="12.5" font-weight="700" fill="#e65100">你写</text>
+  <text x="380" y="212" font-size="11.5" fill="#424242">· queryset / serializer_class</text>
+  <text x="380" y="230" font-size="11.5" fill="#424242">· 需要特殊行为时重写方法：</text>
+  <text x="392" y="248" font-size="11.5" fill="#5d4037">get_queryset / perform_create / get_serializer_class</text>
+
+  <text x="380" y="278" font-size="12.5" font-weight="700" fill="#e65100">框架给</text>
+  <text x="380" y="298" font-size="11.5" fill="#424242">· APIView 的全部，加上：</text>
+  <text x="380" y="316" font-size="11.5" fill="#424242">· get_object（按 pk 取，自动 404）</text>
+  <text x="380" y="334" font-size="11.5" fill="#424242">· 过滤 / 分页 / 排序接入点</text>
+  <text x="380" y="352" font-size="11.5" fill="#424242">· list / create / retrieve … 的通用实现</text>
+
+  <text x="380" y="382" font-size="12.5" font-weight="700" fill="#e65100">路由</text>
+  <text x="380" y="402" font-size="11.5" fill="#424242">手写 path(...)，一个视图一个 URL</text>
+
+  <text x="380" y="432" font-size="12.5" font-weight="700" fill="#2e7d32">适合</text>
+  <text x="380" y="452" font-size="11.5" fill="#33691e">· 标准 CRUD，但列表和详情要分开控制</text>
+  <text x="380" y="470" font-size="11.5" fill="#33691e">· 两个接口的行为差异较大</text>
+
+  <text x="380" y="516" font-size="12.5" font-weight="700" fill="#b71c1c">坑</text>
+  <text x="380" y="536" font-size="11.5" fill="#8e2b2b">列表和详情是两个类，配置要写两遍</text>
+
+  <!-- ============ 列 3：ViewSet ============ -->
+  <rect x="660" y="116" width="286" height="420" rx="10" fill="#f1f8e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="803" y="144" text-anchor="middle" font-size="16" font-weight="700" fill="#1b5e20">ViewSet / ModelViewSet</text>
+  <text x="803" y="164" text-anchor="middle" font-size="11.5" fill="#33691e">一个顶六个 + router 自动路由</text>
+
+  <text x="680" y="192" font-size="12.5" font-weight="700" fill="#1b5e20">你写</text>
+  <text x="680" y="212" font-size="11.5" fill="#424242">· queryset / serializer_class</text>
+  <text x="680" y="230" font-size="11.5" fill="#424242">· 额外动作用 @action 标记</text>
+
+  <text x="680" y="278" font-size="12.5" font-weight="700" fill="#1b5e20">框架给</text>
+  <text x="680" y="298" font-size="11.5" fill="#424242">· 前两列全部，加上：</text>
+  <text x="680" y="316" font-size="11.5" fill="#424242">· list/create/retrieve/update/</text>
+  <text x="692" y="334" font-size="11.5" fill="#424242">partial_update/destroy 六个 action</text>
+  <text x="680" y="352" font-size="11.5" fill="#424242">· router 自动生成 URL 与路由名</text>
+
+  <text x="680" y="382" font-size="12.5" font-weight="700" fill="#1b5e20">路由</text>
+  <text x="680" y="402" font-size="11.5" fill="#424242">router.register(prefix, ViewSet, basename=…)</text>
+
+  <text x="680" y="432" font-size="12.5" font-weight="700" fill="#2e7d32">适合</text>
+  <text x="680" y="452" font-size="11.5" fill="#33691e">· 标准资源的完整 CRUD</text>
+  <text x="680" y="470" font-size="11.5" fill="#33691e">· 资源上再挂几个动作（发布、置顶）</text>
+
+  <text x="680" y="516" font-size="12.5" font-weight="700" fill="#b71c1c">坑</text>
+  <text x="680" y="536" font-size="11.5" fill="#8e2b2b">非 CRUD 语义硬塞进来 → URL 语义崩坏</text>
+</svg>

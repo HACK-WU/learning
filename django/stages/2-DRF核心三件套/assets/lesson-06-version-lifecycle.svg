@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="1000" height="560" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="1000" height="560" fill="#ffffff"/>
+  <text x="500" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">API 版本的生命周期：双版本窗口期是怎么来的</text>
+  <text x="500" y="54" text-anchor="middle" font-size="13" fill="#666666">旧版本不是"说下线就下线"，它必须经历一段与新版本共存的时间</text>
+
+  <!-- 时间轴 -->
+  <line x1="90" y1="120" x2="940" y2="120" stroke="#90a4ae" stroke-width="2"/>
+  <text x="90" y="142" font-size="11.5" fill="#546e7a">t0</text>
+  <text x="300" y="142" font-size="11.5" fill="#546e7a">t1</text>
+  <text x="500" y="142" font-size="11.5" fill="#546e7a">t2</text>
+  <text x="700" y="142" font-size="11.5" fill="#546e7a">t3</text>
+  <text x="910" y="142" font-size="11.5" fill="#546e7a">t4</text>
+
+  <text x="90" y="106" font-size="11" fill="#78909c">v1 上线</text>
+  <text x="300" y="106" font-size="11" fill="#78909c">v2 上线</text>
+  <text x="500" y="106" font-size="11" fill="#78909c">公告弃用</text>
+  <text x="700" y="106" font-size="11" fill="#78909c">公告下线日</text>
+  <text x="910" y="106" font-size="11" fill="#78909c">v1 下线</text>
+
+  <!-- 刻度 -->
+  <circle cx="90" cy="120" r="5" fill="#546e7a"/>
+  <circle cx="300" cy="120" r="5" fill="#546e7a"/>
+  <circle cx="500" cy="120" r="5" fill="#f57c00"/>
+  <circle cx="700" cy="120" r="5" fill="#c62828"/>
+  <circle cx="910" cy="120" r="5" fill="#c62828"/>
+
+  <!-- ===== v1 生命周期条 ===== -->
+  <text x="30" y="196" font-size="14" font-weight="700" fill="#0d47a1">v1</text>
+  <!-- 存活期 -->
+  <rect x="90" y="176" width="610" height="30" rx="4" fill="#90caf9" stroke="#1976d2" stroke-width="1.5"/>
+  <!-- 弃用期（t2-t3）-->
+  <rect x="500" y="176" width="200" height="30" fill="#ffcc80"/>
+  <!-- 末期（t3-t4）-->
+  <rect x="700" y="176" width="210" height="30" fill="#ef9a9a"/>
+  <text x="530" y="196" font-size="11.5" font-weight="700" fill="#e65100">弃用期（仍可用）</text>
+  <text x="735" y="196" font-size="11.5" font-weight="700" fill="#b71c1c">已公告下线日</text>
+  <!-- 下线后虚线 -->
+  <rect x="910" y="176" width="30" height="30" fill="#eceff1" stroke="#b0bec5" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="948" y="196" font-size="10" fill="#78909c">410</text>
+
+  <!-- ===== v2 生命周期条 ===== -->
+  <text x="30" y="256" font-size="14" font-weight="700" fill="#1b5e20">v2</text>
+  <rect x="300" y="236" width="640" height="30" rx="4" fill="#a5d6a7" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="320" y="256" font-size="11.5" fill="#1b5e20">v2 成为默认版本</text>
+
+  <!-- 双版本窗口高亮 -->
+  <rect x="300" y="176" width="610" height="90" fill="#fff59d" opacity="0.35"/>
+  <rect x="300" y="176" width="610" height="90" fill="none" stroke="#f9a825" stroke-width="2" stroke-dasharray="5,4"/>
+  <text x="605" y="340" text-anchor="middle" font-size="13" font-weight="700" fill="#e65100">双版本共存窗口（t1 → t4）</text>
+  <text x="605" y="358" text-anchor="middle" font-size="11.5" fill="#5d4037">这段时间内两套逻辑都要维护 —— 这就是版本控制的成本</text>
+
+  <!-- ===== 三个阶段说明 ===== -->
+  <rect x="60" y="386" width="280" height="150" rx="10" fill="#e3f2fd" stroke="#1976d2" stroke-width="1.5"/>
+  <text x="200" y="410" text-anchor="middle" font-size="13" font-weight="700" fill="#0d47a1">① 共存期（t1–t2）</text>
+  <text x="80" y="432" font-size="11.5" fill="#424242">· 新旧版本都正常工作</text>
+  <text x="80" y="450" font-size="11.5" fill="#424242">· 前端按自己节奏迁移</text>
+  <text x="80" y="468" font-size="11.5" fill="#424242">· 后端同时维护两套逻辑</text>
+  <text x="80" y="494" font-size="11.5" font-weight="700" fill="#0d47a1">响应头：无</text>
+
+  <rect x="360" y="386" width="280" height="150" rx="10" fill="#fff8e1" stroke="#f57c00" stroke-width="1.5"/>
+  <text x="500" y="410" text-anchor="middle" font-size="13" font-weight="700" fill="#e65100">② 弃用期（t2–t3）</text>
+  <text x="380" y="432" font-size="11.5" fill="#424242">· 不推荐新接入，但还能用</text>
+  <text x="380" y="450" font-size="11.5" fill="#424242">· 监控调用量，识别剩余用户</text>
+  <text x="380" y="468" font-size="11.5" fill="#424242">· 主动通知仍未迁移的调用方</text>
+  <text x="380" y="494" font-size="11.5" font-weight="700" fill="#e65100">Deprecation: @1730419200</text>
+  <text x="380" y="514" font-size="10.5" fill="#8d6e63">（RFC 9745，Structured Field Date）</text>
+
+  <rect x="660" y="386" width="280" height="150" rx="10" fill="#ffebee" stroke="#c62828" stroke-width="1.5"/>
+  <text x="800" y="410" text-anchor="middle" font-size="13" font-weight="700" fill="#b71c1c">③ 下线倒计时（t3–t4）</text>
+  <text x="680" y="432" font-size="11.5" fill="#424242">· 下线日期已对外公告</text>
+  <text x="680" y="450" font-size="11.5" fill="#424242">· 逐步返回警告 / 限流</text>
+  <text x="680" y="468" font-size="11.5" fill="#424242">· 到期后返回 410 Gone</text>
+  <text x="680" y="494" font-size="11.5" font-weight="700" fill="#b71c1c">Sunset: Wed, 01 Apr 2026...</text>
+  <text x="680" y="514" font-size="10.5" fill="#8e2b2b">（RFC 8594，HTTP-date）</text>
+</svg>

@@ -1,0 +1,14 @@
+# OrderFlow 运行依赖
+#
+# 版本基线（本机实测，2026-09-04）：
+#   Python 3.13.14 / Django 6.1 / DRF 3.18.0
+# 验证环境：C:\Users\<你>\.workbuddy\binaries\python\envs\dj-course
+
+Django>=6.1,<6.2
+djangorestframework>=3.18,<3.19
+drf-spectacular>=0.30
+django-cors-headers>=4.9
+django-filter>=25.1
+waitress>=3.0
+factory-boy>=3.3
+PyYAML>=6.0

@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 330" width="1120" height="330" font-family="Microsoft YaHei, PingFang SC, Helvetica, Arial, sans-serif">
+  <rect width="1120" height="330" fill="#fbfcfe"/>
+  <text x="560" y="32" text-anchor="middle" font-size="18" font-weight="bold" fill="#1a1a2e">阶段 4 · 数据层纵深</text>
+  <text x="560" y="52" text-anchor="middle" font-size="12" fill="#5a6b7d">纵深 —— 真正的复杂度在数据层</text>
+
+  <defs>
+    <marker id="a4" markerWidth="10" markerHeight="10" refX="8" refY="3.5" orient="auto">
+      <path d="M0,0 L8,3.5 L0,7 z" fill="#455a64"/>
+    </marker>
+  </defs>
+
+  <rect x="20" y="76" width="252" height="198" rx="9" fill="#e3f2fd" stroke="#1976d2" stroke-width="2"/>
+  <rect x="20" y="76" width="252" height="30" rx="9" fill="#1976d2"/>
+  <rect x="20" y="96" width="252" height="10" fill="#1976d2"/>
+  <text x="146" y="97" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">课 11　查询表达式进阶</text>
+  <text x="36" y="130" font-size="11.5" fill="#0d47a1">① F() 表达式与原子更新</text>
+  <text x="36" y="150" font-size="11.5" fill="#0d47a1">② Q() 对象与复杂条件</text>
+  <text x="36" y="170" font-size="11.5" fill="#0d47a1">③ 子查询 · Case · 聚合</text>
+  <line x1="33" y1="184" x2="259" y2="184" stroke="#bbdefb" stroke-width="1"/>
+  <text x="36" y="204" font-size="11" fill="#5a6b7d">产出：计算推给数据库</text>
+  <text x="36" y="222" font-size="11" fill="#5a6b7d">产出：一条查询替代循环</text>
+  <text x="36" y="246" font-size="11" fill="#c62828">⚠️ 误区：Python 里改字段再 save</text>
+  <text x="36" y="264" font-size="11" fill="#c62828">⚠️ 误区：F() 更新后读旧值</text>
+
+  <rect x="292" y="76" width="252" height="198" rx="9" fill="#e8f5e9" stroke="#388e3c" stroke-width="2"/>
+  <rect x="292" y="76" width="252" height="30" rx="9" fill="#388e3c"/>
+  <rect x="292" y="96" width="252" height="10" fill="#388e3c"/>
+  <text x="418" y="97" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">课 12　索引 · 约束 · 连接池</text>
+  <text x="308" y="130" font-size="11.5" fill="#1b5e20">① 索引三种用法与代价</text>
+  <text x="308" y="150" font-size="11.5" fill="#1b5e20">② 约束下沉到数据库</text>
+  <text x="308" y="170" font-size="11.5" fill="#1b5e20">③ 连接池（5.1+）</text>
+  <line x1="305" y1="184" x2="531" y2="184" stroke="#c8e6c9" stroke-width="1"/>
+  <text x="308" y="204" font-size="11" fill="#5a6b7d">产出：索引真的被命中</text>
+  <text x="308" y="222" font-size="11" fill="#5a6b7d">产出：连接数算得对</text>
+  <text x="308" y="246" font-size="11" fill="#c62828">⚠️ 误区：加了索引就该快</text>
+  <text x="308" y="264" font-size="11" fill="#c62828">⚠️ 误区：max_size 即总连接数</text>
+
+  <rect x="564" y="76" width="252" height="198" rx="9" fill="#e1f5fe" stroke="#0288d1" stroke-width="2"/>
+  <rect x="564" y="76" width="252" height="30" rx="9" fill="#0288d1"/>
+  <rect x="564" y="96" width="252" height="10" fill="#0288d1"/>
+  <text x="690" y="97" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">课 13　多数据库与 DB 路由</text>
+  <text x="580" y="130" font-size="11.5" fill="#01579b">① DATABASE_ROUTERS 四钩子</text>
+  <text x="580" y="150" font-size="11.5" fill="#01579b">② 主从与写后读不一致</text>
+  <text x="580" y="170" font-size="11.5" fill="#01579b">③ 多库硬约束与迁移</text>
+  <line x1="577" y1="184" x2="803" y2="184" stroke="#b3e5fc" stroke-width="1"/>
+  <text x="580" y="204" font-size="11" fill="#5a6b7d">产出：读写去向可控</text>
+  <text x="580" y="222" font-size="11" fill="#5a6b7d">产出：跨库事务不出错</text>
+  <text x="580" y="246" font-size="11" fill="#c62828">⚠️ 误区：配完主从就万事大吉</text>
+  <text x="580" y="264" font-size="11" fill="#c62828">⚠️ 误区：atomic 能跨库</text>
+
+  <rect x="836" y="76" width="252" height="198" rx="9" fill="#e8eaf6" stroke="#3f51b5" stroke-width="2"/>
+  <rect x="836" y="76" width="252" height="30" rx="9" fill="#3f51b5"/>
+  <rect x="836" y="96" width="252" height="10" fill="#3f51b5"/>
+  <text x="962" y="97" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">课 14　迁移工程</text>
+  <text x="852" y="130" font-size="11.5" fill="#283593">① 数据迁移与历史模型</text>
+  <text x="852" y="150" font-size="11.5" fill="#283593">② RunSQL 与状态解耦</text>
+  <text x="852" y="170" font-size="11.5" fill="#283593">③ 零停机变更与治理</text>
+  <line x1="849" y1="184" x2="1075" y2="184" stroke="#c5cae9" stroke-width="1"/>
+  <text x="852" y="204" font-size="11" fill="#5a6b7d">产出：迁移不因模型变更而崩</text>
+  <text x="852" y="222" font-size="11" fill="#5a6b7d">产出：线上加字段不掉数据</text>
+  <text x="852" y="246" font-size="11" fill="#c62828">⚠️ 误区：迁移里直接 import 模型</text>
+  <text x="852" y="264" font-size="11" fill="#c62828">⚠️ 误区：唯一字段一步到位</text>
+
+  <line x1="274" y1="175" x2="288" y2="175" stroke="#455a64" stroke-width="2.5" marker-end="url(#a4)"/>
+  <line x1="546" y1="175" x2="560" y2="175" stroke="#455a64" stroke-width="2.5" marker-end="url(#a4)"/>
+  <line x1="818" y1="175" x2="832" y2="175" stroke="#455a64" stroke-width="2.5" marker-end="url(#a4)"/>
+
+  <rect x="20" y="290" width="530" height="30" rx="6" fill="#fff8e1" stroke="#ffcc80"/>
+  <text x="285" y="310" text-anchor="middle" font-size="11.5" fill="#e65100">前置：阶段 2 的 queryset 与 serializer、阶段 3 的认证</text>
+
+  <rect x="570" y="290" width="518" height="30" rx="6" fill="#fce4ec" stroke="#f48fb1"/>
+  <text x="829" y="310" text-anchor="middle" font-size="11.5" fill="#880e4f">后续：阶段 5 性能前提、阶段 6 部署直接消费</text>
+</svg>

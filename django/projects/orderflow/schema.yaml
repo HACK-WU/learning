@@ -1,0 +1,692 @@
+openapi: 3.0.3
+info:
+  title: OrderFlow API
+  version: 1.0.0
+  description: Django 进阶课程的结课实战项目：一条从提交到上线的完整链路。
+paths:
+  /api/v1/categories/:
+    get:
+      operationId: categories_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: 用于排序结果的字段。
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: 分页结果集中的页码。
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: 搜索关键词。
+        schema:
+          type: string
+      tags:
+      - categories
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCategoryList'
+          description: ''
+  /api/v1/categories/{id}/:
+    get:
+      operationId: categories_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: 标识此 分类 的 唯一整数值。
+        required: true
+      tags:
+      - categories
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          description: ''
+  /api/v1/health/:
+    get:
+      operationId: health_retrieve
+      description: |-
+        健康检查：给负载均衡 / 容器探针用。
+
+        三条硬要求（课 22 上线清单）：
+          1. 不需要认证 —— 探针不会带 token
+          2. 真的查一次库 —— 只返回 200 的"假健康"等于没做
+          3. 不查缓存 —— 缓存挂了不代表服务挂了，反之亦然
+
+        ⚠️ 且它是**手写路径**，必须排在 router 之前（见 config/urls.py 的说明）。
+      summary: 健康检查
+      tags:
+      - health
+      security:
+      - {}
+      responses:
+        '200':
+          description: No response body
+        '503':
+          description: No response body
+  /api/v1/me/:
+    get:
+      operationId: me_retrieve
+      description: 当前用户信息（用来验证认证是否生效）。
+      summary: 当前登录用户
+      tags:
+      - me
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Me'
+          description: ''
+  /api/v1/orders/:
+    get:
+      operationId: orders_list
+      description: |-
+        订单：列表、详情、创建、状态流转。
+
+        ⚠️ N+1 治理（课 15）：列表必须 prefetch_related("items")，
+           否则每条订单的 items 各查一次库。
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: 用于排序结果的字段。
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: 分页结果集中的页码。
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: 搜索关键词。
+        schema:
+          type: string
+      tags:
+      - orders
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrderList'
+          description: ''
+    post:
+      operationId: orders_create
+      description: 幂等键通过请求头 Idempotency-Key 传入；重复提交会返回原订单而非新建。
+      summary: 下单
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderCreateRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+        '400':
+          description: 参数错误
+        '409':
+          description: 库存不足
+  /api/v1/orders/{id}/:
+    get:
+      operationId: orders_retrieve
+      description: |-
+        订单：列表、详情、创建、状态流转。
+
+        ⚠️ N+1 治理（课 15）：列表必须 prefetch_related("items")，
+           否则每条订单的 items 各查一次库。
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: 标识此 订单 的 唯一整数值。
+        required: true
+      tags:
+      - orders
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+  /api/v1/orders/{id}/status/:
+    post:
+      operationId: orders_status_create
+      description: |-
+        状态流转。
+
+        ⚠️ get_object() 是必须的：对象级权限只在 get_object() 里被触发。
+        直接用 Order.objects.get(pk=...) 会绕过 IsOwnerOrStaff。
+      summary: 订单状态流转
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: 标识此 订单 的 唯一整数值。
+        required: true
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderStatusUpdateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderStatusUpdateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderStatusUpdateRequest'
+        required: true
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+        '409':
+          description: 非法状态流转
+  /api/v1/products/:
+    get:
+      operationId: products_list
+      description: |-
+        商品列表与详情。
+
+        刻意只读：商品的增删改走 Admin / 管理命令，不暴露给 API。
+        浏览商品不需要登录，所以 permission_classes 为空列表（不是 [] 之外的省略）。
+      parameters:
+      - in: query
+        name: category
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: 用于排序结果的字段。
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: 分页结果集中的页码。
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: 搜索关键词。
+        schema:
+          type: string
+      tags:
+      - products
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductList'
+          description: ''
+  /api/v1/products/{id}/:
+    get:
+      operationId: products_retrieve
+      description: 演示课 16 的缓存读写：命中缓存时不查库，响应头 X-Cache 标明命中情况。
+      summary: 商品详情（走缓存）
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: 标识此 商品 的 唯一整数值。
+        required: true
+      tags:
+      - products
+      security:
+      - cookieAuth: []
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+components:
+  schemas:
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: 名称
+          maxLength: 50
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: 创建时间
+      required:
+      - created_at
+      - id
+      - name
+    Me:
+      type: object
+      description: |-
+        当前用户信息。
+
+        ⚠️ 用普通 Serializer 而不是 ModelSerializer：
+        这里只暴露三个字段，用 ModelSerializer 会引向 User 的全字段，
+        等于把 is_superuser、password 哈希这类字段放在了危险的边缘。
+      properties:
+        id:
+          type: integer
+          description: 用户 ID
+        username:
+          type: string
+          description: 用户名
+        is_staff:
+          type: boolean
+          description: 是否为后台人员
+      required:
+      - id
+      - is_staff
+      - username
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: 订单 ID
+        order_no:
+          type: string
+          format: uuid
+          readOnly: true
+          title: 订单号
+          description: 对外订单号（UUID），不暴露自增 ID 以免泄漏业务量
+        status:
+          allOf:
+          - $ref: '#/components/schemas/OrderStatusEnum'
+          readOnly: true
+          title: 状态
+          description: |-
+            订单状态：pending/paid/shipped/cancelled
+
+            * `pending` - 待支付
+            * `paid` - 已支付
+            * `shipped` - 已发货
+            * `cancelled` - 已取消
+        status_display:
+          type: string
+          readOnly: true
+          description: 状态的中文显示名
+        total_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          readOnly: true
+          title: 订单总额
+          description: 订单总额（元）
+        remark:
+          type: string
+          title: 备注
+          description: 订单备注
+          maxLength: 200
+        can_cancel:
+          type: boolean
+          readOnly: true
+          description: 当前用户能否取消此订单
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+          readOnly: true
+          description: 订单明细
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: 创建时间
+          description: 下单时间
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: 更新时间
+          description: 最后更新时间
+      required:
+      - can_cancel
+      - created_at
+      - id
+      - items
+      - order_no
+      - status
+      - status_display
+      - total_amount
+      - updated_at
+    OrderCreateRequest:
+      type: object
+      description: 下单入参。
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItemCreateRequest'
+          description: 订单明细，至少一项
+        remark:
+          type: string
+          default: ''
+          description: 订单备注
+          maxLength: 200
+      required:
+      - items
+    OrderItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: 明细 ID
+        product:
+          type: integer
+          readOnly: true
+          title: 商品
+          description: 商品 ID
+        product_name:
+          type: string
+          readOnly: true
+          title: 商品名称快照
+          description: 下单时的商品名称快照，商品改名不影响历史订单
+        unit_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          readOnly: true
+          title: 成交单价
+          description: 下单时的成交单价快照
+        quantity:
+          type: integer
+          readOnly: true
+          title: 数量
+          description: 购买数量
+        subtotal:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          readOnly: true
+          description: 小计 = 成交单价 x 数量
+      required:
+      - id
+      - product
+      - product_name
+      - quantity
+      - subtotal
+      - unit_price
+    OrderItemCreateRequest:
+      type: object
+      description: |-
+        下单时的单个明细项。
+
+        用 Serializer 而非 ModelSerializer：入参和落库的 OrderItem 不是一回事
+        （单价是下单时从商品取的快照，不是用户传的）。
+      properties:
+        product_id:
+          type: integer
+          description: 商品 ID
+        quantity:
+          type: integer
+          maximum: 999
+          minimum: 1
+          description: 购买数量
+      required:
+      - product_id
+      - quantity
+    OrderStatusEnum:
+      enum:
+      - pending
+      - paid
+      - shipped
+      - cancelled
+      type: string
+      description: |-
+        * `pending` - 待支付
+        * `paid` - 已支付
+        * `shipped` - 已发货
+        * `cancelled` - 已取消
+    OrderStatusUpdateRequest:
+      type: object
+      description: 状态流转入参。
+      properties:
+        status:
+          allOf:
+          - $ref: '#/components/schemas/OrderStatusUpdateStatusEnum'
+          description: |-
+            目标状态：paid（支付）或 cancelled（取消）
+
+            * `paid` - paid
+            * `cancelled` - cancelled
+      required:
+      - status
+    OrderStatusUpdateStatusEnum:
+      enum:
+      - paid
+      - cancelled
+      type: string
+      description: |-
+        * `paid` - paid
+        * `cancelled` - cancelled
+    PaginatedCategoryList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+    PaginatedOrderList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+    PaginatedProductList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: 商品 ID
+        name:
+          type: string
+          title: 名称
+          description: 商品名称
+          maxLength: 100
+        description:
+          type: string
+          title: 描述
+          description: 商品描述
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          title: 单价
+          description: 单价（元），保留两位小数
+        stock:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          title: 库存
+          description: 当前可售库存
+        category:
+          type: integer
+          nullable: true
+          title: 分类
+          description: 所属分类 ID
+        category_name:
+          type: string
+          readOnly: true
+          description: 所属分类名称
+        image:
+          type: string
+          format: uri
+          nullable: true
+          title: 图片
+          description: 商品图片（multipart 上传）
+        image_url:
+          type: string
+          format: uri
+          nullable: true
+          readOnly: true
+          description: 商品图片绝对地址
+        is_active:
+          type: boolean
+          title: 上架
+          description: 是否上架，下架商品不可下单
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: 创建时间
+          description: 创建时间
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: 更新时间
+          description: 最后更新时间
+      required:
+      - category_name
+      - created_at
+      - id
+      - image_url
+      - name
+      - price
+      - updated_at
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"

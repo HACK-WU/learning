@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="1000" height="560" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="1000" height="560" fill="#ffffff"/>
+  <text x="500" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">渲染权移交：后端交出的不是数据，是「数据长什么样」</text>
+  <text x="500" y="56" text-anchor="middle" font-size="13" fill="#666666">同一份 article（id=1, title, body, status），两种返回方式</text>
+
+  <!-- 左：服务端渲染 -->
+  <rect x="40" y="86" width="430" height="410" rx="10" fill="#fdf3f4" stroke="#c62828" stroke-width="2"/>
+  <text x="255" y="116" text-anchor="middle" font-size="16" font-weight="700" fill="#b71c1c">服务端渲染：后端拼 HTML</text>
+  <text x="255" y="138" text-anchor="middle" font-size="12" fill="#8e2b2b">render() → 模板引擎 → 整页 HTML</text>
+
+  <rect x="66" y="158" width="378" height="150" rx="8" fill="#ffffff" stroke="#e0b4b4" stroke-width="1.5"/>
+  <text x="86" y="182" font-size="13" font-weight="700" fill="#333333">返回内容（203 字节）</text>
+  <text x="86" y="205" font-size="12" fill="#c62828" font-family="'Consolas','Courier New',monospace">&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;</text>
+  <text x="86" y="223" font-size="12" fill="#c62828" font-family="'Consolas','Courier New',monospace">  &lt;title&gt;Django 6.1 发布&lt;/title&gt;</text>
+  <text x="86" y="241" font-size="12" fill="#c62828" font-family="'Consolas','Courier New',monospace">&lt;/head&gt;&lt;body&gt;</text>
+  <text x="86" y="259" font-size="12" fill="#2e7d32" font-family="'Consolas','Courier New',monospace">  &lt;h1&gt;Django 6.1 发布&lt;/h1&gt;   ← 数据</text>
+  <text x="86" y="277" font-size="12" fill="#2e7d32" font-family="'Consolas','Courier New',monospace">  &lt;p&gt;模型字段 fetch_mode 上线&lt;/p&gt; ← 数据</text>
+  <text x="86" y="295" font-size="12" fill="#1565c0" font-family="'Consolas','Courier New',monospace">  &lt;span class="badge"&gt;draft&lt;/span&gt; ← 长相</text>
+
+  <text x="86" y="330" font-size="12.5" fill="#333333">数据与「长相」焊死在一个响应里：</text>
+  <text x="86" y="351" font-size="12.5" fill="#c62828">前端想换个配色 → 要改后端模板</text>
+  <text x="86" y="372" font-size="12.5" fill="#c62828">App 想要这份数据 → 只能解析 HTML</text>
+
+  <!-- 右：API -->
+  <rect x="530" y="86" width="430" height="410" rx="10" fill="#f1f8f2" stroke="#2e7d32" stroke-width="2"/>
+  <text x="745" y="116" text-anchor="middle" font-size="16" font-weight="700" fill="#1b5e20">前后端分离：后端只给数据</text>
+  <text x="745" y="138" text-anchor="middle" font-size="12" fill="#33691e">Serializer → JSON → 前端决定怎么画</text>
+
+  <rect x="556" y="158" width="378" height="150" rx="8" fill="#ffffff" stroke="#b7d9bc" stroke-width="1.5"/>
+  <text x="576" y="182" font-size="13" font-weight="700" fill="#333333">返回内容（100 字节）</text>
+  <text x="576" y="205" font-size="12" fill="#2e7d32" font-family="'Consolas','Courier New',monospace">{</text>
+  <text x="576" y="223" font-size="12" fill="#2e7d32" font-family="'Consolas','Courier New',monospace">  "id": 1,</text>
+  <text x="576" y="241" font-size="12" fill="#2e7d32" font-family="'Consolas','Courier New',monospace">  "title": "Django 6.1 发布",</text>
+  <text x="576" y="259" font-size="12" fill="#2e7d32" font-family="'Consolas','Courier New',monospace">  "body": "模型字段 fetch_mode 上线",</text>
+  <text x="576" y="277" font-size="12" fill="#2e7d32" font-family="'Consolas','Courier New',monospace">  "status": "draft"</text>
+  <text x="576" y="295" font-size="12" fill="#2e7d32" font-family="'Consolas','Courier New',monospace">}</text>
+
+  <text x="576" y="330" font-size="12.5" fill="#333333">只有数据，没有「长相」：</text>
+  <text x="576" y="351" font-size="12.5" fill="#2e7d32">Web / App / 小程序 消费同一份数据</text>
+  <text x="576" y="372" font-size="12.5" fill="#2e7d32">改配色、改布局 → 前端自己说了算</text>
+
+  <!-- 底部结论 -->
+  <rect x="40" y="512" width="920" height="34" rx="6" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+  <text x="500" y="534" text-anchor="middle" font-size="13.5" font-weight="700" fill="#6d4c00">契约 = 这份 JSON 的字段名与含义。它一旦发布，改一个字段名就是改所有消费方</text>
+</svg>

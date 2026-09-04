@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 640" width="900" height="640" font-family="Microsoft YaHei, PingFang SC, Helvetica, Arial, sans-serif">
+  <rect width="900" height="640" fill="#fbfcfe"/>
+
+  <text x="450" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#1a1a2e">Django 进阶（前后端分离）· 学习路径</text>
+  <text x="450" y="57" text-anchor="middle" font-size="13" fill="#5a6b7d">6 阶段 / 22 课 / 66 知识点　|　Django 6.1 + DRF 3.18</text>
+
+  <!-- 上排：阶段 1-3 -->
+  <rect x="40" y="88" width="190" height="140" rx="10" fill="#e8f4fd" stroke="#2196f3" stroke-width="2"/>
+  <rect x="40" y="88" width="190" height="32" rx="10" fill="#2196f3"/>
+  <rect x="40" y="110" width="190" height="10" fill="#2196f3"/>
+  <text x="135" y="110" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">阶段 1 · 决定分家</text>
+  <text x="135" y="142" text-anchor="middle" font-size="13" font-weight="bold" fill="#0d47a1">为什么要前后端分离</text>
+  <text x="135" y="166" text-anchor="middle" font-size="11.5" fill="#33475b">课 1　模板渲染到 API 契约</text>
+  <text x="135" y="185" text-anchor="middle" font-size="11.5" fill="#33475b">课 2　工程骨架与跨域</text>
+  <text x="135" y="210" text-anchor="middle" font-size="11" fill="#5a6b7d">6 个知识点</text>
+
+  <rect x="255" y="88" width="190" height="140" rx="10" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+  <rect x="255" y="88" width="190" height="32" rx="10" fill="#4caf50"/>
+  <rect x="255" y="110" width="190" height="10" fill="#4caf50"/>
+  <text x="350" y="110" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">阶段 2 · 立规矩</text>
+  <text x="350" y="142" text-anchor="middle" font-size="13" font-weight="bold" fill="#1b5e20">DRF 核心三件套</text>
+  <text x="350" y="166" text-anchor="middle" font-size="11.5" fill="#33475b">课 3-4　序列化器（含进阶）</text>
+  <text x="350" y="185" text-anchor="middle" font-size="11.5" fill="#33475b">课 5　视图层与路由</text>
+  <text x="350" y="200" text-anchor="middle" font-size="11.5" fill="#33475b">课 6-7　版本控制 · 业务归属</text>
+  <text x="350" y="218" text-anchor="middle" font-size="11" fill="#5a6b7d">15 个知识点</text>
+
+  <rect x="470" y="88" width="190" height="140" rx="10" fill="#fff8e1" stroke="#ff9800" stroke-width="2"/>
+  <rect x="470" y="88" width="190" height="32" rx="10" fill="#ff9800"/>
+  <rect x="470" y="110" width="190" height="10" fill="#ff9800"/>
+  <text x="565" y="110" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">阶段 3 · 守门</text>
+  <text x="565" y="142" text-anchor="middle" font-size="13" font-weight="bold" fill="#e65100">认证、权限与鉴权</text>
+  <text x="565" y="166" text-anchor="middle" font-size="11.5" fill="#33475b">课 8　认证：你是谁</text>
+  <text x="565" y="185" text-anchor="middle" font-size="11.5" fill="#33475b">课 9　权限：你能干什么</text>
+  <text x="565" y="204" text-anchor="middle" font-size="11.5" fill="#33475b">课 10　分离架构下的安全</text>
+  <text x="565" y="222" text-anchor="middle" font-size="11" fill="#5a6b7d">9 个知识点</text>
+
+  <rect x="685" y="88" width="175" height="140" rx="10" fill="#e3f2fd" stroke="#1976d2" stroke-width="2"/>
+  <rect x="685" y="88" width="175" height="32" rx="10" fill="#1976d2"/>
+  <rect x="685" y="110" width="175" height="10" fill="#1976d2"/>
+  <text x="772" y="110" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">阶段 4 · 纵深</text>
+  <text x="772" y="142" text-anchor="middle" font-size="13" font-weight="bold" fill="#0d47a1">数据层纵深</text>
+  <text x="772" y="166" text-anchor="middle" font-size="11.5" fill="#33475b">课 11　查询表达式进阶</text>
+  <text x="772" y="185" text-anchor="middle" font-size="11.5" fill="#33475b">课 12　索引约束与连接池</text>
+  <text x="772" y="200" text-anchor="middle" font-size="11.5" fill="#33475b">课 13-14　DB 路由 · 迁移工程</text>
+  <text x="772" y="218" text-anchor="middle" font-size="11" fill="#5a6b7d">12 个知识点</text>
+
+  <line x1="232" y1="158" x2="252" y2="158" stroke="#455a64" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <line x1="447" y1="158" x2="467" y2="158" stroke="#455a64" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <line x1="662" y1="158" x2="682" y2="158" stroke="#455a64" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- 下排：阶段 5-6 -->
+  <rect x="255" y="300" width="190" height="126" rx="10" fill="#fce4ec" stroke="#e91e63" stroke-width="2"/>
+  <rect x="255" y="300" width="190" height="32" rx="10" fill="#e91e63"/>
+  <rect x="255" y="322" width="190" height="10" fill="#e91e63"/>
+  <text x="350" y="322" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">阶段 5 · 扛住真实世界</text>
+  <text x="350" y="354" text-anchor="middle" font-size="13" font-weight="bold" fill="#880e4f">性能与异步</text>
+  <text x="350" y="378" text-anchor="middle" font-size="11.5" fill="#33475b">课 15　ORM 进阶与 N+1</text>
+  <text x="350" y="397" text-anchor="middle" font-size="11.5" fill="#33475b">课 16　缓存与异步</text>
+  <text x="350" y="412" text-anchor="middle" font-size="11.5" fill="#33475b">课 17　信号：隐式耦合的代价</text>
+  <text x="350" y="425" text-anchor="middle" font-size="11" fill="#5a6b7d">9 个知识点</text>
+
+  <rect x="470" y="300" width="190" height="126" rx="10" fill="#f3e5f5" stroke="#9c27b0" stroke-width="2"/>
+  <rect x="470" y="300" width="190" height="32" rx="10" fill="#9c27b0"/>
+  <rect x="470" y="322" width="190" height="10" fill="#9c27b0"/>
+  <text x="565" y="322" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">阶段 6 · 收尾</text>
+  <text x="565" y="354" text-anchor="middle" font-size="13" font-weight="bold" fill="#4a148c">工程化与生产</text>
+  <text x="565" y="378" text-anchor="middle" font-size="11.5" fill="#33475b">课 18　中间件与请求链路</text>
+  <text x="565" y="397" text-anchor="middle" font-size="11.5" fill="#33475b">课 19-21　文件 Admin · 测试 · 命令</text>
+  <text x="565" y="412" text-anchor="middle" font-size="11.5" fill="#33475b">课 22　部署与运维</text>
+  <text x="565" y="425" text-anchor="middle" font-size="11" fill="#5a6b7d">15 个知识点</text>
+
+  <defs>
+    <marker id="arrow" markerWidth="11" markerHeight="11" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L9,4 L0,8 z" fill="#455a64"/>
+    </marker>
+    <marker id="arrowdash" markerWidth="11" markerHeight="11" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L9,4 L0,8 z" fill="#90a4ae"/>
+    </marker>
+  </defs>
+
+  <line x1="350" y1="230" x2="350" y2="296" stroke="#455a64" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <line x1="447" y1="363" x2="467" y2="363" stroke="#455a64" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- 依赖回指虚线 -->
+  <path d="M 565 230 C 620 262, 700 262, 700 232" fill="none" stroke="#90a4ae" stroke-width="1.8" stroke-dasharray="6,4" marker-end="url(#arrowdash)"/>
+  <path d="M 772 230 C 820 268, 460 268, 400 296" fill="none" stroke="#90a4ae" stroke-width="1.8" stroke-dasharray="6,4" marker-end="url(#arrowdash)"/>
+  <path d="M 470 388 C 200 388, 120 330, 120 232" fill="none" stroke="#90a4ae" stroke-width="1.6" stroke-dasharray="6,4" marker-end="url(#arrowdash)"/>
+  <text x="252" y="470" text-anchor="middle" font-size="10.5" fill="#78909c">对象级权限依赖 request.user　|　表达式与索引是性能前提</text>
+
+  <!-- 故事主线 -->
+  <rect x="40" y="452" width="835" height="78" rx="9" fill="#f5f7fa" stroke="#cfd8dc" stroke-width="1.5"/>
+  <text x="58" y="475" font-size="13" font-weight="bold" fill="#37474f">📖 故事主线：一个「什么都能干」的视图函数</text>
+  <text x="58" y="497" font-size="11.5" fill="#546e7a">⚔️ 冲突：它又要查库、校验、渲染、鉴权 —— 改一个字段要动五个地方</text>
+  <text x="58" y="516" font-size="11.5" fill="#546e7a">🔄 转折：学会把职责交出去（序列化器 / 权限类 / 服务层 / 任务框架 / 数据库本身）</text>
+
+  <!-- 收尾环节 -->
+  <text x="450" y="566" text-anchor="middle" font-size="14" font-weight="bold" fill="#1a1a2e">课 时 完 成 后 的 收 尾 环 节</text>
+
+  <rect x="150" y="582" width="220" height="52" rx="8" fill="#ede7f6" stroke="#673ab7" stroke-width="2"/>
+  <text x="260" y="604" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#311b92">Phase 3 · 结课实战项目</text>
+  <text x="260" y="622" text-anchor="middle" font-size="11" fill="#4527a0">跨阶段整合，把知识点焊成能力</text>
+
+  <rect x="530" y="582" width="220" height="52" rx="8" fill="#e0f2f1" stroke="#009688" stroke-width="2"/>
+  <text x="640" y="604" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#004d40">Phase 5 · 三件套</text>
+  <text x="640" y="622" text-anchor="middle" font-size="11" fill="#00695c">实战经验 / 排障手册 / 场景解法库</text>
+
+  <line x1="372" y1="608" x2="526" y2="608" stroke="#455a64" stroke-width="2" marker-end="url(#arrow)"/>
+</svg>

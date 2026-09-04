@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" width="1000" height="500" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="1000" height="500" fill="#ffffff"/>
+  <text x="500" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">工程骨架：配置包与业务包分离，settings 按环境继承</text>
+  <text x="500" y="56" text-anchor="middle" font-size="13" fill="#666666">django-admin startproject 生成的单文件 settings.py，拆成「一基多环境」</text>
+
+  <!-- ================= 左：目录树 ================= -->
+  <rect x="30" y="80" width="440" height="390" rx="10" fill="#f5f9fd" stroke="#1976d2" stroke-width="2"/>
+  <text x="250" y="110" text-anchor="middle" font-size="16" font-weight="700" fill="#0d47a1">目录结构（三层分区）</text>
+
+  <!-- 根层 -->
+  <rect x="52" y="130" width="396" height="44" rx="6" fill="#e3f2fd" stroke="#90caf9" stroke-width="1.5"/>
+  <text x="68" y="150" font-size="13" font-weight="700" fill="#0d47a1">blogapi/　（项目根）</text>
+  <text x="68" y="167" font-size="11.5" fill="#424242">manage.py　　← 唯一入口，用 DJANGO_SETTINGS_MODULE 选环境</text>
+
+  <!-- config 层 -->
+  <rect x="52" y="186" width="396" height="150" rx="6" fill="#fff8e1" stroke="#ffb74d" stroke-width="1.5"/>
+  <text x="68" y="208" font-size="13" font-weight="700" fill="#e65100">config/　（配置包：只放「怎么跑」）</text>
+  <text x="84" y="229" font-size="11.5" fill="#424242" font-family="'Consolas','Courier New',monospace">settings/</text>
+  <text x="150" y="229" font-size="11.5" fill="#6d4c41" font-family="'Consolas','Courier New',monospace">base.py　← 公共项，所有环境共享</text>
+  <text x="150" y="248" font-size="11.5" fill="#2e7d32" font-family="'Consolas','Courier New',monospace">dev.py　 ← DEBUG / CORS 白名单 / 本地库</text>
+  <text x="150" y="267" font-size="11.5" fill="#c62828" font-family="'Consolas','Courier New',monospace">prod.py　← 密钥与白名单全部读环境变量</text>
+  <text x="84" y="290" font-size="11.5" fill="#424242" font-family="'Consolas','Courier New',monospace">urls.py</text>
+  <text x="150" y="290" font-size="11.5" fill="#6d4c41">根路由：所有对外 API 挂 /api/</text>
+  <text x="84" y="309" font-size="11.5" fill="#424242" font-family="'Consolas','Courier New',monospace">wsgi.py / asgi.py</text>
+  <text x="200" y="309" font-size="11.5" fill="#6d4c41">部署入口（同步 / 异步，课 16）</text>
+  <text x="360" y="329" font-size="11" fill="#8d6e63">为什么拆：dev 与 prod 的差异 ≥ 8 项，靠注释开关迟早出错</text>
+
+  <!-- apps 层 -->
+  <rect x="52" y="348" width="396" height="106" rx="6" fill="#f1f8e9" stroke="#81c784" stroke-width="1.5"/>
+  <text x="68" y="370" font-size="13" font-weight="700" fill="#1b5e20">apps/　（业务包：只放「做什么」）</text>
+  <text x="84" y="391" font-size="11.5" fill="#424242" font-family="'Consolas','Courier New',monospace">users/</text>
+  <text x="140" y="391" font-size="11.5" fill="#33691e">models.py ← 自定义 User（本课知识点 3）</text>
+  <text x="84" y="411" font-size="11.5" fill="#424242" font-family="'Consolas','Courier New',monospace">articles/</text>
+  <text x="158" y="411" font-size="11.5" fill="#33691e">models.py / views.py / serializers.py …</text>
+  <text x="84" y="437" font-size="11.5" fill="#2e7d32">按「业务边界」切，不按「技术层」切：</text>
+  <text x="255" y="437" font-size="11.5" fill="#c62828">不要建 models/ views/ 这种大杂烩目录</text>
+
+  <!-- ================= 右：settings 继承 ================= -->
+  <rect x="490" y="80" width="480" height="390" rx="10" fill="#f3e5f5" stroke="#8e24aa" stroke-width="2"/>
+  <text x="730" y="110" text-anchor="middle" font-size="16" font-weight="700" fill="#4a148c">settings 继承关系</text>
+
+  <!-- base -->
+  <rect x="600" y="132" width="260" height="96" rx="8" fill="#ffffff" stroke="#ce93d8" stroke-width="1.5"/>
+  <text x="730" y="156" text-anchor="middle" font-size="14" font-weight="700" fill="#4a148c">base.py</text>
+  <text x="617" y="178" font-size="11.5" fill="#424242">INSTALLED_APPS / MIDDLEWARE</text>
+  <text x="617" y="196" font-size="11.5" fill="#424242">DATABASES / AUTH_USER_MODEL</text>
+  <text x="617" y="214" font-size="11.5" fill="#c62828">DEBUG = False　← 安全默认</text>
+
+  <!-- dev -->
+  <rect x="512" y="272" width="196" height="86" rx="8" fill="#e8f5e9" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="610" y="296" text-anchor="middle" font-size="14" font-weight="700" fill="#1b5e20">dev.py</text>
+  <text x="527" y="318" font-size="11.5" fill="#33691e">DEBUG = True</text>
+  <text x="527" y="336" font-size="11.5" fill="#33691e">CORS_ALLOWED_ORIGINS（硬编码）</text>
+  <text x="527" y="352" font-size="11.5" fill="#33691e">sqlite3 本地文件</text>
+
+  <!-- prod -->
+  <rect x="752" y="272" width="196" height="86" rx="8" fill="#ffebee" stroke="#ef5350" stroke-width="1.5"/>
+  <text x="850" y="296" text-anchor="middle" font-size="14" font-weight="700" fill="#b71c1c">prod.py</text>
+  <text x="767" y="318" font-size="11.5" fill="#8e2b2b">DEBUG = False</text>
+  <text x="767" y="336" font-size="11.5" fill="#8e2b2b">os.environ["DJANGO_SECRET_KEY"]</text>
+  <text x="767" y="352" font-size="11.5" fill="#8e2b2b">SECURE_* / COOKIE_SECURE</text>
+
+  <!-- 继承箭头 -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#8e24aa"/>
+    </marker>
+  </defs>
+  <line x1="610" y1="272" x2="676" y2="236" stroke="#8e24aa" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="850" y1="272" x2="784" y2="236" stroke="#8e24aa" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="646" y="252" font-size="11" fill="#6a1b9a">from .base import *</text>
+  <text x="712" y="252" font-size="11" fill="#6a1b9a">from .base import *</text>
+
+  <!-- 底部说明 -->
+  <rect x="512" y="378" width="436" height="76" rx="8" fill="#ffffff" stroke="#e1bee7" stroke-width="1.5"/>
+  <text x="527" y="399" font-size="12" font-weight="700" fill="#4a148c">三条纪律</text>
+  <text x="527" y="419" font-size="11.5" fill="#424242">① 差异项才放进 dev/prod，公共项一律留在 base</text>
+  <text x="527" y="436" font-size="11.5" fill="#424242">② 子环境只用 `from .base import *` 单向继承，禁止互相 import</text>
+  <text x="527" y="453" font-size="11.5" fill="#424242">③ 密钥绝不写进 base.py（prod 里用 os.environ[...] 取值，缺失即崩）</text>
+</svg>

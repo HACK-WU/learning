@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" width="1000" height="620" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="1000" height="620" fill="#ffffff"/>
+  <text x="500" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">Serializer 的完整数据流：三层校验卡在哪，错了往哪走</text>
+  <text x="500" y="54" text-anchor="middle" font-size="13" fill="#666666">is_valid() 一次调用的完整路径 —— 重点看「字段级失败时，对象级根本不执行」</text>
+
+  <defs>
+    <marker id="a1" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#1976d2"/>
+    </marker>
+    <marker id="a2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#c62828"/>
+    </marker>
+  </defs>
+
+  <!-- 输入 -->
+  <rect x="60" y="76" width="260" height="46" rx="8" fill="#e8f4fd" stroke="#1976d2" stroke-width="2"/>
+  <text x="190" y="96" text-anchor="middle" font-size="14" font-weight="700" fill="#0d47a1">request.data（外部输入）</text>
+  <text x="190" y="114" text-anchor="middle" font-size="11.5" fill="#424242">完全不可信：字段名、类型、值都可能错</text>
+
+  <line x1="190" y1="122" x2="190" y2="146" stroke="#1976d2" stroke-width="2" marker-end="url(#a1)"/>
+
+  <!-- L1 字段级 -->
+  <rect x="60" y="152" width="260" height="104" rx="8" fill="#fff8e1" stroke="#f57c00" stroke-width="2"/>
+  <text x="190" y="174" text-anchor="middle" font-size="14" font-weight="700" fill="#e65100">① to_internal_value()　字段级</text>
+  <text x="76" y="196" font-size="11.5" fill="#424242">逐字段：反序列化 → validators</text>
+  <text x="76" y="213" font-size="11.5" fill="#424242">→ validate_&lt;field&gt;()</text>
+  <text x="76" y="234" font-size="11.5" fill="#b71c1c">只看这一个字段的值</text>
+  <text x="76" y="249" font-size="11.5" fill="#b71c1c">看不到别的字段</text>
+
+  <!-- L1 分支 -->
+  <line x1="320" y1="190" x2="392" y2="190" stroke="#c62828" stroke-width="2" marker-end="url(#a2)"/>
+  <rect x="396" y="164" width="196" height="52" rx="6" fill="#ffebee" stroke="#ef5350" stroke-width="1.5"/>
+  <text x="494" y="184" text-anchor="middle" font-size="12" font-weight="700" fill="#b71c1c">有字段级错误 → 直接返回</text>
+  <text x="494" y="202" text-anchor="middle" font-size="11.5" fill="#8e2b2b">errors = {"title": [...]}</text>
+
+  <line x1="190" y1="256" x2="190" y2="280" stroke="#1976d2" stroke-width="2" marker-end="url(#a1)"/>
+
+  <!-- L2 对象级 -->
+  <rect x="60" y="286" width="260" height="104" rx="8" fill="#f3e5f5" stroke="#8e24aa" stroke-width="2"/>
+  <text x="190" y="308" text-anchor="middle" font-size="14" font-weight="700" fill="#4a148c">② run_validators() + validate()</text>
+  <text x="76" y="330" font-size="11.5" fill="#424242">对象级：能同时看到所有字段</text>
+  <text x="76" y="347" font-size="11.5" fill="#424242">做跨字段校验（如 状态=已发布</text>
+  <text x="76" y="364" font-size="11.5" fill="#424242">则 发布时间 不能为空）</text>
+  <text x="76" y="385" font-size="11.5" fill="#6a1b9a">⚠️ 只有 ① 全部通过才会执行</text>
+
+  <!-- L2 分支 -->
+  <line x1="320" y1="330" x2="392" y2="330" stroke="#c62828" stroke-width="2" marker-end="url(#a2)"/>
+  <rect x="396" y="304" width="196" height="52" rx="6" fill="#ffebee" stroke="#ef5350" stroke-width="1.5"/>
+  <text x="494" y="324" text-anchor="middle" font-size="12" font-weight="700" fill="#b71c1c">跨字段错误 → 返回</text>
+  <text x="494" y="342" text-anchor="middle" font-size="11.5" fill="#8e2b2b">抛 dict → {"published_at": [...]}</text>
+
+  <line x1="190" y1="390" x2="190" y2="414" stroke="#1976d2" stroke-width="2" marker-end="url(#a1)"/>
+
+  <!-- validated_data -->
+  <rect x="60" y="420" width="260" height="60" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="190" y="442" text-anchor="middle" font-size="14" font-weight="700" fill="#1b5e20">③ validated_data</text>
+  <text x="190" y="463" text-anchor="middle" font-size="11.5" fill="#33691e">已清洗、已校验、可直接落库的数据</text>
+
+  <line x1="190" y1="480" x2="190" y2="504" stroke="#1976d2" stroke-width="2" marker-end="url(#a1)"/>
+
+  <!-- save -->
+  <rect x="60" y="510" width="260" height="60" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="190" y="532" text-anchor="middle" font-size="14" font-weight="700" fill="#1b5e20">④ save() → create() / update()</text>
+  <text x="190" y="553" text-anchor="middle" font-size="11.5" fill="#33691e">ModelSerializer 给了默认实现</text>
+  <text x="190" y="570" font-size="11.5" fill="#b71c1c">但可写嵌套必须手写（课 4）</text>
+
+  <!-- 右侧说明栏 -->
+  <rect x="620" y="76" width="320" height="176" rx="10" fill="#f5f9fd" stroke="#90caf9" stroke-width="1.5"/>
+  <text x="780" y="102" text-anchor="middle" font-size="14" font-weight="700" fill="#0d47a1">错误落点：取决于你怎么抛</text>
+  <text x="638" y="126" font-size="11.5" fill="#424242">raise ValidationError("xxx")</text>
+  <text x="638" y="144" font-size="11.5" fill="#b71c1c">→ {"non_field_errors": ["xxx"]}</text>
+  <text x="638" y="168" font-size="11.5" fill="#424242">raise ValidationError({"f": "xxx"})</text>
+  <text x="638" y="186" font-size="11.5" fill="#2e7d32">→ {"f": ["xxx"]}　（前端好定位）</text>
+  <text x="638" y="212" font-size="11.5" fill="#424242">建议：凡是能归因到某个字段的错，</text>
+  <text x="638" y="229" font-size="11.5" fill="#424242">一律用 dict 抛，别让前端去猜。</text>
+
+  <rect x="620" y="272" width="320" height="176" rx="10" fill="#fff8e1" stroke="#ffb74d" stroke-width="1.5"/>
+  <text x="780" y="298" text-anchor="middle" font-size="14" font-weight="700" fill="#e65100">第三层：需要查库的校验</text>
+  <text x="638" y="322" font-size="11.5" fill="#424242">唯一性、余额是否充足、优惠券是否</text>
+  <text x="638" y="339" font-size="11.5" fill="#424242">可用……这些要打数据库，通常写在</text>
+  <text x="638" y="356" font-size="11.5" fill="#424242">validate() 里或 validators=[] 中。</text>
+  <text x="638" y="382" font-size="11.5" fill="#b71c1c">⚠️ 并发下存在 TOCTOU：校验通过</text>
+  <text x="638" y="399" font-size="11.5" fill="#b71c1c">与真正写入之间，数据可能已被改。</text>
+  <text x="638" y="423" font-size="11.5" fill="#2e7d32">唯一性交给数据库约束兜底，</text>
+  <text x="638" y="440" font-size="11.5" fill="#2e7d32">不要只靠 serializer 层校验。</text>
+
+  <rect x="620" y="468" width="320" height="102" rx="10" fill="#f1f8e9" stroke="#81c784" stroke-width="1.5"/>
+  <text x="780" y="494" text-anchor="middle" font-size="14" font-weight="700" fill="#1b5e20">与 Django Form 的对照</text>
+  <text x="638" y="518" font-size="11.5" fill="#424242">clean_&lt;field&gt;() → validate_&lt;field&gt;()</text>
+  <text x="638" y="536" font-size="11.5" fill="#424242">clean() → validate()</text>
+  <text x="638" y="554" font-size="11.5" fill="#424242">cleaned_data → validated_data</text>
+</svg>

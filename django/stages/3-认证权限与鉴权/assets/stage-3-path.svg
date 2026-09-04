@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 330" width="860" height="330" font-family="Microsoft YaHei, PingFang SC, Helvetica, Arial, sans-serif">
+  <rect width="860" height="330" fill="#fbfcfe"/>
+  <text x="430" y="32" text-anchor="middle" font-size="18" font-weight="bold" fill="#1a1a2e">阶段 3 · 认证、权限与鉴权</text>
+  <text x="430" y="52" text-anchor="middle" font-size="12" fill="#5a6b7d">守门 —— 你是谁？你能干什么？</text>
+
+  <defs>
+    <marker id="a3" markerWidth="10" markerHeight="10" refX="8" refY="3.5" orient="auto">
+      <path d="M0,0 L8,3.5 L0,7 z" fill="#455a64"/>
+    </marker>
+  </defs>
+
+  <!-- 课 6 -->
+  <rect x="24" y="76" width="256" height="198" rx="9" fill="#fff8e1" stroke="#ff9800" stroke-width="2"/>
+  <rect x="24" y="76" width="256" height="30" rx="9" fill="#ff9800"/>
+  <rect x="24" y="96" width="256" height="10" fill="#ff9800"/>
+  <text x="152" y="97" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">课 8　认证：你是谁</text>
+  <text x="40" y="130" font-size="11.5" fill="#e65100">① Session 与 Token 的边界</text>
+  <text x="40" y="150" font-size="11.5" fill="#e65100">② JWT 原理与 simplejwt</text>
+  <text x="40" y="170" font-size="11.5" fill="#e65100">③ 刷新、轮换与黑名单</text>
+  <line x1="37" y1="184" x2="267" y2="184" stroke="#ffe0b2" stroke-width="1"/>
+  <text x="40" y="204" font-size="11" fill="#5a6b7d">产出：为场景选对认证方式</text>
+  <text x="40" y="222" font-size="11" fill="#5a6b7d">产出：说清登出困境与解法</text>
+  <text x="40" y="246" font-size="11" fill="#c62828">⚠️ 误区：JWT 是加密的（其实只签名）</text>
+  <text x="40" y="264" font-size="11" fill="#c62828">⚠️ 误区：无状态还能强制下线</text>
+
+  <!-- 课 7 -->
+  <rect x="302" y="76" width="256" height="198" rx="9" fill="#fff3e0" stroke="#fb8c00" stroke-width="2"/>
+  <rect x="302" y="76" width="256" height="30" rx="9" fill="#fb8c00"/>
+  <rect x="302" y="96" width="256" height="10" fill="#fb8c00"/>
+  <text x="430" y="97" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">课 9　权限：你能干什么</text>
+  <text x="318" y="130" font-size="11.5" fill="#e65100">① 权限四层与执行顺序</text>
+  <text x="318" y="150" font-size="11.5" fill="#e65100">② 自定义对象级权限</text>
+  <text x="318" y="170" font-size="11.5" fill="#e65100">③ 限流 Throttling</text>
+  <line x1="315" y1="184" x2="545" y2="184" stroke="#ffe0b2" stroke-width="1"/>
+  <text x="318" y="204" font-size="11" fill="#5a6b7d">产出：只能访问自己的数据</text>
+  <text x="318" y="222" font-size="11" fill="#5a6b7d">产出：接口不再被随便刷</text>
+  <text x="318" y="246" font-size="11" fill="#c62828">⚠️ 误区：权限通过但列表仍泄数据</text>
+  <text x="318" y="264" font-size="11" fill="#c62828">⚠️ 误区：权限顺序写错永不生效</text>
+
+  <!-- 课 8 -->
+  <rect x="580" y="76" width="256" height="198" rx="9" fill="#fff8e1" stroke="#f57c00" stroke-width="2"/>
+  <rect x="580" y="76" width="256" height="30" rx="9" fill="#f57c00"/>
+  <rect x="580" y="96" width="256" height="10" fill="#f57c00"/>
+  <text x="708" y="97" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">课 10　分离架构下的安全</text>
+  <text x="596" y="130" font-size="11.5" fill="#e65100">① CSRF 的重新理解（压缩）</text>
+  <text x="596" y="150" font-size="11.5" fill="#e65100">② Cookie 存放 token 的取舍</text>
+  <text x="596" y="170" font-size="11.5" fill="#e65100">③ 越权与批量分配防线</text>
+  <line x1="593" y1="184" x2="823" y2="184" stroke="#ffe0b2" stroke-width="1"/>
+  <text x="596" y="204" font-size="11" fill="#5a6b7d">产出：说清 XSS 与 CSRF 的权衡</text>
+  <text x="596" y="222" font-size="11" fill="#5a6b7d">产出：堵住两类隐藏漏洞</text>
+  <text x="596" y="246" font-size="11" fill="#c62828">⚠️ 误区：用了 JWT 就不用管 CSRF</text>
+  <text x="596" y="264" font-size="11" fill="#c62828">⚠️ 误区：扫描扫不出 = 没有漏洞</text>
+
+  <line x1="282" y1="175" x2="298" y2="175" stroke="#455a64" stroke-width="2.5" marker-end="url(#a3)"/>
+  <line x1="560" y1="175" x2="576" y2="175" stroke="#455a64" stroke-width="2.5" marker-end="url(#a3)"/>
+
+  <rect x="24" y="290" width="400" height="30" rx="6" fill="#e8f5e9" stroke="#a5d6a7"/>
+  <text x="224" y="310" text-anchor="middle" font-size="11.5" fill="#2e7d32">前置：阶段 2 的 request.user 与序列化器</text>
+
+  <rect x="436" y="290" width="400" height="30" rx="6" fill="#fce4ec" stroke="#f48fb1"/>
+  <text x="636" y="310" text-anchor="middle" font-size="11.5" fill="#880e4f">后续：阶段 4 缓存承接限流、queryset 承接过滤</text>
+</svg>

@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 330" width="1400" height="330" font-family="Microsoft YaHei, PingFang SC, Helvetica, Arial, sans-serif">
+  <rect width="1400" height="330" fill="#fbfcfe"/>
+  <text x="700" y="32" text-anchor="middle" font-size="18" font-weight="bold" fill="#1a1a2e">阶段 2 · DRF 核心三件套</text>
+  <text x="700" y="52" text-anchor="middle" font-size="12" fill="#5a6b7d">立规矩 —— 契约与分工</text>
+
+  <defs>
+    <marker id="a2" markerWidth="10" markerHeight="10" refX="8" refY="3.5" orient="auto">
+      <path d="M0,0 L8,3.5 L0,7 z" fill="#455a64"/>
+    </marker>
+  </defs>
+
+  <rect x="20" y="76" width="252" height="198" rx="9" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+  <rect x="20" y="76" width="252" height="30" rx="9" fill="#4caf50"/>
+  <rect x="20" y="96" width="252" height="10" fill="#4caf50"/>
+  <text x="146" y="97" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">课 3　序列化器：守门人</text>
+  <text x="36" y="130" font-size="11.5" fill="#1b5e20">① Serializer 与 ModelSerializer</text>
+  <text x="36" y="150" font-size="11.5" fill="#1b5e20">② 校验三层防线（含 Form 对照）</text>
+  <text x="36" y="170" font-size="11.5" fill="#1b5e20">③ 嵌套、来源与只读字段</text>
+  <line x1="33" y1="184" x2="259" y2="184" stroke="#c8e6c9" stroke-width="1"/>
+  <text x="36" y="204" font-size="11" fill="#5a6b7d">产出：校验写在对的层</text>
+  <text x="36" y="222" font-size="11" fill="#5a6b7d">产出：嵌套不拖垮性能</text>
+  <text x="36" y="246" font-size="11" fill="#c62828">⚠️ 误区：__all__ 暴露敏感字段</text>
+  <text x="36" y="264" font-size="11" fill="#c62828">⚠️ 误区：校验写 view 里能被绕过</text>
+
+  <rect x="292" y="76" width="252" height="198" rx="9" fill="#f1f8e9" stroke="#7cb342" stroke-width="2"/>
+  <rect x="292" y="76" width="252" height="30" rx="9" fill="#7cb342"/>
+  <rect x="292" y="96" width="252" height="10" fill="#7cb342"/>
+  <text x="418" y="97" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">课 4　序列化器进阶</text>
+  <text x="308" y="130" font-size="11.5" fill="#33691e">① 可写嵌套 serializer</text>
+  <text x="308" y="150" font-size="11.5" fill="#33691e">② SerializerMethodField 陷阱</text>
+  <text x="308" y="170" font-size="11.5" fill="#33691e">③ 动态裁剪字段</text>
+  <line x1="305" y1="184" x2="531" y2="184" stroke="#dcedc8" stroke-width="1"/>
+  <text x="308" y="204" font-size="11" fill="#5a6b7d">产出：嵌套能写回且不出半截数据</text>
+  <text x="308" y="222" font-size="11" fill="#5a6b7d">产出：不再埋隐式 N+1</text>
+  <text x="308" y="246" font-size="11" fill="#c62828">⚠️ 误区：嵌套加上就能写</text>
+  <text x="308" y="264" font-size="11" fill="#c62828">⚠️ 误区：MethodField 没有代价</text>
+
+  <rect x="564" y="76" width="252" height="198" rx="9" fill="#e8f5e9" stroke="#388e3c" stroke-width="2"/>
+  <rect x="564" y="76" width="252" height="30" rx="9" fill="#388e3c"/>
+  <rect x="564" y="96" width="252" height="10" fill="#388e3c"/>
+  <text x="690" y="97" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">课 5　视图层与路由</text>
+  <text x="580" y="130" font-size="11.5" fill="#1b5e20">① 请求响应对象与内容协商</text>
+  <text x="580" y="150" font-size="11.5" fill="#1b5e20">② APIView/Generic/ViewSet 取舍</text>
+  <text x="580" y="170" font-size="11.5" fill="#1b5e20">③ router 的 URL 生成</text>
+  <line x1="577" y1="184" x2="803" y2="184" stroke="#c8e6c9" stroke-width="1"/>
+  <text x="580" y="204" font-size="11" fill="#5a6b7d">产出：为接口选对抽象层级</text>
+  <text x="580" y="222" font-size="11" fill="#5a6b7d">产出：知道 router 生成什么 URL</text>
+  <text x="580" y="246" font-size="11" fill="#c62828">⚠️ 误区：全用 ViewSet 反而不清晰</text>
+  <text x="580" y="264" font-size="11" fill="#c62828">⚠️ 误区：DRF Request ≠ HttpRequest</text>
+
+  <rect x="836" y="76" width="252" height="198" rx="9" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+  <rect x="836" y="76" width="252" height="30" rx="9" fill="#f9a825"/>
+  <rect x="836" y="96" width="252" height="10" fill="#f9a825"/>
+  <text x="962" y="97" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">课 6　API 版本控制</text>
+  <text x="852" y="130" font-size="11.5" fill="#e65100">① 三种版本策略的取舍</text>
+  <text x="852" y="150" font-size="11.5" fill="#e65100">② 版本分派 serializer 与视图</text>
+  <text x="852" y="170" font-size="11.5" fill="#e65100">③ 弃用策略与前端协作</text>
+  <line x1="849" y1="184" x2="1075" y2="184" stroke="#ffe0b2" stroke-width="1"/>
+  <text x="852" y="204" font-size="11" fill="#5a6b7d">产出：新旧版本可共存</text>
+  <text x="852" y="222" font-size="11" fill="#5a6b7d">产出：旧版本能有序下线</text>
+  <text x="852" y="246" font-size="11" fill="#c62828">⚠️ 误区：加个 v1 前缀就算版本控制</text>
+  <text x="852" y="264" font-size="11" fill="#c62828">⚠️ 误区：版本越多越好</text>
+
+  <rect x="1108" y="76" width="252" height="198" rx="9" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <rect x="1108" y="76" width="252" height="30" rx="9" fill="#2e7d32"/>
+  <rect x="1108" y="96" width="252" height="10" fill="#2e7d32"/>
+  <text x="1234" y="97" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">课 7　业务逻辑该放哪</text>
+  <text x="1124" y="130" font-size="11.5" fill="#1b5e20">① 业务逻辑放置的四种方案</text>
+  <text x="1124" y="150" font-size="11.5" fill="#1b5e20">② 状态码 · 统一响应 · 错误码</text>
+  <text x="1124" y="170" font-size="11.5" fill="#1b5e20">③ 分页、过滤与排序</text>
+  <line x1="1121" y1="184" x2="1347" y2="184" stroke="#c8e6c9" stroke-width="1"/>
+  <text x="1124" y="204" font-size="11" fill="#5a6b7d">产出：view 不再变胖</text>
+  <text x="1124" y="222" font-size="11" fill="#5a6b7d">产出：列表接口可安全上线</text>
+  <text x="1124" y="246" font-size="11" fill="#c62828">⚠️ 误区：模型变上帝对象</text>
+  <text x="1124" y="264" font-size="11" fill="#c62828">⚠️ 误区：列表不分页是定时炸弹</text>
+
+  <line x1="274" y1="175" x2="288" y2="175" stroke="#455a64" stroke-width="2.5" marker-end="url(#a2)"/>
+  <line x1="546" y1="175" x2="560" y2="175" stroke="#455a64" stroke-width="2.5" marker-end="url(#a2)"/>
+  <line x1="818" y1="175" x2="832" y2="175" stroke="#455a64" stroke-width="2.5" marker-end="url(#a2)"/>
+  <line x1="1090" y1="175" x2="1104" y2="175" stroke="#455a64" stroke-width="2.5" marker-end="url(#a2)"/>
+
+  <rect x="20" y="290" width="660" height="30" rx="6" fill="#e8f4fd" stroke="#90caf9"/>
+  <text x="350" y="310" text-anchor="middle" font-size="11.5" fill="#0d47a1">前置：阶段 1 的骨架、CORS、用户模型</text>
+
+  <rect x="700" y="290" width="660" height="30" rx="6" fill="#fff8e1" stroke="#ffcc80"/>
+  <text x="1030" y="310" text-anchor="middle" font-size="11.5" fill="#e65100">后续：阶段 3 依赖本阶段的 request.user 与 serializer</text>
+</svg>
