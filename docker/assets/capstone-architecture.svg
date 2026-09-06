@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="460" viewBox="0 0 1000 460" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="1000" height="460" fill="#fafafa"/>
+
+  <text x="40" y="34" font-size="20" font-weight="bold" fill="#1565C0">结课项目架构：订单服务生产化</text>
+  <text x="40" y="55" font-size="12.5" fill="#555">四个服务、一个自定义网络、两个具名卷。每个箭头上标注了它依赖的课号与非功能约束。</text>
+
+  <!-- 外部 -->
+  <rect x="40" y="180" width="120" height="52" rx="5" fill="#eceff1" stroke="#607d8b" stroke-width="1.8"/>
+  <text x="100" y="202" font-size="11.5" font-weight="bold" fill="#37474f" text-anchor="middle">外部请求</text>
+  <text x="100" y="220" font-size="10" fill="#546e7a" text-anchor="middle">:8080</text>
+
+  <path d="M 160 206 L 193 206" fill="none" stroke="#1565C0" stroke-width="2" marker-end="url(#a1)"/>
+  <defs>
+    <marker id="a1" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><polygon points="0,0 9,4.5 0,9" fill="#1565C0"/></marker>
+    <marker id="a2" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><polygon points="0,0 9,4.5 0,9" fill="#00695c"/></marker>
+  </defs>
+  <text x="176" y="196" font-size="9" fill="#0d47a1" text-anchor="middle">课 8</text>
+
+  <!-- 网络虚线框 -->
+  <rect x="175" y="98" width="600" height="228" rx="8" fill="none" stroke="#00695c" stroke-width="1.5" stroke-dasharray="7 4"/>
+  <text x="190" y="118" font-size="10.5" font-weight="bold" fill="#004d40">自定义 bridge 网络 backend　（课 8：同网络内按服务名互访，全部端口互通，无需 -p）</text>
+
+  <!-- nginx -->
+  <rect x="195" y="165" width="135" height="82" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.8"/>
+  <text x="262" y="190" font-size="11.5" font-weight="bold" fill="#1b5e20" text-anchor="middle">nginx</text>
+  <text x="262" y="208" font-size="9.5" fill="#1b5e20" text-anchor="middle">反向代理</text>
+  <text x="262" y="224" font-size="9" fill="#1b5e20" text-anchor="middle">容器内 :80</text>
+  <text x="262" y="239" font-size="8.5" fill="#66bb6a" text-anchor="middle">唯一对外发布端口</text>
+
+  <path d="M 330 206 L 373 206" fill="none" stroke="#1565C0" stroke-width="2" marker-end="url(#a1)"/>
+  <text x="351" y="196" font-size="9" fill="#0d47a1" text-anchor="middle">app:8000</text>
+
+  <!-- app -->
+  <rect x="375" y="158" width="135" height="96" rx="5" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="442" y="182" font-size="11.5" font-weight="bold" fill="#0d47a1" text-anchor="middle">order-service</text>
+  <text x="442" y="200" font-size="9.5" fill="#0d47a1" text-anchor="middle">:8000　/healthz</text>
+  <text x="442" y="216" font-size="9" fill="#0d47a1" text-anchor="middle">非 root（课 12）</text>
+  <text x="442" y="231" font-size="9" fill="#0d47a1" text-anchor="middle">只读根 + tmpfs</text>
+  <text x="442" y="246" font-size="8.5" fill="#b71c1c" text-anchor="middle">cap_drop: ALL</text>
+
+  <path d="M 510 186 L 548 156" fill="none" stroke="#1565C0" stroke-width="2" marker-end="url(#a1)"/>
+  <text x="524" y="176" font-size="9" fill="#0d47a1" text-anchor="middle">db:5432</text>
+  <path d="M 510 226 L 548 262" fill="none" stroke="#1565C0" stroke-width="2" marker-end="url(#a1)"/>
+  <text x="524" y="252" font-size="9" fill="#0d47a1" text-anchor="middle">redis:6379</text>
+
+  <!-- db -->
+  <rect x="550" y="125" width="205" height="62" rx="5" fill="#fff8e1" stroke="#ef6c00" stroke-width="1.6"/>
+  <text x="562" y="147" font-size="11" font-weight="bold" fill="#e65100">postgres:16</text>
+  <text x="562" y="164" font-size="9" fill="#e65100">有状态：数据必须在卷里（课 7）</text>
+  <text x="562" y="180" font-size="9" fill="#e65100">healthcheck: pg_isready（课 9）</text>
+
+  <!-- redis -->
+  <rect x="550" y="231" width="205" height="62" rx="5" fill="#fff8e1" stroke="#ef6c00" stroke-width="1.6"/>
+  <text x="562" y="253" font-size="11" font-weight="bold" fill="#e65100">redis:7-alpine</text>
+  <text x="562" y="270" font-size="9" fill="#e65100">缓存，丢了可重建</text>
+  <text x="562" y="286" font-size="9" fill="#e65100">但仍然挂卷：避免每次冷启动</text>
+
+  <!-- 卷 -->
+  <path d="M 755 156 L 793 156" fill="none" stroke="#00695c" stroke-width="2" marker-end="url(#a2)"/>
+  <rect x="795" y="131" width="165" height="52" rx="5" fill="#e0f2f1" stroke="#00695c" stroke-width="1.6"/>
+  <text x="877" y="152" font-size="11" font-weight="bold" fill="#004d40" text-anchor="middle">具名卷 pgdata</text>
+  <text x="877" y="170" font-size="9" fill="#004d40" text-anchor="middle">容器删了数据还在（课 7）</text>
+
+  <path d="M 755 262 L 793 262" fill="none" stroke="#00695c" stroke-width="2" marker-end="url(#a2)"/>
+  <rect x="795" y="237" width="165" height="52" rx="5" fill="#e0f2f1" stroke="#00695c" stroke-width="1.6"/>
+  <text x="877" y="258" font-size="11" font-weight="bold" fill="#004d40" text-anchor="middle">具名卷 redisdata</text>
+  <text x="877" y="276" font-size="9" fill="#004d40" text-anchor="middle">⚠️ down -v 才会删（课 7）</text>
+
+  <!-- 底部：非功能约束 -->
+  <rect x="40" y="344" width="920" height="98" rx="6" fill="#fff8e1" stroke="#ef6c00" stroke-width="1.2"/>
+  <text x="60" y="368" font-size="12.5" font-weight="bold" fill="#e65100">非功能约束（验收时可逐条核对）</text>
+  <text x="60" y="390" font-size="11" fill="#333">① <tspan font-family="monospace">order-service</tspan> 镜像 <tspan font-weight="bold">&lt; 150 MB</tspan>（课 6 多阶段 + slim 基础镜像）</text>
+  <text x="60" y="408" font-size="11" fill="#333">② 容器 <tspan font-weight="bold">不以 root 运行</tspan>，且 <tspan font-family="monospace">read_only + cap_drop: ALL + no-new-privileges</tspan>（课 12）</text>
+  <text x="60" y="426" font-size="11" fill="#333">③ 从 <tspan font-family="monospace">compose up</tspan> 到四个服务全 <tspan font-weight="bold">healthy &lt; 60 秒</tspan>；单容器日志磁盘占用 <tspan font-weight="bold">≤ 30 MB</tspan>（课 11 的 local 驱动）</text>
+</svg>

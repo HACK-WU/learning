@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="600" viewBox="0 0 1000 600" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="1000" height="600" fill="#fafafa"/>
+
+  <text x="40" y="40" font-size="20" font-weight="bold" fill="#1565C0">指令顺序决定构建速度：改一行代码之后</text>
+  <text x="40" y="62" font-size="12.5" fill="#555">两份 Dockerfile 做的事一模一样，只是 `COPY` 的位置不同。改一行 app.py 后，左边的依赖要重装，右边的不用。</text>
+
+  <!-- ============ 左列：优化前 ============ -->
+  <rect x="40" y="86" width="440" height="30" rx="4" fill="#c62828"/>
+  <text x="260" y="107" font-size="13.5" font-weight="bold" fill="#ffffff" text-anchor="middle">❌ 先 COPY 全部，再装依赖</text>
+
+  <rect x="40" y="128" width="440" height="40" rx="4" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="58" y="146" font-size="12" fill="#1b5e20">FROM python:3.11</text>
+  <text x="58" y="162" font-size="10.5" fill="#2e7d32">第 1 层</text>
+  <rect x="360" y="136" width="102" height="24" rx="10" fill="#2e7d32"/>
+  <text x="411" y="152" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">CACHED</text>
+
+  <rect x="40" y="176" width="440" height="40" rx="4" fill="#ffebee" stroke="#c62828" stroke-width="1.5"/>
+  <text x="58" y="194" font-size="12" fill="#b71c1c">COPY . /app</text>
+  <text x="58" y="210" font-size="10.5" fill="#c62828">第 2 层 · 改了 app.py，整层失效</text>
+  <rect x="360" y="184" width="102" height="24" rx="10" fill="#c62828"/>
+  <text x="411" y="200" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">失效</text>
+
+  <rect x="40" y="224" width="440" height="40" rx="4" fill="#ffebee" stroke="#c62828" stroke-width="1.5"/>
+  <text x="58" y="242" font-size="12" fill="#b71c1c">WORKDIR /app</text>
+  <text x="58" y="258" font-size="10.5" fill="#c62828">第 3 层 · 上游变了，跟着重跑</text>
+  <rect x="360" y="232" width="102" height="24" rx="10" fill="#c62828"/>
+  <text x="411" y="248" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">失效</text>
+
+  <rect x="40" y="272" width="440" height="48" rx="4" fill="#ffcdd2" stroke="#c62828" stroke-width="2"/>
+  <text x="58" y="291" font-size="12" font-weight="bold" fill="#b71c1c">RUN pip install -r requirements.txt</text>
+  <text x="58" y="309" font-size="10.5" fill="#c62828">第 4 层 · 💸 依赖一个没变，却要全部重装</text>
+  <rect x="360" y="283" width="102" height="24" rx="10" fill="#c62828"/>
+  <text x="411" y="299" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">失效</text>
+
+  <text x="40" y="348" font-size="12" font-weight="bold" fill="#c62828">结果：改一行代码 → 重装全部依赖（几分钟）</text>
+
+  <!-- ============ 右列：优化后 ============ -->
+  <rect x="520" y="86" width="440" height="30" rx="4" fill="#2e7d32"/>
+  <text x="740" y="107" font-size="13.5" font-weight="bold" fill="#ffffff" text-anchor="middle">✅ 先装依赖，再 COPY 源码</text>
+
+  <rect x="520" y="128" width="440" height="40" rx="4" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="538" y="146" font-size="12" fill="#1b5e20">FROM python:3.11</text>
+  <text x="538" y="162" font-size="10.5" fill="#2e7d32">第 1 层</text>
+  <rect x="840" y="136" width="102" height="24" rx="10" fill="#2e7d32"/>
+  <text x="891" y="152" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">CACHED</text>
+
+  <rect x="520" y="176" width="440" height="40" rx="4" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="538" y="194" font-size="12" fill="#1b5e20">COPY requirements.txt .</text>
+  <text x="538" y="210" font-size="10.5" fill="#2e7d32">第 2 层 · 只依赖清单，改代码不影响它</text>
+  <rect x="840" y="184" width="102" height="24" rx="10" fill="#2e7d32"/>
+  <text x="891" y="200" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">CACHED</text>
+
+  <rect x="520" y="224" width="440" height="48" rx="4" fill="#c8e6c9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="538" y="243" font-size="12" font-weight="bold" fill="#1b5e20">RUN pip install -r requirements.txt</text>
+  <text x="538" y="261" font-size="10.5" fill="#2e7d32">第 3 层 · 🎉 命中缓存，几秒钟跳过</text>
+  <rect x="840" y="235" width="102" height="24" rx="10" fill="#2e7d32"/>
+  <text x="891" y="251" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">CACHED</text>
+
+  <rect x="520" y="280" width="440" height="40" rx="4" fill="#ffebee" stroke="#c62828" stroke-width="1.5"/>
+  <text x="538" y="298" font-size="12" fill="#b71c1c">COPY . /app</text>
+  <text x="538" y="314" font-size="10.5" fill="#c62828">第 4 层 · 只有这一层重跑</text>
+  <rect x="840" y="288" width="102" height="24" rx="10" fill="#c62828"/>
+  <text x="891" y="304" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">失效</text>
+
+  <text x="520" y="348" font-size="12" font-weight="bold" fill="#2e7d32">结果：改一行代码 → 只重跑最后一两层（几秒）</text>
+
+  <!-- ============ 规则说明 ============ -->
+  <rect x="40" y="376" width="920" height="96" rx="6" fill="#ffffff" stroke="#cfd8dc" stroke-width="1.2"/>
+  <text x="60" y="400" font-size="13" font-weight="bold" fill="#333">背后的规则只有两条：</text>
+  <text x="60" y="424" font-size="12.5" fill="#333">① 某条指令的缓存失效后，<tspan font-weight="bold">它下游的所有指令都要重跑</tspan>——哪怕它们的输入其实没变。</text>
+  <text x="60" y="448" font-size="12.5" fill="#333">② 所以要把<tspan font-weight="bold">改动频率低</tspan>的指令尽量往前放，<tspan font-weight="bold">改动频率高</tspan>的（源码）往后放。</text>
+  <text x="60" y="470" font-size="11.5" fill="#c62828">⚠️ 注意：RUN 的缓存不会自动过期——`RUN apt-get update` 就算上游包更新了也会命中旧缓存，需要更新时用 --no-cache。</text>
+
+  <!-- ============ 页脚 ============ -->
+  <text x="40" y="502" font-size="11.5" fill="#78909c">配套：把不想进上下文的文件写进 .dockerignore（.git、node_modules、构建产物、.env），既能加速又能防止敏感文件被 COPY 进镜像。</text>
+  <line x1="40" y1="520" x2="960" y2="520" stroke="#cfd8dc" stroke-width="1"/>
+  <text x="40" y="540" font-size="11" fill="#78909c">机制依据：Docker 官方 Docker build cache · Build context（.dockerignore）· Dockerfile reference（核查于 2026-09）。</text>
+  <text x="40" y="560" font-size="11" fill="#78909c">注：Dockerfile 中每一条「修改文件系统」的指令产生一层；LABEL / ENV / CMD / WORKDIR / EXPOSE 只改元数据，不产生层。</text>
+</svg>

@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="580" viewBox="0 0 1000 580" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="1000" height="580" fill="#fafafa"/>
+
+  <text x="40" y="34" font-size="20" font-weight="bold" fill="#1565C0">容器化到哪一步：三条路径与各自的红线</text>
+  <text x="40" y="55" font-size="12.5" fill="#555">不是「越往上越好」，而是<tspan font-weight="bold">匹配你的规模</tspan>。越级上台阶付出的成本，往往远超得到的收益。</text>
+
+  <!-- ===== 路径 A ===== -->
+  <rect x="40" y="80" width="920" height="150" rx="6" fill="#ffffff" stroke="#2e7d32" stroke-width="1.6"/>
+  <rect x="40" y="80" width="920" height="30" rx="6" fill="#2e7d32"/>
+  <rect x="40" y="100" width="920" height="10" fill="#2e7d32"/>
+  <text x="60" y="101" font-size="13" font-weight="bold" fill="#ffffff">路径 A · 单机与个人 —— 把「能跑」变成「随时能重现」</text>
+
+  <text x="60" y="132" font-size="11" font-weight="bold" fill="#1b5e20">适用条件</text>
+  <text x="60" y="150" font-size="10" fill="#333">一台机器</text>
+  <text x="60" y="166" font-size="10" fill="#333">1–3 个服务</text>
+  <text x="60" y="182" font-size="10" fill="#333">能接受分钟级停机</text>
+  <text x="60" y="198" font-size="10" fill="#333">没有专职运维</text>
+  <text x="60" y="220" font-size="9" fill="#78909c">这是门槛最低、也最</text>
+  <text x="60" y="232" font-size="9" fill="#78909c">容易被低估的一级</text>
+
+  <line x1="250" y1="118" x2="250" y2="222" stroke="#c8e6c9" stroke-width="1"/>
+  <text x="270" y="132" font-size="11" font-weight="bold" fill="#1b5e20">该做的（对应本课）</text>
+  <text x="270" y="152" font-size="10" fill="#333">✓ Dockerfile 分层与瘦身　（课 4–6）</text>
+  <text x="270" y="168" font-size="10" fill="#333">✓ 数据放卷、不放容器层　（课 7）</text>
+  <text x="270" y="184" font-size="10" fill="#333">✓ 自定义网络按名互访　　（课 8）</text>
+  <text x="270" y="200" font-size="10" fill="#333">✓ 内存/CPU 限制 + 日志轮转（课 10–11）</text>
+  <text x="270" y="216" font-size="10" fill="#333">✓ 以非 root 运行　　　　（课 12）</text>
+
+  <line x1="650" y1="118" x2="650" y2="222" stroke="#ffcdd2" stroke-width="1"/>
+  <text x="670" y="132" font-size="11" font-weight="bold" fill="#b71c1c">红线（别做）</text>
+  <text x="670" y="152" font-size="10" fill="#b71c1c">✗ 别上编排（还没到规模）</text>
+  <text x="670" y="168" font-size="10" fill="#b71c1c">✗ 别挂 /var/run/docker.sock</text>
+  <text x="670" y="184" font-size="10" fill="#b71c1c">✗ 别用 --privileged 图省事</text>
+  <text x="670" y="200" font-size="10" fill="#b71c1c">✗ 别把密钥 COPY / ARG 进镜像</text>
+  <text x="670" y="216" font-size="10" fill="#b71c1c">✗ 别 -v /:/host</text>
+
+  <!-- 升级箭头 -->
+  <path d="M 500 230 L 500 250" fill="none" stroke="#78909c" stroke-width="2" marker-end="url(#up)"/>
+  <defs>
+    <marker id="up" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><polygon points="0,0 9,4.5 0,9" fill="#78909c"/></marker>
+  </defs>
+  <text x="520" y="246" font-size="9.5" fill="#78909c">服务变多、需要一键环境时再上台阶</text>
+
+  <!-- ===== 路径 B ===== -->
+  <rect x="40" y="256" width="920" height="150" rx="6" fill="#ffffff" stroke="#1565C0" stroke-width="1.6"/>
+  <rect x="40" y="256" width="920" height="30" rx="6" fill="#1565C0"/>
+  <rect x="40" y="276" width="920" height="10" fill="#1565C0"/>
+  <text x="60" y="277" font-size="13" font-weight="bold" fill="#ffffff">路径 B · 小团队与多服务 —— 把「在我这儿能跑」变成「谁都能跑起来」</text>
+
+  <text x="60" y="308" font-size="11" font-weight="bold" fill="#0d47a1">适用条件</text>
+  <text x="60" y="326" font-size="10" fill="#333">1–3 台机器</text>
+  <text x="60" y="342" font-size="10" fill="#333">多个服务互相依赖</text>
+  <text x="60" y="358" font-size="10" fill="#333">新人要能一键搭环境</text>
+  <text x="60" y="374" font-size="10" fill="#333">仍无专职 K8s 运维</text>
+  <text x="60" y="396" font-size="9" fill="#78909c">大多数团队的</text>
+  <text x="60" y="408" font-size="9" fill="#78909c">「舒适区」在这里</text>
+
+  <line x1="250" y1="294" x2="250" y2="398" stroke="#bbdefb" stroke-width="1"/>
+  <text x="270" y="308" font-size="11" font-weight="bold" fill="#0d47a1">在 A 的基础上加</text>
+  <text x="270" y="328" font-size="10" fill="#333">✓ compose 声明整套环境　（课 9）</text>
+  <text x="270" y="344" font-size="10" fill="#333">✓ healthcheck + service_healthy（课 9）</text>
+  <text x="270" y="360" font-size="10" fill="#333">✓ restart: unless-stopped　（课 10）</text>
+  <text x="270" y="376" font-size="10" fill="#333">✓ 构建搬进 CI + 复用缓存（课 13）</text>
+  <text x="270" y="392" font-size="10" fill="#333">✓ tag 带 git sha，永不覆盖（课 13）</text>
+
+  <line x1="650" y1="294" x2="650" y2="398" stroke="#ffcdd2" stroke-width="1"/>
+  <text x="670" y="308" font-size="11" font-weight="bold" fill="#b71c1c">红线（别做）</text>
+  <text x="670" y="328" font-size="10" fill="#b71c1c">✗ 别急着上 K8s（成本陡增）</text>
+  <text x="670" y="344" font-size="10" fill="#b71c1c">✗ 别在 compose 里硬编码密钥</text>
+  <text x="670" y="360" font-size="10" fill="#b71c1c">✗ 别用 latest 做部署引用</text>
+  <text x="670" y="376" font-size="10" fill="#b71c1c">✗ 别以为 unhealthy 会自动重启</text>
+  <text x="670" y="392" font-size="10" fill="#b71c1c">✗ 别漏掉 depends_on 的 healthcheck</text>
+
+  <path d="M 500 406 L 500 426" fill="none" stroke="#78909c" stroke-width="2" marker-end="url(#up)"/>
+  <text x="520" y="422" font-size="9.5" fill="#78909c">需要多机调度、自愈与滚动发布时再上台阶</text>
+
+  <!-- ===== 路径 C ===== -->
+  <rect x="40" y="432" width="920" height="130" rx="6" fill="#ffffff" stroke="#6a1b9a" stroke-width="1.6"/>
+  <rect x="40" y="432" width="920" height="30" rx="6" fill="#6a1b9a"/>
+  <rect x="40" y="452" width="920" height="10" fill="#6a1b9a"/>
+  <text x="60" y="453" font-size="13" font-weight="bold" fill="#ffffff">路径 C · 规模化与多机 —— 需要专职投入，别为了「现代化」而上</text>
+
+  <text x="60" y="484" font-size="11" font-weight="bold" fill="#4a148c">适用条件</text>
+  <text x="60" y="502" font-size="10" fill="#333">多台机器、需跨机调度</text>
+  <text x="60" y="518" font-size="10" fill="#333">要求自愈 / 滚动发布</text>
+  <text x="60" y="534" font-size="10" fill="#333">有专职运维投入</text>
+  <text x="60" y="550" font-size="9" fill="#b71c1c">⚠️ 这一级是「立项」</text>
+
+  <line x1="250" y1="470" x2="250" y2="554" stroke="#e1bee7" stroke-width="1"/>
+  <text x="270" y="484" font-size="11" font-weight="bold" fill="#4a148c">在 B 的基础上加</text>
+  <text x="270" y="504" font-size="10" fill="#333">✓ 编排平台（先理解 CRI 与运行时栈，课 14）</text>
+  <text x="270" y="520" font-size="10" fill="#333">✓ 集中式日志与指标（课 11 的 cAdvisor / Prometheus 路径）</text>
+  <text x="270" y="536" font-size="10" fill="#333">✓ 镜像扫描进 CI 当发布闸门（课 13）</text>
+  <text x="270" y="552" font-size="10" fill="#333">✓ 不可变镜像 + digest 锁定（课 12–13）</text>
+
+  <line x1="650" y1="470" x2="650" y2="554" stroke="#ffcdd2" stroke-width="1"/>
+  <text x="670" y="484" font-size="11" font-weight="bold" fill="#b71c1c">红线（别做）</text>
+  <text x="670" y="504" font-size="10" fill="#b71c1c">✗ 别把有状态服务硬塞进去</text>
+  <text x="670" y="520" font-size="10" fill="#b71c1c">✗ 别忘 DB schema 不会随代码回滚</text>
+  <text x="670" y="536" font-size="10" fill="#b71c1c">✗ 别省掉资源限制（会拖垮邻居）</text>
+  <text x="670" y="552" font-size="10" fill="#b71c1c">✗ 别在没有可观测性时上线</text>
+</svg>

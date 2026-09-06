@@ -1,0 +1,65 @@
+# 课 13 的「闸门②」：用 compose 跑集成测试 —— 在 **推送之前** 验证镜像真的能用。
+#
+# 用法（与 compose.yaml 合并）：
+#   docker compose -f compose.yaml -f compose.test.yaml up \
+#       --abort-on-container-exit --exit-code-from tests
+#
+# 两个设计点：
+#   · tests 服务复用 **同一个已构建的镜像**（build: .），不额外依赖外部测试镜像；
+#   · `--exit-code-from tests` 让整条命令的退出码取自 tests，CI 才能据此判定成败。
+#
+# ⚠️ compose 会先做变量插值：想在容器里拿到 shell / Python 的 `$`，文件里必须写 `$$`（课 9）。
+#   本文件刻意不使用任何 shell 变量，因此没有 `$$`；若你改写时用到，记得转义。
+
+services:
+  tests:
+    build: .
+    entrypoint: ["python"]        # 覆盖镜像里的 ENTRYPOINT（课 5）
+    command:
+      - -c
+      - |
+        import json
+        import sys
+        import time
+        import urllib.request
+
+        BASE = "http://nginx"     # 课 8：走服务名，不写 IP
+
+        def wait_ready(timeout: int = 60) -> bool:
+            """轮询 /healthz 直到就绪。
+
+            注意：这不是「sleep 30 碰运气」，而是读真实的健康检查端点（课 9 / 课 11）。
+            """
+            deadline = time.time() + timeout
+            while time.time() < deadline:
+                try:
+                    with urllib.request.urlopen(f"{BASE}/healthz", timeout=2) as resp:
+                        if resp.status == 200:
+                            return True
+                except Exception:
+                    time.sleep(1)
+            return False
+
+        if not wait_ready():
+            print("FAIL：nginx 在 60 秒内未就绪")
+            sys.exit(1)
+
+        print("① GET /healthz")
+        with urllib.request.urlopen(f"{BASE}/healthz") as resp:
+            body = json.loads(resp.read())
+        assert body.get("status") == "ok", body
+        print("   ->", body)
+
+        print("② GET / 应回显 db 与 redis 的 **服务名**（证明 DNS 生效）")
+        with urllib.request.urlopen(f"{BASE}/") as resp:
+            body = json.loads(resp.read())
+        assert body.get("db") == "db", body
+        assert body.get("redis") == "redis", body
+        print("   ->", body)
+
+        print("全部通过")
+    depends_on:
+      nginx:
+        condition: service_started
+    networks:
+      - backend                   # 复用 compose.yaml 里定义的 backend 网络

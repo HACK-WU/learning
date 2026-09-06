@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="620" viewBox="0 0 1000 620" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="1000" height="620" fill="#fafafa"/>
+
+  <text x="40" y="36" font-size="20" font-weight="bold" fill="#1565C0">容器里的 root 要动宿主机，得闯过几道闸</text>
+  <text x="40" y="57" font-size="12.5" fill="#555">容器内的 uid 0 与宿主机的 uid 0 <tspan font-weight="bold">默认是同一个人</tspan>——只靠下面这些闸门拦着。加 `--privileged` 等于一次拆掉前两道。</text>
+
+  <!-- ===== 主流程 ===== -->
+  <!-- 容器内 root -->
+  <rect x="40" y="140" width="140" height="70" rx="5" fill="#ffffff" stroke="#c62828" stroke-width="2"/>
+  <text x="110" y="167" font-size="12.5" font-weight="bold" fill="#b71c1c" text-anchor="middle">容器内进程</text>
+  <text x="110" y="187" font-size="11.5" fill="#b71c1c" text-anchor="middle">uid = 0（root）</text>
+  <text x="110" y="202" font-size="9.5" fill="#78909c" text-anchor="middle">官方：默认用户就是 root</text>
+
+  <path d="M 180 175 L 223 175" fill="none" stroke="#78909c" stroke-width="2" marker-end="url(#g)"/>
+  <defs>
+    <marker id="g" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><polygon points="0,0 9,4.5 0,9" fill="#78909c"/></marker>
+  </defs>
+
+  <!-- 闸 1：capabilities -->
+  <rect x="225" y="120" width="110" height="110" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="280" y="146" font-size="11.5" font-weight="bold" fill="#1b5e20" text-anchor="middle">闸 ①</text>
+  <text x="280" y="165" font-size="11.5" font-weight="bold" fill="#1b5e20" text-anchor="middle">capabilities</text>
+  <text x="280" y="185" font-size="10" fill="#1b5e20" text-anchor="middle">只保留 14 条</text>
+  <text x="280" y="202" font-size="10" fill="#1b5e20" text-anchor="middle">其余一律剥夺</text>
+  <text x="280" y="220" font-size="9" fill="#66bb6a" text-anchor="middle">✅ 默认开启</text>
+
+  <path d="M 335 175 L 383 175" fill="none" stroke="#78909c" stroke-width="2" marker-end="url(#g)"/>
+
+  <!-- 闸 2：seccomp -->
+  <rect x="385" y="120" width="110" height="110" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="440" y="146" font-size="11.5" font-weight="bold" fill="#1b5e20" text-anchor="middle">闸 ②</text>
+  <text x="440" y="165" font-size="11.5" font-weight="bold" fill="#1b5e20" text-anchor="middle">seccomp</text>
+  <text x="440" y="185" font-size="10" fill="#1b5e20" text-anchor="middle">限制可用的</text>
+  <text x="440" y="202" font-size="10" fill="#1b5e20" text-anchor="middle">系统调用</text>
+  <text x="440" y="220" font-size="9" fill="#66bb6a" text-anchor="middle">✅ 默认开启</text>
+
+  <path d="M 495 175 L 543 175" fill="none" stroke="#78909c" stroke-width="2" marker-end="url(#g)"/>
+
+  <!-- 闸 3：user namespace -->
+  <rect x="545" y="120" width="110" height="110" rx="5" fill="#eceff1" stroke="#90a4ae" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="600" y="146" font-size="11.5" font-weight="bold" fill="#455a64" text-anchor="middle">闸 ③</text>
+  <text x="600" y="165" font-size="11.5" font-weight="bold" fill="#455a64" text-anchor="middle">user ns</text>
+  <text x="600" y="185" font-size="10" fill="#546e7a" text-anchor="middle">把容器 root</text>
+  <text x="600" y="202" font-size="10" fill="#546e7a" text-anchor="middle">映射成普通 uid</text>
+  <text x="600" y="220" font-size="9" fill="#ef6c00" text-anchor="middle">⚠️ 默认关闭</text>
+
+  <path d="M 655 175 L 748 175" fill="none" stroke="#78909c" stroke-width="2" marker-end="url(#g)"/>
+
+  <!-- 宿主机 -->
+  <rect x="750" y="140" width="200" height="70" rx="5" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="850" y="167" font-size="12.5" font-weight="bold" fill="#b71c1c" text-anchor="middle">宿主机 root（uid 0）</text>
+  <text x="850" y="187" font-size="10.5" fill="#b71c1c" text-anchor="middle">不启用闸③时，容器里的 0 就是这里的 0</text>
+  <text x="850" y="202" font-size="9.5" fill="#78909c" text-anchor="middle">共享同一个内核 —— 容器不是虚拟机</text>
+
+  <!-- ===== 三道闸的说明 ===== -->
+  <text x="60" y="272" font-size="12" font-weight="bold" fill="#37474f">三道闸各自是什么</text>
+
+  <rect x="60" y="284" width="290" height="104" rx="5" fill="#ffffff" stroke="#a5d6a7" stroke-width="1.2"/>
+  <text x="76" y="306" font-size="11" font-weight="bold" fill="#1b5e20">① capabilities（能力切片）</text>
+  <text x="76" y="325" font-size="10" fill="#333">把 root 的权力切成小块，默认只给 14 条：</text>
+  <text x="76" y="342" font-size="9.5" fill="#555">CHOWN　DAC_OVERRIDE　FOWNER　FSETID　KILL</text>
+  <text x="76" y="357" font-size="9.5" fill="#555">MKNOD　NET_BIND_SERVICE　NET_RAW　SETUID / GID</text>
+  <text x="76" y="372" font-size="9.5" fill="#555">SETFCAP　SETPCAP　AUDIT_WRITE　SYS_CHROOT</text>
+  <text x="76" y="386" font-size="9.5" fill="#c62828">⚠️ DAC_OVERRIDE 可绕过文件读写执行权限检查</text>
+
+  <rect x="365" y="284" width="290" height="104" rx="5" fill="#ffffff" stroke="#a5d6a7" stroke-width="1.2"/>
+  <text x="381" y="306" font-size="11" font-weight="bold" fill="#1b5e20">② seccomp（系统调用过滤）</text>
+  <text x="381" y="325" font-size="10" fill="#333">默认 profile 拦截一批危险系统调用。</text>
+  <text x="381" y="342" font-size="10" fill="#333">官方特别说明：默认 profile 会<tspan font-weight="bold">随你授予的</tspan></text>
+  <text x="381" y="357" font-size="10" fill="#333">capabilities 自动调整，所以通常不用手动改。</text>
+  <text x="381" y="376" font-size="9.5" fill="#78909c">--security-opt seccomp=unconfined 可关闭（不推荐）</text>
+  <text x="381" y="388" font-size="9.5" fill="#78909c">no-new-privileges：让 su / sudo 这类提权失效</text>
+
+  <rect x="670" y="284" width="290" height="104" rx="5" fill="#ffffff" stroke="#ef6c00" stroke-width="1.2"/>
+  <text x="686" y="306" font-size="11" font-weight="bold" fill="#e65100">③ user namespace（UID 重映射）</text>
+  <text x="686" y="325" font-size="10" fill="#333">容器内的 uid 0 → 宿主机上的高编号 uid</text>
+  <text x="686" y="342" font-size="10" fill="#333">（如 231072）。官方：逃逸出去时"running as</text>
+  <text x="686" y="357" font-size="10" fill="#333">an unprivileged high-number UID... <tspan font-weight="bold">has no</tspan></text>
+  <text x="686" y="372" font-size="10" fill="#333"><tspan font-weight="bold">privileges on the host system at all</tspan>"。</text>
+  <text x="686" y="388" font-size="9.5" fill="#78909c">两种实现：userns-remap（daemon 仍是 root） / rootless</text>
+
+  <!-- ===== privileged 警告 ===== -->
+  <rect x="60" y="404" width="900" height="94" rx="6" fill="#ffebee" stroke="#c62828" stroke-width="1.5"/>
+  <text x="80" y="430" font-size="13" font-weight="bold" fill="#b71c1c">⛔ --privileged：一次拆掉闸 ① 与闸 ②</text>
+  <text x="80" y="452" font-size="11" fill="#333">官方原话：「The `--privileged` flag gives <tspan font-weight="bold">all capabilities</tspan> to the container... enables access to <tspan font-weight="bold">all devices</tspan> on the host, and</text>
+  <text x="80" y="469" font-size="11" fill="#333">reconfigures AppArmor or SELinux to allow the container <tspan font-weight="bold">nearly all the same access to the host</tspan> as processes running outside containers.」</text>
+  <text x="80" y="490" font-size="11" fill="#333">它还一并：禁用默认 seccomp profile、禁用默认 AppArmor profile、禁用 SELinux 进程标签、使 <tspan font-family="monospace">/sys</tspan> 与 cgroups 挂载可读写。</text>
+  <text x="80" y="510" font-size="11" font-weight="bold" fill="#b71c1c">官方警告：「A container with --privileged is not a securely sandboxed process. Containers in this mode can get a root shell on the host.」</text>
+
+  <!-- 底部 -->
+  <text x="60" y="530" font-size="10.5" fill="#78909c">正确的替代做法：需要某项特权时，只加那一项 —— 例如操作网络栈用 <tspan font-family="monospace">--cap-add=NET_ADMIN</tspan>，而不是 <tspan font-family="monospace">--privileged</tspan>。</text>
+  <text x="60" y="546" font-size="10.5" fill="#78909c">最根本的一道防线其实不在图里：<tspan font-weight="bold">让应用以非 root 用户运行</tspan>（Dockerfile 的 <tspan font-family="monospace">USER</tspan> 指令）—— 官方称这是"best way to prevent privilege-escalation"。</text>
+  <text x="60" y="568" font-size="10" fill="#90a4ae">机制依据：Docker 官方 Running containers（Runtime privilege and Linux capabilities / User）、Isolate containers with a user namespace、Rootless mode（核查于 2026-09）。</text>
+</svg>

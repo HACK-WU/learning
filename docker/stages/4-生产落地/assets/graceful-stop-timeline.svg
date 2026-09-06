@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="580" viewBox="0 0 1000 580" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="1000" height="580" fill="#fafafa"/>
+
+  <text x="40" y="36" font-size="20" font-weight="bold" fill="#1565C0">docker stop 的十秒钟里，到底发生了什么</text>
+  <text x="40" y="57" font-size="12.5" fill="#555">同样是 `docker stop`，有的容器 1 秒优雅退出，有的干等 10 秒被强杀 —— 差别在于<tspan font-weight="bold">应用有没有真的收到并处理 SIGTERM</tspan>。</text>
+
+  <!-- ============ 顶部：官方信号序列 ============ -->
+  <rect x="40" y="74" width="920" height="82" rx="6" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.3"/>
+  <text x="60" y="98" font-size="12.5" font-weight="bold" fill="#0d47a1">官方信号序列（docker container stop）</text>
+
+  <line x1="80" y1="126" x2="920" y2="126" stroke="#90a4ae" stroke-width="1.5"/>
+
+  <circle cx="90" cy="126" r="7" fill="#1565C0"/>
+  <text x="90" y="118" font-size="11" font-weight="bold" fill="#0d47a1" text-anchor="middle">SIGTERM</text>
+  <text x="90" y="148" font-size="10" fill="#555" text-anchor="middle">t = 0</text>
+
+  <rect x="105" y="112" width="720" height="28" rx="4" fill="#fff59d" stroke="#f9a825" stroke-width="1"/>
+  <text x="465" y="131" font-size="11.5" fill="#795548" text-anchor="middle">宽限期（grace period）—— 默认 10 秒（Linux）/ 30 秒（Windows）</text>
+
+  <circle cx="905" cy="126" r="7" fill="#c62828"/>
+  <text x="905" y="118" font-size="11" font-weight="bold" fill="#b71c1c" text-anchor="middle">SIGKILL</text>
+  <text x="905" y="148" font-size="10" fill="#555" text-anchor="middle">超时</text>
+
+  <text x="60" y="152" font-size="10" fill="#78909c">首个信号可用镜像的 STOPSIGNAL 或 --stop-signal 改；超时可用 docker stop -t / --stop-timeout 改（-1 = 无限等待）</text>
+
+  <!-- ============ 场景 A：处理了 SIGTERM ============ -->
+  <rect x="40" y="176" width="450" height="290" rx="6" fill="#ffffff" stroke="#2e7d32" stroke-width="1.5"/>
+  <rect x="40" y="176" width="450" height="30" rx="6" fill="#2e7d32"/>
+  <rect x="40" y="196" width="450" height="10" fill="#2e7d32"/>
+  <text x="265" y="197" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">✅ 场景 A：应用收到并处理了 SIGTERM</text>
+
+  <text x="60" y="238" font-size="11.5" font-weight="bold" fill="#37474f">容器内主进程</text>
+
+  <line x1="80" y1="272" x2="450" y2="272" stroke="#b0bec5" stroke-width="1"/>
+
+  <!-- SIGTERM 到达 -->
+  <path d="M 100 250 L 100 268" fill="none" stroke="#1565C0" stroke-width="2" marker-end="url(#a1)"/>
+  <defs>
+    <marker id="a1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><polygon points="0,0 8,4 0,8" fill="#1565C0"/></marker>
+    <marker id="a2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><polygon points="0,0 8,4 0,8" fill="#c62828"/></marker>
+  </defs>
+  <text x="100" y="243" font-size="10" fill="#0d47a1" text-anchor="middle">SIGTERM</text>
+
+  <!-- 清理阶段 -->
+  <rect x="112" y="256" width="150" height="32" rx="3" fill="#c8e6c9" stroke="#2e7d32" stroke-width="1"/>
+  <text x="187" y="271" font-size="9.5" fill="#1b5e20" text-anchor="middle">收到 → 开始清理</text>
+  <text x="187" y="283" font-size="9" fill="#1b5e20" text-anchor="middle">关连接 / 刷盘 / 摘流量</text>
+
+  <!-- 主动退出 -->
+  <circle cx="300" cy="272" r="7" fill="#2e7d32"/>
+  <text x="300" y="300" font-size="10.5" font-weight="bold" fill="#1b5e20" text-anchor="middle">主动退出</text>
+  <text x="300" y="314" font-size="9.5" fill="#1b5e20" text-anchor="middle">约 1–2 秒</text>
+
+  <line x1="300" y1="260" x2="300" y2="248" stroke="#2e7d32" stroke-width="1.5" stroke-dasharray="4 3"/>
+
+  <!-- 没有 SIGKILL -->
+  <rect x="330" y="256" width="110" height="32" rx="3" fill="#e8f5e9" stroke="#a5d6a7" stroke-width="1"/>
+  <text x="385" y="277" font-size="9.5" fill="#66bb6a" text-anchor="middle">（用不上 SIGKILL）</text>
+
+  <!-- 结果条 -->
+  <rect x="58" y="330" width="414" height="54" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1"/>
+  <text x="74" y="352" font-size="11.5" font-weight="bold" fill="#1b5e20">✅ 优雅停止</text>
+  <text x="74" y="371" font-size="10.5" fill="#333">请求处理完、连接关干净、数据落盘。用户无感知。</text>
+
+  <text x="60" y="402" font-size="10" fill="#78909c">前提：①用 exec 形式（`["app"]` 而非 `app`），让应用自己是 PID 1；</text>
+  <text x="60" y="418" font-size="10" fill="#78909c">②应用内部显式注册 SIGTERM 处理器（多数框架需自己写）。</text>
+  <text x="60" y="434" font-size="10" fill="#78909c">官方提醒：PID 1「ignores any signal with the default action」，</text>
+  <text x="60" y="450" font-size="10" fill="#78909c">所以没写处理器 = 不会退出。</text>
+
+  <!-- ============ 场景 B：没处理 SIGTERM ============ -->
+  <rect x="510" y="176" width="450" height="290" rx="6" fill="#ffffff" stroke="#c62828" stroke-width="1.5"/>
+  <rect x="510" y="176" width="450" height="30" rx="6" fill="#c62828"/>
+  <rect x="510" y="196" width="450" height="10" fill="#c62828"/>
+  <text x="735" y="197" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">❌ 场景 B：信号被忽略（shell 形式 / 未处理）</text>
+
+  <text x="530" y="238" font-size="11.5" font-weight="bold" fill="#37474f">容器内主进程</text>
+
+  <line x1="550" y1="272" x2="920" y2="272" stroke="#b0bec5" stroke-width="1"/>
+
+  <!-- SIGTERM 到达但被忽略 -->
+  <path d="M 570 250 L 570 268" fill="none" stroke="#1565C0" stroke-width="2" marker-end="url(#a2)"/>
+  <text x="570" y="243" font-size="10" fill="#b71c1c" text-anchor="middle">SIGTERM</text>
+
+  <rect x="582" y="256" width="230" height="32" rx="3" fill="#eceff1" stroke="#90a4ae" stroke-width="1"/>
+  <text x="697" y="271" font-size="9.5" fill="#546e7a" text-anchor="middle">毫无反应 —— 信号石沉大海</text>
+  <text x="697" y="283" font-size="9" fill="#78909c" text-anchor="middle">（shell 形式下 /bin/sh 才是 PID 1）</text>
+
+  <!-- 干等 -->
+  <rect x="760" y="256" width="70" height="32" rx="3" fill="#ffe0b2" stroke="#ef6c00" stroke-width="1"/>
+  <text x="795" y="277" font-size="9.5" fill="#e65100" text-anchor="middle">干等</text>
+
+  <!-- SIGKILL -->
+  <circle cx="900" cy="272" r="8" fill="#c62828"/>
+  <text x="900" y="300" font-size="10.5" font-weight="bold" fill="#b71c1c" text-anchor="middle">被 SIGKILL</text>
+  <text x="900" y="314" font-size="9.5" fill="#b71c1c" text-anchor="middle">整整 10 秒</text>
+
+  <!-- 结果条 -->
+  <rect x="528" y="330" width="414" height="54" rx="5" fill="#ffebee" stroke="#c62828" stroke-width="1"/>
+  <text x="544" y="352" font-size="11.5" font-weight="bold" fill="#b71c1c">❌ 强杀：正在处理的请求中断</text>
+  <text x="544" y="371" font-size="10.5" fill="#333">连接没关、缓冲没刷、可能留下半写状态。发布时表现为 502。</text>
+
+  <text x="530" y="402" font-size="10" fill="#78909c">两个常见成因：①Dockerfile 用了 shell 形式的 CMD/ENTRYPOINT</text>
+  <text x="530" y="418" font-size="10" fill="#78909c">（课 5：此时 /bin/sh 是 PID 1，它<tspan font-weight="bold">不转发信号</tspan>）；②应用自己没注册</text>
+  <text x="530" y="434" font-size="10" fill="#78909c">SIGTERM 处理器 —— Linux 会让 PID 1 忽略默认动作的信号。</text>
+
+  <!-- 底部注释 -->
+  <rect x="40" y="480" width="920" height="76" rx="6" fill="#fff8e1" stroke="#ef6c00" stroke-width="1.2"/>
+  <text x="60" y="504" font-size="12" font-weight="bold" fill="#e65100">⚠️ 两个高频误判</text>
+  <text x="60" y="525" font-size="11" fill="#333">① 「设了 --restart 就自愈了」—— 重启策略只在<tspan font-weight="bold">容器退出后</tspan>生效，它既不会让停止变优雅，也代替不了健康检查（课 9）。</text>
+  <text x="60" y="545" font-size="11" fill="#333">② 「--oom-kill-disable 能防被杀」—— 官方明说：只在<tspan font-weight="bold">同时设了 -m/--memory</tspan> 的容器上用；否则宿主机可能耗尽内存，</text>
+  <text x="60" y="562" font-size="11" fill="#333">　 内核会去杀宿主机上的进程。而且官方不建议靠它绕过保护机制。</text>
+</svg>

@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="660" viewBox="0 0 1000 660" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="1000" height="660" fill="#fafafa"/>
+
+  <text x="40" y="38" font-size="20" font-weight="bold" fill="#1565C0">容器的端口，谁能访问到哪些</text>
+  <text x="40" y="60" font-size="12.5" fill="#555">这是一个「边界」问题：访问者站在哪一圈，决定了它能穿过什么。<tspan font-weight="bold">EXPOSE 不参与任何一圈的判断</tspan>——它只是镜像里的说明文字。</text>
+
+  <!-- ========== 上半部分：区域图 ========== -->
+  <!-- 外圈：主机之外 / 其他网络 -->
+  <rect x="60" y="80" width="880" height="225" rx="8" fill="#eceff1" stroke="#607d8b" stroke-width="1.5"/>
+  <text x="78" y="102" font-size="12.5" font-weight="bold" fill="#37474f">③ Docker 主机之外 / 其他 Docker 网络</text>
+
+  <!-- 中圈：同一 bridge 网络 + 宿主机 -->
+  <rect x="130" y="140" width="740" height="125" rx="8" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.5"/>
+  <text x="148" y="162" font-size="12.5" font-weight="bold" fill="#0d47a1">② 同一 bridge 网络 + Docker 宿主机</text>
+
+  <!-- 容器 -->
+  <rect x="440" y="185" width="150" height="56" rx="5" fill="#ffffff" stroke="#2e7d32" stroke-width="2"/>
+  <text x="515" y="206" font-size="12" font-weight="bold" fill="#1b5e20" text-anchor="middle">① 容器 order-service</text>
+  <text x="515" y="227" font-size="12" fill="#1b5e20" text-anchor="middle">:80　:5432</text>
+
+  <!-- 中圈边界徽章：全部端口可达 -->
+  <rect x="620" y="128" width="230" height="26" rx="13" fill="#2e7d32"/>
+  <text x="735" y="146" font-size="11.5" font-weight="bold" fill="#ffffff" text-anchor="middle">跨过这条边：全部端口可达</text>
+
+  <!-- 外圈边界徽章：只有发布的端口 -->
+  <rect x="620" y="68" width="290" height="26" rx="13" fill="#c62828"/>
+  <text x="765" y="86" font-size="11.5" font-weight="bold" fill="#ffffff" text-anchor="middle">跨过这条边：只有 -p 发布的端口能过</text>
+
+  <!-- 出网箭头 -->
+  <path d="M 592 218 L 920 218" fill="none" stroke="#00695c" stroke-width="2" marker-end="url(#out)"/>
+  <defs>
+    <marker id="out" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><polygon points="0,0 9,4.5 0,9" fill="#00695c"/></marker>
+  </defs>
+  <text x="606" y="212" font-size="11" fill="#00695c">容器<tspan font-weight="bold">主动出网</tspan>：一律允许</text>
+  <text x="606" y="240" font-size="11" fill="#00695c">经 masquerade 伪装，外部只看到宿主机 IP</text>
+
+  <!-- 圈内补充说明 -->
+  <text x="148" y="256" font-size="11" fill="#0d47a1">• 同网络的容器之间，端口全部互通</text>
+  <text x="400" y="256" font-size="11" fill="#0d47a1">• 不需要 EXPOSE，也不需要 -p</text>
+
+  <text x="78" y="288" font-size="11" fill="#37474f">• 不同 bridge 网络之间，只能走「已发布的端口」通信（官方：驱动会自动装规则阻断其他流量）</text>
+
+  <!-- ========== 下半部分：可达性对照 ========== -->
+  <text x="60" y="352" font-size="14" font-weight="bold" fill="#1565C0">谁能访问到什么（官方语义）</text>
+
+  <!-- 表头 -->
+  <text x="66" y="378" font-size="11" font-weight="bold" fill="#78909c">访问者</text>
+  <text x="310" y="378" font-size="11" font-weight="bold" fill="#78909c">可达范围</text>
+  <text x="650" y="378" font-size="11" font-weight="bold" fill="#78909c">需要做什么</text>
+
+  <!-- 行 1 -->
+  <rect x="60" y="388" width="880" height="38" rx="4" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1"/>
+  <text x="70" y="411" font-size="12" fill="#1b5e20">同一网络的其他容器</text>
+  <rect x="300" y="397" width="320" height="20" rx="3" fill="#2e7d32"/>
+  <text x="460" y="411" font-size="11.5" font-weight="bold" fill="#ffffff" text-anchor="middle">全部端口（80、5432 …）</text>
+  <text x="650" y="411" font-size="11.5" fill="#1b5e20">什么都不用做（EXPOSE 也不需要）</text>
+
+  <!-- 行 2 -->
+  <rect x="60" y="430" width="880" height="38" rx="4" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1"/>
+  <text x="70" y="453" font-size="12" fill="#1b5e20">Docker 宿主机本身</text>
+  <rect x="300" y="439" width="320" height="20" rx="3" fill="#2e7d32"/>
+  <text x="460" y="453" font-size="11.5" font-weight="bold" fill="#ffffff" text-anchor="middle">全部端口（80、5432 …）</text>
+  <text x="650" y="453" font-size="11.5" fill="#1b5e20">什么都不用做</text>
+
+  <!-- 行 3 -->
+  <rect x="60" y="472" width="880" height="38" rx="4" fill="#fff8e1" stroke="#ef6c00" stroke-width="1"/>
+  <text x="70" y="495" font-size="12" fill="#e65100">其他 Docker 网络的容器</text>
+  <rect x="300" y="481" width="120" height="20" rx="3" fill="#ef6c00"/>
+  <text x="360" y="495" font-size="11.5" font-weight="bold" fill="#ffffff" text-anchor="middle">仅已发布</text>
+  <text x="650" y="495" font-size="11.5" fill="#e65100">必须 -p / --publish</text>
+
+  <!-- 行 4 -->
+  <rect x="60" y="514" width="880" height="38" rx="4" fill="#fff8e1" stroke="#ef6c00" stroke-width="1"/>
+  <text x="70" y="537" font-size="12" fill="#e65100">Docker 主机之外的机器</text>
+  <rect x="300" y="523" width="120" height="20" rx="3" fill="#ef6c00"/>
+  <text x="360" y="537" font-size="11.5" font-weight="bold" fill="#ffffff" text-anchor="middle">仅已发布</text>
+  <text x="650" y="537" font-size="11.5" fill="#e65100">必须 -p / --publish</text>
+
+  <!-- EXPOSE 说明条 -->
+  <rect x="60" y="568" width="880" height="76" rx="6" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="1.2"/>
+  <text x="78" y="592" font-size="12.5" font-weight="bold" fill="#4a148c">EXPOSE 在哪一圈？—— 它一圈都不在</text>
+  <text x="78" y="613" font-size="11.5" fill="#333">官方原话：「The EXPOSE instruction <tspan font-weight="bold">doesn't actually publish the port</tspan>. It functions as a type of documentation</text>
+  <text x="78" y="631" font-size="11.5" fill="#333">between the person who builds the image and the person who runs the container.」它只影响 <tspan font-weight="bold">-P</tspan>（自动发布所有被 EXPOSE 的端口）。</text>
+
+  <text x="40" y="656" font-size="10.5" fill="#78909c">机制依据：Docker 官方 Networking overview / Bridge network driver / Dockerfile reference · EXPOSE（核查于 2026-09）。</text>
+</svg>

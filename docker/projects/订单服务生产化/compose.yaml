@@ -1,0 +1,118 @@
+# 课 9 的成果（一份文件描述整套环境）+ 课 10–13 的成果（限制 / 健康检查 / 日志 / 安全 / 可追溯 tag）
+#
+# 启动：  docker compose up -d
+# 验收：  docker compose ps      （四个服务都应 healthy）
+# 停止：  docker compose down    （卷保留，数据还在）
+# 推倒重来：docker compose down -v  ⚠️ 连卷一起删，数据库数据会没（课 7）
+
+services:
+  # ---------------------------------------------------------------- app
+  app:
+    build: .
+    image: order-service:${TAG:-dev}      # 课 13：tag 由 CI 注入，不写死 latest
+    restart: unless-stopped               # 课 10：挂了自动起；人工停了就不再自作主张
+
+    # 课 12：三重收敛
+    read_only: true
+    tmpfs:
+      - /tmp                              # 只读根之后，需要临时写的地方挂 tmpfs
+    cap_drop: [ALL]                       # 先全剥夺……
+    security_opt:
+      - no-new-privileges:true            # 让 su / sudo 这类提权失效
+
+    # 课 10：资源上限，别拖垮同机的其他服务
+    mem_limit: 256m
+    cpus: 0.5
+
+    # 课 11：日志驱动。`local` **默认就轮转**（20m × 5 文件）且 **默认压缩**，
+    #        默认 `json-file` 则默认不轮转，能撑爆磁盘。
+    logging: &default-logging
+      driver: local
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    environment:
+      DB_HOST: db                          # 课 8：服务名即 DNS 名，不写 IP
+      REDIS_HOST: redis
+
+    depends_on:
+      db:
+        condition: service_healthy         # 课 9：等「能连」，不是等「启动」
+      redis:
+        condition: service_started
+
+    networks: [backend]
+
+  # ----------------------------------------------------------------- db
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: orders
+      # ⚠️ 仅演示。真实项目请改用 env_file 或 secrets，别把密码写在版本控制里（课 12）
+      #    生产写法见 compose 文件末尾的注释，以及 README 的「权衡决策 3」
+      POSTGRES_PASSWORD: devpass
+    volumes:
+      - pgdata:/var/lib/postgresql/data    # 课 7：数据在卷里，容器删了还在
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d orders"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+    mem_limit: 512m
+    logging: *default-logging
+    networks: [backend]
+
+  # -------------------------------------------------------------- redis
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--save", "60", "1"]
+    volumes:
+      - redisdata:/data
+    mem_limit: 128m
+    logging: *default-logging
+    networks: [backend]
+
+  # -------------------------------------------------------------- nginx
+  nginx:
+    # 课 12：演示环境用 tag 即可；生产请锁 **digest**（同一个 tag 的内容是可变的）
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      # 课 8：显式绑到 127.0.0.1。写成 "8080:80" 会绑到 0.0.0.0 并 **绕过宿主防火墙**。
+      - "127.0.0.1:8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      app:
+        condition: service_healthy
+    mem_limit: 128m
+    logging: *default-logging
+    networks: [backend]
+
+volumes:
+  pgdata:
+  redisdata:
+
+networks:
+  backend:
+    # 课 8：不写 driver 就是 bridge —— 用户自定义 bridge 自带内嵌 DNS，
+    #       容器之间才能 **按服务名** 互访（默认 bridge 网络做不到）。
+
+# ---------------------------------------------------------------------
+# 生产升级路径（课 12）：把明文密码换成从外部文件注入的 secret：
+#
+#   services:
+#     db:
+#       environment:
+#         POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+#       secrets: [db_password]
+#
+#   secrets:
+#     db_password:
+#       file: ./secrets/db_password.txt     # 该文件不进版本控制
+#
+# 要点：密钥**不进镜像层**，也不进 compose 文件；只在容器启动时以文件形式挂载。

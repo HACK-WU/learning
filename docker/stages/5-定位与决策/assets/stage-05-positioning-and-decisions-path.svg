@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="660" viewBox="0 0 1000 660" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="1000" height="660" fill="#fafafa"/>
+
+  <!-- ===== 顶部标题 ===== -->
+  <text x="60" y="42" font-size="20" font-weight="bold" fill="#1565C0">阶段 5 · 定位与决策 —— 学习路径</text>
+  <text x="60" y="66" font-size="12.5" fill="#555">主线：回望 order-service 全程 → 先看清 Docker 站在容器生态的哪一格，再把坐标变成"该不该用、用到哪一步"的决策</text>
+
+  <!-- ================= 课 14 ================= -->
+  <rect x="60" y="90" width="560" height="165" rx="8" fill="#ffffff" stroke="#b0bec5" stroke-width="1.5"/>
+  <text x="80" y="124" font-size="16" font-weight="bold" fill="#1565C0">课 14 · Docker在容器生态中的位置</text>
+  <line x1="80" y1="134" x2="600" y2="134" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="80" y="160" font-size="12.5" fill="#333">· OCI 与运行时栈：runc / containerd / dockerd 三层 + CRI</text>
+  <text x="80" y="186" font-size="12.5" fill="#333">· 编排与替代方案：Swarm / Kubernetes / Podman 定位差异</text>
+  <text x="80" y="212" font-size="12.5" fill="#333">· 容器 vs 虚拟机：隔离强度 / 性能密度 / 运维成本</text>
+  <text x="605" y="239" font-size="11" fill="#78909c" text-anchor="end">序号 1/2</text>
+
+  <!-- 主链箭头 课14→课15 -->
+  <line x1="340" y1="255" x2="340" y2="278" stroke="#1565C0" stroke-width="2"/>
+  <polygon points="340,286 334,277 346,277" fill="#1565C0"/>
+
+  <!-- ================= 课 15 ================= -->
+  <rect x="60" y="285" width="560" height="165" rx="8" fill="#ffffff" stroke="#b0bec5" stroke-width="1.5"/>
+  <text x="80" y="319" font-size="16" font-weight="bold" fill="#1565C0">课 15 · 决策清单与学习地图</text>
+  <line x1="80" y1="329" x2="600" y2="329" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="80" y="355" font-size="12.5" fill="#333">· 引入决策树：单机 / 小团队 / 规模化、何时别上容器</text>
+  <text x="80" y="381" font-size="12.5" fill="#333">· 成本与风险清单：新增运维负担 / 失败原因 / 能力前提</text>
+  <text x="80" y="407" font-size="12.5" fill="#333">· 下一步学习地图：K8s / BuildKit / rootless 与安全加固</text>
+  <text x="605" y="434" font-size="11" fill="#78909c" text-anchor="end">序号 2/2 · 课程知识点终点</text>
+
+  <!-- 课 15 之后的收尾节点 -->
+  <line x1="340" y1="450" x2="340" y2="475" stroke="#1565C0" stroke-width="2"/>
+  <polygon points="340,483 334,474 346,474" fill="#1565C0"/>
+
+  <!-- ===== 底部收尾三件套（高亮块） ===== -->
+  <rect x="60" y="488" width="560" height="76" rx="8" fill="#1565C0"/>
+  <text x="80" y="515" font-size="14" font-weight="bold" fill="#ffffff">课程知识点到此结束，接下来：</text>
+  <text x="80" y="541" font-size="12.5" fill="#e3f2fd">学完本阶段 → 结课实战项目（Phase 3）→ 收尾三件套（Phase 5）</text>
+
+  <!-- 右侧定位标注 -->
+  <text x="636" y="120" font-size="11" fill="#616161">阶段 5 收尾，站在更高处</text>
+  <text x="636" y="142" font-size="11" fill="#616161">复盘 order-service 一整段旅程，</text>
+  <text x="636" y="164" font-size="11" fill="#616161">从"会用"走向"用对"。</text>
+
+  <!-- ===== 底部说明 ===== -->
+  <text x="60" y="600" font-size="11" fill="#78909c">路径说明：按学习顺序课 14 → 课 15 主链推进；课 14 先给 Docker 在整个容器生态定坐标，课 15 再把坐标变成决策清单与下一步学习地图。学完本阶段知识点 → 结课实战项目（Phase 3）→ 收尾三件套（Phase 5）。</text>
+</svg>
