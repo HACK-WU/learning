@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="580" viewBox="0 0 900 580" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="900" height="580" fill="#fafafa"/>
+
+  <text x="40" y="40" font-size="20" font-weight="bold" fill="#1565C0">容器 vs 虚拟机：虚拟化层次对比</text>
+  <text x="40" y="62" font-size="12.5" fill="#555">同样的硬件、同样的应用，差别只在于「中间那几层」——左边每台 VM 都带一份完整操作系统，右边没有。</text>
+
+  <!-- ============ 列标题 ============ -->
+  <rect x="70" y="82" width="330" height="30" rx="5" fill="#1565C0"/>
+  <text x="235" y="102" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">虚拟机（VM）</text>
+  <rect x="500" y="82" width="330" height="30" rx="5" fill="#1565C0"/>
+  <text x="665" y="102" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">容器（Container）</text>
+
+  <!-- ============ 第 1 层：App ============ -->
+  <rect x="70" y="122" width="160" height="52" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="150" y="144" font-size="13" font-weight="bold" fill="#1b5e20" text-anchor="middle">App A</text>
+  <text x="150" y="163" font-size="11" fill="#33691e" text-anchor="middle">order-service</text>
+  <rect x="240" y="122" width="160" height="52" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="320" y="144" font-size="13" font-weight="bold" fill="#1b5e20" text-anchor="middle">App B</text>
+  <text x="320" y="163" font-size="11" fill="#33691e" text-anchor="middle">postgres</text>
+
+  <rect x="500" y="122" width="160" height="52" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="580" y="144" font-size="13" font-weight="bold" fill="#1b5e20" text-anchor="middle">App A</text>
+  <text x="580" y="163" font-size="11" fill="#33691e" text-anchor="middle">order-service</text>
+  <rect x="670" y="122" width="160" height="52" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="750" y="144" font-size="13" font-weight="bold" fill="#1b5e20" text-anchor="middle">App B</text>
+  <text x="750" y="163" font-size="11" fill="#33691e" text-anchor="middle">postgres</text>
+
+  <!-- ============ 第 2 层：Bins / Libs ============ -->
+  <rect x="70" y="182" width="160" height="52" rx="5" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="1.5"/>
+  <text x="150" y="206" font-size="13" font-weight="bold" fill="#4a148c" text-anchor="middle">Bins / Libs</text>
+  <text x="150" y="223" font-size="11" fill="#6a1b9a" text-anchor="middle">各自的依赖库</text>
+  <rect x="240" y="182" width="160" height="52" rx="5" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="1.5"/>
+  <text x="320" y="206" font-size="13" font-weight="bold" fill="#4a148c" text-anchor="middle">Bins / Libs</text>
+  <text x="320" y="223" font-size="11" fill="#6a1b9a" text-anchor="middle">各自的依赖库</text>
+
+  <rect x="500" y="182" width="160" height="52" rx="5" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="1.5"/>
+  <text x="580" y="206" font-size="13" font-weight="bold" fill="#4a148c" text-anchor="middle">Bins / Libs</text>
+  <text x="580" y="223" font-size="11" fill="#6a1b9a" text-anchor="middle">各自的依赖库</text>
+  <rect x="670" y="182" width="160" height="52" rx="5" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="1.5"/>
+  <text x="750" y="206" font-size="13" font-weight="bold" fill="#4a148c" text-anchor="middle">Bins / Libs</text>
+  <text x="750" y="223" font-size="11" fill="#6a1b9a" text-anchor="middle">各自的依赖库</text>
+
+  <!-- ============ 第 3 层：Guest OS（容器侧为空） ============ -->
+  <rect x="70" y="242" width="330" height="52" rx="5" fill="#fff3e0" stroke="#e65100" stroke-width="2"/>
+  <text x="235" y="266" font-size="13" font-weight="bold" fill="#bf360c" text-anchor="middle">Guest OS（客户机操作系统）</text>
+  <text x="235" y="284" font-size="11" fill="#e65100" text-anchor="middle">每个 VM 各带一份完整操作系统 · 数十 GB 量级</text>
+
+  <rect x="500" y="242" width="330" height="52" rx="5" fill="none" stroke="#90a4ae" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="665" y="273" font-size="12.5" fill="#90a4ae" text-anchor="middle">✕ 没有这一层 —— 容器不自带内核</text>
+
+  <!-- ============ 第 4 层：Hypervisor / Docker Engine ============ -->
+  <rect x="70" y="302" width="330" height="52" rx="5" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="235" y="326" font-size="13" font-weight="bold" fill="#0d47a1" text-anchor="middle">Hypervisor（虚拟机监视器）</text>
+  <text x="235" y="344" font-size="11" fill="#1565C0" text-anchor="middle">在硬件层切分资源 · 每台 VM 独占一份</text>
+
+  <rect x="500" y="302" width="330" height="52" rx="5" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="665" y="326" font-size="13" font-weight="bold" fill="#0d47a1" text-anchor="middle">Docker Engine（dockerd · containerd · runc）</text>
+  <text x="665" y="344" font-size="11" fill="#1565C0" text-anchor="middle">不虚拟化硬件，只给进程套上 namespace + cgroups</text>
+
+  <!-- ============ 第 5 层：Host OS ============ -->
+  <rect x="70" y="362" width="330" height="46" rx="5" fill="#e8eaf6" stroke="#3949ab" stroke-width="1.5"/>
+  <text x="235" y="390" font-size="13" fill="#283593" text-anchor="middle">Host OS（宿主机操作系统）</text>
+
+  <rect x="500" y="362" width="330" height="46" rx="5" fill="#e8eaf6" stroke="#3949ab" stroke-width="1.5"/>
+  <text x="665" y="390" font-size="13" font-weight="bold" fill="#283593" text-anchor="middle">Host OS —— 内核被所有容器共享</text>
+
+  <!-- ============ 第 6 层：硬件 ============ -->
+  <rect x="70" y="416" width="760" height="40" rx="5" fill="#eceff1" stroke="#607d8b" stroke-width="1.5"/>
+  <text x="450" y="441" font-size="13" fill="#37474f" text-anchor="middle">基础设施（物理机 / 云主机 · CPU · 内存 · 磁盘 · 网卡）</text>
+
+  <!-- ============ 对比标注 ============ -->
+  <line x1="410" y1="268" x2="490" y2="268" stroke="#e65100" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="450" y="262" font-size="11" fill="#e65100" text-anchor="middle">关键差异</text>
+
+  <rect x="40" y="478" width="820" height="76" rx="6" fill="#ffffff" stroke="#cfd8dc" stroke-width="1"/>
+  <text x="60" y="500" font-size="12.5" font-weight="bold" fill="#333">一句话看懂：</text>
+  <text x="60" y="521" font-size="12.5" fill="#333">虚拟机虚拟的是「硬件」—— 每台 VM 都要跑一个完整内核，隔离强、体积大（数十 GB）、启动慢（分钟级）。</text>
+  <text x="60" y="542" font-size="12.5" fill="#333">容器虚拟的是「操作系统」—— 共享宿主机内核，隔离弱一档、体积小（通常数十 MB）、启动快（秒级甚至亚秒级）。</text>
+</svg>

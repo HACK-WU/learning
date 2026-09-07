@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1020" height="520" viewBox="0 0 1020 520" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <!-- 背景 -->
+  <rect x="0" y="0" width="1020" height="520" fill="#fafafa"/>
+
+  <!-- 标题 -->
+  <text x="510" y="38" text-anchor="middle" font-size="20" font-weight="700" fill="#212121">阶段 3 · 数据与网络 路径图</text>
+  <text x="510" y="62" text-anchor="middle" font-size="13" fill="#78909c">容器不是孤岛：让 order-service 的数据活下来、服务互相找得到、一键拉起整套本地环境</text>
+
+  <!-- 课 7 卡片 -->
+  <g>
+    <rect x="60" y="110" width="260" height="190" rx="10" fill="#ffffff" stroke="#1565C0" stroke-width="2"/>
+    <rect x="60" y="110" width="260" height="36" rx="10" fill="#1565C0"/>
+    <rect x="60" y="128" width="260" height="18" fill="#1565C0"/>
+    <text x="190" y="133" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">第 7 课 · 数据持久化</text>
+    <text x="80" y="176" font-size="12" fill="#333">· 容器文件系统的临时性</text>
+    <text x="80" y="200" font-size="12" fill="#333">· 三种挂载方式</text>
+    <text x="80" y="224" font-size="12" fill="#333">· 卷的生命周期与清理</text>
+    <!-- 序号 右下角 -->
+    <text x="300" y="286" text-anchor="end" font-size="14" font-weight="700" fill="#1565C0">①</text>
+  </g>
+
+  <!-- 课 8 卡片 -->
+  <g>
+    <rect x="380" y="110" width="260" height="190" rx="10" fill="#ffffff" stroke="#1565C0" stroke-width="2"/>
+    <rect x="380" y="110" width="260" height="36" rx="10" fill="#1565C0"/>
+    <rect x="380" y="128" width="260" height="18" fill="#1565C0"/>
+    <text x="510" y="133" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">第 8 课 · 容器网络</text>
+    <text x="400" y="176" font-size="12" fill="#333">· 网络驱动全景</text>
+    <text x="400" y="200" font-size="12" fill="#333">· bridge 网络与端口映射</text>
+    <text x="400" y="224" font-size="12" fill="#333">· 自定义网络与 DNS 服务发现</text>
+    <text x="620" y="286" text-anchor="end" font-size="14" font-weight="700" fill="#1565C0">②</text>
+  </g>
+
+  <!-- 课 9 卡片 -->
+  <g>
+    <rect x="700" y="110" width="260" height="190" rx="10" fill="#ffffff" stroke="#1565C0" stroke-width="2"/>
+    <rect x="700" y="110" width="260" height="36" rx="10" fill="#1565C0"/>
+    <rect x="700" y="128" width="260" height="18" fill="#1565C0"/>
+    <text x="830" y="133" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">第 9 课 · Compose 编排多容器</text>
+    <text x="720" y="176" font-size="12" fill="#333">· compose 文件结构</text>
+    <text x="720" y="200" font-size="12" fill="#333">· 一键本地开发环境</text>
+    <text x="720" y="224" font-size="12" fill="#333">· 健康检查与启动顺序</text>
+    <text x="940" y="286" text-anchor="end" font-size="14" font-weight="700" fill="#1565C0">③</text>
+  </g>
+
+  <!-- 主链箭头 课7 -> 课8 -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#1565C0"/>
+    </marker>
+    <marker id="darrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#e65100"/>
+    </marker>
+  </defs>
+
+  <!-- 主链箭头 课7 -> 课8 -->
+  <line x1="320" y1="205" x2="374" y2="205" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow)"/>
+  <!-- 主链箭头 课8 -> 课9 -->
+  <line x1="640" y1="205" x2="694" y2="205" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <!-- 虚线依赖：课9 挂源码做热重载依赖 课7 三种挂载方式 -->
+  <line x1="470" y1="300" x2="470" y2="340" stroke="#e65100" stroke-width="2" stroke-dasharray="5,4"/>
+  <line x1="470" y1="340" x2="760" y2="340" stroke="#e65100" stroke-width="2" stroke-dasharray="5,4"/>
+  <line x1="760" y1="340" x2="760" y2="304" stroke="#e65100" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#darrow)"/>
+  <text x="615" y="330" text-anchor="middle" font-size="11" fill="#e65100">课9 挂源码热重载需先掌握课7 三种挂载方式</text>
+
+  <!-- 虚线依赖：课9 多服务互通依赖 课8 自定义网络 -->
+  <line x1="520" y1="305" x2="520" y2="390" stroke="#e65100" stroke-width="2" stroke-dasharray="5,4"/>
+  <line x1="520" y1="390" x2="810" y2="390" stroke="#e65100" stroke-width="2" stroke-dasharray="5,4"/>
+  <line x1="810" y1="390" x2="810" y2="360" stroke="#e65100" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#darrow)"/>
+  <text x="640" y="383" text-anchor="middle" font-size="11" fill="#e65100">课9 多服务互联需先掌握课8 自定义网络</text>
+
+  <!-- 阶段终点 -->
+  <text x="830" y="345" font-size="12" fill="#78909c" text-anchor="middle">→ 阶段 4 · 让它稳稳地跑</text>
+
+  <!-- 底部说明 -->
+  <text x="510" y="505" text-anchor="middle" font-size="11" fill="#78909c">主链按学习顺序：先让数据活下来（课7）→ 再让服务互相找得到（课8）→ 最后用 compose 一键拉起整套本地环境（课9）。虚线为阶段内知识点依赖。</text>
+</svg>

@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="540" viewBox="0 0 1000 540" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="1000" height="540" fill="#fafafa"/>
+
+  <text x="40" y="34" font-size="20" font-weight="bold" fill="#1565C0">从 git push 到可回滚：一条交付流水线</text>
+  <text x="40" y="55" font-size="12.5" fill="#555">关键不在"能不能自动"，而在<tspan font-weight="bold">镜像从哪来、缓存怎么复用、闸门设在哪</tspan>。</text>
+
+  <!-- ===== 阶段 1 ===== -->
+  <rect x="40" y="110" width="130" height="90" rx="5" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.8"/>
+  <text x="105" y="136" font-size="11.5" font-weight="bold" fill="#0d47a1" text-anchor="middle">① 推送代码</text>
+  <text x="105" y="158" font-size="10" fill="#0d47a1" text-anchor="middle">git push / PR</text>
+  <text x="105" y="176" font-size="9.5" fill="#0d47a1" text-anchor="middle">触发流水线</text>
+  <text x="105" y="191" font-size="9" fill="#78909c" text-anchor="middle">tag 策略在此决定</text>
+
+  <path d="M 170 155 L 186 155" fill="none" stroke="#78909c" stroke-width="2" marker-end="url(#a)"/>
+  <defs>
+    <marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><polygon points="0,0 9,4.5 0,9" fill="#78909c"/></marker>
+    <marker id="c" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><polygon points="0,0 9,4.5 0,9" fill="#00695c"/></marker>
+  </defs>
+
+  <!-- ===== 阶段 2 ===== -->
+  <rect x="188" y="110" width="130" height="90" rx="5" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.8"/>
+  <text x="253" y="136" font-size="11.5" font-weight="bold" fill="#0d47a1" text-anchor="middle">② 准备环境</text>
+  <text x="253" y="158" font-size="10" fill="#0d47a1" text-anchor="middle">setup-buildx</text>
+  <text x="253" y="176" font-size="9.5" fill="#0d47a1" text-anchor="middle">login（凭据）</text>
+  <text x="253" y="191" font-size="9" fill="#c62828" text-anchor="middle">⚠️ 构建机权限很大</text>
+
+  <path d="M 318 155 L 334 155" fill="none" stroke="#78909c" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- ===== 阶段 3 ===== -->
+  <rect x="336" y="110" width="130" height="90" rx="5" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.8"/>
+  <text x="401" y="136" font-size="11.5" font-weight="bold" fill="#0d47a1" text-anchor="middle">③ 构建镜像</text>
+  <text x="401" y="158" font-size="10" fill="#0d47a1" text-anchor="middle">buildx build</text>
+  <text x="401" y="176" font-size="9.5" fill="#0d47a1" text-anchor="middle">--cache-from 导入</text>
+  <text x="401" y="191" font-size="9" fill="#78909c" text-anchor="middle">缓存来自上一步</text>
+
+  <path d="M 466 155 L 482 155" fill="none" stroke="#78909c" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- ===== 阶段 4：安全闸门 ===== -->
+  <rect x="484" y="104" width="130" height="102" rx="5" fill="#fff8e1" stroke="#ef6c00" stroke-width="2"/>
+  <text x="549" y="130" font-size="11.5" font-weight="bold" fill="#e65100" text-anchor="middle">④ 闸门</text>
+  <text x="549" y="152" font-size="10" fill="#e65100" text-anchor="middle">漏洞扫描（scout）</text>
+  <text x="549" y="170" font-size="9.5" fill="#e65100" text-anchor="middle">history 自查密钥</text>
+  <text x="549" y="188" font-size="9.5" fill="#e65100" text-anchor="middle">compose 跑集成测试</text>
+  <text x="549" y="203" font-size="9" fill="#b71c1c" text-anchor="middle">⛔ 不过就不推送</text>
+
+  <path d="M 614 155 L 630 155" fill="none" stroke="#78909c" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- ===== 阶段 5 ===== -->
+  <rect x="632" y="110" width="130" height="90" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.8"/>
+  <text x="697" y="136" font-size="11.5" font-weight="bold" fill="#1b5e20" text-anchor="middle">⑤ 推送仓库</text>
+  <text x="697" y="158" font-size="10" fill="#1b5e20" text-anchor="middle">--push</text>
+  <text x="697" y="176" font-size="9.5" fill="#1b5e20" text-anchor="middle">--cache-to 导出</text>
+  <text x="697" y="191" font-size="9" fill="#78909c" text-anchor="middle">镜像 + 缓存分开存</text>
+
+  <path d="M 762 155 L 778 155" fill="none" stroke="#78909c" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- ===== 阶段 6 ===== -->
+  <rect x="780" y="110" width="180" height="90" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.8"/>
+  <text x="870" y="136" font-size="11.5" font-weight="bold" fill="#1b5e20" text-anchor="middle">⑥ 部署</text>
+  <text x="870" y="158" font-size="10" fill="#1b5e20" text-anchor="middle">换 tag 拉取（不重建）</text>
+  <text x="870" y="176" font-size="9.5" fill="#1b5e20" text-anchor="middle">健康检查作闸门（课 11）</text>
+  <text x="870" y="191" font-size="9" fill="#1b5e20" text-anchor="middle">unhealthy → 回滚</text>
+
+  <!-- ===== 缓存回路 ===== -->
+  <path d="M 697 200 L 697 236 L 401 236 L 401 200" fill="none" stroke="#00695c" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#c)"/>
+  <rect x="470" y="220" width="160" height="32" rx="4" fill="#e0f2f1" stroke="#00695c" stroke-width="1"/>
+  <text x="550" y="241" font-size="10.5" font-weight="bold" fill="#004d40" text-anchor="middle">构建缓存回路</text>
+
+  <!-- ===== 回滚 ===== -->
+  <path d="M 870 200 L 870 282 L 870 282" fill="none" stroke="#c62828" stroke-width="0"/>
+  <rect x="780" y="248" width="180" height="46" rx="4" fill="#ffebee" stroke="#c62828" stroke-width="1.2"/>
+  <text x="870" y="268" font-size="10.5" font-weight="bold" fill="#b71c1c" text-anchor="middle">↩ 回滚：换回上一个 tag</text>
+  <text x="870" y="285" font-size="9.5" fill="#b71c1c" text-anchor="middle">镜像不可变，旧 tag 一直都在</text>
+
+  <!-- ===== 底部说明 ===== -->
+  <rect x="40" y="312" width="920" height="86" rx="6" fill="#fff8e1" stroke="#ef6c00" stroke-width="1.2"/>
+  <text x="60" y="336" font-size="12" font-weight="bold" fill="#e65100">⚠️ 缓存的三条官方提醒</text>
+  <text x="60" y="357" font-size="11" fill="#333">① <tspan font-family="monospace">min</tspan>（默认）只缓存进入最终镜像的层，<tspan font-family="monospace">max</tspan> 连中间层也缓存——后者更容易命中但更大；<tspan font-family="monospace">inline</tspan> 后端<tspan font-weight="bold">只支持 min</tspan>。</text>
+  <text x="60" y="375" font-size="11" fill="#333">② <tspan font-weight="bold">同一位置不能被写两次而不覆盖</tspan>。要按分支维护多份缓存，必须用不同 ref（官方给出了"当前分支 + main"的双导入写法）。</text>
+  <text x="60" y="393" font-size="11" fill="#b71c1c">③ 构建里用到凭据必须用 <tspan font-family="monospace">--secret</tspan>；用 <tspan font-family="monospace">COPY</tspan> 或 <tspan font-family="monospace">ARG</tspan> 处理会泄露（回扣课 5、课 6、课 12）。</text>
+
+  <rect x="40" y="410" width="920" height="66" rx="6" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.2"/>
+  <text x="60" y="434" font-size="12" font-weight="bold" fill="#0d47a1">🚀 多平台构建（可选）</text>
+  <text x="60" y="455" font-size="11" fill="#333">一条命令产出多架构：<tspan font-family="monospace">--platform linux/amd64,linux/arm64</tspan>。产物是 <tspan font-weight="bold">manifest list</tspan>，pull 时按主机架构自动挑。</text>
+  <text x="60" y="472" font-size="11" fill="#b71c1c">⚠️ 官方提醒：QEMU 模拟"can be <tspan font-weight="bold">much slower</tspan> than native builds"，编译/压缩类任务尤其明显 —— 优先用原生节点或交叉编译。</text>
+
+  <text x="40" y="498" font-size="10" fill="#90a4ae">机制依据：Docker 官方 Docker Build GitHub Actions / Cache management with GitHub Actions / Cache storage backends / Multi-platform builds（核查于 2026-09）。</text>
+  <text x="40" y="514" font-size="10" fill="#90a4ae">注：图中展示的是通用流水线形态，具体 action 版本（如 build-push-action）请以官方文档当前版本为准。</text>
+</svg>

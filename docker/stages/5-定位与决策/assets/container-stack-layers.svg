@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="600" viewBox="0 0 1000 600" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="1000" height="600" fill="#fafafa"/>
+
+  <text x="40" y="34" font-size="20" font-weight="bold" fill="#1565C0">Docker 站在容器生态的哪一格</text>
+  <text x="40" y="55" font-size="12.5" fill="#555">两条路线都汇合到 <tspan font-weight="bold">containerd → runc</tspan>。区别只在于：<tspan font-weight="bold">Kubernetes 那条路绕开了 dockerd</tspan>。</text>
+
+  <!-- ===== 列标题 ===== -->
+  <rect x="80" y="80" width="300" height="26" rx="4" fill="#1565C0"/>
+  <text x="230" y="98" font-size="12.5" font-weight="bold" fill="#ffffff" text-anchor="middle">Docker 路线（你在用的）</text>
+
+  <rect x="620" y="80" width="300" height="26" rx="4" fill="#6a1b9a"/>
+  <text x="770" y="98" font-size="12.5" font-weight="bold" fill="#ffffff" text-anchor="middle">Kubernetes 路线</text>
+
+  <!-- ===== L1 CLI ===== -->
+  <rect x="80" y="120" width="300" height="44" rx="4" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.5"/>
+  <text x="230" y="140" font-size="11.5" font-weight="bold" fill="#0d47a1" text-anchor="middle">docker CLI · docker compose</text>
+  <text x="230" y="156" font-size="9.5" fill="#0d47a1" text-anchor="middle">你敲的每一条命令从这里进去</text>
+
+  <rect x="620" y="120" width="300" height="44" rx="4" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="1.5"/>
+  <text x="770" y="140" font-size="11.5" font-weight="bold" fill="#4a148c" text-anchor="middle">kubectl</text>
+  <text x="770" y="156" font-size="9.5" fill="#4a148c" text-anchor="middle">调度与编排的入口</text>
+
+  <path d="M 230 164 L 230 182" fill="none" stroke="#1565C0" stroke-width="2" marker-end="url(#d)"/>
+  <path d="M 770 164 L 770 182" fill="none" stroke="#6a1b9a" stroke-width="2" marker-end="url(#p)"/>
+  <defs>
+    <marker id="d" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><polygon points="0,0 9,4.5 0,9" fill="#1565C0"/></marker>
+    <marker id="p" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><polygon points="0,0 9,4.5 0,9" fill="#6a1b9a"/></marker>
+    <marker id="g2" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><polygon points="0,0 9,4.5 0,9" fill="#00695c"/></marker>
+  </defs>
+
+  <!-- ===== L2 引擎 / kubelet ===== -->
+  <rect x="80" y="184" width="300" height="58" rx="4" fill="#fff8e1" stroke="#ef6c00" stroke-width="1.8"/>
+  <text x="230" y="206" font-size="11.5" font-weight="bold" fill="#e65100" text-anchor="middle">dockerd（Docker Engine）</text>
+  <text x="230" y="222" font-size="9.5" fill="#e65100" text-anchor="middle">构建镜像 · 管镜像/网络/卷 · 提供 REST API</text>
+  <text x="230" y="236" font-size="9" fill="#b71c1c" text-anchor="middle">⚠️ 长期运行的 root 守护进程</text>
+
+  <rect x="620" y="184" width="300" height="58" rx="4" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="1.8"/>
+  <text x="770" y="206" font-size="11.5" font-weight="bold" fill="#4a148c" text-anchor="middle">kubelet + CRI</text>
+  <text x="770" y="222" font-size="9.5" fill="#4a148c" text-anchor="middle">CRI 是一层抽象：可接任何兼容运行时</text>
+  <text x="770" y="236" font-size="9" fill="#4a148c" text-anchor="middle">（containerd / CRI-O / ...）</text>
+
+  <!-- ===== 汇合区标注 ===== -->
+  <rect x="400" y="120" width="200" height="122" rx="5" fill="#e0f2f1" stroke="#00695c" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <text x="500" y="146" font-size="11.5" font-weight="bold" fill="#004d40" text-anchor="middle">dockershim 曾经在这里</text>
+  <text x="500" y="166" font-size="9.5" fill="#004d40" text-anchor="middle">它是个「适配器」，让 kubelet</text>
+  <text x="500" y="180" font-size="9.5" fill="#004d40" text-anchor="middle">能把 Docker 当成 CRI 运行时用</text>
+  <text x="500" y="200" font-size="9.5" font-weight="bold" fill="#b71c1c" text-anchor="middle">K8s v1.24 已移除</text>
+  <text x="500" y="220" font-size="9" fill="#004d40" text-anchor="middle">移除后：K8s 直连 containerd，</text>
+  <text x="500" y="234" font-size="9" fill="#004d40" text-anchor="middle">中间那层（dockerd）被绕开</text>
+
+  <path d="M 380 213 L 620 213" fill="none" stroke="#c62828" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <path d="M 620 213 L 600 213" fill="none" stroke="#c62828" stroke-width="1.5"/>
+  <text x="500" y="256" font-size="9" fill="#b71c1c" text-anchor="middle">↑ 这条老路已断</text>
+
+  <!-- ===== 汇合箭头 ===== -->
+  <path d="M 230 242 L 230 268 L 500 268 L 500 288" fill="none" stroke="#1565C0" stroke-width="2" marker-end="url(#d)"/>
+  <path d="M 770 242 L 770 268 L 500 268" fill="none" stroke="#6a1b9a" stroke-width="2" marker-end="url(#p)"/>
+
+  <!-- ===== L3 containerd ===== -->
+  <rect x="200" y="292" width="600" height="58" rx="4" fill="#e0f2f1" stroke="#00695c" stroke-width="2"/>
+  <text x="500" y="314" font-size="12.5" font-weight="bold" fill="#004d40" text-anchor="middle">containerd</text>
+  <text x="500" y="332" font-size="10" fill="#004d40" text-anchor="middle">管理完整的容器生命周期：镜像传输与存储 · 容器执行与监管 · 底层存储 · 网络接入</text>
+  <text x="500" y="346" font-size="9" fill="#00695c" text-anchor="middle">CNCF 毕业项目（2019）｜ Docker Engine 与 Kubernetes 都用它</text>
+
+  <path d="M 500 350 L 500 370" fill="none" stroke="#00695c" stroke-width="2" marker-end="url(#g2)"/>
+
+  <!-- ===== L4 runc ===== -->
+  <rect x="200" y="374" width="600" height="52" rx="4" fill="#fff8e1" stroke="#ef6c00" stroke-width="2"/>
+  <text x="500" y="396" font-size="12.5" font-weight="bold" fill="#e65100" text-anchor="middle">runc</text>
+  <text x="500" y="414" font-size="10" fill="#e65100" text-anchor="middle">OCI runtime-spec 的参考实现 —— 真正去创建 namespaces / cgroups 并启动进程的那一层</text>
+
+  <path d="M 500 426 L 500 446" fill="none" stroke="#00695c" stroke-width="2" marker-end="url(#g2)"/>
+
+  <!-- ===== L5 内核 ===== -->
+  <rect x="200" y="450" width="600" height="44" rx="4" fill="#eceff1" stroke="#607d8b" stroke-width="2"/>
+  <text x="500" y="472" font-size="12.5" font-weight="bold" fill="#37474f" text-anchor="middle">Linux 内核</text>
+  <text x="500" y="488" font-size="10" fill="#546e7a" text-anchor="middle">namespaces（隔离） + cgroups（记账与限额）—— 所有容器共享同一个内核</text>
+
+  <!-- ===== 底部 OCI 条 ===== -->
+  <rect x="40" y="508" width="920" height="72" rx="6" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.2"/>
+  <text x="60" y="532" font-size="12.5" font-weight="bold" fill="#0d47a1">OCI：让上面这些零件能互相替换的标准（Linux Foundation 下，2015 年由 Docker、CoreOS 等发起）</text>
+  <text x="60" y="553" font-size="11" fill="#333">① <tspan font-family="monospace">runtime-spec</tspan> —— 怎么运行一个已解包的「文件系统束」；<tspan font-weight="bold">Docker 把 runc 捐给 OCI 作为基石</tspan></text>
+  <text x="60" y="570" font-size="11" fill="#333">② <tspan font-family="monospace">image-spec</tspan> —— 镜像由 manifest + 配置 + 层序列化组成；manifest 里的<tspan font-weight="bold">内容寻址标识</tspan>就是课 12 讲的 digest</text>
+
+  <text x="40" y="594" font-size="9.5" fill="#90a4ae">依据：OCI 官网 About / containerd.io / Docker 官方 What is Docker / Kubernetes 官方 dockershim removal 页（核查于 2026-09）。</text>
+</svg>

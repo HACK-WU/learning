@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="700" viewBox="0 0 1000 700" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="1000" height="700" fill="#fafafa"/>
+
+  <!-- ===== 顶部标题 ===== -->
+  <text x="60" y="42" font-size="20" font-weight="bold" fill="#1565C0">阶段 1 · 容器与镜像基础 —— 学习路径</text>
+  <text x="60" y="66" font-size="12.5" fill="#555">主线：order-service 为什么「我这儿能跑，别人那儿不行」→ 先看清环境与容器的本质，再谈容器化</text>
+
+  <!-- ================= 课 1 ================= -->
+  <rect x="60" y="90" width="560" height="165" rx="8" fill="#ffffff" stroke="#b0bec5" stroke-width="1.5"/>
+  <text x="80" y="124" font-size="16" font-weight="bold" fill="#1565C0">课 1 · 为什么需要Docker</text>
+  <line x1="80" y1="134" x2="600" y2="134" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="80" y="160" font-size="12.5" fill="#333">· 环境不一致的代价：依赖矩阵 / 配置漂移 / 交接即崩</text>
+  <text x="80" y="186" font-size="12.5" fill="#333">· 容器 vs 虚拟机：虚拟化层次不同、体积与启动差距</text>
+  <text x="80" y="212" font-size="12.5" fill="#333">· Docker 起源与生态位：2013 / OCI / CNCF 三条时间线</text>
+  <text x="605" y="239" font-size="11" fill="#78909c" text-anchor="end">序号 1/3</text>
+
+  <!-- 主链箭头 课1→课2 -->
+  <line x1="340" y1="255" x2="340" y2="278" stroke="#1565C0" stroke-width="2"/>
+  <polygon points="340,286 334,277 346,277" fill="#1565C0"/>
+
+  <!-- ================= 课 2 ================= -->
+  <rect x="60" y="285" width="560" height="165" rx="8" fill="#ffffff" stroke="#b0bec5" stroke-width="1.5"/>
+  <text x="80" y="319" font-size="16" font-weight="bold" fill="#1565C0">课 2 · 跑起来第一个容器</text>
+  <line x1="80" y1="329" x2="600" y2="329" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="80" y="355" font-size="12.5" fill="#333">· 镜像与容器的关系：模板与实例、一像多容器</text>
+  <text x="80" y="381" font-size="12.5" fill="#333">· docker run 背后：守护进程查/拉/建/挂载/启进程</text>
+  <text x="80" y="407" font-size="12.5" fill="#333">· 生命周期命令：ps、logs、exec/attach、stop/rm、退出码</text>
+  <text x="605" y="434" font-size="11" fill="#78909c" text-anchor="end">序号 2/3</text>
+
+  <!-- 主链箭头 课2→课3 -->
+  <line x1="340" y1="450" x2="340" y2="473" stroke="#1565C0" stroke-width="2"/>
+  <polygon points="340,481 334,472 346,472" fill="#1565C0"/>
+
+  <!-- ================= 课 3 ================= -->
+  <rect x="60" y="480" width="560" height="165" rx="8" fill="#ffffff" stroke="#b0bec5" stroke-width="1.5"/>
+  <text x="80" y="514" font-size="16" font-weight="bold" fill="#1565C0">课 3 · 镜像的里子：分层与仓库</text>
+  <line x1="80" y1="524" x2="600" y2="524" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="80" y="550" font-size="12.5" fill="#333">· 联合文件系统与分层：只读层栈 + 容器层、写时复制</text>
+  <text x="80" y="576" font-size="12.5" fill="#333">· 仓库、标签与摘要：registry / repo / tag、digest、latest</text>
+  <text x="80" y="602" font-size="12.5" fill="#333">· 镜像体积从哪来：基础镜像 / 中间产物 / 虚悬镜像</text>
+  <text x="605" y="629" font-size="11" fill="#78909c" text-anchor="end">序号 3/3</text>
+
+  <!-- ===== 跨课虚线依赖：课3 复用课1 的概念打底 ===== -->
+  <line x1="636" y1="172" x2="636" y2="545" stroke="#90a4ae" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <polygon points="636,553 631,544 641,544" fill="#90a4ae"/>
+  <text x="652" y="336" font-size="11" fill="#616161">虚线链接：课 3 的分层与仓库，</text>
+  <text x="652" y="358" font-size="11" fill="#616161">复用课 1 建立的容器与镜像</text>
+  <text x="652" y="380" font-size="11" fill="#616161">概念打底，属软前置，可跳读。</text>
+
+  <!-- ===== 底部说明 ===== -->
+  <text x="60" y="672" font-size="11" fill="#78909c">路径说明：按学习顺序课 1 → 课 2 → 课 3 主链推进；虚线表示课 3 复用课 1 的概念打底（非硬前置）。卡片右下角为该课在本阶段中的序号。</text>
+</svg>

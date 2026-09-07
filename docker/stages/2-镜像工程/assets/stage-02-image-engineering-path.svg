@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="700" viewBox="0 0 1000 700" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="1000" height="700" fill="#fafafa"/>
+
+  <!-- ===== 顶部标题 ===== -->
+  <text x="60" y="42" font-size="20" font-weight="bold" fill="#1565C0">阶段 2 · 镜像工程 —— 学习路径</text>
+  <text x="60" y="66" font-size="12.5" fill="#555">主线：把 order-service 装进「盒子」→ 先会写、再会配、最后瘦身；为阶段 4 CI 与阶段 5 成本账打底</text>
+
+  <!-- ================= 课 4 ================= -->
+  <rect x="60" y="90" width="560" height="165" rx="8" fill="#ffffff" stroke="#b0bec5" stroke-width="1.5"/>
+  <text x="80" y="124" font-size="16" font-weight="bold" fill="#1565C0">课 4 · Dockerfile入门</text>
+  <line x1="80" y1="134" x2="600" y2="134" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="80" y="160" font-size="12.5" fill="#333">· Dockerfile 语法骨架：FROM/RUN/COPY/WORKDIR/EXPOSE、一层一指令</text>
+  <text x="80" y="186" font-size="12.5" fill="#333">· 构建上下文与 .dockerignore：整体打包、误传大目录的后果</text>
+  <text x="80" y="212" font-size="12.5" fill="#333">· 构建缓存与指令顺序：逐层缓存与失效级联、先拷清单再拷源码</text>
+  <text x="605" y="239" font-size="11" fill="#78909c" text-anchor="end">序号 1/3</text>
+
+  <!-- 主链箭头 课4→课5 -->
+  <line x1="340" y1="255" x2="340" y2="278" stroke="#1565C0" stroke-width="2"/>
+  <polygon points="340,286 334,277 346,277" fill="#1565C0"/>
+
+  <!-- ================= 课 5 ================= -->
+  <rect x="60" y="285" width="560" height="165" rx="8" fill="#ffffff" stroke="#b0bec5" stroke-width="1.5"/>
+  <text x="80" y="319" font-size="16" font-weight="bold" fill="#1565C0">课 5 · 启动命令与配置注入</text>
+  <line x1="80" y1="329" x2="600" y2="329" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="80" y="355" font-size="12.5" fill="#333">· CMD 与 ENTRYPOINT：exec vs shell、谁是 PID 1、信号怎么传</text>
+  <text x="80" y="381" font-size="12.5" fill="#333">· ENV 与 ARG：构建期 vs 运行期、docker run -e 覆盖哪一层</text>
+  <text x="80" y="407" font-size="12.5" fill="#333">· 运行时配置覆盖与密钥：三层覆盖顺序、密钥走 secret/挂载而非 ENV</text>
+  <text x="605" y="434" font-size="11" fill="#78909c" text-anchor="end">序号 2/3</text>
+
+  <!-- 主链箭头 课5→课6 -->
+  <line x1="340" y1="450" x2="340" y2="473" stroke="#1565C0" stroke-width="2"/>
+  <polygon points="340,481 334,472 346,472" fill="#1565C0"/>
+
+  <!-- ================= 课 6 ================= -->
+  <rect x="60" y="480" width="560" height="165" rx="8" fill="#ffffff" stroke="#b0bec5" stroke-width="1.5"/>
+  <text x="80" y="514" font-size="16" font-weight="bold" fill="#1565C0">课 6 · 多阶段构建与镜像瘦身</text>
+  <line x1="80" y1="524" x2="600" y2="524" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="80" y="550" font-size="12.5" fill="#333">· 多阶段构建：builder 模式、COPY --from 跨阶段拷贝、依赖不进最终镜像</text>
+  <text x="80" y="576" font-size="12.5" fill="#333">· 基础镜像选型：full/slim/alpine/distroless、musl 与 glibc 陷阱</text>
+  <text x="80" y="602" font-size="12.5" fill="#333">· 瘦身实操与体积核算：同层清理才有效、层合并代价、docker history</text>
+  <text x="605" y="629" font-size="11" fill="#78909c" text-anchor="end">序号 3/3</text>
+
+  <!-- ===== 跨课虚线依赖：课6 依赖课4 的指令分层/缓存机制 ===== -->
+  <line x1="636" y1="172" x2="636" y2="545" stroke="#90a4ae" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <polygon points="636,553 631,544 641,544" fill="#90a4ae"/>
+  <text x="652" y="336" font-size="11" fill="#616161">虚线链接：课 6 的多阶段与瘦身，</text>
+  <text x="652" y="358" font-size="11" fill="#616161">建立在课 4 的指令分层与缓存</text>
+  <text x="652" y="380" font-size="11" fill="#616161">机制之上，属软前置，可跳读。</text>
+
+  <!-- ===== 底部说明 ===== -->
+  <text x="60" y="672" font-size="11" fill="#78909c">路径说明：按学习顺序课 4 → 课 5 → 课 6 主链推进；虚线表示课 6 的多阶段瘦身依赖课 4 的指令分层/缓存机制（软前置）。卡片右下角为该课在本阶段中的序号。</text>
+</svg>

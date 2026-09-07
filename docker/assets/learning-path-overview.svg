@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="620" viewBox="0 0 1000 620" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="1000" height="620" fill="#fafafa"/>
+
+  <text x="40" y="42" font-size="22" font-weight="bold" fill="#1565C0">Docker 系统学习 · 学习路径总览</text>
+  <text x="40" y="66" font-size="13" fill="#555">故事主线：一个订单服务从「我这儿能跑」走到「任何地方都能稳稳跑」—— 5 阶段 · 15 课 · 45 知识点</text>
+
+  <!-- ============ 阶段 1 ============ -->
+  <rect x="40" y="88" width="620" height="86" rx="8" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="60" y="114" font-size="16" font-weight="bold" fill="#0d47a1">阶段 1 · 容器与镜像基础</text>
+  <text x="60" y="134" font-size="12" fill="#1565C0">课 1–3 ｜ 9 知识点</text>
+  <text x="60" y="157" font-size="12.5" fill="#333">目标：说清容器与虚拟机的本质区别、镜像为什么分层、一次 docker run 背后发生了什么</text>
+  <line x1="660" y1="131" x2="690" y2="131" stroke="#90a4ae" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <rect x="690" y="88" width="270" height="86" rx="8" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+  <text x="708" y="117" font-size="14" font-weight="bold" fill="#e65100">第 1 幕 · 我这儿能跑</text>
+  <text x="708" y="139" font-size="11.5" fill="#6d4c41">环境地狱：交接即崩，才发现</text>
+  <text x="708" y="157" font-size="11.5" fill="#6d4c41">「能跑」不等于「到处能跑」</text>
+
+  <line x1="350" y1="174" x2="350" y2="182" stroke="#1565C0" stroke-width="2"/>
+  <polygon points="350,188 345,180 355,180" fill="#1565C0"/>
+
+  <!-- ============ 阶段 2 ============ -->
+  <rect x="40" y="188" width="620" height="86" rx="8" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="60" y="214" font-size="16" font-weight="bold" fill="#0d47a1">阶段 2 · 镜像工程</text>
+  <text x="60" y="234" font-size="12" fill="#1565C0">课 4–6 ｜ 9 知识点</text>
+  <text x="60" y="257" font-size="12.5" fill="#333">目标：写出缓存友好的 Dockerfile，避开 CMD/ENTRYPOINT 与 PID 1 的坑，把镜像瘦下来</text>
+  <line x1="660" y1="231" x2="690" y2="231" stroke="#90a4ae" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <rect x="690" y="188" width="270" height="86" rx="8" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+  <text x="708" y="217" font-size="14" font-weight="bold" fill="#e65100">第 2 幕 · 装进盒子</text>
+  <text x="708" y="239" font-size="11.5" fill="#6d4c41">盒子又大又脏，改一行代码</text>
+  <text x="708" y="257" font-size="11.5" fill="#6d4c41">就要重装一遍全部依赖</text>
+
+  <line x1="350" y1="274" x2="350" y2="282" stroke="#1565C0" stroke-width="2"/>
+  <polygon points="350,288 345,280 355,280" fill="#1565C0"/>
+
+  <!-- ============ 阶段 3 ============ -->
+  <rect x="40" y="288" width="620" height="86" rx="8" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="60" y="314" font-size="16" font-weight="bold" fill="#0d47a1">阶段 3 · 数据与网络</text>
+  <text x="60" y="334" font-size="12" fill="#1565C0">课 7–9 ｜ 9 知识点</text>
+  <text x="60" y="357" font-size="12.5" fill="#333">目标：让数据活过容器本身，让服务互相找得到，用一个 compose 文件拉起全套环境</text>
+  <line x1="660" y1="331" x2="690" y2="331" stroke="#90a4ae" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <rect x="690" y="288" width="270" height="86" rx="8" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+  <text x="708" y="317" font-size="14" font-weight="bold" fill="#e65100">第 3 幕 · 不是孤岛</text>
+  <text x="708" y="339" font-size="11.5" fill="#6d4c41">数据随容器一起没了，</text>
+  <text x="708" y="357" font-size="11.5" fill="#6d4c41">三个容器互相找不到</text>
+
+  <line x1="350" y1="374" x2="350" y2="382" stroke="#1565C0" stroke-width="2"/>
+  <polygon points="350,388 345,380 355,380" fill="#1565C0"/>
+
+  <!-- ============ 阶段 4 ============ -->
+  <rect x="40" y="388" width="620" height="86" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="60" y="414" font-size="16" font-weight="bold" fill="#1b5e20">阶段 4 · 生产落地</text>
+  <text x="60" y="434" font-size="12" fill="#2e7d32">课 10–13 ｜ 12 知识点</text>
+  <text x="60" y="457" font-size="12.5" fill="#333">目标：设好资源边界、管住日志与权限，把构建到部署串成一条可回滚的交付流水线</text>
+  <line x1="660" y1="431" x2="690" y2="431" stroke="#90a4ae" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <rect x="690" y="388" width="270" height="86" rx="8" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+  <text x="708" y="417" font-size="14" font-weight="bold" fill="#e65100">第 4 幕 · 稳稳地跑</text>
+  <text x="708" y="439" font-size="11.5" fill="#6d4c41">被 OOM 杀掉、日志撑爆磁盘、</text>
+  <text x="708" y="457" font-size="11.5" fill="#6d4c41">容器里跑的竟然是 root</text>
+
+  <line x1="350" y1="474" x2="350" y2="482" stroke="#2e7d32" stroke-width="2"/>
+  <polygon points="350,488 345,480 355,480" fill="#2e7d32"/>
+
+  <!-- ============ 阶段 5 ============ -->
+  <rect x="40" y="488" width="620" height="86" rx="8" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="2"/>
+  <text x="60" y="514" font-size="16" font-weight="bold" fill="#4a148c">阶段 5 · 定位与决策</text>
+  <text x="60" y="534" font-size="12" fill="#6a1b9a">课 14–15 ｜ 6 知识点</text>
+  <text x="60" y="557" font-size="12.5" fill="#333">目标：说清 Docker 在容器生态中的位置，判断该不该容器化、容器化到哪一步</text>
+  <line x1="660" y1="531" x2="690" y2="531" stroke="#90a4ae" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <rect x="690" y="488" width="270" height="86" rx="8" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+  <text x="708" y="517" font-size="14" font-weight="bold" fill="#e65100">第 5 幕 · 该不该用</text>
+  <text x="708" y="539" font-size="11.5" fill="#6d4c41">船长视角回望全程，</text>
+  <text x="708" y="557" font-size="11.5" fill="#6d4c41">把「会用」变成「用对」</text>
+
+  <!-- ============ 页脚 ============ -->
+  <line x1="40" y1="590" x2="960" y2="590" stroke="#cfd8dc" stroke-width="1"/>
+  <text x="40" y="608" font-size="11.5" fill="#78909c">左：学习阶段与前置依赖（箭头方向 = 学习顺序）｜ 右：该阶段在故事主线中的章节定位</text>
+</svg>

@@ -1,0 +1,34 @@
+# 课 4：.dockerignore 是第一道防线。
+# 没有它，`COPY . .` 会把上下文里的一切都带进镜像 —— 包括 .env、私钥、整个 .git。
+
+# 版本控制与编辑器
+.git
+.gitignore
+.vscode
+.idea
+
+# ⚠️ 密钥与本地配置（课 12：这些东西进了镜像层就很难清干净）
+.env
+*.pem
+*.key
+id_rsa*
+secrets/
+
+# Python 缓存
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# 不属于镜像的文档与编排文件
+README.md
+compose*.yaml
+nginx.conf
+workflow-ci.yml
+
+# 数据与构建产物
+*.db
+*.sqlite3
+dist/
+build/
