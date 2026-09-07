@@ -1,0 +1,55 @@
+# 数据源：全部走 provisioning，不手工点
+# 关键点：exemplar 的开关在【这里】，不在 dashboard
+apiVersion: 1
+
+datasources:
+  - name: Shop-Prom
+    type: prometheus
+    uid: shop-prom
+    access: proxy
+    url: http://p3-prom:9090
+    isDefault: true
+    editable: false
+    jsonData:
+      httpMethod: POST
+      # 关键：exemplar 链路必须满足两个条件
+      #   1. Prometheus 启动时带 --enable-feature=exemplar-storage
+      #   2. 数据源这里配 exemplarTraceIdDestinations 指向 Jaeger
+      exemplarTraceIdDestinations:
+        - name: trace_id
+          datasourceUid: shop-jaeger
+      # 控制查询成本：限制返回的数据点数（课 12 实测：这是性能主开关）
+      maxDataPoints: 1000
+
+  - name: Shop-Loki
+    type: loki
+    uid: shop-loki
+    access: proxy
+    url: http://grafana-loki:3100
+    editable: false
+    jsonData:
+      maxLines: 1000
+      derivedFields:
+        # 关键：把日志里的 trace_id 变成【可点击的跳转链接】
+        # 这是「日志 → 链路」这一跳的技术实现
+        - name: trace_id
+          matcherRegex: '"trace_id":\s*"(\w+)"'
+          url: '$${__value.raw}'
+          datasourceUid: shop-jaeger
+
+  - name: Shop-Jaeger
+    type: jaeger
+    uid: shop-jaeger
+    access: proxy
+    url: http://grafana-jaeger:16686
+    editable: false
+    jsonData:
+      tracesToLogs:
+        datasourceUid: shop-loki
+        # 反向跳转：从 trace 跳回这个服务的日志
+        tags:
+          - service.name
+        mappedTags:
+          - key: service.name
+            value: service
+        query: '{service="$${__span.tags.service.name}"}'

@@ -1,0 +1,10 @@
+# 实战项目：被监控应用的抓取配置
+# 关键点：exemplars 的开关在【数据源】而非这里，但 histogram 必须原样抓进来
+scrape_configs:
+  - job_name: 'shop'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['p3-shop:9400']
+        labels:
+          service: 'shop-api'
+          app: 'shop'

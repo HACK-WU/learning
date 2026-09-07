@@ -1,0 +1,19 @@
+apiVersion: 1
+
+datasources:
+  - name: ProvProm
+    uid: provprom
+    type: prometheus
+    access: proxy
+    url: http://grafana-prom:9090
+    isDefault: true
+    editable: false
+    jsonData:
+      httpMethod: POST
+
+  - name: ProvLoki
+    uid: provloki
+    type: loki
+    access: proxy
+    url: http://grafana-loki:3100
+    editable: false

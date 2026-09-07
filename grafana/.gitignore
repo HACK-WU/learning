@@ -1,0 +1,11 @@
+# 实战项目运行产物（会被 up.sh / down.sh 重新生成，不入库）
+
+# 应用日志（应用直推 Loki 的同时落盘一份，供排查用）
+projects/从告警到定位/实现/app/logs/
+
+# 告警接收器落盘的告警 JSON
+projects/从告警到定位/实现/webhook/out/
+
+# Python 缓存
+projects/从告警到定位/实现/**/__pycache__/
+projects/从告警到定位/实现/**/*.pyc

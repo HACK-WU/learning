@@ -1,0 +1,18 @@
+# Grafana 课程实验环境的 Prometheus 配置
+# 说明：scrape_interval 设为 5s，让实验数据尽快产生，避免学员等太久看不到曲线
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+  external_labels:
+    env: grafana-course
+
+scrape_configs:
+  # 采集 node-exporter：课程主要数据源，提供真实主机指标
+  - job_name: 'node'
+    static_configs:
+      - targets: ['grafana-node:9100', 'grafana-node2:9100', 'grafana-node3:9100']
+
+  # 采集 Prometheus 自身：提供 prometheus_* 与 up 等指标
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']

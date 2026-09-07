@@ -1,0 +1,15 @@
+apiVersion: 1
+
+providers:
+  - name: prov-dashboards
+    orgId: 1
+    folder: 'Provisioned'
+    folderUid: provfolder
+    type: file
+    disableDeletion: true
+    editable: true
+    allowUiUpdates: false
+    updateIntervalSeconds: 10
+    options:
+      path: /var/lib/grafana/dashboards
+      foldersFromFilesStructure: false

@@ -1,0 +1,61 @@
+# 通知策略 + 联系人
+apiVersion: 1
+
+# 联系人（Contact Points）：告警发到哪
+contactPoints:
+  - orgId: 1
+    name: shop-webhook
+    receivers:
+      - uid: shop-webhook-1
+        type: webhook
+        settings:
+          url: http://p3-webhook:8080/alert
+          httpMethod: POST
+  # 分级：严重告警走一个兜底的「黑名单」通道，保证永远有人收到
+  - orgId: 1
+    name: shop-catchall
+    receivers:
+      - uid: shop-catchall-1
+        type: webhook
+        settings:
+          url: http://p3-webhook:8080/critical
+          httpMethod: POST
+
+# 通知策略（Policy Tree）：按 label 路由 + 分组 + 静默时机
+policies:
+  - orgId: 1
+    receiver: shop-webhook
+    # 分组：同一 team 的告警聚成一条，避免告警轰炸（课 8 知识点）
+    group_by: ['team', 'alertname']
+    # 关键：group_wait 是「攒一攒再发」的窗口，避免抖动导致的误报
+    group_wait: 30s
+    group_interval: 2m
+    repeat_interval: 10m
+    routes:
+      # 子策略：critical 级别单独走兜底通道
+      - receiver: shop-catchall
+        matchers:
+          - severity = critical
+        group_by: ['alertname']
+        group_wait: 10s
+        repeat_interval: 5m
+        # 关键：continue=false，匹配到就停止，不再往下匹配
+        continue: false
+      # 子策略：可用性告警优先级最高，立刻发
+      - receiver: shop-catchall
+        matchers:
+          - signal = availability
+        group_by: ['alertname']
+        group_wait: 0s
+        repeat_interval: 5m
+        continue: false
+
+# 静默（Mute Timing）：维护窗口内不告警
+muteTimes:
+  - orgId: 1
+    name: 夜间维护窗口
+    time_intervals:
+      - times:
+          - start_time: '02:00'
+            end_time: '04:00'
+        weekdays: ['monday:friday']

@@ -1,0 +1,44 @@
+# Promtail 配置：把应用日志送进 Loki
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://grafana-loki:3100/loki/api/v1/push
+
+scrape_configs:
+  - job_name: shop
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          # 关键点 1：__path__ 必须指向【容器内的日志文件】，不是 stdout
+          __path__: /var/log/shop/*.log
+          job: shop
+          service: shop-api
+    pipeline_stages:
+      # 关键点 2：日志本身是 JSON，必须先解析，否则 Loki 里就是一大坨字符串
+      - json:
+          expressions:
+            level: level
+            service: service
+            msg: msg
+            trace_id: trace_id
+            span_id: span_id
+            route: route
+            downstream: downstream
+            error_type: error_type
+      # 关键点 3：把解析出的字段提升为【Loki 标签】——
+      #   只有提升为标签，Grafana 才能用它过滤；但高基数字段（trace_id）不能提，
+      #   否则会把 Loki 打爆。trace_id 保留为「可搜索的日志内容」，用 |~ 过滤。
+      - labels:
+          level:
+          service:
+          route:
+          error_type:
+      - timestamp:
+          source: ts
+          format: RFC3339

@@ -3,18 +3,19 @@
 > 以「课程制」方式系统学习技术主题：每门课程自带学习档案、路径总览与课件体系，支持断点续学。
 
 [![courses](https://img.shields.io/badge/courses-21-blue)](#课程导航)
-[![Bash](https://img.shields.io/badge/Bash-0%2F13-yellow)](shell/02-课程目录.md)
+[![Bash](https://img.shields.io/badge/Bash-13%2F13-brightgreen)](shell/02-课程目录.md)
 [![Celery + Django](https://img.shields.io/badge/Celery%2B_Django-10%2F10-brightgreen)](celery-django/02-课程目录.md)
 [![Consul](https://img.shields.io/badge/Consul-7%2F11-yellow)](consul/02-课程目录.md)
 [![Design Patterns](https://img.shields.io/badge/Design_Patterns-12%2F12-brightgreen)](design-patterns/02-课程目录.md)
 [![Django 进阶](https://img.shields.io/badge/Django-22%2F22-brightgreen)](django/02-课程目录.md)
+[![Docker](https://img.shields.io/badge/Docker-15%2F15-brightgreen)](docker/02-课程目录.md)
 [![Doris](https://img.shields.io/badge/Doris-12%2F12-brightgreen)](doris/02-课程目录.md)
 [![Elasticsearch](https://img.shields.io/badge/Elasticsearch-15%2F15-brightgreen)](elasticsearch/02-课程目录.md)
-[![Grafana](https://img.shields.io/badge/Grafana-12%2F12-yellow)](grafana/02-课程目录.md)
+[![Grafana](https://img.shields.io/badge/Grafana-12%2F12-brightgreen)](grafana/02-课程目录.md)
 [![InfluxDB](https://img.shields.io/badge/InfluxDB-19%2F19-brightgreen)](influxdb/02-课程目录.md)
 [![Kafka](https://img.shields.io/badge/Kafka-10%2F10-brightgreen)](kafka/02-课程目录.md)
 [![OpenTelemetry](https://img.shields.io/badge/OpenTelemetry-12%2F12-brightgreen)](opentelemetry/02-课程目录.md)
-[![Prometheus](https://img.shields.io/badge/Prometheus-4%2F12-yellow)](prometheus/02-课程目录.md)
+[![Prometheus](https://img.shields.io/badge/Prometheus-10%2F12-yellow)](prometheus/02-课程目录.md)
 [![PromQL](https://img.shields.io/badge/PromQL-12%2F12-brightgreen)](promql/02-课程目录.md)
 [![RabbitMQ](https://img.shields.io/badge/RabbitMQ-12%2F12-brightgreen)](rabbitmq/02-课程目录.md)
 [![Redis](https://img.shields.io/badge/Redis-9%2F9-brightgreen)](redis/02-课程目录.md)
@@ -27,9 +28,9 @@
 
 ## 概述
 
-本仓库收录**二十一门**系统化技术课程，覆盖后端基础设施、前端语言与图形媒体三大方向：
+本仓库收录**二十二门**系统化技术课程，覆盖后端基础设施、前端语言与图形媒体三大方向：
 
-- **后端 / 基础设施**：Bash 脚本编程（进阶向）、Celery + Django 异步任务、Consul 服务注册发现、设计模式（Python 实现）、Django 进阶（前后端分离）、Doris 实时数仓（OLAP）、Elasticsearch 搜索、Grafana 可视化、InfluxDB 时序数据库、Kafka 消息队列、OpenTelemetry 可观测性、Prometheus 监控、PromQL 监控查询语言、RabbitMQ 消息中间件、Redis 缓存与数据结构服务器、SurrealDB 多模型数据库、VictoriaMetrics 时序数据库、ZooKeeper 分布式协调
+- **后端 / 基础设施**：Bash 脚本编程（进阶向）、Celery + Django 异步任务、Consul 服务注册发现、设计模式（Python 实现）、Django 进阶（前后端分离）、Docker 容器技术、Doris 实时数仓（OLAP）、Elasticsearch 搜索、Grafana 可视化、InfluxDB 时序数据库、Kafka 消息队列、OpenTelemetry 可观测性、Prometheus 监控、PromQL 监控查询语言、RabbitMQ 消息中间件、Redis 缓存与数据结构服务器、SurrealDB 多模型数据库、VictoriaMetrics 时序数据库、ZooKeeper 分布式协调
 - **前端（`frontend/`）**：JavaScript 语言核心（ES6+）、TypeScript 类型系统
 - **图形媒体（`animation-engine/`）**：动画引擎与视频基础
 
@@ -44,18 +45,19 @@
 
 | 课程 | 主题 | 基础要求 | 进度 | 状态 |
 |------|------|----------|------|------|
-| [Bash 脚本编程](shell/02-课程目录.md) | 进阶向：解析链路与展开、数据结构与 fd、进程边界与 trap、严格模式与可观测、安全性能与选型，以「一段 2000 行的 deploy.sh」为主线，WSL Ubuntu 24.04 + bash 5.2.21 实操贯穿全程 | 进阶（已写过 2000+ 行 shell） | 0 / 13 课 | 🔄 进行中 |
+| [Bash 脚本编程](shell/02-课程目录.md) | 进阶向：解析链路与展开、数据结构与 fd、进程边界与 trap、严格模式与可观测、安全性能与选型，以「一段 2000 行的 deploy.sh」为主线，WSL Ubuntu 24.04 + bash 5.2.21 实操贯穿全程，含 release-audit 结课项目与收尾四件套 | 进阶（已写过 2000+ 行 shell） | 13 / 13 课 | ✅ 已完成 |
 | [Celery + Django](celery-django/02-课程目录.md) | Celery 异步任务体系与 Django 集成，从异步化动因、可靠性幂等到并发模型、编排与生产运维 | Django 熟，Celery 入门 | 10 / 10 课 | ✅ 已完成 |
 | [Consul](consul/02-课程目录.md) | 服务注册发现与配置中心，从能力拆解到横向对比与选型决策（决策参考导向） | 入门 | 7 / 11 课 | 🔄 进行中 |
 | [设计模式](design-patterns/02-课程目录.md) | GoF 设计模式的 Python 惯用实现，以订单系统重构为故事主线 | Python 基础扎实 | 12 / 12 课 | ✅ 已完成 |
 | [Django 进阶](django/02-课程目录.md) | 前后端分离架构下的 Django 进阶：DRF 三件套 → 认证权限 → 数据层纵深 → 性能异步 → 工程化生产，贯穿「不报错的错误」暗线，含 OrderFlow 结课项目与收尾三件套 | Django 熟（前后端分离为背景裁剪条件，非学习目标） | 22 / 22 课 | ✅ 已完成 |
+| [Docker](docker/02-课程目录.md) | 以「容器解决的是环境传递，不是隔离加强」为主线：容器与镜像基础 → 镜像工程 → 数据与网络 → 生产落地 → 定位与决策，贯穿「先问数据在哪 / 边界在哪 / 观测从哪来」，含《订单服务生产化》结课项目与收尾四件套 | 入门（需 Linux 基础） | 15 / 15 课 | ✅ 已完成 |
 | [Doris](doris/02-课程目录.md) | Apache Doris 实时数仓（OLAP）：从「MySQL 报表为什么慢」到建模、导入、查询引擎与分布式运维，Docker 集群 + 2150 万行数据实操贯穿全程，含电商实时数仓结课项目 | 零基础 | 12 / 12 课 | ✅ 已完成 |
 | [Elasticsearch](elasticsearch/02-课程目录.md) | 从「数据库为什么搞不定搜索」到查询聚合、分布式与选型，附认证备考映射 | 零基础 | 15 / 15 课 | ✅ 已完成 |
-| [Grafana](grafana/02-课程目录.md) | Grafana 可视化与面板设计，含 playground 实操环境 | 入门（需 Prometheus / PromQL 基础） | 12 / 12 课 | 🔶 收尾中 |
+| [Grafana](grafana/02-课程目录.md) | 「Grafana 自己不存数据，它只负责把数据变成图」：从看图 → 查得到 → 叫得醒 → 管得住，覆盖面板与数据源协议、Transformations、告警通知策略、Provisioning、权限与服务账号、性能与高可用，Docker + WSL 实操贯穿全程，含《从告警到定位》结课项目与收尾四件套 | 入门（需 Prometheus / PromQL 基础） | 12 / 12 课 | ✅ 已完成 |
 | [InfluxDB](influxdb/02-课程目录.md) | InfluxDB 3 时序数据库，从「为什么不用 MySQL」到生产落地与选型决策 | 零基础 | 19 / 19 课 | ✅ 已完成 |
 | [Kafka 基础](kafka/02-课程目录.md) | 从消息队列概念到集群可靠性与事件驱动架构，Docker 实操贯穿全程 | 零基础 | 10 / 10 课 | ✅ 已完成 |
 | [OpenTelemetry](opentelemetry/02-课程目录.md) | 可观测性标准：从三大信号（Trace / Metrics / Logs）到采集、处理与生产落地，含 capstone 结课项目与收尾四件套 | 入门（需后端服务经验） | 12 / 12 课 | ✅ 已完成 |
-| [Prometheus](prometheus/02-课程目录.md) | Prometheus 监控体系：数据模型、抓取与存储、告警与生产实践，含 labs 动手实验 | 进阶（已学完 PromQL 课程） | 4 / 12 课 | 🔄 进行中 |
+| [Prometheus](prometheus/02-课程目录.md) | Prometheus 监控体系：数据模型、抓取与存储、告警与生产实践，含 labs 动手实验 | 进阶（已学完 PromQL 课程） | 10 / 12 课 | 🔄 进行中 |
 | [PromQL](promql/02-课程目录.md) | Prometheus 查询语言，从数据模型到告警规则与 Grafana 面板，含 SLO 实战项目 | 零基础 | 12 / 12 课 | ✅ 已完成 |
 | [RabbitMQ 基础](rabbitmq/02-课程目录.md) | 从「为什么需要消息队列」到生产落地，Python（pika）实操贯穿全程，止于选型决策 | 零基础 | 12 / 12 课 | ✅ 已完成 |
 | [Redis](redis/02-课程目录.md) | 从「为什么需要 Redis」到数据结构、持久化、主从哨兵、分片集群与缓存设计，WSL + Redis 8 实操贯穿全程 | 零基础 | 9 / 9 课 | ✅ 已完成 |
@@ -78,9 +80,9 @@
 
 > ⚠️ 本门课的目录层级比其他课程多一层（`animation-engine/00-动画与视频基础/`），其 `02-课程目录.md` 位于子目录下，链接需带上中间层。
 
-> 进度为 2026-09-04 快照，实时状态以各课程 `00-学习档案.md` 为准。
+> 进度为 2026-09-07 快照，实时状态以各课程 `00-学习档案.md` 为准。
 >
-> 当前 21 门课中 **15 门已真正结课**（Celery + Django / Design Patterns / Django 进阶 / Doris / Elasticsearch / InfluxDB / Kafka / OpenTelemetry / PromQL / RabbitMQ / Redis / SurrealDB / TypeScript / VictoriaMetrics / ZooKeeper），**2 门课时已讲完但收尾产物待生成**（Grafana / 动画与视频基础），**4 门仍在推进**（Bash / Consul / Prometheus / JavaScript，其未讲课时仅落盘占位骨架或详细大纲，不计入进度）。
+> 当前 22 门课中 **18 门已真正结课**（Bash / Celery + Django / Design Patterns / Django 进阶 / Docker / Doris / Elasticsearch / Grafana / InfluxDB / Kafka / OpenTelemetry / PromQL / RabbitMQ / Redis / SurrealDB / TypeScript / VictoriaMetrics / ZooKeeper），**1 门课时已讲完但收尾产物待生成**（动画与视频基础），**3 门仍在推进**（Consul / Prometheus / JavaScript，其未讲课时仅落盘占位骨架或详细大纲，不计入进度）。
 >
 > 状态图例：✅ 已完成 = 全部课时与收尾环节（结课项目 / 课程手册 / 排障手册）均交付；🔶 收尾中 = 全部课时讲完，收尾环节待生成；🔄 进行中 = 尚有课时未编写。
 
@@ -104,9 +106,10 @@ learning/
 ├── consul/                   # Consul 课程（4 阶段 11 课，含 payloads/ 与 projects/）
 ├── design-patterns/          # 设计模式课程（4 阶段 12 课，Python）
 ├── django/                   # Django 进阶课程（6 阶段 22 课 66 知识点，含 final-课程手册.md、08/09/10 收尾三件套与 projects/orderflow/ 结课项目）
+├── docker/                   # Docker 课程（5 阶段 15 课 45 知识点，含 final-课程手册.md、08/09/10 收尾三件套、projects/订单服务生产化/ 与 assets/）
 ├── doris/                    # Apache Doris 课程（4 阶段 12 课 36 知识点，含 final-课程手册.md、projects/ 与 assets/ 实测脚本）
 ├── elasticsearch/            # Elasticsearch 课程（5 阶段 15 课，含 final-课程手册.md 与 playground/ 实测脚本）
-├── grafana/                  # Grafana 课程（含 playground/ 实操环境）
+├── grafana/                  # Grafana 课程（4 阶段 12 课，含 final-课程手册.md、08/09/10 收尾三件套、projects/从告警到定位/ 与 playground/ 实测脚本）
 ├── opentelemetry/            # OpenTelemetry 课程（4 阶段 12 课 42 知识点，含 final-课程手册.md、08/09/10 收尾三件套与 projects/capstone/）
 ├── prometheus/               # Prometheus 课程（4 阶段 12 课 36 知识点，含 labs/ 动手实验）
 ├── surrealdb/                # SurrealDB 课程（4 阶段 12 课 40 知识点，含 final-课程手册.md、收尾四件套与 projects/）

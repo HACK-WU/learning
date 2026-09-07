@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="620" viewBox="0 0 1080 620" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="1080" height="620" fill="#ffffff"/>
+  <text x="540" y="42" text-anchor="middle" font-size="26" font-weight="bold" fill="#1f2937">Grafana 学习路径</text>
+  <text x="540" y="70" text-anchor="middle" font-size="14" fill="#6b7280">主角：一张 dashboard ｜ 冲突：指标/日志/链路散在三个系统 ｜ 收束：同一时间窗内三级下钻</text>
+
+  <!-- 阶段 1 -->
+  <g>
+    <rect x="60" y="120" width="210" height="140" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-width="2"/>
+    <text x="165" y="150" text-anchor="middle" font-size="18" font-weight="bold" fill="#3730a3">阶段 1 · 看得见</text>
+    <text x="165" y="176" text-anchor="middle" font-size="13" fill="#4338ca">把数据摆到一块屏幕上</text>
+    <text x="165" y="204" text-anchor="middle" font-size="12" fill="#4b5563">课 1 定位与插件模型</text>
+    <text x="165" y="224" text-anchor="middle" font-size="12" fill="#4b5563">课 2 第一个面板</text>
+    <text x="165" y="244" text-anchor="middle" font-size="12" fill="#4b5563">课 3 变量与组织</text>
+  </g>
+
+  <!-- 阶段 2 -->
+  <g>
+    <rect x="330" y="120" width="210" height="140" rx="10" fill="#ecfdf5" stroke="#059669" stroke-width="2"/>
+    <text x="435" y="150" text-anchor="middle" font-size="18" font-weight="bold" fill="#065f46">阶段 2 · 查得到</text>
+    <text x="435" y="176" text-anchor="middle" font-size="13" fill="#047857">让图说人话</text>
+    <text x="435" y="204" text-anchor="middle" font-size="12" fill="#4b5563">课 4 查询与协议</text>
+    <text x="435" y="224" text-anchor="middle" font-size="12" fill="#4b5563">课 5 Transformations</text>
+    <text x="435" y="244" text-anchor="middle" font-size="12" fill="#4b5563">课 6 动态仪表盘</text>
+  </g>
+
+  <!-- 阶段 3 -->
+  <g>
+    <rect x="600" y="120" width="210" height="140" rx="10" fill="#fff7ed" stroke="#ea580c" stroke-width="2"/>
+    <text x="705" y="150" text-anchor="middle" font-size="18" font-weight="bold" fill="#9a3412">阶段 3 · 叫得醒</text>
+    <text x="705" y="176" text-anchor="middle" font-size="13" fill="#c2410c">从看图到被叫醒</text>
+    <text x="705" y="204" text-anchor="middle" font-size="12" fill="#4b5563">课 7 告警架构</text>
+    <text x="705" y="224" text-anchor="middle" font-size="12" fill="#4b5563">课 8 规则与通知</text>
+    <text x="705" y="244" text-anchor="middle" font-size="12" fill="#4b5563">课 9 日志与链路</text>
+  </g>
+
+  <!-- 阶段 4 -->
+  <g>
+    <rect x="870" y="120" width="150" height="140" rx="10" fill="#fdf2f8" stroke="#db2777" stroke-width="2"/>
+    <text x="945" y="150" text-anchor="middle" font-size="18" font-weight="bold" fill="#9d174d">阶段 4</text>
+    <text x="945" y="176" text-anchor="middle" font-size="13" fill="#be185d">管得住</text>
+    <text x="945" y="204" text-anchor="middle" font-size="12" fill="#4b5563">课 10 Provisioning</text>
+    <text x="945" y="224" text-anchor="middle" font-size="12" fill="#4b5563">课 11 权限</text>
+    <text x="945" y="244" text-anchor="middle" font-size="12" fill="#4b5563">课 12 运维</text>
+  </g>
+
+  <!-- 箭头 -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+  <line x1="270" y1="190" x2="326" y2="190" stroke="#6b7280" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="540" y1="190" x2="596" y2="190" stroke="#6b7280" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="810" y1="190" x2="866" y2="190" stroke="#6b7280" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 收束条 -->
+  <rect x="60" y="330" width="960" height="86" rx="10" fill="#f9fafb" stroke="#9ca3af" stroke-width="1.5"/>
+  <text x="540" y="360" text-anchor="middle" font-size="16" font-weight="bold" fill="#1f2937">收束：同一个时间窗口内，指标 → 日志 → 链路三级下钻</text>
+  <text x="540" y="386" text-anchor="middle" font-size="13" fill="#4b5563">阶段 1 埋下"共享时间选择器"的伏笔 → 阶段 3 课 9 在此收束</text>
+  <text x="540" y="406" text-anchor="middle" font-size="13" fill="#4b5563">阶段 4 把这一切从"我会配"变成"团队可维护"</text>
+
+  <!-- 环境条 -->
+  <rect x="60" y="446" width="960" height="130" rx="10" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.5"/>
+  <text x="80" y="474" font-size="15" font-weight="bold" fill="#075985">实操环境（本机实测 2026-09-04）</text>
+  <text x="80" y="502" font-size="12.5" fill="#1f2937">WSL Ubuntu 24.04.4 + Docker 29.4.1 ｜ Grafana 13.2.1（核查于 2026-09）</text>
+  <text x="80" y="524" font-size="12.5" fill="#1f2937">已有可复用镜像：prom/prometheus:v3.14.0 ｜ prom/node-exporter:v1.10.2 ｜ prom/alertmanager:v0.30.0 ｜ jaegertracing/jaeger:latest</text>
+  <text x="80" y="546" font-size="12.5" fill="#1f2937">端口规划：Grafana 3001 ｜ Prometheus 9091 ｜ node-exporter 9101 ｜ Loki 3101（待拉）｜ Jaeger 16687 ｜ 统一网络 grafana-net</text>
+  <text x="80" y="566" font-size="12.5" fill="#b45309">实测要点：13.2.1 的 /login 用 user 字段而非 username（username 返回 400 form-auth.invalid）</text>
+</svg>

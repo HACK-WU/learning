@@ -627,8 +627,10 @@ grafana/playground/l04-archive2.py
 
 # ---- 阶段 2 课 5《Transformations》一次性脚本 ----
 # 分类判据同课 4：讲义是否引用 / 是否被取代 / 是否跨课复用。
-# 一次性环境探测（结论已固化进档案）
-grafana/playground/l05-env-probe.sh
+# ⚠️ 2026-09-07 收官卫生处理修正：l05-env-probe.sh **不忽略**（原判「结论已固化进档案」有误）
+#   实测：讲义 5 第四幕「实验 3：复现 60 帧问题」代码块逐字引用该脚本供读者照抄
+#   （`wsl -d Ubuntu -- bash -lc "bash .../playground/l05-env-probe.sh"`）。
+#   丢了读者照抄必然失败 —— 属 (a) 类终态·保留，不在本分节忽略范围内。
 # 数据库层取证：l05-probe-db.sh 取错列（命中 name 非 value）→ JSONDecodeError；
 # l05-probe-db2.sh 误判 value 为二进制，且 group 是 SQL 保留字致语法错误；
 # l05-probe-db3.sh 是修正后的最终版，三者结论已并入讲义 5.1「数据库层的一个坑」

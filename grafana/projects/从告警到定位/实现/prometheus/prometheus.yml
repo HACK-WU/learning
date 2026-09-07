@@ -1,0 +1,23 @@
+# 项目专属 Prometheus：只抓 shop 应用，与 grafana-lab 的 prom 隔离
+# 隔离的理由：实战项目要能「一键重建」，不该依赖前 12 课的实验残留
+global:
+  scrape_interval: 5s
+  external_labels:
+    source: p3-shop
+
+scrape_configs:
+  - job_name: 'shop'
+    scrape_interval: 5s
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['p3-shop:9400']
+        labels:
+          service: 'shop-api'
+          app: 'shop'
+
+  # 抓 node-exporter，让「主机层」也能下钻（演示从应用到主机的第二跳）
+  - job_name: 'node'
+    static_configs:
+      - targets: ['grafana-node:9100']
+        labels:
+          service: 'node'

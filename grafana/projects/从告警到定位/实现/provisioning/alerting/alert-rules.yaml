@@ -1,0 +1,138 @@
+# 告警 provisioning：统一告警的「规则 + 通知策略 + 联系人」
+# 关键点：这正是课 10 实测的坑——用 file provisioning 时，
+#         enable/provisioned 目录里的 YAML 会在启动时【覆盖】UI 建的告警
+apiVersion: 1
+
+groups:
+  - orgId: 1
+    name: shop-alerts
+    folder: Shop 可观测性
+    interval: 30s
+    rules:
+      # ---- 规则 1：P90 延迟告警（症状型告警，看用户感受）----
+      - uid: shop-p90-latency
+        title: '[Shop] P90 延迟过高'
+        condition: C
+        for: 1m
+        noDataState: NoData
+        execErrState: Error
+        annotations:
+          # 实测结论：这里必须用 $labels / $values（官方语法）。
+          # 踩过的坑：YAML provisioning 里若写成 $$labels，Grafana 会当成纯文本不渲染。
+          # $labels 只含【查询标签】（如 route），不含 alertname 这类内置标签。
+          summary: '接口 {{ $labels.route }} 的 P90 延迟达到 {{ humanize $values.B.Value }}s'
+          description: '超过 0.5s 阈值持续 1 分钟。请打开总览盘看是哪个下游拖慢的。'
+          runbook_url: 'http://localhost:3130/d/shop-overview'
+        labels:
+          severity: warning
+          team: shop
+          # 关键：signal 标签用于通知策略路由（课 8 的知识点）
+          signal: latency
+        data:
+          - refId: A
+            relativeTimeRange: { from: 300, to: 0 }
+            datasourceUid: shop-prom
+            model:
+              editorMode: code
+              expr: 'histogram_quantile(0.9, sum by (le, route) (rate(shop_request_duration_seconds_bucket[2m])))'
+              instant: false
+              intervalMs: 1000
+              maxDataPoints: 43200
+          - refId: B
+            relativeTimeRange: { from: 300, to: 0 }
+            datasourceUid: '-100'
+            model:
+              type: reduce
+              reducer: last
+              expression: A
+          - refId: C
+            relativeTimeRange: { from: 0, to: 0 }
+            datasourceUid: '-100'
+            model:
+              type: threshold
+              expression: B
+              conditions:
+                - type: query
+                  evaluator: { type: gt, params: [0.5] }
+
+      # ---- 规则 2：错误率告警（原因型告警，看系统状态）----
+      - uid: shop-error-rate
+        title: '[Shop] 错误率过高'
+        condition: C
+        for: 1m
+        noDataState: OK
+        execErrState: Error
+        annotations:
+          summary: '接口 {{ $labels.route }} 5xx 错误率 {{ humanizePercentage $values.B.Value }}'
+          description: '错误率超过 3%。这类告警通常意味着下游依赖挂了。'
+        labels:
+          severity: critical
+          team: shop
+          signal: error
+        data:
+          - refId: A
+            relativeTimeRange: { from: 300, to: 0 }
+            datasourceUid: shop-prom
+            model:
+              editorMode: code
+              # 关键：or (... * 0) 兜底。没有 500 时 X 为空，X/Y 整个表达式返回空，
+              # 下游 reduce 得到 nil，模板 humanizePercentage 报 "can't convert <nil> to float"。
+              # 实测：无故障时加了兜底返回 0（5 条 route 全 0），有故障时正常算出比例。
+              expr: '(sum by (route) (rate(shop_requests_total{status="500"}[2m])) / sum by (route) (rate(shop_requests_total[2m]))) or (sum by (route) (rate(shop_requests_total[2m])) * 0)'
+              instant: false
+              intervalMs: 1000
+              maxDataPoints: 43200
+          - refId: B
+            relativeTimeRange: { from: 300, to: 0 }
+            datasourceUid: '-100'
+            model:
+              type: reduce
+              reducer: last
+              expression: A
+          - refId: C
+            relativeTimeRange: { from: 0, to: 0 }
+            datasourceUid: '-100'
+            model:
+              type: threshold
+              expression: B
+              conditions:
+                - type: query
+                  evaluator: { type: gt, params: [0.03] }
+
+      # ---- 规则 3：服务存活告警（课 7 的 up==0 经典款）----
+      - uid: shop-down
+        title: '[Shop] 服务不可用'
+        condition: C
+        for: 0s
+        noDataState: NoData
+        execErrState: Error
+        annotations:
+          summary: 'shop-api 实例 {{ $labels.instance }} 已下线'
+          description: 'up==0。先确认容器是否还活着，再看是不是抓取配置错了。'
+        labels:
+          severity: critical
+          team: shop
+          signal: availability
+        data:
+          - refId: A
+            relativeTimeRange: { from: 300, to: 0 }
+            datasourceUid: shop-prom
+            model:
+              editorMode: code
+              expr: 'up{job="shop"}'
+              instant: false
+              intervalMs: 1000
+              maxDataPoints: 43200
+          - refId: B
+            relativeTimeRange: { from: 300, to: 0 }
+            datasourceUid: '-100'
+            model: { type: reduce, reducer: last, expression: A }
+          - refId: C
+            relativeTimeRange: { from: 0, to: 0 }
+            datasourceUid: '-100'
+            model:
+              type: threshold
+              expression: B
+              conditions:
+                - type: query
+                  evaluator: { type: lt, params: [1] }

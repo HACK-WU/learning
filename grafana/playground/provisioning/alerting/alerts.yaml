@@ -1,0 +1,61 @@
+apiVersion: 1
+
+groups:
+  - orgId: 1
+    name: prov-group
+    folder: Provisioned
+    interval: 60s
+    rules:
+      - uid: prov-rule-node-down
+        title: ProvisionalNodeDown
+        condition: B
+        noDataState: NoData
+        execErrState: Error
+        for: 0s
+        annotations:
+          summary: node down (provisioned)
+          __dashboardUid__: prov-dash-001
+          __panelId__: "1"
+        labels:
+          source: provisioning
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: provprom
+            model:
+              editorMode: code
+              expr: up
+              instant: true
+              intervalMs: 1000
+              maxDataPoints: 43200
+              refId: A
+          - refId: B
+            relativeTimeRange:
+              from: 0
+              to: 0
+            datasourceUid: __expr__
+            model:
+              conditions:
+                - evaluator:
+                    params:
+                      - 1
+                    type: lt
+                  operator:
+                    type: and
+                  query:
+                    params:
+                      - A
+                  reducer:
+                    type: last
+                  type: query
+              datasource:
+                type: __expr__
+                uid: __expr__
+              expression: A
+              intervalMs: 1000
+              maxDataPoints: 43200
+              reducer: last
+              refId: B
+              type: threshold

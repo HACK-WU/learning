@@ -1,0 +1,15 @@
+# Dashboard provider：从 JSON 文件加载 dashboard
+apiVersion: 1
+
+providers:
+  - name: shop-dashboards
+    orgId: 1
+    folder: 'Shop 可观测性'
+    type: file
+    # 关键：disableDeletion=false 意味着 UI 上删掉重启后会回来（课 10 的坑）
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards
+      foldersFromFilesStructure: false
