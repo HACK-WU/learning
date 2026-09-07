@@ -1,0 +1,265 @@
+#!/usr/bin/env bash
+#
+# release-audit —— 发布产物审计工具
+#
+# 用法：
+#   release-audit [选项] <发布目录> [清单文件]
+#
+# 选项：
+#   -h, --help          显示帮助
+#   -V, --version       显示版本
+#   -q, --quiet         只输出报告，不输出日志
+#   -v, --verbose       输出 DEBUG 级日志
+#   -j, --jobs N        并发度（默认 = CPU 核数）
+#   --no-color          禁用颜色
+#   --skip <检查名>     跳过指定检查（可重复）
+#
+# 退出码：
+#   0  全部通过
+#   1  有 WARN（不阻断发布）
+#   2  有 BLOCK（必须阻断）
+#   64 用法错误
+#   66 输入不存在或不可读
+#   70 内部错误
+#
+# 报告写 stdout，日志写 stderr。
+
+# ─────────────────────────────────────────────────────────────
+# 0. 定位自身并 source 依赖
+# ─────────────────────────────────────────────────────────────
+# ${BASH_SOURCE[0]} 而不是 $0：被 source 时 $0 是调用方的名字，会找错目录。
+# 这是课 6/课 11 反复强调的约定。
+RA_SELF_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+readonly RA_SELF_DIR
+
+# shellcheck source=lib/core.sh
+source "$RA_SELF_DIR/lib/core.sh"
+# shellcheck source=lib/report.sh
+source "$RA_SELF_DIR/lib/report.sh"
+# shellcheck source=lib/checks.sh
+source "$RA_SELF_DIR/lib/checks.sh"
+
+readonly RA_VERSION='1.0.0'
+
+# ─────────────────────────────────────────────────────────────
+# 1. 参数解析
+# ─────────────────────────────────────────────────────────────
+ra_usage() {
+  cat <<'EOF'
+release-audit —— 发布产物审计工具
+
+用法：
+  release-audit [选项] <发布目录> [清单文件]
+
+选项：
+  -h, --help          显示本帮助
+  -V, --version       显示版本
+  -q, --quiet         只输出报告
+  -v, --verbose       输出 DEBUG 日志
+  -j, --jobs N        并发度（默认 CPU 核数）
+  --skip <检查名>     跳过指定检查，可重复
+                      检查名：required perm secret version checksum struct
+
+退出码：
+  0 通过   1 有警告   2 有阻断   64 用法错误   66 输入不可用   70 内部错误
+EOF
+}
+
+ra_parse_args() {
+  RA_TARGET_DIR=''
+  RA_MANIFEST_FILE=''
+  local -a skips=()
+
+  # 用 while + case 而不是 getopts：getopts 不支持长选项
+  while (($# > 0)); do
+    case "$1" in
+      -h|--help)
+        ra_usage
+        exit "$EX_OK"
+        ;;
+      -V|--version)
+        printf 'release-audit %s\n' "$RA_VERSION"
+        exit "$EX_OK"
+        ;;
+      -q|--quiet)
+        RA_LOG_LEVEL=$RA_LOG_ERROR
+        shift
+        ;;
+      -v|--verbose)
+        RA_LOG_LEVEL=$RA_LOG_DEBUG
+        shift
+        ;;
+      -j|--jobs)
+        if (($# < 2)); then
+          ra_die "$EX_USAGE" "$1 需要一个数字参数"
+        fi
+        # 校验是正整数：非数字会让后面的并发逻辑失控
+        if [[ ! $2 =~ ^[0-9]+$ ]]; then
+          ra_die "$EX_USAGE" "--jobs 需要非负整数，收到 '$2'"
+        fi
+        RA_JOBS=$2
+        shift 2
+        ;;
+      --jobs=*)
+        local jv="${1#--jobs=}"
+        [[ $jv =~ ^[0-9]+$ ]] || ra_die "$EX_USAGE" "--jobs 需要非负整数，收到 '$jv'"
+        RA_JOBS=$jv
+        shift
+        ;;
+      --skip)
+        if (($# < 2)); then
+          ra_die "$EX_USAGE" "--skip 需要检查名"
+        fi
+        skips+=("$2")
+        shift 2
+        ;;
+      --skip=*)
+        skips+=("${1#--skip=}")
+        shift
+        ;;
+      --)
+        shift
+        break
+        ;;
+      -*)
+        ra_die "$EX_USAGE" "未知选项 '$1'（用 --help 查看用法）"
+        ;;
+      *)
+        break
+        ;;
+    esac
+  done
+
+  # 位置参数：第一个是目录，第二个是清单
+  if (($# < 1)); then
+    ra_die "$EX_USAGE" '缺少发布目录参数（用 --help 查看用法）'
+  fi
+  RA_TARGET_DIR=$1
+  shift
+  if (($# >= 1)); then
+    RA_MANIFEST_FILE=$1
+    shift
+  fi
+  if (($# > 0)); then
+    ra_die "$EX_USAGE" "多余的位置参数 '$1'"
+  fi
+
+  # 校验跳过项合法，拼成关联数组便于 O(1) 查询
+  local -A valid_skip=(
+    [required]=1 [perm]=1 [secret]=1 [version]=1 [checksum]=1 [struct]=1
+  )
+  local s
+  for s in "${skips[@]}"; do
+    if [[ -z ${valid_skip[$s]:-} ]]; then
+      ra_die "$EX_USAGE" "未知检查名 '$s'（可选：required perm secret version checksum struct）"
+    fi
+    RA_SKIP["$s"]=1
+  done
+}
+
+declare -A RA_SKIP=()
+
+# ─────────────────────────────────────────────────────────────
+# 2. 输入校验（注入防护第一道关）
+# ─────────────────────────────────────────────────────────────
+ra_validate_inputs() {
+  local dir=$1
+
+  if [[ -z $dir ]]; then
+    ra_die "$EX_USAGE" '发布目录参数为空'
+  fi
+  if [[ ! -e $dir ]]; then
+    ra_die "$EX_NOINPUT" "发布目录不存在: $dir"
+  fi
+  if [[ ! -d $dir ]]; then
+    ra_die "$EX_NOINPUT" "发布目录不是目录: $dir"
+  fi
+  if [[ ! -r $dir ]]; then
+    ra_die "$EX_NOINPUT" "发布目录不可读: $dir"
+  fi
+
+  # 去掉结尾的斜杠，保证后面的 "${f#$root/}" 能正确剥离前缀
+  while [[ $dir == */ && ${#dir} -gt 1 ]]; do
+    dir=${dir%/}
+  done
+  RA_TARGET_DIR=$dir
+}
+
+# ─────────────────────────────────────────────────────────────
+# 3. 主流程
+# ─────────────────────────────────────────────────────────────
+ra_main() {
+  ra_parse_args "$@"
+  ra_validate_inputs "$RA_TARGET_DIR"
+
+  ra_info "release-audit $RA_VERSION 开始审计: $RA_TARGET_DIR"
+
+  # 依次执行检查；每项检查内部负责产生 finding，不向外抛错
+  if [[ -z ${RA_SKIP[struct]:-} ]]; then
+    ra_debug '运行检查: struct'
+    ra_check_structure "$RA_TARGET_DIR"
+  fi
+
+  if [[ -z ${RA_SKIP[required]:-} ]]; then
+    ra_debug '运行检查: required'
+    ra_check_required_files "$RA_TARGET_DIR" "$RA_MANIFEST_FILE"
+  fi
+
+  if [[ -z ${RA_SKIP[perm]:-} ]]; then
+    ra_debug '运行检查: perm'
+    ra_check_permissions "$RA_TARGET_DIR"
+  fi
+
+  if [[ -z ${RA_SKIP[secret]:-} ]]; then
+    ra_debug '运行检查: secret'
+    ra_check_secrets "$RA_TARGET_DIR"
+  fi
+
+  if [[ -z ${RA_SKIP[version]:-} ]]; then
+    ra_debug '运行检查: version'
+    ra_check_version_consistency "$RA_TARGET_DIR" "$RA_MANIFEST_FILE"
+  fi
+
+  if [[ -z ${RA_SKIP[checksum]:-} ]]; then
+    ra_debug '运行检查: checksum'
+    ra_check_checksums "$RA_TARGET_DIR"
+  fi
+
+  # ── 渲染报告（stdout） ──
+  printf 'release-audit %s\n' "$RA_VERSION"
+  printf '目标目录: %s\n' "$RA_TARGET_DIR"
+  printf '审计时间: %s\n' "$(printf '%(%Y-%m-%d %H:%M:%S)T' -1)"
+  printf '并发度:   %s\n' "$( (( RA_JOBS > 0 )) && printf '%s' "$RA_JOBS" || printf '%s(自动)' "$(ra_cpu_count)" )"
+  printf '\n'
+  printf '%-6s %-14s %-32s %s\n' '级别' '检查项' '对象' '说明'
+  printf '%.0s-' {1..100}
+  printf '\n'
+
+  ra_render_findings
+  ra_render_summary
+
+  # ── 定退出码（严重度 → 退出码，纯函数） ──
+  local -A counts=()
+  ra_count_by_severity counts
+  local rc=0
+  ra_exit_code_for "${counts[$SEV_BLOCK]}" "${counts[$SEV_WARN]}" || rc=$?
+
+  case "$rc" in
+    "$EX_OK")   ra_info '结论：通过' ;;
+    "$EX_WARN") ra_info "结论：通过（有 ${counts[$SEV_WARN]} 条警告）" ;;
+    "$EX_BLOCK") ra_info "结论：阻断（${counts[$SEV_BLOCK]} 条阻断项）" ;;
+  esac
+
+  return "$rc"
+}
+
+# ─────────────────────────────────────────────────────────────
+# 4. main 守卫
+# ─────────────────────────────────────────────────────────────
+# ⚠️ 课 12 实测结论：在 set -e + source 的场景下，
+#    `[[ "${BASH_SOURCE[0]}" = "$0" ]] && main "$@"` 会让 source 方拿到返回 1 而被 -e 杀死。
+#    必须用 if 块写法。
+if [[ ${BASH_SOURCE[0]} == "$0" ]]; then
+  ra_main "$@"
+  exit $?
+fi

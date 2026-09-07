@@ -533,3 +533,326 @@ grafana/playground/l01-probe-store.sh
 grafana/playground/l01-probe-store2.sh
 grafana/playground/l01-forms.sh
 grafana/playground/l01-forms2.sh
+
+# --- 课 2（2026-09-04 交付后追加）---
+# 编译产物
+grafana/playground/__pycache__/
+# 一次性诊断 / 包装脚本（课 3 起不会复用）
+grafana/playground/l02-diag-mu.sh
+grafana/playground/l02-link-diag.sh
+grafana/playground/l02-link-run.sh
+grafana/playground/l02-verify-run.sh
+grafana/playground/l02-portaudit.sh
+grafana/playground/l02-review-probe.sh
+grafana/playground/l02-syntax.sh
+# 已废弃：shell 内联 JSON 会因 PromQL 里的双引号变形，导致 400 bad request data；
+# 其职能已由 l02-panel.py 取代（讲义已记录该坑）
+grafana/playground/l02-panel.sh
+# 保留说明（勿加规则）：l02-verify.sh / l02-linkcheck.sh / l02-readyfix.sh / l02-envcheck.sh
+#   是跨课复用的交付校验与环境核验脚本；l02-init.sh / l02-init2.sh / l02-timing.sh /
+#   l02-ds.sh / l02-cors.sh / l02-cors2.sh / l02-panel.py / l02-diag-health.sh
+#   均为课 2 正文直接引用的实验脚本。
+# 存疑未定（后续课确认无用再判）：l02-plugins.sh / l02-archive-append.py
+
+# --- 课 3（2026-09-04 交付后追加）---
+# 判据同课 2：按「讲义正文是否引用」分三类，只忽略过程态。
+# (a) 终态·保留（讲义正文或后续课直接引用，勿加规则）：
+#     l03-nodes-up.sh      —— 搭 3 台 node-exporter，环境重建要重跑（幂等）
+#     l03-fix-gzip.sh      —— 环境修复（Prometheus gzip 导致空 frame），后续课沿用
+#     l03-cal.sh           —— 时间窗口标定 + timeFrom 判定（讲义第四幕实验 A）
+#     l03-timefrom-tri.sh  —— timeFrom 三重取证（手法 A/B/C）
+#     l03-timequery.sh     —— 时间共享性实验
+#     l03-exp32.sh / l03-exp33.sh / l03-exp34.sh —— 3.2 / 3.3 实验
+#     l03-sniff3.sh        —— 探针抓包（证明变量插值位置，讲义核心证据）
+#     l03-diag-res2.sh     —— resource 表直查（存储层发现的证据链）
+#     l03-verify.sh        —— 交付结构校验，跨课复用
+#     l03-linkcheck-all.sh —— 全仓链接检查，跨课复用
+#     l03-archive.py / l03-checklist.py / l03-fix-abspath.py —— 档案回写与修复工具
+# (b) 过程态·忽略：一次性诊断脚本（20 个 diag-*）与被取代的中间版。
+grafana/playground/l03-diag-bisect.sh
+grafana/playground/l03-diag-cleanup.sh
+grafana/playground/l03-diag-control.sh
+grafana/playground/l03-diag-db.sh
+grafana/playground/l03-diag-db2.sh
+grafana/playground/l03-diag-deep.sh
+grafana/playground/l03-diag-diff.sh
+grafana/playground/l03-diag-dscmp.sh
+grafana/playground/l03-diag-dsnow.sh
+grafana/playground/l03-diag-fwd2.sh
+grafana/playground/l03-diag-gzipfix.sh
+grafana/playground/l03-diag-kv.sh
+grafana/playground/l03-diag-l4.sh
+grafana/playground/l03-diag-link.sh
+grafana/playground/l03-diag-meta.sh
+grafana/playground/l03-diag-meta2.sh
+grafana/playground/l03-diag-promlog.sh
+grafana/playground/l03-diag-rawdump.sh
+grafana/playground/l03-diag-res.sh
+grafana/playground/l03-diag-sniff.sh
+grafana/playground/l03-diag-sniff3001.sh
+grafana/playground/l03-diag-timefmt.sh
+grafana/playground/l03-diag-twoinst.sh
+grafana/playground/l03-diag-zeropoint.sh
+# 探索性探测（结论已固化进讲义，脚本本身不再需要）
+grafana/playground/l03-env-probe.sh
+grafana/playground/l03-probe-execq.sh
+grafana/playground/l03-proxy-path.sh
+grafana/playground/l03-var-interp.sh
+grafana/playground/l03-var-probe2.sh
+grafana/playground/l03-channel.sh
+grafana/playground/l03-e2e.sh
+# 被取代的中间版（判据：l03-sniff3.sh 是最终版，前两版分别败在容器内外 /tmp 不共享、
+# 日志写在容器内；l03-var-fix2.sh 取代了缺 urllib.parse 导入而崩溃的 l03-var-fix.sh）
+grafana/playground/l03-sniff.sh
+grafana/playground/l03-sniff2.sh
+grafana/playground/l03-var-fix.sh
+# 一次性评审探针（核验结果已并入评审结论块）
+grafana/playground/l03-review-probe.sh
+
+# ---- 阶段 2 课 4《查询编辑器与数据源协议》一次性脚本 ----
+# 分类判据：讲义是否引用 / 是否被取代 / 是否跨课复用。
+# 一次性环境探测（结论已固化进档案「实验环境资产」表）
+grafana/playground/l04-env-probe.sh
+# 插件路径定位（l04-frontend-probe2.sh 是修正路径后的最终版，本版因路径错误全 0 命中）
+grafana/playground/l04-find-plugin.sh
+grafana/playground/l04-frontend-probe.sh
+# 一次性诊断（命令写法核对 / PowerShell 续行符方案稿）
+grafana/playground/l04-diag-cmdfmt.sh
+grafana/playground/l04-diag-psline.sh
+# 一次性修复脚本（P0 续行缺陷已修复，脚本无需保留）
+grafana/playground/l04-fix-cmdline.py
+# 一次性档案回写脚本（内容已写入 4 处档案）
+grafana/playground/l04-archive.py
+grafana/playground/l04-archive2.py
+
+# ---- 阶段 2 课 5《Transformations》一次性脚本 ----
+# 分类判据同课 4：讲义是否引用 / 是否被取代 / 是否跨课复用。
+# 一次性环境探测（结论已固化进档案）
+grafana/playground/l05-env-probe.sh
+# 数据库层取证：l05-probe-db.sh 取错列（命中 name 非 value）→ JSONDecodeError；
+# l05-probe-db2.sh 误判 value 为二进制，且 group 是 SQL 保留字致语法错误；
+# l05-probe-db3.sh 是修正后的最终版，三者结论已并入讲义 5.1「数据库层的一个坑」
+grafana/playground/l05-probe-db.sh
+grafana/playground/l05-probe-db2.sh
+# 一次性评审核查（判定已并入评审结论块）
+grafana/playground/l05-review-probe.sh
+# 一次性档案回写脚本（内容已写入 4 处档案）
+grafana/playground/l05-archive.py
+grafana/playground/l05-archive2.py
+# 回写补丁：l05-archive2.py 的 str.replace 锚点不符导致静默无操作，
+# 本补丁修复课程目录课 5 条目并改用 assert 校验（保留作「静默失败」教训的实证）
+grafana/playground/l05-archive3.py
+
+# ---- 阶段 2 课 6《变量进阶与动态仪表盘》一次性脚本 ----
+# 分类判据同课 4/5：讲义是否引用 / 是否被取代 / 是否跨课复用。
+# 一次性状态检查（开课前确认讲义骨架与环境健康）
+grafana/playground/l06-check.sh
+# 一次性语法检查 + 执行包装（课 6 回写脚本两次踩引号嵌套坑，
+# 内联 python -c 报 bash 语法错误，故改为落盘脚本；结论已并入档案「命令一律落盘」约束）
+grafana/playground/l06-run-archive.sh
+# 一次性档案回写脚本（内容已写入 4 处档案）
+grafana/playground/l06-archive.py
+grafana/playground/l06-archive2.py
+
+# ---- 阶段 3 课 7《告警架构：规则在哪求值、状态怎么迁移》一次性脚本 ----
+# 分类判据同课 4/5/6：讲义是否引用 / 是否被取代 / 是否跨课复用。
+# 一次性环境准备：创建告警专用文件夹（Grafana 13 强制 folderUID）。
+# ⚠️ 保留（勿加规则）：课 7 正文 3 处直接引用（第 257 行命令、第 780 行「本课额外前提」、
+# 第 802 行排障提示「若报 folderUID must be set，先跑 l07-mkfolder.sh」），
+# 丢了读者照抄会直接失败。课 8 亦复用同一文件夹。
+# （2026-09-04 课 8 回归校验时发现此处曾误加忽略规则，与注释和正文矛盾，已移除）
+# 一次性开课调研：告警 API 端点探测 + 端口占用（结论已并入档案）
+grafana/playground/l07-envcheck.sh
+# 一次性排障：ruler API 读不到规则的根因（Grafana 13 顶层即 namespace map）
+grafana/playground/l07-diag-norules.sh
+# 一次性排障：state 字段定位（ruler 无 state，须读 /metrics）
+grafana/playground/l07-diag-state.sh
+# 一次性排障：pushgateway 不可用根因（Prometheus 未配该 job）
+grafana/playground/l07-diag-pgw.sh
+# 一次性语法检查 + 执行包装（沿用课 6 教训：内联 python -c 易踩引号嵌套）
+grafana/playground/l07-run-archive.sh
+# 一次性档案回写脚本（内容已写入 4 处档案）
+grafana/playground/l07-archive.py
+grafana/playground/l07-archive2.py
+# 一次性环境恢复确认（node3 容器 + pushgateway 残留清理）
+grafana/playground/l07-check-env.sh
+# 一次性状态机探测，被 v3 取代（v1 按旧版解析、v2 修正后仍读不到 state）
+grafana/playground/l07_probe_statemachine.py
+grafana/playground/l07_probe_statemachine2.py
+# 一次性 KeepLast 探测，被 l07_probe_down.py 取代
+# （改表达式的方式无法捕获「Alerting 中途变 No Data」，改用停容器）
+grafana/playground/l07_probe_keeplast.py
+grafana/playground/l07_probe_keeplast2.py
+
+# ---- 阶段 3 课 8《告警规则与通知策略实战》一次性脚本 ----
+# 分类判据同课 4/5/6/7：讲义是否引用 / 是否被取代 / 是否跨课复用。
+# 一次性环境探测（通知相关 API 端点与现有配置，结论已并入档案）
+grafana/playground/l08-envcheck.sh
+# 一次性排障：静默删不掉 / contact point 409 / test 接口 404 三处异常
+grafana/playground/l08-diag-anomaly.sh
+# 一次性排障：contact point 删除 409 的根因（策略树引用未解除，重试即成功）
+grafana/playground/l08-diag-409.sh
+# 一次性排障：正文中 bash 代码块反斜杠续行的定位
+grafana/playground/l08-diag-backslash.sh
+# 一次性排障：返回链接层级（实证 ../../ 解析到 stages/ 不可达，应为 ../../../）
+grafana/playground/l08-diag-link.sh
+# 一次性 8.1 探测，被 rule3 取代（v1 状态残留污染、v2 输出被缓冲且耗时过长）
+grafana/playground/l08_probe_rule.py
+grafana/playground/l08_probe_rule2.py
+# 一次性 8.1 核实（interval 单位与 classic/reduce 标签差异），结论已并入正文
+grafana/playground/l08_probe_verify2.py
+# 一次性 8.2 探测，被 policy2 取代（v1 引用了不存在的 receiver，策略树全 400）
+grafana/playground/l08_probe_policy.py
+# 一次性输出包装（后台任务输出文件读取）
+grafana/playground/l08-read-bg.sh
+grafana/playground/l08-watch.sh
+grafana/playground/l08-watch-group.sh
+grafana/playground/l08-watch-timing.sh
+grafana/playground/l08-check-bg.sh
+grafana/playground/l08-check-group.sh
+# 一次性档案回写脚本（内容已写入 4 处档案）
+grafana/playground/l08-archive.py
+# 课 8 探测输出（实测数字已固化进正文，输出文件属过程残留）
+grafana/playground/l08-out-*.txt
+grafana/playground/l08-webhook-log.jsonl
+# 保留说明（勿加规则）：
+#   l08_webhook_receiver.py —— 讲义第 1336 行的 docker run 命令**逐字引用**，
+#       丢了读者照抄会直接失败（本仓库通用教训：ES 课 15 踩过同类坑）
+#   l08-start-webhook.sh / l08-cleanup.sh / l08-webhook-check.sh
+#       —— 环境搭建与恢复脚本，课 9 起 Loki/Jaeger 接入时复用同一套 webhook 观测法
+#   l08-verify.sh / l08-review-check.sh / l08-final.sh
+#       —— 交付校验与评审证据链，跨课复用
+#   l08_probe_rule3.py / l08_probe_policy2.py / l08_probe_group.py / l08_probe_timing.py
+#       —— 本课三大核心实验的最终版脚本（8.1 维度 / 8.2 策略树 / 8.3 分组与时间参数），
+#          是正文实测数据的可溯源证据，课 9 若补测 recovering 会再次用到
+
+# ---- 课 9《日志与链路》一次性脚本（2026-09-07 交付后卫生检查）----
+# 判据同前：讲义正文是否【逐字引用】。引用了的保留，纯过程性的忽略。
+# 一次性环境体检（镜像/端口/数据源现状，结论已固化进档案"实验环境资产"表）
+grafana/playground/l09-envcheck.sh
+# 一次性排障：dxag-read 解析失败（实为 bash 内联 Python 引号问题，非 API 故障）
+grafana/playground/l09-diag-read.sh
+# 一次性排障：Jaeger 存量 trace 探测（结论：49 个服务但最近 1h 无数据，故必须自造）
+grafana/playground/l09-jaeger-probe.sh
+# 一次性排障：count_over_time 显示 15/35/30 的疑点（实为打印数据点个数，非缺陷）
+grafana/playground/l09-diag-counts.py
+# 一次性排障：确认 detected_level / service_name 是 Loki 自动注入
+grafana/playground/l09-diag-autolabel.py
+# 一次性排障：OTLP 写入失败（打错端口 + 4318 未映射）
+grafana/playground/l09-diag-otlp.sh
+# 一次性修复：Jaeger OTLP 端口映射（中间版，14317/24317 连撞 otelcol-lab06）
+grafana/playground/l09-fix-otlp.sh
+grafana/playground/l09-fix-otlp2.sh
+# 一次性端口扫描（避开其他课程占用）
+grafana/playground/l09-findport.sh
+# 一次性排障：exporter 未输出（实为 docker -v 把文件建成了目录）
+grafana/playground/l09-diag-exporter.sh
+# 一次性排障：Prometheus 抓取失败原因（网络正常，是解析报 got "#"）
+grafana/playground/l09-diag-net.sh
+# 一次性排障：Prometheus 连通性与 targets 读取
+grafana/playground/l09-diag-prom.sh
+# 一次性最小对照实验：text/plain vs openmetrics（结论已写入正文坑四）
+grafana/playground/l09-diag-parse.sh
+grafana/playground/l09-test-om.sh
+# 一次性排障：LogQL 代理 400 + exemplar 配置回读为 None（两者均为我误判）
+grafana/playground/l09-diag-2issues.sh
+# 一次性排障：确认 Loki frame 结构（values[2] 才是日志行）
+grafana/playground/l09-diag-frame.py
+# 一次性探测：数据源创建响应的 uid 层级（实为 datasource.uid 包了两层）
+grafana/playground/l09-diag-ds.sh
+# 中间版探测（被 ds2 / final 取代）
+grafana/playground/l09_probe_ds.py
+grafana/playground/l09_probe_exemplar.py
+grafana/playground/l09_probe_exemplar2.py
+grafana/playground/l09_probe_exemplar3.py
+# 课 9 探测输出（实测数字已固化进正文，输出文件属过程残留）
+grafana/playground/l09-r1.txt
+grafana/playground/l09-r2.txt
+grafana/playground/l09-r3.txt
+grafana/playground/l09-r3b.txt
+grafana/playground/l09-r5.txt
+grafana/playground/l09-r5b.txt
+grafana/playground/l09-rfinal.txt
+# 保留说明（勿加规则）：
+#   l09_exemplar_exporter.py —— 讲义 9.3「第 2 步」整段**逐字引用**了这个文件，
+#       它是 exemplar 闭环（指标→traceID→Jaeger）的唯一可运行样本，
+#       丢了读者照抄必失败（本仓库通用教训：ES 课 15、课 8 webhook 均踩过）
+#   l09-env-up.sh / l09-jaeger-up.sh / l09-exemplar-up.sh / l09-restart-exporter.sh
+#       —— 课 9 环境搭建与恢复脚本（Loki 3101 / Jaeger 16687+44318 / Prom-ex 9202），
+#          课 10 讲 Provisioning 时要在同一套环境上做，需保留
+#   l09-verify.sh / l09-final.sh / l09-archive.py
+#       —— 交付校验、全量复验与档案回写，跨课复用
+#   l09_probe_loki.py / l09_probe_drilldown.py / l09_probe_ds2.py / l09_probe_final.py
+#       —— 本课三大知识点的最终版实验脚本（9.1 LogQL / 9.2 时间窗 / 9.3 闭环），
+#          是正文实测数据的可溯源证据
+#   prometheus-ex.yml / prometheus-ex2.yml
+#       —— 课 9 Prometheus 实例配置（开 exemplar-storage），课 10 复用
+
+# ---- 写课过程的一次性探针与中间版脚本（grafana 课程，2026-09-07 课 10 交付后卫生检查）----
+# 判据沿用课 8/课 9：**被讲义正文引用 = 保留；仅写课过程用过 = 忽略**。
+# ⚠️ 特别注意：本课的 provisioning 配置文件是【教学主体】而非过程残留，
+#    绝不能被任何 `*.yaml` / `*.json` 通配规则吞掉，故下方不设目录级规则。
+grafana/playground/l10-envcheck.sh
+grafana/playground/l10-check.sh
+grafana/playground/l10-probe2.sh
+grafana/playground/l10-probe3.sh
+grafana/playground/l10-probe4.sh
+grafana/playground/l10-restart.sh
+grafana/playground/l10-uiedit.sh
+grafana/playground/l10-diag-allow.sh
+grafana/playground/l10-wait.sh
+grafana/playground/l10-wait2.sh
+grafana/playground/l10-verify.sh
+grafana/playground/l10-archive.py
+grafana/playground/l10-archive2.py
+grafana/playground/l10-final.sh
+grafana/playground/l10_uiconflict.py
+# 保留说明（勿加规则）：
+#   provisioning/ 整个目录（datasources/ds.yaml、dashboards/dash.yaml、
+#       alerting/alerts.yaml、dashboards-json/prov-dash.json）
+#       —— 这是课 10 的【教学主体】：第四幕五个实操全部依赖它，
+#          讲义正文逐段引用了 ds.yaml / dash.yaml 的字段说明。
+#          ⚠️ 曾考虑用 `grafana/playground/provisioning/*.yaml` 忽略旧版中间产物，
+#          但那会连带吞掉正文引用的教学文件，故一律保留
+#   l10-env-up.sh —— 第四幕「环境准备」引用；且内含 docker -v 静默建目录的防护
+#       （先校验 4 个文件存在再起容器），是课 9 教训的固化产物
+#   l10-probe1.sh —— 第四幕「实操 1」引用，验证三类文件落地
+#   l10-probe5.sh —— 第四幕「实操 2」引用，复现 400 Cannot save provisioned dashboard
+#   l10-fresh.sh / l10-uiedit2.sh —— 第四幕「实操 3」引用，allowUiUpdates 干净对照实验
+#   l10-delete.sh / l10-delete2.sh —— 第四幕「实操 4」引用，disableDeletion 双向对照
+#   l10_jsonmodel.py / l10_roundtrip.py / l10_diff.py —— 第四幕「实操 5」引用，
+#       10.3 全部量化结论（15 字段 / 只回填 id+version / diff 0 行）的可溯源证据
+
+# ---- 写课过程的一次性探针与中间版脚本（grafana 课程，2026-09-07 课 11 交付后卫生检查）----
+# 判据沿用课 8/9/10：**被讲义正文引用 = 保留；仅写课过程用过 = 忽略**。
+grafana/playground/l11-team-probe.sh
+grafana/playground/l11-folder-perm.sh
+grafana/playground/l11-diag-perm.sh
+grafana/playground/l11-hasacl.sh
+grafana/playground/l11-whereami.sh
+grafana/playground/l11-folder-fix.sh
+grafana/playground/l11-team-role.sh
+grafana/playground/l11-clean-user.sh
+grafana/playground/l11-decisive.sh
+grafana/playground/l11-sa.sh
+grafana/playground/l11-perm-db.sh
+grafana/playground/l11-write1.py
+grafana/playground/l11-write2.py
+grafana/playground/l11-write3.py
+grafana/playground/l11-archive.py
+grafana/playground/l11-archive2.py
+grafana/playground/l11-archive3.py
+grafana/playground/l11-verify.sh
+grafana/playground/l11-final.sh
+grafana/playground/l11-fix-continuation.py
+# 保留说明（勿加规则）：
+#   l11-envcheck.sh —— 第四幕「环境确认」引用
+#   l11-org-setup.sh —— 11.1「示例演示」+ 第四幕「实操 1」引用（建 Org/User/Team）
+#   l11-org-switch.sh / l11-crossorg.sh —— 11.1 跨 Org 隔离与越权测试的可溯源证据
+#       （404 装作不存在、403 明确拒绝，这两种响应的区分是本课核心结论）
+#   l11-folder-setup.sh / l11-perm-retest.sh —— 11.2「示例演示」引用
+#   l11-viewer-test.sh —— 11.2 两道闸门对照（bob 403 vs carol 200）
+#   l11-root-cause.sh —— 【决定性】干净用户 dave 的验证，本课最重要的一条证据
+#   l11-sa2.sh / l11-token-test.sh —— 11.3 服务账号与 token 的创建/使用/权限边界
+#   l11-dbcheck.sh —— 11.3 坐实「API Key 接口已移除但 api_key 表还在」的唯一证据
+#       （拷贝 grafana.db 出来查 92 张表，含 permission 表的 k8s 风格 scope）

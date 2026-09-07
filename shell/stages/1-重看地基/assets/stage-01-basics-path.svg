@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="360" viewBox="0 0 1000 360" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Microsoft YaHei,sans-serif">
+  <rect width="1000" height="360" fill="#ffffff"/>
+  <text x="500" y="34" text-anchor="middle" font-size="19" font-weight="700" fill="#0D47A1">阶段 1 · 重看地基 — 学习路径</text>
+  <text x="500" y="56" text-anchor="middle" font-size="12" fill="#555555">章节：「能跑」和「跑对了」之间差着一层解析</text>
+
+  <!-- 课 1 -->
+  <rect x="30" y="90" width="290" height="200" rx="10" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
+  <rect x="30" y="90" width="290" height="38" rx="10" fill="#1565C0"/>
+  <rect x="30" y="116" width="290" height="12" fill="#1565C0"/>
+  <text x="175" y="114" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">课 1 · 一行命令的生命周期</text>
+  <text x="50" y="146" font-size="12" font-weight="700" fill="#0D47A1">知识点</text>
+  <text x="50" y="168" font-size="11.5" fill="#333333">1. shell 解析命令的完整链路</text>
+  <text x="62" y="186" font-size="10.5" fill="#666666">读取 → 分词 → 展开 → 重定向</text>
+  <text x="62" y="202" font-size="10.5" fill="#666666">→ 执行命令（展开在重定向之后）</text>
+  <text x="50" y="224" font-size="11.5" fill="#333333">2. 引号与转义</text>
+  <text x="62" y="242" font-size="10.5" fill="#666666">单/双/反斜杠 · 引号不嵌套传递</text>
+  <text x="50" y="264" font-size="11.5" fill="#333333">3. 命令查找顺序与命令类型</text>
+  <text x="62" y="282" font-size="10.5" fill="#666666">别名→函数→内建→PATH · hash 缓存</text>
+
+  <!-- 课 2 -->
+  <rect x="355" y="90" width="290" height="200" rx="10" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
+  <rect x="355" y="90" width="290" height="38" rx="10" fill="#1565C0"/>
+  <rect x="355" y="116" width="290" height="12" fill="#1565C0"/>
+  <text x="500" y="114" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">课 2 · 展开全家桶</text>
+  <text x="375" y="146" font-size="12" font-weight="700" fill="#0D47A1">知识点</text>
+  <text x="375" y="168" font-size="11.5" fill="#333333">1. 参数展开全集</text>
+  <text x="387" y="186" font-size="10.5" fill="#666666">:- := :? :+ · # ## % %% · 切片</text>
+  <text x="387" y="202" font-size="10.5" fill="#666666">· 大小写 · 间接 · 前缀匹配</text>
+  <text x="375" y="224" font-size="11.5" fill="#333333">2. 单词分割与路径名展开</text>
+  <text x="387" y="242" font-size="10.5" fill="#666666">IFS · nullglob/failglob/dotglob</text>
+  <text x="375" y="264" font-size="11.5" fill="#333333">3. 命令/算术/进程替换</text>
+  <text x="387" y="282" font-size="10.5" fill="#666666">$() vs `` · $((...)) · &lt;(...) 与 fd</text>
+
+  <!-- 课 3 -->
+  <rect x="680" y="90" width="290" height="200" rx="10" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
+  <rect x="680" y="90" width="290" height="38" rx="10" fill="#1565C0"/>
+  <rect x="680" y="116" width="290" height="12" fill="#1565C0"/>
+  <text x="825" y="114" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">课 3 · 退出码与条件</text>
+  <text x="700" y="146" font-size="12" font-weight="700" fill="#0D47A1">知识点</text>
+  <text x="700" y="168" font-size="11.5" fill="#333333">1. 退出码的真相</text>
+  <text x="712" y="186" font-size="10.5" fill="#666666">$? · 管道默认取最后一个 · 信号</text>
+  <text x="712" y="202" font-size="10.5" fill="#666666">致死 128+n · 退出码的语义约定</text>
+  <text x="700" y="224" font-size="11.5" fill="#333333">2. 条件测试三件套</text>
+  <text x="712" y="242" font-size="10.5" fill="#666666">[[ ]] vs [ ] vs (( )) · 正则匹配</text>
+  <text x="700" y="264" font-size="11.5" fill="#333333">3. 控制流细节</text>
+  <text x="712" y="282" font-size="10.5" fill="#666666">for 的两种形态 · case · select</text>
+
+  <!-- 箭头 -->
+  <path d="M 330 190 L 345 190" stroke="#1565C0" stroke-width="2.5" marker-end="url(#a1)"/>
+  <path d="M 655 190 L 670 190" stroke="#1565C0" stroke-width="2.5" marker-end="url(#a1)"/>
+
+  <!-- 底部 -->
+  <rect x="30" y="308" width="940" height="38" rx="8" fill="#ECEFF1" stroke="#546E7A" stroke-dasharray="6 4"/>
+  <text x="500" y="332" text-anchor="middle" font-size="12.5" font-weight="700" fill="#263238">本阶段出口：能说出任意一行命令 shell 分几步处理、$? 为何是那个值、引号该不该加</text>
+
+  <defs>
+    <marker id="a1" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#1565C0"/>
+    </marker>
+  </defs>
+</svg>

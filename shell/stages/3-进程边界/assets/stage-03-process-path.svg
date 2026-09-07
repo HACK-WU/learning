@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="360" viewBox="0 0 900 360" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Microsoft YaHei,sans-serif">
+  <rect width="900" height="360" fill="#ffffff"/>
+  <text x="450" y="34" text-anchor="middle" font-size="19" font-weight="700" fill="#E65100">阶段 3 · 进程边界 — 学习路径</text>
+  <text x="450" y="56" text-anchor="middle" font-size="12" fill="#555555">章节：脚本从来不是自己一个人在跑</text>
+
+  <rect x="25" y="90" width="265" height="200" rx="10" fill="#FFF3E0" stroke="#EF6C00" stroke-width="2"/>
+  <rect x="25" y="90" width="265" height="38" rx="10" fill="#EF6C00"/>
+  <rect x="25" y="116" width="265" height="12" fill="#EF6C00"/>
+  <text x="157" y="114" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">课 8 · 子shell 与执行上下文</text>
+  <text x="43" y="146" font-size="12" font-weight="700" fill="#E65100">知识点</text>
+  <text x="43" y="168" font-size="11.5" fill="#333333">1. 什么会创建子 shell</text>
+  <text x="55" y="186" font-size="10.5" fill="#666666">管道 · 命令替换 · 括号组 · 后台</text>
+  <text x="55" y="202" font-size="10.5" fill="#666666">· 外部命令 · 变量改不回来的根因</text>
+  <text x="43" y="224" font-size="11.5" fill="#333333">2. source 与执行的区别</text>
+  <text x="55" y="242" font-size="10.5" fill="#666666">同进程 vs 新进程 · exit 的杀伤范围</text>
+  <text x="43" y="264" font-size="11.5" fill="#333333">3. 执行环境继承</text>
+  <text x="55" y="282" font-size="10.5" fill="#666666">export · env -i · BASH_ENV</text>
+
+  <rect x="318" y="90" width="265" height="200" rx="10" fill="#FFF3E0" stroke="#EF6C00" stroke-width="2"/>
+  <rect x="318" y="90" width="265" height="38" rx="10" fill="#EF6C00"/>
+  <rect x="318" y="116" width="265" height="12" fill="#EF6C00"/>
+  <text x="450" y="114" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">课 9 · 信号 trap 与清理</text>
+  <text x="336" y="146" font-size="12" font-weight="700" fill="#E65100">知识点</text>
+  <text x="336" y="168" font-size="11.5" fill="#333333">1. 信号基础与 trap</text>
+  <text x="348" y="186" font-size="10.5" fill="#666666">SIGINT TERM HUP · trap 注册与重置</text>
+  <text x="336" y="208" font-size="11.5" fill="#333333">2. 伪信号 EXIT ERR DEBUG</text>
+  <text x="348" y="226" font-size="10.5" fill="#666666">触发时机 · ERR 与 set -e 的联动</text>
+  <text x="336" y="248" font-size="11.5" fill="#333333">3. 清理、锁与临时文件</text>
+  <text x="348" y="266" font-size="10.5" fill="#666666">mktemp · flock · 中断安全的收尾</text>
+
+  <rect x="611" y="90" width="265" height="200" rx="10" fill="#FFF3E0" stroke="#EF6C00" stroke-width="2"/>
+  <rect x="611" y="90" width="265" height="38" rx="10" fill="#EF6C00"/>
+  <rect x="611" y="116" width="265" height="12" fill="#EF6C00"/>
+  <text x="743" y="114" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">课 10 · 与文本工具的协作</text>
+  <text x="629" y="146" font-size="12" font-weight="700" fill="#E65100">知识点</text>
+  <text x="629" y="168" font-size="11.5" fill="#333333">1. 三剑客分工与边界</text>
+  <text x="641" y="186" font-size="10.5" fill="#666666">grep 筛选 · sed 单行替换 · awk 字段</text>
+  <text x="641" y="202" font-size="10.5" fill="#666666">计算 · 各自不该干什么</text>
+  <text x="629" y="224" font-size="11.5" fill="#333333">2. find / xargs 与 NUL 分隔</text>
+  <text x="641" y="242" font-size="10.5" fill="#666666">-print0 / -0 · 文件名带空格的解法</text>
+  <text x="629" y="264" font-size="11.5" fill="#333333">3. 何时不该用 shell 处理文本</text>
+  <text x="641" y="282" font-size="10.5" fill="#666666">性能悬崖 · 换 Python 的判据</text>
+
+  <path d="M 295 190 L 316 190" stroke="#EF6C00" stroke-width="2.5" marker-end="url(#a3)"/>
+  <path d="M 588 190 L 609 190" stroke="#EF6C00" stroke-width="2.5" marker-end="url(#a3)"/>
+
+  <rect x="25" y="308" width="851" height="38" rx="8" fill="#ECEFF1" stroke="#546E7A" stroke-dasharray="6 4"/>
+  <text x="450" y="332" text-anchor="middle" font-size="12.5" font-weight="700" fill="#263238">本阶段出口：知道变量为什么改不回来，且脚本被 Ctrl-C / 被 kill 都能干净收摊</text>
+
+  <defs>
+    <marker id="a3" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#EF6C00"/>
+    </marker>
+  </defs>
+</svg>

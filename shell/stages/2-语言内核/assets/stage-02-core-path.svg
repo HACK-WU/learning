@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="360" viewBox="0 0 1080 360" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Microsoft YaHei,sans-serif">
+  <rect width="1080" height="360" fill="#ffffff"/>
+  <text x="540" y="34" text-anchor="middle" font-size="19" font-weight="700" fill="#1B5E20">阶段 2 · 语言内核 — 学习路径</text>
+  <text x="540" y="56" text-anchor="middle" font-size="12" fill="#555555">章节：把它当成一门真正的语言来用</text>
+
+  <rect x="20" y="90" width="245" height="200" rx="10" fill="#E8F5E9" stroke="#2E7D32" stroke-width="2"/>
+  <rect x="20" y="90" width="245" height="38" rx="10" fill="#2E7D32"/>
+  <rect x="20" y="116" width="245" height="12" fill="#2E7D32"/>
+  <text x="142" y="114" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">课 4 · 变量属性与作用域</text>
+  <text x="38" y="146" font-size="12" font-weight="700" fill="#1B5E20">知识点</text>
+  <text x="38" y="168" font-size="11.5" fill="#333333">1. declare 与变量属性</text>
+  <text x="50" y="186" font-size="10.5" fill="#666666">-r -i -a -A -l -u -x -n</text>
+  <text x="38" y="208" font-size="11.5" fill="#333333">2. 作用域与 local</text>
+  <text x="50" y="226" font-size="10.5" fill="#666666">动态作用域 · 全局变量污染</text>
+  <text x="38" y="248" font-size="11.5" fill="#333333">3. nameref 与间接引用</text>
+  <text x="50" y="266" font-size="10.5" fill="#666666">${!var} vs declare -n · 循环陷阱</text>
+
+  <rect x="285" y="90" width="245" height="200" rx="10" fill="#E8F5E9" stroke="#2E7D32" stroke-width="2"/>
+  <rect x="285" y="90" width="245" height="38" rx="10" fill="#2E7D32"/>
+  <rect x="285" y="116" width="245" height="12" fill="#2E7D32"/>
+  <text x="407" y="114" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">课 5 · 数组与映射</text>
+  <text x="303" y="146" font-size="12" font-weight="700" fill="#1B5E20">知识点</text>
+  <text x="303" y="168" font-size="11.5" fill="#333333">1. 索引数组</text>
+  <text x="315" y="186" font-size="10.5" fill="#666666">@ 与 * 的差异 · 稀疏数组</text>
+  <text x="303" y="208" font-size="11.5" fill="#333333">2. 关联数组</text>
+  <text x="315" y="226" font-size="10.5" fill="#666666">declare -A · 遍历顺序 · 存在性判断</text>
+  <text x="303" y="248" font-size="11.5" fill="#333333">3. mapfile 与数组操作</text>
+  <text x="315" y="266" font-size="10.5" fill="#666666">-t -d · 切片 · 追加 · 排序去重</text>
+
+  <rect x="550" y="90" width="245" height="200" rx="10" fill="#E8F5E9" stroke="#2E7D32" stroke-width="2"/>
+  <rect x="550" y="90" width="245" height="38" rx="10" fill="#2E7D32"/>
+  <rect x="550" y="116" width="245" height="12" fill="#2E7D32"/>
+  <text x="672" y="114" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">课 6 · 函数与调用约定</text>
+  <text x="568" y="146" font-size="12" font-weight="700" fill="#1B5E20">知识点</text>
+  <text x="568" y="168" font-size="11.5" fill="#333333">1. 函数即命令与返回值</text>
+  <text x="580" y="186" font-size="10.5" fill="#666666">return vs echo · 0-255 限制</text>
+  <text x="568" y="208" font-size="11.5" fill="#333333">2. 参数传递与 "$@" 陷阱</text>
+  <text x="580" y="226" font-size="10.5" fill="#666666">$* vs $@ · shift · 穿透三层函数</text>
+  <text x="568" y="248" font-size="11.5" fill="#333333">3. 递归与调用栈</text>
+  <text x="580" y="266" font-size="10.5" fill="#666666">FUNCNAME · BASH_SOURCE · 深度控制</text>
+
+  <rect x="815" y="90" width="245" height="200" rx="10" fill="#E8F5E9" stroke="#2E7D32" stroke-width="2"/>
+  <rect x="815" y="90" width="245" height="38" rx="10" fill="#2E7D32"/>
+  <rect x="815" y="116" width="245" height="12" fill="#2E7D32"/>
+  <text x="937" y="114" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">课 7 · 重定向与 fd</text>
+  <text x="833" y="146" font-size="12" font-weight="700" fill="#1B5E20">知识点</text>
+  <text x="833" y="168" font-size="11.5" fill="#333333">1. fd 表与重定向</text>
+  <text x="845" y="186" font-size="10.5" fill="#666666">顺序敏感 · exec 持久重定向</text>
+  <text x="833" y="208" font-size="11.5" fill="#333333">2. here-doc 与 here-string</text>
+  <text x="845" y="226" font-size="10.5" fill="#666666">&lt;&lt;-EOF 缩进 · 引号决定是否展开</text>
+  <text x="833" y="248" font-size="11.5" fill="#333333">3. 管道、缓冲与协进程</text>
+  <text x="845" y="266" font-size="10.5" fill="#666666">块缓冲 vs 行缓冲 · coproc（选读）</text>
+
+  <path d="M 270 190 L 283 190" stroke="#2E7D32" stroke-width="2.5" marker-end="url(#a2)"/>
+  <path d="M 535 190 L 548 190" stroke="#2E7D32" stroke-width="2.5" marker-end="url(#a2)"/>
+  <path d="M 800 190 L 813 190" stroke="#2E7D32" stroke-width="2.5" marker-end="url(#a2)"/>
+
+  <rect x="20" y="308" width="1040" height="38" rx="8" fill="#ECEFF1" stroke="#546E7A" stroke-dasharray="6 4"/>
+  <text x="540" y="332" text-anchor="middle" font-size="12.5" font-weight="700" fill="#263238">本阶段出口：能用关联数组与数组替代字符串拼接，能安全传参，能精确控制每个 fd 的去向</text>
+
+  <defs>
+    <marker id="a2" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2E7D32"/>
+    </marker>
+  </defs>
+</svg>
