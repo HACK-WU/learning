@@ -798,6 +798,6 @@ flowchart TD
 
 ⬅️ **上一课**：[课 2 · 为什么需要 Skill](../../../stages/1-理解Skill/lessons/lesson-02-为什么需要Skill.md)
 
-➡️ **下一课**：课 4 · 用 npx skills 命令
+➡️ **下一课**：[课 4 · 用 npx skills 命令](./lesson-04-用npx-skills命令.md)
 
 📚 **返回目录**：[课程目录](../../../02-课程目录.md)
