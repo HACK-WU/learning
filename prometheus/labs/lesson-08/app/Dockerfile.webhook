@@ -1,0 +1,6 @@
+FROM python:3.11-slim
+WORKDIR /app
+COPY webhook_receiver.py /app/webhook_receiver.py
+RUN mkdir -p /data
+EXPOSE 8080
+CMD ["python", "-u", "/app/webhook_receiver.py"]

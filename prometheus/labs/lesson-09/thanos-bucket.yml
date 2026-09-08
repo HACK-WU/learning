@@ -1,0 +1,14 @@
+# Thanos 侧对象存储配置（MinIO）
+#
+# 【v0.42.4 实测】字段名为 bucket_lookup_type（枚举：path / dns / auto）
+# 旧写法 s3forcepathstyle 与 force_s3_path_style 均已移除，写了组件直接启动失败：
+#   yaml: unmarshal errors: field s3forcepathstyle not found in type s3.Config
+# 用真组件启动实测判定（tools bucket 子命令会掩盖字段校验，不可用它判定）
+type: S3
+config:
+  bucket: thanos
+  endpoint: l9-minio:9000
+  access_key: minioadmin
+  secret_key: minioadmin
+  insecure: true
+  bucket_lookup_type: path

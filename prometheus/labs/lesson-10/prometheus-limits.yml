@@ -1,0 +1,30 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+scrape_configs:
+  # job A：不做任何限制（对照组）
+  - job_name: "app-raw"
+    static_configs:
+      - targets: ["l10-app:8000"]
+
+  # job B：sample_limit 限制单目标样本数
+  - job_name: "app-sample-limit"
+    sample_limit: 100
+    static_configs:
+      - targets: ["l10-app:8000"]
+
+  # job C：label_limit 限制每条样本的标签数
+  - job_name: "app-label-limit"
+    label_limit: 3
+    static_configs:
+      - targets: ["l10-app:8000"]
+
+  # job D：metric_relabel_configs 丢弃高基数指标
+  - job_name: "app-drop"
+    metric_relabel_configs:
+      - source_labels: [__name__]
+        regex: "card_bad_by_(url|reqid)"
+        action: drop
+    static_configs:
+      - targets: ["l10-app:8000"]

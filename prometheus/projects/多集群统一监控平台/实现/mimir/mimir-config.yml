@@ -1,0 +1,75 @@
+# Mimir 单体模式配置（v3.2.0）
+#
+# 【为什么用单体模式】课 9 实测：1 容器 / 8 秒 ready / 72.68MiB。
+#   单机演示多租户与长期存储，不必拆微服务。
+#
+# 【实测修正点·沿用课 9】
+#   1. blocks-storage.s3 只有 10 个字段，不存在 force_path_style / bucket_lookup_type
+#      —— 与 Thanos 不同，Mimir 对 S3 兼容存储自动用 path style。
+#      写了不存在的字段会直接启动失败：field force_path_style not found
+#   2. compactor.ring 下没有 replication_factor
+#   3. Mimir 3.x 只提供 distroless 镜像，容器内没有 sh/bash，
+#      无法 docker exec 进去排查，只能靠日志和 HTTP 接口
+#
+# 【决策点 1】选 Mimir 的核心理由：原生多租户（存储级隔离）
+#   详见 ../设计决策.md
+
+multitenancy_enabled: true
+
+server:
+  http_listen_port: 8080
+  grpc_listen_port: 9095
+  log_level: info
+
+# 用文件系统后端模拟对象存储，省掉 MinIO 依赖
+# 【代价说明】生产必须换成 s3/gcs/azure；文件系统后端不支持横向扩展，
+#   这是本演示为了可运行性做的妥协，设计决策.md 已记录
+blocks_storage:
+  backend: filesystem
+  filesystem:
+    dir: /data/blocks
+  tsdb:
+    dir: /data/tsdb
+  bucket_store:
+    sync_dir: /data/tsdb-sync
+
+compactor:
+  data_dir: /data/compactor
+  sharding_ring:
+    kvstore:
+      store: inmemory
+
+ingester:
+  ring:
+    replication_factor: 1
+    instance_addr: 127.0.0.1
+    kvstore:
+      store: inmemory
+
+distributor:
+  ring:
+    instance_addr: 127.0.0.1
+    kvstore:
+      store: inmemory
+
+ruler_storage:
+  backend: filesystem
+  filesystem:
+    dir: /data/rules
+
+alertmanager_storage:
+  backend: filesystem
+  filesystem:
+    dir: /data/alertmanager
+
+# 限制器：防止单个租户把集群写爆
+# 【知识点回指·阶段 4 课 10】基数治理的另一种手段是在写入侧设限
+#
+# 【实测修正 2026-09-07】Mimir 3.2.0 的 limits 段**没有** max_series_per_user 字段，
+#   写了会直接启动失败：field max_series_per_user not found in type validation.plainLimits
+#   实际可用的是 max_global_series_per_user（默认 150000）。
+#   验证方式：docker run --rm grafana/mimir:3.2.0 -help | grep 'max.*series'
+limits:
+  ingestion_rate: 100000
+  ingestion_burst_size: 200000
+  max_global_series_per_user: 500000

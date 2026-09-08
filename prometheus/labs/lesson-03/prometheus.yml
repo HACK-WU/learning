@@ -1,0 +1,15 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+scrape_configs:
+  # Prometheus 自己——课 3 全靠 TSDB 内部指标，必须自抓取
+  - job_name: prometheus
+    static_configs:
+      - targets:
+          - localhost:9090
+
+  - job_name: l3-demo
+    static_configs:
+      - targets:
+          - l3-app:8080

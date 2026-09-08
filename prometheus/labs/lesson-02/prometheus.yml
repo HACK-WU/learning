@@ -1,0 +1,91 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+scrape_configs:
+  # ========== 知识点 1：服务发现的输出契约 ==========
+  # file_sd 是理解所有 SD 的钥匙：它把"SD 到底输出了什么"显式摊开给你看
+  - job_name: file-sd-demo
+    file_sd_configs:
+      - files:
+          - /etc/prometheus/sd/targets.json
+        refresh_interval: 15s
+    relabel_configs:
+      # 把 __meta_* 元标签"提升"为人能读的业务标签
+      - source_labels: [__meta_service]
+        target_label: service
+      - source_labels: [__meta_env]
+        target_label: env
+      - source_labels: [__meta_team]
+        target_label: team
+      # 只抓生产环境，staging 的 user 服务直接丢弃
+      - source_labels: [__meta_env]
+        regex: "prod"
+        action: keep
+
+  # ========== 知识点 2：relabel_configs（作用于 target） ==========
+  - job_name: relabel-target-demo
+    file_sd_configs:
+      - files:
+          - /etc/prometheus/sd/targets.json
+    relabel_configs:
+      # 1) replace：把元标签提升为业务标签
+      - source_labels: [__meta_service]
+        target_label: service
+        regex: "(.*)"
+        replacement: "$1"
+        action: replace
+      # 2) labelmap：把所有 __meta_ 前缀的元标签批量提升（去掉前缀）
+      - regex: "__meta_(service|team)_(.+)"
+        action: labelmap
+      # 3) keep / drop：按标签过滤目标（这里保留全部，仅作演示）
+      - source_labels: [__meta_env]
+        regex: "prod"
+        action: keep
+      # 4) 改写抓取地址：把 __address__ 换成 scheme://host:port
+      - source_labels: [__address__]
+        target_label: __address__
+        regex: "([^:]+)(:[0-9]+)?"
+        replacement: "$1:8080"
+        action: replace
+
+  # ========== 知识点 2：metric_relabel_configs（作用于样本） ==========
+  - job_name: metric-relabel-demo
+    file_sd_configs:
+      - files:
+          - /etc/prometheus/sd/targets.json
+    relabel_configs:
+      - source_labels: [__meta_env]
+        regex: "prod"
+        action: keep
+    metric_relabel_configs:
+      # 丢弃高基数的调试指标（在样本落进 TSDB 之前）
+      - source_labels: [__name__]
+        regex: "app_debug_user_id"
+        action: drop
+      # 给所有样本统一打一个环境标签
+      - target_label: scraped_by
+        replacement: "lesson-02-prom"
+        action: replace
+
+  # ========== 知识点 3：honor_labels 标签冲突 ==========
+  # 前两个 job 抓同一个"自带 job/instance 标签"的 target（冲突场景），
+  # 唯一区别就是 honor_labels 的取值
+  - job_name: honor-false
+    honor_labels: false
+    static_configs:
+      - targets:
+          - app-conflict:8080
+
+  - job_name: honor-true
+    honor_labels: true
+    static_configs:
+      - targets:
+          - app-conflict:8080
+
+  # 第三个 job 抓一个不冲突的普通 target，作为对照组
+  - job_name: honor-normal
+    honor_labels: false
+    static_configs:
+      - targets:
+          - app-order-1:8080

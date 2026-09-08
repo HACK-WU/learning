@@ -1,0 +1,43 @@
+# 全局查询层 —— 通过 remote read 从 Mimir 读全量历史
+#
+# 【知识点回指·阶段 3 课 8】全局视图有两条路：联邦 vs 远端读。
+#   本项目选远端读，理由见 ../设计决策.md 决策点 2。
+#
+# 【知识点回指·阶段 3 课 7】remote read 的三种模式：
+#   SAMPLES / STREAMED_XOR_CHUNKS / STREAMED_CHUNKS（后者不存在）
+#   流式模式内存恒赢（SAMPLES +8~10MiB，STREAMED -7~10MiB）
+#
+# 【重要限制·阶段 3 课 7】告警与规则求值只走本地 TSDB，
+#   不会走 remote read。所以这个 global 实例只用于「人肉查」和 Grafana，
+#   不承担告警职责。
+
+global:
+  scrape_interval: 60s
+  # 全局层不再采集业务目标，只查远端
+  #
+  # 【重大陷阱·2026-09-07 实测发现】这里**不能**写 external_labels！
+  #   external_labels 在 remote read 时会被**自动附加到查询选择器**上
+  #   （课 9 讲的「三段式」：write 附加 → read 附加到选择器 → 返回前剥离）。
+  #   本例若写 cluster: global，实际发出的查询是 {__name__="up", cluster="global"}，
+  #   而真实数据的 cluster 是 prod/staging/dev-shanghai —— 永远查不到，
+  #   且**不报任何错**（status 仍是 success），是教科书级的静默失败。
+  #
+  #   证据：Mimir 日志 param_matchers_0="{__name__=\"up\",cluster=\"global\"}"
+  #   去掉 external_labels 后同一查询立刻返回三个集群的数据。
+  #
+  # 同理，写错 external_labels 也会让 remote write 的数据带着错误标签入库。
+
+remote_read:
+  - url: http://mimir:8080/prometheus/api/v1/read
+    # 【关键·阶段 3 课 9】读同样需要租户头，否则 401
+    headers:
+      X-Scope-OrgID: tenant-demo
+    # 【知识点回指·阶段 3 课 7】remote read 失败是静默的：
+    #   status 仍是 success，原因只在 warnings 里。排查时必须看 warnings
+    read_recent: true
+    # required_matchers 留空 = 读取全部序列
+
+scrape_configs:
+  - job_name: global-self
+    static_configs:
+      - targets: ["localhost:9090"]

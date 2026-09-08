@@ -1,0 +1,71 @@
+# ============================================================
+# prometheus 课程仓库 —— labs 实验区忽略规则
+#
+# 原则：提交"能让人复现出结论的东西"，忽略"复现过程中产生的东西"。
+#   - 结论/脚本/配置  → 提交（不可再生，或再生成本高）
+#   - TSDB 块/日志/临时产物 → 忽略（一条命令即可重跑）
+#   - 一次性维护脚本  → 忽略（跑完即废，与课程教学内容无关）
+#   - 讲义草稿       → 忽略（已合并进 stages/ 正式讲义）
+# ============================================================
+
+# --- 1. TSDB / 时序数据库原始产物（重跑即可复现，体积大头）---
+labs/**/data/
+labs/**/data-*/
+labs/**/vdata/
+labs/**/vdata-*/
+labs/**/wal/
+labs/**/blocks/
+labs/**/vblocks/
+labs/**/blocks-out/
+labs/**/blocks-input/
+labs/**/chunks_head/
+labs/**/01*/           # TSDB 块目录（ULID 命名）
+
+# --- 2. 运行日志与取证输出 ---
+labs/**/*.log
+labs/**/*.jsonl
+labs/**/logs/
+labs/**/*-out.txt
+labs/**/*-out*.txt
+labs/**/evidence-report*.txt
+labs/**/nohup.out
+
+# --- 3. Python / 编辑器垃圾 ---
+labs/**/__pycache__/
+labs/**/*.pyc
+labs/**/*.pyo
+labs/**/.pytest_cache/
+labs/**/*.bak
+labs/**/*.tmp
+labs/**/*.swp
+labs/**/*~
+labs/**/.DS_Store
+
+# --- 4. 讲义草稿（已合并进 stages/ 正式讲义，不重复入库）---
+labs/**/_draft/
+
+# --- 5. 一次性维护脚本（改文档/改索引用，跑完即废）---
+labs/**/append-*.py
+labs/**/_upd_*.py
+labs/**/patch-*.py
+labs/**/fix-*.py
+labs/**/cleanup-*.py
+labs/**/clean-*.py
+labs/**/_rr_review*.sh
+labs/**/*factcheck*.py
+labs/**/*-reviewrow*.py
+labs/**/add-*.py
+labs/**/insert-*.py
+labs/**/update-*.py
+labs/**/rewrite-*.py
+labs/**/sync-*.py
+labs/**/gen-index*.py
+
+# --- 6. 审计/排障临时脚本（本轮新增，用完可删）---
+labs/phase5/audit-*.py
+
+# 注意：以下内容【必须提交】，不要被上面的规则误伤
+#   - labs/**/DATA.md、*-DATA.md  → 实验结论记录，不可再生
+#   - labs/**/setup*.sh、exp*.sh、verify*.sh、probe*.sh → 实验脚本
+#   - labs/**/prometheus.yml、alertmanager*.yml、rules*.yml → 实验配置
+#   - labs/**/app/ → 示例应用代码

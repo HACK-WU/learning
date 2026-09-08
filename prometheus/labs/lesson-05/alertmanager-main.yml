@@ -1,0 +1,60 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: default-receiver
+  group_by: ['alertname']
+  # 注意：这三个是 route 级字段，写在 global: 下会导致启动失败
+  group_wait: 20s
+  group_interval: 10s
+  repeat_interval: 30s
+  routes:
+    # 专用路由写前面：节点级告警优先分流到 infra
+    - matchers:
+        - alertname=~"Node.*"
+      receiver: infra-receiver
+      group_by: ['alertname', 'zone']
+      continue: false
+
+    # 其次按 team 分流
+    - matchers:
+        - team="payments"
+      receiver: payments-receiver
+      group_by: ['alertname']
+      continue: false
+
+    # search 团队的 critical 单独值班
+    - matchers:
+        - team="search"
+        - severity="critical"
+      receiver: search-critical-receiver
+      group_by: ['alertname']
+
+inhibit_rules:
+  - source_matchers:
+      - alertname="NodeDown"
+      - severity="critical"
+    target_matchers:
+      - severity="warning"
+    equal: ['zone']
+
+receivers:
+  - name: default-receiver
+    webhook_configs:
+      - url: 'http://l5-receiver:8099/default'
+        send_resolved: true
+
+  - name: payments-receiver
+    webhook_configs:
+      - url: 'http://l5-receiver:8099/payments'
+        send_resolved: true
+
+  - name: search-critical-receiver
+    webhook_configs:
+      - url: 'http://l5-receiver:8099/search-critical'
+        send_resolved: true
+
+  - name: infra-receiver
+    webhook_configs:
+      - url: 'http://l5-receiver:8099/infra'
+        send_resolved: true

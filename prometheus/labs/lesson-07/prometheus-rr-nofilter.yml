@@ -1,0 +1,17 @@
+global:
+  scrape_interval: 2s
+  external_labels:
+    cluster: l7-lab
+    replica: "0"
+
+# 关键对照：关掉 external labels 过滤
+remote_read:
+  - url: "http://l7-vm:8428/api/v1/read"
+    read_recent: true
+    filter_external_labels: false
+    name: vm-nofilter
+
+scrape_configs:
+  - job_name: l7-prom-self
+    static_configs:
+      - targets: ["localhost:9090"]

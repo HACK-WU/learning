@@ -1,0 +1,60 @@
+# 采集端 Prometheus 配置 —— 三环境共用模板
+#
+# 三个环境（prod / staging / dev）各跑一个 Prometheus，配置结构相同，
+# 差别只在 external_labels 的 cluster 值与 targets。
+#
+# 【知识点回指·阶段 1 课 2】external_labels 只加在「出站数据」上，
+#   不影响本地查询 —— 这是它最容易误解的一点。
+# 【知识点回指·阶段 3 课 8】cluster 必须全局唯一；HA 副本必须带 replica，
+#   否则后端 dedup 合并成一份，看似干净实则值在副本间无规律跳变。
+
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+  external_labels:
+    env: prod
+    cluster: prod-shanghai
+    region: cn-east
+
+rule_files:
+  - /etc/prometheus/rules/*.yml
+
+# 【决策点 1 的产物】数据出站到 Mimir（长期存储）
+# 详见 ../设计决策.md 决策点 1：为什么选 Mimir 而不是 Thanos / VM
+#
+# 【关键·阶段 3 课 9】Mimir 开启 multitenancy_enabled 后，
+#   所有读写请求必须带 X-Scope-OrgID 头，否则返回 401。
+#   这是存储级隔离（不是查询过滤），无头请求连数据都看不到。
+remote_write:
+  - url: http://mimir:8080/api/v1/push
+    headers:
+      X-Scope-OrgID: tenant-demo
+    # 【知识点回指·阶段 3 课 7】队列配置决定「后端抖动能扛多久」
+    queue_config:
+      capacity: 10000        # 每 shard 内存队列容量（样本数）
+      max_shards: 20         # 后端慢时才扩容到此
+      min_shards: 1
+      max_samples_per_send: 2000
+      batch_send_deadline: 5s
+      # 【知识点回指·阶段 3 课 7】500/503 是可重试错误，
+      #   后端短暂不可用时靠重试扛过去，数据由 WAL 兜底
+      retry_on_http_429: true
+
+scrape_configs:
+  # 业务服务。三环境共用同一镜像，靠 APP_ENV 区分身份
+  - job_name: app
+    static_configs:
+      - targets: ["app-prod:8000"]
+        labels:
+          env: prod
+
+  # 【知识点回指·阶段 4 课 10】Prometheus 默认不监控自己，
+  #   必须显式加 self-scrape job，否则 prometheus_* 内部指标全查不到
+  - job_name: prometheus
+    static_configs:
+      - targets: ["localhost:9090"]
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ["alertmanager:9093"]

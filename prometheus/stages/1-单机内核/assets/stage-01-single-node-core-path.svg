@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="345" viewBox="0 0 940 345" font-family="'PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="940" height="345" fill="#fafafa"/>
+
+  <text x="470" y="34" text-anchor="middle" font-size="19" font-weight="bold" fill="#0d47a1">阶段 1 · 单机内核 ——「接住它」</text>
+  <text x="470" y="56" text-anchor="middle" font-size="12" fill="#555">一条时间序列诞生了：谁把它捞上来、放哪儿</text>
+
+  <!-- 课 1 -->
+  <rect x="30" y="76" width="280" height="176" rx="8" fill="#fff" stroke="#1565C0" stroke-width="2"/>
+  <rect x="30" y="76" width="280" height="32" rx="8" fill="#1565C0"/>
+  <text x="170" y="98" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#fff">课 1 架构总览与第一条数据</text>
+  <text x="46" y="126" font-size="11.5" fill="#333">① 整体架构与组件边界</text>
+  <text x="46" y="150" font-size="11.5" fill="#333">② 拉取模型的完整语义</text>
+  <text x="46" y="174" font-size="11.5" fill="#333">③ Exporter 生态与指标暴露</text>
+  <line x1="46" y1="196" x2="294" y2="196" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="46" y="216" font-size="11" fill="#666">跑通第一条数据，看清子系统边界</text>
+  <text x="46" y="238" font-size="11" fill="#666">产出：docker compose 单机栈</text>
+
+  <!-- 课 2 -->
+  <rect x="330" y="76" width="280" height="176" rx="8" fill="#fff" stroke="#1565C0" stroke-width="2"/>
+  <rect x="330" y="76" width="280" height="32" rx="8" fill="#1565C0"/>
+  <text x="470" y="98" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#fff">课 2 目标从哪来</text>
+  <text x="346" y="126" font-size="11.5" fill="#333">① 服务发现机制</text>
+  <text x="346" y="150" font-size="11.5" fill="#333">② relabel_configs 三段改写</text>
+  <text x="346" y="174" font-size="11.5" fill="#333">③ honor_labels 与标签冲突</text>
+  <line x1="346" y1="196" x2="594" y2="196" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="346" y="216" font-size="11" fill="#666">动态目标如何变成稳定的标签</text>
+  <text x="346" y="238" font-size="11" fill="#666">产出：file_sd + 三段 relabel 配置</text>
+
+  <!-- 课 3 -->
+  <rect x="630" y="76" width="280" height="176" rx="8" fill="#fff" stroke="#1565C0" stroke-width="2"/>
+  <rect x="630" y="76" width="280" height="32" rx="8" fill="#1565C0"/>
+  <text x="770" y="98" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#fff">课 3 TSDB 存储引擎</text>
+  <text x="646" y="126" font-size="11.5" fill="#333">① 物理视角的数据模型</text>
+  <text x="646" y="150" font-size="11.5" fill="#333">② WAL 与 checkpoint</text>
+  <text x="646" y="174" font-size="11.5" fill="#333">③ block、compaction 与保留</text>
+  <line x1="646" y1="196" x2="894" y2="196" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="646" y="216" font-size="11" fill="#666">落盘之后，磁盘上长什么样</text>
+  <text x="646" y="238" font-size="11" fill="#666">产出：真实数据目录逐文件解读</text>
+
+  <line x1="310" y1="164" x2="328" y2="164" stroke="#1565C0" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="610" y1="164" x2="628" y2="164" stroke="#1565C0" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- 底部 -->
+  <rect x="30" y="270" width="880" height="52" rx="6" fill="#e3f2fd" stroke="#90caf9" stroke-width="1"/>
+  <text x="46" y="290" font-size="11.5" fill="#0d47a1" font-weight="bold">为什么这个阶段是地基：</text>
+  <text x="46" y="310" font-size="11.5" fill="#333">不理解 TSDB 分层（课 3），阶段 4 的容量规划与排障就只能背结论；不理解拉取语义（课 1），阶段 2 的告警抖动无法解释。</text>
+
+  <defs>
+    <marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#1565C0"/>
+    </marker>
+  </defs>
+</svg>

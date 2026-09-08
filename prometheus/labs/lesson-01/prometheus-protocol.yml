@@ -1,0 +1,22 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+  scrape_protocols:
+    - PrometheusText1.0.0
+    - PrometheusText0.0.4
+    - OpenMetricsText1.0.0
+
+scrape_configs:
+  - job_name: echo-default
+    static_configs:
+      - targets:
+          - echo-app:8080
+
+  - job_name: echo-openmetrics-first
+    scrape_protocols:
+      - OpenMetricsText1.0.0
+      - PrometheusText1.0.0
+      - PrometheusText0.0.4
+    static_configs:
+      - targets:
+          - echo-app:8080

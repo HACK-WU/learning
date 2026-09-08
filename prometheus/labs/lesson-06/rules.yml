@@ -1,0 +1,12 @@
+groups:
+  - name: l6-preagg
+    interval: 5s
+    rules:
+      - record: l6:card_rate:sum
+        expr: sum(rate(l6_card_metric[5m]))
+
+      - record: l6:card_rate:by_idx
+        expr: sum by (idx) (rate(l6_card_metric[5m]))
+
+      - record: l6:card_rate:top10
+        expr: topk(10, sum by (idx) (rate(l6_card_metric[5m])))

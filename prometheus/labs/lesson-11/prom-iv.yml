@@ -1,0 +1,8 @@
+global:
+  scrape_interval: 60s
+  evaluation_interval: 60s
+  scrape_timeout: 60s
+scrape_configs:
+  - job_name: "l11"
+    static_configs:
+      - targets: ["l11c-ivapp:8000"]

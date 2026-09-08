@@ -1,0 +1,43 @@
+[
+  {
+    "targets": [
+      "app-order-1:8080",
+      "app-order-2:8080"
+    ],
+    "labels": {
+      "__meta_service": "order",
+      "__meta_env": "prod",
+      "__meta_team": "trade"
+    }
+  },
+  {
+    "targets": [
+      "app-payment-1:8080"
+    ],
+    "labels": {
+      "__meta_service": "payment",
+      "__meta_env": "prod",
+      "__meta_team": "pay"
+    }
+  },
+  {
+    "targets": [
+      "app-user-1:8080"
+    ],
+    "labels": {
+      "__meta_service": "user",
+      "__meta_env": "staging",
+      "__meta_team": "account"
+    }
+  },
+  {
+    "targets": [
+      "app-payment-2:8080"
+    ],
+    "labels": {
+      "__meta_service": "payment",
+      "__meta_env": "prod",
+      "__meta_team": "pay"
+    }
+  }
+]

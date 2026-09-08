@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="345" viewBox="0 0 940 345" font-family="'PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="940" height="345" fill="#fafafa"/>
+
+  <text x="470" y="34" text-anchor="middle" font-size="19" font-weight="bold" fill="#004d40">阶段 2 · 规则与告警 ——「让它叫醒人」</text>
+  <text x="470" y="56" text-anchor="middle" font-size="12" fill="#555">数据存下来了，可没人半夜盯着屏幕看</text>
+
+  <!-- 课 4 -->
+  <rect x="30" y="76" width="280" height="176" rx="8" fill="#fff" stroke="#00695C" stroke-width="2"/>
+  <rect x="30" y="76" width="280" height="32" rx="8" fill="#00695C"/>
+  <text x="170" y="98" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#fff">课 4 规则引擎</text>
+  <text x="46" y="126" font-size="11.5" fill="#333">① 规则组与评估机制</text>
+  <text x="46" y="150" font-size="11.5" fill="#333">② recording rules</text>
+  <text x="46" y="174" font-size="11.5" fill="#333">③ 告警规则与状态机</text>
+  <line x1="46" y1="196" x2="294" y2="196" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="46" y="216" font-size="11" fill="#666">数据什么时候被求值、多久算"持续"</text>
+  <text x="46" y="238" font-size="11" fill="#666">产出：实测 for 与评估延迟</text>
+
+  <!-- 课 5 -->
+  <rect x="330" y="76" width="280" height="176" rx="8" fill="#fff" stroke="#00695C" stroke-width="2"/>
+  <rect x="330" y="76" width="280" height="32" rx="8" fill="#00695C"/>
+  <text x="470" y="98" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#fff">课 5 Alertmanager 深入</text>
+  <text x="346" y="126" font-size="11.5" fill="#333">① 告警的到达与去重</text>
+  <text x="346" y="150" font-size="11.5" fill="#333">② 路由树与匹配</text>
+  <text x="346" y="174" font-size="11.5" fill="#333">③ 抑制、静默与时间窗口</text>
+  <line x1="346" y1="196" x2="594" y2="196" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="346" y="216" font-size="11" fill="#666">1000 条告警怎么压成 1 条通知</text>
+  <text x="346" y="238" font-size="11" fill="#666">产出：多级路由树 + 分组实测</text>
+
+  <!-- 课 6 -->
+  <rect x="630" y="76" width="280" height="176" rx="8" fill="#fff" stroke="#00695C" stroke-width="2"/>
+  <rect x="630" y="76" width="280" height="32" rx="8" fill="#00695C"/>
+  <text x="770" y="98" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#fff">课 6 查询引擎与查询成本</text>
+  <text x="646" y="126" font-size="11.5" fill="#333">① PromQL 执行流程</text>
+  <text x="646" y="150" font-size="11.5" fill="#333">② staleness 与 lookback delta</text>
+  <text x="646" y="174" font-size="11.5" fill="#333">③ 查询成本控制</text>
+  <line x1="646" y1="196" x2="894" y2="196" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="646" y="216" font-size="11" fill="#666">为什么这个点没数据、这条查询会打挂</text>
+  <text x="646" y="238" font-size="11" fill="#666">产出：成本对比实测</text>
+
+  <line x1="310" y1="164" x2="328" y2="164" stroke="#00695C" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="610" y1="164" x2="628" y2="164" stroke="#00695C" stroke-width="2" marker-end="url(#a)"/>
+
+  <rect x="30" y="270" width="880" height="52" rx="6" fill="#e0f2f1" stroke="#80cbc4" stroke-width="1"/>
+  <text x="46" y="290" font-size="11.5" fill="#004d40" font-weight="bold">环环相扣：</text>
+  <text x="46" y="310" font-size="11.5" fill="#333">课 4 决定"什么算异常"，课 5 决定"通知谁、多久通知一次"，课 6 决定"规则里的查询能不能扛住"——三者共同决定告警的延迟与噪声。</text>
+
+  <defs>
+    <marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#00695C"/>
+    </marker>
+  </defs>
+</svg>

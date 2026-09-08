@@ -1,0 +1,143 @@
+# 多集群统一监控平台 —— 完整可运行工程
+#
+# 端口段：19500+ （课 9 已占到 19430，19440 已被其他进程占用）
+#
+# 架构：
+#   3 个业务服务（prod/staging/dev，同一镜像不同环境变量）
+#   → 3 个 Prometheus 采集端（各自打 external_labels 环境标）
+#   → remote write → Mimir（长期存储 + 多租户）
+#   → 全局查询层 Prometheus 通过 remote read 读全量
+#   → Alertmanager 按 env 分层路由 → webhook 落盘
+#
+# 启动：docker compose up -d
+# 验证：./verify.sh
+
+# 中文目录名会让 compose 推导项目名失败（project name must not be empty），
+# 必须显式指定。用 ASCII 名字避免 DNS 名称非法。
+name: multi-cluster-monitoring
+
+services:
+  # ============ 业务服务（三环境共用镜像） ============
+  app-prod:
+    build: ./app
+    environment:
+      - APP_ENV=prod
+      - APP_CLUSTER=prod-shanghai
+      - APP_REGION=cn-east
+    networks: [mon]
+
+  app-staging:
+    build: ./app
+    environment:
+      - APP_ENV=staging
+      - APP_CLUSTER=staging-shanghai
+      - APP_REGION=cn-east
+    networks: [mon]
+
+  app-dev:
+    build: ./app
+    environment:
+      - APP_ENV=dev
+      - APP_CLUSTER=dev-shanghai
+      - APP_REGION=cn-east
+    networks: [mon]
+
+  # ============ 采集端 Prometheus（三环境各一） ============
+  prom-prod:
+    image: prom/prometheus:v3.14.0
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.enable-lifecycle
+      - --web.enable-admin-api
+    volumes:
+      - ./prometheus/prometheus-prod.yml:/etc/prometheus/prometheus.yml:ro
+      - ./rules:/etc/prometheus/rules:ro
+    ports:
+      - "19500:9090"
+    networks: [mon]
+    depends_on: [app-prod, mimir, alertmanager]
+
+  prom-staging:
+    image: prom/prometheus:v3.14.0
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.enable-lifecycle
+    volumes:
+      - ./prometheus/prometheus-staging.yml:/etc/prometheus/prometheus.yml:ro
+      - ./rules:/etc/prometheus/rules:ro
+    ports:
+      - "19501:9090"
+    networks: [mon]
+    depends_on: [app-staging, mimir, alertmanager]
+
+  prom-dev:
+    image: prom/prometheus:v3.14.0
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.enable-lifecycle
+    volumes:
+      - ./prometheus/prometheus-dev.yml:/etc/prometheus/prometheus.yml:ro
+      - ./rules:/etc/prometheus/rules:ro
+    ports:
+      - "19502:9090"
+    networks: [mon]
+    depends_on: [app-dev, mimir, alertmanager]
+
+  # ============ 长期存储：Mimir 单体模式 ============
+  mimir:
+    image: grafana/mimir:3.2.0
+    command:
+      - -config.file=/etc/mimir/mimir-config.yml
+    volumes:
+      - ./mimir/mimir-config.yml:/etc/mimir/mimir-config.yml:ro
+      - mimir-data:/data
+    ports:
+      - "19510:8080"
+    networks: [mon]
+
+  # ============ 全局查询层（remote read 读 Mimir） ============
+  prom-global:
+    image: prom/prometheus:v3.14.0
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+    volumes:
+      - ./prometheus/prometheus-global.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "19520:9090"
+    networks: [mon]
+    depends_on: [mimir]
+
+  # ============ 告警 ============
+  alertmanager:
+    image: prom/alertmanager:v0.30.0
+    command:
+      - --config.file=/etc/alertmanager/alertmanager.yml
+      - --storage.path=/alertmanager
+    volumes:
+      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+    ports:
+      - "19530:9093"
+    networks: [mon]
+    depends_on: [webhook-logger]
+
+  # 告警接收端：把通知落盘，便于验收时核对分层是否生效
+  webhook-logger:
+    build: ./webhook
+    environment:
+      - LOG_DIR=/logs
+    volumes:
+      - ./logs:/logs
+    ports:
+      - "19540:8080"
+    networks: [mon]
+
+networks:
+  mon:
+    driver: bridge
+
+volumes:
+  mimir-data:

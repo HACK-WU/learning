@@ -1,0 +1,18 @@
+global:
+  scrape_interval: 2s
+  external_labels:
+    cluster: l7-reader
+    role: query
+
+# 关键：本实例自己不抓 l7-app，本地没有这批数据
+# 只能通过 remote read 从 backend 取
+remote_read:
+  - url: "http://l7-backend:9090/api/v1/read"
+    read_recent: true
+    filter_external_labels: false
+    name: backend-read
+
+scrape_configs:
+  - job_name: reader-self
+    static_configs:
+      - targets: ["localhost:9090"]

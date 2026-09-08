@@ -1,0 +1,12 @@
+groups:
+  - name: probe-both
+    rules:
+      - record: probe:rr
+        expr: vector(1)
+      - alert: ProbeAlwaysFiring
+        expr: vector(1)
+        for: 1m
+        labels:
+          severity: page
+        annotations:
+          summary: "probe alert"

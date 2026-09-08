@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="345" viewBox="0 0 940 345" font-family="'PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif">
+  <rect width="940" height="345" fill="#fafafa"/>
+
+  <text x="470" y="34" text-anchor="middle" font-size="19" font-weight="bold" fill="#e65100">阶段 3 · 规模化与生态 ——「单机装不下了」</text>
+  <text x="470" y="56" text-anchor="middle" font-size="12" fill="#555">数据涨到千万序列，一台机器接不住了</text>
+
+  <!-- 课 7 -->
+  <rect x="30" y="76" width="280" height="176" rx="8" fill="#fff" stroke="#EF6C00" stroke-width="2"/>
+  <rect x="30" y="76" width="280" height="32" rx="8" fill="#EF6C00"/>
+  <text x="170" y="98" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#fff">课 7 远程读写与 Agent 模式</text>
+  <text x="46" y="126" font-size="11.5" fill="#333">① remote write 协议与队列</text>
+  <text x="46" y="150" font-size="11.5" fill="#333">② remote read</text>
+  <text x="46" y="174" font-size="11.5" fill="#333">③ Agent 模式</text>
+  <line x1="46" y1="196" x2="294" y2="196" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="46" y="216" font-size="11" fill="#666">数据怎么出去、丢在哪</text>
+  <text x="46" y="238" font-size="11" fill="#666">产出：断网实测 + 队列行为</text>
+
+  <!-- 课 8 -->
+  <rect x="330" y="76" width="280" height="176" rx="8" fill="#fff" stroke="#EF6C00" stroke-width="2"/>
+  <rect x="330" y="76" width="280" height="32" rx="8" fill="#EF6C00"/>
+  <text x="470" y="98" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#fff">课 8 联邦与全局视图</text>
+  <text x="346" y="126" font-size="11.5" fill="#333">① federation</text>
+  <text x="346" y="150" font-size="11.5" fill="#333">② HA 与数据一致性</text>
+  <text x="346" y="174" font-size="11.5" fill="#333">③ external labels 的正确用法</text>
+  <line x1="346" y1="196" x2="594" y2="196" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="346" y="216" font-size="11" fill="#666">多实例怎么拼出一张全局图</text>
+  <text x="346" y="238" font-size="11" fill="#666">产出：双写去重实测</text>
+
+  <!-- 课 9 -->
+  <rect x="630" y="76" width="280" height="176" rx="8" fill="#fff" stroke="#EF6C00" stroke-width="2"/>
+  <rect x="630" y="76" width="280" height="32" rx="8" fill="#EF6C00"/>
+  <text x="770" y="98" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#fff">课 9 长期存储选型</text>
+  <text x="646" y="126" font-size="11.5" fill="#333">① 三种架构路线</text>
+  <text x="646" y="150" font-size="11.5" fill="#333">② 选型决策框架</text>
+  <text x="646" y="174" font-size="11.5" fill="#333">③ 与 OpenTelemetry 的关系</text>
+  <line x1="646" y1="196" x2="894" y2="196" stroke="#e0e0e0" stroke-width="1"/>
+  <text x="646" y="216" font-size="11" fill="#666">该往哪走、放弃什么</text>
+  <text x="646" y="238" font-size="11" fill="#666">产出：选型结论 + 代价清单</text>
+
+  <line x1="310" y1="164" x2="328" y2="164" stroke="#EF6C00" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="610" y1="164" x2="628" y2="164" stroke="#EF6C00" stroke-width="2" marker-end="url(#a)"/>
+
+  <rect x="30" y="270" width="880" height="52" rx="6" fill="#fff3e0" stroke="#ffb74d" stroke-width="1"/>
+  <text x="46" y="290" font-size="11.5" fill="#e65100" font-weight="bold">⚠️ 事实核查重点阶段：</text>
+  <text x="46" y="310" font-size="11.5" fill="#333">课 9 涉及 Thanos / Mimir / VictoriaMetrics 的版本号、OTLP receiver 状态等时效敏感内容，写课时必须联网核查并标注（核查于 YYYY-MM）。</text>
+
+  <defs>
+    <marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#EF6C00"/>
+    </marker>
+  </defs>
+</svg>

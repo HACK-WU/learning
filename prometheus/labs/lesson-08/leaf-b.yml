@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 5s
+  external_labels:
+    cluster: leaf-b
+    region: cn-north
+
+scrape_configs:
+  - job_name: l8-app
+    static_configs:
+      - targets: ["l8-app:8080"]
+  - job_name: leaf-b-self
+    static_configs:
+      - targets: ["localhost:9090"]

@@ -1,0 +1,57 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: default-receiver
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 30s
+  routes:
+    - matchers:
+        - alertname=~"Node.*"
+      receiver: infra-receiver
+      group_by: ['alertname', 'zone']
+      # continue: true —— 命中后继续匹配后续兄弟路由
+      continue: true
+
+    - matchers:
+        - team="payments"
+      receiver: payments-receiver
+      group_by: ['alertname', 'zone']
+      continue: false
+
+    - matchers:
+        - team="search"
+        - severity="critical"
+      receiver: search-critical-receiver
+      group_by: ['alertname']
+
+inhibit_rules:
+  - source_matchers:
+      - alertname="NodeDown"
+      - severity="critical"
+    target_matchers:
+      - severity="warning"
+    equal: ['zone']
+
+receivers:
+  - name: default-receiver
+    webhook_configs:
+      - url: 'http://l5-receiver:8099/default'
+        send_resolved: true
+
+  - name: payments-receiver
+    webhook_configs:
+      - url: 'http://l5-receiver:8099/payments'
+        send_resolved: true
+
+  - name: search-critical-receiver
+    webhook_configs:
+      - url: 'http://l5-receiver:8099/search-critical'
+        send_resolved: true
+
+  - name: infra-receiver
+    webhook_configs:
+      - url: 'http://l5-receiver:8099/infra'
+        send_resolved: true

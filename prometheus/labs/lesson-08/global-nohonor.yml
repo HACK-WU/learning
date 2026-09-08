@@ -1,0 +1,31 @@
+global:
+  scrape_interval: 5s
+  external_labels:
+    cluster: global
+    tier: global-view
+
+scrape_configs:
+  # ---- 对照组：honor_labels 未显式设置（默认 false） ----
+  - job_name: federate-leaf-a
+    metrics_path: /federate
+    params:
+      match[]:
+        - '{__name__=~"l8_.*"}'
+    static_configs:
+      - targets: ["l8-leaf-a:9090"]
+        labels:
+          source_cluster: leaf-a
+
+  - job_name: federate-leaf-b
+    metrics_path: /federate
+    params:
+      match[]:
+        - '{__name__=~"l8_.*"}'
+    static_configs:
+      - targets: ["l8-leaf-b:9090"]
+        labels:
+          source_cluster: leaf-b
+
+  - job_name: global-self
+    static_configs:
+      - targets: ["localhost:9090"]

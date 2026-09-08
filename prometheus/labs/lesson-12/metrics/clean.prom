@@ -1,0 +1,10 @@
+# HELP http_requests_total Total HTTP requests
+# TYPE http_requests_total counter
+http_requests_total{code="200",user_id="u1"} 1
+http_requests_total{code="200",user_id="u2"} 2
+http_requests_total{code="500",user_id="u3"} 3
+# HELP rpc_duration_seconds RPC duration
+# TYPE rpc_duration_seconds histogram
+rpc_duration_seconds_bucket{le="0.1"} 5
+rpc_duration_seconds_bucket{le="+Inf"} 7
+rpc_duration_seconds_count 7

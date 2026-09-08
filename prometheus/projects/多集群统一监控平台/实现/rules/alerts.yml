@@ -1,0 +1,87 @@
+# 告警规则 —— 分层设计（三环境共用）
+#
+# 【知识点回指·阶段 2 课 4】规则组按 evaluation_interval 顺序求值，
+#   for 的语义是「条件连续成立多久」，用来消除抖动。
+# 【知识点回指·阶段 2 课 6】查询成本是真实存在的 —— 规则每次求值都要跑一遍，
+#   一条昂贵的规则每 5 秒跑一次，等于给 Prometheus 持续加压。
+#
+# 【分层告警设计】同一个症状，在不同环境严重程度不同：
+#   - prod 错误率 > 5%  → 立即呼叫值班（critical）
+#   - staging > 5%      → 只发群消息（warning）
+#   - dev > 5%          → 不告警（噪声源）
+# 这就是 alertmanager 路由树要解决的问题，也是本项目决策点 2 的产物。
+
+groups:
+  - name: availability
+    rules:
+      # 目标不可达 —— 最基础的告警
+      - alert: TargetDown
+        expr: up{job="app"} == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "目标 {{ $labels.instance }} 不可达"
+          description: "env={{ $labels.env }} 的 {{ $labels.instance }} 已连续 30s 抓取失败"
+
+      # 错误率告警 —— 分层的关键示例
+      - alert: HighErrorRate
+        expr: |
+          sum by (env, cluster) (rate(http_requests_total{status="500"}[2m]))
+          /
+          sum by (env, cluster) (rate(http_requests_total[2m]))
+          > 0.05
+        for: 1m
+        labels:
+          # 注意：这里不写死 severity，交给 alertmanager 按 env 路由决定
+          team: platform
+        annotations:
+          summary: "{{ $labels.cluster }} 错误率超过 5%"
+          description: "当前错误率 {{ $value | humanizePercentage }}，env={{ $labels.env }}"
+
+  - name: latency
+    rules:
+      # 延迟告警用 histogram_quantile
+      # 【知识点回指·PromQL 课】histogram_quantile 需要 le 标签，
+      #   且必须按 le 之外的标签做 sum by，否则结果无意义
+      - alert: HighLatencyP99
+        expr: |
+          histogram_quantile(
+            0.99,
+            sum by (le, env, cluster) (rate(http_request_duration_seconds_bucket[5m]))
+          ) > 0.5
+        for: 2m
+        labels:
+          team: platform
+        annotations:
+          summary: "{{ $labels.cluster }} P99 延迟超过 500ms"
+          description: "当前 P99 = {{ $value }}s"
+
+  - name: pipeline
+    rules:
+      # 【本项目独有】监控「监控链路本身」
+      # remote write 卡住时，业务指标看起来是正常的（因为本地还有数据），
+      # 但全局视图已经停止更新 —— 这是最容易被忽略的盲区
+      # 【知识点回指·阶段 3 课 7】WAL 截断与发送确认解耦，
+      #   所以「发送失败」不会立刻反映在数据上，必须主动监控队列
+      - alert: RemoteWriteStalled
+        expr: |
+          prometheus_remote_storage_samples_pending > 5000
+        for: 2m
+        labels:
+          severity: critical
+          team: platform
+        annotations:
+          summary: "remote write 队列积压"
+          description: "pending = {{ $value }}，超出容量时新样本会被丢弃"
+
+      - alert: RemoteWriteFailing
+        expr: |
+          rate(prometheus_remote_storage_samples_failed_total[2m]) > 0
+        for: 1m
+        labels:
+          severity: critical
+          team: platform
+        annotations:
+          summary: "remote write 持续失败"
+          description: "后端不可用时数据靠 WAL 兜底，超过保留期就真丢了"

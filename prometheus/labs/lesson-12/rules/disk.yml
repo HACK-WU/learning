@@ -1,0 +1,10 @@
+groups:
+  - name: disk
+    rules:
+      - alert: DiskWillFillIn6h
+        expr: predict_linear(node_filesystem_free_bytes[1h], 6*3600) < 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "disk will fill in 6h"

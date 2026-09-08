@@ -1,0 +1,22 @@
+global:
+  scrape_interval: 5s
+  external_labels:
+    cluster: ha-cluster
+    # 故意不写 replica —— 用于验证"忘写 replica 标签"的后果
+
+remote_write:
+  - url: "http://l8-vm-norep:8428/api/v1/write"
+    queue_config:
+      capacity: 1000
+      max_shards: 10
+      min_shards: 1
+      max_samples_per_send: 100
+      batch_send_deadline: 5s
+
+scrape_configs:
+  - job_name: l8-app
+    static_configs:
+      - targets: ["l8-app:8080"]
+  - job_name: norep-1-self
+    static_configs:
+      - targets: ["localhost:9090"]

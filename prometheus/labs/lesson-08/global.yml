@@ -1,0 +1,34 @@
+global:
+  scrape_interval: 5s
+  external_labels:
+    cluster: global
+    tier: global-view
+
+scrape_configs:
+  # ---- 分层联邦：抓取两个叶子的 /federate 端点 ----
+  - job_name: federate-leaf-a
+    honor_labels: true
+    metrics_path: /federate
+    params:
+      match[]:
+        - '{__name__=~"l8_.*"}'
+    static_configs:
+      - targets: ["l8-leaf-a:9090"]
+        labels:
+          source_cluster: leaf-a
+
+  - job_name: federate-leaf-b
+    honor_labels: true
+    metrics_path: /federate
+    params:
+      match[]:
+        - '{__name__=~"l8_.*"}'
+    static_configs:
+      - targets: ["l8-leaf-b:9090"]
+        labels:
+          source_cluster: leaf-b
+
+  # ---- 自身监控 ----
+  - job_name: global-self
+    static_configs:
+      - targets: ["localhost:9090"]

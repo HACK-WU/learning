@@ -1,0 +1,55 @@
+groups:
+  - name: l4-A-slow
+    interval: 5s
+    rules:
+      - record: l4:expensive:rate5m
+        expr: sum(rate({__name__=~".+"}[5m]))
+      - record: l4:fast_probe:const
+        expr: vector(1)
+
+  - name: l4-B-fast
+    interval: 5s
+    rules:
+      - record: l4:uptime_probe:const
+        expr: vector(2)
+
+  - name: l4-C-recording
+    interval: 10s
+    rules:
+      - record: job:app_requests:rate1m
+        expr: sum by (job) (rate(app_requests_total[1m]))
+
+      - record: job:app_requests_error:ratio1m
+        expr: |
+          sum by (job) (rate(app_requests_total{status="500"}[1m]))
+          / clamp_min(sum by (job) (rate(app_requests_total[1m])), 1e-9)
+
+  - name: l4-D-alerts
+    interval: 10s
+    rules:
+      - alert: L4HighErrorRate
+        expr: job:app_requests_error:ratio1m > 0.1
+        for: 20s
+        labels:
+          severity: critical
+        annotations:
+          summary: '错误率 {{ $value | humanizePercentage }} 超过 10%（for=20s）'
+
+      - alert: L4ErrorRateWobble
+        expr: job:app_requests_error:ratio1m > 0.05
+        for: 0s
+        labels:
+          severity: warning
+        annotations:
+          summary: '错误率 {{ $value | humanizePercentage }} 超过 5%（for=0s，无保护，易抖动）'
+
+      # keep_firing_for：条件已经不满足了，但仍保持 firing 一段时间
+      # 用途：避免告警在阈值附近快速翻转（flapping）
+      - alert: L4ErrorRateKeepFiring
+        expr: job:app_requests_error:ratio1m > 0.05
+        for: 0s
+        keep_firing_for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: '错误率 {{ $value | humanizePercentage }}（keep_firing_for=30s，恢复后仍保持 30 秒）'

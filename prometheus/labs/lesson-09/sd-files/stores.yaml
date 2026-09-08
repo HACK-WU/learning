@@ -1,0 +1,4 @@
+- targets:
+  - l9-thanos-sc-1:19090
+  - l9-thanos-sc-2:19090
+  - l9-thanos-store:19090

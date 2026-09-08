@@ -1,0 +1,11 @@
+global:
+  scrape_interval: 30s
+  evaluation_interval: 30s
+  # 注意：scrape_timeout 必须 <= scrape_interval，否则启动报错：
+  #   "global scrape timeout greater than scrape interval"
+  scrape_timeout: 25s
+
+scrape_configs:
+  - job_name: "l11"
+    static_configs:
+      - targets: ["l11c-app:8000"]

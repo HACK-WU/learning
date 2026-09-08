@@ -1,0 +1,5 @@
+groups:
+  - name: probe-record-only
+    rules:
+      - record: probe:rr
+        expr: vector(1)

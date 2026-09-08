@@ -1,0 +1,34 @@
+groups:
+  - name: l5-app-alerts
+    interval: 5s
+    rules:
+      # 实例级告警（warning），带 team / zone / instance 标签
+      - alert: HighErrorRate
+        expr: |
+          sum by (instance, team, zone) (
+            rate(app_requests_total{status="500"}[10s])
+          )
+          /
+          sum by (instance, team, zone) (
+            rate(app_requests_total[10s])
+          )
+          > 0.1
+        for: 5s
+        labels:
+          severity: warning
+        annotations:
+          summary: "实例 {{ $labels.instance }} 错误率过高"
+          description: "{{ $labels.team }}/{{ $labels.zone }} 错误率超过 10%"
+
+  - name: l5-node-alerts
+    interval: 5s
+    rules:
+      # 节点级告警（critical），用于演示抑制
+      - alert: NodeDown
+        expr: app_node_up == 0
+        for: 5s
+        labels:
+          severity: critical
+        annotations:
+          summary: "节点 {{ $labels.instance }} 宕机"
+          description: "{{ $labels.zone }} 区节点不可用，应抑制该区实例级告警"

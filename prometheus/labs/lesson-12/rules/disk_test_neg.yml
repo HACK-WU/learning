@@ -1,0 +1,12 @@
+rule_files:
+  - disk.yml
+evaluation_interval: 1m
+tests:
+  - interval: 1m
+    input_series:
+      - series: 'node_filesystem_free_bytes{mountpoint="/"}'
+        values: '100000000000-1000000000x59'
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: DiskWillFillIn6h
+        exp_alerts: []          # 故意写错：声称不该触发

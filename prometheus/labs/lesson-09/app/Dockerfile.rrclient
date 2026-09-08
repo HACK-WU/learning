@@ -1,0 +1,4 @@
+FROM python:3.11-slim
+RUN pip install --no-cache-dir cramjam
+COPY rr_client.py /rr_client.py
+CMD ["sleep", "infinity"]

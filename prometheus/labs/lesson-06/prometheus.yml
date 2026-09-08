@@ -1,0 +1,18 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+  scrape_timeout: 4s
+
+rule_files:
+  - /etc/prometheus/rules.yml
+
+scrape_configs:
+  # 实验主体：可控基数、可控生死的 app
+  - job_name: l6-app
+    static_configs:
+      - targets: ['l6-app:8080']
+
+  # Prometheus 自抓取：用于查询统计与自身指标
+  - job_name: prometheus
+    static_configs:
+      - targets: ['localhost:9090']

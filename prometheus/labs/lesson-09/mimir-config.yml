@@ -1,0 +1,60 @@
+# Mimir 单体模式最小配置（v3.2.0 实测修正）
+#
+# 【实测修正点 1】Mimir 的 blocks-storage.s3 只有 10 个字段，
+#   不存在 force_path_style / bucket_lookup_type —— 与 Thanos 不同，
+#   Mimir 对 MinIO 这类 S3 兼容存储自动使用 path style。
+#   写了不存在的字段会直接启动失败：field force_path_style not found in type s3.Config
+#
+# 【实测修正点 2】compactor.ring 下没有 replication_factor，
+#   replication-factor 只在 ingester.ring / 部分 ring 上存在。
+#
+# 【实测修正点 3】Mimir 3.x 只提供 distroless 镜像，容器内没有 sh/bash，
+#   无法 docker exec 进去排查，只能靠日志和 HTTP 接口。
+multitenancy_enabled: true
+
+server:
+  http_listen_port: 8080
+  grpc_listen_port: 9095
+  log_level: info
+
+blocks_storage:
+  backend: s3
+  s3:
+    bucket_name: mimir
+    endpoint: l9-minio:9000
+    access_key_id: minioadmin
+    secret_access_key: minioadmin
+    insecure: true
+  tsdb:
+    dir: /data/tsdb
+  bucket_store:
+    sync_dir: /data/tsdb-sync
+
+compactor:
+  data_dir: /data/compactor
+  sharding_ring:
+    kvstore:
+      store: inmemory
+
+ingester:
+  ring:
+    replication_factor: 1
+    instance_addr: 127.0.0.1
+    kvstore:
+      store: inmemory
+
+distributor:
+  ring:
+    instance_addr: 127.0.0.1
+    kvstore:
+      store: inmemory
+
+ruler_storage:
+  backend: filesystem
+  filesystem:
+    dir: /data/rules
+
+alertmanager_storage:
+  backend: filesystem
+  filesystem:
+    dir: /data/alertmanager

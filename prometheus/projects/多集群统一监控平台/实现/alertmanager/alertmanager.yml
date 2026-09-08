@@ -1,0 +1,71 @@
+# Alertmanager 配置 —— 分层路由树
+#
+# 【知识点回指·阶段 2 课 5】路由树是「从上往下匹配、命中即停」，
+#   不是「找最精确的规则」。continue: true 才会继续往下匹配。
+# 【知识点回指·阶段 2 课 5】group_by 决定「哪些告警合并成一条通知」，
+#   group_wait 是「组内第一条告警来了先等多久」，决定响应延迟。
+#
+# 本文件的核心设计：用 env 标签把告警分流到不同接收端，
+# 实现「同样的症状、不同的处置强度」。
+
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: default
+  # 按 alertname + cluster 分组，避免同集群多条告警刷屏
+  group_by: ["alertname", "cluster"]
+  group_wait: 10s
+  group_interval: 1m
+  repeat_interval: 4h
+
+  routes:
+    # 第一层：prod 环境 —— 最严格，立即呼叫值班
+    - matchers:
+        - env = "prod"
+      receiver: pager-prod
+      group_wait: 10s
+      repeat_interval: 1h
+      continue: false
+
+    # 第二层：staging —— 降级为群消息
+    - matchers:
+        - env = "staging"
+      receiver: chat-staging
+      group_wait: 30s
+      repeat_interval: 4h
+      continue: false
+
+    # 第三层：dev —— 只记录，不打扰
+    # 【设计取舍】也可以直接 drop 掉，但保留 receiver 便于事后分析
+    - matchers:
+        - env = "dev"
+      receiver: silent-dev
+      continue: false
+
+    # 兜底：监控链路本身的告警，无 env 标签也要响
+    - matchers:
+        - alertname =~ "RemoteWrite.*"
+      receiver: pager-prod
+      continue: false
+
+receivers:
+  - name: pager-prod
+    webhook_configs:
+      - url: http://webhook-logger:8080/pager
+        send_resolved: true
+
+  - name: chat-staging
+    webhook_configs:
+      - url: http://webhook-logger:8080/chat
+        send_resolved: true
+
+  - name: silent-dev
+    webhook_configs:
+      - url: http://webhook-logger:8080/silent
+        send_resolved: true
+
+  - name: default
+    webhook_configs:
+      - url: http://webhook-logger:8080/default
+        send_resolved: true
