@@ -218,14 +218,16 @@ PS C:\Users\你> npx -v
 Windows 的下载命令（我已实测可稳定下载）：
 
 ```powershell
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/HACK-WU/skills/master/scripts/skill-install.ps1" -OutFile "$env:USERPROFILE\skill-install.ps1"
+Invoke-WebRequest -Uri "https://gitee.com/hack-wu/skills/raw/master/scripts/skill-install.ps1" -OutFile "$env:USERPROFILE\skill-install.ps1"
 ```
 
 > ⚠️ **这是本课最容易踩的坑**：网上很多教程写的是 `install.ps1` 或 `skills.ps1`，**都不对**。真实文件名是 **`skill-install.ps1`**，而且在 **`scripts/` 子目录**下、分支是 **`master`**（不是 `main`）。我实测过：写错名字一律 404。
 
-> 💡 **下载源的选择**：作者同时在 GitHub 和 Gitee 放了这个脚本。我实测时 Gitee 源出现间歇性 404（3 次连试全失败），GitHub 源 3 次全成功——所以**推荐用上面的 GitHub 链接**。如果你的网络访问 GitHub 困难，把域名换成 `gitee.com/hack-wu/skills/raw/master/scripts/skill-install.ps1` 多试几次即可（详见第四幕步骤 2）。
+> 💡 **为什么用 Gitee 而不是 GitHub**：这是国内镜像站，GitHub 有时候连不上。作者在两边都放了一份，**内容逐字节相同**——我实测比对过 SHA1，两边都是 `9580FDBF96EF8FCD`，21210 字节（核查于 2026-09-08）。
 >
-> ⚠️ **用户名容易写错**：Gitee 上的用户名是 **`hack-wu`（中间有连字符）**，不是 `hackwu`。写错会固定 404，且和"间歇性抽风"的 404 长得一模一样——**先核对拼写，再判断是不是网络问题**。
+> ⚠️ **用户名容易写错**：Gitee 上的用户名是 **`hack-wu`（中间有连字符）**，不是 `hackwu`。写错会 404，且和"链接失效"长得一模一样——**先核对拼写，再怀疑别的**。
+>
+> 如果你的网络访问 Gitee 困难，把域名换成 `raw.githubusercontent.com/HACK-WU/skills/master/scripts/skill-install.ps1` 即可（详见第四幕步骤 2）。
 
 **第二步：运行脚本安装**
 
@@ -525,8 +527,10 @@ v22.14.0
 ### 步骤 2：下载安装脚本
 
 ```powershell
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/HACK-WU/skills/master/scripts/skill-install.ps1" -OutFile "$env:USERPROFILE\skill-install.ps1"
+Invoke-WebRequest -Uri "https://gitee.com/hack-wu/skills/raw/master/scripts/skill-install.ps1" -OutFile "$env:USERPROFILE\skill-install.ps1"
 ```
+
+> ⚠️ **用户名是 `hack-wu`（带连字符）**，写成 `hackwu` 会 404。
 
 > 💡 这条命令用 `$env:USERPROFILE` 自动定位到你的用户目录（比如 `C:\Users\你`），**不要照抄别人的用户名**。
 
@@ -549,9 +553,8 @@ skill-install.ps1   21210
 **下不下来怎么办？**（我实测时真的遇到了，见下方"实测提醒"）
 
 ```powershell
-# 备选源一：Gitee（国内镜像，时好时坏，多试几次）
-# 注意用户名是 hack-wu（带连字符），不是 hackwu
-Invoke-WebRequest -Uri "https://gitee.com/hack-wu/skills/raw/master/scripts/skill-install.ps1" -OutFile "$env:USERPROFILE\skill-install.ps1"
+# 备选源一：GitHub（Gitee 访问困难时用这个，内容完全相同）
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/HACK-WU/skills/master/scripts/skill-install.ps1" -OutFile "$env:USERPROFILE\skill-install.ps1"
 
 # 备选源二：换个网络（手机热点）再试
 # 备选源三：浏览器打开下面的网址，手动保存为 skill-install.ps1
@@ -559,12 +562,19 @@ Invoke-WebRequest -Uri "https://gitee.com/hack-wu/skills/raw/master/scripts/skil
 #   （GitHub 版：https://github.com/HACK-WU/skills/blob/master/scripts/skill-install.ps1）
 ```
 
-> ⚠️ **实测提醒（重要）**：我写这课的时候，同一个 Gitee 链接**第一次下载成功了，之后连试 3 次全部 404**；换成 GitHub 源后**连试 3 次全部成功**。（2026-09-08 复测：GitHub 源 3/3 成功，Gitee 源 10/10 失败，但中间也曾成功过一次——**结论是间歇性抽风，不是永久失效**。）所以：
-> - **首选 GitHub 源**（上面的主命令），它更稳
-> - 如果你在 Gitee 源上遇到 404，**先核对用户名是不是 `hack-wu`**（带连字符），拼错和抽风的报错一模一样
-> - 确认没拼错还是 404，**不是你命令写错了**，换个源或过会儿重试即可
+> ⚠️ **实测提醒（重要，含一次结论修正）**：
+>
+> **两个源的内容是完全一样的**——2026-09-08 实测比对，两边都是 21210 字节、SHA1 均为 `9580FDBF96EF8FCD`，各下载 3 次全部成功。**不存在"哪个源更好"，只有"你的网络哪个更快"。**
+>
+> **关于"Gitee 间歇性 404"这个说法的修正**：本课初稿曾记录"Gitee 连试 3 次全 404，GitHub 全成功"，我当时判定为 Gitee 不稳定。2026-09-08 复测发现**真因另有其事**：
+>
+> - Gitee 的 raw 链接在 PowerShell 5.1 的 `Invoke-WebRequest` 下会抛 `NullReferenceException`（**不是 404**）——这是 PowerShell 5.1 处理无响应体时的已知 bug，跟 Gitee 稳不稳没关系。
+> - 换成 `System.Net.WebClient` 或 PowerShell 7 后，Gitee **3/3 稳定成功**。
+> - 另一个干扰项是**用户名**：`hack-wu` 写成 `hackwu` 会真 404，和上述报错混在一起，极易误判成"网络抽风"。
+>
+> 所以如果你遇到 404 / 报错，按这个顺序排查：**① 用户名是不是 `hack-wu`（带连字符）→ ② 文件名是不是 `skill-install.ps1`、在 `scripts/` 下、分支 `master` → ③ 换个源或换 PowerShell 7 → ④ 换网络。**
+>
 > - 另外：**别用 `irm` 下载**（`irm` 是 `Invoke-RestMethod` 的缩写，我实测它在同一个链接上报 404，而 `Invoke-WebRequest` 正常）——**照抄上面的 `Invoke-WebRequest` 写法**
-> - 404 也有可能是文件名写错：正确名字是 **`skill-install.ps1`**（不是 `install.ps1`），在 **`scripts/`** 目录下、分支 **`master`**
 
 **如果跑脚本时报"禁止运行脚本"**，先执行这一条（只影响当前用户，安全）：
 
