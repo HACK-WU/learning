@@ -210,6 +210,8 @@ curl -O https://gitee.com/hack-wu/skills/raw/master/scripts/skill-install.sh
 
 > ⚠️ **Mac / Linux 同学注意两件事**（Windows 同学可以跳过）：
 > 1. **参数不一样**：`.sh` 版用**短选项** `-t` 和 `-n`，而 Windows 的 `.ps1` 版用 `-Target` 和 `-NameFilter`。照抄会报错，对照下面的表改。
+>    - 特别提醒 `-t`：在 Windows 上它会报 **"ambiguous（歧义）"** 错误，因为脚本里同时有 `-Target` 和 `-TargetPath`，PowerShell 不知道你要哪个。
+>    - 反过来 `-n` 在 Windows 上**碰巧能用**（脚本里只有 `-NameFilter` 一个 N 开头的参数，没歧义），但仍建议写完整——哪天作者加个 N 开头的新参数，你的命令就突然失效了。
 > 2. **要加执行权限**：直接 `./skill-install.sh` 会提示"Permission denied"。要么前面加 `bash`，要么先跑一次 `chmod +x skill-install.sh`。
 
 | 你想做的事 | Windows（`.ps1`） | Mac / Linux（`.sh`） |

@@ -223,7 +223,9 @@ Invoke-WebRequest -Uri "https://raw.githubusercontent.com/HACK-WU/skills/master/
 
 > ⚠️ **这是本课最容易踩的坑**：网上很多教程写的是 `install.ps1` 或 `skills.ps1`，**都不对**。真实文件名是 **`skill-install.ps1`**，而且在 **`scripts/` 子目录**下、分支是 **`master`**（不是 `main`）。我实测过：写错名字一律 404。
 
-> 💡 **下载源的选择**：作者同时在 GitHub 和 Gitee 放了这个脚本。我实测时 Gitee 源出现间歇性 404（3 次连试全失败），GitHub 源 3 次全成功——所以**推荐用上面的 GitHub 链接**。如果你的网络访问 GitHub 困难，把域名换成 `gitee.com/hackwu/skills/raw/master/scripts/skill-install.ps1` 多试几次即可（详见第四幕步骤 2）。
+> 💡 **下载源的选择**：作者同时在 GitHub 和 Gitee 放了这个脚本。我实测时 Gitee 源出现间歇性 404（3 次连试全失败），GitHub 源 3 次全成功——所以**推荐用上面的 GitHub 链接**。如果你的网络访问 GitHub 困难，把域名换成 `gitee.com/hack-wu/skills/raw/master/scripts/skill-install.ps1` 多试几次即可（详见第四幕步骤 2）。
+>
+> ⚠️ **用户名容易写错**：Gitee 上的用户名是 **`hack-wu`（中间有连字符）**，不是 `hackwu`。写错会固定 404，且和"间歇性抽风"的 404 长得一模一样——**先核对拼写，再判断是不是网络问题**。
 
 **第二步：运行脚本安装**
 
@@ -268,9 +270,31 @@ $dest = if ($leaf -eq "skills") { $target } else { Join-Path $target "skills" }
 | 只装某几个技能 | `-NameFilter` | `-n` |
 | 指定从哪个仓库装 | `-Repo` | `--repo` |
 
-> ⚠️ **实测高频坑**：在 Windows 上照抄 Mac 教程写 `-t`，PowerShell 会报"找不到参数"。**Windows 一律用完整的 `-Target` / `-NameFilter` / `-Repo`。**
+> ⚠️ **实测高频坑**：在 Windows 上照抄 Mac 教程写 `-t`，PowerShell 会直接报错。**Windows 一律用完整的 `-Target` / `-NameFilter` / `-Repo`。**
 
-好消息是：PowerShell 里参数名**可以只打前面几个字母**（比如打 `-Tar` 就行），但初学阶段建议**照抄完整写法**，不容易错。
+**为什么 `-t` 一定会失败？**（我实测复现了，报错原文如下）
+
+```powershell
+# 实测：用 -t 传值
+.\skill-install.ps1 install -t C:\projects\my-app
+```
+
+```
+Parameter cannot be processed because the parameter name 't' is ambiguous.
+Possible matches include: -TargetPath -Target.
+```
+
+原因不是"PowerShell 不认短参数"，而是**这个脚本里同时存在 `-TargetPath` 和 `-Target` 两个参数**。你打 `-t`，PowerShell 猜不出你想用哪个，于是**拒绝执行并列出候选**——这属于**歧义（ambiguous）错误**，和"找不到参数"是两回事。
+
+**顺带一个反直觉的发现**：`-n` 其实是**能用**的。脚本里只有 `$NameFilter` 一个以 N 开头的参数，没有歧义，所以 PowerShell 允许你缩写：
+
+```powershell
+# 实测：下面两条完全等价，都成功
+.\skill-install.ps1 install -n code-review -Target C:\projects\my-app
+.\skill-install.ps1 install -NameFilter code-review -Target C:\projects\my-app
+```
+
+**但别因此就去用 `-n`**：它能用纯属"碰巧没撞名"，作者随时可能新增一个以 N 开头的参数，你的命令就会突然失效。而 `-t` 连碰巧都用不了。**初学阶段照抄完整写法最稳。**
 
 #### 常用命令一览
 
@@ -526,16 +550,19 @@ skill-install.ps1   21210
 
 ```powershell
 # 备选源一：Gitee（国内镜像，时好时坏，多试几次）
-Invoke-WebRequest -Uri "https://gitee.com/hackwu/skills/raw/master/scripts/skill-install.ps1" -OutFile "$env:USERPROFILE\skill-install.ps1"
+# 注意用户名是 hack-wu（带连字符），不是 hackwu
+Invoke-WebRequest -Uri "https://gitee.com/hack-wu/skills/raw/master/scripts/skill-install.ps1" -OutFile "$env:USERPROFILE\skill-install.ps1"
 
 # 备选源二：换个网络（手机热点）再试
 # 备选源三：浏览器打开下面的网址，手动保存为 skill-install.ps1
-#   https://github.com/HACK-WU/skills/blob/master/scripts/skill-install.ps1
+#   https://gitee.com/hack-wu/skills/blob/master/scripts/skill-install.ps1
+#   （GitHub 版：https://github.com/HACK-WU/skills/blob/master/scripts/skill-install.ps1）
 ```
 
-> ⚠️ **实测提醒（重要）**：我写这课的时候，同一个 Gitee 链接**第一次下载成功了，之后连试 3 次全部 404**；换成 GitHub 源后**连试 3 次全部成功**。所以：
+> ⚠️ **实测提醒（重要）**：我写这课的时候，同一个 Gitee 链接**第一次下载成功了，之后连试 3 次全部 404**；换成 GitHub 源后**连试 3 次全部成功**。（2026-09-08 复测：GitHub 源 3/3 成功，Gitee 源 10/10 失败，但中间也曾成功过一次——**结论是间歇性抽风，不是永久失效**。）所以：
 > - **首选 GitHub 源**（上面的主命令），它更稳
-> - 如果你在 Gitee 源上遇到 404，**不是你命令写错了**，换个源或重试即可
+> - 如果你在 Gitee 源上遇到 404，**先核对用户名是不是 `hack-wu`**（带连字符），拼错和抽风的报错一模一样
+> - 确认没拼错还是 404，**不是你命令写错了**，换个源或过会儿重试即可
 > - 另外：**别用 `irm` 下载**（`irm` 是 `Invoke-RestMethod` 的缩写，我实测它在同一个链接上报 404，而 `Invoke-WebRequest` 正常）——**照抄上面的 `Invoke-WebRequest` 写法**
 > - 404 也有可能是文件名写错：正确名字是 **`skill-install.ps1`**（不是 `install.ps1`），在 **`scripts/`** 目录下、分支 **`master`**
 
