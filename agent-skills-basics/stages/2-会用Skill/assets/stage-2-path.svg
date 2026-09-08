@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 300" width="900" height="300" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="900" height="300" fill="#ffffff"/>
+  <text x="450" y="30" text-anchor="middle" font-size="17" font-weight="bold" fill="#1a1a1a">阶段 2 · 会用 Skill —— 学习路径</text>
+
+  <rect x="40" y="60" width="380" height="190" rx="10" fill="#e8f4fd" stroke="#4a90d9" stroke-width="2"/>
+  <rect x="40" y="60" width="380" height="36" rx="10" fill="#4a90d9"/>
+  <rect x="40" y="80" width="380" height="16" fill="#4a90d9"/>
+  <text x="230" y="84" text-anchor="middle" font-size="15" font-weight="bold" fill="#ffffff">课 3 · 用一键脚本安装</text>
+  <text x="230" y="118" text-anchor="middle" font-size="12" fill="#1a1a1a">实操层：新手路线</text>
+  <text x="230" y="142" text-anchor="middle" font-size="11" fill="#555555">① 环境准备（Node ≥ 22）</text>
+  <text x="230" y="162" text-anchor="middle" font-size="11" fill="#555555">② install 装到两处（管理源 + 目标）</text>
+  <text x="230" y="182" text-anchor="middle" font-size="11" fill="#555555">③ list / update / remove</text>
+  <text x="230" y="222" text-anchor="middle" font-size="11" font-weight="bold" fill="#2c6fad">产出：项目里跑着至少</text>
+  <text x="230" y="238" text-anchor="middle" font-size="11" font-weight="bold" fill="#2c6fad">1 个装好的技能</text>
+
+  <path d="M 428 155 L 466 155" stroke="#888888" stroke-width="2.5" marker-end="url(#a2)"/>
+  <text x="447" y="147" text-anchor="middle" font-size="10" fill="#888888">想装</text>
+  <text x="447" y="175" text-anchor="middle" font-size="10" fill="#888888">别人的</text>
+
+  <rect x="474" y="60" width="386" height="190" rx="10" fill="#fff4e6" stroke="#e8a33d" stroke-width="2"/>
+  <rect x="474" y="60" width="386" height="36" rx="10" fill="#e8a33d"/>
+  <rect x="474" y="80" width="386" height="16" fill="#e8a33d"/>
+  <text x="667" y="84" text-anchor="middle" font-size="15" font-weight="bold" fill="#ffffff">课 4 · 用 npx skills 命令</text>
+  <text x="667" y="118" text-anchor="middle" font-size="12" fill="#1a1a1a">实操层 + 定位层：进阶路线</text>
+  <text x="667" y="142" text-anchor="middle" font-size="11" fill="#555555">① 参数详解（--skill/-a/-g/-y）</text>
+  <text x="667" y="162" text-anchor="middle" font-size="11" fill="#555555">② 7 个社区仓库巡礼</text>
+  <text x="667" y="182" text-anchor="middle" font-size="11" fill="#555555">③ 安全边界三条原则</text>
+  <text x="667" y="222" text-anchor="middle" font-size="11" font-weight="bold" fill="#a06a12">产出：能装上任意仓库技能</text>
+  <text x="667" y="238" text-anchor="middle" font-size="11" font-weight="bold" fill="#a06a12">且知道什么不该装</text>
+
+  <rect x="40" y="266" width="820" height="26" rx="5" fill="#f5f5f5" stroke="#cccccc" stroke-width="1"/>
+  <text x="450" y="283" text-anchor="middle" font-size="11" fill="#333333">本阶段产出：能独立装、查、更新、卸载 —— 用熟了别人的，才知道自己该怎么写（阶段 3）</text>
+
+  <defs>
+    <marker id="a2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#888888"/>
+    </marker>
+  </defs>
+</svg>

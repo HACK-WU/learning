@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 460" width="1000" height="460" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="1000" height="460" fill="#ffffff"/>
+  <text x="500" y="34" text-anchor="middle" font-size="20" font-weight="bold" fill="#1a1a1a">AI Agent Skill 学习路径总览</text>
+  <text x="500" y="58" text-anchor="middle" font-size="13" fill="#666666">故事主线：一个学生从「每周重说一遍」到「AI 主动按规矩办事」</text>
+
+  <!-- 阶段 1 -->
+  <rect x="40" y="90" width="280" height="300" rx="10" fill="#e8f4fd" stroke="#4a90d9" stroke-width="2"/>
+  <rect x="40" y="90" width="280" height="40" rx="10" fill="#4a90d9"/>
+  <rect x="40" y="112" width="280" height="18" fill="#4a90d9"/>
+  <text x="180" y="116" text-anchor="middle" font-size="16" font-weight="bold" fill="#ffffff">阶段 1 · 理解 Skill</text>
+  <text x="180" y="152" text-anchor="middle" font-size="12" fill="#1a4d80">「失忆的助理」</text>
+
+  <rect x="62" y="170" width="236" height="52" rx="6" fill="#ffffff" stroke="#4a90d9" stroke-width="1.5"/>
+  <text x="180" y="190" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a1a1a">课 1 · Skill 到底是什么</text>
+  <text x="180" y="208" text-anchor="middle" font-size="11" fill="#555555">文件夹 / SKILL.md / 不是什么</text>
+
+  <rect x="62" y="234" width="236" height="52" rx="6" fill="#ffffff" stroke="#4a90d9" stroke-width="1.5"/>
+  <text x="180" y="254" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a1a1a">课 2 · 为什么需要 Skill</text>
+  <text x="180" y="272" text-anchor="middle" font-size="11" fill="#555555">失忆 / 渐进式披露 / 三个收益</text>
+
+  <text x="180" y="312" text-anchor="middle" font-size="11" fill="#1a4d80">阶段目标：能向别人讲清</text>
+  <text x="180" y="330" text-anchor="middle" font-size="11" fill="#1a4d80">Skill 是什么、为什么要有它</text>
+  <text x="180" y="360" text-anchor="middle" font-size="11" font-weight="bold" fill="#2c6fad">产出：能指着一个文件夹</text>
+  <text x="180" y="376" text-anchor="middle" font-size="11" font-weight="bold" fill="#2c6fad">说清哪部分是必填的</text>
+
+  <!-- 箭头 1→2 -->
+  <path d="M 326 240 L 356 240" stroke="#888888" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="341" y="232" text-anchor="middle" font-size="10" fill="#888888">懂了</text>
+
+  <!-- 阶段 2 -->
+  <rect x="362" y="90" width="280" height="300" rx="10" fill="#fff4e6" stroke="#e8a33d" stroke-width="2"/>
+  <rect x="362" y="90" width="280" height="40" rx="10" fill="#e8a33d"/>
+  <rect x="362" y="112" width="280" height="18" fill="#e8a33d"/>
+  <text x="502" y="116" text-anchor="middle" font-size="16" font-weight="bold" fill="#ffffff">阶段 2 · 会用 Skill</text>
+  <text x="502" y="152" text-anchor="middle" font-size="12" fill="#8a5a12">「把别人的经验搬过来」</text>
+
+  <rect x="384" y="170" width="236" height="52" rx="6" fill="#ffffff" stroke="#e8a33d" stroke-width="1.5"/>
+  <text x="502" y="190" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a1a1a">课 3 · 用一键脚本安装</text>
+  <text x="502" y="208" text-anchor="middle" font-size="11" fill="#555555">环境 / 安装 / 管理</text>
+
+  <rect x="384" y="234" width="236" height="52" rx="6" fill="#ffffff" stroke="#e8a33d" stroke-width="1.5"/>
+  <text x="502" y="254" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a1a1a">课 4 · 用 npx skills 命令</text>
+  <text x="502" y="272" text-anchor="middle" font-size="11" fill="#555555">参数 / 社区仓库 / 安全</text>
+
+  <text x="502" y="312" text-anchor="middle" font-size="11" fill="#8a5a12">阶段目标：能独立装上、</text>
+  <text x="502" y="330" text-anchor="middle" font-size="11" fill="#8a5a12">查看、更新、卸载技能</text>
+  <text x="502" y="360" text-anchor="middle" font-size="11" font-weight="bold" fill="#a06a12">产出：你的项目里跑着</text>
+  <text x="502" y="376" text-anchor="middle" font-size="11" font-weight="bold" fill="#a06a12">至少 1 个别人的技能</text>
+
+  <!-- 箭头 2→3 -->
+  <path d="M 648 240 L 678 240" stroke="#888888" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="663" y="232" text-anchor="middle" font-size="10" fill="#888888">会用了</text>
+
+  <!-- 阶段 3 -->
+  <rect x="684" y="90" width="280" height="300" rx="10" fill="#eaf7ea" stroke="#5cb85c" stroke-width="2"/>
+  <rect x="684" y="90" width="280" height="40" rx="10" fill="#5cb85c"/>
+  <rect x="684" y="112" width="280" height="18" fill="#5cb85c"/>
+  <text x="824" y="116" text-anchor="middle" font-size="16" font-weight="bold" fill="#ffffff">阶段 3 · 会写 Skill</text>
+  <text x="824" y="152" text-anchor="middle" font-size="12" fill="#2d6a2d">「把自己的规矩固化下来」</text>
+
+  <rect x="706" y="170" width="236" height="40" rx="6" fill="#ffffff" stroke="#5cb85c" stroke-width="1.5"/>
+  <text x="824" y="188" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a1a1a">课 5 · 写第一个 SKILL.md</text>
+  <text x="824" y="202" text-anchor="middle" font-size="11" fill="#555555">从重复的事到技能</text>
+
+  <rect x="706" y="220" width="236" height="40" rx="6" fill="#ffffff" stroke="#5cb85c" stroke-width="1.5"/>
+  <text x="824" y="238" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a1a1a">课 6 · 写好、排障与安全</text>
+  <text x="824" y="252" text-anchor="middle" font-size="11" fill="#555555">坏味道 / 不触发 / 脚本风险</text>
+
+  <rect x="706" y="270" width="236" height="40" rx="6" fill="#ffffff" stroke="#5cb85c" stroke-width="1.5"/>
+  <text x="824" y="288" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a1a1a">课 7 · 拆分、组合与共享</text>
+  <text x="824" y="302" text-anchor="middle" font-size="11" fill="#555555">多文件 / 边界 / 团队</text>
+
+  <text x="824" y="330" text-anchor="middle" font-size="11" fill="#2d6a2d">阶段目标：能把一件重复的</text>
+  <text x="824" y="348" text-anchor="middle" font-size="11" fill="#2d6a2d">事写成可靠、能共享的技能</text>
+  <text x="824" y="372" text-anchor="middle" font-size="11" font-weight="bold" fill="#2d6a2d">产出：1 个自己写的、</text>
+  <text x="824" y="388" text-anchor="middle" font-size="11" font-weight="bold" fill="#2d6a2d">真的会被触发的技能</text>
+
+  <!-- 底部收束 -->
+  <rect x="40" y="410" width="924" height="34" rx="6" fill="#f5f5f5" stroke="#cccccc" stroke-width="1"/>
+  <text x="500" y="432" text-anchor="middle" font-size="12" fill="#333333">收束：学完能回答「我有哪些重复的事，可以交给 AI 按固定规矩做」——并真的做出来</text>
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#888888"/>
+    </marker>
+  </defs>
+</svg>
