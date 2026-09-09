@@ -1,0 +1,290 @@
+#!/usr/bin/env bash
+#
+# wf-lab —— 团队 Git 工作流搭建与故障演练沙盘
+#
+# 一个课程收尾项目：把 12 课的知识固化成"能真跑一遍"的演练与检查。
+#   课 1-3   对象模型 / 三区 / 提交身份      → doctor（环境体检）
+#   课 4-6   差异撤销 / 分支 / 合并冲突      → drill merge-conflict
+#   课 7-9   远端同步 / rebase / 分支策略    → init, drill rebase, audit
+#   课 10-12 排查 / 救援 / 工程实践          → rescue, hooks, audit, replay
+#
+# 用法：
+#   wf-lab init <dir>            搭建"远端 + 两名成员"的团队沙盘
+#   wf-lab hooks <repo>          安装团队钩子并自检
+#   wf-lab audit <repo>          仓库卫生审计
+#   wf-lab rescue <repo> <case>  误操作救援演练
+#   wf-lab drill  <dir> <case>   协作演练（冲突 / 变基 / 强推）
+#   wf-lab doctor                环境与依赖体检
+#   wf-lab replay <dir>          一键跑全套演练
+#
+# 退出码：0 全通过 ｜ 1 有警告 ｜ 2 有阻断项 ｜ 64 用法错误 ｜ 66 输入无效
+
+set -Eeuo pipefail
+shopt -s inherit_errexit 2>/dev/null || true
+
+WF_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+WF_LIB_DIR="$WF_ROOT/lib"
+
+# shellcheck source=/dev/null
+. "$WF_LIB_DIR/core.sh"
+# shellcheck source=/dev/null
+. "$WF_LIB_DIR/repo.sh"
+# shellcheck source=/dev/null
+. "$WF_LIB_DIR/hooks.sh"
+# shellcheck source=/dev/null
+. "$WF_LIB_DIR/audit.sh"
+# shellcheck source=/dev/null
+. "$WF_LIB_DIR/rescue.sh"
+# shellcheck source=/dev/null
+. "$WF_LIB_DIR/drill.sh"
+
+readonly WF_VERSION='1.0.0'
+
+# ── 用法 ───────────────────────────────────────────────────
+usage() {
+    cat <<EOF
+wf-lab v$WF_VERSION —— 团队 Git 工作流搭建与故障演练沙盘
+
+用法:
+  wf-lab init <dir>                    搭建团队沙盘（remote.git + zhang + li）
+  wf-lab hooks <repo> [--mode MODE]    安装钩子并自检（MODE: hooksPath|dotgit）
+  wf-lab hooks <repo> --check-only     只自检，不重新安装（用于验收已有钩子）
+  wf-lab audit <repo> [--purge PATH]   仓库卫生审计（--purge 会重写历史）
+  wf-lab rescue <repo> <case>          救援演练（case: reset-hard|deleted-branch|bisect）
+  wf-lab rescue <dir> force-push       强推覆盖对照（传沙盘根目录）
+  wf-lab drill  <dir> <case>           协作演练（case: merge-conflict|rebase）
+  wf-lab doctor                        环境与依赖体检
+  wf-lab replay <dir>                  一键跑全套演练
+  wf-lab version
+
+退出码: 0 全通过 | 1 有警告 | 2 有阻断 | 64 用法错误 | 66 输入无效
+EOF
+}
+
+# ── 子命令：version ────────────────────────────────────────
+cmd_version() {
+    printf 'wf-lab %s\n' "$WF_VERSION"
+    printf 'git %s\n' "$(wf_git_version)"
+}
+
+# ── 子命令：doctor ─────────────────────────────────────────
+cmd_doctor() {
+    printf '═══ 环境体检 ═══\n'
+    local ok=0
+
+    command -v git >/dev/null 2>&1 || { printf '  ❌ 缺少 git\n'; ok=1; }
+    printf '  git            : %s\n' "$(wf_git_version 2>/dev/null || echo '未安装')"
+
+    # 只依赖常规系统自带命令；课程约定不安装 git-lfs / git-filter-repo
+    local c
+    for c in awk sort head mktemp du sha256sum; do
+        if command -v "$c" >/dev/null 2>&1; then
+            printf '  %-15s : ✅\n' "$c"
+        else
+            printf '  %-15s : ❌ 缺失\n' "$c"; ok=1
+        fi
+    done
+
+    # 可选增强：未装不影响使用，但要说清楚
+    for c in git-lfs git-filter-repo shellcheck; do
+        if command -v "$c" >/dev/null 2>&1; then
+            printf '  %-15s : ✅（可选）\n' "$c"
+        else
+            printf '  %-15s : ⚠️ 未安装（可选，已用等价实现替代）\n' "$c"
+        fi
+    done
+
+    printf '\n  默认分支名    : %s\n' \
+        "$(git config --get init.defaultBranch 2>/dev/null || echo 'master（未设置 init.defaultBranch）')"
+    printf '  哈希算法      : %s\n' \
+        "$(git rev-parse --show-object-format 2>/dev/null || echo 'sha1')"
+
+    (( ok == 0 )) || return "$WF_INTERNAL"
+    return "$WF_OK"
+}
+
+# ── 子命令：init ───────────────────────────────────────────
+cmd_init() {
+    (( $# >= 1 )) || die_usage "init 需要一个目录参数"
+    local root="$1"
+    [[ -e $root ]] && die_noinput "目录已存在：$root（换一个名字或先删除）"
+
+    wf_require_cmds git
+    wf_team_build "$root"
+
+    printf '\n  沙盘结构：\n'
+    printf '    %s/remote.git   远端（裸仓库）\n' "$root"
+    printf '    %s/zhang/       Zhang Wei 的克隆\n' "$root"
+    printf '    %s/li/          Li Si 的克隆\n' "$root"
+    printf '\n  下一步：wf-lab hooks %s/zhang\n' "$root"
+}
+
+# ── 子命令：hooks ──────────────────────────────────────────
+cmd_hooks() {
+    local repo='' mode='hooksPath' check_only=0
+    while (( $# )); do
+        case "$1" in
+            --mode) mode="${2:-}"; shift 2 ;;
+            --mode=*) mode="${1#*=}"; shift ;;
+            --check-only) check_only=1; shift ;;
+            -*) die_usage "Unknown option: $1" ;;
+            *) repo="$1"; shift ;;
+        esac
+    done
+    [[ -n $repo ]] || die_usage "hooks needs a repo path"
+    [[ -d $repo/.git ]] || die_noinput "Not a git repo: $repo"
+
+    if (( check_only )); then
+        # Inspect and verify the hooks that are already installed.
+        # Without this, running `hooks` re-installs and overwrites a
+        # deliberately broken hook, so the selftest can never fail.
+        printf '═══ 钩子自检（仅检查，不重新安装）：%s ═══\n' "$repo"
+    else
+        printf '═══ 安装团队钩子：%s ═══\n' "$repo"
+        wf_hooks_install "$repo" "$mode"
+    fi
+
+    printf '\n  钩子状态：\n'
+    wf_hooks_report "$repo"
+
+    printf '\n  自检（装了 ≠ 生效，必须验）：\n'
+    local rc=0
+    wf_hooks_selftest "$repo" || rc=$?
+
+    findings_render
+    return "$rc"
+}
+
+# ── 子命令：audit ──────────────────────────────────────────
+cmd_audit() {
+    local repo='' purge=''
+    while (( $# )); do
+        case "$1" in
+            --purge) purge="${2:-}"; shift 2 ;;
+            --purge=*) purge="${1#*=}"; shift ;;
+            -*) die_usage "未知选项: $1" ;;
+            *) repo="$1"; shift ;;
+        esac
+    done
+    [[ -n $repo ]] || die_usage "audit 需要一个仓库路径"
+    [[ -d $repo/.git ]] || die_noinput "不是 Git 仓库: $repo"
+
+    wf_audit_run "$repo"
+
+    if [[ -n $purge ]]; then
+        printf '\n  ⚠️ 即将重写历史移除：%s\n' "$purge"
+        wf_audit_purge_path "$repo" "$purge"
+    fi
+
+    findings_render
+    findings_exit_code
+}
+
+# ── 子命令：rescue ─────────────────────────────────────────
+cmd_rescue() {
+    (( $# >= 2 )) || die_usage "rescue 需要 <repo> <case>"
+    local target="$1" case_name="$2"
+
+    case "$case_name" in
+        reset-hard)
+            [[ -d $target/.git ]] || die_noinput "不是 Git 仓库: $target"
+            printf '═══ 救援演练：reset --hard 丢失提交 ═══\n'
+            wf_rescue_reset_hard "$target"
+            ;;
+        deleted-branch)
+            [[ -d $target/.git ]] || die_noinput "不是 Git 仓库: $target"
+            printf '═══ 救援演练：误删分支 ═══\n'
+            wf_rescue_deleted_branch "$target"
+            ;;
+        bisect)
+            [[ -d $target/.git ]] || die_noinput "不是 Git 仓库: $target"
+            printf '═══ 排查演练：bisect 定位坏提交 ═══\n'
+            wf_rescue_bisect_demo "$target"
+            ;;
+        force-push)
+            [[ -d $target/zhang && -d $target/li ]] \
+                || die_noinput "force-push 需要沙盘根目录（含 zhang/ 与 li/）"
+            printf '═══ 救援演练：强推覆盖（force-with-lease 对照）═══\n'
+            wf_rescue_force_push_demo "$target"
+            ;;
+        *)
+            die_usage "未知救援场景: $case_name（可选 reset-hard|deleted-branch|bisect|force-push）"
+            ;;
+    esac
+
+    findings_render
+    findings_exit_code
+}
+
+# ── 子命令：drill ──────────────────────────────────────────
+cmd_drill() {
+    (( $# >= 2 )) || die_usage "drill 需要 <dir> <case>"
+    local root="$1" case_name="$2"
+
+    case "$case_name" in
+        merge-conflict) wf_drill_merge_conflict "$root" ;;
+        rebase)         wf_drill_rebase "$root" ;;
+        *) die_usage "未知演练场景: $case_name（可选 merge-conflict|rebase）" ;;
+    esac
+
+    findings_render
+    findings_exit_code
+}
+
+# ── 子命令：replay ─────────────────────────────────────────
+cmd_replay() {
+    (( $# >= 1 )) || die_usage "replay 需要一个目录"
+    local root="$1"
+
+    printf '══════════════════════════════════════\n'
+    printf ' wf-lab 全套演练（%s）\n' "$root"
+    printf '══════════════════════════════════════\n'
+
+    if [[ ! -d $root ]]; then
+        printf '\n[1/6] 搭建沙盘…\n'
+        cmd_init "$root" >/dev/null
+    else
+        printf '\n[1/6] 沙盘已存在，跳过搭建\n'
+    fi
+
+    printf '\n[2/6] 钩子安装与自检…\n'
+    wf_hooks_install "$root/zhang" hooksPath >/dev/null
+    wf_hooks_selftest "$root/zhang" || true
+
+    printf '\n[3/6] 合并冲突演练…\n'
+    wf_drill_merge_conflict "$root" || true
+
+    printf '\n[4/6] 变基演练…\n'
+    wf_drill_rebase "$root" || true
+
+    printf '\n[5/6] 误操作救援…\n'
+    wf_rescue_reset_hard "$root/li" || true
+    wf_rescue_deleted_branch "$root/li" || true
+
+    printf '\n[6/6] 卫生审计…\n'
+    wf_audit_run "$root/zhang" || true
+
+    findings_render
+    findings_exit_code
+}
+
+# ── 主入口 ─────────────────────────────────────────────────
+main() {
+    (( $# )) || { usage; return "$WF_USAGE"; }
+    local cmd="$1"; shift
+
+    case "$cmd" in
+        -h|--help|help) usage ;;
+        version|--version|-V) cmd_version ;;
+        doctor)   cmd_doctor "$@" ;;
+        init)     cmd_init "$@" ;;
+        hooks)    cmd_hooks "$@" ;;
+        audit)    cmd_audit "$@" ;;
+        rescue)   cmd_rescue "$@" ;;
+        drill)    cmd_drill "$@" ;;
+        replay)   cmd_replay "$@" ;;
+        *)        die_usage "未知子命令: $cmd（用 --help 看用法）" ;;
+    esac
+}
+
+main "$@"

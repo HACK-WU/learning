@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 260" width="860" height="260" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="860" height="260" fill="#ffffff"/>
+  <text x="430" y="28" text-anchor="middle" font-size="16" font-weight="bold" fill="#1a237e">阶段 3 · 协作与共享</text>
+  <text x="430" y="47" text-anchor="middle" font-size="11" fill="#5f6368">众人手中的同一份历史：推送出去，也接得回来</text>
+
+  <rect x="30" y="70" width="220" height="130" rx="8" fill="#fff8e1" stroke="#EF6C00" stroke-width="2"/>
+  <rect x="30" y="70" width="220" height="28" rx="8" fill="#EF6C00"/>
+  <text x="140" y="89" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#ffffff">课 7 · 远端仓库与同步</text>
+  <text x="140" y="118" text-anchor="middle" font-size="10.5" fill="#37474f">remote / fetch / pull / push</text>
+  <text x="140" y="137" text-anchor="middle" font-size="10.5" fill="#37474f">本地分支与远程跟踪分支</text>
+  <text x="140" y="156" text-anchor="middle" font-size="10.5" fill="#37474f">本地裸仓库模拟两人协作</text>
+  <text x="140" y="183" text-anchor="middle" font-size="10.5" fill="#EF6C00">主角走出本机</text>
+
+  <rect x="320" y="70" width="220" height="130" rx="8" fill="#fff8e1" stroke="#EF6C00" stroke-width="2"/>
+  <rect x="320" y="70" width="220" height="28" rx="8" fill="#EF6C00"/>
+  <text x="430" y="89" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#ffffff">课 8 · 变基与提交整理</text>
+  <text x="430" y="118" text-anchor="middle" font-size="10.5" fill="#37474f">merge 与 rebase 的语义差别</text>
+  <text x="430" y="137" text-anchor="middle" font-size="10.5" fill="#37474f">rebase 内部机制与黄金法则</text>
+  <text x="430" y="156" text-anchor="middle" font-size="10.5" fill="#37474f">cherry-pick 与交互式 rebase</text>
+  <text x="430" y="183" text-anchor="middle" font-size="10.5" fill="#EF6C00">历史开始被改写</text>
+
+  <rect x="610" y="70" width="220" height="130" rx="8" fill="#fff8e1" stroke="#EF6C00" stroke-width="2"/>
+  <rect x="610" y="70" width="220" height="28" rx="8" fill="#EF6C00"/>
+  <text x="720" y="89" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#ffffff">课 9 · 分支策略与发布</text>
+  <text x="720" y="118" text-anchor="middle" font-size="10.5" fill="#37474f">Git Flow / GitHub Flow / trunk-based</text>
+  <text x="720" y="137" text-anchor="middle" font-size="10.5" fill="#37474f">提交规范与 Conventional Commits</text>
+  <text x="720" y="156" text-anchor="middle" font-size="10.5" fill="#37474f">标签与发布：轻量 vs 附注</text>
+  <text x="720" y="183" text-anchor="middle" font-size="10.5" fill="#EF6C00">给混乱定规矩</text>
+
+  <path d="M250 135 L318 135" stroke="#5f6368" stroke-width="2"/>
+  <polygon points="318,135 311,130 311,140" fill="#5f6368"/>
+  <path d="M540 135 L608 135" stroke="#5f6368" stroke-width="2"/>
+  <polygon points="608,135 601,130 601,140" fill="#5f6368"/>
+
+  <rect x="30" y="215" width="800" height="33" rx="6" fill="#f5f5f5" stroke="#bdbdbd" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="430" y="236" text-anchor="middle" font-size="11" fill="#37474f">阶段产出：完整走一遍两人协作的推拉与变基，能说明该选 merge 还是 rebase</text>
+</svg>
