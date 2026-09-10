@@ -1,0 +1,44 @@
+# SQL 语句 · 修改与操作符（Doris Docs 4.x · 共 38 条）
+
+> 范围：doris.apache.org/docs/4.x · 生成日期：2026-09-10 · INSERT/UPDATE/DELETE/操作符
+
+| 我要… | 去哪一页 | 关键词 | 相关 |
+|-------|----------|--------|------|
+| 查 DELETE 语法与示例 | [sql-manual/sql-statements/data-modification/DML/DELETE](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/DML/DELETE/) | DELETE | |
+| 查 INSERT 语法与示例 | [sql-manual/sql-statements/data-modification/DML/INSERT](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/DML/INSERT/) | INSERT | |
+| 查 INSERT-OVERWRITE 语法与示例 | [sql-manual/sql-statements/data-modification/DML/INSERT-OVERWRITE](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/DML/INSERT-OVERWRITE/) | INSERT-OVERWRITE | |
+| 查 MERGE INTO 语法与示例 | [sql-manual/sql-statements/data-modification/DML/MERGE-INTO](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/DML/MERGE-INTO/) | MERGE-INTO | |
+| 查 SHOW DELETE 语法与示例 | [sql-manual/sql-statements/data-modification/DML/SHOW-DELETE](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/DML/SHOW-DELETE/) | SHOW-DELETE | |
+| 查 SHOW-LAST-INSERT 语法与示例 | [sql-manual/sql-statements/data-modification/DML/SHOW-LAST-INSERT](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/DML/SHOW-LAST-INSERT/) | SHOW-LAST-INSERT | |
+| 查 UPDATE 语法与示例 | [sql-manual/sql-statements/data-modification/DML/UPDATE](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/DML/UPDATE/) | UPDATE | |
+| 查 BACKUP 语法与示例 | [sql-manual/sql-statements/data-modification/backup-and-restore/BACKUP](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/backup-and-restore/BACKUP/) | BACKUP | |
+| 查 CANCEL BACKUP 语法与示例 | [sql-manual/sql-statements/data-modification/backup-and-restore/CANCEL-BACKUP](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/backup-and-restore/CANCEL-BACKUP/) | CANCEL-BACKUP | |
+| 查 CANCEL RESTORE 语法与示例 | [sql-manual/sql-statements/data-modification/backup-and-restore/CANCEL-RESTORE](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/backup-and-restore/CANCEL-RESTORE/) | CANCEL-RESTORE | |
+| 查 CREATE-REPOSITORY 语法与示例 | [sql-manual/sql-statements/data-modification/backup-and-restore/CREATE-REPOSITORY](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/backup-and-restore/CREATE-REPOSITORY/) | CREATE-REPOSITORY | |
+| 查 DROP-REPOSITORY 语法与示例 | [sql-manual/sql-statements/data-modification/backup-and-restore/DROP-REPOSITORY](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/backup-and-restore/DROP-REPOSITORY/) | DROP-REPOSITORY | |
+| 查 RESTORE 语法与示例 | [sql-manual/sql-statements/data-modification/backup-and-restore/RESTORE](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/backup-and-restore/RESTORE/) | RESTORE | |
+| 查 SHOW-CREATE-REPOSITORY 语法与示例 | [sql-manual/sql-statements/data-modification/backup-and-restore/SHOW-CREATE-REPOSITORY](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/backup-and-restore/SHOW-CREATE-REPOSITORY/) | SHOW-CREATE-REPOSITORY | |
+| 查 SHOW-REPOSITORIES 语法与示例 | [sql-manual/sql-statements/data-modification/backup-and-restore/SHOW-REPOSITORIES](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/backup-and-restore/SHOW-REPOSITORIES/) | SHOW-REPOSITORIES | |
+| 查 SHOW RESTORE 语法与示例 | [sql-manual/sql-statements/data-modification/backup-and-restore/SHOW-RESTORE](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/backup-and-restore/SHOW-RESTORE/) | SHOW-RESTORE | |
+| 查 SHOW SNAPSHOT 语法与示例 | [sql-manual/sql-statements/data-modification/backup-and-restore/SHOW-SNAPSHOT](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/backup-and-restore/SHOW-SNAPSHOT/) | SHOW-SNAPSHOT | |
+| 查 ALTER-ROUTINE-LOAD 语法与示例 | [sql-manual/sql-statements/data-modification/load-and-export/ALTER-ROUTINE-LOAD](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/load-and-export/ALTER-ROUTINE-LOAD/) | ALTER-ROUTINE-LOAD | |
+| 查 BROKER LOAD 语法与示例 | [sql-manual/sql-statements/data-modification/load-and-export/BROKER-LOAD](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/load-and-export/BROKER-LOAD/) | BROKER-LOAD | |
+| 查 CANCEL EXPORT 语法与示例 | [sql-manual/sql-statements/data-modification/load-and-export/CANCEL-EXPORT](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/load-and-export/CANCEL-EXPORT/) | CANCEL-EXPORT | |
+| 查 CANCEL LOAD 语法与示例 | [sql-manual/sql-statements/data-modification/load-and-export/CANCEL-LOAD](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/load-and-export/CANCEL-LOAD/) | CANCEL-LOAD | |
+| 查 CLEAN LABEL 语法与示例 | [sql-manual/sql-statements/data-modification/load-and-export/CLEAN-LABEL](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/load-and-export/CLEAN-LABEL/) | CLEAN-LABEL | |
+| 查 CREATE-ROUTINE-LOAD 语法与示例 | [sql-manual/sql-statements/data-modification/load-and-export/CREATE-ROUTINE-LOAD](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/load-and-export/CREATE-ROUTINE-LOAD/) | CREATE-ROUTINE-LOAD | |
+| 查 EXPORT 语法与示例 | [sql-manual/sql-statements/data-modification/load-and-export/EXPORT](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/load-and-export/EXPORT/) | EXPORT | |
+| 查 MYSQL LOAD 语法与示例 | [sql-manual/sql-statements/data-modification/load-and-export/MYSQL-LOAD](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/load-and-export/MYSQL-LOAD/) | MYSQL-LOAD | |
+| 查 OUTFILE 语法与示例 | [sql-manual/sql-statements/data-modification/load-and-export/OUTFILE](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/load-and-export/OUTFILE/) | OUTFILE | |
+| 查 PAUSE-ROUTINE-LOAD 语法与示例 | [sql-manual/sql-statements/data-modification/load-and-export/PAUSE-ROUTINE-LOAD](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/load-and-export/PAUSE-ROUTINE-LOAD/) | PAUSE-ROUTINE-LOAD | |
+| 查 RESUME-ROUTINE-LOAD 语法与示例 | [sql-manual/sql-statements/data-modification/load-and-export/RESUME-ROUTINE-LOAD](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/load-and-export/RESUME-ROUTINE-LOAD/) | RESUME-ROUTINE-LOAD | |
+| 查 SHOW-CREATE-LOAD 语法与示例 | [sql-manual/sql-statements/data-modification/load-and-export/SHOW-CREATE-LOAD](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/load-and-export/SHOW-CREATE-LOAD/) | SHOW-CREATE-LOAD | |
+| 查 SHOW-CREATE-ROUTINE-LOAD 语法与示例 | [sql-manual/sql-statements/data-modification/load-and-export/SHOW-CREATE-ROUTINE-LOAD](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/load-and-export/SHOW-CREATE-ROUTINE-LOAD/) | SHOW-CREATE-ROUTINE-LOAD | |
+| 查 SHOW EXPORT 语法与示例 | [sql-manual/sql-statements/data-modification/load-and-export/SHOW-EXPORT](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/load-and-export/SHOW-EXPORT/) | SHOW-EXPORT | |
+| 查 SHOW LOAD 语法与示例 | [sql-manual/sql-statements/data-modification/load-and-export/SHOW-LOAD](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/load-and-export/SHOW-LOAD/) | SHOW-LOAD | |
+| 查 SHOW-LOAD-WARNINGS 语法与示例 | [sql-manual/sql-statements/data-modification/load-and-export/SHOW-LOAD-WARNINGS](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/load-and-export/SHOW-LOAD-WARNINGS/) | SHOW-LOAD-WARNINGS | |
+| 查 SHOW-ROUTINE-LOAD 语法与示例 | [sql-manual/sql-statements/data-modification/load-and-export/SHOW-ROUTINE-LOAD](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/load-and-export/SHOW-ROUTINE-LOAD/) | SHOW-ROUTINE-LOAD | |
+| 查 SHOW-ROUTINE-LOAD-TASK 语法与示例 | [sql-manual/sql-statements/data-modification/load-and-export/SHOW-ROUTINE-LOAD-TASK](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/load-and-export/SHOW-ROUTINE-LOAD-TASK/) | SHOW-ROUTINE-LOAD-TASK | |
+| 查 SHOW-STREAM-LOAD 语法与示例 | [sql-manual/sql-statements/data-modification/load-and-export/SHOW-STREAM-LOAD](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/load-and-export/SHOW-STREAM-LOAD/) | SHOW-STREAM-LOAD | |
+| 查 STOP-ROUTINE-LOAD 语法与示例 | [sql-manual/sql-statements/data-modification/load-and-export/STOP-ROUTINE-LOAD](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/load-and-export/STOP-ROUTINE-LOAD/) | STOP-ROUTINE-LOAD | |
+| 查 SYNC 语法与示例 | [sql-manual/sql-statements/data-modification/load-and-export/SYNC](https://doris.apache.org/docs/4.x/sql-manual/sql-statements/data-modification/load-and-export/SYNC/) | SYNC | |
