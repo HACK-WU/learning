@@ -15,7 +15,7 @@
 |--------|--------|------|
 | 容器里的 root 是谁 | 共享内核意味着什么 / 容器内 root 不等于宿主机 root 但风险真实 / USER 指令 / rootless 模式 | ✅ 已完成 |
 | 能力与系统调用收敛 | 默认 capability 集 / --cap-drop=ALL 再按需加回 / --privileged 等于拆掉所有围栏 / seccomp 默认 profile | ✅ 已完成 |
-| 镜像供应链与漏洞 | 可信基础镜像 / 漏洞扫描 / 镜像来源核验 / 密钥绝不能进镜像层 | ✅ 已完成 |
+| 镜像供应链与漏洞 | 可信基础镜像 / 漏洞扫描 / 镜像来源核验 / 密钥绝不能进镜像层 / **签名校验（cosign）与 DCT 退役** | ✅ 已完成 |
 
 ---
 
@@ -435,7 +435,6 @@ docker history leak-demo --no-trunc | grep -i password
 # 2) 用同样的方法自查你自己的镜像
 docker history <你的镜像> --no-trunc | grep -i -E 'password|secret|token|api[_-]?key'
 # 预期：理想情况为空；若出现明文，说明泄了 —— 必须轮换密钥
-```
 
 # 2) 看镜像的元数据：默认用户、暴露端口、环境变量
 docker inspect <镜像> --format 'USER={{.Config.User}}  ENV={{json .Config.Env}}'
@@ -471,6 +470,62 @@ cat .dockerignore
 
 - [Running containers · Image digests（Docker 官方）](https://docs.docker.com/engine/containers/run/)——digest 是内容寻址且输入不变则可预测
 - [Dockerfile reference · RUN --mount=type=secret（Docker 官方）](https://docs.docker.com/reference/dockerfile/)——构建期密钥不落层
+- [Content trust in Docker（Docker 官方）](https://docs.docker.com/engine/security/trust/)——DCT 原理与**退役公告**
+
+##### 补充：digest 之外，怎么验证"这个镜像确实是某某发布的"
+
+`digest` 解决的是**内容完整性**——"我拉到的字节和我上次拉到的一样"。但它回答不了另一个问题：**"这些字节是谁放的？"**
+
+digest 只保证"内容没被改"，不保证"内容本来就是好的"。如果有人在 registry 侧换了一个恶意镜像，你照样能拿到一个"完整且一致"的 digest。这就是**签名（signature）**要补的位——它证明的是**发布者身份**。
+
+**Docker 自家方案 DCT 已经退役，别再学它**
+
+Docker Content Trust（DCT，基于 Notary v1）是 Docker 早期的镜像签名方案，靠 `DOCKER_CONTENT_TRUST=1` 环境变量开启。但官方已在文档首页挂出退役警告：
+
+> **Docker Content Trust (DCT) is being retired. The Notary v1 service at `notary.docker.io` will shut down on December 8, 2026.**
+
+也就是说：**现在（2026 年）再投入学习 `DOCKER_CONTENT_TRUST=1`，学到的东西年底就作废。** 这一点必须讲清楚，因为网上大量教程仍在教它。
+
+**现在该用什么：cosign（Sigstore）**
+
+业界当前的通行做法是 **cosign**（CNCF Sigstore 项目），签名以 **OCI 制品**形式附在镜像旁边，与 registry 解耦：
+
+```bash
+# 生成密钥对（首次）
+cosign generate-key-pair
+
+# 给镜像签名（按 digest 签，不按 tag 签）
+cosign sign --key cosign.key myrepo/app@sha256:<digest>
+
+# 验证签名与发布者身份
+cosign verify --key cosign.pub myrepo/app@sha256:<digest>
+```
+
+CI 里的正确把关姿势是**验签 + 按 digest 部署**组合：
+
+```bash
+# 1) 先按 tag 解析出 digest
+DIGEST=$(docker buildx imagetools inspect myrepo/app:1.2.3 \
+         --format '{{.Manifest.Digest}}')
+
+# 2) 对这个 digest 验签——验不过就退出，不往下走
+cosign verify --key cosign.pub myrepo/app@$DIGEST || exit 1
+
+# 3) 验过了，才按 digest 部署（tag 之后被挪也影响不到你）
+docker pull myrepo/app@$DIGEST
+```
+
+**三个机制的对照——别再混着用**
+
+| 机制 | 证明什么 | 挡住什么 | 挡不住什么 |
+|------|---------|---------|-----------|
+| tag（`app:1.2`） | 什么都不证明 | — | 一切（可被覆盖） |
+| **digest**（`@sha256:...`） | 内容**没被改过** | 传输篡改、tag 漂移 | 内容本身就是恶意的 |
+| **签名**（cosign） | 内容**是谁发布的** | 冒名发布、供应链投毒 | 发布者自己作恶 / 有 0day 漏洞 |
+
+> ⚠️ **别把签名当免死金牌**：签名证明"这确实是 A 公司构建的"，不证明"这个镜像没有漏洞"。漏洞扫描（本课上面讲的）和来源校验是**两道独立的闸门**，一起上才完整。
+
+**顺带回扣课 3**：课 3 讲的"官方镜像 / Verified Publisher 徽章"，本质就是**人工审核的信任链**；而签名是**密码学的信任链**。前者成本低压不住规模化，后者力气大但能自动化——生产上二者叠加。
 
 ---
 
@@ -714,6 +769,8 @@ graph TD
 | `docker history <镜像> --no-trunc \| grep -iE 'password\|secret\|token'` | ⚠️ **自查镜像里有没有烤进密钥** | 知识点 3 / 步骤 4 |
 | `docker pull <镜像>@sha256:<digest>` | 按内容寻址拉取，真正锁定版本 | 知识点 3 / 演示 |
 | `docker buildx build --secret id=<名>,src=<文件> .` | 构建期用密钥且不落层（课 5） | 知识点 3 / 演示 |
+| `cosign verify --key cosign.pub <镜像>@<digest>` | 验证**发布者身份**（digest 只保证内容没改，不保证来源） | 知识点 3 / 签名校验 |
+| `docker buildx imagetools inspect <镜像>:<tag> --format '{{.Manifest.Digest}}'` | 由 tag 解析出 digest，供验签与部署使用 | 知识点 3 / 签名校验 |
 
 ---
 

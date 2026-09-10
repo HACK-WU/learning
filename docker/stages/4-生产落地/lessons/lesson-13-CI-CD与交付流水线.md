@@ -13,7 +13,7 @@
 
 | 知识点 | 关键点 | 状态 |
 |--------|--------|------|
-| 镜像仓库与推送流程 | registry 选型 / tag 策略（语义化版本 + git sha）/ **`docker login` 的凭据存放位置**（默认 base64，官方说 less secure）/ `docker tag` 与 `docker push` 的先后 / 三大云 registry 的差异 | ✅ 已完成 |
+| 镜像仓库与推送流程 | registry 选型 / tag 策略（语义化版本 + git sha）/ **`docker login` 的凭据存放位置**（默认 base64，官方说 less secure）/ `docker tag` 与 `docker push` 的先后 / 三大云 registry 的差异 / **Docker Hub 拉取限额与 CI 应对** | ✅ 已完成 |
 | CI 中的构建与缓存 | BuildKit / 外部缓存必须显式 export + import / 四种缓存后端 / min 与 max 模式 / 一条最小 GitHub Actions 流水线 / 构建机的安全边界 | ✅ 已完成 |
 | 部署与回滚 | 镜像不可变、换 tag 即回滚 / 健康检查作为发布闸门（回扣课 11）/ 滚动与蓝绿的取舍 | ✅ 已完成 |
 
@@ -197,6 +197,48 @@ docker logout myregistry.example.com
 #### 官方文档
 
 - [docker login（Docker 官方）](https://docs.docker.com/reference/cli/docker/login/)——凭据存放位置、base64 vs credential store、官方"less secure"表述、`--password-stdin`、`credsStore` / `credHelpers` 配置
+- [Pull usage and limits（Docker 官方）](https://docs.docker.com/docker-hub/usage/pulls/)——6 小时窗口的拉取限额、各订阅档位配额
+
+##### 补充：推得出去，也得拉得回来——Docker Hub 拉取限额
+
+上面讲的是**推送侧**。但生产事故里更常见的其实是**拉取侧**：CI 跑到一半突然报 `toomanyrequests: You have reached your pull rate limit`。
+
+这个错误不是网络问题，是 Docker Hub 的**拉取限额**：
+
+- 限额按 **6 小时滚动窗口**计算
+- **未登录（匿名）用户**：每个 **IPv4 地址**（或 IPv6 /64 子网）**100 次 / 6 小时**
+- **已登录的 Personal 用户**：**200 次 / 6 小时**
+- **Pro / Team / Business**：**不限**（但仍受 fair use 约束）
+
+**为什么 CI 最容易踩**：CI 跑在云上，出口 IP 往往是**整条流水线共用**的。匿名拉取时，100 次的配额是所有 job 分摊的——团队一大，上午就把配额用光了。
+
+**一次 pull 怎么计数**（官方定义，容易算错）：
+
+- 一次 `docker pull` 包含**版本检查 + 实际下载**；**版本检查不计入**配额
+- 普通镜像：拉一次 = **1 次**（一个 manifest）
+- **多架构镜像**：**每个不同架构各算 1 次**——这是很多人配额掉得快的隐藏原因
+
+**四条应对办法**
+
+```bash
+# ① 最直接：CI 里先登录，配额从 100 提到 200
+docker login -u "$DOCKERHUB_USER" --password-stdin <<< "$DOCKERHUB_TOKEN"
+
+# ② 治本：把基础镜像同步到自己的 registry，之后从自己的仓库拉
+docker pull alpine:3.20
+docker tag  alpine:3.20 myregistry.internal/base/alpine:3.20
+docker push myregistry.internal/base/alpine:3.20
+
+# ③ 用 registry 作为 pull-through cache（镜像代理缓存）
+#    配好之后，CI 拉 docker.io 的镜像走本地缓存，只miss时才回源
+
+# ④ 减少无效拉取：Dockerfile 里锁死基础镜像 digest，别每次都 latest
+FROM alpine:3.20@sha256:<digest>
+```
+
+**配额用在哪了，可以查**：登录后在 Docker Hub 的账户页能看到月度拉取用量与当前限额。
+
+> ⚠️ **别把它当"Docker Hub 的坑"**：这是**公共 registry 的通行做法**（各大云厂商的公共镜像仓库也有限额）。真正要记住的是架构原则——**生产环境不该在运行时依赖公共 registry**。把基础镜像收进自己的仓库，既躲开限额，也躲开"上游镜像被删/被改"的风险。
 
 ---
 

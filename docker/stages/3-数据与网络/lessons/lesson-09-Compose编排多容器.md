@@ -15,6 +15,7 @@
 |--------|--------|------|
 | compose 文件结构 | services / networks / volumes 三段 / 环境变量与 env_file / Compose V1 已停更，用 docker compose | ✅ 已完成 |
 | 一键本地开发环境 | up -d / down / logs -f / exec / 挂源码做热重载 | ✅ 已完成 |
+| 多文件拆分与复用 | `-f` 多文件按序 merge / `extends` 服务级继承 / `include` 模块化拼装 / `compose config` 看最终生效 | ✅ 已完成 |
 | 健康检查与启动顺序 | HEALTHCHECK 指令 / depends_on 只等启动不等就绪 / condition: service_healthy | ✅ 已完成 |
 
 ---
@@ -401,6 +402,104 @@ docker volume ls
 
 - [docker compose down（Docker 官方）](https://docs.docker.com/reference/cli/docker/compose/down/)——默认删除清单、external 永不删除、匿名卷行为、`-v` 语义
 - [Define services · networks / volumes（Docker 官方）](https://docs.docker.com/reference/compose-file/services/)——隐式 default 网络、links 非必需、bind 短语法自动建目录
+
+---
+
+### 知识点 2.5：多文件拆分与复用（merge / extends / include）
+
+> 本知识点关键点：`-f` 多文件按序合并 / `extends` 复用单个服务 / `include` 按应用模块整合 / 三种机制的分工
+
+#### 一句话定义
+
+一份 `compose.yaml` 只能描述一种部署形态；**当"本地开发""测试""生产"的差异，和"该不该复用别人的服务定义"同时出现时，就要把文件拆开**——Compose 提供三种组合机制：**merge**（多文件叠加覆盖）、**extends**（单个服务继承复用）、**include**（整段子应用拼进来）。
+
+#### 直觉建立（类比）
+
+写文档的三层复用：
+
+- **merge** = 一份模板文档，不同场合**盖不同的章、改几段话**（整体覆盖）
+- **extends** = 引用别人写好的**一个章节**，在此基础上改（局部继承）
+- **include** = 直接把另一份**完整文档**作为附件并入（模块化拼装）
+
+#### 核心原理
+
+**① merge：多文件按命令行顺序叠加**
+
+```bash
+# 后面的文件覆盖前面的：相同字段覆盖，新字段追加
+docker compose -f compose.yaml -f compose.prod.yaml up -d
+```
+
+默认行为：Compose 会自动读取 `compose.yaml` + `compose.override.yaml` 两个文件（**不需要显式 `-f`**）。约定是 `compose.yaml` 放基础配置，`compose.override.yaml` 放本地覆盖。
+
+典型的三层拆法：
+
+```text
+compose.yaml           基础：镜像、网络、卷、健康检查
+compose.override.yaml  本地：挂源码、开调试端口、关资源限制（自动生效）
+compose.prod.yaml      生产：资源限制、重启策略、日志轮转（-f 显式指定）
+```
+
+> ⚠️ **顺序决定一切**：Compose 按 `-f` 的**书写顺序**合并，后面的覆盖前面的。写反了生产配置会被本地配置盖掉。
+
+**② extends：复用单个服务的定义**
+
+```yaml
+# compose.yaml
+services:
+  web:
+    extends:
+      file: common.yaml
+      service: webapp-base
+    environment:
+      ENV: prod      # 只覆盖差异项，其余继承
+```
+
+适合"多个服务共享一份基线"（比如三个服务都要同一套日志配置和健康检查）。
+
+> ⚠️ **extends 的相对路径陷阱**：`extends.file` 里的相对路径是**相对于当前文件**解析的，跨目录复用时最容易踩坑。
+
+**③ include：按应用模块整合（Compose 2.20+）**
+
+```yaml
+# compose.yaml
+include:
+  - observability/compose.yaml   # 整段子应用并进来
+services:
+  app:
+    build: .
+    depends_on:
+      - prometheus               # 直接用子文件里声明的服务
+```
+
+被 include 的每段**作为独立的 Compose 应用模型加载**，有自己的项目目录——**这正是它解决 `extends` / `merge` 相对路径问题的原因**。且 `include` 是**递归**生效的。
+
+#### 三者怎么选
+
+| 场景 | 用哪个 | 理由 |
+|------|--------|------|
+| 同一套服务，不同环境（dev/test/prod）参数不同 | **merge**（`-f` 多文件） | 整体覆盖，最直观 |
+| 多个服务共享一份基线配置 | **extends** | 粒度是单个服务 |
+| 按团队 / 模块拆分，各自维护自己的文件 | **include** | 模块自治，相对路径不打架 |
+| 只是本地临时改几个参数 | **merge**（`compose.override.yaml`） | 自动生效，不进版本库 |
+
+#### 常见误区
+
+1. **"多文件合并是深合并，数组会追加"** → 分字段：标量（字符串/数字）**覆盖**；数组 `command`、`ports`、`volumes` 在 merge 规则下**按元素处理**，不是简单拼接或简单替换，有疑惑时用 `docker compose config` 看展开结果。
+2. **"`extends` 能跨文件带走 `depends_on`"** → `extends` 不会继承 `depends_on`、`volumes_from` 这类"关系型"字段，需要各自声明。
+3. **"用 `include` 就是把文本贴进来"** → 不是。被 include 的文件是**独立应用模型**，相对路径基于它自己的目录解析——这既是它的优点，也意味着**它内部的路径不会因为你放的位置而变**。
+4. **"拆分文件越多越好"** → 三层（基础 / 环境 / 本地覆盖）通常够用。拆到七八层以后，"最终到底生效了什么"只能靠 `docker compose config` 才能搞清楚，反而增加排障成本。
+
+#### 一句话记住
+
+> **merge 管"同一套服务不同环境"，extends 管"多个服务共享一份基线"，include 管"按模块拼装"；拿不准最终生效了什么，就跑 `docker compose config`。**
+
+#### 官方文档
+
+- [Merge Compose files（Docker 官方）](https://docs.docker.com/compose/how-tos/multiple-compose-files/merge/)——多文件合并规则、override 约定、`-f` 顺序语义
+- [extends（Docker 官方）](https://docs.docker.com/compose/how-tos/multiple-compose-files/extends/)——服务级继承与不继承的字段
+- [include（Docker 官方）](https://docs.docker.com/compose/how-tos/multiple-compose-files/include/)——模块化拼装、独立应用模型、递归包含
+- [docker compose config（Docker 官方）](https://docs.docker.com/reference/cli/docker/compose/config/)——查看合并后的最终配置
 
 ---
 
@@ -819,6 +918,8 @@ graph TD
 | `docker compose down --remove-orphans` | 删除已不在 compose 文件里的服务容器 | 知识点 2 |
 | `docker compose config` | 校验并输出合并后的配置（**不启动**） | 知识点 1 / 步骤 1 |
 | `-p <项目名>` | 覆盖项目名（默认取目录名）——同一份文件可部署多套 | 知识点 1 |
+| `docker compose -f compose.yaml -f compose.prod.yaml up -d` | 多文件按序合并，**后者覆盖前者** | 知识点 2.5 |
+| `docker compose -f compose.yaml -f compose.prod.yaml config` | 只看合并结果不启动——**排查"到底生效了什么"** | 知识点 2.5 |
 
 ---
 

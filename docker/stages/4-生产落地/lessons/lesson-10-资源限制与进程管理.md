@@ -14,7 +14,7 @@
 | 知识点 | 关键点 | 状态 |
 |--------|--------|------|
 | cgroups 资源限制 | --memory / --cpus 的语义 / OOMKilled 与退出码 137 / 容器内 free、nproc 看到的是宿主机这个经典坑 | ✅ 已完成 |
-| 重启策略与自愈 | no / on-failure / always / unless-stopped 的差别 / 退出码语义 / 重启策略不等于健康检查 | ✅ 已完成 |
+| 重启策略与自愈 | no / on-failure / always / unless-stopped 的差别 / 退出码语义 / 重启策略不等于健康检查 / **live restore：daemon 重启不杀容器** | ✅ 已完成 |
 | 优雅停止与 PID 1 | SIGTERM → 宽限期 → SIGKILL / 为什么 exec 形式才收得到信号（回扣阶段 2 课 5）/ PID 1 的僵尸进程回收责任 | ✅ 已完成 |
 
 ---
@@ -346,6 +346,51 @@ docker rm -f slow oom2
 #### 官方文档
 
 - [docker container run · Restart policies（Docker 官方）](https://docs.docker.com/reference/cli/docker/container/run/)——四策略语义、退避算法、与 `--rm` 冲突
+
+##### 补充：重启策略救不了的那种"停机"——live restore
+
+上面的重启策略管的是**容器进程挂了**。但还有一种停机它无能为力：**Docker daemon 自己重启**（升级引擎、改 `daemon.json`、系统打补丁重启 docker 服务）。
+
+默认情况下，**daemon 一停，它管的所有容器跟着停**。业务上这意味着"我明明只是升个 Docker 版本，结果整台机器上的服务全断了"。
+
+live restore 就是解决这个的：**让容器在 daemon 不可用时继续跑**。
+
+```json
+// /etc/docker/daemon.json
+{
+  "live-restore": true
+}
+```
+
+改完**不用重启**就能生效（推荐 `systemctl reload docker`，或给 `dockerd` 发 `SIGHUP`）：
+
+```bash
+sudo systemctl reload docker
+```
+
+验证方式：重启 daemon，看容器是不是还在跑、且 `RestartCount` 没涨。
+
+```bash
+docker inspect <容器> --format 'Running={{.State.Running}} RestartCount={{.RestartCount}}'
+```
+
+> ⚠️ **四个必须知道的边界**
+> 1. **Windows 容器不支持**（仅 Linux 容器支持，含 Docker Desktop for Windows 上跑的 Linux 容器）。
+> 2. **daemon 不可用期间，`docker` 命令是用不了的**——容器在跑，但你没法管理它。它保的是"业务不断"，不是"管理不断"。
+> 3. **升级跨大版本时，官方文档建议仍走正常重启流程**，别指望靠 live restore 跳过。
+> 4. **开启后 daemon 重启不会再重置容器**，意味着某些 daemon 侧的配置变更要重启**容器**才生效——排障时记得问一句"这个容器上次重启是什么时候"。
+
+**和重启策略的关系**：两者不是二选一，是互补。
+
+| 场景 | 靠什么兜底 |
+|------|-----------|
+| 业务进程崩了 | 重启策略（`--restart`） |
+| 整机重启了 | 重启策略（daemon 起来后拉起容器） |
+| **只重启 daemon，不想动业务** | **live restore** |
+
+#### 官方文档（live restore）
+
+- [Live restore（Docker 官方）](https://docs.docker.com/engine/daemon/live-restore/)——开启方式、`SIGHUP` 热加载、Windows 不支持、升级注意事项
 
 ---
 
@@ -693,6 +738,7 @@ graph TD
 | `docker stop [-t <秒>] <容器>` | 停止；`-t -1` 为无限等待（默认 Linux 10 秒） | 知识点 3 / 步骤 4 |
 | `docker run --stop-signal SIGINT ...` | 改停止时发的首个信号 | 知识点 3 / 演示 |
 | `docker run --init ...` | 用 **tini** 当 PID 1：转发信号 + **回收僵尸进程** | 知识点 3 / 演示 |
+| `sudo systemctl reload docker` | 热加载 daemon 配置（**不重启**，配合 `live-restore` 生效） | 知识点 2 / live restore |
 
 ---
 

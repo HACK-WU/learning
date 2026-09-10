@@ -15,7 +15,7 @@
 |--------|--------|------|
 | 引入决策树 | 单机 / 小团队 / 规模化三条路径 / 什么时候别上容器 | ✅ 已完成 |
 | 成本与风险清单 | 容器化新增的运维负担 / 常见引入失败原因 / 团队能力前提 | ✅ 已完成 |
-| 下一步学习地图 | Kubernetes / BuildKit 深入 / rootless 与安全加固 / 与本仓库其他课程（Kafka、Redis、VictoriaMetrics、Django 等）的连接 | ✅ 已完成 |
+| 下一步学习地图 | Kubernetes / BuildKit 深入 / rootless 与安全加固 / 与本仓库其他课程（Kafka、Redis、VictoriaMetrics、Django 等）的连接 / **`docker context` 多机管理** / **已废弃写法对照表** | ✅ 已完成 |
 
 ---
 
@@ -317,6 +317,64 @@ docker compose config | grep -E 'mem_limit|cpus|restart|healthcheck|max-size'
 
 > **下一步往哪走，取决于你要解决的问题；而这 15 课是所有深入路线的共同地基。**
 
+##### 补充一：`docker context` —— 一台客户端管多台 daemon
+
+课上所有命令默认都打在**本机**的 `/var/run/docker.sock` 上。但实际工作里常常是"本地写代码，跑在测试机 / 服务器上"，很多人就一直在 `ssh` 过去敲命令。
+
+`docker context` 就是解决这个的：**把"连哪台 daemon"存成一个命名配置，一条命令切换**。
+
+```bash
+# 看看现在有哪些 context（* 号是当前生效的）
+docker context ls
+
+# 创建：通过 SSH 连远程机器（最常用，不需要开 TCP 端口）
+docker context create staging --docker "host=ssh://user@192.168.1.50"
+
+# 切换：切换后，所有 docker 命令都打在那台机器上
+docker context use staging
+docker ps          # 看的是远程机器的容器
+
+# 切回本地
+docker context use default
+
+# 只临时用一次，不改当前 context
+docker --context staging ps
+docker compose --context staging up -d
+```
+
+**为什么比 `ssh` 过去敲更好**：
+
+- `docker cp`、本地 Dockerfile 构建上下文、compose 文件都在**本地**，不用先 scp 过去
+- 一套脚本换个 context 就能作用于不同环境
+- 不暴露 2375 端口（走 SSH 通道），**比开 TCP 安全得多**
+
+> ⚠️ **两个坑**
+> 1. **context 只影响 CLI 打到哪，不影响"镜像在哪"**——在 staging context 下 `docker build`，镜像建在**远程机器的本地存储**里，不会自动跑到你的笔记本上。
+> 2. **误操作的代价变了**——`docker context use prod` 之后敲 `docker compose down -v`，删的是生产。建议把当前 context 显示进 shell 提示符，或用 `--context` 显式指定而**不要长期切过去**。
+
+##### 补充二：这些写法已经废弃，别再用了
+
+这门课的版本基线是 **Docker Engine 29.x**（核查于 2026-09）。Docker 迭代快，网上大量教程仍停留在 1.x / 20.x 时代。以下写法**官方已列入废弃清单**，遇到了要认得出：
+
+| 废弃项 | 现在该用什么 | 说明 |
+|--------|-------------|------|
+| `docker-compose`（带连字符） | **`docker compose`**（空格） | V1 是 Python 写的独立程序，已停更；V2 是 Go 插件。本课一律用 V2 |
+| `MAINTAINER` 指令 | **`LABEL org.opencontainers.image.authors=...`** | 官方明确废弃 |
+| legacy builder（`DOCKER_BUILDKIT=0`） | **BuildKit**（默认） | 旧构建器已在 Linux 上废弃 |
+| `overlay2.override_kernel_check` | — | 该存储选项已废弃 |
+| `docker daemon` 命令 | **`dockerd`** | 老教程里的 `docker daemon` 早已改名 |
+| `--filter` 之外的旧 `docker ps` 别名 | `docker ps` / `docker container ls` | 建议统一用 `docker <对象> <动词>` 新语法 |
+| `DOCKER_CONTENT_TRUST=1`（DCT） | **cosign（Sigstore）** | Notary v1 服务 **2026-12-08 关停**，详见课 12 |
+| `links` / 环境变量式容器互联 | **自定义网络 + 服务名 DNS**（课 8） | 官方明说 links 非必需 |
+| `--cpu-shares` 当硬上限用 | **`--cpus`**（课 10） | 前者是相对权重，不是上限 |
+
+完整清单见官方文档（它会持续更新）：
+
+- [Deprecated features（Docker 官方）](https://docs.docker.com/engine/deprecated/)——含 cgroup v1 支持、`docker commit --pause`、legacy `~/.dockercfg`、AuFS 等
+- [Docker contexts（Docker 官方）](https://docs.docker.com/engine/manage-resources/contexts/)——context 的构成、SSH 端点、切换与覆盖
+
+> **判断口诀**：看到教程里出现**带连字符的 `docker-compose`**、**`MAINTAINER`**、**`docker daemon`**，就可以怀疑这篇文章写于 2020 年之前——**参数细节以官网当页为准**。
+
 ---
 
 ## 第四幕：实操验证
@@ -522,6 +580,10 @@ graph TD
 | `docker images --format '{{.Repository}}:{{.Tag}}' \| grep ':latest'` | 揪出 **latest 标签**（生产不该用） | 步骤 3 |
 | `docker info --format '{{.Swarm.LocalNodeState}}'` | 只读看 Swarm 状态，判断是否已上编排 | 知识点 1 / 演示 |
 | `docker compose config` | 校验 compose 文件合法性（不启动） | 知识点 3 / 演示 |
+| `docker context ls` | 列出所有 context（`*` = 当前生效） | 知识点 3 / context |
+| `docker context create <名> --docker "host=ssh://user@host"` | 建一个远程 context（走 SSH，**不用开 2375**） | 知识点 3 / context |
+| `docker context use <名>` | 切换 context——**之后所有 docker 命令都打在那台机器上** | 知识点 3 / context |
+| `docker --context <名> <命令>` | 只临时用一次（**推荐，比长期切过去安全**） | 知识点 3 / context |
 
 ---
 

@@ -14,7 +14,7 @@
 | 知识点 | 关键点 | 状态 |
 |--------|--------|------|
 | 联合文件系统与分层 | 只读层栈 + 一个容器层 / Copy-on-Write 的读写路径 / 层在镜像之间共享 | ✅ 已完成 |
-| 仓库、标签与摘要 | registry / repository / tag 三层命名 / digest 才是内容寻址 / latest 不是"最新"而是"默认" | ✅ 已完成 |
+| 仓库、标签与摘要 | registry / repository / tag 三层命名 / digest 才是内容寻址 / latest 不是"最新"而是"默认" / **官方镜像与可信发布者的辨识** | ✅ 已完成 |
 | 镜像体积从哪来 | 基础镜像占大头 / 构建中间产物留在层里删不掉 / 虚悬镜像与 `docker system df` / `image prune` 与 `system prune` 的清理边界 | ✅ 已完成 |
 
 ---
@@ -252,6 +252,28 @@ docker image inspect my-alpine:latest --format '{{.Id}}'
 
 - [docker tag（Docker 官方）](https://docs.docker.com/reference/cli/docker/image/tag/)——tag 与完整引用格式
 - [docker run --pull（Docker 官方）](https://docs.docker.com/reference/cli/docker/container/run/#pull)——`missing` / `always` / `never` 三种拉镜像策略
+- [Trusted content（Docker 官方）](https://docs.docker.com/docker-hub/image-library/trusted-content/)——官方镜像 / 认证发布者 / 赞助开源项目的辨识方法
+
+##### 补充：怎么判断一个镜像"来路正不正"
+
+`docker pull alpine` 谁都能推，pull 到一个名字很像的镜像不等于 pull 到你以为的那个。Docker Hub 上的镜像按**可信度**分四类，在镜像页的标签上直接可见：
+
+| 类别 | 页面上的写法 | 含义 | 可信度 |
+|------|-------------|------|--------|
+| Docker Official Images | 直接是 `alpine`、`nginx`，**没有用户名前缀** | Docker 官方维护：有文档、遵循最佳实践、定期更新、有安全响应 | 最高，生产优先选 |
+| Docker Verified Publisher (DVP) | `bitnami/nginx` 这类，带 **Verified Publisher** 徽章 | 发布者身份经 Docker 核验的商业厂商 | 高 |
+| Docker-Sponsored Open Source (DSOS) | 带 **Sponsored OSS** 徽章 | Docker 赞助的开源项目，由项目方维护 | 高 |
+| 普通用户镜像 | `someone/nginx` | 任何人都能推，无任何担保 | 未知，**不该直接进生产** |
+
+判断口诀：**名字里有没有 `/` 前缀，是最快的筛选器**。没有前缀（`alpine`、`postgres`、`redis`）就是官方镜像；有前缀就要去看徽章。
+
+```bash
+# 看镜像是不是官方镜像：官方镜像的仓库名是 library/xxx
+docker pull alpine
+docker image inspect alpine --format '{{index .RepoTags 0}}'
+```
+
+> ⚠️ **注意**：官方镜像也不能无脑信。官方镜像只保证"来源可追溯 + 有人维护"，不保证"零漏洞"——有没有漏洞是课 12 扫描的事，两件事别混为一谈。
 
 ---
 
@@ -482,6 +504,7 @@ graph TD
 | `docker image prune` | 只清虚悬镜像（相对安全） | 知识点 3 |
 | `docker system prune` | + 停止的容器、无用网络、构建缓存（**默认不删卷**） | 知识点 3 |
 | `docker system prune --volumes` | 🔴 再 + 匿名卷，**生产上别顺手敲** | 知识点 3 |
+| `docker image inspect --format '{{index .RepoTags 0}}' <镜像>` | 看完整引用名，**无用户名前缀 = 官方镜像** | 知识点 2 / 可信内容 |
 
 ---
 
