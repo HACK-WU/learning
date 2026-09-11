@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 300" width="1100" height="300" font-family="Microsoft YaHei, PingFang SC, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,4 L0,8 z" fill="#c62828"/>
+    </marker>
+    <style>
+      .lesson-title { font-size: 14px; font-weight: bold; fill: #ffffff; }
+      .lesson-sub { font-size: 11px; fill: #ffcdd2; }
+      .point { font-size: 11.5px; fill: #263238; }
+      .goal { font-size: 11px; fill: #37474f; }
+      .num { font-size: 13px; font-weight: bold; fill: #ffffff; }
+      .axis { font-size: 12px; fill: #607d8b; font-weight: bold; }
+    </style>
+  </defs>
+
+  <rect width="1100" height="300" fill="#ffffff"/>
+
+  <text x="550" y="28" text-anchor="middle" font-size="17" font-weight="bold" fill="#b71c1c">阶段 5：安全体系 · 3 课</text>
+  <text x="550" y="48" text-anchor="middle" font-size="11.5" fill="#607d8b">故事章节：谁能对集群做什么</text>
+
+  <g>
+    <rect x="30" y="70" width="320" height="196" rx="8" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+    <rect x="30" y="70" width="320" height="32" rx="8" fill="#c62828"/>
+    <rect x="30" y="90" width="320" height="12" fill="#c62828"/>
+    <circle cx="52" cy="86" r="12" fill="#b71c1c"/>
+    <text x="52" y="91" text-anchor="middle" class="num">15</text>
+    <text x="72" y="91" class="lesson-title">认证 · 授权 · 准入</text>
+    <text x="46" y="120" class="lesson-sub">RBAC 与 ServiceAccount</text>
+    <text x="46" y="146" class="point">· API 安全三段式</text>
+    <text x="46" y="168" class="point">· RBAC 最小权限</text>
+    <text x="46" y="190" class="point">· ServiceAccount 与 token 安全</text>
+    <line x1="46" y1="204" x2="334" y2="204" stroke="#ef9a9a" stroke-width="1"/>
+    <text x="46" y="224" class="goal">回答：谁能访问集群，</text>
+    <text x="46" y="242" class="goal">能做到哪一步？</text>
+    <text x="46" y="260" class="lesson-sub">⚠ 白名单模型，默认拒绝</text>
+  </g>
+
+  <g>
+    <rect x="390" y="70" width="320" height="196" rx="8" fill="#fce4ec" stroke="#ad1457" stroke-width="2"/>
+    <rect x="390" y="70" width="320" height="32" rx="8" fill="#ad1457"/>
+    <rect x="390" y="90" width="320" height="12" fill="#ad1457"/>
+    <circle cx="412" cy="86" r="12" fill="#880e4f"/>
+    <text x="412" y="91" text-anchor="middle" class="num">16</text>
+    <text x="432" y="91" class="lesson-title">Pod 安全</text>
+    <text x="406" y="120" class="lesson-sub" fill="#ad1457">PSA 与 securityContext</text>
+    <text x="406" y="146" class="point">· Pod 安全标准 PSA</text>
+    <text x="406" y="168" class="point">· securityContext / capabilities</text>
+    <text x="406" y="190" class="point">· 镜像与供应链安全</text>
+    <line x1="406" y1="204" x2="694" y2="204" stroke="#f48fb1" stroke-width="1"/>
+    <text x="406" y="224" class="goal">回答：容器以什么权限跑，</text>
+    <text x="406" y="242" class="goal">能不能被限制住？</text>
+    <text x="406" y="260" class="lesson-sub" fill="#ad1457">⚠ PSP 已于 v1.25 移除</text>
+  </g>
+
+  <g>
+    <rect x="750" y="70" width="320" height="196" rx="8" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="2"/>
+    <rect x="750" y="70" width="320" height="32" rx="8" fill="#6a1b9a"/>
+    <rect x="750" y="90" width="320" height="12" fill="#6a1b9a"/>
+    <circle cx="772" cy="86" r="12" fill="#4a148c"/>
+    <text x="772" y="91" text-anchor="middle" class="num">17</text>
+    <text x="792" y="91" class="lesson-title">Secret · etcd · 审计</text>
+    <text x="766" y="120" class="lesson-sub" fill="#6a1b9a">数据保护与事后追溯</text>
+    <text x="766" y="146" class="point">· Secret 加固与 etcd 静态加密</text>
+    <text x="766" y="168" class="point">· 审计日志</text>
+    <text x="766" y="190" class="point">· 运行时安全与威胁模型</text>
+    <line x1="766" y1="204" x2="1054" y2="204" stroke="#ce93d8" stroke-width="1"/>
+    <text x="766" y="224" class="goal">回答：敏感数据怎么保护，</text>
+    <text x="766" y="242" class="goal">出事之后能不能查到？</text>
+    <text x="766" y="260" class="lesson-sub" fill="#6a1b9a">⚠ Secret 是 base64 不是加密</text>
+  </g>
+
+  <path d="M350,168 L390,168" stroke="#c62828" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <path d="M710,168 L750,168" stroke="#c62828" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+</svg>

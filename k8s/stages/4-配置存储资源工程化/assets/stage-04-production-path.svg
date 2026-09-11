@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 420" width="1080" height="420" font-family="Microsoft YaHei, PingFang SC, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="a4" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,4 L0,8 z" fill="#7b1fa2"/>
+    </marker>
+  </defs>
+  <rect width="1080" height="420" fill="#ffffff"/>
+  <text x="540" y="32" text-anchor="middle" font-size="18" font-weight="bold" fill="#4a148c">阶段 4 · 配置 · 存储 · 资源 · 工程化 — 学习路径</text>
+  <text x="540" y="54" text-anchor="middle" font-size="12" fill="#607d8b">故事章节：从能用到敢上生产 —— 最后一道坎是「该不该用」</text>
+
+  <g>
+    <rect x="25" y="90" width="250" height="140" rx="8" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2"/>
+    <rect x="25" y="90" width="250" height="32" rx="8" fill="#7b1fa2"/>
+    <rect x="25" y="110" width="250" height="12" fill="#7b1fa2"/>
+    <text x="150" y="113" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff">课 9 · ConfigMap 与 Secret</text>
+    <text x="43" y="146" font-size="11" fill="#263238">① ConfigMap 配置分离</text>
+    <text x="43" y="168" font-size="11" fill="#263238">② Secret（base64 ≠ 加密）</text>
+    <text x="43" y="190" font-size="11" fill="#263238">③ 配置变更联动更新</text>
+    <text x="43" y="216" font-size="10.5" fill="#7b1fa2" font-style="italic">回答：配置怎么不写死进镜像？</text>
+  </g>
+
+  <g>
+    <rect x="295" y="90" width="250" height="140" rx="8" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2"/>
+    <rect x="295" y="90" width="250" height="32" rx="8" fill="#7b1fa2"/>
+    <rect x="295" y="110" width="250" height="12" fill="#7b1fa2"/>
+    <text x="420" y="113" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff">课 10 · 存储三层抽象</text>
+    <text x="313" y="146" font-size="11" fill="#263238">① Volume 基础</text>
+    <text x="313" y="168" font-size="11" fill="#263238">② PV / PVC / StorageClass</text>
+    <text x="313" y="190" font-size="11" fill="#263238">③ 有状态应用落地</text>
+    <text x="313" y="216" font-size="10.5" fill="#7b1fa2" font-style="italic">回答：Pod 没了数据怎么还在？</text>
+  </g>
+
+  <g>
+    <rect x="565" y="90" width="250" height="140" rx="8" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2"/>
+    <rect x="565" y="90" width="250" height="32" rx="8" fill="#7b1fa2"/>
+    <rect x="565" y="110" width="250" height="12" fill="#7b1fa2"/>
+    <text x="690" y="113" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff">课 11 · 资源 · 调度 · HPA</text>
+    <text x="583" y="146" font-size="11" fill="#263238">① requests 与 limits</text>
+    <text x="583" y="168" font-size="11" fill="#263238">② QoS 与驱逐顺序</text>
+    <text x="583" y="190" font-size="11" fill="#263238">③ 调度与亲和性 ④ HPA</text>
+    <text x="583" y="216" font-size="10.5" fill="#7b1fa2" font-style="italic">回答：内存不够时先杀谁？</text>
+  </g>
+
+  <g>
+    <rect x="835" y="90" width="220" height="140" rx="8" fill="#ede7f6" stroke="#4527a0" stroke-width="2.5"/>
+    <rect x="835" y="90" width="220" height="32" rx="8" fill="#4527a0"/>
+    <rect x="835" y="110" width="220" height="12" fill="#4527a0"/>
+    <text x="945" y="113" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff">课 12 · 工程化与决策</text>
+    <text x="853" y="146" font-size="11" fill="#263238">① Helm 与 Chart</text>
+    <text x="853" y="168" font-size="11" fill="#263238">② 排障工具箱</text>
+    <text x="853" y="190" font-size="11" fill="#263238">③ 该不该用 k8s（决策收口）</text>
+    <text x="853" y="216" font-size="10.5" fill="#4527a0" font-style="italic">回答：什么时候该说「不用」？</text>
+  </g>
+
+  <path d="M275,160 L295,160" stroke="#7b1fa2" stroke-width="2.5" fill="none" marker-end="url(#a4)"/>
+  <path d="M545,160 L565,160" stroke="#7b1fa2" stroke-width="2.5" fill="none" marker-end="url(#a4)"/>
+  <path d="M815,160 L835,160" stroke="#4527a0" stroke-width="2.5" fill="none" marker-end="url(#a4)"/>
+
+  <rect x="25" y="270" width="1030" height="124" rx="6" fill="#fafafa" stroke="#bdbdbd" stroke-width="1"/>
+  <text x="45" y="296" font-size="13" font-weight="bold" fill="#263238">🔑 本阶段是「从会用走向会设计」的转折点</text>
+  <text x="45" y="322" font-size="12" fill="#37474f">前三个阶段解决「怎么让应用跑起来、被访问、被隔离」；本阶段解决「跑得稳不稳、数据丢不丢、资源够不够、</text>
+  <text x="45" y="344" font-size="12" fill="#37474f">以及最根本的 —— 这件事到底该不该交给 k8s」。</text>
+  <text x="45" y="372" font-size="12" fill="#37474f">➡️ 课程知识讲完后：进入 Phase 3 综合实战项目（跨阶段整合），而非就此结束。</text>
+</svg>

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 400" width="1000" height="400" font-family="Microsoft YaHei, PingFang SC, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="a2" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,4 L0,8 z" fill="#2e7d32"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="400" fill="#ffffff"/>
+  <text x="500" y="32" text-anchor="middle" font-size="18" font-weight="bold" fill="#1b5e20">阶段 2 · 工作负载与控制器 — 学习路径</text>
+  <text x="500" y="54" text-anchor="middle" font-size="12" fill="#607d8b">故事章节：让机器自己干活 —— 谁来保证「我声明的状态」一直成立</text>
+
+  <g>
+    <rect x="40" y="90" width="420" height="150" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+    <rect x="40" y="90" width="420" height="32" rx="8" fill="#2e7d32"/>
+    <rect x="40" y="110" width="420" height="12" fill="#2e7d32"/>
+    <text x="250" y="113" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">课 4 · Deployment：无状态应用的自愈与更新</text>
+    <text x="60" y="146" font-size="11.5" fill="#263238">① 控制器与 ReplicaSet —— 副本数由谁保证</text>
+    <text x="60" y="168" font-size="11.5" fill="#263238">② 滚动更新 —— maxSurge / maxUnavailable 两个旋钮</text>
+    <text x="60" y="190" font-size="11.5" fill="#263238">③ 回滚与版本历史 —— revision 是怎么记的</text>
+    <text x="60" y="220" font-size="11" fill="#2e7d32" font-style="italic">回答：怎么做到「更新时业务不中断」？</text>
+  </g>
+
+  <g>
+    <rect x="540" y="90" width="420" height="150" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+    <rect x="540" y="90" width="420" height="32" rx="8" fill="#2e7d32"/>
+    <rect x="540" y="110" width="420" height="12" fill="#2e7d32"/>
+    <text x="750" y="113" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">课 5 · StatefulSet / DaemonSet / Job</text>
+    <text x="560" y="146" font-size="11.5" fill="#263238">① StatefulSet —— 有状态应用的稳定身份与存储</text>
+    <text x="560" y="168" font-size="11.5" fill="#263238">② DaemonSet —— 每个节点一个（日志 / 监控 Agent）</text>
+    <text x="560" y="190" font-size="11.5" fill="#263238">③ Job 与 CronJob —— 跑完就退出的任务</text>
+    <text x="560" y="220" font-size="11" fill="#2e7d32" font-style="italic">回答：不是所有应用都该用 Deployment</text>
+  </g>
+
+  <path d="M460,165 L540,165" stroke="#2e7d32" stroke-width="2.5" fill="none" marker-end="url(#a2)"/>
+
+  <rect x="40" y="270" width="920" height="104" rx="6" fill="#fafafa" stroke="#bdbdbd" stroke-width="1"/>
+  <text x="60" y="296" font-size="13" font-weight="bold" fill="#263238">🔑 本阶段的核心判断：按应用形态选控制器</text>
+  <text x="60" y="322" font-size="12" fill="#37474f">Deployment 管无状态（Pod 可随意替换）｜ StatefulSet 管有状态（要稳定身份 + 稳定存储）｜</text>
+  <text x="60" y="344" font-size="12" fill="#37474f">DaemonSet 管「每节点一份」｜ Job/CronJob 管「跑完就退出」。选错的代价往往要到扩容或重启时才暴露。</text>
+  <text x="60" y="364" font-size="12" fill="#37474f">➡️ 下一阶段：阶段 3《网络与服务暴露》—— 应用跑起来了，怎么让别人访问到它。</text>
+</svg>

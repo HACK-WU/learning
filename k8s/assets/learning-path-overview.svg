@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 800" width="1180" height="800" font-family="Microsoft YaHei, PingFang SC, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,4 L0,8 z" fill="#1565C0"/>
+    </marker>
+    <marker id="arrow2" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,4 L0,8 z" fill="#455a64"/>
+    </marker>
+    <style>
+      .stage-title { font-size: 15px; font-weight: bold; fill: #ffffff; }
+      .stage-sub { font-size: 11px; fill: #e3f2fd; }
+      .lesson { font-size: 11.5px; fill: #263238; }
+      .chapter { font-size: 11px; fill: #1565C0; font-style: italic; }
+      .goal { font-size: 12px; fill: #37474f; }
+      .axis { font-size: 12px; fill: #607d8b; font-weight: bold; }
+      .num { font-size: 13px; font-weight: bold; fill: #ffffff; }
+    </style>
+  </defs>
+
+  <rect width="1180" height="800" fill="#ffffff"/>
+
+  <text x="590" y="30" text-anchor="middle" font-size="19" font-weight="bold" fill="#0d47a1">Kubernetes 学习路径 · 6 阶段 20 课 66 知识点</text>
+  <text x="590" y="52" text-anchor="middle" font-size="12" fill="#607d8b">故事主线：一个服务从「能跑起来」到「稳稳地跑在集群里」　｜　覆盖基准：CKA 2025 + CKS 考纲交叉对齐</text>
+
+  <line x1="60" y1="70" x2="1120" y2="70" stroke="#cfd8dc" stroke-width="1"/>
+
+  <g>
+    <rect x="30" y="88" width="352" height="212" rx="8" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+    <rect x="30" y="88" width="352" height="34" rx="8" fill="#1565C0"/>
+    <rect x="30" y="110" width="352" height="12" fill="#1565C0"/>
+    <circle cx="52" cy="105" r="12" fill="#0d47a1"/>
+    <text x="52" y="110" text-anchor="middle" class="num">1</text>
+    <text x="72" y="110" class="stage-title">心智模型与架构</text>
+    <text x="46" y="140" class="chapter">故事章节：单机时代的终结</text>
+    <text x="46" y="164" class="lesson">课 1　· 为什么需要 k8s</text>
+    <text x="46" y="186" class="lesson">课 2　· 声明式 API 与调谐循环</text>
+    <text x="46" y="208" class="lesson">课 3　· Pod：最小调度单元</text>
+    <line x1="46" y1="222" x2="366" y2="222" stroke="#90caf9" stroke-width="1"/>
+    <text x="46" y="242" class="goal">目标：建立「声明式」心智模型，</text>
+    <text x="46" y="260" class="goal">看懂集群由哪些组件构成</text>
+    <text x="46" y="284" class="chapter">回答：k8s 到底在替我做什么？</text>
+  </g>
+
+  <g>
+    <rect x="414" y="88" width="352" height="212" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+    <rect x="414" y="88" width="352" height="34" rx="8" fill="#2e7d32"/>
+    <rect x="414" y="110" width="352" height="12" fill="#2e7d32"/>
+    <circle cx="436" cy="105" r="12" fill="#1b5e20"/>
+    <text x="436" y="110" text-anchor="middle" class="num">2</text>
+    <text x="456" y="110" class="stage-title">工作负载与控制器</text>
+    <text x="430" y="140" class="chapter" fill="#2e7d32">故事章节：让机器自己干活</text>
+    <text x="430" y="164" class="lesson">课 4　· 多容器 Pod（init/sidecar/优雅终止）</text>
+    <text x="430" y="186" class="lesson">课 5　· Deployment 自愈与更新</text>
+    <text x="430" y="208" class="lesson">课 6　· StatefulSet / DaemonSet / Job</text>
+    <line x1="430" y1="222" x2="750" y2="222" stroke="#a5d6a7" stroke-width="1"/>
+    <text x="430" y="242" class="goal">目标：按应用形态选对控制器，</text>
+    <text x="430" y="260" class="goal">掌握更新 / 回滚 / 自愈机制</text>
+    <text x="430" y="284" class="chapter" fill="#2e7d32">回答：怎么让它一直保持我想要的样子？</text>
+  </g>
+
+  <g>
+    <rect x="798" y="88" width="352" height="212" rx="8" fill="#fff3e0" stroke="#ef6c00" stroke-width="2"/>
+    <rect x="798" y="88" width="352" height="34" rx="8" fill="#ef6c00"/>
+    <rect x="798" y="110" width="352" height="12" fill="#ef6c00"/>
+    <circle cx="820" cy="105" r="12" fill="#e65100"/>
+    <text x="820" y="110" text-anchor="middle" class="num">3</text>
+    <text x="840" y="110" class="stage-title">网络与服务暴露</text>
+    <text x="814" y="140" class="chapter" fill="#ef6c00">故事章节：让世界看到你的服务</text>
+    <text x="814" y="164" class="lesson">课 7　· Service 与 CoreDNS（集群内寻址）</text>
+    <text x="814" y="186" class="lesson">课 8　· Ingress 七层路由（⚠ 组件已 EOL）</text>
+    <text x="814" y="208" class="lesson">课 9　· Gateway API（下一代入口标准）</text>
+    <text x="814" y="230" class="lesson">课 10 · NetworkPolicy 防火墙</text>
+    <line x1="814" y1="244" x2="1134" y2="244" stroke="#ffcc80" stroke-width="1"/>
+    <text x="814" y="266" class="goal">目标：搞懂流量怎么进集群、</text>
+    <text x="814" y="284" class="goal">怎么在集群内被寻址与被隔离</text>
+  </g>
+
+  <g>
+    <rect x="30" y="340" width="352" height="212" rx="8" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2"/>
+    <rect x="30" y="340" width="352" height="34" rx="8" fill="#7b1fa2"/>
+    <rect x="30" y="362" width="352" height="12" fill="#7b1fa2"/>
+    <circle cx="52" cy="357" r="12" fill="#4a148c"/>
+    <text x="52" y="362" text-anchor="middle" class="num">4</text>
+    <text x="72" y="362" class="stage-title">配置·存储·资源·工程化</text>
+    <text x="46" y="392" class="chapter" fill="#7b1fa2">故事章节：从能用到敢上生产</text>
+    <text x="46" y="416" class="lesson">课 11 · ConfigMap 与 Secret</text>
+    <text x="46" y="438" class="lesson">课 12 · Volume / PV / PVC / StorageClass</text>
+    <text x="46" y="460" class="lesson">课 13 · 资源 · 调度 · 扩缩容</text>
+    <text x="46" y="482" class="lesson">课 14 · Helm · Kustomize · 可观测性</text>
+    <line x1="46" y1="496" x2="366" y2="496" stroke="#ce93d8" stroke-width="1"/>
+    <text x="46" y="518" class="goal">目标：配置 / 数据 / 资源三线收口，</text>
+    <text x="46" y="536" class="goal">掌握工程化交付手段</text>
+    <text x="46" y="554" class="chapter" fill="#7b1fa2">回答：怎么让它可被持续维护？</text>
+  </g>
+
+  <g>
+    <rect x="414" y="340" width="352" height="212" rx="8" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+    <rect x="414" y="340" width="352" height="34" rx="8" fill="#c62828"/>
+    <rect x="414" y="362" width="352" height="12" fill="#c62828"/>
+    <circle cx="436" cy="357" r="12" fill="#b71c1c"/>
+    <text x="436" y="362" text-anchor="middle" class="num">5</text>
+    <text x="456" y="362" class="stage-title">安全体系（新增）</text>
+    <text x="430" y="392" class="chapter" fill="#c62828">故事章节：谁能对集群做什么</text>
+    <text x="430" y="416" class="lesson">课 15 · 认证 · 授权 · 准入（RBAC / SA）</text>
+    <text x="430" y="438" class="lesson">课 16 · Pod 安全（PSA / securityContext）</text>
+    <text x="430" y="460" class="lesson">课 17 · Secret 加固 · etcd 加密 · 审计</text>
+    <line x1="430" y1="474" x2="750" y2="474" stroke="#ef9a9a" stroke-width="1"/>
+    <text x="430" y="496" class="goal">目标：谁能访问 / 以什么权限跑 /</text>
+    <text x="430" y="514" class="goal">出事能不能查到</text>
+    <text x="430" y="538" class="chapter" fill="#c62828">回答：怎么防止它被滥用？</text>
+  </g>
+
+  <g>
+    <rect x="798" y="340" width="352" height="212" rx="8" fill="#e0f2f1" stroke="#00695c" stroke-width="2"/>
+    <rect x="798" y="340" width="352" height="34" rx="8" fill="#00695c"/>
+    <rect x="798" y="362" width="352" height="12" fill="#00695c"/>
+    <circle cx="820" cy="357" r="12" fill="#004d40"/>
+    <text x="820" y="362" text-anchor="middle" class="num">6</text>
+    <text x="840" y="362" class="stage-title">排障 · 运维 · 扩展（新增）</text>
+    <text x="814" y="392" class="chapter" fill="#00695c">故事章节：出事了怎么办，它从哪来</text>
+    <text x="814" y="416" class="lesson">课 18 · 系统化排障（分层定位法）</text>
+    <text x="814" y="438" class="lesson">课 19 · 集群运维与生命周期（部分原理课）</text>
+    <text x="814" y="460" class="lesson">课 20 · 扩展机制与决策收口</text>
+    <line x1="814" y1="474" x2="1134" y2="474" stroke="#80cbc4" stroke-width="1"/>
+    <text x="814" y="496" class="goal">目标：形成排障动作序列，理解</text>
+    <text x="814" y="514" class="goal">运维成本，收口决策问题</text>
+    <text x="814" y="538" class="chapter" fill="#00695c">回答：出事怎么办？该不该用？</text>
+  </g>
+
+  <g>
+    <path d="M382,194 L414,194" stroke="#1565C0" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+    <path d="M766,194 L798,194" stroke="#1565C0" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+    <path d="M974,300 L974,340" stroke="#1565C0" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+    <path d="M1134,446 L798,446" stroke="#1565C0" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+    <path d="M414,446 L382,446" stroke="#1565C0" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  </g>
+
+  <line x1="60" y1="582" x2="1120" y2="582" stroke="#cfd8dc" stroke-width="1"/>
+
+  <text x="60" y="608" class="axis">阶段依赖说明</text>
+  <text x="60" y="630" font-size="12" fill="#37474f">· 阶段 1 → 2：先懂「声明式」再谈「谁来保证声明成立」（控制器）</text>
+  <text x="60" y="650" font-size="12" fill="#37474f">· 阶段 2 → 3：先有工作负载，才谈怎么被访问与被隔离</text>
+  <text x="60" y="670" font-size="12" fill="#37474f">· 阶段 3 → 4：跑通之后才谈配置、持久化、资源治理与工程化</text>
+  <text x="60" y="690" font-size="12" fill="#37474f">· 阶段 4 → 5 → 6：能跑通、能维护之后，才谈安全加固与系统化排障（安全与排障也反向依赖前四阶段的机制理解）</text>
+
+  <rect x="60" y="708" width="1060" height="80" rx="6" fill="#fafafa" stroke="#bdbdbd" stroke-width="1"/>
+  <text x="80" y="732" font-size="13" font-weight="bold" fill="#263238">🎯 贯穿全课程的「决策参考」线（用户目标之一）</text>
+  <text x="80" y="754" font-size="12" fill="#37474f">· 课 1 埋种子（适用边界） → 课 9（入口选型） → 课 14（工程化选型） → 课 20（决策清单收口）</text>
+  <text x="80" y="776" font-size="12" fill="#37474f">· Phase 4 课程手册汇总「决策清单」　· Phase 5 场景解法库以设计题升华</text>
+</svg>

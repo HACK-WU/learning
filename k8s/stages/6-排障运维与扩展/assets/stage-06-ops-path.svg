@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 300" width="1100" height="300" font-family="Microsoft YaHei, PingFang SC, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,4 L0,8 z" fill="#00695c"/>
+    </marker>
+    <style>
+      .lesson-title { font-size: 14px; font-weight: bold; fill: #ffffff; }
+      .lesson-sub { font-size: 11px; fill: #b2dfdb; }
+      .point { font-size: 11.5px; fill: #263238; }
+      .goal { font-size: 11px; fill: #37474f; }
+      .num { font-size: 13px; font-weight: bold; fill: #ffffff; }
+    </style>
+  </defs>
+
+  <rect width="1100" height="300" fill="#ffffff"/>
+
+  <text x="550" y="28" text-anchor="middle" font-size="17" font-weight="bold" fill="#004d40">阶段 6：排障 · 运维 · 扩展 · 3 课</text>
+  <text x="550" y="48" text-anchor="middle" font-size="11.5" fill="#607d8b">故事章节：出事了怎么办，以及它从哪来</text>
+
+  <g>
+    <rect x="30" y="70" width="320" height="196" rx="8" fill="#e0f2f1" stroke="#00695c" stroke-width="2"/>
+    <rect x="30" y="70" width="320" height="32" rx="8" fill="#00695c"/>
+    <rect x="30" y="90" width="320" height="12" fill="#00695c"/>
+    <circle cx="52" cy="86" r="12" fill="#004d40"/>
+    <text x="52" y="91" text-anchor="middle" class="num">18</text>
+    <text x="72" y="91" class="lesson-title">系统化排障</text>
+    <text x="46" y="120" class="lesson-sub">分层定位法</text>
+    <text x="46" y="146" class="point">· 排障方法论（分层定位）</text>
+    <text x="46" y="168" class="point">· 集群与节点排障</text>
+    <text x="46" y="190" class="point">· 工作负载与网络排障</text>
+    <line x1="46" y1="204" x2="334" y2="204" stroke="#80cbc4" stroke-width="1"/>
+    <text x="46" y="224" class="goal">回答：出事了，</text>
+    <text x="46" y="242" class="goal">怎么一步步定位到根因？</text>
+    <text x="46" y="260" class="lesson-sub">节点 → 控制面 → 负载 → 网络 → 存储</text>
+  </g>
+
+  <g>
+    <rect x="390" y="70" width="320" height="196" rx="8" fill="#e8eaf6" stroke="#283593" stroke-width="2"/>
+    <rect x="390" y="70" width="320" height="32" rx="8" fill="#283593"/>
+    <rect x="390" y="90" width="320" height="12" fill="#283593"/>
+    <circle cx="412" cy="86" r="12" fill="#1a237e"/>
+    <text x="412" y="91" text-anchor="middle" class="num">19</text>
+    <text x="432" y="91" class="lesson-title">集群运维与生命周期</text>
+    <text x="406" y="120" class="lesson-sub">节点维护 · 搭建 · 升级 · HA</text>
+    <text x="406" y="146" class="point">· 节点维护（cordon / drain / PDB）</text>
+    <text x="406" y="168" class="point">· 集群搭建与 kubeadm（原理课）</text>
+    <text x="406" y="190" class="point">· 升级 / etcd 备份恢复 / HA（原理课）</text>
+    <line x1="406" y1="204" x2="694" y2="204" stroke="#9fa8da" stroke-width="1"/>
+    <text x="406" y="224" class="goal">回答：生产集群怎么维护，</text>
+    <text x="406" y="242" class="goal">真实运维成本有多高？</text>
+    <text x="406" y="260" class="lesson-sub">⚠ kind 无法真实操，标注为原理课</text>
+  </g>
+
+  <g>
+    <rect x="750" y="70" width="320" height="196" rx="8" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+    <rect x="750" y="70" width="320" height="32" rx="8" fill="#f9a825"/>
+    <rect x="750" y="90" width="320" height="12" fill="#f9a825"/>
+    <circle cx="772" cy="86" r="12" fill="#f57f17"/>
+    <text x="772" y="91" text-anchor="middle" class="num">20</text>
+    <text x="792" y="91" class="lesson-title">扩展机制与决策收口</text>
+    <text x="766" y="120" class="lesson-sub" fill="#f9a825">CRD · Operator · 决策清单</text>
+    <text x="766" y="146" class="point">· CRD 与自定义资源</text>
+    <text x="766" y="168" class="point">· Operator 模式</text>
+    <text x="766" y="190" class="point">· 扩展接口 CNI / CSI / CRI</text>
+    <line x1="766" y1="204" x2="1054" y2="204" stroke="#ffe082" stroke-width="1"/>
+    <text x="766" y="224" class="goal">回答：k8s 为什么能长成今天这样，</text>
+    <text x="766" y="242" class="goal">以及我到底该不该用它？</text>
+    <text x="766" y="260" class="lesson-sub" fill="#f9a825">🎯 决策参考线在此收口</text>
+  </g>
+
+  <path d="M350,168 L390,168" stroke="#00695c" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+  <path d="M710,168 L750,168" stroke="#00695c" stroke-width="2.5" fill="none" marker-end="url(#arrow)"/>
+</svg>

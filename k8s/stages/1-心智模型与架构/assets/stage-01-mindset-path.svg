@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 420" width="1000" height="420" font-family="Microsoft YaHei, PingFang SC, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="a" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,4 L0,8 z" fill="#1565C0"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="420" fill="#ffffff"/>
+  <text x="500" y="32" text-anchor="middle" font-size="18" font-weight="bold" fill="#0d47a1">阶段 1 · 心智模型与架构 — 学习路径</text>
+  <text x="500" y="54" text-anchor="middle" font-size="12" fill="#607d8b">故事章节：单机时代的终结 —— 为什么容器自己管不了自己</text>
+
+  <g>
+    <rect x="40" y="90" width="280" height="140" rx="8" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+    <rect x="40" y="90" width="280" height="32" rx="8" fill="#1565C0"/>
+    <rect x="40" y="110" width="280" height="12" fill="#1565C0"/>
+    <text x="180" y="113" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">课 1 · 为什么需要 k8s</text>
+    <text x="60" y="146" font-size="11.5" fill="#263238">① 容器编排要解决的鸿沟</text>
+    <text x="60" y="168" font-size="11.5" fill="#263238">② k8s 是什么与不是什么</text>
+    <text x="60" y="190" font-size="11.5" fill="#263238">③ 集群架构总览</text>
+    <text x="60" y="216" font-size="11" fill="#1565C0" font-style="italic">回答：k8s 在替我做什么？</text>
+  </g>
+
+  <g>
+    <rect x="360" y="90" width="280" height="140" rx="8" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+    <rect x="360" y="90" width="280" height="32" rx="8" fill="#1565C0"/>
+    <rect x="360" y="110" width="280" height="12" fill="#1565C0"/>
+    <text x="500" y="113" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">课 2 · 声明式 API 与调谐循环</text>
+    <text x="380" y="146" font-size="11.5" fill="#263238">① 声明式 vs 命令式</text>
+    <text x="380" y="168" font-size="11.5" fill="#263238">② 调谐循环 Reconcile</text>
+    <text x="380" y="190" font-size="11.5" fill="#263238">③ kubectl 与 API 资源模型</text>
+    <text x="380" y="216" font-size="11" fill="#1565C0" font-style="italic">回答：apply 之后发生了什么？</text>
+  </g>
+
+  <g>
+    <rect x="680" y="90" width="280" height="140" rx="8" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+    <rect x="680" y="90" width="280" height="32" rx="8" fill="#1565C0"/>
+    <rect x="680" y="110" width="280" height="12" fill="#1565C0"/>
+    <text x="820" y="113" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">课 3 · Pod：最小调度单元</text>
+    <text x="700" y="146" font-size="11.5" fill="#263238">① 为什么需要 Pod 这一层</text>
+    <text x="700" y="168" font-size="11.5" fill="#263238">② Pod 生命周期与状态机</text>
+    <text x="700" y="190" font-size="11.5" fill="#263238">③ 探针三兄弟</text>
+    <text x="700" y="216" font-size="11" fill="#1565C0" font-style="italic">回答：k8s 怎么知道它活着？</text>
+  </g>
+
+  <path d="M320,160 L360,160" stroke="#1565C0" stroke-width="2.5" fill="none" marker-end="url(#a)"/>
+  <path d="M640,160 L680,160" stroke="#1565C0" stroke-width="2.5" fill="none" marker-end="url(#a)"/>
+
+  <rect x="40" y="270" width="920" height="120" rx="6" fill="#fafafa" stroke="#bdbdbd" stroke-width="1"/>
+  <text x="60" y="296" font-size="13" font-weight="bold" fill="#263238">🔑 本阶段的总钥匙：调谐循环</text>
+  <text x="60" y="322" font-size="12" fill="#37474f">阶段 1 的三个知识点（声明式、控制器、Pod 状态机）本质上都是「调谐循环」的不同切面 ——</text>
+  <text x="60" y="344" font-size="12" fill="#37474f">你声明期望状态 → 控制器持续观测实际状态 → 有差异就动作。理解这一点，后面所有 k8s 行为都能推导出来。</text>
+  <text x="60" y="372" font-size="12" fill="#37474f">➡️ 下一阶段：阶段 2《工作负载与控制器》—— 具体看看「谁来保证声明成立」。</text>
+</svg>

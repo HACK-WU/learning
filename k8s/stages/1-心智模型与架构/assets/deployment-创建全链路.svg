@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="620" viewBox="0 0 1120 620" font-family="Microsoft YaHei, PingFang SC, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#37474f"/>
+    </marker>
+    <marker id="arrowWrite" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#0277bd"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1120" height="620" fill="#ffffff"/>
+  <text x="560" y="34" text-anchor="middle" font-size="20" font-weight="bold" fill="#1a237e">kubectl create deployment 全链路：谁把什么传给谁，对象形态如何变化</text>
+  <text x="560" y="56" text-anchor="middle" font-size="13" fill="#546e7a">数据源：本机 kind 集群 v1.34.0 实测 ｜ 泳道 = 组件 ｜ 蓝箭头 = 写 etcd，深灰箭头 = 读/观察</text>
+
+  <!-- 泳道背景 -->
+  <rect x="20" y="76" width="1080" height="72" fill="#fafafa" stroke="#e0e0e0"/>
+  <rect x="20" y="154" width="1080" height="96" fill="#eceff1" stroke="#e0e0e0"/>
+  <rect x="20" y="256" width="1080" height="86" fill="#fafafa" stroke="#e0e0e0"/>
+  <rect x="20" y="348" width="1080" height="86" fill="#eceff1" stroke="#e0e0e0"/>
+  <rect x="20" y="440" width="1080" height="86" fill="#fafafa" stroke="#e0e0e0"/>
+  <rect x="20" y="532" width="1080" height="66" fill="#eceff1" stroke="#e0e0e0"/>
+
+  <!-- 泳道标签 -->
+  <rect x="20" y="76" width="132" height="72" fill="#37474f"/>
+  <text x="86" y="106" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">你 / kubectl</text>
+  <text x="86" y="126" text-anchor="middle" font-size="11" fill="#cfd8dc">发起者</text>
+
+  <rect x="20" y="154" width="132" height="96" fill="#455a64"/>
+  <text x="86" y="188" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">kube-apiserver</text>
+  <text x="86" y="208" text-anchor="middle" font-size="11" fill="#cfd8dc">唯一入口</text>
+  <text x="86" y="226" text-anchor="middle" font-size="11" fill="#cfd8dc">校验 · 鉴权</text>
+
+  <rect x="20" y="256" width="132" height="86" fill="#37474f"/>
+  <text x="86" y="290" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">etcd</text>
+  <text x="86" y="310" text-anchor="middle" font-size="11" fill="#cfd8dc">唯一有状态核心</text>
+
+  <rect x="20" y="348" width="132" height="86" fill="#455a64"/>
+  <text x="86" y="376" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">Controller</text>
+  <text x="86" y="394" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">Manager</text>
+  <text x="86" y="414" text-anchor="middle" font-size="11" fill="#cfd8dc">Deployment→RS→Pod</text>
+
+  <rect x="20" y="440" width="132" height="86" fill="#37474f"/>
+  <text x="86" y="474" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">kube-scheduler</text>
+  <text x="86" y="494" text-anchor="middle" font-size="11" fill="#cfd8dc">选节点</text>
+
+  <rect x="20" y="532" width="132" height="66" fill="#455a64"/>
+  <text x="86" y="560" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">kubelet</text>
+  <text x="86" y="580" text-anchor="middle" font-size="11" fill="#cfd8dc">+ 容器运行时</text>
+
+  <!-- 步骤 1 -->
+  <circle cx="196" cy="112" r="15" fill="#1a237e"/>
+  <text x="196" y="118" text-anchor="middle" font-size="15" font-weight="bold" fill="#ffffff">1</text>
+  <rect x="222" y="92" width="188" height="40" rx="4" fill="#ffffff" stroke="#1a237e" stroke-width="1.5"/>
+  <text x="316" y="109" text-anchor="middle" font-size="12" fill="#1a237e">kubectl create deployment</text>
+  <text x="316" y="126" text-anchor="middle" font-size="11" fill="#546e7a">HTTP POST → apiserver</text>
+
+  <!-- 1 -> apiserver -->
+  <path d="M316,132 L316,186" stroke="#37474f" stroke-width="1.8" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- apiserver 步骤 2 -->
+  <circle cx="352" cy="206" r="15" fill="#0277bd"/>
+  <text x="352" y="212" text-anchor="middle" font-size="15" font-weight="bold" fill="#ffffff">2</text>
+  <rect x="378" y="186" width="216" height="40" rx="4" fill="#e1f5fe" stroke="#0277bd" stroke-width="1.5"/>
+  <text x="486" y="203" text-anchor="middle" font-size="12" fill="#01579b">校验 + 写入 Deployment</text>
+  <text x="486" y="220" text-anchor="middle" font-size="11" fill="#546e7a">对象形态：Deployment</text>
+
+  <!-- 2 -> etcd -->
+  <path d="M486,226 L486,256" stroke="#0277bd" stroke-width="1.8" fill="none" marker-end="url(#arrowWrite)"/>
+  <text x="498" y="245" font-size="10" fill="#0277bd">写</text>
+
+  <rect x="352" y="270" width="268" height="42" rx="4" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+  <text x="486" y="288" text-anchor="middle" font-size="12" fill="#e65100">etcd 持久化：期望状态已落库</text>
+  <text x="486" y="305" text-anchor="middle" font-size="11" fill="#546e7a">此时还没有任何 Pod</text>
+
+  <!-- etcd -> CM (observe) -->
+  <path d="M560,312 L560,348" stroke="#37474f" stroke-width="1.8" fill="none" marker-end="url(#arrow)"/>
+  <text x="570" y="336" font-size="10" fill="#37474f">watch</text>
+
+  <!-- CM 步骤 3 -->
+  <circle cx="352" cy="386" r="15" fill="#2e7d32"/>
+  <text x="352" y="392" text-anchor="middle" font-size="15" font-weight="bold" fill="#ffffff">3</text>
+  <rect x="378" y="366" width="236" height="40" rx="4" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="496" y="383" text-anchor="middle" font-size="12" fill="#1b5e20">创建 ReplicaSet 对象</text>
+  <text x="496" y="400" text-anchor="middle" font-size="11" fill="#546e7a">形态：Deployment→RS</text>
+
+  <!-- CM 步骤 4 -->
+  <circle cx="676" cy="386" r="15" fill="#2e7d32"/>
+  <text x="676" y="392" text-anchor="middle" font-size="15" font-weight="bold" fill="#ffffff">4</text>
+  <rect x="702" y="366" width="216" height="40" rx="4" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="810" y="383" text-anchor="middle" font-size="12" fill="#1b5e20">创建 Pod 对象</text>
+  <text x="810" y="400" text-anchor="middle" font-size="11" fill="#546e7a">形态：RS→Pod（Pending）</text>
+  <path d="M614,386 L662,386" stroke="#37474f" stroke-width="1.6" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- 4 -> etcd 写回 -->
+  <path d="M810,406 L810,312 L754,312" stroke="#0277bd" stroke-width="1.6" fill="none" marker-end="url(#arrowWrite)"/>
+  <text x="818" y="360" font-size="10" fill="#0277bd">写回</text>
+
+  <!-- etcd -> scheduler -->
+  <path d="M700,312 L700,440" stroke="#37474f" stroke-width="1.8" fill="none" marker-end="url(#arrow)" stroke-dasharray="4,3"/>
+  <text x="708" y="390" font-size="10" fill="#37474f">发现未调度 Pod</text>
+
+  <!-- scheduler 步骤 5 -->
+  <circle cx="676" cy="478" r="15" fill="#6a1b9a"/>
+  <text x="676" y="484" text-anchor="middle" font-size="15" font-weight="bold" fill="#ffffff">5</text>
+  <rect x="702" y="458" width="226" height="40" rx="4" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="1.5"/>
+  <text x="815" y="475" text-anchor="middle" font-size="12" fill="#4a148c">选节点，写回 nodeName</text>
+  <text x="815" y="492" text-anchor="middle" font-size="11" fill="#546e7a">Pod 仍是 Pending→已绑定</text>
+
+  <!-- scheduler -> etcd -->
+  <path d="M928,478 L960,478 L960,312 L754,312" stroke="#0277bd" stroke-width="1.6" fill="none" marker-end="url(#arrowWrite)"/>
+
+  <!-- etcd -> kubelet -->
+  <path d="M880,312 L880,532" stroke="#37474f" stroke-width="1.8" fill="none" marker-end="url(#arrow)" stroke-dasharray="4,3"/>
+
+  <!-- kubelet 步骤 6 -->
+  <circle cx="560" cy="562" r="15" fill="#c62828"/>
+  <text x="560" y="568" text-anchor="middle" font-size="15" font-weight="bold" fill="#ffffff">6</text>
+  <rect x="586" y="542" width="214" height="40" rx="4" fill="#ffebee" stroke="#c62828" stroke-width="1.5"/>
+  <text x="693" y="559" text-anchor="middle" font-size="12" fill="#b71c1c">拉镜像 + 起容器</text>
+  <text x="693" y="576" text-anchor="middle" font-size="11" fill="#546e7a">唯一真正"跑东西"的一步</text>
+
+  <!-- 步骤 7 -->
+  <rect x="852" y="542" width="200" height="40" rx="4" fill="#eceff1" stroke="#37474f" stroke-width="1.5"/>
+  <circle cx="874" cy="562" r="15" fill="#37474f"/>
+  <text x="874" y="568" text-anchor="middle" font-size="15" font-weight="bold" fill="#ffffff">7</text>
+  <text x="962" y="559" text-anchor="middle" font-size="12" fill="#263238">上报 status</text>
+  <text x="962" y="576" text-anchor="middle" font-size="11" fill="#546e7a">持续比对 → 收敛</text>
+
+  <!-- 关键结论框 -->
+  <rect x="864" y="92" width="236" height="130" rx="5" fill="#fffde7" stroke="#f9a825" stroke-width="2"/>
+  <text x="982" y="114" text-anchor="middle" font-size="13" font-weight="bold" fill="#e65100">🔑 关键：无人下命令</text>
+  <text x="982" y="138" text-anchor="middle" font-size="11" fill="#4e342e">3–7 步里没有一步是</text>
+  <text x="982" y="156" text-anchor="middle" font-size="11" fill="#4e342e">"有人指挥"，都是组件</text>
+  <text x="982" y="174" text-anchor="middle" font-size="11" fill="#4e342e">自己 watch etcd 发现活儿</text>
+  <text x="982" y="198" text-anchor="middle" font-size="11" font-weight="bold" fill="#c62828">= 调谐循环（课 2 主题）</text>
+  <text x="982" y="214" text-anchor="middle" font-size="10" fill="#546e7a">level-triggered，非 edge-triggered</text>
+
+  <text x="20" y="614" font-size="10" fill="#90a4ae">注：组件间不直接通信，全部以 etcd 中的对象状态为中介；任一组件重启都不影响整体收敛。</text>
+</svg>

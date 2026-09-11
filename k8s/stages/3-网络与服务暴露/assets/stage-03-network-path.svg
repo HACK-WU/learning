@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 400" width="1040" height="400" font-family="Microsoft YaHei, PingFang SC, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="a3" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,4 L0,8 z" fill="#ef6c00"/>
+    </marker>
+  </defs>
+  <rect width="1040" height="400" fill="#ffffff"/>
+  <text x="520" y="32" text-anchor="middle" font-size="18" font-weight="bold" fill="#e65100">阶段 3 · 网络与服务暴露 — 学习路径</text>
+  <text x="520" y="54" text-anchor="middle" font-size="12" fill="#607d8b">故事章节：让世界看到你的服务 —— 流量怎么进来，又怎么被隔离</text>
+
+  <g>
+    <rect x="30" y="90" width="310" height="150" rx="8" fill="#fff3e0" stroke="#ef6c00" stroke-width="2"/>
+    <rect x="30" y="90" width="310" height="32" rx="8" fill="#ef6c00"/>
+    <rect x="30" y="110" width="310" height="12" fill="#ef6c00"/>
+    <text x="185" y="113" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">课 6 · Service：稳定的访问入口</text>
+    <text x="48" y="146" font-size="11.5" fill="#263238">① 为什么 Pod IP 不能依赖</text>
+    <text x="48" y="168" font-size="11.5" fill="#263238">② Service 四类型与选型</text>
+    <text x="48" y="190" font-size="11.5" fill="#263238">③ kube-proxy 与转发机制</text>
+    <text x="48" y="220" font-size="11" fill="#ef6c00" font-style="italic">回答：Pod 老换 IP，别人怎么找到它？</text>
+  </g>
+
+  <g>
+    <rect x="365" y="90" width="310" height="150" rx="8" fill="#fff3e0" stroke="#ef6c00" stroke-width="2"/>
+    <rect x="365" y="90" width="310" height="32" rx="8" fill="#ef6c00"/>
+    <rect x="365" y="110" width="310" height="12" fill="#ef6c00"/>
+    <text x="520" y="113" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">课 7 · Ingress：七层路由与灰度</text>
+    <text x="383" y="146" font-size="11.5" fill="#263238">① Ingress 与 Controller 的分离</text>
+    <text x="383" y="168" font-size="11.5" fill="#263238">② 规则与路径匹配</text>
+    <text x="383" y="190" font-size="11.5" fill="#263238">③ 灰度发布与流量切分</text>
+    <text x="383" y="220" font-size="11" fill="#ef6c00" font-style="italic">回答：一个 IP 怎么按域名分给多个服务？</text>
+  </g>
+
+  <g>
+    <rect x="700" y="90" width="310" height="150" rx="8" fill="#fff3e0" stroke="#ef6c00" stroke-width="2"/>
+    <rect x="700" y="90" width="310" height="32" rx="8" fill="#ef6c00"/>
+    <rect x="700" y="110" width="310" height="12" fill="#ef6c00"/>
+    <text x="855" y="113" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">课 8 · NetworkPolicy：集群内防火墙</text>
+    <text x="718" y="146" font-size="11.5" fill="#263238">① 默认全通的隐患</text>
+    <text x="718" y="168" font-size="11.5" fill="#263238">② 策略语义：白名单模型</text>
+    <text x="718" y="190" font-size="11.5" fill="#263238">③ CNI 支持与实测验证</text>
+    <text x="718" y="220" font-size="11" fill="#ef6c00" font-style="italic">回答：怎么限制「谁能访问谁」？</text>
+  </g>
+
+  <path d="M340,165 L365,165" stroke="#ef6c00" stroke-width="2.5" fill="none" marker-end="url(#a3)"/>
+  <path d="M675,165 L700,165" stroke="#ef6c00" stroke-width="2.5" fill="none" marker-end="url(#a3)"/>
+
+  <rect x="30" y="270" width="980" height="104" rx="6" fill="#fafafa" stroke="#bdbdbd" stroke-width="1"/>
+  <text x="50" y="296" font-size="13" font-weight="bold" fill="#263238">🔑 本阶段的主线：流量视角由内向外，再由外向内收口</text>
+  <text x="50" y="322" font-size="12" fill="#37474f">课 6 解决「集群内怎么找到服务」→ 课 7 解决「集群外怎么进来」→ 课 8 解决「进来了能去哪」。</text>
+  <text x="50" y="344" font-size="12" fill="#37474f">三者合起来才构成完整的网络模型；只学 Service 不学 NetworkPolicy，等于只装门不装锁。</text>
+  <text x="50" y="364" font-size="12" fill="#37474f">➡️ 下一阶段：阶段 4《配置 · 存储 · 资源 · 工程化》—— 能跑、能访问，接下来解决「敢不敢上生产」。</text>
+</svg>
