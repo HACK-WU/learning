@@ -858,3 +858,12 @@ grafana/playground/l11-fix-continuation.py
 #   l11-sa2.sh / l11-token-test.sh —— 11.3 服务账号与 token 的创建/使用/权限边界
 #   l11-dbcheck.sh —— 11.3 坐实「API Key 接口已移除但 api_key 表还在」的唯一证据
 #       （拷贝 grafana.db 出来查 92 张表，含 permission 表的 k8s 风格 scope）
+
+# ---- 教学实操环境：k8s 课程写课探针脚本（k8s 课程）----
+# 背景：写课过程中为核验结论，会在 assets/ 下临时创建一次性探针/复验脚本
+#   （如课 12 的 l12-review-probe.sh / l12-final-check2.sh），结论并入讲义后即弃，
+#   不是教学内容，丢了课程仍完整。
+# ⚠️ 误伤核查（2026-09-11 卫生检查）：k8s 讲义全部实验均用内联 heredoc，
+#   正文零引用任何 .sh/.py/.yaml 外部脚本，故本条通配不会吞掉教学载荷。
+#   若将来新增被讲义正文直接引用的脚本，须照既有惯例在此加 ! 例外。
+k8s/assets/*.sh

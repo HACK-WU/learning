@@ -280,7 +280,7 @@ python3.11.exe code\consumer_committed.py
 - [kafka-python 官方文档（含事务与 read_committed 示例）](https://kafka-python.readthedocs.io/)
 - [kafka-python PyPI](https://pypi.org/project/kafka-python/)
 - [confluent-kafka Python 客户端（Confluent 官方）](https://docs.confluent.io/kafka-clients/python/current/overview.html)
-- [Apache Kafka 官方文档（Java 客户端与配置）](https://kafka.apache.org/documentation/)
+- [Apache Kafka 4.3 Javadoc（Java 客户端与配置）](https://kafka.apache.org/43/javadoc/index.html)
 
 ## 一图总结
 

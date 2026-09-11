@@ -264,7 +264,7 @@ risk-team  orders  2          2               2               0
 
 ## 📚 官方文档
 
-- [Kafka 消费者配置](https://kafka.apache.org/documentation/#consumerconfigs)：`enable.auto.commit`、`auto.offset.reset`、`session.timeout.ms` 等参数完整参考
+- [Kafka 消费者配置（4.3）](https://kafka.apache.org/43/configuration/consumer-configs/)：[`enable.auto.commit`](https://kafka.apache.org/43/configuration/consumer-configs/#consumerconfigs_enable.auto.commit)、[`auto.offset.reset`](https://kafka.apache.org/43/configuration/consumer-configs/#consumerconfigs_auto.offset.reset)、[`session.timeout.ms`](https://kafka.apache.org/43/configuration/consumer-configs/#consumerconfigs_session.timeout.ms) 等参数完整参考
 - [Kafka 消费者再均衡协议（4.0+）](https://kafka.apache.org/43/operations/consumer-rebalance-protocol)：KIP-848 新一代再均衡协议的官方说明
 
 ## 一图总结

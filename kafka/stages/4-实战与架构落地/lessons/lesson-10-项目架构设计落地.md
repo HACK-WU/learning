@@ -215,10 +215,10 @@ docker exec kafka /opt/kafka/bin/kafka-consumer-groups.sh --bootstrap-server loc
 
 ## 📚 官方文档
 
-- [Apache Kafka 官方文档：Introduction 与 Use Cases](https://kafka.apache.org/documentation/#uses)
+- [Apache Kafka 4.3 官方文档：Use Cases](https://kafka.apache.org/43/getting-started/uses/)
 - [Confluent：事件驱动架构介绍](https://www.confluent.io/learn/event-driven-architecture/)
 - [KIP-932: Queues for Kafka（share groups）](https://cwiki.apache.org/confluence/display/KAFKA/KIP-932%3A+Queues+for+Kafka)
-- [Kafka Connect 官方文档](https://kafka.apache.org/documentation/#connect)
+- [Kafka Connect 官方文档（4.3）](https://kafka.apache.org/43/kafka-connect/overview/)
 
 ## 一图总结
 

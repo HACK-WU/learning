@@ -185,8 +185,8 @@ flowchart LR
 
 ## 📚 官方文档
 
-- [Apache Kafka 官方文档](https://kafka.apache.org/documentation/)：Kafka 权威文档，涵盖概念、配置、API 与 CLI 工具
-- [Kafka 快速开始](https://kafka.apache.org/quickstart)：官方 Quickstart，第 3 课会用到其中的启动与收发命令
+- [Apache Kafka 4.3 官方文档](https://kafka.apache.org/43/getting-started/)：Kafka 权威文档，涵盖概念、配置、API 与生态组件入口
+- [Kafka 快速开始（4.3）](https://kafka.apache.org/43/getting-started/quickstart/)：官方 Quickstart，第 3 课会用到其中的启动与收发命令
 
 ## 一图总结
 

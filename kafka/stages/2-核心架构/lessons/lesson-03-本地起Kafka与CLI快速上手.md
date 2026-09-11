@@ -230,8 +230,8 @@ docker stop kafka && docker rm kafka   # 停掉并删除容器
 
 ## 📚 官方文档
 
-- [Kafka 快速开始](https://kafka.apache.org/quickstart)：官方 Quickstart，含单节点 KRaft 启动与命令行生产/消费
-- [Apache Kafka 官方文档](https://kafka.apache.org/documentation/)：`kafka-topics.sh`、console 工具等命令的完整参考
+- [Kafka 快速开始（4.3）](https://kafka.apache.org/43/getting-started/quickstart/)：官方 Quickstart，含单节点 KRaft 启动与命令行生产/消费
+- [Kafka 基础运维操作（4.3）](https://kafka.apache.org/43/operations/basic-kafka-operations/)：`kafka-topics.sh`、`kafka-configs.sh`、console 工具等命令参考
 
 ## 一图总结
 

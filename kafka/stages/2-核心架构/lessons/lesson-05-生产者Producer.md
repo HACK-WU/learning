@@ -247,8 +247,8 @@ Partition:2  user2  另一条订单
 
 ## 📚 官方文档
 
-- [Kafka 生产者配置](https://kafka.apache.org/documentation/#producerconfigs)：`acks`、`key.serializer`、`linger.ms` 等生产者参数完整参考
-- [Kafka 快速开始](https://kafka.apache.org/quickstart)：官方 Quickstart，含 console-producer 的 key 用法
+- [Kafka 生产者配置（4.3）](https://kafka.apache.org/43/configuration/producer-configs/)：[`acks`](https://kafka.apache.org/43/configuration/producer-configs/#producerconfigs_acks)、[`linger.ms`](https://kafka.apache.org/43/configuration/producer-configs/#producerconfigs_linger.ms)、[`batch.size`](https://kafka.apache.org/43/configuration/producer-configs/#producerconfigs_batch.size) 等生产者参数完整参考（另需 `key.serializer`，属序列化器配置）
+- [Kafka 快速开始（4.3）](https://kafka.apache.org/43/getting-started/quickstart/)：官方 Quickstart，含 console-producer 的 key 用法
 
 ## 一图总结
 

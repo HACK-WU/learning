@@ -136,9 +136,33 @@ flowchart LR
 
 > 💡 **进阶小注**：follower 抄得慢，还会拖慢消息的「可见时间」——消费者只能读到**已被 ISR 全体同步**的消息（这条分界线叫高水位 High Watermark）。所以 ISR 抖动不仅关系容灾，也关系消费延迟，进阶话题，混个脸熟即可。
 
+> 🆕 **2026-09-10 重要补充：ELR（Eligible Leader Replicas，可当选副本）**。上面第 4 条「ISR 全军覆没」的抉择，在 **Kafka 4.0 之后出现了一个更好的答案**。此前只有「停写」或「丢数据」两条路，因为无法证明某个 OSR 副本是否持有全部已确认数据。但「严格 min ISR」规则普及后（ISR 人数不足 `min.insync.replicas` 时高水位不再推进），可以得到一个关键推论：**凡是被高水位承认过的消息，一定已经写进了至少 min.insync.replicas 个副本**——于是那些不在 ISR 里、但已确认收到高水位以内全部消息的副本，其实是**安全的接班人**。KRaft controller 把这份名单记在 PartitionRecord 的 `Eligible Leader Replicas` 字段里，这就是 **ELR**（[KIP-966 Part 1](https://cwiki.apache.org/confluence/display/KAFKA/KIP-966%3A+Eligible+Leader+Replicas), 4.0 起提供，4.1 起新集群默认启用）。
+
+于是新版本的选举顺序变成三级：
+
+```mermaid
+flowchart TD
+    A["leader 挂了，controller 主持选举"] --> B{"ISR 非空？"}
+    B -- "是" --> B1["① 从 ISR 中选<br/>（最优：数据最新）"]
+    B -- "否" --> C{"ELR 非空？"}
+    C -- "是" --> C1["② 从 ELR 中选一个未被围栏的<br/>（保证不丢已确认消息）"]
+    C -- "否" --> D["③ 退回旧行为：<br/>选上一个已知 leader（若未围栏）"]
+    style B1 stroke:#3fb950,stroke-width:2px
+    style C1 stroke:#d29922,stroke-width:2px
+    style D stroke:#f85149,stroke-width:2px
+```
+
+三点值得记住：
+
+- **ELR 把「不可用」和「丢数据」的二选一，变成了第三条路**：既不用停服，也不用冒险丢数据。这是 4.x 在可用性上的实质性改进。
+- **它依赖 `min.insync.replicas` 的正确配置**——正是第 3 条的熔断值划定了「已确认消息至少落在几个副本上」，ELR 的安全性由此推导而来。两者是配套的，不是各自独立。
+- **开启后 `min.insync.replicas` 会被提升为集群级配置**：官方明确，启用 ELR 时若集群级没有该配置会自动补上（取 active controller 的静态值）；此后**不允许删除集群级配置、也不允许再在 broker 级设置**；一旦更新该值（即便值没变），**所有 ELR 状态会被清空重建**。这是运维上容易踩的坑。
+
+> ⚠️ **版本边界**：4.0 需显式设 `eligible.leader.replicas.version=1` 才启用（设 0 可安全降级）；4.1 起新集群默认开启。用 4.0 且没设过这个参数的同学，集群行为仍是本课知识点 2 描述的旧模型。
+
 #### 一句话记住
 
-**ISR = 「跟得上的在岗名单」（leader 恒在，30 秒跟不上就除名，追上就回填）；接班只从名单里选；配 min.insync.replicas=2 给名单上熔断，防止 acks=all 静默退化成「等 1 个」。**
+**ISR = 「跟得上的在岗名单」（leader 恒在，30 秒跟不上就除名，追上就回填）；接班只从名单里选；配 min.insync.replicas=2 给名单上熔断，防止 acks=all 静默退化成「等 1 个」。4.0 起还有 ELR 兜底：ISR 全没时，从「确认过全部已提交消息的副本」里选，做到既不停服也不丢数据。**
 
 ---
 
@@ -287,15 +311,17 @@ docker start kafka
 1. **「副本就是备份」**：错。备份是冷的、恢复以小时计；副本是热的、实时同步、秒级接班。副本是为故障转移而生的**工作冗余**，不是躺在磁带库里的保险。
 2. **「三副本可以分摊读写负载」**：错。读写都走 leader——单 leader 模型保住了分区内的顺序性（offset 单一权威）。消费者就近读 follower 只是新版本的进阶优化，不改变基本模型。
 3. **「`acks=all` 就绝对不丢」**：不一定。`acks=all` 等的是**当前 ISR**，ISR 收缩后可能只剩 leader 自己，保障静默退化。生产姿势是三件套：**RF=3 + min.insync.replicas=2 + acks=all**。
-4. **「ISR 空了就开 unclean election，先恢复要紧」**：危险。允许 OSR 上位 = 已确认的消息可能凭空消失。默认 false 是「宁停不丢」；只有日志、指标这类可重采的数据才考虑打开。
-5. **「副本越多越可靠，RF 调到 5」**：副本越多写入放大越重、磁盘和网络开销越大，同步变慢反而更容易踢 ISR。业界默认甜点是 3：容忍 1 台故障，成本与可靠平衡。
-6. **「Controller 挂了集群就瘫了」**：生产环境 controller 是 3/5 台多数派仲裁，死 1 台秒级换主，数据面读写基本不受影响。但单 controller（含我们课 3 的 combined 单容器）确实是单点——生产禁用。
+4. **「ISR 空了就开 unclean election，先恢复要紧」**：危险。允许 OSR 上位 = 已确认的消息可能凭空消失。默认 false 是「宁停不丢」；只有日志、指标这类可重采的数据才考虑打开。（**4.0+ 补充**：正确做法不是开 unclean，而是启用 ELR——它能在不丢已确认消息的前提下从 ISR 之外选出合法接班人，见知识点 2 的 ELR 补充。）
+5. **「ISR 空了分区就一定不可用」**：4.0 之前成立；4.1 起新集群默认启用 ELR 后，ISR 空了仍可从 ELR 选出安全接班人，分区继续可用且不丢数据。判断分区是否可用，先看 ELR 是否启用、再看 ELR 是否为空。
+6. **「副本越多越可靠，RF 调到 5」**：副本越多写入放大越重、磁盘和网络开销越大，同步变慢反而更容易踢 ISR。业界默认甜点是 3：容忍 1 台故障，成本与可靠平衡。
+7. **「Controller 挂了集群就瘫了」**：生产环境 controller 是 3/5 台多数派仲裁，死 1 台秒级换主，数据面读写基本不受影响。但单 controller（含我们课 3 的 combined 单容器）确实是单点——生产禁用。
 
 ## 📚 官方文档
 
-- [Kafka 复制相关 Broker 配置](https://kafka.apache.org/documentation/#brokerconfigs)：`replica.lag.time.max.ms`、`unclean.leader.election.enable` 等参数完整参考
-- [Kafka Topic 级配置](https://kafka.apache.org/documentation/#topicconfigs)：`min.insync.replicas` 的官方语义（含与 acks 联动的推荐组合）
+- [Kafka Broker 配置（4.3）](https://kafka.apache.org/43/configuration/broker-configs/)：[`replica.lag.time.max.ms`](https://kafka.apache.org/43/configuration/broker-configs/#brokerconfigs_replica.lag.time.max.ms)、[`unclean.leader.election.enable`](https://kafka.apache.org/43/configuration/broker-configs/#brokerconfigs_unclean.leader.election.enable) 等副本相关参数参考
+- [Kafka Topic 级配置（4.3）](https://kafka.apache.org/43/configuration/topic-configs/)：[`min.insync.replicas`](https://kafka.apache.org/43/configuration/topic-configs/#topicconfigs_min.insync.replicas) 的官方语义（含与 acks 联动的推荐组合）
 - [KRaft 运维指南](https://kafka.apache.org/43/operations/kraft)：controller 仲裁、`kafka-metadata-quorum.sh` 工具说明
+- [Eligible Leader Replicas（ELR，4.3）](https://kafka.apache.org/43/operations/eligible-leader-replicas/)：4.0 起引入（KIP-966 Part 1）、4.1 起新集群默认启用的「第三级接班人」机制，含 `eligible.leader.replicas.version` 开关与启用后 `min.insync.replicas` 的集群级约束
 
 ## 一图总结
 

@@ -188,8 +188,8 @@ docker exec -it kafka /opt/kafka/bin/kafka-topics.sh --describe \
 
 ## 📚 官方文档
 
-- [Kafka 核心概念与术语](https://kafka.apache.org/documentation/#intro_concepts_and_terms)：Topic / Partition / Broker / offset 的官方定义
-- [Apache Kafka 官方文档](https://kafka.apache.org/documentation/)：存储模型、副本与日志机制的权威说明
+- [Kafka 核心概念与术语（4.3）](https://kafka.apache.org/43/getting-started/introduction/)：Topic / Partition / Broker / offset 的官方定义
+- [Kafka 日志存储实现（4.3）](https://kafka.apache.org/43/implementation/log/)：存储模型、分段与压实机制的权威说明
 
 ## 一图总结
 

@@ -267,9 +267,9 @@ docker exec -it kafka /opt/kafka/bin/kafka-transactions.sh \
 
 ## 📚 官方文档
 
-- [Kafka Producer 配置](https://kafka.apache.org/documentation/#producerconfigs)：`enable.idempotence` / `transactional.id` / `transaction.timeout.ms`
-- [Kafka Consumer 配置](https://kafka.apache.org/documentation/#consumerconfigs)：`isolation.level`
-- [KafkaProducer Javadoc](https://kafka.apache.org/34/javadoc/org/apache/kafka/clients/producer/KafkaProducer.html)：幂等与事务 API 的官方示例代码
+- [Kafka Producer 配置（4.3）](https://kafka.apache.org/43/configuration/producer-configs/)：[`enable.idempotence`](https://kafka.apache.org/43/configuration/producer-configs/#producerconfigs_enable.idempotence) / [`transactional.id`](https://kafka.apache.org/43/configuration/producer-configs/#producerconfigs_transactional.id) / [`transaction.timeout.ms`](https://kafka.apache.org/43/configuration/producer-configs/#producerconfigs_transaction.timeout.ms)
+- [Kafka Consumer 配置（4.3）](https://kafka.apache.org/43/configuration/consumer-configs/)：[`isolation.level`](https://kafka.apache.org/43/configuration/consumer-configs/#consumerconfigs_isolation.level)
+- [KafkaProducer Javadoc（4.3）](https://kafka.apache.org/43/javadoc/org/apache/kafka/clients/producer/KafkaProducer.html)：幂等与事务 API 的官方示例代码
 - [KIP-679](https://cwiki.apache.org/confluence/display/KAFKA/KIP-679%3A+Producer+will+enable+the+strongest+delivery+guarantee+by+default)：3.0 起默认开启幂等的提案原文
 
 ## 一图总结
