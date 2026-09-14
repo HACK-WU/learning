@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="800" height="400" fill="#ffffff"/>
+
+  <text x="400" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#1a237e">要搬家、要扩建、要换设备，还不能关门</text>
+  <text x="400" y="48" text-anchor="middle" font-size="12" fill="#555555">新库房已经租好，东西却还堆在老地方</text>
+
+  <!-- 左：硬搬 -->
+  <text x="200" y="74" text-anchor="middle" font-size="14" font-weight="600" fill="#c62828">要么关门搬，要么边搬边把路堵死</text>
+
+  <g transform="translate(35,84)">
+    <rect x="0" y="0" width="330" height="180" rx="7" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+
+    <rect x="14" y="16" width="302" height="46" rx="5" fill="#ffffff" stroke="#c62828" stroke-width="1.2"/>
+    <text x="165" y="34" text-anchor="middle" font-size="10" fill="#b71c1c">新库房租好了，可东西不会自己走过去</text>
+    <text x="165" y="52" text-anchor="middle" font-size="9" fill="#b71c1c">它就在那儿空着，还得照样付租金</text>
+
+    <rect x="14" y="70" width="145" height="46" rx="4" fill="#ffffff" stroke="#c62828" stroke-width="1.2"/>
+    <text x="86" y="88" text-anchor="middle" font-size="9" fill="#b71c1c">强行搬：整个门厅</text>
+    <text x="86" y="104" text-anchor="middle" font-size="9" fill="#b71c1c">被搬家的车占满，</text>
+    <text x="86" y="112" text-anchor="middle" font-size="9" fill="#b71c1c">来办事的人全堵着</text>
+
+    <rect x="171" y="70" width="145" height="46" rx="4" fill="#ffffff" stroke="#c62828" stroke-width="1.2"/>
+    <text x="243" y="88" text-anchor="middle" font-size="9" fill="#b71c1c">于是改成慢慢搬：</text>
+    <text x="243" y="104" text-anchor="middle" font-size="9" fill="#b71c1c">搬得太慢，新货进得更快，</text>
+    <text x="243" y="112" text-anchor="middle" font-size="9" fill="#b71c1c">永远搬不完</text>
+
+    <rect x="14" y="124" width="302" height="44" rx="4" fill="#ffffff" stroke="#c62828" stroke-width="1.2"/>
+    <text x="165" y="142" text-anchor="middle" font-size="9" fill="#b71c1c">最常被忘的一件：搬完了没回去销那道"慢行"的口子，</text>
+    <text x="165" y="158" text-anchor="middle" font-size="9" fill="#b71c1c">从此所有人一直慢慢走，还查不出为什么</text>
+  </g>
+
+  <!-- 分隔 -->
+  <line x1="400" y1="70" x2="400" y2="370" stroke="#bbbbbb" stroke-width="1" stroke-dasharray="5,4"/>
+
+  <!-- 右：边开边搬 -->
+  <text x="600" y="74" text-anchor="middle" font-size="14" font-weight="600" fill="#2e7d32">照常营业，按步就班地挪</text>
+
+  <g transform="translate(420,84)">
+    <rect x="0" y="0" width="330" height="180" rx="7" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+
+    <rect x="14" y="16" width="302" height="30" rx="5" fill="#ffffff" stroke="#2e7d32" stroke-width="1.2"/>
+    <text x="165" y="36" text-anchor="middle" font-size="10" fill="#1b5e20">先在新库房摆好空位，等齐了再撤旧的</text>
+
+    <g transform="translate(14,54)">
+      <rect x="0" y="0" width="94" height="52" rx="4" fill="#fff8e1" stroke="#f9a825" stroke-width="1.2"/>
+      <text x="47" y="18" text-anchor="middle" font-size="9" fill="#e65100">先问一句：</text>
+      <text x="47" y="33" text-anchor="middle" font-size="9" fill="#e65100">搬哪些、搬到哪，</text>
+      <text x="47" y="46" text-anchor="middle" font-size="9" fill="#e65100">给个方案看看</text>
+
+      <line x1="98" y1="26" x2="112" y2="26" stroke="#2e7d32" stroke-width="1.4"/>
+      <polygon points="112,26 106,22 106,30" fill="#2e7d32"/>
+
+      <rect x="118" y="0" width="94" height="52" rx="4" fill="#fff8e1" stroke="#f9a825" stroke-width="1.2"/>
+      <text x="165" y="18" text-anchor="middle" font-size="9" fill="#e65100">照方案搬，</text>
+      <text x="165" y="33" text-anchor="middle" font-size="9" fill="#e65100">并给搬运限速</text>
+      <text x="165" y="46" text-anchor="middle" font-size="9" fill="#e65100">（别堵住来客）</text>
+
+      <line x1="216" y1="26" x2="230" y2="26" stroke="#2e7d32" stroke-width="1.4"/>
+      <polygon points="230,26 224,22 224,30" fill="#2e7d32"/>
+
+      <rect x="236" y="0" width="94" height="52" rx="4" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+      <text x="283" y="18" text-anchor="middle" font-size="9" font-weight="700" fill="#1b5e20">搬完必须</text>
+      <text x="283" y="33" text-anchor="middle" font-size="9" font-weight="700" fill="#1b5e20">回去复查，</text>
+      <text x="283" y="46" text-anchor="middle" font-size="9" fill="#1b5e20">顺手撤掉限速</text>
+    </g>
+
+    <rect x="14" y="114" width="145" height="54" rx="4" fill="#ffffff" stroke="#2e7d32" stroke-width="1.2"/>
+    <text x="86" y="132" text-anchor="middle" font-size="9" fill="#1b5e20">要歇业检修：</text>
+    <text x="86" y="147" text-anchor="middle" font-size="9" fill="#1b5e20">先把手上的活归置好，</text>
+    <text x="86" y="161" text-anchor="middle" font-size="9" fill="#1b5e20">再把柜台交给别人</text>
+
+    <rect x="171" y="114" width="145" height="54" rx="4" fill="#ffffff" stroke="#2e7d32" stroke-width="1.2"/>
+    <text x="243" y="132" text-anchor="middle" font-size="9" fill="#1b5e20">重新开门后：</text>
+    <text x="243" y="147" text-anchor="middle" font-size="9" fill="#1b5e20">柜台不会自己回来，</text>
+    <text x="243" y="161" text-anchor="middle" font-size="9" fill="#1b5e20">得再安排一次</text>
+  </g>
+
+  <!-- 底部结论 -->
+  <rect x="35" y="292" width="730" height="88" rx="6" fill="#f5f5f5" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="400" y="318" text-anchor="middle" font-size="12" fill="#333333">左边的麻烦都不是"搬不动"，而是搬之前没方案、搬的时候不限速、搬完不复查</text>
+  <text x="400" y="342" text-anchor="middle" font-size="12" fill="#333333">右边：先出方案 → 限速搬 → 复查收尾；检修前先交班，回来后再把柜台交还</text>
+  <text x="400" y="368" text-anchor="middle" font-size="12" font-weight="700" fill="#333333">全程照常营业 —— 这才叫"运维操作"，不是"停机维护"</text>
+</svg>

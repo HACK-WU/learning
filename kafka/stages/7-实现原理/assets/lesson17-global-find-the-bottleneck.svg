@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="410" viewBox="0 0 800 410" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="800" height="410" fill="#ffffff"/>
+
+  <text x="400" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#1a237e">路修得再宽，也可能是别处堵着</text>
+  <text x="400" y="48" text-anchor="middle" font-size="12" fill="#555555">路只跑了一成，东西却送不快 —— 先找堵点，再谈加宽</text>
+
+  <!-- 左：凭感觉加宽 -->
+  <text x="200" y="74" text-anchor="middle" font-size="14" font-weight="600" fill="#c62828">看着路没跑满，就一味加宽</text>
+
+  <g transform="translate(35,84)">
+    <rect x="0" y="0" width="330" height="185" rx="7" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+
+    <rect x="14" y="16" width="302" height="40" rx="5" fill="#ffffff" stroke="#c62828" stroke-width="1.2"/>
+    <text x="165" y="34" text-anchor="middle" font-size="10" fill="#b71c1c">路明明空着一大半，东西就是送不快</text>
+    <text x="165" y="50" text-anchor="middle" font-size="9" fill="#b71c1c">第一反应：路不够宽，再加几条</text>
+
+    <g transform="translate(14,64)">
+      <rect x="0" y="0" width="145" height="50" rx="4" fill="#ffffff" stroke="#c62828" stroke-width="1.2"/>
+      <text x="72" y="18" text-anchor="middle" font-size="9" fill="#b71c1c">每个客人配一个伙计</text>
+      <text x="72" y="33" text-anchor="middle" font-size="9" fill="#b71c1c">人一多，伙计比客人事还多，</text>
+      <text x="72" y="44" text-anchor="middle" font-size="9" fill="#b71c1c">光互相打招呼就忙不过来</text>
+
+      <rect x="157" y="0" width="145" height="50" rx="4" fill="#ffffff" stroke="#c62828" stroke-width="1.2"/>
+      <text x="229" y="18" text-anchor="middle" font-size="9" fill="#b71c1c">同一个伙计又接待又干活</text>
+      <text x="229" y="33" text-anchor="middle" font-size="9" fill="#b71c1c">门口堆着没人接，</text>
+      <text x="229" y="44" text-anchor="middle" font-size="9" fill="#b71c1c">里面的人干等着</text>
+
+      <rect x="0" y="58" width="302" height="50" rx="4" fill="#ffffff" stroke="#c62828" stroke-width="1.2"/>
+      <text x="165" y="76" text-anchor="middle" font-size="9" fill="#b71c1c">还有个更隐蔽的：抄来的仪表读数看着像"空闲比例"，</text>
+      <text x="165" y="91" text-anchor="middle" font-size="9" fill="#b71c1c">其实是一直往上加的总数，照着它设的提醒永远不响，</text>
+      <text x="165" y="102" text-anchor="middle" font-size="9" fill="#b71c1c">你却一直以为一切正常</text>
+    </g>
+  </g>
+
+  <!-- 分隔 -->
+  <line x1="400" y1="70" x2="400" y2="380" stroke="#bbbbbb" stroke-width="1" stroke-dasharray="5,4"/>
+
+  <!-- 右：分工 + 先看仪表 -->
+  <text x="600" y="74" text-anchor="middle" font-size="14" font-weight="600" fill="#2e7d32">先分工，再用仪表定位堵在哪一段</text>
+
+  <g transform="translate(420,84)">
+    <rect x="0" y="0" width="330" height="185" rx="7" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+
+    <rect x="14" y="16" width="302" height="26" rx="5" fill="#ffffff" stroke="#2e7d32" stroke-width="1.2"/>
+    <text x="165" y="34" text-anchor="middle" font-size="10" fill="#1b5e20">把"招呼"和"干活"分成两拨人，中间放个单子筐</text>
+
+    <g transform="translate(14,50)">
+      <rect x="0" y="0" width="94" height="56" rx="4" fill="#fff8e1" stroke="#f9a825" stroke-width="1.2"/>
+      <text x="47" y="18" text-anchor="middle" font-size="9" fill="#e65100">门口一人</text>
+      <text x="47" y="32" text-anchor="middle" font-size="9" fill="#e65100">专门领位</text>
+      <text x="47" y="48" text-anchor="middle" font-size="9" fill="#e65100">（一人足够）</text>
+
+      <line x1="98" y1="28" x2="112" y2="28" stroke="#2e7d32" stroke-width="1.4"/>
+      <polygon points="112,28 106,24 106,32" fill="#2e7d32"/>
+
+      <rect x="118" y="0" width="94" height="56" rx="4" fill="#fff8e1" stroke="#f9a825" stroke-width="1.2"/>
+      <text x="165" y="18" text-anchor="middle" font-size="9" fill="#e65100">几人管招呼</text>
+      <text x="165" y="32" text-anchor="middle" font-size="9" fill="#e65100">每人认领几桌</text>
+      <text x="165" y="48" text-anchor="middle" font-size="9" fill="#e65100">（只听只端，不干）</text>
+
+      <line x1="216" y1="28" x2="230" y2="28" stroke="#2e7d32" stroke-width="1.4"/>
+      <polygon points="230,28 224,24 224,32" fill="#2e7d32"/>
+
+      <rect x="236" y="0" width="94" height="56" rx="4" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.6"/>
+      <text x="283" y="18" text-anchor="middle" font-size="9" font-weight="700" fill="#1b5e20">后面一批人</text>
+      <text x="283" y="32" text-anchor="middle" font-size="9" fill="#1b5e20">专门干活</text>
+      <text x="283" y="48" text-anchor="middle" font-size="9" fill="#1b5e20">（从单子筐里取）</text>
+    </g>
+
+    <rect x="14" y="114" width="145" height="59" rx="4" fill="#ffffff" stroke="#2e7d32" stroke-width="1.2"/>
+    <text x="86" y="132" text-anchor="middle" font-size="9" fill="#1b5e20">怎么看堵在哪：</text>
+    <text x="86" y="147" text-anchor="middle" font-size="9" fill="#1b5e20">先瞧单子筐堆了多少，</text>
+    <text x="86" y="161" text-anchor="middle" font-size="9" fill="#1b5e20">再看招呼的人有多闲</text>
+
+    <rect x="171" y="114" width="145" height="59" rx="4" fill="#ffffff" stroke="#2e7d32" stroke-width="1.2"/>
+    <text x="243" y="132" text-anchor="middle" font-size="9" fill="#1b5e20">抄来的数先对一遍：</text>
+    <text x="243" y="147" text-anchor="middle" font-size="9" fill="#1b5e20">是"比例"还是"累计数"，</text>
+    <text x="243" y="161" text-anchor="middle" font-size="9" fill="#1b5e20">看清了才拿它设提醒</text>
+  </g>
+
+  <!-- 底部结论 -->
+  <rect x="35" y="296" width="730" height="92" rx="6" fill="#f5f5f5" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="400" y="322" text-anchor="middle" font-size="12" fill="#333333">左边的问题不是"路不够宽"，而是没分工、也没先量一量到底哪一段堵</text>
+  <text x="400" y="346" text-anchor="middle" font-size="12" fill="#333333">右边：领位 / 招呼 / 干活分开，中间用单子筐解耦；堵不堵看筐里堆了多少，不看感觉</text>
+  <text x="400" y="372" text-anchor="middle" font-size="12" font-weight="700" fill="#333333">先确认堵点在哪一段，再决定动哪里 —— 顺序反了就是白花钱</text>
+</svg>

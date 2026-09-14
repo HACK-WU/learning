@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="360" viewBox="0 0 800 360" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="800" height="360" fill="#ffffff"/>
+
+  <text x="400" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#1a237e">同一件事，两种接法</text>
+
+  <!-- 左：现在 -->
+  <text x="200" y="58" text-anchor="middle" font-size="14" font-weight="600" fill="#c62828">现在：谁跟谁都要单独连一根线</text>
+  <text x="200" y="76" text-anchor="middle" font-size="12" fill="#555555">人一多，线就乱成一团，加一个人要改一大片</text>
+
+  <g transform="translate(30,95)">
+    <rect x="0" y="0" width="82" height="26" rx="5" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.5"/>
+    <text x="41" y="18" text-anchor="middle" font-size="11" fill="#0d47a1">出数据 1</text>
+    <rect x="0" y="40" width="82" height="26" rx="5" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.5"/>
+    <text x="41" y="58" text-anchor="middle" font-size="11" fill="#0d47a1">出数据 2</text>
+    <rect x="0" y="80" width="82" height="26" rx="5" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.5"/>
+    <text x="41" y="98" text-anchor="middle" font-size="11" fill="#0d47a1">出数据 3</text>
+
+    <rect x="238" y="0" width="82" height="26" rx="5" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+    <text x="279" y="18" text-anchor="middle" font-size="11" fill="#e65100">用数据 1</text>
+    <rect x="238" y="40" width="82" height="26" rx="5" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+    <text x="279" y="58" text-anchor="middle" font-size="11" fill="#e65100">用数据 2</text>
+    <rect x="238" y="80" width="82" height="26" rx="5" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+    <text x="279" y="98" text-anchor="middle" font-size="11" fill="#e65100">用数据 3</text>
+
+    <g stroke="#c62828" stroke-width="1" opacity="0.75">
+      <line x1="82" y1="13" x2="238" y2="13"/>
+      <line x1="82" y1="13" x2="238" y2="53"/>
+      <line x1="82" y1="13" x2="238" y2="93"/>
+      <line x1="82" y1="53" x2="238" y2="13"/>
+      <line x1="82" y1="53" x2="238" y2="53"/>
+      <line x1="82" y1="53" x2="238" y2="93"/>
+      <line x1="82" y1="93" x2="238" y2="13"/>
+      <line x1="82" y1="93" x2="238" y2="53"/>
+      <line x1="82" y1="93" x2="238" y2="93"/>
+    </g>
+
+    <text x="160" y="132" text-anchor="middle" font-size="12" fill="#c62828">3 对 3 就要 9 根线</text>
+    <text x="160" y="150" text-anchor="middle" font-size="12" fill="#c62828">10 对 10 就是 100 根</text>
+    <text x="160" y="172" text-anchor="middle" font-size="12" font-weight="700" fill="#b71c1c">新加一个人 → 要接一大把线</text>
+  </g>
+
+  <!-- 分隔 -->
+  <line x1="400" y1="60" x2="400" y2="320" stroke="#bbbbbb" stroke-width="1" stroke-dasharray="5,4"/>
+
+  <!-- 右：改造后 -->
+  <text x="600" y="58" text-anchor="middle" font-size="14" font-weight="600" fill="#2e7d32">改造后：大家都对着中间一个本子</text>
+  <text x="600" y="76" text-anchor="middle" font-size="12" fill="#555555">写的人只管写，读的人只管读，互不相识</text>
+
+  <g transform="translate(420,95)">
+    <rect x="0" y="0" width="82" height="26" rx="5" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.5"/>
+    <text x="41" y="18" text-anchor="middle" font-size="11" fill="#0d47a1">出数据 1</text>
+    <rect x="0" y="40" width="82" height="26" rx="5" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.5"/>
+    <text x="41" y="58" text-anchor="middle" font-size="11" fill="#0d47a1">出数据 2</text>
+    <rect x="0" y="80" width="82" height="26" rx="5" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.5"/>
+    <text x="41" y="98" text-anchor="middle" font-size="11" fill="#0d47a1">出数据 3</text>
+
+    <rect x="112" y="8" width="110" height="96" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2.5"/>
+    <text x="167" y="34" text-anchor="middle" font-size="12" font-weight="700" fill="#1b5e20">本子：先记着</text>
+    <text x="167" y="52" text-anchor="middle" font-size="10" fill="#33691e">一条一条按顺序</text>
+    <text x="167" y="68" text-anchor="middle" font-size="10" fill="#33691e">写完就留着</text>
+    <text x="167" y="86" text-anchor="middle" font-size="10" fill="#33691e">谁都能从头再看</text>
+
+    <rect x="248" y="0" width="82" height="26" rx="5" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+    <text x="289" y="18" text-anchor="middle" font-size="11" fill="#e65100">用数据 1</text>
+    <rect x="248" y="40" width="82" height="26" rx="5" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+    <text x="289" y="58" text-anchor="middle" font-size="11" fill="#e65100">用数据 2</text>
+    <rect x="248" y="80" width="82" height="26" rx="5" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+    <text x="289" y="98" text-anchor="middle" font-size="11" fill="#e65100">用数据 3</text>
+
+    <line x1="82" y1="13" x2="112" y2="30" stroke="#333" stroke-width="1.2" marker-end="url(#ar)"/>
+    <line x1="82" y1="53" x2="112" y2="56" stroke="#333" stroke-width="1.2" marker-end="url(#ar)"/>
+    <line x1="82" y1="93" x2="112" y2="82" stroke="#333" stroke-width="1.2" marker-end="url(#ar)"/>
+
+    <line x1="222" y1="30" x2="248" y2="13" stroke="#2e7d32" stroke-width="1.2" marker-end="url(#ag)"/>
+    <line x1="222" y1="56" x2="248" y2="53" stroke="#2e7d32" stroke-width="1.2" marker-end="url(#ag)"/>
+    <line x1="222" y1="82" x2="248" y2="93" stroke="#2e7d32" stroke-width="1.2" marker-end="url(#ag)"/>
+
+    <text x="165" y="132" text-anchor="middle" font-size="12" fill="#2e7d32">3 对 3 只要 6 根线</text>
+    <text x="165" y="150" text-anchor="middle" font-size="12" fill="#2e7d32">10 对 10 也只要 20 根</text>
+    <text x="165" y="172" text-anchor="middle" font-size="12" font-weight="700" fill="#1b5e20">新加一个人 → 只接 1 根线</text>
+  </g>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#333"/>
+    </marker>
+    <marker id="ag" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#2e7d32"/>
+    </marker>
+  </defs>
+</svg>

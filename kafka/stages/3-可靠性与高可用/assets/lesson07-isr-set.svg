@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="330" viewBox="0 0 760 330" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="760" height="330" fill="#ffffff"/>
+
+  <text x="380" y="24" text-anchor="middle" font-size="16" font-weight="700" fill="#1a237e">「有资格顶班」的名单是怎么收缩和扩张的</text>
+
+  <!-- AR 外框 -->
+  <rect x="40" y="48" width="560" height="200" rx="10" fill="#fafafa" stroke="#455a64" stroke-width="2"/>
+  <rect x="40" y="48" width="150" height="24" rx="6" fill="#455a64"/>
+  <text x="115" y="65" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">AR 全部副本（3 个）</text>
+
+  <!-- ISR 内框 -->
+  <rect x="62" y="86" width="330" height="148" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2.5"/>
+  <rect x="62" y="86" width="176" height="24" rx="5" fill="#2e7d32"/>
+  <text x="150" y="103" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">ISR 在岗名单（有资格顶班）</text>
+
+  <rect x="80" y="122" width="290" height="40" rx="6" fill="#ffffff" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="225" y="140" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1b5e20">leader（正本，永远在名单里）</text>
+  <text x="225" y="155" text-anchor="middle" font-size="10" fill="#33691e">它自己不需要"跟上"，它就是要被跟的那个</text>
+
+  <rect x="80" y="170" width="290" height="46" rx="6" fill="#ffffff" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="225" y="188" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1b5e20">跟得上的 follower</text>
+  <text x="225" y="205" text-anchor="middle" font-size="10" fill="#33691e">落后不超过 30 秒 → 留在名单里</text>
+
+  <!-- OSR -->
+  <rect x="410" y="86" width="170" height="148" rx="8" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <rect x="410" y="86" width="120" height="24" rx="5" fill="#c62828"/>
+  <text x="470" y="103" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">OSR 落榜区</text>
+
+  <rect x="424" y="122" width="142" height="70" rx="6" fill="#ffffff" stroke="#c62828" stroke-width="1.5"/>
+  <text x="495" y="144" text-anchor="middle" font-size="11.5" font-weight="700" fill="#b71c1c">掉了队的 follower</text>
+  <text x="495" y="162" text-anchor="middle" font-size="10" fill="#c62828">落后超过 30 秒</text>
+  <text x="495" y="178" text-anchor="middle" font-size="10" fill="#c62828">暂失顶班资格</text>
+
+  <!-- 迁移箭头 -->
+  <path d="M 372 180 C 390 180, 400 180, 418 180" fill="none" stroke="#c62828" stroke-width="2" marker-end="url(#out)"/>
+  <text x="395" y="200" text-anchor="middle" font-size="9.5" fill="#c62828">掉队</text>
+  <text x="395" y="212" text-anchor="middle" font-size="9.5" fill="#c62828">除名</text>
+
+  <path d="M 418 152 C 400 152, 390 152, 372 152" fill="none" stroke="#2e7d32" stroke-width="2" marker-end="url(#in)"/>
+  <text x="395" y="138" text-anchor="middle" font-size="9.5" fill="#2e7d32">追上</text>
+  <text x="395" y="126" text-anchor="middle" font-size="9.5" fill="#2e7d32">回填</text>
+
+  <!-- 右侧说明 -->
+  <rect x="620" y="48" width="120" height="200" rx="8" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+  <text x="680" y="70" text-anchor="middle" font-size="11.5" font-weight="700" fill="#e65100">注意</text>
+  <text x="680" y="92" text-anchor="middle" font-size="10" fill="#e65100">名单不是</text>
+  <text x="680" y="106" text-anchor="middle" font-size="10" fill="#e65100">"人数过半"</text>
+  <text x="680" y="128" text-anchor="middle" font-size="10" fill="#e65100">它只问</text>
+  <text x="680" y="142" text-anchor="middle" font-size="10" fill="#e65100">"跟没跟上"</text>
+  <text x="680" y="166" text-anchor="middle" font-size="10" fill="#e65100">所以可能</text>
+  <text x="680" y="180" text-anchor="middle" font-size="10" fill="#e65100">只剩 1 个人</text>
+  <text x="680" y="198" text-anchor="middle" font-size="10" fill="#e65100">此时风险拉满</text>
+  <text x="680" y="232" text-anchor="middle" font-size="9.5" fill="#e65100">但集群仍在跑</text>
+
+  <text x="380" y="276" text-anchor="middle" font-size="11.5" fill="#555">顶班的人只能从绿色名单里选——名单上的人都抄齐了最新账目，上位后一条不多、一条不少。</text>
+  <text x="380" y="296" text-anchor="middle" font-size="11.5" fill="#555">红色区里的人不是"坏了"，只是暂时落后；追上进度就自动回到绿色名单。</text>
+  <text x="380" y="316" text-anchor="middle" font-size="11" fill="#777">（AR = ISR + OSR：三个圈里的人加起来，就是这个分区的全部副本）</text>
+
+  <defs>
+    <marker id="out" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#c62828"/>
+    </marker>
+    <marker id="in" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#2e7d32"/>
+    </marker>
+  </defs>
+</svg>

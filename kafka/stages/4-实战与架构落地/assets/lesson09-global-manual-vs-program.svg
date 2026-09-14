@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="310" viewBox="0 0 800 310" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="800" height="310" fill="#ffffff"/>
+
+  <text x="400" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#1a237e">同一件事，两种干法</text>
+
+  <!-- 左：人肉敲 -->
+  <text x="200" y="58" text-anchor="middle" font-size="14" font-weight="600" fill="#c62828">现在：靠人坐在终端前敲</text>
+  <text x="200" y="76" text-anchor="middle" font-size="12" fill="#555555">敲一行出一条，人一走就断</text>
+
+  <g transform="translate(40,95)">
+    <rect x="0" y="0" width="66" height="34" rx="5" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+    <text x="33" y="22" text-anchor="middle" font-size="11" fill="#e65100">一个人</text>
+
+    <rect x="96" y="0" width="120" height="34" rx="5" fill="#f5f5f5" stroke="#9e9e9e" stroke-width="1.5"/>
+    <text x="156" y="22" text-anchor="middle" font-size="11" fill="#616161">黑框：敲一行命令</text>
+
+    <rect x="246" y="0" width="66" height="34" rx="5" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.5"/>
+    <text x="279" y="22" text-anchor="middle" font-size="11" fill="#0d47a1">系统</text>
+
+    <line x1="66" y1="17" x2="94" y2="17" stroke="#333" stroke-width="1.5" marker-end="url(#a)"/>
+    <line x1="216" y1="17" x2="244" y2="17" stroke="#333" stroke-width="1.5" marker-end="url(#a)"/>
+
+    <text x="156" y="56" text-anchor="middle" font-size="11" fill="#c62828">一次一件事，做完就没了</text>
+    <text x="156" y="74" text-anchor="middle" font-size="11" fill="#c62828">人不在 → 停；人走了 → 断</text>
+    <text x="156" y="96" text-anchor="middle" font-size="11" fill="#c62828">没法加判断、没法重试</text>
+
+    <rect x="0" y="114" width="312" height="32" rx="5" fill="#ffebee" stroke="#c62828" stroke-width="1.5"/>
+    <text x="156" y="135" text-anchor="middle" font-size="11" fill="#b71c1c">适合：临时看一眼、手动补一条</text>
+  </g>
+
+  <!-- 分隔 -->
+  <line x1="400" y1="60" x2="400" y2="270" stroke="#bbbbbb" stroke-width="1" stroke-dasharray="5,4"/>
+
+  <!-- 右：写成程序 -->
+  <text x="600" y="58" text-anchor="middle" font-size="14" font-weight="600" fill="#2e7d32">改造后：写成一个自己跑的程序</text>
+  <text x="600" y="76" text-anchor="middle" font-size="12" fill="#555555">写好放着，昼夜不停地自己干</text>
+
+  <g transform="translate(425,95)">
+    <rect x="0" y="0" width="118" height="82" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2.5"/>
+    <text x="59" y="22" text-anchor="middle" font-size="12" font-weight="700" fill="#1b5e20">一段程序</text>
+    <text x="59" y="42" text-anchor="middle" font-size="10" fill="#33691e">自己取、自己判断</text>
+    <text x="59" y="58" text-anchor="middle" font-size="10" fill="#33691e">出错自己重试</text>
+    <text x="59" y="74" text-anchor="middle" font-size="10" fill="#33691e">记住干到哪了</text>
+
+    <rect x="145" y="14" width="110" height="54" rx="6" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.5"/>
+    <text x="200" y="36" text-anchor="middle" font-size="11" fill="#0d47a1">系统（同一套规矩）</text>
+    <text x="200" y="54" text-anchor="middle" font-size="10" fill="#0d47a1">不用你改</text>
+
+    <line x1="118" y1="41" x2="143" y2="41" stroke="#2e7d32" stroke-width="1.8" marker-end="url(#ag)"/>
+    <line x1="143" y1="54" x2="120" y2="54" stroke="#2e7d32" stroke-width="1.2" marker-end="url(#ag)"/>
+
+    <text x="130" y="96" text-anchor="middle" font-size="11" fill="#2e7d32">没人盯着也能一直干</text>
+    <text x="130" y="114" text-anchor="middle" font-size="11" fill="#2e7d32">能加业务判断、能兜底重试</text>
+
+    <rect x="0" y="130" width="310" height="32" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+    <text x="155" y="151" text-anchor="middle" font-size="11" fill="#1b5e20">适合：长期跑的活、要判断的活</text>
+  </g>
+
+  <rect x="40" y="245" width="720" height="46" rx="6" fill="#f5f5f5" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="400" y="266" text-anchor="middle" font-size="12" fill="#333333">右边那个方框里说的"规矩"，和左边是同一套 —— 换的只是谁来干这件事</text>
+  <text x="400" y="284" text-anchor="middle" font-size="12" fill="#333333">所以前面学的那些道理，在程序里一条都不会变</text>
+
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#333"/>
+    </marker>
+    <marker id="ag" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#2e7d32"/>
+    </marker>
+  </defs>
+</svg>

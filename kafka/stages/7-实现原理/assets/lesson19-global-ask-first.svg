@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="410" viewBox="0 0 800 410" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="800" height="410" fill="#ffffff"/>
+
+  <text x="400" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#1a237e">要换新版，就得所有人一起停</text>
+  <text x="400" y="48" text-anchor="middle" font-size="12" fill="#555555">还是先开口问一句"你说到哪一级"？</text>
+
+  <!-- 左：同时停 -->
+  <text x="200" y="74" text-anchor="middle" font-size="14" font-weight="600" fill="#c62828">换版就得全停下，一起换</text>
+
+  <g transform="translate(35,84)">
+    <rect x="0" y="0" width="330" height="190" rx="7" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+
+    <rect x="14" y="16" width="302" height="36" rx="5" fill="#ffffff" stroke="#c62828" stroke-width="1.2"/>
+    <text x="165" y="32" text-anchor="middle" font-size="10" fill="#b71c1c">旧规矩作废，新的立刻顶上</text>
+    <text x="165" y="47" text-anchor="middle" font-size="9" fill="#b71c1c">没跟上的，一律不接待</text>
+
+    <g transform="translate(14,60)">
+      <rect x="0" y="0" width="94" height="52" rx="4" fill="#ffffff" stroke="#c62828" stroke-width="1.2"/>
+      <text x="47" y="18" text-anchor="middle" font-size="9" fill="#b71c1c">还在用旧说法</text>
+      <text x="47" y="34" text-anchor="middle" font-size="9" fill="#b71c1c">听不懂新规矩，</text>
+      <text x="47" y="45" text-anchor="middle" font-size="9" fill="#b71c1c">直接被挡在门外</text>
+
+      <rect x="105" y="0" width="94" height="52" rx="4" fill="#ffffff" stroke="#c62828" stroke-width="1.2"/>
+      <text x="152" y="18" text-anchor="middle" font-size="9" fill="#b71c1c">对面只会新说法</text>
+      <text x="152" y="34" text-anchor="middle" font-size="9" fill="#b71c1c">回的话这边也听不懂，</text>
+      <text x="152" y="45" text-anchor="middle" font-size="9" fill="#b71c1c">两边都僵着</text>
+
+      <rect x="210" y="0" width="94" height="52" rx="4" fill="#ffffff" stroke="#c62828" stroke-width="1.2"/>
+      <text x="257" y="18" text-anchor="middle" font-size="9" fill="#b71c1c">于是只能：</text>
+      <text x="257" y="34" text-anchor="middle" font-size="9" fill="#b71c1c">挑个夜深人静，</text>
+      <text x="257" y="45" text-anchor="middle" font-size="9" fill="#b71c1c">一起停、一起换</text>
+    </g>
+
+    <rect x="14" y="120" width="302" height="58" rx="4" fill="#ffffff" stroke="#c62828" stroke-width="1.2"/>
+    <text x="165" y="138" text-anchor="middle" font-size="9" fill="#b71c1c">或者退一步：一套旧、一套新，两套并行摆着</text>
+    <text x="165" y="154" text-anchor="middle" font-size="9" fill="#b71c1c">每加一版就多一套，摆到后来越搬越沉，</text>
+    <text x="165" y="170" text-anchor="middle" font-size="9" fill="#b71c1c">还得一直给旧的留位置</text>
+  </g>
+
+  <!-- 分隔 -->
+  <line x1="400" y1="70" x2="400" y2="380" stroke="#bbbbbb" stroke-width="1" stroke-dasharray="5,4"/>
+
+  <!-- 右：先问一句 -->
+  <text x="600" y="74" text-anchor="middle" font-size="14" font-weight="600" fill="#2e7d32">开口先问一句，两边各退一步取交集</text>
+
+  <g transform="translate(420,84)">
+    <rect x="0" y="0" width="330" height="190" rx="7" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+
+    <rect x="14" y="16" width="302" height="34" rx="5" fill="#ffffff" stroke="#2e7d32" stroke-width="1.2"/>
+    <text x="165" y="31" text-anchor="middle" font-size="10" fill="#1b5e20">先用最朴素的那种问法开口（谁都听得懂）</text>
+    <text x="165" y="45" text-anchor="middle" font-size="9" fill="#1b5e20">问到了，后面才敢往细了说</text>
+
+    <g transform="translate(14,58)">
+      <rect x="0" y="0" width="94" height="58" rx="4" fill="#fff8e1" stroke="#f9a825" stroke-width="1.2"/>
+      <text x="47" y="18" text-anchor="middle" font-size="9" fill="#e65100">先问：</text>
+      <text x="47" y="33" text-anchor="middle" font-size="9" fill="#e65100">你会到哪一级？</text>
+      <text x="47" y="48" text-anchor="middle" font-size="9" fill="#e65100">（不用报身份也答）</text>
+
+      <line x1="98" y1="29" x2="112" y2="29" stroke="#2e7d32" stroke-width="1.4"/>
+      <polygon points="112,29 106,25 106,33" fill="#2e7d32"/>
+
+      <rect x="118" y="0" width="94" height="58" rx="4" fill="#fff8e1" stroke="#f9a825" stroke-width="1.2"/>
+      <text x="165" y="18" text-anchor="middle" font-size="9" fill="#e65100">回一张清单：</text>
+      <text x="165" y="33" text-anchor="middle" font-size="9" fill="#e65100">这项我会 1 到 8 级</text>
+      <text x="165" y="48" text-anchor="middle" font-size="9" fill="#e65100">那项我还不会</text>
+
+      <line x1="216" y1="29" x2="230" y2="29" stroke="#2e7d32" stroke-width="1.4"/>
+      <polygon points="230,29 224,25 224,33" fill="#2e7d32"/>
+
+      <rect x="236" y="0" width="94" height="58" rx="4" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.6"/>
+      <text x="283" y="18" text-anchor="middle" font-size="9" font-weight="700" fill="#1b5e20">两边各退一步，</text>
+      <text x="283" y="33" text-anchor="middle" font-size="9" font-weight="700" fill="#1b5e20">取都会的那一级</text>
+      <text x="283" y="48" text-anchor="middle" font-size="9" fill="#1b5e20">（取最高的那级）</text>
+    </g>
+
+    <rect x="14" y="124" width="145" height="54" rx="4" fill="#ffffff" stroke="#2e7d32" stroke-width="1.2"/>
+    <text x="86" y="142" text-anchor="middle" font-size="9" fill="#1b5e20">对面按这一级回话：</text>
+    <text x="86" y="157" text-anchor="middle" font-size="9" fill="#1b5e20">你说几级，他就用几级</text>
+    <text x="86" y="171" text-anchor="middle" font-size="9" fill="#1b5e20">的规矩答你</text>
+
+    <rect x="171" y="124" width="145" height="54" rx="4" fill="#ffffff" stroke="#2e7d32" stroke-width="1.2"/>
+    <text x="243" y="142" text-anchor="middle" font-size="9" fill="#1b5e20">加个小规定又不换版：</text>
+    <text x="243" y="157" text-anchor="middle" font-size="9" fill="#1b5e20">写成"可选"的，</text>
+    <text x="243" y="171" text-anchor="middle" font-size="9" fill="#1b5e20">没写就不占地方</text>
+  </g>
+
+  <!-- 底部结论 -->
+  <rect x="35" y="300" width="730" height="88" rx="6" fill="#f5f5f5" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="400" y="326" text-anchor="middle" font-size="12" fill="#333333">左边：要么一起停着换，要么新旧两套长期并行 —— 换来的是"换一次伤筋动骨"</text>
+  <text x="400" y="350" text-anchor="middle" font-size="12" fill="#333333">右边：先问一句拿到清单 → 取双方都会的最高级 → 对面照这一级回话</text>
+  <text x="400" y="376" text-anchor="middle" font-size="12" font-weight="700" fill="#333333">于是可以先换一头、再换另一头，全程不用停 —— 代价是那张清单和这些老规矩都得一直留着</text>
+</svg>

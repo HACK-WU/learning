@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="800" height="400" fill="#ffffff"/>
+
+  <text x="400" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#1a237e">装了仪表，不等于知道该看哪一格</text>
+  <text x="400" y="48" text-anchor="middle" font-size="12" fill="#555555">一间大屋子，上千个读数；出了事是别人先发现的</text>
+
+  <!-- 左：装了仪表 -->
+  <text x="200" y="74" text-anchor="middle" font-size="14" font-weight="600" fill="#c62828">表很多，但没有一格写着"出事了"</text>
+
+  <g transform="translate(35,84)">
+    <rect x="0" y="0" width="330" height="170" rx="7" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+
+    <rect x="14" y="16" width="302" height="34" rx="5" fill="#ffffff" stroke="#c62828" stroke-width="1.2"/>
+    <text x="165" y="30" text-anchor="middle" font-size="10" fill="#b71c1c">墙上密密麻麻挂了一千多个表</text>
+    <text x="165" y="44" text-anchor="middle" font-size="9" fill="#b71c1c">每一格都在跳，看久了只觉得都在动</text>
+
+    <g transform="translate(14,58)">
+      <rect x="0" y="0" width="92" height="46" rx="4" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.2"/>
+      <text x="46" y="18" text-anchor="middle" font-size="9" fill="#1b5e20">表 1：正常</text>
+      <text x="46" y="35" text-anchor="middle" font-size="9" fill="#1b5e20">（不重要）</text>
+      <rect x="105" y="0" width="92" height="46" rx="4" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.2"/>
+      <text x="151" y="18" text-anchor="middle" font-size="9" fill="#1b5e20">表 2：正常</text>
+      <text x="151" y="35" text-anchor="middle" font-size="9" fill="#1b5e20">（不重要）</text>
+      <rect x="210" y="0" width="92" height="46" rx="4" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.2"/>
+      <text x="256" y="18" text-anchor="middle" font-size="9" fill="#1b5e20">表 3：正常</text>
+      <text x="256" y="35" text-anchor="middle" font-size="9" fill="#1b5e20">（不重要）</text>
+
+      <rect x="0" y="54" width="92" height="46" rx="4" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.2"/>
+      <text x="46" y="72" text-anchor="middle" font-size="9" fill="#1b5e20">表 4：正常</text>
+      <text x="46" y="89" text-anchor="middle" font-size="9" fill="#1b5e20">（也不重要）</text>
+      <rect x="105" y="54" width="92" height="46" rx="4" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.2"/>
+      <text x="151" y="72" text-anchor="middle" font-size="9" fill="#1b5e20">表 5：正常</text>
+      <text x="151" y="89" text-anchor="middle" font-size="9" fill="#1b5e20">（也不重要）</text>
+      <rect x="210" y="54" width="92" height="46" rx="4" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+      <text x="256" y="72" text-anchor="middle" font-size="9" font-weight="700" fill="#b71c1c">那一格已经红了</text>
+      <text x="256" y="89" text-anchor="middle" font-size="9" fill="#b71c1c">没人知道它重要</text>
+    </g>
+
+    <text x="165" y="166" text-anchor="middle" font-size="10" fill="#b71c1c">全是绿的，也没人标过哪几格不能有变动</text>
+  </g>
+
+  <!-- 分隔 -->
+  <line x1="400" y1="70" x2="400" y2="370" stroke="#bbbbbb" stroke-width="1" stroke-dasharray="5,4"/>
+
+  <!-- 右：有清单 -->
+  <text x="600" y="74" text-anchor="middle" font-size="14" font-weight="600" fill="#2e7d32">先圈定几格，写清"正常长什么样"</text>
+
+  <g transform="translate(420,84)">
+    <rect x="0" y="0" width="330" height="170" rx="7" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+
+    <rect x="14" y="16" width="302" height="28" rx="5" fill="#ffffff" stroke="#2e7d32" stroke-width="1.2"/>
+    <text x="165" y="34" text-anchor="middle" font-size="10" fill="#1b5e20">只挑出几格，其余留着看趋势就好</text>
+
+    <g transform="translate(14,52)">
+      <rect x="0" y="0" width="302" height="26" rx="4" fill="#fff8e1" stroke="#f9a825" stroke-width="1.2"/>
+      <text x="10" y="18" font-size="9" fill="#e65100">该盯的一格　　"正常时它应该是 0"　　越了就叫人</text>
+
+      <rect x="0" y="32" width="302" height="26" rx="4" fill="#fff8e1" stroke="#f9a825" stroke-width="1.2"/>
+      <text x="10" y="50" font-size="9" fill="#e65100">该盯的一格　　"正常时全屋子只有一处是 1"　多了少了都叫人</text>
+
+      <rect x="0" y="64" width="302" height="26" rx="4" fill="#fff8e1" stroke="#f9a825" stroke-width="1.2"/>
+      <text x="10" y="82" font-size="9" fill="#e65100">该盯的一格　　"正常时它也是 0"　　越了就叫人</text>
+
+      <rect x="0" y="96" width="302" height="26" rx="4" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.2"/>
+      <text x="10" y="114" font-size="9" fill="#0d47a1">有一项表上没有 —— 得拿两个数相减才看得出来</text>
+    </g>
+
+    <text x="165" y="164" text-anchor="middle" font-size="10" fill="#1b5e20">每一格都写着"正常时长什么样"，不用猜</text>
+  </g>
+
+  <!-- 底部结论 -->
+  <rect x="35" y="278" width="730" height="92" rx="6" fill="#f5f5f5" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="400" y="304" text-anchor="middle" font-size="12" fill="#333333">左边不是没有数据，是没人提前说清"哪一格异常才要叫人"——于是出事时，先看出来的是用的人</text>
+  <text x="400" y="328" text-anchor="middle" font-size="12" fill="#333333">右边：先圈定少数几格，再给每格写清"正常时长什么样"；有一项表上根本没有，得另外算</text>
+  <text x="400" y="354" text-anchor="middle" font-size="12" font-weight="700" fill="#333333">所以本课不是"接上仪表"，而是"定出该叫人的那几格"</text>
+</svg>

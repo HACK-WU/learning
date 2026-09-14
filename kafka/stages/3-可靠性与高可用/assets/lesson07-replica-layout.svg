@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="330" viewBox="0 0 780 330" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="780" height="330" fill="#ffffff"/>
+
+  <text x="390" y="24" text-anchor="middle" font-size="16" font-weight="700" fill="#1a237e">一个分区的三份副本，分别落在哪台机器上</text>
+
+  <!-- 三个 Broker 框 -->
+  <rect x="30" y="48" width="200" height="150" rx="8" fill="#fafafa" stroke="#1565C0" stroke-width="1.5"/>
+  <text x="130" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#0d47a1">Broker 1</text>
+  <rect x="52" y="82" width="156" height="46" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="3"/>
+  <text x="130" y="102" text-anchor="middle" font-size="12" font-weight="700" fill="#1b5e20">orders-0 · leader</text>
+  <text x="130" y="119" text-anchor="middle" font-size="10.5" fill="#33691e">正本：接待读写</text>
+  <rect x="52" y="140" width="156" height="42" rx="6" fill="#eeeeee" stroke="#bdbdbd" stroke-width="1"/>
+  <text x="130" y="166" text-anchor="middle" font-size="10.5" fill="#616161">orders-1 / orders-2</text>
+
+  <rect x="290" y="48" width="200" height="150" rx="8" fill="#fafafa" stroke="#8b949e" stroke-width="1.5"/>
+  <text x="390" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#424242">Broker 2</text>
+  <rect x="312" y="82" width="156" height="46" rx="6" fill="#f5f5f5" stroke="#8b949e" stroke-width="2"/>
+  <text x="390" y="102" text-anchor="middle" font-size="12" font-weight="700" fill="#424242">orders-0 · follower</text>
+  <text x="390" y="119" text-anchor="middle" font-size="10.5" fill="#616161">抄本：只同步，不接待</text>
+  <rect x="312" y="140" width="156" height="42" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="390" y="166" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1b5e20">orders-1 · leader</text>
+
+  <rect x="550" y="48" width="200" height="150" rx="8" fill="#fafafa" stroke="#8b949e" stroke-width="1.5"/>
+  <text x="650" y="70" text-anchor="middle" font-size="13" font-weight="700" fill="#424242">Broker 3</text>
+  <rect x="572" y="82" width="156" height="46" rx="6" fill="#f5f5f5" stroke="#8b949e" stroke-width="2"/>
+  <text x="650" y="102" text-anchor="middle" font-size="12" font-weight="700" fill="#424242">orders-0 · follower</text>
+  <text x="650" y="119" text-anchor="middle" font-size="10.5" fill="#616161">抄本：只同步，不接待</text>
+  <rect x="572" y="140" width="156" height="42" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="650" y="166" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1b5e20">orders-2 · leader</text>
+
+  <!-- 同步箭头 -->
+  <path d="M 208 105 C 250 105, 260 105, 308 105" fill="none" stroke="#2e7d32" stroke-width="1.6" stroke-dasharray="5,3" marker-end="url(#f1)"/>
+  <path d="M 468 105 C 510 105, 520 105, 568 105" fill="none" stroke="#2e7d32" stroke-width="1.6" stroke-dasharray="5,3" marker-end="url(#f1)"/>
+  <text x="390" y="130" text-anchor="middle" font-size="10.5" fill="#2e7d32">fetch 拉取同步：抄本主动找正本要新数据</text>
+
+  <!-- 客户端 -->
+  <rect x="30" y="222" width="200" height="46" rx="6" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.5"/>
+  <text x="130" y="242" text-anchor="middle" font-size="12" font-weight="700" fill="#0d47a1">生产者</text>
+  <text x="130" y="259" text-anchor="middle" font-size="10.5" fill="#0d47a1">写入：只认正本</text>
+
+  <rect x="290" y="222" width="200" height="46" rx="6" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.5"/>
+  <text x="390" y="242" text-anchor="middle" font-size="12" font-weight="700" fill="#0d47a1">消费者</text>
+  <text x="390" y="259" text-anchor="middle" font-size="10.5" fill="#0d47a1">读取：也只认正本</text>
+
+  <path d="M 130 222 L 130 200" stroke="#1565C0" stroke-width="1.5" marker-end="url(#f2)"/>
+  <path d="M 390 222 L 390 200 L 130 200 L 130 202" fill="none" stroke="#1565C0" stroke-width="1.5" marker-end="url(#f2)"/>
+
+  <rect x="550" y="222" width="200" height="46" rx="6" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+  <text x="650" y="242" text-anchor="middle" font-size="12" font-weight="700" fill="#e65100">关键规则</text>
+  <text x="650" y="259" text-anchor="middle" font-size="10.5" fill="#e65100">同一分区的副本必须分散在不同机器</text>
+
+  <text x="390" y="300" text-anchor="middle" font-size="11.5" fill="#555">同一台机器上放两份没有意义：机器一坏，两份一起没。</text>
+  <text x="390" y="318" text-anchor="middle" font-size="11.5" fill="#555">这也解释了：只有 1 台机器的集群，建不出"一份存三处"的 Topic。</text>
+
+  <defs>
+    <marker id="f1" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#2e7d32"/>
+    </marker>
+    <marker id="f2" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#1565C0"/>
+    </marker>
+  </defs>
+</svg>

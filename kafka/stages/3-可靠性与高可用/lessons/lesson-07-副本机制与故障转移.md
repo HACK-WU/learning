@@ -26,6 +26,14 @@
 
 这就是本课三个知识点要回答的三件事：**怎么存**（副本与 leader/follower）、**谁有资格接班**（ISR 机制）、**谁主持交接**（控制器选举与故障转移）。
 
+> 📌 **一句话本质**：本课做的事，是把**「一份东西只放在一个地方」**变成**「同一份东西放好几个地方，其中一个说了算，坏了立刻有人顶上」**。
+>
+> ⚖️ **处境对照**：
+> - **不这么做（单份存储）**：放东西的那台机器一停，读写全部报错——**东西还在磁盘上，但谁也拿不到**。上面演习里那句 `Container kafka is not running` 就是全部后果。
+> - **这么做（多份 + 自动顶班）**：坏一台，另外两台里立刻有一台顶上，客户端自动重试成功，**全程无人干预**。
+>
+> ⏳ **量化说明**：上面"单份"的后果是本课第四幕**在本机单容器集群上真实复现**的（可执行、可复现）；"多份自动顶班"的切换速度取决于心跳与选举配置（默认秒级），**本课未在多节点集群上实测切换耗时**，需要实测时可参考本课末的「进阶挑战」。
+
 ---
 
 ## 第二幕：认知冲突
@@ -42,7 +50,27 @@
 
 ## 第三幕：层层揭示
 
+### 一眼全局图（进入细节前先看一眼）
+
+![一份账本 vs 三份账本](../assets/lesson07-global-one-copy-vs-three.svg)
+
+> 看图：**左边**是现在的样子——全公司就这一本账本，放在一台机器上，这台机器一坏，账本就拿不出来，全都停摆；**右边**是本课的做法——同样的账本在三台机器上各放一份，内容一模一样，正本一改两份抄本马上跟着抄。差别在于：**从"一份"变成"随时待命的三份"，坏一台也不停摆**。
+
+**四条硬约束**说明：① 本图只回答"本课要解决什么问题、靠什么思路"；② 图上不出现术语（副本、leader、follower、ISR 这些词都在下面才出场）；③ 已带读图指引；④ 图旁文字能独立说清同一件事。
+
+### 本课地图（分几步走）
+
+| 步 | 这一步要解决什么（人话） | 对应知识点 |
+|:--:|------------------------|-----------|
+| 1 | 先定"往哪存、存几份"，以及这么多份到底听谁的 | 知识点 1：副本与 leader/follower |
+| 2 | 再定"谁有资格顶班"——不是所有抄本都够格 | 知识点 2：ISR 机制 |
+| 3 | 最后定"谁发现坏了、谁主持换人、怎么通知到所有人" | 知识点 3：控制器选举与故障转移 |
+
+> 只回答"分几步走、现在在哪"；不写机制、不写结论；**不标学习状态**（进度以 `00-学习档案.md` 为准）。
+
 ### 知识点 1：副本与 leader/follower
+
+> 🧭 第 1/3 步｜承接：第二幕的三个冲突——"存三份是不是做备份""三台都能写吗""正本挂了谁接班" → 本步：先把"往哪存、存几份、这么多份听谁的"定下来
 
 **一句话定义**：副本（replica）是同一个分区在多个不同 Broker 上的拷贝，份数由副本因子（replication factor，RF）决定；每个分区任意时刻只有一个 leader 副本对外提供读写，其余 follower 副本只做一件事——从 leader 同步数据。
 
@@ -57,25 +85,9 @@
 
 #### 概念与原理
 
-```mermaid
-flowchart LR
-    P["生产者"] --> L
-    C["消费者"] --> L
-    subgraph B1["Broker 1"]
-        L[("orders-0<br/>leader 副本")]
-    end
-    subgraph B2["Broker 2"]
-        F1[("orders-0<br/>follower 副本")]
-    end
-    subgraph B3["Broker 3"]
-        F2[("orders-0<br/>follower 副本")]
-    end
-    L -. "fetch 拉取同步" .-> F1
-    L -. "fetch 拉取同步" .-> F2
-    style L stroke:#3fb950,stroke-width:2px
-    style F1 stroke:#8b949e,stroke-width:2px
-    style F2 stroke:#8b949e,stroke-width:2px
-```
+![副本在各 Broker 上的分布](../assets/lesson07-replica-layout.svg)
+
+> 看图：**三个大方框是三台机器**（Broker 1/2/3），每台机器里都放着 `orders-0` 的账本——**位置关系是本图的关键**：同一个分区的三份副本分散在不同机器上。绿色的 **`orders-0 leader`（正本）只在 Broker 1**，生产者和消费者的箭头都只指向它；Broker 2、3 上的灰色 `follower`（抄本）通过虚线的 fetch 箭头主动从正本拉数据。注意每个 Broker 上还各有一个别的分区的 leader（orders-1、orders-2）——**正本是"按分区"分散的**，不是全挤在一台上。
 
 关键规则：
 
@@ -84,6 +96,17 @@ flowchart LR
 3. **follower 的日常就是抄账**：不停地 fetch。抄账的进度，决定了它在下一个知识点里的「资格」。
 4. **RF=1 意味着裸奔**：我们课 3 建的 `orders` 就是 RF=1。Broker 挂 → 分区不可用（数据还在磁盘上，但读不了写不了——**「不丢」和「可用」是两回事**）；磁盘坏 → 数据真丢。副本同时解决这两件事。
 
+#### 🗣️ 行话对照
+
+> 讲透后对标：下面这些是工作现场能搜到、能对上号的标准叫法与真实指标名。
+
+- **副本 Replica / 副本因子 Replication Factor（RF）**：就是本课说的"账本存几份"。在哪遇到：建 Topic 的参数 `--replication-factor 3`；配置名 `replication.factor`。
+- **主副本 Leader / 从副本 Follower**：就是本课说的"正本"和"抄本"。在哪遇到：`kafka-topics.sh --describe` 输出的 `Leader`、`Replicas`、`Isr` 三列；报错 `NotLeaderForPartitionException`（往不是正本的那台发了写请求）。
+- **副本不足 Under Replicated Partitions**：就是本课说的"有抄本掉队了、没存够份数"。在哪遇到：监控指标 `kafka_server_replicamanager_underreplicatedpartitions`（值 > 0 就说明有分区的副本没跟齐）；Grafana Kafka 大盘的 `Under Replicated Partitions` 面板；告警规则常用 `> 0`。
+
+> 🔍 **实测说明**：上面第三个指标名**经本机实测确认**——2026-09-14 在 3 节点 Kafka 集群（容器 `l15-kafka-1/2/3`，JMX exporter 端口 17071）上抓取 exporter 输出，确认真实存在的是 `kafka_server_replicamanager_underreplicatedpartitions`（注意**没有** `_total` 后缀）。同一批实测确认的组合指标还有：`kafka_server_replicamanager_isrshrinkspersec`（掉队速率，实测 0.0）、`kafka_server_replicamanager_isrexpandspersec`（回填速率，实测 12.0）、`kafka_server_replicamanager_underminisrpartitioncount`（低于最小同步副本数的分区数，实测 0.0）。
+> ⚠️ **指标名随 Kafka 版本与 exporter 配置可能变化，用前请先在你的环境 `curl` 一次确认**——本课曾把该指标误记为 `..._underreplicated_total`，实测后已更正。
+
 #### 一句话记住
 
 **副本 = 同一分区抄在多台 Broker 上的热账本；正本（leader）统一记账、统一接待读写，学徒（follower）自己跑来抄——副本是实时同步的冗余，不是备份。**
@@ -91,6 +114,8 @@ flowchart LR
 ---
 
 ### 知识点 2：ISR 机制
+
+> 🧭 第 2/3 步｜承接：上一步定了"一份正本 + 两份抄本"，但第二幕的第三个冲突还没解决——"接班的那个要是还没抄到最新几条，已经确认过的消息去哪了" → 本步：定出"谁有资格顶班"的名单规则
 
 **一句话定义**：ISR（In-Sync Replicas，同步副本集合）是「跟得上 leader 的副本」名单——leader 自己，加上落后不超过 `replica.lag.time.max.ms`（默认 30 秒）的 follower；只有 ISR 成员有资格在新 leader 选举中上位。
 
@@ -108,14 +133,11 @@ flowchart LR
 
 #### 概念与原理
 
-**1. 全家福：AR = ISR + OSR。** 一个分区的全部副本叫 AR（Assigned Replicas）；其中跟得上的叫 ISR，被踢出去落后的叫 OSR（Out-of-Sync Replicas）。学徒在两个集合间动态流动：
+**1. 全家福：AR = ISR + OSR。** 一个分区的全部副本叫 **AR**（Assigned Replicas，本文自拟译"已分配副本集"）；其中跟得上的叫 ISR（In-Sync Replicas，**同步副本集合**），被踢出去落后的叫 **OSR**（Out-of-Sync Replicas，本文自拟译"失同步副本集"）——后两个缩写**中文资料里译名互不统一，本课为便于阅读自拟了中文名并标注"非通用译名"**（原因见本课「🗣️ 行话对照」的说明）。学徒在两个集合间动态流动：
 
-```mermaid
-flowchart LR
-    I["ISR 在岗名单<br/>leader 恒在 + 跟得上的 follower"]
-    I -- "掉队：落后超 30 秒<br/>→ 收缩（shrink）除名" --> OSR["OSR 落榜区<br/>（出局坐冷板凳）"]
-    OSR -- "追上 leader 进度<br/>→ 扩张（expand）回填" --> I
-```
+![ISR 与 OSR 的包含与进出关系](../assets/lesson07-isr-set.svg)
+
+> 看图：**最大的灰框是全部副本（AR，3 个）**；里面套着**绿色框（ISR 在岗名单）**和**红色框（OSR 落榜区）**——注意这是**包含关系**，不是"从一个走到另一个"的流程。绿框里永远有 leader（正本自己不需要"跟上"），外加跟得上的 follower；红框里是落后超过 30 秒的 follower。中间的**两个箭头是进出**：红箭头"掉队→除名"、绿箭头"追上→回填"。右上角黄色提示：这份名单**只看跟没跟上，不看人数过半**，所以可能只剩 1 个人。
 
 **2. ISR 与 acks=all 的联动（回扣课 5！）** 课 5 说 `acks=all` 时「等所有副本确认」——现在给出精确版：**等的是「当前 ISR 里所有成员」确认**，不是全部副本。这就有个隐蔽的退化：两个 follower 都被踢出 ISR 后，ISR 只剩 leader 自己，此时 `acks=all` 实际等到的只有 1 份确认——**配置还是 all，保障却缩水成了 1**。
 
@@ -136,7 +158,7 @@ flowchart LR
 
 > 💡 **进阶小注**：follower 抄得慢，还会拖慢消息的「可见时间」——消费者只能读到**已被 ISR 全体同步**的消息（这条分界线叫高水位 High Watermark）。所以 ISR 抖动不仅关系容灾，也关系消费延迟，进阶话题，混个脸熟即可。
 
-> 🆕 **2026-09-10 重要补充：ELR（Eligible Leader Replicas，可当选副本）**。上面第 4 条「ISR 全军覆没」的抉择，在 **Kafka 4.0 之后出现了一个更好的答案**。此前只有「停写」或「丢数据」两条路，因为无法证明某个 OSR 副本是否持有全部已确认数据。但「严格 min ISR」规则普及后（ISR 人数不足 `min.insync.replicas` 时高水位不再推进），可以得到一个关键推论：**凡是被高水位承认过的消息，一定已经写进了至少 min.insync.replicas 个副本**——于是那些不在 ISR 里、但已确认收到高水位以内全部消息的副本，其实是**安全的接班人**。KRaft controller 把这份名单记在 PartitionRecord 的 `Eligible Leader Replicas` 字段里，这就是 **ELR**（[KIP-966 Part 1](https://cwiki.apache.org/confluence/display/KAFKA/KIP-966%3A+Eligible+Leader+Replicas), 4.0 起提供，4.1 起新集群默认启用）。
+> 🆕 **2026-09-10 重要补充：ELR（Eligible Leader Replicas，本文自拟译“合格候选副本集”，非通用译名）**。上面第 4 条「ISR 全军覆没」的抉择，在 **Kafka 4.0 之后出现了一个更好的答案**。此前只有「停写」或「丢数据」两条路，因为无法证明某个 OSR 副本是否持有全部已确认数据。但「严格 min ISR」规则普及后（ISR 人数不足 `min.insync.replicas` 时高水位不再推进），可以得到一个关键推论：**凡是被高水位承认过的消息，一定已经写进了至少 min.insync.replicas 个副本**——于是那些不在 ISR 里、但已确认收到高水位以内全部消息的副本，其实是**安全的接班人**。KRaft controller 把这份名单记在 PartitionRecord 的 `Eligible Leader Replicas` 字段里，这就是 **ELR**（[KIP-966 Part 1](https://cwiki.apache.org/confluence/display/KAFKA/KIP-966%3A+Eligible+Leader+Replicas), 4.0 起提供，4.1 起新集群默认启用）。
 
 于是新版本的选举顺序变成三级：
 
@@ -160,6 +182,29 @@ flowchart TD
 
 > ⚠️ **版本边界**：4.0 需显式设 `eligible.leader.replicas.version=1` 才启用（设 0 可安全降级）；4.1 起新集群默认开启。用 4.0 且没设过这个参数的同学，集群行为仍是本课知识点 2 描述的旧模型。
 
+#### 🗣️ 行话对照
+
+> 讲透后对标：ISR 这一组概念在运维现场出现频率极高，下面是标准叫法与真实抓手。
+
+- **ISR（In-Sync Replicas，同步副本集合）**：就是本课说的"随时可顶班的在岗名单"。在哪遇到：`kafka-topics.sh --describe` 输出的 **`Isr` 列**——这是最常用的现场抓手。
+- **OSR（Out-of-Sync Replicas，本文自拟译"失同步副本集"，非通用译名）**：就是本课说的"落榜区"。在哪遇到：`--describe` 输出里**在 `Replicas` 中但不在 `Isr` 中的那些编号**，两者相减就是 OSR（`OSR = Replicas − Isr`）。
+- **AR（Assigned Replicas，本文自拟译"已分配副本集"，非通用译名）**：就是本课说的"这个分区一共配了几份（3 份）"。在哪遇到：`--describe` 输出的 **`Replicas` 列**。关系恒等式：**AR = ISR + OSR**。
+
+> 💡 **为什么 OSR / AR 的中文名要标"自拟"**：判据是"**这个中文说法真有人在用吗**"。中文技术社区里 OSR 出现过"非同步副本""异步副本""失同步副本"等多种写法，**互不统一、谁都不算权威**，且其中"异步副本"还是**误译**——`Out-of-Sync` 是"没跟上、不同步"，而"异步"对应的是 `Asynchronous`（如异步发送，完全是另一个概念）。**重点是标注而不是能不能用中文**：标了"本文自拟、非通用译名"之后，读者知道这名字是本课为了好读起的，**不会拿去跟人对线**；真正出问题的是不标注、冒充通用术语。**检索与现场沟通时，建议直接用英文缩写 `OSR` / 全称 `Out-of-Sync Replicas`**，命中率最高。
+> **ISR 则不同**——"同步副本"是中文社区高度一致的叫法（属"公认译名"一档，无需标注），故保留中英对照：**别把"谨慎"执行成"一律用英文"**。
+- **收缩 / 扩张（Shrink / Expand）**：就是本课说的"除名"与"回填"。在哪遇到：监控指标 `kafka_server_replicamanager_isrshrinkspersec` 与 `kafka_server_replicamanager_isrexpandspersec`（实测存在；前者长期为 0 才健康，频繁跳动说明有副本在反复掉队）。
+- **最小同步副本数 `min.insync.replicas`**：就是本课说的"给名单上熔断"。在哪遇到：**Topic 级配置项**；配套监控 `kafka_server_replicamanager_underminisrpartitioncount`。
+
+**多策略对照（顶班人选法的三种选择）**：
+
+| 本课说法（人话） | 行业标准叫法 | 典型配置 / 在哪遇到 | 代价 |
+|---|---|---|---|
+| 名单空了就停摆，宁可不可用也不丢 | **Clean Leader Election（默认行为）** | `unclean.leader.election.enable=false`（默认值） | 分区不可用，直到有副本追上 |
+| 名单空了也让落榜的顶上，先恢复可用 | **Unclean Leader Election（不洁选举）** | `unclean.leader.election.enable=true` | **已确认的消息可能丢失** |
+| （4.0+）让"确认过全部已提交数据的副本"顶上 | **ELR（Eligible Leader Replicas，KIP-966）** | `eligible.leader.replicas.version=1`（4.1 起新集群默认开启） | 依赖 `min.insync.replicas` 正确配置才安全 |
+
+> 🔍 **实测说明**：上表的 ISR 类指标名已于 2026-09-14 在本机 3 节点集群（容器 `l15-kafka-1/2/3`，JMX exporter 端口 17071）**实测确认真实存在**，其中 `isrexpandspersec` 实测值 12.0、`isrshrinkspersec` 为 0.0、`underminisrpartitioncount` 为 0.0。配置项名称取自 Kafka 4.3 官方文档。**沿用前先在你的环境核实指标名，勿照抄配告警**（配指标告警前须先确认语义与值域，血的教训见课 15 的 `RequestHandlerAvgIdlePercent` 案例）。
+
 #### 一句话记住
 
 **ISR = 「跟得上的在岗名单」（leader 恒在，30 秒跟不上就除名，追上就回填）；接班只从名单里选；配 min.insync.replicas=2 给名单上熔断，防止 acks=all 静默退化成「等 1 个」。4.0 起还有 ELR 兜底：ISR 全没时，从「确认过全部已提交消息的副本」里选，做到既不停服也不丢数据。**
@@ -167,6 +212,8 @@ flowchart TD
 ---
 
 ### 知识点 3：控制器选举与故障转移
+
+> 🧭 第 3/3 步｜承接：上两步定好了"存几份"和"谁有资格顶班"，但还缺最后一环——**谁第一个发现机器坏了、谁来主持换人、怎么通知到所有人** → 本步：补上这个"主持交接"的角色
 
 **一句话定义**：控制器（Controller）是集群的「总管」，负责发现 Broker 死亡、主持分区 leader 选举并广播元数据；KRaft 模式下控制器是一组节点组成的仲裁（quorum），按 Raft 多数派规则运转，其中一台为 active controller 主事。
 
@@ -201,6 +248,8 @@ sequenceDiagram
     P->>B2: 重试成功，继续写入
 ```
 
+> 看图：这是一张**按时间从上往下走的时序图**，四条竖线分别是"坏掉的 1 号机""消防队（控制器）""顶班的 2 号机""下单的人"。顺序是：心跳断 → 消防队发现 → 指定 2 号机接任 → 广播新安排 → 下单的人第一次发送失败 → **自己刷新信息重试** → 成功。注意最后两步：**客户端是自愈的，没有任何人工介入**。
+
 拆开看五步：
 
 1. **发现**：Broker 定期向 controller 心跳续约，心跳断了，controller 在秒级内把它「拉黑」（fence）；
@@ -210,6 +259,17 @@ sequenceDiagram
 5. **老将归队**：宿主机 1 修复后，Broker 1 回归，先以 follower 身份追进度，追齐后重新进入 ISR；配合默认开启的 leader 自动均衡，leader 角色还会逐步迁回，避免长期倾斜。
 
 **3. Controller 自己挂了怎么办？** 其余 controller 按多数派在秒级内选出新 active controller。期间的微妙差别值得知道：**数据面（正常的读写收发）基本不受影响**——分区 leader 都还活着；暂时受阻的是**元数据操作**（建 Topic、再选 leader 这类「管理层」动作）。这也是为什么生产环境 controller 一定部署 3 台起步：值班室必须永远有多数派在场。
+
+#### 🗣️ 行话对照
+
+> 讲透后对标：控制器这组概念在排障时的抓手非常明确，尤其"谁是主事人"这个问题。
+
+- **控制器 Controller / KRaft 仲裁 Quorum**：就是本课说的"消防队长值班室"。在哪遇到：命令 `kafka-metadata-quorum.sh --bootstrap-server ... describe --status`；配置项 `controller.quorum.voters`。
+- **Active Controller（主事控制器）**：就是本课说的"今天主事的那个队长"。在哪遇到：上面那条命令输出的 `LeaderId` 字段；监控指标 `kafka_controller_kafkacontroller_activecontrollercount`（**实测：整个集群有且只有 1 台为 1，其余为 0**，若出现 0 个或 2 个都要立即排查）。
+- **离线分区 Offline Partitions**：就是本课说的"没人能顶班、彻底不可用的分区"。在哪遇到：监控指标 `kafka_controller_kafkacontroller_offlinepartitionscount`（实测存在，健康时应为 0）。
+- ** fencing（围栏）**：就是本课说的"把失联的机器拉黑、不让它再说话"。在哪遇到：日志关键字 `fenced` / `FencedBroker`；ELR 相关文档里的 `Eligible Leader Replicas` 字段。
+
+> 🔍 **实测说明**：2026-09-14 在本机 3 节点集群上实测，三台节点的 `kafka_controller_kafkacontroller_activecontrollercount` 分别为 **1.0 / 0.0 / 0.0**——正好印证"任意时刻有且只有 1 个 active controller"；同批实测 `offlinepartitionscount = 0.0`、`globalpartitioncount = 69.0`。**指标名请在你自己的环境核实后再配告警。**
 
 #### 一句话记住
 
@@ -343,7 +403,9 @@ flowchart TD
     style CT stroke:#d29922,stroke-width:2px
 ```
 
-> 读法：**绿的**是 ISR 在岗名单（leader 恒在 + 跟得上的 follower，接班只从这里选）；**红的**是掉队被除名的 OSR，追上后可回归；**黄的** controller 仲裁负责发现死亡、主持选举。`min.insync.replicas=2` 保证绿名单少于 2 人时拒绝写入（熔断），而不是默默降级。
+> 看图：**绿的**是 ISR 在岗名单（leader 恒在 + 跟得上的 follower，接班只从这里选）；**红的**是掉队被除名的 OSR，追上后可回归；**黄的** controller 仲裁负责发现死亡、主持选举。`min.insync.replicas=2` 保证绿名单少于 2 人时拒绝写入（熔断），而不是默默降级。
+
+> **与课首入口的分工（勿混，三方视角）**：「一眼全局图」在课首、问题视角、零术语，给没学过的人看（回答"为什么需要它、靠什么思路"）；「本课地图」在课首、路线视角（回答"分几步走、现在在哪"），是表格不是图；本图在课末、知识视角，给刚学完的人复习用（回答"本课讲了什么"）。三者不可替代、不雷同。
 
 ## 课后小测
 

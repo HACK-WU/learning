@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="800" height="500" fill="#ffffff"/>
+
+  <text x="400" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#1a237e">两样东西，各自该怎么放</text>
+  <text x="400" y="48" text-anchor="middle" font-size="12" fill="#555555">仓库堆不下了；钥匙又不能摆在明面上</text>
+
+  <!-- ============ 第一块：仓库 ============ -->
+  <text x="200" y="74" text-anchor="middle" font-size="14" font-weight="600" fill="#c62828">全都堆在市区的贵仓库</text>
+  <text x="600" y="74" text-anchor="middle" font-size="14" font-weight="600" fill="#2e7d32">常用的留近处，陈年的挪远郊</text>
+
+  <!-- 左：堆在贵仓库 -->
+  <g transform="translate(35,84)">
+    <rect x="0" y="0" width="330" height="130" rx="7" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+
+    <rect x="15" y="20" width="140" height="96" rx="5" fill="#ffffff" stroke="#c62828" stroke-width="1.2" stroke-dasharray="4,3"/>
+    <text x="85" y="38" text-anchor="middle" font-size="10" fill="#b71c1c">市区仓库（租金很贵）</text>
+    <rect x="24" y="46" width="122" height="17" rx="3" fill="#fff8e1" stroke="#f9a825" stroke-width="1"/>
+    <text x="85" y="59" text-anchor="middle" font-size="9" fill="#e65100">最近几天的货</text>
+    <rect x="24" y="67" width="122" height="17" rx="3" fill="#eeeeee" stroke="#9e9e9e" stroke-width="1"/>
+    <text x="85" y="80" text-anchor="middle" font-size="9" fill="#616161">去年的货</text>
+    <rect x="24" y="88" width="122" height="17" rx="3" fill="#eeeeee" stroke="#9e9e9e" stroke-width="1"/>
+    <text x="85" y="101" text-anchor="middle" font-size="9" fill="#616161">前年的货（一年查不了几次）</text>
+
+    <text x="170" y="40" font-size="10" fill="#b71c1c">新的旧的挤在一起</text>
+    <text x="170" y="58" font-size="10" fill="#b71c1c">想多装，只能整间加盖</text>
+    <text x="170" y="76" font-size="10" fill="#b71c1c">同样的东西还要存三份，</text>
+    <text x="170" y="92" font-size="10" fill="#b71c1c">多出来的账单一路翻倍</text>
+    <text x="170" y="112" font-size="10" font-weight="700" fill="#b71c1c">钱花在最不值的地方</text>
+  </g>
+
+  <!-- 右：分层 -->
+  <g transform="translate(420,84)">
+    <rect x="0" y="0" width="330" height="130" rx="7" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+
+    <rect x="15" y="20" width="112" height="96" rx="5" fill="#ffffff" stroke="#2e7d32" stroke-width="1.2"/>
+    <text x="71" y="38" text-anchor="middle" font-size="10" fill="#1b5e20">市区小仓库</text>
+    <rect x="24" y="46" width="94" height="17" rx="3" fill="#fff8e1" stroke="#f9a825" stroke-width="1"/>
+    <text x="71" y="59" text-anchor="middle" font-size="9" fill="#e65100">最近几天的货</text>
+    <rect x="24" y="67" width="94" height="17" rx="3" fill="#eeeeee" stroke="#9e9e9e" stroke-width="1"/>
+    <text x="71" y="80" text-anchor="middle" font-size="9" fill="#616161">上个月的货</text>
+    <text x="71" y="104" text-anchor="middle" font-size="9" fill="#1b5e20">取用：很快</text>
+
+    <line x1="137" y1="68" x2="163" y2="68" stroke="#2e7d32" stroke-width="1.6"/>
+    <polygon points="163,68 156,64 156,72" fill="#2e7d32"/>
+    <text x="150" y="58" text-anchor="middle" font-size="9" fill="#1b5e20">放不下的</text>
+    <text x="150" y="86" text-anchor="middle" font-size="9" fill="#1b5e20">搬过去</text>
+
+    <rect x="172" y="20" width="143" height="96" rx="5" fill="#ffffff" stroke="#2e7d32" stroke-width="1.2" stroke-dasharray="4,3"/>
+    <text x="243" y="38" text-anchor="middle" font-size="10" fill="#1b5e20">远郊大仓库（很便宜）</text>
+    <rect x="181" y="46" width="125" height="17" rx="3" fill="#eeeeee" stroke="#9e9e9e" stroke-width="1"/>
+    <text x="243" y="59" text-anchor="middle" font-size="9" fill="#616161">去年的货</text>
+    <rect x="181" y="67" width="125" height="17" rx="3" fill="#eeeeee" stroke="#9e9e9e" stroke-width="1"/>
+    <text x="243" y="80" text-anchor="middle" font-size="9" fill="#616161">前年的货</text>
+    <text x="243" y="104" text-anchor="middle" font-size="9" fill="#1b5e20">要时照样能取，只是慢些</text>
+  </g>
+
+  <!-- ============ 第二块：钥匙 ============ -->
+  <text x="200" y="243" text-anchor="middle" font-size="14" font-weight="600" fill="#c62828">钥匙就挂在门上</text>
+  <text x="600" y="243" text-anchor="middle" font-size="14" font-weight="600" fill="#2e7d32">门上只留一张"去哪儿取"的纸条</text>
+
+  <g transform="translate(35,253)">
+    <rect x="0" y="0" width="330" height="115" rx="7" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+
+    <rect x="15" y="18" width="140" height="80" rx="5" fill="#ffffff" stroke="#c62828" stroke-width="1.2"/>
+    <text x="85" y="36" text-anchor="middle" font-size="10" fill="#b71c1c">这份文件里写着</text>
+    <text x="85" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#b71c1c">开门密码：abc123</text>
+    <text x="85" y="80" text-anchor="middle" font-size="9" fill="#b71c1c">（钥匙本身就在纸上）</text>
+
+    <text x="170" y="40" font-size="10" fill="#b71c1c">这份文件要交给同事、</text>
+    <text x="170" y="56" font-size="10" fill="#b71c1c">存进档案、拷进备份……</text>
+    <text x="170" y="78" font-size="10" fill="#b71c1c">每流转一次，</text>
+    <text x="170" y="94" font-size="10" fill="#b71c1c">看见密码的人就多一批</text>
+  </g>
+
+  <g transform="translate(420,253)">
+    <rect x="0" y="0" width="330" height="115" rx="7" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+
+    <rect x="15" y="18" width="140" height="80" rx="5" fill="#ffffff" stroke="#2e7d32" stroke-width="1.2"/>
+    <text x="85" y="36" text-anchor="middle" font-size="10" fill="#1b5e20">这份文件里写着</text>
+    <text x="85" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#1b5e20">密码去某处取</text>
+    <text x="85" y="80" text-anchor="middle" font-size="9" fill="#1b5e20">（这里没有钥匙本身）</text>
+
+    <text x="170" y="40" font-size="10" fill="#1b5e20">文件随便传、随便存，</text>
+    <text x="170" y="56" font-size="10" fill="#1b5e20">看到的只是一句"去哪儿取"</text>
+    <text x="170" y="78" font-size="10" fill="#1b5e20">要换密码，只改那一处，</text>
+    <text x="170" y="94" font-size="10" fill="#1b5e20">这些文件一份都不用动</text>
+  </g>
+
+  <!-- 底部结论 -->
+  <rect x="35" y="390" width="730" height="94" rx="6" fill="#f5f5f5" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="400" y="414" text-anchor="middle" font-size="12" fill="#333333">货：不必为一年查不了几次的旧货付市区的租金 —— 挪走照样取得到，只是慢一点</text>
+  <text x="400" y="436" text-anchor="middle" font-size="12" fill="#333333">钥匙：文件里只留"去哪儿取"，不留钥匙本身</text>
+  <text x="400" y="464" text-anchor="middle" font-size="12" font-weight="700" fill="#333333">共同点：贵的、显眼的地方，只放非得放在那儿的东西</text>
+</svg>

@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="330" viewBox="0 0 800 330" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="800" height="330" fill="#ffffff"/>
+
+  <text x="400" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#1a237e">同一批货，两种装法</text>
+  <text x="400" y="48" text-anchor="middle" font-size="12" fill="#555555">每件都自带一张完整单据，还是一箱共用一张？</text>
+
+  <!-- 左：逐件 -->
+  <text x="200" y="76" text-anchor="middle" font-size="14" font-weight="600" fill="#c62828">逐件发：每件都挂一张完整单据</text>
+
+  <g transform="translate(35,92)">
+    <rect x="0" y="0" width="330" height="120" rx="7" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+    <text x="165" y="20" text-anchor="middle" font-size="11" fill="#b71c1c">单据重量 ≈ 货物本身，甚至更重</text>
+
+    <g transform="translate(14,32)">
+      <rect x="0" y="0" width="94" height="30" rx="4" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.2"/>
+      <text x="47" y="20" text-anchor="middle" font-size="9" fill="#0d47a1">单据（完整地址）</text>
+      <rect x="0" y="34" width="94" height="24" rx="4" fill="#fff8e1" stroke="#f9a825" stroke-width="1.2"/>
+      <text x="47" y="50" text-anchor="middle" font-size="9" fill="#e65100">货 1</text>
+      <rect x="0" y="76" width="94" height="30" rx="4" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.2"/>
+      <text x="47" y="96" text-anchor="middle" font-size="9" fill="#0d47a1">单据（又一张）</text>
+    </g>
+
+    <g transform="translate(120,32)">
+      <rect x="0" y="0" width="94" height="30" rx="4" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.2"/>
+      <text x="47" y="20" text-anchor="middle" font-size="9" fill="#0d47a1">单据（完整地址）</text>
+      <rect x="0" y="34" width="94" height="24" rx="4" fill="#fff8e1" stroke="#f9a825" stroke-width="1.2"/>
+      <text x="47" y="50" text-anchor="middle" font-size="9" fill="#e65100">货 2</text>
+      <rect x="0" y="76" width="94" height="30" rx="4" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.2"/>
+      <text x="47" y="96" text-anchor="middle" font-size="9" fill="#0d47a1">单据（还是一张）</text>
+    </g>
+
+    <text x="245" y="52" text-anchor="middle" font-size="11" fill="#b71c1c">同样的信息</text>
+    <text x="245" y="68" text-anchor="middle" font-size="11" fill="#b71c1c">重复写了三遍</text>
+    <text x="245" y="86" text-anchor="middle" font-size="11" fill="#b71c1c">还没法整箱一起处理</text>
+  </g>
+
+  <!-- 分隔 -->
+  <line x1="400" y1="70" x2="400" y2="300" stroke="#bbbbbb" stroke-width="1" stroke-dasharray="5,4"/>
+
+  <!-- 右：整箱 -->
+  <text x="600" y="76" text-anchor="middle" font-size="14" font-weight="600" fill="#2e7d32">整箱发：一箱共用一张单据</text>
+
+  <g transform="translate(420,92)">
+    <rect x="0" y="0" width="330" height="120" rx="7" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+    <text x="165" y="20" text-anchor="middle" font-size="11" fill="#1b5e20">单据写一次，箱里的货只写"差多少"</text>
+
+    <rect x="14" y="30" width="302" height="30" rx="4" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.5"/>
+    <text x="165" y="50" text-anchor="middle" font-size="10" fill="#0d47a1">这一整箱共用的一张单据：从哪开始 · 一共几件 · 封条</text>
+
+    <rect x="14" y="68" width="94" height="34" rx="4" fill="#fff8e1" stroke="#f9a825" stroke-width="1.2"/>
+    <text x="61" y="82" text-anchor="middle" font-size="9" fill="#e65100">货 1</text>
+    <text x="61" y="96" text-anchor="middle" font-size="9" fill="#e65100">只写：+0</text>
+
+    <rect x="120" y="68" width="94" height="34" rx="4" fill="#fff8e1" stroke="#f9a825" stroke-width="1.2"/>
+    <text x="167" y="82" text-anchor="middle" font-size="9" fill="#e65100">货 2</text>
+    <text x="167" y="96" text-anchor="middle" font-size="9" fill="#e65100">只写：+1</text>
+
+    <rect x="226" y="68" width="94" height="34" rx="4" fill="#fff8e1" stroke="#f9a825" stroke-width="1.2"/>
+    <text x="273" y="82" text-anchor="middle" font-size="9" fill="#e65100">货 3</text>
+    <text x="273" y="96" text-anchor="middle" font-size="9" fill="#e65100">只写：+2</text>
+  </g>
+
+  <rect x="35" y="228" width="730" height="76" rx="6" fill="#f5f5f5" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="400" y="252" text-anchor="middle" font-size="12" fill="#333333">右边省在哪：地址只写一次；"+0 / +1 / +2" 这种小数字，比写完整地址短得多</text>
+  <text x="400" y="274" text-anchor="middle" font-size="12" fill="#333333">而且整箱一起处理能省更多 —— 逐件处理反而可能越弄越大</text>
+  <text x="400" y="294" text-anchor="middle" font-size="12" font-weight="700" fill="#333333">所以"一箱"不是省事的技巧，而是这套格式打底的规矩</text>
+</svg>
