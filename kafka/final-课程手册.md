@@ -33,8 +33,11 @@
 | 2 | Kafka 核心架构（真动手） | 用真集群动手，说清 Topic/Partition/Broker 存储模型，讲透生产者与消费者机制 | 能跑通"建 Topic → 发 → 收"；能画出数据流并解释 offset 与再均衡 | 课 3-6 |
 | 3 | 可靠性与高可用 | 理解副本如何保证不丢数据，说清三种交付语义与幂等 | 能说清「ISR 缩小时会不会丢消息」「为什么默认至少一次会重复」 | 课 7-8 |
 | 4 | 实战与架构落地 | 写生产/消费代码、设计事件驱动架构 | 跑通最小可用 demo；能画出基于 Kafka 的项目架构图 | 课 9-10 |
+| 5 | 生产落地延伸（2026-09-10 新增） | 补上主线未覆盖的生产必备域，从「会写 demo」走到「敢上生产」 | 能配通 SASL+ACL 最小安全集群；能说清一个 ProduceRequest 在字节层面长什么样；能判断哪些主题适合开分层存储 | 课 11-14 |
+| 6 | 运维与可观测（2026-09-14 新增） | 从「敢上生产」走到「上生产之后活得下去」——知道集群好不好、能安全改动它 | 能说出 5 个「正常值应为 0」的关键指标；能独立跑完一次带限流的分区重分配并确认限流已清除；能解释为什么加了新 broker 却不分担数据 | 课 15-16 |
+| 7 | 实现原理（2026-09-14 新增） | 从「会用」走到「知道为什么」——把机制追到实现依据 | 能画出请求从网卡到落盘的链路并指出咽喉；能解释 CoordinatorLoadInProgressException 为何是自愈过程；能说清为什么升级可先升一边且不停服 | 课 17-19 |
 
-> 四个阶段一条主线：**动机（为什么）→ 机制（怎么工作）→ 保障（怎么可靠）→ 落地（怎么用对）**。
+> 六个阶段一条主线：**动机（为什么）→ 机制（怎么工作）→ 保障（怎么可靠）→ 落地（怎么用对）→ 上生产（怎么敢用）→ 上线后（怎么活得下去）**。阶段 5、6 均属延伸补充，主线 10 课不依赖它们。
 
 ---
 
@@ -298,6 +301,352 @@ flowchart TB
 **技术选型的答案永远是"看清单"，不是"看热度"**：日均 2000 万事件多下游、大促削峰、需要重放历史——适合 Kafka；每天 500 条、按部门路由、处理完流转下一环节的审批流——不该用 Kafka（那是工作流引擎的活）。
 
 > 📖 [课 10 全文](stages/4-实战与架构落地/lessons/lesson-10-项目架构设计落地.md)
+
+---
+
+## 阶段 5：生产落地延伸
+
+> 2026-09-10 对照 Apache Kafka 4.3 官方文档索引（`web-index/kafka/`）核对主线 10 课后新增，补上生产必备但主线未覆盖的四个域。
+
+### 课 11：Kafka 安全体系
+
+**知识点**：认证·授权·加密 · listeners 与协议映射
+
+**一图总结**
+
+```mermaid
+flowchart TD
+    subgraph L["监听器（门）"]
+        L1["CLIENT:9092"]
+        L2["INTERNAL:9093"]
+    end
+    subgraph P["安全协议（规则）"]
+        P1["SASL_SSL<br/>认证+加密"]
+        P2["SASL_PLAINTEXT<br/>仅认证"]
+    end
+    L1 --> P1
+    L2 --> P2
+    P1 --> A["认证 Authentication<br/>SASL: GSSAPI/PLAIN/SCRAM/OAUTHBEARER"]
+    P2 --> A
+    A --> B["授权 Authorization<br/>ACL: principal+resource+operation<br/>⚠ 不配=全放行"]
+    A --> C["加密 Encryption<br/>SSL/TLS（有性能损耗）"]
+    B --> D["安全的读写"]
+    C --> D
+    style D stroke:#3fb950,stroke-width:2px
+    style B stroke:#d29922,stroke-width:2px
+```
+
+**核心结论**：**认证 = 你是谁，授权 = 你能干什么，加密 = 路上防偷看**——三者独立、可渐进开启、可混用。最容易踩的坑是「开了认证没配 ACL」：Kafka 默认授权器在无 ACL 时**允许所有操作**，等于刷了工牌就全楼通行。四件套必须成套配：`listeners` 开端口、`listener.security.protocol.map` 定规则、`inter.broker.listener.name` 选内部通道、`advertised.listeners` 告诉客户端真地址（容器/NAT 环境下漏它是排障头号高频问题）。开 ACL 前**务必先设 `super.users`**，否则会把自己锁在门外。
+
+> 📖 [课 11 全文](stages/5-生产落地延伸/lessons/lesson-11-Kafka安全体系.md)
+
+---
+
+### 课 12：多租户与配额
+
+**知识点**：多租户隔离与配额
+
+**一图总结**
+
+```mermaid
+flowchart TD
+    subgraph NS["划地盘：命名空间"]
+        N1["层级化主题命名<br/>&lt;组织&gt;.&lt;团队&gt;.&lt;数据集&gt;.&lt;事件&gt;"]
+        N2["强制手段<br/>前缀 ACL / CreateTopicPolicy / 禁自建"]
+        N3["配套：关闭 auto.create.topics.enable"]
+        N1 --> N2 --> N3
+    end
+    subgraph QU["限量：配额"]
+        CQ["客户端配额（按 principal）<br/>请求速率 &gt; 带宽 &gt; controller_mutation"]
+        SQ["服务端配额<br/>连接速率 / 最大连接数 / 单 IP 连接数"]
+    end
+    NS --> QU
+    CQ --> TH["超限 → 限流（变慢，非报错）"]
+    SQ --> TH
+    TH --> MON["必须配监控<br/>否则看不见"]
+    style TH stroke:#d29922,stroke-width:2px
+    style MON stroke:#f85149,stroke-width:2px
+```
+
+**核心结论**：**多租户 = 用命名规范划地盘 + 用配额限量**。共享集群的诉求是降本，隔离只是手段，一个团队一套集群的运维成本不现实。配额优先该限的是**请求速率**而非带宽——官方明确指出，请求速率配额的隔离效果往往比带宽配额更显著，因为瓶颈是 broker CPU，带宽只是表象。最关键的一条：**配额超限是限流（throttling），客户端表现为「变慢」而不是「报错」**，所以不配监控根本发现不了自己被限流了。
+
+> 📖 [课 12 全文](stages/5-生产落地延伸/lessons/lesson-12-多租户与配额.md)
+
+---
+
+### 课 13：协议与消息格式
+
+**知识点**：wire protocol 与消息格式
+
+**一图总结**
+
+```mermaid
+flowchart TD
+    subgraph P["wire protocol（请求-响应·二进制）"]
+        REQ["ProduceRequest / FetchRequest / MetadataRequest"]
+    end
+    REQ --> BATCH
+    subgraph BATCH["RecordBatch（批次·基本单位）"]
+        direction TB
+        BH["头部：baseOffset / batchLength / magic / CRC<br/>attributes（压缩·事务·控制位）/ producerId<br/>baseSequence / recordsCount"]
+        REC["records[]"]
+        BH --> REC
+    end
+    REC --> R1["Record 1：length / attributes<br/>timestampDelta / offsetDelta（varint 差值）<br/>key / value / headers"]
+    REC --> R2["Record 2：同结构<br/>绝对 offset = baseOffset + offsetDelta"]
+    BATCH --> CB["Control Batch（可选）<br/>abort marker=0 / commit=1<br/>不传给应用，供 read_committed 过滤"]
+    style BH stroke:#d29922,stroke-width:2px
+    style CB stroke:#8b949e,stroke-width:2px
+```
+
+**核心结论**：**消息永远按批写入——批量是格式的基本假设，不是优化**。这解释了压缩为什么有效（作用于整批，能利用批内重复的 schema）。Record 里**不存绝对 offset**，只存相对批次的 `offsetDelta`（varint 变长编码），批内差值都是 0/1/2 这种小数字，一个字节就够，单条消息的元数据开销因此被压到极低。三个易错细节：整批大小 = `batchLength` + 12 字节；CRC 覆盖 attributes 到批次末尾、**不含 partitionLeaderEpoch**（该字段 broker 收到后才赋值，纳入校验就得每批重算）；`magic` 是版本锚点，必须先解析它才能解释后续字节——这正是新老客户端能共存的技术基础。
+
+> 📖 [课 13 全文](stages/5-生产落地延伸/lessons/lesson-13-协议与消息格式.md)
+
+---
+
+### 课 14：分层存储与配置进阶
+
+**知识点**：分层存储与配置进阶
+
+**一图总结**
+
+```mermaid
+flowchart TD
+    subgraph TS["分层存储"]
+        W["消息写入本地"] --> ROLL["segment 滚动"]
+        ROLL --> UP["上传远端对象存储"]
+        UP -- "成功" --> LR["local.retention 到期<br/>本地段删除"]
+        UP -- "未成功" --> KEEP["本地段保留<br/>（不允许删）"]
+        LR --> RR["retention.ms 到期<br/>远端数据删除"]
+        LR --> CON["仍可消费<br/>（延迟更高）"]
+    end
+    subgraph CFG["配置进阶"]
+        CP["配置提供器<br/>File / EnvVar / Directory / 自定义"]
+        SP["系统属性<br/>JVM -D 参数"]
+        CP --> OUT["敏感值外置<br/>配置文件无明文"]
+    end
+    style KEEP stroke:#f85149,stroke-width:2px
+    style UP stroke:#d29922,stroke-width:2px
+    style OUT stroke:#3fb950,stroke-width:2px
+```
+
+**核心结论**：**分层存储把存储与计算解耦**——热数据留本地 SSD，冷数据挪远端对象存储，不必按副本倍数加 broker。两级保留务必分清：`local.retention.*` 管本地段、`retention.*` 管远端总保留，且**本地段必须上传成功后才具备删除资格**（保证数据不会两边都没有）。四条限制里最要命的两条：**不支持 compacted topic**；**关集群级开关前必须先删光所有分层 topic**，否则 broker 启动抛异常。另外 Apache Kafka **不提供开箱即用的 RemoteStorageManager**，需自建或选第三方实现。配置提供器则解决「密码进 Git」——把敏感值外置为引用，文件里只留别名。
+
+> 📖 [课 14 全文](stages/5-生产落地延伸/lessons/lesson-14-分层存储与配置进阶.md)
+
+---
+
+## 阶段 6：运维与可观测
+
+> 2026-09-14 对照 Apache Kafka 4.3 官方文档索引（`web-index/kafka/`）二次核对后新增，补上最后两类缺口：官方 `operations/monitoring` 与 `basic-kafka-operations` 两整页此前零覆盖，`hardware-and-os`、`java-version` 亦未展开。
+> ✅ 两课结论**全部基于本机真实实测**：3 节点 KRaft 集群 + JMX Exporter + Prometheus + Grafana（工程见 [assets/stage6-observability](assets/stage6-observability)）。
+
+---
+
+### 课 15：监控与可观测
+
+**知识点**：监控与可观测
+
+**一图总结**
+
+```mermaid
+flowchart TB
+    subgraph SRC["指标来源"]
+        YM["Yammer Metrics<br/>服务端"] --> JMX["JMX<br/>默认禁用远程 + 无认证"]
+        KM["Kafka Metrics<br/>客户端"] --> JMX
+    end
+    subgraph COL["采集链路"]
+        JMX --> EXP["JMX Exporter<br/>javaagent / sidecar"]
+        EXP --> PROM["Prometheus<br/>10s 拉取"]
+        PROM --> GRAF["Grafana 大屏"]
+    end
+    subgraph ALT["该告警的（官方点名）"]
+        A1["UnderReplicatedPartitions = 0"]
+        A2["UnderMinIsrPartitionCount = 0"]
+        A3["ActiveControllerCount 恰好 1"]
+        A4["OfflineLogDirectoryCount = 0"]
+        A5["OfflinePartitionsCount = 0"]
+    end
+    subgraph LAG["消费延迟（需另算）"]
+        L1["CLI: consumer-groups --describe"]
+        L2["客户端指标 records-lag"]
+        L3["LogEndOffset - CurrentOffset"]
+    end
+    PROM --> ALT
+    PROM --> LAG
+    style JMX stroke:#f85149,stroke-width:2px
+    style EXP stroke:#d29922,stroke-width:2px
+```
+
+**核心结论**：**指标不缺，缺的是优先级**——单个 broker 实测暴露 **1511** 个指标（初创无 topic 时约 834，随 topic 数增长），而官方已明确标注哪些「正常值应为 0」：UnderReplicatedPartitions、UnderMinIsrPartitionCount、OfflineLogDirectoryCount、OfflinePartitionsCount。两个最容易写错的判据：**`ActiveControllerCount` 的正常值是「恰好一个 broker 为 1」，不是 0**——写成 `> 0` 会一直告警；**消费延迟 lag 不在 broker 指标里**，broker 不维护消费者的实时读进度，需用 CLI 或客户端 `records-lag` 算。安全上：**远程 JMX 默认禁用且默认无认证**，开了等于给未授权者一个**能控制 broker** 的后门，生产必须配认证 + SSL。
+
+> 📖 [课 15 全文](stages/6-运维与可观测/lessons/lesson-15-监控与可观测.md)
+
+---
+
+### 课 16：集群运维操作
+
+**知识点**：集群运维操作
+
+**一图总结**
+
+```mermaid
+flowchart TB
+    subgraph RA["分区重分配（三板斧）"]
+        G["--generate<br/>生成候选方案"] --> E["--execute<br/>执行（带 --throttle）"]
+        E --> V["--verify<br/>验证 + 清除限流"]
+        V -. "必须跑到完成" .-> V
+    end
+    subgraph TR["限流两个坑"]
+        T1["坑1：不 verify<br/>限流永久残留"]
+        T2["坑2：限流 < 写入速率<br/>复制永不推进"]
+    end
+    subgraph OPS["日常运维"]
+        S["优雅关停<br/>刷盘 + 迁 leader"] --> P["优先副本选举<br/>leader 迁回"]
+        P --> R["机架感知<br/>跨机架容灾"]
+    end
+    subgraph HW["选型"]
+        H1["XFS（推荐）<br/>160ms vs EXT4 250ms+"]
+        H2["fd ≥ 100000"]
+        H3["vm.max_map_count<br/>分区数 × 2 段"]
+        H4["Java 最新 LTS"]
+    end
+    E --> TR
+    style V stroke:#3fb950,stroke-width:2px
+    style T1 stroke:#f85149,stroke-width:2px
+    style T2 stroke:#f85149,stroke-width:2px
+```
+
+**核心结论**：**加机器 ≠ 扩容**——新 broker **不会自动分到任何分区**，必须显式跑重分配（`--generate` → `--execute` → `--verify`，三模式互斥）。限流有两个必须知道的坑：①**不跑 `--verify`，限流会永久残留**，集群长期半速运行（本课实测捕获官方警告原文 "You must run --verify periodically... to ensure the throttle is removed."）；②**限流值低于写入速率**（`max(BytesInPerSec) > throttle`）**复制永不推进**，判据是 `FetcherLagMetrics` 的 lag 应持续下降。另外：重分配工具**不会自动均衡数据分布**，该搬哪些要管理员自己判断；**目标 broker 数必须 ≥ 副本因子**（RF=3 迁到 2 个 broker 实测报 `InvalidReplicationFactorException`）。选型上官方给了硬数据：**XFS 160ms vs EXT4 250ms+ 且 XFS 免调优**（EXT4 的性能选项在故障场景下可能损坏文件系统）；文件描述符至少 10 万；**官方推荐禁用应用级 fsync**——持久性靠副本而非本地刷盘。
+
+> 📖 [课 16 全文](stages/6-运维与可观测/lessons/lesson-16-集群运维操作.md)
+
+---
+
+## 阶段 7：实现原理
+
+> 2026-09-14 新增。补齐阶段 6 登记的三项「已知未覆盖」底层实现内容。
+
+**阶段目标**：从「会用」走到「知道为什么」——把前面反复出现的机制，追到它们的实现依据。
+
+### 课 17：网络层与请求处理模型
+
+**知识点**：网络层与请求处理模型
+
+**一图总结**
+
+```mermaid
+flowchart TD
+    subgraph NET["网络层（NIO Reactor）"]
+        A["Acceptor ×1<br/>接收连接"]
+        P["Processor ×3<br/>num.network.threads<br/>读请求 / 写响应"]
+        Q["RequestChannel 队列<br/>queued.max.requests=500"]
+    end
+    subgraph IO["处理层"]
+        H["IO 线程 ×8<br/>num.io.threads<br/>校验 / 落盘 / 查数据"]
+        L[("分区日志<br/>顺序写")]
+    end
+    subgraph SEND["发送"]
+        ZC["零拷贝 sendfile<br/>transferTo<br/>2 次 DMA，0 次 CPU 拷贝"]
+    end
+    C["客户端"] --> A
+    A --> P
+    P --> Q
+    Q --> H
+    H --> L
+    L --> ZC
+    ZC --> P
+    P --> C
+    M["⚠️ RequestHandlerAvgIdlePercent<br/>实测为累积计数，勿当比率告警"] -.-> H
+    style Q stroke:#d29922,stroke-width:2px
+    style ZC stroke:#238636,stroke-width:2px
+    style M stroke:#da3633,stroke-width:2px
+```
+
+**核心结论**：网络层是标准 Reactor NIO——1 个 acceptor + N 个 processor（**默认 3**）+ M 个 IO 线程（**默认 8**），用请求队列解耦。**排查性能问题先看队列积压，再调线程数**：实测 processor 空闲比 1.0、队列 0 积压，说明 33 MB/s 是单客户端压测上限而非集群上限。⚠️ **`RequestHandlerAvgIdlePercent` 实测是单调累积计数**（5 次采样 2.36e11→2.62e11），不是 0~1 比率，照抄教程配 `< 0.3` 告警将**永不触发**；改用 `RequestQueueSize` + `TotalTimeMs`。零拷贝只在消费拉取路径生效，靠 `TransferableRecords.writeTo` → `transferTo` 把 4 次拷贝（含 2 次 CPU）降到 2 次 DMA。
+
+> 📖 [课 17 全文](stages/7-实现原理/lessons/lesson-17-网络层与请求处理模型.md)
+
+---
+
+### 课 18：消费者位移与协调者
+
+**知识点**：消费者位移与协调者
+
+**一图总结**
+
+```mermaid
+flowchart TD
+    subgraph DISCOVER["① 发现协调者"]
+        C1["消费者启动"] --> C2["向任意 broker 发<br/>FindCoordinator"]
+        C2 --> C3["返回：你的组归<br/>broker N 管"]
+    end
+    subgraph COMMIT["② 提交位移"]
+        D1["处理完消息"] --> D2["OffsetCommit 请求<br/>发给协调者"]
+        D2 --> D3["追加到 __consumer_offsets<br/>compact topic，50 分区，RF=3"]
+        D3 --> D4["⚠️ 所有副本收到后<br/>才返回成功"]
+        D4 --> D5["同步更新内存缓存"]
+    end
+    subgraph FETCH["③ 查询位移"]
+        E1["OffsetFetch 请求"] --> E2{"缓存已加载？"}
+        E2 -->|"是"| E3["直接返回缓存值"]
+        E2 -->|"否（刚接手）"| E4["CoordinatorLoadInProgressException<br/>退避重试"]
+    end
+    C3 --> D2
+    C3 --> E1
+    D5 --> E2
+    style D4 stroke:#da3633,stroke-width:2px
+    style E4 stroke:#d29922,stroke-width:2px
+```
+
+**核心结论**：**每个消费组有专属协调者 broker**，按 `hash(group.id) % 50` 决定归属分区，该分区的 leader 即协调者；消费者通过 `FindCoordinator` 发现（**可向任意 broker 发起**，自举设计）。**提交成功要求所有副本都收到**才返回，不是 leader 单独确认。**`CoordinatorLoadInProgressException` 是正常自愈过程**——协调者变更后新协调者加载缓存期间拒绝查询，客户端自动退避重试（实测：停 broker 2 → 协调者变为 broker 3）。`__consumer_offsets` 是 compact topic，且 **`segment.bytes` 被特意调小到 100MB**（默认 1GB）以加快压实。
+
+> 📖 [课 18 全文](stages/7-实现原理/lessons/lesson-18-消费者位移与协调者.md)
+
+> ⚠️ **主题偏差**：本课原定「分区分配算法」，抓取官方 4.3 原文后发现 `implementation/distribution` 页面已改为只讲 Consumer Offset Tracking（**无副本分配算法原文**），机架感知已在课 16 覆盖，故改题。详见[阶段 7 概览](stages/7-实现原理/overview.md)。
+
+---
+
+### 课 19：协议版本与兼容性
+
+**知识点**：协议版本与兼容性
+
+**一图总结**
+
+```mermaid
+flowchart TD
+    subgraph HANDSHAKE["① 建连协商"]
+        A1["TCP 连接建立"] --> A2["ApiVersionsRequest v0<br/>（最低版本自举）"]
+        A2 --> A3["broker 返回 183 个 API<br/>的版本区间<br/>无需认证"]
+        A3 --> A4["客户端取<br/>min(自己max, broker max)"]
+    end
+    subgraph REQ["② 请求携带版本"]
+        B1["ProduceRequest<br/>version=12"] --> B2["broker 按 v12 解析"]
+        B2 --> B3["broker 按 v12 格式<br/>构造响应"]
+    end
+    subgraph COMPAT["③ 双向兼容承诺"]
+        C1["新客户端 ↔ 老 broker"]
+        C2["老客户端 ↔ 新 broker"]
+        C3["→ 先升一边，不停服"]
+    end
+    subgraph EVOLVE["④ 演进方式"]
+        D1["升版本号<br/>结构性变更"]
+        D2["Tagged Fields<br/>可选稀疏字段<br/>不占空间"]
+    end
+    A4 --> B1
+    B3 --> C1
+    B3 --> C2
+    C1 --> C3
+    C2 --> C3
+    style A2 stroke:#d29922,stroke-width:2px
+    style C3 stroke:#238636,stroke-width:2px
+    style D2 stroke:#0969da,stroke-width:2px
+```
+
+**核心结论**：**Kafka 承诺双向兼容**——新客户端能连老 broker、老客户端能连新 broker，因此**可先升一边、全程不停服**。版本在建连时协商，取双方都支持的最高版本：**实测 Fetch 支持 `4 to 17` 且客户端用 17、Metadata `0 to 13` 用 13、ApiVersions `0 to 4` 用 4，均等于 broker usable 上界**。`ApiVersions` 用最低版本 v0 发送且**无需认证**（KIP-35，自 0.10.0.0 起），**结果只对当前连接有效**，断线必须重问。broker 会**按请求声明的版本格式构造响应**——不同版本客户端连同一 broker 拿到的字节格式不同，各自都能解析。演进有两条路：结构性变更升版本号；可选稀疏字段用 **Tagged Fields**（不升版、未设置时不占空间）。本环境 API 共 **183** 个，其中 **UNSUPPORTED 33** 个。
+
+> 📖 [课 19 全文](stages/7-实现原理/lessons/lesson-19-协议版本与兼容性.md)
 
 ---
 

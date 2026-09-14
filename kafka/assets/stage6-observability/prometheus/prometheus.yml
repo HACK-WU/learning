@@ -1,0 +1,19 @@
+global:
+  scrape_interval: 10s
+  evaluation_interval: 10s
+
+scrape_configs:
+  # 直连 broker 内 JMX Exporter javaagent 暴露的 HTTP 端口
+  - job_name: kafka
+    static_configs:
+      - targets:
+          - kafka-1:17071
+          - kafka-2:17072
+          - kafka-3:17073
+        labels:
+          cluster: lesson15
+
+  - job_name: prometheus
+    static_configs:
+      - targets:
+          - localhost:9090

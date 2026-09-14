@@ -1,0 +1,76 @@
+lowercaseOutputName: true
+lowercaseOutputLabelNames: true
+
+rules:
+  # 关键 broker 指标：ISR 相关（官方点名要告警的）
+  - pattern: 'kafka.server<type=ReplicaManager, name=(UnderReplicatedPartitions|UnderMinIsrPartitionCount|AtMinIsrPartitionCount|OfflineReplicaCount|PartitionCount|LeaderCount|IsrShrinksPerSec|IsrExpandsPerSec)><>Value'
+    name: kafka_server_replicamanager_$1
+    type: GAUGE
+
+  # 请求处理
+  # 【实测结论 2026-09-14】RequestHandlerAvgIdlePercent 经本配置导出的是「单调累积计数」，
+  # 不是 0~1 的空闲比率：连续 5 次采样严格递增（2.36e11 → 2.62e11，每 3 秒约 +6.3e9），
+  # 该 MBean 在本环境只暴露 Count 一个属性，无 Value 属性（已实测确认，见课 17 讲义）。
+  # 因此**不要**拿它当比率配告警（如 `> 0.3` 会永远触发）。
+  # 可用的真实空闲比替代：kafka_network_processor_idlepercent（每个 network processor 的 0~1 值）
+  # 以及 kafka_network_socketserver_networkprocessoravgidlepercent。
+  # 队列积压用：kafka_network_requestchannel_requestqueuesize。
+  - pattern: 'kafka.network<type=Processor, name=IdlePercent, networkProcessor=(.+)><>Value'
+    name: kafka_network_processor_idlepercent
+    type: GAUGE
+    labels:
+      networkProcessor: "$1"
+
+  - pattern: 'kafka.network<type=SocketServer, name=NetworkProcessorAvgIdlePercent><>Value'
+    name: kafka_network_socketserver_networkprocessoravgidlepercent
+    type: GAUGE
+
+  - pattern: 'kafka.network<type=RequestMetrics, name=(RequestsPerSec|ErrorsPerSec|TotalTimeMs|RequestQueueTimeMs), request=(.+), version=(.+)><>Count'
+    name: kafka_network_requestmetrics_$1_count
+    type: COUNTER
+    labels:
+      request: "$2"
+      version: "$3"
+
+  - pattern: 'kafka.network<type=RequestChannel, name=RequestQueueSize><>Value'
+    name: kafka_network_requestchannel_requestqueuesize
+    type: GAUGE
+
+  # 吞吐（BytesIn/BytesOut）
+  - pattern: 'kafka.server<type=BrokerTopicMetrics, name=(BytesInPerSec|BytesOutPerSec|MessagesInPerSec|TotalProduceRequestsPerSec|TotalFetchRequestsPerSec|FailedProduceRequestsPerSec|FailedFetchRequestsPerSec), topic=(.+)><>Count'
+    name: kafka_server_brokertopicmetrics_$1_total
+    type: COUNTER
+    labels:
+      topic: "$2"
+
+  - pattern: 'kafka.server<type=BrokerTopicMetrics, name=(BytesInPerSec|BytesOutPerSec|MessagesInPerSec|TotalProduceRequestsPerSec|TotalFetchRequestsPerSec), topic=(.+)><>OneMinuteRate'
+    name: kafka_server_brokertopicmetrics_$1_rate
+    type: GAUGE
+    labels:
+      topic: "$2"
+
+  # 日志刷盘与离线目录
+  - pattern: 'kafka.log<type=LogManager, name=OfflineLogDirectoryCount><>Value'
+    name: kafka_log_logmanager_offlinelogdirectorycount
+    type: GAUGE
+
+  # Controller
+  - pattern: 'kafka.controller<type=KafkaController, name=(ActiveControllerCount|OfflinePartitionsCount|GlobalTopicCount|GlobalPartitionCount|PreferredReplicaImbalanceCount)><>Value'
+    name: kafka_controller_kafkacontroller_$1
+    type: GAUGE
+
+  # KRaft 法定人数
+  - pattern: 'kafka.server<type=raft-metrics, name=(current-state|current-leader|current-voted|current-epoch|high-watermark|log-end-offset|number-of-unknown-voter-connections)><>Value'
+    name: kafka_raft_$1
+    type: GAUGE
+
+  # 通用兜底：Yammer 的 Value / Count
+  - pattern: 'kafka.(\w+)<type=(.+), name=(.+), (.+)><>(Value|Count)'
+    name: kafka_$1_$2_$3
+    type: GAUGE
+    labels:
+      "$4": ""
+
+  - pattern: 'kafka.(\w+)<type=(.+), name=(.+)><>(Value|Count)'
+    name: kafka_$1_$2_$3
+    type: GAUGE
