@@ -1,0 +1,198 @@
+
+==============================================================================
+SETUP · 建表
+==============================================================================
+  NOTICE:  table "accounts" does not exist, skipping
+  NOTICE:  table "task_queue" does not exist, skipping
+  NOTICE:  table "inventory" does not exist, skipping
+   accounts 
+  ----------
+          3
+  (1 row)
+
+==============================================================================
+实验 A · 各命令在 finance.accounts 上自动获取的表级锁
+==============================================================================
+  （单会话：BEGIN → 执行命令 → 查 pg_locks → ROLLBACK）
+
+  SELECT                           → (1 row)
+  UPDATE                           → (1 row)
+  INSERT                           → (1 row)
+  DELETE                           → (1 row)
+  SELECT FOR UPDATE                → (1 row)
+  SELECT FOR SHARE                 → (1 row)
+  SELECT FOR NO KEY UPDATE         → (1 row)
+  SELECT FOR KEY SHARE             → (1 row)
+  CREATE INDEX                     → (1 row)
+  ALTER TABLE ADD COLUMN           → (1 row)
+  TRUNCATE                         → (1 row)
+  LOCK TABLE (不写模式 = 默认)           → (1 row)
+  VACUUM 之外：ANALYZE                → (1 row)
+
+  --- 显式 LOCK TABLE 八种模式全列 ---
+  LOCK TABLE ... IN ACCESS SHARE MODE        → (1 row)
+  LOCK TABLE ... IN ROW SHARE MODE           → (1 row)
+  LOCK TABLE ... IN ROW EXCLUSIVE MODE       → (1 row)
+  LOCK TABLE ... IN SHARE UPDATE EXCLUSIVE MODE → (1 row)
+  LOCK TABLE ... IN SHARE MODE               → (1 row)
+  LOCK TABLE ... IN SHARE ROW EXCLUSIVE MODE → (1 row)
+  LOCK TABLE ... IN EXCLUSIVE MODE           → (1 row)
+  LOCK TABLE ... IN ACCESS EXCLUSIVE MODE    → (1 row)
+
+==============================================================================
+实验 B · ACCESS EXCLUSIVE 是唯一能阻塞纯 SELECT 的模式（官方 Tip 实测）
+==============================================================================
+  HOLDER:               note              
+  HOLDER: --------------------------------
+  HOLDER:  HOLDER 已持有 ACCESS EXCLUSIVE
+  HOLDER: (1 row)
+
+==============================================================================
+  3 秒后 OBS 观察（SELECT 应该仍在等待）
+==============================================================================
+   pid  | state  | wait_event_type | wait_event |                       query_head                       | blocked_by 
+  ------+--------+-----------------+------------+--------------------------------------------------------+------------
+   3732 | active | Lock            | relation   | SELECT id, balance FROM finance.accounts WHERE id = 1; | {3733}
+  (1 row)
+   pid  | locktype |        mode         | granted |   rel    | blocked_by 
+  ------+----------+---------------------+---------+----------+------------
+   3733 | relation | AccessExclusiveLock | t       | accounts | {}
+   3732 | relation | AccessShareLock     | f       | accounts | {3733}
+  (2 rows)
+
+  HOLDER ROLLBACK 后，WAITER 的结果（等了 3.0 秒）：
+   id | balance 
+  ----+---------
+    1 | 1000.00
+  (1 row)
+
+==============================================================================
+实验 C · ROW EXCLUSIVE 之间不冲突（两个会话同时 UPDATE 不同行）
+==============================================================================
+  WAITER:               note               
+  WAITER: ---------------------------------
+  WAITER:  WAITER 改 id=2 成功（没被阻塞）
+  WAITER: (1 row)
+
+==============================================================================
+实验 D · SHARE 模式：阻塞写入，但不阻塞读
+==============================================================================
+
+  D-1 读（SELECT）应畅通：
+   cnt 
+  -----
+     3
+  (1 row)
+  D-2 写（UPDATE）应被阻塞：
+   pid  | state  | wait_event_type | wait_event |                         query_head                         | blocked_by 
+  ------+--------+-----------------+------------+------------------------------------------------------------+------------
+   3732 | active | Lock            | relation   | UPDATE finance.accounts SET balance = balance WHERE id = 3 | {3733}
+  (1 row)
+   pid  | locktype |       mode       | granted |   rel    | blocked_by 
+  ------+----------+------------------+---------+----------+------------
+   3733 | relation | ShareLock        | t       | accounts | {}
+   3732 | relation | RowExclusiveLock | f       | accounts | {3733}
+  (2 rows)
+
+  HOLDER ROLLBACK 后 WAITER：
+
+==============================================================================
+实验 E · SHARE UPDATE EXCLUSIVE（VACUUM/ANALYZE/CREATE INDEX CONCURRENTLY 用的模式）
+==============================================================================
+  HOLDER:        note        
+  HOLDER: -------------------
+  HOLDER:  HOLDER 持有 SHARE
+  HOLDER: (1 row)
+  E-1 读：
+   cnt 
+  -----
+     3
+  (1 row)
+  E-2 写：
+         note       
+  ------------------
+   写成功，没被阻塞
+  (1 row)
+  E-3 第二个会话也想拿 SHARE UPDATE EXCLUSIVE（自我冲突 → 应阻塞）：
+   pid  | state  | wait_event_type | wait_event |                         query_head                         | blocked_by 
+  ------+--------+-----------------+------------+------------------------------------------------------------+------------
+   3732 | active | Lock            | relation   | LOCK TABLE finance.accounts IN SHARE UPDATE EXCLUSIVE MODE | {3733}
+  (1 row)
+  HOLDER ROLLBACK 后 WAITER：
+   note 
+  ------
+   拿到
+  (1 row)
+
+==============================================================================
+实验 F · lock_timeout 实测（等锁超时报错，而不是无限等）
+==============================================================================
+  WAITER（lock_timeout=2s）：
+  ERROR:  canceling statement due to lock timeout
+  LINE 1: SELECT id FROM finance.accounts WHERE id = 1;
+                         ^
+  Time: 2003.119 ms (00:02.003)
+
+==============================================================================
+实验 G · NOWAIT：不等，直接报错
+==============================================================================
+  G-1 SELECT FOR UPDATE NOWAIT：
+   id | owner | balance 
+  ----+-------+---------
+    1 | alice | 1000.00
+  (1 row)
+  Time: 4.324 ms
+  G-2 SELECT FOR UPDATE（默认会等）：
+   pid | state | wait_event_type | wait_event | query_head | blocked_by 
+  -----+-------+-----------------+------------+------------+------------
+  (0 rows)
+  HOLDER ROLLBACK 后 WAITER：
+  ERROR:  canceling statement due to lock timeout
+  CONTEXT:  while locking tuple (0,1) in relation "accounts"
+  Time: 2001.082 ms (00:02.001)
+
+==============================================================================
+实验 H · SKIP LOCKED：跳过被锁的行（队列场景）
+==============================================================================
+  HOLDER:              note             
+  HOLDER: ------------------------------
+  HOLDER:  HOLDER 持有 ACCESS EXCLUSIVE
+  HOLDER: (1 row)
+  H-1 普通 SELECT FOR UPDATE（应阻塞）：
+   pid | state | wait_event_type | wait_event | query_head | blocked_by 
+  -----+-------+-----------------+------------+------------+------------
+  (0 rows)
+  H-2 换成 SKIP LOCKED：
+  (上面那条解除阻塞后返回)  id 
+  (上面那条解除阻塞后返回) ----
+  (上面那条解除阻塞后返回)   1
+  (上面那条解除阻塞后返回)   2
+  (上面那条解除阻塞后返回)   3
+  (上面那条解除阻塞后返回)   4
+  (上面那条解除阻塞后返回)   5
+  (上面那条解除阻塞后返回) (5 rows)
+  (上面那条解除阻塞后返回) Time: 2.159 ms
+  无锁时全部返回:  id | payload 
+  无锁时全部返回: ----+---------
+  无锁时全部返回:   1 | task-1
+  无锁时全部返回:   2 | task-2
+  无锁时全部返回:   3 | task-3
+  无锁时全部返回:   4 | task-4
+  无锁时全部返回:   5 | task-5
+  无锁时全部返回: (5 rows)
+  无锁时全部返回: Time: 1.291 ms
+
+  --- 再演一次：持锁下 SKIP LOCKED ---
+  SKIP LOCKED 结果:  id | payload 
+  SKIP LOCKED 结果: ----+---------
+  SKIP LOCKED 结果:   1 | task-1
+  SKIP LOCKED 结果:   2 | task-2
+  SKIP LOCKED 结果:   3 | task-3
+  SKIP LOCKED 结果:   4 | task-4
+  SKIP LOCKED 结果:   5 | task-5
+  SKIP LOCKED 结果: (5 rows)
+  SKIP LOCKED 结果: Time: 0.713 ms
+
+==============================================================================
+实验 1 结束
+==============================================================================

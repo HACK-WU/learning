@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="680" viewBox="0 0 1100 680" role="img" aria-labelledby="title desc">
+  <title id="title">订单系统的 PostgreSQL 生产化全链路</title>
+  <desc id="desc">应用把写请求送到主库，主库通过 WAL 异步流复制到备库，同时归档 WAL 并生成逻辑与物理备份；监控面观察连接、复制、WAL、表和语句指标。</desc>
+  <rect width="1100" height="680" fill="#ffffff"/>
+  <text x="55" y="48" font-family="sans-serif" font-size="28" font-weight="700" fill="#263238">订单系统的 PG 生产化全链路</text>
+  <text x="55" y="76" font-family="sans-serif" font-size="15" fill="#546e7a">一条写请求、三类恢复资产、一个可观测的异步复制闭环</text>
+
+  <rect x="45" y="105" width="1010" height="125" rx="14" fill="#f5f9ff" stroke="#90caf9" stroke-width="2"/>
+  <text x="68" y="135" font-family="sans-serif" font-size="16" font-weight="700" fill="#1565c0">应用与访问边界</text>
+  <rect x="70" y="153" width="190" height="54" rx="9" fill="#1565c0"/>
+  <text x="165" y="177" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="700" fill="#ffffff">order-service</text>
+  <text x="165" y="196" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#e3f2fd">幂等键 · 事务 · 租户上下文</text>
+  <rect x="305" y="153" width="190" height="54" rx="9" fill="#ffffff" stroke="#42a5f5" stroke-width="2"/>
+  <text x="400" y="177" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="700" fill="#1565c0">app_runtime</text>
+  <text x="400" y="196" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#455a64">最小权限 · 只走函数</text>
+  <line x1="260" y1="180" x2="305" y2="180" stroke="#1565c0" stroke-width="3"/>
+  <polygon points="305,180 294,174 294,186" fill="#1565c0"/>
+
+  <rect x="45" y="260" width="640" height="300" rx="14" fill="#fffaf5" stroke="#ffcc80" stroke-width="2"/>
+  <text x="68" y="290" font-family="sans-serif" font-size="16" font-weight="700" fill="#ef6c00">数据平面</text>
+  <rect x="80" y="325" width="240" height="100" rx="10" fill="#ef6c00"/>
+  <text x="200" y="359" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="700" fill="#ffffff">Primary</text>
+  <text x="200" y="384" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#fff3e0">orders schema · RLS</text>
+  <text x="200" y="404" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#fff3e0">WAL · pg_stat_statements</text>
+  <rect x="400" y="325" width="240" height="100" rx="10" fill="#ffffff" stroke="#ef6c00" stroke-width="3"/>
+  <text x="520" y="359" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="700" fill="#ef6c00">Standby</text>
+  <text x="520" y="384" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#5d4037">hot_standby · 只读查询</text>
+  <text x="520" y="404" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#5d4037">slot · async streaming</text>
+  <line x1="320" y1="375" x2="400" y2="375" stroke="#ef6c00" stroke-width="4"/>
+  <polygon points="400,375 388,368 388,382" fill="#ef6c00"/>
+  <text x="360" y="356" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#e65100">WAL 流复制</text>
+  <rect x="120" y="465" width="470" height="60" rx="9" fill="#fff3e0" stroke="#ffb74d"/>
+  <text x="355" y="490" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="700" fill="#e65100">订单写入路径</text>
+  <text x="355" y="510" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#6d4c41">place_order → reserve_stock → order_event</text>
+
+  <rect x="735" y="260" width="320" height="300" rx="14" fill="#f6fbf7" stroke="#a5d6a7" stroke-width="2"/>
+  <text x="758" y="290" font-family="sans-serif" font-size="16" font-weight="700" fill="#2e7d32">恢复与观察平面</text>
+  <rect x="765" y="320" width="260" height="58" rx="9" fill="#2e7d32"/>
+  <text x="895" y="345" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="700" fill="#ffffff">WAL archive</text>
+  <text x="895" y="363" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#e8f5e9">PITR 的连续时间线</text>
+  <rect x="765" y="400" width="125" height="92" rx="9" fill="#ffffff" stroke="#66bb6a" stroke-width="2"/>
+  <text x="827" y="427" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="700" fill="#2e7d32">逻辑备份</text>
+  <text x="827" y="450" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#455a64">pg_dump</text>
+  <text x="827" y="470" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#455a64">pg_restore</text>
+  <rect x="915" y="400" width="110" height="92" rx="9" fill="#ffffff" stroke="#66bb6a" stroke-width="2"/>
+  <text x="970" y="427" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="700" fill="#2e7d32">物理备份</text>
+  <text x="970" y="450" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#455a64">basebackup</text>
+  <text x="970" y="470" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#455a64">timeline</text>
+  <line x1="320" y1="425" x2="735" y2="350" stroke="#43a047" stroke-width="3" stroke-dasharray="8 7"/>
+  <polygon points="735,350 721,347 726,360" fill="#43a047"/>
+  <text x="535" y="400" font-family="sans-serif" font-size="12" fill="#2e7d32">归档 WAL</text>
+  <line x1="320" y1="450" x2="765" y2="445" stroke="#81c784" stroke-width="2" stroke-dasharray="5 6"/>
+  <line x1="320" y1="465" x2="915" y2="445" stroke="#81c784" stroke-width="2" stroke-dasharray="5 6"/>
+
+  <rect x="45" y="595" width="1010" height="55" rx="10" fill="#eceff1"/>
+  <text x="68" y="619" font-family="sans-serif" font-size="14" font-weight="700" fill="#37474f">验收闭环</text>
+  <text x="155" y="619" font-family="sans-serif" font-size="13" fill="#455a64">数据完整性 → 并发正确性 → 复制一致性 → 逻辑恢复 → PITR 恢复点 → 指标可见 → 安全边界</text>
+  <text x="68" y="640" font-family="sans-serif" font-size="12" fill="#607d8b">本项目默认端口：Primary 15432 · Standby 15434；异步复制可能存在 RPO 窗口，不能冒充自动 HA。</text>
+</svg>

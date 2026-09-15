@@ -1,0 +1,96 @@
+services:
+  primary:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-order_service}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pg_demo_only}
+      REPLICATION_PASSWORD: ${REPLICATION_PASSWORD:-replica_demo_only}
+      APP_PASSWORD: ${APP_PASSWORD:-app_demo_only}
+      REPORT_PASSWORD: ${REPORT_PASSWORD:-report_demo_only}
+      TENANT_PASSWORD: ${TENANT_PASSWORD:-tenant_demo_only}
+    command:
+      - postgres
+      - -c
+      - listen_addresses=*
+      - -c
+      - wal_level=replica
+      - -c
+      - max_wal_senders=10
+      - -c
+      - max_replication_slots=4
+      - -c
+      - wal_keep_size=64MB
+      - -c
+      - archive_mode=on
+      - -c
+      - archive_command=test ! -f /var/lib/postgresql/data/pg_wal_archive/%f && cp %p /var/lib/postgresql/data/pg_wal_archive/%f
+      - -c
+      - shared_preload_libraries=pg_stat_statements
+      - -c
+      - track_io_timing=on
+      - -c
+      - log_min_duration_statement=250
+      - -c
+      - max_connections=50
+    ports:
+      - "${PRIMARY_PORT:-15432}:5432"
+    volumes:
+      - primary_data:/var/lib/postgresql/data
+      - ./primary/initdb:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d order_service"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  standby:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-order_service}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pg_demo_only}
+      REPLICATION_PASSWORD: ${REPLICATION_PASSWORD:-replica_demo_only}
+    depends_on:
+      primary:
+        condition: service_healthy
+    command:
+      - sh
+      - -ceu
+      - |
+        export PGPASSWORD="$${REPLICATION_PASSWORD}"
+        until pg_isready -h primary -U postgres -d "$${POSTGRES_DB}"; do
+          sleep 1
+        done
+        if [ ! -s "$${PGDATA}/PG_VERSION" ]; then
+          rm -rf "$${PGDATA}"/*
+          pg_basebackup \
+            -h primary \
+            -D "$${PGDATA}" \
+            -U replicator \
+            -Fp \
+            -Xs \
+            -R \
+            --slot=capstone_standby
+          printf '%s\n' "primary:5432:*:replicator:$${REPLICATION_PASSWORD}" > "$${PGDATA}/.pgpass"
+          chmod 600 "$${PGDATA}/.pgpass"
+          cat >> "$${PGDATA}/postgresql.auto.conf" <<'EOF'
+        primary_conninfo = 'host=primary port=5432 user=replicator application_name=pg-capstone-standby passfile=/var/lib/postgresql/data/.pgpass'
+        primary_slot_name = 'capstone_standby'
+        EOF
+          chown -R postgres:postgres "$${PGDATA}"
+        fi
+        exec /usr/local/bin/docker-entrypoint.sh postgres -c hot_standby=on -c listen_addresses='*'
+    ports:
+      - "${STANDBY_PORT:-15434}:5432"
+    volumes:
+      - standby_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d order_service"]
+      interval: 2s
+      timeout: 3s
+      retries: 60
+
+volumes:
+  primary_data:
+  standby_data:

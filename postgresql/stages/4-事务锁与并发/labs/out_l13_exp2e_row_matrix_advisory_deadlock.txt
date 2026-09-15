@@ -1,0 +1,39 @@
+
+
+==============================================================================
+实验 I（重测）· 行级锁冲突矩阵 · 阻塞观察法
+==============================================================================
+  行 = A 已持有（Current）；列 = B 请求（Requested）；X=冲突  ✓=兼容
+
+  A＼B                KEY SHARE     SHARE         NO KEY UPDATE      UPDATE       
+  ----------------------------------------------------------------------------
+  FOR KEY SHARE      ✓             ✓             ✓                  X            
+  FOR SHARE          ✓             ✓             X                  X            
+  FOR NO KEY UPDATE  ✓             X             X                  X            
+  FOR UPDATE         X             X             X                  X            
+
+
+==============================================================================
+实验 L（重测）· 死锁的 SQLSTATE
+==============================================================================
+A: 
+B: 
+
+OBS 观察等待中的会话：
+ pid  | wait_event_type |  wait_event   | blocked_by 
+------+-----------------+---------------+------------
+ 3948 | Lock            | transactionid | {3947}
+(1 row)
+
+A 触发死锁 → A 的完整报错：
+ERROR:  40P01: deadlock detected
+DETAIL:  Process 3947 waits for ShareLock on transaction 1345; blocked by process 3948.
+Process 3948 waits for ShareLock on transaction 1344; blocked by process 3947.
+HINT:  See server log for query details.
+CONTEXT:  while updating tuple (0,43) in relation "accounts"
+LOCATION:  DeadLockReport, deadlock.c:1130
+
+B 随后成功完成：
+[]
+
+补测 v3 结束

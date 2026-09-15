@@ -1,0 +1,176 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 600" font-family="-apple-system, 'PingFang SC', 'Segoe UI', sans-serif">
+  <rect width="920" height="600" fill="#fafafa"/>
+
+  <!-- 标题 -->
+  <text x="460" y="28" text-anchor="middle" font-size="20" font-weight="700" fill="#0d47a1">课 4 一图总结 · 三种关系 + 范式 vs 反范式</text>
+  <text x="460" y="48" text-anchor="middle" font-size="11" fill="#666">上：4.1 / 4.2 / 4.3 三件事 · 下：order_service 四表 ER 关系 + 决策心法 · 事实核查于 2026-09-06</text>
+
+  <!-- ========= 上半：3 个知识点 ========= -->
+
+  <!-- ===== 4.1 ===== -->
+  <g transform="translate(20, 66)">
+    <rect width="280" height="196" rx="8" fill="#ffffff" stroke="#bcd"/>
+    <rect width="280" height="28" rx="8" fill="#0d47a1"/>
+    <text x="14" y="19" font-size="13" font-weight="700" fill="#ffffff">4.1 主键 / 外键 / 唯一约束</text>
+
+    <text x="14" y="50" font-size="11" font-weight="700" fill="#1565c0">🎯 用途：身份证 + 认亲戚</text>
+
+    <g transform="translate(14, 60)">
+      <rect width="252" height="94" rx="4" fill="#f5f7fa" stroke="#cfd8dc"/>
+      <text x="8" y="15" font-size="10" fill="#333"><tspan font-weight="700" fill="#0d47a1">PRIMARY KEY</tspan>  唯一 + 非空 · 1 个</text>
+      <text x="8" y="31" font-size="10" fill="#333"><tspan font-weight="700" fill="#0d47a1">UNIQUE      </tspan>  值不重复 · 可 NULL</text>
+      <text x="8" y="47" font-size="10" fill="#333"><tspan font-weight="700" fill="#388e3c">FOREIGN KEY </tspan>  指向别人主键</text>
+      <text x="8" y="63" font-size="10" fill="#333">  ↳ 5 动作：<tspan fill="#0d47a1">NO ACTION(默认,可defer)</tspan></text>
+      <text x="8" y="77" font-size="10" fill="#333">     RESTRICT / CASCADE /</text>
+      <text x="8" y="90" font-size="10" fill="#333">     SET NULL / SET DEFAULT</text>
+    </g>
+
+    <text x="14" y="170" font-size="10" font-weight="700" fill="#c62828">⚠️ 外键不自动建索引！引用侧必须手动建</text>
+    <text x="14" y="186" font-size="10" font-weight="700" fill="#0d47a1">一句话：身份证 · 认亲戚 · 防重复</text>
+  </g>
+
+  <!-- ===== 4.2 ===== -->
+  <g transform="translate(320, 66)">
+    <rect width="280" height="196" rx="8" fill="#ffffff" stroke="#bcd"/>
+    <rect width="280" height="28" rx="8" fill="#0d47a1"/>
+    <text x="14" y="19" font-size="13" font-weight="700" fill="#ffffff">4.2 一对多 / 多对多 / 自引用</text>
+
+    <text x="14" y="50" font-size="11" font-weight="700" fill="#1565c0">🎯 用途：把现实关系翻译成表</text>
+
+    <g transform="translate(14, 60)">
+      <rect width="252" height="94" rx="4" fill="#f5f7fa" stroke="#cfd8dc"/>
+      <text x="8" y="15" font-size="10" fill="#333"><tspan font-weight="700" fill="#0d47a1">一对多</tspan>  外键放"多"的那侧</text>
+      <text x="8" y="29" font-size="10" fill="#666">         users → orders</text>
+      <text x="8" y="45" font-size="10" fill="#333"><tspan font-weight="700" fill="#388e3c">多对多</tspan>  拆中间表 + 两端外键</text>
+      <text x="8" y="59" font-size="10" fill="#666">         orders ↔ products</text>
+      <text x="8" y="71" font-size="10" fill="#666">         → order_items</text>
+      <text x="8" y="87" font-size="10" fill="#333"><tspan font-weight="700" fill="#e65100">自引用</tspan>  外键指自己（parent_id）</text>
+    </g>
+
+    <text x="14" y="170" font-size="10" font-weight="700" fill="#c62828">⚠️ 深树别硬用递归 CTE → 换 ltree + GiST</text>
+    <text x="14" y="186" font-size="10" font-weight="700" fill="#0d47a1">一句话：外键放多侧 · 中间表 · 指自己</text>
+  </g>
+
+  <!-- ===== 4.3 ===== -->
+  <g transform="translate(620, 66)">
+    <rect width="280" height="196" rx="8" fill="#ffffff" stroke="#bcd"/>
+    <rect width="280" height="28" rx="8" fill="#0d47a1"/>
+    <text x="14" y="19" font-size="13" font-weight="700" fill="#ffffff">4.3 范式与反范式（决策点）</text>
+
+    <text x="14" y="50" font-size="11" font-weight="700" fill="#1565c0">🎯 用途：该不该加冗余字段</text>
+
+    <g transform="translate(14, 60)">
+      <rect width="252" height="94" rx="4" fill="#f5f7fa" stroke="#cfd8dc"/>
+      <text x="8" y="15" font-size="10" fill="#333"><tspan font-weight="700" fill="#0d47a1">默认：规范化到 3NF</tspan></text>
+      <text x="8" y="29" font-size="10" fill="#666">  1NF 一格一值 / 2NF 依赖整个主键</text>
+      <text x="8" y="41" font-size="10" fill="#666">  3NF 无传递依赖</text>
+      <text x="8" y="58" font-size="10" font-weight="700" fill="#388e3c">三类合理反范式：</text>
+      <text x="8" y="72" font-size="10" fill="#333">  ① 历史快照（下单时价格 / 名）</text>
+      <text x="8" y="84" font-size="10" fill="#333">  ② 高频聚合（触发器维护）</text>
+      <text x="8" y="96" font-size="10" fill="#333">  ③ 结构不固定（JSONB + GIN）</text>
+    </g>
+
+    <text x="14" y="170" font-size="10" font-weight="700" fill="#c62828">⚠️ 禁止"预防性反范式"——实测到瓶颈再改</text>
+    <text x="14" y="186" font-size="10" font-weight="700" fill="#0d47a1">一句话：默认 3NF，三类例外</text>
+  </g>
+
+  <!-- ========= 下半：四表 ER 关系 ========= -->
+  <text x="460" y="288" text-anchor="middle" font-size="14" font-weight="700" fill="#0d47a1">order_service 四表 ER · 关系建模成果</text>
+
+  <g transform="translate(20, 300)">
+    <!-- users -->
+    <g transform="translate(0, 0)">
+      <rect width="180" height="128" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+      <rect width="180" height="24" rx="8" fill="#1565c0"/>
+      <text x="90" y="17" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">users</text>
+      <text x="12" y="44" font-size="10" font-weight="700" fill="#333">id <tspan font-weight="400" fill="#0d47a1">PK</tspan></text>
+      <text x="12" y="60" font-size="10" fill="#333">email <tspan fill="#0d47a1">UNIQUE</tspan></text>
+      <text x="12" y="76" font-size="10" fill="#333">name</text>
+      <text x="12" y="92" font-size="10" fill="#e65100">order_count <tspan fill="#888">(冗余)</tspan></text>
+      <text x="12" y="110" font-size="9" fill="#666">↑ 触发器维护</text>
+    </g>
+
+    <!-- orders -->
+    <g transform="translate(240, 0)">
+      <rect width="180" height="128" rx="8" fill="#fff3e0" stroke="#e65100" stroke-width="2"/>
+      <rect width="180" height="24" rx="8" fill="#e65100"/>
+      <text x="90" y="17" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">orders</text>
+      <text x="12" y="44" font-size="10" font-weight="700" fill="#333">id <tspan font-weight="400" fill="#0d47a1">PK</tspan></text>
+      <text x="12" y="60" font-size="10" fill="#333">order_no <tspan fill="#0d47a1">UNIQUE</tspan></text>
+      <text x="12" y="76" font-size="10" fill="#333">user_id <tspan fill="#0d47a1">FK → users</tspan></text>
+      <text x="12" y="92" font-size="10" fill="#333">status / created_at</text>
+      <text x="12" y="110" font-size="9" fill="#c62828">idx_orders_user_id ⚠️ 手动</text>
+    </g>
+
+    <!-- order_items -->
+    <g transform="translate(480, 0)">
+      <rect width="200" height="128" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+      <rect width="200" height="24" rx="8" fill="#2e7d32"/>
+      <text x="100" y="17" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">order_items</text>
+      <text x="12" y="44" font-size="10" font-weight="700" fill="#333">id <tspan font-weight="400" fill="#0d47a1">PK</tspan></text>
+      <text x="12" y="60" font-size="10" fill="#333">order_id <tspan fill="#0d47a1">FK CASCADE</tspan></text>
+      <text x="12" y="76" font-size="10" fill="#333">product_id <tspan fill="#0d47a1">FK RESTRICT</tspan></text>
+      <text x="12" y="92" font-size="10" fill="#e65100">product_name / unit_price</text>
+      <text x="12" y="110" font-size="9" fill="#666">↑ 历史快照（反范式 ✅）</text>
+    </g>
+
+    <!-- products -->
+    <g transform="translate(720, 0)">
+      <rect width="180" height="128" rx="8" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2"/>
+      <rect width="180" height="24" rx="8" fill="#7b1fa2"/>
+      <text x="90" y="17" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">products</text>
+      <text x="12" y="44" font-size="10" font-weight="700" fill="#333">id <tspan font-weight="400" fill="#0d47a1">PK</tspan></text>
+      <text x="12" y="60" font-size="10" fill="#333">title / price</text>
+      <text x="12" y="76" font-size="10" fill="#333">category_id <tspan fill="#0d47a1">FK</tspan></text>
+      <text x="12" y="92" font-size="10" fill="#333">attributes <tspan fill="#7b1fa2">JSONB</tspan></text>
+      <text x="12" y="110" font-size="9" fill="#666">GIN 索引 · 灵活扩展</text>
+    </g>
+
+    <!-- 关系连线 -->
+    <!-- users 1:N orders -->
+    <line x1="182" y1="364" x2="238" y2="364" stroke="#1565c0" stroke-width="2"/>
+    <polygon points="238,364 230,360 230,368" fill="#1565c0"/>
+    <text x="210" y="352" text-anchor="middle" font-size="9" font-weight="700" fill="#1565c0">1 : N</text>
+    <text x="210" y="380" text-anchor="middle" font-size="8" fill="#666">RESTRICT</text>
+
+    <!-- orders 1:N order_items -->
+    <line x1="422" y1="364" x2="478" y2="364" stroke="#e65100" stroke-width="2"/>
+    <polygon points="478,364 470,360 470,368" fill="#e65100"/>
+    <text x="450" y="352" text-anchor="middle" font-size="9" font-weight="700" fill="#e65100">1 : N</text>
+    <text x="450" y="380" text-anchor="middle" font-size="8" fill="#666">CASCADE</text>
+
+    <!-- order_items N:1 products -->
+    <line x1="682" y1="364" x2="718" y2="364" stroke="#7b1fa2" stroke-width="2"/>
+    <polygon points="718,364 710,360 710,368" fill="#7b1fa2"/>
+    <text x="700" y="352" text-anchor="middle" font-size="9" font-weight="700" fill="#7b1fa2">N : 1</text>
+    <text x="700" y="380" text-anchor="middle" font-size="8" fill="#666">RESTRICT</text>
+  </g>
+
+  <!-- ========= 决策心法 ========= -->
+  <g transform="translate(20, 448)">
+    <rect width="880" height="140" rx="8" fill="#ffffff" stroke="#bcd"/>
+
+    <text x="20" y="24" font-size="13" font-weight="700" fill="#0d47a1">🎯 建模决策心法（6 问）</text>
+
+    <!-- 左列 -->
+    <text x="20" y="48" font-size="10" font-weight="700" fill="#0d47a1">Q1 主键用什么？</text>
+    <text x="20" y="62" font-size="9" fill="#333">单机 → BIGINT IDENTITY；多写 → UUIDv7；业务号降 UNIQUE</text>
+
+    <text x="20" y="82" font-size="10" font-weight="700" fill="#0d47a1">Q2 外键建完还要做什么？</text>
+    <text x="20" y="96" font-size="9" fill="#c62828">在引用侧手动 CREATE INDEX（PG 不自动建）⚠️</text>
+
+    <text x="20" y="116" font-size="10" font-weight="700" fill="#0d47a1">Q3 ON DELETE 选哪个？</text>
+    <text x="20" y="130" font-size="9" fill="#333">明细类 → CASCADE；独立实体 → RESTRICT；可选 → SET NULL</text>
+
+    <!-- 右列 -->
+    <text x="460" y="48" font-size="10" font-weight="700" fill="#0d47a1">Q4 NO ACTION vs RESTRICT？</text>
+    <text x="460" y="62" font-size="9" fill="#333">NO ACTION 可 defer（事务内临时打破再补）；RESTRICT 不可</text>
+
+    <text x="460" y="82" font-size="10" font-weight="700" fill="#0d47a1">Q5 该不该反范式？</text>
+    <text x="460" y="96" font-size="9" fill="#333">默认不。例外：历史快照 / 高频聚合 / 结构不固定</text>
+
+    <text x="460" y="116" font-size="10" font-weight="700" fill="#0d47a1">Q6 深树怎么存？</text>
+    <text x="460" y="130" font-size="9" fill="#333">深度≤10 写多 → 邻接表 + 递归 CTE；读多树深 → ltree + GiST</text>
+  </g>
+
+</svg>

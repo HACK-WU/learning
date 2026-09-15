@@ -1,0 +1,237 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 1176" width="920" height="1176" font-family="system-ui, -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif">
+  <rect x="0" y="0" width="920" height="1176" fill="#fafafa"/>
+
+  <defs>
+    <marker id="arrow14" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#c62828"/>
+    </marker>
+    <marker id="arrow14b" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#1565c0"/>
+    </marker>
+  </defs>
+
+  <!-- ============ 标题 ============ -->
+  <text x="30" y="40" font-size="24" font-weight="700" fill="#0d47a1">课 14 · 备份与恢复</text>
+  <text x="30" y="64" font-size="13" fill="#666">PostgreSQL 17.11 实测 · 逻辑 158M / custom 45M / 物理 447M · PITR 曲线救国</text>
+  <line x1="30" y1="78" x2="890" y2="78" stroke="#dcdcdc" stroke-width="1"/>
+
+  <!-- ============ ① 三种备份全景 ============ -->
+  <text x="30" y="104" font-size="15" font-weight="700" fill="#333">① 三种备份不是三选一，是三层互补 —— 你能不能"回到任意时刻"取决于最下面那层</text>
+
+  <!-- 卡片 1 -->
+  <rect x="30" y="118" width="272" height="112" rx="6" fill="#ffffff" stroke="#e0e0e0"/>
+  <rect x="30" y="118" width="272" height="5" rx="2" fill="#1565c0"/>
+  <text x="46" y="144" font-size="14" font-weight="700" fill="#0d47a1">逻辑备份 pg_dump</text>
+  <text x="46" y="164" font-size="11.5" fill="#333">抄的是「内容」不是「形态」</text>
+  <text x="46" y="182" font-size="11.5" fill="#333">粒度：单个数据库（不含角色/表空间）</text>
+  <text x="46" y="200" font-size="11.5" fill="#c62828" font-weight="700">边界：只能回到它执行的那一刻</text>
+  <text x="46" y="218" font-size="11" fill="#666">实测 661 MB 库 → custom 45 MB / 158 MB</text>
+
+  <!-- 卡片 2 -->
+  <rect x="324" y="118" width="272" height="112" rx="6" fill="#ffffff" stroke="#e0e0e0"/>
+  <rect x="324" y="118" width="272" height="5" rx="2" fill="#2e7d32"/>
+  <text x="340" y="144" font-size="14" font-weight="700" fill="#1b5e20">物理备份 pg_basebackup</text>
+  <text x="340" y="164" font-size="11.5" fill="#333">把整个集群「整套复印」</text>
+  <text x="340" y="182" font-size="11.5" fill="#333">粒度：整个集群（不能只备一个库）</text>
+  <text x="340" y="200" font-size="11.5" fill="#c62828" font-weight="700">边界：体积约为逻辑备份的 10 倍</text>
+  <text x="340" y="218" font-size="11" fill="#666">实测 2.0 GB 数据目录 → 447 MB，41.5 s</text>
+
+  <!-- 卡片 3 -->
+  <rect x="618" y="118" width="272" height="112" rx="6" fill="#ffffff" stroke="#e0e0e0"/>
+  <rect x="618" y="118" width="272" height="5" rx="2" fill="#ef6c00"/>
+  <text x="634" y="144" font-size="14" font-weight="700" fill="#e65100">PITR（= 基础备份 + WAL 归档）</text>
+  <text x="634" y="164" font-size="11.5" fill="#333">月度对账单 + 每日流水账</text>
+  <text x="634" y="182" font-size="11.5" fill="#333">能力：回到备份之后的任意时刻</text>
+  <text x="634" y="200" font-size="11.5" fill="#2e7d32" font-weight="700">这就是"凌晨删表还能救回来"</text>
+  <text x="634" y="218" font-size="11" fill="#666">实测：删表 → 精确恢复到删除前 3 行</text>
+
+  <!-- ① 底部提示条 -->
+  <rect x="30" y="238" width="860" height="26" rx="4" fill="#fff3e0" stroke="#ffe0b2"/>
+  <text x="42" y="255" font-size="11.5" fill="#e65100" font-weight="700">官方原话：pg_dump「cannot be used as part of a continuous-archiving solution」—— 逻辑备份做不了 PITR 的活，两者互补。</text>
+
+  <!-- ============ ② 逻辑备份：四种格式 ============ -->
+  <text x="30" y="288" font-size="15" font-weight="700" fill="#333">② 逻辑备份四种格式 —— 体积、压缩、并行三个维度一次看清（实测同一 661 MB 库）</text>
+
+  <rect x="30" y="300" width="860" height="176" rx="6" fill="#ffffff" stroke="#e0e0e0"/>
+  <!-- 表头 -->
+  <rect x="30" y="300" width="860" height="30" rx="6" fill="#1565c0"/>
+  <rect x="30" y="318" width="860" height="12" fill="#1565c0"/>
+  <text x="48" y="320" font-size="11.5" font-weight="700" fill="#ffffff">格式</text>
+  <text x="140" y="320" font-size="11.5" font-weight="700" fill="#ffffff">参数</text>
+  <text x="212" y="320" font-size="11.5" font-weight="700" fill="#ffffff">默认？</text>
+  <text x="282" y="320" font-size="11.5" font-weight="700" fill="#ffffff">默认压缩</text>
+  <text x="392" y="320" font-size="11.5" font-weight="700" fill="#ffffff">并行 dump</text>
+  <text x="500" y="320" font-size="11.5" font-weight="700" fill="#ffffff">怎么恢复</text>
+  <text x="612" y="320" font-size="11.5" font-weight="700" fill="#ffffff">实测体积</text>
+  <text x="716" y="320" font-size="11.5" font-weight="700" fill="#ffffff">什么时候用它</text>
+  <line x1="30" y1="330" x2="890" y2="330" stroke="#1565c0" stroke-width="1"/>
+
+  <!-- 行 1 plain -->
+  <text x="48" y="356" font-size="12" fill="#333" font-weight="700">plain</text>
+  <text x="140" y="356" font-size="12" fill="#333">-Fp</text>
+  <text x="212" y="356" font-size="12" fill="#2e7d32" font-weight="700">是（默认）</text>
+  <text x="282" y="356" font-size="12" fill="#c62828">不压缩</text>
+  <text x="392" y="356" font-size="12" fill="#c62828">不支持</text>
+  <text x="500" y="356" font-size="12" fill="#333">psql -f</text>
+  <text x="612" y="356" font-size="12" fill="#333" font-weight="700">158 MB</text>
+  <text x="716" y="356" font-size="11" fill="#666">要肉眼改 SQL / 小库</text>
+  <line x1="30" y1="368" x2="890" y2="368" stroke="#eeeeee"/>
+
+  <!-- 行 2 custom -->
+  <text x="48" y="392" font-size="12" fill="#333" font-weight="700">custom</text>
+  <text x="140" y="392" font-size="12" fill="#333">-Fc</text>
+  <text x="212" y="392" font-size="12" fill="#666">—</text>
+  <text x="282" y="392" font-size="12" fill="#2e7d32" font-weight="700">gzip 中等</text>
+  <text x="392" y="392" font-size="12" fill="#c62828">不支持</text>
+  <text x="500" y="392" font-size="12" fill="#333">pg_restore</text>
+  <text x="612" y="392" font-size="12" fill="#2e7d32" font-weight="700">45 MB</text>
+  <text x="716" y="392" font-size="11" fill="#666">单文件逻辑备份首选</text>
+  <line x1="30" y1="404" x2="890" y2="404" stroke="#eeeeee"/>
+
+  <!-- 行 3 directory -->
+  <text x="48" y="428" font-size="12" fill="#333" font-weight="700">directory</text>
+  <text x="140" y="428" font-size="12" fill="#333">-Fd</text>
+  <text x="212" y="428" font-size="12" fill="#666">—</text>
+  <text x="282" y="428" font-size="12" fill="#2e7d32" font-weight="700">gzip 中等</text>
+  <text x="392" y="428" font-size="12" fill="#2e7d32" font-weight="700">✅ 唯一支持</text>
+  <text x="500" y="428" font-size="12" fill="#333">pg_restore</text>
+  <text x="612" y="428" font-size="12" fill="#2e7d32" font-weight="700">45 MB</text>
+  <text x="716" y="428" font-size="11" fill="#666">大库 / 要并行加速（-j 4）</text>
+  <line x1="30" y1="440" x2="890" y2="440" stroke="#eeeeee"/>
+
+  <!-- 行 4 tar -->
+  <text x="48" y="464" font-size="12" fill="#333" font-weight="700">tar</text>
+  <text x="140" y="464" font-size="12" fill="#333">-Ft</text>
+  <text x="212" y="464" font-size="12" fill="#666">—</text>
+  <text x="282" y="464" font-size="12" fill="#c62828" font-weight="700">完全不支持</text>
+  <text x="392" y="464" font-size="12" fill="#c62828">不支持</text>
+  <text x="500" y="464" font-size="12" fill="#333">pg_restore</text>
+  <text x="612" y="464" font-size="12" fill="#c62828" font-weight="700">158 MB</text>
+  <text x="716" y="464" font-size="11" fill="#666">与 directory 布局兼容</text>
+
+  <!-- ② 注脚 -->
+  <text x="34" y="492" font-size="11" fill="#c62828" font-weight="700">⚠️ tar 和 plain 一样大（158 MB）—— 官方：The tar archive format currently does not support compression at all.</text>
+
+  <!-- ============ ③ 物理备份三个一致性 ============ -->
+  <text x="30" y="524" font-size="15" font-weight="700" fill="#333">③ 物理备份凭什么"能立起来"—— 三个一致性缺一不可</text>
+
+  <!-- 1 -->
+  <rect x="30" y="538" width="272" height="92" rx="6" fill="#ffffff" stroke="#e0e0e0"/>
+  <rect x="30" y="538" width="5" height="92" rx="2" fill="#90caf9"/>
+  <text x="46" y="562" font-size="13" font-weight="700" fill="#0d47a1">① 数据一致性</text>
+  <text x="46" y="580" font-size="11" fill="#666">抄到一半业务还在写怎么办？</text>
+  <text x="46" y="598" font-size="11.5" fill="#2e7d32" font-weight="700">不需要完美一致</text>
+  <text x="46" y="616" font-size="10.5" fill="#333">官方：errors corrected by log replay</text>
+
+  <!-- 2 -->
+  <rect x="324" y="538" width="272" height="92" rx="6" fill="#ffffff" stroke="#e0e0e0"/>
+  <rect x="324" y="538" width="5" height="92" rx="2" fill="#a5d6a7"/>
+  <text x="340" y="562" font-size="13" font-weight="700" fill="#1b5e20">② 归档一致性</text>
+  <text x="340" y="580" font-size="11" fill="#666">抄数据期间的 WAL 在哪？</text>
+  <text x="340" y="598" font-size="11.5" fill="#2e7d32" font-weight="700">-X stream 一起收（默认）</text>
+  <text x="340" y="616" font-size="10.5" fill="#333">产物同时有 pg_wal.tar.gz</text>
+
+  <!-- 3 -->
+  <rect x="618" y="538" width="272" height="92" rx="6" fill="#ffffff" stroke="#e0e0e0"/>
+  <rect x="618" y="538" width="5" height="92" rx="2" fill="#ffcc80"/>
+  <text x="634" y="562" font-size="13" font-weight="700" fill="#e65100">③ 启动一致性</text>
+  <text x="634" y="580" font-size="11" fill="#666">恢复从哪儿开始重放？</text>
+  <text x="634" y="598" font-size="11.5" fill="#e65100" font-weight="700">backup_label 里的 LSN</text>
+  <text x="634" y="616" font-size="10.5" fill="#333">START WAL LOCATION: 1/14000028</text>
+
+  <!-- ============ ④ PITR 时间轴 ============ -->
+  <text x="30" y="668" font-size="15" font-weight="700" fill="#333">④ PITR 是怎么"回到任意时刻"的 —— 一条时间轴看懂全部机制</text>
+
+  <rect x="30" y="682" width="860" height="168" rx="6" fill="#ffffff" stroke="#e0e0e0"/>
+
+  <!-- 时间轴线 -->
+  <line x1="70" y1="762" x2="860" y2="762" stroke="#bdbdbd" stroke-width="2"/>
+
+  <!-- T0 基础备份 -->
+  <circle cx="130" cy="762" r="9" fill="#1565c0"/>
+  <text x="130" y="742" font-size="11.5" font-weight="700" fill="#0d47a1" text-anchor="middle">T0 基础备份</text>
+  <text x="130" y="790" font-size="10" fill="#666" text-anchor="middle">pg_basebackup</text>
+  <text x="130" y="804" font-size="10" fill="#666" text-anchor="middle">backup_label 记起点</text>
+
+  <!-- WAL 归档段 -->
+  <rect x="186" y="748" width="300" height="28" rx="4" fill="#e3f2fd" stroke="#90caf9"/>
+  <text x="336" y="767" font-size="11" fill="#0d47a1" text-anchor="middle" font-weight="700">WAL 归档（一笔笔流水账，链子不能断）</text>
+
+  <!-- T1 目标点 -->
+  <circle cx="512" cy="762" r="11" fill="#2e7d32"/>
+  <text x="512" y="742" font-size="11.5" font-weight="700" fill="#1b5e20" text-anchor="middle">T1 想回到这一刻</text>
+  <text x="512" y="790" font-size="10" fill="#2e7d32" text-anchor="middle" font-weight="700">recovery_target_time</text>
+  <text x="512" y="804" font-size="10" fill="#666" text-anchor="middle">恢复就停在这里</text>
+
+  <!-- T2 事故后 -->
+  <circle cx="640" cy="762" r="7" fill="#9e9e9e"/>
+  <text x="640" y="742" font-size="10.5" fill="#666" text-anchor="middle">事故后的变更</text>
+  <text x="640" y="790" font-size="10" fill="#c62828" text-anchor="middle">被丢弃（回不来）</text>
+
+  <!-- T3 事故 -->
+  <circle cx="790" cy="762" r="9" fill="#c62828"/>
+  <text x="790" y="742" font-size="11.5" font-weight="700" fill="#c62828" text-anchor="middle">T3 DROP TABLE</text>
+  <text x="790" y="790" font-size="10" fill="#666" text-anchor="middle">灾难发生</text>
+
+  <!-- 恢复箭头 -->
+  <path d="M130,825 C 280,845 420,845 512,825" fill="none" stroke="#2e7d32" stroke-width="2" marker-end="url(#arrow14b)" stroke-dasharray="5,3"/>
+  <text x="322" y="840" font-size="10.5" fill="#2e7d32" font-weight="700" text-anchor="middle">恢复 = 用 T0 做起点，把 WAL 重放到 T1 就停手</text>
+
+  <!-- ============ ⑤ 恢复配置与三个坑 ============ -->
+  <text x="30" y="886" font-size="15" font-weight="700" fill="#333">⑤ 恢复配置只看四项，但坑都在这四项的"默认值"里</text>
+
+  <!-- 左：四行配置 -->
+  <rect x="30" y="900" width="470" height="152" rx="6" fill="#ffffff" stroke="#e0e0e0"/>
+  <rect x="30" y="900" width="470" height="26" rx="6" fill="#1565c0"/>
+  <rect x="30" y="914" width="470" height="12" fill="#1565c0"/>
+  <text x="46" y="919" font-size="11.5" font-weight="700" fill="#ffffff">恢复配置（写在 postgresql.conf / postgresql.auto.conf）</text>
+
+  <text x="46" y="948" font-size="11.5" fill="#333" font-weight="700">restore_command</text>
+  <text x="196" y="948" font-size="11" fill="#c62828" font-weight="700">唯一必填</text>
+  <text x="290" y="948" font-size="11" fill="#666">cp /archive/%f %p</text>
+
+  <text x="46" y="972" font-size="11.5" fill="#333" font-weight="700">recovery.signal</text>
+  <text x="196" y="972" font-size="11" fill="#333">建文件即触发</text>
+  <text x="290" y="972" font-size="11" fill="#666">恢复完自动删</text>
+
+  <text x="46" y="996" font-size="11.5" fill="#333" font-weight="700">recovery_target_time</text>
+  <text x="196" y="996" font-size="11" fill="#333">与 name/lsn/xid</text>
+  <text x="290" y="996" font-size="11" fill="#c62828">五者只能选一个</text>
+
+  <text x="46" y="1020" font-size="11.5" fill="#333" font-weight="700">recovery_target_action</text>
+  <text x="196" y="1020" font-size="11" fill="#e65100" font-weight="700">默认 pause</text>
+  <text x="290" y="1020" font-size="11" fill="#666">要开写须写 promote</text>
+
+  <text x="46" y="1042" font-size="10.5" fill="#666">PG 12 起 recovery.conf 已移除 —— 该文件存在会导致服务器「拒绝启动」</text>
+
+  <!-- 右：三个坑 -->
+  <rect x="516" y="900" width="374" height="152" rx="6" fill="#fff5f5" stroke="#ffcdd2"/>
+  <rect x="516" y="900" width="374" height="26" rx="6" fill="#c62828"/>
+  <rect x="516" y="914" width="374" height="12" fill="#c62828"/>
+  <text x="532" y="919" font-size="11.5" font-weight="700" fill="#ffffff">三个必须记住的实测行为</text>
+
+  <text x="532" y="948" font-size="11" fill="#b71c1c" font-weight="700">① 目标写错不报错</text>
+  <text x="532" y="966" font-size="10.5" fill="#333">设成 2020 年 → 静默停在"表还不存在"的时刻</text>
+
+  <text x="532" y="990" font-size="11" fill="#b71c1c" font-weight="700">② 默认 pause 而非 promote</text>
+  <text x="532" y="1008" font-size="10.5" fill="#333">服务器起来了但只读不推进，须人工 promote</text>
+
+  <text x="532" y="1032" font-size="11" fill="#b71c1c" font-weight="700">③ 每次恢复新建时间线</text>
+  <text x="532" y="1050" font-size="10.5" fill="#333">实测 timeline 1 → 2；history 文件要一起归档</text>
+
+  <!-- ============ ⑥ 决策速查 ============ -->
+  <text x="30" y="1082" font-size="15" font-weight="700" fill="#333">⑥ 一句话选型</text>
+
+  <rect x="30" y="1094" width="860" height="26" rx="4" fill="#ffffff" stroke="#e0e0e0"/>
+  <text x="42" y="1112" font-size="11" fill="#333">要改 SQL / 小库</text>
+  <text x="180" y="1112" font-size="11" fill="#1565c0" font-weight="700">-Fp plain</text>
+  <text x="280" y="1112" font-size="11" fill="#333">单文件逻辑备份</text>
+  <text x="410" y="1112" font-size="11" fill="#2e7d32" font-weight="700">-Fc custom</text>
+  <text x="520" y="1112" font-size="11" fill="#333">大库要并行</text>
+  <text x="610" y="1112" font-size="11" fill="#2e7d32" font-weight="700">-Fd -j N</text>
+  <text x="700" y="1112" font-size="11" fill="#333">要回到任意时刻</text>
+  <text x="810" y="1112" font-size="11" fill="#e65100" font-weight="700">PITR</text>
+
+  <rect x="30" y="1128" width="860" height="26" rx="4" fill="#e8f5e9" stroke="#c8e6c9"/>
+  <text x="42" y="1146" font-size="11.5" fill="#1b5e20" font-weight="700">课 14 一句话：逻辑备份只能回到"它执行的那一刻"；能回到任意时刻的是 PITR —— 而 PITR 的第三样本钱（演练过的恢复目标）只能练，买不到。</text>
+</svg>

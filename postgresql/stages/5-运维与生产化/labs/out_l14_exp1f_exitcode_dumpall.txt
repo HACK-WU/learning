@@ -1,0 +1,30 @@
+=== B-6b: 重复恢复的退出码（关键：默认忽略错误，退出码仍 0） ===
+不加 -e 的退出码: 1   ← 0！错误只体现为 warning
+加 -e/--exit-on-error: 1   ← 非 0，脚本里能捕获
+
+=== 实验 C: pg_dumpall --globals-only ===
+--
+-- PostgreSQL database cluster dump
+--
+
+\restrict RdLpEKzj4LffhVesP0fX4NAaPYBQ94ySJNDOgtrBcrFS2Nr2yaifDLuhwgjaySz
+
+SET default_transaction_read_only = off;
+
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+
+--
+-- Roles
+--
+
+CREATE ROLE postgres;
+  ...
+输出总行数: 35
+
+=== 对比：pg_dump 单库不含全局对象 ===
+a_plain.sql 中 CREATE ROLE 出现次数: 0
+0
+a_plain.sql 中 CREATE TABLESPACE 出现次数: 0
+0
+pg_dumpall --globals-only 中 CREATE ROLE 出现次数: 1

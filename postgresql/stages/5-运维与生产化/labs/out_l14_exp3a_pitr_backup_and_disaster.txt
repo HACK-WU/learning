@@ -1,0 +1,54 @@
+=== E-1: 拍基础备份（plain 格式，直接就是数据目录） ===
+
+real	0m3.848s
+user	0m0.230s
+sys	0m1.502s
+退出码: 0
+2.1G	l14_backup
+
+=== E-2: 建业务表并写入 3 行（事故前的数据） ===
+NOTICE:  table "pitr_demo" does not exist, skipping
+DROP TABLE
+CREATE TABLE
+INSERT 0 3
+ id |   note   |            created            
+----+----------+-------------------------------
+  1 | 事故前-A | 2026-09-10 15:41:45.030598+00
+  2 | 事故前-B | 2026-09-10 15:41:45.030682+00
+  3 | 事故前-C | 2026-09-10 15:41:45.030684+00
+(3 rows)
+
+
+=== E-3: 记录恢复目标时间 T1 + 建命名恢复点 ===
+T1 = 2026-09-10 15:41:45.059928+00
+ pg_create_restore_point 
+-------------------------
+ 1/1802A640
+(1 row)
+
+
+=== E-4: 事故之后又写入第 4 行（这行不该被恢复回来） ===
+INSERT 0 1
+当前行数: 4
+
+=== E-5: 灾难发生 —— 误删表 ===
+DROP TABLE
+ERROR:  relation "finance.pitr_demo" does not exist
+LINE 1: SELECT * FROM finance.pitr_demo;
+                      ^
+
+=== E-6: 强制切换 WAL，确保最后的事务已归档 ===
+ pg_switch_wal 
+---------------
+ 1/1802B630
+(1 row)
+
+ archived_count | failed_count 
+----------------+--------------
+              5 |            0
+(1 row)
+
+归档目录 WAL 数: 5
+
+=== E-7: 当前时间线 ===
+timeline = 1

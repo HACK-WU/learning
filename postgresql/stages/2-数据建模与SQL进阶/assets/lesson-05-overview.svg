@@ -1,0 +1,193 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 620" font-family="-apple-system, 'PingFang SC', 'Segoe UI', sans-serif">
+  <rect width="920" height="620" fill="#fafafa"/>
+
+  <!-- 标题 -->
+  <text x="460" y="28" text-anchor="middle" font-size="20" font-weight="700" fill="#0d47a1">课 5 一图总结 · 三种视图 + 函数 vs 过程 + 触发器</text>
+  <text x="460" y="48" text-anchor="middle" font-size="11" fill="#666">上：5.1 / 5.2 / 5.3 三件事 · 下：NEW/OLD 可用性矩阵 + 决策心法 · 事实核查于 2026-09-06</text>
+
+  <!-- ========= 上半：3 个知识点 ========= -->
+
+  <!-- ===== 5.1 ===== -->
+  <g transform="translate(20, 66)">
+    <rect width="280" height="210" rx="8" fill="#ffffff" stroke="#bcd"/>
+    <rect width="280" height="28" rx="8" fill="#0d47a1"/>
+    <text x="14" y="19" font-size="13" font-weight="700" fill="#ffffff">5.1 三种视图</text>
+
+    <text x="14" y="50" font-size="11" font-weight="700" fill="#1565c0">🎯 用途：把常用查询存下来复用</text>
+
+    <g transform="translate(14, 60)">
+      <rect width="252" height="108" rx="4" fill="#f5f7fa" stroke="#cfd8dc"/>
+      <text x="8" y="15" font-size="10" fill="#333"><tspan font-weight="700" fill="#0d47a1">普通视图  </tspan>保存的<tspan font-weight="700">查询</tspan>（虚拟表）</text>
+      <text x="8" y="28" font-size="9" fill="#c62828">   ❌ 不加速 · ❌ 不能建索引</text>
+      <text x="8" y="45" font-size="10" fill="#333"><tspan font-weight="700" fill="#388e3c">可更新视图</tspan> 满足 5 条件自动可更新</text>
+      <text x="8" y="58" font-size="9" fill="#666">   否则用 INSTEAD OF 触发器（仅视图）</text>
+      <text x="8" y="71" font-size="9" fill="#666">   + WITH CHECK OPTION 防幽灵行</text>
+      <text x="8" y="88" font-size="10" fill="#333"><tspan font-weight="700" fill="#7b1fa2">物化视图  </tspan>保存的<tspan font-weight="700">结果</tspan>（物理表）</text>
+      <text x="8" y="101" font-size="9" fill="#388e3c">   ✅ 加速 · ✅ 必须建索引 · 要 REFRESH</text>
+    </g>
+
+    <text x="14" y="183" font-size="9" font-weight="700" fill="#c62828">⚠️ CONCURRENTLY 四条件：UNIQUE / 无 WHERE</text>
+    <text x="14" y="196" font-size="9" font-weight="700" fill="#c62828">    / 无 NULL / 已填充（首次必须普通刷新）</text>
+  </g>
+
+  <!-- ===== 5.2 ===== -->
+  <g transform="translate(320, 66)">
+    <rect width="280" height="210" rx="8" fill="#ffffff" stroke="#bcd"/>
+    <rect width="280" height="28" rx="8" fill="#0d47a1"/>
+    <text x="14" y="19" font-size="13" font-weight="700" fill="#ffffff">5.2 函数与存储过程</text>
+
+    <text x="14" y="50" font-size="11" font-weight="700" fill="#1565c0">🎯 用途：带逻辑的复用</text>
+
+    <g transform="translate(14, 60)">
+      <rect width="252" height="108" rx="4" fill="#f5f7fa" stroke="#cfd8dc"/>
+      <!-- 表头 -->
+      <text x="8" y="14" font-size="9" font-weight="700" fill="#666">维度</text>
+      <text x="90" y="14" font-size="9" font-weight="700" fill="#0d47a1">FUNCTION</text>
+      <text x="180" y="14" font-size="9" font-weight="700" fill="#e65100">PROCEDURE</text>
+      <line x1="0" y1="20" x2="252" y2="20" stroke="#cfd8dc"/>
+
+      <text x="8" y="34" font-size="9" fill="#333">返回值</text>
+      <text x="90" y="34" font-size="9" fill="#0d47a1">✅ RETURNS</text>
+      <text x="180" y="34" font-size="9" fill="#e65100">❌ 无（OUT 参数）</text>
+
+      <text x="8" y="48" font-size="9" fill="#333">调用</text>
+      <text x="90" y="48" font-size="9" fill="#0d47a1">SELECT fn()</text>
+      <text x="180" y="48" font-size="9" fill="#e65100">只能 CALL</text>
+
+      <text x="8" y="62" font-size="9" fill="#333">事务控制</text>
+      <text x="90" y="62" font-size="9" fill="#c62828">❌ 禁止</text>
+      <text x="180" y="62" font-size="9" fill="#388e3c">✅ COMMIT</text>
+
+      <text x="8" y="76" font-size="9" fill="#333">用于触发器</text>
+      <text x="90" y="76" font-size="9" fill="#388e3c">✅ 可以</text>
+      <text x="180" y="76" font-size="9" fill="#c62828">❌ 不行</text>
+
+      <text x="8" y="90" font-size="9" fill="#333">引入版本</text>
+      <text x="90" y="90" font-size="9" fill="#666">一直有</text>
+      <text x="180" y="90" font-size="9" fill="#666">PG 11+</text>
+
+      <line x1="0" y1="98" x2="252" y2="98" stroke="#cfd8dc"/>
+      <text x="8" y="112" font-size="9" fill="#555">⚠️ plpgsql：裸 SELECT 不行 → PERFORM / INTO</text>
+    </g>
+
+    <text x="14" y="183" font-size="9" font-weight="700" fill="#c62828">⚠️ SAVEPOINT 在 plpgsql 禁止</text>
+    <text x="14" y="196" font-size="9" font-weight="700" fill="#0d47a1">   用嵌套 BEGIN...EXCEPTION...END 代替</text>
+  </g>
+
+  <!-- ===== 5.3 ===== -->
+  <g transform="translate(620, 66)">
+    <rect width="280" height="210" rx="8" fill="#ffffff" stroke="#bcd"/>
+    <rect width="280" height="28" rx="8" fill="#0d47a1"/>
+    <text x="14" y="19" font-size="13" font-weight="700" fill="#ffffff">5.3 触发器基础</text>
+
+    <text x="14" y="50" font-size="11" font-weight="700" fill="#1565c0">🎯 用途：数据变更时自动做事</text>
+
+    <g transform="translate(14, 60)">
+      <rect width="252" height="108" rx="4" fill="#f5f7fa" stroke="#cfd8dc"/>
+      <text x="8" y="15" font-size="10" fill="#333"><tspan font-weight="700" fill="#0d47a1">时机  </tspan>BEFORE 改/取消 · AFTER 日志同步</text>
+      <text x="8" y="28" font-size="9" fill="#666">      INSTEAD OF 只在视图</text>
+      <text x="8" y="44" font-size="10" fill="#333"><tspan font-weight="700" fill="#388e3c">粒度  </tspan>行级（逐行·能访问 NEW/OLD）</text>
+      <text x="8" y="57" font-size="9" fill="#666">      语句级（一次·NEW/OLD 皆 NULL）</text>
+      <text x="8" y="73" font-size="10" fill="#333"><tspan font-weight="700" fill="#e65100">变量  </tspan>NEW / OLD / TG_OP / TG_TABLE_NAME</text>
+      <text x="8" y="86" font-size="9" fill="#666">      TG_RELNAME 已废弃</text>
+      <text x="8" y="102" font-size="9" fill="#c62828">      ⚠️ TRUNCATE 只能语句级</text>
+    </g>
+
+    <text x="14" y="183" font-size="9" font-weight="700" fill="#c62828">⚠️ 三陷阱：递归触发 / 批量性能 / 调试困难</text>
+    <text x="14" y="196" font-size="9" font-weight="700" fill="#0d47a1">   批量前 DISABLE TRIGGER，之后对账</text>
+  </g>
+
+  <!-- ========= 下半左：NEW / OLD 可用性矩阵 ========= -->
+  <text x="240" y="300" text-anchor="middle" font-size="14" font-weight="700" fill="#0d47a1">NEW / OLD 可用性矩阵（触发器最易踩的坑）</text>
+
+  <g transform="translate(20, 312)">
+    <!-- 表头 -->
+    <rect width="440" height="26" rx="4" fill="#0d47a1"/>
+    <text x="12" y="18" font-size="11" font-weight="700" fill="#ffffff">场景</text>
+    <text x="190" y="18" font-size="11" font-weight="700" fill="#ffffff">NEW（新行）</text>
+    <text x="330" y="18" font-size="11" font-weight="700" fill="#ffffff">OLD（旧行）</text>
+
+    <!-- 行 -->
+    <g transform="translate(0, 26)">
+      <rect width="440" height="132" fill="#ffffff" stroke="#bcd"/>
+
+      <line x1="0" y1="26" x2="440" y2="26" stroke="#eceff1"/>
+      <text x="12" y="18" font-size="10" fill="#333">行级 INSERT</text>
+      <text x="190" y="18" font-size="10" font-weight="700" fill="#388e3c">✅ 有值</text>
+      <text x="330" y="18" font-size="10" fill="#c62828">❌ NULL</text>
+
+      <line x1="0" y1="52" x2="440" y2="52" stroke="#eceff1"/>
+      <text x="12" y="44" font-size="10" fill="#333">行级 UPDATE</text>
+      <text x="190" y="44" font-size="10" font-weight="700" fill="#388e3c">✅ 有值</text>
+      <text x="330" y="44" font-size="10" font-weight="700" fill="#388e3c">✅ 有值</text>
+
+      <line x1="0" y1="78" x2="440" y2="78" stroke="#eceff1"/>
+      <text x="12" y="70" font-size="10" fill="#333">行级 DELETE</text>
+      <text x="190" y="70" font-size="10" fill="#c62828">❌ NULL</text>
+      <text x="330" y="70" font-size="10" font-weight="700" fill="#388e3c">✅ 有值</text>
+
+      <line x1="0" y1="104" x2="440" y2="104" stroke="#eceff1"/>
+      <text x="12" y="96" font-size="10" fill="#333">任意语句级触发器</text>
+      <text x="190" y="96" font-size="10" fill="#c62828">❌ NULL</text>
+      <text x="330" y="96" font-size="10" fill="#c62828">❌ NULL</text>
+
+      <text x="12" y="122" font-size="10" fill="#666">TRUNCATE（只能语句级）</text>
+      <text x="190" y="122" font-size="10" fill="#c62828">❌ NULL</text>
+      <text x="330" y="122" font-size="10" fill="#c62828">❌ NULL</text>
+    </g>
+
+    <!-- 返回值规则 -->
+    <g transform="translate(0, 166)">
+      <rect width="440" height="60" rx="4" fill="#fff3e0" stroke="#e65100"/>
+      <text x="12" y="18" font-size="10" font-weight="700" fill="#bf360c">返回值规则：</text>
+      <text x="12" y="34" font-size="9" fill="#333">BEFORE 行级：RETURN NEW（INSERT/UPDATE）· RETURN OLD（DELETE）</text>
+      <text x="12" y="48" font-size="9" font-weight="700" fill="#c62828">              RETURN NULL = 取消这一行的操作 ⚠️</text>
+    </g>
+  </g>
+
+  <!-- ========= 下半右：物化视图 SOP ========= -->
+  <text x="700" y="300" text-anchor="middle" font-size="14" font-weight="700" fill="#0d47a1">物化视图生产 SOP（5 步）</text>
+
+  <g transform="translate(490, 312)">
+    <g transform="translate(0, 0)">
+      <rect width="410" height="38" rx="4" fill="#ffffff" stroke="#bcd"/>
+      <circle cx="20" cy="19" r="12" fill="#0d47a1"/>
+      <text x="20" y="24" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">1</text>
+      <text x="42" y="16" font-size="10" font-weight="700" fill="#333">CREATE ... WITH NO DATA</text>
+      <text x="42" y="30" font-size="9" fill="#666">先建空壳（快速返回，不阻塞）</text>
+    </g>
+
+    <g transform="translate(0, 44)">
+      <rect width="410" height="38" rx="4" fill="#ffffff" stroke="#bcd"/>
+      <circle cx="20" cy="19" r="12" fill="#0d47a1"/>
+      <text x="20" y="24" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">2</text>
+      <text x="42" y="16" font-size="10" font-weight="700" fill="#333">CREATE UNIQUE INDEX ON mv (col)</text>
+      <text x="42" y="30" font-size="9" fill="#666">空表建索引极快 · CONCURRENTLY 必需</text>
+    </g>
+
+    <g transform="translate(0, 88)">
+      <rect width="410" height="38" rx="4" fill="#fff3e0" stroke="#e65100"/>
+      <circle cx="20" cy="19" r="12" fill="#e65100"/>
+      <text x="20" y="24" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">3</text>
+      <text x="42" y="16" font-size="10" font-weight="700" fill="#bf360c">REFRESH MATERIALIZED VIEW mv</text>
+      <text x="42" y="30" font-size="9" fill="#666">⚠️ 首次必须普通刷新（空视图不能 CONCURRENTLY）</text>
+    </g>
+
+    <g transform="translate(0, 132)">
+      <rect width="410" height="38" rx="4" fill="#e8f5e9" stroke="#2e7d32"/>
+      <circle cx="20" cy="19" r="12" fill="#2e7d32"/>
+      <text x="20" y="24" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">4</text>
+      <text x="42" y="16" font-size="10" font-weight="700" fill="#2e7d32">REFRESH ... CONCURRENTLY mv</text>
+      <text x="42" y="30" font-size="9" fill="#666">✅ 之后都可并发刷新，不阻塞读</text>
+    </g>
+
+    <g transform="translate(0, 176)">
+      <rect width="410" height="38" rx="4" fill="#ffffff" stroke="#bcd"/>
+      <circle cx="20" cy="19" r="12" fill="#7b1fa2"/>
+      <text x="20" y="24" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">5</text>
+      <text x="42" y="16" font-size="10" font-weight="700" fill="#333">cron.schedule(...)  /  GRANT MAINTAIN</text>
+      <text x="42" y="30" font-size="9" fill="#666">pg_cron 定时刷新 · PG 17 可用 MAINTAIN 授权非 owner</text>
+    </g>
+  </g>
+
+</svg>

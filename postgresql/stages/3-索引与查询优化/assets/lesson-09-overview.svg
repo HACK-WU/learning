@@ -1,0 +1,191 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 720" font-family="-apple-system, 'PingFang SC', 'Segoe UI', sans-serif">
+  <rect width="920" height="720" fill="#fafafa"/>
+
+  <!-- 标题 -->
+  <text x="460" y="28" text-anchor="middle" font-size="20" font-weight="700" fill="#0d47a1">课 9 一图总结 · 执行计划：从「猜」到「看」</text>
+  <text x="460" y="48" text-anchor="middle" font-size="11" fill="#666">9.1 EXPLAIN 读懂 · 9.2 常见算子 · 9.3 统计信息与 ANALYZE ｜ 全部实测于 PG 17.11（核查于 2026-09-07）</text>
+
+  <!-- ================= 9.1 一行计划怎么读 ================= -->
+  <g transform="translate(20, 66)">
+    <rect width="440" height="232" rx="8" fill="#ffffff" stroke="#bcd"/>
+    <rect width="440" height="28" rx="8" fill="#0d47a1"/>
+    <text x="14" y="19" font-size="13" font-weight="700" fill="#ffffff">9.1 一行计划怎么读</text>
+
+    <!-- 示例代码 -->
+    <g transform="translate(14, 38)">
+      <rect width="412" height="46" rx="4" fill="#f5f7fa" stroke="#cfd8dc"/>
+      <text x="8" y="16" font-size="9.5" font-family="Menlo, monospace" fill="#333">Seq Scan on orders_big (cost=0.00..20375.00 rows=100 width=32)</text>
+      <text x="8" y="31" font-size="9.5" font-family="Menlo, monospace" fill="#333">  (actual time=48.708..48.708 rows=0 loops=1)</text>
+    </g>
+
+    <!-- 字段标注 -->
+    <g transform="translate(14, 92)" font-size="9.5">
+      <text x="0" y="0" font-weight="700" fill="#1565c0">cost=启动..总 → 主观成本，非毫秒</text>
+      <text x="0" y="15" font-weight="700" fill="#1565c0">rows=100 → 估算输出行数（经 WHERE 后）</text>
+      <text x="0" y="30" font-weight="700" fill="#e65100">actual time → 真实毫秒（第二个值 × loops）</text>
+      <text x="0" y="45" font-weight="700" fill="#e65100">rows=0 loops=1 → 实测行数与执行次数</text>
+    </g>
+
+    <!-- 手算公式 -->
+    <g transform="translate(14, 148)">
+      <rect width="412" height="70" rx="4" fill="#fff8e1" stroke="#e65100"/>
+      <text x="8" y="15" font-size="9.5" font-weight="700" fill="#c62828">手算验证（本课实测，完全对上）：</text>
+      <text x="8" y="31" font-size="9.5" font-family="Menlo, monospace" fill="#333">7875 页 × 1.0      →  7875</text>
+      <text x="8" y="45" font-size="9.5" font-family="Menlo, monospace" fill="#333">1000000 行 × 0.01  → 10000</text>
+      <text x="8" y="59" font-size="9.5" font-family="Menlo, monospace" fill="#333">1000000 × 0.0025×1 →  2500   = <tspan font-weight="700" fill="#c62828">20375</tspan></text>
+    </g>
+  </g>
+
+  <!-- ================= 9.2 三种 Join 怎么选 ================= -->
+  <g transform="translate(470, 66)">
+    <rect width="430" height="232" rx="8" fill="#ffffff" stroke="#bcd"/>
+    <rect width="430" height="28" rx="8" fill="#1565c0"/>
+    <text x="14" y="19" font-size="13" font-weight="700" fill="#ffffff">9.2 三种 Join 怎么选（本课实测，同一条 SQL）</text>
+
+    <!-- 表头 -->
+    <g transform="translate(14, 38)" font-size="9.5" font-weight="700" fill="#0d47a1">
+      <text x="0" y="0">算法</text>
+      <text x="118" y="0">cost（总）</text>
+      <text x="205" y="0">actual</text>
+      <text x="270" y="0">Buffers</text>
+    </g>
+    <line x1="14" y1="44" x2="416" y2="44" stroke="#cfd8dc"/>
+
+    <g transform="translate(14, 58)" font-size="9.5" fill="#333">
+      <!-- Hash Join -->
+      <rect x="-4" y="-11" width="420" height="20" fill="#e8f5e9"/>
+      <text x="0" y="0" font-weight="700" fill="#388e3c">Hash Join ✓</text>
+      <text x="118" y="0" font-weight="700" fill="#388e3c">4204.16</text>
+      <text x="205" y="0">23.569 ms</text>
+      <text x="270" y="0">hit=1427</text>
+      <!-- NL -->
+      <text x="0" y="24">Nested Loop +Memoize</text>
+      <text x="118" y="24">6577.58</text>
+      <text x="205" y="24">27.238 ms</text>
+      <text x="270" y="24">hit=2924</text>
+      <!-- Merge -->
+      <text x="0" y="48">Merge Join</text>
+      <text x="118" y="48">11182.77</text>
+      <text x="205" y="48">67.911 ms</text>
+      <text x="270" y="48">hit=174561</text>
+    </g>
+
+    <!-- 官方定义 -->
+    <g transform="translate(14, 128)">
+      <rect width="402" height="88" rx="4" fill="#f5f7fa" stroke="#cfd8dc"/>
+      <text x="8" y="15" font-size="9" font-weight="700" fill="#0d47a1">官方原文（PG 17 docs 50.5）：</text>
+      <text x="8" y="30" font-size="9" fill="#333">• NL：右关系为左关系的<tspan font-weight="700">每一行</tspan>扫一次</text>
+      <text x="8" y="44" font-size="9" fill="#333">• Hash：<tspan font-weight="700" fill="#c62828">右关系</tspan>先建哈希表（不是「小的那个」）</text>
+      <text x="8" y="58" font-size="9" fill="#333">• Merge：两关系先按连接键<tspan font-weight="700">排序</tspan>，再并行扫</text>
+      <text x="8" y="76" font-size="9" font-weight="700" fill="#c62828">⚠️ Batches &gt; 1 或出现 temp = 溢出到磁盘</text>
+    </g>
+  </g>
+
+  <!-- ================= 9.3 统计信息因果链 ================= -->
+  <g transform="translate(20, 312)">
+    <rect width="440" height="200" rx="8" fill="#ffffff" stroke="#bcd"/>
+    <rect width="440" height="28" rx="8" fill="#7b1fa2"/>
+    <text x="14" y="19" font-size="13" font-weight="700" fill="#ffffff">9.3 统计信息 → 估算 → 计划：完整因果链</text>
+
+    <!-- 因果链 -->
+    <g transform="translate(14, 46)">
+      <rect x="0" y="0" width="118" height="42" rx="5" fill="#f3e5f5" stroke="#7b1fa2"/>
+      <text x="59" y="17" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7b1fa2">统计信息过期</text>
+      <text x="59" y="32" text-anchor="middle" font-size="8.5" fill="#333">reltuples=-1</text>
+
+      <text x="128" y="25" font-size="14" fill="#7b1fa2">→</text>
+
+      <rect x="142" y="0" width="118" height="42" rx="5" fill="#f3e5f5" stroke="#7b1fa2"/>
+      <text x="201" y="17" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7b1fa2">估算行数崩坏</text>
+      <text x="201" y="32" text-anchor="middle" font-size="8.5" fill="#333">300000 vs 15110</text>
+
+      <text x="270" y="25" font-size="14" fill="#7b1fa2">→</text>
+
+      <rect x="284" y="0" width="118" height="42" rx="5" fill="#f3e5f5" stroke="#7b1fa2"/>
+      <text x="343" y="17" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7b1fa2">选错 Join 算法</text>
+      <text x="343" y="32" text-anchor="middle" font-size="8.5" fill="#333">Hash + 全表扫</text>
+    </g>
+
+    <!-- 修复前后对比 -->
+    <g transform="translate(14, 100)">
+      <rect width="412" height="82" rx="4" fill="#e8f5e9" stroke="#388e3c"/>
+      <text x="8" y="15" font-size="9.5" font-weight="700" fill="#388e3c">只跑一次 ANALYZE 的效果（本课核心实验）：</text>
+      <text x="8" y="33" font-size="9.5" fill="#333">未 ANALYZE：估算 300000 / 实际 15110 → Hash Join + Seq Scan</text>
+      <text x="290" y="33" font-size="9.5" font-weight="700" fill="#c62828">31.447 ms</text>
+      <text x="8" y="50" font-size="9.5" fill="#333">ANALYZE 后：估算 15101 / 实际 15110 → Merge Join + Index Only</text>
+      <text x="290" y="50" font-size="9.5" font-weight="700" fill="#388e3c">8.530 ms</text>
+      <line x1="8" y1="60" x2="404" y2="60" stroke="#a5d6a7"/>
+      <text x="8" y="75" font-size="10" font-weight="700" fill="#388e3c">快 3.7 倍 —— 没有改索引，没有改 SQL，只更新了统计信息</text>
+    </g>
+  </g>
+
+  <!-- ================= 诊断决策树 ================= -->
+  <g transform="translate(470, 312)">
+    <rect width="430" height="200" rx="8" fill="#ffffff" stroke="#bcd"/>
+    <rect width="430" height="28" rx="8" fill="#e65100"/>
+    <text x="14" y="19" font-size="13" font-weight="700" fill="#ffffff">慢查询诊断决策树（照着走一遍）</text>
+
+    <g transform="translate(16, 44)" font-size="9.5" fill="#333">
+      <text x="0" y="0" font-weight="700" fill="#e65100">1. 拿计划</text>
+      <text x="80" y="0" font-family="Menlo, monospace" font-size="9">EXPLAIN (ANALYZE, BUFFERS)</text>
+      <text x="0" y="14" fill="#c62828">（写语句务必 BEGIN; … ROLLBACK;）</text>
+
+      <text x="0" y="32" font-weight="700" fill="#e65100">2. 比 rows</text>
+      <text x="80" y="32">估算 vs actual，偏差 &gt; 10 倍 → <tspan font-weight="700" fill="#c62828">先修统计信息</tspan></text>
+
+      <text x="0" y="50" font-weight="700" fill="#e65100">3. 找热点</text>
+      <text x="80" y="50">真实耗时 = actual time 第二值 <tspan font-weight="700">× loops</tspan></text>
+
+      <text x="0" y="68" font-weight="700" fill="#e65100">4. 看 IO</text>
+      <text x="80" y="68">shared read 高 → shared_buffers｜<tspan font-weight="700" fill="#c62828">temp → work_mem</tspan></text>
+
+      <text x="0" y="86" font-weight="700" fill="#e65100">5. 查算子</text>
+      <text x="80" y="86">Batches&gt;1｜Rows Removed 大｜NL+Seq Scan｜Heap Fetches&gt;0</text>
+
+      <text x="0" y="104" font-weight="700" fill="#e65100">6. 常态化</text>
+      <text x="80" y="104">pg_stat_statements 找 Top SQL + auto_explain 抓偶发</text>
+    </g>
+
+    <g transform="translate(16, 156)">
+      <rect width="398" height="32" rx="4" fill="#fff8e1" stroke="#e65100"/>
+      <text x="8" y="14" font-size="9" font-weight="700" fill="#c62828">⚠️ auto_explain 的 log_analyze=on 会对所有语句计时</text>
+      <text x="8" y="26" font-size="8.5" fill="#333">官方原文：extremely negative impact on performance → 生产建议 log_timing=off</text>
+    </g>
+  </g>
+
+  <!-- ================= 底部：三个数字 ================= -->
+  <g transform="translate(20, 526)">
+    <rect width="880" height="154" rx="8" fill="#ffffff" stroke="#bcd"/>
+    <text x="16" y="20" font-size="12" font-weight="700" fill="#0d47a1">本课三个数字的记忆锚点 + 两组「反直觉」实测</text>
+
+    <!-- 三个数字卡片 -->
+    <g transform="translate(16, 32)">
+      <rect width="270" height="52" rx="6" fill="#e3f2fd" stroke="#1565c0"/>
+      <text x="135" y="20" text-anchor="middle" font-size="17" font-weight="700" fill="#0d47a1">17875</text>
+      <text x="135" y="38" text-anchor="middle" font-size="9.5" fill="#333">手算验证 cost 的那次</text>
+
+      <rect x="288" width="270" height="52" rx="6" fill="#e8f5e9" stroke="#388e3c"/>
+      <text x="423" y="20" text-anchor="middle" font-size="17" font-weight="700" fill="#388e3c">3.7 倍</text>
+      <text x="423" y="38" text-anchor="middle" font-size="9.5" fill="#333">只跑一次 ANALYZE 的提速</text>
+
+      <rect x="576" width="270" height="52" rx="6" fill="#f3e5f5" stroke="#7b1fa2"/>
+      <text x="711" y="20" text-anchor="middle" font-size="17" font-weight="700" fill="#7b1fa2">30000</text>
+      <text x="711" y="38" text-anchor="middle" font-size="9.5" fill="#333">default_statistics_target=100 的采样行数（300×100）</text>
+    </g>
+
+    <!-- 两组反直觉 -->
+    <g transform="translate(16, 96)" font-size="9.5">
+      <text x="0" y="0" font-weight="700" fill="#c62828">反直觉 ①：cost 低的不一定快</text>
+      <text x="200" y="0" fill="#333">HashAggregate cost 22875 → 125.310 ms ｜ GroupAggregate cost 37269（高 39%）→ <tspan font-weight="700">124.394 ms</tspan></text>
+
+      <text x="0" y="18" font-weight="700" fill="#c62828">反直觉 ②：估算不准加索引没用</text>
+      <text x="200" y="18" fill="#333">列相关 region/city 低估 6.8 倍 → <tspan font-weight="700">CREATE STATISTICS</tspan> 后偏差降到 1.85%</text>
+
+      <text x="0" y="36" font-weight="700" fill="#388e3c">顺手记：Incremental Sort 差 91.6 倍</text>
+      <text x="200" y="36" fill="#333">Presorted Key 命中索引前缀时 1.603 ms ｜ 关掉后全表排序 146.778 ms</text>
+    </g>
+  </g>
+
+  <!-- 页脚 -->
+  <text x="460" y="702" text-anchor="middle" font-size="9.5" fill="#888">课 9 · 执行计划 ｜ PostgreSQL 17.11 容器实测 ｜ 事实核查于 2026-09（PG 官方文档 14.1 / 50.5 / F.3 auto_explain / F.30 pg_stat_statements）</text>
+</svg>

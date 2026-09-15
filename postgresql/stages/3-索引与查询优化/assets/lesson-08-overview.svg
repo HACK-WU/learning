@@ -1,0 +1,246 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 700" font-family="-apple-system, 'PingFang SC', 'Segoe UI', sans-serif">
+  <rect width="920" height="700" fill="#fafafa"/>
+
+  <!-- 标题 -->
+  <text x="460" y="28" text-anchor="middle" font-size="20" font-weight="700" fill="#0d47a1">课 8 一图总结 · 索引原理：用空间换时间的那笔交易</text>
+  <text x="460" y="48" text-anchor="middle" font-size="11" fill="#666">上：8.1 / 8.2 / 8.3 三件事 · 下：B-Tree 物理结构（pageinspect 实测）+ 索引类型决策表 · 实测于 PG 17.11（核查于 2026-09-07）</text>
+
+  <!-- ========= 上半：3 个知识点 ========= -->
+
+  <!-- ===== 8.1 ===== -->
+  <g transform="translate(20, 66)">
+    <rect width="280" height="212" rx="8" fill="#ffffff" stroke="#bcd"/>
+    <rect width="280" height="28" rx="8" fill="#0d47a1"/>
+    <text x="14" y="19" font-size="13" font-weight="700" fill="#ffffff">8.1 B-Tree 索引原理</text>
+
+    <text x="14" y="50" font-size="11" font-weight="700" fill="#1565c0">🎯 本质：多级平衡树，每层都是双向链表</text>
+
+    <g transform="translate(14, 60)">
+      <rect width="252" height="110" rx="4" fill="#f5f7fa" stroke="#cfd8dc"/>
+      <text x="8" y="15" font-size="9" font-weight="700" fill="#0d47a1">100 万行索引 · pageinspect 实测：</text>
+      <text x="8" y="30" font-size="9" fill="#333">总页 838 ｜ 叶子 <tspan font-weight="700" fill="#388e3c">834（99.5%）</tspan></text>
+      <text x="8" y="44" font-size="9" fill="#333">内部 3 ｜ 根 1 ｜ 层数 <tspan font-weight="700" fill="#1565c0">3</tspan></text>
+      <text x="8" y="58" font-size="9" fill="#333">索引 6712 kB vs 堆表 62 MB（10.8%）</text>
+      <line x1="0" y1="66" x2="252" y2="66" stroke="#cfd8dc"/>
+      <text x="8" y="80" font-size="9" font-weight="700" fill="#c62828">⚠️ PG 无聚簇索引：叶子存 TID</text>
+      <text x="8" y="93" font-size="9" fill="#333">叶子条目 ctid=(16,1) → 指向堆表行</text>
+      <text x="8" y="105" font-size="9" fill="#333">（MySQL InnoDB 主键叶子存整行，不同）</text>
+    </g>
+
+    <text x="14" y="186" font-size="9" font-weight="700" fill="#c62828">⚠️ 代价：5 个索引 → 插入慢 4.1 倍</text>
+    <text x="14" y="200" font-size="9" font-weight="700" fill="#0d47a1">   索引 64 MB &gt; 数据 34 MB（1.9 倍）</text>
+  </g>
+
+  <!-- ===== 8.2 ===== -->
+  <g transform="translate(320, 66)">
+    <rect width="280" height="212" rx="8" fill="#ffffff" stroke="#bcd"/>
+    <rect width="280" height="28" rx="8" fill="#0d47a1"/>
+    <text x="14" y="19" font-size="13" font-weight="700" fill="#ffffff">8.2 Hash / GIN / BRIN</text>
+
+    <text x="14" y="50" font-size="11" font-weight="700" fill="#1565c0">🎯 本质：B-Tree 之外的三把专用工具</text>
+
+    <g transform="translate(14, 60)">
+      <rect width="252" height="110" rx="4" fill="#f5f7fa" stroke="#cfd8dc"/>
+      <text x="8" y="14" font-size="9" font-weight="700" fill="#0d47a1">Hash（PG 10+ 已 WAL 化）</text>
+      <text x="8" y="27" font-size="8" fill="#333">只做等值 · 不存键值 → <tspan font-weight="700" fill="#c62828">永不 Index Only Scan</tspan></text>
+      <text x="8" y="39" font-size="8" fill="#388e3c">实测 8208 kB vs B-Tree 27 MB（30%）</text>
+      <line x1="0" y1="47" x2="252" y2="47" stroke="#cfd8dc"/>
+      <text x="8" y="60" font-size="9" font-weight="700" fill="#0d47a1">GIN（倒排：一键对多行）</text>
+      <text x="8" y="73" font-size="8" fill="#333">数组 @&gt; · JSONB 包含 · 全文 @@</text>
+      <text x="8" y="85" font-size="8" fill="#388e3c">实测 336 kB vs B-Tree 6656 kB（1/20）</text>
+      <line x1="0" y1="92" x2="252" y2="92" stroke="#cfd8dc"/>
+      <text x="8" y="105" font-size="9" font-weight="700" fill="#0d47a1">BRIN（每 128 页一条 min/max 摘要）</text>
+    </g>
+
+    <text x="14" y="186" font-size="9" font-weight="700" fill="#c62828">⚠️ BRIN 看 correlation：&gt;0.9 才值得</text>
+    <text x="14" y="200" font-size="9" font-weight="700" fill="#0d47a1">   实测 24 kB vs 21 MB（875 倍），但慢于 B-Tree</text>
+  </g>
+
+  <!-- ===== 8.3 ===== -->
+  <g transform="translate(620, 66)">
+    <rect width="280" height="212" rx="8" fill="#ffffff" stroke="#bcd"/>
+    <rect width="280" height="28" rx="8" fill="#0d47a1"/>
+    <text x="14" y="19" font-size="13" font-weight="700" fill="#ffffff">8.3 组合索引与最左前缀</text>
+
+    <text x="14" y="50" font-size="11" font-weight="700" fill="#1565c0">🎯 本质：不是"能不能用"，是"缩小多少"</text>
+
+    <g transform="translate(14, 60)">
+      <rect width="252" height="110" rx="4" fill="#f5f7fa" stroke="#cfd8dc"/>
+      <text x="8" y="14" font-size="9" font-weight="700" fill="#666">索引 (a,b,c) · 20 万行 · 索引共 171 页：</text>
+      <text x="8" y="30" font-size="9" fill="#333">WHERE a = 5   → Buffers <tspan font-weight="700" fill="#388e3c">6</tspan></text>
+      <text x="8" y="44" font-size="9" fill="#333">WHERE b = 42  → Buffers <tspan font-weight="700" fill="#c62828">170</tspan>（≈ 全索引）</text>
+      <text x="8" y="58" font-size="9" fill="#333">无索引全表扫  → Buffers 1470</text>
+      <line x1="0" y1="66" x2="252" y2="66" stroke="#cfd8dc"/>
+      <text x="8" y="80" font-size="9" font-weight="700" fill="#0d47a1">列顺序：等值在前、范围在后</text>
+      <text x="8" y="93" font-size="8" fill="#333">(status, created_at) 74 页 / 1.71 ms</text>
+      <text x="8" y="105" font-size="8" fill="#333">(created_at, status) 366 页 / 5.36 ms</text>
+    </g>
+
+    <text x="14" y="186" font-size="9" font-weight="700" fill="#c62828">⚠️ Index Only Scan 也会回表！</text>
+    <text x="14" y="200" font-size="9" font-weight="700" fill="#0d47a1">   Heap Fetches 实测 0 → 200 →（VACUUM）→ 0</text>
+  </g>
+
+  <!-- ========= 下半左：B-Tree 物理结构（实测） ========= -->
+  <g transform="translate(20, 294)">
+    <rect width="440" height="300" rx="8" fill="#ffffff" stroke="#bcd"/>
+    <rect width="440" height="28" rx="8" fill="#1565c0"/>
+    <text x="14" y="19" font-size="13" font-weight="700" fill="#ffffff">B-Tree 物理结构（pageinspect 真跑出来的）</text>
+
+    <!-- 树结构 -->
+    <g transform="translate(16, 42)">
+      <!-- meta -->
+      <rect x="150" y="0" width="120" height="22" rx="3" fill="#eceff1" stroke="#90a4ae"/>
+      <text x="210" y="15" text-anchor="middle" font-size="9" font-weight="700" fill="#455a64">block 0 · metapage</text>
+      <text x="278" y="15" font-size="8" fill="#666">root=290 level=2</text>
+
+      <line x1="210" y1="22" x2="210" y2="34" stroke="#90a4ae" stroke-width="1.5"/>
+
+      <!-- root -->
+      <rect x="150" y="34" width="120" height="24" rx="3" fill="#e3f2fd" stroke="#1565c0"/>
+      <text x="210" y="50" text-anchor="middle" font-size="9" font-weight="700" fill="#0d47a1">root 页 blkno=290 (r)</text>
+
+      <line x1="210" y1="58" x2="210" y2="70" stroke="#90a4ae" stroke-width="1.5"/>
+      <line x1="90" y1="70" x2="330" y2="70" stroke="#90a4ae" stroke-width="1.5"/>
+      <line x1="90" y1="70" x2="90" y2="80" stroke="#90a4ae" stroke-width="1.5"/>
+      <line x1="330" y1="70" x2="330" y2="80" stroke="#90a4ae" stroke-width="1.5"/>
+
+      <!-- internal -->
+      <rect x="30" y="80" width="120" height="22" rx="3" fill="#fff8e1" stroke="#f9a825"/>
+      <text x="90" y="95" text-anchor="middle" font-size="9" font-weight="700" fill="#e65100">internal (i) L1</text>
+      <rect x="270" y="80" width="120" height="22" rx="3" fill="#fff8e1" stroke="#f9a825"/>
+      <text x="330" y="95" text-anchor="middle" font-size="9" font-weight="700" fill="#e65100">internal (i) L1</text>
+
+      <!-- leaf row -->
+      <line x1="90" y1="102" x2="90" y2="114" stroke="#90a4ae"/>
+      <line x1="330" y1="102" x2="330" y2="114" stroke="#90a4ae"/>
+      <rect x="0" y="114" width="72" height="26" rx="3" fill="#e8f5e9" stroke="#388e3c"/>
+      <text x="36" y="130" text-anchor="middle" font-size="8" font-weight="700" fill="#2e7d32">leaf</text>
+      <rect x="76" y="114" width="72" height="26" rx="3" fill="#e8f5e9" stroke="#388e3c"/>
+      <text x="112" y="130" text-anchor="middle" font-size="8" font-weight="700" fill="#2e7d32">leaf</text>
+      <rect x="152" y="114" width="72" height="26" rx="3" fill="#e8f5e9" stroke="#388e3c"/>
+      <text x="188" y="130" text-anchor="middle" font-size="8" font-weight="700" fill="#2e7d32">leaf</text>
+      <rect x="228" y="114" width="72" height="26" rx="3" fill="#e8f5e9" stroke="#388e3c"/>
+      <text x="264" y="130" text-anchor="middle" font-size="8" font-weight="700" fill="#2e7d32">leaf</text>
+      <rect x="304" y="114" width="72" height="26" rx="3" fill="#e8f5e9" stroke="#388e3c"/>
+      <text x="340" y="130" text-anchor="middle" font-size="8" font-weight="700" fill="#2e7d32">leaf</text>
+
+      <!-- 双向链表 -->
+      <path d="M 36 145 L 36 158 L 112 158 L 112 145" fill="none" stroke="#388e3c" stroke-width="1.2" marker-end="url(#ar)"/>
+      <path d="M 112 145 L 112 152 L 188 152 L 188 145" fill="none" stroke="#388e3c" stroke-width="1.2"/>
+      <path d="M 188 145 L 188 152 L 264 152 L 264 145" fill="none" stroke="#388e3c" stroke-width="1.2"/>
+      <path d="M 264 145 L 264 152 L 340 152 L 340 145" fill="none" stroke="#388e3c" stroke-width="1.2"/>
+      <text x="188" y="172" text-anchor="middle" font-size="8" font-weight="700" fill="#2e7d32">↑ 叶子层双向链表（btpo_prev / btpo_next）实测 1→2→4→5→6</text>
+
+      <!-- 指向堆 -->
+      <line x1="188" y1="140" x2="188" y2="182" stroke="#c62828" stroke-width="1.2"/>
+      <text x="196" y="180" font-size="8" fill="#c62828">ctid → 堆表行</text>
+    </g>
+
+    <line x1="16" y1="238" x2="424" y2="238" stroke="#cfd8dc" stroke-dasharray="3 3"/>
+
+    <!-- 实测数字 -->
+    <text x="16" y="256" font-size="11" font-weight="700" fill="#1565c0">两个"你以为"的反例（本课实测）</text>
+
+    <g transform="translate(16, 264)">
+      <rect width="408" height="26" rx="4" fill="#fff3e0" stroke="#e65100"/>
+      <text x="8" y="12" font-size="9" font-weight="700" fill="#e65100">① "缺最左列 = 索引失效"？错</text>
+      <text x="8" y="23" font-size="8" fill="#333">Index Cond 里明写 (b = 42) —— 走了索引，但扫 170/171 页 ≈ 全索引</text>
+
+      <rect y="30" width="408" height="26" rx="4" fill="#fff3e0" stroke="#e65100"/>
+      <text x="8" y="42" font-size="9" font-weight="700" fill="#e65100">② "Index Only Scan = 不回表"？错</text>
+      <text x="8" y="53" font-size="8" fill="#333">UPDATE 后 Heap Fetches: 0 → 200，VACUUM 后回到 0（visibility map）</text>
+    </g>
+  </g>
+
+  <!-- ========= 下半右：决策表 ========= -->
+  <g transform="translate(480, 294)">
+    <rect width="420" height="300" rx="8" fill="#ffffff" stroke="#bcd"/>
+    <rect width="420" height="28" rx="8" fill="#7b1fa2"/>
+    <text x="14" y="19" font-size="13" font-weight="700" fill="#ffffff">两张决策表 + 一个代价提醒</text>
+
+    <!-- 表1 -->
+    <text x="16" y="48" font-size="10" font-weight="700" fill="#7b1fa2">① 索引类型四选一</text>
+    <g transform="translate(16, 54)">
+      <rect width="388" height="17" fill="#f3e5f5"/>
+      <text x="6" y="12" font-size="8" font-weight="700" fill="#333">场景</text>
+      <text x="210" y="12" font-size="8" font-weight="700" fill="#333">选谁</text>
+      <text x="310" y="12" font-size="8" font-weight="700" fill="#333">实测优势</text>
+
+      <rect y="17" width="388" height="17" fill="#ffffff" stroke="#e0e0e0"/>
+      <text x="6" y="29" font-size="8" fill="#333">等值 / 范围 / 排序（绝大多数）</text>
+      <text x="210" y="29" font-size="8" font-weight="700" fill="#388e3c">B-Tree（默认）</text>
+      <text x="310" y="29" font-size="7" fill="#666">万能</text>
+
+      <rect y="34" width="388" height="17" fill="#fafafa" stroke="#e0e0e0"/>
+      <text x="6" y="46" font-size="8" fill="#333">长字符串纯等值、想省空间</text>
+      <text x="210" y="46" font-size="8" font-weight="700" fill="#388e3c">Hash</text>
+      <text x="310" y="46" font-size="7" fill="#666">体积 30%</text>
+
+      <rect y="51" width="388" height="17" fill="#ffffff" stroke="#e0e0e0"/>
+      <text x="6" y="63" font-size="8" fill="#333">数组 @&gt; / JSONB 包含 / 全文 @@</text>
+      <text x="210" y="63" font-size="8" font-weight="700" fill="#388e3c">GIN</text>
+      <text x="310" y="63" font-size="7" fill="#666">体积 1/20</text>
+
+      <rect y="68" width="388" height="17" fill="#fafafa" stroke="#e0e0e0"/>
+      <text x="6" y="80" font-size="8" fill="#333">TB 级表时间范围 + 物理有序</text>
+      <text x="210" y="80" font-size="8" font-weight="700" fill="#388e3c">BRIN</text>
+      <text x="310" y="80" font-size="7" fill="#666">体积 1/875</text>
+
+      <rect y="85" width="388" height="17" fill="#fff3e0" stroke="#e0e0e0"/>
+      <text x="6" y="97" font-size="8" fill="#333">需要唯一约束 / 覆盖索引</text>
+      <text x="210" y="97" font-size="8" font-weight="700" fill="#e65100">只能 B-Tree</text>
+      <text x="310" y="97" font-size="7" fill="#666">Hash 不支持</text>
+    </g>
+
+    <!-- 表2 -->
+    <text x="16" y="176" font-size="10" font-weight="700" fill="#7b1fa2">② 建索引前问自己四个问题</text>
+    <g transform="translate(16, 182)">
+      <rect width="388" height="16" fill="#ffffff" stroke="#e0e0e0"/>
+      <text x="6" y="11" font-size="8" fill="#333">1. 会被用吗？ → 一周后查 <tspan font-weight="700" fill="#0d47a1">pg_stat_user_indexes.idx_scan</tspan></text>
+      <rect y="16" width="388" height="16" fill="#fafafa" stroke="#e0e0e0"/>
+      <text x="6" y="27" font-size="8" fill="#333">2. 区分度高吗？ → 性别 / 布尔值别建 B-Tree</text>
+      <rect y="32" width="388" height="16" fill="#ffffff" stroke="#e0e0e0"/>
+      <text x="6" y="43" font-size="8" fill="#333">3. 物理相关吗？ → BRIN 先看 <tspan font-weight="700" fill="#0d47a1">correlation &gt; 0.9</tspan></text>
+      <rect y="48" width="388" height="16" fill="#fafafa" stroke="#e0e0e0"/>
+      <text x="6" y="59" font-size="8" fill="#333">4. 写入代价接受吗？ → 每多一个索引多一份成本</text>
+    </g>
+
+    <!-- 代价 -->
+    <text x="16" y="256" font-size="10" font-weight="700" fill="#c62828">③ 索引不是免费的（30 万行插入实测）</text>
+    <g transform="translate(16, 262)">
+      <rect width="188" height="30" rx="4" fill="#e8f5e9" stroke="#388e3c"/>
+      <text x="94" y="13" text-anchor="middle" font-size="8" fill="#333">1 个索引（仅主键）</text>
+      <text x="94" y="26" text-anchor="middle" font-size="11" font-weight="700" fill="#2e7d32">392 ms</text>
+
+      <rect x="200" width="188" height="30" rx="4" fill="#ffebee" stroke="#c62828"/>
+      <text x="294" y="13" text-anchor="middle" font-size="8" fill="#333">5 个索引</text>
+      <text x="294" y="26" text-anchor="middle" font-size="11" font-weight="700" fill="#c62828">1622 ms（4.1×）</text>
+    </g>
+  </g>
+
+  <!-- ========= 阶段 3 进度 ========= -->
+  <g transform="translate(20, 610)">
+    <rect width="880" height="74" rx="8" fill="#e3f2fd" stroke="#1565c0"/>
+    <text x="16" y="22" font-size="12" font-weight="700" fill="#0d47a1">阶段 3 · 索引与查询优化（9 知识点）· 本课开篇 3 / 9</text>
+
+    <g transform="translate(16, 32)">
+      <rect width="280" height="30" rx="4" fill="#0d47a1" stroke="#0d47a1"/>
+      <text x="140" y="13" text-anchor="middle" font-size="9" font-weight="700" fill="#ffffff">课 8 索引原理</text>
+      <text x="140" y="25" text-anchor="middle" font-size="8" fill="#c5d9f1">索引长什么样、怎么选 ✅ 本课</text>
+
+      <rect x="296" width="280" height="30" rx="4" fill="#ffffff" stroke="#bcd"/>
+      <text x="436" y="13" text-anchor="middle" font-size="9" font-weight="700" fill="#0d47a1">课 9 执行计划</text>
+      <text x="436" y="25" text-anchor="middle" font-size="8" fill="#666">EXPLAIN 当一门语言读</text>
+
+      <rect x="592" width="280" height="30" rx="4" fill="#ffffff" stroke="#bcd"/>
+      <text x="732" y="13" text-anchor="middle" font-size="9" font-weight="700" fill="#0d47a1">课 10 慢查询优化实战</text>
+      <text x="732" y="25" text-anchor="middle" font-size="8" fill="#666">统计信息、索引陷阱、重写模式</text>
+    </g>
+  </g>
+
+  <defs>
+    <marker id="ar" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 z" fill="#388e3c"/>
+    </marker>
+  </defs>
+</svg>

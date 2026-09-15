@@ -1,0 +1,21 @@
+=== 停掉恢复实例 5434 ===
+waiting for server to shut down.... done
+server stopped
+
+=== 对照实验：把恢复目标设成一个早于基础备份结束的时间 ===
+（官方：The stop point must be after the ending time of the base backup）
+waiting for server to start.... done
+server started
+pg_ctl 退出码: 0
+
+--- 服务端日志里的失败原因 ---
+2026-09-10 15:42:36.203 UTC [230] LOG:  starting backup recovery with redo LSN 1/17000028, checkpoint LSN 1/17000080, on timeline ID 1
+2026-09-10 15:42:36.220 UTC [230] LOG:  starting point-in-time recovery to 2020-01-01 00:00:00+00
+2026-09-10 15:42:36.240 UTC [230] LOG:  completed backup recovery with redo LSN 1/17000028 and end LSN 1/17000120
+2026-09-10 15:42:36.240 UTC [230] LOG:  consistent recovery state reached at 1/17000120
+2026-09-10 15:42:36.242 UTC [230] LOG:  recovery stopping before commit of transaction 2505, time 2026-09-10 15:41:45.029573+00
+2026-09-10 15:42:36.242 UTC [230] LOG:  pausing at the end of recovery
+
+=== 收尾：确认主库(5433)始终没受影响 ===
+主库中 pitr_demo 存在吗: false
+主库 timeline=1

@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1180" viewBox="0 0 1000 1180">
+<rect x="0" y="0" width="1000" height="1180" rx="0" fill="#ffffff"/>
+<text x="500.0" y="40" font-size="21" fill="#333333" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">课 17 · 扩展与安全：装能力、锁权限、控连接、留后路</text>
+<text x="500.0" y="64" font-size="12.5" fill="#777" font-weight="normal" text-anchor="middle" font-family="PingFang SC, sans-serif">实测环境 PostgreSQL 17.11 · 实验数据见 labs/out_l17_full.md</text>
+<rect x="24" y="88" width="952" height="158" rx="8" fill="#fafafa"/>
+<text x="44" y="116" font-size="15" fill="#333333" font-weight="bold" text-anchor="start" font-family="PingFang SC, sans-serif">① 扩展 = 按需加装的能力包（CREATE EXTENSION）</text>
+<rect x="60" y="132" width="220" height="100" rx="8" fill="#ffffff" stroke="#bbb" stroke-width="1"/>
+<text x="170" y="154" font-size="12.5" fill="#1565C0" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">内置够用</text>
+<text x="170" y="174" font-size="11" fill="#333333" font-weight="normal" text-anchor="middle" font-family="PingFang SC, sans-serif">gen_random_uuid() PG13+</text>
+<text x="170" y="192" font-size="10.5" fill="#777" font-weight="normal" text-anchor="middle" font-family="PingFang SC, sans-serif">加密 pgcrypto / 模糊 pg_trgm</text>
+<rect x="292" y="132" width="220" height="100" rx="8" fill="#ffffff" stroke="#bbb" stroke-width="1"/>
+<text x="402" y="154" font-size="12.5" fill="#1565C0" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">trusted 机制(PG13+)</text>
+<text x="402" y="174" font-size="11" fill="#333333" font-weight="normal" text-anchor="middle" font-family="PingFang SC, sans-serif">有 CREATE 权限即可装</text>
+<text x="402" y="192" font-size="10.5" fill="#777" font-weight="normal" text-anchor="middle" font-family="PingFang SC, sans-serif">实测 citext/pg_trgm ✓</text>
+<rect x="524" y="132" width="220" height="100" rx="8" fill="#ffffff" stroke="#bbb" stroke-width="1"/>
+<text x="634" y="154" font-size="12.5" fill="#1565C0" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">非 trusted</text>
+<text x="634" y="174" font-size="11" fill="#333333" font-weight="normal" text-anchor="middle" font-family="PingFang SC, sans-serif">实测 pg_freespacemap</text>
+<text x="634" y="192" font-size="10.5" fill="#777" font-weight="normal" text-anchor="middle" font-family="PingFang SC, sans-serif">permission denied + HINT</text>
+<rect x="756" y="132" width="220" height="100" rx="8" fill="#ffffff" stroke="#bbb" stroke-width="1"/>
+<text x="866" y="154" font-size="12.5" fill="#1565C0" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">外部生态</text>
+<text x="866" y="174" font-size="11" fill="#333333" font-weight="normal" text-anchor="middle" font-family="PingFang SC, sans-serif">pgvector/PostGIS/pg_cron</text>
+<text x="866" y="192" font-size="10.5" fill="#777" font-weight="normal" text-anchor="middle" font-family="PingFang SC, sans-serif">需专用镜像，按需引入</text>
+<rect x="24" y="266" width="952" height="190" rx="8" fill="#fafafa"/>
+<text x="44" y="294" font-size="15" fill="#333333" font-weight="bold" text-anchor="start" font-family="PingFang SC, sans-serif">② RLS 行级安全（PG 9.5+）：同一张表，四个视角实测</text>
+<rect x="60" y="308" width="440" height="56" rx="8" fill="#E8F5E9"/>
+<text x="74" y="330" font-size="12.5" fill="#2E7D32" font-weight="bold" text-anchor="start" font-family="PingFang SC, sans-serif">普通用户 app_a</text>
+<text x="74" y="350" font-size="11" fill="#333333" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">只见 tenant=current_user 的 2 行</text>
+<rect x="526" y="308" width="440" height="56" rx="8" fill="#FFEBEE"/>
+<text x="540" y="330" font-size="12.5" fill="#C62828" font-weight="bold" text-anchor="start" font-family="PingFang SC, sans-serif">跨租户写入</text>
+<text x="540" y="350" font-size="11" fill="#333333" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">WITH CHECK 拦截: violates row-level security policy</text>
+<rect x="60" y="374" width="440" height="56" rx="8" fill="#FFF8E1"/>
+<text x="74" y="396" font-size="12.5" fill="#B26A00" font-weight="bold" text-anchor="start" font-family="PingFang SC, sans-serif">表 owner（非super）</text>
+<text x="74" y="416" font-size="11" fill="#333333" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">默认绕过看 4 行 → FORCE 后 0 行</text>
+<rect x="526" y="374" width="440" height="56" rx="8" fill="#E3F2FD"/>
+<text x="540" y="396" font-size="12.5" fill="#1565C0" font-weight="bold" text-anchor="start" font-family="PingFang SC, sans-serif">superuser</text>
+<text x="540" y="416" font-size="11" fill="#333333" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">永远穿透（FORCE 对其无效）</text>
+<rect x="24" y="476" width="952" height="140" rx="8" fill="#fafafa"/>
+<text x="44" y="504" font-size="15" fill="#333333" font-weight="bold" text-anchor="start" font-family="PingFang SC, sans-serif">③ 每个连接一个进程：50 连接 = 787 MB（实测账单）</text>
+<text x="60" y="536" font-size="11.5" fill="#333333" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">0 连接 · 362 MB</text>
+<rect x="240" y="522" width="560" height="16" rx="4" fill="#eee"/>
+<rect x="240" y="522" width="173" height="16" rx="4" fill="#999"/>
+<text x="60" y="564" font-size="11.5" fill="#333333" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">50 连接 · 1149 MB</text>
+<rect x="240" y="550" width="560" height="16" rx="4" fill="#eee"/>
+<rect x="240" y="550" width="560" height="16" rx="4" fill="#C62828"/>
+<text x="60" y="592" font-size="11.5" fill="#333333" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">断开 · 回落 362 MB</text>
+<rect x="240" y="578" width="560" height="16" rx="4" fill="#eee"/>
+<rect x="240" y="578" width="173" height="16" rx="4" fill="#2E7D32"/>
+<text x="60" y="622" font-size="11.5" fill="#555" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">max_connections 默认 100 且直接挂钩共享内存分配 → 连接池（PgBouncer transaction 模式）才是解</text>
+<rect x="24" y="636" width="952" height="140" rx="8" fill="#fafafa"/>
+<text x="44" y="664" font-size="15" fill="#333333" font-weight="bold" text-anchor="start" font-family="PingFang SC, sans-serif">④ 权限是四道门（B 组实测顺序）</text>
+<rect x="60" y="682" width="220" height="80" rx="8" fill="#ffffff" stroke="#1565C0" stroke-width="1.2"/>
+<text x="170" y="704" font-size="12.5" fill="#1565C0" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">1 · pg_hba.conf</text>
+<text x="170" y="726" font-size="10.5" fill="#333333" font-weight="normal" text-anchor="middle" font-family="PingFang SC, sans-serif">能不能连上（IP+认证方式）</text>
+<rect x="292" y="682" width="220" height="80" rx="8" fill="#ffffff" stroke="#1565C0" stroke-width="1.2"/>
+<text x="402" y="704" font-size="12.5" fill="#1565C0" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">2 · schema USAGE</text>
+<text x="402" y="726" font-size="10.5" fill="#333333" font-weight="normal" text-anchor="middle" font-family="PingFang SC, sans-serif">能不能看见（缺它报 permission denied for schema）</text>
+<rect x="524" y="682" width="220" height="80" rx="8" fill="#ffffff" stroke="#1565C0" stroke-width="1.2"/>
+<text x="634" y="704" font-size="12.5" fill="#1565C0" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">3 · 表 GRANT</text>
+<text x="634" y="726" font-size="10.5" fill="#333333" font-weight="normal" text-anchor="middle" font-family="PingFang SC, sans-serif">能不能读写（表/列/序列粒度）</text>
+<rect x="756" y="682" width="220" height="80" rx="8" fill="#ffffff" stroke="#1565C0" stroke-width="1.2"/>
+<text x="866" y="704" font-size="12.5" fill="#1565C0" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">4 · 行 RLS</text>
+<text x="866" y="726" font-size="10.5" fill="#333333" font-weight="normal" text-anchor="middle" font-family="PingFang SC, sans-serif">能看哪几行（策略 USING/WITH CHECK）</text>
+<rect x="24" y="796" width="952" height="120" rx="8" fill="#fafafa"/>
+<text x="44" y="824" font-size="15" fill="#333333" font-weight="bold" text-anchor="start" font-family="PingFang SC, sans-serif">⑤ 两个容易被时间线坑掉的事实</text>
+<rect x="60" y="840" width="440" height="64" rx="8" fill="#ffffff" stroke="#B26A00" stroke-width="1.2"/>
+<text x="280" y="862" font-size="12.5" fill="#B26A00" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">PG 15 起 public schema 收紧</text>
+<text x="80" y="882" font-size="11" fill="#333333" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">新建库：public 无 PUBLIC CREATE；升级库旧 ACL 保留，需手动 REVOKE</text>
+<rect x="524" y="840" width="432" height="64" rx="8" fill="#ffffff" stroke="#C62828" stroke-width="1.2"/>
+<text x="740" y="862" font-size="12.5" fill="#C62828" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">pg_upgrade 不转移统计信息</text>
+<text x="544" y="882" font-size="11" fill="#333333" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">官方原文：statistics are not transferred…升级后要重新生成</text>
+<rect x="24" y="936" width="952" height="140" rx="8" fill="#fafafa"/>
+<text x="44" y="964" font-size="15" fill="#333333" font-weight="bold" text-anchor="start" font-family="PingFang SC, sans-serif">⑥ 大版本升级三路线（官方 18.6 / 逻辑复制 / dump）</text>
+<rect x="60" y="980" width="290" height="84" rx="8" fill="#ffffff" stroke="#bbb" stroke-width="1"/>
+<text x="205" y="1000" font-size="13" fill="#1565C0" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">pg_upgrade</text>
+<text x="205" y="1018" font-size="11.5" fill="#333333" font-weight="normal" text-anchor="middle" font-family="PingFang SC, sans-serif">停机分钟级</text>
+<text x="205" y="1034" font-size="10.5" fill="#555" font-weight="normal" text-anchor="middle" font-family="PingFang SC, sans-serif">--link 硬链接 · --check 先查</text>
+<text x="205" y="1050" font-size="10.5" fill="#C62828" font-weight="normal" text-anchor="middle" font-family="PingFang SC, sans-serif">⚠ link 模式旧目录不可再用</text>
+<rect x="370" y="980" width="290" height="84" rx="8" fill="#ffffff" stroke="#bbb" stroke-width="1"/>
+<text x="515" y="1000" font-size="13" fill="#1565C0" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">逻辑复制</text>
+<text x="515" y="1018" font-size="11.5" fill="#333333" font-weight="normal" text-anchor="middle" font-family="PingFang SC, sans-serif">停机秒级（切换时）</text>
+<text x="515" y="1034" font-size="10.5" fill="#555" font-weight="normal" text-anchor="middle" font-family="PingFang SC, sans-serif">低停机跨版本 · 易回滚</text>
+<text x="515" y="1050" font-size="10.5" fill="#C62828" font-weight="normal" text-anchor="middle" font-family="PingFang SC, sans-serif">PG 17 还保留复制槽</text>
+<rect x="680" y="980" width="290" height="84" rx="8" fill="#ffffff" stroke="#bbb" stroke-width="1"/>
+<text x="825" y="1000" font-size="13" fill="#1565C0" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">dump/restore</text>
+<text x="825" y="1018" font-size="11.5" fill="#333333" font-weight="normal" text-anchor="middle" font-family="PingFang SC, sans-serif">小时级</text>
+<text x="825" y="1034" font-size="10.5" fill="#555" font-weight="normal" text-anchor="middle" font-family="PingFang SC, sans-serif">跨架构/跨平台最稳</text>
+<text x="825" y="1050" font-size="10.5" fill="#C62828" font-weight="normal" text-anchor="middle" font-family="PingFang SC, sans-serif">慢，随库大小线性</text>
+<text x="60" y="1100" font-size="11.5" fill="#555" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">FDW（postgres_fdw）实测：跨库查询一条 SELECT 打通（本库 6 行 = 外库 6 行）——跨“库”用 FDW，跨“实例/版本”用三路线</text>
+</svg>

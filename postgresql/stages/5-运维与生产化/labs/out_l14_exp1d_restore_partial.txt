@@ -1,0 +1,17 @@
+=== B-2: -t 只恢复一张表（注意 pg_restore 的 -t 不含索引等附属对象） ===
+pg_restore: error: could not execute query: ERROR:  schema "finance" does not exist
+Command was: COPY finance.accounts (id, owner, balance) FROM stdin;
+pg_restore: warning: errors ignored on restore: 3
+ERROR:  relation "finance.accounts" does not exist
+LINE 1: SELECT count(*) FROM finance.accounts;
+                             ^
+该库 finance schema 的索引（-t 不含附属对象）：
+该库 finance schema 的表：
+
+=== B-3: --schema-only（只结构不数据） ===
+[schema-only] accounts 行数: 0
+
+=== B-4: 再用 --data-only 补数据 ===
+DETAIL:  Key (user_id)=(2) is not present in table "users".
+pg_restore: warning: errors ignored on restore: 1
+[先 -s 再 -a] accounts 行数: 3

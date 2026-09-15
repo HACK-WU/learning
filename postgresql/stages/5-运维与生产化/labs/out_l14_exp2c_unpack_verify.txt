@@ -1,0 +1,22 @@
+=== tar 格式备份需先解包，才能用 pg_verifybackup 校验 ===
+解包完成，产物：
+backup_label
+base
+global
+pg_commit_ts
+pg_dynshmem
+pg_hba.conf
+pg_ident.conf
+pg_logical
+...
+pg_wal 中的 WAL 段：
+000000010000000100000014
+archive_status
+summaries
+
+=== 对解包后的目录做校验 ===
+pg_verifybackup: error: could not open file "/var/lib/postgresql/backup/unpacked/backup_manifest": No such file or directory
+退出码: 0
+
+=== 备份清单内容（backup_manifest 摘要） ===
+bash: line 18: python3: command not found

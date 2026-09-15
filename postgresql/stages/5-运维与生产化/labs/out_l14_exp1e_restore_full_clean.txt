@@ -1,0 +1,21 @@
+=== B-5: 完整恢复到新库（directory 格式 + -j 4 并行） ===
+
+real	0m4.118s
+user	0m0.683s
+sys	0m0.229s
+--- 验证 ---
+orders_big=1000000
+accounts=3
+db_size=656 MB
+tables=24
+
+=== B-6: 重复恢复同一归档（不加 --clean → 对象已存在报错） ===
+Command was: ALTER TABLE ONLY finance.products
+    ADD CONSTRAINT products_category_id_fkey FOREIGN KEY (category_id) REFERENCES finance.categories(id);
+
+
+pg_restore: warning: errors ignored on restore: 113
+
+=== B-7: 加 --clean --if-exists 再恢复（错误被抑制） ===
+--- 验证仍完好 ---
+accounts=3

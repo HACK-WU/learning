@@ -1,0 +1,106 @@
+
+==============================================================================
+实验 A · 各命令在 finance.accounts 上自动获取的表级锁
+==============================================================================
+  （BEGIN → 执行命令 → 查 pg_locks → ROLLBACK）
+
+  SELECT                         → AccessShareLock
+  UPDATE                         → RowExclusiveLock
+  DELETE                         → RowExclusiveLock
+  INSERT                         → RowExclusiveLock
+  SELECT FOR UPDATE              → RowShareLock
+  SELECT FOR NO KEY UPDATE       → RowShareLock
+  SELECT FOR SHARE               → RowShareLock
+  SELECT FOR KEY SHARE           → RowShareLock
+  CREATE INDEX                   → ShareLock
+  ALTER TABLE ADD COLUMN         → AccessExclusiveLock
+  TRUNCATE                       → AccessExclusiveLock + ShareLock
+  ANALYZE                        → ShareUpdateExclusiveLock
+  LOCK TABLE（不写模式）               → AccessExclusiveLock
+  CREATE TRIGGER 类（SHARE ROW EXCL） → ShareRowExclusiveLock
+
+  --- 显式 LOCK TABLE 八种模式 ---
+  LOCK TABLE ... IN ACCESS SHARE MODE        → AccessShareLock
+  LOCK TABLE ... IN ROW SHARE MODE           → RowShareLock
+  LOCK TABLE ... IN ROW EXCLUSIVE MODE       → RowExclusiveLock
+  LOCK TABLE ... IN SHARE UPDATE EXCLUSIVE MODE → ShareUpdateExclusiveLock
+  LOCK TABLE ... IN SHARE MODE               → ShareLock
+  LOCK TABLE ... IN SHARE ROW EXCLUSIVE MODE → ShareRowExclusiveLock
+  LOCK TABLE ... IN EXCLUSIVE MODE           → ExclusiveLock
+  LOCK TABLE ... IN ACCESS EXCLUSIVE MODE    → AccessExclusiveLock
+
+==============================================================================
+实验 A-2 · VACUUM 的锁（大表 100 万行，高频轮询抓拍）
+==============================================================================
+  抓拍结果： mode           | granted  | --------------------------+--------- |  ShareUpdateExclusiveLock | t | (1 row)
+
+  → 官方：VACUUM（不带 FULL）获取 SHARE UPDATE EXCLUSIVE（PG 17 docs 13.3.1）
+
+==============================================================================
+实验 G · NOWAIT：不等，直接报错（SQLSTATE 55P03）
+==============================================================================
+ lock_timeout 
+--------------
+ 0
+(1 row)
+  HOLDER: HOLDER 锁住 id=1
+
+  G-1 NOWAIT（应立即报错）：
+  G-2 不带 NOWAIT（应阻塞）：
+   pid  | wait_event_type |  wait_event   |                      query_head                      | blocked_by 
+  ------+-----------------+---------------+------------------------------------------------------+------------
+   3754 | Lock            | transactionid | SELECT * FROM finance.accounts WHERE id = 1 FOR UPDA | {3755}
+  (1 row)
+   pid  | locktype |        mode         | granted |      rel      | blocked_by 
+  ------+----------+---------------------+---------+---------------+------------
+   3754 | tuple    | AccessExclusiveLock | t       | accounts      | {3755}
+   3754 | relation | RowShareLock        | t       | accounts      | {3755}
+   3754 | relation | RowShareLock        | t       | accounts_pkey | {3755}
+   3755 | relation | RowShareLock        | t       | accounts      | {}
+   3755 | relation | RowShareLock        | t       | accounts_pkey | {}
+  (5 rows)
+
+  HOLDER ROLLBACK 后 WAITER：
+  ERROR:  could not obtain lock on row in relation "accounts"
+   id | owner | balance 
+  ----+-------+---------
+    1 | alice | 1000.00
+  (1 row)
+  Time: 3016.479 ms (00:03.016)
+
+
+==============================================================================
+实验 H · SKIP LOCKED：跳过被锁的行（队列场景）
+==============================================================================
+
+  HOLDER: HOLDER 锁住 task 1,2
+
+  H-1 不带 SKIP LOCKED 的全表 FOR UPDATE（应阻塞）：
+   pid  | wait_event_type |  wait_event   |                      query_head                      | blocked_by 
+  ------+-----------------+---------------+------------------------------------------------------+------------
+   3754 | Lock            | transactionid | SELECT id, payload FROM finance.task_queue ORDER BY  | {3755}
+  (1 row)
+  HOLDER ROLLBACK 后返回：
+   id | payload 
+  ----+---------
+    1 | task-1
+    2 | task-2
+    3 | task-3
+    4 | task-4
+    5 | task-5
+  (5 rows)
+
+
+  H-2 重新持锁，用 SKIP LOCKED：
+  HOLDER: HOLDER 锁住 1,2
+  SKIP LOCKED 结果（应只剩 3,4,5）:  id | payload 
+  SKIP LOCKED 结果（应只剩 3,4,5）: ----+---------
+  SKIP LOCKED 结果（应只剩 3,4,5）:   3 | task-3
+  SKIP LOCKED 结果（应只剩 3,4,5）:   4 | task-4
+  SKIP LOCKED 结果（应只剩 3,4,5）:   5 | task-5
+  SKIP LOCKED 结果（应只剩 3,4,5）: (3 rows)
+
+
+==============================================================================
+实验 1b 结束
+==============================================================================

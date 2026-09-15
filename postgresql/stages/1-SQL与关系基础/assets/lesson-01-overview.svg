@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 540" font-family="-apple-system, 'PingFang SC', 'Segoe UI', sans-serif">
+  <!-- 浅底 -->
+  <rect width="880" height="540" fill="#fafafa"/>
+
+  <!-- 标题 -->
+  <text x="440" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#0d47a1">课 1 一图总结 · PostgreSQL 是什么 + 怎么装</text>
+  <text x="440" y="52" text-anchor="middle" font-size="11" fill="#666">左：PG 是什么 / 右：怎么装 / 数据核查于 2026-09-06</text>
+
+  <!-- 左右分栏 -->
+  <line x1="440" y1="70" x2="440" y2="530" stroke="#cfd8dc" stroke-width="1" stroke-dasharray="4 4"/>
+
+  <!-- ========= 左半：PG 是什么 ========= -->
+  <text x="32" y="92" font-size="14" font-weight="700" fill="#1565c0">📜 左 · 起源与本质</text>
+
+  <!-- 起源时间线 -->
+  <g transform="translate(32, 110)">
+    <rect width="380" height="118" rx="6" fill="#ffffff" stroke="#bcd"/>
+    <text x="14" y="22" font-size="12" font-weight="700" fill="#333">起源时间线</text>
+    <line x1="14" y1="56" x2="366" y2="56" stroke="#1976d2" stroke-width="2"/>
+    <!-- 时间线 4 个节点 -->
+    <circle cx="40" cy="56" r="5" fill="#1976d2"/>
+    <circle cx="140" cy="56" r="5" fill="#1976d2"/>
+    <circle cx="240" cy="56" r="5" fill="#1976d2"/>
+    <circle cx="340" cy="56" r="5" fill="#0d47a1"/>
+    <text x="40" y="42" text-anchor="middle" font-size="10" fill="#333">1986 Berkeley</text>
+    <text x="40" y="74" text-anchor="middle" font-size="9" fill="#555">POSTGRES 立项</text>
+    <text x="140" y="42" text-anchor="middle" font-size="10" fill="#333">1994</text>
+    <text x="140" y="74" text-anchor="middle" font-size="9" fill="#555">Postgres95</text>
+    <text x="240" y="42" text-anchor="middle" font-size="10" fill="#333">1996</text>
+    <text x="240" y="74" text-anchor="middle" font-size="9" fill="#555">改名 PostgreSQL</text>
+    <text x="340" y="42" text-anchor="middle" font-size="10" fill="#0d47a1" font-weight="700">2026</text>
+    <text x="340" y="74" text-anchor="middle" font-size="9" fill="#0d47a1" font-weight="700">PG 17.11</text>
+    <text x="14" y="104" font-size="9" fill="#777">主要资助：DARPA / ARO / NSF / ESL · 关键人物：Stonebraker → Andrew Yu + Jolly Chen → 社区</text>
+  </g>
+
+  <!-- 6 大支柱 -->
+  <g transform="translate(32, 248)">
+    <rect width="380" height="160" rx="6" fill="#ffffff" stroke="#bcd"/>
+    <text x="14" y="22" font-size="12" font-weight="700" fill="#333">6 大支柱（前 3 基础 + 后 3 特色）</text>
+
+    <!-- 三基础 -->
+    <g transform="translate(14, 36)">
+      <rect width="110" height="48" rx="4" fill="#e3f2fd" stroke="#1976d2"/>
+      <text x="55" y="20" text-anchor="middle" font-size="11" font-weight="700" fill="#0d47a1">ACID 强事务</text>
+      <text x="55" y="36" text-anchor="middle" font-size="9" fill="#333">默认 READ COMMITTED</text>
+    </g>
+    <g transform="translate(132, 36)">
+      <rect width="110" height="48" rx="4" fill="#e3f2fd" stroke="#1976d2"/>
+      <text x="55" y="20" text-anchor="middle" font-size="11" font-weight="700" fill="#0d47a1">MVCC 并发</text>
+      <text x="55" y="36" text-anchor="middle" font-size="9" fill="#333">读不阻塞写</text>
+    </g>
+    <g transform="translate(250, 36)">
+      <rect width="110" height="48" rx="4" fill="#e3f2fd" stroke="#1976d2"/>
+      <text x="55" y="20" text-anchor="middle" font-size="11" font-weight="700" fill="#0d47a1">SQL 标准</text>
+      <text x="55" y="36" text-anchor="middle" font-size="9" fill="#333">SQL:2011 大部分</text>
+    </g>
+
+    <!-- 三特色 -->
+    <g transform="translate(14, 92)">
+      <rect width="110" height="48" rx="4" fill="#fff3e0" stroke="#ef6c00"/>
+      <text x="55" y="20" text-anchor="middle" font-size="11" font-weight="700" fill="#e65100">JSONB</text>
+      <text x="55" y="36" text-anchor="middle" font-size="9" fill="#333">二进制 + JSONPath</text>
+    </g>
+    <g transform="translate(132, 92)">
+      <rect width="110" height="48" rx="4" fill="#fff3e0" stroke="#ef6c00"/>
+      <text x="55" y="20" text-anchor="middle" font-size="11" font-weight="700" fill="#e65100">扩展体系</text>
+      <text x="55" y="36" text-anchor="middle" font-size="9" fill="#333">PostGIS / pgvector</text>
+    </g>
+    <g transform="translate(250, 92)">
+      <rect width="110" height="48" rx="4" fill="#fff3e0" stroke="#ef6c00"/>
+      <text x="55" y="20" text-anchor="middle" font-size="11" font-weight="700" fill="#e65100">流/逻辑复制</text>
+      <text x="55" y="36" text-anchor="middle" font-size="9" fill="#333">PG 10+ 内置</text>
+    </g>
+  </g>
+
+  <!-- 一句话 -->
+  <g transform="translate(32, 428)">
+    <rect width="380" height="92" rx="6" fill="#fffde7" stroke="#f57f17"/>
+    <text x="14" y="22" font-size="11" font-weight="700" fill="#bf360c">一句话记住</text>
+    <text x="14" y="48" font-size="13" fill="#333">PG = 1986 Berkeley 血统 + 1996 名字定型</text>
+    <text x="14" y="68" font-size="13" fill="#333">≈ "开源免费的 Oracle 级数据库"</text>
+  </g>
+
+  <!-- ========= 右半：怎么装 ========= -->
+  <text x="458" y="92" font-size="14" font-weight="700" fill="#1565c0">🛠️ 右 · 怎么装</text>
+
+  <!-- Docker 命令卡 -->
+  <g transform="translate(458, 110)">
+    <rect width="380" height="158" rx="6" fill="#ffffff" stroke="#bcd"/>
+    <text x="14" y="22" font-size="12" font-weight="700" fill="#333">Docker 一行起 PG 17</text>
+    <rect x="14" y="34" width="352" height="110" rx="4" fill="#263238"/>
+    <text x="22" y="54" font-size="10.5" fill="#aed581" font-family="Menlo, monospace">docker pull postgres:17</text>
+    <text x="22" y="72" font-size="10.5" fill="#aed581" font-family="Menlo, monospace">docker run -d --name pg17 \</text>
+    <text x="22" y="90" font-size="10.5" fill="#aed581" font-family="Menlo, monospace">  -e POSTGRES_PASSWORD=postgres \</text>
+    <text x="22" y="108" font-size="10.5" fill="#aed581" font-family="Menlo, monospace">  -e POSTGRES_DB=order_service \</text>
+    <text x="22" y="126" font-size="10.5" fill="#aed581" font-family="Menlo, monospace">  -p 5432:5432 postgres:17</text>
+  </g>
+
+  <!-- 三大件 -->
+  <g transform="translate(458, 284)">
+    <rect width="380" height="76" rx="6" fill="#ffffff" stroke="#bcd"/>
+    <text x="14" y="22" font-size="12" font-weight="700" fill="#333">三大件</text>
+    <g transform="translate(14, 36)">
+      <rect width="108" height="32" rx="4" fill="#e8f5e9" stroke="#388e3c"/>
+      <text x="54" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#1b5e20">postgresql-server</text>
+      <text x="54" y="26" text-anchor="middle" font-size="9" fill="#333">容器内</text>
+    </g>
+    <g transform="translate(130, 36)">
+      <rect width="108" height="32" rx="4" fill="#e8f5e9" stroke="#388e3c"/>
+      <text x="54" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#1b5e20">psql</text>
+      <text x="54" y="26" text-anchor="middle" font-size="9" fill="#333">标准 CLI</text>
+    </g>
+    <g transform="translate(246, 36)">
+      <rect width="108" height="32" rx="4" fill="#e8f5e9" stroke="#388e3c"/>
+      <text x="54" y="14" text-anchor="middle" font-size="10" font-weight="700" fill="#1b5e20">pgcli</text>
+      <text x="54" y="26" text-anchor="middle" font-size="9" fill="#333">推荐：自动补全</text>
+    </g>
+  </g>
+
+  <!-- 连接三风格 -->
+  <g transform="translate(458, 372)">
+    <rect width="380" height="148" rx="6" fill="#ffffff" stroke="#bcd"/>
+    <text x="14" y="22" font-size="12" font-weight="700" fill="#333">连接 3 种风格</text>
+    <text x="14" y="44" font-size="10" fill="#555" font-family="Menlo, monospace"># URL 风格（最推荐）</text>
+    <text x="22" y="60" font-size="9.5" fill="#0d47a1" font-family="Menlo, monospace">pgcli postgres://postgres:postgres@localhost:5432/order_service</text>
+    <text x="14" y="84" font-size="10" fill="#555" font-family="Menlo, monospace"># 标志位风格</text>
+    <text x="22" y="100" font-size="9.5" fill="#0d47a1" font-family="Menlo, monospace">pgcli -h localhost -p 5432 -U postgres -d order_service</text>
+    <text x="14" y="124" font-size="10" fill="#555" font-family="Menlo, monospace"># 环境变量</text>
+    <text x="22" y="140" font-size="9.5" fill="#0d47a1" font-family="Menlo, monospace">export PGHOST=localhost ...; pgcli</text>
+  </g>
+</svg>

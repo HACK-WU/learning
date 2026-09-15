@@ -1,0 +1,46 @@
+======================================================================
+① 40001 serialization_failure —— SERIALIZABLE 并发更新
+======================================================================
+ balance 
+---------
+ 1000.00
+(1 row)
+ balance 
+---------
+ 1000.00
+(1 row)
+
+
+B 的报错：
+
+ERROR:  40001: could not serialize access due to concurrent update
+LOCATION:  ExecUpdate, nodeModifyTable.c:2415
+
+======================================================================
+② 40P01 deadlock_detected
+======================================================================
+
+
+A 的报错：
+ERROR:  40P01: deadlock detected
+DETAIL:  Process 4021 waits for ShareLock on transaction 1370; blocked by process 4022.
+Process 4022 waits for ShareLock on transaction 1369; blocked by process 4021.
+HINT:  See server log for query details.
+CONTEXT:  while updating tuple (0,53) in relation "accounts"
+LOCATION:  DeadLockReport, deadlock.c:1130
+[]
+
+
+
+======================================================================
+③ 55P03 lock_not_available —— NOWAIT
+======================================================================
+ id | owner | balance 
+----+-------+---------
+  1 | alice |  970.00
+(1 row)
+B 的报错：
+
+
+
+补测结束

@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 520" font-family="-apple-system, 'PingFang SC', 'Segoe UI', sans-serif">
+  <!-- 背景（浅底深字） -->
+  <rect width="880" height="520" fill="#fafafa"/>
+
+  <!-- 标题区 -->
+  <text x="440" y="36" text-anchor="middle" font-size="22" font-weight="700" fill="#0d47a1">PostgreSQL 学习路径总览</text>
+  <text x="440" y="60" text-anchor="middle" font-size="13" fill="#555">从「会写 SQL」到「能扛生产」的订单系统之旅</text>
+
+  <!-- 故事主线（顶部线） -->
+  <line x1="80" y1="92" x2="800" y2="92" stroke="#90a4ae" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <text x="80" y="86" font-size="11" fill="#607d8b">主角：一行订单数据</text>
+  <text x="800" y="86" text-anchor="end" font-size="11" fill="#607d8b">收束：生产化手册</text>
+
+  <!-- 阶段卡片（5 张，从左到右） -->
+  <!-- 阶段 1 -->
+  <g transform="translate(60, 120)">
+    <rect width="150" height="200" rx="10" fill="#ffffff" stroke="#1976d2" stroke-width="2"/>
+    <rect width="150" height="34" rx="10" fill="#1976d2"/>
+    <rect y="24" width="150" height="10" fill="#1976d2"/>
+    <text x="75" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">阶段 1 · SQL 基础</text>
+    <text x="14" y="64" font-size="11" fill="#333" font-weight="600">课 1–3（9 知识点）</text>
+    <text x="14" y="92" font-size="11" fill="#555">▸ 认识 PostgreSQL</text>
+    <text x="14" y="112" font-size="11" fill="#555">▸ 表与数据类型</text>
+    <text x="14" y="132" font-size="11" fill="#555">▸ 查询基础</text>
+    <text x="14" y="166" font-size="10" fill="#0d47a1" font-style="italic">我能装好、能写 SELECT</text>
+    <text x="14" y="184" font-size="10" fill="#0d47a1" font-style="italic">能跑通 CRUD 与 JOIN</text>
+  </g>
+
+  <!-- 阶段 2 -->
+  <g transform="translate(222, 120)">
+    <rect width="150" height="200" rx="10" fill="#ffffff" stroke="#1976d2" stroke-width="2"/>
+    <rect width="150" height="34" rx="10" fill="#1976d2"/>
+    <rect y="24" width="150" height="10" fill="#1976d2"/>
+    <text x="75" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">阶段 2 · 建模进阶</text>
+    <text x="14" y="64" font-size="11" fill="#333" font-weight="600">课 4–7（12 知识点）</text>
+    <text x="14" y="92" font-size="11" fill="#555">▸ 关系建模</text>
+    <text x="14" y="112" font-size="11" fill="#555">▸ 视图与函数</text>
+    <text x="14" y="132" font-size="11" fill="#555">▸ CTE 与窗口函数</text>
+    <text x="14" y="166" font-size="10" fill="#0d47a1" font-style="italic">表与表的关系设计清楚</text>
+    <text x="14" y="184" font-size="10" fill="#0d47a1" font-style="italic">复杂 SQL 也不再乱</text>
+  </g>
+
+  <!-- 阶段 3 -->
+  <g transform="translate(384, 120)">
+    <rect width="150" height="200" rx="10" fill="#ffffff" stroke="#0d47a1" stroke-width="2"/>
+    <rect width="150" height="34" rx="10" fill="#0d47a1"/>
+    <rect y="24" width="150" height="10" fill="#0d47a1"/>
+    <text x="75" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">阶段 3 · 索引优化</text>
+    <text x="14" y="64" font-size="11" fill="#333" font-weight="600">课 8–10（9 知识点）</text>
+    <text x="14" y="92" font-size="11" fill="#555">▸ B+Tree / Hash / GIN</text>
+    <text x="14" y="112" font-size="11" fill="#555">▸ EXPLAIN 读懂</text>
+    <text x="14" y="132" font-size="11" fill="#555">▸ 慢查询实战优化</text>
+    <text x="14" y="166" font-size="10" fill="#0d47a1" font-style="italic">亿级表查询从秒到毫秒</text>
+    <text x="14" y="184" font-size="10" fill="#0d47a1" font-style="italic">定位慢 SQL 与重写</text>
+  </g>
+
+  <!-- 阶段 4 -->
+  <g transform="translate(546, 120)">
+    <rect width="150" height="200" rx="10" fill="#ffffff" stroke="#0d47a1" stroke-width="2"/>
+    <rect width="150" height="34" rx="10" fill="#0d47a1"/>
+    <rect y="24" width="150" height="10" fill="#0d47a1"/>
+    <text x="75" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">阶段 4 · 事务并发</text>
+    <text x="14" y="64" font-size="11" fill="#333" font-weight="600">课 11–13（12 知识点）</text>
+    <text x="14" y="92" font-size="11" fill="#555">▸ ACID 与隔离级别</text>
+    <text x="14" y="112" font-size="11" fill="#555">▸ MVCC 原理</text>
+    <text x="14" y="132" font-size="11" fill="#555">▸ 锁 / 死锁排查</text>
+    <text x="14" y="166" font-size="10" fill="#0d47a1" font-style="italic">超卖/扣款不出错</text>
+    <text x="14" y="184" font-size="10" fill="#0d47a1" font-style="italic">并发场景下的取舍</text>
+  </g>
+
+  <!-- 阶段 5 -->
+  <g transform="translate(708, 120)">
+    <rect width="150" height="200" rx="10" fill="#ffffff" stroke="#0d47a1" stroke-width="2"/>
+    <rect width="150" height="34" rx="10" fill="#0d47a1"/>
+    <rect y="24" width="150" height="10" fill="#0d47a1"/>
+    <text x="75" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">阶段 5 · 运维生产</text>
+    <text x="14" y="64" font-size="11" fill="#333" font-weight="600">课 14–17（12 知识点）</text>
+    <text x="14" y="92" font-size="11" fill="#555">▸ 备份与恢复</text>
+    <text x="14" y="112" font-size="11" fill="#555">▸ 复制与 HA</text>
+    <text x="14" y="132" font-size="11" fill="#555">▸ 监控 / 扩展 / 安全</text>
+    <text x="14" y="166" font-size="10" fill="#0d47a1" font-style="italic">硬盘坏了也能恢复</text>
+    <text x="14" y="184" font-size="10" fill="#0d47a1" font-style="italic">横向扩展与权限隔离</text>
+  </g>
+
+  <!-- 阶段间箭头 -->
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1565c0"/>
+    </marker>
+  </defs>
+  <line x1="210" y1="220" x2="222" y2="220" stroke="#1565c0" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="372" y1="220" x2="384" y2="220" stroke="#1565c0" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="534" y1="220" x2="546" y2="220" stroke="#1565c0" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="696" y1="220" x2="708" y2="220" stroke="#1565c0" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- 故事冲突轴（每段一句话） -->
+  <g transform="translate(0, 350)">
+    <rect x="60" y="0" width="150" height="140" rx="8" fill="#fff3e0" stroke="#fb8c00" stroke-width="1"/>
+    <text x="135" y="24" text-anchor="middle" font-size="11" font-weight="700" fill="#e65100">冲突 1</text>
+    <text x="135" y="50" text-anchor="middle" font-size="10" fill="#bf360c">SQL 写错 →</text>
+    <text x="135" y="66" text-anchor="middle" font-size="10" fill="#bf360c">全表扫 30 秒</text>
+    <text x="135" y="98" text-anchor="middle" font-size="9" fill="#555">解决：阶段 1 入门</text>
+  </g>
+
+  <g transform="translate(222, 350)">
+    <rect x="0" y="0" width="150" height="140" rx="8" fill="#fff3e0" stroke="#fb8c00" stroke-width="1"/>
+    <text x="75" y="24" text-anchor="middle" font-size="11" font-weight="700" fill="#e65100">冲突 2</text>
+    <text x="75" y="50" text-anchor="middle" font-size="10" fill="#bf360c">表乱加、谁是谁</text>
+    <text x="75" y="66" text-anchor="middle" font-size="10" fill="#bf360c">关系糊涂</text>
+    <text x="75" y="98" text-anchor="middle" font-size="9" fill="#555">解决：阶段 2 建模</text>
+  </g>
+
+  <g transform="translate(384, 350)">
+    <rect x="0" y="0" width="150" height="140" rx="8" fill="#fff3e0" stroke="#fb8c00" stroke-width="1"/>
+    <text x="75" y="24" text-anchor="middle" font-size="11" font-weight="700" fill="#e65100">冲突 3</text>
+    <text x="75" y="50" text-anchor="middle" font-size="10" fill="#bf360c">数据涨到亿</text>
+    <text x="75" y="66" text-anchor="middle" font-size="10" fill="#bf360c">列表页崩了</text>
+    <text x="75" y="98" text-anchor="middle" font-size="9" fill="#555">解决：阶段 3 索引</text>
+  </g>
+
+  <g transform="translate(546, 350)">
+    <rect x="0" y="0" width="150" height="140" rx="8" fill="#fff3e0" stroke="#fb8c00" stroke-width="1"/>
+    <text x="75" y="24" text-anchor="middle" font-size="11" font-weight="700" fill="#e65100">冲突 4</text>
+    <text x="75" y="50" text-anchor="middle" font-size="10" fill="#bf360c">并发一上</text>
+    <text x="75" y="66" text-anchor="middle" font-size="10" fill="#bf360c">库存超卖</text>
+    <text x="75" y="98" text-anchor="middle" font-size="9" fill="#555">解决：阶段 4 并发</text>
+  </g>
+
+  <g transform="translate(708, 350)">
+    <rect x="0" y="0" width="150" height="140" rx="8" fill="#fff3e0" stroke="#fb8c00" stroke-width="1"/>
+    <text x="75" y="24" text-anchor="middle" font-size="11" font-weight="700" fill="#e65100">冲突 5</text>
+    <text x="75" y="50" text-anchor="middle" font-size="10" fill="#bf360c">硬盘坏、宕机</text>
+    <text x="75" y="66" text-anchor="middle" font-size="10" fill="#bf360c">主从延迟 8h</text>
+    <text x="75" y="98" text-anchor="middle" font-size="9" fill="#555">解决：阶段 5 运维</text>
+  </g>
+
+  <!-- 底部 legend -->
+  <g transform="translate(60, 510)">
+    <text x="0" y="0" font-size="10" fill="#555">📖 提示：未勾选 = 未学/未评审；学习进度见 00-学习档案.md 第 4 节</text>
+  </g>
+</svg>

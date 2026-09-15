@@ -1,0 +1,170 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 540" font-family="-apple-system, 'PingFang SC', 'Segoe UI', sans-serif">
+  <rect width="880" height="540" fill="#fafafa"/>
+
+  <!-- 标题 -->
+  <text x="440" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#0d47a1">课 2 一图总结 · 一张合规的 orders 表 + CRUD 心法</text>
+  <text x="440" y="52" text-anchor="middle" font-size="11" fill="#666">左：主角订单字段全表 · 右：5 大约束 + CRUD 心法 / 数据核查于 2026-09-06</text>
+
+  <line x1="440" y1="70" x2="440" y2="530" stroke="#cfd8dc" stroke-width="1" stroke-dasharray="4 4"/>
+
+  <!-- ========= 左半：orders 表字段全表 ========= -->
+  <text x="32" y="92" font-size="14" font-weight="700" fill="#1565c0">📋 左 · public.orders（12 字段）</text>
+
+  <!-- 表头 -->
+  <g transform="translate(32, 110)">
+    <rect width="380" height="22" rx="4" fill="#0d47a1"/>
+    <text x="14" y="16" font-size="11" font-weight="700" fill="#ffffff">字段名</text>
+    <text x="160" y="16" font-size="11" font-weight="700" fill="#ffffff">类型</text>
+    <text x="252" y="16" font-size="11" font-weight="700" fill="#ffffff">约束</text>
+  </g>
+
+  <!-- 字段行（9 行，每行 24 高） -->
+  <g transform="translate(32, 132)">
+    <rect width="380" height="216" fill="#ffffff" stroke="#bcd"/>
+
+    <line x1="0" y1="24"  x2="380" y2="24"  stroke="#eceff1"/>
+    <text x="14" y="16" font-size="11" font-weight="700" fill="#333">id</text>
+    <text x="160" y="16" font-size="11" fill="#0d47a1">BIGINT</text>
+    <text x="252" y="16" font-size="10" fill="#555">PK · IDENTITY</text>
+
+    <line x1="0" y1="48"  x2="380" y2="48"  stroke="#eceff1"/>
+    <text x="14" y="40" font-size="11" font-weight="700" fill="#333">order_no</text>
+    <text x="160" y="40" font-size="11" fill="#0d47a1">TEXT</text>
+    <text x="252" y="40" font-size="10" fill="#555">NOT NULL · UNIQUE</text>
+
+    <line x1="0" y1="72"  x2="380" y2="72"  stroke="#eceff1"/>
+    <text x="14" y="64" font-size="11" font-weight="700" fill="#333">user_id</text>
+    <text x="160" y="64" font-size="11" fill="#0d47a1">INTEGER</text>
+    <text x="252" y="64" font-size="10" fill="#555">NOT NULL</text>
+
+    <line x1="0" y1="96"  x2="380" y2="96"  stroke="#eceff1"/>
+    <text x="14" y="88" font-size="11" font-weight="700" fill="#333">amount</text>
+    <text x="160" y="88" font-size="11" fill="#e65100" font-weight="700">NUMERIC(10,2)</text>
+    <text x="252" y="88" font-size="10" fill="#555">NOT NULL · CHECK ≥ 0</text>
+
+    <line x1="0" y1="120"  x2="380" y2="120"  stroke="#eceff1"/>
+    <text x="14" y="112" font-size="11" font-weight="700" fill="#333">status</text>
+    <text x="160" y="112" font-size="11" fill="#0d47a1">TEXT</text>
+    <text x="252" y="112" font-size="10" fill="#555">NOT NULL · DEFAULT pending</text>
+
+    <line x1="0" y1="144"  x2="380" y2="144"  stroke="#eceff1"/>
+    <text x="14" y="136" font-size="11" font-weight="700" fill="#333">is_paid</text>
+    <text x="160" y="136" font-size="11" fill="#0d47a1">BOOLEAN</text>
+    <text x="252" y="136" font-size="10" fill="#555">NOT NULL · DEFAULT false</text>
+
+    <line x1="0" y1="168"  x2="380" y2="168"  stroke="#eceff1"/>
+    <text x="14" y="160" font-size="11" font-weight="700" fill="#333">created_at</text>
+    <text x="160" y="160" font-size="11" fill="#388e3c" font-weight="700">TIMESTAMPTZ</text>
+    <text x="252" y="160" font-size="10" fill="#555">DEFAULT now()</text>
+
+    <line x1="0" y1="192"  x2="380" y2="192"  stroke="#eceff1"/>
+    <text x="14" y="184" font-size="11" font-weight="700" fill="#333">paid_at</text>
+    <text x="160" y="184" font-size="11" fill="#388e3c" font-weight="700">TIMESTAMPTZ</text>
+    <text x="252" y="184" font-size="10" fill="#555">可空</text>
+
+    <line x1="0" y1="216"  x2="380" y2="216"  stroke="#eceff1"/>
+    <text x="14" y="208" font-size="11" font-weight="700" fill="#333">note · tags · extra</text>
+    <text x="160" y="208" font-size="11" fill="#0d47a1">TEXT·TEXT[]·JSONB</text>
+    <text x="252" y="208" font-size="10" fill="#555">可空 / DEFAULT</text>
+  </g>
+
+  <!-- 表级约束提示 -->
+  <g transform="translate(32, 360)">
+    <rect width="380" height="64" rx="6" fill="#fff3e0" stroke="#ef6c00"/>
+    <text x="14" y="22" font-size="11" font-weight="700" fill="#e65100">表级 CHECK 约束</text>
+    <text x="14" y="44" font-size="11" fill="#333">paid_at IS NULL</text>
+    <text x="14" y="60" font-size="11" fill="#333">OR paid_at &gt;= created_at</text>
+  </g>
+
+  <!-- 一句话 -->
+  <g transform="translate(32, 438)">
+    <rect width="380" height="80" rx="6" fill="#fffde7" stroke="#f57f17"/>
+    <text x="14" y="22" font-size="11" font-weight="700" fill="#bf360c">一句话记住</text>
+    <text x="14" y="46" font-size="12" fill="#333">金额 → NUMERIC</text>
+    <text x="14" y="64" font-size="12" fill="#333">时间 → TIMESTAMPTZ · 字符串 → TEXT</text>
+  </g>
+
+  <!-- ========= 右半：CRUD 心法 + 5 大约束 ========= -->
+  <text x="458" y="92" font-size="14" font-weight="700" fill="#1565c0">🛠️ 右 · 5 大约束 + CRUD 心法</text>
+
+  <!-- 5 大约束卡片 -->
+  <g transform="translate(458, 110)">
+    <rect width="380" height="146" rx="6" fill="#ffffff" stroke="#bcd"/>
+    <text x="14" y="22" font-size="12" font-weight="700" fill="#333">5 大约束</text>
+
+    <g transform="translate(14, 36)">
+      <rect width="172" height="36" rx="4" fill="#e3f2fd" stroke="#1976d2"/>
+      <text x="12" y="16" font-size="11" font-weight="700" fill="#0d47a1">PRIMARY KEY</text>
+      <text x="12" y="30" font-size="9" fill="#333">NOT NULL + UNIQUE · 唯一身份</text>
+    </g>
+    <g transform="translate(196, 36)">
+      <rect width="170" height="36" rx="4" fill="#e3f2fd" stroke="#1976d2"/>
+      <text x="12" y="16" font-size="11" font-weight="700" fill="#0d47a1">NOT NULL</text>
+      <text x="12" y="30" font-size="9" fill="#333">不能空 · 三值逻辑</text>
+    </g>
+
+    <g transform="translate(14, 80)">
+      <rect width="172" height="36" rx="4" fill="#e3f2fd" stroke="#1976d2"/>
+      <text x="12" y="16" font-size="11" font-weight="700" fill="#0d47a1">UNIQUE</text>
+      <text x="12" y="30" font-size="9" fill="#333">不重复 · 允许多 NULL</text>
+    </g>
+    <g transform="translate(196, 80)">
+      <rect width="170" height="36" rx="4" fill="#e3f2fd" stroke="#1976d2"/>
+      <text x="12" y="16" font-size="11" font-weight="700" fill="#0d47a1">CHECK</text>
+      <text x="12" y="30" font-size="9" fill="#333">值必须满足条件 · 跨列可用</text>
+    </g>
+
+    <g transform="translate(14, 124)">
+      <rect width="352" height="22" rx="4" fill="#e3f2fd" stroke="#1976d2"/>
+      <text x="14" y="14" font-size="11" font-weight="700" fill="#0d47a1">DEFAULT</text>
+      <text x="98" y="14" font-size="10" fill="#333">INSERT 不指定时填的默认值（UPDATE 不生效）</text>
+    </g>
+  </g>
+
+  <!-- CRUD 心法 -->
+  <g transform="translate(458, 268)">
+    <rect width="380" height="156" rx="6" fill="#ffffff" stroke="#bcd"/>
+    <text x="14" y="22" font-size="12" font-weight="700" fill="#333">CRUD 心法</text>
+
+    <g transform="translate(14, 36)">
+      <rect width="180" height="28" rx="4" fill="#fff3e0" stroke="#ef6c00"/>
+      <text x="14" y="14" font-size="11" font-weight="700" fill="#e65100">C · INSERT</text>
+      <text x="100" y="14" font-size="10" fill="#333">+ RETURNING</text>
+    </g>
+    <g transform="translate(204, 36)">
+      <rect width="162" height="28" rx="4" fill="#fff3e0" stroke="#ef6c00"/>
+      <text x="14" y="14" font-size="11" font-weight="700" fill="#e65100">R · SELECT</text>
+      <text x="100" y="14" font-size="10" fill="#333">显式列 · 勿 *</text>
+    </g>
+
+    <g transform="translate(14, 70)">
+      <rect width="180" height="28" rx="4" fill="#fff3e0" stroke="#ef6c00"/>
+      <text x="14" y="14" font-size="11" font-weight="700" fill="#e65100">U · UPDATE</text>
+      <text x="92" y="14" font-size="10" fill="#333">⚠️ 永远带 WHERE</text>
+    </g>
+    <g transform="translate(204, 70)">
+      <rect width="162" height="28" rx="4" fill="#fff3e0" stroke="#ef6c00"/>
+      <text x="14" y="14" font-size="11" font-weight="700" fill="#e65100">D · DELETE</text>
+      <text x="92" y="14" font-size="10" fill="#333">⚠️ 永远带 WHERE</text>
+    </g>
+
+    <g transform="translate(14, 104)">
+      <rect width="180" height="36" rx="4" fill="#ffebee" stroke="#c62828"/>
+      <text x="14" y="14" font-size="11" font-weight="700" fill="#c62828">T · TRUNCATE</text>
+      <text x="14" y="28" font-size="9" fill="#333">清全表 · 比 DELETE 快百倍</text>
+    </g>
+    <g transform="translate(204, 104)">
+      <rect width="162" height="36" rx="4" fill="#e8f5e9" stroke="#388e3c"/>
+      <text x="14" y="14" font-size="11" font-weight="700" fill="#1b5e20">身份 · IDENTITY</text>
+      <text x="14" y="28" font-size="9" fill="#333">GENERATED ALWAYS · 标准 SQL</text>
+    </g>
+  </g>
+
+  <!-- IDENTITY vs SERIAL -->
+  <g transform="translate(458, 432)">
+    <rect width="380" height="86" rx="6" fill="#fffde7" stroke="#f57f17"/>
+    <text x="14" y="22" font-size="11" font-weight="700" fill="#bf360c">PG 17 推荐：IDENTITY &gt; SERIAL</text>
+    <text x="14" y="46" font-size="10" fill="#333">✅ id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY</text>
+    <text x="14" y="64" font-size="10" fill="#888">（仍合法）id SERIAL PRIMARY KEY ← legacy / 兼容旧项目</text>
+  </g>
+</svg>

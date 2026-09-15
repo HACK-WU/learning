@@ -1,0 +1,173 @@
+
+==============================================================================
+实验 M-3（修正）· idle in transaction 会一直持有它拿过的锁
+==============================================================================
+A 在事务里查一次表（拿 AccessShareLock），然后什么都不做：
+ id | owner | balance 
+----+-------+---------
+  1 | alice |  970.00
+(1 row)
+
+OBS 看它此刻的状态与持有的锁：
+ pid  |        state        | xact_s |  locktype  |      mode       | granted |      rel      
+------+---------------------+--------+------------+-----------------+---------+---------------
+ 3999 | idle in transaction |    1.5 | relation   | AccessShareLock | t       | accounts_pkey
+ 3999 | idle in transaction |    1.5 | relation   | AccessShareLock | t       | accounts
+ 3999 | idle in transaction |    1.5 | virtualxid | ExclusiveLock   | t       | 
+(3 rows)
+
+
+→ 结论：事务一开，锁就一直攥着，直到 COMMIT/ROLLBACK —— 哪怕应用层早就'查询完毕'了
+
+==============================================================================
+实验 N（修正）· idle_in_transaction_session_timeout：客户端静默才触发
+==============================================================================
+N-1 默认值：  v 
+---
+ 0
+(1 row)
+
+N-2 设 3s，A 开事务后【客户端静默 6 秒】（不执行 pg_sleep，服务端真正 idle）：
+ tx_started 
+------------
+          1
+(1 row)
+   ...客户端静默 6 秒...
+[连接已被服务器终止]
+   → 连接已被服务器终止（超时生效）
+
+N-3 服务器日志证据：
+   2026-09-10 15:16:01.252 UTC [3969] FATAL:  terminating connection due to transaction timeout
+   2026-09-10 15:17:19.108 UTC [3999] FATAL:  terminating connection due to idle-in-transaction timeout
+
+N-4 对照：不开事务时静默 6 秒不受影响（幂等验证）：
+
+   ...静默 6 秒...
+           note           
+--------------------------
+ 没开事务，静默 6s 也活着
+(1 row)
+
+
+==============================================================================
+实验 P（修正）· 长事务钉死元组：用 REPEATABLE READ 固定快照
+==============================================================================
+P-0 建表（关 autovacuum，1 万行）：
+NOTICE:  table "bloat_lt" does not exist, skipping
+
+P-1 A 开 REPEATABLE READ 事务并查表（固定一个快照，然后停住）：
+  cnt  
+-------
+ 10000
+(1 row)
+
+P-2 OBS 看 A 此刻钉住的 backend_xmin：
+ pid  |        state        | backend_xmin | xact_s 
+------+---------------------+--------------+--------
+ 4007 | idle in transaction |         1362 |    0.0
+(1 row)
+
+P-3 B 把 1 万行全改一遍（产生 1 万死元组）：
+ pg_stat_force_next_flush 
+--------------------------
+(1 row)
+   死元组：  n_dead_tup 
+------------
+      10000
+(1 row)
+
+P-4 现在 VACUUM —— 关键看 'dead but not yet removable' 字段：
+INFO:  vacuuming "order_service.finance.bloat_lt"
+INFO:  finished vacuuming "order_service.finance.bloat_lt": index scans: 0
+pages: 0 removed, 109 remain, 109 scanned (100.00% of total)
+tuples: 0 removed, 20000 remain, 10000 are dead but not yet removable
+removable cutoff: 1362, which was 1 XIDs old when operation ended
+frozen: 0 pages from table (0.00% of total) had 0 tuples frozen
+index scan not needed: 0 pages from table (0.00% of total) had 0 dead item identifiers removed
+avg read rate: 0.000 MB/s, avg write rate: 0.000 MB/s
+buffer usage: 236 hits, 0 misses, 0 dirtied
+WAL usage: 1 records, 0 full page images, 237 bytes
+system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+INFO:  vacuuming "order_service.pg_toast.pg_toast_25149"
+INFO:  finished vacuuming "order_service.pg_toast.pg_toast_25149": index scans: 0
+pages: 0 removed, 0 remain, 0 scanned (100.00% of total)
+tuples: 0 removed, 0 remain, 0 are dead but not yet removable
+removable cutoff: 1362, which was 1 XIDs old when operation ended
+frozen: 0 pages from table (100.00% of total) had 0 tuples frozen
+index scan not needed: 0 pages from table (100.00% of total) had 0 dead item identifiers removed
+avg read rate: 0.000 MB/s, avg write rate: 0.000 MB/s
+buffer usage: 6 hits, 0 misses, 0 dirtied
+WAL usage: 0 records, 0 full page images, 0 bytes
+system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+   死元组（VACUUM 后）：  n_dead_tup 
+------------
+      10000
+(1 row)
+
+P-5 A 提交，再 VACUUM —— 这次应清干净：
+
+INFO:  vacuuming "order_service.finance.bloat_lt"
+INFO:  finished vacuuming "order_service.finance.bloat_lt": index scans: 1
+pages: 0 removed, 109 remain, 109 scanned (100.00% of total)
+tuples: 10000 removed, 10000 remain, 0 are dead but not yet removable
+removable cutoff: 1363, which was 0 XIDs old when operation ended
+new relfrozenxid: 1362, which is 1 XIDs ahead of previous value
+frozen: 0 pages from table (0.00% of total) had 0 tuples frozen
+index scan needed: 54 pages from table (49.54% of total) had 10000 dead item identifiers removed
+index "bloat_lt_pkey": pages: 57 in total, 0 newly deleted, 0 currently deleted, 0 reusable
+avg read rate: 0.000 MB/s, avg write rate: 0.000 MB/s
+buffer usage: 353 hits, 0 misses, 0 dirtied
+WAL usage: 274 records, 0 full page images, 102438 bytes
+system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+INFO:  vacuuming "order_service.pg_toast.pg_toast_25149"
+INFO:  finished vacuuming "order_service.pg_toast.pg_toast_25149": index scans: 0
+pages: 0 removed, 0 remain, 0 scanned (100.00% of total)
+tuples: 0 removed, 0 remain, 0 are dead but not yet removable
+removable cutoff: 1363, which was 0 XIDs old when operation ended
+new relfrozenxid: 1363, which is 1 XIDs ahead of previous value
+frozen: 0 pages from table (100.00% of total) had 0 tuples frozen
+index scan not needed: 0 pages from table (100.00% of total) had 0 dead item identifiers removed
+avg read rate: 0.000 MB/s, avg write rate: 0.000 MB/s
+buffer usage: 10 hits, 0 misses, 0 dirtied
+WAL usage: 1 records, 0 full page images, 188 bytes
+system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+ pg_stat_force_next_flush 
+--------------------------
+(1 row)
+   死元组（提交后 VACUUM）：  n_dead_tup 
+------------
+          0
+(1 row)
+
+==============================================================================
+实验 R（补测）· SERIALIZABLE 40001 的 SQLSTATE
+==============================================================================
+R-1 A/B 都进 SERIALIZABLE 并读同一行：
+ balance 
+---------
+ 1000.00
+(1 row)
+ balance 
+---------
+ 1000.00
+(1 row)
+
+R-2 A 改并提交：
+
+
+R-3 B 也改同一行 → 完整报错（含 SQLSTATE）：
+ERROR:  could not serialize access due to concurrent update
+
+R-4 B ROLLBACK 后重试（第二次成功）：
+
+ balance 
+---------
+  970.00
+(1 row)
+
+==============================================================================
+清理
+==============================================================================
+
+
+实验 4 结束

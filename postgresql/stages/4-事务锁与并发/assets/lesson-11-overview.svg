@@ -1,0 +1,158 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 852" width="920" height="852" font-family="system-ui, -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif">
+  <rect x="0" y="0" width="920" height="852" fill="#fafafa"/>
+
+  <!-- ============ 标题 ============ -->
+  <text x="30" y="40" font-size="24" font-weight="700" fill="#0d47a1">课 11 · 事务与隔离级别</text>
+  <text x="30" y="64" font-size="13" fill="#666">PostgreSQL 17.11 实测 · 四个名字、三种行为 · 防线与漏洞</text>
+  <line x1="30" y1="78" x2="890" y2="78" stroke="#dcdcdc" stroke-width="1"/>
+
+  <!-- ============ 模块 1：ACID ============ -->
+  <text x="30" y="104" font-size="15" font-weight="700" fill="#333">① ACID —— PG 拿什么落地</text>
+
+  <g>
+    <rect x="30" y="116" width="200" height="98" rx="6" fill="#ffffff" stroke="#e0e0e0"/>
+    <rect x="30" y="116" width="200" height="4" rx="2" fill="#1565c0"/>
+    <text x="46" y="142" font-size="14" font-weight="700" fill="#1565c0">A 原子性</text>
+    <text x="46" y="164" font-size="12" fill="#333">要么全做，要么全不做</text>
+    <text x="46" y="184" font-size="11.5" fill="#666">机制：事务块 + MVCC</text>
+    <text x="46" y="201" font-size="11.5" fill="#666">报错 → aborted，只可 ROLLBACK</text>
+  </g>
+
+  <g>
+    <rect x="246" y="116" width="200" height="98" rx="6" fill="#ffffff" stroke="#e0e0e0"/>
+    <rect x="246" y="116" width="200" height="4" rx="2" fill="#e65100"/>
+    <text x="262" y="142" font-size="14" font-weight="700" fill="#e65100">C 一致性</text>
+    <text x="262" y="164" font-size="12" fill="#333">做完之后数据仍合法</text>
+    <text x="262" y="184" font-size="11.5" fill="#666">机制：CHECK / UNIQUE / FK</text>
+    <text x="262" y="201" font-size="11.5" fill="#666">只保证「合法」，不保证「正确」</text>
+  </g>
+
+  <g>
+    <rect x="462" y="116" width="200" height="98" rx="6" fill="#ffffff" stroke="#e0e0e0"/>
+    <rect x="462" y="116" width="200" height="4" rx="2" fill="#388e3c"/>
+    <text x="478" y="142" font-size="14" font-weight="700" fill="#388e3c">I 隔离性</text>
+    <text x="478" y="164" font-size="12" fill="#333">看不见别人的半成品</text>
+    <text x="478" y="184" font-size="11.5" fill="#666">机制：MVCC 快照</text>
+    <text x="478" y="201" font-size="11.5" fill="#666">SER 再加 SSI 谓词锁</text>
+  </g>
+
+  <g>
+    <rect x="678" y="116" width="212" height="98" rx="6" fill="#ffffff" stroke="#e0e0e0"/>
+    <rect x="678" y="116" width="212" height="4" rx="2" fill="#7b1fa2"/>
+    <text x="694" y="142" font-size="14" font-weight="700" fill="#7b1fa2">D 持久性</text>
+    <text x="694" y="164" font-size="12" fill="#333">commit 返回后不会丢</text>
+    <text x="694" y="184" font-size="11.5" fill="#666">机制：WAL 预写式日志</text>
+    <text x="694" y="201" font-size="11.5" fill="#666">先写日志，再改数据页</text>
+  </g>
+
+  <!-- ============ 模块 2：隔离级别矩阵 ============ -->
+  <text x="30" y="252" font-size="15" font-weight="700" fill="#333">② 四个名字、三种行为 —— 官方 Table 13.1（PG 17）</text>
+
+  <!-- 表头 -->
+  <rect x="30" y="264" width="860" height="38" fill="#eef3fa" stroke="#d6e0ee"/>
+  <text x="44" y="288" font-size="12.5" font-weight="700" fill="#0d47a1">现象</text>
+  <text x="252" y="288" font-size="12.5" font-weight="700" fill="#0d47a1">Read uncommitted</text>
+  <text x="418" y="288" font-size="12.5" font-weight="700" fill="#0d47a1">Read committed</text>
+  <text x="588" y="288" font-size="12.5" font-weight="700" fill="#0d47a1">Repeatable read</text>
+  <text x="758" y="288" font-size="12.5" font-weight="700" fill="#0d47a1">Serializable</text>
+
+  <!-- 行 1 脏读 -->
+  <rect x="30" y="302" width="860" height="38" fill="#ffffff" stroke="#e6e6e6"/>
+  <text x="44" y="326" font-size="12.5" fill="#333">脏读 Dirty Read</text>
+  <text x="252" y="326" font-size="12.5" font-weight="600" fill="#388e3c">✗ 不会</text>
+  <text x="252" y="337" font-size="9.5" fill="#8a8a8a">Allowed, but not in PG</text>
+  <text x="418" y="326" font-size="12.5" font-weight="600" fill="#388e3c">✗ 不会</text>
+  <text x="588" y="326" font-size="12.5" font-weight="600" fill="#388e3c">✗ 不会</text>
+  <text x="758" y="326" font-size="12.5" font-weight="600" fill="#388e3c">✗ 不会</text>
+
+  <!-- 行 2 不可重复读 -->
+  <rect x="30" y="340" width="860" height="38" fill="#fcfcfc" stroke="#e6e6e6"/>
+  <text x="44" y="364" font-size="12.5" fill="#333">不可重复读 Nonrepeatable Read</text>
+  <text x="252" y="364" font-size="12.5" font-weight="600" fill="#c62828">✓ 可能</text>
+  <text x="418" y="364" font-size="12.5" font-weight="600" fill="#c62828">✓ 可能</text>
+  <text x="588" y="364" font-size="12.5" font-weight="600" fill="#388e3c">✗ 不会</text>
+  <text x="758" y="364" font-size="12.5" font-weight="600" fill="#388e3c">✗ 不会</text>
+
+  <!-- 行 3 幻读 -->
+  <rect x="30" y="378" width="860" height="38" fill="#ffffff" stroke="#e6e6e6"/>
+  <text x="44" y="402" font-size="12.5" fill="#333">幻读 Phantom Read</text>
+  <text x="252" y="402" font-size="12.5" font-weight="600" fill="#c62828">✓ 可能</text>
+  <text x="418" y="402" font-size="12.5" font-weight="600" fill="#c62828">✓ 可能</text>
+  <text x="588" y="402" font-size="12.5" font-weight="600" fill="#388e3c">✗ 不会</text>
+  <text x="588" y="413" font-size="9.5" fill="#8a8a8a">PG 强于标准</text>
+  <text x="758" y="402" font-size="12.5" font-weight="600" fill="#388e3c">✗ 不会</text>
+
+  <!-- 行 4 序列化异常 -->
+  <rect x="30" y="416" width="860" height="38" fill="#fff6ef" stroke="#e6e6e6"/>
+  <text x="44" y="440" font-size="12.5" font-weight="700" fill="#e65100">序列化异常 Serialization Anomaly</text>
+  <text x="252" y="440" font-size="12.5" font-weight="600" fill="#c62828">✓ 可能</text>
+  <text x="418" y="440" font-size="12.5" font-weight="600" fill="#c62828">✓ 可能</text>
+  <text x="588" y="440" font-size="12.5" font-weight="600" fill="#c62828">✓ 可能</text>
+  <text x="758" y="440" font-size="12.5" font-weight="700" fill="#388e3c">✗ 不会</text>
+
+  <!-- 默认标注 -->
+  <rect x="418" y="454" width="170" height="22" rx="3" fill="#0d47a1"/>
+  <text x="503" y="469" font-size="11" font-weight="700" fill="#ffffff" text-anchor="middle">PG 默认级别</text>
+
+  <!-- RU = RC 标注 -->
+  <path d="M252 476 L252 486 L418 486 L418 476" fill="none" stroke="#7b1fa2" stroke-width="1.4" stroke-dasharray="4 3"/>
+  <text x="335" y="500" font-size="11" font-weight="600" fill="#7b1fa2" text-anchor="middle">行为完全相同（内部只有 3 种）</text>
+
+  <!-- ============ 模块 3：三个现象 + 序列化异常 ============ -->
+  <text x="30" y="540" font-size="15" font-weight="700" fill="#333">③ 四个现象 —— 变的是什么、防线在哪</text>
+
+  <g>
+    <rect x="30" y="554" width="200" height="106" rx="6" fill="#ffffff" stroke="#e0e0e0"/>
+    <text x="46" y="578" font-size="13.5" font-weight="700" fill="#1565c0">脏读</text>
+    <text x="46" y="599" font-size="11.5" fill="#333">读到了别人</text>
+    <text x="46" y="615" font-size="11.5" fill="#333">还没提交的修改</text>
+    <line x1="46" y1="627" x2="214" y2="627" stroke="#eeeeee"/>
+    <text x="46" y="646" font-size="11" font-weight="600" fill="#388e3c">防线：所有级别</text>
+  </g>
+
+  <g>
+    <rect x="246" y="554" width="200" height="106" rx="6" fill="#ffffff" stroke="#e0e0e0"/>
+    <text x="262" y="578" font-size="13.5" font-weight="700" fill="#1565c0">不可重复读</text>
+    <text x="262" y="599" font-size="11.5" fill="#333">同一行两次读，</text>
+    <text x="262" y="615" font-size="11.5" fill="#333">值不一样了</text>
+    <line x1="262" y1="627" x2="430" y2="627" stroke="#eeeeee"/>
+    <text x="262" y="646" font-size="11" font-weight="600" fill="#388e3c">防线：REPEATABLE READ 起</text>
+  </g>
+
+  <g>
+    <rect x="462" y="554" width="200" height="106" rx="6" fill="#ffffff" stroke="#e0e0e0"/>
+    <text x="478" y="578" font-size="13.5" font-weight="700" fill="#1565c0">幻读</text>
+    <text x="478" y="599" font-size="11.5" fill="#333">同一条件两次查，</text>
+    <text x="478" y="615" font-size="11.5" fill="#333">行数不一样了</text>
+    <line x1="478" y1="627" x2="646" y2="627" stroke="#eeeeee"/>
+    <text x="478" y="646" font-size="11" font-weight="600" fill="#388e3c">防线：REPEATABLE READ 起</text>
+  </g>
+
+  <g>
+    <rect x="678" y="554" width="212" height="106" rx="6" fill="#fff6ef" stroke="#f0c9a8"/>
+    <text x="694" y="578" font-size="13.5" font-weight="700" fill="#e65100">序列化异常</text>
+    <text x="694" y="599" font-size="11.5" fill="#333">各自看都对，</text>
+    <text x="694" y="615" font-size="11.5" fill="#333">合起来不等于任何串行顺序</text>
+    <line x1="694" y1="627" x2="874" y2="627" stroke="#f3ddc8"/>
+    <text x="694" y="646" font-size="11" font-weight="700" fill="#c62828">防线：只有 SERIALIZABLE</text>
+  </g>
+
+  <!-- ============ 模块 4：BOSS 实验 ============ -->
+  <text x="30" y="694" font-size="15" font-weight="700" fill="#333">④ BOSS 实验：写偏斜 —— 规则「至少 1 名医生在岗」</text>
+
+  <rect x="30" y="706" width="420" height="80" rx="6" fill="#ffffff" stroke="#e0e0e0"/>
+  <text x="46" y="728" font-size="12.5" font-weight="700" fill="#e65100">REPEATABLE READ</text>
+  <text x="46" y="749" font-size="11.5" fill="#333">A、B 都数到 2 人 → 各让一人下班 → 都成功</text>
+  <text x="46" y="769" font-size="13" font-weight="700" fill="#c62828">最终在岗 0 人 —— 规则被破坏</text>
+
+  <rect x="470" y="706" width="420" height="80" rx="6" fill="#ffffff" stroke="#e0e0e0"/>
+  <text x="486" y="728" font-size="12.5" font-weight="700" fill="#7b1fa2">SERIALIZABLE</text>
+  <text x="486" y="749" font-size="11.5" fill="#333">B 被谓词锁拦下 → 报 40001 → 应用重试</text>
+  <text x="486" y="769" font-size="13" font-weight="700" fill="#388e3c">最终在岗 1 人 —— 规则保住</text>
+
+  <!-- 底部：40001 -->
+  <rect x="30" y="800" width="860" height="42" rx="5" fill="#fdeaea" stroke="#f0c0c0"/>
+  <text x="46" y="820" font-size="12.5" font-weight="700" fill="#c62828">SQLSTATE 40001</text>
+  <text x="152" y="820" font-size="12" fill="#333">—— 所有序列化失败的统一编码，应用必须能自动重试</text>
+  <text x="46" y="836" font-size="10.5" fill="#666">could not serialize access due to concurrent update ｜ ... due to read/write dependencies among transactions</text>
+</svg>

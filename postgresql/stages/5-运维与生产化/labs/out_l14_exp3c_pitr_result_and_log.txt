@@ -1,0 +1,34 @@
+=== E-8: 恢复结果验证（对比事故前后） ===
+ id |   note   |            created            
+----+----------+-------------------------------
+  1 | 事故前-A | 2026-09-10 15:41:45.030598+00
+  2 | 事故前-B | 2026-09-10 15:41:45.030682+00
+  3 | 事故前-C | 2026-09-10 15:41:45.030684+00
+(3 rows)
+
+恢复后行数: 3
+--- 事故后写入的第 4 行是否存在 ---
+id=4 的行数（应为 0）: 0
+
+=== recovery.signal 是否已被恢复流程自动删除 ===
+  ls: cannot access '/var/lib/postgresql/restore/recovery.signal': No such file or directory
+
+=== timeline 变化 ===
+主库(5433) timeline = 1
+恢复实例(5434) timeline = 2
+--- timeline history 文件 ---
+  (归档目录暂无 history)
+
+=== 服务端日志：恢复全过程 ===
+2026-09-10 15:42:10.898 UTC [160] LOG:  starting backup recovery with redo LSN 1/17000028, checkpoint LSN 1/17000080, on timeline ID 1
+2026-09-10 15:42:10.914 UTC [160] LOG:  starting point-in-time recovery to 2026-09-10 15:41:45.059928+00
+2026-09-10 15:42:10.916 UTC [160] LOG:  redo starts at 1/17000028
+2026-09-10 15:42:10.933 UTC [160] LOG:  completed backup recovery with redo LSN 1/17000028 and end LSN 1/17000120
+2026-09-10 15:42:10.933 UTC [160] LOG:  consistent recovery state reached at 1/17000120
+2026-09-10 15:42:10.935 UTC [160] LOG:  recovery stopping before commit of transaction 2507, time 2026-09-10 15:41:47.108843+00
+2026-09-10 15:42:10.935 UTC [160] LOG:  redo done at 1/1802A6E0 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.01 s
+2026-09-10 15:42:10.938 UTC [160] LOG:  selected new timeline ID: 2
+2026-09-10 15:42:10.957 UTC [160] LOG:  archive recovery complete
+2026-09-10 15:42:10.958 UTC [158] LOG:  checkpoint starting: end-of-recovery immediate wait
+2026-09-10 15:42:10.967 UTC [158] LOG:  checkpoint complete: wrote 39 buffers (0.2%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.002 s, sync=0.007 s, total=0.010 s; sync files=35, longest=0.001 s, average=0.001 s; distance=16553 kB, estimate=16553 kB; lsn=1/1802A6E0, redo lsn=1/1802A6E0
+2026-09-10 15:42:13.994 UTC [177] FATAL:  role "root" does not exist

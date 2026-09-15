@@ -1,0 +1,188 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 600" font-family="-apple-system, 'PingFang SC', 'Segoe UI', sans-serif">
+  <rect width="920" height="600" fill="#fafafa"/>
+
+  <!-- 标题 -->
+  <text x="460" y="28" text-anchor="middle" font-size="20" font-weight="700" fill="#0d47a1">课 6 一图总结 · CTE + 递归 + 相关子查询</text>
+  <text x="460" y="48" text-anchor="middle" font-size="11" fill="#666">上：6.1 / 6.2 / 6.3 三件事 · 下：PG 12+ 物化决策树 + 优化器 unnest 能力表 · 事实核查于 2026-09-07</text>
+
+  <!-- ========= 上半：3 个知识点 ========= -->
+
+  <!-- ===== 6.1 ===== -->
+  <g transform="translate(20, 66)">
+    <rect width="280" height="200" rx="8" fill="#ffffff" stroke="#bcd"/>
+    <rect width="280" height="28" rx="8" fill="#0d47a1"/>
+    <text x="14" y="19" font-size="13" font-weight="700" fill="#ffffff">6.1 WITH 子句</text>
+
+    <text x="14" y="50" font-size="11" font-weight="700" fill="#1565c0">🎯 用途：把嵌套改成从上往下的流水线</text>
+
+    <g transform="translate(14, 60)">
+      <rect width="252" height="100" rx="4" fill="#f5f7fa" stroke="#cfd8dc"/>
+      <text x="8" y="15" font-size="10" fill="#333">WITH a AS (...),</text>
+      <text x="8" y="29" font-size="10" fill="#333">     b AS (... FROM a ...)   <tspan fill="#666">← 可引用前面</tspan></text>
+      <text x="8" y="43" font-size="10" fill="#333">SELECT ... FROM b;</text>
+      <line x1="0" y1="52" x2="252" y2="52" stroke="#cfd8dc"/>
+      <text x="8" y="68" font-size="10" font-weight="700" fill="#0d47a1">PG 12+ 默认规则：</text>
+      <text x="8" y="82" font-size="9" fill="#333">单次引用 + 无副作用 + 非递归 → <tspan font-weight="700" fill="#388e3c">内联</tspan></text>
+      <text x="8" y="95" font-size="9" fill="#333">递归 / 有副作用 / 多次引用   → <tspan font-weight="700" fill="#e65100">物化</tspan></text>
+    </g>
+
+    <text x="14" y="176" font-size="9" font-weight="700" fill="#c62828">⚠️ MATERIALIZED / NOT MATERIALIZED 可覆盖</text>
+    <text x="14" y="190" font-size="9" font-weight="700" fill="#0d47a1">   写 CTE 禁用并行，多写顺序不保证</text>
+  </g>
+
+  <!-- ===== 6.2 ===== -->
+  <g transform="translate(320, 66)">
+    <rect width="280" height="200" rx="8" fill="#ffffff" stroke="#bcd"/>
+    <rect width="280" height="28" rx="8" fill="#0d47a1"/>
+    <text x="14" y="19" font-size="13" font-weight="700" fill="#ffffff">6.2 递归 CTE</text>
+
+    <text x="14" y="50" font-size="11" font-weight="700" fill="#1565c0">🎯 用途：遍历树 / 图（层级不确定）</text>
+
+    <g transform="translate(14, 60)">
+      <rect width="252" height="100" rx="4" fill="#f5f7fa" stroke="#cfd8dc"/>
+      <text x="8" y="15" font-size="10" fill="#333">WITH <tspan font-weight="700" fill="#0d47a1">RECURSIVE</tspan> t AS (</text>
+      <text x="8" y="29" font-size="9" fill="#666">  SELECT ... WHERE 起点      ← anchor</text>
+      <text x="8" y="42" font-size="10" fill="#333">  UNION ALL</text>
+      <text x="8" y="55" font-size="9" fill="#666">  SELECT ... JOIN t ON 关系   ← 递归项</text>
+      <text x="8" y="68" font-size="9" fill="#666">  WHERE t.depth &lt; N          ← 守卫</text>
+      <text x="8" y="81" font-size="10" fill="#333">) CYCLE id SET is_cycle USING path</text>
+      <text x="8" y="95" font-size="9" fill="#666">SELECT ... WHERE NOT is_cycle</text>
+    </g>
+
+    <text x="14" y="176" font-size="9" font-weight="700" fill="#c62828">⚠️ join 列必建索引 · 递归总物化</text>
+    <text x="14" y="190" font-size="9" font-weight="700" fill="#0d47a1">   方向别搞反：子孙 c.parent_id=t.id / 祖先 c.id=t.parent_id</text>
+  </g>
+
+  <!-- ===== 6.3 ===== -->
+  <g transform="translate(620, 66)">
+    <rect width="280" height="200" rx="8" fill="#ffffff" stroke="#bcd"/>
+    <rect width="280" height="28" rx="8" fill="#0d47a1"/>
+    <text x="14" y="19" font-size="13" font-weight="700" fill="#ffffff">6.3 相关子查询 vs JOIN</text>
+
+    <text x="14" y="50" font-size="11" font-weight="700" fill="#1565c0">🎯 用途：存在性判断 / 逐行取值</text>
+
+    <g transform="translate(14, 60)">
+      <rect width="252" height="100" rx="4" fill="#f5f7fa" stroke="#cfd8dc"/>
+      <text x="8" y="15" font-size="9" font-weight="700" fill="#666">写法</text>
+      <text x="130" y="15" font-size="9" font-weight="700" fill="#666">优化器能 unnest？</text>
+      <line x1="0" y1="21" x2="252" y2="21" stroke="#cfd8dc"/>
+
+      <text x="8" y="35" font-size="9" fill="#333">EXISTS</text>
+      <text x="130" y="35" font-size="9" fill="#388e3c">✅ semi-join</text>
+
+      <text x="8" y="49" font-size="9" fill="#333">NOT EXISTS</text>
+      <text x="130" y="49" font-size="9" fill="#388e3c">✅ anti-join</text>
+
+      <text x="8" y="63" font-size="9" fill="#333">IN (子查询)</text>
+      <text x="130" y="63" font-size="9" fill="#388e3c">✅ semi-join</text>
+
+      <text x="8" y="77" font-size="9" font-weight="700" fill="#c62828">NOT IN (子查询)</text>
+      <text x="130" y="77" font-size="9" font-weight="700" fill="#c62828">❌ 不能（NULL 陷阱）</text>
+
+      <text x="8" y="91" font-size="9" font-weight="700" fill="#c62828">SELECT 里的相关标量</text>
+      <text x="130" y="91" font-size="9" font-weight="700" fill="#c62828">❌ 几乎从不</text>
+    </g>
+
+    <text x="14" y="176" font-size="9" font-weight="700" fill="#c62828">⚠️ 判断口诀：EXPLAIN 看到 SubPlan = 没救</text>
+    <text x="14" y="190" font-size="9" font-weight="700" fill="#0d47a1">   看到 Semi/Anti Join = 优化器已救</text>
+  </g>
+
+  <!-- ========= 下半左：PG 12+ CTE 物化决策树 ========= -->
+  <text x="230" y="296" text-anchor="middle" font-size="14" font-weight="700" fill="#0d47a1">PG 12+ CTE 物化决策树</text>
+
+  <g transform="translate(20, 308)">
+    <!-- 根节点 -->
+    <rect x="100" y="0" width="180" height="30" rx="4" fill="#0d47a1"/>
+    <text x="190" y="20" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">这个 CTE 是递归的？</text>
+
+    <line x1="190" y1="30" x2="190" y2="46" stroke="#666"/>
+    <line x1="60" y1="46" x2="320" y2="46" stroke="#666"/>
+    <line x1="60" y1="46" x2="60" y2="62" stroke="#666"/>
+    <line x1="320" y1="46" x2="320" y2="62" stroke="#666"/>
+    <text x="68" y="42" font-size="9" fill="#333">是</text>
+    <text x="272" y="42" font-size="9" fill="#333">否</text>
+
+    <!-- 是 → 物化 -->
+    <rect x="10" y="62" width="100" height="28" rx="4" fill="#e65100"/>
+    <text x="60" y="81" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">物化</text>
+
+    <!-- 否 → 有副作用？ -->
+    <rect x="180" y="62" width="200" height="28" rx="4" fill="#1565c0"/>
+    <text x="280" y="81" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">有副作用（写/volatile）？</text>
+
+    <line x1="280" y1="90" x2="280" y2="102" stroke="#666"/>
+    <line x1="200" y1="102" x2="360" y2="102" stroke="#666"/>
+    <line x1="200" y1="102" x2="200" y2="116" stroke="#666"/>
+    <line x1="360" y1="102" x2="360" y2="116" stroke="#666"/>
+    <text x="208" y="99" font-size="9" fill="#333">是</text>
+    <text x="318" y="99" font-size="9" fill="#333">否</text>
+
+    <rect x="150" y="116" width="100" height="28" rx="4" fill="#e65100"/>
+    <text x="200" y="135" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">物化</text>
+
+    <!-- 否 → 引用几次？ -->
+    <rect x="270" y="116" width="180" height="28" rx="4" fill="#1565c0"/>
+    <text x="360" y="135" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">被引用几次？</text>
+
+    <line x1="360" y1="144" x2="360" y2="156" stroke="#666"/>
+    <line x1="300" y1="156" x2="420" y2="156" stroke="#666"/>
+    <line x1="300" y1="156" x2="300" y2="170" stroke="#666"/>
+    <line x1="420" y1="156" x2="420" y2="170" stroke="#666"/>
+    <text x="280" y="153" font-size="9" fill="#333">1 次</text>
+    <text x="404" y="153" font-size="9" fill="#333">多次</text>
+
+    <rect x="252" y="170" width="96" height="28" rx="4" fill="#2e7d32"/>
+    <text x="300" y="189" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">内联</text>
+
+    <rect x="372" y="170" width="96" height="28" rx="4" fill="#e65100"/>
+    <text x="420" y="189" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">物化</text>
+
+    <!-- 说明 -->
+    <g transform="translate(0, 210)">
+      <rect width="440" height="50" rx="4" fill="#fff3e0" stroke="#e65100"/>
+      <text x="12" y="18" font-size="10" font-weight="700" fill="#bf360c">内联 = 折叠进外层，条件下推、能用索引（通常更快）</text>
+      <text x="12" y="34" font-size="9" fill="#333">物化 = 先算完再给外层，是「优化屏障」，保证只算一次</text>
+      <text x="12" y="46" font-size="9" font-weight="700" fill="#0d47a1">可用 MATERIALIZED / NOT MATERIALIZED 显式覆盖</text>
+    </g>
+  </g>
+
+  <!-- ========= 下半右：防环三件套 ========= -->
+  <text x="690" y="296" text-anchor="middle" font-size="14" font-weight="700" fill="#0d47a1">递归 CTE 防环三件套</text>
+
+  <g transform="translate(490, 308)">
+    <g transform="translate(0, 0)">
+      <rect width="410" height="60" rx="4" fill="#ffffff" stroke="#bcd"/>
+      <circle cx="22" cy="24" r="13" fill="#0d47a1"/>
+      <text x="22" y="29" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">1</text>
+      <text x="44" y="17" font-size="10" font-weight="700" fill="#333">UNION（而非 UNION ALL）</text>
+      <text x="44" y="32" font-size="9" fill="#666">每轮去重 → 有环也能终止 · 但每步 hash 开销</text>
+      <text x="44" y="47" font-size="9" fill="#666">适用：图 / 可能有脏数据的场景</text>
+    </g>
+
+    <g transform="translate(0, 66)">
+      <rect width="410" height="60" rx="4" fill="#e8f5e9" stroke="#2e7d32"/>
+      <circle cx="22" cy="24" r="13" fill="#2e7d32"/>
+      <text x="22" y="29" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">2</text>
+      <text x="44" y="17" font-size="10" font-weight="700" fill="#2e7d32">CYCLE 子句（PG 14+ · 推荐）</text>
+      <text x="44" y="32" font-size="9" fill="#666">CYCLE id SET is_cycle USING path</text>
+      <text x="44" y="47" font-size="9" fill="#666">WHERE NOT is_cycle 过滤 · <tspan font-weight="700" fill="#c62828">WHERE is_cycle 可揪出环</tspan></text>
+    </g>
+
+    <g transform="translate(0, 132)">
+      <rect width="410" height="60" rx="4" fill="#ffffff" stroke="#bcd"/>
+      <circle cx="22" cy="24" r="13" fill="#e65100"/>
+      <text x="22" y="29" text-anchor="middle" font-size="12" font-weight="700" fill="#ffffff">3</text>
+      <text x="44" y="17" font-size="10" font-weight="700" fill="#333">depth 守卫（兜底 · 永远加）</text>
+      <text x="44" y="32" font-size="9" fill="#666">WHERE t.depth &lt; 10</text>
+      <text x="44" y="47" font-size="9" fill="#666">手工数组（PG 14 前）：WHERE NOT (c.id = ANY(t.path))</text>
+    </g>
+
+    <g transform="translate(0, 202)">
+      <rect width="410" height="58" rx="4" fill="#fff3e0" stroke="#e65100"/>
+      <text x="12" y="18" font-size="10" font-weight="700" fill="#bf360c">⚠️ 递归 CTE 性能铁律</text>
+      <text x="12" y="34" font-size="9" fill="#333">① join 列必须建索引（manager_id / parent_id）— 否则每轮全表扫</text>
+      <text x="12" y="48" font-size="9" fill="#333">② 递归 CTE 总是物化（工作表迭代），不参与内联优化</text>
+    </g>
+  </g>
+
+</svg>

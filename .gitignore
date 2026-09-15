@@ -51,6 +51,38 @@ elasticsearch/playground/snapshots/
 elasticsearch/playground/backup-*/
 elasticsearch-9.5.1-*.zip
 
+# ---- 教学实操环境：ELK 结课综合实战项目《日志平台生产化》运行期产物 ----
+# 说明：projects/日志平台生产化/ 下的四份主文档、SVG、以及 实现/ 里的配置与脚本
+#       （docker-compose.yml / filebeat.yml / *.conf / scripts/*.py / .env）**都要入库**，
+#       它们才是教学产物。但运行期会就地生成下列大体积/可再生的中间产物，须忽略。
+#   logs/            造数据脚本写出的日志（gen-logs.py 再生）
+#   es/backup/       ES fs 快照仓库（本次实测 4.8MB / 306 文件，bootstrap.py 再生）
+#   kibana/*.ndjson  Saved Objects 导出备份（bootstrap.py 或手工导出再生）
+# 另：playground/11-alerting/ 下两个课 12 运行期残留（webhook 收信端 stdout、导出 ndjson），
+#     未被任何讲义引用且可完全再生，一并忽略。
+elasticsearch/elk/projects/*/实现/logs/
+elasticsearch/elk/projects/*/实现/es/backup/
+elasticsearch/elk/projects/*/实现/kibana/*.ndjson
+elasticsearch/elk/playground/*/webhook-server.out
+elasticsearch/elk/playground/11-alerting/kibana-saved-objects.ndjson
+
+# ---- ELK 子教程：课 11 Kibana 演示数据的 bulk 载荷（2026-09-15 卫生检查）----
+# 背景：playground/10-kibana-visual/bulk-app-logs.ndjson（305KB / 600 条）
+#   由同目录 gen-app-logs.py 生成。讲义 lesson-11 第 530-534 行就是
+#   `cd .../10-kibana-visual && python3 gen-app-logs.py` 之后才
+#   `--data-binary @bulk-app-logs.ndjson` —— 读者照抄即可重新生成。
+# 判据（比一般"可再生"更强）：该载荷**内嵌生成时刻的时间戳**
+#   （实测首行 @timestamp = 2026-09-08T11:20:02.167Z），而 gen-app-logs.py 的用途
+#   明确规定"时间跨度：最近 3 小时"；一旦入库即固化为一周前的陈旧时间，
+#   Discover 默认 15min 窗口反而看不到数据 —— 它**必须**每次现生成，
+#   不是"可选的再生"，而是"入库即失效"。故判为过程残留。
+# ⚠️ 对照组：同课另一载荷 playground/08-where-to-process/audit_bulk.ndjson（612B）
+#   **不忽略** —— 讲义 lesson-09 第 223 / 589 行 `--data-binary @audit_bulk.ndjson`
+#   引用它，而仓库内零处生成脚本（全仓仅 lesson-09 两处提及，再无 generator），
+#   丢了读者照抄命令直接失败。这正是本仓库反复踩过的坑：
+#   ES 课 15「讲义引用的文件不存在」，以及 k8s 聚合层二进制那条规则的镜像判定。
+elasticsearch/elk/playground/10-kibana-visual/bulk-app-logs.ndjson
+
 # ---- 教学实操环境：Redis 运行时数据（redis 课程）----
 # 风险点：redis.conf 的 dir 默认值是 ./（即启动 redis-server 时的当前目录）。
 # 若在仓库目录内直接启动而未指定 --dir，RDB 快照与 AOF 会就地生成，
@@ -415,6 +447,35 @@ frontend/javascript-core/**/*.cpuprofile
 # ⚠️ 用 / 锚定仓库根 —— 只有根目录这一个实例，不会波及任何主题目录
 #   （各主题自己的一次性探针脚本另由 doris/ surrealdb/ 等分节规则处理）。
 /.probe/
+
+# ---- web-index 抓取工作区（跨主题共享，2026-09-15 卫生检查补录）----
+# 背景：temp/ 是仓库根的 web-index 抓取工作区，与 .probe/ 同类但分工不同——
+#   .probe/ 放写课过程的探测脚本，temp/ 放**建索引过程**的脚本、抓取原文与候选表：
+#     build_*_web_index.py（每个站点的抓取脚本，10 个）
+#     *-sitemap.xml / *.xml.gz、*-llms.txt / *-llms-full.txt、rfc*.html（抓下来的原始素材）
+#     web-index-*-map.md（候选链接中间表，由脚本生成、供人工/AI 筛选后落到
+#       {topic-slug}/web-index/ 才是教学产物）
+#   覆盖 consul / rabbitmq / opentelemetry / prometheus / redis / zookeeper / doris /
+#   influxdb / celery-django / elastic-docs / mdn-http / httpwg 等十余个主题，跨主题共享。
+# 判据：与 .probe/ 完全同构 —— 讲义引用的是**最终落盘的 {topic-slug}/web-index/ 索引**
+#   （本技能明文要求该目录入库），从不引用 temp/ 下的脚本与抓取原文。
+#   实测：全仓 .md 中零处引用 temp/ 下任何文件（唯一提及是 k8s/00-评审清单.md 的
+#   评审记录，已明文登记这些文件为"本轮临时文件 · 待用户决定是否清理"）。
+#   8.5 MB / 38 文件，丢了课程仍完整 —— 过程残留，不是教学产物。
+# ⚠️ 用 / 锚定仓库根 —— 实测全仓仅根目录这一个 temp/ 实例；各主题自己的
+#   索引目录叫 {topic-slug}/web-index/（如 operating-system/web-index/man7.org/），
+#   名字不同，不会被本规则波及。
+/temp/
+
+# ---- AI 工作记忆文档（仓库根，2026-09-15 卫生检查 · 用户决定不入库）----
+# 背景：AGENTS.md 是 AI 在对话过程中维护的仓库级临时记忆（架构 / 需求进度 / 关键产物 /
+#   决策记录 / 问题追踪），按用户规则充当"活文档"随对话推进反复改写。
+# 判据：它是**过程文档**而非教学产物 —— 丢失后各课程目录内的 `00-学习档案.md`
+#   `00-评审清单.md` `final-课程手册.md` 仍完整记录同样的信息（课程不依赖它）。
+#   且版本库里的连续小改动只会制造噪音 diff，起不到"可查阅"作用。
+# ⚠️ 用 / 锚定仓库根 —— 只忽略根级这一份；若将来某主题目录需要自己的 AGENTS.md
+#   （面向读者而非 AI 的说明文档），不会被本规则波及。
+/AGENTS.md
 
 # ---- 教学实操环境：Django 课程运行时数据（django 课程，2026-09-04 卫生检查）----
 # 背景：Phase 4 汇总手册收尾时的卫生检查发现三类过程残留：
@@ -899,3 +960,10 @@ k8s/assets/*.sh
 #   是聚合层实验的教学主体，吞掉后读者照抄补充课会直接失败
 #   （本仓库通用教训：ES 课 15 踩过「讲义引用的文件不存在」的坑）。
 k8s/assets/aggregator/aggregator-apiserver
+
+# ---- ELK 子教程（elasticsearch/elk/）：课 12 快照仓库落盘数据（~64MB，2026-09-10）----
+elasticsearch/elk/playground/07-reliability/backups/
+
+# ---- PostgreSQL 结课实战运行期产物 ----
+# 备份与隔离恢复实例由项目脚本生成；教学源码和 Markdown 不忽略。
+postgresql/projects/订单系统的 PG 生产化手册/实现/runtime/

@@ -1,0 +1,244 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 1228" width="920" height="1228" font-family="system-ui, -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif">
+  <rect x="0" y="0" width="920" height="1228" fill="#fafafa"/>
+
+  <defs>
+    <marker id="a13" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#c62828"/>
+    </marker>
+  </defs>
+
+  <!-- ============ 标题 ============ -->
+  <text x="30" y="40" font-size="24" font-weight="700" fill="#0d47a1">课 13 · 锁机制与死锁</text>
+  <text x="30" y="64" font-size="13" fill="#666">PostgreSQL 17.11 实测 · 表锁 8 种 / 行锁 4 种 / 死锁 40P01 / 四个超时</text>
+  <line x1="30" y1="78" x2="890" y2="78" stroke="#dcdcdc" stroke-width="1"/>
+
+  <!-- ============ ① 表级锁 8 种 ============ -->
+  <text x="30" y="104" font-size="15" font-weight="700" fill="#333">① 表级锁 8 种模式 —— 每个命令都先拿一把表锁（名字里的 "row" 是历史遗留）</text>
+
+  <g>
+    <rect x="30" y="116" width="204" height="66" rx="5" fill="#ffffff" stroke="#e0e0e0"/>
+    <rect x="30" y="116" width="204" height="4" rx="2" fill="#388e3c"/>
+    <text x="44" y="140" font-size="12.5" font-weight="700" fill="#388e3c">ACCESS SHARE</text>
+    <text x="44" y="159" font-size="11" fill="#333">SELECT 自动获取</text>
+    <text x="44" y="175" font-size="10.5" fill="#666">只与 ACCESS EXCLUSIVE 冲突</text>
+  </g>
+  <g>
+    <rect x="244" y="116" width="204" height="66" rx="5" fill="#ffffff" stroke="#e0e0e0"/>
+    <rect x="244" y="116" width="204" height="4" rx="2" fill="#388e3c"/>
+    <text x="258" y="140" font-size="12.5" font-weight="700" fill="#388e3c">ROW SHARE</text>
+    <text x="258" y="159" font-size="11" fill="#333">SELECT ... FOR UPDATE/SHARE</text>
+    <text x="258" y="175" font-size="10.5" fill="#666">与 EXCLUSIVE / ACCESS EXCL 冲突</text>
+  </g>
+  <g>
+    <rect x="458" y="116" width="204" height="66" rx="5" fill="#ffffff" stroke="#e0e0e0"/>
+    <rect x="458" y="116" width="204" height="4" rx="2" fill="#1565c0"/>
+    <text x="472" y="140" font-size="12.5" font-weight="700" fill="#1565c0">ROW EXCLUSIVE</text>
+    <text x="472" y="159" font-size="11" fill="#333">UPDATE / DELETE / INSERT</text>
+    <text x="472" y="175" font-size="10.5" fill="#e65100">是表锁！不是行锁</text>
+  </g>
+  <g>
+    <rect x="672" y="116" width="204" height="66" rx="5" fill="#ffffff" stroke="#e0e0e0"/>
+    <rect x="672" y="116" width="204" height="4" rx="2" fill="#1565c0"/>
+    <text x="686" y="140" font-size="12.5" font-weight="700" fill="#1565c0">SHARE UPDATE EXCLUSIVE</text>
+    <text x="686" y="159" font-size="11" fill="#333">VACUUM / ANALYZE / CREATE INDEX CONC</text>
+    <text x="686" y="175" font-size="10.5" fill="#666">自我冲突；不挡读也不挡写（实测）</text>
+  </g>
+
+  <g>
+    <rect x="30" y="190" width="204" height="66" rx="5" fill="#ffffff" stroke="#e0e0e0"/>
+    <rect x="30" y="190" width="204" height="4" rx="2" fill="#e65100"/>
+    <text x="44" y="214" font-size="12.5" font-weight="700" fill="#e65100">SHARE</text>
+    <text x="44" y="233" font-size="11" fill="#333">CREATE INDEX（非 CONCURRENTLY）</text>
+    <text x="44" y="249" font-size="10.5" fill="#666">挡写不挡读（实测：读畅通、写阻塞）</text>
+  </g>
+  <g>
+    <rect x="244" y="190" width="204" height="66" rx="5" fill="#ffffff" stroke="#e0e0e0"/>
+    <rect x="244" y="190" width="204" height="4" rx="2" fill="#e65100"/>
+    <text x="258" y="214" font-size="12.5" font-weight="700" fill="#e65100">SHARE ROW EXCLUSIVE</text>
+    <text x="258" y="233" font-size="11" fill="#333">CREATE TRIGGER / 部分 ALTER TABLE</text>
+    <text x="258" y="249" font-size="10.5" fill="#666">自我排他，同时只允许一个会话</text>
+  </g>
+  <g>
+    <rect x="458" y="190" width="204" height="66" rx="5" fill="#ffffff" stroke="#e0e0e0"/>
+    <rect x="458" y="190" width="204" height="4" rx="2" fill="#c62828"/>
+    <text x="472" y="214" font-size="12.5" font-weight="700" fill="#c62828">EXCLUSIVE</text>
+    <text x="472" y="233" font-size="11" fill="#333">REFRESH MATERIALIZED VIEW CONC</text>
+    <text x="472" y="249" font-size="10.5" fill="#666">只允许并发的 ACCESS SHARE（只读）</text>
+  </g>
+  <g>
+    <rect x="672" y="190" width="204" height="66" rx="5" fill="#fdeaea" stroke="#c62828" stroke-width="1.4"/>
+    <rect x="672" y="190" width="204" height="4" rx="2" fill="#c62828"/>
+    <text x="686" y="214" font-size="12.5" font-weight="700" fill="#c62828">ACCESS EXCLUSIVE</text>
+    <text x="686" y="233" font-size="11" fill="#333">DROP / TRUNCATE / ALTER / VACUUM FULL</text>
+    <text x="686" y="249" font-size="10.5" fill="#c62828">LOCK TABLE 不写模式时的默认值！</text>
+  </g>
+
+  <!-- ============ ② 行级锁 4 种 ============ -->
+  <text x="30" y="284" font-size="15" font-weight="700" fill="#333">② 行级锁 4 种 —— 强度递减四档（不是"两层"）</text>
+
+  <g>
+    <rect x="30" y="296" width="204" height="62" rx="5" fill="#ffffff" stroke="#e0e0e0"/>
+    <text x="44" y="319" font-size="12.5" font-weight="700" fill="#7b1fa2">FOR UPDATE</text>
+    <text x="44" y="337" font-size="10.5" fill="#333">最强：BUPDATE/DELETE/FOR * 全挡</text>
+    <text x="44" y="352" font-size="10.5" fill="#666">DELETE、改唯一索引列时自动拿</text>
+  </g>
+  <g>
+    <rect x="244" y="296" width="204" height="62" rx="5" fill="#ffffff" stroke="#e0e0e0"/>
+    <text x="258" y="319" font-size="12.5" font-weight="700" fill="#7b1fa2">FOR NO KEY UPDATE</text>
+    <text x="258" y="337" font-size="10.5" fill="#333">不挡 FOR KEY SHARE</text>
+    <text x="258" y="352" font-size="10.5" fill="#666">多数 UPDATE 自动拿（默认写锁）</text>
+  </g>
+  <g>
+    <rect x="458" y="296" width="204" height="62" rx="5" fill="#ffffff" stroke="#e0e0e0"/>
+    <text x="472" y="319" font-size="12.5" font-weight="700" fill="#7b1fa2">FOR SHARE</text>
+    <text x="472" y="337" font-size="10.5" fill="#333">共享：挡写，不挡 FOR SHARE/KEY SHARE</text>
+    <text x="472" y="352" font-size="10.5" fill="#666">SELECT ... FOR SHARE</text>
+  </g>
+  <g>
+    <rect x="672" y="296" width="204" height="62" rx="5" fill="#ffffff" stroke="#e0e0e0"/>
+    <text x="686" y="319" font-size="12.5" font-weight="700" fill="#7b1fa2">FOR KEY SHARE</text>
+    <text x="686" y="337" font-size="10.5" fill="#333">最宽容：只挡 DELETE / 改键值的 UPDATE</text>
+    <text x="686" y="352" font-size="10.5" fill="#666">外键引用检查时自动拿</text>
+  </g>
+
+  <!-- ============ ③ 冲突矩阵 ============ -->
+  <text x="30" y="392" font-size="15" font-weight="700" fill="#333">③ 行锁冲突矩阵 4×4 —— 实测与官方 Table 13.3 完全吻合</text>
+
+  <text x="30" y="418" font-size="10.5" fill="#666">行 = 已持有（Current）　列 = 新请求（Requested）</text>
+  <text x="204" y="418" font-size="10.5" fill="#666">✓ 兼容（不阻塞）</text>
+  <text x="306" y="418" font-size="10.5" fill="#666">X 冲突（阻塞）</text>
+
+  <!-- 表头 -->
+  <text x="176" y="442" font-size="11" font-weight="700" fill="#333" text-anchor="end">KEY SHARE</text>
+  <text x="252" y="442" font-size="11" font-weight="700" fill="#333" text-anchor="end">SHARE</text>
+  <text x="328" y="442" font-size="11" font-weight="700" fill="#333" text-anchor="end">NO KEY UPD</text>
+  <text x="404" y="442" font-size="11" font-weight="700" fill="#333" text-anchor="end">UPDATE</text>
+
+  <!-- 第 1 行：FOR KEY SHARE -->
+  <text x="30" y="466" font-size="11" font-weight="700" fill="#7b1fa2">FOR KEY SHARE</text>
+  <rect x="186" y="450" width="76" height="24" rx="3" fill="#e8f5e9" stroke="#c5e1a5"/><text x="224" y="466" font-size="12" fill="#388e3c" text-anchor="middle">✓</text>
+  <rect x="262" y="450" width="76" height="24" rx="3" fill="#e8f5e9" stroke="#c5e1a5"/><text x="300" y="466" font-size="12" fill="#388e3c" text-anchor="middle">✓</text>
+  <rect x="338" y="450" width="76" height="24" rx="3" fill="#e8f5e9" stroke="#c5e1a5"/><text x="376" y="466" font-size="12" fill="#388e3c" text-anchor="middle">✓</text>
+  <rect x="414" y="450" width="76" height="24" rx="3" fill="#ffebee" stroke="#ffcdd2"/><text x="452" y="466" font-size="12" font-weight="700" fill="#c62828" text-anchor="middle">X</text>
+
+  <!-- 第 2 行：FOR SHARE -->
+  <text x="30" y="496" font-size="11" font-weight="700" fill="#7b1fa2">FOR SHARE</text>
+  <rect x="186" y="480" width="76" height="24" rx="3" fill="#e8f5e9" stroke="#c5e1a5"/><text x="224" y="496" font-size="12" fill="#388e3c" text-anchor="middle">✓</text>
+  <rect x="262" y="480" width="76" height="24" rx="3" fill="#e8f5e9" stroke="#c5e1a5"/><text x="300" y="496" font-size="12" fill="#388e3c" text-anchor="middle">✓</text>
+  <rect x="338" y="480" width="76" height="24" rx="3" fill="#ffebee" stroke="#ffcdd2"/><text x="376" y="496" font-size="12" font-weight="700" fill="#c62828" text-anchor="middle">X</text>
+  <rect x="414" y="480" width="76" height="24" rx="3" fill="#ffebee" stroke="#ffcdd2"/><text x="452" y="496" font-size="12" font-weight="700" fill="#c62828" text-anchor="middle">X</text>
+
+  <!-- 第 3 行：FOR NO KEY UPDATE -->
+  <text x="30" y="526" font-size="11" font-weight="700" fill="#7b1fa2">FOR NO KEY UPDATE</text>
+  <rect x="186" y="510" width="76" height="24" rx="3" fill="#e8f5e9" stroke="#c5e1a5"/><text x="224" y="526" font-size="12" fill="#388e3c" text-anchor="middle">✓</text>
+  <rect x="262" y="510" width="76" height="24" rx="3" fill="#ffebee" stroke="#ffcdd2"/><text x="300" y="526" font-size="12" font-weight="700" fill="#c62828" text-anchor="middle">X</text>
+  <rect x="338" y="510" width="76" height="24" rx="3" fill="#ffebee" stroke="#ffcdd2"/><text x="376" y="526" font-size="12" font-weight="700" fill="#c62828" text-anchor="middle">X</text>
+  <rect x="414" y="510" width="76" height="24" rx="3" fill="#ffebee" stroke="#ffcdd2"/><text x="452" y="526" font-size="12" font-weight="700" fill="#c62828" text-anchor="middle">X</text>
+
+  <!-- 第 4 行：FOR UPDATE -->
+  <text x="30" y="556" font-size="11" font-weight="700" fill="#7b1fa2">FOR UPDATE</text>
+  <rect x="186" y="540" width="76" height="24" rx="3" fill="#ffebee" stroke="#ffcdd2"/><text x="224" y="556" font-size="12" font-weight="700" fill="#c62828" text-anchor="middle">X</text>
+  <rect x="262" y="540" width="76" height="24" rx="3" fill="#ffebee" stroke="#ffcdd2"/><text x="300" y="556" font-size="12" font-weight="700" fill="#c62828" text-anchor="middle">X</text>
+  <rect x="338" y="540" width="76" height="24" rx="3" fill="#ffebee" stroke="#ffcdd2"/><text x="376" y="556" font-size="12" font-weight="700" fill="#c62828" text-anchor="middle">X</text>
+  <rect x="414" y="540" width="76" height="24" rx="3" fill="#ffebee" stroke="#ffcdd2"/><text x="452" y="556" font-size="12" font-weight="700" fill="#c62828" text-anchor="middle">X</text>
+
+  <rect x="520" y="450" width="356" height="114" rx="6" fill="#fff8e1" stroke="#ffe082"/>
+  <text x="536" y="474" font-size="12.5" font-weight="700" fill="#e65100">⚠️ 官方 Tip（实测确认）</text>
+  <text x="536" y="496" font-size="11.5" fill="#333">Only an ACCESS EXCLUSIVE lock blocks</text>
+  <text x="536" y="513" font-size="11.5" fill="#333">a SELECT (without FOR UPDATE/SHARE).</text>
+  <text x="536" y="534" font-size="11" fill="#666">持 SHARE / SHARE UPDATE EXCLUSIVE 时：</text>
+  <text x="536" y="550" font-size="11" fill="#388e3c">SELECT 畅通（实测）✅</text>
+
+  <!-- ============ ④ 排查核心：等的是 relation 还是 transactionid ============ -->
+  <text x="30" y="600" font-size="15" font-weight="700" fill="#333">④ 排查核心 —— 等表锁 vs 等行锁，在视图里长得完全不一样</text>
+
+  <g>
+    <rect x="30" y="612" width="415" height="112" rx="6" fill="#ffffff" stroke="#e0e0e0"/>
+    <text x="48" y="636" font-size="12.5" font-weight="700" fill="#1565c0">等表锁 → wait_event = relation</text>
+    <text x="48" y="658" font-size="11.5" fill="#333">SELECT id FROM accounts WHERE id=1;</text>
+    <text x="48" y="678" font-size="11.5" fill="#666">pid 3732 | Lock | relation | blocked_by {3733}</text>
+    <text x="48" y="700" font-size="11.5" fill="#388e3c">pg_locks 里能看到 granted = f 的那一行 ✅</text>
+    <text x="48" y="718" font-size="11" fill="#666">AccessExclusiveLock(t) vs AccessShareLock(f)</text>
+  </g>
+
+  <g>
+    <rect x="462" y="612" width="416" height="112" rx="6" fill="#fdeaea" stroke="#c62828" stroke-width="1.3"/>
+    <text x="480" y="636" font-size="12.5" font-weight="700" fill="#c62828">等行锁 → wait_event = transactionid</text>
+    <text x="480" y="658" font-size="11.5" fill="#333">SELECT ... FOR UPDATE;（行已被别人锁住）</text>
+    <text x="480" y="678" font-size="11.5" fill="#666">pid 3754 | Lock | transactionid | blocked_by {3755}</text>
+    <text x="480" y="700" font-size="11.5" fill="#c62828">pg_locks 里 granted 全是 t —— 看不出在等谁 ❌</text>
+    <text x="480" y="718" font-size="11" fill="#666">官方：row-level locks normally do not appear in this view</text>
+  </g>
+
+  <rect x="30" y="734" width="848" height="40" rx="5" fill="#e8f5e9" stroke="#c5e1a5"/>
+  <text x="44" y="752" font-size="12.5" fill="#333">正确姿势（官方推荐）：<tspan font-family="monospace" fill="#0d47a1">SELECT pid, pg_blocking_pids(pid) FROM pg_stat_activity WHERE wait_event_type='Lock';</tspan></text>
+  <text x="44" y="768" font-size="11" fill="#666">官方原话：自己 join pg_locks 算阻塞关系 "very difficult to get right" —— 用 pg_blocking_pids()</text>
+
+  <!-- ============ ⑤ 咨询锁 ============ -->
+  <text x="30" y="806" font-size="15" font-weight="700" fill="#333">⑤ 咨询锁 —— 借数据库锁表当应用层互斥量（系统不保证你用对）</text>
+
+  <g>
+    <rect x="30" y="818" width="415" height="96" rx="6" fill="#ffffff" stroke="#e0e0e0"/>
+    <rect x="30" y="818" width="415" height="4" rx="2" fill="#e65100"/>
+    <text x="48" y="842" font-size="12.5" font-weight="700" fill="#e65100">会话级 pg_advisory_lock(k)</text>
+    <text x="48" y="864" font-size="11.5" fill="#333">显式 unlock 或会话结束才释放</text>
+    <text x="48" y="884" font-size="11.5" fill="#c62828">不遵守事务语义：ROLLBACK 后仍持有（实测）</text>
+    <text x="48" y="904" font-size="11" fill="#666">适合：定时任务防重复执行（长周期互斥）</text>
+  </g>
+
+  <g>
+    <rect x="462" y="818" width="416" height="96" rx="6" fill="#ffffff" stroke="#e0e0e0"/>
+    <rect x="462" y="818" width="416" height="4" rx="2" fill="#388e3c"/>
+    <text x="480" y="842" font-size="12.5" font-weight="700" fill="#388e3c">事务级 pg_advisory_xact_lock(k)</text>
+    <text x="480" y="864" font-size="11.5" fill="#333">事务结束自动释放（实测 COMMIT 后 held: 1 → 0）</text>
+    <text x="480" y="884" font-size="11.5" fill="#388e3c">推荐优先用这个</text>
+    <text x="480" y="904" font-size="11" fill="#666">适合：一次业务操作的短周期互斥</text>
+  </g>
+
+  <rect x="30" y="924" width="848" height="38" rx="5" fill="#fff8e1" stroke="#ffe082"/>
+  <text x="44" y="941" font-size="11.5" fill="#333">在 pg_locks 里的样子：<tspan font-family="monospace" fill="#0d47a1">locktype='advisory'</tspan>，键藏在 classid/objid，要拼回来：<tspan font-family="monospace" fill="#0d47a1">(classid::bigint &lt;&lt; 32) | objid::bigint</tspan></text>
+  <text x="44" y="957" font-size="11" fill="#666">坑：数字随便编 → 撞号 → 莫名互相阻塞；连接池不关物理连接 → 会话级锁跨请求一直攥着</text>
+
+  <!-- ============ ⑥ 死锁 ============ -->
+  <text x="30" y="994" font-size="15" font-weight="700" fill="#333">⑥ 死锁 —— 不预防，1 秒后检测环、牺牲一个（40P01）</text>
+
+  <g>
+    <rect x="30" y="1006" width="120" height="44" rx="5" fill="#ffffff" stroke="#e0e0e0"/>
+    <text x="90" y="1025" font-size="12" font-weight="700" fill="#1565c0" text-anchor="middle">事务 A</text>
+    <text x="90" y="1042" font-size="10.5" fill="#333" text-anchor="middle">锁住 id=1</text>
+  </g>
+  <g>
+    <rect x="30" y="1060" width="120" height="44" rx="5" fill="#ffffff" stroke="#e0e0e0"/>
+    <text x="90" y="1079" font-size="12" font-weight="700" fill="#e65100" text-anchor="middle">事务 B</text>
+    <text x="90" y="1096" font-size="10.5" fill="#333" text-anchor="middle">锁住 id=2</text>
+  </g>
+  <line x1="155" y1="1028" x2="245" y2="1082" stroke="#c62828" stroke-width="1.6" marker-end="url(#a13)"/>
+  <line x1="155" y1="1082" x2="245" y2="1028" stroke="#c62828" stroke-width="1.6" marker-end="url(#a13)"/>
+  <text x="200" y="1059" font-size="11" font-weight="700" fill="#c62828" text-anchor="middle">环</text>
+
+  <rect x="268" y="1006" width="610" height="98" rx="6" fill="#fdeaea" stroke="#c62828" stroke-width="1.3"/>
+  <text x="284" y="1028" font-size="12" font-weight="700" fill="#c62828">ERROR: 40P01: deadlock detected</text>
+  <text x="284" y="1048" font-size="11" fill="#333">DETAIL: Process 4021 waits for ShareLock on transaction 1370; blocked by 4022.</text>
+  <text x="284" y="1064" font-size="11" fill="#333">　　　　Process 4022 waits for ShareLock on transaction 1369; blocked by 4021.</text>
+  <text x="284" y="1084" font-size="11" fill="#666">客户端报错只给环；<tspan fill="#c62828">服务器日志</tspan>里还有双方完整 STATEMENT（更能定位业务逻辑）</text>
+  <text x="284" y="1100" font-size="11" fill="#666">deadlock_timeout=1s 触发检测｜牺牲哪个不确定，双方都要能重试</text>
+
+  <!-- ============ ⑦ 四个超时 ============ -->
+  <text x="30" y="1138" font-size="15" font-weight="700" fill="#333">⑦ 四个超时各管一段 —— 一个都不能少</text>
+
+  <rect x="30" y="1150" width="848" height="30" rx="4" fill="#ffffff" stroke="#e0e0e0"/>
+  <rect x="32" y="1152" width="212" height="26" fill="#e3f2fd"/>
+  <rect x="244" y="1152" width="212" height="26" fill="#e8f5e9"/>
+  <rect x="456" y="1152" width="212" height="26" fill="#fff8e1"/>
+  <rect x="668" y="1152" width="208" height="26" fill="#fff3e0"/>
+  <text x="138" y="1170" font-size="11" font-weight="700" fill="#1565c0" text-anchor="middle">lock_timeout</text>
+  <text x="350" y="1170" font-size="11" font-weight="700" fill="#388e3c" text-anchor="middle">statement_timeout</text>
+  <text x="562" y="1170" font-size="11" font-weight="700" fill="#e65100" text-anchor="middle">idle_in_transaction_…</text>
+  <text x="772" y="1170" font-size="11" font-weight="700" fill="#c62828" text-anchor="middle">transaction_timeout</text>
+  <text x="138" y="1194" font-size="10.5" fill="#666" text-anchor="middle">单次等锁 · 建议 3s</text>
+  <text x="350" y="1194" font-size="10.5" fill="#666" text-anchor="middle">单条语句 · 按 SLA</text>
+  <text x="562" y="1194" font-size="10.5" fill="#666" text-anchor="middle">事务内空闲 · 建议 5min</text>
+  <text x="772" y="1194" font-size="10.5" fill="#666" text-anchor="middle">整条事务 · PG 17 新增</text>
+  <text x="30" y="1212" font-size="10.5" fill="#c62828">实测：lock_timeout=2s → 2003ms 报错｜idle_in_transaction 静默 6s → 连接终止｜transaction_timeout=3s → 事务跑 6s 在 3.0s 被切</text>
+
+</svg>

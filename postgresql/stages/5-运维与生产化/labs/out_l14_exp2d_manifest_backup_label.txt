@@ -1,0 +1,22 @@
+=== 解包目录内校验（manifest 就位后） ===
+backup successfully verified
+退出码: 0
+
+=== backup_manifest 摘要（纯 grep/head） ===
+{ "PostgreSQL-Backup-Manifest-Version": 2,
+"System-Identifier": 7682798685620764710,
+"Files": [
+{ "Path": "backup_label", "Size": 227, "Last-Modified": "2026-09-10 15:39:57 GMT", "Checksum-Algorithm": "CRC32C", "Checksum": "c81cd87c" },
+{ "Path": "tablespace_map", "Size": 0, "Last-Modified": "2026-0
+...
+manifest 中 Path 条数: 2633
+manifest 大小: 376K
+
+=== backup_label（备份的起止 LSN —— PITR 的起点） ===
+START WAL LOCATION: 1/14000028 (file 000000010000000100000014)
+CHECKPOINT LOCATION: 1/14000080
+BACKUP METHOD: streamed
+BACKUP FROM: primary
+START TIME: 2026-09-10 15:39:57 UTC
+LABEL: pg_basebackup base backup
+START TIMELINE: 1

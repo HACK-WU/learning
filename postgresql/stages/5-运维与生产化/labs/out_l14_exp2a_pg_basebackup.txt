@@ -1,0 +1,69 @@
+=== 先手动 CHECKPOINT 清脏页 ===
+CHECKPOINT
+
+=== 检查是否有阻碍（长事务/活跃连接） ===
+
+real	0m0.064s
+user	0m0.014s
+sys	0m0.006s
+非 idle 会话数: 3
+
+=== 实验 D: pg_basebackup（tar + gzip，含 WAL 流式，180s 超时） ===
+waiting for checkpoint
+  40606/2111646 kB (1%), 0/1 tablespace
+  86622/2111646 kB (4%), 0/1 tablespace
+ 108700/2111646 kB (5%), 0/1 tablespace
+ 148368/2111646 kB (7%), 0/1 tablespace
+ 188277/2111646 kB (8%), 0/1 tablespace
+ 214901/2111646 kB (10%), 0/1 tablespace
+ 250858/2111646 kB (11%), 0/1 tablespace
+ 302272/2111646 kB (14%), 0/1 tablespace
+ 341980/2111646 kB (16%), 0/1 tablespace
+ 377771/2111646 kB (17%), 0/1 tablespace
+ 426363/2111646 kB (20%), 0/1 tablespace
+ 478897/2111646 kB (22%), 0/1 tablespace
+ 522029/2111646 kB (24%), 0/1 tablespace
+ 585104/2111646 kB (27%), 0/1 tablespace
+ 663995/2111646 kB (31%), 0/1 tablespace
+ 707764/2111646 kB (33%), 0/1 tablespace
+ 748868/2111646 kB (35%), 0/1 tablespace
+ 802807/2111646 kB (38%), 0/1 tablespace
+ 839210/2111646 kB (39%), 0/1 tablespace
+ 875250/2111646 kB (41%), 0/1 tablespace
+ 926030/2111646 kB (43%), 0/1 tablespace
+ 982068/2111646 kB (46%), 0/1 tablespace
+1050985/2111646 kB (49%), 0/1 tablespace
+1148551/2111646 kB (54%), 0/1 tablespace
+1217989/2111646 kB (57%), 0/1 tablespace
+1278688/2111646 kB (60%), 0/1 tablespace
+1323551/2111646 kB (62%), 0/1 tablespace
+1396731/2111646 kB (66%), 0/1 tablespace
+1441487/2111646 kB (68%), 0/1 tablespace
+1508603/2111646 kB (71%), 0/1 tablespace
+1569096/2111646 kB (74%), 0/1 tablespace
+1614161/2111646 kB (76%), 0/1 tablespace
+1682710/2111646 kB (79%), 0/1 tablespace
+1738277/2111646 kB (82%), 0/1 tablespace
+1784430/2111646 kB (84%), 0/1 tablespace
+1833966/2111646 kB (86%), 0/1 tablespace
+1852879/2111646 kB (87%), 0/1 tablespace
+1909032/2111646 kB (90%), 0/1 tablespace
+1965145/2111646 kB (93%), 0/1 tablespace
+2040467/2111646 kB (96%), 0/1 tablespace
+2091353/2111646 kB (99%), 0/1 tablespace
+2111657/2111657 kB (100%), 0/1 tablespace
+2111657/2111657 kB (100%), 1/1 tablespace
+
+real	0m41.531s
+user	0m39.897s
+sys	0m1.238s
+pg_basebackup 退出码: 0
+
+--- 备份产物 ---
+total 457232
+drwx------ 2 root     root          4096 Sep 10 15:40 .
+drwxr-xr-x 3 postgres postgres      4096 Sep 10 15:39 ..
+-rw------- 1 root     root        381356 Sep 10 15:40 backup_manifest
+-rw------- 1 root     root     467790490 Sep 10 15:40 base.tar.gz
+-rw------- 1 root     root         17109 Sep 10 15:40 pg_wal.tar.gz
+447M	/var/lib/postgresql/backup/base

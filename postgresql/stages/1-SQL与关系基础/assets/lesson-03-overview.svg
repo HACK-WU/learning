@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 560" font-family="-apple-system, 'PingFang SC', 'Segoe UI', sans-serif">
+  <rect width="920" height="560" fill="#fafafa"/>
+
+  <!-- 标题 -->
+  <text x="460" y="30" text-anchor="middle" font-size="20" font-weight="700" fill="#0d47a1">课 3 一图总结 · 查询三件套 + 阶段 1 闭环</text>
+  <text x="460" y="50" text-anchor="middle" font-size="11" fill="#666">上：3.1 / 3.2 / 3.3 三件事 · 下：阶段 1 三课整合成"日常 80% 业务查询能力" · 事实核查于 2026-09-06</text>
+
+  <!-- ========= 上半：3 个知识点（WHERE/ORDER BY/LIMIT / JOIN / 聚合） ========= -->
+
+  <!-- ===== 3.1 ===== -->
+  <g transform="translate(20, 70)">
+    <rect width="280" height="180" rx="8" fill="#ffffff" stroke="#bcd"/>
+    <rect width="280" height="28" rx="8" fill="#0d47a1"/>
+    <text x="14" y="19" font-size="13" font-weight="700" fill="#ffffff">3.1 WHERE / ORDER BY / LIMIT</text>
+
+    <text x="14" y="50" font-size="11" font-weight="700" fill="#1565c0">🎯 用途：列表 / 详情 / 分页</text>
+
+    <!-- 最小代码框 -->
+    <g transform="translate(14, 60)">
+      <rect width="252" height="78" rx="4" fill="#f5f7fa" stroke="#cfd8dc"/>
+      <text x="8" y="14" font-size="10" fill="#333">SELECT order_no, amount</text>
+      <text x="8" y="28" font-size="10" fill="#333">FROM   orders</text>
+      <text x="8" y="42" font-size="10" fill="#333">WHERE  user_id = 5 AND status = 2</text>
+      <text x="8" y="56" font-size="10" fill="#333">ORDER BY amount DESC</text>
+      <text x="8" y="70" font-size="10" fill="#333">LIMIT 10;</text>
+    </g>
+
+    <text x="14" y="156" font-size="10" fill="#555">⚠️ 深分页用键集：WHERE (created_at, id) &lt; (?, ?)</text>
+    <text x="14" y="170" font-size="10" font-weight="700" fill="#0d47a1">一句话：过滤行 · 排序 · 取一段</text>
+  </g>
+
+  <!-- ===== 3.2 ===== -->
+  <g transform="translate(320, 70)">
+    <rect width="280" height="180" rx="8" fill="#ffffff" stroke="#bcd"/>
+    <rect width="280" height="28" rx="8" fill="#0d47a1"/>
+    <text x="14" y="19" font-size="13" font-weight="700" fill="#ffffff">3.2 JOIN 家族</text>
+
+    <text x="14" y="50" font-size="11" font-weight="700" fill="#1565c0">🎯 用途：多表拼数据（订单 + 用户 + 商品）</text>
+
+    <!-- 4 种 JOIN -->
+    <g transform="translate(14, 60)">
+      <rect width="252" height="78" rx="4" fill="#f5f7fa" stroke="#cfd8dc"/>
+      <text x="8" y="16" font-size="11" fill="#333"><tspan font-weight="700" fill="#0d47a1">INNER </tspan>重叠（交集）—— 严格匹配</text>
+      <text x="8" y="32" font-size="11" fill="#333"><tspan font-weight="700" fill="#388e3c">LEFT  </tspan>保留左表 —— 别丢行</text>
+      <text x="8" y="48" font-size="11" fill="#333"><tspan font-weight="700" fill="#e65100">RIGHT </tspan>等同 LEFT 调换 —— 生产建议改写</text>
+      <text x="8" y="64" font-size="11" fill="#333"><tspan font-weight="700" fill="#7b1fa2">FULL  </tspan>两边都保留 —— 对账 / 找差异</text>
+    </g>
+
+    <text x="14" y="156" font-size="10" fill="#555">⚠️ 禁止 NATURAL JOIN（改列自动炸）</text>
+    <text x="14" y="170" font-size="10" font-weight="700" fill="#0d47a1">一句话：INNER 重叠，LEFT 保留左表</text>
+  </g>
+
+  <!-- ===== 3.3 ===== -->
+  <g transform="translate(620, 70)">
+    <rect width="280" height="180" rx="8" fill="#ffffff" stroke="#bcd"/>
+    <rect width="280" height="28" rx="8" fill="#0d47a1"/>
+    <text x="14" y="19" font-size="13" font-weight="700" fill="#ffffff">3.3 聚合 + GROUP BY</text>
+
+    <text x="14" y="50" font-size="11" font-weight="700" fill="#1565c0">🎯 用途：月报 / 分布 / GMV</text>
+
+    <!-- 5 大聚合 -->
+    <g transform="translate(14, 60)">
+      <rect width="252" height="78" rx="4" fill="#f5f7fa" stroke="#cfd8dc"/>
+      <text x="8" y="16" font-size="11" fill="#333">5 大聚合：<tspan font-weight="700" fill="#0d47a1">COUNT / SUM / AVG / MIN / MAX</tspan></text>
+      <text x="8" y="32" font-size="11" fill="#333"><tspan font-weight="700" fill="#1565c0">GROUP BY</tspan>  按什么切组</text>
+      <text x="8" y="48" font-size="11" fill="#333"><tspan font-weight="700" fill="#e65100">HAVING  </tspan>切完后再过滤组（≠ WHERE）</text>
+      <text x="8" y="64" font-size="11" fill="#333"><tspan font-weight="700" fill="#388e3c">STRING_AGG</tspan>  字符串聚合（非 LISTAGG）</text>
+    </g>
+
+    <text x="14" y="156" font-size="10" fill="#555">⚠️ PG 严格模式：SELECT 非聚合列必入 GROUP BY</text>
+    <text x="14" y="170" font-size="10" font-weight="700" fill="#0d47a1">一句话：多行压一行，组多再滤</text>
+  </g>
+
+  <!-- 三段之间的箭头（隐含流动） -->
+  <text x="460" y="262" text-anchor="middle" font-size="12" font-weight="700" fill="#0d47a1">↓  组合应用  ↓</text>
+
+  <!-- ========= 下半：阶段 1 整闭环（三课） ========= -->
+
+  <text x="460" y="288" text-anchor="middle" font-size="14" font-weight="700" fill="#0d47a1">🎉 阶段 1 闭环 · 学完三课 = 日常 80% 业务查询能力</text>
+
+  <!-- 三课卡片 -->
+  <g transform="translate(20, 300)">
+    <!-- 课 1 -->
+    <g transform="translate(0, 0)">
+      <rect width="280" height="170" rx="8" fill="#e3f2fd" stroke="#1565c0"/>
+      <text x="140" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#0d47a1">课 1 · 认识 PostgreSQL</text>
+      <text x="140" y="40" text-anchor="middle" font-size="10" fill="#444">装库 · 进库 · 找层级</text>
+      <line x1="20" y1="50" x2="260" y2="50" stroke="#90caf9"/>
+
+      <text x="20" y="72" font-size="10" fill="#333">· 1.1 PG 是什么 +</text>
+      <text x="20" y="88" font-size="10" fill="#333">       Docker 起容器</text>
+      <text x="20" y="106" font-size="10" fill="#333">· 1.2 三大件 + pgcli</text>
+      <text x="20" y="124" font-size="10" fill="#333">· 1.3 cluster→db→schema→table</text>
+      <text x="20" y="142" font-size="10" fill="#333">       + search_path</text>
+
+      <rect x="20" y="152" width="240" height="14" rx="2" fill="#0d47a1"/>
+      <text x="140" y="162" text-anchor="middle" font-size="10" font-weight="700" fill="#ffffff">✅ 已闭环</text>
+    </g>
+
+    <!-- 课 2 -->
+    <g transform="translate(300, 0)">
+      <rect width="280" height="170" rx="8" fill="#e8f5e9" stroke="#388e3c"/>
+      <text x="140" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#2e7d32">课 2 · 表与数据类型</text>
+      <text x="140" y="40" text-anchor="middle" font-size="10" fill="#444">建库 · 入住 · 起名字</text>
+      <line x1="20" y1="50" x2="260" y2="50" stroke="#a5d6a7"/>
+
+      <text x="20" y="72" font-size="10" fill="#333">· 2.1 8 大类型族（数值/字符串/</text>
+      <text x="20" y="88" font-size="10" fill="#333">       时间/布尔/JSON...）</text>
+      <text x="20" y="106" font-size="10" fill="#333">· 2.2 5 约束 + IDENTITY 主键</text>
+      <text x="20" y="124" font-size="10" fill="#333">· 2.3 CRUD + RETURNING</text>
+
+      <rect x="20" y="152" width="240" height="14" rx="2" fill="#2e7d32"/>
+      <text x="140" y="162" text-anchor="middle" font-size="10" font-weight="700" fill="#ffffff">✅ 已闭环</text>
+    </g>
+
+    <!-- 课 3（你在这里） -->
+    <g transform="translate(600, 0)">
+      <rect width="280" height="170" rx="8" fill="#fff3e0" stroke="#e65100"/>
+      <text x="140" y="22" text-anchor="middle" font-size="13" font-weight="700" fill="#bf360c">课 3 · 查询基础 ← 你在这里</text>
+      <text x="140" y="40" text-anchor="middle" font-size="10" fill="#444">过滤 · 拼接 · 算总数</text>
+      <line x1="20" y1="50" x2="260" y2="50" stroke="#ffcc80"/>
+
+      <text x="20" y="72" font-size="10" fill="#333">· 3.1 WHERE / ORDER BY / LIMIT</text>
+      <text x="20" y="88" font-size="10" fill="#333">       + 键集分页</text>
+      <text x="20" y="106" font-size="10" fill="#333">· 3.2 JOIN 家族（INNER/LEFT/</text>
+      <text x="20" y="124" font-size="10" fill="#333">       RIGHT/FULL）</text>
+
+      <rect x="20" y="152" width="240" height="14" rx="2" fill="#e65100"/>
+      <text x="140" y="162" text-anchor="middle" font-size="10" font-weight="700" fill="#ffffff">✅ 阶段 1 收官</text>
+    </g>
+  </g>
+
+  <!-- 整合视角 -->
+  <g transform="translate(20, 490)">
+    <rect width="880" height="56" rx="8" fill="#0d47a1"/>
+    <text x="20" y="22" font-size="13" font-weight="700" fill="#ffffff">阶段 1 整合能力：</text>
+    <text x="20" y="42" font-size="11" fill="#e3f2fd">起 PG 容器 → 建库 schema → 建带约束的表 → 写 CRUD → 写列表/详情/月报查询（80% 业务 SQL 场景覆盖）</text>
+    <text x="700" y="22" font-size="11" font-weight="700" fill="#ffd54f">→ 阶段 2：把表组织成系统</text>
+    <text x="700" y="42" font-size="10" fill="#e3f2fd">关系建模 / 视图 / CTE / 窗口函数</text>
+  </g>
+
+</svg>

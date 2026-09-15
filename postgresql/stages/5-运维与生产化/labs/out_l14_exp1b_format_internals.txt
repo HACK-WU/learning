@@ -1,0 +1,83 @@
+=== finance schema 的表 ===
+ finance | accounts_t    | table | postgres
+ finance | big_orders    | table | postgres
+ finance | cast_demo     | table | postgres
+ finance | categories    | table | postgres
+ finance | daily_sales   | table | postgres
+ finance | docs          | table | postgres
+ finance | doctors       | table | postgres
+ finance | idx_demo      | table | postgres
+ finance | inventory     | table | postgres
+ finance | mvcc_demo     | table | postgres
+ finance | mytab         | table | postgres
+ finance | note_search   | table | postgres
+ finance | orders        | table | postgres
+ finance | orders_big    | table | postgres
+ finance | orders_fresh  | table | postgres
+ finance | orders_fresh2 | table | postgres
+ finance | orders_skew   | table | postgres
+ finance | orders_tx     | table | postgres
+ finance | products      | table | postgres
+ finance | sessions      | table | postgres
+ finance | small_users   | table | postgres
+ finance | task_queue    | table | postgres
+ finance | users         | table | postgres
+(24 rows)
+
+
+=== plain 格式头部（可直接 psql -f 执行） ===
+--
+-- PostgreSQL database dump
+--
+
+\restrict 9js9DH7fDw56F5mgiu4jwNdUisOUpgqiZB3ahMXCelKwpkP0yvpciSVVcHIos2k
+
+-- Dumped from database version 17.11 (Debian 17.11-1.pgdg13+2)
+-- Dumped by pg_dump version 17.11 (Debian 17.11-1.pgdg13+2)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+  ...
+=== plain 里的 COPY 语句（数据装载方式） ===
+702:COPY finance.accounts (id, owner, balance) FROM stdin;
+713:COPY finance.accounts_t (id, owner, balance) FROM stdin;
+723:COPY finance.big_orders (oid, uid, amount, status) FROM stdin;
+230731:COPY finance.cast_demo (id, code, note) FROM stdin;
+1230739:COPY finance.categories (id, name) FROM stdin;
+1230753:COPY finance.daily_sales (day, shift, sales) FROM stdin;
+COPY 语句总数: 24
+
+=== custom 格式头部（二进制，不可直接读） ===
+0000000   P   G   D   M   P 001 020  \0 004  \b 001 001  \0 002  \0  \0
+0000020  \0  \0 036  \0  \0  \0  \0 017  \0  \0  \0  \0  \n  \0  \0  \0
+0000040  \0  \b  \0  \0  \0  \0   ~  \0  \0  \0  \0  \0  \0  \0  \0  \0
+0000060
+
+=== directory 格式内部结构 ===
+total 46068
+drwx------ 2 root root     4096 Sep 10 15:30 .
+drwxr-xr-x 3 root root     4096 Sep 10 15:30 ..
+-rw-r--r-- 1 root root      178 Sep 10 15:30 3718.dat.gz
+-rw-r--r-- 1 root root       82 Sep 10 15:30 3720.dat.gz
+-rw-r--r-- 1 root root      284 Sep 10 15:30 3722.dat.gz
+-rw-r--r-- 1 root root   513680 Sep 10 15:30 3724.dat.gz
+-rw-r--r-- 1 root root      186 Sep 10 15:30 3725.dat.gz
+-rw-r--r-- 1 root root 11680366 Sep 10 15:30 3727.dat.gz
+-rw-r--r-- 1 root root  1004779 Sep 10 15:30 3729.dat.gz
+-rw-r--r-- 1 root root 12162017 Sep 10 15:30 3731.dat.gz
+-rw-r--r-- 1 root root  1121787 Sep 10 15:30 3733.dat.gz
+... 文件总数: 25
+
+=== tar 格式内部 ===
+toc.dat
+3751.dat
+3746.dat
+3736.dat
+3743.dat
+3720.dat
+
+=== -j 并行的连接数说明（官方：开 njobs+1 个连接） ===
+（见正文 14.1 核心原理）

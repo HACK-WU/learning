@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1180" viewBox="0 0 1000 1180">
+<defs><marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#333333"/></marker><marker id="arrB" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#1565C0"/></marker><marker id="arrR" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#C62828"/></marker></defs>
+<rect x="0" y="0" width="1000" height="1180" rx="0" fill="#ffffff"/>
+<text x="500.0" y="40" font-size="21" fill="#333333" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">课 15 · 复制与高可用：从一台到两台，再到一套 HA</text>
+<text x="500.0" y="64" font-size="12.5" fill="#777" font-weight="normal" text-anchor="middle" font-family="PingFang SC, sans-serif">实测环境 PostgreSQL 17.11 · 实验数据见 labs/out_l15_full.md</text>
+<rect x="24" y="88" width="952" height="236" rx="8" fill="#fafafa"/>
+<text x="44" y="116" font-size="15" fill="#333333" font-weight="bold" text-anchor="start" font-family="PingFang SC, sans-serif">① 流复制管道：WAL 从主库字节级流到从库</text>
+<rect x="60" y="140" width="210" height="150" rx="8" fill="#E3F2FD" stroke="#1565C0" stroke-width="1.5"/>
+<text x="165" y="168" font-size="14.5" fill="#1565C0" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">主库 primary（5433）</text>
+<text x="165" y="194" font-size="12" fill="#333333" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">wal_level = replica（默认）</text>
+<text x="165" y="214" font-size="12" fill="#333333" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">max_wal_senders = 10（默认）</text>
+<text x="165" y="234" font-size="12" fill="#333333" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">walsender 进程 ← 从库连入</text>
+<text x="165" y="262" font-size="12" fill="#777" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">产生 WAL（课 11 已讲）</text>
+<rect x="730" y="140" width="210" height="150" rx="8" fill="#E8F5E9" stroke="#2E7D32" stroke-width="1.5"/>
+<text x="835" y="168" font-size="14.5" fill="#2E7D32" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">从库 standby（5435）</text>
+<text x="835" y="194" font-size="12" fill="#333333" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">walreceiver 接收并落盘</text>
+<text x="835" y="214" font-size="12" fill="#333333" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">startup 进程重放（恢复态）</text>
+<text x="835" y="234" font-size="12" fill="#333333" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">pg_is_in_recovery() = t</text>
+<text x="835" y="262" font-size="12" fill="#777" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">可读不可写（hot standby 默认开）</text>
+<line x1="278" y1="215" x2="722" y2="215" stroke="#1565C0" stroke-width="2.5" marker-end="url(#arr)"/>
+<text x="500" y="196" font-size="12.5" fill="#1565C0" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">WAL 记录流（streaming replication）</text>
+<circle cx="360" cy="215" r="5" fill="#1565C0"/>
+<text x="360" y="237" font-size="11.5" fill="#1565C0" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">sent_lsn</text>
+<text x="360" y="252" font-size="10.5" fill="#777" font-weight="normal" text-anchor="middle" font-family="PingFang SC, sans-serif">主库已发出</text>
+<circle cx="480" cy="215" r="5" fill="#1565C0"/>
+<text x="480" y="255" font-size="11.5" fill="#1565C0" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">write_lsn</text>
+<text x="480" y="270" font-size="10.5" fill="#777" font-weight="normal" text-anchor="middle" font-family="PingFang SC, sans-serif">从库已写入 OS</text>
+<circle cx="600" cy="215" r="5" fill="#1565C0"/>
+<text x="600" y="237" font-size="11.5" fill="#1565C0" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">flush_lsn</text>
+<text x="600" y="252" font-size="10.5" fill="#777" font-weight="normal" text-anchor="middle" font-family="PingFang SC, sans-serif">从库已 fsync</text>
+<circle cx="700" cy="215" r="5" fill="#1565C0"/>
+<text x="700" y="255" font-size="11.5" fill="#1565C0" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">replay_lsn</text>
+<text x="700" y="270" font-size="10.5" fill="#777" font-weight="normal" text-anchor="middle" font-family="PingFang SC, sans-serif">从库已重放</text>
+<rect x="300" y="288" width="400" height="26" rx="8" fill="#ffffff" stroke="#B26A00" stroke-width="1"/>
+<text x="500" y="305" font-size="11.5" fill="#B26A00" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">三 lag：write_lag ≈ remote_write 代价 · flush_lag ≈ on 代价 · replay_lag ≈ remote_apply 代价</text>
+<rect x="24" y="344" width="952" height="120" rx="8" fill="#fafafa"/>
+<text x="44" y="372" font-size="15" fill="#333333" font-weight="bold" text-anchor="start" font-family="PingFang SC, sans-serif">② 从库的三块积木（课 14 的 pg_basebackup -R 一步凑齐）</text>
+<rect x="60" y="388" width="290" height="62" rx="8" fill="#ffffff" stroke="#bbb" stroke-width="1"/>
+<text x="205" y="410" font-size="13.5" fill="#1565C0" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">数据目录拷贝</text>
+<text x="205" y="428" font-size="11.5" fill="#333333" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">pg_basebackup 整集群物理复制</text>
+<text x="205" y="443" font-size="11" fill="#777" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">2.27 GB / 实测 14 秒</text>
+<rect x="370" y="388" width="290" height="62" rx="8" fill="#ffffff" stroke="#bbb" stroke-width="1"/>
+<text x="515" y="410" font-size="13.5" fill="#1565C0" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">standby.signal</text>
+<text x="515" y="428" font-size="11.5" fill="#333333" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">一个空文件 = 持续当从库</text>
+<text x="515" y="443" font-size="11" fill="#777" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">promote 后自动删除</text>
+<rect x="680" y="388" width="290" height="62" rx="8" fill="#ffffff" stroke="#bbb" stroke-width="1"/>
+<text x="825" y="410" font-size="13.5" fill="#1565C0" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">primary_conninfo</text>
+<text x="825" y="428" font-size="11.5" fill="#333333" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">auto.conf 里的连接串</text>
+<text x="825" y="443" font-size="11" fill="#777" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">可加 application_name / slot</text>
+<rect x="24" y="484" width="952" height="210" rx="8" fill="#fafafa"/>
+<text x="44" y="512" font-size="15" fill="#333333" font-weight="bold" text-anchor="start" font-family="PingFang SC, sans-serif">③ synchronous_commit 四档：每多等一步，多一层保证（实测单次 INSERT）</text>
+<rect x="60" y="528" width="130" height="26" rx="6" fill="#FFF8E1"/>
+<text x="125" y="546" font-size="13" fill="#B26A00" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">off</text>
+<text x="205" y="546" font-size="12.5" fill="#333333" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">不等本地落盘，直接返回</text>
+<text x="430" y="546" font-size="12" fill="#555" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">丢最近 ~600ms（3×wal_writer_delay）</text>
+<rect x="60" y="560" width="130" height="26" rx="6" fill="#ffffff"/>
+<text x="125" y="578" font-size="13" fill="#333333" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">local</text>
+<text x="205" y="578" font-size="12.5" fill="#333333" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">等本地 flush</text>
+<text x="430" y="578" font-size="12" fill="#555" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">不管从库——异步复制的默认语义</text>
+<rect x="60" y="592" width="130" height="26" rx="6" fill="#E3F2FD"/>
+<text x="125" y="610" font-size="13" fill="#1565C0" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">on</text>
+<text x="205" y="610" font-size="12.5" fill="#333333" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">本地 flush + 从库 flush</text>
+<text x="430" y="610" font-size="12" fill="#555" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">5.177 ms；除非主从全毁否则不丢</text>
+<rect x="60" y="624" width="130" height="26" rx="6" fill="#ffffff"/>
+<text x="125" y="642" font-size="13" fill="#333333" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">remote_write</text>
+<text x="205" y="642" font-size="12.5" fill="#333333" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">…+ 从库写入 OS 页缓存</text>
+<text x="430" y="642" font-size="12" fill="#555" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">1.798 ms；从库进程崩不丢，OS 崩可能丢</text>
+<rect x="60" y="656" width="130" height="26" rx="6" fill="#E8F5E9"/>
+<text x="125" y="674" font-size="13" fill="#2E7D32" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">remote_apply</text>
+<text x="205" y="674" font-size="12.5" fill="#333333" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">…+ 从库重放完可查</text>
+<text x="430" y="674" font-size="12" fill="#555" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">2.016 ms；返回即从库可见</text>
+<text x="60" y="688" font-size="12.5" fill="#C62828" font-weight="bold" text-anchor="start" font-family="PingFang SC, sans-serif">⚠ 从库没了 + on/remote_apply → 所有写事务全局挂起（实测 6.67 s 不返回）；客户端取消也撤不回（in-doubt 提交）</text>
+<rect x="24" y="714" width="952" height="170" rx="8" fill="#fafafa"/>
+<text x="44" y="742" font-size="15" fill="#333333" font-weight="bold" text-anchor="start" font-family="PingFang SC, sans-serif">④ 复制槽：restart_lsn 把 WAL 钉在主库（wal_keep_size=0 的对照组）</text>
+<rect x="60" y="760" width="440" height="100" rx="8" fill="#ffffff" stroke="#C62828" stroke-width="1.2"/>
+<text x="280" y="784" font-size="13" fill="#C62828" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">无槽（默认）</text>
+<text x="80" y="808" font-size="12" fill="#333333" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">checkpoint 只认自己 → 实测回收 14 段（52→38）</text>
+<text x="80" y="828" font-size="11.5" fill="#C62828" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">从库醒来: ERROR: requested WAL segment … removed</text>
+<text x="80" y="848" font-size="12" fill="#777" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">唯一修复 = 重新 basebackup</text>
+<rect x="524" y="760" width="420" height="100" rx="8" fill="#ffffff" stroke="#2E7D32" stroke-width="1.2"/>
+<text x="734" y="784" font-size="13" fill="#2E7D32" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">有槽 pg_create_physical_replication_slot</text>
+<text x="544" y="808" font-size="12" fill="#333333" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">restart_lsn 钉住 → 实测 38 段纹丝不动</text>
+<text x="544" y="828" font-size="12" fill="#2E7D32" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">从库一回来立刻追上，无需重建</text>
+<text x="544" y="848" font-size="11.5" fill="#C62828" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">代价：inactive 槽会撑爆 pg_wal（max_slot_wal_keep_size 兜底）</text>
+<rect x="24" y="904" width="952" height="150" rx="8" fill="#fafafa"/>
+<text x="44" y="932" font-size="15" fill="#333333" font-weight="bold" text-anchor="start" font-family="PingFang SC, sans-serif">⑤ promote：从库升主，timeline 1 → 2（实测 pg_promote()）</text>
+<line x1="70" y1="985" x2="460" y2="985" stroke="#999" stroke-width="2.5" marker-end="url(#arr)"/>
+<text x="90" y="975" font-size="11.5" fill="#777" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">timeline 1（原主库的 WAL 链）</text>
+<circle cx="460" cy="985" r="6" fill="#C62828"/>
+<text x="460" y="1012" font-size="11.5" fill="#C62828" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">promote 点：standby.signal 被删、槽 inactive</text>
+<line x1="460" y1="985" x2="900" y2="935" stroke="#2E7D32" stroke-width="2.5" marker-end="url(#arr)"/>
+<text x="760" y="928" font-size="12" fill="#2E7D32" font-weight="bold" text-anchor="start" font-family="PingFang SC, sans-serif">timeline 2（新主 5435 的 WAL 链）</text>
+<rect x="560" y="1000" width="396" height="40" rx="8" fill="#FFEBEE" stroke="#C62828" stroke-width="1.2"/>
+<text x="758" y="1017" font-size="12" fill="#C62828" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">⚠ 旧主若还活着 = 双主分叉：旧主写的行新主没有</text>
+<text x="758" y="1033" font-size="11.5" fill="#C62828" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">新主写的行旧主也没有（实验 D3 实证）→ 先隔离旧主！</text>
+<rect x="24" y="1074" width="952" height="86" rx="8" fill="#fafafa"/>
+<text x="44" y="1098" font-size="15" fill="#333333" font-weight="bold" text-anchor="start" font-family="PingFang SC, sans-serif">⑥ HA 是一组组件，不是一个开关</text>
+<rect x="60" y="1108" width="290" height="44" rx="8" fill="#ffffff" stroke="#bbb" stroke-width="1"/>
+<text x="205" y="1124" font-size="12.5" fill="#1565C0" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">A · 手动切换</text>
+<text x="205" y="1140" font-size="11" fill="#333333" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">pg_ctl promote + 人肉观察</text>
+<text x="205" y="1148" font-size="10.5" fill="#777" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">最简单；最容易分叉（D3 已证）</text>
+<rect x="370" y="1108" width="290" height="44" rx="8" fill="#ffffff" stroke="#bbb" stroke-width="1"/>
+<text x="515" y="1124" font-size="12.5" fill="#1565C0" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">B · Patroni + etcd</text>
+<text x="515" y="1140" font-size="11" fill="#333333" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">自动选主 / fencing / 恢复</text>
+<text x="515" y="1148" font-size="10.5" fill="#777" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">生产主流；多一个分布式组件要养</text>
+<rect x="680" y="1108" width="290" height="44" rx="8" fill="#ffffff" stroke="#bbb" stroke-width="1"/>
+<text x="825" y="1124" font-size="12.5" fill="#1565C0" font-weight="bold" text-anchor="middle" font-family="PingFang SC, sans-serif">C · 云与中间层</text>
+<text x="825" y="1140" font-size="11" fill="#333333" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">RDS/云托管，或 PgBouncer+HAProxy</text>
+<text x="825" y="1148" font-size="10.5" fill="#777" font-weight="normal" text-anchor="start" font-family="PingFang SC, sans-serif">把切换外包；代价是黑盒与绑定</text>
+</svg>

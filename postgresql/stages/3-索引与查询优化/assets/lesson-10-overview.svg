@@ -1,0 +1,197 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 730" font-family="-apple-system, 'PingFang SC', 'Segoe UI', sans-serif">
+  <rect width="920" height="730" fill="#fafafa"/>
+
+  <!-- 标题 -->
+  <text x="460" y="28" text-anchor="middle" font-size="20" font-weight="700" fill="#0d47a1">课 10 一图总结 · 慢查询优化实战：从「看懂」到「改对」</text>
+  <text x="460" y="48" text-anchor="middle" font-size="11" fill="#666">10.1 慢查询日志 · 10.2 五大索引陷阱 · 10.3 五种重写模式 ｜ 全部实测于 PG 17.11（核查于 2026-09-08）</text>
+
+  <!-- ================= 10.1 三件套 ================= -->
+  <g transform="translate(20, 66)">
+    <rect width="455" height="272" rx="8" fill="#ffffff" stroke="#bcd"/>
+    <rect width="455" height="28" rx="8" fill="#0d47a1"/>
+    <text x="14" y="19" font-size="13" font-weight="700" fill="#ffffff">10.1 慢查询定位三件套（互补，不是三选一）</text>
+
+    <g transform="translate(14, 42)" font-size="9.5">
+      <!-- 表头 -->
+      <text x="0" y="0" font-weight="700" fill="#0d47a1">工具</text>
+      <text x="128" y="0" font-weight="700" fill="#0d47a1">类比</text>
+      <text x="270" y="0" font-weight="700" fill="#0d47a1">强项</text>
+      <line x1="0" y1="6" x2="427" y2="6" stroke="#cfd8dc"/>
+
+      <text x="0" y="22" font-weight="700" fill="#1565c0">log_min_duration</text>
+      <text x="128" y="22" fill="#333">路口抓拍</text>
+      <text x="270" y="22" fill="#333">有 SQL 原文（含参数）</text>
+      <text x="0" y="38" font-weight="700" fill="#1565c0">pg_stat_statements</text>
+      <text x="128" y="38" fill="#333">流量统计</text>
+      <text x="270" y="38" fill="#333">聚合视角，能排 Top N</text>
+      <text x="0" y="54" font-weight="700" fill="#1565c0">auto_explain</text>
+      <text x="128" y="54" fill="#333">事故录像</text>
+      <text x="270" y="54" fill="#333">连执行计划一起给</text>
+      <line x1="0" y1="62" x2="427" y2="62" stroke="#cfd8dc"/>
+
+      <text x="0" y="78" font-weight="700" fill="#c62828">弱项：</text>
+      <text x="40" y="78" fill="#333">日志没聚合视角 ｜ 统计把参数归一化成 $1 ｜ auto_explain 开销最大</text>
+    </g>
+
+    <!-- 实测 -->
+    <g transform="translate(14, 128)">
+      <rect width="427" height="132" rx="4" fill="#f5f7fa" stroke="#cfd8dc"/>
+      <text x="8" y="15" font-size="9.5" font-weight="700" fill="#0d47a1">本课实测：慢查询日志开关</text>
+      <text x="8" y="32" font-size="9" font-family="Menlo, monospace" fill="#333">SHOW log_min_duration_statement;   → <tspan font-weight="700" fill="#c62828">-1（默认禁用）</tspan></text>
+      <text x="8" y="46" font-size="9" font-family="Menlo, monospace" fill="#333">ALTER SYSTEM SET ... = '10ms';  SELECT pg_reload_conf();</text>
+      <text x="8" y="60" font-size="9" font-family="Menlo, monospace" fill="#333">LOG: parameter "log_min_duration_statement" changed to "10ms"</text>
+      <text x="8" y="74" font-size="9" font-family="Menlo, monospace" fill="#388e3c">LOG: duration: 97.256 ms  statement: ... date(created_at)=...</text>
+      <line x1="8" y1="82" x2="419" y2="82" stroke="#cfd8dc"/>
+      <text x="8" y="97" font-size="9" fill="#333">同轮跑的 <tspan font-family="Menlo, monospace">user_id=500</tspan>（0.04 ms）<tspan font-weight="700" fill="#388e3c">未被记录</tspan> ✓ 阈值生效</text>
+      <text x="8" y="112" font-size="9" font-weight="700" fill="#c62828">⚠️ 生产从 5000 ms 起步，逐步下调；一步设 10 ms 会打爆日志</text>
+      <text x="8" y="126" font-size="9" font-weight="700" fill="#c62828">⚠️ 日志记的是整个语句串（含 SET），建议设 application_name 归因</text>
+    </g>
+  </g>
+
+  <!-- ================= 10.2 五大陷阱 ================= -->
+  <g transform="translate(485, 66)">
+    <rect width="415" height="272" rx="8" fill="#ffffff" stroke="#bcd"/>
+    <rect width="415" height="28" rx="8" fill="#e65100"/>
+    <text x="14" y="19" font-size="13" font-weight="700" fill="#ffffff">10.2 五大索引陷阱 · 症状 → 正解 → 实测</text>
+
+    <g transform="translate(14, 42)" font-size="9.5">
+      <!-- 陷阱 1 -->
+      <rect x="-6" y="-11" width="405" height="48" rx="3" fill="#fff8e1"/>
+      <text x="0" y="0" font-weight="700" fill="#c62828">① 函数包裹列</text>
+      <text x="0" y="14" fill="#333">date(created_at) → 改范围查询 <tspan font-weight="700" fill="#388e3c">75.9→9.8 ms（7.7×）</tspan></text>
+      <text x="0" y="28" font-weight="700" fill="#c62828">⚠️ timestamptz 建函数索引会报 must be marked IMMUTABLE</text>
+
+      <!-- 陷阱 2 -->
+      <text x="0" y="52" font-weight="700" fill="#c62828">② 类型不匹配</text>
+      <text x="0" y="66" fill="#333">numeric 常量是杀手 <tspan font-weight="700" fill="#c62828">0.04 → 96 ms（2400×）</tspan>；字符串字面量<tspan font-weight="700" fill="#388e3c">安全</tspan></text>
+
+      <!-- 陷阱 3 -->
+      <text x="0" y="90" font-weight="700" fill="#c62828">③ 前置通配 LIKE</text>
+      <text x="0" y="104" fill="#333">后缀通配要 <tspan font-family="Menlo, monospace">text_pattern_ops</tspan> <tspan font-weight="700" fill="#388e3c">19.1→0.84 ms（22.7×）</tspan></text>
+      <text x="0" y="118" fill="#333">两端通配要 <tspan font-family="Menlo, monospace">pg_trgm</tspan> GIN <tspan font-weight="700" fill="#388e3c">23.7→2.77 ms（8.6×）</tspan></text>
+
+      <!-- 陷阱 4 -->
+      <text x="0" y="142" font-weight="700" fill="#c62828">④ OR 一侧不可索引</text>
+      <text x="0" y="156" fill="#333">两侧都有索引 → PG 自动 BitmapOr <tspan font-weight="700" fill="#388e3c">3.4 ms</tspan>（不用改！）</text>
+      <text x="0" y="170" fill="#333">一侧不行 → 拆 UNION <tspan font-weight="700" fill="#388e3c">83.3→35.0 ms（2.4×）</tspan></text>
+
+      <!-- 陷阱 5 -->
+      <text x="0" y="194" font-weight="700" fill="#c62828">⑤ 不等谓词命中过多</text>
+      <text x="0" y="208" fill="#333">命中 50% 时全表扫是对的；加部分索引 <tspan font-weight="700" fill="#388e3c">72.1→0.06 ms</tspan></text>
+    </g>
+  </g>
+
+  <!-- ================= 类型转换实测表（本课最重要） ================= -->
+  <g transform="translate(20, 350)">
+    <rect width="455" height="212" rx="8" fill="#ffffff" stroke="#bcd"/>
+    <rect width="455" height="28" rx="8" fill="#7b1fa2"/>
+    <text x="14" y="19" font-size="13" font-weight="700" fill="#ffffff">★ 本课核心：类型转换七种组合实测（推翻骨架原描述）</text>
+
+    <g transform="translate(14, 44)" font-size="9.5">
+      <text x="0" y="0" font-weight="700" fill="#0d47a1">写法</text>
+      <text x="150" y="0" font-weight="700" fill="#0d47a1">列类型</text>
+      <text x="215" y="0" font-weight="700" fill="#0d47a1">计划</text>
+      <text x="330" y="0" font-weight="700" fill="#0d47a1">耗时</text>
+      <line x1="0" y1="6" x2="427" y2="6" stroke="#cfd8dc"/>
+
+      <!-- 行 -->
+      <text x="0" y="24" font-family="Menlo, monospace" fill="#333">user_id = 500</text>
+      <text x="150" y="24" fill="#333">integer</text>
+      <text x="215" y="24" fill="#388e3c">Index Only Scan</text>
+      <text x="330" y="24" fill="#333">0.843 ms</text>
+
+      <rect x="-6" y="30" width="439" height="18" fill="#e8f5e9"/>
+      <text x="0" y="44" font-family="Menlo, monospace" font-weight="700" fill="#388e3c">user_id = '500'</text>
+      <text x="150" y="44" fill="#333">integer</text>
+      <text x="215" y="44" font-weight="700" fill="#388e3c">Index Only Scan ✓</text>
+      <text x="330" y="44" font-weight="700" fill="#388e3c">0.040 ms</text>
+
+      <rect x="-6" y="50" width="439" height="18" fill="#ffebee"/>
+      <text x="0" y="64" font-family="Menlo, monospace" font-weight="700" fill="#c62828">user_id = 500.0</text>
+      <text x="150" y="64" fill="#333">integer</text>
+      <text x="215" y="64" font-weight="700" fill="#c62828">Seq Scan ✗</text>
+      <text x="330" y="64" font-weight="700" fill="#c62828">96.095 ms</text>
+
+      <text x="0" y="86" font-family="Menlo, monospace" fill="#333">id = 500</text>
+      <text x="150" y="86" fill="#333">bigint</text>
+      <text x="215" y="86" fill="#388e3c">Index Only Scan</text>
+      <text x="330" y="86" fill="#333">0.680 ms</text>
+
+      <rect x="-6" y="92" width="439" height="18" fill="#ffebee"/>
+      <text x="0" y="106" font-family="Menlo, monospace" font-weight="700" fill="#c62828">id = 500.0</text>
+      <text x="150" y="106" fill="#333">bigint</text>
+      <text x="215" y="106" font-weight="700" fill="#c62828">Seq Scan ✗</text>
+      <text x="330" y="106" font-weight="700" fill="#c62828">60.393 ms</text>
+
+      <text x="0" y="128" font-family="Menlo, monospace" fill="#333">code::text = '...'</text>
+      <text x="150" y="128" fill="#333">varchar</text>
+      <text x="215" y="128" fill="#388e3c">Index Only Scan</text>
+      <text x="330" y="128" fill="#333">0.096 ms</text>
+
+      <line x1="0" y1="138" x2="427" y2="138" stroke="#cfd8dc"/>
+      <text x="0" y="154" font-size="9" fill="#333">✅ <tspan font-family="Menlo, monospace">Index Cond: (user_id = 500)</tspan>　常量被转，安全</text>
+      <text x="0" y="168" font-size="9" fill="#333">❌ <tspan font-family="Menlo, monospace">Filter: ((user_id)::numeric = 500.0)</tspan>　<tspan font-weight="700" fill="#c62828">列被转，索引作废</tspan></text>
+    </g>
+  </g>
+
+  <!-- ================= 10.3 五种重写模式 ================= -->
+  <g transform="translate(485, 350)">
+    <rect width="415" height="212" rx="8" fill="#ffffff" stroke="#bcd"/>
+    <rect width="415" height="28" rx="8" fill="#388e3c"/>
+    <text x="14" y="19" font-size="13" font-weight="700" fill="#ffffff">10.3 五种重写模式 · 实测倍数</text>
+
+    <g transform="translate(14, 44)" font-size="9.5">
+      <text x="0" y="0" font-weight="700" fill="#388e3c">① 大 OFFSET → 键集分页</text>
+      <text x="0" y="14" fill="#333">扫 500021 行 → <tspan font-weight="700">扫 21 行</tspan>　<tspan font-weight="700" fill="#c62828">126.7 → 0.123 ms（1030×）</tspan></text>
+
+      <text x="0" y="38" font-weight="700" fill="#388e3c">② IN / EXISTS / JOIN</text>
+      <text x="0" y="52" fill="#333">三者计划<tspan font-weight="700">完全相同</tspan>（cost 1043.58）→ 按语义选，别按传说选</text>
+
+      <text x="0" y="76" font-weight="700" fill="#388e3c">③ 提前缩小结果集</text>
+      <text x="0" y="90" fill="#333">JOIN 23 万行 → <tspan font-weight="700">先压成 500 行</tspan>　<tspan font-weight="700" fill="#c62828">65.4 → 31.0 ms（2.1×）</tspan></text>
+
+      <text x="0" y="114" font-weight="700" fill="#388e3c">④ UNION → UNION ALL</text>
+      <text x="0" y="128" fill="#333">省掉 HashAggregate 去重　<tspan font-weight="700" fill="#c62828">14.0 → 2.61 ms（5.4×）</tspan></text>
+      <text x="0" y="142" fill="#c62828">⚠️ 前提：能证明两侧不重叠</text>
+
+      <text x="0" y="164" font-weight="700" fill="#388e3c">⑤ 大事务拆小批</text>
+      <text x="0" y="178" fill="#333">一次 UPDATE 39970 行 = 255.7 ms（全部行锁至 COMMIT）</text>
+    </g>
+  </g>
+
+  <!-- ================= 参数速查 + 三个数字 ================= -->
+  <g transform="translate(20, 574)">
+    <rect width="880" height="136" rx="8" fill="#ffffff" stroke="#bcd"/>
+    <text x="16" y="20" font-size="12" font-weight="700" fill="#0d47a1">调优参数：本课实测的默认值 + 调整依据</text>
+
+    <g transform="translate(16, 32)" font-size="9.5">
+      <text x="0" y="0" font-weight="700" fill="#1565c0">参数</text>
+      <text x="215" y="0" font-weight="700" fill="#1565c0">默认</text>
+      <text x="270" y="0" font-weight="700" fill="#1565c0">何时调 / 依据</text>
+      <line x1="0" y1="6" x2="848" y2="6" stroke="#cfd8dc"/>
+
+      <text x="0" y="22" font-family="Menlo, monospace" fill="#333">random_page_cost</text>
+      <text x="215" y="22" font-weight="700" fill="#e65100">4.0</text>
+      <text x="270" y="22" fill="#333">SSD → <tspan font-weight="700">1.1</tspan>。官方原文：建模为「随机比顺序慢 40 倍，但 90% 随机读命中缓存」</text>
+
+      <text x="0" y="40" font-family="Menlo, monospace" fill="#333">work_mem</text>
+      <text x="215" y="40" font-weight="700" fill="#e65100">4 MB</text>
+      <text x="270" y="40" fill="#333">看到 Batches&gt;1 / temp 时调。<tspan font-weight="700" fill="#c62828">每个 Sort/Hash/Materialize 节点各一份</tspan>；hash 再 ×2.0</text>
+
+      <text x="0" y="58" font-family="Menlo, monospace" fill="#333">max_parallel_workers_per_gather</text>
+      <text x="215" y="58" font-weight="700" fill="#e65100">2</text>
+      <text x="270" y="58" fill="#333">OLAP 可到 4；社区经验 4 以上收益递减且内存成倍增长</text>
+
+      <text x="0" y="76" font-family="Menlo, monospace" fill="#333">min_parallel_table_scan_size / jit_above_cost</text>
+      <text x="215" y="76" font-weight="700" fill="#e65100">8MB / 100000</text>
+      <text x="270" y="76" fill="#333">小表不想要并行 → 调高前者；短查询被 JIT 拖慢 → 调高后者</text>
+
+      <text x="0" y="94" font-family="Menlo, monospace" fill="#333">log_min_duration_statement</text>
+      <text x="215" y="94" font-weight="700" fill="#e65100">-1（禁用）</text>
+      <text x="270" y="94" fill="#333">上线就该开。<tspan font-weight="700">pg_reload_conf() 即可生效</tspan>，不需要重启</text>
+    </g>
+  </g>
+
+  <!-- 页脚 -->
+  <text x="460" y="724" text-anchor="middle" font-size="9.5" fill="#888">课 10 · 慢查询优化实战（阶段 3 收官）｜ PostgreSQL 17.11 容器实测 ｜ 事实核查于 2026-09（PG 官方文档 Query Planning / F.30 / F.3 + 本课 12 组实测）</text>
+</svg>

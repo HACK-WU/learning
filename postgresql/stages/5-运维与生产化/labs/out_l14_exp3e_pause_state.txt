@@ -1,0 +1,24 @@
+=== 5435 实例当前处于什么状态（pause 对照） ===
+pg_is_in_recovery = true
+default_transaction_read_only = off
+recovery_target_action = pause
+--- 该实例里 pitr_demo 的状态（停在最早可达点） ---
+ERROR:  relation "finance.pitr_demo" does not exist
+LINE 1: ...ELECT 'pitr_demo 行数: ' || (SELECT count(*) FROM finance.pi...
+--- 尝试写入（pause 状态下应被拒绝） ---
+ERROR:  relation "finance.pitr_demo" does not exist
+LINE 1: INSERT INTO finance.pitr_demo (id,note) VALUES (99,'x');
+                    ^
+
+=== 停掉 5435 实例 ===
+waiting for server to shut down.... done
+server stopped
+
+=== 清理演练目录（保留 l14_backup 供课 15 复用） ===
+剩余空间：
+overlay          59G   23G   33G  42% /
+保留的备份：
+2.1G	/var/lib/postgresql/l14_backup
+2.5G	/var/lib/postgresql/backup
+归档目录：
+65M	/var/lib/postgresql/archive

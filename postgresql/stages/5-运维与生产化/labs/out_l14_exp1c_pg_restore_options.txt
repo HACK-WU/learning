@@ -1,0 +1,42 @@
+=== B-0: pg_restore 喂 plain 格式会怎样？（关键区别） ===
+pg_restore: error: input file appears to be a text format dump. Please use psql.
+退出码: 1
+
+=== B-1: -l 列出归档目录（custom 格式 TOC） ===
+;
+; Archive created at 2026-09-10 15:30:02 UTC
+;     dbname: order_service
+;     TOC Entries: 153
+;     Compression: gzip
+;     Dump Version: 1.16-0
+;     Format: CUSTOM
+;     Integer: 4 bytes
+;     Offset: 8 bytes
+;     Dumped from database version: 17.11 (Debian 17.11-1.pgdg13+2)
+;     Dumped by pg_dump version: 17.11 (Debian 17.11-1.pgdg13+2)
+;
+;
+; Selected TOC Entries:
+;
+10; 2615 16385 SCHEMA - finance postgres
+2; 3079 16448 EXTENSION - pageinspect 
+3761; 0 0 COMMENT - EXTENSION pageinspect 
+  ...
+可见条目总数: 149
+
+=== B-2: -t 只恢复一张表（注意 pg_restore 的 -t 不含索引等附属对象） ===
+createdb: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  role "root" does not exist
+pg_restore: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  database "b_single" does not exist
+退出码(末尾): 0
+psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  database "b_single" does not exist
+该库里的索引（-t 不含附属对象 → 索引可能缺失）：
+psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  database "b_single" does not exist
+
+=== B-3: --schema-only（只结构不数据） ===
+createdb: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  role "root" does not exist
+pg_restore: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  database "b_schema" does not exist
+psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  database "b_schema" does not exist
+
+=== B-4: --data-only（只数据不结构，需目标表已存在） ===
+pg_restore: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  database "b_schema" does not exist
+psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  database "b_schema" does not exist

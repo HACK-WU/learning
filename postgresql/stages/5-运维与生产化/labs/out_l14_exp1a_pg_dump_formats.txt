@@ -1,0 +1,30 @@
+=== PG 版本 ===
+postgres (PostgreSQL) 17.11 (Debian 17.11-1.pgdg13+2)
+
+=== 源库 order_service 大小 ===
+661 MB
+finance schema 表数: 0
+
+=== 实验 A-1: plain (-Fp，默认格式) ===
+退出码: 0
+
+=== 实验 A-2: custom (-Fc) ===
+退出码: 0
+
+=== 实验 A-3: directory (-Fd -j 4，唯一支持并行的格式) ===
+
+real	0m1.157s
+user	0m3.755s
+sys	0m0.162s
+
+=== 实验 A-4: tar (-Ft) ===
+退出码: 0
+
+=== 四种格式体积对比 ===
+158M	a_plain.sql
+45M	a_custom.dump
+45M	a_dir
+158M	a_tar.tar
+
+=== 文件类型识别 ===
+bash: line 30: file: command not found
