@@ -17,6 +17,8 @@
 - json-file 默认无限增长；`docker logs` 读的是宿主机上的文件
 - 共享内核意味着容器内 root 风险真实；USER / capabilities / rootless
 - 镜像不可变 + 换 tag 即回滚；健康检查作为发布闸门
+- 镜像还应能提供构建证据：Build checks、SBOM、provenance 与签名各自回答不同问题
+- daemon / context / `DOCKER_HOST` 与 registry 限流、架构不匹配，都是交付链路的一部分
 
 ## ✅ 必须掌握的知识点
 
@@ -34,6 +36,11 @@
 | 镜像仓库与推送流程 | 课 13 · CI-CD与交付流水线 | 设计 tag 策略、安全存放凭据、完成 push |
 | CI 中的构建与缓存 | 课 13 · CI-CD与交付流水线 | 用 BuildKit 与缓存挂载加速 CI 构建，并守住构建机安全边界 |
 | 部署与回滚 | 课 13 · CI-CD与交付流水线 | 用不可变镜像实现"换 tag 即回滚"，并用健康检查做发布闸门 |
+
+### 场景补丁（不新增知识点）
+
+- [课 12](lessons/lesson-12-容器安全边界.md) 已补充 digest、签名、SBOM、provenance 的分工；DCT 是**正在退役**的旧路线，Notary v1 计划于 2026-12-08 关停。
+- [课 13](lessons/lesson-13-CI-CD与交付流水线.md) 已补充 `docker build --check .`、多架构发布、CI attestations 与 registry 症状分流。
 
 ## 🗺️ 本阶段路径图
 

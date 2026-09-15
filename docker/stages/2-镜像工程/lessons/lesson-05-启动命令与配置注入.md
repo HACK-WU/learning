@@ -2,6 +2,7 @@
 
 > 所属阶段：阶段 2《镜像工程》｜ 水平：入门 ｜ 本课知识点：CMD 与 ENTRYPOINT、ENV 与 ARG、运行时配置覆盖与密钥
 > 故事情节：`docker stop` 要等满 10 秒才退，改一个配置就要重新构建一次镜像
+> 📖 结论已按官方文档核对（核查于 2026-09-15 ｜ 来源：[Dockerfile reference](https://docs.docker.com/reference/dockerfile/)）
 
 ## 🎯 本课目标
 
@@ -42,7 +43,7 @@ real    0m10.19s          ← 每次发版都要为这一步多等 10 秒
 他在 Dockerfile 里写了这么一行：
 
 ```dockerfile
-ENV DB_PASSWORD=hunter2
+ENV DB_PASSWORD=demo-only-password
 ```
 
 同事随手敲了一条 `docker history order-service`，密码就出现在了构建历史里。
@@ -50,6 +51,10 @@ ENV DB_PASSWORD=hunter2
 > 🎬 **场景**：一个"停不下来"，一个"改不动"，一个"藏不住"。三件事分别对应本课的三个知识点。
 
 ---
+
+> 📌 **一句话本质**：镜像描述“能做什么”，启动参数描述“这次怎么做”，敏感配置则应该只在运行时短暂进入。
+>
+> ⚖️ **处境对照**：把一切写死在镜像里容易复现却难以变更；把一切塞进环境变量容易启动却可能扩大泄露面，关键是按生命周期放置。
 
 ## 第二幕：认知冲突
 
@@ -63,9 +68,24 @@ ENV DB_PASSWORD=hunter2
 
 ## 第三幕：层层揭示
 
+### 一眼全局图
+
+![制作选择与运行选择](../assets/lesson-05-overview.svg)
+
+> 看图：先区分“制作时”和“运行时”的选择，再把密钥从成品里移到外部注入。
+
+### 本课地图
+
+| 步 | 要回答的问题 | 对应知识点 |
+|---|---|---|
+| 1 | 谁应该成为容器里的第一个进程？ | CMD 与 ENTRYPOINT |
+| 2 | 哪些配置属于制作期，哪些属于运行期？ | ENV 与 ARG |
+| 3 | 配置如何覆盖，密钥如何不进镜像？ | 运行时配置覆盖与密钥 |
+
 ### 知识点 1：CMD 与 ENTRYPOINT
 
 > 本知识点关键点：exec 形式 vs shell 形式 / 谁是 PID 1、信号怎么传 / 两者组合的规则表
+> 🧭 第 1/3 步｜承接：镜像已经构建完成 → 本步：先确定启动时谁接收信号、谁负责退出。
 
 #### 一句话定义
 
@@ -197,6 +217,10 @@ docker rm s1 s2
 ### 知识点 2：ENV 与 ARG
 
 > 本知识点关键点：ARG 只在构建期、ENV 进容器运行期 / `docker run -e` 覆盖 ENV / 密钥不能进 ENV 也不能进镜像层
+> 🧭 第 2/3 步｜承接：启动命令决定进程行为 → 本步：按生命周期区分构建期参数和运行期配置。
+
+#### 🧩 图解
+![配置生命周期](../assets/lesson-05-config-lifecycle.svg)
 
 #### 一句话定义
 
@@ -292,6 +316,7 @@ docker run --rm arg-demo
 ### 知识点 3：运行时配置覆盖与密钥
 
 > 本知识点关键点：镜像内 ENV → compose environment → `docker run -e` 的三层覆盖顺序 / env_file / 挂载配置文件覆盖 / 密钥应走 secret 或挂载而非 ENV
+> 🧭 第 3/3 步｜承接：配置的生命周期已经分清 → 本步：处理覆盖优先级，并把敏感内容移出镜像。
 
 #### 一句话定义
 
@@ -391,9 +416,9 @@ docker run --rm --env-file env.list alpine:3.20 sh -c 'echo $DB_HOST:$DB_PORT'
 # 预期：db.internal:5432
 
 # 4) 看看密钥是怎么泄露的
-docker run -d --name leaky -e DB_PASSWORD=hunter2 alpine:3.20 sleep 600
+docker run -d --name leaky -e DB_PASSWORD=demo-only-password alpine:3.20 sleep 600
 docker inspect leaky --format '{{json .Config.Env}}'
-# 预期：明文看到 DB_PASSWORD=hunter2  ← 这就是"别把密钥放 ENV"的实锤
+# 预期：明文看到 DB_PASSWORD=demo-only-password  ← 这就是"别把密钥放 ENV"的实锤
 docker rm -f leaky
 ```
 
@@ -468,7 +493,7 @@ docker run -d --name os-prod2 \
 
 ```dockerfile
 # ❌ 改之前 —— 密码会永久留在镜像层里
-ENV DB_PASSWORD=hunter2
+ENV DB_PASSWORD=demo-only-password
 
 # ✅ 改之后 —— 镜像里不留任何密钥，运行时注入
 ENV DB_PASSWORD_FILE=/run/secrets/db_password   # 只指路径，不存值

@@ -2,6 +2,7 @@
 
 > 所属阶段：阶段 2《镜像工程》｜ 水平：入门 ｜ 本课知识点：Dockerfile 语法骨架、构建上下文与 .dockerignore、构建缓存与指令顺序
 > 故事情节：order-service 被写进 Dockerfile，但每次改一行代码都要重装一遍全部依赖
+> 📖 结论已按官方文档核对（核查于 2026-09-15 ｜ 来源：[Dockerfile reference](https://docs.docker.com/reference/dockerfile/)）
 
 ## 🎯 本课目标
 
@@ -51,6 +52,10 @@ CMD ["python", "app.py"]
 
 ---
 
+> 📌 **一句话本质**：Dockerfile 把一次性的手工制作过程变成可以重复执行、可以审查的成品配方。
+>
+> ⚖️ **处境对照**：构建上下文越大，传给构建器的材料越多；指令顺序越随意，代码小改动越可能让前面的大步骤全部重做。
+
 ## 第二幕：认知冲突
 
 > ❓ **问题**：依赖清单根本没变，为什么要重装？我这个项目只有 2MB，那 1.2GB 又是从哪来的？
@@ -66,9 +71,27 @@ CMD ["python", "app.py"]
 
 ## 第三幕：层层揭示
 
+### 一眼全局图
+
+![Dockerfile 从步骤到缓存](../assets/lesson-04-overview.svg)
+
+> 看图：先把 Dockerfile 看成“制作配方”，再观察材料边界和步骤顺序如何影响速度与体积。
+
+### 本课地图
+
+| 步 | 要回答的问题 | 对应知识点 |
+|---|---|---|
+| 1 | 每条指令分别负责什么？ | Dockerfile 语法骨架 |
+| 2 | 哪些文件真的会被送进构建？ | 构建上下文与 `.dockerignore` |
+| 3 | 为什么改代码会触发重装？ | 构建缓存与指令顺序 |
+
 ### 知识点 1：Dockerfile 语法骨架
 
 > 本知识点关键点：FROM / RUN / COPY / WORKDIR / EXPOSE 各自职责 / 每条指令生成一层 / `docker build` 与常用参数
+> 🧭 第 1/3 步｜承接：从“镜像是什么”进入“镜像怎么做” → 本步：先读懂一份 Dockerfile 的制作语法。
+
+#### 🧩 图解
+![Dockerfile 制作步骤](../assets/lesson-04-dockerfile-steps.svg)
 
 #### 一句话定义
 
@@ -180,6 +203,10 @@ docker run --rm hello-docker:v1 sh -c 'pwd && ls -l && cat /build-stamp'
 ### 知识点 2：构建上下文与 .dockerignore
 
 > 本知识点关键点：上下文整体打包发给守护进程 / 误把整个家目录传进去的后果 / .dockerignore 的匹配规则
+> 🧭 第 2/3 步｜承接：已经写出制作步骤 → 本步：收紧真正送入构建的材料范围。
+
+#### 🧩 图解
+![构建上下文边界](../assets/lesson-04-build-context-boundary.svg)
 
 #### 一句话定义
 
@@ -286,6 +313,7 @@ docker build -t hello-docker:v1 .
 ### 知识点 3：构建缓存与指令顺序
 
 > 本知识点关键点：逐层缓存与失效级联 / 先拷依赖清单再拷源码 / --no-cache 与缓存失效排查
+> 🧭 第 3/3 步｜承接：材料边界清楚后，速度仍取决于步骤顺序 → 本步：用缓存失效规则缩短重复构建。
 
 #### 一句话定义
 

@@ -2,6 +2,7 @@
 
 > 所属阶段：阶段 4《生产落地》｜ 水平：入门 ｜ 本课知识点：容器里的 root 是谁、能力与系统调用收敛、镜像供应链与漏洞
 > 故事情节：`order-service` 以 root 运行，而容器里的 root 并不是"假"的
+> 📖 结论已按官方文档核对（核查于 2026-09-15 ｜ 来源：[Content trust](https://docs.docker.com/engine/security/trust/)、[Build attestations](https://docs.docker.com/build/metadata/attestations/)）
 
 ## 🎯 本课目标
 
@@ -15,7 +16,7 @@
 |--------|--------|------|
 | 容器里的 root 是谁 | 共享内核意味着什么 / 容器内 root 不等于宿主机 root 但风险真实 / USER 指令 / rootless 模式 | ✅ 已完成 |
 | 能力与系统调用收敛 | 默认 capability 集 / --cap-drop=ALL 再按需加回 / --privileged 等于拆掉所有围栏 / seccomp 默认 profile | ✅ 已完成 |
-| 镜像供应链与漏洞 | 可信基础镜像 / 漏洞扫描 / 镜像来源核验 / 密钥绝不能进镜像层 / **签名校验（cosign）与 DCT 退役** | ✅ 已完成 |
+| 镜像供应链与漏洞 | 可信基础镜像 / 漏洞扫描 / 镜像来源核验 / 密钥绝不能进镜像层 / **签名校验（cosign）与 DCT 退役计划** | ✅ 已完成 |
 
 ---
 
@@ -59,6 +60,10 @@ $ docker history order-service --no-trunc | grep -i password
 
 ---
 
+> 📌 **一句话本质**：容器安全要把权限、能力、镜像来源和构建证据分别收紧，不能用一个“安全标签”替代检查。
+>
+> ⚖️ **处境对照**：降低权限解决“它能做什么”，来源证明解决“它从哪里来”；只做其中一边，攻击面或供应链风险仍然存在。
+
 ## 第二幕：认知冲突
 
 > ❓ **问题**：容器里的 root 和宿主机的 root 是同一个人吗？是什么在拦着它？镜像里的秘密又是从哪进去的？
@@ -73,9 +78,27 @@ $ docker history order-service --no-trunc | grep -i password
 
 ## 第三幕：层层揭示
 
+### 一眼全局图
+
+![权限、来源与可验证交付](../assets/lesson-12-overview.svg)
+
+> 看图：先收敛运行时权限，再追问镜像来源和构建过程是否留下可验证证据。
+
+### 本课地图
+
+| 步 | 要回答的问题 | 对应知识点 |
+|---|---|---|
+| 1 | 容器内的 root 到底意味着什么？ | 容器里的 root 是谁 |
+| 2 | 如何减少进程可使用的系统能力？ | 能力与系统调用收敛 |
+| 3 | 如何判断镜像可信且构建可追溯？ | 镜像供应链与漏洞 |
+
 ### 知识点 1：容器里的 root 是谁
 
 > 本知识点关键点：共享内核意味着什么 / 容器内 root 不等于宿主机 root 但风险真实 / USER 指令 / rootless 模式
+> 🧭 第 1/3 步｜承接：容器隔离边界已经建立 → 本步：先判断进程身份和共享内核带来的真实风险。
+
+#### 🧩 图解
+![root 身份与主机边界](../assets/lesson-12-root-boundary.svg)
 
 #### 一句话定义
 
@@ -201,6 +224,7 @@ docker info --format '{{json .SecurityOptions}}'
 ### 知识点 2：能力与系统调用收敛
 
 > 本知识点关键点：默认 capability 集 / --cap-drop=ALL 再按需加回 / --privileged 等于拆掉所有围栏 / seccomp 默认 profile
+> 🧭 第 2/3 步｜承接：身份只是权限的一部分 → 本步：继续收敛进程可调用的系统能力。
 
 #### 一句话定义
 
@@ -350,6 +374,7 @@ docker run --rm --read-only alpine sh -c 'touch /etc/try && echo ok' || echo "�
 ### 知识点 3：镜像供应链与漏洞
 
 > 本知识点关键点：可信基础镜像 / 漏洞扫描 / 镜像来源核验 / 密钥绝不能进镜像层
+> 🧭 第 3/3 步｜承接：运行时边界已收紧 → 本步：追溯镜像来源、漏洞和秘密是否进入成品。
 
 #### 一句话定义
 
@@ -426,11 +451,11 @@ FROM alpine
 ARG DB_PASSWORD=placeholder
 RUN echo "构建中用到密码，但没往镜像里写任何东西" >/dev/null
 EOF
-docker build --build-arg DB_PASSWORD=prod-super-secret -t leak-demo .
+docker build --build-arg DB_PASSWORD=demo-only-password -t leak-demo .
 
 # 哪怕镜像里根本没有这个文件，history 里照样翻得出来
 docker history leak-demo --no-trunc | grep -i password
-# 预期：能看到 ARG DB_PASSWORD=prod-super-secret   ← 明文！
+# 预期：能看到 ARG DB_PASSWORD=demo-only-password   ← 明文！
 
 # 2) 用同样的方法自查你自己的镜像
 docker history <你的镜像> --no-trunc | grep -i -E 'password|secret|token|api[_-]?key'
@@ -478,13 +503,13 @@ cat .dockerignore
 
 digest 只保证"内容没被改"，不保证"内容本来就是好的"。如果有人在 registry 侧换了一个恶意镜像，你照样能拿到一个"完整且一致"的 digest。这就是**签名（signature）**要补的位——它证明的是**发布者身份**。
 
-**Docker 自家方案 DCT 已经退役，别再学它**
+**Docker 自家方案 DCT 正在退役，别把它当成新项目的首选**
 
 Docker Content Trust（DCT，基于 Notary v1）是 Docker 早期的镜像签名方案，靠 `DOCKER_CONTENT_TRUST=1` 环境变量开启。但官方已在文档首页挂出退役警告：
 
 > **Docker Content Trust (DCT) is being retired. The Notary v1 service at `notary.docker.io` will shut down on December 8, 2026.**
 
-也就是说：**现在（2026 年）再投入学习 `DOCKER_CONTENT_TRUST=1`，学到的东西年底就作废。** 这一点必须讲清楚，因为网上大量教程仍在教它。
+也就是说：**截至 2026-09，Notary v1 尚未到计划关停日；新项目不应再把 `DOCKER_CONTENT_TRUST=1` 作为首选方案。** 这一点必须讲清楚，因为网上大量教程仍在教它。
 
 **现在该用什么：cosign（Sigstore）**
 
@@ -526,6 +551,34 @@ docker pull myrepo/app@$DIGEST
 > ⚠️ **别把签名当免死金牌**：签名证明"这确实是 A 公司构建的"，不证明"这个镜像没有漏洞"。漏洞扫描（本课上面讲的）和来源校验是**两道独立的闸门**，一起上才完整。
 
 **顺带回扣课 3**：课 3 讲的"官方镜像 / Verified Publisher 徽章"，本质就是**人工审核的信任链**；而签名是**密码学的信任链**。前者成本低压不住规模化，后者力气大但能自动化——生产上二者叠加。
+
+---
+
+### 场景补充（不新增知识点）：镜像不只要能跑，还要能证明
+
+安全检查至少有两条不同问题：**digest** 让你知道拿到的内容没有被替换；签名、SBOM 和 provenance 分别帮助你判断发布者、成分和构建过程。它们互相补位，不能混成一个“已安全”结论。
+
+```bash
+docker buildx build \
+  --tag registry.example.com/order-service:1.0.0 \
+  --provenance=mode=max \
+  --sbom=true \
+  --push .
+
+# 先确认仓库里的目标镜像与 manifest，再按组织工具查看附带证明
+docker buildx imagetools inspect registry.example.com/order-service:1.0.0
+```
+
+| 词 | 白话问题 | 不等于 |
+|---|---|---|
+| digest | 我拿到的内容有没有被替换？ | 内容本身没有漏洞 |
+| signature | 谁声明发布了这份内容？ | 发布者永远不会出错 |
+| SBOM | 成品里有哪些软件成分？ | 已经修复全部漏洞 |
+| provenance | 这份成品怎样被构建出来？ | 自动完成发布授权 |
+
+> **实操边界**：BuildKit 默认可生成最小 provenance；需要更完整构建信息时显式使用 `--provenance=mode=max`，并用 `--sbom=true` 生成 SBOM。多架构或附带证明的成品应直接推到 registry；`--load` 和传统本地 image store 对 image index / attestations 有限制。验签仍按组织选择的 cosign / policy 工具执行，不要把“看见 digest”误当成“验过签名”。
+
+🔵 官方依据：[Build attestations](https://docs.docker.com/build/metadata/attestations/)——provenance、SBOM、`--push` 与 `--load` 的边界；[GitHub Actions attestations](https://docs.docker.com/build/ci/github-actions/attestations/)——CI 中 `provenance`、`sbom` 与推送方式。
 
 ---
 

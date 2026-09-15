@@ -2,6 +2,7 @@
 
 > 所属阶段：阶段 4《生产落地》｜ 水平：入门 ｜ 本课知识点：镜像仓库与推送流程、CI 中的构建与缓存、部署与回滚
 > 故事情节：从"我本地构建推上去"变成"流水线构建、换 tag 即回滚"
+> 📖 结论已按官方文档核对（核查于 2026-09-15 ｜ 来源：[Build checks](https://docs.docker.com/build/checks/)、[GitHub Actions attestations](https://docs.docker.com/build/ci/github-actions/attestations/)）
 
 ## 🎯 本课目标
 
@@ -53,11 +54,39 @@ ssh prod "docker pull ... && docker compose up -d"
 
 ---
 
+> 📌 **一句话本质**：交付流水线不是“自动执行命令”，而是把构建质量、测试结果和发布证据串成可回退的闸门。
+>
+> ⚖️ **处境对照**：只构建并推送，速度快但无法证明成品；先检查、测试，再按目标架构推送并附带证明，流程更长却更适合生产。
+
 ## 第三幕：层层揭示
+
+### 一眼全局图
+
+![从提交到可回退发布](../assets/lesson-13-overview.svg)
+
+> 看图：沿着“提交—检查—发布”走一遍，观察哪些步骤必须在镜像进入仓库前完成。
+
+### 本课地图
+
+| 步 | 要回答的问题 | 对应知识点 |
+|---|---|---|
+| 1 | 镜像如何命名、登录、推送？ | 镜像仓库与推送流程 |
+| 2 | CI 如何复用缓存并缩短构建？ | CI 中的构建与缓存 |
+| 3 | 如何把测试、证明、回滚串成闸门？ | 部署与回滚 |
 
 ### 知识点 1：镜像仓库与推送流程
 
 > 本知识点关键点：registry 选型 / tag 策略 / `docker login` 的凭据存放 / `docker tag` 与 `docker push` 的先后
+> 🧭 第 1/3 步｜承接：成品已经需要被交接 → 本步：给它一个可定位的仓库位置和不可混淆的版本身份。
+
+#### 🧩 图解
+```mermaid
+flowchart LR
+    A[本地成品] --> B[tag]
+    B --> C[login]
+    C --> D[push 到仓库]
+    D --> E[按 tag 或 digest 拉取]
+```
 
 #### 一句话定义
 
@@ -245,6 +274,7 @@ FROM alpine:3.20@sha256:<digest>
 ### 知识点 2：CI 中的构建与缓存
 
 > 本知识点关键点：BuildKit / 外部缓存必须显式 export + import / 四种缓存后端 / min 与 max 模式 / 构建机安全边界
+> 🧭 第 2/3 步｜承接：仓库能接收成品还不够 → 本步：让构建可重复、可加速，并守住 CI 的权限边界。
 
 #### 一句话定义
 
@@ -527,6 +557,7 @@ docker images myrepo/cache-demo
 ### 知识点 3：部署与回滚
 
 > 本知识点关键点：镜像不可变、换 tag 即回滚 / 健康检查作为发布闸门 / 滚动与蓝绿的取舍
+> 🧭 第 3/3 步｜承接：流水线已经能产出镜像 → 本步：把检查、发布、验证和回滚连成闭环。
 
 #### 一句话定义
 
@@ -656,6 +687,50 @@ docker compose down
 #### 官方文档
 
 - [Docker Build GitHub Actions（Docker 官方）](https://docs.docker.com/build/ci/github-actions/)——官方 actions（含 scout 扫描 action，可用作发布闸门）
+
+---
+
+### 场景补充（不新增知识点）：在 CI 里把检查、测试、证明放到推送前
+
+构建成功只是“语法和依赖能完成”，不是“可以交付”。先跑 Build checks，再做能 `--load` 的单架构集成测试；测试通过后，用多架构、SBOM 和 provenance 重新构建并推送最终成品。
+
+```bash
+# 只检查 Dockerfile，不生成最终镜像
+docker build --check .
+```
+
+Build checks 目前标为 Beta；常规构建会报告 warning，若要把检查违规变成失败，可在 Dockerfile 顶部使用 `# check=error=true`。执行前确认 Buildx 至少为 0.15.0。
+
+GitHub Actions 的最终发布阶段可以采用下面的结构（仓库登录、权限和环境保护规则按团队配置）：
+
+```yaml
+- name: Build checks
+  run: docker build --check .
+
+- name: Build and push release image
+  uses: docker/build-push-action@v7
+  with:
+    context: .
+    platforms: linux/amd64,linux/arm64
+    push: true
+    tags: registry.example.com/order-service:${{ github.sha }}
+    provenance: mode=max
+    sbom: true
+```
+
+| 阶段 | 输出方式 | 目的 | 不要混淆 |
+|---|---|---|---|
+| 检查 | `docker build --check .` | 尽早发现 Dockerfile 问题 | 不是运行测试 |
+| 集成测试 | 单架构 `load: true` | 把镜像载入 CI 主机后测试 | 不是最终多架构发布 |
+| 发布 | `platforms` + `push` + `provenance` + `sbom` | 产出可分发、可追溯成品 | 不要期待它像单镜像一样直接载入本地 |
+
+| registry 症状 | 先做什么 | 可能的下一步 |
+|---|---|---|
+| `429 Too Many Requests` / 拉取被限流 | 登录并确认 CI 是否反复冷拉基础镜像 | 配置认证、缓存或镜像代理；核对当前官方限额 |
+| `denied` / `unauthorized` | 检查 registry、namespace、token 权限 | 最小权限重发 token，不把 token 写进 Dockerfile |
+| `no matching manifest` | `docker buildx imagetools inspect` 看目标架构 | 重新发布对应 `--platform`，或修正部署平台 |
+
+🔵 官方依据：[Build checks](https://docs.docker.com/build/checks/)、[GitHub Actions attestations](https://docs.docker.com/build/ci/github-actions/attestations/)、[Docker Hub usage and limits](https://docs.docker.com/docker-hub/usage/pulls/)。
 
 ---
 

@@ -2,6 +2,7 @@
 
 > 所属阶段：阶段 5《定位与决策》｜ 水平：入门 ｜ 本课知识点：引入决策树、成本与风险清单、下一步学习地图
 > 故事情节：收束 —— 回望全程，把"会用 Docker"变成"用对 Docker"
+> 📖 结论已按官方文档核对（核查于 2026-09-15 ｜ 来源：[Docker contexts](https://docs.docker.com/engine/manage-resources/contexts/)、[Daemon troubleshooting](https://docs.docker.com/engine/daemon/troubleshoot/)）
 
 ## 🎯 本课目标
 
@@ -47,11 +48,30 @@
 
 ---
 
+> 📌 **一句话本质**：成熟的 Docker 决策不是“选一个工具”，而是用需求、规模、风险和团队能力决定边界。
+>
+> ⚖️ **处境对照**：为了追赶潮流而全量容器化，会把运行、存储、网络和排障成本一起引入；从最小可承担的台阶开始，反而更容易持续交付。
+
 ## 第三幕：层层揭示
+
+### 一眼全局图
+
+![从业务需求到合适落点](../assets/lesson-15-overview.svg)
+
+> 看图：先问业务要解决什么，再评估规模与风险，最后选择团队能长期承担的落点。
+
+### 本课地图
+
+| 步 | 要回答的问题 | 对应知识点 |
+|---|---|---|
+| 1 | 该不该容器化、容器化到哪一步？ | 引入决策树 |
+| 2 | 引入后新增哪些成本和风险？ | 成本与风险清单 |
+| 3 | 下一步应该沿哪条路线深入？ | 下一步学习地图 |
 
 ### 知识点 1：引入决策树
 
 > 本知识点关键点：单机 / 小团队 / 规模化三条路径 / 什么时候别上容器
+> 🧭 第 1/3 步｜承接：生态地图告诉你工具各有位置 → 本步：先判断业务是否需要容器以及需要到哪一级。
 
 #### 一句话定义
 
@@ -133,6 +153,10 @@ docker info --format '{{json .SecurityOptions}}'
 ### 知识点 2：成本与风险清单
 
 > 本知识点关键点：容器化新增的运维负担 / 常见引入失败原因 / 团队能力前提
+> 🧭 第 2/3 步｜承接：已经选定可能的落点 → 本步：把新增的运行、存储、网络和排障成本显式列出来。
+
+#### 🧩 图解
+![容器化收益、负担与能力前提](../assets/lesson-15-cost-risk-map.svg)
 
 #### 一句话定义
 
@@ -235,6 +259,7 @@ docker images --format '{{.Repository}}:{{.Tag}}' | grep ':latest' || echo "（�
 ### 知识点 3：下一步学习地图
 
 > 本知识点关键点：Kubernetes / BuildKit 深入 / rootless 与安全加固 / 与本仓库其他课程的连接
+> 🧭 第 3/3 步｜承接：成本和能力前提已经清楚 → 本步：选择下一条能解决真实问题的深入路线。
 
 #### 一句话定义
 
@@ -377,6 +402,39 @@ docker compose --context staging up -d
 
 ---
 
+### 场景补充（不新增知识点）：命令为什么打错机器，或者根本找不到 daemon
+
+当终端出现下面的报错时，问题可能不在镜像和容器，而在 Docker CLI 当前指向的 daemon：
+
+```text
+Cannot connect to the Docker daemon. Is 'docker daemon' running on this host?
+```
+
+按“先确认目标，再改变目标”的顺序排查：
+
+```bash
+docker info
+docker context ls
+docker context show
+env | grep DOCKER_HOST
+
+# 明确检查默认 context，而不是凭感觉切换
+docker --context default info
+```
+
+| 观察 | 说明 | 动作 |
+|---|---|---|
+| `docker info` 直接失败 | daemon 未运行，或 CLI 指向不可达目标 | macOS Docker Desktop 先确认应用已启动；再查 `DOCKER_HOST` |
+| `docker context ls` 的 `*` 不是预期目标 | 当前 context 与预期机器不一致 | 先用 `docker --context <name> info` 验证，再决定是否 `docker context use <name>` |
+| `DOCKER_HOST` 有值 | 环境变量可能覆盖默认 socket / context | 临时 `unset DOCKER_HOST` 后重新确认，或显式使用 `--context` |
+| 能连上但资源不对 | 其实打到了另一台 daemon | 对目标执行 `docker info`，记录 Server、存储和节点信息 |
+
+> **安全边界**：不要为了“先连上”而随意开放未加密的远程 daemon 端口。context 只是客户端的目标选择器，不会替你解决远端认证、网络可达性或权限配置。
+
+🔵 官方依据：[Docker contexts](https://docs.docker.com/engine/manage-resources/contexts/)——context、`DOCKER_HOST` 与 CLI 覆盖关系；[Daemon troubleshooting](https://docs.docker.com/engine/daemon/troubleshoot/)——`docker info`、daemon 未运行和目标指错的排查入口。
+
+---
+
 ## 第四幕：实操验证
 
 把第一幕那三个问题变成可以带走的东西。
@@ -494,7 +552,7 @@ done
 
 ## 第五幕：体系收束
 
-> 📍 **全局定位**：这是 45 个知识点的**最后一课**。整门课到此闭环。
+> 📍 **全局定位**：这是 46 个知识点的**最后一课**。整门课到此闭环。
 >
 > 回望这 15 课，`order-service` 走过的路：
 >
@@ -671,14 +729,14 @@ C 错——这 15 课是**地基**（分层、网络、卷、cgroup、信号、P
 ```
 继续学 Docker。我的学习档案在 docker/00-学习档案.md，
 刚学完阶段 5《定位与决策》的课《决策清单与学习地图》，
-45 个知识点已全部完成。请按大纲进入收尾环节：结课实战项目（Phase 3）。
+46 个知识点已全部完成。请按大纲进入收尾环节：结课实战项目（Phase 3）。
 ```
 
 > 若暂时不做实战项目，也可以直接开始**收尾三件套**（实战经验 / 排障速查手册 / 场景解法库）：
 
 ```
 继续学 Docker。我的学习档案在 docker/00-学习档案.md，
-45 个知识点已全部完成。请按大纲进入收尾三件套（Phase 5）：
+46 个知识点已全部完成。请按大纲进入收尾三件套（Phase 5）：
 实战经验、排障速查手册、场景解法库。
 ```
 
@@ -690,4 +748,4 @@ C 错——这 15 课是**地基**（分层、网络、卷、cgroup、信号、P
 
 📚 **返回目录**：[课程目录](../../../02-课程目录.md)
 
-🎉 **45 个知识点全部完成** —— 从课 1 的"我这儿能跑"，走到"任何地方都能稳稳跑，且知道该不该这么做"
+🎉 **46 个知识点全部完成** —— 从课 1 的"我这儿能跑"，走到"任何地方都能稳稳跑，且知道该不该这么做"

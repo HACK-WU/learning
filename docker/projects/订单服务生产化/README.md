@@ -1,6 +1,6 @@
 # 结课实战项目：订单服务生产化
 
-> 所属课程：Docker 系统学习 ｜ Phase 3（结课实战）｜ 前提：完成 15 课 / 45 知识点
+> 所属课程：Docker 系统学习 ｜ Phase 3（结课实战）｜ 前提：完成 15 课 / 46 知识点
 >
 > **目标**：把 `order-service` 从"我这儿能跑"，做到"**任何人 clone 下来一条命令跑起来，出问题几秒回滚**"。
 >
@@ -17,7 +17,7 @@
 ```
 源码
   │
-  ├─ 阶段 2 镜像工程 ──── Dockerfile（多阶段 → 瘦身 → 非 root ─ 课 4/6/12）
+  ├─ 阶段 2 镜像工程 ──── Dockerfile（多阶段 → 瘦身 → 非 root → 目标架构 ─ 课 4/6/12）
   │                            ↓
   │                        order-service:<sha>          ← 不可变产物
   │                            ↓
@@ -25,7 +25,7 @@
   │                            ↓
   │                        一套可一键复现的环境
   │                            ↓
-  └─ 阶段 4 生产落地 ──── 资源限制 + 日志轮转 + 安全收敛 + CI 闸门 + 换 tag 回滚（课 10–13）
+  └─ 阶段 4 生产落地 ──── 资源限制 + 日志轮转 + 安全收敛 + CI 闸门 + 证明 + 换 tag 回滚（课 10–13）
                                ↓
                           可交付、可回滚
 ```
@@ -54,6 +54,32 @@
 | **阶段 2 · 镜像工程** | Dockerfile 的多阶段构建、依赖层前置、非 root、`HEALTHCHECK`、exec 形式 `ENTRYPOINT` | 课 4、5、6、12 |
 | **阶段 3 · 数据与网络** | 两个具名卷、一个自定义 bridge 网络、`depends_on: service_healthy`、compose 统一描述 | 课 7、8、9 |
 | **阶段 4 · 生产落地** | 资源限制、日志驱动与轮转、只读根 + `cap_drop: ALL` + `no-new-privileges`、CI 三道闸门、换 tag 回滚 | 课 10、11、12、13 |
+
+### 场景补丁：把“本机能跑”推进到“目标平台可验证交付”
+
+本项目原本以单架构、`load` 后测试为主；这适合验证应用，但不足以覆盖 Apple 芯片开发机向 amd64 生产交付的场景。新版流程把它拆成两段：**测试阶段单架构 `load`，发布阶段多架构 `push`**。
+
+```bash
+# 发布阶段示意：按实际 registry 与版本替换占位符
+docker buildx build \
+  --platform linux/amd64,linux/arm64 \
+  --tag registry.example.com/order-service:<YOUR_RELEASE_TAG> \
+  --provenance=mode=max \
+  --sbom=true \
+  --push .
+
+docker buildx imagetools inspect registry.example.com/order-service:<YOUR_RELEASE_TAG>
+```
+
+补丁验收点：
+
+- [ ] `docker build --check .` 先通过，再进入测试构建
+- [ ] 目标架构至少包含生产所需平台，并用 `imagetools inspect` 检查 manifest
+- [ ] 发布构建显式生成 SBOM / provenance；它们不等于签名，仍需按组织策略验签
+- [ ] 测试构建可以 `load`，最终多架构成品使用 `push`，不把两种输出方式混为一谈
+- [ ] 发布失败时保留 registry、目标架构和 digest 信息，按 [排障条目 12](../../09-排障速查手册.md#-条目-12--registry-受限或架构不匹配) 分流
+
+Compose 的开发侧补丁见[课 9](../../stages/3-数据与网络/lessons/lesson-09-Compose编排多容器.md)（Profiles / Watch / Secrets）；daemon 与目标机器确认见[课 15](../../stages/5-定位与决策/lessons/lesson-15-决策清单与学习地图.md)。
 
 ### 非功能约束表（门槛②）
 

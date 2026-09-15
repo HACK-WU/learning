@@ -16,6 +16,7 @@
 - 自定义 bridge 网络内按容器名做 DNS 解析，网络即隔离边界
 - compose 的 services / networks / volumes 三段结构；Compose V1 已停更
 - `depends_on` 只等启动不等就绪，健康检查才是就绪信号
+- 同一份 Compose 可按需启用调试服务、同步源码，并把运行时密钥挂载到 `/run/secrets`
 
 ## ✅ 必须掌握的知识点
 
@@ -29,7 +30,12 @@
 | 自定义网络与 DNS 服务发现 | 课 8 · 容器网络 | 建自定义网络实现按容器名访问，并说清默认 bridge 为何做不到 |
 | compose 文件结构 | 课 9 · Compose编排多容器 | 写出 services / networks / volumes 三段齐全的多服务 compose 文件 |
 | 一键本地开发环境 | 课 9 · Compose编排多容器 | 用 up -d / down / logs -f / exec 管理全套环境，并挂源码做热重载 |
+| 多文件拆分与复用 | 课 9 · Compose编排多容器 | 用 `-f`、`extends`、`include` 按变化边界复用配置 |
 | 健康检查与启动顺序 | 课 9 · Compose编排多容器 | 用 HEALTHCHECK 与 condition: service_healthy 解决 depends_on 不解决的问题 |
+
+### 场景补丁（不新增知识点）
+
+- [课 9](lessons/lesson-09-Compose编排多容器.md) 已补充 Profiles / Watch / Secrets：开发、调试和敏感配置不再被迫使用同一种启动形态。
 
 ## 🗺️ 本阶段路径图
 

@@ -1,9 +1,10 @@
 # 课 13 的交付流水线 —— 放到仓库的 .github/workflows/ci.yml 即可生效。
 #
-# 三个设计要点（课 13 知识点 2）：
+# 四个设计要点（课 12–13）：
 #   ① PR 只构建、不推送 —— PR 的代码不可信，不该拿到写 registry 的凭据；
 #   ② tag 带 git sha，永不覆盖；
-#   ③ 三道闸门都在 **推送之前** —— 脏镜像根本进不了仓库。
+#   ③ Build checks、测试和扫描都在 **推送之前** —— 脏镜像根本进不了仓库；
+#   ④ 测试构建可 `load`，最终发布按目标平台 `push`，并附带 SBOM / provenance。
 
 name: ci
 
@@ -25,6 +26,10 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
+
+      # 0) 先检查 Dockerfile（课 13 场景补丁）
+      - name: Build checks
+        run: docker build --check .
 
       # ① PR 触发时不登录、不推送
       - name: Login to registry
@@ -74,11 +79,19 @@ jobs:
         uses: docker/build-push-action@v7
         with:
           context: .
+          # 测试阶段的 load 只针对单一架构；最终发布显式覆盖目标平台。
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: |
             ${{ env.IMAGE }}:${{ github.sha }}
             ${{ env.IMAGE }}:${{ github.ref_name }}
+          provenance: mode=max
+          sbom: true
           cache-from: type=gha
+
+      - name: Verify published manifest
+        if: github.event_name != 'pull_request'
+        run: docker buildx imagetools inspect ${{ env.IMAGE }}:${{ github.sha }}
 
 # ---------------------------------------------------------------------
 # 已知注意事项（课 13）：

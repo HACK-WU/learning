@@ -2,6 +2,7 @@
 
 > 所属阶段：阶段 3《数据与网络》｜ 水平：入门 ｜ 本课知识点：compose 文件结构、一键本地开发环境、健康检查与启动顺序
 > 故事情节：5 条又长又容易敲错的 `docker run`，变成一个 `docker compose up`
+> 📖 结论已按官方文档核对（核查于 2026-09-15 ｜ 来源：[Compose file reference](https://docs.docker.com/reference/compose-file/)）
 
 ## 🎯 本课目标
 
@@ -52,6 +53,10 @@ docker run -d --name nginx --network order-net -p 80:80 \
 
 ---
 
+> 📌 **一句话本质**：Compose 是把一组服务的运行关系写成可重复执行的清单，并按不同环境选择要启用的部分。
+>
+> ⚖️ **处境对照**：所有服务永远一起启动最简单，却会拖慢开发和放大权限；按 profile、watch、secret 拆出环境差异，配置多一点但边界更清楚。
+
 ## 第二幕：认知冲突
 
 > ❓ **问题**：这四条命令为什么不直接写进文件？写进去之后，启动顺序的问题又该怎么解决？
@@ -66,9 +71,28 @@ docker run -d --name nginx --network order-net -p 80:80 \
 
 ## 第三幕：层层揭示
 
+### 一眼全局图
+
+![多服务清单与按需运行](../assets/lesson-09-overview.svg)
+
+> 看图：从“多个服务”走到“一份清单”，最后追问开发、测试、调试是否应该每次都启动同一组服务。
+
+### 本课地图
+
+| 步 | 要回答的问题 | 对应知识点 |
+|---|---|---|
+| 1 | services、networks、volumes 如何组织？ | compose 文件结构 |
+| 2 | 如何一条命令拉起并反复使用开发环境？ | 一键本地开发环境 |
+| 2.5 | 多文件如何拆分、复用、合并？ | 多文件拆分与复用 |
+| 3 | 如何让应用等依赖真正就绪？ | 健康检查与启动顺序 |
+
 ### 知识点 1：compose 文件结构
 
 > 本知识点关键点：services / networks / volumes 三段 / 环境变量与 env_file / Compose V1 已停更，用 docker compose
+> 🧭 第 1/4 步｜承接：多个容器已经分别能跑 → 本步：把服务、网络、数据和配置写进一份清单。
+
+#### 🧩 图解
+![Compose 文件三类关系](../assets/lesson-09-compose-model.svg)
 
 #### 一句话定义
 
@@ -244,6 +268,15 @@ docker compose ps
 ### 知识点 2：一键本地开发环境
 
 > 本知识点关键点：up -d / down / logs -f / exec / 挂源码做热重载
+> 🧭 第 2/4 步｜承接：清单已经能描述整套环境 → 本步：用统一命令启动、观察、进入和收工。
+
+#### 🧩 图解
+```mermaid
+flowchart LR
+    A[源码变化] --> B[重新构建或同步]
+    B --> C[服务运行]
+    C --> D[logs / exec / down]
+```
 
 #### 一句话定义
 
@@ -408,6 +441,10 @@ docker volume ls
 ### 知识点 2.5：多文件拆分与复用（merge / extends / include）
 
 > 本知识点关键点：`-f` 多文件按序合并 / `extends` 复用单个服务 / `include` 按应用模块整合 / 三种机制的分工
+> 🧭 第 2.5/4 步｜承接：一份清单开始承载多种环境 → 本步：按变化边界拆分并复用 Compose 配置。
+
+#### 🧩 图解
+![Compose 三种组合机制](../assets/lesson-09-compose-composition.svg)
 
 #### 一句话定义
 
@@ -506,6 +543,7 @@ services:
 ### 知识点 3：健康检查与启动顺序
 
 > 本知识点关键点：HEALTHCHECK 指令 / depends_on 只等启动不等就绪 / condition: service_healthy
+> 🧭 第 3/4 步｜承接：服务已经能一起启动，但启动不等于可用 → 本步：用健康状态控制依赖关系。
 
 #### 一句话定义
 
@@ -677,6 +715,82 @@ docker compose down -v
 
 - [Define services · depends_on（Docker 官方）](https://docs.docker.com/reference/compose-file/services/)——短/长语法、三种 condition、"does not wait for healthy" 原话
 - [Define services · healthcheck（Docker 官方）](https://docs.docker.com/reference/compose-file/services/)——与 Dockerfile HEALTHCHECK 同语义、可覆盖、`test` 首项约束
+
+---
+
+### 场景补充（不新增知识点）：同一套 Compose 的开发、调试与安全配置
+
+一份 Compose 清单不必让所有环境都启动同一组服务。核心服务保持无 profile，调试工具按需打开；源码同步、运行时密钥也分别处理。
+
+**1）按 profile 启用调试服务**
+
+```yaml
+services:
+  app:
+    build: .
+  adminer:
+    image: adminer:4
+    profiles: ["debug"]
+```
+
+```bash
+docker compose --profile debug up -d
+# 或：COMPOSE_PROFILES=debug docker compose up -d
+```
+
+没有 `profiles` 的服务默认启动；带 profile 的服务只有在 profile 开启时启动。**数据库、应用等核心服务不要放进 debug profile**，否则普通 `up` 会缺核心依赖。
+
+**2）用 Watch 做开发期同步**（Compose 2.22.0+）
+
+```yaml
+services:
+  app:
+    build: .
+    develop:
+      watch:
+        - action: sync
+          path: ./app
+          target: /srv/app
+          ignore:
+            - ./app/__pycache__/
+```
+
+```bash
+docker compose watch
+```
+
+Watch 只作用于带本地 `build` 的服务，路径相对 Compose 文件；它是开发期自动更新工具，不取代生产发布，也不必和 bind mount 叠加到无法判断变化来源。
+
+**3）用 secrets 让运行时拿到密钥**
+
+```yaml
+services:
+  app:
+    build: .
+    secrets: [db_password]
+    environment:
+      DB_PASSWORD_FILE: /run/secrets/db_password
+
+secrets:
+  db_password:
+    file: ./secrets/db_password.txt
+```
+
+```bash
+mkdir -p secrets
+printf '%s\n' '<YOUR_DB_PASSWORD>' > secrets/db_password.txt
+docker compose up -d
+```
+
+Compose 会把获授权的 secret 挂载到容器内 `/run/secrets/<name>`；文件应加入 `.gitignore`，示例中的 `<YOUR_DB_PASSWORD>` 只是占位符，不要替换成真实凭据后提交。Docker 官方文档说明该机制面向 Linux containers；本课程在 macOS Docker Desktop 上默认使用 Linux containers。
+
+| 症状 | 先检查 | 边界 |
+|---|---|---|
+| debug 服务没起来 | profile 是否开启、服务是否声明了 `profiles` | profile 只控制选择，不替代依赖关系 |
+| `docker compose watch` 不同步 | Compose 版本、服务是否有 `build`、路径是否相对当前文件 | 没有本地 build 的纯镜像服务不在 Watch 范围 |
+| 应用读不到 secret | 服务是否声明 `secrets`、程序是否读取 `/run/secrets/...` | secret 不会自动变成同名环境变量 |
+
+🔵 官方依据：[Compose profiles](https://docs.docker.com/compose/how-tos/profiles/)、[Compose Watch](https://docs.docker.com/compose/how-tos/file-watch/)、[Compose secrets](https://docs.docker.com/compose/how-tos/use-secrets/)。
 
 ---
 

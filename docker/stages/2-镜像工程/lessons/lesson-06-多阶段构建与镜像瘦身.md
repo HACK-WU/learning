@@ -2,6 +2,7 @@
 
 > 所属阶段：阶段 2《镜像工程》｜ 水平：入门 ｜ 本课知识点：多阶段构建、基础镜像选型、瘦身实操与体积核算
 > 故事情节：`order-service` 的镜像从 1.2GB 瘦到 45MB，且删了文件镜像却没变小
+> 📖 结论已按官方文档核对（核查于 2026-09-15 ｜ 来源：[Multi-platform builds](https://docs.docker.com/build/building/multi-platform/)）
 
 ## 🎯 本课目标
 
@@ -52,6 +53,10 @@ order-service    v6        1.21GB        ← 还大了 0.01GB
 
 ---
 
+> 📌 **一句话本质**：把制作过程和运行成品分开，才能同时控制镜像体积、构建速度和交付架构。
+>
+> ⚖️ **处境对照**：只看本机 arm64 能否运行，会漏掉 amd64 生产机的兼容性；只追求最小镜像，又可能牺牲调试和依赖兼容性。
+
 ## 第二幕：认知冲突
 
 > ❓ **问题**：既然"删"没用，那到底怎么才能真正把镜像瘦下来？
@@ -67,9 +72,24 @@ order-service    v6        1.21GB        ← 还大了 0.01GB
 
 ## 第三幕：层层揭示
 
+### 一眼全局图
+
+![制作区与运行区](../assets/lesson-06-overview.svg)
+
+> 看图：先把构建期材料和运行期成品分开，再把“能否在目标机器运行”加入瘦身之外的交付判断。
+
+### 本课地图
+
+| 步 | 要回答的问题 | 对应知识点 |
+|---|---|---|
+| 1 | 如何只把成品带进最终镜像？ | 多阶段构建 |
+| 2 | full、slim、alpine、distroless 怎么取舍？ | 基础镜像选型 |
+| 3 | 哪些清理真的能减小镜像？如何核算？ | 瘦身实操与体积核算 |
+
 ### 知识点 1：多阶段构建
 
 > 本知识点关键点：builder 模式 / `COPY --from` 跨阶段拷贝 / 构建期依赖不进最终镜像
+> 🧭 第 1/3 步｜承接：知道缓存能加速制作，但中间材料仍会进成品 → 本步：用多个阶段隔离制作区和运行区。
 
 #### 一句话定义
 
@@ -179,6 +199,10 @@ docker run --rm order-service:debug sh -c 'ls /root/.local/lib/python3.11/site-p
 ### 知识点 2：基础镜像选型
 
 > 本知识点关键点：full / slim / alpine / distroless 的取舍 / musl 与 glibc 兼容性陷阱 / 调试便利性 vs 体积
+> 🧭 第 2/3 步｜承接：成品已经能只带运行材料 → 本步：比较基础镜像的兼容性、调试性和体积代价。
+
+#### 🧩 图解
+![基础镜像取舍](../assets/lesson-06-base-image-tradeoffs.svg)
 
 #### 一句话定义
 
@@ -285,6 +309,7 @@ docker run --rm --entrypoint=sh -ti gcr.io/distroless/python3-debian13:debug -c 
 ### 知识点 3：瘦身实操与体积核算
 
 > 本知识点关键点：同层内清理才有效 / 层合并的代价 / `docker history` 逐层看体积
+> 🧭 第 3/3 步｜承接：基础镜像选型决定了下限 → 本步：用逐层证据核算哪些瘦身动作真的有效。
 
 #### 一句话定义
 
@@ -404,6 +429,32 @@ docker system df
 
 - [Dockerfile reference · RUN / COPY（Docker 官方）](https://docs.docker.com/reference/dockerfile/)——哪些指令产生层
 - [Docker build cache（Docker 官方）](https://docs.docker.com/build/cache/)——缓存粒度与排序原则
+
+---
+
+### 场景补充（不新增知识点）：arm64 开发机向 amd64 生产交付
+
+本机是 Apple 芯片时，开发环境通常是 `linux/arm64`；生产节点却可能是 `linux/amd64`。**“本机能跑”不再等于“目标机器能跑”**，镜像瘦身之后还要确认目标架构和发布方式。
+
+```bash
+docker buildx build \
+  --platform linux/amd64,linux/arm64 \
+  --tag registry.example.com/order-service:dev \
+  --push .
+
+# 查看仓库中是否同时存在两个目标架构
+docker buildx imagetools inspect registry.example.com/order-service:dev
+```
+
+| 方案 | 人话 | 适合 | 代价与边界 |
+|---|---|---|---|
+| QEMU 模拟 | 在当前机器模拟另一种处理器 | 先跑通多架构构建 | 配置简单，但跨架构编译可能更慢 |
+| 原生构建节点 | 每种架构用对应的机器制作 | 构建频繁、性能敏感 | 需要维护多个 builder 节点 |
+| 交叉编译 | 在一台机器编译出另一架构成品 | 编译链明确、语言支持好 | 依赖和运行时不一定都能交叉编译 |
+
+> **边界提醒**：`--load` 适合把单一目标架构载入本地镜像存储；多架构成品通常要推送到 registry 后再按 manifest 检查。遇到 `exec format error` 或 `no matching manifest`，先查目标架构和 manifest，不要先怀疑业务代码。
+
+🔵 官方依据：[Multi-platform builds](https://docs.docker.com/build/building/multi-platform/)——多架构镜像、QEMU / 原生节点 / 交叉编译三种策略与 `--platform` 用法。
 
 ---
 
@@ -588,7 +639,7 @@ graph TD
 
 ## 🎉 阶段 2 完成
 
-阶段 2《镜像工程》三课到此收官（**18 / 45 知识点**）。
+阶段 2《镜像工程》三课到此收官（**18 / 46 知识点**）。
 
 你现在能独立完成一份生产级 Dockerfile：
 

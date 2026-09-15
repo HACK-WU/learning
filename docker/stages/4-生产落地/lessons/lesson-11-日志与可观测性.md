@@ -2,6 +2,7 @@
 
 > 所属阶段：阶段 4《生产落地》｜ 水平：入门 ｜ 本课知识点：日志驱动与日志膨胀、健康检查与状态观测、容器指标与资源观测
 > 故事情节：日志撑爆了磁盘，而编排器一直以为 `order-service` 是健康的
+> 📖 结论已按官方文档核对（核查于 2026-09-15 ｜ 来源：[Configure logging drivers](https://docs.docker.com/engine/logging/configure/)）
 
 ## 🎯 本课目标
 
@@ -49,6 +50,10 @@ a1b2c3d4e5f6   order-service    Up 3 weeks     order-service-1
 
 ---
 
+> 📌 **一句话本质**：可观测性就是把“发生了什么、现在能不能用、资源是否逼近边界”变成可检索的证据。
+>
+> ⚖️ **处境对照**：只看 `docker ps` 得到的是存活幻觉；只收集日志又会错过健康状态和资源趋势，三类证据要互相补位。
+
 ## 第二幕：认知冲突
 
 > ❓ **问题**：容器的日志写到哪去了？为什么默认没人管它涨？`Up` 为什么不能说明服务是好的？到底该看什么？
@@ -63,9 +68,24 @@ a1b2c3d4e5f6   order-service    Up 3 weeks     order-service-1
 
 ## 第三幕：层层揭示
 
+### 一眼全局图
+
+![从程序输出到提前发现](../assets/lesson-11-overview.svg)
+
+> 看图：从程序输出开始，经过集中观察，最后把“发现问题”提前到用户受影响之前。
+
+### 本课地图
+
+| 步 | 要回答的问题 | 对应知识点 |
+|---|---|---|
+| 1 | 日志写到哪里，如何防止膨胀？ | 日志驱动与日志膨胀 |
+| 2 | `Up` 为什么不等于可用？ | 健康检查与状态观测 |
+| 3 | 哪些指标可信，如何观察资源？ | 容器指标与资源观测 |
+
 ### 知识点 1：日志驱动与日志膨胀
 
 > 本知识点关键点：json-file 默认无限增长 / docker logs 读的是宿主机上的文件 / max-size 与 max-file / 日志驱动选型
+> 🧭 第 1/3 步｜承接：资源和进程状态可能变化 → 本步：先保证日志有去处、可读取且不会无界膨胀。
 
 #### 一句话定义
 
@@ -272,6 +292,17 @@ docker rm -f nolog
 ### 知识点 2：健康检查与状态观测
 
 > 本知识点关键点：HEALTHCHECK 三态 starting / healthy / unhealthy / docker events / inspect 里该看哪些字段
+> 🧭 第 2/3 步｜承接：日志能告诉你发生过什么 → 本步：补上“现在是否可用”的健康状态证据。
+
+#### 🧩 图解
+```mermaid
+stateDiagram-v2
+    [*] --> starting
+    starting --> healthy
+    starting --> unhealthy
+    healthy --> unhealthy
+    unhealthy --> healthy
+```
 
 #### 一句话定义
 
@@ -408,6 +439,7 @@ docker rm -f hc-demo
 ### 知识点 3：容器指标与资源观测
 
 > 本知识点关键点：cgroups 才是指标的真实来源 / docker stats 各字段含义与局限 / 容器内 top、free 看到的是宿主机 / 导出到 Prometheus + cAdvisor 的路径
+> 🧭 第 3/3 步｜承接：日志和健康状态各自有盲区 → 本步：观察资源指标，并知道哪些观察结果不能直接相信。
 
 #### 一句话定义
 
