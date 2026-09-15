@@ -136,7 +136,7 @@ flowchart LR
     style A stroke:#3fb950,stroke-width:2px
 ```
 
-**核心结论**：Kafka 4.0 已**彻底移除 ZooKeeper**，默认 KRaft 模式，单节点用 `KAFKA_PROCESS_ROLES='broker,controller'` 一个节点兼两职。看历史消息必须加 `--from-beginning`（默认只消费启动后的新消息）。
+**核心结论**：Kafka 4.0 已**彻底移除 ZooKeeper**，默认 KRaft 模式，单节点用 `KAFKA_PROCESS_ROLES='broker,controller'` 一个节点兼两职。看历史消息必须加 `--from-beginning`（默认只消费启动后的新消息）。本地单节点 Docker 还要把容器放进用户自定义网络，并设置 `KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1`；`orders` 存业务消息，`__consumer_offsets` 存消费者组位移，消费者先开、生产者后开是合法顺序。消费端空白时先用 `kafka-get-offsets.sh --topic orders` 判断业务数据，再检查内部 Topic，不要把两个 Topic 混为一谈。
 
 > 📖 [课 3 全文](stages/2-核心架构/lessons/lesson-03-本地起Kafka与CLI快速上手.md)
 

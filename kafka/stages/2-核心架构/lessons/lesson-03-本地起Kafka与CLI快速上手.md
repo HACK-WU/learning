@@ -8,6 +8,7 @@
 
 - 用 Docker 一条命令把 Kafka 跑起来（KRaft 单节点）
 - 会创建 Topic、生产一条消息、消费一条消息
+- 能区分业务 Topic 与消费者组位移 Topic，并在消费端空白时完成最小取证
 - 会用 `--describe` 亲眼看 Partition / 副本，回扣第 4 课的分片概念
 
 ---
@@ -76,8 +77,12 @@
 用官方镜像 `apache/kafka:4.0.0`，配好 KRaft 所需的环境变量，一条命令启动：
 
 ```bash
+# `kafka` 这个容器名会被控制器自连接使用；先建用户自定义网络，保证容器 DNS 可用
+docker network inspect kafka-net >/dev/null 2>&1 || docker network create kafka-net
+
 docker run -d \
   --name kafka \
+  --network kafka-net \
   -p 9092:9092 \
   -e KAFKA_NODE_ID=1 \
   -e KAFKA_PROCESS_ROLES='broker,controller' \
@@ -86,15 +91,20 @@ docker run -d \
   -e KAFKA_ADVERTISED_LISTENERS='PLAINTEXT://localhost:9092' \
   -e KAFKA_CONTROLLER_LISTENER_NAMES='CONTROLLER' \
   -e KAFKA_LISTENER_SECURITY_PROTOCOL_MAP='CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT' \
+  -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 \
   -e KAFKA_LOG_DIRS='/tmp/kraft-logs' \
   -e CLUSTER_ID='MkU3OEVBNTcwNTJENDM2Qk' \
   apache/kafka:4.0.0
 ```
 
-> 这些环境变量你不用逐条背，只需看懂 3 个关键点：
+> 这些环境变量你不用逐条背，只需先看懂几个关键点：
 > - `KAFKA_PROCESS_ROLES='broker,controller'`：这一个节点**既当仓库又当管理员**（单节点 KRaft 的典型玩法）；
 > - `KAFKA_CONTROLLER_QUORUM_VOTERS` + `CLUSTER_ID`：KRaft 集群的身份标识；
-> - `KAFKA_ADVERTISED_LISTENERS='PLAINTEXT://localhost:9092'`：客户端从 `localhost:9092` 连进来。
+> - `KAFKA_ADVERTISED_LISTENERS='PLAINTEXT://localhost:9092'`：宿主机上的客户端从 `localhost:9092` 连进来；
+> - `--network kafka-net`：让容器内部的 `kafka` 名称能解析到自己，供 `1@kafka:29093` 使用；
+> - `KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1`：这是**单节点实验专用**。消费者组要保存位移，需要内部 Topic `__consumer_offsets`；默认副本因子通常按多节点集群准备，单节点必须改为 1。
+
+这里故意保留两种地址：`kafka:29093` 是容器内部控制器通信地址，`localhost:9092` 是宿主机上 CLI 的客户端地址。不要把两者混成一个地址。
 
 启动后确认它活着：
 
@@ -102,6 +112,8 @@ docker run -d \
 docker logs kafka
 # 看到类似 "Kafka Server started" 就说明起来了（首次启动会先格式化，稍等几秒）
 ```
+
+如果日志出现 `Received a fatal error while waiting for the controller to acknowledge that we are caught up`，在本课这套 Docker 单节点环境里，先检查容器是否加入了 `kafka-net`，以及 `KAFKA_CONTROLLER_QUORUM_VOTERS` 是否仍是 `1@kafka:29093`。这是控制器自连接失败的启动问题，和后面 `orders` 有没有业务消息是两层不同的问题。
 
 > 💡 **类比的边界**：这条命令起的是"单节点演示版"——副本数只能是 1，不适合生产；生产要起 3 个以上 controller + 多 broker。但拿来学习足够了。
 
@@ -112,7 +124,7 @@ docker logs kafka
 - **KRaft（Kafka Raft）**：就是本课说的"它自己管自己、不用再养一个协调服务"。在哪遇到：配置项 `process.roles` / `controller.quorum.voters`；**Kafka 4.0 起是唯一模式**，旧教程里的 ZooKeeper 已彻底移除。
 - **ZooKeeper（ZK）**：就是本课说的"以前那个要单独装、单独养的协调服务"。在哪遇到：2025 年之前的旧教程与老集群；**现在遇到它基本意味着你要处理的是历史系统**。
 - **Broker / Controller 两种角色 `process.roles`**：就是本课说的"既当仓库又当管理员"。在哪遇到：KRaft 配置项 `process.roles=broker,controller`（单机）或拆成两类节点（生产）。
-- ** advertised 监听地址 `advertised.listeners`**：就是本课说的"对外公布从哪进来"。在哪遇到：**连不上集群的第一嫌疑**——客户端拿到的是这个地址，写错就会出现"能 ping 通但连不上"。
+- **advertised 监听地址 `advertised.listeners`**：就是本课说的"对外公布从哪进来"。在哪遇到：**连不上集群的第一嫌疑**——客户端拿到的是这个地址，写错就会出现"能 ping 通但连不上"。
 
 #### 一句话记住
 
@@ -155,9 +167,66 @@ docker exec -it kafka /opt/kafka/bin/kafka-console-producer.sh \
 
 ```bash
 docker exec -it kafka /opt/kafka/bin/kafka-console-consumer.sh \
-  --topic orders --from-beginning --bootstrap-server localhost:9092
+  --topic orders --group lesson3-consumer --from-beginning \
+  --bootstrap-server localhost:9092
 # 预期输出：刚才发的那两行文字原样打印出来
 ```
+
+消费者先启动是完全合法的：它会先在 `orders` 上等待，生产者稍后输入的新消息应该立即出现。生产者窗口里的 `>` 是输入提示符，不是报错；每输入一行并回车，才发送一条消息。
+
+#### 🧪 现场复盘：为什么生产端有输入，消费端却空白？
+
+这次实验暴露了一个很适合排障的分层关系：**`orders` 保存业务消息，`__consumer_offsets` 保存消费者组的消费进度**。消费者命令仍然消费 `--topic orders`，不会因为检查内部 Topic 就改去消费 `__consumer_offsets`。
+
+如果消费者窗口一直空白，先不要猜“消息丢了”，按下面顺序取证：
+
+**① 先看 `orders` 有没有写入数据：**
+
+```bash
+docker exec kafka /opt/kafka/bin/kafka-get-offsets.sh \
+  --bootstrap-server localhost:9092 --topic orders
+```
+
+如果输出类似 `orders:0:2`、`orders:1:3`，说明 `orders` 的各分区已经有数据；最后一个数字是该分区当前的末端位移，不是消息正文。
+
+**② 再看消费者组依赖的内部 Topic 是否存在：**
+
+```bash
+docker exec kafka /opt/kafka/bin/kafka-topics.sh \
+  --list --bootstrap-server localhost:9092
+
+docker exec kafka /opt/kafka/bin/kafka-topics.sh --describe \
+  --topic __consumer_offsets --bootstrap-server localhost:9092
+```
+
+在本课的 `apache/kafka:4.0.0` 单节点实验中，如果启动时漏了 `KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1`，你可能看到 `orders` 存在，但 `__consumer_offsets` 不存在；日志则会反复尝试自动创建它。此时不是 `orders` 没有数据，而是消费者组初始化缺少保存位移的地方。
+
+**③ 已有容器的临时修复：**
+
+```bash
+docker exec kafka /opt/kafka/bin/kafka-topics.sh --create \
+  --if-not-exists --topic __consumer_offsets \
+  --partitions 50 --replication-factor 1 \
+  --config cleanup.policy=compact \
+  --bootstrap-server localhost:9092
+```
+
+这是**本地单节点练习的补救命令**，不是生产环境的常规操作。新建容器时应优先在启动命令中写入 `KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1`，让 Kafka 自己完成内部 Topic 初始化。
+
+**④ 用一个全新的消费者组查看 `orders` 中到底有哪些消息：**
+
+```bash
+docker exec -it kafka /opt/kafka/bin/kafka-console-consumer.sh \
+  --bootstrap-server localhost:9092 \
+  --topic orders \
+  --group inspect-orders-$(date +%s) \
+  --from-beginning \
+  --property print.partition=true \
+  --property print.offset=true \
+  --timeout-ms 5000
+```
+
+这里使用新的组名，是为了不复用某个旧组已经提交过的位移；`print.partition` 和 `print.offset` 会把消息来自哪个分区、位于哪个位移一起打印，5 秒没有新消息后自动退出。不要把 `--max-messages` 当成退出条件：如果实际消息数少于它，命令可能继续等待。
 
 #### 🗣️ 行话对照
 
@@ -204,10 +273,10 @@ Topic: orders  Partition: 2  Leader: 1  Replicas: 1  Isr: 1
 
 ```bash
 docker exec -it kafka /opt/kafka/bin/kafka-topics.sh --list --bootstrap-server localhost:9092
-# 预期：orders 以及系统内部的 __consumer_offsets
+# 初始可能只有 orders；消费者组成功初始化后，再检查是否出现 __consumer_offsets
 ```
 
-> 💡 现在你只需看懂一件事：`orders` 这一个 Topic，底层其实是 **3 个 Partition（0/1/2）**。这就是"逻辑一个、物理三个"的分片雏形，第 4 课会把它讲透。
+> 💡 现在你要看懂两件事：① `orders` 这个业务 Topic 底层其实是 **3 个 Partition（0/1/2）**，这是"逻辑一个、物理三个"的分片雏形；② `__consumer_offsets` 是消费者组的内部进度本，不是订单消息 Topic。第 4 课会把分片讲透，第 6 课会把消费者组和位移讲透。
 
 #### 🗣️ 行话对照
 
@@ -217,7 +286,7 @@ docker exec -it kafka /opt/kafka/bin/kafka-topics.sh --list --bootstrap-server l
 - **Leader**：就是本课说的"这一段当前归谁管"。在哪遇到：`--describe` 的 `Leader:` 列；**值为 -1 表示该分区暂无主，属于异常信号**。
 - **Replicas（AR）**：就是本课说的"这一段一共存了几份、都在哪"。在哪遇到：`--describe` 的 `Replicas:` 列。
 - **Isr**：就是本课说的"这几份里，现在跟得上的是哪几个"。在哪遇到：`--describe` 的 `Isr:` 列；**Replicas 与 Isr 不一致 = 有副本掉队**（第 7 课细讲）。
-- **`__consumer_offsets`（系统内置 Topic）**：就是本课说的"系统自己留的进度本"。在哪遇到：`--list` 里总会看到它；**别手贱删**。
+- **`__consumer_offsets`（系统内置 Topic）**：就是本课说的"系统自己留的进度本"。在哪遇到：消费者组初始化后可在 `--list` 里看到；**别把业务消息写进去，也不要在生产环境手动删除或改分区数**。
 
 #### 一句话记住
 
@@ -229,9 +298,14 @@ docker exec -it kafka /opt/kafka/bin/kafka-topics.sh --list --bootstrap-server l
 
 把上面三步串成一条完整链路，亲手验证"生产 → 存储 → 消费"：
 
+> ⚠️ 第 4、5 步要在**两个终端分别执行**：终端 A 的消费者会一直前台等待，先不要关闭它；再切到终端 B 启动生产者。
+
 ```bash
-# 1. 起 Kafka
+# 1. 起 Kafka（两个终端都要能复用这个容器）
+docker network inspect kafka-net >/dev/null 2>&1 || docker network create kafka-net
+
 docker run -d --name kafka -p 9092:9092 \
+  --network kafka-net \
   -e KAFKA_NODE_ID=1 \
   -e KAFKA_PROCESS_ROLES='broker,controller' \
   -e KAFKA_CONTROLLER_QUORUM_VOTERS='1@kafka:29093' \
@@ -239,6 +313,7 @@ docker run -d --name kafka -p 9092:9092 \
   -e KAFKA_ADVERTISED_LISTENERS='PLAINTEXT://localhost:9092' \
   -e KAFKA_CONTROLLER_LISTENER_NAMES='CONTROLLER' \
   -e KAFKA_LISTENER_SECURITY_PROTOCOL_MAP='CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT' \
+  -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 \
   -e KAFKA_LOG_DIRS='/tmp/kraft-logs' \
   -e CLUSTER_ID='MkU3OEVBNTcwNTJENDM2Qk' \
   apache/kafka:4.0.0
@@ -250,6 +325,26 @@ docker exec -it kafka /opt/kafka/bin/kafka-topics.sh --create \
 # 3. 观察分区
 docker exec -it kafka /opt/kafka/bin/kafka-topics.sh --describe \
   --topic orders --bootstrap-server localhost:9092
+
+# 4. 终端 A：先开消费者；它会等待后续消息
+docker exec -it kafka /opt/kafka/bin/kafka-console-consumer.sh \
+  --bootstrap-server localhost:9092 --topic orders \
+  --group lesson3-demo --from-beginning
+
+# 5. 终端 B：再开生产者，逐行输入 hello、hi 并回车
+docker exec -it kafka /opt/kafka/bin/kafka-console-producer.sh \
+  --topic orders --bootstrap-server localhost:9092
+```
+
+终端 A 应该能看到 `hello`、`hi`。如果没有看到，不要交换“先开消费者/先开生产者”的顺序；直接回到上面的“现场复盘”执行 `kafka-get-offsets.sh`，再检查 `__consumer_offsets`。
+
+```bash
+# 6. 查看 orders 中的消息、分区和位移（使用一次性新组）
+docker exec -it kafka /opt/kafka/bin/kafka-console-consumer.sh \
+  --bootstrap-server localhost:9092 --topic orders \
+  --group inspect-orders-$(date +%s) --from-beginning \
+  --property print.partition=true --property print.offset=true \
+  --timeout-ms 5000
 ```
 
 > ✅ **回扣场景**：从"纸上谈兵"到"亲手看到 3 个 Partition"，你已经迈出关键一步。后面第 4 课讲分片、第 5 课讲生产者、第 6 课讲消费者时，**随时能用这个真集群做实验**，不用再干看文字。
@@ -258,6 +353,7 @@ docker exec -it kafka /opt/kafka/bin/kafka-topics.sh --describe \
 
 ```bash
 docker stop kafka && docker rm kafka   # 停掉并删除容器
+docker network rm kafka-net            # 仅当这个网络只供本课使用时执行
 ```
 
 ---
@@ -271,27 +367,36 @@ docker stop kafka && docker rm kafka   # 停掉并删除容器
 
 ## 🐞 常见误区
 
-1. **"忘了 `--from-beginning` 看不到旧消息"**：`kafka-console-consumer` 默认只读**启动之后新来的消息**；要读历史消息必须加 `--from-beginning`。
+1. **"忘了 `--from-beginning` 看不到旧消息"**：`kafka-console-consumer` 默认只读**启动之后新来的消息**；要读历史消息必须加 `--from-beginning`。但它只解决“从哪里开始读”，不能修复消费者组初始化失败。
 2. **"脚本路径找不到"**：命令工具在**容器内** `/opt/kafka/bin/`，必须用 `docker exec -it kafka /opt/kafka/bin/xxx.sh`，而不是直接敲 `kafka-topics.sh`（除非你宿主机也装了 Kafka）。
 3. **"把 `-p 9092:9092` 端口改了就忘了 advertised 监听"**：对外监听地址由 `KAFKA_ADVERTISED_LISTENERS` 决定，客户端要连它，端口不匹配会连不上。
+4. **"消费者一定要等生产者启动后才能开"**：不对。消费者先开是正常用法，它会等待新消息；消费端空白时，先区分“正在等待”与“消费者组没有成功初始化”。
+5. **"`orders` 变成了 `__consumer_offsets`"**：不对。它们是两个 Topic：`orders` 存业务消息，`__consumer_offsets` 存消费者组位移。查看 `orders` 用 `--topic orders`，不要把内部 Topic 当成业务数据。
+6. **"`--list` 看不到 `__consumer_offsets`，说明 orders 没创建成功"**：不对。两者创建时机和用途不同；先用 `kafka-get-offsets.sh --topic orders` 判断业务数据是否存在，再检查内部 Topic 和日志。
+7. **"单节点不用额外配置内部 Topic"**：容易踩坑。官方默认 `offsets.topic.replication.factor` 是 3，单节点实验应设置 `KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1`；否则消费者组初始化可能失败。
 
 ## 📋 命令速查卡
 
 | 动作 | 命令 |
 |------|------|
-| 起 Kafka（KRaft 单节点） | `docker run -d --name kafka -p 9092:9092 -e KAFKA_NODE_ID=1 -e KAFKA_PROCESS_ROLES='broker,controller' -e KAFKA_CONTROLLER_QUORUM_VOTERS='1@kafka:29093' -e KAFKA_LISTENERS='PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:29093' -e KAFKA_ADVERTISED_LISTENERS='PLAINTEXT://localhost:9092' -e KAFKA_CONTROLLER_LISTENER_NAMES='CONTROLLER' -e KAFKA_LISTENER_SECURITY_PROTOCOL_MAP='CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT' -e KAFKA_LOG_DIRS='/tmp/kraft-logs' -e CLUSTER_ID='MkU3OEVBNTcwNTJENDM2Qk' apache/kafka:4.0.0` |
+| 创建用户自定义网络 | `docker network inspect kafka-net >/dev/null 2>&1 || docker network create kafka-net` |
+| 起 Kafka（KRaft 单节点） | `docker run -d --name kafka --network kafka-net -p 9092:9092 -e KAFKA_NODE_ID=1 -e KAFKA_PROCESS_ROLES='broker,controller' -e KAFKA_CONTROLLER_QUORUM_VOTERS='1@kafka:29093' -e KAFKA_LISTENERS='PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:29093' -e KAFKA_ADVERTISED_LISTENERS='PLAINTEXT://localhost:9092' -e KAFKA_CONTROLLER_LISTENER_NAMES='CONTROLLER' -e KAFKA_LISTENER_SECURITY_PROTOCOL_MAP='CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT' -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 -e KAFKA_LOG_DIRS='/tmp/kraft-logs' -e CLUSTER_ID='MkU3OEVBNTcwNTJENDM2Qk' apache/kafka:4.0.0` |
 | 看日志/是否启动 | `docker logs kafka` |
 | 建 Topic | `docker exec -it kafka /opt/kafka/bin/kafka-topics.sh --create --topic orders --partitions 3 --replication-factor 1 --bootstrap-server localhost:9092` |
 | 列出 Topic | `docker exec -it kafka /opt/kafka/bin/kafka-topics.sh --list --bootstrap-server localhost:9092` |
 | 看分区/副本 | `docker exec -it kafka /opt/kafka/bin/kafka-topics.sh --describe --topic orders --bootstrap-server localhost:9092` |
 | 生产消息 | `docker exec -it kafka /opt/kafka/bin/kafka-console-producer.sh --topic orders --bootstrap-server localhost:9092` |
-| 消费消息 | `docker exec -it kafka /opt/kafka/bin/kafka-console-consumer.sh --topic orders --from-beginning --bootstrap-server localhost:9092` |
+| 消费消息 | `docker exec -it kafka /opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic orders --group lesson3-consumer --from-beginning` |
+| 查看 orders 中有哪些消息 | `docker exec -it kafka /opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic orders --group inspect-orders-$(date +%s) --from-beginning --property print.partition=true --property print.offset=true --timeout-ms 5000` |
+| 查看各分区末端位移 | `docker exec kafka /opt/kafka/bin/kafka-get-offsets.sh --bootstrap-server localhost:9092 --topic orders` |
+| 查看消费者组内部 Topic | `docker exec kafka /opt/kafka/bin/kafka-topics.sh --describe --topic __consumer_offsets --bootstrap-server localhost:9092` |
 | 停止并删除容器 | `docker stop kafka && docker rm kafka` |
 
 ## 📚 官方文档
 
 - [Kafka 快速开始（4.3）](https://kafka.apache.org/43/getting-started/quickstart/)：官方 Quickstart，含单节点 KRaft 启动与命令行生产/消费
 - [Kafka 基础运维操作（4.3）](https://kafka.apache.org/43/operations/basic-kafka-operations/)：`kafka-topics.sh`、`kafka-configs.sh`、console 工具等命令参考
+- [Kafka Broker 配置（4.3）](https://kafka.apache.org/43/configuration/broker-configs/#brokerconfigs_offsets.topic.replication.factor)：`offsets.topic.replication.factor` 的默认值、单节点创建失败条件与分区数说明
 
 ## 一图总结
 
@@ -331,6 +436,18 @@ flowchart LR
 <details><summary>答案与解析</summary>
 
 **答案：A**。默认 console-consumer 只消费启动后新产生的消息；加 `--from-beginning` 才会从 offset 0 开始读历史消息。
+
+</details>
+
+**Q3**：下面哪句话正确？
+- A. `orders` 和 `__consumer_offsets` 是同一个 Topic 的两个别名
+- B. `orders` 存业务消息，`__consumer_offsets` 存消费者组位移；消费订单仍然使用 `--topic orders`
+- C. 只要加 `--from-beginning`，就不需要 `__consumer_offsets`
+- D. 消费者必须先于生产者启动，否则消息不会保存
+
+<details><summary>答案与解析</summary>
+
+**答案：B**。`--from-beginning` 只决定消费者从可用历史位置开始读取；消费者组仍需要内部位移 Topic 保存进度。消费者先开或后开都可以，关键是 broker、Topic 和消费者组初始化都正常。
 
 </details>
 
