@@ -46,3 +46,11 @@
 - [ ] `lessons/lesson-04-多容器Pod与优雅终止.md`
 - [ ] `lessons/lesson-05-Deployment自愈与更新.md`
 - [ ] `lessons/lesson-06-StatefulSet与DaemonSet与Job.md`
+
+### 课级入口要素补齐（2026-09-15）
+
+按 topic-teach 最新 skill 的「课级入口要素」硬约束，本阶段课 5-6已全部补齐六项要素（一句话本质 / 处境对照 / 一眼全局图 + 读图指引 / 本课地图 / 📖 文档核对 / 🧭 知识点衔接句），经 `verify.sh` 全量核验 P0=0。
+
+**本阶段新增全局图**：lesson-05-我要三个怎么保证.svg、lesson-06-三种脾气三种安排.svg
+
+**真实性纪律**：处境对照一律不给编造数字，全部为机制层面对照，无把握处标 ⏳；📖 留痕仅在确认真实引用官方文档后补写。

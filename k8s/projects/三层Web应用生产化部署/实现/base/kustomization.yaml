@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: shop3t
+
+resources:
+  - namespace.yaml
+  - config.yaml
+  - rbac.yaml
+  - database.yaml
+  - api.yaml
+  - web.yaml
+  - gateway.yaml
+  - networkpolicy.yaml
+
+# ⚠️ 不要在这里用 commonLabels / labels 给全部资源注入标签。
+# 实测踩坑：注入 app.kubernetes.io/part-of=shop3t 后，NetworkPolicy 的
+# podSelector: {matchLabels: {app: web}} 会因 Pod 上多出的标签而匹配不到，
+# 导致策略静默失效（不报错，只是不生效）。NetworkPolicy 必须保持标签干净。

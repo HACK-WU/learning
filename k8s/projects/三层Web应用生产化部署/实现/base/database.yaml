@@ -1,0 +1,111 @@
+# 阶段 2 / 课 6 + 阶段 4 / 课 12：有状态层用 StatefulSet + PVC
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-headless
+  namespace: shop3t
+spec:
+  clusterIP: None          # headless：给 StatefulSet 提供稳定 DNS
+  selector:
+    app: db
+  ports:
+    - port: 5432
+      name: pg
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: db
+  namespace: shop3t
+spec:
+  serviceName: db-headless
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      # 阶段 5 / 课 15：默认挂载 SA token 是经典提权风险，这里显式关闭
+      automountServiceAccountToken: false
+      securityContext:
+        # postgres 镜像以 uid 999 运行，数据目录必须属主匹配
+        fsGroup: 999
+        runAsUser: 999
+        runAsGroup: 999
+        runAsNonRoot: true
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          ports:
+            - containerPort: 5432
+              name: pg
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: shop-config
+                  key: DB_NAME
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: shop-secret
+                  key: DB_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: shop-secret
+                  key: DB_PASSWORD
+            # 关键：让 postgres 接受 Secret 里的密码（PGPASSWORD 校验）
+            - name: POSTGRES_HOST_AUTH_METHOD
+              value: "scram-sha-256"
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          # 阶段 1 / 课 3：三探针
+          startupProbe:
+            exec:
+              command: ["pg_isready", "-U", "shopuser", "-d", "shopdb"]
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 30     # 首次启动最多等 150 秒
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "shopuser", "-d", "shopdb"]
+            periodSeconds: 5
+            timeoutSeconds: 3
+          livenessProbe:
+            exec:
+              command: ["pg_isready", "-U", "shopuser", "-d", "shopdb"]
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 6
+          # 阶段 5 / 课 16：restricted 档四件套
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            seccompProfile:
+              type: RuntimeDefault
+            runAsNonRoot: true
+          # 阶段 4 / 课 13：DB 设 Guaranteed（requests == limits）
+          resources:
+            requests:
+              cpu: 200m
+              memory: 512Mi
+            limits:
+              cpu: 500m
+              memory: 1Gi
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: standard
+        resources:
+          requests:
+            storage: 1Gi

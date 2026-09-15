@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 470" width="900" height="470" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="900" height="470" fill="#fbfcfe"/>
+
+  <!-- 标题 -->
+  <text x="450" y="34" text-anchor="middle" font-size="19" font-weight="700" fill="#1f2937">
+    一台机器上的几个盒子，和一大群机器上的一堆盒子
+  </text>
+  <text x="450" y="56" text-anchor="middle" font-size="13" fill="#6b7280">
+    左边：你自己盯着的日子 · 右边：有人替你盯着的结果
+  </text>
+
+  <!-- ============ 左半：不这么做 ============ -->
+  <rect x="30" y="82" width="390" height="330" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="225" y="108" text-anchor="middle" font-size="15" font-weight="700" fill="#b91c1c">
+    自己盯：每个盒子都要你操心
+  </text>
+
+  <!-- 四台机器 -->
+  <g>
+    <!-- 机器1 -->
+    <rect x="52" y="126" width="160" height="60" rx="6" fill="#fff" stroke="#fca5a5"/>
+    <text x="62" y="144" font-size="11" fill="#7f1d1d">机器 1</text>
+    <rect x="62" y="150" width="34" height="24" rx="3" fill="#fee2e2" stroke="#f87171"/>
+    <rect x="102" y="150" width="34" height="24" rx="3" fill="#fee2e2" stroke="#f87171"/>
+    <rect x="142" y="150" width="34" height="24" rx="3" fill="#fee2e2" stroke="#f87171"/>
+
+    <!-- 机器2 -->
+    <rect x="222" y="126" width="160" height="60" rx="6" fill="#fff" stroke="#fca5a5"/>
+    <text x="232" y="144" font-size="11" fill="#7f1d1d">机器 2</text>
+    <rect x="232" y="150" width="34" height="24" rx="3" fill="#fee2e2" stroke="#f87171"/>
+    <rect x="272" y="150" width="34" height="24" rx="3" fill="#fee2e2" stroke="#f87171"/>
+
+    <!-- 机器3 宕机 -->
+    <rect x="52" y="200" width="160" height="60" rx="6" fill="#f5f5f5" stroke="#9ca3af" stroke-dasharray="4 3"/>
+    <text x="62" y="218" font-size="11" fill="#6b7280">机器 3（瘫了）</text>
+    <text x="62" y="244" font-size="20" fill="#ef4444">✕ ✕</text>
+
+    <!-- 机器4 -->
+    <rect x="222" y="200" width="160" height="60" rx="6" fill="#fff" stroke="#fca5a5"/>
+    <text x="232" y="218" font-size="11" fill="#7f1d1d">机器 4</text>
+    <rect x="232" y="224" width="34" height="24" rx="3" fill="#fee2e2" stroke="#f87171"/>
+  </g>
+
+  <!-- 你 -->
+  <ellipse cx="225" cy="298" rx="42" ry="26" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="225" y="302" text-anchor="middle" font-size="13" font-weight="700" fill="#991b1b">你</text>
+
+  <!-- 你到各机器的连线 -->
+  <path d="M 200 282 L 130 190" stroke="#ef4444" stroke-width="1" fill="none" marker-end="url(#arw)"/>
+  <path d="M 225 272 L 225 200" stroke="#ef4444" stroke-width="1" fill="none" marker-end="url(#arw)"/>
+  <path d="M 250 282 L 320 190" stroke="#ef4444" stroke-width="1" fill="none" marker-end="url(#arw)"/>
+
+  <!-- 左侧痛点 -->
+  <text x="52" y="346" font-size="12" fill="#7f1d1d">· 哪个盒子在哪台机器上？靠你记</text>
+  <text x="52" y="366" font-size="12" fill="#7f1d1d">· 机器瘫了 → 盒子没了 → 你半夜爬起来搬</text>
+  <text x="52" y="386" font-size="12" fill="#7f1d1d">· 客人来了找哪台机器？靠你手写地址</text>
+  <text x="52" y="404" font-size="12" font-weight="600" fill="#b91c1c">人一多、机器一多，就盯不过来了</text>
+
+  <!-- ============ 箭头 ============ -->
+  <defs>
+    <marker id="arw" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#ef4444"/>
+    </marker>
+    <marker id="arwg" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#059669"/>
+    </marker>
+  </defs>
+  <path d="M 432 247 L 462 247" stroke="#059669" stroke-width="3" fill="none" marker-end="url(#arwg)"/>
+
+  <!-- ============ 右半：这么做 ============ -->
+  <rect x="480" y="82" width="390" height="330" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="675" y="108" text-anchor="middle" font-size="15" font-weight="700" fill="#047857">
+    交给一套系统：你说要什么，它来盯
+  </text>
+
+  <!-- 管家 -->
+  <rect x="560" y="126" width="230" height="52" rx="8" fill="#d1fae5" stroke="#059669" stroke-width="2"/>
+  <text x="675" y="146" text-anchor="middle" font-size="14" font-weight="700" fill="#065f46">总管家（你只跟它说话）</text>
+  <text x="675" y="166" text-anchor="middle" font-size="11" fill="#047857">你说："这类盒子，一直给我留 3 个"</text>
+
+  <!-- 机器群 -->
+  <g>
+    <rect x="502" y="200" width="160" height="60" rx="6" fill="#fff" stroke="#86efac"/>
+    <text x="512" y="218" font-size="11" fill="#065f46">机器 1</text>
+    <rect x="512" y="224" width="34" height="24" rx="3" fill="#d1fae5" stroke="#34d399"/>
+    <rect x="552" y="224" width="34" height="24" rx="3" fill="#d1fae5" stroke="#34d399"/>
+
+    <rect x="672" y="200" width="160" height="60" rx="6" fill="#fff" stroke="#86efac"/>
+    <text x="682" y="218" font-size="11" fill="#065f46">机器 2</text>
+    <rect x="682" y="224" width="34" height="24" rx="3" fill="#d1fae5" stroke="#34d399"/>
+
+    <rect x="502" y="272" width="160" height="60" rx="6" fill="#f5f5f5" stroke="#9ca3af" stroke-dasharray="4 3"/>
+    <text x="512" y="290" font-size="11" fill="#6b7280">机器 3（瘫了）</text>
+    <text x="512" y="316" font-size="12" fill="#059669">已自动补到别处 →</text>
+
+    <rect x="672" y="272" width="160" height="60" rx="6" fill="#fff" stroke="#86efac"/>
+    <text x="682" y="290" font-size="11" fill="#065f46">机器 4</text>
+    <rect x="682" y="296" width="34" height="24" rx="3" fill="#d1fae5" stroke="#34d399"/>
+    <rect x="722" y="296" width="34" height="24" rx="3" fill="#a7f3d0" stroke="#10b981" stroke-width="2"/>
+    <text x="726" y="312" font-size="9" fill="#065f46">补的</text>
+  </g>
+
+  <!-- 管家到机器的连线 -->
+  <path d="M 600 180 L 580 200" stroke="#059669" stroke-width="1.2" fill="none" marker-end="url(#arwg)"/>
+  <path d="M 675 180 L 675 200" stroke="#059669" stroke-width="1.2" fill="none" marker-end="url(#arwg)"/>
+  <path d="M 750 180 L 770 200" stroke="#059669" stroke-width="1.2" fill="none" marker-end="url(#arwg)"/>
+  <path d="M 620 178 L 580 272" stroke="#059669" stroke-width="1.2" fill="none" marker-end="url(#arwg)"/>
+  <path d="M 730 178 L 770 272" stroke="#059669" stroke-width="1.2" fill="none" marker-end="url(#arwg)"/>
+
+  <!-- 右侧收益 -->
+  <text x="502" y="352" font-size="12" fill="#065f46">· 盒子放哪台机器？系统自己挑</text>
+  <text x="502" y="372" font-size="12" fill="#065f46">· 盒子没了？系统自动补一个</text>
+  <text x="502" y="392" font-size="12" fill="#065f46">· 地址总是变？给一个固定门牌</text>
+  <text x="502" y="410" font-size="12" font-weight="600" fill="#047857">你只说"要什么"，不再管"怎么摆"</text>
+
+  <!-- 底部一句话 -->
+  <rect x="30" y="428" width="840" height="30" rx="6" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="450" y="448" text-anchor="middle" font-size="13" font-weight="600" fill="#1e40af">
+    本课要解决的：把"跑起来"变成"一直跑着"，而且不用你盯着
+  </text>
+</svg>

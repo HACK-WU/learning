@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: shop3t
+  labels:
+    # 阶段 5 / 课 16：命名空间级强制 restricted 档
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/enforce-version: latest
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+---
+# 阶段 4 / 课 13：ResourceQuota 兜底，防止单应用吃满节点
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: shop3t-quota
+  namespace: shop3t
+spec:
+  hard:
+    requests.cpu: "4"
+    requests.memory: 4Gi
+    limits.cpu: "8"
+    limits.memory: 8Gi
+    pods: "20"
+    persistentvolumeclaims: "5"
+---
+# 阶段 4 / 课 13：LimitRange 给未声明资源的容器兜底
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: shop3t-limits
+  namespace: shop3t
+spec:
+  limits:
+    - type: Container
+      default:
+        cpu: 500m
+        memory: 256Mi
+      defaultRequest:
+        cpu: 100m
+        memory: 128Mi
+      min:
+        cpu: 50m
+        memory: 64Mi
+      max:
+        cpu: "2"
+        memory: 2Gi

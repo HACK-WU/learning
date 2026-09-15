@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" width="900" height="620">
+  <rect width="900" height="620" fill="#ffffff"/>
+  <text x="450" y="26" text-anchor="middle" font-family="sans-serif" font-size="19" font-weight="bold" fill="#1a1a1a">分层定位法：从外到内五层，每层一个问句、一条命令、一个判据</text>
+  <text x="450" y="47" text-anchor="middle" font-family="sans-serif" font-size="12.5" fill="#666666">原则：自顶向下逐层排除，先证明「上一层没问题」，再进入下一层。不要跳层，不要同时改多个地方</text>
+
+  <!-- L0 集群 -->
+  <rect x="60" y="62" width="780" height="86" rx="8" fill="#ebf8ff" stroke="#2c5282" stroke-width="2"/>
+  <text x="80" y="86" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2c5282">L0 集群整体：是不是「全局性」故障？</text>
+  <text x="80" y="107" font-family="monospace" font-size="11.5" fill="#1a1a1a">kubectl get nodes | kubectl get pods -A | kubectl cluster-info</text>
+  <text x="80" y="128" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">判据：节点是否全 Ready？kube-system 是否全 Running？</text>
+  <text x="600" y="107" font-family="sans-serif" font-size="12" fill="#2c5282">问句：</text>
+  <text x="600" y="127" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">只有我这个服务坏了，还是全都坏了？</text>
+
+  <polygon points="450,152 466,152 466,147 472,152 466,157 466,152" fill="#718096"/>
+
+  <!-- L1 节点 -->
+  <rect x="60" y="162" width="780" height="86" rx="8" fill="#f0fff4" stroke="#276749" stroke-width="2"/>
+  <text x="80" y="186" font-family="sans-serif" font-size="15" font-weight="bold" fill="#276749">L1 节点：承载它的机器还好吗？</text>
+  <text x="80" y="207" font-family="monospace" font-size="11.5" fill="#1a1a1a">kubectl describe node &lt;n&gt; | df -h | journalctl -u kubelet</text>
+  <text x="80" y="228" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">判据：MemoryPressure / DiskPressure / PIDPressure / Ready 四项</text>
+  <text x="600" y="186" font-family="sans-serif" font-size="12" fill="#276749">问句：</text>
+  <text x="600" y="206" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">节点有没有被压力打垮？</text>
+  <text x="600" y="228" font-family="sans-serif" font-size="11.5" fill="#666666">实测：四条件全 False + Ready=True 才健康</text>
+
+  <polygon points="450,252 466,252 466,247 472,252 466,257 466,252" fill="#718096"/>
+
+  <!-- L2 控制面 -->
+  <rect x="60" y="262" width="780" height="86" rx="8" fill="#fffaf0" stroke="#c05621" stroke-width="2"/>
+  <text x="80" y="286" font-family="sans-serif" font-size="15" font-weight="bold" fill="#c05621">L2 控制面：调度与决策还工作吗？</text>
+  <text x="80" y="307" font-family="monospace" font-size="11.5" fill="#1a1a1a">kubectl get pods -n kube-system | ls /etc/kubernetes/manifests/</text>
+  <text x="80" y="328" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">判据：apiserver / scheduler / controller-manager / etcd 是否 1/1 Running</text>
+  <text x="600" y="286" font-family="sans-serif" font-size="12" fill="#c05621">问句：</text>
+  <text x="600" y="306" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">新 Pod 能调度吗？证书过期了吗？</text>
+  <text x="600" y="328" font-family="sans-serif" font-size="11.5" fill="#666666">实测：kind 上 kubeadm certs 可用（剩 361d）</text>
+
+  <polygon points="450,352 466,352 466,347 472,352 466,357 466,352" fill="#718096"/>
+
+  <!-- L3 工作负载 -->
+  <rect x="60" y="362" width="780" height="106" rx="8" fill="#fff5f5" stroke="#c53030" stroke-width="2"/>
+  <text x="80" y="386" font-family="sans-serif" font-size="15" font-weight="bold" fill="#c53030">L3 工作负载：Pod 自己卡在哪一步？（最常见的一层）</text>
+  <text x="80" y="407" font-family="monospace" font-size="11.5" fill="#1a1a1a">kubectl get pod -o wide | kubectl describe pod | kubectl logs [--previous]</text>
+  <text x="80" y="428" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">Pending → describe 看 FailedScheduling 原文</text>
+  <text x="80" y="446" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">ImagePullBackOff / CrashLoopBackOff → 看 Events + 退出码</text>
+  <text x="600" y="386" font-family="sans-serif" font-size="12" fill="#c53030">判据（实测原文）：</text>
+  <text x="600" y="406" font-family="monospace" font-size="10.5" fill="#1a1a1a">0/1 nodes are available:</text>
+  <text x="600" y="421" font-family="monospace" font-size="10.5" fill="#1a1a1a">1 Insufficient cpu</text>
+  <text x="600" y="436" font-family="monospace" font-size="10.5" fill="#1a1a1a">exit code 1 / OOMKilled=137</text>
+  <text x="600" y="453" font-family="monospace" font-size="10.5" fill="#1a1a1a">Back-off 10s→20s→40s→5min</text>
+
+  <polygon points="450,472 466,472 466,467 472,472 466,477 466,472" fill="#718096"/>
+
+  <!-- L4 网络与存储 -->
+  <rect x="60" y="482" width="780" height="106" rx="8" fill="#faf5ff" stroke="#6b46c1" stroke-width="2"/>
+  <text x="80" y="506" font-family="sans-serif" font-size="15" font-weight="bold" fill="#6b46c1">L4 网络与存储：Pod 活着，但别人访问不到它</text>
+  <text x="80" y="527" font-family="monospace" font-size="11.5" fill="#1a1a1a">kubectl get endpointslice | kubectl exec -- wget | kubectl get pvc</text>
+  <text x="80" y="548" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">判据1：EndpointSlice 的 endpoints 是否为 null（无后端）</text>
+  <text x="80" y="566" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">判据2：三种报错区分 DNS / 无后端 / 被丢包（见下方对照）</text>
+  <text x="600" y="506" font-family="sans-serif" font-size="12" fill="#6b46c1">报错对照（实测）：</text>
+  <text x="600" y="526" font-family="monospace" font-size="10.5" fill="#1a1a1a">Connection refused → 无后端</text>
+  <text x="600" y="541" font-family="monospace" font-size="10.5" fill="#1a1a1a">bad address → DNS 解析失败</text>
+  <text x="600" y="556" font-family="monospace" font-size="10.5" fill="#1a1a1a">download timed out → 被 DROP</text>
+  <text x="600" y="576" font-family="sans-serif" font-size="10.5" fill="#666666">finalizer 卡删除：deletionTimestamp 有值</text>
+
+  <text x="450" y="604" text-anchor="middle" font-family="sans-serif" font-size="11.5" fill="#666666">⚠️ 反直觉实测：busybox 的 nslookup 查短名会 NXDOMAIN（补域不完整），但应用（wget）能正常解析 —— 用诊断工具判断「DNS 坏了」可能误判</text>
+</svg>

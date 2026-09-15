@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 640" width="900" height="640">
+  <rect width="900" height="640" fill="#ffffff"/>
+  <text x="450" y="26" text-anchor="middle" font-family="sans-serif" font-size="19" font-weight="bold" fill="#1a1a1a">节点维护三件套：cordon → drain → uncordon，PDB 是全程的刹车片</text>
+  <text x="450" y="47" text-anchor="middle" font-family="sans-serif" font-size="12.5" fill="#666666">没有 PDB 的 drain = 可能一次性驱逐掉某服务的全部副本；cordon 只挡新 Pod，不管存量</text>
+
+  <!-- 上排：三件套状态机 -->
+  <rect x="60" y="62" width="180" height="150" rx="8" fill="#ebf8ff" stroke="#2c5282" stroke-width="2"/>
+  <text x="150" y="88" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2c5282">① cordon</text>
+  <text x="150" y="110" text-anchor="middle" font-family="monospace" font-size="11" fill="#1a1a1a">kubectl cordon &lt;n&gt;</text>
+  <text x="78" y="132" font-family="sans-serif" font-size="12" fill="#1a1a1a">作用：spec.unschedulable=true</text>
+  <text x="78" y="152" font-family="sans-serif" font-size="12" fill="#1a1a1a">✅ 阻止新 Pod 调度上来</text>
+  <text x="78" y="172" font-family="sans-serif" font-size="12" fill="#1a1a1a">❌ 已有 Pod 照常运行</text>
+  <text x="78" y="196" font-family="sans-serif" font-size="11.5" fill="#2c5282">状态：Ready,SchedulingDisabled</text>
+
+  <polygon points="245,137 258,137 258,132 264,137 258,142 258,137" fill="#718096"/>
+
+  <rect x="270" y="62" width="200" height="150" rx="8" fill="#fff5f5" stroke="#c53030" stroke-width="2"/>
+  <text x="370" y="88" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="bold" fill="#c53030">② drain</text>
+  <text x="370" y="110" text-anchor="middle" font-family="monospace" font-size="11" fill="#1a1a1a">kubectl drain &lt;n&gt;</text>
+  <text x="288" y="132" font-family="sans-serif" font-size="12" fill="#1a1a1a">作用：驱逐全部 Pod（走</text>
+  <text x="288" y="148" font-family="sans-serif" font-size="12" fill="#1a1a1a">eviction API，受 PDB 约束）</text>
+  <text x="288" y="170" font-family="sans-serif" font-size="12" fill="#1a1a1a">✅ 优雅终止 + 尊重 PDB</text>
+  <text x="288" y="190" font-family="sans-serif" font-size="12" fill="#1a1a1a">⚠️ 自动先 cordon</text>
+  <text x="288" y="206" font-family="sans-serif" font-size="11.5" fill="#c53030">被 PDB 挡住时会重试等待</text>
+
+  <polygon points="475,137 488,137 488,132 494,137 488,142 488,137" fill="#718096"/>
+
+  <rect x="500" y="62" width="180" height="150" rx="8" fill="#f0fff4" stroke="#276749" stroke-width="2"/>
+  <text x="590" y="88" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="bold" fill="#276749">③ 维护</text>
+  <text x="590" y="110" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#1a1a1a">内核升级 / 硬件更换</text>
+  <text x="518" y="134" font-family="sans-serif" font-size="12" fill="#1a1a1a">此时节点上已无业务 Pod</text>
+  <text x="518" y="154" font-family="sans-serif" font-size="12" fill="#1a1a1a">可安全关机 / 重启 / 换盘</text>
+  <text x="518" y="180" font-family="sans-serif" font-size="11.5" fill="#276749">或用优雅关闭（见知识点二）</text>
+  <text x="518" y="200" font-family="sans-serif" font-size="11.5" fill="#666666">kind 实测 shutdownGracePeriod=0s</text>
+
+  <polygon points="685,137 698,137 698,132 704,137 698,142 698,137" fill="#718096"/>
+
+  <rect x="710" y="62" width="130" height="150" rx="8" fill="#faf5ff" stroke="#6b46c1" stroke-width="2"/>
+  <text x="775" y="88" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="bold" fill="#6b46c1">④ uncordon</text>
+  <text x="775" y="110" text-anchor="middle" font-family="monospace" font-size="10.5" fill="#1a1a1a">kubectl uncordon</text>
+  <text x="730" y="134" font-family="sans-serif" font-size="12" fill="#1a1a1a">恢复可调度</text>
+  <text x="730" y="154" font-family="sans-serif" font-size="12" fill="#1a1a1a">新 Pod 重新进来</text>
+  <text x="730" y="180" font-family="sans-serif" font-size="11.5" fill="#6b46c1">⚠️ 不会自动把旧</text>
+  <text x="730" y="197" font-family="sans-serif" font-size="11.5" fill="#6b46c1">Pod 迁回来</text>
+
+  <!-- 中：PDB 刹车片 -->
+  <rect x="60" y="232" width="780" height="118" rx="8" fill="#fffaf0" stroke="#c05621" stroke-width="2"/>
+  <text x="80" y="258" font-family="sans-serif" font-size="15" font-weight="bold" fill="#c05621">PDB 贯穿全程：它是「自愿驱逐」的刹车片，不是墙</text>
+  <text x="80" y="282" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">drain 调用 eviction API → 每次驱逐前先问 PDB → 不允许就拒绝，drain 重试等待（实测报错见下）</text>
+  <text x="80" y="306" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">⚠️ 关键区别：PDB 只管「自愿驱逐」（drain / eviction API），不管「直接删除」（kubectl delete pod / 删 Deployment）</text>
+  <text x="80" y="330" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">实测：PDB minAvailable=3 时 drain 全部被拒（3 个 Pod 全在）；但 kubectl delete pod 照样删掉（剩 2 个）</text>
+  <text x="620" y="258" font-family="sans-serif" font-size="12" fill="#c05621">实测报错原文：</text>
+  <text x="620" y="278" font-family="monospace" font-size="10" fill="#1a1a1a">error when evicting</text>
+  <text x="620" y="292" font-family="monospace" font-size="10" fill="#1a1a1a">pods/"web-..." (will retry</text>
+  <text x="620" y="306" font-family="monospace" font-size="10" fill="#1a1a1a">after 5s): Cannot evict pod</text>
+  <text x="620" y="320" font-family="monospace" font-size="10" fill="#1a1a1a">as it would violate the</text>
+  <text x="620" y="334" font-family="monospace" font-size="10" fill="#1a1a1a">pod's disruption budget.</text>
+
+  <!-- 下左：drain 常见坑 -->
+  <rect x="60" y="368" width="380" height="130" rx="8" fill="#f7fafc" stroke="#718096" stroke-width="2"/>
+  <text x="80" y="392" font-family="sans-serif" font-size="14" font-weight="bold" fill="#2d3748">drain 的三个「不做完不让走」</text>
+  <text x="80" y="414" font-family="sans-serif" font-size="12" fill="#1a1a1a">1. DaemonSet Pod（kube-proxy、CNI）</text>
+  <text x="100" y="431" font-family="monospace" font-size="10.5" fill="#c53030">→ 需 --ignore-daemonsets</text>
+  <text x="80" y="452" font-family="sans-serif" font-size="12" fill="#1a1a1a">2. 用了 emptyDir 的 Pod（数据会丢）</text>
+  <text x="100" y="469" font-family="monospace" font-size="10.5" fill="#c53030">→ 需 --delete-emptydir-data</text>
+  <text x="80" y="490" font-family="sans-serif" font-size="12" fill="#1a1a1a">3. 无控制器的裸 Pod（删了不会重建）</text>
+  <text x="100" y="487" font-family="monospace" font-size="10.5" fill="#c53030"></text>
+  <text x="100" y="487" font-family="sans-serif" font-size="10.5" fill="#c53030"></text>
+  <text x="100" y="487" font-family="monospace" font-size="10.5" fill="#c53030"></text>
+
+  <!-- 下右：PDB 字段 -->
+  <rect x="460" y="368" width="380" height="130" rx="8" fill="#f7fafc" stroke="#718096" stroke-width="2"/>
+  <text x="480" y="392" font-family="sans-serif" font-size="14" font-weight="bold" fill="#2d3748">PDB 字段实测对照（3 副本全健康）</text>
+  <text x="480" y="414" font-family="monospace" font-size="10.5" fill="#1a1a1a">minAvailable=2    → ALLOWED=1  DESIRED=2</text>
+  <text x="480" y="431" font-family="monospace" font-size="10.5" fill="#1a1a1a">maxUnavailable=1  → ALLOWED=1  DESIRED=2</text>
+  <text x="480" y="448" font-family="monospace" font-size="10.5" fill="#1a1a1a">minAvailable=60%  → ALLOWED=1  DESIRED=2</text>
+  <text x="480" y="465" font-family="monospace" font-size="10.5" fill="#1a1a1a">minAvailable=100% → ALLOWED=0  DESIRED=3</text>
+  <text x="480" y="485" font-family="sans-serif" font-size="11.5" fill="#666666">ALLOWED=0 = 完全锁死，节点永远维护不了</text>
+
+  <!-- 底部：非计划关机 -->
+  <rect x="60" y="516" width="780" height="104" rx="8" fill="#fff5f5" stroke="#c53030" stroke-width="2"/>
+  <text x="80" y="540" font-family="sans-serif" font-size="14" font-weight="bold" fill="#c53030">非计划关机（断电 / 直接 kill）：另一套机制，PDB 完全帮不上忙</text>
+  <text x="80" y="562" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">节点失联 → 默认 5 分钟后（not-ready toleration 300s，实测）Pod 被标记为 NotReady → 调度到别处</text>
+  <text x="80" y="582" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">但 StatefulSet 的 Pod 会卡在 Terminating（旧节点上的 kubelet 已死，删不掉），需手动加 out-of-service 污点</text>
+  <text x="80" y="606" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">优雅关闭（计划内）：kubelet 借 systemd 抑制器锁延迟关机，分两阶段终止普通 Pod → 关键 Pod</text>
+
+  <text x="450" y="634" text-anchor="middle" font-family="sans-serif" font-size="11.5" fill="#666666">⚠️ kind 单节点集群限制：drain 后 Pod 无处可去，PDB 会永久阻塞 —— 生产需多节点才能完整演练</text>
+</svg>

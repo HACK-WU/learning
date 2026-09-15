@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 470" width="900" height="470" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="900" height="470" fill="#fbfcfe"/>
+
+  <text x="450" y="34" text-anchor="middle" font-size="19" font-weight="700" fill="#1f2937">
+    楼里每扇门都不锁：谁都能走到谁屋里去
+  </text>
+  <text x="450" y="56" text-anchor="middle" font-size="13" fill="#6b7280">
+    再加一道能上锁的东西 —— 但它只管"写规矩"，锁门的是别人
+  </text>
+
+  <defs>
+    <marker id="a10r" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#dc2626"/>
+    </marker>
+    <marker id="a10g" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#059669"/>
+    </marker>
+    <marker id="a10" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+
+  <!-- ===== 左：默认全通 ===== -->
+  <rect x="30" y="76" width="420" height="250" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="240" y="100" text-anchor="middle" font-size="14" font-weight="700" fill="#b91c1c">现在的样子：门全都不锁</text>
+
+  <!-- 房间 -->
+  <g>
+    <rect x="52" y="116" width="110" height="52" rx="4" fill="#fff" stroke="#fca5a5"/>
+    <text x="107" y="136" text-anchor="middle" font-size="10" fill="#7f1d1d">前台</text>
+    <text x="107" y="152" text-anchor="middle" font-size="9" fill="#9ca3af">（对外开门的）</text>
+
+    <rect x="184" y="116" width="110" height="52" rx="4" fill="#fff" stroke="#fca5a5"/>
+    <text x="239" y="136" text-anchor="middle" font-size="10" fill="#7f1d1d">业务间</text>
+    <text x="239" y="152" text-anchor="middle" font-size="9" fill="#9ca3af">（处理订单的）</text>
+
+    <rect x="316" y="116" width="110" height="52" rx="4" fill="#fff" stroke="#fca5a5"/>
+    <text x="371" y="136" text-anchor="middle" font-size="10" fill="#7f1d1d">账房</text>
+    <text x="371" y="152" text-anchor="middle" font-size="9" fill="#9ca3af">（放着钱的）</text>
+  </g>
+
+  <!-- 全通的线 -->
+  <path d="M 107 172 L 239 172" stroke="#dc2626" stroke-width="1.6" fill="none" marker-end="url(#a10r)"/>
+  <path d="M 239 172 L 371 172" stroke="#dc2626" stroke-width="1.6" fill="none" marker-end="url(#a10r)"/>
+  <path d="M 107 176 C 140 220 340 220 371 176" stroke="#dc2626" stroke-width="1.6" fill="none" stroke-dasharray="5 3" marker-end="url(#a10r)"/>
+
+  <text x="240" y="200" text-anchor="middle" font-size="10" fill="#991b1b">任意两间都能直接走到，没人拦</text>
+
+  <!-- 攻击路径 -->
+  <rect x="52" y="214" width="374" height="46" rx="6" fill="#fff5f5" stroke="#fca5a5"/>
+  <text x="239" y="234" text-anchor="middle" font-size="11" font-weight="700" fill="#b91c1c">于是：前台被攻破 → 一路走到账房</text>
+  <text x="239" y="250" text-anchor="middle" font-size="10" fill="#7f1d1d">一个跑测试的房间出 bug，也能把整栋楼扫一遍</text>
+
+  <text x="240" y="284" text-anchor="middle" font-size="11" fill="#7f1d1d">好处是：装东西时完全不用操心通不通</text>
+  <text x="240" y="300" text-anchor="middle" font-size="11" fill="#b91c1c">代价是：安全边界等于没有</text>
+
+  <!-- ===== 右：加规矩 ===== -->
+  <rect x="470" y="76" width="400" height="250" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="670" y="100" text-anchor="middle" font-size="14" font-weight="700" fill="#047857">加一道规矩：谁能进谁的屋</text>
+
+  <g>
+    <rect x="492" y="116" width="100" height="52" rx="4" fill="#fff" stroke="#86efac"/>
+    <text x="542" y="136" text-anchor="middle" font-size="10" fill="#065f46">前台</text>
+    <text x="542" y="152" text-anchor="middle" font-size="9" fill="#9ca3af">（对外）</text>
+
+    <rect x="606" y="116" width="100" height="52" rx="4" fill="#fff" stroke="#86efac"/>
+    <text x="656" y="136" text-anchor="middle" font-size="10" fill="#065f46">业务间</text>
+    <text x="656" y="152" text-anchor="middle" font-size="9" fill="#9ca3af">（订单）</text>
+
+    <rect x="720" y="116" width="126" height="52" rx="4" fill="#d1fae5" stroke="#059669" stroke-width="2"/>
+    <text x="783" y="136" text-anchor="middle" font-size="10" fill="#065f46">账房</text>
+    <text x="783" y="152" text-anchor="middle" font-size="9" fill="#047857">只放业务间进来</text>
+  </g>
+
+  <!-- 允许的 -->
+  <path d="M 656 172 L 783 172" stroke="#059669" stroke-width="2.2" fill="none" marker-end="url(#a10g)"/>
+  <text x="720" y="166" text-anchor="middle" font-size="9" fill="#047857">允许</text>
+
+  <!-- 被挡的 -->
+  <path d="M 542 176 C 600 214 700 214 760 180" stroke="#dc2626" stroke-width="2" fill="none" stroke-dasharray="5 3"/>
+  <text x="648" y="216" text-anchor="middle" font-size="16" fill="#dc2626">✕</text>
+  <text x="648" y="234" text-anchor="middle" font-size="10" fill="#991b1b">没写明允许的，就走不过去</text>
+
+  <!-- 白名单说明 -->
+  <rect x="492" y="246" width="354" height="70" rx="6" fill="#ecfdf5" stroke="#6ee7b7"/>
+  <text x="669" y="266" text-anchor="middle" font-size="11" font-weight="700" fill="#065f46">⚠ 它只有"允许"，没有"禁止"</text>
+  <text x="669" y="286" text-anchor="middle" font-size="10" fill="#047857">想"全都不许进"？就给这批屋子挂上规矩，</text>
+  <text x="669" y="302" text-anchor="middle" font-size="10" fill="#047857">但一条允许都不写 —— 那就是全封</text>
+
+  <!-- ===== 下方：写了规矩 ≠ 真上锁 ===== -->
+  <rect x="30" y="342" width="840" height="94" rx="10" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.5"/>
+  <text x="52" y="366" font-size="14" font-weight="700" fill="#b45309">本课最大的坑：规矩写好了 ≠ 门真的锁上了</text>
+
+  <g>
+    <rect x="52" y="378" width="230" height="48" rx="6" fill="#fff" stroke="#fbbf24"/>
+    <text x="167" y="398" text-anchor="middle" font-size="11" font-weight="700" fill="#92400e">你写的：规矩</text>
+    <text x="167" y="416" text-anchor="middle" font-size="10" fill="#b45309">存下来了，就这些</text>
+
+    <text x="304" y="404" font-size="15" fill="#b45309">→</text>
+
+    <rect x="322" y="378" width="230" height="48" rx="6" fill="#fef3c7" stroke="#f59e0b"/>
+    <text x="437" y="398" text-anchor="middle" font-size="11" font-weight="700" fill="#92400e">真正锁门的：另一个部件</text>
+    <text x="437" y="416" text-anchor="middle" font-size="10" fill="#b45309">它可以选择不理会</text>
+
+    <text x="574" y="404" font-size="11" fill="#b45309">结果是：</text>
+
+    <rect x="592" y="378" width="278" height="48" rx="6" fill="#fee2e2" stroke="#f87171"/>
+    <text x="731" y="398" text-anchor="middle" font-size="11" font-weight="700" fill="#991b1b">没有"已生效"的标记可看</text>
+    <text x="731" y="416" text-anchor="middle" font-size="10" fill="#7f1d1d">"创建成功" ≠ "已经拦住了"</text>
+  </g>
+
+  <!-- 底部一句话 -->
+  <text x="450" y="458" text-anchor="middle" font-size="13" font-weight="600" fill="#1e40af">
+    本课要解决的：给"门全都不锁"的楼补一套能上锁的规矩，并弄清它到底有没有真的锁上
+  </text>
+</svg>

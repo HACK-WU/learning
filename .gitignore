@@ -867,3 +867,35 @@ grafana/playground/l11-fix-continuation.py
 #   正文零引用任何 .sh/.py/.yaml 外部脚本，故本条通配不会吞掉教学载荷。
 #   若将来新增被讲义正文直接引用的脚本，须照既有惯例在此加 ! 例外。
 k8s/assets/*.sh
+
+# ⚠️ 例外（2026-09-15 卫生检查补）：上面那条通配的注释曾断言
+#   「正文零引用任何 .sh/.py/.yaml 外部脚本」，实测该断言已被打破 ——
+#   补充课《三大未竟实践》的「附：可复现资源」表（第 842 / 849 行）逐字引用了
+#   下面两个脚本，被通配吞掉的后果就是讲义链接指向不存在的文件
+#   （正是本仓库在 ES 课 15 踩过的「讲义引用的文件不存在」）。
+#   按注释既定的「加 ! 例外」惯例补回，只放这两个，其余 20 个探针仍忽略。
+!k8s/assets/sup-csi-lab.sh
+!k8s/assets/cleanup-all.sh
+
+
+# ---- 规划工作目录（plan-track skill 产物，跨主题通用，2026-09-15 卫生检查）----
+# 背景：plan-track 为复杂任务在 {topic-slug}/ 下建档 .plans/{日期}-{任务}/，
+#   内含 plan.md（目标 / 完成判据 / 工作项状态）与 checklist.md（自评审清单）。
+#   它是**AI 执行过程的规划台账**，不是教学产物 —— 用户明确指示「.plan 目录不用提交」。
+# 判据：丢了课程依然完整（讲义、档案、SVG、项目源码无一引用 .plans/ 下任何文件）。
+# ⚠️ 用裸目录名 `.plans/` 匹配任意层级而非锚定 k8s/：plan-track 是跨主题通用的
+#    执行机制，elasticsearch / django / grafana 等主题同样会生成，逐主题写会反复漏。
+#    目录名足够独特，不会误伤教学产物（*.md 正文 / assets/*.svg 均不在其下）。
+.plans/
+
+# ---- 教学实操环境：k8s 聚合层实验的 Go 编译产物（2026-09-15 卫生检查）----
+# 背景：k8s/assets/aggregator/build.sh 会在同目录产出 aggregator-apiserver
+#   （实测 ELF 64-bit / statically linked / Go 二进制 / 9.0 MB）。
+# 判据：一条 `bash build.sh` 即可重建，属构建产物；丢了课程仍完整 ——
+#   补充课正文引用的是**源码** main.go（第 555、847 行）与 run-lab.sh（第 848 行），
+#   零处引用该二进制本体。
+# ⚠️ 只忽略二进制本身，不写 k8s/assets/aggregator/ 一刀切 ——
+#   同目录的 main.go / run-lab.sh / build.sh / go.mod / Dockerfile / deploy.yaml
+#   是聚合层实验的教学主体，吞掉后读者照抄补充课会直接失败
+#   （本仓库通用教训：ES 课 15 踩过「讲义引用的文件不存在」的坑）。
+k8s/assets/aggregator/aggregator-apiserver

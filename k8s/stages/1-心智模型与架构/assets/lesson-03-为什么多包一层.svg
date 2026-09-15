@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 460" width="900" height="460" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="900" height="460" fill="#fbfcfe"/>
+
+  <text x="450" y="34" text-anchor="middle" font-size="19" font-weight="700" fill="#1f2937">
+    两个要搭档的东西，怎么保证它们不分家
+  </text>
+  <text x="450" y="56" text-anchor="middle" font-size="13" fill="#6b7280">
+    分三种做法：各跑各的 / 硬塞在一起 / 打包成一个整体
+  </text>
+
+  <defs>
+    <marker id="a3r" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#dc2626"/>
+    </marker>
+    <marker id="a3g" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#059669"/>
+    </marker>
+  </defs>
+
+  <!-- ===== 做法一：各跑各的 ===== -->
+  <rect x="30" y="76" width="260" height="200" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="160" y="100" text-anchor="middle" font-size="14" font-weight="700" fill="#b91c1c">做法一：各跑各的</text>
+
+  <rect x="52" y="116" width="216" height="56" rx="6" fill="#fff" stroke="#fca5a5"/>
+  <text x="64" y="134" font-size="11" fill="#7f1d1d">机器 A</text>
+  <rect x="64" y="140" width="70" height="24" rx="3" fill="#fee2e2" stroke="#f87171"/>
+  <text x="99" y="156" text-anchor="middle" font-size="10" fill="#991b1b">程序 1</text>
+
+  <rect x="52" y="184" width="216" height="56" rx="6" fill="#fff" stroke="#fca5a5"/>
+  <text x="64" y="202" font-size="11" fill="#7f1d1d">机器 B（隔得老远）</text>
+  <rect x="64" y="208" width="70" height="24" rx="3" fill="#fee2e2" stroke="#f87171"/>
+  <text x="99" y="224" text-anchor="middle" font-size="10" fill="#991b1b">程序 2</text>
+
+  <path d="M 160 176 L 160 180" stroke="#dc2626" stroke-width="2" fill="none"/>
+  <text x="160" y="258" text-anchor="middle" font-size="12" font-weight="700" fill="#b91c1c">✕ 分家了</text>
+  <text x="160" y="270" text-anchor="middle" font-size="10" fill="#7f1d1d">一个在这台，一个在那台</text>
+
+  <!-- ===== 做法二：硬塞 ===== -->
+  <rect x="320" y="76" width="260" height="200" rx="10" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.5"/>
+  <text x="450" y="100" text-anchor="middle" font-size="14" font-weight="700" fill="#b45309">做法二：硬塞进一个盒子</text>
+
+  <rect x="342" y="116" width="216" height="90" rx="6" fill="#fff" stroke="#fcd34d"/>
+  <text x="354" y="134" font-size="11" fill="#92400e">一个盒子，里面两摊事</text>
+  <rect x="354" y="142" width="86" height="50" rx="3" fill="#fef3c7" stroke="#f59e0b"/>
+  <text x="397" y="170" text-anchor="middle" font-size="10" fill="#92400e">程序 1</text>
+  <rect x="450" y="142" width="86" height="50" rx="3" fill="#fef3c7" stroke="#f59e0b"/>
+  <text x="493" y="170" text-anchor="middle" font-size="10" fill="#92400e">程序 2</text>
+
+  <text x="450" y="230" text-anchor="middle" font-size="11" fill="#92400e">是挨在一起了，但</text>
+  <text x="450" y="248" text-anchor="middle" font-size="11" fill="#92400e">要升级只能一起升，</text>
+  <text x="450" y="266" text-anchor="middle" font-size="11" fill="#92400e">死了一个也一起完</text>
+
+  <!-- ===== 做法三：打包 ===== -->
+  <rect x="610" y="76" width="260" height="200" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="740" y="100" text-anchor="middle" font-size="14" font-weight="700" fill="#047857">做法三：打包成一个整体</text>
+
+  <rect x="632" y="116" width="216" height="90" rx="8" fill="#d1fae5" stroke="#059669" stroke-width="2.5" stroke-dasharray="7 4"/>
+  <text x="644" y="134" font-size="11" fill="#065f46">机器 A · 一个整体（虚线框）</text>
+  <rect x="644" y="142" width="86" height="50" rx="3" fill="#fff" stroke="#34d399"/>
+  <text x="687" y="164" text-anchor="middle" font-size="10" fill="#065f46">程序 1</text>
+  <text x="687" y="178" text-anchor="middle" font-size="9" fill="#059669">可单独升级</text>
+  <rect x="740" y="142" width="86" height="50" rx="3" fill="#fff" stroke="#34d399"/>
+  <text x="783" y="164" text-anchor="middle" font-size="10" fill="#065f46">程序 2</text>
+  <text x="783" y="178" text-anchor="middle" font-size="9" fill="#059669">可单独看日志</text>
+
+  <text x="740" y="230" text-anchor="middle" font-size="12" font-weight="700" fill="#047857">✓ 一定在同一台</text>
+  <text x="740" y="248" text-anchor="middle" font-size="11" fill="#065f46">能互相直接喊话、</text>
+  <text x="740" y="266" text-anchor="middle" font-size="11" fill="#065f46">又能各管各的</text>
+
+  <!-- ===== 下方：假死问题 ===== -->
+  <rect x="30" y="296" width="840" height="120" rx="10" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="52" y="320" font-size="14" font-weight="700" fill="#1e40af">还有第二个麻烦：怎么知道它"活着但已经不能用了"</text>
+
+  <g>
+    <rect x="54" y="334" width="150" height="56" rx="6" fill="#fff" stroke="#93c5fd"/>
+    <text x="129" y="354" text-anchor="middle" font-size="11" fill="#1e40af">看着好好的</text>
+    <text x="129" y="372" text-anchor="middle" font-size="11" fill="#3b82f6">进程在、端口通</text>
+
+    <path d="M 208 362 L 246 362" stroke="#3b82f6" stroke-width="1.4" fill="none" marker-end="url(#a3g)"/>
+
+    <rect x="250" y="334" width="150" height="56" rx="6" fill="#fff" stroke="#93c5fd"/>
+    <text x="325" y="354" text-anchor="middle" font-size="11" fill="#1e40af">其实已经卡住了</text>
+    <text x="325" y="372" text-anchor="middle" font-size="11" fill="#3b82f6">不干活，但没退出</text>
+
+    <text x="420" y="356" font-size="12" fill="#1e40af">→ 光看"在不在"没用</text>
+    <text x="420" y="376" font-size="12" fill="#1e40af">得问它"还能不能干活"</text>
+
+    <path d="M 596 362 L 634 362" stroke="#059669" stroke-width="1.4" fill="none" marker-end="url(#a3g)"/>
+
+    <rect x="638" y="334" width="216" height="56" rx="6" fill="#d1fae5" stroke="#059669"/>
+    <text x="746" y="354" text-anchor="middle" font-size="11" fill="#065f46">定时来问三种问题：</text>
+    <text x="746" y="372" text-anchor="middle" font-size="11" fill="#047857">起了没 / 活不活 / 能不能接客</text>
+  </g>
+
+  <!-- 底部一句话 -->
+  <text x="450" y="444" text-anchor="middle" font-size="13" font-weight="600" fill="#1e40af">
+    本课要解决的：给"必须在一起的一伙东西"定一个边界，并且能看出它到底是活着还是装活
+  </text>
+</svg>

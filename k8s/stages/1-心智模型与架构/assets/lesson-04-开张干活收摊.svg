@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 470" width="900" height="470" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="900" height="470" fill="#fbfcfe"/>
+
+  <text x="450" y="34" text-anchor="middle" font-size="19" font-weight="700" fill="#1f2937">
+    一个盒子装不下所有事：开张前的准备、干活时的帮手、收摊时的体面
+  </text>
+  <text x="450" y="56" text-anchor="middle" font-size="13" fill="#6b7280">
+    三个麻烦：谁先来 / 谁来打下手 / 怎么走才不丢东西
+  </text>
+
+  <defs>
+    <marker id="a4" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#6b7280"/>
+    </marker>
+    <marker id="a4g" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#059669"/>
+    </marker>
+    <marker id="a4r" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+
+  <!-- ===== 时间轴标题 ===== -->
+  <text x="52" y="88" font-size="13" font-weight="700" fill="#374151">一个整体的时间线：从开张到收摊</text>
+
+  <!-- ===== 阶段1：开张前的准备 ===== -->
+  <rect x="52" y="100" width="240" height="180" rx="10" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="172" y="122" text-anchor="middle" font-size="14" font-weight="700" fill="#1e40af">① 开张前：先把事办好</text>
+
+  <rect x="72" y="134" width="200" height="38" rx="6" fill="#fff" stroke="#93c5fd"/>
+  <text x="172" y="157" text-anchor="middle" font-size="11" fill="#1e40af">等另一个东西就绪 → 干完就走</text>
+
+  <path d="M 172 176 L 172 190" stroke="#3b82f6" stroke-width="1.4" fill="none" marker-end="url(#a4)"/>
+
+  <rect x="72" y="194" width="200" height="38" rx="6" fill="#fff" stroke="#93c5fd"/>
+  <text x="172" y="217" text-anchor="middle" font-size="11" fill="#1e40af">把要用的东西取来 → 干完就走</text>
+
+  <path d="M 172 236 L 172 250" stroke="#3b82f6" stroke-width="1.4" fill="none" marker-end="url(#a4)"/>
+
+  <rect x="72" y="254" width="200" height="38" rx="6" fill="#fff" stroke="#93c5fd"/>
+  <text x="172" y="277" text-anchor="middle" font-size="11" fill="#1e40af">把场地收拾好 → 干完就走</text>
+
+  <text x="172" y="300" text-anchor="middle" font-size="10" fill="#3b82f6">一个接一个，前一个成了才轮到下一个</text>
+  <text x="172" y="316" text-anchor="middle" font-size="10" fill="#3b82f6">全办完，才轮到正主上场</text>
+
+  <path d="M 296 190 L 330 190" stroke="#059669" stroke-width="2.4" fill="none" marker-end="url(#a4g)"/>
+
+  <!-- ===== 阶段2：干活时的帮手 ===== -->
+  <rect x="334" y="100" width="240" height="180" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="454" y="122" text-anchor="middle" font-size="14" font-weight="700" fill="#047857">② 干活时：配个打下手的</text>
+
+  <rect x="354" y="134" width="200" height="110" rx="8" fill="#d1fae5" stroke="#059669" stroke-width="2" stroke-dasharray="7 4"/>
+  <rect x="366" y="146" width="176" height="42" rx="4" fill="#fff" stroke="#34d399"/>
+  <text x="454" y="164" text-anchor="middle" font-size="11" font-weight="700" fill="#065f46">正主（一直要干）</text>
+  <text x="454" y="179" text-anchor="middle" font-size="10" fill="#059669">对外接活</text>
+
+  <rect x="366" y="194" width="176" height="42" rx="4" fill="#a7f3d0" stroke="#10b981"/>
+  <text x="454" y="212" text-anchor="middle" font-size="11" font-weight="700" fill="#065f46">打下手的（跟着一起）</text>
+  <text x="454" y="227" text-anchor="middle" font-size="10" fill="#059669">搬东西、传话，不碰正主的代码</text>
+
+  <text x="454" y="264" text-anchor="middle" font-size="10" fill="#065f46">要给正主加"记日志"，</text>
+  <text x="454" y="280" text-anchor="middle" font-size="10" fill="#065f46">不用改它一行代码</text>
+
+  <path d="M 578 190 L 612 190" stroke="#059669" stroke-width="2.4" fill="none" marker-end="url(#a4g)"/>
+
+  <!-- ===== 阶段3：收摊 ===== -->
+  <rect x="616" y="100" width="232" height="180" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="732" y="122" text-anchor="middle" font-size="14" font-weight="700" fill="#b91c1c">③ 收摊时：怎么说走就走</text>
+
+  <!-- 粗暴 -->
+  <text x="636" y="144" font-size="11" font-weight="700" fill="#991b1b">直接拔电源：</text>
+  <rect x="636" y="152" width="192" height="34" rx="4" fill="#fee2e2" stroke="#f87171"/>
+  <text x="732" y="173" text-anchor="middle" font-size="11" fill="#991b1b">手上活儿扔了 → 外面看到报错</text>
+
+  <text x="732" y="204" text-anchor="middle" font-size="14" fill="#dc2626">▼</text>
+
+  <!-- 体面 -->
+  <text x="636" y="224" font-size="11" font-weight="700" fill="#065f46">先打个招呼再走：</text>
+  <rect x="636" y="232" width="192" height="38" rx="4" fill="#d1fae5" stroke="#059669"/>
+  <text x="732" y="250" text-anchor="middle" font-size="11" fill="#065f46">1. 先别派新活给我</text>
+  <text x="732" y="264" text-anchor="middle" font-size="11" fill="#065f46">2. 手上的干完 3. 再走</text>
+
+  <!-- ===== 下方：502 的来源 ===== -->
+  <rect x="52" y="300" width="796" height="130" rx="10" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.5"/>
+  <text x="72" y="324" font-size="14" font-weight="700" fill="#b45309">那"发版时总有几个请求失败"是怎么来的？</text>
+
+  <!-- 时间轴 -->
+  <line x1="80" y1="368" x2="820" y2="368" stroke="#d1d5db" stroke-width="1.5"/>
+
+  <g>
+    <!-- 收到通知但还没生效 -->
+    <rect x="90" y="344" width="150" height="20" rx="3" fill="#fee2e2" stroke="#f87171"/>
+    <text x="165" y="358" text-anchor="middle" font-size="10" fill="#991b1b">这边已经开始收摊</text>
+
+    <rect x="250" y="344" width="150" height="20" rx="3" fill="#fef3c7" stroke="#fbbf24"/>
+    <text x="325" y="358" text-anchor="middle" font-size="10" fill="#92400e">别处还不知道，仍在派活</text>
+
+    <path d="M 340 388 L 340 398" stroke="#dc2626" stroke-width="1.6" fill="none" marker-end="url(#a4r)"/>
+    <text x="352" y="404" font-size="11" fill="#b91c1c">← 活儿派到一个已经在收摊的摊位上</text>
+  </g>
+
+  <text x="72" y="424" font-size="12" fill="#92400e">关键：这两件事是同时发生的 —— 一边已经开始收，另一边还没收到通知，中间这段时间送来的活就全砸了</text>
+
+  <!-- 底部一句话 -->
+  <text x="450" y="452" text-anchor="middle" font-size="13" font-weight="600" fill="#1e40af">
+    本课要解决的：把"开张前的准备""干活时的帮手""收摊时的体面"三件事，各自安排妥当
+  </text>
+</svg>

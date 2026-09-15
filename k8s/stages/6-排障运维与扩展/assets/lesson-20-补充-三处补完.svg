@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 440" width="900" height="440" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="900" height="440" fill="#fbfcfe"/>
+
+  <text x="450" y="34" text-anchor="middle" font-size="19" font-weight="700" fill="#1f2937">
+    三处"讲过但没真做过"的，这次真跑一遍
+  </text>
+  <text x="450" y="56" text-anchor="middle" font-size="13" fill="#6b7280">
+    每一处都从"存不存在"做到"真跑通、真搞挂、真修好"
+  </text>
+
+  <defs>
+    <marker id="a20g" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#059669"/>
+    </marker>
+    <marker id="a20r" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+
+  <!-- ===== 顶部：之前的状态 ===== -->
+  <rect x="30" y="76" width="840" height="70" rx="10" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="52" y="100" font-size="13" font-weight="700" fill="#334155">课 20 留下的三处空缺</text>
+  <g>
+    <rect x="52" y="110" width="250" height="24" rx="4" fill="#fff" stroke="#cbd5e1"/>
+    <text x="177" y="126" text-anchor="middle" font-size="10" fill="#64748b">存储：只讲了概念，没真拍过一次快照</text>
+    <rect x="325" y="110" width="250" height="24" rx="4" fill="#fff" stroke="#cbd5e1"/>
+    <text x="450" y="126" text-anchor="middle" font-size="10" fill="#64748b">拦截：只看过现成的，没自己写过一个</text>
+    <rect x="598" y="110" width="272" height="24" rx="4" fill="#fff" stroke="#cbd5e1"/>
+    <text x="734" y="126" text-anchor="middle" font-size="10" fill="#64748b">加接口：明确标着"只观察未搭建"</text>
+  </g>
+
+  <path d="M 450 150 L 450 172" stroke="#059669" stroke-width="2.4" fill="none" marker-end="url(#a20g)"/>
+  <text x="470" y="166" font-size="11" font-weight="700" fill="#047857">本篇：全部真跑一遍</text>
+
+  <!-- ===== 三块 ===== -->
+  <!-- 块1 -->
+  <rect x="30" y="180" width="270" height="200" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="165" y="204" text-anchor="middle" font-size="13" font-weight="700" fill="#047857">① 存储：拍快照再还原</text>
+
+  <g>
+    <rect x="52" y="216" width="226" height="26" rx="4" fill="#fff" stroke="#86efac"/>
+    <text x="165" y="233" text-anchor="middle" font-size="10" fill="#065f46">装一个真家伙（不用云厂商）</text>
+
+    <path d="M 165 244 L 165 256" stroke="#059669" stroke-width="1.3" fill="none" marker-end="url(#a20g)"/>
+
+    <rect x="52" y="260" width="226" height="26" rx="4" fill="#d1fae5" stroke="#34d399"/>
+    <text x="165" y="277" text-anchor="middle" font-size="10" fill="#065f46">写数据 → 拍个快照 → 删掉数据</text>
+
+    <path d="M 165 288 L 165 300" stroke="#059669" stroke-width="1.3" fill="none" marker-end="url(#a20g)"/>
+
+    <rect x="52" y="304" width="226" height="26" rx="4" fill="#a7f3d0" stroke="#10b981" stroke-width="2"/>
+    <text x="165" y="321" text-anchor="middle" font-size="10" font-weight="700" fill="#065f46">从快照还原 → 数据回来了 ✓</text>
+  </g>
+  <text x="165" y="350" text-anchor="middle" font-size="10" fill="#065f46">顺带撞上一个反直觉的：</text>
+  <text x="165" y="366" text-anchor="middle" font-size="10" fill="#065f46">卷能变大，但快照是某个瞬间</text>
+
+  <!-- 块2 -->
+  <rect x="315" y="180" width="270" height="200" rx="10" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="450" y="204" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">② 拦截：自己写一个</text>
+
+  <g>
+    <rect x="337" y="216" width="226" height="26" rx="4" fill="#fff" stroke="#93c5fd"/>
+    <text x="450" y="233" text-anchor="middle" font-size="10" fill="#1e40af">规矩：每个都得带一个名字标签</text>
+
+    <path d="M 450 244 L 450 256" stroke="#3b82f6" stroke-width="1.3" fill="none" marker-end="url(#a20g)"/>
+
+    <rect x="337" y="260" width="226" height="26" rx="4" fill="#dbeafe" stroke="#60a5fa"/>
+    <text x="450" y="277" text-anchor="middle" font-size="10" fill="#1e40af">不带的 → 当场拦下 ✓</text>
+
+    <path d="M 450 288 L 450 300" stroke="#dc2626" stroke-width="1.3" fill="none" marker-end="url(#a20r)"/>
+
+    <rect x="337" y="304" width="226" height="26" rx="4" fill="#fee2e2" stroke="#f87171" stroke-width="2"/>
+    <text x="450" y="321" text-anchor="middle" font-size="10" font-weight="700" fill="#991b1b">故意搞挂它 → 半个集群瘫了 ✕</text>
+  </g>
+  <text x="450" y="350" text-anchor="middle" font-size="10" fill="#1e40af">然后修好，并讲清修法的代价：</text>
+  <text x="450" y="366" text-anchor="middle" font-size="10" fill="#1e40af">拦不住了，但不会再拖垮集群</text>
+
+  <!-- 块3 -->
+  <rect x="600" y="180" width="270" height="200" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="735" y="204" text-anchor="middle" font-size="13" font-weight="700" fill="#b91c1c">③ 加接口：自己搭一个</text>
+
+  <g>
+    <rect x="622" y="216" width="226" height="26" rx="4" fill="#fff" stroke="#fca5a5"/>
+    <text x="735" y="233" text-anchor="middle" font-size="10" fill="#7f1d1d">写一个小服务（几百行）</text>
+
+    <path d="M 735 244 L 735 256" stroke="#6b7280" stroke-width="1.3" fill="none" marker-end="url(#a20g)"/>
+
+    <rect x="622" y="260" width="226" height="26" rx="4" fill="#fff" stroke="#fca5a5"/>
+    <text x="735" y="277" text-anchor="middle" font-size="10" fill="#7f1d1d">登记上去，让主系统认识它</text>
+
+    <path d="M 735 288 L 735 300" stroke="#059669" stroke-width="1.3" fill="none" marker-end="url(#a20g)"/>
+
+    <rect x="622" y="304" width="226" height="26" rx="4" fill="#d1fae5" stroke="#34d399" stroke-width="2"/>
+    <text x="735" y="321" text-anchor="middle" font-size="10" font-weight="700" fill="#065f46">增删查改全跑通 ✓</text>
+  </g>
+  <text x="735" y="350" text-anchor="middle" font-size="10" fill="#7f1d1d">最大的坑不在搭起来，在拆：</text>
+  <text x="735" y="366" text-anchor="middle" font-size="10" fill="#7f1d1d">坏掉的登记项会让空间删不掉</text>
+
+  <!-- 底部 -->
+  <rect x="30" y="396" width="840" height="30" rx="6" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="450" y="416" text-anchor="middle" font-size="12" font-weight="600" fill="#1e40af">
+    贯穿三块的方法：判断"能不能做"最快的办法不是查文档，是用最小代价试一次真东西
+  </text>
+</svg>

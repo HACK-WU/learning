@@ -1,0 +1,107 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: webhooklab
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admission-webhook
+  namespace: webhooklab
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admission-webhook
+  namespace: webhooklab
+  labels:
+    app: admission-webhook
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admission-webhook
+  template:
+    metadata:
+      labels:
+        app: admission-webhook
+    spec:
+      serviceAccountName: admission-webhook
+      containers:
+      - name: webhook
+        # 标准库 Python 镜像，直接挂源码运行，无需构建
+        image: python:3.12-alpine
+        command: ["python", "/app/server.py"]
+        args: ["validate"]
+        ports:
+        - containerPort: 8443
+          name: https
+        volumeMounts:
+        - name: code
+          mountPath: /app
+        - name: certs
+          mountPath: /etc/webhook/certs
+          readOnly: true
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8443
+            scheme: HTTPS
+          initialDelaySeconds: 2
+          periodSeconds: 3
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8443
+            scheme: HTTPS
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 200m
+            memory: 128Mi
+      volumes:
+      - name: code
+        configMap:
+          name: webhook-code
+      - name: certs
+        secret:
+          secretName: webhook-certs
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: admission-webhook
+  namespace: webhooklab
+spec:
+  selector:
+    app: admission-webhook
+  ports:
+  - port: 443
+    targetPort: 8443
+    name: https
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: admission-webhook-viewer
+rules:
+- apiGroups: [""]
+  resources: ["pods", "namespaces"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: admission-webhook-viewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: admission-webhook-viewer
+subjects:
+- kind: ServiceAccount
+  name: admission-webhook
+  namespace: webhooklab

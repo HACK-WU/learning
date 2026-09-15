@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700" width="900" height="700">
+  <rect width="900" height="700" fill="#ffffff"/>
+  <text x="450" y="26" text-anchor="middle" font-family="sans-serif" font-size="19" font-weight="bold" fill="#1a1a1a">k8s 的四层扩展点：从「能装插件」到「能加 API」</text>
+  <text x="450" y="47" text-anchor="middle" font-family="sans-serif" font-size="12.5" fill="#666666">越往上越贴近用户、越易用；越往下越贴近内核、越灵活。本图所有 ✅ 项均在本集群实测</text>
+
+  <!-- 层1：CRD -->
+  <rect x="60" y="62" width="780" height="118" rx="8" fill="#f0fff4" stroke="#276749" stroke-width="2"/>
+  <text x="80" y="86" font-family="sans-serif" font-size="15" font-weight="bold" fill="#276749">① CRD + Controller（Operator）= 加一种「资源」</text>
+  <text x="80" y="108" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">做什么：教 API server 认识一个新名词（如 Backup、Database），再写个控制器让它「活」起来</text>
+  <text x="80" y="128" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">数据存哪：<tspan font-weight="bold">etcd</tspan>（跟内置资源一样，由 API server 代管）　·　要写代码吗：<tspan font-weight="bold">不用写 API server</tspan>，只写控制器（任意语言）</text>
+  <text x="80" y="150" font-family="sans-serif" font-size="12" fill="#276749">✅ 实测：建 CRD → kubectl 立刻认识（`kubectl get bk`）；schema 校验报错 `must be of type string`</text>
+  <text x="80" y="168" font-family="sans-serif" font-size="12" fill="#276749">✅ 实测：status 子资源保护生效（普通 patch 改不动 status，`no change`）</text>
+
+  <!-- 层2：聚合层 -->
+  <rect x="60" y="192" width="780" height="118" rx="8" fill="#ebf8ff" stroke="#2c5282" stroke-width="2"/>
+  <text x="80" y="216" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2c5282">② API 聚合层 = 加一个「独立 API server」</text>
+  <text x="80" y="238" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">做什么：自己写一个 API server，主 API server 把匹配的请求代理过去（对用户感觉像内置 API）</text>
+  <text x="80" y="258" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">数据存哪：<tspan font-weight="bold">你自己决定</tspan>（可以用自己的存储）　·　要写代码吗：<tspan font-weight="bold">要</tspan>，且要构建镜像、长期维护</text>
+  <text x="80" y="280" font-family="sans-serif" font-size="12" fill="#2c5282">✅ 实测：本集群 metrics-server 就是聚合层 —— APIService 指向 kube-system/metrics-server，AVAILABLE=True</text>
+  <text x="80" y="298" font-family="sans-serif" font-size="12" fill="#2c5282">✅ 实测：`kubectl top nodes` 真的取到数据（109m CPU / 1546Mi）—— 聚合层在这台机器上正在工作</text>
+
+  <!-- 层3：三接口 -->
+  <rect x="60" y="322" width="780" height="140" rx="8" fill="#fffaf0" stroke="#c05621" stroke-width="2"/>
+  <text x="80" y="346" font-family="sans-serif" font-size="15" font-weight="bold" fill="#c05621">③ 扩展接口 CNI / CRI / CSI = 把底层实现交给生态（k8s 生态的根）</text>
+
+  <rect x="80" y="358" width="240" height="90" rx="6" fill="#ffffff" stroke="#c05621" stroke-width="1.5"/>
+  <text x="200" y="378" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="bold" fill="#c05621">CNI · 网络</text>
+  <text x="94" y="398" font-family="sans-serif" font-size="11.5" fill="#1a1a1a">职责：给 Pod 配网卡、分配 IP</text>
+  <text x="94" y="416" font-family="sans-serif" font-size="11.5" fill="#1a1a1a">生态：Calico / Cilium / Flannel</text>
+  <text x="94" y="436" font-family="sans-serif" font-size="11" fill="#276749">✅ 实测：kindnet（ptp + host-local）</text>
+
+  <rect x="332" y="358" width="236" height="90" rx="6" fill="#ffffff" stroke="#c05621" stroke-width="1.5"/>
+  <text x="450" y="378" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="bold" fill="#c05621">CRI · 运行时</text>
+  <text x="346" y="398" font-family="sans-serif" font-size="11.5" fill="#1a1a1a">职责：真正去跑容器（拉镜像/启停）</text>
+  <text x="346" y="416" font-family="sans-serif" font-size="11.5" fill="#1a1a1a">生态：containerd / CRI-O</text>
+  <text x="346" y="436" font-family="sans-serif" font-size="11" fill="#276749">✅ 实测：containerd 2.1.3 + crictl</text>
+
+  <rect x="580" y="358" width="240" height="90" rx="6" fill="#ffffff" stroke="#c05621" stroke-width="1.5"/>
+  <text x="700" y="378" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="bold" fill="#c05621">CSI · 存储</text>
+  <text x="594" y="398" font-family="sans-serif" font-size="11.5" fill="#1a1a1a">职责：卷的创建/挂载/快照</text>
+  <text x="594" y="416" font-family="sans-serif" font-size="11.5" fill="#1a1a1a">生态：云厂商驱动 / Rook / Longhorn</text>
+  <text x="594" y="436" font-family="sans-serif" font-size="11" fill="#c53030">⚠️ 实测：本集群无 CSI 驱动</text>
+
+  <!-- 层4：Admission -->
+  <rect x="60" y="474" width="780" height="86" rx="8" fill="#faf5ff" stroke="#6b46c1" stroke-width="2"/>
+  <text x="80" y="498" font-family="sans-serif" font-size="15" font-weight="bold" fill="#6b46c1">④ Admission Webhook = 在「写入前」拦一道（准入控制）</text>
+  <text x="80" y="520" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">做什么：对象存进 etcd 之前拦截，可<tspan font-weight="bold">校验</tspan>（ValidatingWebhook）或<tspan font-weight="bold">改写</tspan>（MutatingWebhook）</text>
+  <text x="80" y="540" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">典型用途：强制加标签、注入 sidecar、拒绝不合规镜像　·　注意：webhook 挂了会<tspan font-weight="bold">阻塞所有写入</tspan>（要配好 failurePolicy）</text>
+  <text x="80" y="556" font-family="sans-serif" font-size="11.5" fill="#666666">📄 本课不展开（属扩展机制的第四个点，了解即可）</text>
+
+  <!-- 决策 -->
+  <rect x="60" y="572" width="780" height="112" rx="8" fill="#fff5f5" stroke="#c53030" stroke-width="2"/>
+  <text x="80" y="596" font-family="sans-serif" font-size="15" font-weight="bold" fill="#c53030">🎯 最终决策：CRD 还是聚合层？以及——到底要不要用 k8s？</text>
+  <text x="80" y="618" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">选 CRD 如果：字段不多、公司内部用、小项目 → <tspan font-weight="bold">无需编程、无需额外服务、随 k8s 升级自动修 bug</tspan></text>
+  <text x="80" y="638" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">选聚合层如果：要自定义存储层 / 要精细控制 API 行为 / 要处理多版本 → <tspan font-weight="bold">但要自己维护一个服务</tspan></text>
+  <text x="80" y="662" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#c53030">该不该用 k8s：核心判据是「它消除的复杂度 &gt; 它引入的复杂度」，不是「它流不流行」</text>
+  <text x="80" y="680" font-family="sans-serif" font-size="11.5" fill="#666666">如果你说不出 k8s 本季度具体解决了哪个问题 —— 你是在为一场还没发生的火灾买保险</text>
+</svg>

@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 470" width="900" height="470">
+  <rect width="900" height="470" fill="#ffffff"/>
+  <text x="450" y="28" text-anchor="middle" font-family="sans-serif" font-size="19" font-weight="bold" fill="#1a1a1a">一次 API 请求要过的三道门，以及 4C 模型把它们放在哪一层</text>
+  <text x="450" y="50" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#666666">上：三道门依次放行，失败原因完全不同；下：这套机制在整个安全版图里的位置</text>
+
+  <!-- 请求入口 -->
+  <rect x="330" y="70" width="240" height="38" rx="6" fill="#e2e8f0" stroke="#4a5568" stroke-width="2"/>
+  <text x="450" y="95" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#2d3748">kubectl apply / 容器内调用</text>
+  <polygon points="450,113 444,122 456,122" fill="#4a5568"/>
+
+  <!-- 门1 认证 -->
+  <rect x="40" y="128" width="255" height="118" rx="8" fill="#ebf8ff" stroke="#2b6cb0" stroke-width="2"/>
+  <text x="167" y="152" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2b6cb0">① 认证：你是谁</text>
+  <text x="56" y="176" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">凭据：证书 / token / OIDC</text>
+  <text x="56" y="198" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">成功 → 得到 用户名 + 组</text>
+  <text x="56" y="220" font-family="sans-serif" font-size="12.5" fill="#c53030">失败 → 401 Unauthorized</text>
+  <text x="56" y="240" font-family="sans-serif" font-size="11.5" fill="#666666">无凭据 → 变 system:anonymous</text>
+
+  <!-- 门2 授权 -->
+  <rect x="322" y="128" width="255" height="118" rx="8" fill="#f0fff4" stroke="#276749" stroke-width="2"/>
+  <text x="449" y="152" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="bold" fill="#276749">② 授权：你能做什么</text>
+  <text x="338" y="176" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">RBAC：动词 + 资源 + 命名空间</text>
+  <text x="338" y="198" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">默认拒绝，只放行明确授权</text>
+  <text x="338" y="220" font-family="sans-serif" font-size="12.5" fill="#c53030">失败 → 403 Forbidden</text>
+  <text x="338" y="240" font-family="sans-serif" font-size="11.5" fill="#666666">报错里写明是哪个 SA 被拒</text>
+
+  <!-- 门3 准入 -->
+  <rect x="604" y="128" width="255" height="118" rx="8" fill="#fffaf0" stroke="#c05621" stroke-width="2"/>
+  <text x="731" y="152" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="bold" fill="#c05621">③ 准入：这事能这么干吗</text>
+  <text x="620" y="176" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">检查对象内容：配额 / 安全策略</text>
+  <text x="620" y="198" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">只管写操作，读操作不经过</text>
+  <text x="620" y="220" font-family="sans-serif" font-size="12.5" fill="#c53030">失败 → 403（带具体原因）</text>
+  <text x="620" y="240" font-family="sans-serif" font-size="11.5" fill="#666666">能改内容（注入 sidecar 等）</text>
+
+  <polygon points="300,187 316,187 316,182 322,187 316,192 316,187" fill="#718096"/>
+  <polygon points="582,187 598,187 598,182 604,187 598,192 598,187" fill="#718096"/>
+
+  <!-- 落库 -->
+  <rect x="330" y="256" width="240" height="32" rx="6" fill="#e6fffa" stroke="#285e61" stroke-width="2"/>
+  <text x="450" y="278" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="bold" fill="#285e61">写入 etcd</text>
+
+  <line x1="30" y1="306" x2="870" y2="306" stroke="#cbd5e0" stroke-width="1.5"/>
+  <text x="450" y="332" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="bold" fill="#1a1a1a">4C 模型：这些机制分别守哪一层</text>
+
+  <!-- 4C 四层 -->
+  <rect x="40" y="348" width="196" height="102" rx="8" fill="#faf5ff" stroke="#6b46c1" stroke-width="2"/>
+  <text x="138" y="372" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#6b46c1">Code（代码）</text>
+  <text x="56" y="394" font-family="sans-serif" font-size="12" fill="#1a1a1a">镜像无漏洞、不跑 root</text>
+  <text x="56" y="414" font-family="sans-serif" font-size="12" fill="#1a1a1a">依赖干净、镜像签名</text>
+  <text x="56" y="436" font-family="sans-serif" font-size="11.5" fill="#666666">本阶段不展开</text>
+
+  <rect x="252" y="348" width="196" height="102" rx="8" fill="#fff5f5" stroke="#c53030" stroke-width="2"/>
+  <text x="350" y="372" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#c53030">Container（容器）</text>
+  <text x="268" y="394" font-family="sans-serif" font-size="12" fill="#1a1a1a">securityContext 降权</text>
+  <text x="268" y="414" font-family="sans-serif" font-size="12" fill="#1a1a1a">PSA 基线 / 受限档</text>
+  <text x="268" y="436" font-family="sans-serif" font-size="11.5" fill="#666666">→ 课 16</text>
+
+  <rect x="464" y="348" width="196" height="102" rx="8" fill="#ebf8ff" stroke="#2b6cb0" stroke-width="2.5"/>
+  <text x="562" y="372" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#2b6cb0">Cluster（集群）</text>
+  <text x="480" y="394" font-family="sans-serif" font-size="12" font-weight="bold" fill="#1a1a1a">RBAC 最小授权 ← 本课</text>
+  <text x="480" y="414" font-family="sans-serif" font-size="12" font-weight="bold" fill="#1a1a1a">SA token 不随意挂载</text>
+  <text x="480" y="436" font-family="sans-serif" font-size="11.5" fill="#666666">组件间 TLS、审计</text>
+
+  <rect x="676" y="348" width="196" height="102" rx="8" fill="#f7fafc" stroke="#718096" stroke-width="2"/>
+  <text x="774" y="372" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#4a5568">Cloud（云 / 基础设施）</text>
+  <text x="692" y="394" font-family="sans-serif" font-size="12" fill="#1a1a1a">节点 OS 加固、网络隔离</text>
+  <text x="692" y="414" font-family="sans-serif" font-size="12" fill="#1a1a1a">IAM、磁盘加密</text>
+  <text x="692" y="436" font-family="sans-serif" font-size="11.5" fill="#666666">本阶段不展开</text>
+
+  <text x="450" y="464" text-anchor="middle" font-family="sans-serif" font-size="11.5" fill="#666666">越往里越贴近应用；任一层失守，外面的加固都失效 —— 所以四层都要守</text>
+</svg>

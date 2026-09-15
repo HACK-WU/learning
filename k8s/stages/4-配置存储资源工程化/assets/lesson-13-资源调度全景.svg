@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" width="900" height="420">
+  <rect width="900" height="420" fill="#ffffff"/>
+  <text x="450" y="30" text-anchor="middle" font-family="sans-serif" font-size="19" font-weight="bold" fill="#1a1a1a">一个 Pod 要落地，先过「资格」再过「位置」</text>
+  <text x="450" y="52" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#666666">上半部分决定能不能进来，下半部分决定去哪台机器</text>
+
+  <!-- 左：资格 -->
+  <rect x="40" y="78" width="380" height="120" rx="8" fill="#e8f2ff" stroke="#2b6cb0" stroke-width="2"/>
+  <text x="230" y="102" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2b6cb0">先过「资格」：配额够不够</text>
+  <text x="60" y="128" font-family="sans-serif" font-size="13" fill="#1a1a1a">① 命名空间剩多少 CPU / 内存 / Pod 数？</text>
+  <text x="60" y="152" font-family="sans-serif" font-size="13" fill="#1a1a1a">② 超了 → 直接拒绝创建，Pod 根本不出现</text>
+  <text x="60" y="176" font-family="sans-serif" font-size="13" fill="#c53030">   报错：exceeded quota（不是 Pending）</text>
+
+  <!-- 右：位置 -->
+  <rect x="480" y="78" width="380" height="120" rx="8" fill="#e9f7ef" stroke="#276749" stroke-width="2"/>
+  <text x="670" y="102" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="bold" fill="#276749">再过「位置」：机器合不合适</text>
+  <text x="500" y="128" font-family="sans-serif" font-size="13" fill="#1a1a1a">① 节点剩余资源装得下我申请的量吗？</text>
+  <text x="500" y="152" font-family="sans-serif" font-size="13" fill="#1a1a1a">② 节点有没有我受不了的污点 / 不匹配的标签？</text>
+  <text x="500" y="176" font-family="sans-serif" font-size="13" fill="#c53030">   卡住 → 一直 Pending，等待条件变化</text>
+
+  <!-- 中间箭头 -->
+  <path d="M 420 138 L 478 138" stroke="#4a5568" stroke-width="2.5" fill="none" marker-end="url(#arr)"/>
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#4a5568"/>
+    </marker>
+  </defs>
+
+  <!-- 下：运行中的两条线 -->
+  <line x1="40" y1="226" x2="860" y2="226" stroke="#cbd5e0" stroke-width="1.5"/>
+  <text x="450" y="250" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="bold" fill="#1a1a1a">落地之后：用量变了会怎样？</text>
+
+  <rect x="40" y="266" width="380" height="130" rx="8" fill="#fff5f5" stroke="#c53030" stroke-width="2"/>
+  <text x="230" y="290" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#c53030">自己内部涨：单个容器超标</text>
+  <text x="60" y="316" font-family="sans-serif" font-size="13" fill="#1a1a1a">内存超上限 → 立刻被杀（OOMKilled）</text>
+  <text x="60" y="340" font-family="sans-serif" font-size="13" fill="#1a1a1a">CPU 超上限 → 只是变慢（限速，不死）</text>
+  <text x="60" y="366" font-family="sans-serif" font-size="12" fill="#666666">区别：内存没法"限一下"，CPU 可以</text>
+
+  <rect x="480" y="266" width="380" height="130" rx="8" fill="#fffaf0" stroke="#c05621" stroke-width="2"/>
+  <text x="670" y="290" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#c05621">整体负载涨：一个不够用了</text>
+  <text x="500" y="316" font-family="sans-serif" font-size="13" fill="#1a1a1a">观察者盯指标 → 自动加副本（横向扩容）</text>
+  <text x="500" y="340" font-family="sans-serif" font-size="13" fill="#1a1a1a">节点整体不够 → 再加机器（集群扩容）</text>
+  <text x="500" y="366" font-family="sans-serif" font-size="12" fill="#666666">扩容快、缩容慢，是故意的</text>
+</svg>

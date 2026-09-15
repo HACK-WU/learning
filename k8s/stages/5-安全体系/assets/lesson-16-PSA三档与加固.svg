@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" width="900" height="500">
+  <rect width="900" height="500" fill="#ffffff"/>
+  <text x="450" y="28" text-anchor="middle" font-family="sans-serif" font-size="19" font-weight="bold" fill="#1a1a1a">同一个 Pod 在三档标准下的遭遇，以及每一档到底挡什么</text>
+  <text x="450" y="50" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#666666">上：三档是「累积」关系，restricted 包含 baseline；下：实测的拦截清单（本课全部数据实测于 kind v1.34）</text>
+
+  <!-- 三档递进 -->
+  <rect x="40" y="72" width="255" height="150" rx="8" fill="#fff5f5" stroke="#c53030" stroke-width="2"/>
+  <text x="167" y="98" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="bold" fill="#c53030">privileged 无限制</text>
+  <text x="56" y="122" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">什么都能跑</text>
+  <text x="56" y="144" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">特权容器 / 宿主机命名空间</text>
+  <text x="56" y="166" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">hostPath / hostPort</text>
+  <text x="56" y="190" font-family="sans-serif" font-size="12" font-weight="bold" fill="#c53030">实测：7 项违规全放行</text>
+  <text x="56" y="210" font-family="sans-serif" font-size="11.5" fill="#666666">只给 CNI / CSI / 节点 Agent</text>
+
+  <rect x="322" y="72" width="255" height="150" rx="8" fill="#fffaf0" stroke="#c05621" stroke-width="2"/>
+  <text x="449" y="98" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="bold" fill="#c05621">baseline 最低门槛</text>
+  <text x="338" y="122" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">挡「碰宿主机」的行为</text>
+  <text x="338" y="144" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">禁 privileged / hostPath</text>
+  <text x="338" y="166" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">禁 host 命名空间 / hostPort</text>
+  <text x="338" y="190" font-family="sans-serif" font-size="12" font-weight="bold" fill="#c05621">实测：拦 6 项，普通 Pod 放行</text>
+  <text x="338" y="210" font-family="sans-serif" font-size="11.5" fill="#666666">仍可用 root 跑（不是终点）</text>
+
+  <rect x="604" y="72" width="255" height="150" rx="8" fill="#f0fff4" stroke="#276749" stroke-width="2.5"/>
+  <text x="731" y="98" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="bold" fill="#276749">restricted 加固目标</text>
+  <text x="620" y="122" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">baseline 全部 + 容器自身降权</text>
+  <text x="620" y="144" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">必须非 root、必须丢全部能力</text>
+  <text x="620" y="166" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">必须禁提权、必须设 seccomp</text>
+  <text x="620" y="190" font-family="sans-serif" font-size="12" font-weight="bold" fill="#276749">实测：四缺一即拒绝（全或无）</text>
+  <text x="620" y="210" font-family="sans-serif" font-size="11.5" fill="#666666">生产目标档</text>
+
+  <polygon points="300,147 316,147 316,142 322,147 316,152 316,147" fill="#718096"/>
+  <polygon points="582,147 598,147 598,142 604,147 598,152 598,147" fill="#718096"/>
+  <text x="450" y="240" text-anchor="middle" font-family="sans-serif" font-size="11.5" fill="#666666">箭头方向 = 越来越严；restricted 继承 baseline 的全部要求，再叠加自身四条</text>
+
+  <line x1="30" y1="258" x2="870" y2="258" stroke="#cbd5e0" stroke-width="1.5"/>
+  <text x="450" y="284" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="bold" fill="#1a1a1a">实测拦截清单：同一个违规项在三档下的结局</text>
+
+  <!-- 表格 -->
+  <rect x="40" y="298" width="820" height="28" fill="#e2e8f0"/>
+  <rect x="40" y="326" width="820" height="26" fill="#f7fafc"/>
+  <rect x="40" y="352" width="820" height="26" fill="#ffffff"/>
+  <rect x="40" y="378" width="820" height="26" fill="#f7fafc"/>
+  <rect x="40" y="404" width="820" height="26" fill="#ffffff"/>
+  <rect x="40" y="430" width="820" height="26" fill="#f7fafc"/>
+  <rect x="40" y="456" width="820" height="26" fill="#ffffff"/>
+
+  <text x="60" y="317" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#2d3748">违规项</text>
+  <text x="330" y="317" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#2d3748">privileged</text>
+  <text x="470" y="317" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#2d3748">baseline</text>
+  <text x="610" y="317" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#2d3748">restricted</text>
+
+  <text x="60" y="344" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">privileged: true（特权容器）</text>
+  <text x="336" y="344" font-family="sans-serif" font-size="12.5" fill="#276749">允许</text>
+  <text x="476" y="344" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#c53030">拒绝</text>
+  <text x="616" y="344" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#c53030">拒绝</text>
+
+  <text x="60" y="370" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">hostPath 挂载宿主机 /</text>
+  <text x="336" y="370" font-family="sans-serif" font-size="12.5" fill="#276749">允许</text>
+  <text x="476" y="370" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#c53030">拒绝</text>
+  <text x="616" y="370" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#c53030">拒绝</text>
+
+  <text x="60" y="396" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">hostNetwork / hostPID（宿主机命名空间）</text>
+  <text x="336" y="396" font-family="sans-serif" font-size="12.5" fill="#276749">允许</text>
+  <text x="476" y="396" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#c53030">拒绝</text>
+  <text x="616" y="396" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#c53030">拒绝</text>
+
+  <text x="60" y="422" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">添加 NET_RAW 能力 / 暴露 hostPort</text>
+  <text x="336" y="422" font-family="sans-serif" font-size="12.5" fill="#276749">允许</text>
+  <text x="476" y="422" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#c53030">拒绝</text>
+  <text x="616" y="422" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#c53030">拒绝</text>
+
+  <text x="60" y="448" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">裸奔 Pod（无任何 securityContext）</text>
+  <text x="336" y="448" font-family="sans-serif" font-size="12.5" fill="#276749">允许</text>
+  <text x="476" y="448" font-family="sans-serif" font-size="12.5" fill="#276749">允许</text>
+  <text x="616" y="448" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#c53030">拒绝</text>
+
+  <text x="60" y="474" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#1a1a1a">加固四件套齐备（生产推荐）</text>
+  <text x="336" y="474" font-family="sans-serif" font-size="12.5" fill="#276749">允许</text>
+  <text x="476" y="474" font-family="sans-serif" font-size="12.5" fill="#276749">允许</text>
+  <text x="616" y="474" font-family="sans-serif" font-size="12.5" fill="#276749">允许</text>
+
+  <text x="450" y="494" text-anchor="middle" font-family="sans-serif" font-size="11.5" fill="#666666">restricted 是「全或无」：非 root + 禁提权 + 丢全部能力 + seccomp 四条缺一不可（实测 p0–p3 逐项加固仍被拒，p4 齐备才放行）</text>
+</svg>

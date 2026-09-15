@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 470" width="900" height="470" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="900" height="470" fill="#fbfcfe"/>
+
+  <text x="450" y="34" text-anchor="middle" font-size="19" font-weight="700" fill="#1f2937">
+    写在这儿的东西，能活多久
+  </text>
+  <text x="450" y="56" text-anchor="middle" font-size="13" fill="#6b7280">
+    先问一句"它得活过什么"，再决定往哪儿写
+  </text>
+
+  <defs>
+    <marker id="a12g" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#059669"/>
+    </marker>
+    <marker id="a12r" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+
+  <!-- 阶梯标题 -->
+  <text x="52" y="88" font-size="13" font-weight="700" fill="#374151">四层，能活过的坎一级比一级多</text>
+
+  <!-- ===== 第 1 层 ===== -->
+  <rect x="52" y="100" width="180" height="150" rx="8" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="142" y="122" text-anchor="middle" font-size="12" font-weight="700" fill="#b91c1c">第 1 层：随手就写</text>
+  <rect x="70" y="132" width="144" height="34" rx="4" fill="#fff" stroke="#fca5a5"/>
+  <text x="142" y="153" text-anchor="middle" font-size="10" fill="#7f1d1d">程序自带的地盘</text>
+  <text x="142" y="184" text-anchor="middle" font-size="11" font-weight="700" fill="#991b1b">✕ 活不过重启</text>
+  <text x="142" y="202" text-anchor="middle" font-size="10" fill="#7f1d1d">进程一崩，写的东西</text>
+  <text x="142" y="218" text-anchor="middle" font-size="10" fill="#7f1d1d">跟着一起没</text>
+  <text x="142" y="240" text-anchor="middle" font-size="9" fill="#9ca3af">适合：什么都不存</text>
+
+  <path d="M 236 175 L 262 175" stroke="#059669" stroke-width="2" fill="none" marker-end="url(#a12g)"/>
+
+  <!-- ===== 第 2 层 ===== -->
+  <rect x="266" y="100" width="180" height="150" rx="8" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.5"/>
+  <text x="356" y="122" text-anchor="middle" font-size="12" font-weight="700" fill="#b45309">第 2 层：临时暂存</text>
+  <rect x="284" y="132" width="144" height="34" rx="4" fill="#fff" stroke="#fbbf24"/>
+  <text x="356" y="153" text-anchor="middle" font-size="10" fill="#92400e">跟着这一个整体走</text>
+  <text x="356" y="184" text-anchor="middle" font-size="11" font-weight="700" fill="#b45309">✓ 活过重启</text>
+  <text x="356" y="202" text-anchor="middle" font-size="10" fill="#92400e">但整体被删掉重建，</text>
+  <text x="356" y="218" text-anchor="middle" font-size="10" fill="#92400e">还是没</text>
+  <text x="356" y="240" text-anchor="middle" font-size="9" fill="#9ca3af">适合：缓存、中间结果</text>
+
+  <path d="M 450 175 L 476 175" stroke="#059669" stroke-width="2" fill="none" marker-end="url(#a12g)"/>
+
+  <!-- ===== 第 3 层 ===== -->
+  <rect x="480" y="100" width="180" height="150" rx="8" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="570" y="122" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">第 3 层：借用这台机器</text>
+  <rect x="498" y="132" width="144" height="34" rx="4" fill="#fff" stroke="#93c5fd"/>
+  <text x="570" y="153" text-anchor="middle" font-size="10" fill="#1e40af">直接放到机器上</text>
+  <text x="570" y="184" text-anchor="middle" font-size="11" font-weight="700" fill="#1e40af">✓ 活过重建</text>
+  <text x="570" y="202" text-anchor="middle" font-size="10" fill="#3b82f6">但钉死在这一台机器上，</text>
+  <text x="570" y="218" text-anchor="middle" font-size="10" fill="#3b82f6">换台机器就没有</text>
+  <text x="570" y="240" text-anchor="middle" font-size="9" fill="#9ca3af">适合：看机器的 agent</text>
+
+  <path d="M 664 175 L 690 175" stroke="#059669" stroke-width="2" fill="none" marker-end="url(#a12g)"/>
+
+  <!-- ===== 第 4 层 ===== -->
+  <rect x="694" y="100" width="180" height="150" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="784" y="122" text-anchor="middle" font-size="12" font-weight="700" fill="#047857">第 4 层：另外申请一份</text>
+  <rect x="712" y="132" width="144" height="34" rx="4" fill="#fff" stroke="#86efac"/>
+  <text x="784" y="153" text-anchor="middle" font-size="10" fill="#065f46">不在这台机器上</text>
+  <text x="784" y="184" text-anchor="middle" font-size="11" font-weight="700" fill="#047857">✓ 活过重建＋换机器</text>
+  <text x="784" y="202" text-anchor="middle" font-size="10" fill="#065f46">机器塌了也还在</text>
+  <text x="784" y="218" text-anchor="middle" font-size="10" fill="#065f46">（前提是放在机器外）</text>
+  <text x="784" y="240" text-anchor="middle" font-size="9" fill="#9ca3af">适合：数据库、用户文件</text>
+
+  <!-- ===== 中间：怎么问 ===== -->
+  <rect x="52" y="270" width="822" height="66" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="72" y="294" font-size="13" font-weight="700" fill="#334155">先别问"用哪个"，先问"它得活过什么"</text>
+  <text x="72" y="316" font-size="11" fill="#475569">活过进程崩溃就行？→ 第 2 层够　要活过重建？→ 第 3 或 4 层　机器塌了也得在？→ 只能第 4 层</text>
+  <text x="72" y="332" font-size="11" fill="#475569">选高了：浪费、拖慢调度、还得多管一份生命周期　选低了：数据没了，而且往往出事才发现</text>
+
+  <!-- ===== 下方：申请 vs 直接用 ===== -->
+  <rect x="52" y="352" width="822" height="86" rx="10" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.5"/>
+  <text x="72" y="376" font-size="13" font-weight="700" fill="#b45309">第 4 层为什么多了一道手续：写的人和给的人分开了</text>
+
+  <g>
+    <rect x="72" y="388" width="200" height="42" rx="6" fill="#fff" stroke="#fbbf24"/>
+    <text x="172" y="406" text-anchor="middle" font-size="11" font-weight="700" fill="#92400e">用的人：写一张申请单</text>
+    <text x="172" y="422" text-anchor="middle" font-size="10" fill="#b45309">"我要多大、怎么读写"</text>
+
+    <text x="290" y="411" font-size="14" fill="#b45309">→</text>
+
+    <rect x="310" y="388" width="200" height="42" rx="6" fill="#fff" stroke="#fbbf24"/>
+    <text x="410" y="406" text-anchor="middle" font-size="11" font-weight="700" fill="#92400e">管的人：准备好一堆空位</text>
+    <text x="410" y="422" text-anchor="middle" font-size="10" fill="#b45309">按单子挑一个配给它</text>
+
+    <text x="528" y="411" font-size="14" fill="#b45309">→</text>
+
+    <rect x="548" y="388" width="150" height="42" rx="6" fill="#d1fae5" stroke="#059669"/>
+    <text x="623" y="406" text-anchor="middle" font-size="11" font-weight="700" fill="#065f46">对上了就用</text>
+    <text x="623" y="422" text-anchor="middle" font-size="10" fill="#047857">没对上就一直等着</text>
+
+    <text x="718" y="406" font-size="10" fill="#92400e">好处：用的人不用知道</text>
+    <text x="718" y="422" font-size="10" fill="#92400e">底下的存储是哪家的</text>
+  </g>
+
+  <!-- 底部一句话 -->
+  <text x="450" y="458" text-anchor="middle" font-size="13" font-weight="600" fill="#1e40af">
+    本课要解决的：按"要活过什么"选对地方，别让数据在出事那天才发现没存住
+  </text>
+</svg>

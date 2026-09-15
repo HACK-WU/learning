@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 440" width="900" height="440">
+  <rect width="900" height="440" fill="#ffffff"/>
+  <text x="450" y="30" text-anchor="middle" font-family="sans-serif" font-size="19" font-weight="bold" fill="#1a1a1a">管理一堆 YAML 的三条路，以及"它现在健康吗"从哪来</text>
+  <text x="450" y="52" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#666666">左边：怎么把一份配置变成多份；右边：怎么知道它跑得好不好</text>
+
+  <!-- 左上：Helm -->
+  <rect x="30" y="78" width="265" height="150" rx="8" fill="#e8f2ff" stroke="#2b6cb0" stroke-width="2"/>
+  <text x="162" y="102" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="bold" fill="#2b6cb0">Helm：填空式打包</text>
+  <text x="48" y="126" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">一份模板 + 一份填值 = 成品 YAML</text>
+  <text x="48" y="148" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">模板里能写判断和循环</text>
+  <text x="48" y="170" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">装完留一份"版本台账"，能回滚</text>
+  <text x="48" y="196" font-family="sans-serif" font-size="12" fill="#c53030">代价：模板可能写得很难读</text>
+
+  <!-- 中上：Kustomize -->
+  <rect x="317" y="78" width="265" height="150" rx="8" fill="#e9f7ef" stroke="#276749" stroke-width="2"/>
+  <text x="449" y="102" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="bold" fill="#276749">Kustomize：叠补丁</text>
+  <text x="335" y="126" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">一份底稿 + 每层只写"改哪"</text>
+  <text x="335" y="148" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">没有判断和循环，只有覆盖</text>
+  <text x="335" y="170" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">改完还是标准 YAML，随时可读</text>
+  <text x="335" y="196" font-family="sans-serif" font-size="12" fill="#c53030">代价：不能打包分发，无版本台账</text>
+
+  <!-- 右上：都不用 -->
+  <rect x="604" y="78" width="265" height="150" rx="8" fill="#f7fafc" stroke="#718096" stroke-width="2"/>
+  <text x="736" y="102" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="bold" fill="#4a5568">都不用：直接写</text>
+  <text x="622" y="126" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">就一两个服务、环境也不多</text>
+  <text x="622" y="148" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">加工具反而增加理解成本</text>
+  <text x="622" y="170" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">YAML 本身就是交付物</text>
+  <text x="622" y="196" font-family="sans-serif" font-size="12" fill="#666666">判断标准：改一处要不要改多份</text>
+
+  <line x1="30" y1="248" x2="870" y2="248" stroke="#cbd5e0" stroke-width="1.5"/>
+  <text x="450" y="274" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="bold" fill="#1a1a1a">部署完之后：健康不健康，靠这三条线索</text>
+
+  <!-- 下三块 -->
+  <rect x="30" y="290" width="265" height="130" rx="8" fill="#fffaf0" stroke="#c05621" stroke-width="2"/>
+  <text x="162" y="314" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#c05621">① 指标：数字是多少</text>
+  <text x="48" y="340" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">CPU 用了多少？内存呢？</text>
+  <text x="48" y="362" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">k8s 只留"当前这一刻"</text>
+  <text x="48" y="388" font-family="sans-serif" font-size="12" fill="#666666">要看趋势，得另装长期存储</text>
+
+  <rect x="317" y="290" width="265" height="130" rx="8" fill="#fff5f5" stroke="#c53030" stroke-width="2"/>
+  <text x="449" y="314" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#c53030">② 日志：当时说了什么</text>
+  <text x="335" y="340" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">存在节点文件里，容器没了就悬</text>
+  <text x="335" y="362" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">会轮转，不会永久留存</text>
+  <text x="335" y="388" font-family="sans-serif" font-size="12" fill="#666666">要留存，得送到集群外面</text>
+
+  <rect x="604" y="290" width="265" height="130" rx="8" fill="#faf5ff" stroke="#6b46c1" stroke-width="2"/>
+  <text x="736" y="314" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="bold" fill="#6b46c1">③ 链路：请求走了哪</text>
+  <text x="622" y="340" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">一个请求经过几个服务？</text>
+  <text x="622" y="362" font-family="sans-serif" font-size="12.5" fill="#1a1a1a">哪儿慢了？卡在哪一跳？</text>
+  <text x="622" y="388" font-family="sans-serif" font-size="12" fill="#666666">k8s 不自带，需额外组件</text>
+</svg>

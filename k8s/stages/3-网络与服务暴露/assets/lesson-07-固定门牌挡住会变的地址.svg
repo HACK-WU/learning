@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 460" width="900" height="460" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="900" height="460" fill="#fbfcfe"/>
+
+  <text x="450" y="34" text-anchor="middle" font-size="19" font-weight="700" fill="#1f2937">
+    后面的东西一直在换，前面怎么还得是同一个门牌
+  </text>
+  <text x="450" y="56" text-anchor="middle" font-size="13" fill="#6b7280">
+    三个麻烦：地址会变 / 个数会变 / 该找谁得自己挑
+  </text>
+
+  <defs>
+    <marker id="a7r" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#dc2626"/>
+    </marker>
+    <marker id="a7g" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#059669"/>
+    </marker>
+    <marker id="a7" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+
+  <!-- ===== 左：直接记地址 ===== -->
+  <rect x="30" y="76" width="390" height="230" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="225" y="100" text-anchor="middle" font-size="14" font-weight="700" fill="#b91c1c">做法一：把地址抄下来</text>
+
+  <rect x="52" y="114" width="160" height="40" rx="6" fill="#fff" stroke="#fca5a5"/>
+  <text x="132" y="138" text-anchor="middle" font-size="11" fill="#7f1d1d">要调用别人的一方</text>
+
+  <text x="222" y="140" font-size="11" fill="#7f1d1d">手里的纸条：</text>
+  <text x="222" y="158" font-size="10" fill="#991b1b">· · · 140</text>
+  <text x="222" y="172" font-size="10" fill="#991b1b">· · · 141</text>
+  <text x="222" y="186" font-size="10" fill="#991b1b">· · · 142</text>
+
+  <path d="M 132 158 L 190 158" stroke="#dc2626" stroke-width="1.4" fill="none" marker-end="url(#a7r)"/>
+
+  <!-- 后端 Pod 旧 -->
+  <g>
+    <rect x="52" y="200" width="70" height="34" rx="4" fill="#fee2e2" stroke="#f87171"/>
+    <text x="87" y="221" text-anchor="middle" font-size="9" fill="#991b1b">.140</text>
+    <rect x="128" y="200" width="70" height="34" rx="4" fill="#fee2e2" stroke="#f87171"/>
+    <text x="163" y="221" text-anchor="middle" font-size="9" fill="#991b1b">.141</text>
+    <rect x="204" y="200" width="70" height="34" rx="4" fill="#fee2e2" stroke="#f87171"/>
+    <text x="239" y="221" text-anchor="middle" font-size="9" fill="#991b1b">.142</text>
+  </g>
+  <text x="162" y="248" text-anchor="middle" font-size="10" fill="#7f1d1d">（今天）</text>
+
+  <!-- 换掉 -->
+  <text x="300" y="222" font-size="14" fill="#dc2626">▼ 换了一批</text>
+
+  <g>
+    <rect x="52" y="256" width="70" height="34" rx="4" fill="#f5f5f5" stroke="#9ca3af" stroke-dasharray="4 3"/>
+    <text x="87" y="277" text-anchor="middle" font-size="9" fill="#9ca3af">.143</text>
+    <rect x="128" y="256" width="70" height="34" rx="4" fill="#f5f5f5" stroke="#9ca3af" stroke-dasharray="4 3"/>
+    <text x="163" y="277" text-anchor="middle" font-size="9" fill="#9ca3af">.144</text>
+    <rect x="204" y="256" width="70" height="34" rx="4" fill="#f5f5f5" stroke="#9ca3af" stroke-dasharray="4 3"/>
+    <text x="239" y="277" text-anchor="middle" font-size="9" fill="#9ca3af">.145</text>
+  </g>
+  <text x="162" y="302" text-anchor="middle" font-size="10" fill="#b91c1c">（明天：一个都对不上 ✕）</text>
+
+  <!-- ===== 右：加个中间人 ===== -->
+  <rect x="450" y="76" width="420" height="230" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="660" y="100" text-anchor="middle" font-size="14" font-weight="700" fill="#047857">做法二：前面放个固定门牌</text>
+
+  <rect x="472" y="114" width="150" height="40" rx="6" fill="#fff" stroke="#86efac"/>
+  <text x="547" y="138" text-anchor="middle" font-size="11" fill="#065f46">要调用别人的一方</text>
+
+  <text x="632" y="124" font-size="10" fill="#065f46">纸条上只写一个名字，</text>
+  <text x="632" y="140" font-size="10" fill="#065f46">而且永远不用改</text>
+
+  <path d="M 622 134 L 700 134" stroke="#059669" stroke-width="1.6" fill="none" marker-end="url(#a7g)"/>
+
+  <!-- 固定门牌 -->
+  <rect x="700" y="112" width="150" height="44" rx="8" fill="#d1fae5" stroke="#059669" stroke-width="2.5"/>
+  <text x="775" y="132" text-anchor="middle" font-size="12" font-weight="700" fill="#065f46">固定门牌</text>
+  <text x="775" y="148" text-anchor="middle" font-size="10" fill="#047857">名字永不变</text>
+
+  <path d="M 775 158 L 775 186" stroke="#059669" stroke-width="1.6" fill="none" marker-end="url(#a7g)"/>
+
+  <!-- 后端 -->
+  <g>
+    <rect x="472" y="190" width="90" height="34" rx="4" fill="#fff" stroke="#34d399"/>
+    <text x="517" y="211" text-anchor="middle" font-size="9" fill="#065f46">.140</text>
+    <rect x="568" y="190" width="90" height="34" rx="4" fill="#fff" stroke="#34d399"/>
+    <text x="613" y="211" text-anchor="middle" font-size="9" fill="#065f46">.141</text>
+    <rect x="664" y="190" width="90" height="34" rx="4" fill="#fff" stroke="#34d399"/>
+    <text x="709" y="211" text-anchor="middle" font-size="9" fill="#065f46">.142</text>
+    <rect x="760" y="190" width="90" height="34" rx="4" fill="#fff" stroke="#34d399"/>
+    <text x="805" y="211" text-anchor="middle" font-size="9" fill="#065f46">.143（新）</text>
+  </g>
+  <text x="660" y="240" text-anchor="middle" font-size="10" fill="#065f46">随便换、随便加减 —— 前面那个名字都不用动</text>
+
+  <!-- 门牌干的活 -->
+  <rect x="472" y="252" width="376" height="44" rx="6" fill="#ecfdf5" stroke="#6ee7b7"/>
+  <text x="660" y="270" text-anchor="middle" font-size="10" fill="#065f46">它还顺手干了三件事：</text>
+  <text x="660" y="286" text-anchor="middle" font-size="10" fill="#047857">① 记住当前有哪些在干活　② 有人来了分给谁　③ 名字怎么翻译成地址</text>
+
+  <!-- ===== 下方：这套门牌由什么组成 ===== -->
+  <rect x="30" y="322" width="840" height="104" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="52" y="346" font-size="14" font-weight="700" fill="#334155">这个"固定门牌"是怎么搭出来的</text>
+
+  <g>
+    <rect x="52" y="358" width="180" height="52" rx="6" fill="#eff6ff" stroke="#93c5fd"/>
+    <text x="142" y="380" text-anchor="middle" font-size="11" font-weight="700" fill="#1e40af">门牌本身</text>
+    <text x="142" y="396" text-anchor="middle" font-size="10" fill="#3b82f6">挑人靠什么认？靠标签</text>
+
+    <path d="M 236 384 L 268 384" stroke="#6b7280" stroke-width="1.4" fill="none" marker-end="url(#a7)"/>
+
+    <rect x="272" y="358" width="180" height="52" rx="6" fill="#f0fdf4" stroke="#86efac"/>
+    <text x="362" y="380" text-anchor="middle" font-size="11" font-weight="700" fill="#047857">记住"现在谁在干活"</text>
+    <text x="362" y="396" text-anchor="middle" font-size="10" fill="#065f46">一份会不断更新的名单</text>
+
+    <path d="M 456 384 L 488 384" stroke="#6b7280" stroke-width="1.4" fill="none" marker-end="url(#a7)"/>
+
+    <rect x="492" y="358" width="180" height="52" rx="6" fill="#fef3c7" stroke="#fbbf24"/>
+    <text x="582" y="380" text-anchor="middle" font-size="11" font-weight="700" fill="#b45309">真正把活送过去的</text>
+    <text x="582" y="396" text-anchor="middle" font-size="10" fill="#92400e">每台机器上都有，只管转</text>
+
+    <path d="M 676 384 L 708 384" stroke="#6b7280" stroke-width="1.4" fill="none" marker-end="url(#a7)"/>
+
+    <rect x="712" y="358" width="158" height="52" rx="6" fill="#fce7f3" stroke="#ec4899"/>
+    <text x="791" y="380" text-anchor="middle" font-size="11" font-weight="700" fill="#9d174d">名字翻译成地址</text>
+    <text x="791" y="396" text-anchor="middle" font-size="10" fill="#be185d">不用记数字，记名字</text>
+  </g>
+
+  <!-- 底部一句话 -->
+  <text x="450" y="448" text-anchor="middle" font-size="13" font-weight="600" fill="#1e40af">
+    本课要解决的：用一个永不变的名字，挡住后面那一堆一直在变的地址
+  </text>
+</svg>

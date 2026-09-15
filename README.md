@@ -2,7 +2,7 @@
 
 > 以「课程制」方式系统学习技术主题：每门课程自带学习档案、路径总览与课件体系，支持断点续学。
 
-[![courses](https://img.shields.io/badge/courses-21-blue)](#课程导航)
+[![courses](https://img.shields.io/badge/courses-23-blue)](#课程导航)
 [![Bash](https://img.shields.io/badge/Bash-13%2F13-brightgreen)](shell/02-课程目录.md)
 [![Celery + Django](https://img.shields.io/badge/Celery%2B_Django-10%2F10-brightgreen)](celery-django/02-课程目录.md)
 [![Consul](https://img.shields.io/badge/Consul-7%2F11-yellow)](consul/02-课程目录.md)
@@ -25,14 +25,16 @@
 [![动画与视频基础](https://img.shields.io/badge/Animation_Engine-10%2F10-yellow)](animation-engine/00-动画与视频基础/02-课程目录.md)
 [![JavaScript Core](https://img.shields.io/badge/JavaScript_Core-7%2F12-yellow)](frontend/javascript-core/02-课程目录.md)
 [![TypeScript](https://img.shields.io/badge/TypeScript-15%2F15-brightgreen)](frontend/typescript-core/02-课程目录.md)
+[![LangChain](https://img.shields.io/badge/LangChain-0%2F13-yellow)](langchain/langchain/02-课程目录.md)
 
 ## 概述
 
-本仓库收录**二十二门**系统化技术课程，覆盖后端基础设施、前端语言与图形媒体三大方向：
+本仓库收录**二十三门**系统化技术课程，覆盖后端基础设施、前端语言、图形媒体与 AI 应用四大方向：
 
 - **后端 / 基础设施**：Bash 脚本编程（进阶向）、Celery + Django 异步任务、Consul 服务注册发现、设计模式（Python 实现）、Django 进阶（前后端分离）、Docker 容器技术、Doris 实时数仓（OLAP）、Elasticsearch 搜索、Grafana 可视化、InfluxDB 时序数据库、Kafka 消息队列、OpenTelemetry 可观测性、Prometheus 监控、PromQL 监控查询语言、RabbitMQ 消息中间件、Redis 缓存与数据结构服务器、SurrealDB 多模型数据库、VictoriaMetrics 时序数据库、ZooKeeper 分布式协调
 - **前端（`frontend/`）**：JavaScript 语言核心（ES6+）、TypeScript 类型系统
 - **图形媒体（`animation-engine/`）**：动画引擎与视频基础
+- **AI / LLM 应用（`langchain/`）**：LangChain 生态组件学习——首期 LangChain 基础组件课程，LangGraph 等后续组件课程将并列于同一父目录
 
 > JS 与 TS 两门课互补且互相引用：`javascript-core` 在课 12 讲「该不该上 TypeScript」的选型条件，`typescript-core` 则把 JavaScript 语言核心列为**前置假设**（ES6 基础），不重复讲解法。
 
@@ -78,11 +80,19 @@
 |------|------|----------|------|------|
 | [动画与视频基础](animation-engine/00-动画与视频基础/02-课程目录.md) | 动画原理与视频编码基础，以 playground 逐帧生成与对比实验贯穿全程 | 零基础 | 10 / 10 课 | 🔶 收尾中 |
 
-> ⚠️ 本门课的目录层级比其他课程多一层（`animation-engine/00-动画与视频基础/`），其 `02-课程目录.md` 位于子目录下，链接需带上中间层。
+### AI / LLM 方向（`langchain/`）
 
-> 进度为 2026-09-07 快照，实时状态以各课程 `00-学习档案.md` 为准。
+| 课程 | 主题 | 基础要求 | 进度 | 状态 |
+|------|------|----------|------|------|
+| [LangChain 基础组件](langchain/langchain/02-课程目录.md) | LangChain 生态首期课程：从「只会聊天的模型」到生产级智能体——模型 / 消息 / 工具 / Agent / 记忆 / 中间件 / 上下文工程 / RAG / 多智能体 / 测试与可观测，4 阶段 13 课（备课完成，待开课）；父目录 `langchain/` 为生态统一父目录（后续 LangGraph 等组件课程并列） | 进阶（Python 与工程基础扎实，LangChain 从零） | 0 / 13 课 | 🔄 进行中 |
+
+> ⚠️ 本门课的目录层级比其他课程多一层（`animation-engine/00-动画与视频基础/`），其 `02-课程目录.md` 位于子目录下，链接需带上中间层。
 >
-> 当前 22 门课中 **18 门已真正结课**（Bash / Celery + Django / Design Patterns / Django 进阶 / Docker / Doris / Elasticsearch / Grafana / InfluxDB / Kafka / OpenTelemetry / PromQL / RabbitMQ / Redis / SurrealDB / TypeScript / VictoriaMetrics / ZooKeeper），**1 门课时已讲完但收尾产物待生成**（动画与视频基础），**3 门仍在推进**（Consul / Prometheus / JavaScript，其未讲课时仅落盘占位骨架或详细大纲，不计入进度）。
+> ⚠️ LangChain 课程采用「生态父目录 + 组件课程」两级结构（`langchain/langchain/`），其 `02-课程目录.md` 位于组件课程子目录下；后续 LangGraph 等组件课程将并列于同一父目录。
+
+> 进度快照更新于 2026-09-15（本次新增 LangChain 课程），实时状态以各课程 `00-学习档案.md` 为准。
+>
+> 当前 23 门课中 **18 门已真正结课**（Bash / Celery + Django / Design Patterns / Django 进阶 / Docker / Doris / Elasticsearch / Grafana / InfluxDB / Kafka / OpenTelemetry / PromQL / RabbitMQ / Redis / SurrealDB / TypeScript / VictoriaMetrics / ZooKeeper），**1 门课时已讲完但收尾产物待生成**（动画与视频基础），**4 门仍在推进**（Consul / Prometheus / JavaScript / LangChain，其未讲课时仅落盘占位骨架或详细大纲，不计入进度）。
 >
 > 状态图例：✅ 已完成 = 全部课时与收尾环节（结课项目 / 课程手册 / 排障手册）均交付；🔶 收尾中 = 全部课时讲完，收尾环节待生成；🔄 进行中 = 尚有课时未编写。
 
@@ -120,6 +130,8 @@ learning/
 │   │   ├── assets/           # 课程级 SVG（学习路径总览）
 │   │   └── stages/           # 4 个阶段：值与作用域 / 函数与对象 / 异步与现代语法 / 工程化与运行时
 │   └── typescript-core/      # TypeScript 类型系统（5 阶段 15 课 49 知识点，已全部讲完，含 playground/、projects/ 与 08/09/10 收尾三件套）
+├── langchain/                # LangChain 生态统一父目录（后续组件课程并列）
+│   └── langchain/            # LangChain 基础组件课程（4 阶段 13 课；含 web-index/ 官方文档索引）
 ├── influxdb/                 # InfluxDB 3 课程（6 阶段 19 课 57 知识点，含 final-课程手册.md 与 projects/）
 ├── kafka/                    # Kafka 基础课程（4 阶段 10 课，含 final-课程手册.md）
 ├── promql/                   # PromQL 课程（4 阶段 12 课，含 projects/ 可观测性体系）

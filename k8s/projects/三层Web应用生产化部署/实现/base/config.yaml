@@ -1,0 +1,27 @@
+# 阶段 4 / 课 11：配置与镜像解耦
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shop-config
+  namespace: shop3t
+data:
+  # API 层读这些
+  API_PORT: "8000"
+  DB_HOST: "db-0.db-headless.shop3t.svc.cluster.local"
+  DB_PORT: "5432"
+  DB_NAME: "shopdb"
+  LOG_LEVEL: "info"
+  # Web 层读这些
+  API_UPSTREAM: "http://api.shop3t.svc.cluster.local:8000"
+---
+# 阶段 5 / 课 17：Secret 只是 base64，不是加密
+# 真实生产应走外部密钥管理（Vault / KMS），此处为可运行演示
+apiVersion: v1
+kind: Secret
+metadata:
+  name: shop-secret
+  namespace: shop3t
+type: Opaque
+stringData:
+  DB_USER: "shopuser"
+  DB_PASSWORD: "Sh0p-Secret-2026!"
