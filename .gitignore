@@ -53,11 +53,18 @@ elasticsearch-9.5.1-*.zip
 
 # ---- 教学实操环境：ELK 结课综合实战项目《日志平台生产化》运行期产物 ----
 # 说明：projects/日志平台生产化/ 下的四份主文档、SVG、以及 实现/ 里的配置与脚本
-#       （docker-compose.yml / filebeat.yml / *.conf / scripts/*.py / .env）**都要入库**，
+#       （docker-compose.yml / filebeat.yml / *.conf / scripts/*.py）**都要入库**，
 #       它们才是教学产物。但运行期会就地生成下列大体积/可再生的中间产物，须忽略。
 #   logs/            造数据脚本写出的日志（gen-logs.py 再生）
 #   es/backup/       ES fs 快照仓库（本次实测 4.8MB / 306 文件，bootstrap.py 再生）
 #   kibana/*.ndjson  Saved Objects 导出备份（bootstrap.py 或手工导出再生）
+# ⚠️ 实现/.env **故意不入库**（由上方通用规则 `.env` 覆盖，无需 ! 例外）：它只装一行
+#   COMPOSE_PROJECT_NAME（目录名含中文，Compose 拿目录名当项目名会报
+#   "project name must not be empty"），属**每台机器自建的本地配置**。
+#   README 第 82-84 行已把 `printf 'COMPOSE_PROJECT_NAME=elk-capstone\n' > .env`
+#   写成「⓪ 首次运行」的显式步骤，读者照抄即可。
+#   （2026-09-15 卫生检查修正：原注释误将 .env 列入"都要入库"，与实际生效规则相悖 ——
+#   若不写明，后来者会误判为漏忽略而补 ! 例外，反而把本地配置提进仓库。）
 # 另：playground/11-alerting/ 下两个课 12 运行期残留（webhook 收信端 stdout、导出 ndjson），
 #     未被任何讲义引用且可完全再生，一并忽略。
 elasticsearch/elk/projects/*/实现/logs/

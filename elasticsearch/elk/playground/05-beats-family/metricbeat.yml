@@ -1,0 +1,22 @@
+# Metricbeat 配置 · ELK 子教程课 6《Beats 家族与采集选型》
+# 版本基线：Elastic Stack 9.5.3
+#
+# 与 Filebeat 对比着看，会发现 Beats 家族"共享同一套设计"：
+#   filebeat.yml    里是 filebeat.config.modules.path  + filebeat.inputs
+#   metricbeat.yml  里是 metricbeat.config.modules.path + （没有 inputs，因为是定时抓，不读文件）
+
+metricbeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+
+# 全局设置：采集周期默认 10s，可在各模块里覆盖
+metricbeat.max_start_delay: 10s
+
+output.elasticsearch:
+  hosts: ["http://elasticsearch:9200"]
+  username: "elastic"
+  password: "ELKlearn2026"
+
+# 单节点学习环境：副本设 0，避免集群变 yellow
+setup.template.settings:
+  index.number_of_replicas: 0

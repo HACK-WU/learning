@@ -1,0 +1,8 @@
+# 多管道定义 · 课 8 知识点 8.3
+# 每条管道有独立的 id、独立的配置文件、独立的队列 —— 互不影响
+
+- pipeline.id: orders
+  path.config: "/usr/share/logstash/pipeline/orders.conf"
+
+- pipeline.id: nginx
+  path.config: "/usr/share/logstash/pipeline/nginx.conf"

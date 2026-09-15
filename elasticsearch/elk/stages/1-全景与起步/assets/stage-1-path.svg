@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" width="900" height="480" font-family="system-ui, -apple-system, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#8a94a0"/>
+    </marker>
+  </defs>
+
+  <!-- 背景（浅底） -->
+  <rect width="900" height="480" fill="#fafafa"/>
+
+  <!-- 标题与副题 -->
+  <text x="450" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#333333">阶段 1 路径图 · 全景与起步</text>
+  <text x="450" y="56" text-anchor="middle" font-size="12.5" fill="#666666">一条日志的旅程：从「逐台 ssh grep 找不到」到「在一处搜到」</text>
+
+  <!-- 故事主线横幅（深色强调，其上文字用浅色） -->
+  <rect x="30" y="74" width="840" height="34" rx="8" fill="#1565C0"/>
+  <text x="450" y="95" text-anchor="middle" font-size="13" font-weight="600" fill="#ffffff">故事主线 · 本幕 = 看得见全貌 ｜ 主角：一条日志 ｜ 待解：找不到 · 留不住 · 看不懂</text>
+
+  <!-- 横幅 → 课1 的连接箭头 -->
+  <line x1="145" y1="108" x2="145" y2="146" stroke="#8a94a0" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <!-- ============ 三张课卡片 ============ -->
+
+  <!-- 课 1 卡片 -->
+  <g>
+    <rect x="20" y="150" width="250" height="150" rx="8" fill="#ffffff" stroke="#d0d0d0" stroke-width="1.2"/>
+    <rect x="20" y="150" width="5" height="150" fill="#1565C0"/>
+    <text x="40" y="176" font-size="15" font-weight="700" fill="#333333">课 1 · 一条日志的旅程</text>
+    <text x="40" y="196" font-size="12" font-weight="600" fill="#1565C0">认知 · 建立问题感与全貌</text>
+    <line x1="40" y1="206" x2="255" y2="206" stroke="#ececec" stroke-width="1"/>
+    <text x="40" y="228" font-size="12.5" fill="#444444">· 日志为何难查（分散/格式/留存/检索）</text>
+    <text x="40" y="250" font-size="12.5" fill="#444444">· ELK 四组件各管什么（谁可选谁必需）</text>
+    <text x="40" y="272" font-size="12.5" fill="#444444">· ELK 起源与生态位</text>
+  </g>
+
+  <!-- 课 2 卡片 -->
+  <g>
+    <rect x="330" y="150" width="250" height="150" rx="8" fill="#ffffff" stroke="#d0d0d0" stroke-width="1.2"/>
+    <rect x="330" y="150" width="5" height="150" fill="#1565C0"/>
+    <text x="350" y="176" font-size="15" font-weight="700" fill="#333333">课 2 · 把 ELK 跑起来</text>
+    <text x="350" y="196" font-size="12" font-weight="600" fill="#1565C0">部署 · 四件套原地立起（mac+Compose）</text>
+    <line x1="350" y1="206" x2="565" y2="206" stroke="#ececec" stroke-width="1"/>
+    <text x="350" y="228" font-size="12.5" fill="#444444">· Compose 编排四件套</text>
+    <text x="350" y="250" font-size="12.5" fill="#444444">· 首次启动的安全配置</text>
+    <text x="350" y="272" font-size="12.5" fill="#444444">· 容器观测与重建（9.5.3）</text>
+  </g>
+
+  <!-- 课 3 卡片 -->
+  <g>
+    <rect x="640" y="150" width="250" height="150" rx="8" fill="#ffffff" stroke="#d0d0d0" stroke-width="1.2"/>
+    <rect x="640" y="150" width="5" height="150" fill="#1565C0"/>
+    <text x="660" y="176" font-size="15" font-weight="700" fill="#333333">课 3 · 端到端走一遍</text>
+    <text x="660" y="196" font-size="12" font-weight="600" fill="#1565C0">链路 · 第一条日志亲手走通</text>
+    <line x1="660" y1="206" x2="875" y2="206" stroke="#ececec" stroke-width="1"/>
+    <text x="660" y="228" font-size="12.5" fill="#444444">· Filebeat 直连 ES 最小链路</text>
+    <text x="660" y="250" font-size="12.5" fill="#444444">· 一条数据长什么样（字段）</text>
+    <text x="660" y="272" font-size="12.5" fill="#444444">· 组件间契约（索引/时间字段）</text>
+  </g>
+
+  <!-- 课与课之间的推进箭头 -->
+  <line x1="275" y1="190" x2="322" y2="190" stroke="#8a94a0" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <line x1="585" y1="190" x2="632" y2="190" stroke="#8a94a0" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <!-- 三课分别汇入「阶段出口」 -->
+  <line x1="145" y1="300" x2="145" y2="320" stroke="#8a94a0" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <line x1="455" y1="300" x2="455" y2="320" stroke="#8a94a0" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <line x1="765" y1="300" x2="765" y2="320" stroke="#8a94a0" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <!-- 阶段 1 出口（浅色强调条，描边用强调蓝） -->
+  <rect x="20" y="324" width="860" height="38" rx="8" fill="#eef3fb" stroke="#1565C0" stroke-width="1.5"/>
+  <text x="450" y="347" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1565C0">阶段 1 出口 ｜ 看得见全貌：在 Kibana Discover 一处搜到来自各机器的日志</text>
+
+  <!-- 阶段出口 → 阶段 2（虚线占位，待续） -->
+  <line x1="450" y1="362" x2="450" y2="384" stroke="#8a94a0" stroke-width="1.6" marker-end="url(#arrow)"/>
+  <rect x="260" y="388" width="380" height="46" rx="8" fill="#f5f5f5" stroke="#bbbbbb" stroke-width="1.4" stroke-dasharray="6 4"/>
+  <text x="450" y="407" text-anchor="middle" font-size="13" font-weight="700" fill="#666666">下一幕 · 阶段 2 采集（拿得到）</text>
+  <text x="450" y="424" text-anchor="middle" font-size="11.5" fill="#888888">Filebeat / Beats 铺到源头多台机器 ｜ 阶段 2（待建）</text>
+
+  <!-- 阶段间衔接说明（承接 ELK 教程主线） -->
+  <text x="450" y="462" text-anchor="middle" font-size="11" fill="#999999">ELK 子教程 · 阶段 1/4 ｜ 后续：阶段 2 采集 → 阶段 3 处理（看得懂）→ 阶段 4 存储可视化与落地</text>
+</svg>

@@ -1,0 +1,122 @@
+# ELK 子教程 · 课 8《可靠性与吞吐》
+# 版本基线：Elastic Stack 9.5.3 ｜ 环境：macOS arm64 + Docker Compose
+#
+# 与课 7 相比的两处关键变化：
+#   1. Logstash 启用【持久化队列】（config/logstash.yml 里 queue.type: persisted）
+#      —— 用来验证"Logstash 重启后管道里的事件还在不在"
+#   2. 改用【多管道】（config/pipelines.yml）：orders 与 nginx 两条独立管道
+#      —— 用来验证队列与故障隔离
+#
+# 两个 Filebeat 实例分别喂给两条管道，模拟"多个采集端共用一台 Logstash"
+#
+# ⚠️ 端口 9200 / 5601 / 5044 / 5045 / 9600，跑本课前请先停掉 06-logstash-pipeline
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.5.3
+    container_name: elk-es
+    environment:
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=ELKlearn2026
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - xpack.security.http.ssl.enabled=false
+      # ⚠️ 课 12《告警与生产落地》新增：快照仓库的白名单目录。
+      #    path.repo 是【静态设置】，不能通过 cluster settings 热改，只能写在这里 + 重启生效。
+      #    不配的话注册 fs 仓库会直接报错：
+      #    "repository type [fs] is not allowed ... no repository paths configured"
+      - path.repo=/usr/share/elasticsearch/backup
+    ports:
+      - "9200:9200"
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+      # 快照落盘到宿主 ./backups（bind mount，宿主目录需 ES 容器 uid=1000 可写：chmod 777）
+      - ./backups:/usr/share/elasticsearch/backup
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s -u elastic:ELKlearn2026 http://localhost:9200/_cluster/health | grep -qE '\"status\":\"(green|yellow)\"'",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 30s
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:9.5.3
+    container_name: elk-kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=KibanaSys2026
+      # ⚠️ 课 12《告警与生产落地》新增：告警规则与 Connector 都是【加密 saved object】，
+      #    不设这个 key，创建 connector / 规则会直接 500
+      #    （报错：FleetEncryptedSavedObjectEncryptionKeyRequired /
+      #     "An internal server error occurred"）。
+      #    生产环境这是【必配项】，且集群内所有 Kibana 实例必须一致，
+      #    改了它会导致已有 connector / 规则无法解密。
+      #    生成方式：openssl rand -base64 32
+      - XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY=aGVsbG8ta2liYW5hLWVuY3J5cHRpb24ta2V5LTEyMzQ1Njc4OTA=
+    ports:
+      - "5601:5601"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:9.5.3
+    container_name: elk-logstash
+    environment:
+      - LS_JAVA_OPTS=-Xms512m -Xmx512m
+      - xpack.monitoring.enabled=false
+      # ⚠️ 全局参数用【环境变量】传，不要只读挂载 logstash.yml ——
+      #    Logstash 启动时会把设置写回该文件，只读挂载会直接启动失败：
+      #    error: /usr/share/logstash/config/logstash.yml: Read-only file system
+      # 知识点 8.1：持久化队列（默认 memory，进程一崩事件就没了）
+      - queue.type=persisted
+      - queue.max_bytes=1gb
+      # 知识点 8.2：吞吐三兄弟
+      - pipeline.batch.size=125
+      - pipeline.batch.delay=50
+      - pipeline.workers=2
+    ports:
+      - "5044:5044"   # orders 管道
+      - "5045:5045"   # nginx 管道
+      - "9600:9600"   # Logstash 监控 API（本课用它看队列与吞吐指标）
+    volumes:
+      # 多管道定义：两条独立管道（只读即可，Logstash 不会写它）
+      - ./logstash/config/pipelines.yml:/usr/share/logstash/config/pipelines.yml:ro
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+      # 持久化队列的数据目录：挂成命名卷，容器重启才不丢
+      - logstash-queue:/usr/share/logstash/data
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+  # 采集端 1：订单日志 → orders 管道(5044)
+  filebeat-app:
+    image: docker.elastic.co/beats/filebeat:9.5.3
+    container_name: elk-filebeat-app
+    user: root
+    command: ["filebeat", "-e", "--strict.perms=false"]
+    volumes:
+      - ./filebeat-app.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./logs:/var/log/app:ro
+    depends_on:
+      - logstash
+
+  # 采集端 2：nginx 日志 → nginx 管道(5045)
+  filebeat-nginx:
+    image: docker.elastic.co/beats/filebeat:9.5.3
+    container_name: elk-filebeat-nginx
+    user: root
+    command: ["filebeat", "-e", "--strict.perms=false"]
+    volumes:
+      - ./filebeat-nginx.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./logs:/var/log/app:ro
+    depends_on:
+      - logstash
+
+volumes:
+  es-data:
+  logstash-queue:   # 持久化队列落在这，容器重启不丢

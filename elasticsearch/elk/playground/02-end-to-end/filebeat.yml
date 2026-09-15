@@ -1,0 +1,29 @@
+# Filebeat 最小配置 · ELK 子教程课 3《端到端走一遍》
+# 目标：只用十几行配置，跑通"日志文件 → Filebeat → Elasticsearch"最小链路
+#
+# 这份配置**没有**指定索引名 —— 用的是 Filebeat 9.5.3 的默认行为：
+# 自动加载自带索引模板，写入 data stream（名字形如 logs-<dataset>-<namespace>）。
+# 默认行为的具体形态见讲义知识点 3.3。
+
+# ---------- 采集端：从哪个文件读 ----------
+filebeat.inputs:
+  - type: filestream # 新版推荐的日志读取类型（取代老的 log 类型，阶段 2 课 4 细讲）
+    id: demo-app # 每个 input 的唯一标识，Filebeat 靠它记录"读到哪了"
+    enabled: true
+    paths:
+      - /usr/share/filebeat/logs/demo-app.log # 容器内的路径（宿主机 ./logs 挂载进来）
+
+# ---------- 输出端：写到哪个 ES ----------
+output.elasticsearch:
+  hosts: ["http://elasticsearch:9200"] # 容器网络里用服务名互访，不能用 localhost
+  username: "elastic"
+  password: "ELKlearn2026"
+
+# 💡 踩坑记录（真实发生，详见讲义第四幕）：
+# 一开始我在这份文件里写了自定义索引名 index: "demo-app-%{+yyyy.MM.dd}"
+# 外加 setup.template.name / setup.ilm.enabled: false，结果 Filebeat 启动即反复报错：
+#   could not put data stream: 400 Bad Request:
+#   illegal_argument_exception: no matching index template found for data stream [demo-app]
+# 即：9.5.3 下自定义索引名会触发 data stream 创建，而模板对不上就整个链路起不来。
+# 结论：**最小链路阶段别自己起索引名，用默认行为最稳**。
+# 自定义索引名与模板的正确配法，留到阶段 4 课 10（日志的存储策略）再展开。

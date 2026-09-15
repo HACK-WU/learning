@@ -1,0 +1,18 @@
+# Filebeat 配置 · 课 7（输出改投 Logstash，不再直连 ES）
+filebeat.inputs:
+  - type: filestream
+    id: demo-app
+    enabled: true
+    paths:
+      - /var/log/app/demo-app.log
+
+  - type: filestream
+    id: nginx-access
+    enabled: true
+    paths:
+      - /var/log/app/nginx-access.log
+
+# ⚠️ 本课改动点：输出从 output.elasticsearch 换成 output.logstash
+#    数据先交给 Logstash 处理，再由 Logstash 写入 ES
+output.logstash:
+  hosts: ["logstash:5044"]

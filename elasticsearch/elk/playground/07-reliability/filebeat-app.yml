@@ -1,0 +1,10 @@
+# 采集端 1：订单日志 → Logstash 的 orders 管道(5044)
+filebeat.inputs:
+  - type: filestream
+    id: demo-app
+    enabled: true
+    paths:
+      - /var/log/app/demo-app.log
+
+output.logstash:
+  hosts: ["logstash:5044"]

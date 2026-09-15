@@ -1,0 +1,54 @@
+# 结课实战：Filebeat 采集 shop-api 日志 → Logstash:5044
+# 知识点回指：课 4（filestream）｜课 5（processors）｜课 4 多行合并
+
+filebeat.inputs:
+  # 输入 1：正常应用日志（单行 JSON 或半结构化文本）
+  - type: filestream
+    id: shop-api-app
+    enabled: true
+    paths:
+      - /var/log/shop/app-*.log
+    # 课 4：多行合并——异常堆栈必须合成一条，否则一条堆栈变 9 条文档
+    # ⚠️ ⚠️ 本项目最隐蔽的一个坑（真跑才暴露）：
+    #    pattern 若只写 ^日期，那么【不以日期开头的行都会被当成上一行的续行】——
+    #    于是 70% 的 JSON 日志（以 { 开头）被整条吞进前一条文本日志里，
+    #    ES 里表现为 message 是多行拼接、JSON 分支解析全部失败（_json_parse_failed）。
+    #    修法：把 JSON 行也认作"新事件起点"。
+    parsers:
+      - multiline:
+          type: pattern
+          pattern: '^([0-9]{4}-[0-9]{2}-[0-9]{2}|\{)'   # 日期开头 或 { 开头 = 新事件
+          negate: true
+          match: after
+    # ⚠️ 不用 fields_under_root：log.type / service.name 与 ECS 字段同名会冲突，
+    #    放在 [fields] 下最稳，Logstash 里用 [fields][log_type] 读。
+    fields:
+      log_type: app
+
+  # 输入 2：Nginx 访问日志（走另一条解析分支，验证多输入隔离）
+  - type: filestream
+    id: shop-api-nginx
+    enabled: true
+    paths:
+      - /var/log/shop/nginx-*.log
+    fields:
+      log_type: access
+
+# 课 5：processors —— 统一标注环境，丢弃无用字段（省存储，也防字段爆炸）
+processors:
+  - add_fields:
+      target: ''
+      fields:
+        env: capstone
+        lesson: elk-capstone
+  - drop_fields:
+      fields: ["agent.ephemeral_id", "ecs.version"]
+      ignore_missing: true
+
+# 课 7/8：输出到 Logstash（不是 ES）——处理放在 Logstash 侧
+output.logstash:
+  hosts: ["logstash:5044"]
+
+# 课 4：registry 落在容器内即可（实战项目重启不需要断点续传演示）
+logging.level: info
+logging.to_files: false

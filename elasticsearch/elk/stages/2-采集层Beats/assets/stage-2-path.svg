@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="480" viewBox="0 0 900 480">
+  <title>阶段 2 采集层 Beats · 学习路径图</title>
+  <desc>一条日志的一生 · 第 2 幕（采集，拿得到）：阶段 2 内部三课路线图，以及它在四阶段主线中的位置。</desc>
+  <style>
+    text { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; }
+    .bg { fill: #ffffff; }
+    .soft { fill: #fafafa; }
+    .deep { fill: #1565C0; }
+    .deep-border { stroke: #1565C0; fill: #ffffff; }
+    .plain { fill: #ffffff; stroke: #cfd8dc; }
+    .box-text { fill: #333333; }
+    .on-deep { fill: #fafafa; }
+    .accent-line { stroke: #1565C0; }
+    .grey-line { stroke: #b0bec5; fill: none; }
+    .sub { fill: #607d8b; }
+  </style>
+
+  <rect class="bg" x="0" y="0" width="900" height="480" rx="10"/>
+
+  <!-- 标题 -->
+  <text x="450" y="34" font-size="19" font-weight="700" text-anchor="middle" class="box-text">阶段 2 · 采集层 Beats —— 一条日志的「拿得到」</text>
+  <text x="450" y="56" font-size="13" text-anchor="middle" class="sub">在四阶段主线中的位置：看得见全貌 →（本阶段）拿得到 → 看得懂 → 留得住 · 用得上</text>
+
+  <!-- 顶部主线：四个阶段盒子 -->
+  <!-- 阶段1 -->
+  <rect class="plain" x="62" y="88" width="180" height="66" rx="10"/>
+  <text x="152" y="112" font-size="13" font-weight="700" text-anchor="middle" class="box-text">阶段 1</text>
+  <text x="152" y="130" font-size="12" text-anchor="middle" class="box-text">全景与起步</text>
+  <text x="152" y="147" font-size="11" text-anchor="middle" class="sub">看得见全貌</text>
+
+  <!-- 阶段2 高亮 -->
+  <rect class="deep" x="262" y="88" width="180" height="66" rx="10"/>
+  <text x="352" y="112" font-size="13" font-weight="700" text-anchor="middle" class="on-deep">阶段 2 · 采集</text>
+  <text x="352" y="130" font-size="12" text-anchor="middle" class="on-deep">Beats 家族</text>
+  <text x="352" y="147" font-size="11" text-anchor="middle" class="on-deep">拿得到（本阶段）</text>
+
+  <!-- 阶段3 -->
+  <rect class="plain" x="462" y="88" width="180" height="66" rx="10"/>
+  <text x="552" y="112" font-size="13" font-weight="700" text-anchor="middle" class="box-text">阶段 3</text>
+  <text x="552" y="130" font-size="12" text-anchor="middle" class="box-text">处理</text>
+  <text x="552" y="147" font-size="11" text-anchor="middle" class="sub">看得懂</text>
+
+  <!-- 阶段4 -->
+  <rect class="plain" x="662" y="88" width="180" height="66" rx="10"/>
+  <text x="752" y="112" font-size="13" font-weight="700" text-anchor="middle" class="box-text">阶段 4</text>
+  <text x="752" y="130" font-size="12" text-anchor="middle" class="box-text">存储 · 可视化 · 落地</text>
+  <text x="752" y="147" font-size="11" text-anchor="middle" class="sub">留得住 · 用得上</text>
+
+  <!-- 盒子间箭头（y≈121） -->
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#1565C0"/>
+    </marker>
+    <marker id="arrgrey" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#90a4ae"/>
+    </marker>
+  </defs>
+  <line class="accent-line" x1="246" y1="121" x2="258" y2="121" stroke-width="2" marker-end="url(#arr)"/>
+  <line class="accent-line" x1="446" y1="121" x2="458" y2="121" stroke-width="2" marker-end="url(#arr)"/>
+  <line class="accent-line" x1="646" y1="121" x2="658" y2="121" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- 从阶段2下拉到内部三课 -->
+  <line class="grey-line" x1="352" y1="154" x2="352" y2="178" stroke-width="1.5"/>
+  <line class="grey-line" x1="175" y1="178" x2="725" y2="178" stroke-width="1.5"/>
+  <line class="grey-line" x1="175" y1="178" x2="175" y2="240" stroke-width="1.5"/>
+  <line class="grey-line" x1="450" y1="178" x2="450" y2="240" stroke-width="1.5"/>
+  <line class="grey-line" x1="725" y1="178" x2="725" y2="240" stroke-width="1.5"/>
+  <line class="grey-line" x1="175" y1="178" x2="175" y2="184" stroke-width="1.5" marker-end="url(#arrgrey)"/>
+  <text x="450" y="205" font-size="12" font-weight="700" text-anchor="middle" class="box-text">阶段 2 内部路线：采集一条日志要跨过的三课</text>
+
+  <!-- 课 4 -->
+  <rect class="deep-border" x="50" y="240" width="250" height="118" rx="10" stroke-width="1.6"/>
+  <text x="175" y="263" font-size="13" font-weight="700" text-anchor="middle" class="box-text">课 4 · Filebeat 把文件读进来</text>
+  <text x="62" y="286" font-size="11" class="box-text">· harvester 与 input 机制</text>
+  <text x="62" y="305" font-size="11" class="box-text">· registry 与 at-least-once</text>
+  <text x="62" y="324" font-size="11" class="box-text">· 多行合并（异常堆栈）</text>
+  <text x="62" y="345" font-size="11" class="sub">—— 一文件一读取器，断点续读</text>
+
+  <!-- 课 5 -->
+  <rect class="deep-border" x="325" y="240" width="250" height="118" rx="10" stroke-width="1.6"/>
+  <text x="450" y="263" font-size="13" font-weight="700" text-anchor="middle" class="box-text">课 5 · 模块与处理器</text>
+  <text x="337" y="286" font-size="11" class="box-text">· modules 开箱即用</text>
+  <text x="337" y="305" font-size="11" class="box-text">· processors 轻量加工</text>
+  <text x="337" y="324" font-size="11" class="box-text">· 输出与背压传导</text>
+  <text x="337" y="345" font-size="11" class="sub">—— 少写配置，就地剪裁字段</text>
+
+  <!-- 课 6 -->
+  <rect class="deep-border" x="600" y="240" width="250" height="118" rx="10" stroke-width="1.6"/>
+  <text x="725" y="263" font-size="13" font-weight="700" text-anchor="middle" class="box-text">课 6 · Beats 家族与采集选型</text>
+  <text x="612" y="286" font-size="11" class="box-text">· 家族成员各管什么</text>
+  <text x="612" y="305" font-size="11" class="box-text">· 采集端选型对比</text>
+  <text x="612" y="324" font-size="11" class="box-text">· 什么时候不该用 Beats</text>
+  <text x="612" y="345" font-size="11" class="sub">—— 分清阵营，选对工具</text>
+
+  <!-- 课间箭头 -->
+  <line class="accent-line" x1="300" y1="299" x2="321" y2="299" stroke-width="2" marker-end="url(#arr)"/>
+  <line class="accent-line" x1="575" y1="299" x2="596" y2="299" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- 底部故事定位 -->
+  <rect class="soft" x="60" y="396" width="780" height="44" rx="8"/>
+  <text x="450" y="416" font-size="12.5" font-weight="700" text-anchor="middle" class="box-text">故事主线：一条日志的一生 · 第 2 幕（共 4 幕）</text>
+  <text x="450" y="432" font-size="11.5" text-anchor="middle" class="sub">冲突场景：线上报警要逐台 ssh grep → 本阶段 Filebeat 把日志自动搬进管道，从此告别手工翻日志</text>
+</svg>

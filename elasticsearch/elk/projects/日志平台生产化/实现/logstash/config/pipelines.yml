@@ -1,0 +1,7 @@
+# Logstash 多管道定义（课 8）
+# 单条管道即可，但保留 pipelines.yml 是为了显式声明管道 id（便于监控 API 定位）
+- pipeline.id: shop-api
+  path.config: "/usr/share/logstash/pipeline/shop-api.conf"
+  pipeline.workers: 2
+  pipeline.batch.size: 125
+  queue.type: persisted

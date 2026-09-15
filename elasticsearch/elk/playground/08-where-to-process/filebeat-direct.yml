@@ -1,0 +1,16 @@
+# 路径 C：Filebeat 直连 ES + nginx 模块
+# 关键点：模块自带的 ES Ingest Pipeline 会在启动时自动装载到 ES，
+# 日志的 grok 拆字段工作由 ES 节点完成，采集端几乎不干活。
+
+filebeat.modules:
+  - module: nginx
+    access:
+      enabled: true
+      var.paths: ["/var/log/app/nginx-access.log*"]
+    error:
+      enabled: false
+
+output.elasticsearch:
+  hosts: ["http://elasticsearch:9200"]
+  username: "elastic"
+  password: "ELKlearn2026"

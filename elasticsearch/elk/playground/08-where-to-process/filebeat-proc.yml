@@ -1,0 +1,32 @@
+# 路径 A：Filebeat 直连 ES + 只用轻量 processors 加工
+# 关键点：不做正则解析，只在采集端「贴标签 / 删字段」，
+# 日志原文整条原样进 ES —— 与 filebeat-direct（ES Ingest 解析）形成对照。
+
+filebeat.inputs:
+  - type: filestream
+    id: nginx-raw
+    enabled: true
+    paths:
+      - /var/log/app/nginx-access.log
+
+processors:
+  # 贴一个标记字段，标明这批数据走的是「采集端 processors」这条路
+  - add_fields:
+      target: ""
+      fields:
+        ingestion_path: beats-processor
+  # 丢掉几个用不上的字段，减小体积（ECS 元数据字段按需裁剪）
+  - drop_fields:
+      fields: ["log.file.path", "input.type", "agent.ephemeral_id"]
+      ignore_missing: true
+
+# 自定义索引名（不走 data stream），避免与 filebeat-direct 的默认数据流混在一起
+setup.ilm.enabled: false
+setup.template.name: "fb-proc"
+setup.template.pattern: "fb-proc-*"
+
+output.elasticsearch:
+  hosts: ["http://elasticsearch:9200"]
+  username: "elastic"
+  password: "ELKlearn2026"
+  index: "fb-proc-%{+yyyy.MM.dd}"

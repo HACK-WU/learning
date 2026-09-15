@@ -1,0 +1,60 @@
+# ELK 子教程 · 课 2《把 ELK 跑起来》最小可跑栈
+# 版本基线：Elastic Stack 9.5.3 ｜ 环境：macOS arm64 + Docker Compose
+#
+# 本课只起两件：Elasticsearch（存储检索）+ Kibana（可视化界面）
+# Logstash 与 Filebeat 留到课 3《端到端走一遍》再加 —— 先让"仓库"和"展厅"站住，
+# 再接"采集员"与"翻译官"，这样出问题时你能一眼定位是哪一段坏了。
+#
+# ⚠️ 这里的密码是学习环境固定密码，明文写在文件里只为可复现。
+#    生产环境必须用密钥管理（Docker secret / Vault / K8s Secret），切勿照抄。
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.5.3
+    container_name: elk-es
+    environment:
+      # 单节点模式：跳过集群选举与法定人数检查，学习环境必备
+      - discovery.type=single-node
+      # elastic 超级用户的初始密码，9.x 必须显式设置，否则容器拒绝启动
+      - ELASTIC_PASSWORD=ELKlearn2026
+      # 限制 JVM 堆，防止 ES 把 Docker Desktop 分配的 8GB 内存吃满
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      # 学习环境关闭 HTTP 层 TLS：省掉自签证书这一步，curl 可以直接打
+      # （注意：这只是关闭"传输加密"，账号密码认证依然开着）
+      - xpack.security.http.ssl.enabled=false
+    ports:
+      - "9200:9200"
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+    # 健康检查：只有真的能返回集群状态，才算"可用"（光"启动"不算）
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s -u elastic:ELKlearn2026 http://localhost:9200/_cluster/health | grep -qE '\"status\":\"(green|yellow)\"'",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 30s
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:9.5.3
+    container_name: elk-kibana
+    environment:
+      # 用容器网络里的"服务名"互访，不用写死 IP
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      # Kibana 不用超管账号连 ES —— 用内置的 kibana_system 专用账号（最小权限原则）
+      # 该账号的密码在启动 ES 后由我们手动设置（见讲义第四幕第 3 步）
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=KibanaSys2026
+    ports:
+      - "5601:5601"
+    depends_on:
+      # 关键：condition: service_healthy 才是"等 ES 真的可用"，
+      # 只写 depends_on 列表（短语法）只能保证"先启动"，不能保证"已就绪"
+      elasticsearch:
+        condition: service_healthy
+
+volumes:
+  es-data: # 命名卷：数据存在这里，down 掉容器也不丢，只有 down -v 才会清掉

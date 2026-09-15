@@ -1,0 +1,47 @@
+# Filebeat 配置 · ELK 子教程课 5《模块与处理器》
+# 版本基线：Elastic Stack 9.5.3
+
+# ---------- 模块配置（知识点 5.1）----------
+# ⚠️ 这一行是 modules 管理功能的前提：
+#    没有它，filebeat modules list / enable 会报
+#    "modules management requires 'filebeat.config.modules.path' setting"
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+
+# ---------- 普通采集（对照用）----------
+filebeat.inputs:
+  - type: filestream
+    id: demo-app
+    enabled: true
+    paths:
+      - /var/log/app/demo-app.log
+
+# ---------- 采集端轻量加工（知识点 5.2）----------
+# 注意顺序：从上到下依次执行，顺序错了结果就错了
+processors:
+  # ① 打标记：给所有事件加上环境与课次标签
+  - add_fields:
+      target: ""
+      fields:
+        env: learning
+        lesson: lesson-05
+
+  # ② 条件加工：message 里含 ERROR 的才打上 alert 标签
+  - add_tags:
+      when:
+        contains:
+          message: "ERROR"
+      tags: ["alert"]
+
+  # ③ 丢字段：去掉不关心的噪音字段
+  #    ignore_missing: true 表示字段不存在时不要报错
+  - drop_fields:
+      fields: ["agent.ephemeral_id", "ecs.version"]
+      ignore_missing: true
+
+# ---------- 输出（知识点 5.3）----------
+output.elasticsearch:
+  hosts: ["http://elasticsearch:9200"]
+  username: "elastic"
+  password: "ELKlearn2026"

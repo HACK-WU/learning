@@ -1,0 +1,17 @@
+# nginx 模块配置 · ELK 子教程课 5
+#
+# 这个文件的名字（不带 .disabled 后缀）就代表"该模块已启用"。
+# filebeat modules enable nginx 做的事，本质就是把 nginx.yml.disabled 改名成 nginx.yml。
+#
+# var.paths 用来覆盖模块默认的日志路径 —— 本机没有真跑 nginx，
+# 所以我们把模块指向自己造的访问日志/错误日志。
+
+- module: nginx
+  access:
+    enabled: true
+    var.paths:
+      - /var/log/app/nginx-access.log*
+  error:
+    enabled: true
+    var.paths:
+      - /var/log/app/nginx-error.log*

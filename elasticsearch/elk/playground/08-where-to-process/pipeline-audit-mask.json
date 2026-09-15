@@ -1,0 +1,61 @@
+{
+  "description": "课 9 · 审计日志脱敏：ECS 归一化 + 敏感字段三件套（fingerprint / gsub / remove）",
+  "processors": [
+    {
+      "grok": {
+        "field": "message",
+        "patterns": [
+          "%{TIMESTAMP_ISO8601:log_time} %{LOGLEVEL:log.level}\\s+\\[%{DATA:service.name}\\] user=%{NOTSPACE:user.name} ip=%{IP:source.ip} password=%{NOTSPACE:_tmp.password} card=%{NOTSPACE:_tmp.card} action=%{NOTSPACE:event.action} result=%{NOTSPACE:event.outcome}"
+        ]
+      }
+    },
+    {
+      "date": {
+        "field": "log_time",
+        "formats": ["ISO8601"],
+        "target_field": "@timestamp"
+      }
+    },
+    {
+      "fingerprint": {
+        "fields": ["source.ip"],
+        "target_field": "source.ip_hash",
+        "method": "SHA-256",
+        "salt": "elk-course-2026"
+      }
+    },
+    {
+      "remove": { "field": "source.ip", "ignore_missing": true }
+    },
+    {
+      "gsub": {
+        "field": "_tmp.card",
+        "pattern": "\\d(?=\\d{4})",
+        "replacement": "*"
+      }
+    },
+    {
+      "rename": { "field": "_tmp.card", "target_field": "card.masked" }
+    },
+    {
+      "remove": { "field": "_tmp.password", "ignore_missing": true }
+    },
+    {
+      "remove": { "field": "message", "ignore_missing": true }
+    },
+    {
+      "remove": { "field": "log_time", "ignore_missing": true }
+    },
+    {
+      "remove": { "field": "_tmp", "ignore_missing": true }
+    }
+  ],
+  "on_failure": [
+    {
+      "set": { "field": "_index", "value": "failed-audit" }
+    },
+    {
+      "set": { "field": "ingest_error", "value": "{{ _ingest.on_failure_message }}" }
+    }
+  ]
+}

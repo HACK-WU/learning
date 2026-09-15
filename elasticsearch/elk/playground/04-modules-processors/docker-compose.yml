@@ -1,0 +1,63 @@
+# ELK 子教程 · 课 5《模块与处理器》三件套
+# 版本基线：Elastic Stack 9.5.3 ｜ 环境：macOS arm64 + Docker Compose
+#
+# 与课 4 那份的区别（两处改进，都是实测踩出来的）：
+#   1. 日志目录挂载到 /var/log/app，而不是 /usr/share/filebeat/logs
+#      —— 后者是 Filebeat 自己的日志目录，被只读挂载覆盖后 Filebeat 会报
+#         "failed to open new log file ... read-only file system"
+#   2. 多挂了 modules.d 目录，用来演示模块的启用与管理
+#
+# ⚠️ 端口同样用 9200 / 5601，跑本课前请先停掉 03-filebeat-internals
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.5.3
+    container_name: elk-es
+    environment:
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=ELKlearn2026
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - xpack.security.http.ssl.enabled=false
+    ports:
+      - "9200:9200"
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s -u elastic:ELKlearn2026 http://localhost:9200/_cluster/health | grep -qE '\"status\":\"(green|yellow)\"'",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 30s
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:9.5.3
+    container_name: elk-kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=KibanaSys2026
+    ports:
+      - "5601:5601"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:9.5.3
+    container_name: elk-filebeat
+    user: root
+    command: ["filebeat", "-e", "--strict.perms=false"]
+    volumes:
+      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./modules.d:/usr/share/filebeat/modules.d   # 可写：enable/disable 模块会改这里的文件名
+      - ./logs:/var/log/app:ro                      # 只读挂载"应用日志"，不再覆盖 Filebeat 自己的日志目录
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+volumes:
+  es-data:

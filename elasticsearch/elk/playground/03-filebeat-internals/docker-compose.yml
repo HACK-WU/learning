@@ -1,0 +1,61 @@
+# ELK 子教程 · 课 4《Filebeat 把文件读进来》三件套
+# 版本基线：Elastic Stack 9.5.3 ｜ 环境：macOS arm64 + Docker Compose
+#
+# 与课 3 那份结构相同，区别是 logs/ 下有两个文件：
+#   demo-app.log     —— 普通单行日志
+#   stack-error.log  —— 带多行堆栈的错误日志（用来演示多行合并）
+#
+# ⚠️ 端口同样用 9200 / 5601，跑本课前请先停掉 02-end-to-end：
+#     cd ../02-end-to-end && docker compose down
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.5.3
+    container_name: elk-es
+    environment:
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=ELKlearn2026
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - xpack.security.http.ssl.enabled=false
+    ports:
+      - "9200:9200"
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s -u elastic:ELKlearn2026 http://localhost:9200/_cluster/health | grep -qE '\"status\":\"(green|yellow)\"'",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 30s
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:9.5.3
+    container_name: elk-kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=KibanaSys2026
+    ports:
+      - "5601:5601"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:9.5.3
+    container_name: elk-filebeat
+    user: root
+    command: ["filebeat", "-e", "--strict.perms=false"]
+    volumes:
+      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./logs:/usr/share/filebeat/logs:ro
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+volumes:
+  es-data:

@@ -1,0 +1,42 @@
+# 课 9《该在哪处理》配套环境
+#
+# 复用课 8（07-reliability）的 ES / Kibana / Logstash，只新增一个「直连 ES」的 Filebeat，
+# 用来和「经 Logstash」的链路做同台对比（知识点 9.2 决策表）。
+#
+# 依赖：07-reliability 栈必须在跑（网络 07-reliability_default 由它创建）
+#   cd ../07-reliability && docker compose up -d
+#
+# 启动本栈：docker compose up -d
+# 停止本栈：docker compose down
+
+services:
+  # 路径 C：Filebeat 直连 ES，启用 nginx 模块 —— 模块自带的 ES Ingest Pipeline 会自动装载
+  filebeat-direct:
+    image: docker.elastic.co/beats/filebeat:9.5.3
+    container_name: elk-filebeat-direct
+    user: root
+    command: ["filebeat", "-e", "--strict.perms=false"]
+    volumes:
+      - ./filebeat-direct.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./logs/nginx-access.log:/var/log/app/nginx-access.log:ro
+      - ./logs/user-audit.log:/var/log/app/user-audit.log:ro
+    networks:
+      - elk
+
+  # 路径 A：Filebeat 直连 ES，只用轻量 processors 加工（不做重解析）
+  # 与 filebeat-direct 对照：同一份 nginx 日志，一个靠 ES Ingest 解析，一个只在采集端贴标签
+  filebeat-proc:
+    image: docker.elastic.co/beats/filebeat:9.5.3
+    container_name: elk-filebeat-proc
+    user: root
+    command: ["filebeat", "-e", "--strict.perms=false"]
+    volumes:
+      - ./filebeat-proc.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./logs/nginx-access.log:/var/log/app/nginx-access.log:ro
+    networks:
+      - elk
+
+networks:
+  elk:
+    external: true
+    name: 07-reliability_default

@@ -1,0 +1,23 @@
+# Filebeat 配置 · 课 6（与课 5 基本相同，保留 nginx 模块做对照）
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+
+filebeat.inputs:
+  - type: filestream
+    id: demo-app
+    enabled: true
+    paths:
+      - /var/log/app/demo-app.log
+
+processors:
+  - add_fields:
+      target: ""
+      fields:
+        env: learning
+        lesson: lesson-06
+
+output.elasticsearch:
+  hosts: ["http://elasticsearch:9200"]
+  username: "elastic"
+  password: "ELKlearn2026"

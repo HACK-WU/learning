@@ -1,0 +1,74 @@
+# ELK 子教程 · 课 7《Logstash 管道三件套》
+# 版本基线：Elastic Stack 9.5.3 ｜ 环境：macOS arm64 + Docker Compose
+#
+# 链路变化：Filebeat 不再直连 ES，而是先交给 Logstash 处理
+#   logs/*.log → Filebeat → Logstash(5044) → Elasticsearch
+#
+# ⚠️ 端口 9200 / 5601 / 5044，跑本课前请先停掉 05-beats-family
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.5.3
+    container_name: elk-es
+    environment:
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=ELKlearn2026
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - xpack.security.http.ssl.enabled=false
+    ports:
+      - "9200:9200"
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -s -u elastic:ELKlearn2026 http://localhost:9200/_cluster/health | grep -qE '\"status\":\"(green|yellow)\"'",
+        ]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 30s
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:9.5.3
+    container_name: elk-kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=KibanaSys2026
+    ports:
+      - "5601:5601"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:9.5.3
+    container_name: elk-logstash
+    environment:
+      # Logstash 跑 JVM，学习环境限制堆大小，别把 Docker 的内存吃光
+      - LS_JAVA_OPTS=-Xms512m -Xmx512m
+      - xpack.monitoring.enabled=false
+    volumes:
+      # 管道配置目录：Logstash 会加载里面的所有 .conf
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+    ports:
+      - "5044:5044"   # Beats → Logstash 的默认端口
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:9.5.3
+    container_name: elk-filebeat
+    user: root
+    command: ["filebeat", "-e", "--strict.perms=false"]
+    volumes:
+      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./logs:/var/log/app:ro
+    depends_on:
+      - logstash
+
+volumes:
+  es-data:

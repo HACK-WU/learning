@@ -1,0 +1,10 @@
+# 采集端 2：nginx 日志 → Logstash 的 nginx 管道(5045)
+filebeat.inputs:
+  - type: filestream
+    id: nginx-access
+    enabled: true
+    paths:
+      - /var/log/app/nginx-access.log
+
+output.logstash:
+  hosts: ["logstash:5045"]

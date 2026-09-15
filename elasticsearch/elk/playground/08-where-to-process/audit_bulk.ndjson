@@ -1,0 +1,6 @@
+{"index": {"_index": "audit-demo-2026.09.07", "_id": "audit-1"}}
+{"message": "2026-09-07T21:00:01+08:00 INFO [auth] user=alice ip=10.0.0.5 password=Secret123 card=4111111111111111 action=login result=ok"}
+{"index": {"_index": "audit-demo-2026.09.07", "_id": "audit-2"}}
+{"message": "2026-09-07T21:00:03+08:00 WARN [auth] user=bob ip=10.0.0.6 password=BobPass456 card=5500005555555559 action=pay result=fail"}
+{"index": {"_index": "audit-demo-2026.09.07", "_id": "audit-3"}}
+{"message": "2026-09-07T21:00:07+08:00 INFO [auth] user=alice ip=10.0.0.5 password=Secret123 card=4111111111111111 action=pay result=ok"}

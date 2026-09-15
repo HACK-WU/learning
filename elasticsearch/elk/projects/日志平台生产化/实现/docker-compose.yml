@@ -1,0 +1,137 @@
+# ELK 子教程 · 结课实战《日志平台生产化》
+# 版本基线：Elastic Stack 9.5.3 ｜ 环境：macOS arm64 + Docker Compose
+#
+# ⚠️ 跑本项目前先停掉 07-reliability / 08-where-to-process（端口 9200/5601/5044 冲突）：
+#   cd ../../playground/07-reliability && docker compose down   （不加 -v，数据卷保留）
+#   cd ../../playground/08-where-to-process && docker compose down
+#
+# 四件套：Elasticsearch + Kibana + Logstash + Filebeat
+#   5044  = Logstash beats 输入（Filebeat → Logstash）
+#   9600  = Logstash 监控 API（看队列与吞吐）
+#   9200  = ES       5601 = Kibana
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.5.3
+    container_name: cap-es
+    environment:
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=ELKlearn2026
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - xpack.security.http.ssl.enabled=false
+      # 课 12：快照仓库白名单目录（静态设置，改了要重启；不配则 fs 仓库注册失败）
+      - path.repo=/usr/share/elasticsearch/backup
+      # 课 10：ILM 轮询间隔——默认 10 分钟太慢，实战里缩到 30 秒方便验证滚动
+      - indices.lifecycle.poll_interval=30s
+    ports:
+      - "9200:9200"
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+      - ./es/backup:/usr/share/elasticsearch/backup
+    healthcheck:
+      test: ["CMD-SHELL",
+             "curl -s -u elastic:ELKlearn2026 http://localhost:9200/_cluster/health | grep -qE '\"status\":\"(green|yellow)\"'"]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 30s
+
+  # ── 一次性初始化：设置 kibana_system 密码 ────────────────────────────
+  # ⚠️ 本项目第三个隐蔽坑（表现为"Kibana 明明 Up 着却打不开"）：
+  #    ES 镜像只按 ELASTIC_PASSWORD 设置了 elastic 超级用户，
+  #    而 kibana_system 这个内置用户【仍然是随机密码】。
+  #    于是 Kibana 容器照常启动、docker ps 显示 Up，但日志里一直是：
+  #      [ERROR][elasticsearch-service] Unable to retrieve version information
+  #      security_exception: unable to authenticate user [kibana_system]
+  #    /api/status 返回 {"status":{"overall":{"level":"unavailable"}}}，
+  #    所有 Kibana API（Data View / Dashboard / 告警）全部 400 拒绝。
+  #    ← 这正是 Elastic 官方 docker-compose.yml 里那个 setup 容器存在的原因。
+  setup:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.5.3
+    container_name: cap-setup
+    user: "0"
+    command:
+      - bash
+      - -c
+      - |
+        echo "等待 Elasticsearch 就绪..."
+        until curl -s http://elasticsearch:9200 | grep -q "missing authentication credentials"; do sleep 5; done
+        echo "设置 kibana_system 密码..."
+        until curl -s -X POST -u "elastic:$${ELASTIC_PASSWORD}" \
+              -H "Content-Type: application/json" \
+              "http://elasticsearch:9200/_security/user/kibana_system/_password" \
+              -d "{\"password\":\"$${KIBANA_PASSWORD}\"}" | grep -q '^{}'; do sleep 5; done
+        echo "完成：kibana_system 密码已设置"
+    environment:
+      - ELASTIC_PASSWORD=ELKlearn2026
+      - KIBANA_PASSWORD=KibanaSys2026
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    restart: "no"
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:9.5.3
+    container_name: cap-kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=KibanaSys2026
+      # 课 12：告警规则与 Connector 都是加密 saved object，不配这个 key 创建会 500
+      - XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY=aGVsbG8ta2liYW5hLWVuY3J5cHRpb24ta2V5LTEyMzQ1Njc4OTA=
+    ports:
+      - "5601:5601"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      setup:
+        condition: service_completed_successfully
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:9.5.3
+    container_name: cap-logstash
+    environment:
+      - LS_JAVA_OPTS=-Xms512m -Xmx512m
+      - xpack.monitoring.enabled=false
+      # 课 8：持久化队列——Logstash 或 ES 重启时事件不丢
+      #   ⚠️ 全局参数用环境变量传，不要只读挂载 logstash.yml（Logstash 启动会写回该文件导致
+      #      "Read-only file system" 启动失败）
+      - queue.type=persisted
+      - queue.max_bytes=1gb
+      # 课 8：吞吐三兄弟
+      - pipeline.batch.size=125
+      - pipeline.batch.delay=50
+      - pipeline.workers=2
+    ports:
+      - "5044:5044"
+      - "9600:9600"
+    volumes:
+      - ./logstash/config/pipelines.yml:/usr/share/logstash/config/pipelines.yml:ro
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+      - logstash-queue:/usr/share/logstash/data
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:9.5.3
+    container_name: cap-filebeat
+    user: root
+    command: ["filebeat", "-e", "--strict.perms=false"]
+    volumes:
+      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./logs:/var/log/shop:ro
+      # ⚠️ ⚠️ 本项目第四个坑：Filebeat 的 registry（记录"每个文件读到第几字节"）
+      #    默认只存在容器可写层里。容器一旦被 recreate（改配置 / compose down 再 up），
+      #    registry 就没了 → Filebeat 认为所有文件都是新的 → 【把整个文件从头重读一遍】
+      #    → 文档成倍重复入库（实测：重建一次，1000 条变 2420 条）。
+      #    这个坑很隐蔽：数据没丢、查询也不报错，只是"每个数字都翻倍"。
+      #    解法：把 registry 落到命名卷上，容器重建后接着上次的 offset 继续读。
+      - filebeat-registry:/usr/share/filebeat/data
+    depends_on:
+      - logstash
+
+volumes:
+  es-data:
+  logstash-queue:
+  filebeat-registry:

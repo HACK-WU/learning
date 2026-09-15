@@ -1,0 +1,43 @@
+# Filebeat 配置 · ELK 子教程课 4《Filebeat 把文件读进来》
+# 版本基线：Elastic Stack 9.5.3
+#
+# 【阶段 B · 最终版】—— 三个 input 并存，用于对照：
+#   demo-app         单行日志（正常采集）
+#   stack-error      多行堆栈，**不配**多行合并 → 会被切成 9 条（反面教材）
+#   stack-multiline  多行堆栈，**配了**多行合并 → 合并成 1 条（正确做法）
+
+filebeat.inputs:
+  # 输入 1：普通单行日志
+  - type: filestream
+    id: demo-app          # 每个 input 的唯一 id，Filebeat 靠它记"读到哪了"
+    enabled: true
+    paths:
+      - /usr/share/filebeat/logs/demo-app.log
+
+  # 输入 2：多行堆栈 —— 故意不配 parsers，保留"被切碎"的现场做对照
+  - type: filestream
+    id: stack-error
+    enabled: true
+    paths:
+      - /usr/share/filebeat/logs/stack-error.log
+
+  # 输入 3：多行堆栈 —— 配上多行合并
+  - type: filestream
+    id: stack-multiline
+    enabled: true
+    paths:
+      - /usr/share/filebeat/logs/stack-multiline.log
+    parsers:
+      - multiline:
+          type: pattern
+          # 以"年-月-日 时:分:秒"开头的行，才是一条新日志的开始
+          pattern: '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}'
+          # negate=true + match=after：不匹配上面 pattern 的行（即堆栈的那些行），
+          # 拼到前一条的后面（after）
+          negate: true
+          match: after
+
+output.elasticsearch:
+  hosts: ["http://elasticsearch:9200"]
+  username: "elastic"
+  password: "ELKlearn2026"

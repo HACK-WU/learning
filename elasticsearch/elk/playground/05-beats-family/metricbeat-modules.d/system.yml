@@ -1,0 +1,9 @@
+# system 模块 · 采集 CPU 与内存指标
+# 注意：Metricbeat 不"读文件"——它按固定周期向操作系统要数值快照
+
+- module: system
+  metricsets:
+    - cpu        # CPU 使用率（含 user / system / idle 等细分）
+    - memory     # 内存使用量
+  enabled: true
+  period: 10s    # 每 10 秒抓一次
