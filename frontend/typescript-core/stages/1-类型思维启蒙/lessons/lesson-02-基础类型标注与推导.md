@@ -4,6 +4,7 @@
 > 本课知识点：原始类型标注与类型推导、数组、元组与只读、函数类型标注
 > 故事情节：主角开始给老项目加类型，撞上两个极端建议——**"全都写"和"全都不用写"**
 > ✅ 状态：已完成（2026-09-03）｜ 实操环境：Node.js v22.14.0 + TypeScript 7.0.2（**文中所有输出均为本机实测**）
+> 📖 结论已按官方文档核对（核查于 2026-09-16 ｜ 来源：[TypeScript Handbook 路由表](../../../web-index/typescript/index.md)）
 
 ## 🎯 本课目标
 
@@ -137,9 +138,34 @@ lines.map((line) => line.split(",")); // 这个 line 没标类型，为什么没
 
 这三个问题，恰好对应本课的三个知识点。
 
+### 一句话本质
+
+> 本课把“值是什么、以后会不会变、函数怎么被调用”拆开，让你知道什么时候靠推导，什么时候必须写清楚。
+
+### 处境对照
+
+| 做法 | 代价 | 结果 |
+|---|---|---|
+| 每一处都手写类型 | 噪声大、重复多 | 意图未必更清楚 |
+| 完全不写类型 | 关键边界缺少约束 | 错误等到调用或运行时才暴露 |
+
 ---
 
 ## 第三幕：层层揭示
+
+### 一眼全局图
+
+![本课一眼全局图](../assets/lesson-02-entry.svg)
+
+> 看图：先从一个值出发，再观察上下文和未来变化，最后决定是依赖推导还是补充标注。
+
+### 本课地图
+
+| 步骤 | 要解决什么 | 对应知识点 |
+|---|---|---|
+| 第 1 步 | 判断单个值能否被稳定推导 | 知识点 1：原始类型标注与类型推导 |
+| 第 2 步 | 区分列表、固定结构和只读边界 | 知识点 2：数组、元组与只读 |
+| 第 3 步 | 把参数、返回值和调用关系写成契约 | 知识点 3：函数类型标注 |
 
 > ⚠️ **本课的默认环境**（重要，影响你复现每一个输出）：
 > 本课所有示例都在 `playground/lesson-02/` 目录下执行，**该目录没有 `tsconfig.json`**，直接 `npx tsc xxx.ts` 编译单个文件。
@@ -150,6 +176,8 @@ lines.map((line) => line.split(",")); // 这个 line 没标类型，为什么没
 > 第二条要和课 1 那个 `tsc --init` 模板区分开：模板**推荐**你开这个选项，但默认值本身是关。课 10 会完整讲这组开关。
 
 ### 知识点 1：原始类型标注与类型推导
+
+> 🧭 第 1/3 步｜承接：第二幕在问“我不写时 TS 到底知道多少” → 本步：从初值、上下文和可变性看推导来源。
 
 > 关键点：七个原始类型 / 推导的三个信息来源 / 字面量宽化 / 四类必须标注 / 注解 vs 推导决策清单
 
@@ -365,9 +393,19 @@ Alice Alice 18 18 true [ 1 ] { name: 'Alice' }
 - 类型推导：https://www.typescriptlang.org/docs/handbook/type-inference.html
 - 字面量类型：https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#literal-types
 
+#### 🗣️ 行话对照
+
+| 本课说法 | 行业标准叫法 | 在哪里遇到 |
+|---|---|---|
+| 类型标注 | type annotation | 变量、参数、返回值声明 |
+| 类型推导 | type inference | 编辑器悬浮提示、泛型调用 |
+| 字面量变宽 | literal widening | `const` / `let` 推导差异、配置对象 |
+
 ---
 
 ### 知识点 2：数组、元组与只读
+
+> 🧭 第 2/3 步｜承接：知道单值如何被推导后，还要处理“多个值的形状” → 本步：区分可变列表、定长结构和只读视图。
 
 > 关键点：`T[]` 与 `Array<T>` / 元组四件套 / `readonly` 与 `as const` / 赋值方向 / 运行时不设防
 
@@ -582,9 +620,19 @@ const cell2 = row[2]; // ❌ TS2493：类型系统仍然认为它只有 2 个元
 - 数组与元组：https://www.typescriptlang.org/docs/handbook/2/objects.html#tuple-types
 - `readonly` 与 `as const`：https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#readonly-array-type
 
+#### 🗣️ 行话对照
+
+| 本课说法 | 行业标准叫法 | 在哪里遇到 |
+|---|---|---|
+| 数组 | array type | `T[]`、`Array<T>`、集合 API |
+| 元组 | tuple type | 固定返回值、`Promise.all`、参数列表 |
+| 只读 | readonly type | API 参数、状态快照、不可变数据 |
+
 ---
 
 ### 知识点 3：函数类型标注
+
+> 🧭 第 3/3 步｜承接：值和集合的形状已经清楚，还缺“谁接收什么、返回什么” → 本步：用函数签名把调用边界固定下来。
 
 > 关键点：参数与返回值 / 可选·默认·剩余 / `void`·`never` / 函数类型表达式 / 上下文类型
 
@@ -809,6 +857,14 @@ three("x", 1, "?"); // ❌ TS2554: Expected 2 arguments, but got 3.
 - 函数类型：https://www.typescriptlang.org/docs/handbook/2/functions.html
 - `never` 与穷尽性检查：https://www.typescriptlang.org/docs/handbook/2/narrowing.html#exhaustiveness-checking
 
+#### 🗣️ 行话对照
+
+| 本课说法 | 行业标准叫法 | 在哪里遇到 |
+|---|---|---|
+| 函数类型签名 | function type signature | 参数类型、返回值类型、回调 |
+| 上下文推导 | contextual typing | `map` / `forEach` / 事件回调 |
+| 永不返回 | `never` return type | 抛错函数、穷尽性检查 |
+
 ---
 
 ## 第四幕：实操验证
@@ -1028,7 +1084,7 @@ A 错（这是刻意设计），C 错（类型系统不做运行时转换）。
 
 ➡️ **下一课**：[课 3：对象类型与结构化类型](lesson-03-对象类型与结构化类型.md)
 
-📚 **返回目录**：[课程目录](../../02-课程目录.md)
+📚 **返回目录**：[课程目录](../../../02-课程目录.md)
 
 ---
 

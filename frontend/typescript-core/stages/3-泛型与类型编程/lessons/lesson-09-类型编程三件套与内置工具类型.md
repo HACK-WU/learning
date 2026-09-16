@@ -6,6 +6,8 @@
 > ✅ 状态：已完成（2026-09-03）｜ 实操环境：Node.js v22.14.0 + TypeScript 7.0.2（**文中所有输出均为本课本机实测**）
 > ⚠️ **全课程抽象度最高的一课**，卡住可先学「映射类型 + 工具类型用法」，回头再补「条件类型与 infer」
 
+> 📖 结论已按官方文档核对（核查于 2026-09-16 ｜ 来源：[Mapped / Conditional / Utility Types 路由表](../../../web-index/typescript/index.md)）
+
 ## 🎯 本课目标
 
 - 用 `in` 遍历键、`+?` / `-readonly` 改修饰符、`as` 重映射键名，写出映射类型
@@ -90,6 +92,16 @@ summary = { id: 'o1', amount: 100 }
 
 ---
 
+### 一句话本质
+
+> 本课把重复的类型改造变成可组合的计算，让类型本身也能表达遍历、判断和提取。
+
+### 处境对照
+
+| 手写每个变体 | 使用类型计算 |
+|---|---|
+| 字段一改就要同步多份声明 | 规则集中，变化可以自动传播 |
+
 ## 第二幕：认知冲突
 
 你想用类型解决它们，但卡在"怎么表达"上：
@@ -120,9 +132,26 @@ draft.meta.tags.push("x");   // ❌ 报错：'draft.meta' is possibly 'undefined
 
 ## 第三幕：层层揭示
 
+### 一眼全局图
+
+![本课一眼全局图](../assets/lesson-09-entry.svg)
+
+> 看图：把重复的形状改造拆成遍历、判断和提取，最后自动得到可以复用的新形状。
+
+### 本课地图
+
+| 步骤 | 要解决什么 | 对应知识点 |
+|---|---|---|
+| 第 1 步 | 批量遍历并改造已有字段 | 知识点 1：映射类型 |
+| 第 2 步 | 根据条件分支并从结构中提取信息 | 知识点 2：条件类型与 infer |
+| 第 3 步 | 看懂并手写常用工具类型 | 知识点 3：内置工具类型全景与手写实现 |
+| 第 4 步 | 把类型计算放进真实 API 设计 | 知识点 4：泛型的实际设计场景 |
+
 > ⚠️ **本课的默认环境**（与前八课一致）：所有示例在 `playground/lesson-09/` 目录下执行，**没有 `tsconfig.json`**，直接 `npx tsc xxx.ts` 编译单个文件。TS 7.0.2 默认 `strict: true`。
 
 ### 知识点 1：映射类型
+
+> 🧭 第 1/4 步｜承接：第二幕面对的是重复改字段的需求 → 本步：先让类型沿着键集合批量改造。
 
 > 关键点：`in` 遍历键 / 修饰符 `+?` 与 `-readonly` / 键重映射 `as` / 只作用于一层
 
@@ -253,6 +282,8 @@ mapped-probe.ts(11,26): error TS2344: Type '"nmae"' does not satisfy the constra
 ---
 
 ### 知识点 2：条件类型与 infer
+
+> 🧭 第 2/4 步｜承接：批量改造还不够，需要根据输入结构选择不同路径 → 本步：引入条件分支和类型提取。
 
 > 关键点：`extends` 三元 / **裸类型参数会分发** / `infer` 提取 / 分发的坑与 `[T]` 规避
 
@@ -385,6 +416,8 @@ conditional-probe.ts(25,15): error TS1338: 'infer' declarations are only permitt
 
 ### 知识点 3：内置工具类型全景与手写实现
 
+> 🧭 第 3/4 步｜承接：三块积木已经出现 → 本步：把官方常用工具拆开，确认它们不是魔法。
+
 > 关键点：12 个工具类型逐个手写，并用"类型层面的单元测试"验证与内置版等价
 
 #### 一句话定义
@@ -470,6 +503,8 @@ utilities-probe.ts(40,7): error TS2322: Type 'true' is not assignable to type 'f
 ---
 
 ### 知识点 4：泛型的实际设计场景
+
+> 🧭 第 4/4 步｜承接：会计算类型不等于该计算一切 → 本步：把类型编程放回 API、事件和表单的真实约束中。
 
 > 关键点：API 响应包装 / 事件总线类型 / 表单字段映射 / 泛型滥用信号
 
@@ -663,6 +698,14 @@ scenario-guard.ts(40,71): error TS2353: Object literal may only specify known pr
 
 ---
 
+## 🗣️ 术语锚定速查
+
+| 对应知识点 | 本课说法 | 行业标准叫法 | 在哪里遇到 |
+|---|---|---|---|
+| 映射类型 | 遍历并改造字段 | mapped type / key remapping | `in`、`as`、`readonly`、可选属性 |
+| 条件与提取 | 根据结构分支取值 | conditional type / `infer` / distributive conditional | `extends`、工具类型源码 |
+| 工具类型与设计 | 官方预制类型计算 | utility types / type-level programming | `Partial`、`Pick`、`ReturnType`、API 设计 |
+
 ## 🐞 常见误区
 
 1. **"`Partial` 会把嵌套对象也变可选。"** → 只作用一层（实测 TS18048）。
@@ -805,9 +848,9 @@ type MyOmit<T, K extends keyof any> = MyPick<T, Exclude<keyof T, K>>;
 
 ⬅️ **上一课**：[课 8：泛型基础](lesson-08-泛型基础.md)
 
-➡️ **下一课**：[阶段 4 · 课 10：tsconfig 与编译配置](../4-工程化与类型声明/lessons/lesson-10-tsconfig与编译配置.md)
+➡️ **下一课**：[阶段 4 · 课 10：tsconfig 与编译配置](../../4-工程化与类型声明/lessons/lesson-10-tsconfig与编译配置.md)
 
-📚 **返回目录**：[课程目录](../../02-课程目录.md)
+📚 **返回目录**：[课程目录](../../../02-课程目录.md)
 
 ---
 
