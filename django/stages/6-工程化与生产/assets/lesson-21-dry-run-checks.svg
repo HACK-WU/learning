@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="1000" height="560" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="1000" height="560" fill="#ffffff"/>
+  <text x="500" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">--dry-run 必须真的不落库：脚本与管理命令的分界</text>
+  <text x="500" y="54" text-anchor="middle" font-size="13" fill="#666666">左：假 dry-run（只打印，事务照样提交）　右：真 dry-run（可验证）</text>
+
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#666666"/>
+    </marker>
+  </defs>
+
+  <!-- ================= 左：假 dry-run ================= -->
+  <rect x="30" y="76" width="450" height="330" rx="10" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="255" y="104" text-anchor="middle" font-size="16" font-weight="700" fill="#b71c1c">❌ 只在写之前加个 if</text>
+  <text x="255" y="124" text-anchor="middle" font-size="12" fill="#8e2b2b">if not dry_run: obj.save()</text>
+
+  <rect x="70" y="146" width="370" height="42" rx="6" fill="#ffffff" stroke="#ef9a9a" stroke-width="1.5"/>
+  <text x="255" y="165" text-anchor="middle" font-size="12.5" font-weight="700" fill="#b71c1c">① 漏掉某一处 save</text>
+  <text x="255" y="182" text-anchor="middle" font-size="11" fill="#424242">分支散落在业务逻辑里</text>
+
+  <line x1="255" y1="188" x2="255" y2="214" stroke="#c62828" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="70" y="220" width="370" height="52" rx="6" fill="#ffffff" stroke="#ef9a9a" stroke-width="1.5"/>
+  <text x="255" y="240" text-anchor="middle" font-size="12.5" fill="#e65100">② 副作用已经发生</text>
+  <text x="255" y="260" text-anchor="middle" font-size="11" fill="#424242">发消息、写缓存、调外部接口</text>
+
+  <line x1="255" y1="272" x2="255" y2="298" stroke="#c62828" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="70" y="304" width="370" height="66" rx="6" fill="#ffffff" stroke="#c62828" stroke-width="2"/>
+  <text x="255" y="324" text-anchor="middle" font-size="13" font-weight="700" fill="#b71c1c">🚨 "演练"却改了生产数据</text>
+  <text x="255" y="344" text-anchor="middle" font-size="11" fill="#424242">事后才发现，无法回滚</text>
+  <text x="255" y="362" text-anchor="middle" font-size="11" fill="#b71c1c">信任一旦失去，命令没人敢用</text>
+
+  <text x="255" y="392" text-anchor="middle" font-size="12" fill="#c62828">dry-run 的价值 100% 取决于它真的没写</text>
+
+  <!-- ================= 右：真 dry-run ================= -->
+  <rect x="520" y="76" width="450" height="330" rx="10" fill="#f1f8e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="745" y="104" text-anchor="middle" font-size="16" font-weight="700" fill="#1b5e20">✅ 单点开关 + 可验证</text>
+  <text x="745" y="124" text-anchor="middle" font-size="12" fill="#33691e">统一出口，跑完能证明没写</text>
+
+  <rect x="560" y="146" width="370" height="42" rx="6" fill="#ffffff" stroke="#81c784" stroke-width="1.5"/>
+  <text x="745" y="165" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1b5e20">① 写操作收敛到一个出口</text>
+  <text x="745" y="182" text-anchor="middle" font-size="11" fill="#424242">或整体包事务后回滚</text>
+
+  <line x1="745" y1="188" x2="745" y2="214" stroke="#2e7d32" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="560" y="220" width="370" height="52" rx="6" fill="#e8f5e9" stroke="#81c784" stroke-width="1.5"/>
+  <text x="745" y="240" text-anchor="middle" font-size="12.5" fill="#33691e">② 副作用也要走开关</text>
+  <text x="745" y="260" text-anchor="middle" font-size="11" fill="#424242">外部调用不能"顺手就发"</text>
+
+  <line x1="745" y1="272" x2="745" y2="298" stroke="#2e7d32" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="560" y="304" width="370" height="66" rx="6" fill="#ffffff" stroke="#2e7d32" stroke-width="2"/>
+  <text x="745" y="324" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">✅ 跑完断言行数没变</text>
+  <text x="745" y="344" text-anchor="middle" font-size="11" fill="#424242">--dry-run 后 count() 与跑前一致</text>
+  <text x="745" y="362" text-anchor="middle" font-size="11" fill="#1b5e20">这条断言本身就是文档</text>
+
+  <text x="745" y="392" text-anchor="middle" font-size="12" fill="#2e7d32">能被验证的 dry-run 才叫 dry-run</text>
+
+  <!-- ================= 底部：checks ================= -->
+  <rect x="30" y="426" width="940" height="118" rx="10" fill="#f5f9fd" stroke="#90caf9" stroke-width="1.5"/>
+  <text x="500" y="452" text-anchor="middle" font-size="15" font-weight="700" fill="#0d47a1">System checks：把"忘了配"变成"起不来"</text>
+
+  <line x1="60" y1="464" x2="940" y2="464" stroke="#90caf9" stroke-width="1"/>
+  <text x="70" y="482" font-size="12" font-weight="700" fill="#0d47a1">级别</text>
+  <text x="300" y="482" font-size="12" font-weight="700" fill="#0d47a1">含义</text>
+  <text x="620" y="482" font-size="12" font-weight="700" fill="#0d47a1">什么时候用</text>
+  <line x1="60" y1="490" x2="940" y2="490" stroke="#90caf9" stroke-width="1"/>
+
+  <text x="70" y="508" font-size="12" fill="#b71c1c">ERROR</text>
+  <text x="300" y="508" font-size="11" fill="#424242">阻断启动</text>
+  <text x="620" y="508" font-size="11" fill="#424242">缺了就一定跑不了（如 SECRET_KEY）</text>
+
+  <text x="70" y="528" font-size="12" fill="#e65100">WARNING</text>
+  <text x="300" y="528" font-size="11" fill="#424242">提示但不阻断</text>
+  <text x="620" y="528" font-size="11" fill="#424242">配置可疑但可能合法（W035 等）</text>
+
+  <text x="70" y="548" font-size="12" fill="#0d47a1">验证</text>
+  <text x="300" y="548" font-size="11" fill="#424242">manage.py check --list</text>
+  <text x="620" y="548" font-size="11" fill="#1b5e20">确认自己注册的 check 真的在 ✅</text>
+</svg>

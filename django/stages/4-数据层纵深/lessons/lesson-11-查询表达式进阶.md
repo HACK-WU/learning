@@ -1,4 +1,4 @@
-# 课 11　查询表达式进阶
+﻿# 课 11　查询表达式进阶
 
 > 📖 情节定位：**纵深（一）** —— 很多"必须写循环/必须加锁"的场景，其实一条查询就能解决
 > 🎯 本课目标：用表达式把计算推给数据库，减少往返与竞态
@@ -93,6 +93,9 @@ for product in products:
 后者用 `Subquery` + `annotate` 只需要 **1 次查询**，`prefetch_related` 要 2 次且还得在 Python 里算。
 
 ---
+
+
+![F 表达式原子更新](../assets/lesson-11-f-expression-atomic.svg)
 
 ## 第三幕 · 层层揭示
 

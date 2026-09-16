@@ -1,7 +1,10 @@
-# 课 21　自定义管理命令与 System checks
+﻿# 课 21　自定义管理命令与 System checks
 
 > 📖 情节定位：**收尾（三）** —— 把运维动作和约定检查都固化成可执行、可 CI 的东西
 > 🎯 本课目标：能写生产可用的管理命令，并把团队约定变成自动检查
+
+
+![dry-run 与 System checks](../assets/lesson-21-dry-run-checks.svg)
 
 ## 本课要回答的三个问题（来自课 20 的接力）
 

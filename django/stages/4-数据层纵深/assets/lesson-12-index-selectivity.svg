@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="1000" height="560" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="1000" height="560" fill="#ffffff"/>
+  <text x="500" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">加了索引却没变快：优化器为什么不选你的索引</text>
+  <text x="500" y="54" text-anchor="middle" font-size="13" fill="#666666">左：低选择性索引（优化器直接弃用）　右：部分索引（体积是最硬的论据）</text>
+
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#666666"/>
+    </marker>
+  </defs>
+
+  <!-- ================= 左：低选择性 ================= -->
+  <rect x="30" y="76" width="450" height="330" rx="10" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="255" y="104" text-anchor="middle" font-size="16" font-weight="700" fill="#b71c1c">❌ 在 status 上建索引</text>
+  <text x="255" y="124" text-anchor="middle" font-size="12" fill="#8e2b2b">status 只有 3 个取值，100 万行</text>
+
+  <rect x="70" y="146" width="370" height="42" rx="6" fill="#ffffff" stroke="#ef9a9a" stroke-width="1.5"/>
+  <text x="255" y="165" text-anchor="middle" font-size="12.5" font-weight="700" fill="#b71c1c">选择性 = 3 / 1000000 ≈ 0.0003%</text>
+  <text x="255" y="182" text-anchor="middle" font-size="11" fill="#424242">每个值命中约 33 万行</text>
+
+  <line x1="255" y1="188" x2="255" y2="214" stroke="#c62828" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="70" y="220" width="370" height="52" rx="6" fill="#ffffff" stroke="#ef9a9a" stroke-width="1.5"/>
+  <text x="255" y="240" text-anchor="middle" font-size="12.5" fill="#e65100">优化器算了一笔账：回表 33 万次</text>
+  <text x="255" y="260" text-anchor="middle" font-size="11" fill="#424242">随机 IO 远超顺序扫全表</text>
+
+  <line x1="255" y1="272" x2="255" y2="298" stroke="#c62828" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="70" y="304" width="370" height="66" rx="6" fill="#ffffff" stroke="#c62828" stroke-width="2"/>
+  <text x="255" y="324" text-anchor="middle" font-size="13" font-weight="700" fill="#b71c1c">🚨 索引被无视 → 全表扫描</text>
+  <text x="255" y="344" text-anchor="middle" font-size="11" fill="#424242">explain() 里看不到你的索引</text>
+  <text x="255" y="362" text-anchor="middle" font-size="11" fill="#b71c1c">还白搭上每次写入的维护成本</text>
+
+  <text x="255" y="392" text-anchor="middle" font-size="12" fill="#c62828">索引不是建了就生效，先问"它会被用上吗"</text>
+
+  <!-- ================= 右：部分索引 ================= -->
+  <rect x="520" y="76" width="450" height="330" rx="10" fill="#f1f8e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="745" y="104" text-anchor="middle" font-size="16" font-weight="700" fill="#1b5e20">✅ 部分索引只索引热点</text>
+  <text x="745" y="124" text-anchor="middle" font-size="12" fill="#33691e">condition=Q(status="pending")</text>
+
+  <rect x="560" y="146" width="370" height="42" rx="6" fill="#ffffff" stroke="#81c784" stroke-width="1.5"/>
+  <text x="745" y="165" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1b5e20">只装 pending 那 5000 行</text>
+  <text x="745" y="182" text-anchor="middle" font-size="11" fill="#424242">索引体积从 100 万 → 5000 行</text>
+
+  <line x1="745" y1="188" x2="745" y2="214" stroke="#2e7d32" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="560" y="220" width="370" height="52" rx="6" fill="#e8f5e9" stroke="#81c784" stroke-width="1.5"/>
+  <text x="745" y="240" text-anchor="middle" font-size="12.5" fill="#33691e">⚠️ 查询条件必须精确匹配</text>
+  <text x="745" y="260" text-anchor="middle" font-size="11" fill="#424242">WHERE 写法不一致就用不上</text>
+
+  <line x1="745" y1="272" x2="745" y2="298" stroke="#2e7d32" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="560" y="304" width="370" height="66" rx="6" fill="#ffffff" stroke="#2e7d32" stroke-width="2"/>
+  <text x="745" y="324" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">✅ 写入维护代价也变小</text>
+  <text x="745" y="344" text-anchor="middle" font-size="11" fill="#424242">非 pending 的行不进索引</text>
+  <text x="745" y="362" text-anchor="middle" font-size="11" fill="#1b5e20">explain() 可验证</text>
+
+  <text x="745" y="392" text-anchor="middle" font-size="12" fill="#2e7d32">体积是最硬的论据：省空间也省写入</text>
+
+  <!-- ================= 底部：速查 ================= -->
+  <rect x="30" y="426" width="940" height="118" rx="10" fill="#f5f9fd" stroke="#90caf9" stroke-width="1.5"/>
+  <text x="500" y="452" text-anchor="middle" font-size="15" font-weight="700" fill="#0d47a1">索引设计决策清单（本课 1.5 / 1.6 / 1.7 实测 + explain 验证）</text>
+
+  <line x1="60" y1="464" x2="940" y2="464" stroke="#90caf9" stroke-width="1"/>
+  <text x="70" y="482" font-size="12" font-weight="700" fill="#0d47a1">判断项</text>
+  <text x="380" y="482" font-size="12" font-weight="700" fill="#0d47a1">怎么判断</text>
+  <text x="700" y="482" font-size="12" font-weight="700" fill="#0d47a1">不做的后果</text>
+  <text x="880" y="482" font-size="12" font-weight="700" fill="#0d47a1">验证手段</text>
+  <line x1="60" y1="490" x2="940" y2="490" stroke="#90caf9" stroke-width="1"/>
+
+  <text x="70" y="508" font-size="12" fill="#424242">选择性够高吗</text>
+  <text x="380" y="508" font-size="11" fill="#424242">不同值数 / 总行数，越接近 1 越好</text>
+  <text x="700" y="508" font-size="12" fill="#b71c1c">优化器弃用，白建</text>
+  <text x="880" y="508" font-size="12" fill="#0d47a1">explain()</text>
+
+  <text x="70" y="528" font-size="12" fill="#424242">查询模式匹配吗</text>
+  <text x="380" y="528" font-size="11" fill="#424242">函数索引要求写法精确一致</text>
+  <text x="700" y="528" font-size="12" fill="#e65100">看起来该走却没走</text>
+  <text x="880" y="528" font-size="12" fill="#0d47a1">explain()</text>
+
+  <text x="70" y="548" font-size="12" fill="#424242">写入代价可接受吗</text>
+  <text x="380" y="548" font-size="11" fill="#424242">每次 INSERT/UPDATE 都要维护</text>
+  <text x="700" y="548" font-size="12" fill="#e65100">写变慢、体积膨胀</text>
+  <text x="880" y="548" font-size="12" fill="#0d47a1">体积对比</text>
+</svg>

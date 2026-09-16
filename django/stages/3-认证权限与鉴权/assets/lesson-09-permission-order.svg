@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="1000" height="560" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="1000" height="560" fill="#ffffff"/>
+  <text x="500" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">只写 IsAuthenticated 的越权漏洞：认证过了 ≠ 能看这条数据</text>
+  <text x="500" y="54" text-anchor="middle" font-size="13" fill="#666666">左：只判"你是谁"　右：再判"这条数据是不是你的"</text>
+
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#666666"/>
+    </marker>
+  </defs>
+
+  <!-- ================= 左：漏洞版 ================= -->
+  <rect x="30" y="76" width="450" height="330" rx="10" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="255" y="104" text-anchor="middle" font-size="16" font-weight="700" fill="#b71c1c">❌ 只写 IsAuthenticated</text>
+  <text x="255" y="124" text-anchor="middle" font-size="12" fill="#8e2b2b">permission_classes = [IsAuthenticated]</text>
+
+  <rect x="70" y="146" width="370" height="42" rx="6" fill="#ffffff" stroke="#ef9a9a" stroke-width="1.5"/>
+  <text x="255" y="165" text-anchor="middle" font-size="13" font-weight="700" fill="#b71c1c">第 1 层：认证通过（登录了）</text>
+  <text x="255" y="182" text-anchor="middle" font-size="11" fill="#424242">request.user = 张三，合法用户</text>
+
+  <line x1="255" y1="188" x2="255" y2="214" stroke="#c62828" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="70" y="220" width="370" height="42" rx="6" fill="#ffffff" stroke="#ef9a9a" stroke-width="1.5"/>
+  <text x="255" y="239" text-anchor="middle" font-size="12.5" fill="#33691e">第 2 层：queryset 未过滤</text>
+  <text x="255" y="256" text-anchor="middle" font-size="11" fill="#424242">Order.objects.all() ← 全表</text>
+
+  <line x1="255" y1="262" x2="255" y2="288" stroke="#c62828" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="70" y="294" width="370" height="76" rx="6" fill="#ffffff" stroke="#c62828" stroke-width="2"/>
+  <text x="255" y="314" text-anchor="middle" font-size="13" font-weight="700" fill="#b71c1c">🚨 张三看到了李四的订单</text>
+  <text x="255" y="334" text-anchor="middle" font-size="11.5" fill="#424242">GET /api/orders/ 返回全部用户数据</text>
+  <text x="255" y="356" text-anchor="middle" font-size="11.5" fill="#b71c1c">HTTP 200，无报错、无日志</text>
+
+  <text x="255" y="392" text-anchor="middle" font-size="12" fill="#c62828">水平越权：认证是最低门槛，不是数据边界</text>
+
+  <!-- ================= 右：正确版 ================= -->
+  <rect x="520" y="76" width="450" height="330" rx="10" fill="#f1f8e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="745" y="104" text-anchor="middle" font-size="16" font-weight="700" fill="#1b5e20">✅ 两层都判</text>
+  <text x="745" y="124" text-anchor="middle" font-size="12" fill="#33691e">queryset 过滤 + has_object_permission</text>
+
+  <rect x="560" y="146" width="370" height="42" rx="6" fill="#ffffff" stroke="#81c784" stroke-width="1.5"/>
+  <text x="745" y="165" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">第 1 层：认证通过</text>
+  <text x="745" y="182" text-anchor="middle" font-size="11" fill="#424242">request.user = 张三</text>
+
+  <line x1="745" y1="188" x2="745" y2="214" stroke="#2e7d32" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="560" y="220" width="370" height="42" rx="6" fill="#e8f5e9" stroke="#81c784" stroke-width="1.5"/>
+  <text x="745" y="239" text-anchor="middle" font-size="12.5" fill="#33691e">第 2 层：queryset 只给自己的</text>
+  <text x="745" y="256" text-anchor="middle" font-size="11" fill="#424242">Order.objects.filter(user=request.user)</text>
+
+  <line x1="745" y1="262" x2="745" y2="288" stroke="#2e7d32" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="560" y="294" width="370" height="76" rx="6" fill="#ffffff" stroke="#2e7d32" stroke-width="2"/>
+  <text x="745" y="314" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">🛡️ 列表：只见自己的</text>
+  <text x="745" y="334" text-anchor="middle" font-size="11.5" fill="#424242">详情：has_object_permission 再判一次</text>
+  <text x="745" y="356" text-anchor="middle" font-size="11.5" fill="#1b5e20">越权访问 → 404（不暴露资源存在）</text>
+
+  <text x="745" y="392" text-anchor="middle" font-size="12" fill="#2e7d32">列表靠 queryset，详情靠对象级权限，两层都要有</text>
+
+  <!-- ================= 底部：四层顺序 ================= -->
+  <rect x="30" y="426" width="940" height="118" rx="10" fill="#f5f9fd" stroke="#90caf9" stroke-width="1.5"/>
+  <text x="500" y="452" text-anchor="middle" font-size="15" font-weight="700" fill="#0d47a1">权限四层与执行顺序（本课实验 1 实测，不是猜的）</text>
+
+  <line x1="60" y1="464" x2="940" y2="464" stroke="#90caf9" stroke-width="1"/>
+  <text x="70" y="482" font-size="12" font-weight="700" fill="#0d47a1">顺序</text>
+  <text x="230" y="482" font-size="12" font-weight="700" fill="#0d47a1">层</text>
+  <text x="600" y="482" font-size="12" font-weight="700" fill="#0d47a1">作用</text>
+  <text x="860" y="482" font-size="12" font-weight="700" fill="#0d47a1">漏了会怎样</text>
+  <line x1="60" y1="490" x2="940" y2="490" stroke="#90caf9" stroke-width="1"/>
+
+  <text x="70" y="508" font-size="12" fill="#424242">1</text>
+  <text x="230" y="508" font-size="12" fill="#424242">认证 Authentication</text>
+  <text x="600" y="508" font-size="12" fill="#424242">你是谁（request.user）</text>
+  <text x="860" y="508" font-size="12" fill="#b71c1c">匿名用户进来</text>
+
+  <text x="70" y="528" font-size="12" fill="#424242">2</text>
+  <text x="230" y="528" font-size="12" fill="#424242">限流 Throttling</text>
+  <text x="600" y="528" font-size="12" fill="#424242">你来得太频繁吗</text>
+  <text x="860" y="528" font-size="12" fill="#e65100">被刷、拖垮</text>
+
+  <text x="70" y="548" font-size="12" fill="#424242">3</text>
+  <text x="230" y="548" font-size="12" fill="#424242">queryset 过滤</text>
+  <text x="600" y="548" font-size="12" fill="#424242">列表里能看到哪些</text>
+  <text x="860" y="548" font-size="12" fill="#b71c1c">水平越权</text>
+</svg>

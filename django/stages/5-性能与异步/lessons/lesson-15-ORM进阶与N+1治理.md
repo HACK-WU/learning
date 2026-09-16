@@ -1,4 +1,4 @@
-# 课 15《ORM 进阶与 N+1 治理》
+﻿# 课 15《ORM 进阶与 N+1 治理》
 
 > 🧭 所属阶段：[阶段 5 性能与异步](../overview.md) ｜ 上一课：[课 14 迁移工程：不依赖 model 的迁移](../../4-数据层纵深/lessons/lesson-14-迁移工程.md) ｜ 下一课：[课 16 性能：缓存与异步](./lesson-16-性能缓存与异步.md)
 >
@@ -80,6 +80,9 @@ class Note(models.Model):
 > ⚠️ 实验工程在 `%TEMP%` 下，**可能被系统清理**。如果跑不起来，用上面的模型 + `config/settings.py`（两个 alias 指向同一 SQLite 文件）即可重建。
 
 ---
+
+
+![N+1 半修效应](../assets/lesson-15-n1-half-fix.svg)
 
 ## 开场：三个都"加了优化"的接口，还是慢
 

@@ -1,4 +1,4 @@
-# 课 16《性能：缓存与异步》
+﻿# 课 16《性能：缓存与异步》
 
 > 🧭 所属阶段：[阶段 5 性能与异步](../overview.md) ｜ 上一课：[课 15《ORM 进阶与 N+1 治理》](./lesson-15-ORM进阶与N+1治理.md) ｜ 下一课：课 17 信号：隐式耦合的代价
 >
@@ -63,6 +63,9 @@ class Product(models.Model):
 > 注意 settings 里必须有 `ALLOWED_HOSTS = ["testserver"]`——`cache_page` 会调 `build_absolute_uri()`，缺了会抛 `DisallowedHost`（本课踩到的第一个坑）。
 
 ---
+
+
+![缓存键与 Vary](../assets/lesson-16-cache-key-vary.svg)
 
 ## 开场：三个"加了缓存/上了异步"的接口，还是没解决问题
 

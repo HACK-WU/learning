@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="1000" height="560" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="1000" height="560" fill="#ffffff"/>
+  <text x="500" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">半修效应：N+1 链上少写一层，等于没修</text>
+  <text x="500" y="54" text-anchor="middle" font-size="13" fill="#666666">左：只补一半关联（12 条 → 看似改了）　右：补齐链路（3 条）+ select/prefetch 的分工</text>
+
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#666666"/>
+    </marker>
+  </defs>
+
+  <!-- ================= 左：半修 ================= -->
+  <rect x="30" y="76" width="450" height="330" rx="10" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+  <text x="255" y="104" text-anchor="middle" font-size="16" font-weight="700" fill="#e65100">⚠️ 只补了第一层</text>
+  <text x="255" y="124" text-anchor="middle" font-size="12" fill="#8d6e63">Book.objects.select_related("author")</text>
+
+  <rect x="70" y="146" width="370" height="42" rx="6" fill="#ffffff" stroke="#ffcc80" stroke-width="1.5"/>
+  <text x="255" y="165" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1b5e20">第 1 层作者：JOIN 取回 ✅</text>
+  <text x="255" y="182" text-anchor="middle" font-size="11" fill="#424242">序列化 author.name 不再查</text>
+
+  <line x1="255" y1="188" x2="255" y2="214" stroke="#f9a825" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="70" y="220" width="370" height="52" rx="6" fill="#ffffff" stroke="#ffcc80" stroke-width="1.5"/>
+  <text x="255" y="240" text-anchor="middle" font-size="12.5" fill="#e65100">但模板里还访问 author.org</text>
+  <text x="255" y="260" text-anchor="middle" font-size="11" fill="#424242">第二层没写 → 逐条补刀</text>
+
+  <line x1="255" y1="272" x2="255" y2="298" stroke="#c62828" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="70" y="304" width="370" height="66" rx="6" fill="#ffffff" stroke="#c62828" stroke-width="2"/>
+  <text x="255" y="324" text-anchor="middle" font-size="13" font-weight="700" fill="#b71c1c">🚨 查询数 12 条（几乎没省）</text>
+  <text x="255" y="344" text-anchor="middle" font-size="11" fill="#424242">N+1 只是从"每本书 2 次"变"每本书 1 次"</text>
+  <text x="255" y="362" text-anchor="middle" font-size="11" fill="#b71c1c">最容易在 code review 里被漏掉</text>
+
+  <text x="255" y="392" text-anchor="middle" font-size="12" fill="#c62828">半修之后数字确实变小了，但复杂度还是 O(N)</text>
+
+  <!-- ================= 右：补齐 ================= -->
+  <rect x="520" y="76" width="450" height="330" rx="10" fill="#f1f8e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="745" y="104" text-anchor="middle" font-size="16" font-weight="700" fill="#1b5e20">✅ 两层都写全</text>
+  <text x="745" y="124" text-anchor="middle" font-size="12" fill="#33691e">select_related("author__org")</text>
+
+  <rect x="560" y="146" width="370" height="42" rx="6" fill="#ffffff" stroke="#81c784" stroke-width="1.5"/>
+  <text x="745" y="165" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1b5e20">双下划线连成一条 JOIN</text>
+  <text x="745" y="182" text-anchor="middle" font-size="11" fill="#424242">author + org 一次取回</text>
+
+  <line x1="745" y1="188" x2="745" y2="214" stroke="#2e7d32" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="560" y="220" width="370" height="52" rx="6" fill="#e8f5e9" stroke="#81c784" stroke-width="1.5"/>
+  <text x="745" y="240" text-anchor="middle" font-size="12.5" fill="#33691e">M2M 用 prefetch_related</text>
+  <text x="745" y="260" text-anchor="middle" font-size="11" fill="#424242">select_related 用错会抛 FieldError</text>
+
+  <line x1="745" y1="272" x2="745" y2="298" stroke="#2e7d32" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="560" y="304" width="370" height="66" rx="6" fill="#ffffff" stroke="#2e7d32" stroke-width="2"/>
+  <text x="745" y="324" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">✅ 查询数 3 条，与数据量无关</text>
+  <text x="745" y="344" text-anchor="middle" font-size="11" fill="#424242">用 assertNumQueries 把阈值钉死</text>
+  <text x="745" y="362" text-anchor="middle" font-size="11" fill="#1b5e20">values() 会让 select_related 静默失效</text>
+
+  <text x="745" y="392" text-anchor="middle" font-size="12" fill="#2e7d32">补齐后是 O(1) 次查询，不是"少一点"</text>
+
+  <!-- ================= 底部：实测 ================= -->
+  <rect x="30" y="426" width="940" height="118" rx="10" fill="#f5f9fd" stroke="#90caf9" stroke-width="1.5"/>
+  <text x="500" y="452" text-anchor="middle" font-size="15" font-weight="700" fill="#0d47a1">实测查询次数（本课 35 个实验 / 92 项断言，assertNumQueries 数出）</text>
+
+  <line x1="60" y1="464" x2="940" y2="464" stroke="#90caf9" stroke-width="1"/>
+  <text x="70" y="482" font-size="12" font-weight="700" fill="#0d47a1">写法</text>
+  <text x="420" y="482" font-size="12" font-weight="700" fill="#0d47a1">查询次数</text>
+  <text x="640" y="482" font-size="12" font-weight="700" fill="#0d47a1">适用</text>
+  <text x="860" y="482" font-size="12" font-weight="700" fill="#0d47a1">坑</text>
+  <line x1="60" y1="490" x2="940" y2="490" stroke="#90caf9" stroke-width="1"/>
+
+  <text x="70" y="508" font-size="12" fill="#b71c1c">裸 N+1</text>
+  <text x="420" y="508" font-size="12" font-weight="700" fill="#b71c1c">11 条</text>
+  <text x="640" y="508" font-size="11" fill="#424242">—（反例）</text>
+  <text x="860" y="508" font-size="12" fill="#b71c1c">线性增长</text>
+
+  <text x="70" y="528" font-size="12" fill="#1b5e20">select_related</text>
+  <text x="420" y="528" font-size="12" font-weight="700" fill="#1b5e20">1 条</text>
+  <text x="640" y="528" font-size="11" fill="#424242">FK / OneToOne（正向）</text>
+  <text x="860" y="528" font-size="12" fill="#e65100">不去重实例</text>
+
+  <text x="70" y="548" font-size="12" fill="#1b5e20">prefetch_related</text>
+  <text x="420" y="548" font-size="12" font-weight="700" fill="#1b5e20">2 条</text>
+  <text x="640" y="548" font-size="11" fill="#424242">M2M / 反向 FK</text>
+  <text x="860" y="548" font-size="12" fill="#e65100">内存占用高</text>
+</svg>

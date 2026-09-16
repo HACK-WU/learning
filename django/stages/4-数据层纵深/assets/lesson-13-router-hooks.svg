@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="1000" height="560" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="1000" height="560" fill="#ffffff"/>
+  <text x="500" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">只写 db_for_read 的坑：写操作被送进只读库，且不报错</text>
+  <text x="500" y="54" text-anchor="middle" font-size="13" fill="#666666">左：只实现一个钩子（粘性兜底反噬）　右：读写分开 + 跨库事务边界</text>
+
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#666666"/>
+    </marker>
+  </defs>
+
+  <!-- ================= 左：坑 ================= -->
+  <rect x="30" y="76" width="450" height="330" rx="10" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="255" y="104" text-anchor="middle" font-size="16" font-weight="700" fill="#b71c1c">❌ 只实现 db_for_read</text>
+  <text x="255" y="124" text-anchor="middle" font-size="12" fill="#8e2b2b">def db_for_read(...): return "replica"</text>
+
+  <rect x="70" y="146" width="370" height="42" rx="6" fill="#ffffff" stroke="#ef9a9a" stroke-width="1.5"/>
+  <text x="255" y="165" text-anchor="middle" font-size="12.5" font-weight="700" fill="#b71c1c">db_for_write 没写 → 返回 None</text>
+  <text x="255" y="182" text-anchor="middle" font-size="11" fill="#424242">路由器"没有意见"</text>
+
+  <line x1="255" y1="188" x2="255" y2="214" stroke="#c62828" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="70" y="220" width="370" height="52" rx="6" fill="#ffffff" stroke="#ef9a9a" stroke-width="1.5"/>
+  <text x="255" y="240" text-anchor="middle" font-size="12.5" fill="#e65100">粘性兜底：写入沿用"上次读的库"</text>
+  <text x="255" y="260" text-anchor="middle" font-size="11" fill="#424242">utils.py:224-238 的兜底逻辑</text>
+
+  <line x1="255" y1="272" x2="255" y2="298" stroke="#c62828" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="70" y="304" width="370" height="66" rx="6" fill="#ffffff" stroke="#c62828" stroke-width="2"/>
+  <text x="255" y="324" text-anchor="middle" font-size="13" font-weight="700" fill="#b71c1c">🚨 写进了只读从库</text>
+  <text x="255" y="344" text-anchor="middle" font-size="11" fill="#424242">不报错，或报一个看不懂的只读错误</text>
+  <text x="255" y="362" text-anchor="middle" font-size="11" fill="#b71c1c">写入还可能被复制覆盖</text>
+
+  <text x="255" y="392" text-anchor="middle" font-size="12" fill="#c62828">两个钩子的 None 兜底行为完全相反</text>
+
+  <!-- ================= 右：正确 ================= -->
+  <rect x="520" y="76" width="450" height="330" rx="10" fill="#f1f8e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="745" y="104" text-anchor="middle" font-size="16" font-weight="700" fill="#1b5e20">✅ 成对实现 + 认清边界</text>
+  <text x="745" y="124" text-anchor="middle" font-size="12" fill="#33691e">read → replica，write → default</text>
+
+  <rect x="560" y="146" width="370" height="42" rx="6" fill="#ffffff" stroke="#81c784" stroke-width="1.5"/>
+  <text x="745" y="165" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1b5e20">allow_relation：None = 只允同库</text>
+  <text x="745" y="182" text-anchor="middle" font-size="11" fill="#424242">utils.py:253，保守</text>
+
+  <line x1="745" y1="188" x2="745" y2="214" stroke="#2e7d32" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="560" y="220" width="370" height="52" rx="6" fill="#e8f5e9" stroke="#81c784" stroke-width="1.5"/>
+  <text x="745" y="240" text-anchor="middle" font-size="12.5" fill="#33691e">allow_migrate：None = 一律放行</text>
+  <text x="745" y="260" text-anchor="middle" font-size="11" fill="#424242">utils.py:268，与上面相反，必须显式拦</text>
+
+  <line x1="745" y1="272" x2="745" y2="298" stroke="#2e7d32" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="560" y="304" width="370" height="66" rx="6" fill="#ffffff" stroke="#2e7d32" stroke-width="2"/>
+  <text x="745" y="324" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">⚠️ atomic 的 using 是单数</text>
+  <text x="745" y="344" text-anchor="middle" font-size="11" fill="#424242">跨库事务不回滚，需各自包一层</text>
+  <text x="745" y="362" text-anchor="middle" font-size="11" fill="#1b5e20">instance._state.db 参与决策</text>
+
+  <text x="745" y="392" text-anchor="middle" font-size="12" fill="#2e7d32">路由决定去向，复制决定新鲜度，事务只管一个库</text>
+
+  <!-- ================= 底部：钩子 ================= -->
+  <rect x="30" y="426" width="940" height="118" rx="10" fill="#f5f9fd" stroke="#90caf9" stroke-width="1.5"/>
+  <text x="500" y="452" text-anchor="middle" font-size="15" font-weight="700" fill="#0d47a1">四个钩子与 None 兜底（本课 25 个实验实测，源码 django/db/utils.py）</text>
+
+  <line x1="60" y1="464" x2="940" y2="464" stroke="#90caf9" stroke-width="1"/>
+  <text x="70" y="482" font-size="12" font-weight="700" fill="#0d47a1">钩子</text>
+  <text x="300" y="482" font-size="12" font-weight="700" fill="#0d47a1">管什么</text>
+  <text x="620" y="482" font-size="12" font-weight="700" fill="#0d47a1">返回 None 时</text>
+  <text x="870" y="482" font-size="12" font-weight="700" fill="#0d47a1">易错点</text>
+  <line x1="60" y1="490" x2="940" y2="490" stroke="#90caf9" stroke-width="1"/>
+
+  <text x="70" y="508" font-size="12" fill="#424242">db_for_read</text>
+  <text x="300" y="508" font-size="11" fill="#424242">读去哪个库</text>
+  <text x="620" y="508" font-size="12" fill="#424242">下一个路由器 / default</text>
+  <text x="870" y="508" font-size="12" fill="#b71c1c">漏写 write 会反噬</text>
+
+  <text x="70" y="528" font-size="12" fill="#424242">db_for_write</text>
+  <text x="300" y="528" font-size="11" fill="#424242">写去哪个库</text>
+  <text x="620" y="528" font-size="12" fill="#424242">下一个路由器 / default</text>
+  <text x="870" y="528" font-size="12" fill="#e65100">必须与 read 成对</text>
+
+  <text x="70" y="548" font-size="12" fill="#424242">allow_relation</text>
+  <text x="300" y="548" font-size="11" fill="#424242">两个对象能否关联</text>
+  <text x="620" y="548" font-size="12" fill="#1b5e20">只允许同库 ✅</text>
+  <text x="870" y="548" font-size="12" fill="#0d47a1">与下一条相反</text>
+</svg>

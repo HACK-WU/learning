@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="1000" height="560" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="1000" height="560" fill="#ffffff"/>
+  <text x="500" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">缓存键 = URL + Vary：只有 Authorization 有自动兜底</text>
+  <text x="500" y="54" text-anchor="middle" font-size="13" fill="#666666">左：自定义身份头 X-Tenant-Id（A 租户看到 B 的数据）　右：Authorization（自动 patch）</text>
+
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#666666"/>
+    </marker>
+  </defs>
+
+  <!-- ================= 左：自定义头 ================= -->
+  <rect x="30" y="76" width="450" height="330" rx="10" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="255" y="104" text-anchor="middle" font-size="16" font-weight="700" fill="#b71c1c">🚨 X-Tenant-Id + cache_page</text>
+  <text x="255" y="124" text-anchor="middle" font-size="12" fill="#8e2b2b">自定义身份头，Django 不认识</text>
+
+  <rect x="70" y="146" width="370" height="42" rx="6" fill="#ffffff" stroke="#ef9a9a" stroke-width="1.5"/>
+  <text x="255" y="165" text-anchor="middle" font-size="12.5" font-weight="700" fill="#b71c1c">Vary 里没有这个头</text>
+  <text x="255" y="182" text-anchor="middle" font-size="11" fill="#424242">learn_cache_key 只存 Vary 里列的头名</text>
+
+  <line x1="255" y1="188" x2="255" y2="214" stroke="#c62828" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="70" y="220" width="370" height="52" rx="6" fill="#ffffff" stroke="#ef9a9a" stroke-width="1.5"/>
+  <text x="255" y="240" text-anchor="middle" font-size="12.5" fill="#e65100">两个租户算出同一个 md5</text>
+  <text x="255" y="260" text-anchor="middle" font-size="11" fill="#424242">键只由 URL 决定</text>
+
+  <line x1="255" y1="272" x2="255" y2="298" stroke="#c62828" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="70" y="304" width="370" height="66" rx="6" fill="#ffffff" stroke="#c62828" stroke-width="2"/>
+  <text x="255" y="324" text-anchor="middle" font-size="13" font-weight="700" fill="#b71c1c">🚨 A 租户看到 B 租户的数据</text>
+  <text x="255" y="344" text-anchor="middle" font-size="11" fill="#424242">HTTP 200，日志正常，无任何报错</text>
+  <text x="255" y="362" text-anchor="middle" font-size="11" fill="#b71c1c">多租户系统的典型静默事故</text>
+
+  <text x="255" y="392" text-anchor="middle" font-size="12" fill="#c62828">第 3 处"不报错的错误"</text>
+
+  <!-- ================= 右：Authorization ================= -->
+  <rect x="520" y="76" width="450" height="330" rx="10" fill="#f1f8e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="745" y="104" text-anchor="middle" font-size="16" font-weight="700" fill="#1b5e20">✅ Authorization 有兜底</text>
+  <text x="745" y="124" text-anchor="middle" font-size="12" fill="#33691e">middleware/cache.py 里唯一的特殊处理</text>
+
+  <rect x="560" y="146" width="370" height="42" rx="6" fill="#ffffff" stroke="#81c784" stroke-width="1.5"/>
+  <text x="745" y="165" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1b5e20">检测到 Authorization 头</text>
+  <text x="745" y="182" text-anchor="middle" font-size="11" fill="#424242">且 cache-control 不含 public</text>
+
+  <line x1="745" y1="188" x2="745" y2="214" stroke="#2e7d32" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="560" y="220" width="370" height="52" rx="6" fill="#e8f5e9" stroke="#81c784" stroke-width="1.5"/>
+  <text x="745" y="240" text-anchor="middle" font-size="12.5" fill="#33691e">patch_vary_headers 自动补上</text>
+  <text x="745" y="260" text-anchor="middle" font-size="11" fill="#424242">等于帮你写了 Vary: Authorization</text>
+
+  <line x1="745" y1="272" x2="745" y2="298" stroke="#2e7d32" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="560" y="304" width="370" height="66" rx="6" fill="#ffffff" stroke="#2e7d32" stroke-width="2"/>
+  <text x="745" y="324" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">✅ 不同用户各自一份缓存</text>
+  <text x="745" y="344" text-anchor="middle" font-size="11" fill="#424242">实测实验 30 不串号</text>
+  <text x="745" y="362" text-anchor="middle" font-size="11" fill="#1b5e20">自建身份头要手工 patch_vary_headers</text>
+
+  <text x="745" y="392" text-anchor="middle" font-size="12" fill="#2e7d32">只有这一个头有兜底，其余全靠自己声明</text>
+
+  <!-- ================= 底部：三步 ================= -->
+  <rect x="30" y="426" width="940" height="118" rx="10" fill="#f5f9fd" stroke="#90caf9" stroke-width="1.5"/>
+  <text x="500" y="452" text-anchor="middle" font-size="15" font-weight="700" fill="#0d47a1">缓存键生成三步（本课实验 3 / 30 / 34 实测 + 源码级根因）</text>
+
+  <line x1="60" y1="464" x2="940" y2="464" stroke="#90caf9" stroke-width="1"/>
+  <text x="70" y="482" font-size="12" font-weight="700" fill="#0d47a1">步</text>
+  <text x="230" y="482" font-size="12" font-weight="700" fill="#0d47a1">函数</text>
+  <text x="600" y="482" font-size="12" font-weight="700" fill="#0d47a1">做了什么</text>
+  <line x1="60" y1="490" x2="940" y2="490" stroke="#90caf9" stroke-width="1"/>
+
+  <text x="70" y="508" font-size="12" fill="#424242">①</text>
+  <text x="230" y="508" font-size="11" fill="#424242">_generate_cache_header_key</text>
+  <text x="600" y="508" font-size="11" fill="#424242">用 URL 生成 headerlist 的键</text>
+
+  <text x="70" y="528" font-size="12" fill="#424242">②</text>
+  <text x="230" y="528" font-size="11" fill="#424242">learn_cache_key</text>
+  <text x="600" y="528" font-size="11" fill="#424242">把响应 Vary 里的头名存进 headerlist</text>
+
+  <text x="70" y="548" font-size="12" fill="#424242">③</text>
+  <text x="230" y="548" font-size="11" fill="#424242">_generate_cache_key</text>
+  <text x="600" y="548" font-size="11" fill="#424242">逐头取值参与 md5（没进 Vary 的头不参与）</text>
+</svg>

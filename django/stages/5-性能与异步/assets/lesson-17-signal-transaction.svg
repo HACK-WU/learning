@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="1000" height="560" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="1000" height="560" fill="#ffffff"/>
+  <text x="500" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">信号的隐式代价：数据库退得回来，外部退不回来</text>
+  <text x="500" y="54" text-anchor="middle" font-size="13" fill="#666666">左：事务回滚但短信已发出　右：显式调用（提交后再触发）</text>
+
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#666666"/>
+    </marker>
+  </defs>
+
+  <!-- ================= 左：signal ================= -->
+  <rect x="30" y="76" width="450" height="330" rx="10" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="255" y="104" text-anchor="middle" font-size="16" font-weight="700" fill="#b71c1c">❌ post_save 里发通知</text>
+  <text x="255" y="124" text-anchor="middle" font-size="12" fill="#8e2b2b">@receiver(post_save, sender=Order)</text>
+
+  <rect x="70" y="146" width="370" height="42" rx="6" fill="#ffffff" stroke="#ef9a9a" stroke-width="1.5"/>
+  <text x="255" y="165" text-anchor="middle" font-size="12.5" font-weight="700" fill="#b71c1c">① 事务内 save() → 信号立即触发</text>
+  <text x="255" y="182" text-anchor="middle" font-size="11" fill="#424242">此时事务还没提交</text>
+
+  <line x1="255" y1="188" x2="255" y2="214" stroke="#c62828" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="70" y="220" width="370" height="52" rx="6" fill="#ffffff" stroke="#ef9a9a" stroke-width="1.5"/>
+  <text x="255" y="240" text-anchor="middle" font-size="12.5" fill="#e65100">② 信号里调外部 API 发短信</text>
+  <text x="255" y="260" text-anchor="middle" font-size="11" fill="#424242">外部系统没有事务概念</text>
+
+  <line x1="255" y1="272" x2="255" y2="298" stroke="#c62828" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="70" y="304" width="370" height="66" rx="6" fill="#ffffff" stroke="#c62828" stroke-width="2"/>
+  <text x="255" y="324" text-anchor="middle" font-size="13" font-weight="700" fill="#b71c1c">🚨 事务回滚，短信已经发出</text>
+  <text x="255" y="344" text-anchor="middle" font-size="11" fill="#424242">库里没有订单，用户收到下单成功</text>
+  <text x="255" y="362" text-anchor="middle" font-size="11" fill="#b71c1c">不可撤回</text>
+
+  <text x="255" y="392" text-anchor="middle" font-size="12" fill="#c62828">隐式耦合：看代码看不出 save 会发短信</text>
+
+  <!-- ================= 右：显式 ================= -->
+  <rect x="520" y="76" width="450" height="330" rx="10" fill="#f1f8e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="745" y="104" text-anchor="middle" font-size="16" font-weight="700" fill="#1b5e20">✅ 事务提交后再触发</text>
+  <text x="745" y="124" text-anchor="middle" font-size="12" fill="#33691e">transaction.on_commit(lambda: notify(...))</text>
+
+  <rect x="560" y="146" width="370" height="42" rx="6" fill="#ffffff" stroke="#81c784" stroke-width="1.5"/>
+  <text x="745" y="165" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1b5e20">① 事务内只做数据库操作</text>
+  <text x="745" y="182" text-anchor="middle" font-size="11" fill="#424242">不碰外部系统</text>
+
+  <line x1="745" y1="188" x2="745" y2="214" stroke="#2e7d32" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="560" y="220" width="370" height="52" rx="6" fill="#e8f5e9" stroke="#81c784" stroke-width="1.5"/>
+  <text x="745" y="240" text-anchor="middle" font-size="12.5" fill="#33691e">② on_commit 挂回调</text>
+  <text x="745" y="260" text-anchor="middle" font-size="11" fill="#424242">提交成功才执行</text>
+
+  <line x1="745" y1="272" x2="745" y2="298" stroke="#2e7d32" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="560" y="304" width="370" height="66" rx="6" fill="#ffffff" stroke="#2e7d32" stroke-width="2"/>
+  <text x="745" y="324" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">✅ 回滚则回调不执行</text>
+  <text x="745" y="344" text-anchor="middle" font-size="11" fill="#424242">调用链显式可见，可测试</text>
+  <text x="745" y="362" text-anchor="middle" font-size="11" fill="#1b5e20">失败不影响已创建的订单</text>
+
+  <text x="745" y="392" text-anchor="middle" font-size="12" fill="#2e7d32">信号适合"内部联动"，不适合"外部副作用"</text>
+
+  <!-- ================= 底部：信号边界 ================= -->
+  <rect x="30" y="426" width="940" height="118" rx="10" fill="#f5f9fd" stroke="#90caf9" stroke-width="1.5"/>
+  <text x="500" y="452" text-anchor="middle" font-size="15" font-weight="700" fill="#0d47a1">批量操作与信号（本课 2.3 实测：哪些发信号，哪些不发）</text>
+
+  <line x1="60" y1="464" x2="940" y2="464" stroke="#90caf9" stroke-width="1"/>
+  <text x="70" y="482" font-size="12" font-weight="700" fill="#0d47a1">操作</text>
+  <text x="330" y="482" font-size="12" font-weight="700" fill="#0d47a1">发 pre_save/post_save</text>
+  <text x="620" y="482" font-size="12" font-weight="700" fill="#0d47a1">发 m2m_changed</text>
+  <text x="860" y="482" font-size="12" font-weight="700" fill="#0d47a1">备注</text>
+  <line x1="60" y1="490" x2="940" y2="490" stroke="#90caf9" stroke-width="1"/>
+
+  <text x="70" y="508" font-size="12" fill="#424242">obj.save()</text>
+  <text x="330" y="508" font-size="12" fill="#1b5e20">是 ✅</text>
+  <text x="620" y="508" font-size="12" fill="#9e9e9e">—</text>
+  <text x="860" y="508" font-size="11" fill="#424242">逐条，慢</text>
+
+  <text x="70" y="528" font-size="12" fill="#424242">bulk_create</text>
+  <text x="330" y="528" font-size="12" fill="#b71c1c">否 ❌</text>
+  <text x="620" y="528" font-size="12" fill="#b71c1c">否 ❌</text>
+  <text x="860" y="528" font-size="11" fill="#b71c1c">信号静默丢失</text>
+
+  <text x="70" y="548" font-size="12" fill="#424242">queryset.update()</text>
+  <text x="330" y="548" font-size="12" fill="#b71c1c">否 ❌</text>
+  <text x="620" y="548" font-size="12" fill="#b71c1c">否 ❌</text>
+  <text x="860" y="548" font-size="11" fill="#b71c1c">直接发 SQL，绕过信号</text>
+</svg>

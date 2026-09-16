@@ -1,4 +1,4 @@
-# 课 18　中间件与请求链路
+﻿# 课 18　中间件与请求链路
 
 > 📖 情节定位：**扛住真实世界（四）** —— 一个请求从进来到出去，中间发生了什么
 > 🎯 本课目标：能写自定义中间件，并让一次请求的所有日志可追溯
@@ -373,6 +373,9 @@ requires session middleware to be installed. Edit your MIDDLEWARE setting to ins
 但注意：**只有框架内置的中间件有这种检查，你自己写的没有。** 你的日志中间件放在认证之前，Django 绝不会提醒你。
 
 ---
+
+
+![中间件洋葱模型](../assets/lesson-18-middleware-onion.svg)
 
 ## 第三幕：trace_id，把散落的日志串成一条线
 

@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="1000" height="560" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="1000" height="560" fill="#ffffff"/>
+  <text x="500" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">迁移里的模型是快照：为什么必须用 apps.get_model</text>
+  <text x="500" y="54" text-anchor="middle" font-size="13" fill="#666666">左：直接 import 当前模型（定时炸弹）　右：apps.get_model 拿那一刻的历史模型</text>
+
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#666666"/>
+    </marker>
+  </defs>
+
+  <!-- ================= 左：import ================= -->
+  <rect x="30" y="76" width="450" height="330" rx="10" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="255" y="104" text-anchor="middle" font-size="16" font-weight="700" fill="#b71c1c">❌ from myapp.models import X</text>
+  <text x="255" y="124" text-anchor="middle" font-size="12" fill="#8e2b2b">拿到的是"今天的"模型，不是当时的</text>
+
+  <rect x="70" y="146" width="370" height="42" rx="6" fill="#ffffff" stroke="#ef9a9a" stroke-width="1.5"/>
+  <text x="255" y="165" text-anchor="middle" font-size="12.5" font-weight="700" fill="#b71c1c">今天：模型有字段 a, b, c</text>
+  <text x="255" y="182" text-anchor="middle" font-size="11" fill="#424242">半年后：c 被删了，多出 d</text>
+
+  <line x1="255" y1="188" x2="255" y2="214" stroke="#c62828" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="70" y="220" width="370" height="52" rx="6" fill="#ffffff" stroke="#ef9a9a" stroke-width="1.5"/>
+  <text x="255" y="240" text-anchor="middle" font-size="12.5" fill="#e65100">老迁移重跑 → 引用了不存在的 c</text>
+  <text x="255" y="260" text-anchor="middle" font-size="11" fill="#424242">只在"碰到了被改掉的字段"时才炸</text>
+
+  <line x1="255" y1="272" x2="255" y2="298" stroke="#c62828" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="70" y="304" width="370" height="66" rx="6" fill="#ffffff" stroke="#c62828" stroke-width="2"/>
+  <text x="255" y="324" text-anchor="middle" font-size="13" font-weight="700" fill="#b71c1c">🚨 全新环境 migrate 直接失败</text>
+  <text x="255" y="344" text-anchor="middle" font-size="11" fill="#424242">开发机有历史数据所以一直没暴露</text>
+  <text x="255" y="362" text-anchor="middle" font-size="11" fill="#b71c1c">review 极难发现</text>
+
+  <text x="255" y="392" text-anchor="middle" font-size="12" fill="#c62828">定时炸弹：只在新环境/CI 上炸</text>
+
+  <!-- ================= 右：get_model ================= -->
+  <rect x="520" y="76" width="450" height="330" rx="10" fill="#f1f8e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="745" y="104" text-anchor="middle" font-size="16" font-weight="700" fill="#1b5e20">✅ apps.get_model("myapp", "X")</text>
+  <text x="745" y="124" text-anchor="middle" font-size="12" fill="#33691e">从迁移状态里取那一刻的快照</text>
+
+  <rect x="560" y="146" width="370" height="42" rx="6" fill="#ffffff" stroke="#81c784" stroke-width="1.5"/>
+  <text x="745" y="165" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1b5e20">拿到那一刻的字段：a, b, c</text>
+  <text x="745" y="182" text-anchor="middle" font-size="11" fill="#424242">与迁移执行时的数据库一致</text>
+
+  <line x1="745" y1="188" x2="745" y2="214" stroke="#2e7d32" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="560" y="220" width="370" height="52" rx="6" fill="#e8f5e9" stroke="#81c784" stroke-width="1.5"/>
+  <text x="745" y="240" text-anchor="middle" font-size="12.5" fill="#33691e">⚠️ 它是裸模型</text>
+  <text x="745" y="260" text-anchor="middle" font-size="11" fill="#424242">无自定义 manager、无自定义方法</text>
+
+  <line x1="745" y1="272" x2="745" y2="298" stroke="#2e7d32" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="560" y="304" width="370" height="66" rx="6" fill="#ffffff" stroke="#2e7d32" stroke-width="2"/>
+  <text x="745" y="324" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">✅ 迁移可重复、可重放</text>
+  <text x="745" y="344" text-anchor="middle" font-size="11" fill="#424242">连你重写的 save() 都不会跑</text>
+  <text x="745" y="362" text-anchor="middle" font-size="11" fill="#1b5e20">这一点恰恰是安全的</text>
+
+  <text x="745" y="392" text-anchor="middle" font-size="12" fill="#2e7d32">裸模型是特性不是 bug：不受后续改动污染</text>
+
+  <!-- ================= 底部：状态 vs 数据库 ================= -->
+  <rect x="30" y="426" width="940" height="118" rx="10" fill="#f5f9fd" stroke="#90caf9" stroke-width="1.5"/>
+  <text x="500" y="452" text-anchor="middle" font-size="15" font-weight="700" fill="#0d47a1">数据库状态 vs Django 状态（本课实验 4 / 7 / 14 实测）</text>
+
+  <line x1="60" y1="464" x2="940" y2="464" stroke="#90caf9" stroke-width="1"/>
+  <text x="70" y="482" font-size="12" font-weight="700" fill="#0d47a1">操作</text>
+  <text x="330" y="482" font-size="12" font-weight="700" fill="#0d47a1">改数据库</text>
+  <text x="520" y="482" font-size="12" font-weight="700" fill="#0d47a1">改 Django 状态</text>
+  <text x="760" y="482" font-size="12" font-weight="700" fill="#0d47a1">典型后果</text>
+  <line x1="60" y1="490" x2="940" y2="490" stroke="#90caf9" stroke-width="1"/>
+
+  <text x="70" y="508" font-size="12" fill="#424242">RunSQL</text>
+  <text x="330" y="508" font-size="12" fill="#1b5e20">是 ✅</text>
+  <text x="520" y="508" font-size="12" fill="#b71c1c">否 ❌</text>
+  <text x="760" y="508" font-size="11" fill="#b71c1c">Django 看不见 → makemigrations 反复提议</text>
+
+  <text x="70" y="528" font-size="12" fill="#424242">RunPython</text>
+  <text x="330" y="528" font-size="12" fill="#1b5e20">是 ✅</text>
+  <text x="520" y="528" font-size="12" fill="#b71c1c">否 ❌</text>
+  <text x="760" y="528" font-size="11" fill="#424242">要用 state_operations 或 Separate…</text>
+
+  <text x="70" y="548" font-size="12" fill="#424242">加唯一字段</text>
+  <text x="330" y="548" font-size="12" fill="#e65100">三个部署步骤</text>
+  <text x="520" y="548" font-size="12" fill="#e65100">不是一个迁移</text>
+  <text x="760" y="548" font-size="11" fill="#e65100">squash 后必须手工搬运再验证</text>
+</svg>

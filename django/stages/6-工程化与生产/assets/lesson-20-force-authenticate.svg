@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="1000" height="560" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="1000" height="560" fill="#ffffff"/>
+  <text x="500" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">绕过认证 ≠ 绕过权限：force_authenticate 的真实机制</text>
+  <text x="500" y="54" text-anchor="middle" font-size="13" fill="#666666">左：以为 force_authenticate 等于"全通"　右：它只填了 request.user</text>
+
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#666666"/>
+    </marker>
+  </defs>
+
+  <!-- ================= 左：误解 ================= -->
+  <rect x="30" y="76" width="450" height="330" rx="10" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="255" y="104" text-anchor="middle" font-size="16" font-weight="700" fill="#b71c1c">❌ 以为它跳过了权限</text>
+  <text x="255" y="124" text-anchor="middle" font-size="12" fill="#8e2b2b">client.force_authenticate(user=u)</text>
+
+  <rect x="70" y="146" width="370" height="42" rx="6" fill="#ffffff" stroke="#ef9a9a" stroke-width="1.5"/>
+  <text x="255" y="165" text-anchor="middle" font-size="12.5" font-weight="700" fill="#b71c1c">① 直接给 request.user 赋值</text>
+  <text x="255" y="182" text-anchor="middle" font-size="11" fill="#424242">不走认证后端</text>
+
+  <line x1="255" y1="188" x2="255" y2="214" stroke="#c62828" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="70" y="220" width="370" height="52" rx="6" fill="#ffffff" stroke="#ef9a9a" stroke-width="1.5"/>
+  <text x="255" y="240" text-anchor="middle" font-size="12.5" fill="#e65100">② 权限层照常执行</text>
+  <text x="255" y="260" text-anchor="middle" font-size="11" fill="#424242">has_object_permission 仍会调用</text>
+
+  <line x1="255" y1="272" x2="255" y2="298" stroke="#c62828" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="70" y="304" width="370" height="66" rx="6" fill="#ffffff" stroke="#c62828" stroke-width="2"/>
+  <text x="255" y="324" text-anchor="middle" font-size="13" font-weight="700" fill="#b71c1c">🚨 测试用错用户就 403</text>
+  <text x="255" y="344" text-anchor="middle" font-size="11" fill="#424242">还以为是 force_authenticate 没生效</text>
+  <text x="255" y="362" text-anchor="middle" font-size="11" fill="#b71c1c">白白浪费一轮排查</text>
+
+  <text x="255" y="392" text-anchor="middle" font-size="12" fill="#c62828">它只是"你是谁"的快捷方式，不管"能不能"</text>
+
+  <!-- ================= 右：正确认识 ================= -->
+  <rect x="520" y="76" width="450" height="330" rx="10" fill="#f1f8e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="745" y="104" text-anchor="middle" font-size="16" font-weight="700" fill="#1b5e20">✅ 两层各测各的</text>
+  <text x="745" y="124" text-anchor="middle" font-size="12" fill="#33691e">认证绕过用工具，权限绕过要专门造数据</text>
+
+  <rect x="560" y="146" width="370" height="42" rx="6" fill="#ffffff" stroke="#81c784" stroke-width="1.5"/>
+  <text x="745" y="165" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1b5e20">省掉的是"造 token"的成本</text>
+  <text x="745" y="182" text-anchor="middle" font-size="11" fill="#424242">不必走登录接口</text>
+
+  <line x1="745" y1="188" x2="745" y2="214" stroke="#2e7d32" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="560" y="220" width="370" height="52" rx="6" fill="#e8f5e9" stroke="#81c784" stroke-width="1.5"/>
+  <text x="745" y="240" text-anchor="middle" font-size="12.5" fill="#33691e">权限测试必须传"对的用户"</text>
+  <text x="745" y="260" text-anchor="middle" font-size="11" fill="#424242">越权用例反而要传"错的用户"</text>
+
+  <line x1="745" y1="272" x2="745" y2="298" stroke="#2e7d32" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="560" y="304" width="370" height="66" rx="6" fill="#ffffff" stroke="#2e7d32" stroke-width="2"/>
+  <text x="745" y="324" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">✅ 省时间又不失真实性</text>
+  <text x="745" y="344" text-anchor="middle" font-size="11" fill="#424242">factory_boy 造数据要看代价</text>
+  <text x="745" y="362" text-anchor="middle" font-size="11" fill="#1b5e20">APIClient 与 Django Client 差别在这</text>
+
+  <text x="745" y="392" text-anchor="middle" font-size="12" fill="#2e7d32">APIClient 才能用 force_authenticate</text>
+
+  <!-- ================= 底部：提速 ================= -->
+  <rect x="30" y="426" width="940" height="118" rx="10" fill="#f5f9fd" stroke="#90caf9" stroke-width="1.5"/>
+  <text x="500" y="452" text-anchor="middle" font-size="15" font-weight="700" fill="#0d47a1">测试提速手段（本课知识点 2，1.2.1 先量自己的工程）</text>
+
+  <line x1="60" y1="464" x2="940" y2="464" stroke="#90caf9" stroke-width="1"/>
+  <text x="70" y="482" font-size="12" font-weight="700" fill="#0d47a1">手段</text>
+  <text x="330" y="482" font-size="12" font-weight="700" fill="#0d47a1">省掉什么</text>
+  <text x="620" y="482" font-size="12" font-weight="700" fill="#0d47a1">代价 / 注意</text>
+  <line x1="60" y1="490" x2="940" y2="490" stroke="#90caf9" stroke-width="1"/>
+
+  <text x="70" y="508" font-size="12" fill="#424242">--keepdb</text>
+  <text x="330" y="508" font-size="11" fill="#424242">重复建库 + 跑迁移</text>
+  <text x="620" y="508" font-size="11" fill="#e65100">迁移变更后要重建</text>
+
+  <text x="70" y="528" font-size="12" fill="#424242">password hasher 换快</text>
+  <text x="330" y="528" font-size="11" fill="#424242">每次 make_password 的开销</text>
+  <text x="620" y="528" font-size="11" fill="#424242">只影响测试环境</text>
+
+  <text x="70" y="548" font-size="12" fill="#424242">--parallel</text>
+  <text x="330" y="548" font-size="11" fill="#424242">多核并行跑</text>
+  <text x="620" y="548" font-size="11" fill="#e65100">用例间不能共享状态</text>
+</svg>

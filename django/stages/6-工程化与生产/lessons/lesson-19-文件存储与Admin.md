@@ -1,4 +1,4 @@
-# 课 19　文件、存储与 Admin
+﻿# 课 19　文件、存储与 Admin
 
 > 📖 情节定位：**收尾（一）** —— 分离之后，剩下的那些"传统 Django 能力"该怎么处理
 > 🎯 本课目标：文件走独立上传接口，Admin 定制成安全的运营后台，staticfiles 只服务于 Admin
@@ -547,6 +547,9 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 1048576 字节 (1.0 MB)
 另一个相关的量是 `DATA_UPLOAD_MAX_MEMORY_SIZE`（整个请求体），超限会抛 `RequestDataTooBig` → **413**。
 
 ---
+
+
+![同名文件与 STORAGES](../assets/lesson-19-storage-same-name.svg)
 
 ## 第三幕：Admin 定制与安全收敛
 

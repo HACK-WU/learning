@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="1000" height="560" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="1000" height="560" fill="#ffffff"/>
+  <text x="500" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">token 放哪：Cookie 与 localStorage 的真正分歧点是 XSS</text>
+  <text x="500" y="54" text-anchor="middle" font-size="13" fill="#666666">左：localStorage（CSRF 免疫但 XSS 全暴露）　右：HttpOnly Cookie（XSS 拿不走但要防 CSRF）</text>
+
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#666666"/>
+    </marker>
+  </defs>
+
+  <!-- ================= 左：localStorage ================= -->
+  <rect x="30" y="76" width="450" height="330" rx="10" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+  <text x="255" y="104" text-anchor="middle" font-size="16" font-weight="700" fill="#e65100">⚠️ localStorage 存 token</text>
+  <text x="255" y="124" text-anchor="middle" font-size="12" fill="#8d6e63">JS 可读可写，随请求手动塞进 Header</text>
+
+  <rect x="70" y="146" width="370" height="42" rx="6" fill="#ffffff" stroke="#ffcc80" stroke-width="1.5"/>
+  <text x="255" y="165" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">✅ CSRF 天然免疫</text>
+  <text x="255" y="182" text-anchor="middle" font-size="11" fill="#424242">浏览器不会自动带，伪造页面拿不到</text>
+
+  <line x1="255" y1="188" x2="255" y2="214" stroke="#f9a825" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="70" y="220" width="370" height="42" rx="6" fill="#ffffff" stroke="#ffcc80" stroke-width="1.5"/>
+  <text x="255" y="239" text-anchor="middle" font-size="12.5" fill="#e65100">❌ 任何 XSS 都能直接读走</text>
+  <text x="255" y="256" text-anchor="middle" font-size="11" fill="#424242">localStorage.getItem('token')</text>
+
+  <line x1="255" y1="262" x2="255" y2="288" stroke="#c62828" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="70" y="294" width="370" height="76" rx="6" fill="#ffffff" stroke="#c62828" stroke-width="2"/>
+  <text x="255" y="314" text-anchor="middle" font-size="13" font-weight="700" fill="#b71c1c">🚨 一个 XSS = 账号完全失守</text>
+  <text x="255" y="334" text-anchor="middle" font-size="11.5" fill="#424242">token 可被 exfiltrate 到攻击者服务器</text>
+  <text x="255" y="356" text-anchor="middle" font-size="11.5" fill="#b71c1c">无 HttpOnly 保护，服务端救不回来</text>
+
+  <text x="255" y="392" text-anchor="middle" font-size="12" fill="#c62828">防住了 CSRF，却把钥匙放在 XSS 够得到的地方</text>
+
+  <!-- ================= 右：HttpOnly Cookie ================= -->
+  <rect x="520" y="76" width="450" height="330" rx="10" fill="#f1f8e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="745" y="104" text-anchor="middle" font-size="16" font-weight="700" fill="#1b5e20">✅ HttpOnly + Secure + SameSite</text>
+  <text x="745" y="124" text-anchor="middle" font-size="12" fill="#33691e">JS 读不到，浏览器自动携带</text>
+
+  <rect x="560" y="146" width="370" height="42" rx="6" fill="#ffffff" stroke="#81c784" stroke-width="1.5"/>
+  <text x="745" y="165" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">✅ XSS 读不到 token</text>
+  <text x="745" y="182" text-anchor="middle" font-size="11" fill="#424242">document.cookie 取不到 HttpOnly</text>
+
+  <line x1="745" y1="188" x2="745" y2="214" stroke="#2e7d32" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="560" y="220" width="370" height="42" rx="6" fill="#e8f5e9" stroke="#81c784" stroke-width="1.5"/>
+  <text x="745" y="239" text-anchor="middle" font-size="12.5" fill="#33691e">⚠️ 但浏览器会自动带 → 要防 CSRF</text>
+  <text x="745" y="256" text-anchor="middle" font-size="11" fill="#424242">SameSite=Lax/Strict + CSRF token</text>
+
+  <line x1="745" y1="262" x2="745" y2="288" stroke="#2e7d32" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="560" y="294" width="370" height="76" rx="6" fill="#ffffff" stroke="#2e7d32" stroke-width="2"/>
+  <text x="745" y="314" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">🛡️ XSS 拿不走钥匙</text>
+  <text x="745" y="334" text-anchor="middle" font-size="11.5" fill="#424242">最坏是"借浏览器发请求"，可被 SameSite 挡</text>
+  <text x="745" y="356" text-anchor="middle" font-size="11.5" fill="#1b5e20">双重提交 Cookie 兜底</text>
+
+  <text x="745" y="392" text-anchor="middle" font-size="12" fill="#2e7d32">XSS 比 CSRF 更难防，所以优先保 token 不被读走</text>
+
+  <!-- ================= 底部：对照 ================= -->
+  <rect x="30" y="426" width="940" height="118" rx="10" fill="#f5f9fd" stroke="#90caf9" stroke-width="1.5"/>
+  <text x="500" y="452" text-anchor="middle" font-size="15" font-weight="700" fill="#0d47a1">两种存放方式对照（本课实验 3 实测 Cookie 属性）</text>
+
+  <line x1="60" y1="464" x2="940" y2="464" stroke="#90caf9" stroke-width="1"/>
+  <text x="70" y="482" font-size="12" font-weight="700" fill="#0d47a1">方案</text>
+  <text x="430" y="482" font-size="12" font-weight="700" fill="#0d47a1">CSRF 风险</text>
+  <text x="640" y="482" font-size="12" font-weight="700" fill="#0d47a1">XSS 风险</text>
+  <text x="860" y="482" font-size="12" font-weight="700" fill="#0d47a1">结论</text>
+  <line x1="60" y1="490" x2="940" y2="490" stroke="#90caf9" stroke-width="1"/>
+
+  <text x="70" y="508" font-size="12" fill="#424242">localStorage</text>
+  <text x="430" y="508" font-size="12" fill="#1b5e20">免疫 ✅</text>
+  <text x="640" y="508" font-size="12" fill="#b71c1c">token 可被读走 ❌</text>
+  <text x="860" y="508" font-size="12" fill="#b71c1c">不推荐</text>
+
+  <text x="70" y="528" font-size="12" fill="#424242">HttpOnly Cookie</text>
+  <text x="430" y="528" font-size="12" fill="#e65100">需 SameSite 防 ⚠️</text>
+  <text x="640" y="528" font-size="12" fill="#1b5e20">读不到 ✅</text>
+  <text x="860" y="528" font-size="12" fill="#1b5e20">推荐</text>
+
+  <text x="70" y="548" font-size="12" fill="#424242">误区纠正</text>
+  <text x="430" y="548" font-size="12" fill="#424242">"用 JWT 就不用管 CSRF" ❌</text>
+  <text x="640" y="548" font-size="12" fill="#424242">关键在存哪，不在用哪种 token</text>
+  <text x="860" y="548" font-size="12" fill="#0d47a1">XSS 与 CSRF 要同时防</text>
+</svg>

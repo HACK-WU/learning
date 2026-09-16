@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="1000" height="560" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="1000" height="560" fill="#ffffff"/>
+  <text x="500" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">obj.count += 1 不是原子操作：丢失更新是怎么发生的</text>
+  <text x="500" y="54" text-anchor="middle" font-size="13" fill="#666666">左：读-改-写三步（100 次并发后只剩 70）　右：F() 一条 SQL（100 次后正好 30）</text>
+
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#666666"/>
+    </marker>
+  </defs>
+
+  <!-- ================= 左：读改写 ================= -->
+  <rect x="30" y="76" width="450" height="330" rx="10" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="255" y="104" text-anchor="middle" font-size="16" font-weight="700" fill="#b71c1c">❌ Python 里 += 1</text>
+  <text x="255" y="124" text-anchor="middle" font-size="12" fill="#8e2b2b">obj.count += 1; obj.save()</text>
+
+  <rect x="70" y="146" width="370" height="34" rx="6" fill="#ffffff" stroke="#ef9a9a" stroke-width="1.5"/>
+  <text x="255" y="163" text-anchor="middle" font-size="12" font-weight="700" fill="#b71c1c">① SELECT count FROM t</text>
+  <text x="255" y="176" text-anchor="middle" font-size="10.5" fill="#424242">读到 100</text>
+
+  <line x1="255" y1="180" x2="255" y2="200" stroke="#c62828" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <rect x="70" y="206" width="370" height="34" rx="6" fill="#ffffff" stroke="#ef9a9a" stroke-width="1.5"/>
+  <text x="255" y="223" text-anchor="middle" font-size="12" font-weight="700" fill="#b71c1c">② Python 里加 1 → 101</text>
+  <text x="255" y="236" text-anchor="middle" font-size="10.5" fill="#424242">此刻内存里的值已可能与库不一致</text>
+
+  <line x1="255" y1="240" x2="255" y2="260" stroke="#c62828" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <rect x="70" y="266" width="370" height="34" rx="6" fill="#ffffff" stroke="#ef9a9a" stroke-width="1.5"/>
+  <text x="255" y="283" text-anchor="middle" font-size="12" font-weight="700" fill="#b71c1c">③ UPDATE t SET count = 101</text>
+  <text x="255" y="296" text-anchor="middle" font-size="10.5" fill="#424242">整体覆盖，不看库里现在是多少</text>
+
+  <line x1="255" y1="300" x2="255" y2="320" stroke="#c62828" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <rect x="70" y="326" width="370" height="48" rx="6" fill="#ffffff" stroke="#c62828" stroke-width="2"/>
+  <text x="255" y="345" text-anchor="middle" font-size="13" font-weight="700" fill="#b71c1c">🚨 并发 100 次 → 实际只剩 70</text>
+  <text x="255" y="365" text-anchor="middle" font-size="11" fill="#424242">后写的覆盖先写的，30 次更新凭空消失</text>
+
+  <text x="255" y="392" text-anchor="middle" font-size="12" fill="#c62828">transaction.atomic() 挡不住：它保证原子，不保证隔离</text>
+
+  <!-- ================= 右：F() ================= -->
+  <rect x="520" y="76" width="450" height="330" rx="10" fill="#f1f8e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="745" y="104" text-anchor="middle" font-size="16" font-weight="700" fill="#1b5e20">✅ F() 表达式</text>
+  <text x="745" y="124" text-anchor="middle" font-size="12" fill="#33691e">Model.objects.update(count=F("count") + 1)</text>
+
+  <rect x="560" y="146" width="370" height="60" rx="6" fill="#ffffff" stroke="#81c784" stroke-width="1.5"/>
+  <text x="745" y="168" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1b5e20">一条 SQL 在数据库内完成</text>
+  <text x="745" y="186" text-anchor="middle" font-size="11" fill="#424242">UPDATE t SET count = count + 1</text>
+  <text x="745" y="200" text-anchor="middle" font-size="10.5" fill="#424242">读、加、写不分离，无中间态</text>
+
+  <line x1="745" y1="206" x2="745" y2="232" stroke="#2e7d32" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="560" y="238" width="370" height="48" rx="6" fill="#e8f5e9" stroke="#81c784" stroke-width="1.5"/>
+  <text x="745" y="257" text-anchor="middle" font-size="12.5" fill="#33691e">数据库自己加锁，串行执行</text>
+  <text x="745" y="277" text-anchor="middle" font-size="11" fill="#424242">每次都基于库里的最新值</text>
+
+  <line x1="745" y1="286" x2="745" y2="312" stroke="#2e7d32" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="560" y="318" width="370" height="56" rx="6" fill="#ffffff" stroke="#2e7d32" stroke-width="2"/>
+  <text x="745" y="338" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">✅ 并发 100 次 → 正好 30</text>
+  <text x="745" y="358" text-anchor="middle" font-size="11" fill="#424242">100 - 70 = 30，与预期完全一致</text>
+  <text x="745" y="372" text-anchor="middle" font-size="10.5" fill="#1b5e20">更新后记得 refresh_from_db() 取新值</text>
+
+  <text x="745" y="392" text-anchor="middle" font-size="12" fill="#2e7d32">检查与扣减在同一条 SQL，才不会超卖</text>
+
+  <!-- ================= 底部：实测 ================= -->
+  <rect x="30" y="426" width="940" height="118" rx="10" fill="#f5f9fd" stroke="#90caf9" stroke-width="1.5"/>
+  <text x="500" y="452" text-anchor="middle" font-size="15" font-weight="700" fill="#0d47a1">并发扣库存实测（本课实验 1 / 2 / 5，双 alias 手工交错复现）</text>
+
+  <line x1="60" y1="464" x2="940" y2="464" stroke="#90caf9" stroke-width="1"/>
+  <text x="70" y="482" font-size="12" font-weight="700" fill="#0d47a1">写法</text>
+  <text x="430" y="482" font-size="12" font-weight="700" fill="#0d47a1">SQL 形态</text>
+  <text x="700" y="482" font-size="12" font-weight="700" fill="#0d47a1">并发 100 次结果</text>
+  <text x="870" y="482" font-size="12" font-weight="700" fill="#0d47a1">结论</text>
+  <line x1="60" y1="490" x2="940" y2="490" stroke="#90caf9" stroke-width="1"/>
+
+  <text x="70" y="508" font-size="12" fill="#b71c1c">obj.count += 1</text>
+  <text x="430" y="508" font-size="11" fill="#424242">SELECT + UPDATE（整体覆盖）</text>
+  <text x="700" y="508" font-size="12" font-weight="700" fill="#b71c1c">剩 70（应为 30）</text>
+  <text x="870" y="508" font-size="12" fill="#b71c1c">丢失更新</text>
+
+  <text x="70" y="528" font-size="12" fill="#e65100">atomic 包一层</text>
+  <text x="430" y="528" font-size="11" fill="#424242">仍是 SELECT + UPDATE</text>
+  <text x="700" y="528" font-size="12" font-weight="700" fill="#e65100">仍然错</text>
+  <text x="870" y="528" font-size="12" fill="#e65100">挡不住</text>
+
+  <text x="70" y="548" font-size="12" fill="#1b5e20">F("count") + 1</text>
+  <text x="430" y="548" font-size="11" fill="#424242">单条 UPDATE ... SET c = c + 1</text>
+  <text x="700" y="548" font-size="12" font-weight="700" fill="#1b5e20">正好 30 ✅</text>
+  <text x="870" y="548" font-size="12" fill="#1b5e20">正确</text>
+</svg>

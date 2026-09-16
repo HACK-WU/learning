@@ -1,4 +1,4 @@
-# 课 14《迁移工程：不依赖 model 的迁移》
+﻿# 课 14《迁移工程：不依赖 model 的迁移》
 
 > 🧭 所属阶段：[阶段 4 数据层纵深](../overview.md) ｜ 上一课：[课 13 多数据库与 DB 路由](./lesson-13-多数据库与DB路由.md) ｜ 下一课：阶段 5 性能与异步（课 15 ORM 进阶与 N+1 治理）
 >
@@ -28,6 +28,9 @@ python run_lab5.py     # 实验 31-33：大表回填（评审 P0 验证）
 > 💡 **不需要装 PostgreSQL**。历史模型、状态与数据库解耦、`atomic`、squash 这些**都是 Django Python 侧的逻辑**，SQLite 上完整可复现。真正只有 PostgreSQL 才有的部分（`CREATE INDEX CONCURRENTLY`）本课会明确标注为「方案说明 + 引用来源」，不假装跑过。
 
 ---
+
+
+![历史模型快照](../assets/lesson-14-historical-model.svg)
 
 ## 开场：三个"上线后才爆炸"的迁移
 
