@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="380" viewBox="0 0 860 380" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="860" height="380" fill="#ffffff"/>
+
+  <text x="430" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#1a237e">综合版：一个主题，多个小组各自读</text>
+  <text x="430" y="46" text-anchor="middle" font-size="12" fill="#555555">高亮 = 本步新增：消息读走仍保留 + 按「小组」分头消费 + 各自记住读到哪</text>
+
+  <!-- 下单服务 -->
+  <rect x="36" y="86" width="132" height="84" rx="8" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="102" y="111" text-anchor="middle" font-size="13" font-weight="700" fill="#0d47a1">下单服务</text>
+  <text x="102" y="131" text-anchor="middle" font-size="11" fill="#0d47a1">扣库存 / 写库</text>
+  <text x="102" y="150" text-anchor="middle" font-size="11" fill="#0d47a1">投一条订单消息</text>
+
+  <line x1="168" y1="128" x2="222" y2="128" stroke="#333" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <!-- 主题：持久化 + 多分区 -->
+  <rect x="226" y="70" width="176" height="160" rx="10" fill="#e8f5e9" stroke="#2e7d32" stroke-width="3"/>
+  <text x="314" y="96" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">订单主题（可保留）</text>
+
+  <rect x="240" y="108" width="148" height="30" rx="5" fill="#ffffff" stroke="#2e7d32" stroke-width="1.4"/>
+  <text x="314" y="128" text-anchor="middle" font-size="11" fill="#1b5e20">第 0 格：订单 1、4、7…</text>
+
+  <rect x="240" y="144" width="148" height="30" rx="5" fill="#ffffff" stroke="#2e7d32" stroke-width="1.4"/>
+  <text x="314" y="164" text-anchor="middle" font-size="11" fill="#1b5e20">第 1 格：订单 2、5、8…</text>
+
+  <rect x="240" y="180" width="148" height="30" rx="5" fill="#ffffff" stroke="#2e7d32" stroke-width="1.4"/>
+  <text x="314" y="200" text-anchor="middle" font-size="11" fill="#1b5e20">第 2 格：订单 3、6、9…</text>
+
+  <!-- 新增徽标 1 -->
+  <rect x="406" y="86" width="150" height="26" rx="13" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="481" y="104" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">新增①：消息读走仍保留</text>
+  <text x="481" y="128" text-anchor="middle" font-size="10" fill="#5d4037">不是取走就没了</text>
+  <text x="481" y="144" text-anchor="middle" font-size="10" fill="#5d4037">别人还能再读一遍</text>
+
+  <rect x="406" y="160" width="150" height="26" rx="13" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="481" y="178" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">新增②：分成好几格</text>
+  <text x="481" y="202" text-anchor="middle" font-size="10" fill="#5d4037">一格配一个人，</text>
+  <text x="481" y="218" text-anchor="middle" font-size="10" fill="#5d4037">人多就能一起扛</text>
+
+  <!-- 三个消费组 -->
+  <line x1="402" y1="120" x2="452" y2="120" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="456" y="96" width="120" height="48" rx="7" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+  <text x="516" y="117" text-anchor="middle" font-size="12" font-weight="700" fill="#e65100">小组 A：通知</text>
+  <text x="516" y="135" text-anchor="middle" font-size="10" fill="#e65100">3 个人一起发</text>
+
+  <line x1="402" y1="164" x2="452" y2="164" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="456" y="150" width="120" height="48" rx="7" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2"/>
+  <text x="516" y="171" text-anchor="middle" font-size="12" font-weight="700" fill="#4a148c">小组 B：积分</text>
+  <text x="516" y="189" text-anchor="middle" font-size="10" fill="#4a148c">各读各的，互不影响</text>
+
+  <line x1="402" y1="208" x2="452" y2="208" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="456" y="204" width="120" height="48" rx="7" fill="#e1f5fe" stroke="#0277bd" stroke-width="2"/>
+  <text x="516" y="225" text-anchor="middle" font-size="12" font-weight="700" fill="#01579b">小组 C：风控</text>
+  <text x="516" y="243" text-anchor="middle" font-size="10" fill="#01579b">同一条消息三边都看</text>
+
+  <!-- 新增徽标 3 -->
+  <rect x="596" y="86" width="150" height="26" rx="13" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="671" y="104" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">新增③：各组记自己的进度</text>
+  <text x="671" y="128" text-anchor="middle" font-size="10" fill="#5d4037">A 读到第 9 条、B 读到第 4 条</text>
+  <text x="671" y="144" text-anchor="middle" font-size="10" fill="#5d4037">崩了从自己那接着走</text>
+
+  <rect x="596" y="160" width="150" height="26" rx="13" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="671" y="178" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">新增④：慢的只拖慢自己</text>
+  <text x="671" y="202" text-anchor="middle" font-size="10" fill="#5d4037">通知慢了，下单照样秒回</text>
+  <text x="671" y="218" text-anchor="middle" font-size="10" fill="#5d4037">积分、风控也不等它</text>
+
+  <!-- 底部回扣 -->
+  <rect x="36" y="272" width="500" height="84" rx="8" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.6"/>
+  <text x="56" y="298" font-size="12" font-weight="700" fill="#1a237e">回扣本课三个价值：</text>
+  <text x="56" y="320" font-size="11" fill="#283593">异步 —— 下单投完就返回，不等任何人</text>
+  <text x="56" y="338" font-size="11" fill="#283593">解耦 —— 通知挂了，积分和风控照读不误</text>
+  <text x="300" y="320" font-size="11" fill="#283593">削峰 —— 洪峰先堆在格子里，各组按自己速度追</text>
+  <text x="300" y="338" font-size="11" fill="#283593">（每格谁读到哪，都记着，不会重复也不会漏）</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#333"/>
+    </marker>
+  </defs>
+</svg>

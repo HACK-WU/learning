@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="360" viewBox="0 0 880 360" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="880" height="360" fill="#ffffff"/>
+
+  <text x="440" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#1a237e">基础版：一本总账，一次只能一个人翻</text>
+  <text x="440" y="46" text-anchor="middle" font-size="12" fill="#555555">消息全挤在一个分区里，只能开一个消费者；后面的全在排队</text>
+
+  <!-- 总账 -->
+  <rect x="50" y="90" width="260" height="120" rx="8" fill="#e3f2fd" stroke="#1565C0" stroke-width="2.5"/>
+  <text x="180" y="118" text-anchor="middle" font-size="13" font-weight="700" fill="#0d47a1">订单事件（1 个分区）</text>
+  <rect x="66" y="130" width="228" height="26" rx="4" fill="#ffffff" stroke="#1565C0" stroke-width="1.2"/>
+  <text x="180" y="148" text-anchor="middle" font-size="11" fill="#0d47a1">offset 0,1,2,3,4,5… 全挤在这一条上</text>
+  <rect x="66" y="162" width="228" height="26" rx="4" fill="#ffffff" stroke="#1565C0" stroke-width="1.2"/>
+  <text x="180" y="180" text-anchor="middle" font-size="11" fill="#0d47a1">新消息永远加在最右边</text>
+
+  <line x1="310" y1="150" x2="368" y2="150" stroke="#333" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <!-- 单个消费者 -->
+  <rect x="372" y="120" width="140" height="60" rx="8" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+  <text x="442" y="145" text-anchor="middle" font-size="13" font-weight="700" fill="#e65100">消费者 1 个</text>
+  <text x="442" y="164" text-anchor="middle" font-size="10" fill="#e65100">一页一页往下翻</text>
+
+  <!-- 排队 -->
+  <rect x="372" y="200" width="140" height="52" rx="8" fill="#eceff1" stroke="#90a4ae" stroke-width="1.6"/>
+  <text x="442" y="222" text-anchor="middle" font-size="12" font-weight="700" fill="#546e7a">消费者 2、3…</text>
+  <text x="442" y="240" text-anchor="middle" font-size="10" fill="#78909c">闲着，插不进来</text>
+
+  <!-- 吞吐对比 -->
+  <rect x="546" y="86" width="300" height="104" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.8"/>
+  <text x="696" y="110" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">实测：分区数 = 并行上限</text>
+  <text x="562" y="134" font-size="11" fill="#33691e">1 个分区 → 1 个消费者：3.24 秒（926 条/秒）</text>
+  <text x="562" y="154" font-size="11" fill="#33691e">3 个分区 → 3 个消费者：1.08 秒（2777 条/秒）</text>
+  <text x="562" y="174" font-size="11" fill="#33691e">6 个分区 → 6 个消费者：0.54 秒（5559 条/秒）</text>
+
+  <!-- 问题框 -->
+  <rect x="546" y="200" width="300" height="132" rx="8" fill="#fff3e0" stroke="#ef6c00" stroke-width="2"/>
+  <text x="696" y="224" text-anchor="middle" font-size="13" font-weight="700" fill="#bf360c">⚠️ 这一版的问题</text>
+  <text x="560" y="248" font-size="11" fill="#5d4037">1. 并行度恒为 1——人再多也挤不进来，</text>
+  <text x="574" y="266" font-size="11" fill="#5d4037">多开的消费者只能干看着</text>
+  <text x="560" y="290" font-size="11" fill="#5d4037">2. 一台机器磁盘有限，账本迟早装满</text>
+  <text x="560" y="314" font-size="11" fill="#5d4037">3. 这台机器一坏，整本账全瘫</text>
+
+  <text x="180" y="240" text-anchor="middle" font-size="11" fill="#c62828">数据只有一份，全部押在一台机器上</text>
+  <text x="180" y="262" text-anchor="middle" font-size="11" fill="#c62828">↑ 容量、并行、可用性三个天花板同时到顶</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#333"/>
+    </marker>
+  </defs>
+</svg>

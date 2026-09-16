@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="330" viewBox="0 0 860 330" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="860" height="330" fill="#ffffff"/>
+
+  <text x="430" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#1a237e">基础版：把「慢动作」挪到下单之后</text>
+  <text x="430" y="46" text-anchor="middle" font-size="12" fill="#555555">下单接口只写自己的库，再往「筐」里放一条消息；通知服务自己慢慢取</text>
+
+  <!-- 下单服务 -->
+  <rect x="40" y="90" width="150" height="90" rx="8" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="115" y="116" text-anchor="middle" font-size="13" font-weight="700" fill="#0d47a1">下单服务</text>
+  <text x="115" y="136" text-anchor="middle" font-size="11" fill="#0d47a1">① 扣库存</text>
+  <text x="115" y="153" text-anchor="middle" font-size="11" fill="#0d47a1">② 写订单库</text>
+  <text x="115" y="170" text-anchor="middle" font-size="11" fill="#0d47a1">③ 投一条消息</text>
+
+  <!-- 箭头 -->
+  <line x1="190" y1="135" x2="252" y2="135" stroke="#333" stroke-width="1.8" marker-end="url(#ar)"/>
+  <text x="221" y="127" text-anchor="middle" font-size="10" fill="#555555">投</text>
+
+  <!-- 队列/筐 -->
+  <rect x="256" y="76" width="130" height="118" rx="10" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2.5"/>
+  <text x="321" y="103" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">筐（先收着）</text>
+  <text x="321" y="126" text-anchor="middle" font-size="11" fill="#33691e">订单 1</text>
+  <text x="321" y="145" text-anchor="middle" font-size="11" fill="#33691e">订单 2</text>
+  <text x="321" y="164" text-anchor="middle" font-size="11" fill="#33691e">订单 3 …</text>
+  <text x="321" y="186" text-anchor="middle" font-size="10" fill="#33691e">排队等着，不丢</text>
+
+  <!-- 箭头到通知 -->
+  <line x1="386" y1="135" x2="448" y2="135" stroke="#333" stroke-width="1.8" marker-end="url(#ar)"/>
+  <text x="417" y="127" text-anchor="middle" font-size="10" fill="#555555">取</text>
+
+  <rect x="452" y="96" width="140" height="78" rx="8" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+  <text x="522" y="121" text-anchor="middle" font-size="13" font-weight="700" fill="#e65100">通知服务</text>
+  <text x="522" y="141" text-anchor="middle" font-size="11" fill="#e65100">取一条 → 发短信</text>
+  <text x="522" y="160" text-anchor="middle" font-size="11" fill="#e65100">（它慢，就只是它慢）</text>
+
+  <!-- 返回 -->
+  <path d="M115,196 L115,246 L322,246 L322,196" fill="none" stroke="#1565C0" stroke-width="1.6" stroke-dasharray="5,4" marker-end="url(#arb)"/>
+  <text x="218" y="262" text-anchor="middle" font-size="11" font-weight="700" fill="#1565C0">下单立刻返回「已受理」（不用等短信）</text>
+
+  <!-- 问题框 -->
+  <rect x="620" y="76" width="215" height="200" rx="8" fill="#fff3e0" stroke="#ef6c00" stroke-width="2"/>
+  <text x="727" y="102" text-anchor="middle" font-size="13" font-weight="700" fill="#bf360c">⚠️ 这一版有什么问题</text>
+  <text x="636" y="128" font-size="11" fill="#5d4037">1. 消息只在内存里，进程一重启</text>
+  <text x="648" y="146" font-size="11" fill="#5d4037">就全没了（无持久化）</text>
+  <text x="636" y="172" font-size="11" fill="#5d4037">2. 一个筐只能一个人取，想多</text>
+  <text x="648" y="190" font-size="11" fill="#5d4037">加几个通知服务一起干不行</text>
+  <text x="636" y="216" font-size="11" fill="#5d4037">3. 取走就没了，别的服务</text>
+  <text x="648" y="234" font-size="11" fill="#5d4037">（积分、风控）再也看不到</text>
+  <text x="636" y="260" font-size="11" fill="#5d4037">4. 没有人记「取到哪了」，</text>
+  <text x="648" y="278" font-size="11" fill="#5d4037">崩了只能从头再来</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#333"/>
+    </marker>
+    <marker id="arb" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#1565C0"/>
+    </marker>
+  </defs>
+</svg>

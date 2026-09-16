@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="430" viewBox="0 0 880 430" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="880" height="430" fill="#ffffff"/>
+
+  <text x="440" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#1a237e">综合版：同一套账拆成 3 本分册，分开放，各读各的</text>
+  <text x="440" y="46" text-anchor="middle" font-size="12" fill="#555555">高亮 = 本步新增：分片并行 / 分区内有序·跨分区无序 / 分散到不同 Broker / 写入只追加</text>
+
+  <!-- Topic -->
+  <rect x="30" y="70" width="150" height="52" rx="8" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="105" y="92" text-anchor="middle" font-size="12" font-weight="700" fill="#0d47a1">订单事件</text>
+  <text x="105" y="111" text-anchor="middle" font-size="10" fill="#0d47a1">对外还是"一整套账"</text>
+
+  <line x1="180" y1="96" x2="228" y2="96" stroke="#333" stroke-width="1.8" marker-end="url(#ar)"/>
+  <text x="204" y="88" text-anchor="middle" font-size="10" fill="#555555">拆</text>
+
+  <!-- 三个分区 -->
+  <rect x="232" y="66" width="150" height="34" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="307" y="88" text-anchor="middle" font-size="11" font-weight="700" fill="#1b5e20">分册 0：0,3,6,9</text>
+
+  <rect x="232" y="106" width="150" height="34" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="307" y="128" text-anchor="middle" font-size="11" font-weight="700" fill="#1b5e20">分册 1：1,4,7,10</text>
+
+  <rect x="232" y="146" width="150" height="34" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="307" y="168" text-anchor="middle" font-size="11" font-weight="700" fill="#1b5e20">分册 2：2,5,8,11</text>
+
+  <text x="307" y="196" text-anchor="middle" font-size="10" fill="#33691e">每册内部按 offset 有序；册与册之间不排队</text>
+
+  <!-- Broker -->
+  <line x1="382" y1="88" x2="428" y2="88" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <line x1="382" y1="128" x2="428" y2="128" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <line x1="382" y1="168" x2="428" y2="168" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <rect x="432" y="66" width="130" height="34" rx="7" fill="#ede7f6" stroke="#5e35b1" stroke-width="2"/>
+  <text x="497" y="88" text-anchor="middle" font-size="11" font-weight="700" fill="#4527a0">Broker A</text>
+
+  <rect x="432" y="106" width="130" height="34" rx="7" fill="#ede7f6" stroke="#5e35b1" stroke-width="2"/>
+  <text x="497" y="128" text-anchor="middle" font-size="11" font-weight="700" fill="#4527a0">Broker B</text>
+
+  <rect x="432" y="146" width="130" height="34" rx="7" fill="#ede7f6" stroke="#5e35b1" stroke-width="2"/>
+  <text x="497" y="168" text-anchor="middle" font-size="11" font-weight="700" fill="#4527a0">Broker C</text>
+
+  <text x="497" y="196" text-anchor="middle" font-size="10" fill="#5e35b1">三座仓库各放一册，不是堆一起</text>
+
+  <!-- 消费者组 -->
+  <line x1="562" y1="88" x2="606" y2="88" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <line x1="562" y1="128" x2="606" y2="128" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <line x1="562" y1="168" x2="606" y2="168" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <rect x="610" y="70" width="120" height="106" rx="8" fill="#fff8e1" stroke="#f9a825" stroke-width="2.5"/>
+  <text x="670" y="92" text-anchor="middle" font-size="11" font-weight="700" fill="#e65100">同一个消费组</text>
+  <text x="670" y="114" text-anchor="middle" font-size="11" fill="#e65100">消费者 1 → 分册 0</text>
+  <text x="670" y="134" text-anchor="middle" font-size="11" fill="#e65100">消费者 2 → 分册 1</text>
+  <text x="670" y="154" text-anchor="middle" font-size="11" fill="#e65100">消费者 3 → 分册 2</text>
+  <text x="670" y="170" text-anchor="middle" font-size="10" fill="#e65100">3 个人同时各翻一本</text>
+
+  <!-- 新增高亮 -->
+  <rect x="30" y="216" width="194" height="26" rx="13" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="127" y="234" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">新增①：并行度 = 分册数</text>
+  <text x="127" y="258" text-anchor="middle" font-size="10" fill="#5d4037">实测 1→3 分区提速 2.99~3.00 倍</text>
+
+  <rect x="238" y="216" width="194" height="26" rx="13" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="335" y="234" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">新增②：顺序只在册内成立</text>
+  <text x="335" y="258" text-anchor="middle" font-size="10" fill="#5d4037">实测到达序：m1 m2 m4 m0…（乱了）</text>
+
+  <rect x="446" y="216" width="194" height="26" rx="13" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="543" y="234" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">新增③：分散存放不怕单机故障</text>
+  <text x="543" y="258" text-anchor="middle" font-size="10" fill="#5d4037">坏 1 座只影响 1 册，另 2 册继续</text>
+
+  <rect x="654" y="216" width="196" height="26" rx="13" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="752" y="234" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">新增④：加机器就是加容量</text>
+  <text x="752" y="258" text-anchor="middle" font-size="10" fill="#5d4037">装不下就再盖一座仓库</text>
+
+  <!-- 顺序说明 -->
+  <rect x="30" y="278" width="420" height="128" rx="8" fill="#fce4ec" stroke="#c2185b" stroke-width="1.8"/>
+  <text x="50" y="302" font-size="12" font-weight="700" fill="#880e4f">⚠️ 别踩坑：跨分区没有全局顺序</text>
+  <text x="50" y="326" font-size="11" fill="#ad1457">实测发送序 msg0..msg11，实际到达 m1 m2 m4 m0…</text>
+  <text x="50" y="346" font-size="11" fill="#ad1457">但每册内部仍保持：P0[0,3,6,9] P1[1,4,7,10] P2[2,5,8,11]</text>
+  <text x="50" y="370" font-size="11" font-weight="700" fill="#880e4f">要「同一用户有序」？用相同 key 落到同一分区</text>
+  <text x="50" y="390" font-size="11" fill="#ad1457">实测：u1 的订单 [0,3,6] 保持发送顺序 ✓</text>
+
+  <!-- 写入说明 -->
+  <rect x="466" y="278" width="384" height="128" rx="8" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.8"/>
+  <text x="486" y="302" font-size="12" font-weight="700" fill="#1a237e">回扣本课另外两个知识点</text>
+  <text x="486" y="326" font-size="11" fill="#283593">顺序写：永远往末尾追加，磁头一路朝右不回头</text>
+  <text x="486" y="346" font-size="11" fill="#283593">本机实测：跳转次数 0 次 vs 随机写 8191 次（SSD 上速度差被吃掉）</text>
+  <text x="486" y="370" font-size="11" fill="#283593">零拷贝：内核直接把数据发到网卡，少倒一次手</text>
+  <text x="486" y="390" font-size="11" fill="#283593">本机回环实测：与 read+send 基本打平，省的是 CPU 而非秒</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#333"/>
+    </marker>
+  </defs>
+</svg>
