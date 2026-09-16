@@ -4,6 +4,8 @@
 > 实测环境：Node.js v22.14.0 ｜ 生成日期：2026-09-04
 > 📌 本手册是**索引 + 摘要**，不替代课时正文；要下钻细节请走文中的课文件链接。
 
+> 📖 规则补充（2026-09-16）：每课正文首部均保留“一句话本质、处境对照、一眼全局图、本课地图与步骤桥接”；本手册只做总览索引。动态版本与官方资料统一见 [`web-index/INDEX.md`](web-index/INDEX.md)。
+
 ---
 
 ## 🗺️ 学习路径总览
@@ -155,7 +157,7 @@ flowchart LR
 
 > **定位**：代码怎么拆。CJS 与 ESM 的差异在**加载时机**，不在语法。
 
-- **CommonJS 与 ESM**：CJS 运行时加载、导出值拷贝；ESM 编译期静态分析、导出实时绑定。tree-shaking 只在 ESM 上成立。
+- **CommonJS 与 ESM**：CJS 运行时加载并返回 `module.exports`，解构原始值可能形成快照；ESM 静态建图并提供实时绑定，因此更适合稳定 tree-shaking。
 - **import·export 全语法**：命名/默认/转发；导入绑定是**只读**的。
 - **循环依赖与动态导入**：ESM 循环依赖有三种表现（`const` + 同步访问抛 `ReferenceError`（TDZ）；`var` 是 `undefined`；延迟访问正常）；`import()` 做代码分割。
 
@@ -233,7 +235,7 @@ flowchart LR
 
 ### 4. 模块化：CommonJS 还是 ESM？
 
-- 新项目默认 **ESM**（能 tree-shaking、绑定只读、循环依赖语义更明确）。
+- 新项目通常优先 **ESM**（静态结构更适合稳定 tree-shaking、绑定只读、循环依赖语义更明确）。
 - 翻转点：老库是 CJS、需要运行时动态加载、或目标运行时只认 CJS。
 
 ### 5. 该不该上 TypeScript？

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="260" viewBox="0 0 900 260">
+  <rect width="900" height="260" fill="#ffffff"/>
+  <g font-family="Arial, sans-serif" fill="#1f2937" text-anchor="middle">
+    <rect x="45" y="90" width="210" height="80" rx="14" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+    <text x="150" y="125" font-size="20" font-weight="700">复制名字</text><text x="150" y="151" font-size="14">得到一个新标签</text>
+    <rect x="345" y="45" width="210" height="80" rx="14" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+    <text x="450" y="80" font-size="20" font-weight="700">仍指向原物</text><text x="450" y="106" font-size="14">改动会互相看见</text>
+    <rect x="345" y="150" width="210" height="80" rx="14" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="450" y="185" font-size="20" font-weight="700">另造一份</text><text x="450" y="211" font-size="14">改动彼此隔离</text>
+    <rect x="645" y="90" width="210" height="80" rx="14" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+    <text x="750" y="125" font-size="20" font-weight="700">选择比较方式</text><text x="750" y="151" font-size="14">明确是否允许转换</text>
+  </g>
+  <g stroke="#475569" stroke-width="3" fill="none"><path d="M255 130h55v-45h35"/><path d="M255 130h55v60h35"/><path d="M555 85h55v45h35"/><path d="M555 190h55v-60h35"/></g>
+  <g fill="#475569"><path d="M337 85l-12-8v16z"/><path d="M337 190l-12-8v16z"/><path d="M637 130l-12-8v16z"/></g>
+</svg>
