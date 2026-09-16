@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="420" viewBox="0 0 1100 420">
+  <style>
+    .bg{fill:#f8fafc}.box{fill:#fff;stroke:#94a3b8;stroke-width:2}.new{fill:#dcfce7;stroke:#22c55e;stroke-width:2}.out{fill:#fef3c7;stroke:#f59e0b;stroke-width:2}.title{font:700 26px sans-serif;fill:#0f172a}.label{font:600 18px sans-serif;fill:#0f172a}.small{font:15px sans-serif;fill:#475569}.arrow{stroke:#64748b;stroke-width:3;fill:none;marker-end:url(#arrow)}
+  </style>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker></defs>
+  <rect class="bg" width="1100" height="420" rx="24"/>
+  <text class="title" x="550" y="48" text-anchor="middle">综合实现：按健康、定位、业务和动作分层</text>
+  <rect class="box" x="25" y="145" width="145" height="95" rx="16"/><text class="label" x="97" y="183" text-anchor="middle">指标来源</text><text class="small" x="97" y="211" text-anchor="middle">MBean / Client</text>
+  <path class="arrow" d="M170 193 L225 193"/>
+  <rect class="new" x="225" y="105" width="170" height="72" rx="14"/><text class="label" x="310" y="137" text-anchor="middle">集群健康</text><text class="small" x="310" y="162" text-anchor="middle">URP / ISR / 目录</text>
+  <rect class="new" x="225" y="210" width="170" height="72" rx="14"/><text class="label" x="310" y="242" text-anchor="middle">消费定位</text><text class="small" x="310" y="267" text-anchor="middle">Group / Partition</text>
+  <path class="arrow" d="M395 141 L470 193"/><path class="arrow" d="M395 246 L470 193"/>
+  <rect class="new" x="470" y="145" width="185" height="95" rx="16"/><text class="label" x="562" y="183" text-anchor="middle">关联窗口</text><text class="small" x="562" y="211" text-anchor="middle">范围 + 持续时间</text>
+  <path class="arrow" d="M655 193 L725 193"/>
+  <rect class="new" x="725" y="105" width="165" height="72" rx="14"/><text class="label" x="807" y="137" text-anchor="middle">业务影响</text><text class="small" x="807" y="162" text-anchor="middle">延迟 / 错误 / SLO</text>
+  <rect class="new" x="725" y="210" width="165" height="72" rx="14"/><text class="label" x="807" y="242" text-anchor="middle">处置动作</text><text class="small" x="807" y="267" text-anchor="middle">观察 / 通知 / 升级</text>
+  <path class="arrow" d="M890 141 L950 193"/><path class="arrow" d="M890 246 L950 193"/>
+  <rect class="out" x="950" y="135" width="125" height="115" rx="16"/><text class="label" x="1012" y="173" text-anchor="middle">告警包</text><text class="small" x="1012" y="201" text-anchor="middle">证据</text><text class="small" x="1012" y="226" text-anchor="middle">负责人</text>
+  <text class="small" x="550" y="350" text-anchor="middle">本步新增分层、关联窗口和动作出口，让值班者拿到告警就知道“看哪里、做什么、何时升级”。</text>
+</svg>

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 500" font-family="-apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="1060" height="500" fill="#ffffff"/>
+  <text x="40" y="40" fill="#1f2328" font-size="22" font-weight="700">从节点数量到故障域基线</text>
+  <text x="40" y="66" fill="#57606a" font-size="13">数量是表面，真正要核对的是底层资源边界</text>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,3 L0,6 Z" fill="#57606a"/></marker>
+  </defs>
+  <g>
+    <rect x="45" y="110" width="285" height="270" rx="14" fill="#f6f8fa" stroke="#0969da" stroke-width="2"/>
+    <text x="187" y="146" text-anchor="middle" fill="#0969da" font-size="17" font-weight="700">故障域 A</text>
+    <rect x="85" y="175" width="205" height="62" rx="8" fill="#ffffff" stroke="#8c959f"/>
+    <text x="187" y="213" text-anchor="middle" fill="#1f2328" font-size="14">Broker / Controller 1</text>
+    <text x="187" y="272" text-anchor="middle" fill="#57606a" font-size="13">主机、磁盘、网络</text>
+    <text x="187" y="300" text-anchor="middle" fill="#57606a" font-size="13">rack-a</text>
+    <text x="187" y="344" text-anchor="middle" fill="#1a7f37" font-size="13" font-weight="700">一个域出问题</text>
+    <text x="187" y="364" text-anchor="middle" fill="#57606a" font-size="12">不应自动带走全部副本</text>
+  </g>
+  <g>
+    <rect x="388" y="110" width="285" height="270" rx="14" fill="#f6f8fa" stroke="#1a7f37" stroke-width="2"/>
+    <text x="530" y="146" text-anchor="middle" fill="#1a7f37" font-size="17" font-weight="700">故障域 B</text>
+    <rect x="428" y="175" width="205" height="62" rx="8" fill="#ffffff" stroke="#8c959f"/>
+    <text x="530" y="213" text-anchor="middle" fill="#1f2328" font-size="14">Broker / Controller 2</text>
+    <text x="530" y="272" text-anchor="middle" fill="#57606a" font-size="13">独立主机、磁盘、网络</text>
+    <text x="530" y="300" text-anchor="middle" fill="#57606a" font-size="13">rack-b</text>
+    <text x="530" y="344" text-anchor="middle" fill="#1a7f37" font-size="13" font-weight="700">副本分散</text>
+    <text x="530" y="364" text-anchor="middle" fill="#57606a" font-size="12">才有跨域恢复余地</text>
+  </g>
+  <g>
+    <rect x="731" y="110" width="285" height="270" rx="14" fill="#f6f8fa" stroke="#9a6700" stroke-width="2"/>
+    <text x="873" y="146" text-anchor="middle" fill="#9a6700" font-size="17" font-weight="700">故障域 C</text>
+    <rect x="771" y="175" width="205" height="62" rx="8" fill="#ffffff" stroke="#8c959f"/>
+    <text x="873" y="213" text-anchor="middle" fill="#1f2328" font-size="14">Broker / Controller 3</text>
+    <text x="873" y="272" text-anchor="middle" fill="#57606a" font-size="13">独立主机、磁盘、网络</text>
+    <text x="873" y="300" text-anchor="middle" fill="#57606a" font-size="13">rack-c</text>
+    <text x="873" y="344" text-anchor="middle" fill="#9a6700" font-size="13" font-weight="700">仍要验证实际落点</text>
+    <text x="873" y="364" text-anchor="middle" fill="#57606a" font-size="12">标签不是事实本身</text>
+  </g>
+  <path d="M330 245 L388 245 M673 245 L731 245" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="45" y="412" width="971" height="48" rx="8" fill="#fff8c5" stroke="#d29922"/>
+  <text x="530" y="442" text-anchor="middle" fill="#1f2328" font-size="13">故障域基线 = 节点身份 + 主机/机架/可用区 + 存储 + 网络 + 副本实际分布</text>
+</svg>

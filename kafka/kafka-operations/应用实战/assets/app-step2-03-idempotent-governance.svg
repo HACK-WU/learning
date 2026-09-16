@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="420" viewBox="0 0 1100 420">
+  <style>
+    .bg{fill:#f8fafc}.box{fill:#fff;stroke:#94a3b8;stroke-width:2}.new{fill:#dcfce7;stroke:#22c55e;stroke-width:2}.out{fill:#fef3c7;stroke:#f59e0b;stroke-width:2}.title{font:700 26px sans-serif;fill:#0f172a}.label{font:600 18px sans-serif;fill:#0f172a}.small{font:15px sans-serif;fill:#475569}.arrow{stroke:#64748b;stroke-width:3;fill:none;marker-end:url(#arrow)}
+  </style>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker></defs>
+  <rect class="bg" width="1100" height="420" rx="24"/>
+  <text class="title" x="550" y="48" text-anchor="middle">综合实现：先判定，再变更，再留证</text>
+  <rect class="box" x="25" y="145" width="150" height="95" rx="16"/><text class="label" x="100" y="183" text-anchor="middle">申请单</text><text class="small" x="100" y="211" text-anchor="middle">目标状态</text>
+  <path class="arrow" d="M175 193 L235 193"/>
+  <rect class="new" x="235" y="145" width="170" height="95" rx="16"/><text class="label" x="320" y="183" text-anchor="middle">Precheck</text><text class="small" x="320" y="211" text-anchor="middle">现状 / 层级 / 边界</text>
+  <path class="arrow" d="M405 193 L465 193"/>
+  <rect class="new" x="465" y="145" width="170" height="95" rx="16"/><text class="label" x="550" y="183" text-anchor="middle">Plan</text><text class="small" x="550" y="211" text-anchor="middle">动作 + 风险 + 回退</text>
+  <path class="arrow" d="M635 193 L695 193"/>
+  <rect class="new" x="695" y="145" width="170" height="95" rx="16"/><text class="label" x="780" y="183" text-anchor="middle">Execute</text><text class="small" x="780" y="211" text-anchor="middle">只做批准动作</text>
+  <path class="arrow" d="M865 193 L925 193"/>
+  <rect class="out" x="925" y="115" width="150" height="155" rx="16"/><text class="label" x="1000" y="153" text-anchor="middle">Verify</text><text class="small" x="1000" y="183" text-anchor="middle">目标状态</text><text class="small" x="1000" y="208" text-anchor="middle">异常回退</text><text class="small" x="1000" y="233" text-anchor="middle">证据归档</text>
+  <text class="small" x="550" y="350" text-anchor="middle">本步新增现状快照、目标状态和 verify，让重复执行也能先判断“是否已经达成”。</text>
+</svg>

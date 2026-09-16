@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 280" font-family="-apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="900" height="280" fill="#ffffff"/>
+  <text x="36" y="40" fill="#1f2328" font-size="21" font-weight="700">阶段 3 · 可观测与故障排查</text>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#57606a"/></marker></defs>
+  <path d="M276 145 L320 145 M564 145 L608 145" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+  <g><rect x="36" y="82" width="240" height="128" rx="10" fill="#f6f8fa" stroke="#0969da" stroke-width="2"/><text x="156" y="112" text-anchor="middle" fill="#0969da" font-size="15" font-weight="700">课 6</text><text x="156" y="140" text-anchor="middle" fill="#1f2328" font-size="13">可观测性与告警</text><text x="156" y="170" text-anchor="middle" fill="#57606a" font-size="11">信号 → 基线 → 告警</text><text x="156" y="192" text-anchor="middle" fill="#57606a" font-size="11">先知道哪里不对</text></g>
+  <g><rect x="324" y="82" width="240" height="128" rx="10" fill="#f6f8fa" stroke="#9a6700" stroke-width="2"/><text x="444" y="112" text-anchor="middle" fill="#9a6700" font-size="15" font-weight="700">课 7</text><text x="444" y="140" text-anchor="middle" fill="#1f2328" font-size="13">事故响应与排障</text><text x="444" y="170" text-anchor="middle" fill="#57606a" font-size="11">止血 → 取证 → 分诊</text><text x="444" y="192" text-anchor="middle" fill="#57606a" font-size="11">再证明根因</text></g>
+  <g><rect x="612" y="82" width="240" height="128" rx="10" fill="#fff8c5" stroke="#8250df" stroke-width="2"/><text x="732" y="124" text-anchor="middle" fill="#8250df" font-size="15" font-weight="700">阶段产出</text><text x="732" y="154" text-anchor="middle" fill="#1f2328" font-size="13">症状 → 动作 → 升级</text><text x="732" y="180" text-anchor="middle" fill="#57606a" font-size="11">可执行事故手册</text></g>
+</svg>

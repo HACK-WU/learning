@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="560" viewBox="0 0 1400 560">
+  <style>
+    .bg{fill:#f8fafc}.lane{fill:#fff;stroke:#cbd5e1;stroke-width:2}.source{fill:#dbeafe;stroke:#60a5fa;stroke-width:2}.adapter{fill:#dcfce7;stroke:#22c55e;stroke-width:2}.store{fill:#fef3c7;stroke:#f59e0b;stroke-width:2}.action{fill:#fce7f3;stroke:#ec4899;stroke-width:2}.title{font:700 28px sans-serif;fill:#0f172a}.label{font:700 19px sans-serif;fill:#0f172a}.small{font:15px sans-serif;fill:#475569}.tiny{font:14px sans-serif;fill:#64748b}.arrow{stroke:#64748b;stroke-width:3;fill:none;marker-end:url(#arrow)}
+  </style>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker></defs>
+  <rect class="bg" width="1400" height="560" rx="26"/>
+  <text class="title" x="700" y="48" text-anchor="middle">可观测性链路：从 MBean 到可行动告警</text>
+  <rect class="lane" x="35" y="92" width="235" height="345" rx="18"/><text class="label" x="152" y="127" text-anchor="middle">指标来源</text>
+  <rect class="source" x="65" y="160" width="175" height="82" rx="14"/><text class="label" x="152" y="195" text-anchor="middle">Kafka Server</text><text class="small" x="152" y="220" text-anchor="middle">Yammer Metrics</text>
+  <rect class="source" x="65" y="275" width="175" height="82" rx="14"/><text class="label" x="152" y="310" text-anchor="middle">Java Client</text><text class="small" x="152" y="335" text-anchor="middle">Kafka Metrics</text>
+  <path class="arrow" d="M270 205 L350 205"/><path class="arrow" d="M270 316 L350 316"/>
+  <rect class="lane" x="350" y="92" width="235" height="345" rx="18"/><text class="label" x="467" y="127" text-anchor="middle">暴露与转换</text>
+  <rect class="adapter" x="380" y="185" width="175" height="105" rx="14"/><text class="label" x="467" y="225" text-anchor="middle">JMX</text><text class="small" x="467" y="252" text-anchor="middle">MBean 属性</text><text class="small" x="467" y="276" text-anchor="middle">Exporter 转换</text>
+  <path class="arrow" d="M585 238 L665 238"/>
+  <rect class="lane" x="665" y="92" width="235" height="345" rx="18"/><text class="label" x="782" y="127" text-anchor="middle">存储与查询</text>
+  <rect class="store" x="695" y="185" width="175" height="105" rx="14"/><text class="label" x="782" y="225" text-anchor="middle">Prometheus</text><text class="small" x="782" y="252" text-anchor="middle">时间序列</text><text class="small" x="782" y="276" text-anchor="middle">标签与窗口</text>
+  <path class="arrow" d="M900 238 L980 238"/>
+  <rect class="lane" x="980" y="92" width="370" height="345" rx="18"/><text class="label" x="1165" y="127" text-anchor="middle">消费与行动</text>
+  <rect class="adapter" x="1010" y="160" width="150" height="82" rx="14"/><text class="label" x="1085" y="195" text-anchor="middle">规则</text><text class="small" x="1085" y="220" text-anchor="middle">阈值 + 持续时间</text>
+  <rect class="action" x="1175" y="160" width="145" height="82" rx="14"/><text class="label" x="1247" y="195" text-anchor="middle">告警</text><text class="small" x="1247" y="220" text-anchor="middle">通知 + 升级</text>
+  <path class="arrow" d="M1160 201 L1175 201"/>
+  <rect class="action" x="1090" y="285" width="175" height="82" rx="14"/><text class="label" x="1177" y="320" text-anchor="middle">Dashboard</text><text class="small" x="1177" y="345" text-anchor="middle">趋势 + 关联维度</text>
+  <path class="arrow" d="M782 290 C850 390 1010 390 1090 340"/>
+  <text class="tiny" x="700" y="490" text-anchor="middle">数据形态逐步变化：指标 → MBean → 时间序列 → 规则结果；每一步都要保留可追溯的标签和时间</text>
+</svg>

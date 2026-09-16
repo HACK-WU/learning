@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="420" viewBox="0 0 1100 420">
+  <style>
+    .bg{fill:#f8fafc}.box{fill:#fff;stroke:#94a3b8;stroke-width:2}.new{fill:#dcfce7;stroke:#22c55e;stroke-width:2}.out{fill:#fef3c7;stroke:#f59e0b;stroke-width:2}.title{font:700 26px sans-serif;fill:#0f172a}.label{font:600 18px sans-serif;fill:#0f172a}.small{font:15px sans-serif;fill:#475569}.arrow{stroke:#64748b;stroke-width:3;fill:none;marker-end:url(#arrow)}
+  </style>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker></defs>
+  <rect class="bg" width="1100" height="420" rx="24"/>
+  <text class="title" x="550" y="48" text-anchor="middle">综合实现：小批次、有限速、每批验证</text>
+  <rect class="box" x="25" y="145" width="145" height="95" rx="16"/><text class="label" x="97" y="183" text-anchor="middle">目标</text><text class="small" x="97" y="211" text-anchor="middle">撤空旧节点</text>
+  <path class="arrow" d="M170 193 L225 193"/>
+  <rect class="new" x="225" y="145" width="155" height="95" rx="16"/><text class="label" x="302" y="183" text-anchor="middle">小批次</text><text class="small" x="302" y="211" text-anchor="middle">先搬少量分区</text>
+  <path class="arrow" d="M380 193 L435 193"/>
+  <rect class="new" x="435" y="145" width="155" height="95" rx="16"/><text class="label" x="512" y="183" text-anchor="middle">限流</text><text class="small" x="512" y="211" text-anchor="middle">控制资源争抢</text>
+  <path class="arrow" d="M590 193 L645 193"/>
+  <rect class="new" x="645" y="145" width="155" height="95" rx="16"/><text class="label" x="722" y="183" text-anchor="middle">Verify</text><text class="small" x="722" y="211" text-anchor="middle">ISR / URP / 磁盘</text>
+  <path class="arrow" d="M800 193 L855 193"/>
+  <rect class="out" x="855" y="115" width="220" height="155" rx="16"/><text class="label" x="965" y="153" text-anchor="middle">下一批或暂停</text><text class="small" x="965" y="183" text-anchor="middle">稳定 → 继续</text><text class="small" x="965" y="208" text-anchor="middle">异常 → 保留证据</text><text class="small" x="965" y="233" text-anchor="middle">必要时回退计划</text>
+  <text class="small" x="550" y="350" text-anchor="middle">本步新增分批、限流和暂停出口，把搬迁从“一次豪赌”变成可观测的循环。</text>
+</svg>
