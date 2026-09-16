@@ -508,6 +508,115 @@ worker 日志（时间跨度约 1+2+4 = 7 秒）：
 
 ---
 
+### 知识点 2.5：重试耗尽之后呢？—— 死信队列（DLQ）
+
+> 关键点：重试不是兜底 ／ task_failure 只在耗尽时触发 ／ 死信必须落库才能运维 ／ 死信要能重放 ／ Celery 没有内置 DLQ
+
+#### 一句话定义
+
+**死信队列（Dead Letter Queue）**：重试全部失败后，把这条"救不回来的消息"连同失败原因单独存起来的地方 —— 它不是队列中间件的功能，而是你**自己要写的一段兜底逻辑**。
+
+#### 直觉建立：为什么重试解决不了这个问题
+
+课到这里你已经会配 `autoretry_for` + `retry_backoff` + `max_retries`。但请回答一个问题：
+
+> 第三方短信网关挂了 2 小时，你的任务重试 5 次全部失败。
+> **这条消息去哪了？**
+
+答案是：**没了。** Celery 的重试机制只负责"再试几次"，试完还是失败，它就抛个异常、ack 掉消息、完事。消息不会回到队列，也不会有第二个地方存着它。用户没收到短信，而你**根本不知道有这回事**。
+
+这就是"静默丢失"—— 比报错更可怕，因为报错你还会去看日志。
+
+#### 核心原理：`task_failure` 信号是唯一的兜底钩子
+
+Celery 提供了 `task_failure` 信号，它的触发时机非常关键：
+
+```python
+# proj/proj/signals.py（记得在 AppConfig.ready() 里 import）
+import json
+import logging
+
+import redis
+from celery.signals import task_failure
+from django.conf import settings
+
+logger = logging.getLogger('celery.dlq')
+
+
+@task_failure.connect
+def capture_dead_letter(sender=None, task_id=None, exception=None,
+                        args=None, kwargs=None, traceback=None, einfo=None, **kw):
+    """重试耗尽后才会走到这里 —— 每一次重试都不会触发。"""
+    record = {
+        'task_name': sender.name,
+        'task_id': task_id,
+        'args': list(args) if args else [],
+        'kwargs': kwargs or {},
+        'error': f'{type(exception).__name__}: {exception}',
+    }
+    # ⭐ 必须落到一个"进程外能读到"的地方（Redis / DB / 文件）
+    #    写在全局变量里没用 —— worker 是独立进程，你读不到
+    redis.Redis.from_url(settings.CELERY_BROKER_URL).rpush(
+        'celery_dlq', json.dumps(record, ensure_ascii=False))
+    logger.error('[DLQ] 死信入库 task=%s args=%s err=%s',
+                 record['task_name'], record['args'], record['error'])
+```
+
+#### 示例演示：完整复现「重试耗尽 → 落死信」
+
+```python
+# tasks.py
+@shared_task(name='sms.send', bind=True,
+             autoretry_for=(RuntimeError,),
+             retry_backoff=1, retry_backoff_max=2,
+             retry_kwargs={'max_retries': 2})
+def send_sms(self, phone):
+    raise RuntimeError(f'SMS gateway down for {phone}')
+```
+
+实测（celery 5.6.3，`max_retries=3`）：
+
+```text
+[EXEC]  第 1 次执行 phone=13800000000
+[RETRY] retries=0 reason=Retry in 1s: RuntimeError(...)
+[EXEC]  第 2 次执行 phone=13800000000
+[RETRY] retries=1 reason=Retry in 0s: RuntimeError(...)
+[EXEC]  第 3 次执行 phone=13800000000
+[RETRY] retries=2 reason=Retry in 1s: RuntimeError(...)
+[EXEC]  第 4 次执行 phone=13800000000          ← 首试 + 3 次重试 = 4 次
+[DLQ]   已捕获死信 task=dlq.send_sms args=['13800000000']   ← ⭐ 只出现 1 次
+[ERROR] Task dlq.send_sms[c4949afe-...] raised unexpected: RuntimeError(...)
+```
+
+进程外读取（这一步才是"可运维"的关键）：
+
+```bash
+$ redis-cli -p 6380 -n 7 lrange celery_dlq 0 -1
+{"task_name": "dlq.send_sms", "task_id": "60c3404b-...", "args": ["13900000000"],
+ "kwargs": {}, "error": "RuntimeError: SMS gateway down for 13900000000"}
+
+$ redis-cli -p 6380 -n 7 llen celery_dlq
+1
+```
+
+#### 常见误区
+
+1. **以为 Celery 有内置 DLQ** → 没有。RabbitMQ 有 DLX，Redis 没有，Celery 对两者都不提供开箱即用的死信收集，**必须自己写**
+2. **在 `task_retry` 信号里写死信** → 每次重试都会触发，你会收到 3 条重复死信；**只有 `task_failure` 是"耗尽"信号**
+3. **死信存全局变量 / 内存列表** → worker 是独立进程，你在 shell 里读不到；必须落 Redis / DB / 文件
+4. **死信只存不重放** → 存了不看等于没存；死信表里至少要有 `task_name` + `args`，否则故障恢复后无法重放
+5. **把代码 bug 也收进死信** → 参数错误重试耗尽后落死信，只会让死信表被垃圾塞满；**只对"外部依赖失败"落死信**
+
+#### 一句话记住
+
+> **重试负责"再试试"，死信负责"试完了还是不行"—— 前者是 Celery 给的，后者必须你自己写。**
+
+#### 官方文档
+
+- Signals（task_failure）：https://docs.celeryproject.org/en/stable/userguide/signals.html
+
+---
+
 ### 知识点 3：幂等性设计
 
 > 关键点：至少一次投递语义 ／ 业务幂等键 + 唯一约束 ／ 状态机条件更新 ／ 分布式锁的坑 ／ worker_deduplicate_successful_tasks 的边界

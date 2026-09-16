@@ -52,6 +52,7 @@
 | 20 | 超时保护（僵尸任务） | 阶段 4 · 课 10 | 所有任务配 `soft_time_limit` / `time_limit` | [lesson-10](../../stages/4-定时编排与生产运维/lessons/lesson-10-监控、排查与上线清单.md) |
 | 21 | 序列化安全（禁 pickle） | 阶段 4 · 课 10 | `accept_content = ['json']` | [lesson-10](../../stages/4-定时编排与生产运维/lessons/lesson-10-监控、排查与上线清单.md) |
 | 22 | result backend 清理 | 阶段 4 · 课 10 | 关单任务 `ignore_result=True` | [lesson-10](../../stages/4-定时编排与生产运维/lessons/lesson-10-监控、排查与上线清单.md) |
+| 23 | 死信队列（DLQ）兜底 | 阶段 3 · 课 5 · 知识点 2.5 | ⭐ 重试耗尽 → `proj/dlq.py` 落 Redis → 可查可重放 | [lesson-05](../../stages/3-可靠性与幂等/lessons/lesson-05-确认机制与重试策略.md) |
 
 **跨阶段校验**：覆盖 **4 个阶段**（阶段 1 / 2 / 3 / 4），门槛 ≥3 ✅
 
@@ -110,6 +111,7 @@ celery -A proj beat -l INFO                  # 兜底轮询
 | visibility_timeout（决策 2） | countdown=20 vs visibility_timeout=1（差 20 倍）**仍只执行 1 次** —— 未复现网传的重复执行 | `playground/l10-test-eta.sh` |
 | chord 挂死根因（决策 4） | 漏配 `fulfill_order` 路由 → 编排入口进 `default` 队列；补路由后 worker **不带 default** 也跑通 ✅ | `playground/l10-test-chord.sh` |
 | 关单幂等（端到端实跑） | 真实 Django ORM + worker 执行 3 次 → `[True, already_processed, already_processed]`，库存 10→11 ✅ | `playground/l10-e2e-verify.sh` |
+| 重试耗尽落死信（知识点 23） | `max_retries=3` → 执行 **4 次**，`task_failure` **只触发 1 次**；死信落 Redis 后进程外可读（llen=1）✅ | `.plans/2026-09-16/_f1_dlq_test.sh` / `_f1_verify_project.sh` |
 
 ### 一键验证
 

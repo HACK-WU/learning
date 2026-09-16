@@ -52,12 +52,28 @@ def log_task_end(sender=None, task_id=None, state=None, **kwargs):
 
 
 @task_failure.connect
-def log_task_failure(sender=None, task_id=None, exception=None, **kwargs):
-    """任务失败：记录 task_id + 异常（这里就是接告警的地方）"""
+def log_task_failure(sender=None, task_id=None, exception=None, args=None,
+                     task_kwargs=None, **extra):
+    """任务失败：记录 task_id + 异常（这里就是接告警的地方）
+
+    ⚠️ 触发时机：只在【最终失败】时触发（重试耗尽，或直接失败且没配重试）。
+       每次 autoretry 重试都不会走到这里 —— 所以这里是落死信的正确位置。
+    """
     logger.error('[task_failed] task_id=%s name=%s exc=%s',
                  task_id, sender.name, exception, exc_info=True)
     # 生产环境在这里接告警：发送钉钉/企业微信/邮件
     # notify_alert(f'Celery 任务失败 task_id={task_id} name={sender.name}')
+
+    # ⭐ 死信兜底（课 5 知识点 2.5）：重试耗尽的消息必须有地方可查、可重放
+    #    单独抽到 proj/dlq.py，方便单独测试与复用
+    try:
+        from proj.dlq import capture_dead_letter_record
+        capture_dead_letter_record(
+            sender=sender, task_id=task_id, exception=exception,
+            args=args, kwargs=task_kwargs,
+        )
+    except Exception as exc:      # ⚠️ 兜底逻辑绝不能把主流程搞崩
+        logger.exception('[DLQ] 死信入库失败（已忽略，不影响主流程）: %s', exc)
 
 
 @app.task(bind=True, ignore_result=True)

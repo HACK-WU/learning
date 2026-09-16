@@ -155,6 +155,35 @@ docker run -d --name celery-rabbit -p 5672:5672 -p 15672:15672 rabbitmq:4-manage
 # 对应配置：CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
 ```
 
+#### 补充：生产环境的 Broker 高可用（HA）
+
+上面的配置都是**单实例**，开发够用，但生产环境 broker 是**单点故障**：它一挂，所有任务都投递不出去。三种 broker 各有各的 HA 形态：
+
+| Broker | HA 方案 | Celery 配置写法 | 关键注意点 |
+|--------|---------|----------------|-----------|
+| **Redis** | **Sentinel**（哨兵，官方推荐） | `broker_url = 'sentinel://:pwd@host1:26379/0;sentinel://:pwd@host2:26379/0'`<br/>+ `broker_transport_options = {'master_name': 'mymaster'}` | ⭐ 必须给 master 命名；Sentinel 只管主从切换，**队列数据仍可能丢**（异步复制） |
+| **Redis** | **Cluster**（集群） | `broker_url = 'redis://host1:6379/0;redis://host2:6379/0'`<br/>+ `broker_transport_options = {'cluster_mode': True}` | Celery 5.x 起支持；注意 **chord 与某些 canvas 操作在 cluster 下受限** |
+| **RabbitMQ** | **镜像队列 / Quorum 队列** | 与单点写法相同（HA 在 broker 侧配） | ⭐ **Quorum 队列**是新一代方案（Raft 共识），比经典镜像队列更可靠，推荐新项目用 |
+
+Sentinel 的完整写法：
+
+```python
+# settings.py
+CELERY_BROKER_URL = 'sentinel://:password@sentinel1:26379/0;sentinel://:password@sentinel2:26379/0'
+CELERY_BROKER_TRANSPORT_OPTIONS = {
+    'master_name': 'mymaster',        # ⭐ 必填，Sentinel 靠它找主节点
+    'visibility_timeout': 3600,
+}
+# 结果后端也要一起配，否则任务执行完了结果写不回去
+CELERY_RESULT_BACKEND = 'sentinel://:password@sentinel1:26379/1;sentinel://:password@sentinel2:26379/1'
+CELERY_RESULT_BACKEND_TRANSPORT_OPTIONS = {'master_name': 'mymaster'}
+```
+
+> ⚠️ **HA 不等于不丢**：Sentinel 的复制是**异步**的，主节点宕机时还没复制过去的消息会丢。
+> 如果你的任务**绝对不能丢**，要么用 RabbitMQ + Quorum 队列 + publisher confirms，要么在业务侧做**对账补偿**（课 5 的死信队列就是对账的输入之一）。
+
+> 🎯 **本课立场**：HA 是**部署话题**，不是入门话题。第一次学 Celery 不用管它；等你要上生产时，再回来按这张表选。
+
 #### 常见误区
 
 1. **"`pip install celery` 就够了"**
@@ -322,6 +351,52 @@ CELERY_ACCEPT_CONTENT = ['json']                     # 只接受 json，拒绝 p
 
 > 💡 **为什么 broker 和 result backend 用不同的 db 号？**
 > ① 监控队列长度时（`KEYS celery` / `LLEN celery`）不会被成千上万个结果 key 淹没；② 结果过期清理不会误伤队列。**用同一个 db 也能跑，但排查时会很难受。**
+
+#### 补充：新旧配置名对照表（读老项目/老教程时必备）
+
+Celery 4.0 做过一次配置重命名：**小写下划线 → 小写点分**。你搜到的老教程、老项目里满是 `CELERY_ACCEPT_CONTENT` 之外的旧名，比如 `CELERY_TASK_SERIALIZER` 的旧写法是 `CELERY_TASK_SERIALIZER`（这个没变），但下面这些**变了**：
+
+> 📌 下表由本机 **celery 5.6.3** 内置的 `_TO_OLD_KEY` 映射导出（共 194 项），非人工整理，可放心引用。
+
+| 新版（4.0+，小写下划线） | 旧版（<4.0，全大写） | Django settings 写法 |
+|------------------------|-------------------|---------------------|
+| `broker_url` | `BROKER_URL` | `CELERY_BROKER_URL` |
+| `result_backend` | `CELERY_RESULT_BACKEND` | `CELERY_RESULT_BACKEND` |
+| `task_serializer` | `CELERY_TASK_SERIALIZER` | `CELERY_TASK_SERIALIZER` |
+| `result_serializer` | `CELERY_RESULT_SERIALIZER` | `CELERY_RESULT_SERIALIZER` |
+| `accept_content` | `CELERY_ACCEPT_CONTENT` | `CELERY_ACCEPT_CONTENT` |
+| `task_acks_late` | `CELERY_ACKS_LATE` | `CELERY_TASK_ACKS_LATE` |
+| `task_always_eager` | `CELERY_ALWAYS_EAGER` | `CELERY_TASK_ALWAYS_EAGER` |
+| `task_eager_propagates` | `CELERY_EAGER_PROPAGATES_EXCEPTIONS` | `CELERY_TASK_EAGER_PROPAGATES` |
+| `task_track_started` | `CELERY_TRACK_STARTED` | `CELERY_TASK_TRACK_STARTED` |
+| `task_soft_time_limit` | `CELERYD_TASK_SOFT_TIME_LIMIT` | `CELERY_TASK_SOFT_TIME_LIMIT` |
+| `task_time_limit` | `CELERYD_TASK_TIME_LIMIT` | `CELERY_TASK_TIME_LIMIT` |
+| `task_default_queue` | `CELERY_DEFAULT_QUEUE` | `CELERY_TASK_DEFAULT_QUEUE` |
+| `task_routes` | `CELERY_ROUTES` | `CELERY_TASK_ROUTES` |
+| `result_expires` | `CELERY_TASK_RESULT_EXPIRES` | `CELERY_RESULT_EXPIRES` |
+| `worker_prefetch_multiplier` | `CELERYD_PREFETCH_MULTIPLIER` | `CELERY_WORKER_PREFETCH_MULTIPLIER` |
+| `worker_concurrency` | `CELERYD_CONCURRENCY` | `CELERY_WORKER_CONCURRENCY` |
+| `worker_max_tasks_per_child` | `CELERYD_MAX_TASKS_PER_CHILD` | `CELERY_WORKER_MAX_TASKS_PER_CHILD` |
+| `worker_send_task_events` | `CELERY_SEND_EVENTS` | `CELERY_WORKER_SEND_TASK_EVENTS` |
+| `beat_schedule` | `CELERYBEAT_SCHEDULE` | `CELERY_BEAT_SCHEDULE` |
+
+**四条实用规则**：
+
+1. **新项目一律用新名**（小写下划线），旧名虽仍兼容但已废弃
+2. **改名不只在"点分→下划线"，前缀也变了** —— 分三类，别记混：
+   - `CELERY_` 前缀 → 变成 `task_` / `result_` / `broker_` 等
+   - `CELERYD_` 前缀（worker 相关）→ 变成 `worker_`
+   - `CELERYBEAT_` 前缀 → 变成 `beat_`
+3. **少数配置"新旧同名"**，别被老教程误导以为要改：`task_serializer`、`result_serializer`、`accept_content`、`result_backend` 的新旧名只差大小写
+4. **不确定时用命令行查最终生效值**，比翻文档快：
+
+```bash
+celery -A proj inspect conf | grep -i "serializer\|acks\|prefetch"
+```
+
+> ⚠️ **高频踩坑**：`CELERYD_*` 这批旧名在 Django `namespace='CELERY'` 下**不能**写成 `CELERYD_CONCURRENCY`
+> —— 因为 `namespace='CELERY'` 只识别 `CELERY_` 前缀，正确写法是 `CELERY_WORKER_CONCURRENCY`。
+> 另外注意 **`CELERY_TIMEZONE` 与 `CELERY_ENABLE_UTC` 没有 `task_`/`worker_` 前缀**，就是 `timezone` / `enable_utc`。
 
 #### 怎么验证"任务真的注册上了"？
 

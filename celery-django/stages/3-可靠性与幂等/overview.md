@@ -23,10 +23,12 @@
 |--------|--------|----------|
 | ack 时机与可见性超时 | 课 5 | 解释 `acks_late` 的收益与代价，并配好 `visibility_timeout` |
 | 重试策略 | 课 5 | 用 `autoretry_for` + `retry_backoff` + `jitter` 配出合理重试 |
+| 死信队列（DLQ） | 课 5 | 为重试耗尽的任务落死信，做到可查、可重放 |
 | 幂等性设计 | 课 5 | 为"扣款/发券"类任务设计幂等键与去重 |
 | 事务提交后再发任务 | 课 6 | 用 `transaction.on_commit` 修掉脏读 bug |
 | 任务参数序列化 | 课 6 | 坚持"传 id 不传对象"，说清 JSON 序列化边界 |
 | worker 数据库连接管理 | 课 6 | 配置 `CONN_MAX_AGE` 与 `close_old_connections` 防泄漏 |
+| Django 连接池与 prefork | 课 6 | 说清 5.6 为何要在 fork 前关池（`PoolTimeout` 根因） |
 
 ## 🗺️ 本阶段路径图
 

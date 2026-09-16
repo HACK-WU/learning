@@ -511,6 +511,9 @@ flowchart TB
 
 **⑤ 解法：显式加清理钩子（推荐）**
 
+> 📌 **版本补充（Celery 5.6+）**：如果你在 Django 里开了连接池（`OPTIONS["pool"]`），
+> 请先看本节末尾的「补充：Celery 5.6 的 Django 连接池支持」——那里有一个 5.6 才修好的坑。
+
 ```python
 # proj/proj/celery.py（或专门的 signals.py，确保被 import）
 from celery.signals import task_postrun, task_prerun
@@ -581,6 +584,58 @@ def generate(...):
 **问题**：Celery 的 prefork 池会 **fork 子进程**。如果 fork 前父进程已经建立了 DB 连接，**所有子进程会继承同一个 socket** → 多个进程同时用一条连接 → 数据错乱 / 连接报错。
 
 > 🎯 **规则**：**绝不在模块级（import 时）执行数据库查询。** 所有查询都放进函数体内（运行时才执行）。
+
+**⑧-b Celery 5.6 的 Django 连接池支持**（5.6.0 新增，对应[学习路径总览](../../../01-学习路径总览.md)的版本承诺）
+
+上面 ⑧ 讲的「fork 继承连接」问题，在 **Django 5.1+ 的连接池**场景下会更严重 —— 因为池里是**一批**连接，fork 后全部被继承：
+
+```mermaid
+flowchart TB
+    A["worker 主进程<br/>建立连接池（池内有 N 条连接）"] --> B["prefork fork 出子进程"]
+    B --> C["❌ 子进程继承父进程的全部连接 socket<br/>多进程共用同一批物理连接"]
+    C --> D["💥 psycopg_pool.PoolTimeout<br/>协议状态错乱 / 结果串台"]
+    style C fill:#ffebee,stroke:#ef9a9a
+    style D fill:#ffebee,stroke:#ef9a9a
+```
+
+**根因**：跨进程共享数据库连接是**不可能的**（操作系统层面的限制，不是 Celery 的 bug）。父进程池里的连接被 fork 出的子进程继承后，多个进程在同一条 socket 上读写，协议状态机直接乱掉。
+
+**5.6.0 的修复**（[whatsnew-5.6](https://docs.celeryq.dev/en/main/history/whatsnew-5.6.html) 原文）：
+
+> *"Django Connection Pool Support — Fixed an issue where Django applications using psycopg3 connection pooling would experience `psycopg_pool.PoolTimeout` errors after worker forks. Celery now properly closes Django's connection pools before forking, similar to how Django itself handles this in its autoreload mechanism."*
+
+**源码实证**（本机 **celery 5.6.3**，`celery/fixups/django.py` 的 `_close_database`）：
+
+```python
+def _close_database(self) -> None:
+    ...
+    is_prefork = self._is_prefork()
+    for conn in connections:
+        try:
+            conn.close()
+            pool_enabled = self._settings.DATABASES.get(
+                conn.alias, {}).get("OPTIONS", {}).get("pool")
+            if pool_enabled and is_prefork and hasattr(conn, "close_pool"):
+                with contextlib.suppress(KeyError):
+                    conn.close_pool()      # ⭐ 5.6 新增：fork 前把池关掉
+        except self.interface_errors:
+            pass
+```
+
+三个条件**同时满足**才会关池：`OPTIONS["pool"]` 已开启 **且** 是 prefork **且** 后端实现了 `close_pool`。
+
+**对你的实际影响**：
+
+| 场景 | 是否需要关心 |
+|------|------------|
+| 没开 Django 连接池（默认） | 不需要 —— 这段逻辑对你不生效 |
+| 开了连接池 + **prefork** | ⭐ 5.6 之前会 `PoolTimeout`；**5.6+ 自动修好，你什么都不用做** |
+| 开了连接池 + **gevent / eventlet / threads** | 5.6.1 起明确**只在 prefork 下关池**（#10020），这些模式不 fork，池本就安全 |
+| 开了连接池 + Celery **< 5.6** | 需自己挂 `worker_process_init` 信号关池，或先别开连接池 |
+
+> ⚠️ **一个容易误判的点**：这个修复是「**关池**」，不是「**池化改造**」。它不会让 worker 变快，也不负责帮你开连接池 —— 它只让"已经开了连接池的 Django 项目"在 prefork worker 下不再报 `PoolTimeout`。
+
+> 📌 **版本注记**：5.6.0 引入时曾对非 prefork 模式也关池，5.6.1 通过 [#10020](https://github.com/celery/celery/pull/10020) 收紧为「只在 prefork 关闭」。本课实测基线 **celery 5.6.3** 已包含该修复。
 
 **⑨ 怎么确认钩子真的生效了（自检方法）**
 

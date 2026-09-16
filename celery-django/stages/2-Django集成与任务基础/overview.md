@@ -21,11 +21,14 @@
 | 知识点 | 所属课 | 学完应能 |
 |--------|--------|----------|
 | 环境与 Broker 选型 | 课 3 | 根据团队现状在 Redis / RabbitMQ 之间做出有依据的选择 |
+| Broker 高可用（HA） | 课 3 | 说出 Sentinel / Cluster / Quorum 三种 HA 形态及各自代价 |
 | Django 标准集成姿势 | 课 3 | 不看文档从零搭出 celery.py + `__init__.py` + autodiscover |
+| 新旧配置名对照 | 课 3 | 读懂 4.0 之前的老教程与老项目配置 |
 | @shared_task 与常用任务参数 | 课 3 | 给任务正确配 `bind` / `name` / `max_retries` / 超时 |
 | delay 与 apply_async | 课 4 | 用 `apply_async` 实现延迟执行、指定队列、设置过期 |
 | AsyncResult 与结果查询 | 课 4 | 用 `AsyncResult` 查状态取结果，并说出 `get()` 的反模式 |
 | 任务信号与自定义 Task 基类 | 课 4 | 用自定义基类统一收集所有任务的成功/失败钩子 |
+| 任务怎么测 | 课 4 | 用 eager 模式写任务单测，并说清它测不了什么 |
 
 ## 🗺️ 本阶段路径图
 

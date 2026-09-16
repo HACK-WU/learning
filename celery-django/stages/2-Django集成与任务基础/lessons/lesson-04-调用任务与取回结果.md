@@ -678,6 +678,165 @@ app.Task = ObservedTask          # ← 一行，所有任务自动获得耗时�
 
 ---
 
+### 知识点 4：任务怎么测？（eager 模式与三个陷阱）
+
+> 关键点：三种测试策略 ／ `task_always_eager` 让任务同步执行 ／ 陷阱：重试次数照跑但**不等退避** ／ 陷阱：countdown 被忽略 ／ 陷阱：副作用真的发生 ／ 单元测试应 mock 外部依赖
+
+#### 一句话定义
+
+**任务测试**有两个层次：**测你的业务代码**（任务函数本身对不对）和**测 Celery 的编排行为**（重试、路由、chord 对不对）。前者用 eager 模式就够，后者才需要真 worker。
+
+#### 直觉建立：为什么任务"看起来没法测"
+
+任务代码长这样：
+
+```python
+@shared_task(name='orders.charge')
+def charge(order_id, amount):
+    order = Order.objects.get(id=order_id)
+    return pay_gateway(order.user_id, amount)      # ← 真的会调支付网关！
+```
+
+直接写单元测试调它，会**真的去调支付网关**。而不调它，你又不知道任务逻辑对不对。
+
+第一反应可能是"起个 worker + broker 测"——但那会把单测变成集成测试：慢、不稳定、需要 Redis。
+
+**eager 模式**就是解决这个的：让 `task.delay()` **不走 broker**，在**当前进程同步执行**，直接拿到结果。
+
+```python
+app.conf.task_always_eager = True      # 任务同步执行，不发消息
+app.conf.task_eager_propagates = True  # 任务里的异常直接抛出（而不是塞进 result）
+```
+
+#### 核心原理：三种测试策略怎么选
+
+| 策略 | 要不要 broker | 能测到什么 | 测不到什么 | 适用 |
+|------|--------------|-----------|-----------|------|
+| **① eager 同步执行** | ❌ 不要 | 任务函数的**业务逻辑** | 重试节奏、路由、并发 | ⭐ 绝大多数单测 |
+| **② mock 外部依赖** | ❌ 不要 | 编排逻辑、参数传递、错误分支 | 真实的 IO 行为 | ⭐ 外部服务调用 |
+| **③ 真 worker（`celery_worker` fixture）** | ✅ 需要 | 重试、路由、chord、序列化 | —— | 集成测试 / CI |
+
+> 🎯 **选择原则**：**能用 ① 就别用 ③**。真 worker 测试慢且不稳定，只在"要验证 Celery 自身行为"时才用。
+
+#### 示例演示：三种策略各写一个
+
+```python
+# tests/test_tasks.py
+import unittest
+from unittest import mock
+
+from django.test import TestCase, override_settings
+
+from orders.tasks import charge
+
+
+# ===== 策略 ①：eager 同步执行 =====
+@override_settings(CELERY_TASK_ALWAYS_EAGER=True,
+                   CELERY_TASK_EAGER_PROPAGATES=True)
+class TestChargeEager(TestCase):
+    def test_charge_success(self):
+        """eager 下 delay() 同步返回，直接 get() 拿结果。"""
+        result = charge.delay(order_id=1, amount=100)
+        self.assertEqual(result.get(), {'ok': True})
+
+
+# ===== 策略 ②：mock 掉外部依赖（推荐用于有副作用的任务）=====
+class TestChargeWithMock(TestCase):
+    @override_settings(CELERY_TASK_ALWAYS_EAGER=True,
+                       CELERY_TASK_EAGER_PROPAGATES=True)
+    @mock.patch('orders.tasks.pay_gateway')
+    def test_charge_calls_gateway_with_right_args(self, m_pay):
+        m_pay.return_value = {'ok': True}
+        result = charge.delay(order_id=1, amount=100)
+        self.assertEqual(result.get(), {'ok': True})
+        # ⭐ 重点验证「参数传递正确」，而不是「网关真的扣款了」
+        m_pay.assert_called_once_with(1001, 100)
+
+
+# ===== 策略 ③：验证失败路径 =====
+class TestChargeFailure(TestCase):
+    @override_settings(CELERY_TASK_ALWAYS_EAGER=True,
+                       CELERY_TASK_EAGER_PROPAGATES=True)
+    @mock.patch('orders.tasks.pay_gateway', side_effect=RuntimeError('gateway down'))
+    def test_gateway_error_propagates(self, m_pay):
+        with self.assertRaises(RuntimeError) as ctx:
+            charge.delay(order_id=1, amount=100)
+        self.assertIn('gateway down', str(ctx.exception))
+```
+
+实测（celery 5.6.3，unittest 跑通）：
+
+```text
+test_charge_propagates  ... ok
+test_charge_with_mock   ... ok
+test_add_eager          ... ok
+----------------------------------------------------------------------
+Ran 3 tests in 0.165s
+OK
+```
+
+#### ⚠️ 三个陷阱（都是实测验证过的，不是纸面推断）
+
+**陷阱 1：eager 下重试「次数照跑，但不等待」** —— 最隐蔽的一个
+
+```python
+@app.task(bind=True, autoretry_for=(RuntimeError,),
+          retry_backoff=2, retry_kwargs={'max_retries': 3})
+def flaky(self):
+    raise RuntimeError('always fail')
+```
+
+实测结果：
+
+```text
+执行次数: 4   总耗时: 0.26s   相邻间隔: [0.01, 0.01, 0.01]
+                                          ↑ 应该是 2s / 4s / 8s！
+```
+
+> 🎯 **注意**：网上很多文章说「eager 模式下重试不生效」，**这是错的**。实测 eager 下**确实重试了 4 次**，只是**退避等待被跳过**（0.01s 而不是 2/4/8s）。
+> 后果：如果你的测试依赖"重试间隔"，eager 下测出来的行为与生产**完全不同**。
+
+**陷阱 2：`countdown` / `eta` 被完全忽略**
+
+```python
+add.apply_async(args=(1, 1), countdown=30)
+# 实测：0.001 秒就执行完了 —— countdown=30 被完全忽略
+```
+
+eager 模式下所有投递选项（countdown、eta、queue、routing_key）**都不生效**。
+所以：**路由正确性不能用 eager 测**，必须上真 worker。
+
+**陷阱 3：副作用真的会发生**
+
+```python
+@shared_task
+def persist(x):
+    DB.write(x)          # eager 下这里【真的会写库】
+    return x
+```
+
+eager 只是"同步执行"，**不是"空跑"**。任务里的写库、发 HTTP 都会真实发生。
+👉 所以要么用 `mock` 打桩，要么用 Django 的 `TestCase`（每个测试在事务里，结束自动回滚）。
+
+#### 常见误区
+
+1. **以为 eager 下重试不生效** → 错，实测**重试 4 次**；只是退避等待被跳过
+2. **用 eager 测路由 / countdown** → 这些投递选项在 eager 下**全部被忽略**，测了等于没测
+3. **不 mock 外部调用** → 跑测试真的调了支付网关 / 发了短信
+4. **只开 `task_always_eager` 不开 `task_eager_propagates`** → 异常不会抛出，而是塞进 `result`，测试**假通过**（你以为没报错，其实报错被吞了）
+5. **在 CI 里跑真 worker 测试** → 慢且不稳定；真 worker 测试要单独标记，与单测分开跑
+
+#### 一句话记住
+
+> **eager 测的是"你的代码"，不是"Celery 的行为" —— 重试节奏、倒计时、路由这三样，eager 一律测不了。**
+
+#### 官方文档
+
+- Testing with Celery：https://docs.celeryproject.org/en/stable/userguide/testing.html
+- `celery.contrib.testing`（fixture 与工具）：https://docs.celeryproject.org/en/stable/reference/celery.contrib.testing.html
+
+---
+
 ## 第四幕：实操验证
 
 > 逐条回扣第一幕的三个需求。建议跟着跑，特别是 ① 和 ④——它们的**反直觉**正是考点。

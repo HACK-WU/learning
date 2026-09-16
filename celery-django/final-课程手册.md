@@ -80,9 +80,13 @@ graph TD
 | `prefetch_multiplier=1` | **长任务场景**必调：默认 4 会让先启动的 worker 囤货、后启动的饿死 | 课 9 |
 | `REMAP_SIGTERM=SIGQUIT` | 容器环境发版不丢任务的关键（**环境变量**，写进 settings.py 无效） | 课 9 |
 
-> ⚠️ **两个容易混淆的"知识点数"**：课程共 **30 个知识点**（10 课 × 3），
-> 而实战项目的知识点地图列出的是 **22 个** —— 那是项目**实际用上的**知识点，
+> ⚠️ **两个容易混淆的"知识点数"**：课程共 **44 个知识点**（[02-课程目录](02-课程目录.md) 实际条目数），
+> 而实战项目的知识点地图列出的是 **23 个** —— 那是项目**实际用上的**知识点，
 > 不等于课程总量（部分知识点如"cron 的边界"属于认知铺垫，不直接落地为代码）。
+>
+> 📌 **2026-09-16 补充的 5 个**（对齐 Celery 5.6 官方 userguide 后补齐）：
+> 课 3「Broker 高可用」「新旧配置名对照」· 课 4「任务怎么测」· 课 5「死信队列」· 课 6「5.6 连接池」。
+> 另有 `debugging` / `extending` 两条官方章节**明确不覆盖**，理由见 [02-课程目录](02-课程目录.md)。
 
 > ⚠️ **`prefetch_multiplier` 为什么有两个值**：默认 **4** 对**短任务**更优（减少网络往返、提高吞吐）；
 > 长任务场景调成 **1**，否则一个 worker 预取 32 条会把任务全囤在自己手里，其他 worker 饿死。
@@ -173,6 +177,23 @@ flowchart TB
 2. 配了 `namespace='CELERY'` 却用小写配置名 → **静默退回默认值**，"明明配了 Redis 却去连 RabbitMQ"。
 3. 业务逻辑全塞进任务函数 → 难测试难复用；**任务要薄**，只做调度/日志/重试/异常转译。
 
+**➕ 补充：生产环境的 Broker 高可用**
+- 上面配的是**单实例**，broker 一挂任务全投不出去。三种 HA 形态：
+  Redis → **Sentinel**（`sentinel://` + `master_name`）或 **Cluster**（`cluster_mode=True`）；
+  RabbitMQ → **Quorum 队列**（推荐，Raft 共识，优于经典镜像）。
+- ⚠️ **HA ≠ 不丢**：Sentinel 是异步复制，主节点宕机时未复制的消息会丢。
+  绝对不能丢的任务，要么上 RabbitMQ + publisher confirms，要么做**业务侧对账补偿**。
+- 这是**部署话题**，初学不用管；上生产时按这张表选。
+
+**➕ 补充：新旧配置名对照（读老教程必备）**
+- Celery 4.0 做过重命名，且**三类前缀都变了**：`CELERY_` → `task_`/`result_`/`broker_`，
+  `CELERYD_` → `worker_`，`CELERYBEAT_` → `beat_`。
+- ⚠️ 高频踩坑：`namespace='CELERY'` **只认 `CELERY_` 前缀**，所以老教程的 `CELERYD_CONCURRENCY`
+  在 Django settings 里必须写成 `CELERY_WORKER_CONCURRENCY`，写 `CELERYD_CONCURRENCY` 不生效。
+- 少数配置新旧**同名**（`task_serializer` / `accept_content` / `result_backend`），别改错。
+  不确定就 `celery -A proj inspect conf` 查实际生效值。
+- 课 3 正文的对照表由 celery 内置 `_TO_OLD_KEY`（194 项）导出，非人工整理。
+
 → [原课讲义](stages/2-Django集成与任务基础/lessons/lesson-03-第一个Celery+Django项目.md)
 
 ### 课 4 · 调用任务与取回结果
@@ -198,6 +219,33 @@ flowchart TB
 1. `delay()` 里传 `countdown` → `TypeError`，投递选项必须用 `apply_async`。
 2. 一边要进度条一边设 `ignore_result=True` → 自相矛盾。
 3. 以为 `result_expires` 会自动生效 → 需要 **beat 在跑** `celery.backend_cleanup`，否则撑爆 Redis。
+
+**➕ 任务怎么测？（eager 模式）**
+
+```mermaid
+flowchart TB
+    A{"要测什么?"}
+    A -- "任务函数的业务逻辑" --> B["① eager 同步执行<br/>task_always_eager=True"]
+    A -- "外部服务调用" --> C["② mock 打桩<br/>验证参数传递"]
+    A -- "重试/路由/countdown" --> D["③ 真 worker<br/>（慢且不稳，CI 慎用）"]
+    B --> E["✅ 绝大多数单测"]
+    C --> E
+    D --> F["⚠️ 集成测试，与单测分开跑"]
+    style E fill:#e8f5e9,stroke:#2e7d32
+    style F fill:#fff3e0,stroke:#ffb74d
+```
+
+- **原则：能用 ① 就别用 ③**。真 worker 测试慢且不稳定，只在"要验证 Celery 自身行为"时才用。
+- `task_always_eager=True` 让 `delay()` 不走 broker、在当前进程同步执行；
+  **必须同时开 `task_eager_propagates=True`**，否则异常被吞进 result，测试**假通过**。
+
+> 🔬 **实测推翻了两条网传说法**（celery 5.6.3）：
+> ① 网传"eager 下失败 `state=SUCCESS`" → 实测是 **`FAILURE`**。
+> ② 网传"eager 下重试不生效" → 实测**重试照跑 4 次**，只是**退避等待被跳过**
+> （间隔 0.01s，而非 2/4/8s）。这条最隐蔽：你的测试会"快到失真"。
+
+- ⚠️ eager 测不了三样：**重试节奏、countdown/eta、路由**（投递选项在 eager 下全部被忽略）。
+- ⚠️ eager 是"同步执行"不是"空跑" —— 任务里的**写库会真的发生**，要 mock 或套在 `TestCase` 事务里。
 
 → [原课讲义](stages/2-Django集成与任务基础/lessons/lesson-04-调用任务与取回结果.md)
 
@@ -254,6 +302,32 @@ flowchart TB
 > 真正会让长任务重投的是 kombu 的**重投检查周期 ≈ 100 秒**（源码 `10s × 10`，实测 88.8s），
 > 临界区间在 **70~110 秒**。详见 [08-实战经验](08-实战经验.md) 故障模式 11。
 
+**➕ 补充：重试耗尽之后呢？—— 死信队列（DLQ）**
+
+```mermaid
+flowchart TB
+    A["任务重试 N 次仍失败"] --> B["Celery 抛异常、ack 掉消息"]
+    B --> C{"这条消息去哪了?"}
+    C --> D["❌ 没了 —— 静默丢失"]
+    C --> E["✅ task_failure 信号里落死信"]
+    D --> F["用户没收到短信<br/>而你根本不知道"]
+    E --> G["可查 · 可重放"]
+    style D fill:#ffebee,stroke:#ef9a9a
+    style F fill:#ffebee,stroke:#ef9a9a
+    style G fill:#e8f5e9,stroke:#2e7d32
+```
+
+- **重试不是兜底**：Celery 只负责"再试几次"，试完还是失败就 ack 掉完事 —— 这就是**静默丢失**，比报错更危险。
+- **Celery 没有内置 DLQ**（RabbitMQ 有 DLX、Redis 没有，Celery 对两者都不提供开箱即用的死信收集）→ **必须自己写**。
+- 落死信的唯一正确钩子是 **`task_failure`**：它只在**最终失败**时触发一次；
+  若误用 `task_retry`，每次重试都触发，你会收到 N 条重复死信。
+- ⚠️ 死信必须落到**进程外可读**的存储（Redis / DB / 文件）—— 存全局变量没用，worker 是独立进程，shell 里读不到。
+- 死信记录至少要有 `task_name` + `args`，否则故障恢复后**无法重放**。
+
+> 🔬 **实测**（celery 5.6.3）：`max_retries=3` → 执行 **4 次**，`task_failure` **只触发 1 次**；
+> 端到端投 2 个必失败任务 → 死信 **2 条**（而非 8 条），证明"只在耗尽时落一条"。
+> 项目落地见 `projects/电商订单履约系统/实现/proj/dlq.py`（含 `list_dead_letters()` / `replay()`）。
+
 → [原课讲义](stages/3-可靠性与幂等/lessons/lesson-05-确认机制与重试策略.md)
 
 ### 课 6 · Django 事务与 ORM 的坑
@@ -279,6 +353,26 @@ flowchart LR
 1. "本地复现不了就没问题" → 竞态类 bug 在**生产高负载下必然触发**（本地 worker 通常空闲，等得起）。
 2. "配了重试就不需要 `on_commit`" → 重试是兜底，`on_commit` 是**根因修复**。
 3. "`CONN_MAX_AGE=0` 就不会泄漏" → 它的语义是"请求结束时关"，**worker 里没有请求**。
+
+**➕ 补充：Celery 5.6 的 Django 连接池支持**
+
+```mermaid
+flowchart TB
+    A["worker 主进程建立连接池"] --> B["prefork fork 出子进程"]
+    B --> C["❌ 子进程继承父进程的连接 socket<br/>多进程共用同一批物理连接"]
+    C --> D["💥 psycopg_pool.PoolTimeout<br/>协议状态错乱 / 结果串台"]
+    E["5.6+ 修复：fork 前 conn.close_pool()"] --> F["✅ 子进程起自己的新池"]
+    style C fill:#ffebee,stroke:#ef9a9a
+    style D fill:#ffebee,stroke:#ef9a9a
+    style F fill:#e8f5e9,stroke:#2e7d32
+```
+
+- **根因**：跨进程共享数据库连接是**不可能的**（OS 层面限制，不是 Celery 的 bug）。
+- 5.6.0（[#9953](https://github.com/celery/celery/pull/9953)）在 fork 前关池，
+  条件三连：`OPTIONS["pool"]` 已开 **且** 是 prefork **且** 后端有 `close_pool`。
+- ⚠️ **这是"关池"不是"池化改造"** —— 它不会让 worker 变快，只让开了池的项目不再报 `PoolTimeout`。
+- 5.6.1（#10020）收紧为**只在 prefork 关池**：gevent/eventlet/threads 不 fork，池本就安全。
+- 没开 Django 连接池的话，这段逻辑对你**完全不生效**。
 
 → [原课讲义](stages/3-可靠性与幂等/lessons/lesson-06-Django事务与ORM的坑.md)
 
@@ -404,11 +498,11 @@ flowchart TB
 
 | 指标 | 达成 |
 |------|------|
-| 知识点覆盖 | **4 阶段 / 22 个知识点**，逐个回指课时 |
+| 知识点覆盖 | **4 阶段 / 23 个知识点**，逐个回指课时（2026-09-16 补入「死信队列」为 #23） |
 | 非功能约束 | 正确性 / 错误处理 / 性能 / 可观测性 / 安全 **5 项** |
 | 设计决策 | **5 个**，每个都有真实争议与翻转条件 |
 | 反例对照 | **8 条**，"能跑但很糟"的版本逐条对比 |
-| 验收清单 | **30 项**，`verify.sh` **6/6 通过** |
+| 验收清单 | **31 项**，`verify.sh` **6/6 通过**（第 ⑫ 项为死信兜底） |
 
 | 产物 | 内容 |
 |------|------|
@@ -416,7 +510,8 @@ flowchart TB
 | [设计决策](projects/电商订单履约系统/设计决策.md) | 5 个真权衡点的完整论证 |
 | [反例对照](projects/电商订单履约系统/反例对照.md) | "能跑但很糟"的版本 + 8 条对比 |
 | [实现](projects/电商订单履约系统/实现/) | 可运行代码（中文注释，标注对应知识点） |
-| [验收清单](projects/电商订单履约系统/验收清单.md) | 30 项自测 + 自动化脚本 |
+| [验收清单](projects/电商订单履约系统/验收清单.md) | 31 项自测 + 自动化脚本 |
+| [死信兜底实现](projects/电商订单履约系统/实现/proj/dlq.py) | 重试耗尽 → 落 Redis → 可查 · 可重放 |
 
 ### 五个设计决策（含翻转条件）
 
