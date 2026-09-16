@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 540" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="880" height="540" fill="#FDFDFE"/>
+
+  <text x="440" y="38" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">一次 agent 运行的 trace：每个环节都留痕</text>
+
+  <!-- 根节点 -->
+  <rect x="30" y="58" width="820" height="56" rx="12" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="50" y="83" font-size="13.5" font-weight="bold" fill="#1E40AF">[根] 一次 agent 运行：「北京天气？」</text>
+  <text x="50" y="103" font-size="12" fill="#475569">总耗时约 2.6 秒 · 拥有唯一 trace_id（同一棵树里的所有子节点共享它）</text>
+
+  <!-- 树连线 -->
+  <line x1="68" y1="114" x2="68" y2="392" stroke="#94A3B8" stroke-width="1.5"/>
+  <line x1="68" y1="184" x2="95" y2="184" stroke="#94A3B8" stroke-width="1.5"/>
+  <line x1="68" y1="288" x2="95" y2="288" stroke="#94A3B8" stroke-width="1.5"/>
+  <line x1="68" y1="392" x2="95" y2="392" stroke="#94A3B8" stroke-width="1.5"/>
+
+  <!-- 子节点 1：模型调用 #1 -->
+  <rect x="95" y="140" width="755" height="88" rx="10" fill="#F8FBFF" stroke="#DBEAFE" stroke-width="1.2"/>
+  <text x="115" y="166" font-size="13" font-weight="bold" fill="#1D4ED8">模型调用 #1 · 耗时 1.2 秒</text>
+  <text x="115" y="190" font-size="12" fill="#374151">输入：系统提示 + 用户消息（2 条）</text>
+  <text x="115" y="212" font-size="12" fill="#374151">输出：决定调用工具 → get_weather(city=北京)</text>
+
+  <!-- 子节点 2：工具执行 -->
+  <rect x="95" y="244" width="755" height="88" rx="10" fill="#F7FDF9" stroke="#BBF7D0" stroke-width="1.2"/>
+  <text x="115" y="270" font-size="13" font-weight="bold" fill="#15803D">工具执行 get_weather · 耗时约 1 毫秒</text>
+  <text x="115" y="294" font-size="12" fill="#374151">输入：city=北京（由模型决定）</text>
+  <text x="115" y="316" font-size="12" fill="#374151">输出：北京：晴，22°C。</text>
+
+  <!-- 子节点 3：模型调用 #2 -->
+  <rect x="95" y="348" width="755" height="88" rx="10" fill="#F8FBFF" stroke="#DBEAFE" stroke-width="1.2"/>
+  <text x="115" y="374" font-size="13" font-weight="bold" fill="#1D4ED8">模型调用 #2 · 耗时 1.4 秒</text>
+  <text x="115" y="398" font-size="12" fill="#374151">输入：4 条消息（含工具返回的结果）</text>
+  <text x="115" y="420" font-size="12" fill="#374151">输出：「北京：晴，22°C。」</text>
+
+  <!-- 底栏 -->
+  <rect x="30" y="452" width="820" height="62" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="440" y="478" text-anchor="middle" font-size="14" font-weight="bold" fill="#5B21B6">出问题时：从根往下逐节点核对输入与输出，哪一步不对，问题就出在哪一步</text>
+  <text x="440" y="502" text-anchor="middle" font-size="12.5" fill="#475569">每个节点都记录：名称、类型、输入、输出、开始时间、耗时、异常信息</text>
+</svg>

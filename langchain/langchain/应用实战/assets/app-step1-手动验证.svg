@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 540" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="880" height="540" fill="#FDFDFE"/>
+
+  <text x="440" y="38" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">第 1 版：人肉验证 —— 跑一遍、眼睛看</text>
+
+  <!-- 流程 -->
+  <rect x="30" y="70" width="200" height="88" rx="12" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1.5"/>
+  <text x="130" y="102" text-anchor="middle" font-size="14" font-weight="bold" fill="#334155">你（开发者）</text>
+  <text x="130" y="128" text-anchor="middle" font-size="12" fill="#64748B">手动启动验证脚本</text>
+
+  <text x="248" y="120" font-size="18" fill="#94A3B8">→</text>
+
+  <rect x="280" y="70" width="290" height="88" rx="12" fill="#FEFCE8" stroke="#FDE68A" stroke-width="1.5"/>
+  <text x="425" y="100" text-anchor="middle" font-size="14" font-weight="bold" fill="#854D0E">try_agent.py</text>
+  <text x="425" y="124" text-anchor="middle" font-size="12" fill="#92400E">5 个典型问题：查订单 / 查物流 / 退货…</text>
+  <text x="425" y="144" text-anchor="middle" font-size="12" fill="#92400E">逐个发给 agent，打印结果</text>
+
+  <text x="588" y="120" font-size="18" fill="#94A3B8">→</text>
+
+  <rect x="620" y="70" width="230" height="88" rx="12" fill="#F8FBFF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="735" y="100" text-anchor="middle" font-size="14" font-weight="bold" fill="#1E40AF">客服 agent（真模型）</text>
+  <text x="735" y="124" text-anchor="middle" font-size="12" fill="#1D4ED8">真实调用，每次 3~6 秒</text>
+
+  <!-- 人工核对回环 -->
+  <path d="M 735 158 L 735 190 L 130 190 L 130 158" fill="none" stroke="#94A3B8" stroke-width="1.5" stroke-dasharray="5,4"/>
+  <text x="432" y="210" text-anchor="middle" font-size="12" fill="#64748B">结果打印到终端，人眼逐条核对「像不像话」</text>
+
+  <!-- 三个问题 -->
+  <text x="440" y="258" text-anchor="middle" font-size="14" font-weight="bold" fill="#991B1B">三个问题（越用越明显）</text>
+
+  <rect x="30" y="278" width="262" height="120" rx="12" fill="#FEF2F2" stroke="#FECACA" stroke-width="1.5"/>
+  <text x="161" y="308" text-anchor="middle" font-size="13" font-weight="bold" fill="#991B1B">① 慢，且花钱</text>
+  <text x="161" y="334" text-anchor="middle" font-size="12" fill="#B91C1C">每轮都真调模型：</text>
+  <text x="161" y="356" text-anchor="middle" font-size="12" fill="#B91C1C">5 个问题就是 5 次网络请求</text>
+  <text x="161" y="382" text-anchor="middle" font-size="12" fill="#DC2626">改个小地方，全部重跑一遍</text>
+
+  <rect x="309" y="278" width="262" height="120" rx="12" fill="#FEF2F2" stroke="#FECACA" stroke-width="1.5"/>
+  <text x="440" y="308" text-anchor="middle" font-size="13" font-weight="bold" fill="#991B1B">② 结果没法对比</text>
+  <text x="440" y="334" text-anchor="middle" font-size="12" fill="#B91C1C">这遍的回复与上遍不一样</text>
+  <text x="440" y="356" text-anchor="middle" font-size="12" fill="#B91C1C">（模型每次措辞都不同）</text>
+  <text x="440" y="382" text-anchor="middle" font-size="12" fill="#DC2626">「变好了还是变坏了」说不清</text>
+
+  <rect x="588" y="278" width="262" height="120" rx="12" fill="#FEF2F2" stroke="#FECACA" stroke-width="1.5"/>
+  <text x="719" y="308" text-anchor="middle" font-size="13" font-weight="bold" fill="#991B1B">③ 回归靠人眼</text>
+  <text x="719" y="334" text-anchor="middle" font-size="12" fill="#B91C1C">改完提示词要重看 5 个场景</text>
+  <text x="719" y="356" text-anchor="middle" font-size="12" fill="#B91C1C">人眼会累、会漏</text>
+  <text x="719" y="382" text-anchor="middle" font-size="12" fill="#DC2626">更别说「每次都重新看」了</text>
+
+  <!-- 标注条 -->
+  <rect x="30" y="428" width="820" height="80" rx="12" fill="#FFFBEB" stroke="#FDE68A" stroke-width="1.5"/>
+  <text x="440" y="458" text-anchor="middle" font-size="14" font-weight="bold" fill="#92400E">本步形态：手动 · 一次性 · 不可复现</text>
+  <text x="440" y="486" text-anchor="middle" font-size="12.5" fill="#A16207">能跑通、能看到效果——这是所有工具人验证的第一步，也是必须尽快告别的一步</text>
+</svg>

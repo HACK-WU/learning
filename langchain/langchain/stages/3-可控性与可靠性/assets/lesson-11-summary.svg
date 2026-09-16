@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 580" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="880" height="580" fill="#FDFDFE"/>
+
+  <text x="440" y="36" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">本课一张图：检索与 RAG 全链路</text>
+
+  <!-- 卡片 1 -->
+  <rect x="30" y="58" width="400" height="196" rx="12" fill="#FEF2F2" stroke="#FECACA" stroke-width="1.5"/>
+  <text x="50" y="88" font-size="15" font-weight="bold" fill="#991B1B">① 为什么需要检索</text>
+  <text x="50" y="118" font-size="13" fill="#7F1D1D">模型两个硬限制：上下文有限 + 知识冻结</text>
+  <text x="50" y="144" font-size="13" fill="#7F1D1D">私有数据：训练集里根本没有「你公司」</text>
+  <text x="50" y="170" font-size="13" fill="#7F1D1D">空窗表现：编造细节 / 猜测包围（实测两种）</text>
+  <text x="50" y="196" font-size="13" fill="#7F1D1D">思路：先查资料再回答（检索增强生成）</text>
+  <text x="50" y="226" font-size="12.5" fill="#B91C1C">判断问句：这个问题，模型真的「见过」吗？</text>
+
+  <!-- 卡片 2 -->
+  <rect x="450" y="58" width="400" height="196" rx="12" fill="#F7FDF9" stroke="#BBF7D0" stroke-width="1.5"/>
+  <text x="470" y="88" font-size="15" font-weight="bold" fill="#166534">② 知识库构建链路</text>
+  <text x="470" y="118" font-size="13" fill="#15803D">加载：统一成 Document（content + metadata）</text>
+  <text x="470" y="144" font-size="13" fill="#15803D">切分：按标题/段落递归切（300/60 → 15 块）</text>
+  <text x="470" y="170" font-size="13" fill="#15803D">嵌入：文本 → 4096 维向量（语义坐标）</text>
+  <text x="470" y="196" font-size="13" fill="#15803D">入库：写入向量库（内存版/生产版皆可换）</text>
+  <text x="470" y="226" font-size="12.5" fill="#22A55B">四环解耦：换加载器/切分器/模型/库，互不影响</text>
+
+  <!-- 卡片 3 -->
+  <rect x="30" y="282" width="400" height="196" rx="12" fill="#FEFCE8" stroke="#FDE68A" stroke-width="1.5"/>
+  <text x="50" y="312" font-size="15" font-weight="bold" fill="#854D0E">③ 检索：从向量库到统一接口</text>
+  <text x="50" y="342" font-size="13" fill="#92400E">查询三法：按文本 / 带分数 / 按向量</text>
+  <text x="50" y="368" font-size="13" fill="#92400E">分数方向因实现而异（本库：越大越像）</text>
+  <text x="50" y="394" font-size="13" fill="#92400E">Retriever：similarity / mmr / 阈值（本库缺）</text>
+  <text x="50" y="420" font-size="13" fill="#92400E">Retriever 是 Runnable：invoke / batch 即用</text>
+  <text x="50" y="450" font-size="12.5" fill="#A16207">检索不到的，模型就答不出（RAG 的命门是检索）</text>
+
+  <!-- 卡片 4 -->
+  <rect x="450" y="282" width="400" height="196" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="470" y="312" font-size="15" font-weight="bold" fill="#5B21B6">④ RAG 架构三种模式</text>
+  <text x="470" y="342" font-size="13" fill="#6D28D9">2-step：先检索后生成（可控、快、可预期）</text>
+  <text x="470" y="368" font-size="13" fill="#6D28D9">Agentic：检索即工具，模型自决何时查、怎么查</text>
+  <text x="470" y="394" font-size="13" fill="#6D28D9">Hybrid：加查询改写与校验的中间形态</text>
+  <text x="470" y="420" font-size="13" fill="#6D28D9">实测：agent 会拆多条查询并行检索（跨文档多跳）</text>
+  <text x="470" y="450" font-size="12.5" fill="#7C3AED">选型问句：检索是「必经前置」还是「按需动作」？</text>
+
+  <!-- 底栏 -->
+  <rect x="30" y="496" width="820" height="64" rx="12" fill="#FBFBFD" stroke="#E5E7EB" stroke-width="1.5"/>
+  <text x="440" y="522" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#374151">一句话：让模型「先查资料再回答」——知识库四环解耦，检索质量决定答案质量</text>
+  <text x="440" y="546" text-anchor="middle" font-size="13" fill="#6B7280">下一课：课 12《Multi-Agent 多智能体》——从一个 agent 到一个团队</text>
+</svg>

@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 540" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="880" height="540" fill="#FDFDFE"/>
+
+  <text x="440" y="38" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">测试的三层：越往上越「真实」，越慢、越贵</text>
+
+  <!-- 卡 1：单元测试 -->
+  <rect x="30" y="58" width="262" height="372" rx="12" fill="#F7FDF9" stroke="#BBF7D0" stroke-width="1.5"/>
+  <rect x="30" y="58" width="262" height="44" rx="12" fill="#DCFCE7"/>
+  <rect x="30" y="90" width="262" height="12" fill="#DCFCE7"/>
+  <text x="161" y="86" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#166534">第一层 · 单元测试</text>
+  <text x="161" y="124" text-anchor="middle" font-size="12" fill="#15803D">毫秒级 · 零成本 · 百分之百稳定</text>
+
+  <text x="48" y="158" font-size="13" font-weight="bold" fill="#166534">测什么</text>
+  <text x="48" y="180" font-size="12" fill="#374151">小块、确定的逻辑：</text>
+  <text x="48" y="200" font-size="12" fill="#374151">工具链、状态流转、多轮记忆</text>
+
+  <text x="48" y="234" font-size="13" font-weight="bold" fill="#166534">靠什么</text>
+  <text x="48" y="256" font-size="12" fill="#374151">剧本替身（预设回复的假模型）</text>
+  <text x="48" y="276" font-size="12" fill="#374151">+ 内存存储（不落盘）</text>
+
+  <text x="48" y="310" font-size="13" font-weight="bold" fill="#166534">实测</text>
+  <text x="48" y="332" font-size="12" fill="#374151">5 项检查 0.4 秒跑完</text>
+  <text x="48" y="352" font-size="12" fill="#374151">同一输入跑 3 次结果一致</text>
+
+  <text x="48" y="386" font-size="13" font-weight="bold" fill="#166534">什么时候跑</text>
+  <text x="48" y="408" font-size="12" fill="#374151">每次改动都跑</text>
+
+  <!-- 卡 2：集成测试 -->
+  <rect x="309" y="58" width="262" height="372" rx="12" fill="#F8FBFF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <rect x="309" y="58" width="262" height="44" rx="12" fill="#DBEAFE"/>
+  <rect x="309" y="90" width="262" height="12" fill="#DBEAFE"/>
+  <text x="440" y="86" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#1E40AF">第二层 · 集成测试</text>
+  <text x="440" y="124" text-anchor="middle" font-size="12" fill="#1D4ED8">秒级 · 需密钥 · 结果有波动</text>
+
+  <text x="327" y="158" font-size="13" font-weight="bold" fill="#1E40AF">测什么</text>
+  <text x="327" y="180" font-size="12" fill="#374151">真模型真的会配合吗：</text>
+  <text x="327" y="200" font-size="12" fill="#374151">工具被调用、结构、凭据、延迟</text>
+
+  <text x="327" y="234" font-size="13" font-weight="bold" fill="#1E40AF">靠什么</text>
+  <text x="327" y="256" font-size="12" fill="#374151">真 API + 密钥（缺了就跳过）</text>
+  <text x="327" y="276" font-size="12" fill="#374151">断言「结构」而不是「原话」</text>
+
+  <text x="327" y="310" font-size="13" font-weight="bold" fill="#1E40AF">实测</text>
+  <text x="327" y="332" font-size="12" fill="#374151">2 项检查 6.1 秒</text>
+  <text x="327" y="352" font-size="12" fill="#374151">录制回放后 1.9 秒、离线可跑</text>
+
+  <text x="327" y="386" font-size="13" font-weight="bold" fill="#1E40AF">什么时候跑</text>
+  <text x="327" y="408" font-size="12" fill="#374151">CI / 交付前（不是每次保存）</text>
+
+  <!-- 卡 3：Evals -->
+  <rect x="588" y="58" width="262" height="372" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <rect x="588" y="58" width="262" height="44" rx="12" fill="#EDE9FE"/>
+  <rect x="588" y="90" width="262" height="12" fill="#EDE9FE"/>
+  <text x="719" y="86" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#5B21B6">第三层 · 整套评分</text>
+  <text x="719" y="124" text-anchor="middle" font-size="12" fill="#6D28D9">看整条轨迹 · 可评分 · 可对比</text>
+
+  <text x="606" y="158" font-size="13" font-weight="bold" fill="#5B21B6">测什么</text>
+  <text x="606" y="180" font-size="12" fill="#374151">整条执行轨迹的质量：</text>
+  <text x="606" y="200" font-size="12" fill="#374151">顺序对不对、该做的做了吗</text>
+
+  <text x="606" y="234" font-size="13" font-weight="bold" fill="#5B21B6">靠什么</text>
+  <text x="606" y="256" font-size="12" fill="#374151">对照参考答案（确定性匹配）</text>
+  <text x="606" y="276" font-size="12" fill="#374151">或裁判模型打分（评质量）</text>
+
+  <text x="606" y="310" font-size="13" font-weight="bold" fill="#5B21B6">实测</text>
+  <text x="606" y="332" font-size="12" fill="#374151">4 种匹配模式全部可跑</text>
+  <text x="606" y="352" font-size="12" fill="#374151">裁判模型可用（自定义端点）</text>
+
+  <text x="606" y="386" font-size="13" font-weight="bold" fill="#5B21B6">什么时候跑</text>
+  <text x="606" y="408" font-size="12" fill="#374151">改提示词 / 换模型之后</text>
+
+  <!-- 底栏 -->
+  <rect x="30" y="452" width="820" height="62" rx="12" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="440" y="478" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#1E40AF">三层是互补关系，不是三选一：快的常跑，真的定期跑，评分在关键改动后跑</text>
+  <text x="440" y="502" text-anchor="middle" font-size="12.5" fill="#475569">常见配方：第一层每次提交都跑 · 第二三层放进 CI，只在交付前或大改后触发</text>
+</svg>

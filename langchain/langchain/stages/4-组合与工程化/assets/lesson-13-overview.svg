@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 540" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="880" height="540" fill="#FDFDFE"/>
+
+  <text x="440" y="38" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">让 agent 从「能跑」到「敢用」</text>
+
+  <!-- 上方：三个躲不开的问题 -->
+  <rect x="30" y="58" width="262" height="76" rx="12" fill="#FEF2F2" stroke="#FECACA" stroke-width="1.5"/>
+  <text x="161" y="88" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#991B1B">「你怎么证明它可靠？」</text>
+  <text x="161" y="114" text-anchor="middle" font-size="12" fill="#B91C1C">不能只说「我跑过，看着还行」</text>
+
+  <rect x="309" y="58" width="262" height="76" rx="12" fill="#FEF2F2" stroke="#FECACA" stroke-width="1.5"/>
+  <text x="440" y="88" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#991B1B">「改完是变好还是变坏？」</text>
+  <text x="440" y="114" text-anchor="middle" font-size="12" fill="#B91C1C">改动后的影响，要靠什么发现</text>
+
+  <rect x="588" y="58" width="262" height="76" rx="12" fill="#FEF2F2" stroke="#FECACA" stroke-width="1.5"/>
+  <text x="719" y="88" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#991B1B">「出错在哪一步？」</text>
+  <text x="719" y="114" text-anchor="middle" font-size="12" fill="#B91C1C">过去发生过什么，还能查到吗</text>
+
+  <!-- 箭头区 -->
+  <text x="440" y="166" text-anchor="middle" font-size="13" fill="#64748B">↓ 两条思路：交付前证明它，运行中看见它 ↓</text>
+
+  <!-- 左：交付前（分层检查） -->
+  <rect x="30" y="184" width="395" height="248" rx="12" fill="#F8FBFF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="227" y="214" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#1E40AF">交付前：分层检查，快慢结合</text>
+
+  <rect x="48" y="230" width="359" height="56" rx="8" fill="#EFF6FF" stroke="#DBEAFE" stroke-width="1"/>
+  <text x="62" y="252" font-size="13" font-weight="bold" fill="#1D4ED8">第一层 · 快检查</text>
+  <text x="62" y="274" font-size="12" fill="#3B82F6">不碰真模型，毫秒级出结果，每次改动都能跑</text>
+
+  <rect x="48" y="294" width="359" height="56" rx="8" fill="#EFF6FF" stroke="#DBEAFE" stroke-width="1"/>
+  <text x="62" y="316" font-size="13" font-weight="bold" fill="#1D4ED8">第二层 · 真检查</text>
+  <text x="62" y="338" font-size="12" fill="#3B82F6">真模型真调用，验证「它真的配合吗」（秒级）</text>
+
+  <rect x="48" y="358" width="359" height="56" rx="8" fill="#EFF6FF" stroke="#DBEAFE" stroke-width="1"/>
+  <text x="62" y="380" font-size="13" font-weight="bold" fill="#1D4ED8">第三层 · 整套评分</text>
+  <text x="62" y="402" font-size="12" fill="#3B82F6">出一套题 + 评判标准，给整条表现打分</text>
+
+  <!-- 右：运行中（全程留痕） -->
+  <rect x="455" y="184" width="395" height="248" rx="12" fill="#F7FDF9" stroke="#BBF7D0" stroke-width="1.5"/>
+  <text x="652" y="214" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#166534">运行中：全程留痕，有据可查</text>
+
+  <rect x="473" y="230" width="359" height="184" rx="8" fill="#F0FDF4" stroke="#DCFCE7" stroke-width="1"/>
+  <text x="488" y="256" font-size="13" font-weight="bold" fill="#15803D">一次运行的每一步，都被记下来：</text>
+  <text x="488" y="284" font-size="12" fill="#16A34A">① 问了什么、模型第一步决定做什么（+什么时候）</text>
+  <text x="488" y="310" font-size="12" fill="#16A34A">② 工具执行用了什么参数、返回了什么</text>
+  <text x="488" y="336" font-size="12" fill="#16A34A">③ 模型最后怎么答、每步各花了多久</text>
+  <text x="488" y="368" font-size="12" fill="#4ADE80">出问题时：不是「猜」，而是回放每一步</text>
+  <text x="488" y="394" font-size="12" fill="#4ADE80">改完之后：对照新旧两次运行的差异</text>
+
+  <!-- 底栏 -->
+  <rect x="30" y="452" width="820" height="62" rx="12" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="440" y="478" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#1E40AF">从「我跑过，看着还行」→「我能证明，随时可查」</text>
+  <text x="440" y="502" text-anchor="middle" font-size="12.5" fill="#475569">这一课，就是把这两个能力装到你的 agent 工程里（下一课：结课实战项目）</text>
+</svg>

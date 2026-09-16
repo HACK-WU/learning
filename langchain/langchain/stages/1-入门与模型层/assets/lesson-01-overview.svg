@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 460" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#6B7280"/>
+    </marker>
+  </defs>
+
+  <rect width="880" height="460" fill="#FDFDFE"/>
+
+  <text x="440" y="38" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">同一句问话，两种结果</text>
+
+  <!-- 左侧：现状 -->
+  <rect x="30" y="58" width="370" height="256" rx="12" fill="#FBFBFC" stroke="#E5E7EB" stroke-width="1.5"/>
+  <rect x="46" y="72" width="338" height="40" rx="8" fill="#F3F4F6" stroke="#D1D5DB"/>
+  <text x="215" y="97" text-anchor="middle" font-size="16" font-weight="bold" fill="#374151">现在：只会「说」</text>
+
+  <rect x="90" y="130" width="280" height="44" rx="10" fill="#FFFFFF" stroke="#D1D5DB"/>
+  <text x="105" y="157" font-size="14" fill="#374151">帮我看下北京今天的天气？</text>
+
+  <rect x="60" y="190" width="310" height="70" rx="10" fill="#F9FAFB" stroke="#E5E7EB"/>
+  <text x="78" y="217" font-size="14" fill="#6B7280">抱歉，我只能陪聊——</text>
+  <text x="78" y="241" font-size="14" fill="#6B7280">查不到实时天气，也不会动手。</text>
+
+  <text x="215" y="297" text-anchor="middle" font-size="13" fill="#9CA3AF">碰到要「动手」的事，只能干瞪眼</text>
+
+  <!-- 中间箭头 -->
+  <text x="444" y="160" text-anchor="middle" font-size="14" fill="#4B5563">加一圈配套</text>
+  <line x1="404" y1="182" x2="466" y2="182" stroke="#6B7280" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- 右侧：目标 -->
+  <rect x="480" y="58" width="370" height="256" rx="12" fill="#F8FBFF" stroke="#DBEAFE" stroke-width="1.5"/>
+  <rect x="496" y="72" width="338" height="40" rx="8" fill="#EFF6FF" stroke="#BFDBFE"/>
+  <text x="665" y="97" text-anchor="middle" font-size="16" font-weight="bold" fill="#1D4ED8">本课目标：能「做」事</text>
+
+  <rect x="540" y="130" width="280" height="40" rx="10" fill="#FFFFFF" stroke="#BFDBFE"/>
+  <text x="555" y="155" font-size="14" fill="#374151">帮我看下北京今天的天气？</text>
+
+  <rect x="512" y="184" width="60" height="36" rx="8" fill="#EFF6FF" stroke="#93C5FD"/>
+  <text x="542" y="207" text-anchor="middle" font-size="12" fill="#1E40AF">先想一步</text>
+  <line x1="575" y1="202" x2="605" y2="202" stroke="#6B7280" stroke-width="1.6" marker-end="url(#arr)"/>
+  <rect x="610" y="184" width="60" height="36" rx="8" fill="#EFF6FF" stroke="#93C5FD"/>
+  <text x="640" y="207" text-anchor="middle" font-size="12" fill="#1E40AF">动手去查</text>
+  <line x1="673" y1="202" x2="703" y2="202" stroke="#6B7280" stroke-width="1.6" marker-end="url(#arr)"/>
+  <rect x="708" y="184" width="60" height="36" rx="8" fill="#EFF6FF" stroke="#93C5FD"/>
+  <text x="738" y="207" text-anchor="middle" font-size="12" fill="#1E40AF">给出答复</text>
+
+  <rect x="540" y="238" width="280" height="40" rx="10" fill="#ECFDF5" stroke="#6EE7B7"/>
+  <text x="555" y="263" font-size="14" fill="#065F46">北京今天晴，26℃，微风。</text>
+
+  <text x="665" y="297" text-anchor="middle" font-size="13" fill="#9CA3AF">同一句问话，它自己动手查完再回答</text>
+
+  <!-- 底部：配套三件 -->
+  <text x="40" y="350" font-size="15" font-weight="bold" fill="#374151">思路：在模型外面加一圈「配套」</text>
+
+  <rect x="30" y="366" width="262" height="72" rx="10" fill="#F5F3FF" stroke="#DDD6FE"/>
+  <text x="48" y="396" font-size="14" font-weight="bold" fill="#5B21B6">① 告诉它规矩</text>
+  <text x="48" y="422" font-size="13" fill="#6D28D9">该怎么说、哪些不能做</text>
+
+  <rect x="309" y="366" width="262" height="72" rx="10" fill="#F0F9FF" stroke="#BAE6FD"/>
+  <text x="327" y="396" font-size="14" font-weight="bold" fill="#075985">② 给它帮手</text>
+  <text x="327" y="422" font-size="13" fill="#0C4A6E">查数据、算数字、读写文件</text>
+
+  <rect x="588" y="366" width="262" height="72" rx="10" fill="#FEFCE8" stroke="#FDE68A"/>
+  <text x="606" y="396" font-size="14" font-weight="bold" fill="#854D0E">③ 让它反复尝试</text>
+  <text x="606" y="422" font-size="13" fill="#92400E">做完看一眼，不够再来一轮</text>
+</svg>

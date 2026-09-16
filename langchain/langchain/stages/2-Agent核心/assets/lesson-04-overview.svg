@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 500" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="880" height="500" fill="#FDFDFE"/>
+
+  <text x="440" y="38" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">从「只会动嘴」到「会干活」</text>
+
+  <!-- 左上 -->
+  <rect x="30" y="58" width="395" height="168" rx="12" fill="#FBFBFC" stroke="#E5E7EB" stroke-width="1.5"/>
+  <text x="50" y="88" font-size="14.5" font-weight="bold" fill="#374151">现在：它只会说话</text>
+  <text x="50" y="118" font-size="13" fill="#6B7280">「客户表里有多少条记录？」</text>
+  <text x="50" y="142" font-size="13" fill="#6B7280">「我看不到你的数据库，</text>
+  <text x="50" y="162" font-size="13" fill="#6B7280">  只能靠你告诉我」</text>
+  <text x="50" y="200" font-size="13" font-weight="bold" fill="#9A3412">它接不到数据、也做不了动作</text>
+
+  <!-- 左下 -->
+  <rect x="30" y="242" width="395" height="168" rx="12" fill="#FBFBFC" stroke="#E5E7EB" stroke-width="1.5"/>
+  <text x="50" y="272" font-size="14.5" font-weight="bold" fill="#374151">现在：数据靠「人肉搬运」</text>
+  <text x="50" y="302" font-size="13" fill="#6B7280">你先自己去查 → 复制结果</text>
+  <text x="50" y="326" font-size="13" fill="#6B7280">→ 粘贴进对话 → 它才能分析</text>
+  <text x="50" y="358" font-size="13" fill="#9A3412">查一次、搬一次；</text>
+  <text x="50" y="380" font-size="13" fill="#9A3412">问题一多就搬不过来</text>
+
+  <!-- 右上 -->
+  <rect x="455" y="58" width="395" height="168" rx="12" fill="#F8FBFF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="475" y="88" font-size="14.5" font-weight="bold" fill="#1E40AF">本课：配一套「申请 + 跑腿」流程</text>
+  <text x="475" y="118" font-size="13" fill="#475569">① 它写「申请条」：帮我查客户表</text>
+  <text x="475" y="144" font-size="13" fill="#475569">② 跑腿的照单执行（你写好的函数）</text>
+  <text x="475" y="170" font-size="13" fill="#475569">③ 结果递回到它手里</text>
+  <text x="475" y="198" font-size="13" font-weight="bold" fill="#1D4ED8">④ 它用真数据回答你</text>
+
+  <!-- 右下 -->
+  <rect x="455" y="242" width="395" height="168" rx="12" fill="#F7FDF9" stroke="#BBF7D0" stroke-width="1.5"/>
+  <text x="475" y="272" font-size="14.5" font-weight="bold" fill="#166534">本课：安全底线划在这里</text>
+  <text x="475" y="302" font-size="13" fill="#475569">它永远不亲手执行——</text>
+  <text x="475" y="326" font-size="13" fill="#475569">执行都发生在你这边</text>
+  <text x="475" y="358" font-size="13" fill="#15803D">不想让它碰的事？干脆不给这张</text>
+  <text x="475" y="380" font-size="13" fill="#15803D">「申请权」——工具就是权限</text>
+
+  <!-- 底栏 -->
+  <rect x="30" y="430" width="820" height="56" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="440" y="455" text-anchor="middle" font-size="15" font-weight="bold" fill="#5B21B6">思路：把你写好的函数翻译成「说明书」递给它读</text>
+  <text x="440" y="476" text-anchor="middle" font-size="13" fill="#6D28D9">它申请 → 你执行 → 把回执递回来</text>
+</svg>

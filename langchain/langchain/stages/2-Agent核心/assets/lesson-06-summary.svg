@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 580" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="arrS" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#6B7280"/>
+    </marker>
+  </defs>
+
+  <rect width="880" height="580" fill="#FDFDFE"/>
+
+  <text x="440" y="36" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">本课一张图：流式三模式 + v3 事件流</text>
+
+  <!-- 卡片 1 -->
+  <rect x="30" y="58" width="400" height="210" rx="12" fill="#F8FBFF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="50" y="88" font-size="15" font-weight="bold" fill="#1E40AF">① 流式的价值与机制</text>
+  <text x="50" y="118" font-size="13" fill="#1D4ED8">invoke 是"等转完再看"——用户盯空屏，调试靠猜</text>
+  <text x="50" y="144" font-size="13" fill="#1D4ED8">stream 是"边跑边报"——同样的调用，逐步输出</text>
+  <text x="50" y="170" font-size="13" fill="#1D4ED8">三种粒度：进度（每节点）/ token（每字）/ 自定义</text>
+  <text x="50" y="196" font-size="13" fill="#1D4ED8">v2 统一格式：每个 chunk 都是 {type, ns, data}</text>
+  <text x="50" y="222" font-size="13" fill="#1D4ED8">v3 事件流：typed projections，官方推荐新写法</text>
+  <text x="50" y="252" font-size="12.5" fill="#3B82F6">实测：invoke 2.8s 无中间反馈；stream 首 chunk 1.4s</text>
+
+  <!-- 卡片 2 -->
+  <rect x="450" y="58" width="400" height="210" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="470" y="88" font-size="15" font-weight="bold" fill="#5B21B6">② 流模式全解</text>
+  <text x="470" y="118" font-size="13" fill="#6D28D9">updates：每步结束报进度（model → tools → model）</text>
+  <text x="470" y="144" font-size="13" fill="#6D28D9">messages：每个 token chunk 都给你（打字机效果）</text>
+  <text x="470" y="170" font-size="13" fill="#6D28D9">custom：工具里 get_stream_writer() 随时发信号</text>
+  <text x="470" y="196" font-size="13" fill="#6D28D9">多模式混用：stream_mode=["updates","custom"]</text>
+  <text x="470" y="222" font-size="13" fill="#6D28D9">v3 投影：stream.messages / .tool_calls / .values</text>
+  <text x="470" y="252" font-size="12.5" fill="#7C3AED">实测：updates 3 个 chunk；messages 5 个 token chunk</text>
+
+  <!-- 卡片 3 -->
+  <rect x="30" y="286" width="400" height="190" rx="12" fill="#F7FDF9" stroke="#BBF7D0" stroke-width="1.5"/>
+  <text x="50" y="316" font-size="15" font-weight="bold" fill="#166534">③ 实战流式模式</text>
+  <text x="50" y="346" font-size="13" fill="#15803D">打字机效果：stream_mode="messages" 逐 token 打印</text>
+  <text x="50" y="372" font-size="13" fill="#15803D">工具进度条：custom 模式发"正在搜索…"信号</text>
+  <text x="50" y="398" font-size="13" fill="#15803D">思考过程可见：reasoning tokens（需模型支持）</text>
+  <text x="50" y="424" font-size="13" fill="#15803D">多 agent 来源标注：name= + subgraphs=True</text>
+  <text x="50" y="454" font-size="12.5" fill="#22A55B">选择：新项目用 v3 stream_events；老项目用 v2 stream</text>
+
+  <!-- 卡片 4：衔接地图 -->
+  <rect x="450" y="286" width="400" height="190" rx="12" fill="#FEFCE8" stroke="#FDE68A" stroke-width="1.5"/>
+  <text x="470" y="316" font-size="15" font-weight="bold" fill="#854D0E">衔接地图：流式之后去哪</text>
+  <text x="470" y="346" font-size="13" fill="#92400E">课 7（Memory）：流式 + 记忆 = 连续对话体验</text>
+  <text x="470" y="372" font-size="13" fill="#92400E">课 8（Middleware）：流式 + 中间件 = 实时护栏</text>
+  <text x="470" y="398" font-size="13" fill="#92400E">课 10（HITL）：流式 + 中断 = 审批进度可见</text>
+  <text x="470" y="424" font-size="13" fill="#92400E">前端集成：useStream hook 直接消费 v3 事件流</text>
+  <text x="470" y="454" font-size="12.5" fill="#A16207">v3 协议当前为 beta（LangChainBetaWarning）</text>
+
+  <!-- 底部链路 -->
+  <rect x="30" y="496" width="820" height="64" rx="12" fill="#FBFBFD" stroke="#E5E7EB" stroke-width="1.5"/>
+
+  <rect x="52" y="512" width="150" height="34" rx="8" fill="#EFF6FF" stroke="#BFDBFE"/>
+  <text x="127" y="534" text-anchor="middle" font-size="12" fill="#1E40AF">invoke（一次性）</text>
+
+  <line x1="204" y1="529" x2="224" y2="529" stroke="#6B7280" stroke-width="1.5" marker-end="url(#arrS)"/>
+
+  <rect x="228" y="512" width="212" height="34" rx="8" fill="#F5F3FF" stroke="#DDD6FE"/>
+  <text x="334" y="534" text-anchor="middle" font-size="12" fill="#5B21B6">stream（逐步输出）</text>
+
+  <line x1="442" y1="529" x2="462" y2="529" stroke="#6B7280" stroke-width="1.5" marker-end="url(#arrS)"/>
+
+  <rect x="466" y="512" width="170" height="34" rx="8" fill="#F7FDF9" stroke="#BBF7D0"/>
+  <text x="551" y="534" text-anchor="middle" font-size="12" fill="#166534">三种模式 + v3 事件流</text>
+
+  <line x1="638" y1="529" x2="658" y2="529" stroke="#6B7280" stroke-width="1.5" marker-end="url(#arrS)"/>
+
+  <rect x="662" y="512" width="168" height="34" rx="8" fill="#FEFCE8" stroke="#FDE68A"/>
+  <text x="746" y="534" text-anchor="middle" font-size="12" fill="#854D0E">前端 / 记忆 / 护栏</text>
+
+  <text x="440" y="572" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#374151">下一课：让对话有记忆——短期与长期记忆</text>
+</svg>

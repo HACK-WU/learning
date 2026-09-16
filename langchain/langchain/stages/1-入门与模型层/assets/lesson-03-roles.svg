@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 430" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="880" height="430" fill="#FDFDFE"/>
+
+  <text x="440" y="36" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">对话账本里的四种发言</text>
+
+  <!-- 卡片 1：System -->
+  <rect x="30" y="58" width="194" height="254" rx="10" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <rect x="30" y="58" width="194" height="42" rx="10" fill="#EDE9FE" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="127" y="77" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#5B21B6">系统发言</text>
+  <text x="127" y="93" text-anchor="middle" font-size="10.5" fill="#7C3AED">SystemMessage</text>
+  <text x="46" y="126" font-size="12.5" font-weight="bold" fill="#5B21B6">什么：开场前立好规矩</text>
+  <text x="46" y="154" font-size="12.5" fill="#6D28D9">管什么：角色、语气、底线</text>
+  <text x="46" y="182" font-size="12.5" fill="#6D28D9">例：你是一个严谨的客服助手</text>
+  <text x="46" y="210" font-size="12.5" fill="#6D28D9">注意：通常排在最前面</text>
+  <text x="46" y="252" font-size="12" fill="#8B5CF6">相当于「会议守则」</text>
+  <text x="46" y="276" font-size="12" fill="#8B5CF6">贴在墙上，全程生效</text>
+
+  <!-- 卡片 2：Human -->
+  <rect x="238" y="58" width="194" height="254" rx="10" fill="#F0FDF4" stroke="#BBF7D0" stroke-width="1.5"/>
+  <rect x="238" y="58" width="194" height="42" rx="10" fill="#DCFCE7" stroke="#BBF7D0" stroke-width="1.5"/>
+  <text x="335" y="77" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#166534">用户发言</text>
+  <text x="335" y="93" text-anchor="middle" font-size="10.5" fill="#15803D">HumanMessage</text>
+  <text x="254" y="126" font-size="12.5" font-weight="bold" fill="#166534">什么：用户说的话</text>
+  <text x="254" y="154" font-size="12.5" fill="#15803D">管什么：提问、补料、发图</text>
+  <text x="254" y="182" font-size="12.5" fill="#15803D">例：北京今天天气怎么样？</text>
+  <text x="254" y="210" font-size="12.5" fill="#15803D">注意：可带 name / id 做标记</text>
+  <text x="254" y="252" font-size="12" fill="#22C55E">相当于「来访者」</text>
+  <text x="254" y="276" font-size="12" fill="#22C55E">带来任务和材料</text>
+
+  <!-- 卡片 3：AI -->
+  <rect x="446" y="58" width="194" height="254" rx="10" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <rect x="446" y="58" width="194" height="42" rx="10" fill="#DBEAFE" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="543" y="77" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#1E40AF">AI 发言</text>
+  <text x="543" y="93" text-anchor="middle" font-size="10.5" fill="#1D4ED8">AIMessage</text>
+  <text x="462" y="126" font-size="12.5" font-weight="bold" fill="#1E40AF">什么：模型说的话</text>
+  <text x="462" y="154" font-size="12.5" fill="#1D4ED8">管什么：文本，或一份「调用请求」</text>
+  <text x="462" y="182" font-size="12.5" fill="#1D4ED8">例：请帮我调 get_weather</text>
+  <text x="462" y="210" font-size="12.5" fill="#1D4ED8">注意：内容可以是空的</text>
+  <text x="462" y="252" font-size="12" fill="#3B82F6">相当于「助理」</text>
+  <text x="462" y="276" font-size="12" fill="#3B82F6">发言或跑去问后台</text>
+
+  <!-- 卡片 4：Tool -->
+  <rect x="654" y="58" width="194" height="254" rx="10" fill="#FEFCE8" stroke="#FDE68A" stroke-width="1.5"/>
+  <rect x="654" y="58" width="194" height="42" rx="10" fill="#FEF9C3" stroke="#FDE68A" stroke-width="1.5"/>
+  <text x="751" y="77" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#854D0E">工具回执</text>
+  <text x="751" y="93" text-anchor="middle" font-size="10.5" fill="#92400E">ToolMessage</text>
+  <text x="670" y="126" font-size="12.5" font-weight="bold" fill="#854D0E">什么：工具干活的回执</text>
+  <text x="670" y="154" font-size="12.5" fill="#92400E">管什么：把结果带回给模型</text>
+  <text x="670" y="182" font-size="12.5" fill="#92400E">例：北京：晴，26℃</text>
+  <text x="670" y="210" font-size="12.5" fill="#92400E">注意：必须报 id 与请求配对</text>
+  <text x="670" y="252" font-size="12" fill="#CA8A04">相当于「后台查询员」</text>
+  <text x="670" y="276" font-size="12" fill="#CA8A04">递回的纸条</text>
+
+  <!-- 底部：真实链路 -->
+  <rect x="30" y="330" width="818" height="64" rx="12" fill="#FBFBFD" stroke="#E5E7EB" stroke-width="1.5"/>
+  <text x="440" y="356" text-anchor="middle" font-size="13" fill="#374151">一次真实链路：开场规矩 → 用户提问 → AI 请求（带 id）→ 工具回执（报同一个 id）→ AI 总结</text>
+  <text x="440" y="380" text-anchor="middle" font-size="12" fill="#B45309">配对靠 id：本课实测——对不上不会自动报错，但模型会拿错材料（务必保证一致）</text>
+</svg>

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 520" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="880" height="520" fill="#FDFDFE"/>
+
+  <text x="440" y="38" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">上下文工程：让模型"看到对的信息"</text>
+
+  <!-- 左上：问题 -->
+  <rect x="30" y="58" width="395" height="176" rx="12" fill="#FBFBFC" stroke="#E5E7EB" stroke-width="1.5"/>
+  <text x="50" y="88" font-size="14.5" font-weight="bold" fill="#374151">agent 不靠谱的两大原因</text>
+  <text x="50" y="116" font-size="13" fill="#6B7280">① 底层模型能力不够（少数情况）</text>
+  <text x="50" y="140" font-size="13" fill="#9A3412">② "对的信息"没有传给模型（多数情况）</text>
+  <text x="50" y="170" font-size="13" fill="#6B7280">三个现实挑战：</text>
+  <text x="50" y="192" font-size="12.5" fill="#6B7280">长会话历史膨胀 · 工具变多提示词变重 · 动态信息要按时进场</text>
+  <text x="50" y="218" font-size="12.5" fill="#9A3412">实测：多塞 1746 字参考资料 = 每次多付 964 tokens</text>
+
+  <!-- 右上：方案 -->
+  <rect x="455" y="58" width="395" height="176" rx="12" fill="#F8FBFF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="475" y="88" font-size="14.5" font-weight="bold" fill="#1E40AF">上下文工程 = 在合适时机给合适信息</text>
+  <text x="475" y="116" font-size="13" fill="#475569">三类上下文（本课三站）：</text>
+  <text x="475" y="140" font-size="13" fill="#1D4ED8">模型上下文（模型调用看到什么，瞬时）</text>
+  <text x="475" y="164" font-size="13" fill="#1D4ED8">工具上下文（工具能读什么、能写什么，持久）</text>
+  <text x="475" y="188" font-size="13" fill="#1D4ED8">生命周期上下文（步骤之间发生什么，持久）</text>
+  <text x="475" y="216" font-size="12.5" fill="#64748B">数据源三件套：runtime context / state / store</text>
+
+  <!-- 底部三站 -->
+  <rect x="30" y="254" width="262" height="170" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="46" y="284" font-size="13.5" font-weight="bold" fill="#5B21B6">① 上下文工程是什么</text>
+  <text x="46" y="314" font-size="12" fill="#6D28D9">为失败找根因：多半是上下文问题</text>
+  <text x="46" y="338" font-size="12" fill="#6D28D9">上下文窗口 = 稀缺资源（成本+注意力）</text>
+  <text x="46" y="362" font-size="12" fill="#6D28D9">组装视图：模型一次调用看到什么</text>
+  <text x="46" y="386" font-size="12" fill="#6D28D9">三类上下文 × 三种数据源</text>
+  <text x="46" y="410" font-size="12" fill="#7C3AED">贯穿主线：瞬时（transient）vs 持久（persistent）</text>
+
+  <rect x="309" y="254" width="262" height="170" rx="12" fill="#F7FDF9" stroke="#BBF7D0" stroke-width="1.5"/>
+  <text x="325" y="284" font-size="13.5" font-weight="bold" fill="#166534">② 模型上下文 + 工具上下文</text>
+  <text x="325" y="314" font-size="12" fill="#15803D">模型五件套：提示词/消息/工具/模型/格式</text>
+  <text x="325" y="338" font-size="12" fill="#15803D">动态提示词：按状态、按运行环境定制</text>
+  <text x="325" y="362" font-size="12" fill="#15803D">消息注入：瞬时（不写状态）vs 持久（Command）</text>
+  <text x="325" y="386" font-size="12" fill="#15803D">工具结果太长：瞬时截断 / 内置清理</text>
+  <text x="325" y="410" font-size="12" fill="#22A55B">工具读写：runtime 读、Command 写状态、store 跨会话</text>
+
+  <rect x="588" y="254" width="262" height="170" rx="12" fill="#FEFCE8" stroke="#FDE68A" stroke-width="1.5"/>
+  <text x="604" y="284" font-size="13.5" font-weight="bold" fill="#854D0E">③ 生命周期上下文</text>
+  <text x="604" y="314" font-size="12" fill="#92400E">钩子：步骤之间管"横切关注点"</text>
+  <text x="604" y="338" font-size="12" fill="#92400E">摘要：超限压缩——持久替换原文</text>
+  <text x="604" y="362" font-size="12" fill="#92400E">自定义钩子：计数/token 审计 → store</text>
+  <text x="604" y="386" font-size="12" fill="#92400E">最佳实践与常见反模式</text>
+  <text x="604" y="410" font-size="12" fill="#A16207">分水岭：改"视图"还是改"状态"</text>
+
+  <!-- 底栏 -->
+  <rect x="30" y="442" width="820" height="58" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="440" y="466" text-anchor="middle" font-size="15" font-weight="bold" fill="#5B21B6">课 7（记忆=存储机制）→ 课 8（中间件=执行机制）→ 课 9（上下文=策略层）</text>
+  <text x="440" y="487" text-anchor="middle" font-size="13" fill="#6D28D9">本课三站：是什么 → 模型/工具上下文 → 生命周期上下文</text>
+</svg>

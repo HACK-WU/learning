@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 520" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="880" height="520" fill="#FDFDFE"/>
+
+  <text x="440" y="38" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">从「等它转完」到「看它转」</text>
+
+  <!-- 左上：invoke 模式 -->
+  <rect x="30" y="58" width="395" height="180" rx="12" fill="#FBFBFC" stroke="#E5E7EB" stroke-width="1.5"/>
+  <text x="50" y="88" font-size="14.5" font-weight="bold" fill="#374151">上一课：invoke——等它转完再看</text>
+  <text x="50" y="118" font-size="13" fill="#6B7280">invoke 是一次性调用：</text>
+  <text x="50" y="142" font-size="13" fill="#6B7280">递进去一句话 → 等引擎转完 → 拿回结果</text>
+  <text x="50" y="170" font-size="13" fill="#6B7280">中间发生了什么？不知道。</text>
+  <text x="50" y="198" font-size="13" font-weight="bold" fill="#9A3412">用户盯着空屏等 2.8 秒——</text>
+  <text x="50" y="216" font-size="13" font-weight="bold" fill="#9A3412">体验差，调试也瞎。</text>
+
+  <!-- 右上：stream 模式 -->
+  <rect x="455" y="58" width="395" height="180" rx="12" fill="#F8FBFF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="475" y="88" font-size="14.5" font-weight="bold" fill="#1E40AF">本课：stream——看它一步步转</text>
+  <text x="475" y="118" font-size="13" fill="#475569">stream 是逐步输出：</text>
+  <text x="475" y="144" font-size="13" fill="#475569">模型每想出一个 token → 立刻递给你</text>
+  <text x="475" y="170" font-size="13" fill="#475569">工具每执行一步 → 立刻通知你</text>
+  <text x="475" y="198" font-size="13" fill="#1D4ED8">三种模式：进度 / token / 自定义信号</text>
+  <text x="475" y="218" font-size="13" fill="#1D4ED8">v3 事件流：官方推荐的新写法</text>
+
+  <!-- 底部三列 -->
+  <rect x="30" y="256" width="260" height="170" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="50" y="286" font-size="14" font-weight="bold" fill="#5B21B6">① 流式的价值与机制</text>
+  <text x="50" y="316" font-size="12.5" fill="#6D28D9">为什么需要流式（UX + 调试）</text>
+  <text x="50" y="340" font-size="12.5" fill="#6D28D9">invoke vs stream 对照（实测）</text>
+  <text x="50" y="364" font-size="12.5" fill="#6D28D9">stream 不是"另一种调用"——</text>
+  <text x="50" y="388" font-size="12.5" fill="#6D28D9">是"同一次调用，边跑边报"</text>
+  <text x="50" y="412" font-size="12.5" fill="#7C3AED">v2 统一格式：chunk["type"] + chunk["data"]</text>
+
+  <rect x="310" y="256" width="260" height="170" rx="12" fill="#F7FDF9" stroke="#BBF7D0" stroke-width="1.5"/>
+  <text x="330" y="286" font-size="14" font-weight="bold" fill="#166534">② 流模式全解</text>
+  <text x="330" y="316" font-size="12.5" fill="#15803D">updates：每步结束报进度</text>
+  <text x="330" y="340" font-size="12.5" fill="#15803D">messages：每个 token 都给你</text>
+  <text x="330" y="364" font-size="12.5" fill="#15803D">custom：工具里随时发信号</text>
+  <text x="330" y="388" font-size="12.5" fill="#15803D">多模式混用：stream_mode=["updates","custom"]</text>
+  <text x="330" y="412" font-size="12.5" fill="#22A55B">v3 事件流：typed projections</text>
+
+  <rect x="590" y="256" width="260" height="170" rx="12" fill="#FEFCE8" stroke="#FDE68A" stroke-width="1.5"/>
+  <text x="610" y="286" font-size="14" font-weight="bold" fill="#854D0E">③ 实战流式模式</text>
+  <text x="610" y="316" font-size="12.5" fill="#92400E">打字机效果（逐 token 输出）</text>
+  <text x="610" y="340" font-size="12.5" fill="#92400E">工具进度条（custom 信号）</text>
+  <text x="610" y="364" font-size="12.5" fill="#92400E">思考过程可见（reasoning tokens）</text>
+  <text x="610" y="388" font-size="12.5" fill="#92400E">多 agent 来源标注（sub-agents）</text>
+  <text x="610" y="412" font-size="12.5" fill="#A16207">v3 event streaming 官方推荐</text>
+
+  <!-- 底栏 -->
+  <rect x="30" y="444" width="820" height="56" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="440" y="469" text-anchor="middle" font-size="15" font-weight="bold" fill="#5B21B6">本课三站：为什么需要流式 → 三种模式怎么用 → 实战怎么接</text>
+  <text x="440" y="490" text-anchor="middle" font-size="13" fill="#6D28D9">stream 不是"另一种调用"——是"同一次调用，边跑边报"</text>
+</svg>

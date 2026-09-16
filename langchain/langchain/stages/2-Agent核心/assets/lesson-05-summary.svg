@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 580" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="arrS" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#6B7280"/>
+    </marker>
+  </defs>
+
+  <rect width="880" height="580" fill="#FDFDFE"/>
+
+  <text x="440" y="36" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">本课一张图：Agent 核心三件事</text>
+
+  <!-- 卡片 1 -->
+  <rect x="30" y="58" width="400" height="190" rx="12" fill="#F8FBFF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="50" y="88" font-size="15" font-weight="bold" fill="#1E40AF">① 引擎怎么转（create_agent 深入）</text>
+  <text x="50" y="118" font-size="13" fill="#1D4ED8">五动作：模型调用 → 判断 → 工具执行 → 回执并入 → 再转</text>
+  <text x="50" y="144" font-size="13" fill="#1D4ED8">终止条件：某次模型调用没有 tool_calls（空列表）</text>
+  <text x="50" y="170" font-size="13" fill="#1D4ED8">保护：recursion_limit 步数预算，转不完报错不死循环</text>
+  <text x="50" y="196" font-size="13" fill="#1D4ED8">账本：模型调用 = 带申请的轮次 + 1 次收尾</text>
+  <text x="50" y="226" font-size="12.5" fill="#3B82F6">参数全景 15 个：核心三件（model/tools/system_prompt）+ 进阶扩展</text>
+
+  <!-- 卡片 2 -->
+  <rect x="450" y="58" width="400" height="190" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="470" y="88" font-size="15" font-weight="bold" fill="#5B21B6">② 结果怎么读（调用与结果解读）</text>
+  <text x="470" y="118" font-size="13" fill="#6D28D9">输入 {"messages": [...]}；输出 dict：messages（全历史）</text>
+  <text x="470" y="144" font-size="13" fill="#6D28D9">最后一条 AIMessage：有 tool_calls 继续，空则完成</text>
+  <text x="470" y="170" font-size="13" fill="#6D28D9">结构化输出：response_format=Schema → structured_response</text>
+  <text x="470" y="196" font-size="13" fill="#6D28D9">底层实现 = 让模型调用一个「虚拟工具」，再校验/重试</text>
+  <text x="470" y="226" font-size="12.5" fill="#7C3AED">多轮：thread_id + checkpointer 记住历史（课 7 展开）</text>
+
+  <!-- 卡片 3 -->
+  <rect x="30" y="266" width="400" height="190" rx="12" fill="#F7FDF9" stroke="#BBF7D0" stroke-width="1.5"/>
+  <text x="50" y="296" font-size="15" font-weight="bold" fill="#166534">③ harness 怎么配（配置实践）</text>
+  <text x="50" y="326" font-size="13" fill="#15803D">system_prompt：字符串 / SystemMessage 两形态</text>
+  <text x="50" y="352" font-size="13" fill="#15803D">动态选择模型：@wrap_model_call 按场景路由（课 8 展开）</text>
+  <text x="50" y="378" font-size="13" fill="#15803D">能力地图：执行环境/上下文/规划/容错/护栏/引导</text>
+  <text x="50" y="404" font-size="13" fill="#15803D">环境适配：thinking 模型不支持强制 tool_choice</text>
+  <text x="50" y="434" font-size="12.5" fill="#22A55B">配什么 = 边界在哪：工具是权限、提示词是风格、预算防失控</text>
+
+  <!-- 卡片 4：答疑角 -->
+  <rect x="450" y="266" width="400" height="190" rx="12" fill="#FEFCE8" stroke="#FDE68A" stroke-width="1.5"/>
+  <text x="470" y="296" font-size="15" font-weight="bold" fill="#854D0E">衔接地图：后面在哪加深</text>
+  <text x="470" y="326" font-size="13" fill="#92400E">课 6：把「转的过程」实时看见（流式）</text>
+  <text x="470" y="352" font-size="13" fill="#92400E">课 7：thread_id 背后的记忆体系</text>
+  <text x="470" y="378" font-size="13" fill="#92400E">课 8：中间件机制与内置全集（本课只用了用法）</text>
+  <text x="470" y="404" font-size="13" fill="#92400E">课 10：把「人类审批」接进循环（中断机制）</text>
+  <text x="470" y="434" font-size="12.5" fill="#A16207">对照官方 agents 页：Agent = Model + Harness</text>
+
+  <!-- 底部链路 -->
+  <rect x="30" y="476" width="820" height="64" rx="12" fill="#FBFBFD" stroke="#E5E7EB" stroke-width="1.5"/>
+
+  <rect x="52" y="492" width="150" height="34" rx="8" fill="#EFF6FF" stroke="#BFDBFE"/>
+  <text x="127" y="514" text-anchor="middle" font-size="12" fill="#1E40AF">输入："messages"</text>
+
+  <line x1="204" y1="509" x2="224" y2="509" stroke="#6B7280" stroke-width="1.5" marker-end="url(#arrS)"/>
+
+  <rect x="228" y="492" width="212" height="34" rx="8" fill="#F5F3FF" stroke="#DDD6FE"/>
+  <text x="334" y="514" text-anchor="middle" font-size="12" fill="#5B21B6">循环：模型 ↔ 工具（自动转）</text>
+
+  <line x1="442" y1="509" x2="462" y2="509" stroke="#6B7280" stroke-width="1.5" marker-end="url(#arrS)"/>
+
+  <rect x="466" y="492" width="170" height="34" rx="8" fill="#F7FDF9" stroke="#BBF7D0"/>
+  <text x="551" y="514" text-anchor="middle" font-size="12" fill="#166534">结果：messages / 结构化</text>
+
+  <line x1="638" y1="509" x2="658" y2="509" stroke="#6B7280" stroke-width="1.5" marker-end="url(#arrS)"/>
+
+  <rect x="662" y="492" width="168" height="34" rx="8" fill="#FEFCE8" stroke="#FDE68A"/>
+  <text x="746" y="514" text-anchor="middle" font-size="12" fill="#854D0E">下一轮：带记忆再进入</text>
+
+  <text x="440" y="566" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#374151">下一课：让「转的过程」实时可见——流式输出</text>
+</svg>

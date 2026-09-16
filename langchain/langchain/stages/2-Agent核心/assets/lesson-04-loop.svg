@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 580" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="arrA" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#6B7280"/>
+    </marker>
+  </defs>
+
+  <rect width="880" height="580" fill="#FDFDFE"/>
+
+  <text x="440" y="36" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">一个工具的一生：从函数到回执</text>
+
+  <!-- 上段：翻译 -->
+  <rect x="30" y="56" width="820" height="168" rx="12" fill="#FBFBFD" stroke="#E5E7EB" stroke-width="1.5"/>
+  <text x="50" y="84" font-size="14.5" font-weight="bold" fill="#374151">第一步：把函数「翻译」成说明书，随请求递给模型</text>
+
+  <rect x="50" y="100" width="215" height="88" rx="10" fill="#FEFCE8" stroke="#FDE68A" stroke-width="1.5"/>
+  <text x="157" y="126" text-anchor="middle" font-size="12.5" fill="#854D0E">你写的函数</text>
+  <text x="157" y="148" text-anchor="middle" font-size="11.5" fill="#92400E">名字 + 注释 + 参数类型</text>
+  <text x="157" y="170" text-anchor="middle" font-size="11.5" fill="#92400E">（实现留在你手里）</text>
+
+  <line x1="267" y1="144" x2="297" y2="144" stroke="#6B7280" stroke-width="1.6" marker-end="url(#arrA)"/>
+
+  <rect x="300" y="100" width="250" height="88" rx="10" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="425" y="126" text-anchor="middle" font-size="12.5" fill="#5B21B6">自动生成的说明书</text>
+  <text x="425" y="148" text-anchor="middle" font-size="11.5" fill="#6D28D9">name / description</text>
+  <text x="425" y="170" text-anchor="middle" font-size="11.5" fill="#6D28D9">parameters（参数表）</text>
+
+  <line x1="552" y1="144" x2="582" y2="144" stroke="#6B7280" stroke-width="1.6" marker-end="url(#arrA)"/>
+
+  <rect x="585" y="100" width="245" height="88" rx="10" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="707" y="126" text-anchor="middle" font-size="12.5" fill="#1E40AF">递给模型</text>
+  <text x="707" y="148" text-anchor="middle" font-size="11.5" fill="#1D4ED8">模型只读说明书，</text>
+  <text x="707" y="170" text-anchor="middle" font-size="11.5" fill="#1D4ED8">永远看不到函数体</text>
+
+  <text x="50" y="212" font-size="12" fill="#B45309">要点：说明书由函数「自动翻译」而来——注释写得好不好，直接决定模型会不会用、用得对不对</text>
+
+  <!-- 下段：循环 -->
+  <rect x="30" y="246" width="820" height="240" rx="12" fill="#FBFBFD" stroke="#E5E7EB" stroke-width="1.5"/>
+  <text x="50" y="274" font-size="14.5" font-weight="bold" fill="#374151">第二步：一次干活的完整循环</text>
+
+  <rect x="45" y="300" width="175" height="86" rx="10" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="132" y="326" text-anchor="middle" font-size="12" fill="#1E40AF">① 模型写「申请条」</text>
+  <text x="132" y="348" text-anchor="middle" font-size="11" fill="#1D4ED8">工具名 + 参数</text>
+  <text x="132" y="368" text-anchor="middle" font-size="11" fill="#1D4ED8">+ 编号 id</text>
+
+  <line x1="222" y1="343" x2="246" y2="343" stroke="#6B7280" stroke-width="1.6" marker-end="url(#arrA)"/>
+
+  <rect x="248" y="300" width="175" height="86" rx="10" fill="#F0FDF4" stroke="#BBF7D0" stroke-width="1.5"/>
+  <text x="335" y="326" text-anchor="middle" font-size="12" fill="#166534">② 你这边执行</text>
+  <text x="335" y="348" text-anchor="middle" font-size="11" fill="#15803D">先按参数表校验，</text>
+  <text x="335" y="368" text-anchor="middle" font-size="11" fill="#15803D">再调用函数</text>
+
+  <line x1="425" y1="343" x2="449" y2="343" stroke="#6B7280" stroke-width="1.6" marker-end="url(#arrA)"/>
+
+  <rect x="451" y="300" width="175" height="86" rx="10" fill="#FEFCE8" stroke="#FDE68A" stroke-width="1.5"/>
+  <text x="538" y="326" text-anchor="middle" font-size="12" fill="#854D0E">③ 结果包成「回执」</text>
+  <text x="538" y="348" text-anchor="middle" font-size="11" fill="#92400E">ToolMessage</text>
+  <text x="538" y="368" text-anchor="middle" font-size="11" fill="#92400E">带上同一个 id</text>
+
+  <line x1="628" y1="343" x2="652" y2="343" stroke="#6B7280" stroke-width="1.6" marker-end="url(#arrA)"/>
+
+  <rect x="654" y="300" width="176" height="86" rx="10" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="742" y="326" text-anchor="middle" font-size="12" fill="#1E40AF">④ 回执进消息列表</text>
+  <text x="742" y="348" text-anchor="middle" font-size="11" fill="#1D4ED8">模型读到后</text>
+  <text x="742" y="368" text-anchor="middle" font-size="11" fill="#1D4ED8">接着说话或再申请</text>
+
+  <path d="M 742 390 L 742 420 Q 742 428 734 428 L 140 428 Q 132 428 132 420 L 132 392" fill="none" stroke="#9CA3AF" stroke-width="1.6" marker-end="url(#arrA)"/>
+  <text x="437" y="449" text-anchor="middle" font-size="12" fill="#6B7280">可反复多轮：申请 → 执行 → 回执 → 再申请……这就是 agent 的引擎</text>
+
+  <text x="50" y="474" font-size="12" fill="#B45309">编号（id）是申请与回执的「对号」——本课实测：对不上不会报错，但材料会接错线</text>
+
+  <!-- 底部指向 -->
+  <rect x="30" y="506" width="820" height="52" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="440" y="528" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#5B21B6">今天：先看清每个零件（管道、说明书、执行、回执）</text>
+  <text x="440" y="548" text-anchor="middle" font-size="12.5" fill="#6D28D9">课 5 起：这条循环交给框架自动跑</text>
+</svg>

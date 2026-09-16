@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 520" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="880" height="520" fill="#FDFDFE"/>
+
+  <text x="440" y="38" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">从「改源码」到「插插槽」</text>
+
+  <!-- 左上：问题 -->
+  <rect x="30" y="58" width="395" height="180" rx="12" fill="#FBFBFC" stroke="#E5E7EB" stroke-width="1.5"/>
+  <text x="50" y="88" font-size="14.5" font-weight="bold" fill="#374151">上一课的遗留问题：想给循环加行为，加在哪？</text>
+  <text x="50" y="118" font-size="13" fill="#6B7280">工具报错 → agent 直接崩（课 4 实测）</text>
+  <text x="50" y="142" font-size="13" fill="#6B7280">循环没刹车 → 可能一直烧钱</text>
+  <text x="50" y="166" font-size="13" fill="#6B7280">敏感信息 → 原样进模型</text>
+  <text x="50" y="194" font-size="13" font-weight="bold" fill="#9A3412">改 create_agent 源码？</text>
+  <text x="50" y="216" font-size="13" font-weight="bold" fill="#9A3412">每加一个需求都要动引擎——不可持续。</text>
+
+  <!-- 右上：方案 -->
+  <rect x="455" y="58" width="395" height="180" rx="12" fill="#F8FBFF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="475" y="88" font-size="14.5" font-weight="bold" fill="#1E40AF">本课：中间件——循环上的可编程插槽</text>
+  <text x="475" y="118" font-size="13" fill="#475569">六个钩子挂在 agent loop 的各步骤上</text>
+  <text x="475" y="142" font-size="13" fill="#475569">19 个内置件：容错 / 上下文 / 安全 / 工具增强 / 能力扩展</text>
+  <text x="475" y="166" font-size="13" fill="#475569">自定义钩子 + 自定义 state 解决特定问题</text>
+  <text x="475" y="194" font-size="13" fill="#1D4ED8">hook 运行在编译后的 LangGraph 里（实测图节点可见）</text>
+  <text x="475" y="216" font-size="13" fill="#1D4ED8">不改引擎源码，在关键点插入你的逻辑</text>
+
+  <!-- 底部四列 -->
+  <rect x="30" y="256" width="194" height="170" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="46" y="286" font-size="13.5" font-weight="bold" fill="#5B21B6">① 中间件机制</text>
+  <text x="46" y="316" font-size="12" fill="#6D28D9">为什么需要中间件</text>
+  <text x="46" y="340" font-size="12" fill="#6D28D9">六个钩子（4 node + 2 wrap）</text>
+  <text x="46" y="364" font-size="12" fill="#6D28D9">声明方式：</text>
+  <text x="46" y="386" font-size="12" fill="#6D28D9">装饰器 / 类两种写法</text>
+
+  <rect x="240" y="256" width="194" height="170" rx="12" fill="#F7FDF9" stroke="#BBF7D0" stroke-width="1.5"/>
+  <text x="256" y="286" font-size="13.5" font-weight="bold" fill="#166534">② 内置中间件</text>
+  <text x="256" y="316" font-size="12" fill="#15803D">容错：重试 / 降级 / 错误兜底</text>
+  <text x="256" y="340" font-size="12" fill="#15803D">上下文：摘要 / 编辑 / 待办</text>
+  <text x="256" y="364" font-size="12" fill="#15803D">安全：审批 / PII / 调用限制</text>
+  <text x="256" y="388" font-size="12" fill="#15803D">工具增强 / 能力扩展</text>
+
+  <rect x="450" y="256" width="194" height="170" rx="12" fill="#FEFCE8" stroke="#FDE68A" stroke-width="1.5"/>
+  <text x="466" y="286" font-size="13.5" font-weight="bold" fill="#854D0E">③ 自定义中间件</text>
+  <text x="466" y="316" font-size="12" fill="#92400E">装饰器式（快）</text>
+  <text x="466" y="340" font-size="12" fill="#92400E">类式（多钩子/配置）</text>
+  <text x="466" y="364" font-size="12" fill="#92400E">state 更新：dict / Command</text>
+  <text x="466" y="388" font-size="12" fill="#92400E">jump_to 提前收尾</text>
+
+  <rect x="660" y="256" width="190" height="170" rx="12" fill="#FDF2F8" stroke="#FBCFE8" stroke-width="1.5"/>
+  <text x="676" y="286" font-size="13.5" font-weight="bold" fill="#9D174D">④ 组合与顺序</text>
+  <text x="676" y="316" font-size="12" fill="#BE185D">before 正序</text>
+  <text x="676" y="340" font-size="12" fill="#BE185D">after 逆序</text>
+  <text x="676" y="364" font-size="12" fill="#BE185D">wrap 嵌套</text>
+  <text x="676" y="388" font-size="12" fill="#BE185D">顺序影响行为</text>
+
+  <!-- 底栏 -->
+  <rect x="30" y="444" width="820" height="56" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="440" y="469" text-anchor="middle" font-size="15" font-weight="bold" fill="#5B21B6">本课四站：机制 → 内置 → 自定义 → 组合顺序</text>
+  <text x="440" y="490" text-anchor="middle" font-size="13" fill="#6D28D9">中间件是 harness 的"可编程控制层"——Agent = Model + Harness 的最后一块拼图</text>
+</svg>

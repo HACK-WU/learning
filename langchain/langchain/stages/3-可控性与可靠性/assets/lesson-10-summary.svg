@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 580" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="880" height="580" fill="#FDFDFE"/>
+
+  <text x="440" y="36" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">本课一张图：人在环中 + 护栏体系</text>
+
+  <!-- 卡片 1 -->
+  <rect x="30" y="58" width="400" height="196" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="50" y="88" font-size="15" font-weight="bold" fill="#5B21B6">① 为什么需要人在环中</text>
+  <text x="50" y="118" font-size="13" fill="#6D28D9">官方高危四类：金融交易 / 删改生产数据 / 对外通信 / 重大影响</text>
+  <text x="50" y="144" font-size="13" fill="#6D28D9">工具在执行前被冻结（实测：approve 前账本为空）</text>
+  <text x="50" y="170" font-size="13" fill="#6D28D9">判定问句：可逆吗？影响钱吗？外面看得见吗？</text>
+  <text x="50" y="196" font-size="13" fill="#6D28D9">不设闸门 = 直接执行（read_inbox 对照）</text>
+  <text x="50" y="226" font-size="12.5" fill="#7C3AED">核心动作：把"执行权"从模型收回到流程</text>
+
+  <!-- 卡片 2 -->
+  <rect x="450" y="58" width="400" height="196" rx="12" fill="#F7FDF9" stroke="#BBF7D0" stroke-width="1.5"/>
+  <text x="470" y="88" font-size="15" font-weight="bold" fill="#166534">② 中断机制（四种决策）</text>
+  <text x="470" y="118" font-size="13" fill="#15803D">approve：原样执行；edit：改参数执行</text>
+  <text x="470" y="144" font-size="13" fill="#15803D">reject：错误回执（status=error），不执行</text>
+  <text x="470" y="170" font-size="13" fill="#15803D">respond：人工代答（status=success），工具不跑</text>
+  <text x="470" y="196" font-size="13" fill="#15803D">批量：决策与动作顺序对齐；when 谓词条件放行</text>
+  <text x="470" y="226" font-size="12.5" fill="#22A55B">没有 checkpointer：能看到中断，恢复直接报错</text>
+
+  <!-- 卡片 3 -->
+  <rect x="30" y="282" width="400" height="196" rx="12" fill="#FEFCE8" stroke="#FDE68A" stroke-width="1.5"/>
+  <text x="50" y="312" font-size="15" font-weight="bold" fill="#854D0E">③ 内置护栏：PII 检测</text>
+  <text x="50" y="342" font-size="13" fill="#92400E">四策略：redact / mask / hash / block</text>
+  <text x="50" y="368" font-size="13" fill="#92400E">实测格式：[REDACTED_EMAIL] / ****-5100 / &lt;ip_hash:2a39f1ee&gt;</text>
+  <text x="50" y="394" font-size="13" fill="#92400E">脱敏写入状态，模型看到的就是脱敏文本（回显验证）</text>
+  <text x="50" y="420" font-size="13" fill="#92400E">block 命中即抛 PIIDetectionError；支持自定义 detector</text>
+  <text x="50" y="450" font-size="12.5" fill="#A16207">点位：输入 / 输出 / 工具结果 三选可配</text>
+
+  <!-- 卡片 4 -->
+  <rect x="450" y="282" width="400" height="196" rx="12" fill="#FDF2F8" stroke="#FBCFE8" stroke-width="1.5"/>
+  <text x="470" y="312" font-size="15" font-weight="bold" fill="#9D174D">④ 自定义护栏（生命周期钩子）</text>
+  <text x="470" y="342" font-size="13" fill="#BE185D">before_agent：模型未参与就拦下违规请求</text>
+  <text x="470" y="368" font-size="13" fill="#BE185D">after_agent：替换最终输出（含模型审查版）</text>
+  <text x="470" y="394" font-size="13" fill="#BE185D">确定性 = 快而便宜；模型审查 = 慢而细致</text>
+  <text x="470" y="420" font-size="13" fill="#BE185D">实测：两次判定（UNSAFE 拦截 → SAFE 放行）</text>
+  <text x="470" y="450" font-size="12.5" fill="#DB2777">二者结合：规则先行，模型兜底</text>
+
+  <!-- 底栏 -->
+  <rect x="30" y="496" width="820" height="64" rx="12" fill="#FBFBFD" stroke="#E5E7EB" stroke-width="1.5"/>
+  <text x="440" y="522" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#374151">一句话：能不能自己做主，是设计出来的——高风险动作暂停审批，敏感信息脱敏过闸</text>
+  <text x="440" y="546" text-anchor="middle" font-size="13" fill="#6B7280">下一课：课 11《Retrieval 检索与 RAG》——给模型接上外部知识</text>
+</svg>

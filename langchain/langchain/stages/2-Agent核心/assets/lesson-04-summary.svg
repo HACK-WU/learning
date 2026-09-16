@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 580" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="arrB" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#6B7280"/>
+    </marker>
+  </defs>
+
+  <rect width="880" height="580" fill="#FDFDFE"/>
+
+  <text x="440" y="36" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">本课一张图：工具四件事</text>
+
+  <!-- 卡片 1 -->
+  <rect x="30" y="58" width="400" height="170" rx="12" fill="#F8FBFF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="50" y="88" font-size="15" font-weight="bold" fill="#1E40AF">① 机制原理（模型只申请、不执行）</text>
+  <text x="50" y="118" font-size="13" fill="#1D4ED8">说明书 = 名字 + 描述 + 参数表（自动翻译）</text>
+  <text x="50" y="144" font-size="13" fill="#1D4ED8">申请与回执靠编号（id）配对</text>
+  <text x="50" y="170" font-size="13" fill="#1D4ED8">一次可以申请多个（并行调用）</text>
+  <text x="50" y="200" font-size="12.5" fill="#3B82F6">函数体永远不交给模型——执行在你的进程里</text>
+
+  <!-- 卡片 2 -->
+  <rect x="450" y="58" width="400" height="170" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="470" y="88" font-size="15" font-weight="bold" fill="#5B21B6">② 写好一个工具（@tool）</text>
+  <text x="470" y="118" font-size="13" fill="#6D28D9">docstring = 描述（必填，模型据此选择）</text>
+  <text x="470" y="144" font-size="13" fill="#6D28D9">类型标注 = 参数表（必填，决定校验与提示）</text>
+  <text x="470" y="170" font-size="13" fill="#6D28D9">复杂约束用 Pydantic（枚举 / 默认值 / 描述）</text>
+  <text x="470" y="200" font-size="12.5" fill="#7C3AED">命名小写 + 下划线；保留名 config / runtime</text>
+
+  <!-- 卡片 3 -->
+  <rect x="30" y="246" width="400" height="170" rx="12" fill="#F7FDF9" stroke="#BBF7D0" stroke-width="1.5"/>
+  <text x="50" y="276" font-size="15" font-weight="bold" fill="#166534">③ 进阶四件套</text>
+  <text x="50" y="306" font-size="13" fill="#15803D">运行时上下文：用户身份 / 状态 / 长期记忆</text>
+  <text x="50" y="332" font-size="13" fill="#15803D">返回值三型：字符串 / 对象 / Command 状态注入</text>
+  <text x="50" y="358" font-size="13" fill="#15803D">动态工具集 = 权限边界（给谁哪把钥匙）</text>
+  <text x="50" y="384" font-size="13" fill="#15803D">错误处理：默认会崩 → 中间件兜底 → 模型自修正</text>
+
+  <!-- 卡片 4 -->
+  <rect x="450" y="246" width="400" height="170" rx="12" fill="#FEFCE8" stroke="#FDE68A" stroke-width="1.5"/>
+  <text x="470" y="276" font-size="15" font-weight="bold" fill="#854D0E">④ 生态接入</text>
+  <text x="470" y="306" font-size="13" fill="#92400E">现成工具包（prebuilt，接法与自定义一致）</text>
+  <text x="470" y="332" font-size="13" fill="#92400E">MCP 开放协议（本课直连实测成功）</text>
+  <text x="470" y="358" font-size="13" fill="#92400E">服务端工具（厂商内置，取决于平台）</text>
+  <text x="470" y="384" font-size="13" fill="#92400E">headless（客户端执行，本机版本待落地）</text>
+
+  <!-- 底部链路 -->
+  <rect x="30" y="436" width="820" height="64" rx="12" fill="#FBFBFD" stroke="#E5E7EB" stroke-width="1.5"/>
+
+  <rect x="52" y="452" width="108" height="34" rx="8" fill="#FEFCE8" stroke="#FDE68A"/>
+  <text x="106" y="474" text-anchor="middle" font-size="12" fill="#854D0E">定义</text>
+
+  <line x1="162" y1="469" x2="182" y2="469" stroke="#6B7280" stroke-width="1.5" marker-end="url(#arrB)"/>
+
+  <rect x="186" y="452" width="108" height="34" rx="8" fill="#F5F3FF" stroke="#DDD6FE"/>
+  <text x="240" y="474" text-anchor="middle" font-size="12" fill="#5B21B6">绑定</text>
+
+  <line x1="296" y1="469" x2="316" y2="469" stroke="#6B7280" stroke-width="1.5" marker-end="url(#arrB)"/>
+
+  <rect x="320" y="452" width="108" height="34" rx="8" fill="#EFF6FF" stroke="#BFDBFE"/>
+  <text x="374" y="474" text-anchor="middle" font-size="12" fill="#1E40AF">申请</text>
+
+  <line x1="430" y1="469" x2="450" y2="469" stroke="#6B7280" stroke-width="1.5" marker-end="url(#arrB)"/>
+
+  <rect x="454" y="452" width="108" height="34" rx="8" fill="#F0FDF4" stroke="#BBF7D0"/>
+  <text x="508" y="474" text-anchor="middle" font-size="12" fill="#166534">执行</text>
+
+  <line x1="564" y1="469" x2="584" y2="469" stroke="#6B7280" stroke-width="1.5" marker-end="url(#arrB)"/>
+
+  <rect x="588" y="452" width="108" height="34" rx="8" fill="#FEFCE8" stroke="#FDE68A"/>
+  <text x="642" y="474" text-anchor="middle" font-size="12" fill="#854D0E">回执</text>
+
+  <line x1="698" y1="469" x2="718" y2="469" stroke="#6B7280" stroke-width="1.5" marker-end="url(#arrB)"/>
+
+  <rect x="722" y="452" width="108" height="34" rx="8" fill="#EFF6FF" stroke="#BFDBFE"/>
+  <text x="776" y="474" text-anchor="middle" font-size="12" fill="#1E40AF">总结</text>
+
+  <text x="440" y="532" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#374151">下一课：让这条链路自己转起来——拆开 agent 的引擎</text>
+
+  <text x="440" y="558" text-anchor="middle" font-size="12.5" fill="#6B7280">Tools 工具 · 阶段 2《Agent 核心》第 1 课</text>
+</svg>

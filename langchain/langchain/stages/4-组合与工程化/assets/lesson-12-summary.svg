@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 580" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="880" height="580" fill="#FDFDFE"/>
+
+  <text x="440" y="36" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">本课一张图：多智能体全链路</text>
+
+  <!-- 卡片 1 -->
+  <rect x="30" y="58" width="400" height="196" rx="12" fill="#FEF2F2" stroke="#FECACA" stroke-width="1.5"/>
+  <text x="50" y="88" font-size="15" font-weight="bold" fill="#991B1B">① 为什么需要多智能体</text>
+  <text x="50" y="118" font-size="13" fill="#7F1D1D">三动机：上下文管理 / 分布式开发 / 并行化</text>
+  <text x="50" y="144" font-size="13" fill="#7F1D1D">拆分信号是趋势而非工具数红线</text>
+  <text x="50" y="170" font-size="13" fill="#7F1D1D">实测：全能 1983 字符/调用</text>
+  <text x="50" y="196" font-size="13" fill="#7F1D1D">拆分：主代理 275 + 子代理按需 231~907</text>
+  <text x="50" y="226" font-size="12.5" fill="#B91C1C">8 与 16 工具实测：选择仍正确——成本才是拆的理由</text>
+
+  <!-- 卡片 2 -->
+  <rect x="450" y="58" width="400" height="196" rx="12" fill="#F7FDF9" stroke="#BBF7D0" stroke-width="1.5"/>
+  <text x="470" y="88" font-size="15" font-weight="bold" fill="#166534">② 三种核心模式（按控制权区分）</text>
+  <text x="470" y="118" font-size="13" fill="#15803D">Subagents：子代理即工具，一切经主代理</text>
+  <text x="470" y="144" font-size="13" fill="#15803D">Handoffs：状态驱动迁移（工具返回 Command）</text>
+  <text x="470" y="170" font-size="13" fill="#15803D">Router：分类 → 并行分派 → 综合</text>
+  <text x="470" y="196" font-size="13" fill="#15803D">实测：4 calls / 三阶段迁移 / 7 calls</text>
+  <text x="470" y="226" font-size="12.5" fill="#22A55B">隔离真相：子代理看不见主代理历史（需显式传递）</text>
+
+  <!-- 卡片 3 -->
+  <rect x="30" y="282" width="400" height="196" rx="12" fill="#FEFCE8" stroke="#FDE68A" stroke-width="1.5"/>
+  <text x="50" y="312" font-size="15" font-weight="bold" fill="#854D0E">③ 两种进阶模式</text>
+  <text x="50" y="342" font-size="13" fill="#92400E">Skills：按需加载提示词与知识</text>
+  <text x="50" y="368" font-size="13" fill="#92400E">实测：加载后禁 SELECT * 生效（行为改变）</text>
+  <text x="50" y="394" font-size="13" fill="#92400E">实测：有状态会话 3 → 2 calls（复用省调用）</text>
+  <text x="50" y="420" font-size="13" fill="#92400E">Custom workflow：确定性 + agentic 混编</text>
+  <text x="50" y="450" font-size="12.5" fill="#A16207">实测 RAG 流水线：rewrite（模型）→ retrieve（零 LLM）→ agent</text>
+
+  <!-- 卡片 4 -->
+  <rect x="450" y="282" width="400" height="196" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="470" y="312" font-size="15" font-weight="bold" fill="#5B21B6">④ 模式选择（实测调用次数）</text>
+  <text x="470" y="342" font-size="13" fill="#6D28D9">Subagents：4 / 4（无状态，每轮全流程）</text>
+  <text x="470" y="368" font-size="13" fill="#6D28D9">Handoffs：1 → 3 → 2（状态保持省调用）</text>
+  <text x="470" y="394" font-size="13" fill="#6D28D9">Skills：3 / 2（有状态时复用技能）</text>
+  <text x="470" y="420" font-size="13" fill="#6D28D9">Router：3 / 3（无状态，重新分类）</text>
+  <text x="470" y="450" font-size="12.5" fill="#7C3AED">决策四问：领域多 / 阶段多 / 技能多 / 来源多</text>
+
+  <!-- 底栏 -->
+  <rect x="30" y="496" width="820" height="64" rx="12" fill="#FBFBFD" stroke="#E5E7EB" stroke-width="1.5"/>
+  <text x="440" y="522" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#374151">一句话：多智能体是组织设计而非数量堆叠——按任务形状选模式，上下文隔离是中心</text>
+  <text x="440" y="546" text-anchor="middle" font-size="13" fill="#6B7280">下一课：课 13《Testing 与 Observability》——组队之后，如何测试与观测</text>
+</svg>

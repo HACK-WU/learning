@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 560" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="arr3" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#6B7280"/>
+    </marker>
+  </defs>
+
+  <rect width="880" height="560" fill="#FDFDFE"/>
+
+  <text x="440" y="36" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">本课一张图：消息体系四件事</text>
+
+  <!-- 卡片 1：为什么统一 -->
+  <rect x="30" y="58" width="400" height="150" rx="12" fill="#F8FBFF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="50" y="88" font-size="15" font-weight="bold" fill="#1E40AF">① 为什么要统一（标准格式）</text>
+  <text x="50" y="118" font-size="13" fill="#1D4ED8">一套写法走天下：对象 / 字典都归一</text>
+  <text x="50" y="144" font-size="13" fill="#1D4ED8">账本 = 模型的全部输入（消息列表）</text>
+  <text x="50" y="170" font-size="13" fill="#1D4ED8">它无状态：带多少历史，就记得多少</text>
+
+  <!-- 卡片 2：四类发言人 -->
+  <rect x="450" y="58" width="400" height="150" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="470" y="88" font-size="15" font-weight="bold" fill="#5B21B6">② 四个发言人与 id 配对</text>
+  <text x="470" y="118" font-size="13" fill="#6D28D9">系统 / 用户 / AI / 工具，各司其职</text>
+  <text x="470" y="144" font-size="13" fill="#6D28D9">请求与回执通过 tool_call_id 配对</text>
+  <text x="470" y="170" font-size="13" fill="#6D28D9">顺序：设定 → 提问 → 请求 → 回执 → 总结</text>
+
+  <!-- 卡片 3：内容块 -->
+  <rect x="30" y="226" width="400" height="150" rx="12" fill="#F7FDF9" stroke="#BBF7D0" stroke-width="1.5"/>
+  <text x="50" y="256" font-size="15" font-weight="bold" fill="#166534">③ 内容分格（标准内容块）</text>
+  <text x="50" y="286" font-size="13" fill="#15803D">文字｜图片｜文件｜音频｜视频｜推理</text>
+  <text x="50" y="312" font-size="13" fill="#15803D">content 是原生视图，content_blocks 是标准视图</text>
+  <text x="50" y="338" font-size="13" fill="#15803D">懒解析：读的时候自动标准化（thinking → reasoning）</text>
+
+  <!-- 卡片 4：写法与存档 -->
+  <rect x="450" y="226" width="400" height="150" rx="12" fill="#FEFCE8" stroke="#FDE68A" stroke-width="1.5"/>
+  <text x="470" y="256" font-size="15" font-weight="bold" fill="#854D0E">④ 两种写法 + 存档</text>
+  <text x="470" y="286" font-size="13" fill="#92400E">对象写 / 字典写，入口自动归一</text>
+  <text x="470" y="312" font-size="13" fill="#92400E">dumpd 存档为纯数据，load 还原为对象</text>
+  <text x="470" y="338" font-size="13" fill="#92400E">工具请求一并保留（本课实测）</text>
+
+  <!-- 底部：链路 -->
+  <rect x="30" y="398" width="820" height="100" rx="12" fill="#FBFBFD" stroke="#E5E7EB" stroke-width="1.5"/>
+
+  <rect x="52" y="422" width="140" height="36" rx="8" fill="#F5F3FF" stroke="#DDD6FE"/>
+  <text x="122" y="445" text-anchor="middle" font-size="12.5" fill="#5B21B6">系统设定</text>
+
+  <line x1="194" y1="440" x2="212" y2="440" stroke="#6B7280" stroke-width="1.6" marker-end="url(#arr3)"/>
+
+  <rect x="216" y="422" width="140" height="36" rx="8" fill="#F0FDF4" stroke="#BBF7D0"/>
+  <text x="286" y="445" text-anchor="middle" font-size="12.5" fill="#166534">用户提问</text>
+
+  <line x1="358" y1="440" x2="376" y2="440" stroke="#6B7280" stroke-width="1.6" marker-end="url(#arr3)"/>
+
+  <rect x="380" y="422" width="140" height="36" rx="8" fill="#EFF6FF" stroke="#BFDBFE"/>
+  <text x="450" y="445" text-anchor="middle" font-size="12.5" fill="#1E40AF">AI 请求（带 id）</text>
+
+  <line x1="522" y1="440" x2="540" y2="440" stroke="#6B7280" stroke-width="1.6" marker-end="url(#arr3)"/>
+
+  <rect x="544" y="422" width="140" height="36" rx="8" fill="#FEFCE8" stroke="#FDE68A"/>
+  <text x="614" y="445" text-anchor="middle" font-size="12.5" fill="#854D0E">工具回执（同 id）</text>
+
+  <line x1="686" y1="440" x2="704" y2="440" stroke="#6B7280" stroke-width="1.6" marker-end="url(#arr3)"/>
+
+  <rect x="708" y="422" width="122" height="36" rx="8" fill="#EFF6FF" stroke="#BFDBFE"/>
+  <text x="769" y="445" text-anchor="middle" font-size="12.5" fill="#1E40AF">AI 总结</text>
+
+  <text x="440" y="484" text-anchor="middle" font-size="12.5" fill="#6B7280">这条链路就是下一课的主角：把「调用请求」交给框架自动执行</text>
+
+  <text x="440" y="536" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#374151">下一课：Tools 工具——让请求真正变成行动</text>
+</svg>

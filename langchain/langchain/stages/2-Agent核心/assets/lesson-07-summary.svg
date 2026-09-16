@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 580" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="880" height="580" fill="#FDFDFE"/>
+
+  <text x="440" y="36" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">本课一张图：记忆的三层与四站</text>
+
+  <!-- 卡片 1 -->
+  <rect x="30" y="58" width="400" height="196" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="50" y="88" font-size="15" font-weight="bold" fill="#5B21B6">① 记忆机制总览</text>
+  <text x="50" y="118" font-size="13" fill="#6D28D9">模型无状态——记忆在 harness，不在模型</text>
+  <text x="50" y="144" font-size="13" fill="#6D28D9">短期（线程内）：checkpointer 持久化状态</text>
+  <text x="50" y="170" font-size="13" fill="#6D28D9">长期（跨会话）：store 命名空间 + 键</text>
+  <text x="50" y="196" font-size="13" fill="#6D28D9">实测：无 checkpointer 不记得 / 同线程接续 / 换线程隔离</text>
+  <text x="50" y="226" font-size="12.5" fill="#7C3AED">验证纪律：看状态（get_state），不看单次回答</text>
+
+  <!-- 卡片 2 -->
+  <rect x="450" y="58" width="400" height="196" rx="12" fill="#F7FDF9" stroke="#BBF7D0" stroke-width="1.5"/>
+  <text x="470" y="88" font-size="15" font-weight="bold" fill="#166534">② 短期记忆</text>
+  <text x="470" y="118" font-size="13" fill="#15803D">全量：消息数 2 → 4 → 6 → 8 → 10（越聊越长）</text>
+  <text x="470" y="144" font-size="13" fill="#15803D">裁剪：首条 + 最近 4 条，封顶 6 条（中间信息会丢）</text>
+  <text x="470" y="170" font-size="13" fill="#15803D">摘要：超阈值压缩为一条摘要消息（本例全记得）</text>
+  <text x="470" y="196" font-size="13" fill="#15803D">自定义 state：工具写（Command）/ 读（runtime.state）</text>
+  <text x="470" y="226" font-size="12.5" fill="#22A55B">阈值越小触发越勤；每次触发多一次摘要调用</text>
+
+  <!-- 卡片 3 -->
+  <rect x="30" y="282" width="400" height="196" rx="12" fill="#FEFCE8" stroke="#FDE68A" stroke-width="1.5"/>
+  <text x="50" y="312" font-size="15" font-weight="bold" fill="#854D0E">③ 长期记忆</text>
+  <text x="50" y="342" font-size="13" fill="#92400E">store = JSON 文档：命名空间（文件夹）+ 键（文件名）</text>
+  <text x="50" y="368" font-size="13" fill="#92400E">工具读写：runtime.store + context 传 user_id</text>
+  <text x="50" y="394" font-size="13" fill="#92400E">跨会话：session-1 教，session-2 查（新线程照样召回）</text>
+  <text x="50" y="420" font-size="13" fill="#92400E">隔离：换 user_id 查不到；put 覆盖同 key</text>
+  <text x="50" y="450" font-size="12.5" fill="#A16207">生产用 Postgres 等后端；InMemory 仅演示</text>
+
+  <!-- 卡片 4 -->
+  <rect x="450" y="282" width="400" height="196" rx="12" fill="#FDF2F8" stroke="#FBCFE8" stroke-width="1.5"/>
+  <text x="470" y="312" font-size="15" font-weight="bold" fill="#9D174D">④ 记忆工程实践</text>
+  <text x="470" y="342" font-size="13" fill="#BE185D">记忆类型：语义（事实）/ 情景（经历）/ 程序（规则）</text>
+  <text x="470" y="368" font-size="13" fill="#BE185D">合并更新（读-改-写）vs 覆盖写（丢字段）</text>
+  <text x="470" y="394" font-size="13" fill="#BE185D">成本实测：全量 10 条/135 · 裁剪 6 条/116 · 摘要 6 条/303</text>
+  <text x="470" y="420" font-size="13" fill="#BE185D">摘要 ≠ 自动省钱——按会话规模实测再选</text>
+  <text x="470" y="450" font-size="12.5" fill="#DB2777">写入时机：热路径 vs 后台（预告）</text>
+
+  <!-- 底栏 -->
+  <rect x="30" y="496" width="820" height="64" rx="12" fill="#FBFBFD" stroke="#E5E7EB" stroke-width="1.5"/>
+
+  <rect x="52" y="512" width="152" height="34" rx="8" fill="#FBFBFC" stroke="#E5E7EB"/>
+  <text x="128" y="534" text-anchor="middle" font-size="12" fill="#374151">模型无状态</text>
+
+  <text x="216" y="534" text-anchor="middle" font-size="14" fill="#9CA3AF">→</text>
+
+  <rect x="232" y="512" width="176" height="34" rx="8" fill="#F7FDF9" stroke="#BBF7D0"/>
+  <text x="320" y="534" text-anchor="middle" font-size="12" fill="#166534">短期（checkpointer）</text>
+
+  <text x="420" y="534" text-anchor="middle" font-size="14" fill="#9CA3AF">→</text>
+
+  <rect x="436" y="512" width="164" height="34" rx="8" fill="#FEFCE8" stroke="#FDE68A"/>
+  <text x="518" y="534" text-anchor="middle" font-size="12" fill="#854D0E">长期（store）</text>
+
+  <text x="612" y="534" text-anchor="middle" font-size="14" fill="#9CA3AF">→</text>
+
+  <rect x="628" y="512" width="200" height="34" rx="8" fill="#FDF2F8" stroke="#FBCFE8"/>
+  <text x="728" y="534" text-anchor="middle" font-size="12" fill="#9D174D">工程权衡 → 课 8 中间件</text>
+
+  <text x="440" y="574" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#374151">下一课：中间件——摘要中间件已在本课露脸，课 8 展开完整体系</text>
+</svg>

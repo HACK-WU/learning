@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 520" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="880" height="520" fill="#FDFDFE"/>
+
+  <text x="440" y="38" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">从「转头就忘」到「记住你」</text>
+
+  <!-- 左上：问题 -->
+  <rect x="30" y="58" width="395" height="180" rx="12" fill="#FBFBFC" stroke="#E5E7EB" stroke-width="1.5"/>
+  <text x="50" y="88" font-size="14.5" font-weight="bold" fill="#374151">上一课收尾时：用户第二次来，又要重新自我介绍</text>
+  <text x="50" y="118" font-size="13" fill="#6B7280">模型是无状态函数：</text>
+  <text x="50" y="142" font-size="13" fill="#6B7280">本次调用"看到"什么，只取决于这轮递进去的消息</text>
+  <text x="50" y="170" font-size="13" fill="#6B7280">对话一关，全部归零。</text>
+  <text x="50" y="198" font-size="13" font-weight="bold" fill="#9A3412">"请问您怎么称呼？"——</text>
+  <text x="50" y="216" font-size="13" font-weight="bold" fill="#9A3412">用户会烦，客服会累。</text>
+
+  <!-- 右上：方案 -->
+  <rect x="455" y="58" width="395" height="180" rx="12" fill="#F8FBFF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="475" y="88" font-size="14.5" font-weight="bold" fill="#1E40AF">本课：给 harness 装上记忆</text>
+  <text x="475" y="118" font-size="13" fill="#475569">短期记忆：线程内（checkpointer + 状态）</text>
+  <text x="475" y="144" font-size="13" fill="#475569">长期记忆：跨会话（store，命名空间 + 键）</text>
+  <text x="475" y="170" font-size="13" fill="#475569">压缩策略：裁剪 / 摘要 / 自定义 state</text>
+  <text x="475" y="198" font-size="13" fill="#1D4ED8">工程实践：合并更新、成本权衡</text>
+  <text x="475" y="218" font-size="13" fill="#1D4ED8">验证纪律：记忆在不在，看状态不看嘴</text>
+
+  <!-- 底部四列 -->
+  <rect x="30" y="256" width="194" height="170" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="46" y="286" font-size="13.5" font-weight="bold" fill="#5B21B6">① 记忆机制总览</text>
+  <text x="46" y="316" font-size="12" fill="#6D28D9">模型为什么"没记忆"</text>
+  <text x="46" y="340" font-size="12" fill="#6D28D9">短期 vs 长期（作用域）</text>
+  <text x="46" y="364" font-size="12" fill="#6D28D9">三种载体：</text>
+  <text x="46" y="386" font-size="12" fill="#6D28D9">消息历史 / state / store</text>
+
+  <rect x="240" y="256" width="194" height="170" rx="12" fill="#F7FDF9" stroke="#BBF7D0" stroke-width="1.5"/>
+  <text x="256" y="286" font-size="13.5" font-weight="bold" fill="#166534">② 短期记忆</text>
+  <text x="256" y="316" font-size="12" fill="#15803D">默认全量积累（越聊越长）</text>
+  <text x="256" y="340" font-size="12" fill="#15803D">裁剪：保留首条 + 最近 N</text>
+  <text x="256" y="364" font-size="12" fill="#15803D">摘要：压缩为一条摘要</text>
+  <text x="256" y="388" font-size="12" fill="#15803D">自定义 state：工具读写</text>
+
+  <rect x="450" y="256" width="194" height="170" rx="12" fill="#FEFCE8" stroke="#FDE68A" stroke-width="1.5"/>
+  <text x="466" y="286" font-size="13.5" font-weight="bold" fill="#854D0E">③ 长期记忆</text>
+  <text x="466" y="316" font-size="12" fill="#92400E">store：命名空间 + 键</text>
+  <text x="466" y="340" font-size="12" fill="#92400E">工具读写（runtime.store）</text>
+  <text x="466" y="364" font-size="12" fill="#92400E">跨会话召回</text>
+  <text x="466" y="388" font-size="12" fill="#92400E">按用户隔离</text>
+
+  <rect x="660" y="256" width="190" height="170" rx="12" fill="#FDF2F8" stroke="#FBCFE8" stroke-width="1.5"/>
+  <text x="676" y="286" font-size="13.5" font-weight="bold" fill="#9D174D">④ 记忆工程实践</text>
+  <text x="676" y="316" font-size="12" fill="#BE185D">记忆类型（语义/情景/程序）</text>
+  <text x="676" y="340" font-size="12" fill="#BE185D">合并更新（读-改-写）</text>
+  <text x="676" y="364" font-size="12" fill="#BE185D">成本对比（消息数/token）</text>
+  <text x="676" y="388" font-size="12" fill="#BE185D">写入时机（热路径/后台）</text>
+
+  <!-- 底栏 -->
+  <rect x="30" y="444" width="820" height="56" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="440" y="469" text-anchor="middle" font-size="15" font-weight="bold" fill="#5B21B6">本课四站：机制 → 短期 → 长期 → 工程实践</text>
+  <text x="440" y="490" text-anchor="middle" font-size="13" fill="#6D28D9">记忆不是模型的魔法——是 harness 层"状态 + 持久化"的工程</text>
+</svg>

@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 560" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="arrL" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#6B7280"/>
+    </marker>
+  </defs>
+
+  <rect width="880" height="560" fill="#FDFDFE"/>
+
+  <text x="440" y="34" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">agent loop：引擎的五个动作</text>
+  <text x="440" y="58" text-anchor="middle" font-size="13" fill="#6B7280">每一轮 = 一次模型调用 + 一批工具执行；引擎循环这两步，直到模型不再申请</text>
+
+  <!-- ① 模型调用 -->
+  <rect x="320" y="84" width="240" height="64" rx="10" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="440" y="110" text-anchor="middle" font-size="14" font-weight="bold" fill="#1E40AF">① 模型调用</text>
+  <text x="440" y="132" text-anchor="middle" font-size="12" fill="#3B82F6">读消息列表 + 工具说明书，产出一条 AIMessage</text>
+
+  <!-- 箭头到菱形 -->
+  <line x1="440" y1="148" x2="440" y2="176" stroke="#6B7280" stroke-width="1.5" marker-end="url(#arrL)"/>
+
+  <!-- ② 判断菱形 -->
+  <polygon points="440,180 512,228 440,276 368,228" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="440" y="224" text-anchor="middle" font-size="13" font-weight="bold" fill="#5B21B6">有</text>
+  <text x="440" y="244" text-anchor="middle" font-size="13" font-weight="bold" fill="#5B21B6">tool_calls？</text>
+
+  <!-- 是：向左下到 ③ -->
+  <path d="M368,228 L260,228 L260,306" fill="none" stroke="#6B7280" stroke-width="1.5" marker-end="url(#arrL)"/>
+  <text x="286" y="220" font-size="12" fill="#5B21B6">是</text>
+
+  <!-- ③ 工具执行 -->
+  <rect x="140" y="310" width="260" height="78" rx="10" fill="#F7FDF9" stroke="#BBF7D0" stroke-width="1.5"/>
+  <text x="270" y="338" text-anchor="middle" font-size="14" font-weight="bold" fill="#166534">③ 工具执行</text>
+  <text x="270" y="358" text-anchor="middle" font-size="12" fill="#15803D">每个 tool_call 真正被执行一次，</text>
+  <text x="270" y="376" text-anchor="middle" font-size="12" fill="#15803D">产出一条带编号的 ToolMessage（回执）</text>
+
+  <!-- ④ 回线：从 ③ 左边缘绕回 ① -->
+  <path d="M140,349 L90,349 L90,116 L316,116" fill="none" stroke="#3B82F6" stroke-width="1.8" marker-end="url(#arrL)"/>
+  <rect x="58" y="196" width="64" height="66" rx="8" fill="#EFF6FF" stroke="#BFDBFE"/>
+  <text x="90" y="220" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#1E40AF">④ 回执</text>
+  <text x="90" y="237" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#1E40AF">并入</text>
+  <text x="90" y="254" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#1E40AF">下一轮</text>
+
+  <!-- 否：向右到 ⑤ -->
+  <line x1="512" y1="228" x2="616" y2="228" stroke="#6B7280" stroke-width="1.5" marker-end="url(#arrL)"/>
+  <text x="540" y="220" font-size="12" fill="#166534">否</text>
+
+  <!-- ⑤ 结束 -->
+  <rect x="620" y="193" width="210" height="70" rx="10" fill="#F7FDF9" stroke="#BBF7D0" stroke-width="1.5"/>
+  <text x="725" y="220" text-anchor="middle" font-size="14" font-weight="bold" fill="#166534">⑤ 结束 · 返回结果</text>
+  <text x="725" y="242" text-anchor="middle" font-size="12" fill="#15803D">完整消息列表（含全部回执）</text>
+
+  <!-- 账本卡 -->
+  <rect x="500" y="306" width="330" height="150" rx="10" fill="#FEFCE8" stroke="#FDE68A" stroke-width="1.5"/>
+  <text x="520" y="332" font-size="13.5" font-weight="bold" fill="#854D0E">账本（本课实测）</text>
+  <text x="520" y="358" font-size="12.5" fill="#92400E">站二：2 批工具 → 模型 3 次；申请/回执各 2 条；消息 6 条</text>
+  <text x="520" y="380" font-size="12.5" fill="#92400E">站三：一段申请 1 条 + 一段申请 2 条（并行）</text>
+  <text x="520" y="400" font-size="12.5" fill="#92400E">　　　→ 模型 3 次；回执 3 条；消息 7 条</text>
+  <text x="520" y="426" font-size="12.5" font-weight="bold" fill="#854D0E">规律：模型调用 = 带申请的轮次 + 1 次收尾</text>
+  <text x="520" y="446" font-size="12" fill="#A16207">一轮里可以同时申请多条（并行批次）</text>
+
+  <!-- 底部横幅 -->
+  <rect x="30" y="486" width="820" height="32" rx="8" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.2"/>
+  <text x="440" y="507" text-anchor="middle" font-size="12.5" fill="#1E40AF">终止条件：模型不再申请工具（tool_calls 为空列表）→ 引擎停止，轮到你说下一句</text>
+
+  <rect x="30" y="524" width="820" height="32" rx="8" fill="#FEF2F2" stroke="#FECACA" stroke-width="1.2"/>
+  <text x="440" y="545" text-anchor="middle" font-size="12.5" fill="#B91C1C">保护机制：步数预算 recursion_limit（本机默认 9999）——转不完会抛错，而不是无限循环</text>
+
+  <text x="440" y="552" text-anchor="middle" font-size="1" fill="#FDFDFE">placeholder</text>
+</svg>

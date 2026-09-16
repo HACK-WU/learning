@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 580" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="880" height="580" fill="#FDFDFE"/>
+
+  <text x="440" y="36" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">本课一张图：三类上下文 × 瞬时/持久</text>
+
+  <!-- 卡片 1 -->
+  <rect x="30" y="58" width="400" height="196" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="50" y="88" font-size="15" font-weight="bold" fill="#5B21B6">① 上下文工程是什么</text>
+  <text x="50" y="118" font-size="13" fill="#6D28D9">模型失败，多半是"对的信息"没传对</text>
+  <text x="50" y="144" font-size="13" fill="#6D28D9">稀缺性实测：短提示词 70 tokens vs 长 1034</text>
+  <text x="50" y="170" font-size="13" fill="#6D28D9">组装视图：system + 消息 + 工具 + 模型 + 格式</text>
+  <text x="50" y="196" font-size="13" fill="#6D28D9">数据源：runtime context / state / store</text>
+  <text x="50" y="226" font-size="12.5" fill="#7C3AED">判据先记住：改动进"状态"了吗？</text>
+
+  <!-- 卡片 2 -->
+  <rect x="450" y="58" width="400" height="196" rx="12" fill="#F7FDF9" stroke="#BBF7D0" stroke-width="1.5"/>
+  <text x="470" y="88" font-size="15" font-weight="bold" fill="#166534">② 模型上下文（每次调用，瞬时）</text>
+  <text x="470" y="118" font-size="13" fill="#15803D">提示词：@dynamic_prompt 按状态/运行时定制</text>
+  <text x="470" y="144" font-size="13" fill="#15803D">消息：override 瞬时注入（不写状态）</text>
+  <text x="470" y="170" font-size="13" fill="#15803D">工具：按角色过滤（viewer 只见 read_data）</text>
+  <text x="470" y="196" font-size="13" fill="#15803D">格式：收窄候选（Simple → Detailed）</text>
+  <text x="470" y="226" font-size="12.5" fill="#22A55B">工具结果清理：模型看 [cleared]，状态留 1144 字原文</text>
+
+  <!-- 卡片 3 -->
+  <rect x="30" y="282" width="400" height="196" rx="12" fill="#FEFCE8" stroke="#FDE68A" stroke-width="1.5"/>
+  <text x="50" y="312" font-size="15" font-weight="bold" fill="#854D0E">③ 工具上下文（读写管道）</text>
+  <text x="50" y="342" font-size="13" fill="#92400E">读：runtime context（user_777 进入工具）</text>
+  <text x="50" y="368" font-size="13" fill="#92400E">读：state（登录状态来自状态字段）</text>
+  <text x="50" y="394" font-size="13" fill="#92400E">写：Command 更新状态（authenticated=True）</text>
+  <text x="50" y="420" font-size="13" fill="#92400E">写：store 跨会话（语言=中文，新会话读回）</text>
+  <text x="50" y="450" font-size="12.5" fill="#A16207">实测警示：Command.update 须带 ToolMessage（本版本）</text>
+
+  <!-- 卡片 4 -->
+  <rect x="450" y="282" width="400" height="196" rx="12" fill="#FDF2F8" stroke="#FBCFE8" stroke-width="1.5"/>
+  <text x="470" y="312" font-size="15" font-weight="bold" fill="#9D174D">④ 生命周期上下文（步骤之间，持久）</text>
+  <text x="470" y="342" font-size="13" fill="#BE185D">摘要：超限压缩，原文被持久替换</text>
+  <text x="470" y="368" font-size="13" fill="#BE185D">自定义钩子：after_model 计数 → after_agent 写 store</text>
+  <text x="470" y="394" font-size="13" fill="#BE185D">瞬时 vs 持久：改"视图"不写状态、改"状态"留痕</text>
+  <text x="470" y="420" font-size="13" fill="#BE185D">最佳实践：简单起步 / 增量测试 / 监控用量</text>
+  <text x="470" y="450" font-size="12.5" fill="#DB2777">摘要后 4 条消息承载全部历史（原 5 条 + 摘要替换）</text>
+
+  <!-- 底栏 -->
+  <rect x="30" y="496" width="820" height="64" rx="12" fill="#FBFBFD" stroke="#E5E7EB" stroke-width="1.5"/>
+  <text x="440" y="522" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#374151">一句话：上下文工程 = 在合适时机，把合适的信息（瞬时看 / 持久存）放进模型视野</text>
+  <text x="440" y="546" text-anchor="middle" font-size="13" fill="#6B7280">下一课：课 10《人机协同与护栏》——信任边界、中断审批、护栏体系</text>
+</svg>

@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 540" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="880" height="540" fill="#FDFDFE"/>
+
+  <text x="440" y="38" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">检索与 RAG：给模型接上「外部书架」</text>
+
+  <!-- 左上：知识困境 -->
+  <rect x="30" y="58" width="395" height="180" rx="12" fill="#FEF2F2" stroke="#FECACA" stroke-width="1.5"/>
+  <text x="50" y="88" font-size="14.5" font-weight="bold" fill="#991B1B">模型的「知识困境」（本课实测）</text>
+  <text x="50" y="116" font-size="13" fill="#7F1D1D">知识有截止时间：训练完就冻结</text>
+  <text x="50" y="140" font-size="12.5" fill="#9CA3AF">（新政策、新数据一律不知道）</text>
+  <text x="50" y="166" font-size="13" fill="#7F1D1D">训练数据里没有你公司的事</text>
+  <text x="50" y="190" font-size="12.5" fill="#9CA3AF">（问 VPN 客户端——编出「星云星空/Nebula」等细节）</text>
+  <text x="50" y="216" font-size="13" fill="#7F1D1D">不知道时的表现不可靠</text>
+  <text x="50" y="232" font-size="12.5" fill="#9CA3AF">（同一批问题：一次「我不确定」，一次直接编）</text>
+
+  <!-- 右上：检索增强思路 -->
+  <rect x="455" y="58" width="395" height="180" rx="12" fill="#F8FBFF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="475" y="88" font-size="14.5" font-weight="bold" fill="#1E40AF">解药：检索增强（RAG）</text>
+  <text x="475" y="116" font-size="13" fill="#1D4ED8">把外部知识做成「可检索的书架」</text>
+  <text x="475" y="142" font-size="13" fill="#1D4ED8">提问时先查资料，再拼进提示词</text>
+  <text x="475" y="168" font-size="13" fill="#1D4ED8">流水线：加载 → 切分 → 嵌入 → 入库 → 检索</text>
+  <text x="475" y="198" font-size="12.5" fill="#64748B">回答有据可依：先查后答，而不是「凭记忆」</text>
+  <text x="475" y="222" font-size="12.5" fill="#64748B">已有知识库（SQL/CRM/文档系统）不必重建，直接接入</text>
+
+  <!-- 底部三站 -->
+  <rect x="30" y="262" width="262" height="176" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="46" y="292" font-size="13.5" font-weight="bold" fill="#5B21B6">① 为什么需要检索</text>
+  <text x="46" y="322" font-size="12" fill="#6D28D9">模型知识边界（训练截止）</text>
+  <text x="46" y="346" font-size="12" fill="#6D28D9">幻觉问题与私有数据困境</text>
+  <text x="46" y="370" font-size="12" fill="#6D28D9">检索增强生成的思路</text>
+  <text x="46" y="394" font-size="12" fill="#7C3AED">实测：无检索直问的两种失败</text>
+  <text x="46" y="418" font-size="12" fill="#7C3AED">（「编造细节」与「猜测包围」）</text>
+
+  <rect x="309" y="262" width="262" height="176" rx="12" fill="#F7FDF9" stroke="#BBF7D0" stroke-width="1.5"/>
+  <text x="325" y="292" font-size="13.5" font-weight="bold" fill="#166534">② 知识库构建链路</text>
+  <text x="325" y="322" font-size="12" fill="#15803D">加载：文件 → Document</text>
+  <text x="325" y="346" font-size="12" fill="#15803D">切分：chunk_size / overlap 三档对照</text>
+  <text x="325" y="370" font-size="12" fill="#15803D">嵌入：4096 维向量（支持截维）</text>
+  <text x="325" y="394" font-size="12" fill="#15803D">入库：向量库 add_documents</text>
+  <text x="325" y="418" font-size="12" fill="#22A55B">四环解耦：每个环节可替换</text>
+
+  <rect x="588" y="262" width="262" height="176" rx="12" fill="#FEFCE8" stroke="#FDE68A" stroke-width="1.5"/>
+  <text x="604" y="292" font-size="13.5" font-weight="bold" fill="#854D0E">③ 检索器与 RAG 架构</text>
+  <text x="604" y="322" font-size="12" fill="#92400E">查询三法 + 统一 Retriever 接口</text>
+  <text x="604" y="346" font-size="12" fill="#92400E">三种架构：2-step / Agentic / Hybrid</text>
+  <text x="604" y="370" font-size="12" fill="#92400E">检索作为工具接入 agent</text>
+  <text x="604" y="394" font-size="12" fill="#92400E">实测：检索质量决定 RAG 成败</text>
+  <text x="604" y="418" font-size="12" fill="#A16207">（k 值截断答案块的完整案例）</text>
+
+  <!-- 底栏 -->
+  <rect x="30" y="458" width="820" height="62" rx="12" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="440" y="484" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#1E40AF">课 10 管「让不让模型做」 → 课 11 管「喂什么给它」（从信任边界到知识供给）</text>
+  <text x="440" y="508" text-anchor="middle" font-size="12.5" fill="#475569">复用课 3 的消息与课 5 的 agent 循环；检索工具与课 4 的工具机制同构；方法论伏笔指向课 13 的评测</text>
+</svg>

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 250" font-family="-apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#57606a"/>
+    </marker>
+  </defs>
+  <rect width="900" height="250" fill="#ffffff"/>
+  <text x="20" y="40" fill="#1f2328" font-size="18" font-weight="700">阶段 4 路径：组合与工程化（从单兵到团队）</text>
+  <text x="20" y="62" fill="#57606a" font-size="12">学会拆分与协作（多智能体），并让系统可测、可观测、可交付</text>
+
+  <!-- 课 12 -->
+  <g>
+    <rect x="40" y="86" width="230" height="120" rx="10" fill="#f6f8fa" stroke="#8250df" stroke-width="2"/>
+    <text x="155" y="112" fill="#8250df" font-size="13.5" font-weight="700" text-anchor="middle">课 12 · Multi-Agent</text>
+    <line x1="60" y1="124" x2="250" y2="124" stroke="#d0d7de"/>
+    <text x="58" y="146" fill="#1f2328" font-size="11.5">单 agent 的极限与拆分信号</text>
+    <text x="58" y="168" fill="#1f2328" font-size="11.5">subagents / handoffs / router</text>
+    <text x="58" y="190" fill="#1f2328" font-size="11.5">skills / 模式选择决策</text>
+  </g>
+
+  <path d="M272 146 L314 146" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 课 13 -->
+  <g>
+    <rect x="320" y="86" width="230" height="120" rx="10" fill="#f6f8fa" stroke="#8250df" stroke-width="2"/>
+    <text x="435" y="112" fill="#8250df" font-size="13.5" font-weight="700" text-anchor="middle">课 13 · Testing 与观测</text>
+    <line x1="340" y1="124" x2="530" y2="124" stroke="#d0d7de"/>
+    <text x="338" y="146" fill="#1f2328" font-size="11.5">非确定性与 evals</text>
+    <text x="338" y="168" fill="#1f2328" font-size="11.5">单元 / 集成 / Agent Evals</text>
+    <text x="338" y="190" fill="#1f2328" font-size="11.5">LangSmith tracing 与调试</text>
+  </g>
+
+  <path d="M552 146 L594 146" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 结课项目 -->
+  <g>
+    <rect x="600" y="86" width="260" height="120" rx="10" fill="#f6f8fa" stroke="#8250df" stroke-width="2" stroke-dasharray="6 4"/>
+    <text x="730" y="112" fill="#8250df" font-size="13.5" font-weight="700" text-anchor="middle">结课综合实战项目</text>
+    <line x1="620" y1="124" x2="840" y2="124" stroke="#d0d7de"/>
+    <text x="618" y="146" fill="#1f2328" font-size="11.5">跨阶段整合 · 覆盖全部阶段知识点</text>
+    <text x="618" y="168" fill="#1f2328" font-size="11.5">多文件工程 + 设计决策 + 反例对照</text>
+    <text x="618" y="190" fill="#1f2328" font-size="11.5">独立交付一个完整智能体应用</text>
+  </g>
+
+  <text x="20" y="240" fill="#57606a" font-size="11.5">收束：从「会用组件」到「能交付系统」—— 多智能体决策 + 测试护航 + 观测排障</text>
+</svg>

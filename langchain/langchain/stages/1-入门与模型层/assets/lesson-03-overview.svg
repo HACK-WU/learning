@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 500" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#6B7280"/>
+    </marker>
+  </defs>
+
+  <rect width="880" height="500" fill="#FDFDFE"/>
+
+  <text x="440" y="38" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">从「一人一句」到「一本对话流水账」</text>
+
+  <!-- 左上：现状一 -->
+  <rect x="30" y="58" width="395" height="168" rx="12" fill="#FBFBFC" stroke="#E5E7EB" stroke-width="1.5"/>
+  <text x="50" y="88" font-size="14.5" font-weight="bold" fill="#374151">现在：每家的「说法」不一样</text>
+  <text x="50" y="116" font-size="13" fill="#6B7280">平台 A：一套写法</text>
+  <text x="50" y="140" font-size="13" fill="#6B7280">平台 B：另一套写法</text>
+  <text x="50" y="164" font-size="13" fill="#6B7280">平台 C：又一套写法</text>
+  <text x="50" y="200" font-size="13" font-weight="bold" fill="#9A3412">接第 4 家？再写第 4 套对接代码</text>
+
+  <!-- 左下：现状二 -->
+  <rect x="30" y="242" width="395" height="168" rx="12" fill="#FBFBFC" stroke="#E5E7EB" stroke-width="1.5"/>
+  <text x="50" y="272" font-size="14.5" font-weight="bold" fill="#374151">现在：聊完就「失忆」</text>
+  <text x="50" y="300" font-size="13" fill="#6B7280">「我叫小明」 → 「你好，小明！」</text>
+  <text x="50" y="326" font-size="13" fill="#6B7280">「我叫什么？」 → 「不知道呀，我们刚认识」</text>
+  <text x="50" y="358" font-size="13" fill="#9A3412">它不会自己记住上一句</text>
+  <text x="50" y="382" font-size="13" fill="#9A3412">每轮对话，都是一位「从零开始的新员工」</text>
+
+  <!-- 右上：本课一 -->
+  <rect x="455" y="58" width="395" height="168" rx="12" fill="#F8FBFF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="475" y="88" font-size="14.5" font-weight="bold" fill="#1E40AF">本课：一本账，谁都看得懂</text>
+  <rect x="475" y="102" width="5" height="18" rx="2" fill="#8B5CF6"/>
+  <text x="490" y="116" font-size="13" fill="#475569">开场规矩：你是客服助手</text>
+  <rect x="475" y="130" width="5" height="18" rx="2" fill="#16A34A"/>
+  <text x="490" y="144" font-size="13" fill="#475569">用户：我叫小明</text>
+  <rect x="475" y="158" width="5" height="18" rx="2" fill="#2563EB"/>
+  <text x="490" y="172" font-size="13" fill="#475569">助手：你好，小明！</text>
+  <text x="475" y="204" font-size="13" font-weight="bold" fill="#1D4ED8">同样一本账，递给哪家平台都读得懂</text>
+
+  <!-- 右下：本课二 -->
+  <rect x="455" y="242" width="395" height="168" rx="12" fill="#F7FDF9" stroke="#BBF7D0" stroke-width="1.5"/>
+  <text x="475" y="272" font-size="14.5" font-weight="bold" fill="#166534">本课：账本多长，就记得多少</text>
+  <text x="475" y="300" font-size="13" fill="#475569">第 2 轮：把整本账（含第 1 轮）一起递过去</text>
+  <text x="475" y="326" font-size="13" fill="#475569">→ 它翻到前文，答：「你叫小明！」</text>
+  <text x="475" y="358" font-size="13" font-weight="bold" fill="#15803D">它能「记得」多少，取决于账本递了多长</text>
+  <text x="475" y="382" font-size="13" fill="#15803D">想让它记得 → 把账本原样再递一次</text>
+
+  <!-- 底部：思路 -->
+  <rect x="30" y="430" width="820" height="56" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="440" y="464" text-anchor="middle" font-size="15" font-weight="bold" fill="#5B21B6">思路：统一写法（谁在说、说了什么）+ 按顺序全部带上，一起交给它</text>
+</svg>

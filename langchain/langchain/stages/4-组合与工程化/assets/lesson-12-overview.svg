@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 540" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="880" height="540" fill="#FDFDFE"/>
+
+  <text x="440" y="38" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">多智能体：从单兵到团队</text>
+
+  <!-- 左上：单 agent 的三重压力 -->
+  <rect x="30" y="58" width="395" height="180" rx="12" fill="#FEF2F2" stroke="#FECACA" stroke-width="1.5"/>
+  <text x="50" y="88" font-size="14.5" font-weight="bold" fill="#991B1B">单 agent 的三重压力（业务线一涨就显现）</text>
+  <text x="50" y="116" font-size="13" fill="#7F1D1D">上下文膨胀：所有领域知识挤进一个提示词</text>
+  <text x="50" y="140" font-size="12.5" fill="#9CA3AF">（实测：每次调用固定携带 ~1983 字符）</text>
+  <text x="50" y="166" font-size="13" fill="#7F1D1D">工具与知识随业务线性增长</text>
+  <text x="50" y="190" font-size="12.5" fill="#9CA3AF">（实测：8 个、16 个工具仍能选对，但成本在涨）</text>
+  <text x="50" y="216" font-size="13" fill="#7F1D1D">职责混杂：四个团队共用一个提示词</text>
+  <text x="50" y="232" font-size="12.5" fill="#9CA3AF">（谁都不敢改，扩展越来越贵）</text>
+
+  <!-- 右上：拆分与协作 -->
+  <rect x="455" y="58" width="395" height="180" rx="12" fill="#F8FBFF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="475" y="88" font-size="14.5" font-weight="bold" fill="#1E40AF">拆分三动机 + 五模式协作</text>
+  <text x="475" y="116" font-size="13" fill="#1D4ED8">① 上下文管理　② 分布式开发　③ 并行化</text>
+  <text x="475" y="146" font-size="13" fill="#1D4ED8">五种协作模式（按控制权区分）：</text>
+  <text x="475" y="170" font-size="13" fill="#1D4ED8">subagents ／ handoffs ／ router</text>
+  <text x="475" y="194" font-size="13" fill="#1D4ED8">skills ／ custom workflow</text>
+  <text x="475" y="222" font-size="12.5" fill="#64748B">官方定性：设计的中心是上下文工程——决定每个 agent 看到什么</text>
+
+  <!-- 底部三站 -->
+  <rect x="30" y="262" width="262" height="176" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="46" y="292" font-size="13.5" font-weight="bold" fill="#5B21B6">① 为什么需要多智能体</text>
+  <text x="46" y="322" font-size="12" fill="#6D28D9">三个官方动机（管理/分布/并行）</text>
+  <text x="46" y="346" font-size="12" fill="#6D28D9">三个拆分信号（趋势而非红线）</text>
+  <text x="46" y="370" font-size="12" fill="#6D28D9">上下文成本量化对照</text>
+  <text x="46" y="394" font-size="12" fill="#7C3AED">实测：全能 1983 字符</text>
+  <text x="46" y="418" font-size="12" fill="#7C3AED">拆分后主代理 275 字符</text>
+
+  <rect x="309" y="262" width="262" height="176" rx="12" fill="#F7FDF9" stroke="#BBF7D0" stroke-width="1.5"/>
+  <text x="325" y="292" font-size="13.5" font-weight="bold" fill="#166534">② 三种核心模式</text>
+  <text x="325" y="322" font-size="12" fill="#15803D">subagents：子代理即工具（4 calls）</text>
+  <text x="325" y="346" font-size="12" fill="#15803D">handoffs：状态驱动迁移（三阶段）</text>
+  <text x="325" y="370" font-size="12" fill="#15803D">router：分类-并行-综合（7 calls）</text>
+  <text x="325" y="394" font-size="12" fill="#22A55B">并行：一 turn 三子代理（8 calls）</text>
+  <text x="325" y="418" font-size="12" fill="#22A55B">隔离：子代理不会自动知道你的历史</text>
+
+  <rect x="588" y="262" width="262" height="176" rx="12" fill="#FEFCE8" stroke="#FDE68A" stroke-width="1.5"/>
+  <text x="604" y="292" font-size="13.5" font-weight="bold" fill="#854D0E">③ 进阶模式与选择</text>
+  <text x="604" y="322" font-size="12" fill="#92400E">skills：渐进式披露（3 → 2 calls）</text>
+  <text x="604" y="346" font-size="12" fill="#92400E">custom workflow：确定+agentic 混编</text>
+  <text x="604" y="370" font-size="12" fill="#92400E">四模式调用次数对照</text>
+  <text x="604" y="394" font-size="12" fill="#A16207">决策四问：领域 / 阶段 / 技能 / 来源</text>
+  <text x="604" y="418" font-size="12" fill="#A16207">单 agent 能做好的就先别拆</text>
+
+  <!-- 底栏 -->
+  <rect x="30" y="458" width="820" height="62" rx="12" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="440" y="484" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#1E40AF">课 11 给单兵接上外部知识 → 课 12 让单兵变成团队（从「怎么查」到「怎么分工」）</text>
+  <text x="440" y="508" text-anchor="middle" font-size="12.5" fill="#475569">工具机制（课 4）、中间件（课 8）、检查点（课 7）、上下文工程（课 9）在本课成为协作模式的实现底座</text>
+</svg>

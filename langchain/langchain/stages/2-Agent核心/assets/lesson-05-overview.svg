@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 500" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="880" height="500" fill="#FDFDFE"/>
+
+  <text x="440" y="38" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">从「你手写循环」到「框架自动转」</text>
+
+  <!-- 左上 -->
+  <rect x="30" y="58" width="395" height="168" rx="12" fill="#FBFBFC" stroke="#E5E7EB" stroke-width="1.5"/>
+  <text x="50" y="88" font-size="14.5" font-weight="bold" fill="#374151">上一课：循环是你一段段手写的</text>
+  <text x="50" y="118" font-size="13" fill="#6B7280">执行「申请条」→ 包成「回执」→</text>
+  <text x="50" y="142" font-size="13" fill="#6B7280">拼回消息列表 → 再问模型 → ……</text>
+  <text x="50" y="170" font-size="13" fill="#6B7280">「还要不要再转一圈？」也由你判断</text>
+  <text x="50" y="200" font-size="13" font-weight="bold" fill="#9A3412">3 行循环能跑通——但现实里的任务</text>
+  <text x="50" y="218" font-size="13" font-weight="bold" fill="#9A3412">要转十圈、要兜错、要控预算呢？</text>
+
+  <!-- 左下 -->
+  <rect x="30" y="242" width="395" height="168" rx="12" fill="#FBFBFC" stroke="#E5E7EB" stroke-width="1.5"/>
+  <text x="50" y="272" font-size="14.5" font-weight="bold" fill="#374151">手动挡的三个麻烦</text>
+  <text x="50" y="302" font-size="13" fill="#6B7280">① 每次都要重写一遍循环「骨架」</text>
+  <text x="50" y="326" font-size="13" fill="#6B7280">② 多步、并行、出错，判断逻辑越堆越长</text>
+  <text x="50" y="350" font-size="13" fill="#6B7280">③ 循环失控（转不完）没有刹车</text>
+  <text x="50" y="382" font-size="13" font-weight="bold" fill="#9A3412">引擎的活，不该由业务代码兼职</text>
+
+  <!-- 右上 -->
+  <rect x="455" y="58" width="395" height="168" rx="12" fill="#F8FBFF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="475" y="88" font-size="14.5" font-weight="bold" fill="#1E40AF">本课：把循环交给引擎</text>
+  <text x="475" y="118" font-size="13" fill="#475569">一行组装：模型 + 工具 + 提示词</text>
+  <text x="475" y="144" font-size="13" fill="#475569">引擎自动转：申请 → 执行 → 回执 → 再问</text>
+  <text x="475" y="170" font-size="13" fill="#475569">转几圈由任务的复杂度决定</text>
+  <text x="475" y="198" font-size="13" font-weight="bold" fill="#1D4ED8">你负责配边界（工具/提示词/预算）</text>
+
+  <!-- 右下 -->
+  <rect x="455" y="242" width="395" height="168" rx="12" fill="#F7FDF9" stroke="#BBF7D0" stroke-width="1.5"/>
+  <text x="475" y="272" font-size="14.5" font-weight="bold" fill="#166534">循环没有变——只是换了驾驶方式</text>
+  <text x="475" y="302" font-size="13" fill="#475569">「申请条 → 执行 → 回执」还是那三件套</text>
+  <text x="475" y="326" font-size="13" fill="#475569">每个转折点都可观察、可解读</text>
+  <text x="475" y="358" font-size="13" fill="#15803D">看懂它怎么转、怎么停</text>
+  <text x="475" y="380" font-size="13" fill="#15803D">你就从「照抄代码」升级为「看懂引擎」</text>
+
+  <!-- 底栏 -->
+  <rect x="30" y="430" width="820" height="56" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="440" y="455" text-anchor="middle" font-size="15" font-weight="bold" fill="#5B21B6">本课三站：引擎怎么转 → 结果怎么读 → harness 怎么配</text>
+  <text x="440" y="476" text-anchor="middle" font-size="13" fill="#6D28D9">Agent = Model + Harness：循环是引擎的事，边界是你的事</text>
+</svg>

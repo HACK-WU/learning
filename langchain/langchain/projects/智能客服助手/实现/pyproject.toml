@@ -1,0 +1,22 @@
+[project]
+name = "smart-customer-service"
+version = "0.1.0"
+description = "结课综合实战项目：星云商城智能客服助手（LangChain 基础组件课程 Phase 3）"
+requires-python = ">=3.12"
+dependencies = [
+    "langchain>=1.4.0",
+    "langchain-openai>=1.6.2",
+    "python-dotenv>=1.2.3",
+    "langchain-text-splitters>=1.1.2",
+    "pytest>=9.1.1",
+    "agentevals>=0.0.9",
+    "numpy>=2.5.3",
+]
+
+[tool.pytest.ini_options]
+markers = [
+    "integration: 真调模型的测试（默认不跑，用 -m integration 显式运行）",
+]
+addopts = "-m 'not integration'"
+testpaths = ["tests"]
+pythonpath = ["."]

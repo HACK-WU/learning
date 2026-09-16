@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 540" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="880" height="540" fill="#FDFDFE"/>
+
+  <text x="440" y="38" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">第 3 版：三层门禁 ＋ 观测 —— 交付前的完整工序</text>
+
+  <!-- 快层 -->
+  <rect x="30" y="70" width="252" height="170" rx="12" fill="#F7FDF9" stroke="#BBF7D0" stroke-width="1.5"/>
+  <text x="156" y="100" text-anchor="middle" font-size="14" font-weight="bold" fill="#166534">快层 · 单元测试</text>
+  <text x="156" y="126" text-anchor="middle" font-size="12" fill="#15803D">触发：每次改动都跑</text>
+  <rect x="48" y="144" width="216" height="76" rx="8" fill="#DCFCE7"/>
+  <text x="156" y="170" text-anchor="middle" font-size="12" fill="#166534">5 项检查 · 0.4 秒</text>
+  <text x="156" y="192" text-anchor="middle" font-size="12" fill="#166534">零网络 · 百分之百稳定</text>
+  <text x="156" y="212" text-anchor="middle" font-size="11.5" fill="#22A55B">改坏了立刻知道</text>
+
+  <!-- 中间二层 -->
+  <rect x="314" y="70" width="252" height="170" rx="12" fill="#F8FBFF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="440" y="100" text-anchor="middle" font-size="14" font-weight="bold" fill="#1E40AF">真层 · 集成测试</text>
+  <text x="440" y="126" text-anchor="middle" font-size="12" fill="#1D4ED8">触发：CI / 交付前</text>
+  <rect x="332" y="144" width="216" height="76" rx="8" fill="#DBEAFE"/>
+  <text x="440" y="170" text-anchor="middle" font-size="12" fill="#1E40AF">2 项检查 · 6.1 秒</text>
+  <text x="440" y="192" text-anchor="middle" font-size="12" fill="#1E40AF">真模型真调用 · 断言结构</text>
+  <text x="440" y="212" text-anchor="middle" font-size="11.5" fill="#3B82F6">回放模式 1.9 秒离线跑</text>
+
+  <!-- 评分层 -->
+  <rect x="598" y="70" width="252" height="170" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="724" y="100" text-anchor="middle" font-size="14" font-weight="bold" fill="#5B21B6">评分层 · Evals</text>
+  <text x="724" y="126" text-anchor="middle" font-size="12" fill="#6D28D9">触发：改提示词 / 换模型后</text>
+  <rect x="616" y="144" width="216" height="76" rx="8" fill="#EDE9FE"/>
+  <text x="724" y="170" text-anchor="middle" font-size="12" fill="#5B21B6">对照参考轨迹 + 裁判打分</text>
+  <text x="724" y="192" text-anchor="middle" font-size="12" fill="#5B21B6">「变好还是变坏」有数了</text>
+  <text x="724" y="212" text-anchor="middle" font-size="11.5" fill="#7C3AED">缺关键动作 → 判失败</text>
+
+  <!-- 观测 -->
+  <rect x="30" y="258" width="820" height="120" rx="12" fill="#F8FBFF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="50" y="288" font-size="14" font-weight="bold" fill="#1E40AF">观测（挂在整条链路上）：每一次运行都留痕</text>
+  <text x="50" y="316" font-size="12.5" fill="#374151">· 运行后留下 trace 树：模型调用、工具执行、输入输出、耗时——出问题从根往下核对</text>
+  <text x="50" y="340" font-size="12.5" fill="#374151">· 线上排查：不用「猜」，直接回放每一步；改版对比：两次运行的差异一目了然</text>
+  <text x="50" y="364" font-size="12.5" fill="#64748B">· 已有平台（如 LangSmith）两行环境变量接入；不接平台时用本地替代（set_debug / 自建收集器）</text>
+
+  <!-- 收口 -->
+  <rect x="30" y="398" width="820" height="112" rx="12" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="440" y="428" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#1E40AF">三层各就各位：快层每次跑 · 真层与评分层交付前跑 · 观测管上线后</text>
+  <text x="440" y="456" text-anchor="middle" font-size="12.5" fill="#475569">从「我跑过，看着还行」到「我能证明（三层证据），随时可查（trace）」</text>
+  <text x="440" y="482" text-anchor="middle" font-size="12.5" fill="#64748B">这就是「会用」的标准：不是把 agent 跑起来，而是让它「敢交付」</text>
+</svg>

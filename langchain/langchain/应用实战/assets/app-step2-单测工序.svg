@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 540" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="880" height="540" fill="#FDFDFE"/>
+
+  <text x="440" y="38" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">第 2 版：单元测试 —— 把「确定的部分」锁进测试</text>
+
+  <!-- 流程 -->
+  <rect x="30" y="70" width="185" height="96" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="122" y="102" text-anchor="middle" font-size="14" font-weight="bold" fill="#5B21B6">pytest 一键运行</text>
+  <text x="122" y="126" text-anchor="middle" font-size="12" fill="#6D28D9">一条命令跑全部检查</text>
+  <text x="122" y="148" text-anchor="middle" font-size="12" fill="#7C3AED">（不用人守着看）</text>
+
+  <text x="230" y="120" font-size="18" fill="#94A3B8">→</text>
+
+  <rect x="262" y="70" width="280" height="96" rx="12" fill="#FEFCE8" stroke="#FDE68A" stroke-width="1.5"/>
+  <text x="402" y="100" text-anchor="middle" font-size="14" font-weight="bold" fill="#854D0E">剧本模型（替身）</text>
+  <text x="402" y="124" text-anchor="middle" font-size="12" fill="#92400E">预设好「这次回复什么 / 调什么工具」</text>
+  <text x="402" y="146" text-anchor="middle" font-size="12" fill="#92400E">不碰真模型、不花一分钱</text>
+
+  <text x="558" y="120" font-size="18" fill="#94A3B8">→</text>
+
+  <rect x="590" y="70" width="260" height="96" rx="12" fill="#F8FBFF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="720" y="100" text-anchor="middle" font-size="14" font-weight="bold" fill="#1E40AF">agent 内部逻辑</text>
+  <text x="720" y="124" text-anchor="middle" font-size="12" fill="#1D4ED8">工具链执行 / 多轮记忆 / 状态流转</text>
+  <text x="720" y="146" text-anchor="middle" font-size="12" fill="#1D4ED8">跑完自动核对（断言）</text>
+
+  <!-- 本步新增 -->
+  <rect x="30" y="204" width="820" height="96" rx="12" fill="#F7FDF9" stroke="#BBF7D0" stroke-width="1.5"/>
+  <text x="50" y="234" font-size="14" font-weight="bold" fill="#166534">本步新增了什么</text>
+  <text x="50" y="262" font-size="12.5" fill="#374151">· 把「不确定的部分」（真模型）换成剧本替身 → 剩下的逻辑就是确定的，可断言、可重复</text>
+  <text x="50" y="286" font-size="12.5" fill="#374151">· 实测：5 项检查 0.4 秒跑完（真跑一次模型要 3~6 秒）——从「分钟级人工」变「秒级自动」</text>
+
+  <!-- 剩余问题 -->
+  <rect x="30" y="322" width="820" height="120" rx="12" fill="#FFFBEB" stroke="#FDE68A" stroke-width="1.5"/>
+  <text x="50" y="352" font-size="14" font-weight="bold" fill="#92400E">还剩的问题：剧本测不出「真模型会不会真的配合」</text>
+  <text x="50" y="380" font-size="12.5" fill="#A16207">· 真模型可能：该调工具时没调 / 调错工具 / 参数格式不对 / 接口调用失败</text>
+  <text x="50" y="404" font-size="12.5" fill="#A16207">· 这些是「集成问题」，剧本里全是假的，测不到——需要第 3 层来补</text>
+  <text x="50" y="428" font-size="12.5" fill="#A16207">· 还有「质量」问题：工具都调了、格式全对，但答案好不好？（交给评分层）</text>
+
+  <rect x="30" y="462" width="820" height="50" rx="12" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="440" y="493" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#1E40AF">下一步方向：加两层——真调用验证「配合」，评分验证「质量」</text>
+</svg>

@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 250" font-family="-apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#57606a"/>
+    </marker>
+  </defs>
+  <rect width="940" height="250" fill="#ffffff"/>
+  <text x="20" y="40" fill="#1f2328" font-size="18" font-weight="700">阶段 2 路径：Agent 核心（让它动起来）</text>
+  <text x="20" y="62" fill="#57606a" font-size="12">给模型装上手脚（工具）、引擎（循环）、体验（流式）与记忆 —— 跑通完整链路</text>
+
+  <!-- 课 4 -->
+  <g>
+    <rect x="25" y="86" width="205" height="130" rx="10" fill="#f6f8fa" stroke="#1a7f37" stroke-width="2"/>
+    <text x="127" y="112" fill="#1a7f37" font-size="13.5" font-weight="700" text-anchor="middle">课 4 · Tools 工具</text>
+    <line x1="45" y1="124" x2="210" y2="124" stroke="#d0d7de"/>
+    <text x="42" y="146" fill="#1f2328" font-size="11">工具机制原理</text>
+    <text x="42" y="166" fill="#1f2328" font-size="11">@tool 创建工具</text>
+    <text x="42" y="186" fill="#1f2328" font-size="11">上下文 / 动态选择</text>
+    <text x="42" y="206" fill="#1f2328" font-size="11">预置工具 / MCP</text>
+  </g>
+
+  <path d="M232 151 L242 151" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 课 5 -->
+  <g>
+    <rect x="248" y="86" width="205" height="130" rx="10" fill="#f6f8fa" stroke="#1a7f37" stroke-width="2"/>
+    <text x="350" y="112" fill="#1a7f37" font-size="13.5" font-weight="700" text-anchor="middle">课 5 · Agents 核心</text>
+    <line x1="268" y1="124" x2="433" y2="124" stroke="#d0d7de"/>
+    <text x="265" y="146" fill="#1f2328" font-size="11">create_agent 深入</text>
+    <text x="265" y="166" fill="#1f2328" font-size="11">agent loop 拆解</text>
+    <text x="265" y="186" fill="#1f2328" font-size="11">结构化输出</text>
+    <text x="265" y="206" fill="#1f2328" font-size="11">harness 配置</text>
+  </g>
+
+  <path d="M455 151 L465 151" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 课 6 -->
+  <g>
+    <rect x="471" y="86" width="205" height="130" rx="10" fill="#f6f8fa" stroke="#1a7f37" stroke-width="2"/>
+    <text x="573" y="112" fill="#1a7f37" font-size="13.5" font-weight="700" text-anchor="middle">课 6 · Streaming 流式</text>
+    <line x1="491" y1="124" x2="656" y2="124" stroke="#d0d7de"/>
+    <text x="488" y="146" fill="#1f2328" font-size="11">流式的价值与机制</text>
+    <text x="488" y="166" fill="#1f2328" font-size="11">流模式全解</text>
+    <text x="488" y="186" fill="#1f2328" font-size="11">token 逐字输出</text>
+    <text x="488" y="206" fill="#1f2328" font-size="11">agent 进度跟踪</text>
+  </g>
+
+  <path d="M678 151 L688 151" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 课 7 -->
+  <g>
+    <rect x="694" y="86" width="205" height="130" rx="10" fill="#f6f8fa" stroke="#1a7f37" stroke-width="2"/>
+    <text x="796" y="112" fill="#1a7f37" font-size="13.5" font-weight="700" text-anchor="middle">课 7 · Memory 记忆</text>
+    <line x1="714" y1="124" x2="879" y2="124" stroke="#d0d7de"/>
+    <text x="711" y="146" fill="#1f2328" font-size="11">记忆机制总览</text>
+    <text x="711" y="166" fill="#1f2328" font-size="11">短期记忆（裁剪/摘要）</text>
+    <text x="711" y="186" fill="#1f2328" font-size="11">长期记忆（跨会话）</text>
+    <text x="711" y="206" fill="#1f2328" font-size="11">记忆工程实践</text>
+  </g>
+
+  <text x="20" y="240" fill="#57606a" font-size="11.5">实操：写一个带自定义工具的 agent，让它自主完成多步任务；加上流式与记忆</text>
+</svg>

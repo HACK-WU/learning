@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 540" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="880" height="540" fill="#FDFDFE"/>
+
+  <text x="440" y="38" text-anchor="middle" font-size="20" font-weight="bold" fill="#1F2937">人机协同与护栏：模型有手有脚之后，谁说了算</text>
+
+  <!-- 左上：三类事故 -->
+  <rect x="30" y="58" width="395" height="180" rx="12" fill="#FBFBFC" stroke="#E5E7EB" stroke-width="1.5"/>
+  <text x="50" y="88" font-size="14.5" font-weight="bold" fill="#374151">上线后的三类事故</text>
+  <text x="50" y="116" font-size="13" fill="#6B7280">不可逆动作自己拍板</text>
+  <text x="50" y="140" font-size="12.5" fill="#9CA3AF">（给外部发邮件、删生产数据——发出一秒不能撤回）</text>
+  <text x="50" y="166" font-size="13" fill="#6B7280">不该说的说了</text>
+  <text x="50" y="190" font-size="12.5" fill="#9CA3AF">（用户邮箱、卡号进了对话记录与日志）</text>
+  <text x="50" y="216" font-size="13" fill="#6B7280">该停的没停</text>
+  <text x="50" y="232" font-size="12.5" fill="#9CA3AF">（模型一路执行到底，没有人来得及看清）</text>
+
+  <!-- 右上：三道防线 -->
+  <rect x="455" y="58" width="395" height="180" rx="12" fill="#F8FBFF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="475" y="88" font-size="14.5" font-weight="bold" fill="#1E40AF">三道防线（本课三站）</text>
+  <text x="475" y="116" font-size="13" fill="#1D4ED8">① 人机协同：高风险动作先冻结，等人点头</text>
+  <text x="475" y="142" font-size="13" fill="#1D4ED8">② 中断机制：approve / edit / reject / respond</text>
+  <text x="475" y="168" font-size="13" fill="#1D4ED8">③ 护栏体系：PII 脱敏 + 输入输出过滤</text>
+  <text x="475" y="198" font-size="12.5" fill="#64748B">执行权从模型手里收回，交还给流程与人</text>
+  <text x="475" y="222" font-size="12.5" fill="#64748B">全部通过课 8 的中间件体系挂载</text>
+
+  <!-- 底部三站 -->
+  <rect x="30" y="262" width="262" height="172" rx="12" fill="#F5F3FF" stroke="#DDD6FE" stroke-width="1.5"/>
+  <text x="46" y="292" font-size="13.5" font-weight="bold" fill="#5B21B6">① 为什么需要人在环中</text>
+  <text x="46" y="322" font-size="12" fill="#6D28D9">高危动作清单（官方四类）</text>
+  <text x="46" y="346" font-size="12" fill="#6D28D9">三种审批决策 + 一种代答</text>
+  <text x="46" y="370" font-size="12" fill="#6D28D9">判定标准：什么该让人介入</text>
+  <text x="46" y="394" font-size="12" fill="#7C3AED">实测：提案全貌 + 工具冻结</text>
+  <text x="46" y="418" font-size="12" fill="#7C3AED">对照：不设闸门直接执行</text>
+
+  <rect x="309" y="262" width="262" height="172" rx="12" fill="#F7FDF9" stroke="#BBF7D0" stroke-width="1.5"/>
+  <text x="325" y="292" font-size="13.5" font-weight="bold" fill="#166534">② 中断机制</text>
+  <text x="325" y="322" font-size="12" fill="#15803D">配置：True / False / 决策白名单</text>
+  <text x="325" y="346" font-size="12" fill="#15803D">条件中断：when 谓词放行无风险调用</text>
+  <text x="325" y="370" font-size="12" fill="#15803D">恢复：Command(resume) 送回决定</text>
+  <text x="325" y="394" font-size="12" fill="#15803D">流式：interrupted 检测暂停点</text>
+  <text x="325" y="418" font-size="12" fill="#22A55B">检查点：没有它，恢复直接报错</text>
+
+  <rect x="588" y="262" width="262" height="172" rx="12" fill="#FEFCE8" stroke="#FDE68A" stroke-width="1.5"/>
+  <text x="604" y="292" font-size="13.5" font-weight="bold" fill="#854D0E">③ 护栏体系</text>
+  <text x="604" y="322" font-size="12" fill="#92400E">内置：PII 四策略（脱敏/掩码/哈希/拒收）</text>
+  <text x="604" y="346" font-size="12" fill="#92400E">点位：输入 / 输出 / 工具结果</text>
+  <text x="604" y="370" font-size="12" fill="#92400E">自定义：before_agent 拦请求</text>
+  <text x="604" y="394" font-size="12" fill="#92400E">自定义：after_agent 审输出</text>
+  <text x="604" y="418" font-size="12" fill="#A16207">确定性规则先行，模型审查兜底</text>
+
+  <!-- 底栏 -->
+  <rect x="30" y="454" width="820" height="66" rx="12" fill="#EFF6FF" stroke="#BFDBFE" stroke-width="1.5"/>
+  <text x="440" y="480" text-anchor="middle" font-size="14.5" font-weight="bold" fill="#1E40AF">课 9 管"给模型看什么" → 课 10 管"让不让模型做"（信任与边界）</text>
+  <text x="440" y="504" text-anchor="middle" font-size="12.5" fill="#475569">执行机制仍是课 8 的中间件；审批状态存在课 7 的检查点里；护栏挂在课 9 的生命周期钩子上</text>
+</svg>

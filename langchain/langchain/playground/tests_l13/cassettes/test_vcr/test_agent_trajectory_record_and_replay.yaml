@@ -1,0 +1,490 @@
+interactions:
+- request:
+    body: "{\"messages\":[{\"content\":\"\u5317\u4EAC\u5929\u6C14\u600E\u4E48\u6837\uFF1F\",\"role\":\"user\"}],\"model\":\"qwen3.8-flash\",\"stream\":false,\"tools\":[{\"type\":\"function\",\"function\":{\"name\":\"get_weather\",\"description\":\"\u67E5\u8BE2\u57CE\u5E02\u5929\u6C14\u3002\",\"parameters\":{\"properties\":{\"city\":{\"type\":\"string\"}},\"required\":[\"city\"],\"type\":\"object\"}}}]}"
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      authorization:
+      - Bearer <REDACTED>
+      connection:
+      - keep-alive
+      content-length:
+      - '299'
+      content-type:
+      - application/json
+      host:
+      - api.example.com
+      user-agent:
+      - OpenAI/Python 3.14.0
+      x-stainless-arch:
+      - other:amd64
+      x-stainless-async:
+      - 'false'
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Windows
+      x-stainless-package-version:
+      - 3.14.0
+      x-stainless-raw-response:
+      - 'true'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.12.13
+    method: POST
+    uri: https://api.example.com/compatible-mode/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA22Rz2rbQBDGX6XMeRVsy46sfZU4iPXurKV2tatq1yRBCFyXQiGmvbjk0J5KU1Ia
+        Gh8KhpK3SWU7p7xCUfwnDvS2zM43832/KSARQIHHzPE0U57shr4MWoHHhfC9NrK+FyITnuzzMJDd
+        oNUQHSBg+i+Ru43wgJs0U+gSo4EAz5E5FECbQTfs+IcNPyCQGoEKKLw+Qe0fdD2pmI3r5tgkHC3Q
+        owISLfAUaINAitayAQItIDcKgQKzNrGOaQcEcmTW6EQPIm60Q13bWE6vFu/nq5uv9xe/qsnF3z/X
+        1bcfi9n04XZy/2W0+v5mNXu7nF4N0EUnyFyMeTW/rN7N70bj6uN48Wm2PL9e/jx/uJ0sP/9efLhc
+        t9+NxrXH3RYg4IxREWdKbTw/wmNKRbIfNmXD92XTD9uB4CFrdlGGrVpzltUZ5FDzDaPdkxagWVr/
+        7lkDAiwfDFPUzgKFogc8cWc9oC96sA7XgxJKsiNWHpcEZKITG0drOkD3nRJQZpDlpm+B6qFS5TGB
+        4ZZwlps0c5Ezr1BboH4zqFM6pp5Kh62awvbGu3q7Q56rI4GOJTWaAjjjMYpdb4OAw9Nna8r/DN2f
+        8HTnrejR2v6Udqcsy399ERLVwwIAAA==
+    headers:
+      content-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=utf-8
+      date:
+      - Wed, 16 Sep 2026 05:20:38 GMT
+      grpc-accept-encoding:
+      - gzip
+      grpc-encoding:
+      - identity
+      req-arrive-time:
+      - '1789536037241'
+      req-cost-time:
+      - '957'
+      resp-start-time:
+      - '1789536038199'
+      server:
+      - istio-envoy
+      transfer-encoding:
+      - chunked
+      vary:
+      - Accept-Encoding
+      x-envoy-upstream-service-time:
+      - '957'
+      x-request-id:
+      - f893f727-cdd3-4eab-9ead-fbc97f8720d5
+    status:
+      code: 200
+      message: OK
+- request:
+    body: "{\"messages\":[{\"content\":\"\u5317\u4EAC\u5929\u6C14\u600E\u4E48\u6837\uFF1F\",\"role\":\"user\"},{\"content\":null,\"role\":\"assistant\",\"tool_calls\":[{\"type\":\"function\",\"id\":\"call_fb91f033f13947dc9a18ef92\",\"function\":{\"name\":\"get_weather\",\"arguments\":\"{\\\"city\\\":
+      \\\"\u5317\u4EAC\\\"}\"}}]},{\"content\":\"\u5317\u4EAC\uFF1A\u6674\uFF0C22\xB0C\u3002\",\"role\":\"tool\",\"tool_call_id\":\"call_fb91f033f13947dc9a18ef92\"}],\"model\":\"qwen3.8-flash\",\"stream\":false,\"tools\":[{\"type\":\"function\",\"function\":{\"name\":\"get_weather\",\"description\":\"\u67E5\u8BE2\u57CE\u5E02\u5929\u6C14\u3002\",\"parameters\":{\"properties\":{\"city\":{\"type\":\"string\"}},\"required\":[\"city\"],\"type\":\"object\"}}}]}"
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      authorization:
+      - Bearer <REDACTED>
+      connection:
+      - keep-alive
+      content-length:
+      - '577'
+      content-type:
+      - application/json
+      host:
+      - api.example.com
+      user-agent:
+      - OpenAI/Python 3.14.0
+      x-stainless-arch:
+      - other:amd64
+      x-stainless-async:
+      - 'false'
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Windows
+      x-stainless-package-version:
+      - 3.14.0
+      x-stainless-raw-response:
+      - 'true'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.12.13
+    method: POST
+    uri: https://api.example.com/compatible-mode/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA22Q3WoTQRTH3+Vcz5bNbpJu59bHKBImMyfZ1dmZdWeKhbCQFlq8iEUwWrQfF2Kl
+        BY1FIvEjKPgqze6mV3kFWWpSK94efv+P8+9BJIACD5nlcSKdgNcDXG+4zkZTNJx62wuctkB0Gp5g
+        vl/zOlwIIKDbD5DbP8I1ruNEoo20AgI8RWZRAK2tBxsNv+n6AYFYC5RA4dFjVP5a4HQkM2EFhzri
+        aIBu9iBSAreBugRiNIZ1EWgPUi0RKDBjImOZskAgRWa0ilS3xbWyqKoa5fC8eDKZf3xzfTjKB4ez
+        b+/ztxfF5XAxHeSTs3xvkk8+zX8O86PT8vvz4vT4qr97fdyfv9spj8bFwVl1/1DB5ahfjHfy0aB4
+        MV5MB7MvT2c/TuafXxYH5+Wz/Xx/Lx99vervVs1X2Td5i+nr4lWl8bxfl/cqJiPQiVRkwtZNY6Bg
+        rE6AgNTdJNVtA1RtSZndJ7C1/DdJdZzYltUPURmgfjMgYLVlcnWqu7Uqfbn4LeqTu+qWQMsiaSpb
+        zniIYsW6BCxu34nJ/mP6t8Pt6kuR5/3r4mdZ9hsH06YnUQIAAA==
+    headers:
+      content-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=utf-8
+      date:
+      - Wed, 16 Sep 2026 05:20:39 GMT
+      grpc-accept-encoding:
+      - gzip
+      grpc-encoding:
+      - identity
+      req-arrive-time:
+      - '1789536038256'
+      req-cost-time:
+      - '1106'
+      resp-start-time:
+      - '1789536039363'
+      server:
+      - istio-envoy
+      transfer-encoding:
+      - chunked
+      vary:
+      - Accept-Encoding
+      x-envoy-upstream-service-time:
+      - '1106'
+      x-request-id:
+      - 8c48e750-96d5-4b28-bdee-52da3312fcdd
+    status:
+      code: 200
+      message: OK
+- request:
+    body: "{\"messages\":[{\"content\":\"\u5317\u4EAC\u5929\u6C14\u600E\u4E48\u6837\uFF1F\",\"role\":\"user\"}],\"model\":\"qwen3.8-flash\",\"stream\":false,\"tools\":[{\"type\":\"function\",\"function\":{\"name\":\"get_weather\",\"description\":\"\u67E5\u8BE2\u57CE\u5E02\u5929\u6C14\u3002\",\"parameters\":{\"properties\":{\"city\":{\"type\":\"string\"}},\"required\":[\"city\"],\"type\":\"object\"}}}]}"
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      authorization:
+      - Bearer <REDACTED>
+      connection:
+      - keep-alive
+      content-length:
+      - '299'
+      content-type:
+      - application/json
+      host:
+      - api.example.com
+      user-agent:
+      - OpenAI/Python 3.14.0
+      x-stainless-arch:
+      - other:amd64
+      x-stainless-async:
+      - 'false'
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Windows
+      x-stainless-package-version:
+      - 3.14.0
+      x-stainless-raw-response:
+      - 'true'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.12.13
+    method: POST
+    uri: https://api.example.com/compatible-mode/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA22R3WrbQBCFX8XMtRRkZOtnX6UOYr07ttSudlXtmiQIgetS6IWb3hhy0UKhNMGF
+        0gRacAgpfZhYtnOVVyiqf+KU3i2z58yc+aaAhAMBFlPD0kzYvhM4bd50bNZGbreQe3bgtZgdUOSB
+        H4YU0QcLVPc5MrMxHjCVZgJNoiRYwHKkBjmQph+EbddzQseCVHEUQODlEUr3ILB7guq4FscqYaiB
+        PCsgkRyPgdRq1Jr2EUgBuRIIBKjWiTZUGrAgR6qVTGQ/YkoalHWM5WS6eDtbXX6+P/tejc/mN9+q
+        L18XV5OH2/H9x+Hq4tX81+/lZNroo4mOkJoY80Y1O6/ezO6Go+rTaXU9ml/frJ0Pt+Plh5+L0/PV
+        1evlZFq9+1G9v7wbjuq4u4FggVFKRIwKsYn/lyMVIur5bQc9pxu2WbOFIe+6nPdc16s9J1m9Tm8g
+        2QbX7kkKkDStf/dCggU07w9SlEYDgaIDLDEnHSCNDqzTdqCE0trBKw9LC3qJTHQcrUEB2U9qgVD9
+        LFddDUQOhCgPLRhsYWe5SjMTGfUCpQbiNv16S0PFY8lr1RS2597VW7711B1xNDSp0RTAKIuR77SO
+        BQaPn4wp/9N0v8PjybemZvhPl5ZfluUf8MlsVc4CAAA=
+    headers:
+      content-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=utf-8
+      date:
+      - Wed, 16 Sep 2026 05:21:31 GMT
+      grpc-accept-encoding:
+      - gzip
+      grpc-encoding:
+      - identity
+      req-arrive-time:
+      - '1789536090720'
+      req-cost-time:
+      - '1100'
+      resp-start-time:
+      - '1789536091820'
+      server:
+      - istio-envoy
+      transfer-encoding:
+      - chunked
+      vary:
+      - Accept-Encoding
+      x-envoy-upstream-service-time:
+      - '1100'
+      x-request-id:
+      - 70805d10-c5ed-4ed6-864c-8aed8799aee7
+    status:
+      code: 200
+      message: OK
+- request:
+    body: "{\"messages\":[{\"content\":\"\u5317\u4EAC\u5929\u6C14\u600E\u4E48\u6837\uFF1F\",\"role\":\"user\"},{\"content\":null,\"role\":\"assistant\",\"tool_calls\":[{\"type\":\"function\",\"id\":\"call_f750e60b95c14e9db3ddf336\",\"function\":{\"name\":\"get_weather\",\"arguments\":\"{\\\"city\\\":
+      \\\"\u5317\u4EAC\\\"}\"}}]},{\"content\":\"\u5317\u4EAC\uFF1A\u6674\uFF0C22\xB0C\u3002\",\"role\":\"tool\",\"tool_call_id\":\"call_f750e60b95c14e9db3ddf336\"}],\"model\":\"qwen3.8-flash\",\"stream\":false,\"tools\":[{\"type\":\"function\",\"function\":{\"name\":\"get_weather\",\"description\":\"\u67E5\u8BE2\u57CE\u5E02\u5929\u6C14\u3002\",\"parameters\":{\"properties\":{\"city\":{\"type\":\"string\"}},\"required\":[\"city\"],\"type\":\"object\"}}}]}"
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      authorization:
+      - Bearer <REDACTED>
+      connection:
+      - keep-alive
+      content-length:
+      - '577'
+      content-type:
+      - application/json
+      host:
+      - api.example.com
+      user-agent:
+      - OpenAI/Python 3.14.0
+      x-stainless-arch:
+      - other:amd64
+      x-stainless-async:
+      - 'false'
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Windows
+      x-stainless-package-version:
+      - 3.14.0
+      x-stainless-raw-response:
+      - 'true'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.12.13
+    method: POST
+    uri: https://api.example.com/compatible-mode/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA22R347SUBCHX8XMdbuh/Cmltz6GMeTQHpZq6amcs3ETQgIYV7ILi8ZGgotcGCCQ
+        6C5REgiwXvgqcE7hqq9gunXRNd5OfvPNNzNlsEzQwSggZhRdW87EkaIktLSs4rgiJxWUlzVTTclI
+        jeVQIpnRYloaJCC5Z9hgvxuPDFJ0bcws4oAERgkjhk3QlbSWSSXUWEaRoEhMbIMOL15iJ3GkyXkb
+        0UIYLhDLwBT0J2WwHBOfgh6ToIgpRccY9DKUiI1BB0SpRRlyGEhQwogSx3KOswZxGHZCDd8bi8Z8
+        d/N537nmzc52+YUPJmLqBeumaLzj82/+qr2bvvK98XZ5xudD/noerJv8R4c3pv7qvej3gvVH0Z0F
+        62Y8/nP6eFOti8vhdnEhPg39q5m4HPKrvv/V463vvH0TrJvbRWvfq+5GNX7WisARdVOtR8ndqOZf
+        V8WsxtsXfHi7qdbDdQ/CkeR2dc4Hk0hVdGei1wmFp55YTPzl6NGdSuh5FwhHet1g3dxX6/xtgw8+
+        8DdLMVvx83Fw24eKBHnLsWghGx0IdKCMuCCBTY7dEslR0J0T2648leDk/rxuiRRdlmXkOXYo6AlV
+        k4ARhuxDKRlPht73Dz7UU6r0sDtrYoYsm4ZYAxkFbB6yMQkYPn0wpvIf6N+EP08+NCX/oaTUSqXy
+        C+y3dVTAAgAA
+    headers:
+      content-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=utf-8
+      date:
+      - Wed, 16 Sep 2026 05:21:32 GMT
+      grpc-accept-encoding:
+      - gzip
+      grpc-encoding:
+      - identity
+      req-arrive-time:
+      - '1789536091876'
+      req-cost-time:
+      - '1448'
+      resp-start-time:
+      - '1789536093325'
+      server:
+      - istio-envoy
+      transfer-encoding:
+      - chunked
+      vary:
+      - Accept-Encoding
+      x-envoy-upstream-service-time:
+      - '1448'
+      x-request-id:
+      - 92a11387-6e21-41af-8d65-a60ba3498087
+    status:
+      code: 200
+      message: OK
+- request:
+    body: "{\"messages\":[{\"content\":\"\u5317\u4EAC\u5929\u6C14\u600E\u4E48\u6837\uFF1F\",\"role\":\"user\"}],\"model\":\"qwen3.8-flash\",\"stream\":false,\"tools\":[{\"type\":\"function\",\"function\":{\"name\":\"get_weather\",\"description\":\"\u67E5\u8BE2\u57CE\u5E02\u5929\u6C14\u3002\",\"parameters\":{\"properties\":{\"city\":{\"type\":\"string\"}},\"required\":[\"city\"],\"type\":\"object\"}}}]}"
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      authorization:
+      - Bearer <REDACTED>
+      connection:
+      - keep-alive
+      content-length:
+      - '299'
+      content-type:
+      - application/json
+      host:
+      - api.example.com
+      user-agent:
+      - OpenAI/Python 3.14.0
+      x-stainless-arch:
+      - other:amd64
+      x-stainless-async:
+      - 'false'
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Windows
+      x-stainless-package-version:
+      - 3.14.0
+      x-stainless-raw-response:
+      - 'true'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.12.13
+    method: POST
+    uri: https://api.example.com/compatible-mode/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA22R3WrbQBCFX6XM9SrYlqyffZU6iPVqZKld7araNUkQAtel0Is2vTHkooVCaYIL
+        pQm04BAofRhbtvMWRfVPnNK7ZfacmTPflJBGQIEnzPAsF5bXDoKg1elaNnf7lhO4ruX7yCyn78W+
+        0+na2I6BgOo/Q262xiOuslygSZUEArxAZjAC2vb8oGv7gd0ikKkIBVB4cYLSPvKtWDCdNOJEpRw1
+        0KclpDLCU6CNGrVmAwRaQqEEAgWmdaoNkwYIFMi0kqkchFxJg7KJsZpMl29m6+vP9xff67cXi7tv
+        9Zevy5sJuf84Wl+9XPz6vZpMB2jCE2QmwaKeXdavZ/PRuP50Xt+OF7d3G9d8NF59+Lk8v1zfvFpN
+        pvW7H/X76/lo3ETdDwMCRikRcibENvpfhkyI0Os4fuSzqBXYzOFxHPCWE3kxbzxnebNKPJR8i2r/
+        pCVIljW/BxmBACsGwwyl0UCh7AFPzVkP6JMebNL2oIKK7MFVxxWBOJWpTsINJKCHSQkINcgL1ddA
+        5VCI6pjAcAc6L1SWm9Co5yg1ULvtNVsaJh5Krt1Q2J16X3dc8tgdRmhY2qApgTOeYLTXtggYPH00
+        pvpP08MOD+femdr+P10ct6qqP7s/n0fKAgAA
+    headers:
+      content-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=utf-8
+      date:
+      - Wed, 16 Sep 2026 06:08:53 GMT
+      grpc-accept-encoding:
+      - gzip
+      grpc-encoding:
+      - identity
+      req-arrive-time:
+      - '1789538930388'
+      req-cost-time:
+      - '3145'
+      resp-start-time:
+      - '1789538933534'
+      server:
+      - istio-envoy
+      transfer-encoding:
+      - chunked
+      vary:
+      - Accept-Encoding
+      x-envoy-upstream-service-time:
+      - '3145'
+      x-request-id:
+      - 71999025-3c6b-4966-88ea-4b7f84253e1f
+    status:
+      code: 200
+      message: OK
+- request:
+    body: "{\"messages\":[{\"content\":\"\u5317\u4EAC\u5929\u6C14\u600E\u4E48\u6837\uFF1F\",\"role\":\"user\"},{\"content\":null,\"role\":\"assistant\",\"tool_calls\":[{\"type\":\"function\",\"id\":\"call_7248d8ad093a4cff9c04d7fc\",\"function\":{\"name\":\"get_weather\",\"arguments\":\"{\\\"city\\\":
+      \\\"\u5317\u4EAC\\\"}\"}}]},{\"content\":\"\u5317\u4EAC\uFF1A\u6674\uFF0C22\xB0C\u3002\",\"role\":\"tool\",\"tool_call_id\":\"call_7248d8ad093a4cff9c04d7fc\"}],\"model\":\"qwen3.8-flash\",\"stream\":false,\"tools\":[{\"type\":\"function\",\"function\":{\"name\":\"get_weather\",\"description\":\"\u67E5\u8BE2\u57CE\u5E02\u5929\u6C14\u3002\",\"parameters\":{\"properties\":{\"city\":{\"type\":\"string\"}},\"required\":[\"city\"],\"type\":\"object\"}}}]}"
+    headers:
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      authorization:
+      - Bearer <REDACTED>
+      connection:
+      - keep-alive
+      content-length:
+      - '577'
+      content-type:
+      - application/json
+      host:
+      - api.example.com
+      user-agent:
+      - OpenAI/Python 3.14.0
+      x-stainless-arch:
+      - other:amd64
+      x-stainless-async:
+      - 'false'
+      x-stainless-lang:
+      - python
+      x-stainless-os:
+      - Windows
+      x-stainless-package-version:
+      - 3.14.0
+      x-stainless-raw-response:
+      - 'true'
+      x-stainless-retry-count:
+      - '0'
+      x-stainless-runtime:
+      - CPython
+      x-stainless-runtime-version:
+      - 3.12.13
+    method: POST
+    uri: https://api.example.com/compatible-mode/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAAA22RsW7bMBCGX4W4mTIkS3Zkjs2UPVtRGDR5NplQpCJSTQxDQJClReGhQ9GgQEcv
+        BjJk6FCkmfIqiQx0yisUQmKnKbodDv//3X93C9ASGAjFgyhKE+0lMsahSKJ+nMgoE9M8mqR5Eg0z
+        nslRnmZpHAMFNzlCEZ6NPeGK0mDQzgIFUSEPKIEle/lokOajNKVQOIkGGJycok17eTQ13KtOrJwW
+        6IG9XYC2Es+AxRQK9J7PENgCKmcQGHDvtQ/cBqBQIffOajsbC2cD2i7GoUJSe6wI98coCZ+4OpA3
+        qI+0nZFT5EFh1SMHRPH3SIJCUqGvTWDE19bOKen37673O4FXrjaSVFiaORHOCu3RzIm2ZF9pix57
+        Xerd3HZ5+XBz9fDrU7tat6v15vrL5tuPzffLx9tlV/9cP5Efb5e/zy/azx/b1df2w839+QU0FKba
+        aq/GT/sAAx9cCRSMm5WVm3hgtjameUeh3l6jrFxRhnFwx2g9sHSYUwgucLNrZUna5dv+46U/oK/d
+        Y4mBa+M7rOBCodxpYwoBz16Naf4D/Zvw8pOtqZ//Q8kGTdP8ATkgQCVvAgAA
+    headers:
+      content-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=utf-8
+      date:
+      - Wed, 16 Sep 2026 06:08:54 GMT
+      grpc-accept-encoding:
+      - gzip
+      grpc-encoding:
+      - identity
+      req-arrive-time:
+      - '1789538933592'
+      req-cost-time:
+      - '1098'
+      resp-start-time:
+      - '1789538934691'
+      server:
+      - istio-envoy
+      transfer-encoding:
+      - chunked
+      vary:
+      - Accept-Encoding
+      x-envoy-upstream-service-time:
+      - '1098'
+      x-request-id:
+      - 71d0e6c1-201d-4cf8-b381-64a4d9834300
+    status:
+      code: 200
+      message: OK
+version: 1
