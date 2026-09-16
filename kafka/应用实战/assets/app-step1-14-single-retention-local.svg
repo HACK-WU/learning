@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="400" viewBox="0 0 860 400" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="860" height="400" fill="#ffffff"/>
+
+  <text x="430" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#1a237e">基础版：一个 retention 开关，历史数据全堆在本地 SSD</text>
+  <text x="430" y="46" text-anchor="middle" font-size="12" fill="#555555">「留多久」和「放哪种盘」被绑成一个参数 —— 想留就得全留在最贵的盘上</text>
+
+  <!-- 本地磁盘：新旧混放 -->
+  <rect x="30" y="80" width="290" height="220" rx="10" fill="#eceff1" stroke="#546e7a" stroke-width="2"/>
+  <text x="175" y="104" text-anchor="middle" font-size="12" font-weight="700" fill="#263238">broker 本地磁盘（SSD · 贵）</text>
+
+  <rect x="48" y="118" width="254" height="34" rx="6" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.6"/>
+  <text x="175" y="140" text-anchor="middle" font-size="11" fill="#0d47a1">最近几天的数据（热 · 天天被读）</text>
+
+  <rect x="48" y="160" width="254" height="34" rx="6" fill="#fff3e0" stroke="#ef6c00" stroke-width="1.6"/>
+  <text x="175" y="182" text-anchor="middle" font-size="11" fill="#e65100">上月数据（温）</text>
+
+  <rect x="48" y="202" width="254" height="34" rx="6" fill="#fbe9e7" stroke="#d84315" stroke-width="1.6"/>
+  <text x="175" y="224" text-anchor="middle" font-size="11" fill="#bf360c">一年前数据（冷 · 一年查几次）</text>
+
+  <rect x="48" y="244" width="254" height="34" rx="6" fill="#fbe9e7" stroke="#d84315" stroke-width="1.6"/>
+  <text x="175" y="266" text-anchor="middle" font-size="11" fill="#bf360c">两年前数据（合规要留 · 几乎不查）</text>
+
+  <!-- 单一开关 -->
+  <rect x="356" y="150" width="132" height="80" rx="8" fill="#e8eaf6" stroke="#3f51b5" stroke-width="2"/>
+  <text x="422" y="176" text-anchor="middle" font-size="12" font-weight="700" fill="#1a237e">唯一开关</text>
+  <text x="422" y="196" text-anchor="middle" font-size="11" fill="#283593">retention.ms</text>
+  <text x="422" y="214" text-anchor="middle" font-size="10" fill="#283593">= 63072000000（两年）</text>
+
+  <line x1="320" y1="190" x2="354" y2="190" stroke="#333" stroke-width="1.8" marker-end="url(#ar)"/>
+  <line x1="488" y1="190" x2="530" y2="190" stroke="#c62828" stroke-width="1.8" marker-end="url(#arr)"/>
+
+  <rect x="534" y="158" width="130" height="64" rx="8" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="599" y="182" text-anchor="middle" font-size="11" font-weight="700" fill="#b71c1c">到期 → 彻底删除</text>
+  <text x="599" y="202" text-anchor="middle" font-size="10" fill="#b71c1c">没法表达</text>
+  <text x="599" y="218" text-anchor="middle" font-size="10" fill="#b71c1c">「便宜的地方多留」</text>
+
+  <!-- 问题徽标 -->
+  <rect x="686" y="80" width="150" height="26" rx="13" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="761" y="98" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">问题①：留与放绑死</text>
+  <text x="761" y="122" text-anchor="middle" font-size="10" fill="#5d4037">想留两年，就得</text>
+  <text x="761" y="138" text-anchor="middle" font-size="10" fill="#5d4037">两年全占着 SSD</text>
+
+  <rect x="686" y="160" width="150" height="26" rx="13" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="761" y="178" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">问题②：扩容靠加机器</text>
+  <text x="761" y="202" text-anchor="middle" font-size="10" fill="#5d4037">加 broker 则副本跟着复制，</text>
+  <text x="761" y="218" text-anchor="middle" font-size="10" fill="#5d4037">存储成本按倍数放大</text>
+
+  <rect x="686" y="244" width="150" height="26" rx="13" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="761" y="262" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">问题③：凭据在文件里</text>
+  <text x="761" y="286" text-anchor="middle" font-size="10" fill="#5d4037">配置文件进 Git / 镜像 / 备份，</text>
+  <text x="761" y="302" text-anchor="middle" font-size="10" fill="#5d4037">每流转一次多一批人看见</text>
+
+  <!-- 底部结论 -->
+  <rect x="30" y="322" width="806" height="60" rx="8" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.6"/>
+  <text x="50" y="346" font-size="12" font-weight="700" fill="#1a237e">这一版的核心变化：</text>
+  <text x="50" y="366" font-size="11" fill="#283593">保留策略确实生效了 —— 但「留多久」和「放哪种盘」是同一个参数，你没法让冷数据去便宜的地方待着；凭据也明文躺在文件里。</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#333"/>
+    </marker>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#c62828"/>
+    </marker>
+  </defs>
+</svg>

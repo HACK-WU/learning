@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="450" viewBox="0 0 860 450" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="860" height="450" fill="#ffffff"/>
+
+  <text x="430" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#1a237e">综合版：开口问 → 取交集 → 对面照那一级回话</text>
+  <text x="430" y="46" text-anchor="middle" font-size="12" fill="#555555">高亮 = 本步新增：① 最朴素问法自举 ② 取双方都会的最高级 ③ 按该级构造响应</text>
+
+  <!-- 三步 -->
+  <rect x="24" y="66" width="176" height="112" rx="9" fill="#fff176" stroke="#f9a825" stroke-width="2.4"/>
+  <text x="112" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="#795548">新增① 开口问</text>
+  <text x="112" y="110" text-anchor="middle" font-size="10" fill="#5d4037">ApiVersions 用 v0 发</text>
+  <text x="112" y="130" text-anchor="middle" font-size="10" fill="#c62828">无需认证（否则无法自举）</text>
+  <text x="112" y="150" text-anchor="middle" font-size="10" fill="#5d4037">只对当前连接有效，</text>
+  <text x="112" y="168" text-anchor="middle" font-size="10" fill="#5d4037">断线必须重问</text>
+
+  <line x1="200" y1="122" x2="234" y2="122" stroke="#333" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <rect x="238" y="66" width="176" height="112" rx="9" fill="#fff176" stroke="#f9a825" stroke-width="2.4"/>
+  <text x="326" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="#795548">新增② 取交集</text>
+  <text x="326" y="110" text-anchor="middle" font-size="10" fill="#5d4037">min(客户端最高版,</text>
+  <text x="326" y="126" text-anchor="middle" font-size="10" fill="#5d4037">broker 最高版)</text>
+  <text x="326" y="150" text-anchor="middle" font-size="10" fill="#5d4037">183 个 API，</text>
+  <text x="326" y="168" text-anchor="middle" font-size="10" fill="#5d4037">33 个 UNSUPPORTED</text>
+
+  <line x1="414" y1="122" x2="448" y2="122" stroke="#333" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <rect x="452" y="66" width="176" height="112" rx="9" fill="#fff176" stroke="#f9a825" stroke-width="2.4"/>
+  <text x="540" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="#795548">新增③ 照级回话</text>
+  <text x="540" y="110" text-anchor="middle" font-size="10" fill="#5d4037">broker 按请求声明的版本</text>
+  <text x="540" y="128" text-anchor="middle" font-size="10" fill="#5d4037">构造响应</text>
+  <text x="540" y="152" text-anchor="middle" font-size="10" fill="#c62828">老客户端与新客户端</text>
+  <text x="540" y="168" text-anchor="middle" font-size="10" fill="#c62828">拿到的字节格式不同</text>
+
+  <line x1="628" y1="122" x2="662" y2="122" stroke="#333" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <rect x="666" y="66" width="170" height="112" rx="9" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2.6"/>
+  <text x="751" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="#1b5e20">结果：先升一边</text>
+  <text x="751" y="110" text-anchor="middle" font-size="10" fill="#1b5e20">新客户端 ↔ 老 broker</text>
+  <text x="751" y="128" text-anchor="middle" font-size="10" fill="#1b5e20">老客户端 ↔ 新 broker</text>
+  <text x="751" y="152" text-anchor="middle" font-size="10" fill="#1b5e20">→ 全程不停服</text>
+  <text x="751" y="170" text-anchor="middle" font-size="10" fill="#1b5e20">（课 16 滚动升级的依据）</text>
+
+  <!-- 实测 -->
+  <rect x="24" y="192" width="500" height="104" rx="8" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.6"/>
+  <text x="44" y="216" font-size="12" font-weight="700" fill="#1a237e">实测对照（broker 侧真实记录到的请求版本）：</text>
+  <text x="44" y="238" font-size="11" fill="#283593">Fetch：支持 4 to 17　→ 实际使用 17 ✅</text>
+  <text x="44" y="258" font-size="11" fill="#283593">Metadata：支持 0 to 13　→ 实际使用 13 ✅</text>
+  <text x="44" y="278" font-size="11" fill="#283593">ApiVersions：支持 0 to 4　→ 实际使用 4 ✅</text>
+  <text x="44" y="296" font-size="11" fill="#c62828">全部等于 usable 上界 —— 印证「取双方都支持的最高版本」</text>
+
+  <!-- 代价 -->
+  <rect x="540" y="192" width="296" height="104" rx="8" fill="#fff8e1" stroke="#f9a825" stroke-width="1.8"/>
+  <text x="688" y="216" text-anchor="middle" font-size="12" font-weight="700" fill="#795548">代价：老规矩得一直留着</text>
+  <text x="560" y="238" font-size="10" fill="#5d4037">Produce 保留 0 to 12 ——</text>
+  <text x="560" y="254" font-size="10" fill="#5d4037">v0 是 2013 年的格式，</text>
+  <text x="560" y="270" font-size="10" fill="#5d4037">删掉它老客户端立刻报废</text>
+  <text x="560" y="290" font-size="10" fill="#c62828">但兼容有边界：Fetch 起点已是 4</text>
+
+  <!-- 演进两条路 -->
+  <rect x="24" y="312" width="812" height="70" rx="8" fill="#fafafa" stroke="#bdbdbd" stroke-width="1.4"/>
+  <text x="44" y="336" font-size="12" font-weight="700" fill="#37474f">演进的两条路：</text>
+  <text x="44" y="358" font-size="11" fill="#455a64">结构性变更（必填字段增删、语义变化）→ 升版本号，客户端必须适配</text>
+  <text x="44" y="378" font-size="11" fill="#455a64">新增可选的稀疏字段 → Tagged Fields，不升版本、老客户端自动跳过、未设置时完全不占空间</text>
+
+  <!-- 底部 -->
+  <rect x="24" y="396" width="812" height="40" rx="6" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.4"/>
+  <text x="44" y="416" font-size="11" fill="#283593">核心差别：从"一起停着换 / 新旧两套并行"→"建连时协商，先升一头，全程不停服"。</text>
+  <text x="44" y="432" font-size="11" fill="#c62828">别把两层搞混：课 13 讲消息体的二进制格式（payload），本课讲请求/响应的版本协商（protocol）。</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#333"/>
+    </marker>
+  </defs>
+</svg>

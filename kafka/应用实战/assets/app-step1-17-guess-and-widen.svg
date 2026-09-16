@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="400" viewBox="0 0 860 400" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="860" height="400" fill="#ffffff"/>
+
+  <text x="430" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#1a237e">基础版：带宽没跑满就以为路不够宽，先想着加宽</text>
+  <text x="430" y="46" text-anchor="middle" font-size="12" fill="#555555">两种直觉反应 —— 都是在不看仪表的情况下动手</text>
+
+  <!-- 困惑 -->
+  <rect x="24" y="70" width="230" height="96" rx="9" fill="#fafafa" stroke="#bdbdbd" stroke-width="1.6"/>
+  <text x="139" y="94" text-anchor="middle" font-size="12" font-weight="700" fill="#37474f">困惑：路只跑了一成</text>
+  <text x="139" y="116" text-anchor="middle" font-size="11" fill="#c62828">万兆网卡 · 实测 33 MB/s</text>
+  <text x="139" y="136" text-anchor="middle" font-size="10" fill="#455a64">CPU 不高、磁盘没满</text>
+  <text x="139" y="154" text-anchor="middle" font-size="10" fill="#455a64">带宽只用了一小部分</text>
+
+  <line x1="254" y1="118" x2="292" y2="118" stroke="#333" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <!-- 直觉 A -->
+  <rect x="296" y="70" width="260" height="96" rx="9" fill="#ffebee" stroke="#c62828" stroke-width="1.8"/>
+  <text x="426" y="94" text-anchor="middle" font-size="12" font-weight="700" fill="#b71c1c">直觉 A：一个客人一个伙计</text>
+  <text x="426" y="114" text-anchor="middle" font-size="10" fill="#c62828">一个连接一个线程（1:1）</text>
+  <text x="426" y="132" text-anchor="middle" font-size="10" fill="#c62828">上千连接 = 上千线程，</text>
+  <text x="426" y="150" text-anchor="middle" font-size="10" fill="#c62828">光互相打招呼就把算力吃光</text>
+
+  <!-- 直觉 B -->
+  <rect x="576" y="70" width="260" height="96" rx="9" fill="#ffebee" stroke="#c62828" stroke-width="1.8"/>
+  <text x="706" y="94" text-anchor="middle" font-size="12" font-weight="700" fill="#b71c1c">直觉 B：同一批人又接待又干活</text>
+  <text x="706" y="114" text-anchor="middle" font-size="10" fill="#c62828">读、处理、写串在一个线程里</text>
+  <text x="706" y="132" text-anchor="middle" font-size="10" fill="#c62828">干活时没人接待，</text>
+  <text x="706" y="150" text-anchor="middle" font-size="10" fill="#c62828">门口堆着没人接</text>
+
+  <!-- 问题 -->
+  <rect x="24" y="186" width="812" height="52" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="430" y="208" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">问题①：此刻没打流量 —— 空闲比当然是 1.0，说明不了任何问题</text>
+  <text x="430" y="228" text-anchor="middle" font-size="10" fill="#5d4037">不打流量就下结论，等于没测</text>
+
+  <rect x="24" y="248" width="812" height="52" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="430" y="270" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">问题②：以为「吞吐上不去 = 网络瓶颈」</text>
+  <text x="430" y="290" text-anchor="middle" font-size="10" fill="#5d4037">实测打满后队列 0 积压、processor 空闲 1.0 —— 瓶颈根本不在这一段</text>
+
+  <rect x="24" y="310" width="812" height="52" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="430" y="332" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">问题③：照抄教程的指标名与告警阈值（最危险的一条）</text>
+  <text x="430" y="352" text-anchor="middle" font-size="10" fill="#5d4037">看着像「空闲比例」的指标，可能是个一直在往上加的累计数</text>
+
+  <!-- 底部 -->
+  <rect x="24" y="372" width="812" height="24" rx="6" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.4"/>
+  <text x="44" y="389" font-size="11" fill="#283593">这一版的核心变化：你确实准备动手了 —— 但还没看过一眼仪表，也不知道该看哪一格。</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#333"/>
+    </marker>
+  </defs>
+</svg>

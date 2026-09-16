@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="440" viewBox="0 0 880 440" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="880" height="440" fill="#ffffff"/>
+
+  <text x="440" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#1a237e">综合版：认证 + 最小权限 ACL</text>
+  <text x="440" y="46" text-anchor="middle" font-size="12" fill="#555555">高亮 = 本步新增：① 每个房间单独门禁 ② 超管通道 ③ 区分加密/不加密链路</text>
+
+  <!-- 左：客户端 -->
+  <rect x="30" y="130" width="170" height="130" rx="8" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="115" y="156" text-anchor="middle" font-size="13" font-weight="700" fill="#0d47a1">业务账号</text>
+  <rect x="46" y="168" width="138" height="30" rx="5" fill="#ffffff" stroke="#90caf9" stroke-width="1.2"/>
+  <text x="115" y="188" text-anchor="middle" font-size="11" fill="#0d47a1">points-service</text>
+  <text x="115" y="220" text-anchor="middle" font-size="10" fill="#1b5e20">只被授予它需要的最小权限</text>
+  <text x="115" y="240" text-anchor="middle" font-size="10" fill="#1b5e20">SCRAM：密码不上传</text>
+
+  <line x1="200" y1="195" x2="258" y2="195" stroke="#2e7d32" stroke-width="2.2" marker-end="url(#arg)"/>
+
+  <!-- 中：认证 + 授权 -->
+  <rect x="262" y="110" width="180" height="172" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2.4"/>
+  <text x="352" y="136" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">认证 + 授权</text>
+
+  <rect x="278" y="148" width="148" height="30" rx="5" fill="#ffffff" stroke="#a5d6a7" stroke-width="1.2"/>
+  <text x="352" y="168" text-anchor="middle" font-size="11" fill="#1b5e20">SASL/SCRAM-SHA-512</text>
+
+  <rect x="278" y="184" width="148" height="30" rx="5" fill="#e3f2fd" stroke="#1565C0" stroke-width="2.2"/>
+  <text x="352" y="204" text-anchor="middle" font-size="11" font-weight="700" fill="#0d47a1">ACL 最小权限</text>
+
+  <text x="352" y="238" text-anchor="middle" font-size="10" fill="#1b5e20">✓ 拦住没工牌的人</text>
+  <text x="352" y="258" text-anchor="middle" font-size="10" fill="#1b5e20">✓ 限制进门后干什么</text>
+  <text x="352" y="278" text-anchor="middle" font-size="10" fill="#c62828">越权 → 明确报错</text>
+
+  <line x1="442" y1="195" x2="500" y2="195" stroke="#2e7d32" stroke-width="2.2" marker-end="url(#arg)"/>
+
+  <!-- 右：房间各自门禁 -->
+  <rect x="504" y="80" width="346" height="230" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2.4"/>
+  <text x="677" y="106" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">每个房间单独授权</text>
+
+  <!-- 新增徽标 1 -->
+  <rect x="514" y="56" width="326" height="24" rx="12" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="677" y="73" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">新增①：每个房间都装了自己的门禁</text>
+
+  <rect x="520" y="116" width="314" height="30" rx="5" fill="#ffffff" stroke="#a5d6a7" stroke-width="1.4"/>
+  <text x="677" y="136" text-anchor="middle" font-size="11" fill="#1b5e20">orders：points-service 可读 ✓</text>
+
+  <rect x="520" y="152" width="314" height="30" rx="5" fill="#ffffff" stroke="#a5d6a7" stroke-width="1.4"/>
+  <text x="677" y="172" text-anchor="middle" font-size="11" fill="#1b5e20">group points-service：可读 ✓（消费必需）</text>
+
+  <rect x="520" y="188" width="314" height="30" rx="5" fill="#ffebee" stroke="#c62828" stroke-width="1.6"/>
+  <text x="677" y="208" text-anchor="middle" font-size="11" fill="#b71c1c">建 topic：拒绝 ✗ TopicAuthorizationException</text>
+
+  <rect x="520" y="224" width="314" height="30" rx="5" fill="#ffebee" stroke="#c62828" stroke-width="1.6"/>
+  <text x="677" y="244" text-anchor="middle" font-size="11" fill="#b71c1c">别人的 topic：一概拒绝 ✗</text>
+
+  <text x="677" y="278" text-anchor="middle" font-size="10" fill="#1b5e20">越权被明确拒绝并报错 → 可接审计</text>
+  <text x="677" y="298" text-anchor="middle" font-size="10" fill="#1b5e20">事后能回答"谁在什么时候干了什么"</text>
+
+  <!-- 超管通道 -->
+  <rect x="30" y="278" width="412" height="60" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="50" y="300" font-size="12" font-weight="700" fill="#795548">新增②：超管通道（super.users=User:admin）</text>
+  <text x="50" y="320" font-size="11" fill="#5d4037">必须先配超管再配 ACL —— 否则连管理员自己都会被锁在门外</text>
+  <text x="50" y="336" font-size="11" fill="#5d4037">这是安全改造里最高频的"把自己关在外面"事故</text>
+
+  <!-- 加密 -->
+  <rect x="30" y="352" width="412" height="72" rx="8" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.6"/>
+  <text x="50" y="374" font-size="12" font-weight="700" fill="#1a237e">新增③：链路区分加密与否</text>
+  <text x="50" y="394" font-size="11" fill="#283593">SASL_PLAINTEXT：认证但不加密（本例为让 ACL 效果单独可见）</text>
+  <text x="50" y="414" font-size="11" fill="#283593">SASL_SSL：跨公网/不可信网络必须用；官方明示有性能损耗</text>
+
+  <!-- 四个坑 -->
+  <rect x="456" y="326" width="394" height="98" rx="8" fill="#fce4ec" stroke="#c2185b" stroke-width="1.6"/>
+  <text x="476" y="348" font-size="12" font-weight="700" fill="#880e4f">四个必须记住的坑</text>
+  <text x="476" y="368" font-size="11" fill="#6a1b9a">① 先配 super.users 再配 ACL（否则锁死自己）</text>
+  <text x="476" y="388" font-size="11" fill="#6a1b9a">② 消费要两个权限：topic Read + group Read</text>
+  <text x="476" y="408" font-size="11" fill="#6a1b9a">③ 开了认证 ≠ 安全：没 ACL = 全放行</text>
+
+  <defs>
+    <marker id="arg" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#2e7d32"/>
+    </marker>
+  </defs>
+</svg>

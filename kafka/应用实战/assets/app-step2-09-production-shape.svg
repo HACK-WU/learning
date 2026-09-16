@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="440" viewBox="0 0 880 440" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="880" height="440" fill="#ffffff"/>
+
+  <text x="440" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#1a237e">综合版：错误有回执、异常不终止循环、退出前优雅收尾</text>
+  <text x="440" y="46" text-anchor="middle" font-size="12" fill="#555555">高亮 = 本步新增：① 每条发送挂回执 ② 消费循环外套兜底 ③ 多一条退出通道</text>
+
+  <!-- 左：程序主体 -->
+  <rect x="30" y="88" width="220" height="180" rx="8" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="140" y="114" text-anchor="middle" font-size="13" font-weight="700" fill="#0d47a1">程序主体（改后）</text>
+
+  <rect x="46" y="126" width="188" height="32" rx="5" fill="#ffffff" stroke="#90caf9" stroke-width="1.2"/>
+  <text x="140" y="146" text-anchor="middle" font-size="11" fill="#0d47a1">send() + 回执回调</text>
+
+  <!-- 新增徽标 1 -->
+  <rect x="46" y="164" width="188" height="32" rx="5" fill="#e3f2fd" stroke="#1565C0" stroke-width="2.4"/>
+  <text x="140" y="184" text-anchor="middle" font-size="11" font-weight="700" fill="#0d47a1">add_callback / add_errback</text>
+
+  <text x="140" y="216" text-anchor="middle" font-size="10" fill="#0d47a1">成功/失败都被记录</text>
+  <text x="140" y="240" text-anchor="middle" font-size="10" fill="#2e7d32">signal 捕获 SIGINT + SIGTERM</text>
+  <text x="140" y="256" text-anchor="middle" font-size="10" fill="#2e7d32">finally 里 flush + close</text>
+
+  <line x1="250" y1="178" x2="306" y2="178" stroke="#333" stroke-width="2" marker-end="url(#ar)"/>
+
+  <!-- 中：正常路径 -->
+  <rect x="310" y="140" width="180" height="76" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="400" y="166" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">正常路径</text>
+  <text x="400" y="190" text-anchor="middle" font-size="11" fill="#1b5e20">✅ 已送达 partition/offset</text>
+  <text x="400" y="208" text-anchor="middle" font-size="10" fill="#1b5e20">有据可查，不再靠猜</text>
+
+  <!-- 右：三条岔路都有归宿 -->
+  <rect x="520" y="82" width="330" height="216" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2.4"/>
+  <text x="685" y="108" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">三条岔路：各有明确归宿</text>
+
+  <rect x="536" y="120" width="298" height="46" rx="5" fill="#ffffff" stroke="#a5d6a7" stroke-width="1.4"/>
+  <text x="685" y="140" text-anchor="middle" font-size="11" fill="#1b5e20">① 发送失败 → errback 记录并计数</text>
+  <text x="685" y="158" text-anchor="middle" font-size="10" fill="#2e7d32">可统计、可告警（死信见解法库 08）</text>
+
+  <rect x="536" y="174" width="298" height="46" rx="5" fill="#ffffff" stroke="#a5d6a7" stroke-width="1.4"/>
+  <text x="685" y="194" text-anchor="middle" font-size="11" fill="#1b5e20">② 退出信号 → finally 收尾</text>
+  <text x="685" y="212" text-anchor="middle" font-size="10" fill="#2e7d32">flush 冲刷缓冲区 + commitSync + close</text>
+
+  <rect x="536" y="228" width="298" height="46" rx="5" fill="#ffffff" stroke="#a5d6a7" stroke-width="1.4"/>
+  <text x="685" y="248" text-anchor="middle" font-size="11" fill="#1b5e20">③ 单条异常 → try/except 跳过</text>
+  <text x="685" y="266" text-anchor="middle" font-size="10" fill="#2e7d32">循环继续，不会卡死在同一条</text>
+
+  <line x1="490" y1="150" x2="518" y2="142" stroke="#2e7d32" stroke-width="1.6" marker-end="url(#arg)"/>
+  <line x1="490" y1="178" x2="518" y2="178" stroke="#2e7d32" stroke-width="1.6" marker-end="url(#arg)"/>
+  <line x1="490" y1="206" x2="518" y2="214" stroke="#2e7d32" stroke-width="1.6" marker-end="url(#arg)"/>
+
+  <!-- 新增徽标 2 -->
+  <rect x="520" y="58" width="330" height="24" rx="12" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="685" y="75" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">新增②：消费循环外套一层兜底</text>
+
+  <!-- 退出通道 -->
+  <rect x="30" y="286" width="404" height="86" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="50" y="310" font-size="12" font-weight="700" fill="#795548">新增③：多了一条退出通道</text>
+  <text x="50" y="332" font-size="11" fill="#5d4037">SIGTERM / SIGINT → 置位 running=False</text>
+  <text x="50" y="352" font-size="11" fill="#5d4037">→ finally：commitSync（提交位移）</text>
+  <text x="50" y="372" font-size="11" fill="#5d4037">→ flush（冲刷缓冲区）→ close（释放连接）</text>
+
+  <!-- 三条必须记住 -->
+  <rect x="446" y="286" width="404" height="86" rx="8" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.6"/>
+  <text x="466" y="310" font-size="12" font-weight="700" fill="#1a237e">三条必须记住的事实</text>
+  <text x="466" y="332" font-size="11" fill="#283593">① send() 返回 ≠ 发送成功（只进了本地缓冲区）</text>
+  <text x="466" y="352" font-size="11" fill="#283593">② 只注册 SIGINT 不够 —— 容器停服务发的是 SIGTERM</text>
+  <text x="466" y="372" font-size="11" fill="#283593">③ 跳过坏消息是止血不是治本 —— 生产上要进死信队列</text>
+
+  <!-- 底部验证 -->
+  <rect x="30" y="384" width="820" height="42" rx="8" fill="#f1f8e9" stroke="#33691e" stroke-width="1.6"/>
+  <text x="50" y="402" font-size="11" font-weight="700" fill="#33691e">实测：注入坏消息后综合版打印 ❌ 并继续处理后续消息；Ctrl+C 后打印统计数字正常退出</text>
+  <text x="50" y="420" font-size="11" fill="#33691e">基础版则直接终止循环 —— 差别就在"单条异常有没有被兜住"</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#333"/>
+    </marker>
+    <marker id="arg" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#2e7d32"/>
+    </marker>
+  </defs>
+</svg>

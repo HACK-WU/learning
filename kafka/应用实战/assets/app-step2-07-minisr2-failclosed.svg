@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="440" viewBox="0 0 880 440" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="880" height="440" fill="#ffffff"/>
+
+  <text x="440" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#1a237e">综合版：min.insync.replicas=2 上熔断</text>
+  <text x="440" y="46" text-anchor="middle" font-size="12" fill="#555555">高亮 = 本步新增：① 熔断值提到 2 ② 不安全就拒绝写入 ③ 兜底开关说明</text>
+
+  <!-- 生产者 -->
+  <rect x="30" y="90" width="160" height="150" rx="8" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="110" y="116" text-anchor="middle" font-size="13" font-weight="700" fill="#0d47a1">下单服务</text>
+  <rect x="46" y="130" width="128" height="30" rx="5" fill="#ffffff" stroke="#90caf9" stroke-width="1.2"/>
+  <text x="110" y="150" text-anchor="middle" font-size="11" fill="#0d47a1">acks=all</text>
+
+  <!-- 新增徽标 2 -->
+  <rect x="46" y="168" width="128" height="30" rx="5" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="110" y="188" text-anchor="middle" font-size="11" font-weight="700" fill="#b71c1c">✗ NotEnoughReplicas</text>
+
+  <text x="110" y="216" text-anchor="middle" font-size="10" fill="#c62828">不安全 → 明确失败</text>
+  <text x="110" y="234" text-anchor="middle" font-size="10" fill="#c62828">业务方立刻知情</text>
+
+  <line x1="190" y1="140" x2="246" y2="140" stroke="#333" stroke-width="1.8" marker-end="url(#ar)"/>
+  <line x1="246" y1="180" x2="190" y2="180" stroke="#c62828" stroke-width="1.6" stroke-dasharray="5,3" marker-end="url(#arr)"/>
+  <text x="218" y="204" text-anchor="middle" font-size="9" fill="#c62828">报错</text>
+
+  <!-- 三个副本 -->
+  <rect x="250" y="80" width="330" height="196" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2.4"/>
+  <text x="415" y="104" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">分区 0 的 3 个副本（停了 2 台）</text>
+
+  <rect x="266" y="116" width="298" height="32" rx="5" fill="#ffffff" stroke="#2e7d32" stroke-width="1.6"/>
+  <text x="415" y="137" text-anchor="middle" font-size="11" fill="#1b5e20">副本 1（leader）：活着</text>
+
+  <rect x="266" y="154" width="298" height="32" rx="5" fill="#eceff1" stroke="#90a4ae" stroke-width="1.4"/>
+  <text x="415" y="175" text-anchor="middle" font-size="11" fill="#546e7a">副本 2：已停止（不在 ISR）</text>
+
+  <rect x="266" y="192" width="298" height="32" rx="5" fill="#eceff1" stroke="#90a4ae" stroke-width="1.4"/>
+  <text x="415" y="213" text-anchor="middle" font-size="11" fill="#546e7a">副本 3：已停止（不在 ISR）</text>
+
+  <rect x="266" y="234" width="298" height="30" rx="5" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="415" y="254" text-anchor="middle" font-size="11" font-weight="700" fill="#b71c1c">当前 ISR = {1}　低于熔断值 2 → 拒绝写入</text>
+
+  <!-- 熔断值提示 -->
+  <rect x="596" y="80" width="254" height="196" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2.4"/>
+  <text x="723" y="106" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">这一版的关键：熔断值 = 2</text>
+
+  <!-- 新增徽标 1 -->
+  <rect x="606" y="56" width="234" height="24" rx="12" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="723" y="73" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">新增①：熔断值从 1 提到 2</text>
+
+  <rect x="612" y="120" width="222" height="34" rx="5" fill="#ffffff" stroke="#a5d6a7" stroke-width="1.4"/>
+  <text x="723" y="141" text-anchor="middle" font-size="11" fill="#1b5e20">挂 1 台：ISR=2 → 照常写 ✓</text>
+
+  <rect x="612" y="162" width="222" height="34" rx="5" fill="#ffebee" stroke="#c62828" stroke-width="1.6"/>
+  <text x="723" y="183" text-anchor="middle" font-size="11" fill="#b71c1c">挂 2 台：ISR=1 → 拒绝写 ✗</text>
+
+  <text x="723" y="222" text-anchor="middle" font-size="10" fill="#1b5e20">规则明确，不再靠运气</text>
+  <text x="723" y="244" text-anchor="middle" font-size="10" fill="#1b5e20">失败提前暴露 > 虚假成功</text>
+
+  <!-- 兜底开关 -->
+  <rect x="30" y="296" width="404" height="124" rx="8" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.6"/>
+  <text x="50" y="320" font-size="12" font-weight="700" fill="#1a237e">黄金组合是三件套，缺一不可</text>
+  <text x="50" y="344" font-size="11" fill="#283593">replication-factor = 3</text>
+  <text x="50" y="366" font-size="11" fill="#283593">+ min.insync.replicas = 2</text>
+  <text x="50" y="388" font-size="11" fill="#283593">+ 客户端 acks = all</text>
+  <text x="50" y="410" font-size="11" fill="#c62828">只配前两个而用 acks=1，照样丢</text>
+
+  <!-- 新增徽标 3 -->
+  <rect x="446" y="296" width="404" height="124" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="466" y="320" font-size="12" font-weight="700" fill="#795548">新增③：兜底开关（ISR 全没时怎么办）</text>
+  <text x="466" y="344" font-size="11" fill="#5d4037">unclean.leader.election.enable=false（默认）</text>
+  <text x="466" y="364" font-size="11" fill="#5d4037">　→ 宁可不可用也不让落后副本上位：保数据不保可用</text>
+  <text x="466" y="386" font-size="11" fill="#5d4037">=true → 快速恢复可用，但已确认消息可能丢</text>
+  <text x="466" y="408" font-size="11" fill="#5d4037">4.0+ 还有 ELR（KIP-966）：既不停服也不丢数据</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#333"/>
+    </marker>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#c62828"/>
+    </marker>
+  </defs>
+</svg>

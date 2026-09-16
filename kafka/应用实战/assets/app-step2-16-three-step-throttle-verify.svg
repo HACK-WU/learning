@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="440" viewBox="0 0 860 440" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="860" height="440" fill="#ffffff"/>
+
+  <text x="430" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#1a237e">综合版：出方案 → 带限速执行 → 复查撤限流 → 把柜台交还</text>
+  <text x="430" y="46" text-anchor="middle" font-size="12" fill="#555555">高亮 = 本步新增：① --generate ② --throttle（须 &gt; 写入速率）③ --verify ④ 优先副本选举</text>
+
+  <!-- 三板斧 -->
+  <rect x="24" y="70" width="176" height="112" rx="9" fill="#fff176" stroke="#f9a825" stroke-width="2.4"/>
+  <text x="112" y="94" text-anchor="middle" font-size="12" font-weight="700" fill="#795548">新增① --generate</text>
+  <text x="112" y="114" text-anchor="middle" font-size="10" fill="#5d4037">先出候选方案</text>
+  <text x="112" y="132" text-anchor="middle" font-size="10" fill="#5d4037">（只建议，不执行）</text>
+  <text x="112" y="152" text-anchor="middle" font-size="10" fill="#5d4037">顺带输出当前分配</text>
+  <text x="112" y="170" text-anchor="middle" font-size="10" fill="#5d4037">→ 存好用于回滚</text>
+
+  <line x1="200" y1="126" x2="234" y2="126" stroke="#333" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <rect x="238" y="70" width="176" height="112" rx="9" fill="#fff176" stroke="#f9a825" stroke-width="2.4"/>
+  <text x="326" y="94" text-anchor="middle" font-size="12" font-weight="700" fill="#795548">新增② --execute</text>
+  <text x="326" y="114" text-anchor="middle" font-size="10" fill="#5d4037">带 --throttle 执行</text>
+  <text x="326" y="136" font-size="10" fill="#c62828">必须 &gt; max(BytesInPerSec)</text>
+  <text x="326" y="154" font-size="9" fill="#c62828">否则复制永远追不上</text>
+  <text x="326" y="172" font-size="9" fill="#5d4037">看 FetcherLagMetrics 是否下降</text>
+
+  <line x1="414" y1="126" x2="448" y2="126" stroke="#333" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <rect x="452" y="70" width="176" height="112" rx="9" fill="#e8f5e9" stroke="#2e7d32" stroke-width="3"/>
+  <text x="540" y="94" text-anchor="middle" font-size="12" font-weight="700" fill="#1b5e20">新增③ --verify</text>
+  <text x="540" y="114" text-anchor="middle" font-size="10" fill="#1b5e20">查状态 + 清除限流</text>
+  <text x="540" y="136" text-anchor="middle" font-size="10" fill="#c62828">不是可选，是流程一部分</text>
+  <text x="540" y="154" font-size="9" fill="#1b5e20">Clearing broker-level throttles</text>
+  <text x="540" y="170" font-size="9" fill="#1b5e20">Clearing topic-level throttles</text>
+
+  <line x1="628" y1="126" x2="662" y2="126" stroke="#333" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <rect x="666" y="70" width="170" height="112" rx="9" fill="#fff176" stroke="#f9a825" stroke-width="2.4"/>
+  <text x="751" y="94" text-anchor="middle" font-size="12" font-weight="700" fill="#795548">新增④ 交还柜台</text>
+  <text x="751" y="114" text-anchor="middle" font-size="10" fill="#5d4037">重启后全是 follower</text>
+  <text x="751" y="134" font-size="10" fill="#5d4037">leader-election.sh</text>
+  <text x="751" y="152" font-size="9" fill="#5d4037">--election-type preferred</text>
+  <text x="751" y="170" font-size="9" fill="#5d4037">（幂等，无需时不动）</text>
+
+  <!-- 约束条 -->
+  <rect x="24" y="196" width="812" height="70" rx="8" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.6"/>
+  <text x="44" y="220" font-size="12" font-weight="700" fill="#1a237e">三条硬约束（踩上了就直接报错或搬不动）：</text>
+  <text x="44" y="242" font-size="11" fill="#283593">目标 broker 数 ≥ 副本因子（RF=3 迁到 2 台 → InvalidReplicationFactorException；迁移中副本因子不变）</text>
+  <text x="44" y="262" font-size="11" fill="#283593">优雅关停的 leader 预迁移需要 controlled.shutdown.enable=true；分区存在唯一副本时它会失败（合理：不能关掉最后一个副本）</text>
+
+  <!-- 坑 -->
+  <rect x="24" y="280" width="400" height="112" rx="8" fill="#ffebee" stroke="#c62828" stroke-width="1.8"/>
+  <text x="44" y="304" font-size="12" font-weight="700" fill="#b71c1c">限流的两个坑（本课最值钱的一条）</text>
+  <text x="44" y="328" font-size="11" fill="#c62828">坑一：不跑 --verify → 限流永久残留，集群长期半速</text>
+  <text x="44" y="350" font-size="11" fill="#c62828">坑二：限流 &lt; 写入速率 → 复制永远追不上，卡死</text>
+  <text x="44" y="372" font-size="11" fill="#c62828">判据：max(BytesInPerSec) &gt; throttle 即无法推进</text>
+
+  <rect x="436" y="280" width="400" height="112" rx="8" fill="#fafafa" stroke="#bdbdbd" stroke-width="1.4"/>
+  <text x="456" y="304" font-size="12" font-weight="700" fill="#37474f">跑 CLI 前记得清空一个变量</text>
+  <text x="456" y="328" font-size="11" fill="#455a64">-javaagent 写进 KAFKA_JMX_OPTS 后所有 CLI 都会继承，</text>
+  <text x="456" y="348" font-size="11" fill="#455a64">每次都试图重复绑定 17071 → Address already in use</text>
+  <text x="456" y="370" font-size="11" fill="#283593">正确写法：docker exec -e KAFKA_JMX_OPTS= &lt;容器&gt; ...</text>
+
+  <!-- 底部 -->
+  <rect x="24" y="404" width="812" height="24" rx="6" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.4"/>
+  <text x="44" y="421" font-size="11" fill="#283593">核心差别：从「凭感觉硬搬」→「有方案、有限速、有复查、有收尾」，全程照常营业。</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#333"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="430" viewBox="0 0 880 430" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="880" height="430" fill="#ffffff"/>
+
+  <text x="440" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#1a237e">综合版：带 key 保顺序 + acks=all 保不丢 + 放开攒批提吞吐</text>
+  <text x="440" y="46" text-anchor="middle" font-size="12" fill="#555555">高亮 = 本步新增：① 每条带上名字 ② 要等回话 ③ 终于攒得起来</text>
+
+  <!-- 下单服务：带 key -->
+  <rect x="30" y="90" width="170" height="150" rx="8" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="115" y="116" text-anchor="middle" font-size="13" font-weight="700" fill="#0d47a1">下单服务</text>
+  <rect x="46" y="128" width="138" height="26" rx="4" fill="#ffffff" stroke="#90caf9" stroke-width="1.2"/>
+  <text x="115" y="145" text-anchor="middle" font-size="10" fill="#0d47a1">订单 1　key=u1</text>
+  <rect x="46" y="158" width="138" height="26" rx="4" fill="#ffffff" stroke="#90caf9" stroke-width="1.2"/>
+  <text x="115" y="175" text-anchor="middle" font-size="10" fill="#0d47a1">订单 2　key=u2</text>
+  <rect x="46" y="188" width="138" height="26" rx="4" fill="#ffffff" stroke="#90caf9" stroke-width="1.2"/>
+  <text x="115" y="205" text-anchor="middle" font-size="10" fill="#0d47a1">订单 3　key=u1</text>
+  <text x="115" y="228" text-anchor="middle" font-size="10" fill="#2e7d32">send() 后不再 flush()</text>
+
+  <!-- 新增徽标 1 -->
+  <rect x="212" y="56" width="196" height="26" rx="13" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="310" y="74" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">新增①：每条带 key</text>
+
+  <line x1="200" y1="165" x2="256" y2="165" stroke="#333" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <!-- 攒批格（满的） -->
+  <rect x="260" y="112" width="170" height="106" rx="10" fill="#e8f5e9" stroke="#2e7d32" stroke-width="3"/>
+  <text x="345" y="138" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">攒批的地方</text>
+  <text x="345" y="158" text-anchor="middle" font-size="10" fill="#1b5e20">linger_ms=20 / 32KB</text>
+  <text x="345" y="176" text-anchor="middle" font-size="10" fill="#1b5e20">多条打包成一批</text>
+  <text x="345" y="196" text-anchor="middle" font-size="10" fill="#1b5e20">一次往返送多条</text>
+
+  <!-- 新增徽标 3 -->
+  <rect x="212" y="228" width="196" height="26" rx="13" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="310" y="246" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">新增③：终于攒得起来</text>
+
+  <line x1="430" y1="150" x2="490" y2="140" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <line x1="430" y1="180" x2="490" y2="190" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <line x1="490" y1="152" x2="430" y2="168" stroke="#1565C0" stroke-width="1.6" stroke-dasharray="5,3" marker-end="url(#arb)"/>
+  <text x="452" y="132" font-size="9" fill="#1565C0">回执</text>
+
+  <!-- 三个分区：同 key 同格 -->
+  <rect x="494" y="80" width="356" height="180" rx="8" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+  <text x="672" y="104" text-anchor="middle" font-size="12" font-weight="700" fill="#e65100">3 个分区：同 key 永远同一格</text>
+
+  <rect x="510" y="116" width="324" height="34" rx="5" fill="#ffffff" stroke="#fbc02d" stroke-width="1.2"/>
+  <text x="672" y="137" text-anchor="middle" font-size="11" fill="#e65100">分区 0：订单 2（u2）</text>
+
+  <rect x="510" y="156" width="324" height="34" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="672" y="177" text-anchor="middle" font-size="11" fill="#1b5e20">分区 1：订单 1（u1 已下单）→ 订单 3（u1 已付款）✓ 同格有序</text>
+
+  <rect x="510" y="196" width="324" height="34" rx="5" fill="#ffffff" stroke="#fbc02d" stroke-width="1.2"/>
+  <text x="672" y="217" text-anchor="middle" font-size="11" fill="#e65100">分区 2：订单 4（u3）</text>
+
+  <text x="672" y="252" text-anchor="middle" font-size="10" fill="#1b5e20">✓ u1 的两条同格 → 顺序成立</text>
+
+  <!-- 新增徽标 2 -->
+  <rect x="620" y="56" width="230" height="26" rx="13" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="735" y="74" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">新增②：要等回话（acks=all）</text>
+
+  <!-- 底部：配置对照 -->
+  <rect x="30" y="286" width="400" height="124" rx="8" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.6"/>
+  <text x="50" y="310" font-size="12" font-weight="700" fill="#1a237e">关键参数与本课知识点对应</text>
+  <text x="50" y="332" font-size="11" fill="#283593">key=user_id → 分区策略（同 key 同分区）</text>
+  <text x="50" y="352" font-size="11" fill="#283593">acks=all → 可靠性（ISR 全确认）</text>
+  <text x="50" y="372" font-size="11" fill="#283593">linger_ms / batch_size → 发送流程（攒批）</text>
+  <text x="50" y="398" font-size="11" fill="#283593">enable_idempotence → 重试不产生重复（详见第 8 课）</text>
+
+  <rect x="446" y="286" width="404" height="124" rx="8" fill="#fff8e1" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="466" y="310" font-size="12" font-weight="700" fill="#e65100">两个容易配错的组合</text>
+  <text x="466" y="332" font-size="11" fill="#795548">🔴 acks=all 单独配是假安全 —— 还要 broker 侧</text>
+  <text x="466" y="352" font-size="11" fill="#795548">　 min.insync.replicas ≥ 2（第 7 课）</text>
+  <text x="466" y="374" font-size="11" fill="#795548">🔴 幂等有前置：acks=all + retries&gt;0 +</text>
+  <text x="466" y="394" font-size="11" fill="#795548">　 max.in.flight ≤ 5，Python 客户端要显式写</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#333"/>
+    </marker>
+    <marker id="arb" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#1565C0"/>
+    </marker>
+  </defs>
+</svg>

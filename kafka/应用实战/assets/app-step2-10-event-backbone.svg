@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="440" viewBox="0 0 880 440" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="880" height="440" fill="#ffffff"/>
+
+  <text x="440" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#1a237e">综合版：广播事实 —— 订单服务不再认识任何下游</text>
+  <text x="440" y="46" text-anchor="middle" font-size="12" fill="#555555">高亮 = 本步新增：① 三条调用变一条 ② 下游各自订阅 ③ 新团队零改动接入</text>
+
+  <!-- 左：订单服务 -->
+  <rect x="30" y="120" width="180" height="140" rx="8" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="120" y="146" text-anchor="middle" font-size="13" font-weight="700" fill="#0d47a1">订单服务</text>
+  <rect x="46" y="158" width="148" height="34" rx="5" fill="#ffffff" stroke="#90caf9" stroke-width="1.2"/>
+  <text x="120" y="179" text-anchor="middle" font-size="11" fill="#0d47a1">只广播 OrderCreated</text>
+  <text x="120" y="212" text-anchor="middle" font-size="10" fill="#1b5e20">不再认识任何下游</text>
+  <text x="120" y="232" text-anchor="middle" font-size="10" fill="#1b5e20">发完即返回</text>
+  <text x="120" y="252" text-anchor="middle" font-size="10" fill="#1b5e20">下游挂了也不影响</text>
+
+  <!-- 新增徽标 1 -->
+  <rect x="214" y="92" width="180" height="24" rx="12" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="304" y="109" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">新增①：三条变一条</text>
+
+  <line x1="210" y1="190" x2="290" y2="190" stroke="#333" stroke-width="2.2" marker-end="url(#ar)"/>
+  <text x="250" y="180" text-anchor="middle" font-size="9" fill="#333">唯一一条箭头</text>
+
+  <!-- 中：事件主干 -->
+  <rect x="294" y="120" width="180" height="140" rx="10" fill="#e8f5e9" stroke="#2e7d32" stroke-width="3"/>
+  <text x="384" y="150" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">事件主干</text>
+  <text x="384" y="172" text-anchor="middle" font-size="11" fill="#1b5e20">orders topic</text>
+  <text x="384" y="196" text-anchor="middle" font-size="10" fill="#1b5e20">OrderCreated（过去式）</text>
+  <text x="384" y="216" text-anchor="middle" font-size="10" fill="#1b5e20">持久化、可回放</text>
+  <text x="384" y="240" text-anchor="middle" font-size="10" fill="#1b5e20">挂了重启接着读</text>
+
+  <line x1="474" y1="150" x2="530" y2="126" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <line x1="474" y1="190" x2="530" y2="190" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <line x1="474" y1="230" x2="530" y2="254" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <!-- 右：三个独立订阅者 -->
+  <rect x="534" y="76" width="316" height="216" rx="8" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+  <text x="692" y="102" text-anchor="middle" font-size="13" font-weight="700" fill="#e65100">各自订阅（三个不同 group.id）</text>
+
+  <rect x="550" y="112" width="284" height="30" rx="5" fill="#ffffff" stroke="#fbc02d" stroke-width="1.2"/>
+  <text x="692" y="132" text-anchor="middle" font-size="11" fill="#e65100">points-service（0.05s）</text>
+
+  <rect x="550" y="150" width="284" height="30" rx="5" fill="#ffffff" stroke="#fbc02d" stroke-width="1.2"/>
+  <text x="692" y="170" text-anchor="middle" font-size="11" fill="#e65100">risk-service（0.8s，挂了也不影响）</text>
+
+  <rect x="550" y="188" width="284" height="30" rx="5" fill="#ffffff" stroke="#fbc02d" stroke-width="1.2"/>
+  <text x="692" y="208" text-anchor="middle" font-size="11" fill="#e65100">data-pipeline（0.2s）</text>
+
+  <text x="692" y="242" text-anchor="middle" font-size="10" fill="#1b5e20">互不相识、互不等待</text>
+  <text x="692" y="262" text-anchor="middle" font-size="10" fill="#1b5e20">一个挂了不影响另外两个</text>
+  <text x="692" y="284" text-anchor="middle" font-size="11" font-weight="700" fill="#1b5e20">下单接口 ≈ 0.012 秒</text>
+
+  <!-- 新增徽标 2 -->
+  <rect x="534" y="52" width="316" height="24" rx="12" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="692" y="69" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">新增②：下游各自订阅</text>
+
+  <!-- 第四个团队 -->
+  <rect x="294" y="278" width="556" height="62" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="314" y="300" font-size="12" font-weight="700" fill="#795548">新增③：第四个团队零改动接入</text>
+  <text x="314" y="320" font-size="11" fill="#5d4037">新团队自己订阅 orders 即可 —— 订单服务一行代码都不用改</text>
+  <line x1="384" y1="260" x2="384" y2="276" stroke="#f9a825" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#aro)"/>
+
+  <!-- 底部：三重解耦 + 三条易错 -->
+  <rect x="30" y="352" width="404" height="72" rx="8" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.6"/>
+  <text x="50" y="374" font-size="12" font-weight="700" fill="#1a237e">三重解耦（各解决什么）</text>
+  <text x="50" y="394" font-size="11" fill="#283593">空间：不认识下游 → 新团队零改动</text>
+  <text x="50" y="414" font-size="11" fill="#283593">同步：发完即返回 → 风控挂了也能下单</text>
+
+  <rect x="446" y="352" width="404" height="72" rx="8" fill="#fce4ec" stroke="#c2185b" stroke-width="1.6"/>
+  <text x="466" y="374" font-size="12" font-weight="700" fill="#880e4f">三条最容易走偏</text>
+  <text x="466" y="394" font-size="11" fill="#6a1b9a">① 把命令塞进事件流 → 耦合悄悄长回来</text>
+  <text x="466" y="414" font-size="11" fill="#6a1b9a">② 不是所有调用都该改事件 ③ 别硬上 CQRS/事件溯源</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#333"/>
+    </marker>
+    <marker id="aro" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#f9a825"/>
+    </marker>
+  </defs>
+</svg>

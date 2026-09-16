@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="400" viewBox="0 0 880 400" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="880" height="400" fill="#ffffff"/>
+
+  <text x="440" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#1a237e">基础版：只开认证 —— 门装了，屋里随便进</text>
+  <text x="440" y="46" text-anchor="middle" font-size="12" fill="#555555">外人进不来了 —— 但进了门的人什么都能干</text>
+
+  <!-- 左：客户端 -->
+  <rect x="30" y="120" width="180" height="140" rx="8" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="120" y="146" text-anchor="middle" font-size="13" font-weight="700" fill="#0d47a1">客户端</text>
+  <rect x="46" y="158" width="148" height="34" rx="5" fill="#ffffff" stroke="#90caf9" stroke-width="1.2"/>
+  <text x="120" y="179" text-anchor="middle" font-size="11" fill="#0d47a1">必须出示工牌</text>
+  <text x="120" y="212" text-anchor="middle" font-size="10" fill="#1b5e20">SASL/SCRAM 认证</text>
+  <text x="120" y="234" text-anchor="middle" font-size="10" fill="#1b5e20">匿名 → 被拒</text>
+  <text x="120" y="254" text-anchor="middle" font-size="10" fill="#c62828">但进门后无限制</text>
+
+  <line x1="210" y1="190" x2="270" y2="190" stroke="#2e7d32" stroke-width="2.2" marker-end="url(#arg)"/>
+
+  <!-- 中：认证门 -->
+  <rect x="274" y="120" width="180" height="140" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2.4"/>
+  <text x="364" y="150" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">认证（门禁）</text>
+  <rect x="290" y="162" width="148" height="30" rx="5" fill="#ffffff" stroke="#a5d6a7" stroke-width="1.2"/>
+  <text x="364" y="182" text-anchor="middle" font-size="11" fill="#1b5e20">SASL/SCRAM-SHA-512</text>
+  <text x="364" y="216" text-anchor="middle" font-size="10" fill="#1b5e20">✓ 拦住没工牌的人</text>
+  <text x="364" y="240" text-anchor="middle" font-size="10" fill="#c62828">✗ 不限制进了门干什么</text>
+
+  <!-- 匿名被拒 -->
+  <rect x="274" y="278" width="180" height="50" rx="6" fill="#ffebee" stroke="#c62828" stroke-width="1.6"/>
+  <text x="364" y="298" text-anchor="middle" font-size="11" fill="#b71c1c">匿名连接：被拒绝</text>
+  <text x="364" y="316" text-anchor="middle" font-size="10" fill="#c62828">SaslAuthenticationException</text>
+
+  <line x1="454" y1="190" x2="514" y2="190" stroke="#2e7d32" stroke-width="2.2" marker-end="url(#arg)"/>
+
+  <!-- 右：房间全敞开 -->
+  <rect x="518" y="88" width="332" height="204" rx="8" fill="#ffebee" stroke="#c62828" stroke-width="2.4"/>
+  <text x="684" y="114" text-anchor="middle" font-size="13" font-weight="700" fill="#b71c1c">进屋之后：所有房间敞开</text>
+
+  <rect x="534" y="124" width="300" height="28" rx="5" fill="#ffffff" stroke="#ef9a9a" stroke-width="1.2"/>
+  <text x="684" y="143" text-anchor="middle" font-size="11" fill="#b71c1c">orders：能读 ✓ 能写 ✓</text>
+
+  <rect x="534" y="158" width="300" height="28" rx="5" fill="#ffffff" stroke="#ef9a9a" stroke-width="1.2"/>
+  <text x="684" y="177" text-anchor="middle" font-size="11" fill="#b71c1c">别人的 topic：能读 ✓ 能写 ✓</text>
+
+  <rect x="534" y="192" width="300" height="28" rx="5" fill="#ffffff" stroke="#ef9a9a" stroke-width="1.2"/>
+  <text x="684" y="211" text-anchor="middle" font-size="11" fill="#b71c1c">删 topic / 改配置：也允许 ✓</text>
+
+  <text x="684" y="248" text-anchor="middle" font-size="11" font-weight="700" fill="#b71c1c">默认授权器：没有 ACL = 全放行</text>
+  <text x="684" y="272" text-anchor="middle" font-size="10" fill="#c62828">事后追查"是谁读走了数据"依然无解</text>
+
+  <!-- 底部：三个问题 -->
+  <rect x="30" y="344" width="820" height="42" rx="8" fill="#fff8e1" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="50" y="362" font-size="11" font-weight="700" fill="#e65100">这一版只做了一半：① 进门后什么都能干 ② 没有越权记录 ③ 若用 SASL/PLAIN 且不开 SSL，密码等于明文传输</text>
+  <text x="50" y="380" font-size="11" fill="#795548">对应知识点：认证（三件套之一）vs 授权（ACL）—— 下一版把"进门之后"这一层补上</text>
+
+  <defs>
+    <marker id="arg" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#2e7d32"/>
+    </marker>
+  </defs>
+</svg>

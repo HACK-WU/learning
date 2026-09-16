@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="400" viewBox="0 0 860 400" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="860" height="400" fill="#ffffff"/>
+
+  <text x="430" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#1a237e">基础版：每条消息独占一个批次，单据被原样抄写 N 遍</text>
+  <text x="430" y="46" text-anchor="middle" font-size="12" fill="#555555">count:1 出现五次 —— payload 只有 20 字节，头部开销却重复付了五份</text>
+
+  <!-- 五条消息 -->
+  <rect x="24" y="76" width="118" height="40" rx="7" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.8"/>
+  <text x="83" y="101" text-anchor="middle" font-size="11" fill="#0d47a1">消息 1 · 20 字节</text>
+
+  <rect x="24" y="128" width="118" height="40" rx="7" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.8"/>
+  <text x="83" y="153" text-anchor="middle" font-size="11" fill="#0d47a1">消息 2 · 20 字节</text>
+
+  <rect x="24" y="180" width="118" height="40" rx="7" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.8"/>
+  <text x="83" y="205" text-anchor="middle" font-size="11" fill="#0d47a1">消息 3 · 20 字节</text>
+
+  <rect x="24" y="232" width="118" height="40" rx="7" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.8"/>
+  <text x="83" y="257" text-anchor="middle" font-size="11" fill="#0d47a1">消息 4 · 20 字节</text>
+
+  <rect x="24" y="284" width="118" height="40" rx="7" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.8"/>
+  <text x="83" y="309" text-anchor="middle" font-size="11" fill="#0d47a1">消息 5 · 20 字节</text>
+
+  <line x1="142" y1="96" x2="196" y2="96" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <line x1="142" y1="148" x2="196" y2="148" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <line x1="142" y1="200" x2="196" y2="200" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <line x1="142" y1="252" x2="196" y2="252" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <line x1="142" y1="304" x2="196" y2="304" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <!-- 五个批次 -->
+  <rect x="200" y="76" width="360" height="40" rx="6" fill="#fffde7" stroke="#f9a825" stroke-width="1.8"/>
+  <text x="380" y="101" text-anchor="middle" font-size="11" fill="#795548">批次 1：完整单据 + 消息 1（count: 1）</text>
+
+  <rect x="200" y="128" width="360" height="40" rx="6" fill="#fffde7" stroke="#f9a825" stroke-width="1.8"/>
+  <text x="380" y="153" text-anchor="middle" font-size="11" fill="#795548">批次 2：完整单据 + 消息 2（count: 1）</text>
+
+  <rect x="200" y="180" width="360" height="40" rx="6" fill="#fffde7" stroke="#f9a825" stroke-width="1.8"/>
+  <text x="380" y="205" text-anchor="middle" font-size="11" fill="#795548">批次 3：完整单据 + 消息 3（count: 1）</text>
+
+  <rect x="200" y="232" width="360" height="40" rx="6" fill="#fffde7" stroke="#f9a825" stroke-width="1.8"/>
+  <text x="380" y="257" text-anchor="middle" font-size="11" fill="#795548">批次 4：完整单据 + 消息 4（count: 1）</text>
+
+  <rect x="200" y="284" width="360" height="40" rx="6" fill="#fffde7" stroke="#f9a825" stroke-width="1.8"/>
+  <text x="380" y="309" text-anchor="middle" font-size="11" fill="#795548">批次 5：完整单据 + 消息 5（count: 1）</text>
+
+  <!-- 单据内容展开 -->
+  <rect x="576" y="76" width="264" height="248" rx="8" fill="#fafafa" stroke="#bdbdbd" stroke-width="1.4"/>
+  <text x="708" y="98" text-anchor="middle" font-size="12" font-weight="700" fill="#37474f">一张"完整单据"里有这些字段</text>
+  <text x="596" y="122" font-size="10" fill="#455a64">baseOffset / batchLength / partitionLeaderEpoch</text>
+  <text x="596" y="142" font-size="10" fill="#455a64">magic / crc / attributes / lastOffsetDelta</text>
+  <text x="596" y="162" font-size="10" fill="#455a64">baseTimestamp / maxTimestamp</text>
+  <text x="596" y="182" font-size="10" fill="#455a64">producerId / producerEpoch / baseSequence</text>
+  <text x="596" y="202" font-size="10" fill="#455a64">recordsCount / records[]</text>
+
+  <line x1="592" y1="216" x2="824" y2="216" stroke="#e0e0e0" stroke-width="1.2"/>
+  <text x="596" y="238" font-size="10" font-weight="700" fill="#c62828">这份头部被抄了 5 遍</text>
+  <text x="596" y="256" font-size="10" fill="#c62828">payload 只有 20 字节，</text>
+  <text x="596" y="272" font-size="10" fill="#c62828">头部开销反而比它更长</text>
+  <text x="596" y="294" font-size="10" fill="#c62828">producerId / baseSequence = -1</text>
+  <text x="596" y="310" font-size="10" fill="#c62828">（幂等未开，无从判重）</text>
+
+  <!-- 底部结论 -->
+  <rect x="24" y="340" width="816" height="46" rx="8" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.6"/>
+  <text x="44" y="362" font-size="12" font-weight="700" fill="#1a237e">这一版的核心变化：</text>
+  <text x="44" y="380" font-size="11" fill="#283593">消息确实写进去了、字节也确实看得见 —— 但每条都在为同一份元数据重复付费，且压缩对单条短消息帮不上忙。</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#333"/>
+    </marker>
+  </defs>
+</svg>

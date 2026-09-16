@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="420" viewBox="0 0 860 420" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="860" height="420" fill="#ffffff"/>
+
+  <text x="430" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#1a237e">基础版：加完机器干等着，或者凭感觉硬搬一把</text>
+  <text x="430" y="46" text-anchor="middle" font-size="12" fill="#555555">不搬 → 新库房空转；硬搬 → 要么挤爆生产流量，要么永远搬不完</text>
+
+  <!-- 上排：干等 -->
+  <rect x="24" y="70" width="812" height="118" rx="10" fill="#fafafa" stroke="#bdbdbd" stroke-width="1.6"/>
+  <text x="44" y="94" font-size="12" font-weight="700" fill="#37474f">做法 A：加完就等着 —— 新机器一个分区都分不到</text>
+
+  <rect x="60" y="106" width="150" height="66" rx="8" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="135" y="130" text-anchor="middle" font-size="11" font-weight="700" fill="#0d47a1">老库房 1</text>
+  <text x="135" y="150" text-anchor="middle" font-size="10" fill="#0d47a1">箱子堆满</text>
+
+  <rect x="230" y="106" width="150" height="66" rx="8" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="305" y="130" text-anchor="middle" font-size="11" font-weight="700" fill="#0d47a1">老库房 2</text>
+  <text x="305" y="150" text-anchor="middle" font-size="10" fill="#0d47a1">箱子堆满</text>
+
+  <rect x="400" y="106" width="150" height="66" rx="8" fill="#eceff1" stroke="#90a4ae" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="475" y="130" text-anchor="middle" font-size="11" font-weight="700" fill="#546e7a">新库房 3</text>
+  <text x="475" y="148" text-anchor="middle" font-size="10" fill="#546e7a">空着 · 一直空转</text>
+  <text x="475" y="164" text-anchor="middle" font-size="9" fill="#546e7a">（官方：不主动搬就不做事）</text>
+
+  <rect x="580" y="106" width="232" height="66" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="696" y="130" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">问题①：加机器 ≠ 扩容</text>
+  <text x="696" y="150" text-anchor="middle" font-size="10" fill="#5d4037">数据不会自己搬进去，</text>
+  <text x="696" y="166" text-anchor="middle" font-size="10" fill="#5d4037">必须显式执行重分配</text>
+
+  <!-- 下排：硬搬 -->
+  <rect x="24" y="204" width="812" height="152" rx="10" fill="#fafafa" stroke="#bdbdbd" stroke-width="1.6"/>
+  <text x="44" y="228" font-size="12" font-weight="700" fill="#37474f">做法 B：凭感觉硬搬 —— 没有方案、没有限速、也没有复查</text>
+
+  <rect x="60" y="244" width="150" height="60" rx="8" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="135" y="268" text-anchor="middle" font-size="11" font-weight="700" fill="#0d47a1">老库房</text>
+  <text x="135" y="288" text-anchor="middle" font-size="10" fill="#0d47a1">往外搬箱子</text>
+
+  <!-- 不限速：粗管 -->
+  <line x1="210" y1="262" x2="330" y2="262" stroke="#c62828" stroke-width="16" stroke-linecap="round" opacity="0.3"/>
+  <line x1="210" y1="262" x2="330" y2="262" stroke="#c62828" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="270" y="250" text-anchor="middle" font-size="9" fill="#b71c1c">不限速</text>
+
+  <!-- 限速太狠：细管 -->
+  <line x1="210" y1="296" x2="330" y2="296" stroke="#ef6c00" stroke-width="3" marker-end="url(#aro)"/>
+  <text x="270" y="316" text-anchor="middle" font-size="9" fill="#e65100">限速太狠</text>
+
+  <rect x="336" y="244" width="150" height="72" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="411" y="268" text-anchor="middle" font-size="11" font-weight="700" fill="#1b5e20">新库房</text>
+  <text x="411" y="286" text-anchor="middle" font-size="10" fill="#1b5e20">一边收一边被挤</text>
+  <text x="411" y="302" text-anchor="middle" font-size="10" fill="#1b5e20">（生产流量在抢路）</text>
+
+  <rect x="516" y="244" width="296" height="36" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="664" y="262" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">问题②：不限速 → 复制流量挤爆生产流量</text>
+
+  <rect x="516" y="288" width="296" height="36" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="664" y="306" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">问题②：限太狠 → 搬得比新货进来还慢，永远搬不完</text>
+
+  <!-- 底部 -->
+  <rect x="24" y="370" width="812" height="34" rx="6" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.4"/>
+  <text x="44" y="392" font-size="11" fill="#283593">这一版的核心变化：你确实动过手了 —— 但没有方案（热点可能堆一起）、没有限速、也没有复查（限流会永久残留）。</text>
+
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#c62828"/>
+    </marker>
+    <marker id="aro" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#ef6c00"/>
+    </marker>
+  </defs>
+</svg>

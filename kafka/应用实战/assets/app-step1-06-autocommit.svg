@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="410" viewBox="0 0 880 410" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="880" height="410" fill="#ffffff"/>
+
+  <text x="440" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#1a237e">基础版：自动提交 —— 读到了就算数</text>
+  <text x="440" y="46" text-anchor="middle" font-size="12" fill="#555555">代码最短最省心 —— 但记录的进度跑在了实际处理的前面</text>
+
+  <!-- 时间线：正常循环 -->
+  <rect x="30" y="76" width="500" height="150" rx="8" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="280" y="102" text-anchor="middle" font-size="13" font-weight="700" fill="#0d47a1">一次循环里发生了什么</text>
+
+  <rect x="50" y="114" width="130" height="46" rx="6" fill="#ffffff" stroke="#90caf9" stroke-width="1.4"/>
+  <text x="115" y="134" text-anchor="middle" font-size="11" fill="#0d47a1">① poll() 拉一批</text>
+  <text x="115" y="152" text-anchor="middle" font-size="10" fill="#0d47a1">801 – 1000</text>
+
+  <line x1="180" y1="137" x2="216" y2="137" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <rect x="220" y="114" width="130" height="46" rx="6" fill="#ffffff" stroke="#90caf9" stroke-width="1.4"/>
+  <text x="285" y="134" text-anchor="middle" font-size="11" fill="#0d47a1">② 后台慢慢处理</text>
+  <text x="285" y="152" text-anchor="middle" font-size="10" fill="#0d47a1">才做到 850</text>
+
+  <line x1="350" y1="137" x2="386" y2="137" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <rect x="390" y="114" width="122" height="46" rx="6" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="451" y="134" text-anchor="middle" font-size="11" font-weight="700" fill="#b71c1c">③ 自动打卡</text>
+  <text x="451" y="152" text-anchor="middle" font-size="10" fill="#c62828">按"拉到哪"=1000</text>
+
+  <text x="280" y="188" text-anchor="middle" font-size="11" fill="#c62828">⚠️ 打卡点 = 1000，实际只处理到 850 —— 中间 150 条还没干活就算"读过了"</text>
+  <text x="280" y="210" text-anchor="middle" font-size="11" fill="#c62828">打卡机不懂业务：它记的是「读到了哪」，不是「处理完了哪」</text>
+
+  <!-- 右侧：崩溃后 -->
+  <rect x="546" y="76" width="304" height="150" rx="8" fill="#fce4ec" stroke="#c2185b" stroke-width="2"/>
+  <text x="698" y="102" text-anchor="middle" font-size="13" font-weight="700" fill="#880e4f">崩溃之后</text>
+
+  <rect x="566" y="114" width="264" height="34" rx="5" fill="#ffffff" stroke="#ef9a9a" stroke-width="1.2"/>
+  <text x="698" y="135" text-anchor="middle" font-size="11" fill="#6a1b9a">进程没了（851–1000 未处理）</text>
+
+  <rect x="566" y="156" width="264" height="34" rx="5" fill="#ffffff" stroke="#ef9a9a" stroke-width="1.2"/>
+  <text x="698" y="177" text-anchor="middle" font-size="11" fill="#6a1b9a">重启 → 从已提交的 1001 继续</text>
+
+  <text x="698" y="212" text-anchor="middle" font-size="11" font-weight="700" fill="#b71c1c">851–1000 永远不会被处理 → 丢失</text>
+
+  <!-- 底部：三个坑 -->
+  <rect x="30" y="248" width="820" height="92" rx="8" fill="#fff8e1" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="50" y="272" font-size="12" font-weight="700" fill="#e65100">这一版的三个坑（下一版逐个解决）：</text>
+  <text x="50" y="294" font-size="11" fill="#795548">① 有丢失窗口 —— 按"拉到哪"打卡，拉取跑到处理前面时未处理消息被跳过，且不报错</text>
+  <text x="50" y="316" font-size="11" fill="#795548">② 不知道读到哪 —— 没有一行显式记录"处理完了"，出事后只能靠猜</text>
+  <text x="50" y="336" font-size="11" fill="#795548">③ 再均衡时盲目重做 —— 分区被接管后从旧书签继续，刚处理完未提交的那批被重来一遍</text>
+
+  <!-- 底部：对照 CLI -->
+  <rect x="30" y="352" width="820" height="42" rx="8" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.6"/>
+  <text x="50" y="370" font-size="11" font-weight="700" fill="#1a237e">取证命令：kafka-consumer-groups.sh --describe → 看 CURRENT-OFFSET / LOG-END-OFFSET / LAG 三列</text>
+  <text x="50" y="388" font-size="11" fill="#283593">本版的特征是：LAG 归零了（看起来追平了），但中间有几条其实从未处理过 —— 丢了也没人报错</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#333"/>
+    </marker>
+  </defs>
+</svg>

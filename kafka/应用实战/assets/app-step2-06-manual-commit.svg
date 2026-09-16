@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="430" viewBox="0 0 880 430" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="880" height="430" fill="#ffffff"/>
+
+  <text x="440" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#1a237e">综合版：处理完再手动打卡，再均衡时先交接</text>
+  <text x="440" y="46" text-anchor="middle" font-size="12" fill="#555555">高亮 = 本步新增：① 打卡点挪到处理之后 ② 打卡变显式动作 ③ 换届前先交接</text>
+
+  <!-- 时间线 -->
+  <rect x="30" y="76" width="500" height="150" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2.4"/>
+  <text x="280" y="102" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">一次循环里发生了什么（改后）</text>
+
+  <rect x="50" y="114" width="122" height="46" rx="6" fill="#ffffff" stroke="#a5d6a7" stroke-width="1.4"/>
+  <text x="111" y="134" text-anchor="middle" font-size="11" fill="#1b5e20">① poll() 拉一批</text>
+  <text x="111" y="152" text-anchor="middle" font-size="10" fill="#1b5e20">801 – 850</text>
+
+  <line x1="172" y1="137" x2="208" y2="137" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <rect x="212" y="114" width="122" height="46" rx="6" fill="#ffffff" stroke="#a5d6a7" stroke-width="1.4"/>
+  <text x="273" y="134" text-anchor="middle" font-size="11" fill="#1b5e20">② 全部处理完</text>
+  <text x="273" y="152" text-anchor="middle" font-size="10" fill="#1b5e20">850 处理完毕</text>
+
+  <line x1="334" y1="137" x2="370" y2="137" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <rect x="374" y="114" width="140" height="46" rx="6" fill="#e3f2fd" stroke="#1565C0" stroke-width="2.6"/>
+  <text x="444" y="134" text-anchor="middle" font-size="11" font-weight="700" fill="#0d47a1">③ 手动打卡 commit</text>
+  <text x="444" y="152" text-anchor="middle" font-size="10" fill="#0d47a1">按"处理完哪"=850</text>
+
+  <text x="280" y="188" text-anchor="middle" font-size="11" fill="#1b5e20">✓ 打卡点 = 850，与处理进度一致 —— 丢失窗口关闭，代价是重复窗口打开</text>
+  <text x="280" y="210" text-anchor="middle" font-size="11" fill="#1b5e20">重复能靠业务幂等兜底（第 8 课），丢失兜不回来</text>
+
+  <!-- 新增徽标 1 -->
+  <rect x="200" y="60" width="240" height="24" rx="12" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="320" y="77" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">新增①：打卡点挪到处理之后</text>
+
+  <!-- 右侧：崩溃后 -->
+  <rect x="546" y="76" width="304" height="150" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="698" y="102" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">崩溃之后（改后）</text>
+
+  <rect x="566" y="114" width="264" height="34" rx="5" fill="#ffffff" stroke="#a5d6a7" stroke-width="1.2"/>
+  <text x="698" y="135" text-anchor="middle" font-size="11" fill="#1b5e20">进程没了（本批尚未打卡）</text>
+
+  <rect x="566" y="156" width="264" height="34" rx="5" fill="#ffffff" stroke="#a5d6a7" stroke-width="1.2"/>
+  <text x="698" y="177" text-anchor="middle" font-size="11" fill="#1b5e20">重启 → 从 801 重新拉起</text>
+
+  <text x="698" y="212" text-anchor="middle" font-size="11" font-weight="700" fill="#1b5e20">本批重做一遍 → 重复（不是丢失）</text>
+
+  <!-- 新增徽标 2 + 3 -->
+  <rect x="546" y="240" width="304" height="34" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="698" y="256" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">新增②：打卡变显式动作（失败会被感知）</text>
+  <text x="698" y="272" text-anchor="middle" font-size="10" fill="#5d4037">不再由机器替你按拉取位置写</text>
+
+  <rect x="546" y="282" width="304" height="34" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="698" y="298" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">新增③：换届前先交接进度</text>
+  <text x="698" y="314" text-anchor="middle" font-size="10" fill="#5d4037">分区被收回前 commitSync，别盲目重做</text>
+
+  <!-- 底部：三个必须记住 -->
+  <rect x="30" y="248" width="500" height="166" rx="8" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.6"/>
+  <text x="50" y="272" font-size="12" font-weight="700" fill="#1a237e">三个必须记住的配套事实</text>
+  <text x="50" y="294" font-size="11" fill="#283593">① 重复不是 bug，是设计选择 —— 重复能靠业务幂等</text>
+  <text x="50" y="312" font-size="11" fill="#283593">　 兜底，丢失兜不回来（幂等做法见第 8 课）</text>
+  <text x="50" y="334" font-size="11" fill="#283593">② max.poll.interval.ms 是隐形杀手 —— 默认 5 分钟，</text>
+  <text x="50" y="352" font-size="11" fill="#283593">　 一批处理太久会被踢出组，"莫名再均衡"头号原因</text>
+  <text x="50" y="374" font-size="11" fill="#283593">③ 并行度上限 = 分区数 —— 3 分区开 5 个消费者，</text>
+  <text x="50" y="392" font-size="11" fill="#283593">　 有 2 个永远闲着；想更快先加分区</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#333"/>
+    </marker>
+  </defs>
+</svg>

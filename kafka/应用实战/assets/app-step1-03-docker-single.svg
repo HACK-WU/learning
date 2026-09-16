@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="400" viewBox="0 0 880 400" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="880" height="400" fill="#ffffff"/>
+
+  <text x="440" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#1a237e">基础版：一条命令端上来，发一条收一条</text>
+  <text x="440" y="46" text-anchor="middle" font-size="12" fill="#555555">核心变化：不用自己准备零件 —— 但盒子里的东西全在临时目录，删了就没</text>
+
+  <!-- 左：一条长命令 -->
+  <rect x="30" y="80" width="200" height="180" rx="8" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="130" y="106" text-anchor="middle" font-size="13" font-weight="700" fill="#0d47a1">你敲的那一条命令</text>
+  <rect x="46" y="118" width="168" height="120" rx="5" fill="#ffffff" stroke="#90caf9" stroke-width="1.2"/>
+  <text x="58" y="138" font-size="10" fill="#0d47a1">docker run -d --name kafka</text>
+  <text x="58" y="154" font-size="10" fill="#0d47a1">  -p 9092:9092</text>
+  <text x="58" y="170" font-size="10" fill="#0d47a1">  -e KAFKA_NODE_ID=1</text>
+  <text x="58" y="186" font-size="10" fill="#0d47a1">  -e ..._QUORUM_VOTERS=...</text>
+  <text x="58" y="202" font-size="10" fill="#0d47a1">  -e ..._LISTENERS=...</text>
+  <text x="58" y="218" font-size="10" fill="#0d47a1">  apache/kafka:4.0.0</text>
+  <text x="130" y="250" text-anchor="middle" font-size="10" fill="#c62828">十几个变量，敲错一处就起不来</text>
+
+  <line x1="230" y1="170" x2="286" y2="170" stroke="#333" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <!-- 中：容器 -->
+  <rect x="290" y="86" width="230" height="168" rx="10" fill="#e8f5e9" stroke="#2e7d32" stroke-width="3"/>
+  <text x="405" y="110" text-anchor="middle" font-size="13" font-weight="700" fill="#1b5e20">一个盒子（容器）</text>
+  <text x="405" y="128" text-anchor="middle" font-size="10" fill="#1b5e20">三个职责挤在一起，版本已配好</text>
+
+  <rect x="304" y="140" width="202" height="30" rx="5" fill="#ffffff" stroke="#2e7d32" stroke-width="1.4"/>
+  <text x="405" y="159" text-anchor="middle" font-size="11" fill="#1b5e20">对外服务：等别人来连（9092）</text>
+
+  <rect x="304" y="176" width="202" height="30" rx="5" fill="#ffffff" stroke="#2e7d32" stroke-width="1.4"/>
+  <text x="405" y="195" text-anchor="middle" font-size="11" fill="#1b5e20">内部协调：自己管自己（29093）</text>
+
+  <rect x="304" y="212" width="202" height="30" rx="5" fill="#ffebee" stroke="#c62828" stroke-width="1.6"/>
+  <text x="405" y="231" text-anchor="middle" font-size="11" fill="#b71c1c">存东西：容器内临时目录 /tmp</text>
+
+  <line x1="520" y1="170" x2="576" y2="170" stroke="#333" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <!-- 右：三件事 -->
+  <rect x="580" y="76" width="270" height="188" rx="8" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+  <text x="715" y="102" text-anchor="middle" font-size="13" font-weight="700" fill="#e65100">你用它做的三件事</text>
+
+  <rect x="596" y="114" width="238" height="34" rx="5" fill="#ffffff" stroke="#fbc02d" stroke-width="1.2"/>
+  <text x="715" y="136" text-anchor="middle" font-size="11" fill="#e65100">① 开通道：建 3 分区的 topic</text>
+
+  <rect x="596" y="156" width="238" height="34" rx="5" fill="#ffffff" stroke="#fbc02d" stroke-width="1.2"/>
+  <text x="715" y="178" text-anchor="middle" font-size="11" fill="#e65100">② 投一条：producer 发 hello / hi</text>
+
+  <rect x="596" y="198" width="238" height="34" rx="5" fill="#ffffff" stroke="#fbc02d" stroke-width="1.2"/>
+  <text x="715" y="220" text-anchor="middle" font-size="11" fill="#e65100">③ 取一条：consumer 从头读回来</text>
+
+  <text x="715" y="250" text-anchor="middle" font-size="10" fill="#795548">30 秒起、一条 rm 收走</text>
+
+  <!-- 底部：问题提示 -->
+  <rect x="30" y="292" width="820" height="86" rx="8" fill="#fce4ec" stroke="#c2185b" stroke-width="1.6"/>
+  <text x="50" y="316" font-size="12" font-weight="700" fill="#880e4f">这一版的四个坑（下一版逐个解决）：</text>
+  <text x="50" y="338" font-size="11" fill="#6a1b9a">① 数据在容器内临时目录 —— 删容器就没；② 集群 ID 手敲易漂移；</text>
+  <text x="50" y="356" font-size="11" fill="#6a1b9a">③ 单节点只能 1 副本 —— 练不了宕机不丢；④ 长命令每次重敲，错一处查半天</text>
+  <text x="440" y="338" font-size="11" fill="#6a1b9a">对应知识点：KRaft 一键起 / 建 Topic 收发 / CLI 看分区</text>
+  <text x="440" y="356" font-size="11" fill="#6a1b9a">本版先解决"有没有"，下一版解决"留不留得住、能不能复用"</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#333"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="400" viewBox="0 0 860 400" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="860" height="400" fill="#ffffff"/>
+
+  <text x="430" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#1a237e">基础版：一千多个读数都在跳，但没有一格标过"越界就叫人"</text>
+  <text x="430" y="46" text-anchor="middle" font-size="12" fill="#555555">全绿 ≠ 健康 —— 关键的那几格已经变色，却没人知道它重要</text>
+
+  <!-- 采集链路 -->
+  <rect x="24" y="86" width="150" height="60" rx="8" fill="#e3f2fd" stroke="#1565C0" stroke-width="2"/>
+  <text x="99" y="110" text-anchor="middle" font-size="12" font-weight="700" fill="#0d47a1">broker</text>
+  <text x="99" y="130" text-anchor="middle" font-size="10" fill="#0d47a1">传感器密密麻麻</text>
+
+  <line x1="174" y1="116" x2="218" y2="116" stroke="#333" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <rect x="222" y="86" width="150" height="60" rx="8" fill="#fffde7" stroke="#f9a825" stroke-width="2"/>
+  <text x="297" y="110" text-anchor="middle" font-size="12" font-weight="700" fill="#795548">翻译官 · Exporter</text>
+  <text x="297" y="130" text-anchor="middle" font-size="10" fill="#5d4037">1511 个 kafka_ 指标</text>
+
+  <line x1="372" y1="116" x2="416" y2="116" stroke="#333" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <rect x="420" y="86" width="150" height="60" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="495" y="110" text-anchor="middle" font-size="12" font-weight="700" fill="#1b5e20">大屏 · 定时来抄</text>
+  <text x="495" y="130" text-anchor="middle" font-size="10" fill="#1b5e20">每 10 秒拉一次</text>
+
+  <!-- 大屏：一堆表 -->
+  <rect x="24" y="176" width="500" height="184" rx="10" fill="#fafafa" stroke="#bdbdbd" stroke-width="1.6"/>
+  <text x="274" y="200" text-anchor="middle" font-size="12" font-weight="700" fill="#37474f">大屏：一千多格，全是绿的</text>
+
+  <rect x="44" y="212" width="96" height="40" rx="5" fill="#e8f5e9" stroke="#a5d6a7" stroke-width="1.2"/>
+  <text x="92" y="237" text-anchor="middle" font-size="10" fill="#2e7d32">0.00</text>
+  <rect x="150" y="212" width="96" height="40" rx="5" fill="#e8f5e9" stroke="#a5d6a7" stroke-width="1.2"/>
+  <text x="198" y="237" text-anchor="middle" font-size="10" fill="#2e7d32">1.2k</text>
+  <rect x="256" y="212" width="96" height="40" rx="5" fill="#e8f5e9" stroke="#a5d6a7" stroke-width="1.2"/>
+  <text x="304" y="237" text-anchor="middle" font-size="10" fill="#2e7d32">0.98</text>
+  <rect x="362" y="212" width="96" height="40" rx="5" fill="#e8f5e9" stroke="#a5d6a7" stroke-width="1.2"/>
+  <text x="410" y="237" text-anchor="middle" font-size="10" fill="#2e7d32">42</text>
+
+  <rect x="44" y="262" width="96" height="40" rx="5" fill="#e8f5e9" stroke="#a5d6a7" stroke-width="1.2"/>
+  <text x="92" y="287" text-anchor="middle" font-size="10" fill="#2e7d32">0.31</text>
+  <rect x="150" y="262" width="96" height="40" rx="5" fill="#e8f5e9" stroke="#a5d6a7" stroke-width="1.2"/>
+  <text x="198" y="287" text-anchor="middle" font-size="10" fill="#2e7d32">7</text>
+  <!-- 已经变色的关键格 -->
+  <rect x="256" y="262" width="96" height="40" rx="5" fill="#ffcdd2" stroke="#e53935" stroke-width="2"/>
+  <text x="304" y="287" text-anchor="middle" font-size="10" font-weight="700" fill="#b71c1c">53</text>
+  <rect x="362" y="262" width="96" height="40" rx="5" fill="#ffcdd2" stroke="#e53935" stroke-width="2"/>
+  <text x="410" y="287" text-anchor="middle" font-size="10" font-weight="700" fill="#b71c1c">1</text>
+
+  <text x="274" y="330" text-anchor="middle" font-size="10" fill="#c62828">这两格已经变了 —— 但没标过"正常该是几"，没人知道该叫人</text>
+  <text x="274" y="350" text-anchor="middle" font-size="10" fill="#455a64">（副本冗余掉了 / 有目录坏了）</text>
+
+  <!-- 问题徽标 -->
+  <rect x="546" y="176" width="290" height="46" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="691" y="196" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">问题①：全绿 ≠ 健康</text>
+  <text x="691" y="214" text-anchor="middle" font-size="10" fill="#5d4037">没配告警的格子，红了也没人知道；第一个发现的是用户</text>
+
+  <rect x="546" y="232" width="290" height="60" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="691" y="252" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">问题②：不知道正常值是几</text>
+  <text x="691" y="270" text-anchor="middle" font-size="10" fill="#5d4037">多数正常是 0，但关键的不是 ——</text>
+  <text x="691" y="286" text-anchor="middle" font-size="10" fill="#5d4037">「活跃控制器」必须恰好一个为 1</text>
+
+  <rect x="546" y="302" width="290" height="58" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="691" y="322" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">问题③：lag 不在指标表里</text>
+  <text x="691" y="340" text-anchor="middle" font-size="10" fill="#5d4037">它是「写到哪 − 读到哪」，</text>
+  <text x="691" y="356" text-anchor="middle" font-size="10" fill="#5d4037">broker 不替你维护这个差</text>
+
+  <!-- 底部 -->
+  <rect x="24" y="368" width="812" height="24" rx="6" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.4"/>
+  <text x="44" y="385" font-size="11" fill="#283593">这一版的核心变化：链路确实通了、数也确实在跳 —— 但你不知道该盯谁，也不知道越界了算不算异常。</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#333"/>
+    </marker>
+  </defs>
+</svg>

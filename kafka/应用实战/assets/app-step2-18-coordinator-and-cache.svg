@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="440" viewBox="0 0 860 440" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="860" height="440" fill="#ffffff"/>
+
+  <text x="430" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#1a237e">综合版：按组名指派 → 由他一人落笔 → 手边还留一份</text>
+  <text x="430" y="46" text-anchor="middle" font-size="12" fill="#555555">高亮 = 本步新增：① 问谁都行（自举）② 专属落笔 + 所有副本确认 ③ 内存缓存</text>
+
+  <!-- 消费者 -->
+  <rect x="24" y="76" width="118" height="56" rx="7" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.8"/>
+  <text x="83" y="98" text-anchor="middle" font-size="11" font-weight="700" fill="#0d47a1">消费者</text>
+  <text x="83" y="118" text-anchor="middle" font-size="10" fill="#0d47a1">组 order-team</text>
+
+  <line x1="142" y1="104" x2="196" y2="104" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <text x="169" y="96" text-anchor="middle" font-size="9" fill="#455a64">①</text>
+
+  <!-- 任意 broker -->
+  <rect x="200" y="76" width="130" height="56" rx="7" fill="#fff176" stroke="#f9a825" stroke-width="2.2"/>
+  <text x="265" y="98" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">任意 broker</text>
+  <text x="265" y="118" text-anchor="middle" font-size="10" fill="#5d4037">问谁都答得上来</text>
+
+  <line x1="330" y1="104" x2="384" y2="104" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <text x="357" y="96" text-anchor="middle" font-size="9" fill="#455a64">②</text>
+
+  <!-- 协调者 -->
+  <rect x="388" y="66" width="150" height="76" rx="9" fill="#fff176" stroke="#f9a825" stroke-width="2.6"/>
+  <text x="463" y="90" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">协调者 · broker N</text>
+  <text x="463" y="110" text-anchor="middle" font-size="10" fill="#5d4037">hash(组名) % 50</text>
+  <text x="463" y="128" text-anchor="middle" font-size="10" fill="#5d4037">同名组永远归同一位</text>
+
+  <line x1="538" y1="104" x2="592" y2="104" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <text x="565" y="96" text-anchor="middle" font-size="9" fill="#455a64">③</text>
+
+  <!-- 册子 -->
+  <rect x="596" y="66" width="240" height="76" rx="9" fill="#ffebee" stroke="#c62828" stroke-width="2.2"/>
+  <text x="716" y="90" text-anchor="middle" font-size="11" font-weight="700" fill="#b71c1c">__consumer_offsets</text>
+  <text x="716" y="110" text-anchor="middle" font-size="10" fill="#c62828">50 分区 · RF=3 · cleanup.policy=compact</text>
+  <text x="716" y="128" text-anchor="middle" font-size="10" fill="#c62828">segment.bytes=100MB（压得更勤）</text>
+
+  <!-- 缓存 -->
+  <rect x="388" y="164" width="150" height="60" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="2.2"/>
+  <text x="463" y="188" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">新增③：手边那份</text>
+  <text x="463" y="208" text-anchor="middle" font-size="10" fill="#5d4037">查询命中缓存，不读磁盘</text>
+
+  <!-- 写回 -->
+  <line x1="463" y1="142" x2="463" y2="162" stroke="#f9a825" stroke-width="1.6" stroke-dasharray="4,3" marker-end="url(#aro)"/>
+
+  <!-- 提交约束 -->
+  <rect x="24" y="164" width="340" height="60" rx="8" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.6"/>
+  <text x="44" y="188" font-size="11" font-weight="700" fill="#1a237e">新增②：由他一人落笔</text>
+  <text x="44" y="208" font-size="10" fill="#283593">消费者不直接写，交给他 → 不会互相盖掉</text>
+  <text x="44" y="224" font-size="10" fill="#c62828">所有副本都收到才算成功（不是 leader 单独确认）</text>
+
+  <!-- 右下：报错真相 -->
+  <rect x="560" y="164" width="276" height="60" rx="8" fill="#fff8e1" stroke="#f9a825" stroke-width="1.8"/>
+  <text x="698" y="186" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">那个报错的真相</text>
+  <text x="580" y="206" font-size="10" fill="#5d4037">换人后手边那份是空的，他得先把册子读进来</text>
+  <text x="580" y="222" font-size="10" fill="#c62828">这是「慢」，不是「坏」—— 退避重试即可</text>
+
+  <!-- 底部 -->
+  <rect x="24" y="244" width="812" height="176" rx="8" fill="#fafafa" stroke="#bdbdbd" stroke-width="1.4"/>
+  <text x="44" y="268" font-size="12" font-weight="700" fill="#37474f">三条必须记住的事实：</text>
+  <text x="44" y="292" font-size="11" fill="#455a64">① 提交成功要求 __consumer_offsets 对应分区的所有副本都收到 —— 副本同步滞后会超时失败，排查看 ISR / URP</text>
+  <text x="44" y="314" font-size="11" fill="#455a64">② CoordinatorLoadInProgressException 不是错误 —— 只有长期不恢复才需介入，那时该查的是压实是否正常</text>
+  <text x="44" y="336" font-size="11" fill="#455a64">③ 归属是算出来的：分区 = hash(group.id) % 50，该分区的 leader 就是协调者 —— 协调者变更 = leader 漂移（回扣课 7）</text>
+  <text x="44" y="360" font-size="11" fill="#c62828">课 18 实测协调者是 broker 2 —— 你的机器上完全可能是 1 或 3，关键是理解规则，不是记住编号</text>
+  <text x="44" y="384" font-size="11" fill="#455a64">查法：kafka-consumer-groups.sh --describe --group &lt;组名&gt; --state</text>
+  <text x="44" y="406" font-size="11" fill="#455a64">协调者变更演练（实验环境）：docker stop 协调者所在容器 → 再查 --state → 编号应已变化</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#333"/>
+    </marker>
+    <marker id="aro" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#f9a825"/>
+    </marker>
+  </defs>
+</svg>

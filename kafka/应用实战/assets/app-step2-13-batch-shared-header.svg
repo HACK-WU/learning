@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="420" viewBox="0 0 860 420" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="860" height="420" fill="#ffffff"/>
+
+  <text x="430" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#1a237e">综合版：五件共用一张单据 + 箱内只记差值 + 整箱一起压</text>
+  <text x="430" y="46" text-anchor="middle" font-size="12" fill="#555555">高亮 = 本步新增：① count:5 共用头部 ② offsetDelta 变长差值 ③ 整批压缩 ④ 幂等字段</text>
+
+  <!-- 五条消息 -->
+  <rect x="24" y="86" width="110" height="32" rx="6" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.6"/>
+  <text x="79" y="107" text-anchor="middle" font-size="10" fill="#0d47a1">消息 1 · 20 字节</text>
+  <rect x="24" y="126" width="110" height="32" rx="6" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.6"/>
+  <text x="79" y="147" text-anchor="middle" font-size="10" fill="#0d47a1">消息 2 · 20 字节</text>
+  <rect x="24" y="166" width="110" height="32" rx="6" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.6"/>
+  <text x="79" y="187" text-anchor="middle" font-size="10" fill="#0d47a1">消息 3 · 20 字节</text>
+  <rect x="24" y="206" width="110" height="32" rx="6" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.6"/>
+  <text x="79" y="227" text-anchor="middle" font-size="10" fill="#0d47a1">消息 4 · 20 字节</text>
+  <rect x="24" y="246" width="110" height="32" rx="6" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.6"/>
+  <text x="79" y="267" text-anchor="middle" font-size="10" fill="#0d47a1">消息 5 · 20 字节</text>
+
+  <line x1="134" y1="176" x2="196" y2="176" stroke="#333" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <!-- 攒批框 -->
+  <rect x="200" y="150" width="96" height="52" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="2.2"/>
+  <text x="248" y="172" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">linger_ms 攒一批</text>
+  <text x="248" y="190" text-anchor="middle" font-size="10" fill="#5d4037">业务代码一行没动</text>
+
+  <line x1="296" y1="176" x2="336" y2="176" stroke="#333" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <!-- 一个批次 -->
+  <rect x="340" y="86" width="290" height="196" rx="10" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2.6"/>
+
+  <!-- 共用头部 -->
+  <rect x="356" y="100" width="258" height="52" rx="7" fill="#fff176" stroke="#f9a825" stroke-width="2"/>
+  <text x="485" y="120" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">新增①：整箱共用的一张单据</text>
+  <text x="485" y="138" text-anchor="middle" font-size="10" fill="#5d4037">baseOffset / magic / CRC / count: 5</text>
+
+  <!-- records -->
+  <rect x="356" y="160" width="258" height="26" rx="5" fill="#ffffff" stroke="#2e7d32" stroke-width="1.4"/>
+  <text x="485" y="178" text-anchor="middle" font-size="10" fill="#1b5e20">记录 1：offsetDelta = 0（1 字节）</text>
+
+  <rect x="356" y="192" width="258" height="26" rx="5" fill="#ffffff" stroke="#2e7d32" stroke-width="1.4"/>
+  <text x="485" y="210" text-anchor="middle" font-size="10" fill="#1b5e20">记录 2：offsetDelta = 1（1 字节）</text>
+
+  <rect x="356" y="224" width="258" height="26" rx="5" fill="#ffffff" stroke="#2e7d32" stroke-width="1.4"/>
+  <text x="485" y="242" text-anchor="middle" font-size="10" fill="#1b5e20">记录 3 · 4 · 5：+2 / +3 / +4（各 1 字节）</text>
+
+  <rect x="356" y="256" width="258" height="18" rx="5" fill="#f1f8e9" stroke="#7cb342" stroke-width="1.2"/>
+  <text x="485" y="270" text-anchor="middle" font-size="9" fill="#33691e">新增③：整箱一起压（压缩数据跟在 recordsCount 后）</text>
+
+  <!-- 右侧说明 -->
+  <rect x="648" y="86" width="188" height="70" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="2.2"/>
+  <text x="742" y="108" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">新增②：只写「差多少」</text>
+  <text x="742" y="128" text-anchor="middle" font-size="10" fill="#5d4037">不再每条存绝对编号，</text>
+  <text x="742" y="144" text-anchor="middle" font-size="10" fill="#5d4037">varint 小数字 1 字节搞定</text>
+
+  <rect x="648" y="168" width="188" height="70" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="2.2"/>
+  <text x="742" y="190" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">新增④：单据上多了身份</text>
+  <text x="742" y="210" text-anchor="middle" font-size="10" fill="#5d4037">producerId / producerEpoch</text>
+  <text x="742" y="226" text-anchor="middle" font-size="10" fill="#5d4037">baseSequence（幂等判重依据）</text>
+
+  <rect x="648" y="250" width="188" height="32" rx="8" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.6"/>
+  <text x="742" y="271" text-anchor="middle" font-size="10" fill="#283593">整批大小 = batchLength + 12 字节</text>
+
+  <!-- 底部对照 -->
+  <rect x="24" y="304" width="812" height="96" rx="8" fill="#fafafa" stroke="#bdbdbd" stroke-width="1.4"/>
+  <text x="44" y="326" font-size="12" font-weight="700" fill="#37474f">dump 输出里该怎么核对（对照基础版的三个特征）：</text>
+  <text x="44" y="348" font-size="11" fill="#455a64">count: 5 —— 单据只写一次（基础版是 count: 1 出现五次）</text>
+  <text x="44" y="368" font-size="11" fill="#455a64">producerId / baseSequence 不再是 -1 —— 幂等已启用，重发可判重</text>
+  <text x="44" y="388" font-size="11" fill="#455a64">position 增量 —— 一箱 vs 五箱，头部开销直接少了四份</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#333"/>
+    </marker>
+  </defs>
+</svg>

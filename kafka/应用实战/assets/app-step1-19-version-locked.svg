@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="400" viewBox="0 0 860 400" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="860" height="400" fill="#ffffff"/>
+
+  <text x="430" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#1a237e">基础版：以为版本是写死的，升级就得一起停</text>
+  <text x="430" y="46" text-anchor="middle" font-size="12" fill="#555555">两条直觉路线 —— 都走不出"不停服"</text>
+
+  <!-- 路线 A -->
+  <rect x="24" y="70" width="396" height="150" rx="10" fill="#ffebee" stroke="#c62828" stroke-width="1.8"/>
+  <text x="222" y="94" text-anchor="middle" font-size="12" font-weight="700" fill="#b71c1c">路线 A：强绑定（一起停、一起换）</text>
+
+  <rect x="48" y="108" width="110" height="44" rx="6" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.6"/>
+  <text x="103" y="135" text-anchor="middle" font-size="10" fill="#0d47a1">服务端 v1</text>
+  <line x1="158" y1="130" x2="196" y2="130" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="200" y="108" width="110" height="44" rx="6" fill="#e3f2fd" stroke="#1565C0" stroke-width="1.6"/>
+  <text x="255" y="135" text-anchor="middle" font-size="10" fill="#0d47a1">客户端 v1</text>
+
+  <rect x="48" y="166" width="110" height="44" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.6"/>
+  <text x="103" y="193" text-anchor="middle" font-size="10" fill="#1b5e20">服务端 v2</text>
+  <line x1="158" y1="188" x2="196" y2="188" stroke="#c62828" stroke-width="2" marker-end="url(#arr)"/>
+  <rect x="200" y="166" width="110" height="44" rx="6" fill="#ffcdd2" stroke="#c62828" stroke-width="1.6"/>
+  <text x="255" y="193" text-anchor="middle" font-size="10" fill="#b71c1c">v1 下线：必须改</text>
+
+  <text x="330" y="135" font-size="10" fill="#c62828">v1 接口下线 →</text>
+  <text x="330" y="153" font-size="10" fill="#c62828">客户端必须跟着改</text>
+  <text x="330" y="175" font-size="10" fill="#c62828">→ 只能挑夜深人静</text>
+  <text x="330" y="193" font-size="10" fill="#c62828">全停一起换</text>
+
+  <!-- 路线 B -->
+  <rect x="440" y="70" width="396" height="150" rx="10" fill="#ffebee" stroke="#c62828" stroke-width="1.8"/>
+  <text x="638" y="94" text-anchor="middle" font-size="12" font-weight="700" fill="#b71c1c">路线 B：新旧两套并行</text>
+
+  <rect x="464" y="108" width="150" height="44" rx="6" fill="#fffde7" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="539" y="135" text-anchor="middle" font-size="10" fill="#795548">/v1/xxx（旧）</text>
+  <rect x="464" y="166" width="150" height="44" rx="6" fill="#fffde7" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="539" y="193" text-anchor="middle" font-size="10" fill="#795548">/v2/xxx（新）</text>
+
+  <text x="640" y="130" font-size="10" fill="#c62828">每加一版</text>
+  <text x="640" y="148" font-size="10" fill="#c62828">就多一套代码路径</text>
+  <text x="640" y="170" font-size="10" fill="#c62828">越搬越沉，</text>
+  <text x="640" y="188" font-size="10" fill="#c62828">还得一直给旧的留位置</text>
+
+  <!-- 问题 -->
+  <rect x="24" y="236" width="812" height="40" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="430" y="261" text-anchor="middle" font-size="11" fill="#795548">问题①：看不出「取交集」—— [usable: 12] 是当前客户端协商的结果，不是 broker 的上界</text>
+
+  <rect x="24" y="284" width="812" height="40" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="430" y="309" text-anchor="middle" font-size="11" fill="#795548">问题②：不知道区间起点可以不是 0 —— Fetch(1): 4 to 17，v0~v3 已被移除</text>
+
+  <rect x="24" y="332" width="812" height="40" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
+  <text x="430" y="357" text-anchor="middle" font-size="11" fill="#795548">问题③：没区分「不认识」与「版本不匹配」—— UNSUPPORTED 是 broker 完全不认识该 API</text>
+
+  <!-- 底部 -->
+  <rect x="24" y="378" width="812" height="18" rx="5" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.2"/>
+  <text x="44" y="392" font-size="10" fill="#283593">这一版的核心变化：你已意识到"版本"是个问题，但以为只有这两条路可选。</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#333"/>
+    </marker>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#c62828"/>
+    </marker>
+  </defs>
+</svg>

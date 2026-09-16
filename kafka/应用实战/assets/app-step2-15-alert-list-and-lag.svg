@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="440" viewBox="0 0 860 440" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="860" height="440" fill="#ffffff"/>
+
+  <text x="430" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#1a237e">综合版：圈定该叫人的几格 + 写清正常值 + 补上表上没有的那一格</text>
+  <text x="430" y="46" text-anchor="middle" font-size="12" fill="#555555">高亮 = 本步新增：① 圈定清单 ② 判据写对（== 1 而非 &gt; 0）③ lag 自己算</text>
+
+  <!-- 圈定清单 -->
+  <rect x="24" y="70" width="470" height="212" rx="10" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2.4"/>
+  <text x="259" y="94" text-anchor="middle" font-size="12" font-weight="700" fill="#1b5e20">新增①：圈出来的几格，每格都写着「正常时长什么样」</text>
+
+  <rect x="44" y="106" width="430" height="34" rx="6" fill="#fff176" stroke="#f9a825" stroke-width="1.8"/>
+  <text x="60" y="128" font-size="10" fill="#5d4037">副本不足 URP　　　　　　正常值 0　　→ 规则：sum(...) &gt; 0</text>
+
+  <rect x="44" y="146" width="430" height="34" rx="6" fill="#fff176" stroke="#f9a825" stroke-width="1.8"/>
+  <text x="60" y="168" font-size="10" fill="#5d4037">活跃控制器　　　　　　　正常值 恰好 1 个 → 规则：sum(...) != 1（不是 &gt; 0）</text>
+
+  <rect x="44" y="186" width="430" height="34" rx="6" fill="#fff176" stroke="#f9a825" stroke-width="1.8"/>
+  <text x="60" y="208" font-size="10" fill="#5d4037">分区离线 / 日志目录离线　正常值 0　　→ 规则：sum(...) &gt; 0</text>
+
+  <rect x="44" y="226" width="430" height="44" rx="6" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.6"/>
+  <text x="60" y="246" font-size="10" fill="#283593">分区数 / leader 数的正常值不是固定数 —— 是「各 broker 大致均匀」</text>
+  <text x="60" y="264" font-size="10" fill="#283593">（判据是分布是否均衡，不是某个数字）</text>
+
+  <!-- 判据对比 -->
+  <rect x="516" y="70" width="320" height="96" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="2.2"/>
+  <text x="676" y="92" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">新增②：判据形态写错了等于没配</text>
+  <text x="536" y="112" font-size="10" fill="#c62828">❌ &gt; 0　—— 正常集群永远有一个是 1，会一直响</text>
+  <text x="536" y="130" font-size="10" fill="#c62828">　 于是你把它静音 → 真出事时它也不响了</text>
+  <text x="536" y="152" font-size="10" fill="#2e7d32">✅ != 1 —— 0 是没有控制器，≥2 是脑裂，都该叫人</text>
+
+  <!-- lag 区块 -->
+  <rect x="516" y="180" width="320" height="102" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="2.2"/>
+  <text x="676" y="202" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">新增③：表上没有的那一格 · lag</text>
+  <text x="536" y="222" font-size="10" fill="#5d4037">lag = LogEndOffset − CurrentOffset</text>
+  <text x="536" y="240" font-size="10" fill="#5d4037">CLI：consumer-groups --describe 看 LAG 列</text>
+  <text x="536" y="258" font-size="10" fill="#5d4037">客户端指标：records-lag / records-lag-max</text>
+  <text x="536" y="276" font-size="10" fill="#c62828">盯「持续扩大」，不是盯「绝对值大」</text>
+
+  <!-- 底部三事实 -->
+  <rect x="24" y="298" width="812" height="126" rx="8" fill="#fafafa" stroke="#bdbdbd" stroke-width="1.4"/>
+  <text x="44" y="322" font-size="12" font-weight="700" fill="#37474f">三条必须记住的事实：</text>
+  <text x="44" y="344" font-size="11" fill="#455a64">① URP &gt; 0 ≠ 分区离线：前者只是冗余下降、仍可读写；后者才是真不可用 —— URP 就该处理，不能等</text>
+  <text x="44" y="366" font-size="11" fill="#455a64">② lag 大但稳定 ≠ 故障：消费者就是这么慢；差距持续扩大才是真积压</text>
+  <text x="44" y="388" font-size="11" fill="#455a64">③ 远程 JMX 默认禁用 + 默认无认证：开了等于开了个「不止能看、还能控制」的后门，生产必配认证与 SSL</text>
+  <text x="44" y="410" font-size="11" fill="#c62828">写 PromQL 前先 grep exporter 真实输出的名字 —— 教程里的名字可能和你的一致，也可能差一个 _total 后缀</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#333"/>
+    </marker>
+  </defs>
+</svg>

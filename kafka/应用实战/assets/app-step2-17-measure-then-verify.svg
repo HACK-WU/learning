@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="450" viewBox="0 0 860 450" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="860" height="450" fill="#ffffff"/>
+
+  <text x="430" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#1a237e">综合版：把活分成三拨 → 先看咽喉 → 再验仪表语义</text>
+  <text x="430" y="46" text-anchor="middle" font-size="12" fill="#555555">高亮 = 本步新增：① 三拨分工 ② 固定排查顺序 ③ 抄来的读数先验再用</text>
+
+  <!-- 三拨分工 -->
+  <rect x="24" y="66" width="150" height="86" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="2.2"/>
+  <text x="99" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="#795548">领位 · acceptor</text>
+  <text x="99" y="110" text-anchor="middle" font-size="10" fill="#5d4037">固定 1 个，不可配</text>
+  <text x="99" y="128" text-anchor="middle" font-size="10" fill="#5d4037">只负责接连接</text>
+  <text x="99" y="144" text-anchor="middle" font-size="10" fill="#5d4037">不做菜也不点单</text>
+
+  <line x1="174" y1="109" x2="204" y2="109" stroke="#333" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <rect x="208" y="66" width="160" height="86" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="2.2"/>
+  <text x="288" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="#795548">招呼 · processor</text>
+  <text x="288" y="110" text-anchor="middle" font-size="10" fill="#5d4037">num.network.threads = 3</text>
+  <text x="288" y="128" text-anchor="middle" font-size="10" fill="#5d4037">每人管一批连接（不是 1:1）</text>
+  <text x="288" y="144" text-anchor="middle" font-size="10" fill="#5d4037">只读写，不处理</text>
+
+  <line x1="368" y1="109" x2="398" y2="109" stroke="#333" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <rect x="402" y="66" width="150" height="86" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="2.4"/>
+  <text x="477" y="86" text-anchor="middle" font-size="12" font-weight="700" fill="#795548">咽喉 · 请求队列</text>
+  <text x="477" y="106" text-anchor="middle" font-size="10" fill="#795548">RequestChannel</text>
+  <text x="477" y="124" text-anchor="middle" font-size="10" fill="#5d4037">queued.max.requests=500</text>
+  <text x="477" y="142" text-anchor="middle" font-size="10" fill="#c62828">排查先看它堆没堆</text>
+
+  <line x1="552" y1="109" x2="582" y2="109" stroke="#333" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <rect x="586" y="66" width="160" height="86" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="2.2"/>
+  <text x="666" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="#795548">干活 · IO 线程</text>
+  <text x="666" y="110" text-anchor="middle" font-size="10" fill="#5d4037">num.io.threads = 8</text>
+  <text x="666" y="128" text-anchor="middle" font-size="10" fill="#5d4037">校验 / 落盘 / 查数据</text>
+  <text x="666" y="144" text-anchor="middle" font-size="10" fill="#5d4037">与连接数无关（常见误配）</text>
+
+  <text x="770" y="130" font-size="10" fill="#1b5e20">零拷贝</text>
+
+  <!-- 排查顺序 -->
+  <rect x="24" y="166" width="500" height="96" rx="8" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.6"/>
+  <text x="44" y="190" font-size="12" font-weight="700" fill="#1a237e">新增②：固定排查顺序（别跳步）</text>
+  <text x="44" y="212" font-size="11" fill="#283593">① RequestQueueSize 堆了多少 → ② processor 空闲比 → ③ 各请求 TotalTimeMs</text>
+  <text x="44" y="232" font-size="11" fill="#283593">筐是空的（实测 0.0）+ 招呼的人很闲（实测 1.0）= 瓶颈不在这段</text>
+  <text x="44" y="252" font-size="11" fill="#c62828">33 MB/s 是单客户端压测上限，不是集群上限</text>
+
+  <!-- 指标语义 -->
+  <rect x="540" y="166" width="296" height="96" rx="8" fill="#ffebee" stroke="#c62828" stroke-width="1.8"/>
+  <text x="688" y="190" text-anchor="middle" font-size="12" font-weight="700" fill="#b71c1c">新增③：抄来的读数先验再用</text>
+  <text x="560" y="212" font-size="10" fill="#c62828">采样 5 次：2.36e11 → ... → 2.62e11</text>
+  <text x="560" y="230" font-size="10" fill="#c62828">严格单调递增 = 累积计数，不是比率</text>
+  <text x="560" y="248" font-size="10" fill="#5d4037">HELP 行：attribute=Count（不是 Value）</text>
+
+  <!-- 对照与替代 -->
+  <rect x="24" y="276" width="812" height="76" rx="8" fill="#fafafa" stroke="#bdbdbd" stroke-width="1.4"/>
+  <text x="44" y="300" font-size="12" font-weight="700" fill="#37474f">对照一个已知正确的同类指标，立刻就能分辨：</text>
+  <text x="44" y="322" font-size="11" fill="#455a64">RequestHandlerAvgIdlePercent 实测 1e11 量级、单调递增 → 累积计数，照抄 &lt; 0.3 告警永不触发</text>
+  <text x="44" y="342" font-size="11" fill="#455a64">NetworkProcessorAvgIdlePercent 实测 0.9998 ~ 1.0 → 这才是真正的 0~1 比率</text>
+
+  <!-- 底部 -->
+  <rect x="24" y="366" width="812" height="66" rx="8" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.6"/>
+  <text x="44" y="390" font-size="12" font-weight="700" fill="#1a237e">通用教训（比记住某个指标名重要）：</text>
+  <text x="44" y="410" font-size="11" fill="#283593">任何指标写进告警规则前，先 curl 看实际值与 HELP 行；值与语义不符时先查 attribute= 是 Count 还是 Value。</text>
+  <text x="44" y="428" font-size="11" fill="#283593">IO 线程压力的替代方案：RequestQueueSize（队列积压）+ TotalTimeMs（请求总耗时）。</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#333"/>
+    </marker>
+  </defs>
+</svg>
