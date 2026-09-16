@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="420" viewBox="0 0 1100 420">
+  <style>
+    .bg{fill:#f8fafc}.box{fill:#fff;stroke:#94a3b8;stroke-width:2}.source{fill:#e0f2fe;stroke:#38bdf8;stroke-width:2}.warn{fill:#fee2e2;stroke:#ef4444;stroke-width:2}.title{font:700 26px sans-serif;fill:#0f172a}.label{font:600 18px sans-serif;fill:#0f172a}.small{font:15px sans-serif;fill:#475569}.arrow{stroke:#64748b;stroke-width:3;fill:none;marker-end:url(#arrow)}
+  </style>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker></defs>
+  <rect class="bg" width="1100" height="420" rx="24"/>
+  <text class="title" x="550" y="48" text-anchor="middle">基础实现：把一小时窗口写成重启清单</text>
+  <rect class="source" x="40" y="145" width="170" height="95" rx="16"/><text class="label" x="125" y="183" text-anchor="middle">维护申请</text><text class="small" x="125" y="211" text-anchor="middle">重启 / 换盘 / 补丁</text>
+  <path class="arrow" d="M210 193 L285 193"/>
+  <rect class="box" x="285" y="145" width="190" height="95" rx="16"/><text class="label" x="380" y="183" text-anchor="middle">停止服务</text><text class="small" x="380" y="211" text-anchor="middle">按清单执行</text>
+  <path class="arrow" d="M475 193 L550 193"/>
+  <rect class="box" x="550" y="145" width="190" height="95" rx="16"/><text class="label" x="645" y="183" text-anchor="middle">启动服务</text><text class="small" x="645" y="211" text-anchor="middle">等待进程回来</text>
+  <path class="arrow" d="M740 193 L815 193"/>
+  <rect class="warn" x="815" y="115" width="245" height="155" rx="16"/><text class="label" x="937" y="153" text-anchor="middle">“看起来好了”</text><text class="small" x="937" y="183" text-anchor="middle">没有区分 Broker</text><text class="small" x="937" y="208" text-anchor="middle">Controller 或换盘</text><text class="small" x="937" y="233" text-anchor="middle">也没有暂停出口</text>
+  <text class="small" x="550" y="350" text-anchor="middle">本步解决了“动作顺序”，但把数据面、控制面和磁盘风险混成一条直线。</text>
+</svg>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520">
+  <style>
+    .bg{fill:#f8fafc}.box{fill:#fff;stroke:#94a3b8;stroke-width:2}.source{fill:#dbeafe;stroke:#60a5fa;stroke-width:2}.new{fill:#dcfce7;stroke:#22c55e;stroke-width:2}.out{fill:#fef3c7;stroke:#f59e0b;stroke-width:2}.title{font:700 28px sans-serif;fill:#0f172a}.subtitle{font:16px sans-serif;fill:#64748b}.label{font:700 20px sans-serif;fill:#0f172a}.small{font:16px sans-serif;fill:#475569}.arrow{stroke:#64748b;stroke-width:3;fill:none;marker-end:url(#arrow)}
+  </style>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker></defs>
+  <rect class="bg" width="1200" height="520" rx="26"/>
+  <text class="title" x="600" y="50" text-anchor="middle">夜班大屏变红时，如何只叫醒该叫醒的人</text>
+  <text class="subtitle" x="600" y="78" text-anchor="middle">先把分散信号接起来，再按持续时间和影响决定动作</text>
+  <rect class="source" x="60" y="155" width="210" height="110" rx="18"/><text class="label" x="165" y="198" text-anchor="middle">来源</text><text class="small" x="165" y="228" text-anchor="middle">服务、资源、业务</text>
+  <rect class="source" x="60" y="300" width="210" height="110" rx="18"/><text class="label" x="165" y="343" text-anchor="middle">记录</text><text class="small" x="165" y="373" text-anchor="middle">过去发生过什么</text>
+  <path class="arrow" d="M270 210 L385 245"/><path class="arrow" d="M270 355 L385 285"/>
+  <rect class="new" x="385" y="185" width="205" height="145" rx="18"/><text class="label" x="487" y="230" text-anchor="middle">集中</text><text class="small" x="487" y="260" text-anchor="middle">统一名字</text><text class="small" x="487" y="287" text-anchor="middle">统一时间</text>
+  <path class="arrow" d="M590 257 L680 257"/>
+  <rect class="new" x="680" y="185" width="205" height="145" rx="18"/><text class="label" x="782" y="230" text-anchor="middle">判断</text><text class="small" x="782" y="260" text-anchor="middle">异常是否持续</text><text class="small" x="782" y="287" text-anchor="middle">影响是否扩大</text>
+  <path class="arrow" d="M885 257 L975 257"/>
+  <rect class="out" x="975" y="155" width="165" height="205" rx="18"/><text class="label" x="1057" y="205" text-anchor="middle">行动</text><text class="small" x="1057" y="240" text-anchor="middle">观察</text><text class="small" x="1057" y="270" text-anchor="middle">通知</text><text class="small" x="1057" y="300" text-anchor="middle">升级</text>
+  <rect class="box" x="310" y="440" width="580" height="48" rx="16"/><text class="small" x="600" y="471" text-anchor="middle">回看结果：减少误报，也不漏掉真正影响业务的变化</text>
+  <text class="small" x="600" y="122" text-anchor="middle">本图只讲思路，不要求你先认识任何监控工具</text>
+</svg>

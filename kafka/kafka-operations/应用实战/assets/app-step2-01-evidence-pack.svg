@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="420" viewBox="0 0 1100 420">
+  <style>
+    .bg{fill:#f8fafc}.box{fill:#fff;stroke:#94a3b8;stroke-width:2}.new{fill:#dcfce7;stroke:#22c55e;stroke-width:2}.out{fill:#fef3c7;stroke:#f59e0b;stroke-width:2}.title{font:700 26px sans-serif;fill:#0f172a}.label{font:600 18px sans-serif;fill:#0f172a}.small{font:15px sans-serif;fill:#475569}.arrow{stroke:#64748b;stroke-width:3;fill:none;marker-end:url(#arrow)}
+  </style>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker></defs>
+  <rect class="bg" width="1100" height="420" rx="24"/>
+  <text class="title" x="550" y="48" text-anchor="middle">综合实现：一份带证据的集群基线包</text>
+  <rect class="box" x="45" y="145" width="190" height="95" rx="16"/><text class="label" x="140" y="183" text-anchor="middle">采集入口</text><text class="small" x="140" y="211" text-anchor="middle">配置 / 拓扑 / 指标</text>
+  <path class="arrow" d="M235 193 L310 193"/>
+  <rect class="new" x="310" y="90" width="215" height="72" rx="14"/><text class="label" x="417" y="123" text-anchor="middle">对象层</text><text class="small" x="417" y="148" text-anchor="middle">Broker / Controller / 磁盘</text>
+  <rect class="new" x="310" y="175" width="215" height="72" rx="14"/><text class="label" x="417" y="208" text-anchor="middle">健康层</text><text class="small" x="417" y="233" text-anchor="middle">副本 / SLO / 容量</text>
+  <rect class="new" x="310" y="260" width="215" height="72" rx="14"/><text class="label" x="417" y="293" text-anchor="middle">责任层</text><text class="small" x="417" y="318" text-anchor="middle">值班人 / 升级路径</text>
+  <path class="arrow" d="M525 126 L635 178"/><path class="arrow" d="M525 211 L635 211"/><path class="arrow" d="M525 296 L635 244"/>
+  <rect class="new" x="635" y="145" width="220" height="132" rx="16"/><text class="label" x="745" y="185" text-anchor="middle">证据包</text><text class="small" x="745" y="213" text-anchor="middle">采集时间 + 负责人</text><text class="small" x="745" y="238" text-anchor="middle">偏差 + 升级出口</text>
+  <path class="arrow" d="M855 211 L950 211"/>
+  <rect class="out" x="950" y="145" width="115" height="132" rx="16"/><text class="label" x="1007" y="185" text-anchor="middle">可接班</text><text class="small" x="1007" y="213" text-anchor="middle">可查</text><text class="small" x="1007" y="238" text-anchor="middle">可追责</text>
+  <text class="small" x="550" y="370" text-anchor="middle">本步新增三层结构、时间戳和升级出口，把“我看过了”变成“下一班能复核”。</text>
+</svg>

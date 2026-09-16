@@ -5,6 +5,7 @@
 > 故事情节：主角写了一个 `if`，后面的代码里类型**自己变窄了**——第一次感觉编译器在"思考"
 > ✅ 状态：已完成（2026-09-03）｜ 实操环境：Node.js v22.14.0 + TypeScript 7.0.2（**文中所有输出均为本课本机实测**）
 > ⚠️ **本课是阶段 2 核心，也是全课程的分水岭**
+> 📖 结论已按官方文档核对（核查于 2026-09-16 ｜ 来源：[Narrowing 路由表](../../../web-index/typescript/index.md)）
 
 ## 🎯 本课目标
 
@@ -24,7 +25,7 @@
 
 | 用到的 JS 概念 | 掌握要求 | 回补 |
 |---------------|---------|------|
-| `typeof` / `instanceof` 运算符 | 需理解 | [JS 课 1 类型检测的四种方式](../javascript-core/stages/1-值与作用域/lessons/lesson-01-变量与类型.md) ✅ 已学 |
+| `typeof` / `instanceof` 运算符 | 需理解 | [JS 课 1 类型检测的四种方式](../../../../javascript-core/stages/1-值与作用域/lessons/lesson-01-变量与类型.md) ✅ 已学 |
 | `class` 与 `instanceof` 的关系 | 会用即可 | 本课只借 `instanceof` 做收窄，机制在课 7 展开 |
 | `switch` 语句 | 会用即可 | — |
 | `in` 运算符（判断属性是否存在） | 会用即可 | 入门级 |
@@ -98,6 +99,16 @@ discount(3) = count = 3
 
 ---
 
+### 一句话本质
+
+> 本课把条件判断产生的信息传给类型系统，让每条分支只保留可能成立的类型。
+
+### 处境对照
+
+| 不收窄 | 收窄后 |
+|---|---|
+| 每次访问都要防御未知情况 | 分支内部获得更精确的类型 |
+
 ## 第二幕：认知冲突
 
 换成 TS 之后，你撞上了三件既惊喜又困惑的事：
@@ -141,9 +152,25 @@ function next(status: "pending" | "paid" | "refunded") {
 
 ## 第三幕：层层揭示
 
+### 一眼全局图
+
+![本课一眼全局图](../assets/lesson-05-entry.svg)
+
+> 看图：一个值起初可能性很多，条件判断逐步排除不可能，最终每条分支都能安全使用。
+
+### 本课地图
+
+| 步骤 | 要解决什么 | 对应知识点 |
+|---|---|---|
+| 第 1 步 | 用现成的条件判断排除不可能 | 知识点 1：内置收窄手段 |
+| 第 2 步 | 把业务规则写成可复用的证明 | 知识点 2：自定义类型守卫与断言函数 |
+| 第 3 步 | 让控制流结束时暴露遗漏分支 | 知识点 3：控制流分析与穷尽性检查 |
+
 > ⚠️ **本课的默认环境**（与前四课一致）：所有示例在 `playground/lesson-05/` 目录下执行，**没有 `tsconfig.json`**，直接 `npx tsc xxx.ts` 编译单个文件。TS 7.0.2 默认 `strict: true`。
 
 ### 知识点 1：内置收窄手段
+
+> 🧭 第 1/3 步｜承接：第二幕的值有多种可能，不能直接调用属性 → 本步：用 `typeof`、`in`、`instanceof` 等已有线索收窄。
 
 > 关键点：typeof / 真值 / 相等 / instanceof / in 五种收窄 / 各自适用类型范围与盲区
 
@@ -331,6 +358,8 @@ narrowing-probe2.ts(26,3): error TS2322: Type 'boolean' is not assignable to typ
 
 ### 知识点 2：自定义类型守卫与断言函数
 
+> 🧭 第 2/3 步｜承接：内置线索不够表达业务规则 → 本步：把自己的判断函数声明为类型证据。
+
 > 关键点：`x is T` 谓词 / `asserts x is T` / 断言函数的显式标注要求 / 守卫"说谎"的后果
 
 #### 一句话定义
@@ -511,6 +540,8 @@ guards-probe.ts(34,15): error TS18046: 'value' is of type 'unknown'.
 ---
 
 ### 知识点 3：控制流分析与穷尽性检查
+
+> 🧭 第 3/3 步｜承接：分支已经能收窄，还要知道“是不是每种情况都处理了” → 本步：用控制流和 `never` 找出遗漏。
 
 > 关键点：可达性与收窄传播 / `never` 兜底 / `switch` 穷尽报错 / 闭包里的收窄重置
 
@@ -845,6 +876,14 @@ useLying(null);   // 💥 运行时崩溃
 
 ---
 
+## 🗣️ 术语锚定速查
+
+| 对应知识点 | 本课说法 | 行业标准叫法 | 在哪里遇到 |
+|---|---|---|---|
+| 内置收窄 | 用条件排除类型 | type guard / narrowing | `typeof`、`in`、`instanceof` |
+| 自定义守卫 | 函数返回类型证据 | type predicate / assertion function | `value is T`、`asserts` |
+| 控制流检查 | 分支结束仍有遗漏 | control flow analysis / exhaustiveness checking | `never`、`switch` 默认分支 |
+
 ## 🐞 常见误区
 
 1. **"用 `typeof x === "object"` 判断是不是对象。"** → `null` 也会通过（TS18047）。判断 `null` 用 `=== null`。
@@ -988,7 +1027,7 @@ error TS2345: Argument of type '"refunded"' is not assignable to parameter of ty
 
 ➡️ **下一课**：[课 6：any·unknown·never 与信任边界](lesson-06-any·unknown·never与信任边界.md)
 
-📚 **返回目录**：[课程目录](../../02-课程目录.md)
+📚 **返回目录**：[课程目录](../../../02-课程目录.md)
 
 ---
 

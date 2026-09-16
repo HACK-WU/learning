@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="420" viewBox="0 0 1100 420">
+  <style>
+    .bg{fill:#f8fafc}.box{fill:#fff;stroke:#94a3b8;stroke-width:2}.source{fill:#e0f2fe;stroke:#38bdf8;stroke-width:2}.warn{fill:#fee2e2;stroke:#ef4444;stroke-width:2}.title{font:700 26px sans-serif;fill:#0f172a}.label{font:600 18px sans-serif;fill:#0f172a}.small{font:15px sans-serif;fill:#475569}.arrow{stroke:#64748b;stroke-width:3;fill:none;marker-end:url(#arrow)}
+  </style>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker></defs>
+  <rect class="bg" width="1100" height="420" rx="24"/>
+  <text class="title" x="550" y="48" text-anchor="middle">基础实现：收到申请就直接改 Topic</text>
+  <rect class="source" x="55" y="145" width="180" height="95" rx="16"/><text class="label" x="145" y="183" text-anchor="middle">业务申请</text><text class="small" x="145" y="211" text-anchor="middle">分区 / 保留 / 副本</text>
+  <path class="arrow" d="M235 193 L335 193"/>
+  <rect class="box" x="335" y="145" width="205" height="95" rx="16"/><text class="label" x="437" y="183" text-anchor="middle">直接 CLI</text><text class="small" x="437" y="211" text-anchor="middle">create / alter</text>
+  <path class="arrow" d="M540 193 L640 193"/>
+  <rect class="box" x="640" y="145" width="205" height="95" rx="16"/><text class="label" x="742" y="183" text-anchor="middle">命令返回成功</text><text class="small" x="742" y="211" text-anchor="middle">只证明请求被接受</text>
+  <path class="arrow" d="M845 193 L935 193"/>
+  <rect class="warn" x="935" y="145" width="130" height="95" rx="16"/><text class="label" x="1000" y="183" text-anchor="middle">未知</text><text class="small" x="1000" y="211" text-anchor="middle">无回退包</text>
+  <text class="small" x="550" y="340" text-anchor="middle">本步解决了“怎么发起变更”，但没有解决配置来源、不可逆动作和完成判据。</text>
+</svg>

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 520" font-family="-apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="980" height="520" fill="#ffffff"/>
+  <text x="38" y="40" fill="#1f2328" font-size="22" font-weight="700">Kafka 运维对象分层</text>
+  <text x="38" y="66" fill="#57606a" font-size="13">职责可以同进程部署，但检查时仍要分层验证</text>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L8,3 L0,6 Z" fill="#57606a"/></marker>
+  </defs>
+  <g>
+    <rect x="40" y="102" width="900" height="68" rx="10" fill="#f6f8fa" stroke="#0969da" stroke-width="2"/>
+    <text x="70" y="143" fill="#0969da" font-size="16" font-weight="700">客户端请求层</text>
+    <text x="280" y="143" fill="#1f2328" font-size="14">Produce / Fetch / Admin 请求从这里进入</text>
+  </g>
+  <path d="M490 175 L490 205" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+  <g>
+    <rect x="40" y="210" width="420" height="86" rx="10" fill="#f6f8fa" stroke="#1a7f37" stroke-width="2"/>
+    <text x="70" y="247" fill="#1a7f37" font-size="16" font-weight="700">数据面 · Broker</text>
+    <text x="70" y="274" fill="#57606a" font-size="13">服务客户端、保存分区数据、复制日志</text>
+    <rect x="520" y="210" width="420" height="86" rx="10" fill="#f6f8fa" stroke="#9a6700" stroke-width="2"/>
+    <text x="550" y="247" fill="#9a6700" font-size="16" font-weight="700">控制面 · Controller</text>
+    <text x="550" y="274" fill="#57606a" font-size="13">处理元数据变化、成员状态和仲裁</text>
+  </g>
+  <path d="M250 301 L250 335 M730 301 L730 335" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+  <g>
+    <rect x="40" y="340" width="420" height="90" rx="10" fill="#ffffff" stroke="#8250df" stroke-width="2"/>
+    <text x="70" y="378" fill="#8250df" font-size="16" font-weight="700">业务日志</text>
+    <text x="70" y="406" fill="#57606a" font-size="13">Topic 分区、segment、实际消息数据</text>
+    <rect x="520" y="340" width="420" height="90" rx="10" fill="#ffffff" stroke="#8250df" stroke-width="2"/>
+    <text x="550" y="378" fill="#8250df" font-size="16" font-weight="700">元数据日志</text>
+    <text x="550" y="406" fill="#57606a" font-size="13">集群结构、分区归属、配置和状态变化</text>
+  </g>
+  <rect x="40" y="455" width="900" height="38" rx="8" fill="#fff8c5" stroke="#d29922"/>
+  <text x="490" y="480" text-anchor="middle" fill="#1f2328" font-size="13">注意：combined server = 数据面 + 控制面同一服务，不等于职责消失</text>
+</svg>

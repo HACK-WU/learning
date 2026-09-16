@@ -4,6 +4,7 @@
 > 本课知识点：对象类型：interface 与 type、结构化类型系统、类型断言与 satisfies
 > 故事情节：统一记录格式上线，同一个对象两种命运——**写在变量里放行，直接写在调用里报错**
 > ✅ 状态：已完成（2026-09-03）｜ 实操环境：Node.js v22.14.0 + TypeScript 7.0.2（**文中所有输出均为本机实测**）
+> 📖 结论已按官方文档核对（核查于 2026-09-16 ｜ 来源：[TypeScript Handbook 路由表](../../../web-index/typescript/index.md)）
 
 ## 🎯 本课目标
 
@@ -119,13 +120,40 @@ const row3 = { id: "u1", name: "Alice" } as DataRow; // 缺了 score，居然过
 
 这三个问题，恰好对应本课的三个知识点。
 
+### 一句话本质
+
+> 本课把“对象长什么样”变成可复用的契约，再解释为什么 TS 更关心形状而不是名字，以及如何谨慎地表达已有值。
+
+### 处境对照
+
+| 做法 | 结果 |
+|---|---|
+| 每个调用点各自猜对象字段 | 同一份数据可能被不同地方解释成不同形状 |
+| 先定义可检查的形状，再在边界验证 | 调用方能共享契约，额外字段和断言风险更容易被发现 |
+
 ---
 
 ## 第三幕：层层揭示
 
 > ⚠️ **本课的默认环境**（与课 2 一致）：所有示例在 `playground/lesson-03/` 目录下执行，**没有 `tsconfig.json`**，直接 `npx tsc xxx.ts` 编译单个文件。TS 7.0.2 默认 `strict: true`。
 
+### 一眼全局图
+
+![本课一眼全局图](../assets/lesson-03-entry.svg)
+
+> 看图：不同来源的对象先被放到同一个形状比较器中，再决定哪些能通过、哪些要在边界处拦截。
+
+### 本课地图
+
+| 步骤 | 要解决什么 | 对应知识点 |
+|---|---|---|
+| 第 1 步 | 先定义和复用对象形状 | 知识点 1：对象类型：interface 与 type |
+| 第 2 步 | 理解“形状兼容”而非“名字相同” | 知识点 2：结构化类型系统 |
+| 第 3 步 | 区分相信编译器、约束表达式和运行时校验 | 知识点 3：类型断言与 satisfies |
+
 ### 知识点 1：对象类型：interface 与 type
+
+> 🧭 第 1/3 步｜承接：第二幕在问“同一份记录如何被不同地方理解” → 本步：先建立可复用的对象形状。
 
 > 关键点：可选·只读·索引签名 / `extends` 与交叉 `&` / 声明合并 / 能力边界对比 / 选型清单
 
@@ -341,9 +369,19 @@ objects-probe.ts(26,3): error TS2411: Property 'id' of type 'string' is not assi
 - 对象类型：https://www.typescriptlang.org/docs/handbook/2/objects.html
 - interface vs type：https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#differences-between-type-aliases-and-interfaces
 
+#### 🗣️ 行话对照
+
+| 本课说法 | 行业标准叫法 | 在哪里遇到 |
+|---|---|---|
+| 对象形状 | object type / object shape | API DTO、表单模型、函数参数 |
+| 接口 | `interface` | 可扩展对象契约、库公开类型 |
+| 类型别名 | type alias | 联合、元组、映射和组合类型 |
+
 ---
 
 ### 知识点 2：结构化类型系统
+
+> 🧭 第 2/3 步｜承接：有了对象形状后，仍要解释“没有同名声明为什么也能赋值” → 本步：改用成员结构判断兼容性。
 
 > 关键点：看形状不看名字 / 宽度与深度两条规则 / 多余属性检查（新鲜性）/ `{}` 的坑
 
@@ -501,9 +539,19 @@ structural-probe.ts(36,46): error TS2353: Object literal may only specify known 
 - 结构化类型（Type Compatibility）：https://www.typescriptlang.org/docs/handbook/type-compatibility.html
 - 多余属性检查：https://www.typescriptlang.org/docs/handbook/2/objects.html#excess-property-checks
 
+#### 🗣️ 行话对照
+
+| 本课说法 | 行业标准叫法 | 在哪里遇到 |
+|---|---|---|
+| 按形状兼容 | structural typing / type compatibility | 赋值检查、函数参数、类兼容 |
+| 多余属性检查 | excess property checks | 对象字面量直接赋值时报错 |
+| 变量中转放行 | freshness / fresh object literal | 结构化类型的边界行为 |
+
 ---
 
 ### 知识点 3：类型断言与 satisfies
+
+> 🧭 第 3/3 步｜承接：形状兼容能帮助检查，但不能证明运行时值真实可靠 → 本步：区分断言、约束和运行时校验。
 
 > 关键点：`as` 的语义与三条边界 / 双重断言 / `satisfies` 保留推导 / 三种写法对比表
 
@@ -662,6 +710,14 @@ assertions-probe.ts(34,40): error TS2353: Object literal may only specify known 
 
 - 类型断言：https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#type-assertions
 - `satisfies` 运算符（TS 4.9 发布说明）：https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html
+
+#### 🗣️ 行话对照
+
+| 本课说法 | 行业标准叫法 | 在哪里遇到 |
+|---|---|---|
+| 类型断言 | type assertion | `as T`、边界适配、遗留 API |
+| 满足约束但保留推导 | `satisfies` operator | 配置对象、字面量校验 |
+| 运行时验证 | runtime validation | 网络响应、用户输入、JSON.parse |
 
 ---
 
@@ -891,9 +947,9 @@ type ReportConfig = { title: string; sortBy: "id" | "score" };
 
 ⬅️ **上一课**：[课 2：基础类型标注与推导](lesson-02-基础类型标注与推导.md)
 
-➡️ **下一课**：[阶段 2 · 课 4：联合类型与字面量类型](../2-收窄与控制流/lessons/lesson-04-联合类型与字面量类型.md)（阶段 1 已收官）
+➡️ **下一课**：[阶段 2 · 课 4：联合类型与字面量类型](../../2-收窄与控制流/lessons/lesson-04-联合类型与字面量类型.md)（阶段 1 已收官）
 
-📚 **返回目录**：[课程目录](../../02-课程目录.md)
+📚 **返回目录**：[课程目录](../../../02-课程目录.md)
 
 ---
 

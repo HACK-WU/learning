@@ -5,6 +5,8 @@
 > 故事情节：项目构建飞快，类型却从头到尾没检查过一次——**CI 全绿，线上全红**
 > ✅ 状态：已完成（2026-09-04）｜ 实操环境：Node.js v22.14.0 + TypeScript 7.0.2（**文中所有输出均为本课本机实测**）
 
+> 📖 结论已按官方文档核对（核查于 2026-09-16 ｜ 来源：[TypeScript 7.0 官方公告](../../../web-index/typescript-blog/index.md)、[Vite 路由表](../../../web-index/typescript/index.md)）
+
 ## 🎯 本课目标
 
 - 分清 `tsc` / `tsx` / `ts-node` / esbuild / swc / Vite 的分工，知道哪一步会**悄悄跳过类型检查**
@@ -161,6 +163,16 @@ total = 0100
 
 ---
 
+### 一句话本质
+
+> 本课把快速转译、类型检查、代码规范和 CI 门禁拆成各自负责又能协作的流水线。
+
+### 处境对照
+
+| 只追求构建快 | 分离转译与检查 |
+|---|---|
+| CI 可能全绿、类型错误进入线上 | 快速反馈和完整门禁各司其职 |
+
 ## 第二幕：认知冲突
 
 你决定把类型检查加上，结果撞了三堵墙：
@@ -190,9 +202,25 @@ $ npx eslint .
 
 ## 第三幕：层层揭示
 
+### 一眼全局图
+
+![本课一眼全局图](../assets/lesson-12-entry.svg)
+
+> 看图：快速转译、独立类型检查和 CI 门禁是三条协作链，不能把第一条误当成全部保障。
+
+### 本课地图
+
+| 步骤 | 要解决什么 | 对应知识点 |
+|---|---|---|
+| 第 1 步 | 分清运行、转译、构建和类型检查 | 知识点 1：运行与构建工具分工 |
+| 第 2 步 | 在 TS 7 API 过渡期配置 lint | 知识点 2：ESLint 与 typescript-eslint |
+| 第 3 步 | 把类型检查和失败退出码接入团队流程 | 知识点 3：类型检查进 CI 与团队规范 |
+
 > ⚠️ **本课的实测环境**：所有结论都在 `playground/lesson-12/` 下**实际跑过**（6 个子项目）。TS 7 与生态的兼容性以官方公告 + 各包 `peerDependencies` 实测为准。
 
 ### 知识点 1：运行与构建工具分工
+
+> 🧭 第 1/3 步｜承接：第二幕中“构建很快但类型错误漏掉” → 本步：先分清每个工具到底负责哪一类工作。
 
 > 关键点：`tsc` 检查 vs 转译 / `tsx`、`ts-node` / esbuild、swc、Vite 分工 / 别让类型检查被跳过 / JSDoc + `checkJs` 的轻量路线
 
@@ -405,6 +433,8 @@ src/closure-style.js(5,20): error TS1005: '}' expected.
 ---
 
 ### 知识点 2：ESLint 与 typescript-eslint
+
+> 🧭 第 2/3 步｜承接：类型检查和代码规范不是同一件事，且工具可能依赖 TS API → 本步：设计 lint 与 TS 版本的协作方式。
 
 > 关键点：TS 7 无 API → `@typescript/typescript6` 并存方案 / 类型感知 lint / 与 `tsc` 的分工
 
@@ -621,6 +651,8 @@ export default tseslint.config(
 ---
 
 ### 知识点 3：类型检查进 CI 与团队规范
+
+> 🧭 第 3/3 步｜承接：本地工具分工明确后，最后要让团队流程不会吞掉失败 → 本步：建立可见、可失败的 CI 门禁。
 
 > 关键点：`--noEmit` / pre-commit / 类型严格度的团队约定 / 代码评审时看什么
 
@@ -866,6 +898,14 @@ $ npx eslint .        →  4 errors           （tsc 一条都没查出来）
 
 ---
 
+## 🗣️ 术语锚定速查
+
+| 对应知识点 | 本课说法 | 行业标准叫法 | 在哪里遇到 |
+|---|---|---|---|
+| 工具分工 | 转译不等于检查 | transpilation / type checking | Vite、Oxc、`tsc --noEmit` |
+| 类型感知 lint | 规则需要 TS API | typed linting / typescript-eslint | ESLint flat config、peerDependencies |
+| CI 门禁 | 失败必须可见 | typecheck gate / pipeline exit code | `npm run ci`、pre-commit、CI |
+
 ## 🐞 常见误区
 
 1. **"能构建成功就说明类型没问题。"** → 完全无关，实测 esbuild exit=0 而运行时 `TypeError`。
@@ -1061,9 +1101,9 @@ $ npx eslint .
 
 ⬅️ **上一课**：[课 11：模块与声明文件](lesson-11-模块与声明文件.md)
 
-➡️ **下一课**：[课 13：类型体操进阶](../../5-深入与架构/lessons/lesson-13-类型体操进阶.md)（阶段 5 · 待编写）
+➡️ **下一课**：[课 13：类型体操进阶](../../5-深入与架构/lessons/lesson-13-类型体操进阶.md)（阶段 5）
 
-📚 **返回目录**：[课程目录](../../02-课程目录.md)
+📚 **返回目录**：[课程目录](../../../02-课程目录.md)
 
 ---
 

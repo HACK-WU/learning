@@ -280,7 +280,29 @@
 
 ---
 
-## 八、索引
+## 八、课级入口索引
+
+> 每课的完整入口链（本质、处境对照、全局 SVG、本课地图）保留在课文；本表提供汇总手册中的快速入口，避免汇总后丢失读者定位。
+
+| 课 | 一句话本质 | 处境对照摘要 | 入口图 / 课文 |
+|---|---|---|---|
+| 1 | 把运行时才发现的问题提前到写代码时 | 运行时发现 vs 提前检查 | [SVG](stages/1-类型思维启蒙/assets/lesson-01-entry.svg) · [课文](stages/1-类型思维启蒙/lessons/lesson-01-TypeScript到底是什么.md) |
+| 2 | 判断何时依赖推导、何时必须写清 | 全部手写 vs 完全不写 | [SVG](stages/1-类型思维启蒙/assets/lesson-02-entry.svg) · [课文](stages/1-类型思维启蒙/lessons/lesson-02-基础类型标注与推导.md) |
+| 3 | 把对象形状变成可复用契约 | 各自猜字段 vs 共享形状 | [SVG](stages/1-类型思维启蒙/assets/lesson-03-entry.svg) · [课文](stages/1-类型思维启蒙/lessons/lesson-03-对象类型与结构化类型.md) |
+| 4 | 把可能状态收成有限集合 | `string` 放任 vs 合法状态可查 | [SVG](stages/2-收窄与控制流/assets/lesson-04-entry.svg) · [课文](stages/2-收窄与控制流/lessons/lesson-04-联合类型与字面量类型.md) |
+| 5 | 让条件判断带着类型信息走进分支 | 不收窄 vs 分支安全 | [SVG](stages/2-收窄与控制流/assets/lesson-05-entry.svg) · [课文](stages/2-收窄与控制流/lessons/lesson-05-类型收窄.md) |
+| 6 | 外部输入先验证，再进入可信区域 | 直接相信 vs 边界校验 | [SVG](stages/2-收窄与控制流/assets/lesson-06-entry.svg) · [课文](stages/2-收窄与控制流/lessons/lesson-06-any·unknown·never与信任边界.md) |
+| 7 | 为业务对象划定字段、职责和行为 | 随意修改 vs 职责明确 | [SVG](stages/2-收窄与控制流/assets/lesson-07-entry.svg) · [课文](stages/2-收窄与控制流/lessons/lesson-07-类与接口的类型世界.md) |
+| 8 | 一份逻辑服务多种类型且不丢信息 | 重复/`any` vs 泛型复用 | [SVG](stages/3-泛型与类型编程/assets/lesson-08-entry.svg) · [课文](stages/3-泛型与类型编程/lessons/lesson-08-泛型基础.md) |
+| 9 | 把重复类型改造变成可组合计算 | 手写多份 vs 类型计算 | [SVG](stages/3-泛型与类型编程/assets/lesson-09-entry.svg) · [课文](stages/3-泛型与类型编程/lessons/lesson-09-类型编程三件套与内置工具类型.md) |
+| 10 | 让源码、环境和产物遵守同一配置契约 | 旧配置撞墙 vs 环境匹配 | [SVG](stages/4-工程化与类型声明/assets/lesson-10-entry.svg) · [课文](stages/4-工程化与类型声明/lessons/lesson-10-tsconfig与编译配置.md) |
+| 11 | 让模块路径和外部库形状都能被找到 | 暂时通过 vs 解析/声明对齐 | [SVG](stages/4-工程化与类型声明/assets/lesson-11-entry.svg) · [课文](stages/4-工程化与类型声明/lessons/lesson-11-模块与声明文件.md) |
+| 12 | 把转译、检查、规范和 CI 分成协作流水线 | 只求快 vs 快速反馈加门禁 | [SVG](stages/4-工程化与类型声明/assets/lesson-12-entry.svg) · [课文](stages/4-工程化与类型声明/lessons/lesson-12-工具链集成与团队协作.md) |
+| 13 | 先评估复杂类型代价，再决定是否写 | 只看能力 vs 看维护成本 | [SVG](stages/5-深入与架构/assets/lesson-13-entry.svg) · [课文](stages/5-深入与架构/lessons/lesson-13-类型体操进阶.md) |
+| 14 | 把长报错和慢构建拆成可定位阶段 | 只看症状 vs 拆阶段找瓶颈 | [SVG](stages/5-深入与架构/assets/lesson-14-entry.svg) · [课文](stages/5-深入与架构/lessons/lesson-14-编译器原理与类型检查机制.md) |
+| 15 | 把类型边界收束成可演进的架构决策 | 随意共享 vs 控制变化半径 | [SVG](stages/5-深入与架构/assets/lesson-15-entry.svg) · [课文](stages/5-深入与架构/lessons/lesson-15-大型项目类型架构与选型收束.md) |
+
+## 九、索引
 
 - **学习档案**（进度 / 版本基线 / 评审记录）：[`00-学习档案.md`](00-学习档案.md)
 - **学习路径总览**（路线图 / 阶段目标）：[`01-学习路径总览.md`](01-学习路径总览.md)

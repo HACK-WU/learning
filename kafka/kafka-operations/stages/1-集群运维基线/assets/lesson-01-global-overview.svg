@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 430" font-family="-apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="1100" height="430" fill="#ffffff"/>
+  <text x="42" y="42" fill="#1f2328" font-size="23" font-weight="700">先把一座处理中心变成值班地图</text>
+  <text x="42" y="68" fill="#57606a" font-size="13">零术语全局图：先看全貌，再进入正式叫法</text>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#57606a"/>
+    </marker>
+  </defs>
+  <g>
+    <rect x="45" y="135" width="190" height="150" rx="12" fill="#f6f8fa" stroke="#0969da" stroke-width="2"/>
+    <text x="140" y="180" text-anchor="middle" fill="#0969da" font-size="17" font-weight="700">东西不断送来</text>
+    <text x="140" y="214" text-anchor="middle" fill="#57606a" font-size="13">有人送来</text>
+    <text x="140" y="238" text-anchor="middle" fill="#57606a" font-size="13">有人取走</text>
+    <text x="140" y="262" text-anchor="middle" fill="#57606a" font-size="13">还要记得放在哪里</text>
+  </g>
+  <path d="M242 210 L300 210" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+  <g>
+    <rect x="305" y="105" width="420" height="210" rx="14" fill="#f6f8fa" stroke="#1a7f37" stroke-width="2"/>
+    <text x="515" y="137" text-anchor="middle" fill="#1a7f37" font-size="17" font-weight="700">一座处理中心</text>
+    <rect x="335" y="160" width="105" height="105" rx="10" fill="#ffffff" stroke="#8c959f"/>
+    <text x="387" y="202" text-anchor="middle" fill="#1f2328" font-size="14">接待与</text>
+    <text x="387" y="226" text-anchor="middle" fill="#1f2328" font-size="14">处理</text>
+    <rect x="462" y="160" width="105" height="105" rx="10" fill="#ffffff" stroke="#8c959f"/>
+    <text x="514" y="202" text-anchor="middle" fill="#1f2328" font-size="14">统一</text>
+    <text x="514" y="226" text-anchor="middle" fill="#1f2328" font-size="14">指挥</text>
+    <rect x="589" y="160" width="105" height="105" rx="10" fill="#ffffff" stroke="#8c959f"/>
+    <text x="641" y="202" text-anchor="middle" fill="#1f2328" font-size="14">记录与</text>
+    <text x="641" y="226" text-anchor="middle" fill="#1f2328" font-size="14">存放</text>
+  </g>
+  <path d="M732 210 L790 210" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+  <g>
+    <rect x="795" y="105" width="260" height="210" rx="14" fill="#fff8c5" stroke="#9a6700" stroke-width="2"/>
+    <text x="925" y="143" text-anchor="middle" fill="#9a6700" font-size="17" font-weight="700">值班地图</text>
+    <line x1="825" y1="160" x2="1025" y2="160" stroke="#d0d7de"/>
+    <text x="925" y="194" text-anchor="middle" fill="#1f2328" font-size="14">谁负责</text>
+    <text x="925" y="232" text-anchor="middle" fill="#1f2328" font-size="14">哪里会坏</text>
+    <text x="925" y="270" text-anchor="middle" fill="#1f2328" font-size="14">什么叫健康</text>
+  </g>
+  <text x="42" y="375" fill="#6e7781" font-size="12">读图顺序：来什么 → 怎么处理 → 如何记录 → 值班时核对什么</text>
+</svg>

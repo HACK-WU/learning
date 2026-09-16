@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="260" viewBox="0 0 900 260">
+  <rect width="900" height="260" fill="#ffffff"/>
+  <g font-family="Arial, sans-serif" fill="#1f2937" text-anchor="middle">
+    <rect x="45" y="90" width="210" height="80" rx="14" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+    <text x="150" y="125" font-size="20" font-weight="700">代码写下的位置</text><text x="150" y="151" font-size="14">留下可查找的范围</text>
+    <rect x="345" y="90" width="210" height="80" rx="14" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="450" y="125" font-size="20" font-weight="700">名字沿路查找</text><text x="450" y="151" font-size="14">从近处找到远处</text>
+    <rect x="645" y="90" width="210" height="80" rx="14" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+    <text x="750" y="125" font-size="20" font-weight="700">稍后仍能使用</text><text x="750" y="151" font-size="14">记住当时的环境</text>
+  </g>
+  <g stroke="#475569" stroke-width="3" fill="none"><path d="M255 130h82"/><path d="M555 130h82"/></g>
+  <g fill="#475569"><path d="M337 130l-12-8v16z"/><path d="M637 130l-12-8v16z"/></g>
+</svg>
