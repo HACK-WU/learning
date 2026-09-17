@@ -493,7 +493,7 @@ RabbitMQ 4.x 有三种队列**实现类型**（`x-queue-type`），它们在**�
   - ❌ 不支持 `auto-delete`（报 `invalid property 'auto-delete'`）
   - ❌ **不支持 AMQP 的 `basic.get`**（报 `NOT_IMPLEMENTED - basic.get not supported by stream queues`）
   - ❌ 不支持优先级、死信
-- **必须用 stream 协议消费**（端口 **5552**，默认未启用插件，需 `rabbitmq-plugins enable rabbitmq_stream`）
+- **AMQP `basic.consume` 可以把 stream 当普通队列消费**；需要按 offset 回放、读取流特有属性时，再使用 stream 专用协议（端口 **5552**，默认未启用插件，需 `rabbitmq-plugins enable rabbitmq_stream`）
 - 实测**空队列**内存：**34,704 B**（约 34 KB），注意它比 classic 大不少——stream 的内存优势体现在**大量消息**时（消息存段文件、不常驻内存），空队列时反而不占优
 
 > 💡 **本课环境提示**：课 3 起的 `rabbitmq-learn` 容器**没有开启 stream 插件**，也**没有把 5552 端口映射到宿主机**。我为本课额外启用了插件（`rabbitmq-plugins enable rabbitmq_stream`）。stream 的实操需要共享容器网络的 sidecar 容器才能连上 5552——这在 `playground/l5-stream-sidecar.sh` 里有可复现的脚本。**classic 与 quorum 用普通 AMQP（5672）即可，不受影响。**
@@ -526,7 +526,7 @@ ch.queue_declare(queue='q_classic', durable=True,
 ch.queue_declare(queue='q_quorum',  durable=True,
                  arguments={'x-queue-type': 'quorum'})
 ch.queue_declare(queue='q_stream',  durable=True,
-                 arguments={'x-queue-type': 'stream'})   # 消费需用 5552 端口
+                 arguments={'x-queue-type': 'stream'})   # basic.consume 走 5672；offset/原生流能力走 5552
 ```
 
 #### 常见误区
@@ -537,21 +537,20 @@ ch.queue_declare(queue='q_stream',  durable=True,
 
 3. **"stream 就是能存很多消息的队列"**：错得比较深。stream 的**本质区别是消费语义**（非破坏性 + offset 寻址），不是容量。而且它**特性最少**——TTL、优先级、死信、长度限制全不支持。把 stream 当普通队列用会处处碰壁。
 
-4. **"stream 用 AMQP 就能消费"**：实测报 `NOT_IMPLEMENTED - basic.get not supported by stream queues`。必须用 stream 协议（5552）与对应客户端（如 Python 的 `rstream`）。
+4. **"stream 完全不能用 AMQP 消费"**：错。RabbitMQ 4.3 支持用 AMQP `basic.consume` 把 stream 当普通队列消费；实测不支持的是 `basic.get`。如果要按 offset 回放或使用流协议专有能力，才用 5552 端口与对应客户端（如 Python 的 `rstream`）。
 
 5. **"classic 队列在 4.x 已经过时该淘汰了"**：错。官方明确说**非复制的 classic 队列持续受支持并继续开发**，被移除的只是它的**镜像**功能。默认类型实测仍是 classic。
 
 #### 一句话记住
 
-**classic 是默认、最省资源（13,984 B）、特性最全但会丢；quorum 是 Raft 多副本、数据安全优先、内存 2.8~3.4 倍代价；stream 是日志型、读完不删可回放、但特性最少且必须用 5552 专用协议。**
+**classic 是默认、最省资源（13,984 B）、特性最全但会丢；quorum 是 Raft 多副本、数据安全优先、内存 2.8~3.4 倍代价；stream 是日志型、读完不删可回放、特性最少；普通 AMQP 可 `basic.consume`，offset/流特有能力走 5552 专用协议。**
 
 #### 官方文档
 
 - 队列类型总览：https://www.rabbitmq.com/docs/queues#types
 - Classic Queues：https://www.rabbitmq.com/docs/classic-queues
 - Quorum Queues（含"何时不该用"）：https://www.rabbitmq.com/docs/quorum-queues
-- Streams：https://www.rabbitmq.com/docs/streams
-- Stream 插件与协议：https://www.rabbitmq.com/docs/stream
+- Stream 队列与 AMQP / 专用协议：https://www.rabbitmq.com/docs/stream
 
 ---
 
@@ -664,7 +663,7 @@ bash /mnt/d/projects/learning/rabbitmq/playground/l5-verify.sh
 
 7. **quorum 更好所以都该用** → 错。实测内存是 classic 的 **2.8~3.4 倍**（13,984 B vs 39,492~47,412 B），延迟更高。临时队列、最低延迟、可丢数据等场景不该用。
 
-8. **stream 就是容量大的普通队列** → 错。本质区别是**非破坏性消费**，且特性最少（TTL/优先级/死信/长度限制全不支持），还**不能用 AMQP 消费**。
+8. **stream 就是容量大的普通队列** → 错。本质区别是**非破坏性消费**，且特性最少（TTL/优先级/死信/长度限制全不支持）；AMQP `basic.consume` 可用，但 `basic.get` 不可用。
 
 9. **队列类型能改 / 能用 policy 改** → 都不能。只能删了重建，或通过 `default_queue_type` 配置改新建队列的默认值。
 
@@ -759,7 +758,7 @@ A 恰恰是 quorum 的**典型适用场景**。注意 quorum 的内存开销：�
 
 <details><summary>答案与解析</summary>
 
-**答案：B**。实测：对 stream 队列执行 `basic.get` 会报 `NOT_IMPLEMENTED - basic.get not supported by stream queues`。stream **必须**用 stream 协议（端口 5552）和对应客户端（Python 用 `rstream`）消费。
+**答案：B**。实测：对 stream 队列执行 `basic.get` 会报 `NOT_IMPLEMENTED - basic.get not supported by stream queues`。但这不代表 AMQP 全面不可消费：`basic.consume` 可以走普通 AMQP；按 offset 回放等流特有能力才需要 5552 端口和对应客户端（Python 用 `rstream`）。
 
 A 是 stream 的核心特性（实测连读三轮都能读到全部消息）；C 实测确认为 `invalid arg ... of queue type rabbit_stream_queue`；D 需要 `rabbitmq-plugins enable rabbitmq_stream`。
 </details>
@@ -791,7 +790,7 @@ D 是"transient 非独占队列"（541）的行为，两者错误级别不同，
 | 5 | exclusive 粒度误解 | 以为是信道级 | 实为**连接级**，同连接多信道可共享 |
 | 6 | 队列属性/类型不可改 | `inequivalent arg` | 删了重建；类型还需注意不能靠 policy 改 |
 | 7 | 消息超限 | 静默丢弃，异步暴露 406 | 消息保持 KB 级，大 payload 放对象存储 |
-| 8 | stream 用 AMQP 消费 | `NOT_IMPLEMENTED - basic.get` | 用 stream 协议 5552 + `rstream` 客户端 |
+| 8 | stream 用 `basic.get` 消费 | `NOT_IMPLEMENTED - basic.get` | 普通实时消费用 AMQP `basic.consume`；按 offset 回放用 5552 + `rstream` |
 | 9 | stream 设 TTL/长度限制 | `invalid arg ... rabbit_stream_queue` | stream 用保留策略（retention）而非 TTL |
 | 10 | user_id 冒充 | `406 PRECONDITION_FAILED ... authenticated user was` | `user_id` 必须填当前认证用户 |
 
@@ -848,7 +847,7 @@ rabbitmq-plugins enable rabbitmq_stream rabbitmq_stream_management
 | 优先级 | ✅（需 x-max-priority） | ✅（4.3 严格 0-31） | ❌ |
 | 排它 / 非持久化 | ✅ | ❌ | ❌ |
 | auto-delete | ✅ | ❌ | ❌ |
-| AMQP 消费 | ✅ | ✅ | ❌（需 5552） |
+| AMQP 消费 | ✅ | ✅ | ✅ `basic.consume`；❌ `basic.get` |
 | 空队列内存（实测） | 13,984 B | 39,492→47,412 B | 34,704 B |
 
 ---

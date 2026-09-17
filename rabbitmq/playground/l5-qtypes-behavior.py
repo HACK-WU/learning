@@ -39,7 +39,7 @@ try:
     time.sleep(1)
     r = ch.queue_declare(queue='t_stream', durable=True, passive=True)
     print(f"  消息数 = {r.method.message_count}")
-    print("  stream 需专用协议(5552)消费；AMQP basic_get 对 stream 的行为如下：")
+    print("  stream 可用 AMQP basic_consume；basic_get 不支持。下面探测 basic_get，专用协议(5552)用于 offset/流特有能力：")
     m,h,b = ch.basic_get(queue='t_stream', auto_ack=True)
     print(f"    basic_get 结果: {b.decode() if b else None}")
 except Exception as e:

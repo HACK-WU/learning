@@ -511,11 +511,13 @@ pika.ConnectionParameters(
 
 ### 监控建议
 
-生产上必须监控这两个水位，并配置告警：
+生产上必须监控这两个水位，并配置告警。RabbitMQ 4.3.5 的 Prometheus 端点使用以下指标名：
 
-- **内存**：关注 `rabbitmq_node_mem_used` 与高水位的比值，接近时提前扩容或加速消费
-- **磁盘**：关注剩余空间，远早于 50MB 就该告警
-- **告警状态**：直接监控 `rabbitmq_node_alarms` 或 Management UI 的 Alarms 区域
+- **内存**：关注 `rabbitmq_process_resident_memory_bytes` 与 `rabbitmq_resident_memory_limit_bytes` 的比值，接近时提前扩容或加速消费
+- **磁盘**：关注 `rabbitmq_disk_space_available_bytes` 与 `rabbitmq_disk_space_available_limit_bytes`，远早于低水位就该告警
+- **告警状态**：直接监控 `rabbitmq_alarms_memory_used_watermark` / `rabbitmq_alarms_free_disk_space_watermark`（0/1）或 Management UI 的 Alarms 区域
+
+> ⚠️ 网上旧教程中的 `rabbitmq_node_mem_used`、`rabbitmq_node_alarms` 等名称不要直接复制；4.3.5 的 `:15692/metrics` 端点不存在这些现行名称，迁移对照见课 12 与排障速查手册。
 
 > 注意：本环境已启用 `rabbitmq_prometheus` 插件（实测 `rabbitmq-plugins list` 显示 `[E*]`），生产上可直接用它接入 Prometheus。
 

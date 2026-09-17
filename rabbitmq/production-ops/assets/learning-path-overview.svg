@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="560" viewBox="0 0 1000 560">
+  <rect width="1000" height="560" fill="#fff"/>
+  <text x="500" y="48" text-anchor="middle" font-size="26" font-weight="bold" fill="#333">RabbitMQ 生产运维专项</text>
+  <text x="500" y="78" text-anchor="middle" font-size="15" fill="#666">从“能连上”到“安全上线、可恢复、可升级”</text>
+  <g font-family="sans-serif">
+    <rect x="70" y="145" width="190" height="210" rx="12" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+    <text x="165" y="182" text-anchor="middle" font-size="18" font-weight="bold" fill="#1565c0">1 · 安全</text>
+    <text x="165" y="222" text-anchor="middle" font-size="14" fill="#333">账号 / vhost</text>
+    <text x="165" y="250" text-anchor="middle" font-size="14" fill="#333">权限正则</text>
+    <text x="165" y="278" text-anchor="middle" font-size="14" fill="#333">TLS / mTLS</text>
+    <text x="165" y="320" text-anchor="middle" font-size="13" fill="#555">谁能进来？</text>
+    <rect x="290" y="145" width="190" height="210" rx="12" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+    <text x="385" y="182" text-anchor="middle" font-size="18" font-weight="bold" fill="#2e7d32">2 · 控制面</text>
+    <text x="385" y="222" text-anchor="middle" font-size="14" fill="#333">Policy / 配置</text>
+    <text x="385" y="250" text-anchor="middle" font-size="14" fill="#333">Definitions</text>
+    <text x="385" y="278" text-anchor="middle" font-size="14" fill="#333">备份 / 恢复</text>
+    <text x="385" y="320" text-anchor="middle" font-size="13" fill="#555">怎么可维护？</text>
+    <rect x="510" y="145" width="190" height="210" rx="12" fill="#fff8e1" stroke="#ef6c00" stroke-width="2"/>
+    <text x="605" y="182" text-anchor="middle" font-size="18" font-weight="bold" fill="#ef6c00">3 · 可观察</text>
+    <text x="605" y="222" text-anchor="middle" font-size="14" fill="#333">指标 / 日志</text>
+    <text x="605" y="250" text-anchor="middle" font-size="14" fill="#333">告警 / 排障</text>
+    <text x="605" y="278" text-anchor="middle" font-size="14" fill="#333">消费者排空</text>
+    <text x="605" y="320" text-anchor="middle" font-size="13" fill="#555">出问题怎么办？</text>
+    <rect x="730" y="145" width="190" height="210" rx="12" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="2"/>
+    <text x="825" y="182" text-anchor="middle" font-size="18" font-weight="bold" fill="#6a1b9a">4 · 演进</text>
+    <text x="825" y="222" text-anchor="middle" font-size="14" fill="#333">Federation / Shovel</text>
+    <text x="825" y="250" text-anchor="middle" font-size="14" fill="#333">升级 / 回滚</text>
+    <text x="825" y="278" text-anchor="middle" font-size="14" fill="#333">4.x 迁移</text>
+    <text x="825" y="320" text-anchor="middle" font-size="13" fill="#555">变化如何可控？</text>
+    <path d="M260 250 H290 M480 250 H510 M700 250 H730" stroke="#555" stroke-width="3"/>
+    <path d="M280 244 L290 250 L280 256 M500 244 L510 250 L500 256 M720 244 L730 250 L720 256" fill="#555"/>
+  </g>
+  <rect x="130" y="420" width="740" height="58" rx="29" fill="#fafafa" stroke="#9e9e9e"/>
+  <text x="500" y="456" text-anchor="middle" font-size="16" fill="#333">安全边界 → 控制面 → 可观察性 → 可回滚的演进</text>
+</svg>

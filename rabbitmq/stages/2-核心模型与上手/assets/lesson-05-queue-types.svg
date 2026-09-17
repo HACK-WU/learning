@@ -85,7 +85,7 @@
     <text x="692" y="330" font-size="12.5" fill="#2e7d32">✅ 任意 offset 重放 / 多消费者独立读</text>
     <text x="692" y="350" font-size="12.5" fill="#c62828">❌ 不支持 TTL / 优先级 / auto-delete</text>
     <text x="692" y="370" font-size="12.5" fill="#c62828">❌ AMQP basic.get 不支持</text>
-    <text x="692" y="390" font-size="12" fill="#666">须用 stream 协议（端口 5552）</text>
+    <text x="692" y="390" font-size="12" fill="#666">✅ basic.consume；offset 回放走 5552</text>
 
     <text x="692" y="418" font-size="13" font-weight="bold" fill="#4a148c">实测内存（空队列）</text>
     <text x="692" y="440" font-size="12.5" fill="#333">34,704 B（约 34 KB）</text>
