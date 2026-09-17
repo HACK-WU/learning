@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="420" viewBox="0 0 900 420">
+  <title>Transactional Outbox 与 CDC</title>
+  <desc>业务写库与 outbox 在同一数据库事务内提交，再由投递器或 CDC 发布到 Kafka。</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#1565c0"/></marker></defs>
+  <rect width="900" height="420" fill="#fff"/>
+  <text x="40" y="42" font-size="24" font-weight="700" fill="#333">把一致性边界放在真正能做事务的地方</text>
+  <rect x="45" y="105" width="190" height="95" rx="12" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="140" y="143" text-anchor="middle" font-size="18" fill="#333">业务事务</text><text x="140" y="173" text-anchor="middle" font-size="15" fill="#555">订单表 + outbox</text>
+  <line x1="235" y1="152" x2="330" y2="152" stroke="#1565c0" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="330" y="92" width="220" height="120" rx="12" fill="#fafafa" stroke="#555" stroke-width="2"/>
+  <text x="440" y="130" text-anchor="middle" font-size="18" fill="#333">投递层</text><text x="440" y="162" text-anchor="middle" font-size="15" fill="#555">轮询或 CDC</text><text x="440" y="188" text-anchor="middle" font-size="14" fill="#555">可重试 + 可观测</text>
+  <line x1="550" y1="152" x2="645" y2="152" stroke="#1565c0" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="645" y="105" width="210" height="95" rx="12" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="750" y="143" text-anchor="middle" font-size="18" fill="#333">Kafka</text><text x="750" y="173" text-anchor="middle" font-size="15" fill="#555">下游各自消费</text>
+  <rect x="120" y="285" width="660" height="76" rx="12" fill="#fff8e1" stroke="#d29922" stroke-width="2"/>
+  <text x="450" y="318" text-anchor="middle" font-size="17" fill="#333">数据库事务保证“业务事实 + 待发布事件”同成同败</text>
+  <text x="450" y="344" text-anchor="middle" font-size="14" fill="#555">Kafka 仍需消费端幂等；outbox 仍需清理、重试与告警</text>
+</svg>

@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="450" viewBox="0 0 900 450" font-family="Helvetica, Arial, sans-serif">
+  <title>解法 A：加可选字段并给默认值，让新旧读者共存</title>
+  <desc>同一个 orders topic 内新旧两种结构并存；旧读者忽略未知字段、新读者对缺失字段回退默认值，双方都能读完整条流；一旦反序列化器是严格模式，兼容演进的通路即被切断。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#333333"/>
+    </marker>
+    <marker id="arrowred" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#c62828"/>
+    </marker>
+  </defs>
+  <rect width="900" height="450" fill="#ffffff"/>
+  <text x="20" y="30" font-size="16" fill="#333333">解法 A：老消息进新读者、新消息进老读者，两个方向都要能读</text>
+
+  <!-- 中间：topic 内的两种结构 -->
+  <text x="20" y="70" font-size="13" fill="#333333">同一个 orders topic（不做任何拆分，两种结构并存）</text>
+  <rect x="20" y="84" width="380" height="110" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="40" y="110" font-size="12" fill="#333333">v1 老消息（历史积压 / 回放）</text>
+  <text x="40" y="134" font-size="11" fill="#333333">{ order_id, amount: 12900 }</text>
+  <text x="40" y="156" font-size="11" fill="#333333">没有 amount_decimal，也没有 currency</text>
+  <text x="40" y="180" font-size="11" fill="#333333">← 新读者必须能补出这两个值</text>
+
+  <rect x="420" y="84" width="380" height="110" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="440" y="110" font-size="12" fill="#333333">v2 新消息</text>
+  <text x="440" y="134" font-size="11" fill="#333333">{ order_id, amount, amount_decimal, currency }</text>
+  <text x="440" y="156" font-size="11" fill="#333333">amount 标 deprecated，但仍在结构里</text>
+  <text x="440" y="180" font-size="11" fill="#333333">← 老读者不认识两个新字段，需忽略</text>
+
+  <line x1="400" y1="139" x2="420" y2="139" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- 读者 -->
+  <rect x="60" y="252" width="260" height="76" rx="6" fill="#ffffff" stroke="#333333"/>
+  <text x="190" y="278" text-anchor="middle" font-size="12" fill="#333333">老读者（还没升级）</text>
+  <text x="190" y="300" text-anchor="middle" font-size="11" fill="#333333">读 v2 时忽略 amount_decimal / currency</text>
+  <text x="190" y="318" text-anchor="middle" font-size="11" fill="#333333">只认 amount → 照常工作</text>
+
+  <rect x="560" y="252" width="280" height="76" rx="6" fill="#ffffff" stroke="#333333"/>
+  <text x="700" y="278" text-anchor="middle" font-size="12" fill="#333333">新读者（已升级）</text>
+  <text x="700" y="300" text-anchor="middle" font-size="11" fill="#333333">amount_decimal 缺失 → 回退 amount/100</text>
+  <text x="700" y="318" text-anchor="middle" font-size="11" fill="#333333">currency 缺失 → 回退 "CNY"</text>
+
+  <line x1="480" y1="194" x2="300" y2="252" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="340" y1="194" x2="640" y2="252" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="330" y="228" fill="#333333" font-size="11">v2 也发给老读者</text>
+  <text x="470" y="228" fill="#333333" font-size="11">v1 也发给新读者</text>
+
+  <!-- 失效点红框 -->
+  <rect x="60" y="352" width="780" height="56" rx="4" fill="#fafafa" stroke="#c62828" stroke-dasharray="5 3"/>
+  <text x="80" y="376" font-size="12" fill="#c62828">失效点：两个方向里只要断一个，A 就地失效——严格模式反序列化器对未知字段/缺失字段直接报错时，老读者读 v2 会崩（上箭头方向断）。</text>
+  <text x="80" y="396" font-size="12" fill="#c62828">失效点：消费端没写"字段缺失回退"逻辑时，新读者读老消息会拿到 null（下箭头方向断）→ 表现为空指针而非兼容。</text>
+
+  <line x1="190" y1="328" x2="190" y2="352" stroke="#c62828" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arrowred)"/>
+  <line x1="700" y1="328" x2="700" y2="352" stroke="#c62828" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arrowred)"/>
+</svg>

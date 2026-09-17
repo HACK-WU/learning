@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="470" viewBox="0 0 900 470" font-family="Helvetica, Arial, sans-serif">
+  <title>解法 C：双活的两个坑——复制环路与同名 topic 冲突</title>
+  <desc>左侧是同一配置文件下 MM2 自动避环的正常双活；右侧是跨配置/同名 topic 双向复制产生的回环，导致同一 key 在两个地域因果顺序无法保证。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#333333"/>
+    </marker>
+    <marker id="arrowred" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#c62828"/>
+    </marker>
+  </defs>
+  <rect width="900" height="470" fill="#ffffff"/>
+  <text x="20" y="30" font-size="16" fill="#333333">解法 C：双活两地都能写，坑在"同一条记录会不会绕回来"</text>
+
+  <!-- 上半：正常（按业务键路由，无回环） -->
+  <text x="20" y="66" font-size="13" fill="#333333">正常形态：按业务键路由，同一用户只在一个地域写</text>
+  <rect x="60" y="80" width="200" height="86" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="160" y="106" text-anchor="middle" font-size="13" fill="#333333">华东集群</text>
+  <text x="160" y="130" text-anchor="middle" font-size="11" fill="#333333">只写 user_id ∈ 华东片</text>
+  <text x="160" y="150" text-anchor="middle" font-size="11" fill="#333333">本地写 RPO=0</text>
+
+  <rect x="400" y="80" width="200" height="86" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="500" y="106" text-anchor="middle" font-size="13" fill="#333333">华北集群</text>
+  <text x="500" y="130" text-anchor="middle" font-size="11" fill="#333333">只写 user_id ∈ 华北片</text>
+  <text x="500" y="150" text-anchor="middle" font-size="11" fill="#333333">本地写 RPO=0</text>
+
+  <line x1="260" y1="106" x2="400" y2="106" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="330" y="98" text-anchor="middle" font-size="11" fill="#333333">复制 华东→华北</text>
+  <line x1="400" y1="144" x2="260" y2="144" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="330" y="160" text-anchor="middle" font-size="11" fill="#333333">复制 华北→华东（互不重叠，无回环）</text>
+
+  <text x="650" y="106" font-size="12" fill="#333333">同一条记录不会</text>
+  <text x="650" y="126" font-size="12" fill="#333333">被复制回去</text>
+  <text x="650" y="146" font-size="12" fill="#333333">→ 因果顺序可保</text>
+
+  <!-- 下半：异常（同名 topic 双向写，回环+冲突） -->
+  <text x="20" y="218" font-size="13" fill="#333333">异常形态：两个地域都写同名 topic，同一条记录反复绕圈</text>
+  <rect x="60" y="232" width="200" height="86" rx="6" fill="#c62828"/>
+  <text x="160" y="258" text-anchor="middle" font-size="13" fill="#ffffff">华东 · orders</text>
+  <text x="160" y="282" text-anchor="middle" font-size="11" fill="#ffffff">写入 key=SO-1001 v2</text>
+  <text x="160" y="302" text-anchor="middle" font-size="11" fill="#ffffff">本地先看到 v2</text>
+
+  <rect x="400" y="232" width="200" height="86" rx="6" fill="#c62828"/>
+  <text x="500" y="258" text-anchor="middle" font-size="13" fill="#ffffff">华北 · orders</text>
+  <text x="500" y="282" text-anchor="middle" font-size="11" fill="#ffffff">写入 key=SO-1001 v1</text>
+  <text x="500" y="302" text-anchor="middle" font-size="11" fill="#ffffff">本地先看到 v1</text>
+
+  <line x1="260" y1="252" x2="400" y2="252" stroke="#c62828" stroke-width="1.5" marker-end="url(#arrowred)"/>
+  <text x="330" y="244" text-anchor="middle" font-size="11" fill="#c62828">orders → orders</text>
+  <line x1="400" y1="298" x2="260" y2="298" stroke="#c62828" stroke-width="1.5" marker-end="url(#arrowred)"/>
+  <text x="330" y="314" text-anchor="middle" font-size="11" fill="#c62828">orders → orders（同名，互相覆盖）</text>
+
+  <path d="M600 252 C680 252 680 298 600 298" fill="none" stroke="#c62828" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arrowred)"/>
+  <text x="660" y="278" text-anchor="middle" font-size="11" fill="#c62828">绕圈</text>
+
+  <!-- 失效点红框 -->
+  <rect x="60" y="344" width="820" height="60" rx="4" fill="#fafafa" stroke="#c62828" stroke-dasharray="5 3"/>
+  <text x="80" y="368" font-size="12" fill="#c62828">失效点：SO-1001 在华东是 v2、在华北是 v1，两边各自的"最新"不同 → 同一个 key 的因果顺序无从判定，切换后读到哪个版本不确定。</text>
+  <text x="80" y="390" font-size="12" fill="#c62828">失效点：跨配置文件定义双向流时 MM2 的自动避环不生效，同一条记录会被反复复制，形成回环放大。</text>
+
+  <rect x="60" y="418" width="820" height="40" rx="4" fill="#fafafa" stroke="#333333"/>
+  <text x="80" y="443" font-size="12" fill="#333333">解法：同一业务键只在一个地域写入（按业务键路由），让两条复制流的内容互不重叠——冲突从"怎么解"变成"不会发生"。</text>
+</svg>

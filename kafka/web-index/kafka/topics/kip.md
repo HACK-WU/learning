@@ -15,7 +15,7 @@
 | 查 EOS 的生产者可扩展性（sendOffsets 事务化，KIP-447） | [KIP-447：Producer scalability for exactly once semantics](https://cwiki.apache.org/confluence/display/KAFKA/KIP-447%3A+Producer+scalability+for+exactly+once+semantics) | 事务、组元数据 | 课 8、实战项目 |
 | 查挂起事务的检测与中止工具（kafka-transactions.sh） | [KIP-664：Provide tooling to detect and abort hanging transactions](https://cwiki.apache.org/confluence/display/KAFKA/KIP-664%3A+Provide+tooling+to+detect+and+abort+hanging+transactions) | 挂起事务、CLI | 课 8 |
 | 查消费者 session.timeout.ms 默认值上调（45s） | [KIP-735：Increase default consumer session timeout](https://cwiki.apache.org/confluence/display/KAFKA/KIP-735%3A+Increase+default+consumer+session+timeout) | session 超时 | 课 6、9 |
-| 查 share groups / Queues for Kafka（4.0 EA→4.1 Preview→4.2 GA） | [KIP-932：Queues for Kafka](https://cwiki.apache.org/confluence/display/KAFKA/KIP-932%3A+Queues+for+Kafka) | share group、队列、单条确认 | 课 10、场景解法库 |
+| 查 share groups / Queues for Kafka（Kafka 4.2+ production-ready；KIP 页面显示 Accepted，并含 early access / preview 历史说明） | [KIP-932：Queues for Kafka](https://cwiki.apache.org/confluence/display/KAFKA/KIP-932%3A+Queues+for+Kafka) | share group、队列、单条确认 | 课 10、场景解法库 |
 
 ## URL 书写注意（踩过的坑）
 

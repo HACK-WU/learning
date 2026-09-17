@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="500" viewBox="0 0 960 500" font-family="Helvetica, Arial, sans-serif">
+  <rect width="960" height="500" fill="#ffffff"/>
+
+  <text x="480" y="30" text-anchor="middle" font-size="16" fill="#333333">解法 D：三把尺子量三种"吵闹"，量错了等于没量</text>
+
+  <!-- 起点：一个 principal -->
+  <rect x="390" y="52" width="180" height="40" rx="4" fill="#fafafa" stroke="#333333"/>
+  <text x="480" y="77" text-anchor="middle" font-size="12" fill="#333333">配额挂在 principal 上</text>
+  <text x="480" y="106" text-anchor="middle" font-size="11" fill="#333333">User:team-a —— 不管它读写哪个 topic，都算在它头上</text>
+
+  <line x1="480" y1="114" x2="480" y2="134" stroke="#333333" stroke-width="1.5" marker-end="url(#a4)"/>
+  <text x="480" y="130" text-anchor="middle" font-size="10" fill="#333333">分三把尺子</text>
+
+  <!-- 三栏对比 -->
+  <!-- 1 请求速率 -->
+  <rect x="30" y="146" width="290" height="196" rx="6" fill="#ffffff" stroke="#333333"/>
+  <text x="175" y="172" text-anchor="middle" font-size="13" fill="#333333">尺子 1 · 请求速率配额</text>
+  <text x="175" y="198" text-anchor="middle" font-size="11" fill="#333333">量的是"broker 花多少时间处理它的请求"</text>
+  <rect x="55" y="212" width="240" height="34" rx="4" fill="#fafafa" stroke="#333333"/>
+  <text x="175" y="234" text-anchor="middle" font-size="11" fill="#333333">保护对象：broker 的 CPU</text>
+  <text x="175" y="268" text-anchor="middle" font-size="11" fill="#333333">官方观点：很多情况下，它的隔离效果</text>
+  <text x="175" y="288" text-anchor="middle" font-size="11" fill="#333333">比进出带宽配额更显著</text>
+  <text x="175" y="312" text-anchor="middle" font-size="11" fill="#333333">原因：CPU 被占满后，有效带宽反而下降</text>
+  <text x="175" y="332" text-anchor="middle" font-size="11" fill="#333333">→ 带宽是表象，CPU 才是瓶颈</text>
+
+  <!-- 2 带宽 -->
+  <rect x="335" y="146" width="290" height="196" rx="6" fill="#ffffff" stroke="#333333"/>
+  <text x="480" y="172" text-anchor="middle" font-size="13" fill="#333333">尺子 2 · 网络带宽配额</text>
+  <text x="480" y="198" text-anchor="middle" font-size="11" fill="#333333">量的是"搬了多少字节"</text>
+  <rect x="360" y="212" width="240" height="34" rx="4" fill="#fafafa" stroke="#333333"/>
+  <text x="480" y="234" text-anchor="middle" font-size="11" fill="#333333">保护对象：网络与磁盘吞吐</text>
+  <text x="480" y="268" text-anchor="middle" font-size="11" fill="#333333">多租户里最常见的做法，但常常</text>
+  <text x="480" y="288" text-anchor="middle" font-size="11" fill="#333333">限的不是真正的瓶颈</text>
+  <text x="480" y="312" text-anchor="middle" font-size="11" fill="#333333">数据团队全量回放时，带宽先满</text>
+  <text x="480" y="332" text-anchor="middle" font-size="11" fill="#333333">但拖慢别人的那部分是 CPU</text>
+
+  <!-- 3 controller mutation -->
+  <rect x="640" y="146" width="290" height="196" rx="6" fill="#ffffff" stroke="#333333"/>
+  <text x="785" y="172" text-anchor="middle" font-size="13" fill="#333333">尺子 3 · Topic 操作配额</text>
+  <text x="785" y="198" text-anchor="middle" font-size="11" fill="#333333">量的是"建 / 删 / 改 topic 多频繁"</text>
+  <rect x="665" y="212" width="240" height="34" rx="4" fill="#fafafa" stroke="#333333"/>
+  <text x="785" y="234" text-anchor="middle" font-size="11" fill="#333333">保护对象：controller（集群大脑）</text>
+  <text x="785" y="268" text-anchor="middle" font-size="11" fill="#333333">最容易被忽略的一把尺子</text>
+  <text x="785" y="288" text-anchor="middle" font-size="11" fill="#333333">元数据操作洪水会让 controller</text>
+  <text x="785" y="308" text-anchor="middle" font-size="11" fill="#333333">无暇处理真正重要的集群协调</text>
+  <text x="785" y="332" text-anchor="middle" font-size="11" fill="#333333">它量的是"折腾目录的速度"</text>
+
+  <!-- 共同落点 -->
+  <line x1="175" y1="342" x2="400" y2="368" stroke="#333333" stroke-width="1" stroke-dasharray="4 3"/>
+  <line x1="480" y1="342" x2="480" y2="368" stroke="#333333" stroke-width="1.5" marker-end="url(#a4)"/>
+  <line x1="785" y1="342" x2="570" y2="368" stroke="#333333" stroke-width="1" stroke-dasharray="4 3"/>
+  <rect x="345" y="370" width="270" height="30" rx="4" fill="#fafafa" stroke="#333333"/>
+  <text x="480" y="390" text-anchor="middle" font-size="11" fill="#333333">超限后的表现是统一的：限流（变慢），不是报错</text>
+
+  <!-- 失效点 -->
+  <rect x="30" y="416" width="900" height="70" rx="4" fill="#fafafa" stroke="#c62828" stroke-dasharray="5 3"/>
+  <text x="50" y="438" font-size="12" fill="#c62828">失效点：配额数值拍脑袋 + 只配带宽不看请求速率</text>
+  <text x="50" y="458" font-size="11" fill="#333333">数值没有容量预算做依据时，"限"要么限不到痛点（没人变慢），要么把合理业务一起限死（正常任务被拖成超时）；</text>
+  <text x="50" y="476" font-size="11" fill="#333333">而只配带宽、不配请求速率，就正好放过了真正拖慢全场的那个瓶颈——broker 的请求处理 CPU。</text>
+
+  <defs>
+    <marker id="a4" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#333333"/>
+    </marker>
+  </defs>
+</svg>

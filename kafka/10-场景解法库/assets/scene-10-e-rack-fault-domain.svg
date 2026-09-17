@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="440" viewBox="0 0 900 440" font-family="Helvetica, Arial, sans-serif">
+  <title>解法 E：broker.rack 配错时扩容换不来容灾</title>
+  <desc>左侧新增 broker 的 broker.rack 分属 1a/1b/1c，同一分区副本跨机架分布，单机架断电仍有两个副本在线；右侧 rack 缺失或全填同一值，新增节点虽已接入但同一分区副本全落在 1a。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#333333"/>
+    </marker>
+  </defs>
+  <rect width="900" height="440" fill="#ffffff"/>
+  <text x="20" y="30" font-size="16" fill="#333333">解法 E：broker.rack 决定扩容有没有换来容灾能力</text>
+
+  <!-- 左：配了 rack -->
+  <text x="20" y="72" font-size="13" fill="#333333">配了 broker.rack：新节点分属三个故障域，P0 副本跨机架</text>
+  <rect x="20" y="86" width="200" height="120" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="120" y="110" text-anchor="middle" font-size="13" fill="#333333">AZ 1a</text>
+  <rect x="45" y="124" width="150" height="30" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="120" y="144" text-anchor="middle" font-size="12" fill="#333333">broker-1 · P0 leader</text>
+  <text x="120" y="182" text-anchor="middle" font-size="11" fill="#333333">rack=cn-east-1a</text>
+
+  <rect x="240" y="86" width="200" height="120" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="340" y="110" text-anchor="middle" font-size="13" fill="#333333">AZ 1b</text>
+  <rect x="265" y="124" width="150" height="30" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="340" y="144" text-anchor="middle" font-size="12" fill="#333333">broker-4 · P0 副本</text>
+  <text x="340" y="182" text-anchor="middle" font-size="11" fill="#333333">rack=cn-east-1b</text>
+
+  <rect x="460" y="86" width="200" height="120" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="560" y="110" text-anchor="middle" font-size="13" fill="#333333">AZ 1c</text>
+  <rect x="485" y="124" width="150" height="30" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="560" y="144" text-anchor="middle" font-size="12" fill="#333333">broker-5 · P0 副本</text>
+  <text x="560" y="182" text-anchor="middle" font-size="11" fill="#333333">rack=cn-east-1c</text>
+
+  <text x="700" y="130" font-size="13" fill="#333333">扩容真实生效</text>
+  <text x="700" y="152" font-size="13" fill="#333333">单一机架断电</text>
+  <text x="700" y="174" font-size="13" fill="#333333">→ 仍有 2 份在线</text>
+
+  <!-- 右：没配 rack -->
+  <text x="20" y="252" font-size="13" fill="#333333">没配 / 全填同一个 rack：新机器接进来了，但 P0 三份挤在 1a</text>
+  <rect x="20" y="266" width="200" height="100" rx="6" fill="#c62828"/>
+  <text x="120" y="290" text-anchor="middle" font-size="13" fill="#ffffff">AZ 1a（唯一）</text>
+  <rect x="45" y="304" width="150" height="48" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="120" y="324" text-anchor="middle" font-size="11" fill="#333333">broker-1 P0 leader + broker-4</text>
+  <text x="120" y="342" text-anchor="middle" font-size="11" fill="#333333">broker-5 P0 副本</text>
+
+  <rect x="240" y="266" width="200" height="100" rx="6" fill="#ffffff" stroke="#333333" stroke-dasharray="5 3"/>
+  <text x="340" y="300" text-anchor="middle" font-size="13" fill="#333333">AZ 1b</text>
+  <text x="340" y="328" text-anchor="middle" font-size="12" fill="#333333">空</text>
+
+  <rect x="460" y="266" width="200" height="100" rx="6" fill="#ffffff" stroke="#333333" stroke-dasharray="5 3"/>
+  <text x="560" y="300" text-anchor="middle" font-size="13" fill="#333333">AZ 1c</text>
+  <text x="560" y="328" text-anchor="middle" font-size="12" fill="#333333">空</text>
+
+  <text x="700" y="300" font-size="13" fill="#333333">磁盘降了、副本数涨了</text>
+  <text x="700" y="322" font-size="13" fill="#333333">1a 断电 → P0 三份同时消失</text>
+
+  <line x1="660" y1="216" x2="660" y2="262" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="590" y="244" font-size="11" fill="#333333">rack 少配一行</text>
+
+  <!-- 底部失效点 -->
+  <rect x="20" y="384" width="860" height="40" rx="4" fill="#fafafa" stroke="#c62828" stroke-dasharray="5 3"/>
+  <text x="40" y="409" font-size="12" fill="#c62828">失效点：只看“新 broker 有数据、磁盘降了”会误判成功；rack 配错时这两项都好看，机架级故障下 RPO≠0。</text>
+</svg>

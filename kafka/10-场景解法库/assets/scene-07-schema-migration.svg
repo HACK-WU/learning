@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="420" viewBox="0 0 900 420">
+  <title>事件 Schema 兼容演进</title>
+  <desc>先验证兼容性，再按消费者和生产者顺序发布；真正不兼容时用新 topic 双写迁移。</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#1565c0"/></marker></defs>
+  <rect width="900" height="420" fill="#fff"/>
+  <text x="40" y="42" font-size="24" font-weight="700" fill="#333">公共事件契约的升级，先保护旧读者</text>
+  <rect x="45" y="110" width="190" height="92" rx="12" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/><text x="140" y="147" text-anchor="middle" font-size="18" fill="#333">Schema Registry</text><text x="140" y="177" text-anchor="middle" font-size="15" fill="#555">兼容性校验</text>
+  <line x1="235" y1="156" x2="330" y2="156" stroke="#1565c0" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="330" y="92" width="220" height="128" rx="12" fill="#fafafa" stroke="#555" stroke-width="2"/><text x="440" y="127" text-anchor="middle" font-size="18" fill="#333">兼容发布顺序</text><text x="440" y="161" text-anchor="middle" font-size="15" fill="#555">先消费者</text><text x="440" y="189" text-anchor="middle" font-size="15" fill="#555">后生产者</text>
+  <line x1="550" y1="156" x2="645" y2="156" stroke="#1565c0" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="645" y="110" width="210" height="92" rx="12" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/><text x="750" y="147" text-anchor="middle" font-size="18" fill="#333">同一 Topic</text><text x="750" y="177" text-anchor="middle" font-size="15" fill="#555">平滑演进</text>
+  <rect x="130" y="300" width="640" height="72" rx="12" fill="#fff8e1" stroke="#d29922" stroke-width="2"/><text x="450" y="330" text-anchor="middle" font-size="17" fill="#333">不兼容：新 Topic + v1/v2 双写 + 下游逐个切换</text><text x="450" y="356" text-anchor="middle" font-size="14" fill="#555">旧 Topic 只有在确认无消费者后才能停写</text>
+</svg>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="420" viewBox="0 0 900 420">
+  <title>Kafka 多租户安全边界</title>
+  <desc>认证确认身份，ACL 约束资源，配额隔离噪声邻居，监控和计量提供追责证据。</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#1565c0"/></marker></defs>
+  <rect width="900" height="420" fill="#fff"/>
+  <text x="40" y="42" font-size="24" font-weight="700" fill="#333">多租户不是“topic 名字加前缀”就结束</text>
+  <rect x="45" y="110" width="145" height="90" rx="12" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/><text x="117" y="145" text-anchor="middle" font-size="18" fill="#333">租户客户端</text><text x="117" y="175" text-anchor="middle" font-size="15" fill="#555">身份凭据</text>
+  <line x1="190" y1="155" x2="270" y2="155" stroke="#1565c0" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="270" y="85" width="150" height="160" rx="12" fill="#fafafa" stroke="#555" stroke-width="2"/><text x="345" y="119" text-anchor="middle" font-size="18" fill="#333">认证</text><text x="345" y="154" text-anchor="middle" font-size="15" fill="#555">是谁</text><text x="345" y="187" text-anchor="middle" font-size="15" fill="#555">ACL：能做什么</text><text x="345" y="220" text-anchor="middle" font-size="15" fill="#555">配额：能用多少</text>
+  <line x1="420" y1="155" x2="500" y2="155" stroke="#1565c0" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="500" y="110" width="155" height="90" rx="12" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/><text x="577" y="145" text-anchor="middle" font-size="18" fill="#333">共享集群</text><text x="577" y="175" text-anchor="middle" font-size="15" fill="#555">命名空间</text>
+  <line x1="655" y1="155" x2="735" y2="155" stroke="#1565c0" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="735" y="110" width="125" height="90" rx="12" fill="#fff8e1" stroke="#d29922" stroke-width="2"/><text x="797" y="145" text-anchor="middle" font-size="18" fill="#333">计量监控</text><text x="797" y="175" text-anchor="middle" font-size="15" fill="#555">可追责</text>
+  <rect x="120" y="310" width="660" height="62" rx="12" fill="#f5f5f5" stroke="#999"/><text x="450" y="337" text-anchor="middle" font-size="16" fill="#333">共享集群降低成本，专属集群减少隔离风险</text><text x="450" y="360" text-anchor="middle" font-size="14" fill="#555">边界由身份、资源、故障影响面共同定义</text>
+</svg>

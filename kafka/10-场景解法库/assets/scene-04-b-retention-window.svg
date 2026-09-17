@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="310" viewBox="0 0 900 310" font-family="Helvetica, Arial, sans-serif">
+  <rect width="900" height="310" fill="#ffffff"/>
+
+  <text x="450" y="28" text-anchor="middle" font-size="16" fill="#333333">解法 B：保留期决定“能回放多久”，且救不回已删除的数据</text>
+
+  <!-- 时间轴 -->
+  <line x1="60" y1="150" x2="840" y2="150" stroke="#333333" stroke-width="1.5"/>
+  <text x="60" y="140" font-size="11" fill="#333333">更早</text>
+  <text x="820" y="140" text-anchor="end" font-size="11" fill="#333333">现在</text>
+
+  <!-- 默认 7 天 -->
+  <rect x="60" y="70" width="780" height="26" rx="3" fill="#fafafa" stroke="#333333"/>
+  <text x="70" y="88" font-size="11" fill="#333333">默认保留（log.retention.hours=168，即 7 天）</text>
+  <rect x="620" y="158" width="280" height="34" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="760" y="180" text-anchor="middle" font-size="11" fill="#333333">7 天内的数据：可回放</text>
+  <rect x="60" y="158" width="550" height="34" rx="4" fill="#c62828"/>
+  <text x="335" y="180" text-anchor="middle" font-size="11" fill="#ffffff">7 天以前：已被删除，任何配置都救不回来</text>
+
+  <!-- 调长后 90 天 -->
+  <rect x="60" y="215" width="780" height="26" rx="3" fill="#fafafa" stroke="#333333"/>
+  <text x="70" y="233" font-size="11" fill="#333333">调长后（retention.ms 设为 90 天）</text>
+  <rect x="180" y="252" width="660" height="34" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="510" y="274" text-anchor="middle" font-size="11" fill="#333333">90 天内：可回放 —— 但只有“调长之后新写入且未被删”的数据</text>
+  <rect x="60" y="252" width="110" height="34" rx="4" fill="#c62828"/>
+  <text x="115" y="274" text-anchor="middle" font-size="11" fill="#ffffff">仍是空洞</text>
+
+  <text x="450" y="305" text-anchor="middle" font-size="12" fill="#333333">代价：磁盘占用随保留时长线性上升，须在容量规划内调整</text>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#333333"/>
+    </marker>
+  </defs>
+</svg>

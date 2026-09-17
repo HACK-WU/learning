@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="330" viewBox="0 0 900 330" font-family="Helvetica, Arial, sans-serif">
+  <rect width="900" height="330" fill="#ffffff"/>
+
+  <text x="450" y="28" text-anchor="middle" font-size="16" fill="#333333">解法 C：本地只放热数据，冷段下沉后本地才可删除</text>
+
+  <!-- 本地层 -->
+  <rect x="50" y="60" width="360" height="90" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="230" y="84" text-anchor="middle" font-size="13" fill="#333333">本地层（broker 磁盘）</text>
+  <text x="230" y="106" text-anchor="middle" font-size="11" fill="#333333">local.retention.ms / local.retention.bytes</text>
+  <text x="230" y="128" text-anchor="middle" font-size="11" fill="#333333">热段：低延迟读写</text>
+
+  <!-- 远端层 -->
+  <rect x="50" y="175" width="360" height="90" rx="4" fill="#fafafa" stroke="#333333"/>
+  <text x="230" y="199" text-anchor="middle" font-size="13" fill="#333333">远端层（对象存储）</text>
+  <text x="230" y="221" text-anchor="middle" font-size="11" fill="#333333">retention.ms / retention.bytes（总保留）</text>
+  <text x="230" y="243" text-anchor="middle" font-size="11" fill="#333333">冷段：成本低、延迟高</text>
+
+  <line x1="230" y1="150" x2="230" y2="172" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="420" y="166" font-size="11" fill="#333333">段上传</text>
+
+  <!-- 右：读取路径 -->
+  <rect x="470" y="60" width="380" height="205" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="660" y="86" text-anchor="middle" font-size="13" fill="#333333">消费者读取路径</text>
+  <rect x="500" y="100" width="150" height="30" rx="4" fill="#fafafa" stroke="#333333"/>
+  <text x="575" y="120" text-anchor="middle" font-size="11" fill="#333333">命中本地段</text>
+  <rect x="680" y="100" width="150" height="30" rx="4" fill="#fafafa" stroke="#333333"/>
+  <text x="755" y="120" text-anchor="middle" font-size="11" fill="#333333">未命中 → 读远端</text>
+  <line x1="575" y1="130" x2="575" y2="160" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="755" y1="130" x2="755" y2="160" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="500" y="165" width="330" height="30" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="665" y="185" text-anchor="middle" font-size="11" fill="#333333">返回给消费者（远端读取延迟明显更高）</text>
+
+  <rect x="500" y="205" width="330" height="48" rx="4" fill="#fafafa" stroke="#c62828" stroke-dasharray="5 3"/>
+  <text x="665" y="224" text-anchor="middle" font-size="11" fill="#c62828">失效点：本地段必须成功上传远端后才可删除</text>
+  <text x="665" y="244" text-anchor="middle" font-size="11" fill="#c62828">远端上传落后 → 本地按配置删除的计划就会被卡住</text>
+
+  <rect x="50" y="285" width="800" height="34" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="450" y="307" text-anchor="middle" font-size="12" fill="#333333">硬前提：Apache Kafka 不提供开箱即用的 RemoteStorageManager；且不支持 compacted topic</text>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#333333"/>
+    </marker>
+  </defs>
+</svg>

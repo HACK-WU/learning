@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="330" viewBox="0 0 900 330" font-family="Helvetica, Arial, sans-serif">
+  <rect width="900" height="330" fill="#ffffff"/>
+
+  <text x="450" y="28" text-anchor="middle" font-size="16" fill="#333333">解法 D：保序扩容只能另起 topic，双写过渡后再切换</text>
+
+  <!-- 阶段 1 -->
+  <rect x="30" y="55" width="260" height="150" rx="4" fill="#fafafa" stroke="#333333"/>
+  <text x="160" y="80" text-anchor="middle" font-size="13" fill="#333333">阶段 1 · 双写</text>
+  <rect x="55" y="96" width="90" height="30" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="100" y="116" text-anchor="middle" font-size="11" fill="#333333">生产者</text>
+  <line x1="145" y1="105" x2="205" y2="95" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="145" y1="125" x2="205" y2="145" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="210" y="86" width="65" height="28" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="242" y="105" text-anchor="middle" font-size="10" fill="#333333">v1 · 12</text>
+  <rect x="210" y="136" width="65" height="28" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="242" y="155" text-anchor="middle" font-size="10" fill="#333333">v2 · 90</text>
+  <text x="160" y="188" text-anchor="middle" font-size="11" fill="#333333">两条链路用同一个 key</text>
+
+  <!-- 阶段 2 -->
+  <rect x="315" y="55" width="260" height="150" rx="4" fill="#fafafa" stroke="#333333"/>
+  <text x="445" y="80" text-anchor="middle" font-size="13" fill="#333333">阶段 2 · 追平验证</text>
+  <rect x="340" y="96" width="90" height="30" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="385" y="116" text-anchor="middle" font-size="11" fill="#333333">新消费组</text>
+  <line x1="430" y1="111" x2="490" y2="111" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="495" y="96" width="65" height="30" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="527" y="115" text-anchor="middle" font-size="10" fill="#333333">v2</text>
+  <text x="445" y="146" text-anchor="middle" font-size="11" fill="#333333">从 earliest 消费，观察 LAG</text>
+  <text x="445" y="166" text-anchor="middle" font-size="11" fill="#333333">确认处理结果与 v1 一致</text>
+  <text x="445" y="188" text-anchor="middle" font-size="11" fill="#333333">未追平就切 = 漏数据</text>
+
+  <!-- 阶段 3 -->
+  <rect x="600" y="55" width="270" height="150" rx="4" fill="#fafafa" stroke="#333333"/>
+  <text x="735" y="80" text-anchor="middle" font-size="13" fill="#333333">阶段 3 · 切换收口</text>
+  <rect x="625" y="96" width="90" height="30" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="670" y="116" text-anchor="middle" font-size="11" fill="#333333">停写 v1</text>
+  <line x1="715" y1="111" x2="760" y2="111" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="765" y="96" width="90" height="30" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="810" y="116" text-anchor="middle" font-size="11" fill="#333333">下线旧组</text>
+  <text x="735" y="146" text-anchor="middle" font-size="11" fill="#333333">只留 v2 一条链路</text>
+  <text x="735" y="166" text-anchor="middle" font-size="11" fill="#333333">保留 v1 数据直到确认无下游</text>
+  <text x="735" y="188" text-anchor="middle" font-size="11" fill="#333333">这是唯一可回退的窗口</text>
+
+  <line x1="295" y1="130" x2="310" y2="130" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="580" y1="130" x2="595" y2="130" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="30" y="225" width="840" height="42" rx="4" fill="#fafafa" stroke="#c62828" stroke-dasharray="5 3"/>
+  <text x="450" y="245" text-anchor="middle" font-size="12" fill="#c62828">失效点 1：双写期数据双份，磁盘与带宽翻倍；两个 topic 的同一订单可能短暂不一致</text>
+  <text x="450" y="262" text-anchor="middle" font-size="12" fill="#c62828">失效点 2：v2 未验证就切换 = 把迁移风险直接转嫁给业务；切早了没有回头路</text>
+
+  <rect x="30" y="280" width="840" height="34" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="450" y="302" text-anchor="middle" font-size="12" fill="#333333">代价：整条链路要同时维护两套 topic 与两套消费者，迁移周期以天到周计</text>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#333333"/>
+    </marker>
+  </defs>
+</svg>

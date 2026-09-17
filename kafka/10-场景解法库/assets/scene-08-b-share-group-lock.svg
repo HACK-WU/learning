@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="470" viewBox="0 0 960 470" font-family="Helvetica, Arial, sans-serif">
+  <rect width="960" height="470" fill="#ffffff"/>
+
+  <text x="480" y="30" text-anchor="middle" font-size="16" fill="#333333">解法 B：share group 把"进度"的单位从分区换成单条记录</text>
+
+  <!-- 左栏：传统 consumer group -->
+  <rect x="20" y="52" width="440" height="300" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="240" y="76" text-anchor="middle" font-size="14" fill="#333333">传统 consumer group（分区级位移）</text>
+
+  <rect x="45" y="96" width="390" height="34" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="240" y="118" text-anchor="middle" font-size="12" fill="#333333">orders.notify · 12 个分区</text>
+
+  <rect x="45" y="152" width="120" height="48" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="105" y="172" text-anchor="middle" font-size="12" fill="#333333">P0</text>
+  <text x="105" y="189" text-anchor="middle" font-size="11" fill="#333333">归属 C0</text>
+
+  <rect x="180" y="152" width="120" height="48" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="240" y="172" text-anchor="middle" font-size="12" fill="#333333">P1</text>
+  <text x="240" y="189" text-anchor="middle" font-size="11" fill="#333333">归属 C1</text>
+
+  <rect x="315" y="152" width="120" height="48" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="375" y="172" text-anchor="middle" font-size="12" fill="#333333">P2</text>
+  <text x="375" y="189" text-anchor="middle" font-size="11" fill="#333333">归属 C2</text>
+
+  <text x="240" y="228" text-anchor="middle" font-size="12" fill="#333333">并行度上限 = 分区数 = 12</text>
+  <line x1="240" y1="240" x2="240" y2="262" stroke="#333333" stroke-width="1.5" marker-end="url(#arw)"/>
+  <text x="240" y="280" text-anchor="middle" font-size="12" fill="#333333">位移只能整分区提交</text>
+  <text x="240" y="300" text-anchor="middle" font-size="12" fill="#333333">→ 单条失败无法只跳过它自己</text>
+
+  <rect x="45" y="314" width="390" height="26" rx="4" fill="#fafafa" stroke="#c62828" stroke-dasharray="5 3"/>
+  <text x="240" y="332" text-anchor="middle" font-size="11" fill="#c62828">第 13 个消费者拿不到分区，只能空转</text>
+
+  <!-- 右栏：share group -->
+  <rect x="500" y="52" width="440" height="300" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="720" y="76" text-anchor="middle" font-size="14" fill="#333333">share group（记录级持有 + ack）</text>
+
+  <rect x="525" y="96" width="390" height="34" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="720" y="118" text-anchor="middle" font-size="12" fill="#333333">同一批记录落入 share group 队列</text>
+
+  <rect x="525" y="152" width="86" height="34" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="568" y="174" text-anchor="middle" font-size="11" fill="#333333">rec 1</text>
+  <rect x="619" y="152" width="86" height="34" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="662" y="174" text-anchor="middle" font-size="11" fill="#333333">rec 2</text>
+  <rect x="713" y="152" width="86" height="34" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="756" y="174" text-anchor="middle" font-size="11" fill="#333333">rec 3</text>
+  <rect x="807" y="152" width="86" height="34" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="850" y="174" text-anchor="middle" font-size="11" fill="#333333">rec 4</text>
+
+  <line x1="568" y1="186" x2="568" y2="214" stroke="#333333" stroke-width="1.5" marker-end="url(#arw)"/>
+  <line x1="662" y1="186" x2="662" y2="214" stroke="#333333" stroke-width="1.5" marker-end="url(#arw)"/>
+  <line x1="756" y1="186" x2="756" y2="214" stroke="#333333" stroke-width="1.5" marker-end="url(#arw)"/>
+  <line x1="850" y1="186" x2="850" y2="214" stroke="#333333" stroke-width="1.5" marker-end="url(#arw)"/>
+
+  <rect x="525" y="216" width="368" height="30" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="709" y="236" text-anchor="middle" font-size="11" fill="#333333">每条形如 S1 / S2 / S3 … 的消费者各自认领一条，逐条 ack</text>
+
+  <text x="720" y="268" text-anchor="middle" font-size="12" fill="#333333">并行度上限 = 队列里可认领的记录数，不再是分区数</text>
+  <text x="720" y="292" text-anchor="middle" font-size="12" fill="#333333">单条处理失败 → nack，只让这一条重新投递</text>
+  <text x="720" y="316" text-anchor="middle" font-size="12" fill="#333333">投递次数上限由 broker 侧投递次数配置约束</text>
+
+  <rect x="525" y="326" width="390" height="26" rx="4" fill="#fafafa" stroke="#c62828" stroke-dasharray="5 3"/>
+  <text x="720" y="344" text-anchor="middle" font-size="11" fill="#c62828">失效点：按记录分片 → 同一分区的记录被并发处理 → 顺序不再保证</text>
+
+  <!-- 底部 -->
+  <rect x="20" y="366" width="920" height="88" rx="4" fill="#fafafa" stroke="#333333"/>
+  <text x="40" y="390" font-size="12" fill="#333333">正常路径：生产者写入 → share group 把记录分给多个消费者 → 逐条 ack/nack → 失败的仅该条被重新投递。</text>
+  <text x="40" y="412" font-size="12" fill="#333333">红框处为什么失效：把确认粒度降到单条，等于放弃了"分区内串行"，</text>
+  <text x="40" y="432" font-size="12" fill="#333333">所以它换来了"消费者可超过分区数"和"单条确认"，代价正是"分区内不再保序"。</text>
+
+  <defs>
+    <marker id="arw" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#333333"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="420" viewBox="0 0 900 420">
+  <title>跨集群容灾与切换</title>
+  <desc>主集群异步复制到备集群，故障时按 checkpoint 和命名策略切换消费，双活需要业务键路由。</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#1565c0"/></marker></defs>
+  <rect width="900" height="420" fill="#fff"/>
+  <text x="40" y="42" font-size="24" font-weight="700" fill="#333">副本解决单集群故障，跨集群复制解决地域故障</text>
+  <rect x="75" y="110" width="220" height="125" rx="12" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/><text x="185" y="151" text-anchor="middle" font-size="19" fill="#333">主集群 A</text><text x="185" y="184" text-anchor="middle" font-size="15" fill="#555">生产 + 在线消费</text><text x="185" y="211" text-anchor="middle" font-size="14" fill="#555">RF / ISR / rack</text>
+  <line x1="295" y1="172" x2="455" y2="172" stroke="#1565c0" stroke-width="3" marker-end="url(#arrow)"/><text x="375" y="151" text-anchor="middle" font-size="14" fill="#555">MirrorMaker 2</text><text x="375" y="205" text-anchor="middle" font-size="14" fill="#555">异步复制 + checkpoint</text>
+  <rect x="455" y="110" width="220" height="125" rx="12" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/><text x="565" y="151" text-anchor="middle" font-size="19" fill="#333">备集群 B</text><text x="565" y="184" text-anchor="middle" font-size="15" fill="#555">灾备数据</text><text x="565" y="211" text-anchor="middle" font-size="14" fill="#555">目标 topic 前缀</text>
+  <line x1="675" y1="172" x2="790" y2="172" stroke="#1565c0" stroke-width="3" marker-end="url(#arrow)"/><rect x="790" y="130" width="75" height="85" rx="12" fill="#fff8e1" stroke="#d29922" stroke-width="2"/><text x="827" y="164" text-anchor="middle" font-size="17" fill="#333">切换</text><text x="827" y="191" text-anchor="middle" font-size="13" fill="#555">RPO≠0</text>
+  <rect x="115" y="310" width="670" height="62" rx="12" fill="#f5f5f5" stroke="#999"/><text x="450" y="337" text-anchor="middle" font-size="16" fill="#333">主备：先演练 checkpoint、topic 前缀、回切；双活：同一业务键必须有唯一写入地域</text><text x="450" y="360" text-anchor="middle" font-size="14" fill="#555">不要把“可复制”误当作“同步零丢失”</text>
+</svg>

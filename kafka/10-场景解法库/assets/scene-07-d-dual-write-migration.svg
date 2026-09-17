@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="470" viewBox="0 0 900 470" font-family="Helvetica, Arial, sans-serif">
+  <title>解法 D：v1/v2 双写迁移的四个阶段，以及下不掉的 v1</title>
+  <desc>生产者同时写 orders-v1 与 orders-v2，下游逐个从 v1 切到 v2，全部切换完才能停写 v1；只要存在不可控消费者，v1 就永远无法下线。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#333333"/>
+    </marker>
+    <marker id="arrowred" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#c62828"/>
+    </marker>
+  </defs>
+  <rect width="900" height="470" fill="#ffffff"/>
+  <text x="20" y="30" font-size="16" fill="#333333">解法 D：双写期数据双份，切换只能逐个下游来</text>
+
+  <!-- 三个下游 + 迁移阶段 -->
+  <text x="20" y="68" font-size="13" fill="#333333">生产者（迁移期同时写两个 topic）</text>
+  <rect x="20" y="82" width="180" height="44" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="110" y="110" text-anchor="middle" font-size="12" fill="#333333">order-service</text>
+
+  <line x1="200" y1="96" x2="300" y2="96" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="200" y1="116" x2="300" y2="116" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="250" y="88" text-anchor="middle" font-size="11" fill="#333333">toV1</text>
+  <text x="250" y="132" text-anchor="middle" font-size="11" fill="#333333">toV2</text>
+
+  <rect x="300" y="76" width="150" height="30" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="375" y="96" text-anchor="middle" font-size="12" fill="#333333">orders-v1</text>
+  <rect x="300" y="110" width="150" height="30" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="375" y="130" text-anchor="middle" font-size="12" fill="#333333">orders-v2</text>
+
+  <!-- 下游三个 -->
+  <rect x="560" y="60" width="150" height="36" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="635" y="83" text-anchor="middle" font-size="12" fill="#333333">下游 1 · 已切 v2</text>
+  <rect x="560" y="106" width="150" height="36" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="635" y="129" text-anchor="middle" font-size="12" fill="#333333">下游 2 · 仍读 v1</text>
+  <rect x="560" y="152" width="150" height="36" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="635" y="175" text-anchor="middle" font-size="12" fill="#333333">下游 3 · 仍读 v1</text>
+
+  <line x1="450" y1="91" x2="560" y2="124" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="450" y1="125" x2="560" y2="124" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="450" y1="125" x2="560" y2="88" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="450" y1="125" x2="560" y2="170" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <text x="725" y="100" font-size="12" fill="#333333">迁移期：v1 还不能停写</text>
+  <text x="725" y="122" font-size="12" fill="#333333">因为下游 2、3 还在读 v1</text>
+  <text x="725" y="150" font-size="12" fill="#333333">停写判定靠 --list 确认</text>
+  <text x="725" y="172" font-size="12" fill="#333333">没有消费组还订阅 v1</text>
+
+  <!-- 阶段条 -->
+  <rect x="20" y="226" width="860" height="66" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="40" y="250" font-size="12" fill="#333333">① 建 v2 并双写</text>
+  <line x1="200" y1="245" x2="250" y2="245" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="270" y="250" font-size="12" fill="#333333">② 下游逐个切到 v2 并验证</text>
+  <line x1="510" y1="245" x2="560" y2="245" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="580" y="250" font-size="12" fill="#333333">③ 确认无人订阅后停写 v1</text>
+  <text x="40" y="278" font-size="11" fill="#333333">每一步之间都有可观察的窗口，出错可退回上一步——这是 D 比"直接改结构"安全的原因</text>
+
+  <!-- 失效点 -->
+  <rect x="20" y="312" width="860" height="60" rx="4" fill="#fafafa" stroke="#c62828" stroke-dasharray="5 3"/>
+  <text x="40" y="336" font-size="12" fill="#c62828">失效点：只要存在一个不可控消费者（如外部合作方直连 orders-v1），③ 永远无法完成 → v1 永远下不掉，双写、双份存储与两套转换逻辑长期存续。</text>
+  <text x="40" y="358" font-size="12" fill="#c62828">失效点：漏掉"确认无人订阅"这一步就停写 v1，仍读 v1 的下游会静默收不到任何新数据（不报错，只是不再有消息）。</text>
+
+  <line x1="700" y1="188" x2="700" y2="312" stroke="#c62828" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arrowred)"/>
+
+  <rect x="20" y="392" width="860" height="56" rx="4" fill="#fafafa" stroke="#333333"/>
+  <text x="40" y="416" font-size="12" fill="#333333">对照解法 A：A 用一个 topic 承载两版结构、无需停写；D 用两个 topic 彻底隔离，换来"可随破坏性变更"与"v1 可能永存"。</text>
+  <text x="40" y="438" font-size="12" fill="#333333">所以 D 是"确实无法兼容"时的唯一出路，不是变更频率高时的省事选项。</text>
+</svg>

@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="480" viewBox="0 0 900 480" font-family="Helvetica, Arial, sans-serif">
+  <title>解法 B：MM2 主备复制与故障切换的断点</title>
+  <desc>MM2 把 topic 数据、topic 配置与消费位移分别复制到备集群；主集群故障时，未复制完的尾部数据与滞后的 checkpoint 共同决定切换后丢多少。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#333333"/>
+    </marker>
+    <marker id="arrowred" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#c62828"/>
+    </marker>
+  </defs>
+  <rect width="900" height="480" fill="#ffffff"/>
+  <text x="20" y="30" font-size="16" fill="#333333">解法 B：MM2 主备复制搬三样东西，切换时的断点就在其中两样上</text>
+
+  <!-- 主集群 -->
+  <rect x="20" y="56" width="250" height="230" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="145" y="80" text-anchor="middle" font-size="13" fill="#333333">华东 · 主集群 east</text>
+  <rect x="45" y="98" width="200" height="34" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="145" y="120" text-anchor="middle" font-size="12" fill="#333333">orders 分区 · 消息 1…1000</text>
+  <rect x="45" y="146" width="200" height="34" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="145" y="168" text-anchor="middle" font-size="12" fill="#333333">topic 配置（保留/清理策略）</text>
+  <rect x="45" y="194" width="200" height="34" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="145" y="216" text-anchor="middle" font-size="12" fill="#333333">消费组位移在 850</text>
+  <rect x="45" y="242" width="200" height="30" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="145" y="262" text-anchor="middle" font-size="12" fill="#333333">在线消费者组持续消费</text>
+
+  <!-- MM2 中转 -->
+  <rect x="330" y="150" width="130" height="60" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="395" y="174" text-anchor="middle" font-size="12" fill="#333333">MM2 进程</text>
+  <text x="395" y="194" text-anchor="middle" font-size="11" fill="#333333">部署在备机房</text>
+
+  <line x1="270" y1="115" x2="330" y2="168" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="270" y1="163" x2="330" y2="178" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="270" y1="211" x2="330" y2="192" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- 备集群 -->
+  <rect x="520" y="56" width="250" height="230" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="645" y="80" text-anchor="middle" font-size="13" fill="#333333">华北 · 备集群 north</text>
+  <rect x="545" y="98" width="200" height="34" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="645" y="120" text-anchor="middle" font-size="12" fill="#333333">east.orders · 消息仅到 960</text>
+  <rect x="545" y="146" width="200" height="34" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="645" y="168" text-anchor="middle" font-size="12" fill="#333333">topic 配置已同步</text>
+  <rect x="545" y="194" width="200" height="34" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="645" y="216" text-anchor="middle" font-size="12" fill="#333333">checkpoint 位移仅到 820</text>
+  <rect x="545" y="242" width="200" height="30" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="645" y="262" text-anchor="middle" font-size="12" fill="#333333">待切换消费者组</text>
+
+  <line x1="460" y1="168" x2="520" y2="115" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="470" y="140" font-size="11" fill="#333333">topic 数据</text>
+  <line x1="460" y1="180" x2="520" y2="163" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="470" y="205" font-size="11" fill="#333333">配置 / 位移</text>
+
+  <!-- 故障 -->
+  <rect x="20" y="310" width="120" height="34" rx="4" fill="#c62828"/>
+  <text x="80" y="332" text-anchor="middle" font-size="12" fill="#ffffff">华东机房故障</text>
+  <line x1="140" y1="327" x2="360" y2="327" stroke="#c62828" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arrowred)"/>
+  <text x="250" y="318" text-anchor="middle" font-size="11" fill="#c62828">切换</text>
+
+  <rect x="370" y="300" width="430" height="56" rx="4" fill="#fafafa" stroke="#c62828" stroke-dasharray="5 3"/>
+  <text x="390" y="322" font-size="12" fill="#c62828">失效点：961…1000 从未复制 → 直接丢（RPO≠0），且位移已是最终状态、无法追回</text>
+  <text x="390" y="344" font-size="12" fill="#c62828">失效点：checkpoint 只到 820 但数据已到 960 → 820…960 会被重复消费（需幂等兜住）</text>
+
+  <!-- 底部结论条 -->
+  <rect x="20" y="382" width="860" height="44" rx="4" fill="#fafafa" stroke="#333333"/>
+  <text x="40" y="400" font-size="12" fill="#333333">切换动作三件套：① 消费者改订阅名 east.orders ② 从 checkpoint 位移（820）续读 ③ 接受尾部丢失。</text>
+  <text x="40" y="418" font-size="12" fill="#333333">想缩小丢失窗口只有一条路：缩短 checkpoint-latency-ms 与复制滞后——代价是备集群带宽与 MM2 负载上升。</text>
+
+  <line x1="645" y1="286" x2="645" y2="300" stroke="#c62828" stroke-width="1.5" marker-end="url(#arrowred)"/>
+</svg>

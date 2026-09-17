@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="420" viewBox="0 0 900 420">
+  <title>历史数据重放与分层存储</title>
+  <desc>在线消费组继续消费最新数据，独立回放组从本地或远端保留层读取历史，避免移动在线位移。</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#1565c0"/></marker></defs>
+  <rect width="900" height="420" fill="#fff"/>
+  <text x="40" y="42" font-size="24" font-weight="700" fill="#333">重放要复制数据流，不要回拨在线消费者</text>
+  <rect x="55" y="100" width="185" height="95" rx="12" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="147" y="138" text-anchor="middle" font-size="18" fill="#333">Kafka Topic</text><text x="147" y="168" text-anchor="middle" font-size="15" fill="#555">本地段 + 远端段</text>
+  <line x1="240" y1="135" x2="350" y2="110" stroke="#1565c0" stroke-width="3" marker-end="url(#arrow)"/><line x1="240" y1="170" x2="350" y2="230" stroke="#1565c0" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="350" y="72" width="220" height="82" rx="12" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="460" y="108" text-anchor="middle" font-size="18" fill="#333">在线组</text><text x="460" y="135" text-anchor="middle" font-size="15" fill="#555">group = live</text>
+  <rect x="350" y="200" width="220" height="82" rx="12" fill="#fff8e1" stroke="#d29922" stroke-width="2"/>
+  <text x="460" y="236" text-anchor="middle" font-size="18" fill="#333">回放组</text><text x="460" y="263" text-anchor="middle" font-size="15" fill="#555">group = backfill</text>
+  <line x1="570" y1="113" x2="680" y2="113" stroke="#1565c0" stroke-width="3" marker-end="url(#arrow)"/><line x1="570" y1="241" x2="680" y2="241" stroke="#1565c0" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="680" y="100" width="170" height="180" rx="12" fill="#fafafa" stroke="#555" stroke-width="2"/>
+  <text x="765" y="135" text-anchor="middle" font-size="18" fill="#333">下游</text><text x="765" y="173" text-anchor="middle" font-size="15" fill="#555">实时结果</text><text x="765" y="205" text-anchor="middle" font-size="15" fill="#555">修复结果</text><text x="765" y="237" text-anchor="middle" font-size="14" fill="#555">幂等 / 对账</text>
+  <rect x="115" y="330" width="670" height="42" rx="10" fill="#f5f5f5" stroke="#999"/><text x="450" y="357" text-anchor="middle" font-size="15" fill="#555">远端保留需 RemoteStorageManager；compacted topic 不适合直接套用分层存储</text>
+</svg>

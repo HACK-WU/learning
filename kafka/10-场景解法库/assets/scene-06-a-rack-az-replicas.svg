@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="440" viewBox="0 0 900 440" font-family="Helvetica, Arial, sans-serif">
+  <title>解法 A：broker.rack 决定副本落在哪个故障域</title>
+  <desc>同一个分区 P0 的三个副本分别落在 1a/1b/1c 三个机架，可同时抗单机与单机架故障；三个副本挤在同一 AZ 时，该 AZ 断电即整分区不可用。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#333333"/>
+    </marker>
+  </defs>
+  <rect width="900" height="440" fill="#ffffff"/>
+  <text x="20" y="30" font-size="16" fill="#333333">解法 A：broker.rack 决定副本落在哪个故障域</text>
+
+  <!-- 上方：配了 rack，副本跨 AZ -->
+  <text x="20" y="72" font-size="13" fill="#333333">配了 broker.rack：P0 的三个副本分居 1a / 1b / 1c</text>
+  <rect x="20" y="86" width="200" height="120" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="120" y="110" text-anchor="middle" font-size="13" fill="#333333">AZ 1a</text>
+  <rect x="45" y="124" width="150" height="30" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="120" y="144" text-anchor="middle" font-size="12" fill="#333333">broker-1 · P0 leader</text>
+  <text x="120" y="182" text-anchor="middle" font-size="11" fill="#333333">rack=cn-east-1a</text>
+
+  <rect x="240" y="86" width="200" height="120" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="340" y="110" text-anchor="middle" font-size="13" fill="#333333">AZ 1b</text>
+  <rect x="265" y="124" width="150" height="30" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="340" y="144" text-anchor="middle" font-size="12" fill="#333333">broker-2 · P0 副本</text>
+  <text x="340" y="182" text-anchor="middle" font-size="11" fill="#333333">rack=cn-east-1b</text>
+
+  <rect x="460" y="86" width="200" height="120" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="560" y="110" text-anchor="middle" font-size="13" fill="#333333">AZ 1c</text>
+  <rect x="485" y="124" width="150" height="30" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="560" y="144" text-anchor="middle" font-size="12" fill="#333333">broker-3 · P0 副本</text>
+  <text x="560" y="182" text-anchor="middle" font-size="11" fill="#333333">rack=cn-east-1c</text>
+
+  <text x="700" y="130" font-size="13" fill="#333333">任一机架断电</text>
+  <text x="700" y="152" font-size="13" fill="#333333">→ 仍有 2 个副本在线</text>
+  <text x="700" y="174" font-size="13" fill="#333333">→ ISR 可用，RPO=0</text>
+
+  <!-- 下方：没配 rack，副本挤在同一 AZ -->
+  <text x="20" y="252" font-size="13" fill="#333333">没配 broker.rack：Kafka 不知道机架归属，三个副本可能都落进 1a</text>
+  <rect x="20" y="266" width="200" height="100" rx="6" fill="#c62828"/>
+  <text x="120" y="290" text-anchor="middle" font-size="13" fill="#ffffff">AZ 1a（唯一）</text>
+  <rect x="45" y="304" width="150" height="48" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="120" y="324" text-anchor="middle" font-size="11" fill="#333333">broker-1 P0 leader</text>
+  <text x="120" y="342" text-anchor="middle" font-size="11" fill="#333333">broker-2 / broker-3 副本</text>
+
+  <rect x="240" y="266" width="200" height="100" rx="6" fill="#ffffff" stroke="#333333" stroke-dasharray="5 3"/>
+  <text x="340" y="300" text-anchor="middle" font-size="13" fill="#333333">AZ 1b</text>
+  <text x="340" y="328" text-anchor="middle" font-size="12" fill="#333333">空</text>
+
+  <rect x="460" y="266" width="200" height="100" rx="6" fill="#ffffff" stroke="#333333" stroke-dasharray="5 3"/>
+  <text x="560" y="300" text-anchor="middle" font-size="13" fill="#333333">AZ 1c</text>
+  <text x="560" y="328" text-anchor="middle" font-size="12" fill="#333333">空</text>
+
+  <text x="700" y="300" font-size="13" fill="#333333">1a 断电 = 三个副本</text>
+  <text x="700" y="322" font-size="13" fill="#333333">同时消失 → P0 不可用</text>
+
+  <!-- 底部：失效点红框 -->
+  <rect x="20" y="386" width="860" height="40" rx="4" fill="#fafafa" stroke="#c62828" stroke-dasharray="5 3"/>
+  <text x="40" y="411" font-size="12" fill="#c62828">失效点：RF=3 只是"三份"，不是"三个故障域"。没配 broker.rack 时三份挤在一个机架/AZ，机架级故障照样全丢（RPO≠0）。</text>
+
+  <line x1="660" y1="206" x2="660" y2="262" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="600" y="238" font-size="11" fill="#333333">少配一行</text>
+</svg>

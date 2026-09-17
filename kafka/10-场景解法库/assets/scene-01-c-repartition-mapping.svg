@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="330" viewBox="0 0 900 330" font-family="Helvetica, Arial, sans-serif">
+  <rect width="900" height="330" fill="#ffffff"/>
+
+  <text x="450" y="28" text-anchor="middle" font-size="16" fill="#333333">解法 C：分区数一变，同一个 key 的落点就变了</text>
+
+  <!-- 变更前 -->
+  <rect x="40" y="60" width="330" height="120" rx="4" fill="#fafafa" stroke="#333333"/>
+  <text x="205" y="88" text-anchor="middle" font-size="13" fill="#333333">变更前：12 个分区</text>
+  <rect x="70" y="104" width="120" height="34" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="130" y="126" text-anchor="middle" font-size="12" fill="#333333">order_id = 8842</text>
+  <text x="205" y="148" text-anchor="middle" font-size="11" fill="#333333">hash(8842) % 12 = 7</text>
+  <rect x="230" y="104" width="110" height="34" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="285" y="126" text-anchor="middle" font-size="12" fill="#333333">落在 P7</text>
+
+  <!-- 箭头：变更动作 -->
+  <line x1="380" y1="120" x2="510" y2="120" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="445" y="108" text-anchor="middle" font-size="11" fill="#333333">--alter --partitions 36</text>
+  <text x="445" y="145" text-anchor="middle" font-size="11" fill="#c62828">不可逆：分区数只能加不能减</text>
+
+  <!-- 变更后 -->
+  <rect x="520" y="60" width="340" height="120" rx="4" fill="#fafafa" stroke="#333333"/>
+  <text x="690" y="88" text-anchor="middle" font-size="13" fill="#333333">变更后：36 个分区</text>
+  <rect x="550" y="104" width="120" height="34" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="610" y="126" text-anchor="middle" font-size="12" fill="#333333">order_id = 8842</text>
+  <text x="690" y="148" text-anchor="middle" font-size="11" fill="#333333">hash(8842) % 36 = 23</text>
+  <rect x="710" y="104" width="110" height="34" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="765" y="126" text-anchor="middle" font-size="12" fill="#333333">落在 P23</text>
+
+  <!-- 失效点 -->
+  <rect x="40" y="205" width="820" height="46" rx="4" fill="#fafafa" stroke="#c62828" stroke-dasharray="5 3"/>
+  <text x="450" y="226" text-anchor="middle" font-size="12" fill="#c62828">失效点 1：同一订单的新旧事件落到不同分区，按 key 的保序被破坏，且 Kafka 不会重排已有数据</text>
+  <text x="450" y="243" text-anchor="middle" font-size="12" fill="#c62828">失效点 2：auto.offset.reset=latest 的存量消费者，在「新分区建成 → 消费者发现新分区」的窗口内可能漏读</text>
+
+  <rect x="40" y="265" width="820" height="46" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="450" y="286" text-anchor="middle" font-size="12" fill="#333333">代价：分区越多 leader 故障切换越慢；元数据传播与客户端感知都需要时间</text>
+  <text x="450" y="303" text-anchor="middle" font-size="12" fill="#333333">必须保序时的替代路径：新建高分区 topic + 双写迁移（见场景 2 解法 D）</text>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#333333"/>
+    </marker>
+  </defs>
+</svg>

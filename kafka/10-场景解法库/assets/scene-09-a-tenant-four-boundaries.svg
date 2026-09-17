@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="520" viewBox="0 0 940 520" font-family="Helvetica, Arial, sans-serif">
+  <rect width="940" height="520" fill="#ffffff"/>
+
+  <text x="470" y="30" text-anchor="middle" font-size="16" fill="#333333">解法 A：一个租户的空间，是四层边界叠出来的——少一层就漏一层</text>
+
+  <!-- 层 4：broker（最外，物理共享） -->
+  <rect x="30" y="52" width="880" height="404" rx="8" fill="#fafafa" stroke="#333333"/>
+  <text x="50" y="76" font-size="13" fill="#333333">④ 物理层（共享，不可切分）：3 个 broker · 磁盘 · controller</text>
+
+  <!-- 层 3：配额 -->
+  <rect x="60" y="92" width="820" height="348" rx="6" fill="#ffffff" stroke="#333333"/>
+  <text x="80" y="116" font-size="13" fill="#333333">③ 资源层：配额按 principal 限速，护住 broker 与 controller</text>
+
+  <!-- 层 2：ACL -->
+  <rect x="90" y="132" width="760" height="292" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="110" y="156" font-size="13" fill="#333333">② 数据层：前缀 ACL 决定"能读能写哪些 topic 与消费组"</text>
+
+  <!-- 层 1：认证 -->
+  <rect x="120" y="172" width="700" height="236" rx="6" fill="#ffffff" stroke="#333333"/>
+  <text x="140" y="196" font-size="13" fill="#333333">① 身份层：认证确认"你是 User:team-a"，之后的一切都挂在它身上</text>
+
+  <!-- 租户空间集合 -->
+  <rect x="160" y="216" width="280" height="128" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="300" y="240" text-anchor="middle" font-size="12" fill="#333333">team-a 的租户空间</text>
+  <text x="300" y="264" text-anchor="middle" font-size="11" fill="#333333">payments.team-a.orders.created</text>
+  <text x="300" y="284" text-anchor="middle" font-size="11" fill="#333333">payments.team-a.orders.paid</text>
+  <text x="300" y="304" text-anchor="middle" font-size="11" fill="#333333">group: payments.team-a.*</text>
+  <text x="300" y="328" text-anchor="middle" font-size="11" fill="#333333">前缀是"命名约定"，ACL 把它变成边界</text>
+
+  <rect x="470" y="216" width="280" height="128" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="610" y="240" text-anchor="middle" font-size="12" fill="#333333">team-b 的租户空间</text>
+  <text x="610" y="264" text-anchor="middle" font-size="11" fill="#333333">payments.team-b.*</text>
+  <text x="610" y="284" text-anchor="middle" font-size="11" fill="#333333">group: payments.team-b.*</text>
+  <text x="610" y="304" text-anchor="middle" font-size="11" fill="#333333">前缀 ACL 让它摸不到 team-a 的 topic</text>
+  <text x="610" y="328" text-anchor="middle" font-size="11" fill="#333333">两个空间不重叠，也不互相嵌套</text>
+
+  <line x1="440" y1="280" x2="470" y2="280" stroke="#333333" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="455" y="270" text-anchor="middle" font-size="10" fill="#333333">隔离</text>
+
+  <!-- 各层覆盖说明 -->
+  <rect x="770" y="216" width="60" height="128" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="800" y="248" text-anchor="middle" font-size="10" fill="#333333">四层</text>
+  <text x="800" y="268" text-anchor="middle" font-size="10" fill="#333333">逐层</text>
+  <text x="800" y="288" text-anchor="middle" font-size="10" fill="#333333">收紧</text>
+  <text x="800" y="312" text-anchor="middle" font-size="10" fill="#333333">任缺</text>
+  <text x="800" y="332" text-anchor="middle" font-size="10" fill="#333333">一层</text>
+
+  <!-- 失效点 -->
+  <rect x="60" y="376" width="820" height="66" rx="4" fill="#fafafa" stroke="#c62828" stroke-dasharray="5 3"/>
+  <text x="80" y="398" font-size="12" fill="#c62828">失效点：四层全配齐，也只覆盖"数据面 + 资源面"——故障域仍是共享的</text>
+  <text x="80" y="418" font-size="11" fill="#333333">运维把一个 broker 升级搞崩、或 controller 被元数据操作洪水占满，对 team-a 和 team-b 是同等打击；</text>
+  <text x="80" y="436" font-size="11" fill="#333333">这条路解决不了"关键业务要和测试回放共担故障"的问题——那是解法 B 的适用条件。</text>
+
+  <rect x="30" y="472" width="880" height="34" rx="4" fill="#fafafa" stroke="#333333"/>
+  <text x="50" y="494" font-size="12" fill="#333333">正常路径：连接进来（① 认证）→ 访问时按前缀判权限（② ACL）→ 生产/消费速率被限速（③ 配额）→ 全部落在同一批机器上（④ 共享）</text>
+
+</svg>

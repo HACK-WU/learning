@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="440" viewBox="0 0 900 440" font-family="Helvetica, Arial, sans-serif">
+  <title>解法 E：broker 先升，客户端再分批灰度</title>
+  <desc>上半部分第一步只升 broker 并进入观察窗口，客户端保持旧版本；下半部分第二步按业务组分批换客户端包，每组独立验证独立回滚。两端同时换会丧失可定位性。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#333333"/>
+    </marker>
+  </defs>
+  <rect width="900" height="440" fill="#ffffff"/>
+  <text x="20" y="30" font-size="16" fill="#333333">解法 E：把一次升级拆成两个可独立回滚的动作</text>
+
+  <!-- 第一步：broker -->
+  <text x="20" y="72" font-size="13" fill="#333333">第一步（服务端）：只升 broker，客户端不动</text>
+  <rect x="20" y="86" width="200" height="76" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="120" y="110" text-anchor="middle" font-size="12" fill="#333333">broker-1/2/3</text>
+  <text x="120" y="130" text-anchor="middle" font-size="11" fill="#333333">逐个升到新版本</text>
+  <text x="120" y="150" text-anchor="middle" font-size="11" fill="#333333">全部完成 → 观察窗口</text>
+
+  <line x1="220" y1="124" x2="290" y2="124" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="255" y="114" text-anchor="middle" font-size="11" fill="#333333">观察</text>
+
+  <rect x="300" y="86" width="240" height="76" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="420" y="110" text-anchor="middle" font-size="12" fill="#333333">新 broker + 旧客户端</text>
+  <text x="420" y="130" text-anchor="middle" font-size="11" fill="#333333">官方兼容矩阵内的组合</text>
+  <text x="420" y="150" text-anchor="middle" font-size="11" fill="#333333">只做兼容回归，不切流量</text>
+
+  <text x="580" y="118" font-size="12" fill="#333333">服务端异常</text>
+  <text x="580" y="140" font-size="12" fill="#333333">→ 只回退 broker</text>
+
+  <!-- 第二步：客户端 -->
+  <line x1="420" y1="162" x2="420" y2="196" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="440" y="184" font-size="11" fill="#333333">服务端稳定后</text>
+
+  <text x="20" y="228" font-size="13" fill="#333333">第二步（客户端）：按业务组分批换包，一组一组来</text>
+  <rect x="20" y="242" width="180" height="84" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="110" y="266" text-anchor="middle" font-size="12" fill="#333333">group A 换包</text>
+  <text x="110" y="288" text-anchor="middle" font-size="11" fill="#333333">验证 Produce/Fetch</text>
+  <text x="110" y="308" text-anchor="middle" font-size="11" fill="#333333">与位移 → 稳定</text>
+
+  <line x1="200" y1="284" x2="256" y2="284" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="266" y="242" width="180" height="84" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="356" y="266" text-anchor="middle" font-size="12" fill="#333333">group B 换包</text>
+  <text x="356" y="288" text-anchor="middle" font-size="11" fill="#333333">同样先验证</text>
+  <text x="356" y="308" text-anchor="middle" font-size="11" fill="#333333">再放开</text>
+
+  <line x1="446" y1="284" x2="502" y2="284" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="512" y="242" width="180" height="84" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="602" y="266" text-anchor="middle" font-size="12" fill="#333333">group C …</text>
+  <text x="602" y="288" text-anchor="middle" font-size="11" fill="#333333">任一组异常</text>
+  <text x="602" y="308" text-anchor="middle" font-size="11" fill="#333333">只回退该组</text>
+
+  <text x="720" y="266" font-size="12" fill="#333333">broker 保持新版本</text>
+  <text x="720" y="288" font-size="12" fill="#333333">回退范围被限制在</text>
+  <text x="720" y="310" font-size="12" fill="#333333">单个业务组</text>
+
+  <!-- 底部失效点 -->
+  <rect x="20" y="366" width="860" height="56" rx="4" fill="#fafafa" stroke="#c62828" stroke-dasharray="5 3"/>
+  <text x="40" y="390" font-size="12" fill="#c62828">失效点：两端同时换包（broker 与客户端一起动）→ 出现协议/行为差异时无法判断是哪一侧引入的，</text>
+  <text x="40" y="410" font-size="12" fill="#c62828">回退只能整批退回，灰度的意义被抵消。</text>
+</svg>

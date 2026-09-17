@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="300" viewBox="0 0 900 300" font-family="Helvetica, Arial, sans-serif">
+  <rect width="900" height="300" fill="#ffffff"/>
+
+  <text x="450" y="28" text-anchor="middle" font-size="16" fill="#333333">解法 D：归档到外部存储，回放走离线链路而不是 Kafka 消费组</text>
+
+  <!-- 在线链路 -->
+  <text x="60" y="70" font-size="12" fill="#333333">在线链路（保留窗口内）</text>
+  <rect x="60" y="82" width="140" height="44" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="130" y="100" text-anchor="middle" font-size="12" fill="#333333">orders topic</text>
+  <text x="130" y="118" text-anchor="middle" font-size="10" fill="#333333">本地 + 远端段</text>
+  <line x1="200" y1="104" x2="260" y2="104" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="265" y="82" width="140" height="44" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="335" y="106" text-anchor="middle" font-size="12" fill="#333333">在线消费者组</text>
+
+  <!-- 归档链路 -->
+  <text x="560" y="70" font-size="12" fill="#333333">归档链路（保留期无限）</text>
+  <rect x="560" y="82" width="130" height="44" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="625" y="106" text-anchor="middle" font-size="12" fill="#333333">Sink Connector</text>
+  <line x1="690" y1="104" x2="740" y2="104" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="745" y="82" width="95" height="44" rx="4" fill="#fafafa" stroke="#333333"/>
+  <text x="792" y="100" text-anchor="middle" font-size="12" fill="#333333">对象存储</text>
+  <text x="792" y="118" text-anchor="middle" font-size="10" fill="#333333">Parquet 等</text>
+  <line x1="475" y1="104" x2="555" y2="104" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="515" y="94" text-anchor="middle" font-size="10" fill="#333333">持续归档</text>
+
+  <!-- 离线回放 -->
+  <rect x="560" y="160" width="280" height="44" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="700" y="180" text-anchor="middle" font-size="12" fill="#333333">离线批量计算 / 训练</text>
+  <text x="700" y="197" text-anchor="middle" font-size="10" fill="#333333">回放结果写回业务库或新 topic</text>
+  <line x1="792" y1="126" x2="792" y2="157" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="60" y="160" width="400" height="44" rx="4" fill="#fafafa" stroke="#c62828" stroke-dasharray="5 3"/>
+  <text x="260" y="180" text-anchor="middle" font-size="12" fill="#c62828">失效点：离线回放与在线消费是两套代码</text>
+  <text x="260" y="197" text-anchor="middle" font-size="12" fill="#c62828">没有消费组位移语义，重跑与去重要自己定义</text>
+
+  <rect x="60" y="225" width="800" height="52" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="450" y="246" text-anchor="middle" font-size="12" fill="#333333">代价：要额外维护一条归档链路（Connect Sink 或自研）与配套的离线任务</text>
+  <text x="450" y="266" text-anchor="middle" font-size="12" fill="#333333">适用：审计 / 训练类场景，本就不要求“通过 Kafka 的消费者组来回放”</text>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#333333"/>
+    </marker>
+  </defs>
+</svg>

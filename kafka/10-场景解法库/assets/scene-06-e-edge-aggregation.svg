@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="450" viewBox="0 0 900 450" font-family="Helvetica, Arial, sans-serif">
+  <title>解法 E：边缘聚合的单向拓扑与中心单点</title>
+  <desc>三个边缘集群各自单向复制到中心集群，天然无环路；但中心是汇聚单点，且边缘到中心链路断连期间边缘数据停在本地。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#333333"/>
+    </marker>
+    <marker id="arrowred" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#c62828"/>
+    </marker>
+  </defs>
+  <rect width="900" height="450" fill="#ffffff"/>
+  <text x="20" y="30" font-size="16" fill="#333333">解法 E：多条单向流汇入中心，环路的代价换成了中心的单点</text>
+
+  <!-- 边缘三个 -->
+  <rect x="30" y="70" width="180" height="56" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="120" y="94" text-anchor="middle" font-size="12" fill="#333333">门店 A 集群</text>
+  <text x="120" y="114" text-anchor="middle" font-size="11" fill="#333333">本地落盘 + 上报</text>
+
+  <rect x="30" y="190" width="180" height="56" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="120" y="214" text-anchor="middle" font-size="12" fill="#333333">门店 B 集群</text>
+  <text x="120" y="234" text-anchor="middle" font-size="11" fill="#333333">本地落盘 + 上报</text>
+
+  <rect x="30" y="310" width="180" height="56" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="120" y="334" text-anchor="middle" font-size="12" fill="#333333">门店 C 集群</text>
+  <text x="120" y="354" text-anchor="middle" font-size="11" fill="#333333">本地落盘 + 上报</text>
+
+  <!-- 中心 -->
+  <rect x="420" y="176" width="240" height="90" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="540" y="206" text-anchor="middle" font-size="14" fill="#333333">中心集群 K</text>
+  <text x="540" y="232" text-anchor="middle" font-size="11" fill="#333333">多路汇总 · 全局视图</text>
+  <text x="540" y="252" text-anchor="middle" font-size="11" fill="#333333">自身高可用仍需解法 A</text>
+
+  <line x1="210" y1="98" x2="420" y2="190" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="280" y="130" font-size="11" fill="#333333">A→K 单向</text>
+  <line x1="210" y1="218" x2="420" y2="218" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="280" y="210" font-size="11" fill="#333333">B→K 单向</text>
+  <line x1="210" y1="338" x2="420" y2="252" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="280" y="322" font-size="11" fill="#333333">C→K 单向</text>
+
+  <text x="420" y="160" font-size="12" fill="#333333">中心不向边缘回写 → 天然无环路</text>
+  <text x="700" y="200" font-size="12" fill="#333333">单个边缘掉线</text>
+  <text x="700" y="220" font-size="12" fill="#333333">不影响其他边缘</text>
+  <text x="700" y="240" font-size="12" fill="#333333">也不影响中心可用性</text>
+
+  <!-- 失效点红框 -->
+  <rect x="30" y="386" width="840" height="52" rx="4" fill="#fafafa" stroke="#c62828" stroke-dasharray="5 3"/>
+  <text x="50" y="408" font-size="12" fill="#c62828">失效点：中心是汇聚单点——中心所在地域故障时，全部门店数据无法汇总（要靠解法 A 之外的另一套异地方案兜）。</text>
+  <text x="50" y="428" font-size="12" fill="#c62828">失效点：边缘→中心是异步链路，断连期间数据停在边缘本地，中心看到的不是最新全量 → 这段窗口 RPO≠0。</text>
+
+  <line x1="660" y1="266" x2="660" y2="386" stroke="#c62828" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arrowred)"/>
+</svg>

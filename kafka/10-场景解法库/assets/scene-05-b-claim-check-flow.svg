@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="330" viewBox="0 0 900 330" font-family="Helvetica, Arial, sans-serif">
+  <rect width="900" height="330" fill="#ffffff"/>
+
+  <text x="450" y="28" text-anchor="middle" font-size="16" fill="#333333">解法 B：Claim Check —— 消息只放引用，payload 走对象存储</text>
+
+  <!-- 步骤 -->
+  <rect x="40" y="70" width="150" height="50" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="115" y="90" text-anchor="middle" font-size="12" fill="#333333">1 · 生产者</text>
+  <text x="115" y="108" text-anchor="middle" font-size="10" fill="#333333">先把 payload 存起来</text>
+
+  <line x1="190" y1="95" x2="245" y2="95" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="250" y="70" width="150" height="50" rx="4" fill="#fafafa" stroke="#333333"/>
+  <text x="325" y="90" text-anchor="middle" font-size="12" fill="#333333">2 · 对象存储</text>
+  <text x="325" y="108" text-anchor="middle" font-size="10" fill="#333333">大 payload + 生命周期策略</text>
+
+  <line x1="400" y1="95" x2="455" y2="95" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="460" y="70" width="150" height="50" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="535" y="90" text-anchor="middle" font-size="12" fill="#333333">3 · Kafka 消息</text>
+  <text x="535" y="108" text-anchor="middle" font-size="10" fill="#333333">只有引用，KB 级</text>
+
+  <line x1="610" y1="95" x2="665" y2="95" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <rect x="670" y="70" width="150" height="50" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="745" y="90" text-anchor="middle" font-size="12" fill="#333333">4 · 消费者</text>
+  <text x="745" y="108" text-anchor="middle" font-size="10" fill="#333333">拿引用去拉取</text>
+
+  <line x1="745" y1="120" x2="325" y2="155" stroke="#333333" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="560" y="150" font-size="11" fill="#333333">第二次网络往返：按引用回对象存储取 payload</text>
+
+  <rect x="40" y="175" width="780" height="46" rx="4" fill="#fafafa" stroke="#c62828" stroke-dasharray="5 3"/>
+  <text x="430" y="196" text-anchor="middle" font-size="12" fill="#c62828">失效点 1：Kafka 侧的保序与重试只管得住那条引用消息，管不住对象存储里的 payload 是否还在</text>
+  <text x="430" y="214" text-anchor="middle" font-size="12" fill="#c62828">失效点 2：payload 的清理策略没人管 → 对象存储只增不减，成本悄悄上涨</text>
+
+  <rect x="40" y="236" width="780" height="62" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="430" y="258" text-anchor="middle" font-size="12" fill="#333333">代价：引入对象存储依赖，消费端多一次拉取，且必须约定 payload 的过期与删除</text>
+  <text x="430" y="278" text-anchor="middle" font-size="12" fill="#333333">适用：确实要传大对象（文件、图片、报表）——若只是字段太多，先回到解法 A</text>
+  <text x="430" y="296" text-anchor="middle" font-size="11" fill="#333333">示例地址用文档专用段 192.0.2.x / example.com，勿写真实内网地址</text>
+
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#333333"/>
+    </marker>
+  </defs>
+</svg>

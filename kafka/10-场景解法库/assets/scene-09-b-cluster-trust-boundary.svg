@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="480" viewBox="0 0 940 480" font-family="Helvetica, Arial, sans-serif">
+  <rect width="940" height="480" fill="#ffffff"/>
+
+  <text x="470" y="30" text-anchor="middle" font-size="16" fill="#333333">解法 B：拆集群拆的不是磁盘，是"故障域 + 管理员域"</text>
+
+  <!-- 左：专用集群 -->
+  <rect x="30" y="52" width="400" height="300" rx="8" fill="#fafafa" stroke="#333333"/>
+  <text x="230" y="76" text-anchor="middle" font-size="14" fill="#333333">支付专用集群（独立故障域）</text>
+
+  <rect x="55" y="94" width="350" height="58" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="230" y="116" text-anchor="middle" font-size="12" fill="#333333">独立 broker 组 · 独立磁盘</text>
+  <text x="230" y="136" text-anchor="middle" font-size="11" fill="#333333">独立认证 | 独立 ACL | 独立配额</text>
+
+  <rect x="55" y="166" width="350" height="58" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="230" y="188" text-anchor="middle" font-size="12" fill="#333333">独立监控 · 独立备份 · 独立升级窗口</text>
+  <text x="230" y="208" text-anchor="middle" font-size="11" fill="#333333">支付团队的变更不影响别人</text>
+
+  <rect x="55" y="238" width="350" height="46" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="230" y="258" text-anchor="middle" font-size="11" fill="#333333">只接受已评审的跨集群数据出口</text>
+  <text x="230" y="276" text-anchor="middle" font-size="11" fill="#333333">出口方向、RPO、命名都要预先定义</text>
+
+  <text x="230" y="308" text-anchor="middle" font-size="12" fill="#333333">成本：一套集群 = 一套运维</text>
+  <text x="230" y="330" text-anchor="middle" font-size="12" fill="#333333">隔离强度随成本同步放大</text>
+
+  <!-- 右：共享集群 -->
+  <rect x="510" y="52" width="400" height="300" rx="8" fill="#fafafa" stroke="#333333"/>
+  <text x="710" y="76" text-anchor="middle" font-size="14" fill="#333333">共享业务集群（同一故障域）</text>
+
+  <rect x="535" y="94" width="350" height="58" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="710" y="116" text-anchor="middle" font-size="12" fill="#333333">推荐业务 · 分析业务</text>
+  <text x="710" y="136" text-anchor="middle" font-size="11" fill="#333333">前缀 ACL + 各自配额</text>
+
+  <rect x="535" y="166" width="350" height="58" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="710" y="188" text-anchor="middle" font-size="12" fill="#333333">测试回放</text>
+  <text x="710" y="208" text-anchor="middle" font-size="11" fill="#333333">独立账号，但仍然共用同一批 broker 与磁盘</text>
+
+  <rect x="535" y="238" width="350" height="46" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="710" y="258" text-anchor="middle" font-size="11" fill="#333333">一次 broker 级故障 / 管理员误操作</text>
+  <text x="710" y="276" text-anchor="middle" font-size="11" fill="#333333">上面所有租户一起受影响</text>
+
+  <text x="710" y="308" text-anchor="middle" font-size="12" fill="#333333">成本：一套集群服务多个团队</text>
+  <text x="710" y="330" text-anchor="middle" font-size="12" fill="#333333">换来的隔离上限：逻辑隔离</text>
+
+  <!-- 中间对比箭头 -->
+  <line x1="440" y1="200" x2="500" y2="200" stroke="#333333" stroke-width="1.5" marker-end="url(#a3)"/>
+  <text x="470" y="188" text-anchor="middle" font-size="10" fill="#333333">拆</text>
+  <line x1="500" y1="220" x2="440" y2="220" stroke="#333333" stroke-width="1.5" marker-end="url(#a3)"/>
+  <text x="470" y="238" text-anchor="middle" font-size="10" fill="#333333">并</text>
+
+  <!-- 失效点 -->
+  <rect x="30" y="372" width="880" height="58" rx="4" fill="#fafafa" stroke="#c62828" stroke-dasharray="5 3"/>
+  <text x="50" y="394" font-size="12" fill="#c62828">失效点：拆集群解决耦合，但把运维工作也复制了一份——两套监控、两套升级、两套备份、两个容量池</text>
+  <text x="50" y="414" font-size="11" fill="#333333">而且它不自动带来容灾：集群之间要共享事件，就必须额外定义复制方向、RPO 与回放权限，否则"专用"只是"更贵"，没变得更可靠。</text>
+
+  <rect x="30" y="444" width="880" height="26" rx="4" fill="#fafafa" stroke="#333333"/>
+  <text x="50" y="462" font-size="12" fill="#333333">正常路径：先用信任边界（合规 / 强噪声隔离 / 关键业务）判断该不该拆，再决定拆哪一部分——不是拿它当性能调优开关</text>
+
+  <defs>
+    <marker id="a3" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#333333"/>
+    </marker>
+  </defs>
+</svg>

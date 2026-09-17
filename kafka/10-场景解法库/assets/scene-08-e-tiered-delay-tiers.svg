@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="440" viewBox="0 0 940 440" font-family="Helvetica, Arial, sans-serif">
+  <rect width="940" height="440" fill="#ffffff"/>
+
+  <text x="470" y="30" text-anchor="middle" font-size="16" fill="#333333">解法 E：延迟不是"定时器"，而是"落到哪个档位 topic + 什么时候开始消费"</text>
+
+  <!-- 底部时间轴 -->
+  <line x1="60" y1="330" x2="880" y2="330" stroke="#333333" stroke-width="2"/>
+  <text x="60" y="352" font-size="12" fill="#333333">T+0</text>
+  <text x="300" y="352" font-size="12" fill="#333333">T+1m</text>
+  <text x="540" y="352" font-size="12" fill="#333333">T+5m</text>
+  <text x="800" y="352" font-size="12" fill="#333333">T+30m 及以后</text>
+
+  <!-- 三个档位区间条 -->
+  <rect x="60" y="266" width="240" height="48" rx="4" fill="#fafafa" stroke="#333333"/>
+  <text x="180" y="286" text-anchor="middle" font-size="12" fill="#333333">notify.retry.1m</text>
+  <text x="180" y="304" text-anchor="middle" font-size="11" fill="#333333">第 1 次失败落入</text>
+
+  <rect x="300" y="266" width="240" height="48" rx="4" fill="#fafafa" stroke="#333333"/>
+  <text x="420" y="286" text-anchor="middle" font-size="12" fill="#333333">notify.retry.5m</text>
+  <text x="420" y="304" text-anchor="middle" font-size="11" fill="#333333">第 2 次失败落入</text>
+
+  <rect x="540" y="266" width="260" height="48" rx="4" fill="#fafafa" stroke="#333333"/>
+  <text x="670" y="286" text-anchor="middle" font-size="12" fill="#333333">notify.retry.30m</text>
+  <text x="670" y="304" text-anchor="middle" font-size="11" fill="#333333">第 3 次及以后落入</text>
+
+  <line x1="60" y1="314" x2="300" y2="314" stroke="#333333" stroke-width="1.5" marker-end="url(#a2)"/>
+  <line x1="300" y1="314" x2="540" y2="314" stroke="#333333" stroke-width="1.5" marker-end="url(#a2)"/>
+  <line x1="540" y1="314" x2="800" y2="314" stroke="#333333" stroke-width="1.5" marker-end="url(#a2)"/>
+  <text x="470" y="252" text-anchor="middle" font-size="11" fill="#333333">失败次数 +1 → 往右跳档（跳档即丢失精确时间）</text>
+
+  <!-- 上方：两个不同的等待时长落进同一个桶 -->
+  <text x="60" y="60" font-size="13" fill="#333333">业务实际想要的重投时刻</text>
+  <rect x="60" y="76" width="150" height="34" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="135" y="98" text-anchor="middle" font-size="11" fill="#333333">任务甲 想等 1 分 10 秒</text>
+  <rect x="60" y="122" width="150" height="34" rx="4" fill="#ffffff" stroke="#333333"/>
+  <text x="135" y="144" text-anchor="middle" font-size="11" fill="#333333">任务乙 想等 4 分 50 秒</text>
+
+  <line x1="210" y1="93" x2="330" y2="256" stroke="#333333" stroke-width="1.5" marker-end="url(#a2)"/>
+  <line x1="210" y1="139" x2="360" y2="256" stroke="#333333" stroke-width="1.5" marker-end="url(#a2)"/>
+  <text x="300" y="180" font-size="11" fill="#333333">两者都被压进同一个 5m 档</text>
+
+  <!-- 消费侧 -->
+  <rect x="540" y="76" width="340" height="96" rx="4" fill="#fafafa" stroke="#333333"/>
+  <text x="710" y="100" text-anchor="middle" font-size="12" fill="#333333">各档位消费者</text>
+  <text x="710" y="122" text-anchor="middle" font-size="11" fill="#333333">用定时器控制"到点才开始消费"</text>
+  <text x="710" y="144" text-anchor="middle" font-size="11" fill="#333333">消费时机是人为对齐到档位的</text>
+  <text x="710" y="164" text-anchor="middle" font-size="11" fill="#333333">延迟精度 = 档位宽度，不是业务想要的时刻</text>
+  <line x1="600" y1="172" x2="300" y2="264" stroke="#333333" stroke-width="1" stroke-dasharray="4 3"/>
+
+  <!-- 失效点 -->
+  <rect x="60" y="378" width="820" height="46" rx="4" fill="#fafafa" stroke="#c62828" stroke-dasharray="5 3"/>
+  <text x="80" y="398" font-size="12" fill="#c62828">失效点：延迟粒度被档位宽度锁死——做不到任意时间，且档位越多 topic 越多、消费者越多</text>
+  <text x="80" y="416" font-size="12" fill="#333333">正常路径：失败单条 → 按失败次数跳到对应档位 topic → 到点才消费；它保住的是"不阻塞主分区"和"有出口"</text>
+
+  <defs>
+    <marker id="a2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#333333"/>
+    </marker>
+  </defs>
+</svg>

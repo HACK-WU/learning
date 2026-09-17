@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="420" viewBox="0 0 900 420">
+  <title>新增 Broker 分区重分配与健康证明</title>
+  <desc>新增 broker 不会自动承接历史分区，必须生成并执行重分配计划，再用副本和流量指标验证结果。</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#1565c0"/></marker></defs>
+  <rect width="900" height="420" fill="#fff"/>
+  <text x="40" y="42" font-size="24" font-weight="700" fill="#333">加了 Broker，不等于数据已经搬过去</text>
+  <rect x="45" y="105" width="160" height="90" rx="12" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/><text x="125" y="141" text-anchor="middle" font-size="18" fill="#333">旧集群</text><text x="125" y="171" text-anchor="middle" font-size="15" fill="#555">历史副本</text>
+  <line x1="205" y1="150" x2="290" y2="150" stroke="#1565c0" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="290" y="82" width="220" height="145" rx="12" fill="#fafafa" stroke="#555" stroke-width="2"/><text x="400" y="116" text-anchor="middle" font-size="18" fill="#333">重分配计划</text><text x="400" y="150" text-anchor="middle" font-size="15" fill="#555">生成 → 执行</text><text x="400" y="180" text-anchor="middle" font-size="15" fill="#555">限流 → 观察</text><text x="400" y="210" text-anchor="middle" font-size="14" fill="#555">清除 throttle</text>
+  <line x1="510" y1="150" x2="595" y2="150" stroke="#1565c0" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="595" y="105" width="260" height="90" rx="12" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/><text x="725" y="141" text-anchor="middle" font-size="18" fill="#333">新集群分布</text><text x="725" y="171" text-anchor="middle" font-size="15" fill="#555">副本 + leader + 流量</text>
+  <rect x="105" y="305" width="690" height="67" rx="12" fill="#fff8e1" stroke="#d29922" stroke-width="2"/><text x="450" y="334" text-anchor="middle" font-size="17" fill="#333">健康证明：URP=0、ISR 稳定、磁盘/网络可承受、leader 流量真的分散</text><text x="450" y="358" text-anchor="middle" font-size="14" fill="#555">迁移完成后检查并移除限流，避免遗留隐藏上限</text>
+</svg>

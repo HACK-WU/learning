@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="440" viewBox="0 0 900 440" font-family="Helvetica, Arial, sans-serif">
+  <title>解法 A：重分配把副本从不均衡的 3 台铺到 5 台</title>
+  <desc>重分配前新加的 broker-4/5 副本数为 0，存储与 leader 全压在 broker-1/2/3；执行并 verify 之后每个分区的第三份副本落到新节点，旧节点磁盘与 leader 压力下降。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#333333"/>
+    </marker>
+  </defs>
+  <rect width="900" height="440" fill="#ffffff"/>
+  <text x="20" y="30" font-size="16" fill="#333333">解法 A：重分配把副本从不均衡的 3 台铺到 5 台</text>
+
+  <!-- 上排：重分配前 -->
+  <text x="20" y="70" font-size="13" fill="#333333">重分配前：新增的 broker-4 / 5 副本数为 0，压力仍压在 1/2/3</text>
+  <rect x="20" y="84" width="150" height="96" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="95" y="106" text-anchor="middle" font-size="12" fill="#333333">broker-1</text>
+  <text x="95" y="128" text-anchor="middle" font-size="11" fill="#333333">P0 leader</text>
+  <text x="95" y="146" text-anchor="middle" font-size="11" fill="#333333">P1 · P2 副本</text>
+  <text x="95" y="166" text-anchor="middle" font-size="11" fill="#333333">磁盘高 · leader 多</text>
+
+  <rect x="190" y="84" width="150" height="96" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="265" y="106" text-anchor="middle" font-size="12" fill="#333333">broker-2</text>
+  <text x="265" y="128" text-anchor="middle" font-size="11" fill="#333333">P1 leader</text>
+  <text x="265" y="146" text-anchor="middle" font-size="11" fill="#333333">P0 · P2 副本</text>
+  <text x="265" y="166" text-anchor="middle" font-size="11" fill="#333333">磁盘高 · leader 多</text>
+
+  <rect x="360" y="84" width="150" height="96" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="435" y="106" text-anchor="middle" font-size="12" fill="#333333">broker-3</text>
+  <text x="435" y="128" text-anchor="middle" font-size="11" fill="#333333">P2 leader</text>
+  <text x="435" y="146" text-anchor="middle" font-size="11" fill="#333333">P0 · P1 副本</text>
+  <text x="435" y="166" text-anchor="middle" font-size="11" fill="#333333">磁盘高 · leader 多</text>
+
+  <rect x="530" y="84" width="150" height="96" rx="6" fill="#ffffff" stroke="#c62828" stroke-dasharray="5 3"/>
+  <text x="605" y="106" text-anchor="middle" font-size="12" fill="#c62828">broker-4（新）</text>
+  <text x="605" y="132" text-anchor="middle" font-size="11" fill="#c62828">副本 0</text>
+  <text x="605" y="154" text-anchor="middle" font-size="11" fill="#c62828">磁盘几乎为空</text>
+
+  <rect x="700" y="84" width="150" height="96" rx="6" fill="#ffffff" stroke="#c62828" stroke-dasharray="5 3"/>
+  <text x="775" y="106" text-anchor="middle" font-size="12" fill="#c62828">broker-5（新）</text>
+  <text x="775" y="132" text-anchor="middle" font-size="11" fill="#c62828">副本 0</text>
+  <text x="775" y="154" text-anchor="middle" font-size="11" fill="#c62828">磁盘几乎为空</text>
+
+  <!-- 中间箭头 -->
+  <line x1="450" y1="196" x2="450" y2="236" stroke="#333333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="470" y="220" font-size="12" fill="#333333">--execute --throttle 52428800 → --verify</text>
+
+  <!-- 下排：重分配后 -->
+  <text x="20" y="266" font-size="13" fill="#333333">重分配后：每个分区的第三份副本落到新节点，1/2/3 压力下降</text>
+  <rect x="20" y="280" width="150" height="84" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="95" y="302" text-anchor="middle" font-size="12" fill="#333333">broker-1</text>
+  <text x="95" y="324" text-anchor="middle" font-size="11" fill="#333333">P0 leader</text>
+  <text x="95" y="344" text-anchor="middle" font-size="11" fill="#333333">副本数下降</text>
+
+  <rect x="190" y="280" width="150" height="84" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="265" y="302" text-anchor="middle" font-size="12" fill="#333333">broker-2</text>
+  <text x="265" y="324" text-anchor="middle" font-size="11" fill="#333333">P1 leader</text>
+  <text x="265" y="344" text-anchor="middle" font-size="11" fill="#333333">副本数下降</text>
+
+  <rect x="360" y="280" width="150" height="84" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="435" y="302" text-anchor="middle" font-size="12" fill="#333333">broker-3</text>
+  <text x="435" y="324" text-anchor="middle" font-size="11" fill="#333333">P2 leader</text>
+  <text x="435" y="344" text-anchor="middle" font-size="11" fill="#333333">副本数下降</text>
+
+  <rect x="530" y="280" width="150" height="84" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="605" y="302" text-anchor="middle" font-size="12" fill="#333333">broker-4（新）</text>
+  <text x="605" y="324" text-anchor="middle" font-size="11" fill="#333333">承接 P0/P1 副本</text>
+  <text x="605" y="344" text-anchor="middle" font-size="11" fill="#333333">磁盘开始上升</text>
+
+  <rect x="700" y="280" width="150" height="84" rx="6" fill="#fafafa" stroke="#333333"/>
+  <text x="775" y="302" text-anchor="middle" font-size="12" fill="#333333">broker-5（新）</text>
+  <text x="775" y="324" text-anchor="middle" font-size="11" fill="#333333">承接 P2 等副本</text>
+  <text x="775" y="344" text-anchor="middle" font-size="11" fill="#333333">磁盘开始上升</text>
+
+  <!-- 底部失效点 -->
+  <rect x="20" y="384" width="860" height="40" rx="4" fill="#fafafa" stroke="#c62828" stroke-dasharray="5 3"/>
+  <text x="40" y="409" font-size="12" fill="#c62828">失效点：计划写了目标 broker 却不 --execute（新节点永远空），或 execute 后不 --verify（限流残留，集群长期半速）。</text>
+</svg>

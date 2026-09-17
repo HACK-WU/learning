@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="420" viewBox="0 0 900 420">
+  <title>保序粒度与并发设计</title>
+  <desc>业务 key 将事件稳定映射到分区；按 key 保序可以并发，全局保序则牺牲并发。</desc>
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#1565c0"/></marker></defs>
+  <rect width="900" height="420" fill="#fff"/>
+  <text x="40" y="42" font-size="24" font-weight="700" fill="#333">先决定“谁必须有序”，再决定分区数</text>
+  <rect x="45" y="115" width="155" height="80" rx="12" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="122" y="147" text-anchor="middle" font-size="18" fill="#333">订单事件</text><text x="122" y="174" text-anchor="middle" font-size="15" fill="#555">key = order_id</text>
+  <line x1="200" y1="155" x2="285" y2="155" stroke="#1565c0" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="285" y="80" width="215" height="150" rx="12" fill="#fafafa" stroke="#555" stroke-width="2"/>
+  <text x="392" y="113" text-anchor="middle" font-size="18" fill="#333">稳定映射</text>
+  <text x="392" y="147" text-anchor="middle" font-size="16" fill="#555">hash(key) → P0</text><text x="392" y="180" text-anchor="middle" font-size="16" fill="#555">另一个 key → P1</text>
+  <line x1="500" y1="155" x2="585" y2="155" stroke="#1565c0" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="585" y="80" width="270" height="150" rx="12" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="720" y="113" text-anchor="middle" font-size="18" fill="#333">并行消费</text>
+  <text x="720" y="148" text-anchor="middle" font-size="16" fill="#555">同一 key：分区内有序</text><text x="720" y="181" text-anchor="middle" font-size="16" fill="#555">不同 key：分区间并行</text>
+  <rect x="80" y="295" width="740" height="68" rx="12" fill="#fff8e1" stroke="#d29922" stroke-width="2"/>
+  <text x="450" y="325" text-anchor="middle" font-size="17" fill="#333">全局全序 = 1 个分区；按 key 有序 = 多分区 + 稳定 key</text>
+  <text x="450" y="350" text-anchor="middle" font-size="14" fill="#555">分区不够时用新 Topic 双写迁移，不要原地扩分区后假装顺序仍在</text>
+</svg>
