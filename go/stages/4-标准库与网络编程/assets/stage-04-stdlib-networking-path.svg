@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="480" viewBox="0 0 900 480">
+  <!-- 背景 -->
+  <rect width="900" height="480" fill="#ffffff"/>
+  <!-- 标题 -->
+  <text x="450" y="34" font-family="PingFang SC, sans-serif" font-size="20" font-weight="bold" fill="#1565C0" text-anchor="middle">阶段 4 · 标准库与网络编程 —— 让它对外提供服务</text>
+
+  <!-- ============ 课 10 卡片 ============ -->
+  <rect x="30" y="58" width="260" height="400" rx="10" fill="#fafafa" stroke="#1565C0" stroke-width="2"/>
+  <rect x="30" y="58" width="260" height="38" rx="10" fill="#1565C0"/>
+  <rect x="30" y="80" width="260" height="16" fill="#1565C0"/>
+  <text x="160" y="83" font-family="PingFang SC, sans-serif" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">课 10 · io 与 context</text>
+
+  <rect x="48" y="112" width="224" height="104" rx="8" fill="#ffffff" stroke="#90caf9"/>
+  <text x="160" y="134" font-family="PingFang SC, sans-serif" font-size="14" font-weight="bold" fill="#333333" text-anchor="middle">① io.Reader / Writer</text>
+  <text x="160" y="156" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">最小契约 · 组合优先</text>
+  <text x="160" y="176" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">Copy / MultiWriter / bufio</text>
+  <text x="160" y="196" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">流式处理不占满内存</text>
+
+  <rect x="48" y="228" width="224" height="104" rx="8" fill="#ffffff" stroke="#90caf9"/>
+  <text x="160" y="250" font-family="PingFang SC, sans-serif" font-size="14" font-weight="bold" fill="#333333" text-anchor="middle">② context 取消与超时</text>
+  <text x="160" y="272" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">取消树父传子</text>
+  <text x="160" y="292" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">必须调用 cancel</text>
+  <text x="160" y="312" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">不作可选参数、不存 struct</text>
+
+  <rect x="48" y="344" width="224" height="96" rx="8" fill="#ffffff" stroke="#90caf9"/>
+  <text x="160" y="366" font-family="PingFang SC, sans-serif" font-size="14" font-weight="bold" fill="#333333" text-anchor="middle">③ 文件与资源</text>
+  <text x="160" y="388" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">os.Open + defer Close</text>
+  <text x="160" y="408" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">filepath · CreateTemp · embed</text>
+
+  <!-- 箭头 课10 -> 课11 -->
+  <path d="M 290 258 L 320 258" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <!-- ============ 课 11 卡片 ============ -->
+  <rect x="320" y="58" width="260" height="400" rx="10" fill="#fafafa" stroke="#1565C0" stroke-width="2"/>
+  <rect x="320" y="58" width="260" height="38" rx="10" fill="#1565C0"/>
+  <rect x="320" y="80" width="260" height="16" fill="#1565C0"/>
+  <text x="450" y="83" font-family="PingFang SC, sans-serif" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">课 11 · net/http 服务端</text>
+
+  <rect x="338" y="112" width="224" height="104" rx="8" fill="#ffffff" stroke="#90caf9"/>
+  <text x="450" y="134" font-family="PingFang SC, sans-serif" font-size="14" font-weight="bold" fill="#333333" text-anchor="middle">① Handler 与 ServeMux</text>
+  <text x="450" y="156" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">Handler / HandlerFunc / Mux</text>
+  <text x="450" y="176" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">方法 + 通配路由（1.22+）</text>
+  <text x="450" y="196" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">中间件函数链</text>
+
+  <rect x="338" y="228" width="224" height="104" rx="8" fill="#ffffff" stroke="#90caf9"/>
+  <text x="450" y="250" font-family="PingFang SC, sans-serif" font-size="14" font-weight="bold" fill="#333333" text-anchor="middle">② 请求与响应</text>
+  <text x="450" y="272" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">Request 字段与 Body</text>
+  <text x="450" y="292" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">Header 时机 · 状态码一次</text>
+  <text x="450" y="312" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">JSON / json v2 取舍</text>
+
+  <rect x="338" y="344" width="224" height="96" rx="8" fill="#ffffff" stroke="#90caf9"/>
+  <text x="450" y="366" font-family="PingFang SC, sans-serif" font-size="14" font-weight="bold" fill="#333333" text-anchor="middle">③ 生产级 Server 配置</text>
+  <text x="450" y="388" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">超时三件套 · Shutdown</text>
+  <text x="450" y="408" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">DefaultServeMux 的坑</text>
+
+  <!-- 箭头 课11 -> 课12 -->
+  <path d="M 580 258 L 610 258" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <!-- ============ 课 12 卡片 ============ -->
+  <rect x="610" y="58" width="260" height="400" rx="10" fill="#fafafa" stroke="#c62828" stroke-width="2"/>
+  <rect x="610" y="58" width="260" height="38" rx="10" fill="#c62828"/>
+  <rect x="610" y="80" width="260" height="16" fill="#c62828"/>
+  <text x="740" y="83" font-family="PingFang SC, sans-serif" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">课 12 · 数据访问与客户端</text>
+
+  <rect x="628" y="112" width="224" height="104" rx="8" fill="#ffffff" stroke="#ef9a9a"/>
+  <text x="740" y="134" font-family="PingFang SC, sans-serif" font-size="14" font-weight="bold" fill="#333333" text-anchor="middle">① database/sql</text>
+  <text x="740" y="156" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">DB 是连接池、全局复用</text>
+  <text x="740" y="176" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">Query vs Exec · Scan</text>
+  <text x="740" y="196" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">参数化防注入</text>
+
+  <rect x="628" y="228" width="224" height="104" rx="8" fill="#ffffff" stroke="#ef9a9a"/>
+  <text x="740" y="250" font-family="PingFang SC, sans-serif" font-size="14" font-weight="bold" fill="#333333" text-anchor="middle">② http.Client</text>
+  <text x="740" y="272" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">默认无超时，须显式设</text>
+  <text x="740" y="292" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">resp.Body 读完并关闭</text>
+  <text x="740" y="312" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">幂等才重试、要有退避</text>
+
+  <rect x="628" y="344" width="224" height="96" rx="8" fill="#ffffff" stroke="#ef9a9a"/>
+  <text x="740" y="366" font-family="PingFang SC, sans-serif" font-size="14" font-weight="bold" fill="#333333" text-anchor="middle">③ 时间与定时器</text>
+  <text x="740" y="388" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">单调时钟 · time.Since</text>
+  <text x="740" y="408" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">Ticker / Timer 清理 · 布局串</text>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1565C0"/>
+    </marker>
+  </defs>
+</svg>

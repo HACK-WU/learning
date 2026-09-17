@@ -1,0 +1,82 @@
+
+$ go version
+go version go1.27.1 darwin/arm64
+[exit=0]
+
+$ go test -v -count=1 ./...
+?   	example.com/go-course/lesson15/cmd/productiondemo	[no test files]
+=== RUN   TestHealthAndReadiness
+=== RUN   TestHealthAndReadiness/alive_before_ready
+=== RUN   TestHealthAndReadiness/not_ready
+=== RUN   TestHealthAndReadiness/pprof_stays_off_public_mux
+--- PASS: TestHealthAndReadiness (0.00s)
+    --- PASS: TestHealthAndReadiness/alive_before_ready (0.00s)
+    --- PASS: TestHealthAndReadiness/not_ready (0.00s)
+    --- PASS: TestHealthAndReadiness/pprof_stays_off_public_mux (0.00s)
+PASS
+ok  	example.com/go-course/lesson15/internal/app	0.008s
+[exit=0]
+
+$ go test -race -count=1 ./...
+?   	example.com/go-course/lesson15/cmd/productiondemo	[no test files]
+ok  	example.com/go-course/lesson15/internal/app	1.015s
+[exit=0]
+
+$ gofmt -l .
+[exit=0]
+
+$ go vet ./...
+[exit=0]
+
+$ go build -trimpath -ldflags -s\ -w\ -X\ main.version=lesson15-local\ -X\ main.commit=abc1234\ -X\ main.buildTime=2026-09-16T00:00:00Z -o /var/folders/2c/cwpzkdy56_11xg_wh6pv0t3m0000gn/T/tmp.c4suaCdLMl/productiondemo ./cmd/productiondemo
+[exit=0]
+
+$ /var/folders/2c/cwpzkdy56_11xg_wh6pv0t3m0000gn/T/tmp.c4suaCdLMl/productiondemo -demo
+{"level":"INFO","msg":"build metadata","version":"lesson15-local","commit":"abc1234","build_time":"2026-09-16T00:00:00Z"}
+{"level":"INFO","msg":"servers listening","public":"loopback","admin":"loopback"}
+{"level":"INFO","msg":"server started","name":"public"}
+{"level":"INFO","msg":"server started","name":"admin"}
+demo healthz=200 readyz_before=503 readyz_after=200 public_pprof=404 admin_pprof=200
+{"level":"INFO","msg":"slow request started","duration_ms":80}
+{"level":"INFO","msg":"shutdown signal received","signal":"terminated"}
+{"level":"INFO","msg":"graceful shutdown started"}
+{"level":"INFO","msg":"slow request completed","status":200}
+{"level":"INFO","msg":"graceful shutdown complete","in_flight_request_preserved":true}
+demo slow_request=200
+[exit=0]
+
+$ env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -ldflags -s\ -w\ -X\ main.version=lesson15-local\ -X\ main.commit=abc1234\ -X\ main.buildTime=2026-09-16T00:00:00Z -o /var/folders/2c/cwpzkdy56_11xg_wh6pv0t3m0000gn/T/tmp.c4suaCdLMl/productiondemo-linux-amd64 ./cmd/productiondemo
+[exit=0]
+
+$ file /var/folders/2c/cwpzkdy56_11xg_wh6pv0t3m0000gn/T/tmp.c4suaCdLMl/productiondemo-linux-amd64
+/var/folders/2c/cwpzkdy56_11xg_wh6pv0t3m0000gn/T/tmp.c4suaCdLMl/productiondemo-linux-amd64: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, Go BuildID=uK2aw2uxy-bkrXHxV68g/XJH4I-VZyZ2kkxEfjqiy/HvL0DQibVpT0NmVmUSFY/Nl9TCqXAeFHJ3Yb1j1em, BuildID[sha1]=3e3efc2190764df54efa5e0bb371feb432678f89, stripped
+[exit=0]
+
+$ docker build --quiet --build-arg VERSION=lesson15-local --build-arg COMMIT=abc1234 --build-arg BUILD_TIME=2026-09-16T00:00:00Z -t go-course-lesson15:verify-7667 .
+sha256:7bebf6faca51b028544856dcde09c6b8453f3854cd5bd76f92bd15d9859dbeb6
+[exit=0]
+
+$ docker image inspect go-course-lesson15:verify-7667 --format image=\{\{.Id\}\}\ size=\{\{.Size\}\}
+image=sha256:7bebf6faca51b028544856dcde09c6b8453f3854cd5bd76f92bd15d9859dbeb6 size=7880864
+[exit=0]
+
+$ docker run --rm go-course-lesson15:verify-7667 -demo
+{"level":"INFO","msg":"build metadata","version":"lesson15-local","commit":"abc1234","build_time":"2026-09-16T00:00:00Z"}
+{"level":"INFO","msg":"server started","name":"public"}
+{"level":"INFO","msg":"server started","name":"admin"}
+{"level":"INFO","msg":"servers listening","public":"loopback","admin":"loopback"}
+demo healthz=200 readyz_before=503 readyz_after=200 public_pprof=404 admin_pprof=200
+{"level":"INFO","msg":"slow request started","duration_ms":80}
+{"level":"INFO","msg":"shutdown signal received","signal":"terminated"}
+{"level":"INFO","msg":"graceful shutdown started"}
+{"level":"INFO","msg":"slow request completed","status":200}
+{"level":"INFO","msg":"graceful shutdown complete","in_flight_request_preserved":true}
+demo slow_request=200
+[exit=0]
+
+$ docker image rm go-course-lesson15:verify-7667
+Untagged: go-course-lesson15:verify-7667
+Deleted: sha256:7bebf6faca51b028544856dcde09c6b8453f3854cd5bd76f92bd15d9859dbeb6
+[exit=0]
+
+ALL_OUTPUT 生成完毕

@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 660" width="900" height="660" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="900" height="660" fill="#ffffff"/>
+
+  <text x="450" y="30" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">Go 的编译模型与工作区：从源码到「一个二进制」</text>
+  <text x="450" y="50" text-anchor="middle" font-size="12" fill="#777777">实测环境：macOS arm64 · go1.27.1（核查于 2026-09）</text>
+
+  <!-- 三个输入 -->
+  <rect x="30" y="66" width="250" height="72" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+  <text x="155" y="90" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1a1a">你的代码</text>
+  <text x="155" y="110" text-anchor="middle" font-size="12" fill="#333333">main.go + go.mod</text>
+  <text x="155" y="128" text-anchor="middle" font-size="11" fill="#777777">一个目录 + 一个 go.mod = 一个模块</text>
+
+  <rect x="320" y="66" width="250" height="72" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+  <text x="445" y="90" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1a1a">GOROOT</text>
+  <text x="445" y="110" text-anchor="middle" font-size="12" fill="#333333">标准库源码 + 编译器</text>
+  <text x="445" y="128" text-anchor="middle" font-size="11" fill="#777777">/usr/local/Cellar/go/1.27.1/libexec</text>
+
+  <rect x="610" y="66" width="250" height="72" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+  <text x="735" y="90" text-anchor="middle" font-size="14" font-weight="700" fill="#1a1a1a">GOMODCACHE</text>
+  <text x="735" y="110" text-anchor="middle" font-size="12" fill="#333333">第三方模块缓存</text>
+  <text x="735" y="128" text-anchor="middle" font-size="11" fill="#777777">/Users/wuyongping/go/pkg/mod</text>
+
+  <!-- 输入 → go build -->
+  <defs>
+    <marker id="arrDown" markerWidth="10" markerHeight="8" refX="5" refY="0" orient="auto">
+      <path d="M0,0 L10,4 L0,8 Z" fill="#78909c"/>
+    </marker>
+  </defs>
+  <path d="M155,138 L155,150 L420,150 L420,163" fill="none" stroke="#78909c" stroke-width="2" marker-end="url(#arrDown)"/>
+  <line x1="445" y1="138" x2="445" y2="163" stroke="#78909c" stroke-width="2" marker-end="url(#arrDown)"/>
+  <path d="M735,138 L735,150 L480,150 L480,163" fill="none" stroke="#78909c" stroke-width="2" marker-end="url(#arrDown)"/>
+
+  <!-- go build -->
+  <rect x="295" y="165" width="310" height="46" rx="6" fill="#1565C0"/>
+  <text x="450" y="186" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">go build（编译器 + 链接器）</text>
+  <text x="450" y="203" text-anchor="middle" font-size="11" fill="#e3f2fd">AOT 编译：源码 → 本机机器码，不经过虚拟机</text>
+
+  <line x1="450" y1="211" x2="450" y2="238" stroke="#78909c" stroke-width="2" marker-end="url(#arrDown)"/>
+
+  <!-- 二进制 -->
+  <rect x="180" y="240" width="540" height="232" rx="8" fill="#ffffff" stroke="#d0d7de"/>
+  <rect x="180" y="240" width="540" height="32" rx="8" fill="#1565C0"/>
+  <rect x="180" y="264" width="540" height="8" fill="#1565C0"/>
+  <text x="450" y="262" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">一个二进制文件 · 实测 2,429,714 字节（2.32 MiB）</text>
+
+  <rect x="196" y="284" width="508" height="34" rx="4" fill="#e3f2fd" stroke="#90caf9"/>
+  <text x="450" y="306" text-anchor="middle" font-size="13" fill="#1a1a1a">你的代码（编译后的机器码 —— 源码本身不进二进制）</text>
+
+  <rect x="196" y="322" width="508" height="34" rx="4" fill="#e3f2fd" stroke="#90caf9"/>
+  <text x="450" y="344" text-anchor="middle" font-size="13" fill="#1a1a1a">用到的标准库 + 第三方依赖（静态链接，全部拷进来）</text>
+
+  <rect x="196" y="360" width="508" height="34" rx="4" fill="#fff3e0" stroke="#ffb74d"/>
+  <text x="450" y="382" text-anchor="middle" font-size="13" font-weight="700" fill="#1a1a1a">Go runtime —— 垃圾回收 · goroutine 调度 · 栈管理</text>
+
+  <rect x="196" y="398" width="508" height="34" rx="4" fill="#fff3e0" stroke="#ffb74d"/>
+  <text x="450" y="420" text-anchor="middle" font-size="13" fill="#1a1a1a">pclntab：panic 回溯 + 构建信息（-s -w 也删不掉）</text>
+
+  <rect x="196" y="436" width="508" height="30" rx="4" fill="#f5f5f5" stroke="#bdbdbd" stroke-dasharray="5 4"/>
+  <text x="450" y="456" text-anchor="middle" font-size="13" fill="#666666">DWARF 调试信息（虚线 = 可选，-w 可删）</text>
+
+  <!-- 体积实测 -->
+  <text x="30" y="500" font-size="13" font-weight="700" fill="#1a1a1a">体积实测</text>
+
+  <text x="60" y="518" font-size="12" fill="#333333">默认</text>
+  <rect x="150" y="506" width="690" height="22" rx="3" fill="#1565C0"/>
+  <text x="830" y="521" text-anchor="end" font-size="12" font-weight="700" fill="#ffffff">2,429,714 字节（2.32 MiB）</text>
+
+  <text x="60" y="548" font-size="12" fill="#333333">-s -w</text>
+  <rect x="150" y="536" width="451" height="22" rx="3" fill="#42a5f5"/>
+  <text x="591" y="551" text-anchor="end" font-size="12" font-weight="700" fill="#ffffff">1,587,714 字节（1.51 MiB）</text>
+  <text x="615" y="551" font-size="12" font-weight="700" fill="#c62828">−842,000 字节（−34.6%）</text>
+
+  <!-- 交叉编译与边界 -->
+  <rect x="30" y="576" width="840" height="64" rx="8" fill="#fafafa" stroke="#d0d7de"/>
+  <text x="46" y="598" font-size="12" fill="#333333">交叉编译：GOOS=linux GOARCH=amd64 go build → 实测 2,346,817 字节，file 明确标注 statically linked</text>
+  <text x="46" y="620" font-size="12" fill="#c62828">⚠️ 边界：macOS 上即使 CGO_ENABLED=0 仍链接 /usr/lib/libSystem.B.dylib ——「完全静态」只在 Linux 上成立</text>
+  <text x="46" y="636" font-size="11" fill="#777777">对照口径：官方给 Linux 静态链接的 C hello world 约 750 kB；macOS 上 clang 动态链接的 C hello world 实测只有 33,432 字节，不可与 Go 直接比较。</text>
+</svg>

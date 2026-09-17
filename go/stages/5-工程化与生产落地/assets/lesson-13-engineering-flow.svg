@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" width="960" height="560" font-family="PingFang SC, Microsoft YaHei, Helvetica, Arial, sans-serif">
+  <rect width="960" height="560" fill="#ffffff"/>
+  <rect x="24" y="24" width="912" height="512" rx="12" fill="#fafafa" stroke="#d9e2ec"/>
+  <text x="480" y="62" text-anchor="middle" font-size="24" font-weight="bold" fill="#333">一段代码从“我能运行”走到“团队敢接手”</text>
+  <text x="480" y="88" text-anchor="middle" font-size="14" fill="#666">问题不是把代码写出来，而是让它能被重复理解、重复验证、重复交付</text>
+
+  <g transform="translate(58,132)">
+    <rect width="242" height="300" rx="10" fill="#fff4f2" stroke="#e57373" stroke-width="2"/>
+    <rect width="242" height="42" rx="10" fill="#c62828"/>
+    <text x="121" y="27" text-anchor="middle" font-size="17" font-weight="bold" fill="#fff">个人电脑上的代码</text>
+    <rect x="22" y="70" width="198" height="52" rx="7" fill="#ffffff" stroke="#ef9a9a"/>
+    <text x="121" y="92" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">文件能运行</text>
+    <text x="121" y="111" text-anchor="middle" font-size="12" fill="#666">但依赖和规则靠记忆</text>
+    <rect x="22" y="140" width="198" height="52" rx="7" fill="#ffffff" stroke="#ef9a9a"/>
+    <text x="121" y="162" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">改坏了才发现</text>
+    <text x="121" y="181" text-anchor="middle" font-size="12" fill="#666">问题藏到运行时</text>
+    <rect x="22" y="210" width="198" height="62" rx="7" fill="#ffffff" stroke="#ef9a9a"/>
+    <text x="121" y="234" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">只有作者看得懂</text>
+    <text x="121" y="253" text-anchor="middle" font-size="12" fill="#666">接手成本随时间上升</text>
+  </g>
+
+  <g transform="translate(359,132)">
+    <rect width="242" height="300" rx="10" fill="#eef5ff" stroke="#64b5f6" stroke-width="2"/>
+    <rect width="242" height="42" rx="10" fill="#1565c0"/>
+    <text x="121" y="27" text-anchor="middle" font-size="17" font-weight="bold" fill="#fff">一组自动关卡</text>
+    <rect x="22" y="70" width="198" height="52" rx="7" fill="#ffffff" stroke="#90caf9"/>
+    <text x="121" y="92" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">把用到的东西记下来</text>
+    <text x="121" y="111" text-anchor="middle" font-size="12" fill="#666">每个人拿到同一份说明</text>
+    <rect x="22" y="140" width="198" height="52" rx="7" fill="#ffffff" stroke="#90caf9"/>
+    <text x="121" y="162" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">用样例反复验收</text>
+    <text x="121" y="181" text-anchor="middle" font-size="12" fill="#666">改动后马上知道影响</text>
+    <rect x="22" y="210" width="198" height="62" rx="7" fill="#ffffff" stroke="#90caf9"/>
+    <text x="121" y="234" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">让机器统一检查</text>
+    <text x="121" y="253" text-anchor="middle" font-size="12" fill="#666">把争论变成可重复的结果</text>
+  </g>
+
+  <g transform="translate(660,132)">
+    <rect width="242" height="300" rx="10" fill="#f1f8f2" stroke="#81c784" stroke-width="2"/>
+    <rect width="242" height="42" rx="10" fill="#2e7d32"/>
+    <text x="121" y="27" text-anchor="middle" font-size="17" font-weight="bold" fill="#fff">团队可以接手</text>
+    <rect x="22" y="70" width="198" height="52" rx="7" fill="#ffffff" stroke="#a5d6a7"/>
+    <text x="121" y="92" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">环境可复现</text>
+    <text x="121" y="111" text-anchor="middle" font-size="12" fill="#666">不靠某个人的机器</text>
+    <rect x="22" y="140" width="198" height="52" rx="7" fill="#ffffff" stroke="#a5d6a7"/>
+    <text x="121" y="162" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">错误可定位</text>
+    <text x="121" y="181" text-anchor="middle" font-size="12" fill="#666">知道哪一个样例失败</text>
+    <rect x="22" y="210" width="198" height="62" rx="7" fill="#ffffff" stroke="#a5d6a7"/>
+    <text x="121" y="234" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">交付有门槛</text>
+    <text x="121" y="253" text-anchor="middle" font-size="12" fill="#666">能进入评审和主干</text>
+  </g>
+
+  <g stroke="#455a64" stroke-width="2.5" fill="none">
+    <line x1="304" y1="282" x2="350" y2="282"/>
+    <polygon points="359,282 346,275 346,289" fill="#455a64"/>
+    <line x1="605" y1="282" x2="651" y2="282"/>
+    <polygon points="660,282 647,275 647,289" fill="#455a64"/>
+  </g>
+
+  <rect x="122" y="466" width="716" height="42" rx="8" fill="#fff8e1" stroke="#f9a825"/>
+  <text x="480" y="493" text-anchor="middle" font-size="15" font-weight="bold" fill="#5d4037">看图：左边是个人记忆驱动的代码，中间是自动关卡，右边是别人也能放心接手的交付物。</text>
+</svg>

@@ -1,0 +1,198 @@
+
+$ go version
+go version go1.27.1 darwin/arm64
+
+$ go test -count=1 ./...
+ok  	example.com/go-order-service/cmd/order-service	0.064s
+ok  	example.com/go-order-service/internal/app	0.013s
+ok  	example.com/go-order-service/internal/order	0.028s
+
+$ go test -race -count=1 ./...
+ok  	example.com/go-order-service/cmd/order-service	1.085s
+ok  	example.com/go-order-service/internal/app	1.039s
+ok  	example.com/go-order-service/internal/order	1.083s
+
+$ gofmt -l .
+gofmt-clean
+
+$ go vet ./...
+
+$ go build ./...
+
+$ go test -run \^\$ -bench \^BenchmarkEncodeOrder\$ -benchmem ./internal/order
+goos: darwin
+goarch: arm64
+pkg: example.com/go-order-service/internal/order
+cpu: Apple M3 Pro
+BenchmarkEncodeOrder-11    	 2757115	       426.9 ns/op	     432 B/op	       3 allocs/op
+PASS
+ok  	example.com/go-order-service/internal/order	1.631s
+
+$ go test -o /var/folders/2c/cwpzkdy56_11xg_wh6pv0t3m0000gn/T//go-order-service.test -cpuprofile=/var/folders/2c/cwpzkdy56_11xg_wh6pv0t3m0000gn/T//go-order-service-cpu.prof -run \^\$ -bench \^BenchmarkEncodeOrder\$ -benchtime=200ms ./internal/order
+goos: darwin
+goarch: arm64
+pkg: example.com/go-order-service/internal/order
+cpu: Apple M3 Pro
+BenchmarkEncodeOrder-11    	  567924	       414.3 ns/op	     432 B/op	       3 allocs/op
+PASS
+ok  	example.com/go-order-service/internal/order	0.415s
+
+$ go tool pprof -top /var/folders/2c/cwpzkdy56_11xg_wh6pv0t3m0000gn/T//go-order-service-cpu.prof
+File: order.test
+Type: cpu
+Time: 2026-09-16 23:12:10 CST
+Duration: 403.16ms, Total samples = 270ms (66.97%)
+Showing nodes accounting for 270ms, 100% of 270ms total
+      flat  flat%   sum%        cum   cum%
+      90ms 33.33% 33.33%       90ms 33.33%  runtime.kevent
+      30ms 11.11% 44.44%       30ms 11.11%  runtime.pthread_cond_signal
+      30ms 11.11% 55.56%       30ms 11.11%  runtime.pthread_cond_wait
+      20ms  7.41% 62.96%       20ms  7.41%  runtime.madvise
+      10ms  3.70% 66.67%       10ms  3.70%  encoding/json/internal/jsonwire.AppendQuote
+      10ms  3.70% 70.37%       10ms  3.70%  encoding/json/jsontext.(*encoderState).reset
+      10ms  3.70% 74.07%       20ms  7.41%  encoding/json/v2.makeStringArshaler.func1
+      10ms  3.70% 77.78%       40ms 14.81%  encoding/json/v2.makeStructArshaler.func2
+      10ms  3.70% 81.48%       10ms  3.70%  runtime.(*mspan).init
+      10ms  3.70% 85.19%       10ms  3.70%  runtime.procyieldAsm
+      10ms  3.70% 88.89%       10ms  3.70%  runtime.pthread_kill
+      10ms  3.70% 92.59%       10ms  3.70%  runtime.usleep
+      10ms  3.70% 96.30%       10ms  3.70%  sync.(*Pool).pin
+      10ms  3.70%   100%       10ms  3.70%  time.Time.appendFormatRFC3339
+         0     0%   100%       70ms 25.93%  encoding/json.Marshal (inline)
+         0     0%   100%       10ms  3.70%  encoding/json/jsontext.(*encoderState).AppendRaw
+         0     0%   100%       20ms  7.41%  encoding/json/jsontext.export.GetBufferedEncoder (inline)
+         0     0%   100%       20ms  7.41%  encoding/json/jsontext.getBufferedEncoder
+         0     0%   100%       10ms  3.70%  encoding/json/v2.(*timeArshaler).appendMarshal
+         0     0%   100%       70ms 25.93%  encoding/json/v2.Marshal
+         0     0%   100%       10ms  3.70%  encoding/json/v2.makeTimeArshaler.func3
+         0     0%   100%       50ms 18.52%  encoding/json/v2.marshalEncode
+         0     0%   100%       70ms 25.93%  example.com/go-order-service/internal/order.BenchmarkEncodeOrder
+         0     0%   100%       10ms  3.70%  reflect.New
+         0     0%   100%       10ms  3.70%  reflect.unsafe_New
+         0     0%   100%       10ms  3.70%  runtime.(*gcControllerState).enlistWorker
+         0     0%   100%       10ms  3.70%  runtime.(*mcache).nextFree
+         0     0%   100%       10ms  3.70%  runtime.(*mcache).refill
+         0     0%   100%       10ms  3.70%  runtime.(*mcentral).cacheSpan
+         0     0%   100%       10ms  3.70%  runtime.(*mcentral).grow
+         0     0%   100%       10ms  3.70%  runtime.(*mheap).alloc
+         0     0%   100%       30ms 11.11%  runtime.(*mheap).alloc.func1
+         0     0%   100%       30ms 11.11%  runtime.(*mheap).allocSpan
+         0     0%   100%       10ms  3.70%  runtime.(*mheap).initSpan
+         0     0%   100%       40ms 14.81%  runtime.findRunnable
+         0     0%   100%       10ms  3.70%  runtime.forEachP.func1
+         0     0%   100%       10ms  3.70%  runtime.forEachPInternal
+         0     0%   100%       10ms  3.70%  runtime.gcBgMarkWorker.func2
+         0     0%   100%       10ms  3.70%  runtime.gcDrain
+         0     0%   100%       10ms  3.70%  runtime.gcDrainMarkWorkerDedicated (inline)
+         0     0%   100%       90ms 33.33%  runtime.gcStart.func4
+         0     0%   100%       30ms 11.11%  runtime.gopreempt_m (inline)
+         0     0%   100%       30ms 11.11%  runtime.goschedImpl
+         0     0%   100%       20ms  7.41%  runtime.lock (inline)
+         0     0%   100%       20ms  7.41%  runtime.lock2
+         0     0%   100%       20ms  7.41%  runtime.lockWithRank (inline)
+         0     0%   100%       30ms 11.11%  runtime.mPark (inline)
+         0     0%   100%       10ms  3.70%  runtime.mallocgc
+         0     0%   100%       10ms  3.70%  runtime.mallocgcSmallScanNoHeader
+         0     0%   100%       40ms 14.81%  runtime.mcall
+         0     0%   100%       30ms 11.11%  runtime.morestack
+         0     0%   100%       90ms 33.33%  runtime.netpoll
+         0     0%   100%       30ms 11.11%  runtime.newstack
+         0     0%   100%       30ms 11.11%  runtime.notesleep
+         0     0%   100%       30ms 11.11%  runtime.notewakeup
+         0     0%   100%       10ms  3.70%  runtime.osyield (inline)
+         0     0%   100%       40ms 14.81%  runtime.park_m
+         0     0%   100%       10ms  3.70%  runtime.preemptM
+         0     0%   100%       10ms  3.70%  runtime.preemptall
+         0     0%   100%       10ms  3.70%  runtime.preemptone
+         0     0%   100%       10ms  3.70%  runtime.procyield (inline)
+         0     0%   100%       10ms  3.70%  runtime.resetspinning
+         0     0%   100%       10ms  3.70%  runtime.runSafePointFn
+         0     0%   100%       50ms 18.52%  runtime.schedule
+         0     0%   100%       30ms 11.11%  runtime.semasleep
+         0     0%   100%       30ms 11.11%  runtime.semawakeup
+         0     0%   100%       10ms  3.70%  runtime.signalM (inline)
+         0     0%   100%       90ms 33.33%  runtime.startTheWorldWithSema
+         0     0%   100%       20ms  7.41%  runtime.startm
+         0     0%   100%       30ms 11.11%  runtime.stopm
+         0     0%   100%       20ms  7.41%  runtime.sysUsed (inline)
+         0     0%   100%       20ms  7.41%  runtime.sysUsedOS (inline)
+         0     0%   100%      140ms 51.85%  runtime.systemstack
+         0     0%   100%       20ms  7.41%  runtime.wakep
+         0     0%   100%       10ms  3.70%  sync.(*Pool).Get
+         0     0%   100%       70ms 25.93%  testing.(*B).launch
+         0     0%   100%       70ms 25.93%  testing.(*B).runN
+         0     0%   100%       10ms  3.70%  time.Time.AppendFormat
+
+$ go run -ldflags=-X\ main.version=capstone-local\ -X\ main.commit=working-tree\ -X\ main.buildTime=2026-09-16T00:00:00Z ./cmd/order-service -demo
+project=go-order-service version=capstone-local commit=working-tree build_time=2026-09-16T00:00:00Z
+readyz_before=503 readyz_after=200 version_status=200 public_pprof=404 admin_pprof=200
+create_status=202 success_status=paid duplicate_status=200 duplicate_created=false
+failure_create_status=202 failure_status=failed retry_total=1 upstream_calls=3
+metrics_status=200 counters=created:2 paid:1 failed:1
+worker_shutdown=clean
+
+$ env CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -ldflags=-s\ -w -o /var/folders/2c/cwpzkdy56_11xg_wh6pv0t3m0000gn/T//go-order-service-linux-amd64 ./cmd/order-service
+
+$ file /var/folders/2c/cwpzkdy56_11xg_wh6pv0t3m0000gn/T//go-order-service-linux-amd64
+/var/folders/2c/cwpzkdy56_11xg_wh6pv0t3m0000gn/T//go-order-service-linux-amd64: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, Go BuildID=xtTs3fjPmaOECZ80ENrH/zd14SSYKJqWVUrCGPc-V/tn00ihGstXHRWNY0SgXp/JgL6i-zDNRvECJ8tS2Ui, BuildID[sha1]=408d02324655f2604e7be9c4c3f378eb99cf30c5, stripped
+
+$ docker build --tag go-order-service:capstone-local --build-arg VERSION=container-local --build-arg COMMIT=working-tree --build-arg BUILD_TIME=2026-09-16T00:00:00Z .
+#0 building with "desktop-linux" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 534B done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/golang:1.27-bookworm
+#2 DONE 0.9s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 144B done
+#3 DONE 0.0s
+
+#4 [build 1/6] FROM docker.io/library/golang:1.27-bookworm@sha256:648f440f42a0958804efb24df176f806f9d353b41f1c0627f666428e40310f6b
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 14.37kB done
+#5 DONE 0.0s
+
+#6 [build 2/6] WORKDIR /src
+#6 CACHED
+
+#7 [build 3/6] COPY go.mod go.sum ./
+#7 CACHED
+
+#8 [build 4/6] RUN go mod download
+#8 CACHED
+
+#9 [build 5/6] COPY . .
+#9 DONE 0.0s
+
+#10 [build 6/6] RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64     go build -trimpath -ldflags="-s -w -X main.version=container-local -X main.commit=working-tree -X main.buildTime=2026-09-16T00:00:00Z"     -o /out/order-service ./cmd/order-service
+#10 DONE 8.7s
+
+#11 [stage-1 1/1] COPY --from=build /out/order-service /order-service
+#11 DONE 0.0s
+
+#12 exporting to image
+#12 exporting layers 0.0s done
+#12 writing image sha256:06c0b443b8bef811dcead43b10c2722aedb4c6df0797b97cf20c8a48fb718b9f done
+#12 naming to docker.io/library/go-order-service:capstone-local done
+#12 DONE 0.0s
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/kh96hjx7pc7i1sw508j9bjxgt
+
+$ docker run --rm go-order-service:capstone-local -demo
+project=go-order-service version=container-local commit=working-tree build_time=2026-09-16T00:00:00Z
+readyz_before=503 readyz_after=200 version_status=200 public_pprof=404 admin_pprof=200
+create_status=202 success_status=paid duplicate_status=200 duplicate_created=false
+failure_create_status=202 failure_status=failed retry_total=1 upstream_calls=3
+metrics_status=200 counters=created:2 paid:1 failed:1
+worker_shutdown=clean
+
+$ docker image rm go-order-service:capstone-local
+Untagged: go-order-service:capstone-local
+Deleted: sha256:06c0b443b8bef811dcead43b10c2722aedb4c6df0797b97cf20c8a48fb718b9f
+
+verification=passed

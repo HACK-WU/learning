@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="620" viewBox="0 0 1000 620">
+  <rect width="1000" height="620" fill="#fff"/>
+  <text x="50" y="58" font-family="sans-serif" font-size="30" font-weight="700" fill="#333">从源码到可交付边界</text>
+  <text x="50" y="88" font-family="sans-serif" font-size="16" fill="#555">构建证据 · 运行状态 · 诊断入口 · 选型决策</text>
+
+  <rect x="50" y="130" width="260" height="330" rx="14" fill="#EAF3FF" stroke="#1565C0" stroke-width="2"/>
+  <rect x="370" y="130" width="260" height="330" rx="14" fill="#F4F8F4" stroke="#2E7D32" stroke-width="2"/>
+  <rect x="690" y="130" width="260" height="330" rx="14" fill="#FFF7E6" stroke="#B26A00" stroke-width="2"/>
+
+  <rect x="50" y="130" width="260" height="56" rx="14" fill="#1565C0"/>
+  <rect x="370" y="130" width="260" height="56" rx="14" fill="#2E7D32"/>
+  <rect x="690" y="130" width="260" height="56" rx="14" fill="#B26A00"/>
+  <text x="180" y="166" text-anchor="middle" font-family="sans-serif" font-size="21" font-weight="700" fill="#fff">1 · 构建交付</text>
+  <text x="500" y="166" text-anchor="middle" font-family="sans-serif" font-size="21" font-weight="700" fill="#fff">2 · 线上照顾</text>
+  <text x="820" y="166" text-anchor="middle" font-family="sans-serif" font-size="21" font-weight="700" fill="#fff">3 · 选型边界</text>
+
+  <text x="78" y="225" font-family="sans-serif" font-size="18" fill="#333">目标平台</text>
+  <text x="78" y="254" font-family="sans-serif" font-size="16" fill="#555">GOOS / GOARCH</text>
+  <text x="78" y="302" font-family="sans-serif" font-size="18" fill="#333">身份标签</text>
+  <text x="78" y="331" font-family="sans-serif" font-size="16" fill="#555">版本 · 提交 · 构建时间</text>
+  <text x="78" y="379" font-family="sans-serif" font-size="18" fill="#333">运行包装</text>
+  <text x="78" y="408" font-family="sans-serif" font-size="16" fill="#555">静态二进制 · 多阶段镜像</text>
+
+  <text x="398" y="225" font-family="sans-serif" font-size="18" fill="#333">状态</text>
+  <text x="398" y="254" font-family="sans-serif" font-size="16" fill="#555">healthz · readyz</text>
+  <text x="398" y="302" font-family="sans-serif" font-size="18" fill="#333">信号</text>
+  <text x="398" y="331" font-family="sans-serif" font-size="16" fill="#555">SIGTERM · SIGINT</text>
+  <text x="398" y="379" font-family="sans-serif" font-size="18" fill="#333">诊断</text>
+  <text x="398" y="408" font-family="sans-serif" font-size="16" fill="#555">slog · pprof · 受控管理面</text>
+
+  <text x="718" y="225" font-family="sans-serif" font-size="18" fill="#333">先写约束</text>
+  <text x="718" y="254" font-family="sans-serif" font-size="16" fill="#555">并发 · 性能 · 生态 · 团队</text>
+  <text x="718" y="302" font-family="sans-serif" font-size="18" fill="#333">做实验证据</text>
+  <text x="718" y="331" font-family="sans-serif" font-size="16" fill="#555">压测 · 交付 · 回滚</text>
+  <text x="718" y="379" font-family="sans-serif" font-size="18" fill="#333">决定范围</text>
+  <text x="718" y="408" font-family="sans-serif" font-size="16" fill="#555">扩大 · 保留 · 止步</text>
+
+  <line x1="310" y1="294" x2="350" y2="294" stroke="#1565C0" stroke-width="3"/>
+  <polygon points="350,294 338,287 338,301" fill="#1565C0"/>
+  <line x1="630" y1="294" x2="670" y2="294" stroke="#2E7D32" stroke-width="3"/>
+  <polygon points="670,294 658,287 658,301" fill="#2E7D32"/>
+
+  <rect x="50" y="505" width="900" height="70" rx="12" fill="#333"/>
+  <text x="500" y="535" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="700" fill="#fff">收束：收益可测 · 边界可控 · 失败可回退</text>
+  <text x="500" y="560" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#E8E8E8">不是把 Go 用到所有地方，而是把它用到证据成立的地方</text>
+</svg>

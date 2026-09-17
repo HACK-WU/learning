@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" width="900" height="480" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="900" height="480" fill="#ffffff"/>
+
+  <!-- 标题 -->
+  <text x="450" y="36" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">阶段 2 · 组合与抽象：没有 class，怎么组织代码</text>
+  <text x="450" y="60" text-anchor="middle" font-size="13" fill="#666666">课 4 → 课 5 → 课 6（9 个知识点，从左到右递进）</text>
+
+  <!-- ============ 课 4 ============ -->
+  <g>
+    <rect x="24" y="80" width="264" height="46" rx="8" fill="#1565C0"/>
+    <text x="156" y="109" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">课 4 · 函数与错误处理</text>
+
+    <rect x="24" y="140" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="44" cy="160" r="9" fill="#1565C0"/>
+    <text x="44" y="164" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">1</text>
+    <text x="62" y="164" font-size="13" font-weight="700" fill="#1a1a1a">函数：多返回与一等公民</text>
+    <text x="62" y="185" font-size="11" fill="#333333">多返回值 (T, error) · 变参 ...T</text>
+    <text x="62" y="201" font-size="11" fill="#333333">闭包 · 一切都是值传递</text>
+
+    <rect x="24" y="234" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="44" cy="254" r="9" fill="#1565C0"/>
+    <text x="44" y="258" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">2</text>
+    <text x="62" y="258" font-size="13" font-weight="700" fill="#1a1a1a">error 是值</text>
+    <text x="62" y="279" font-size="11" fill="#333333">errors.New / fmt.Errorf / %w 包装</text>
+    <text x="62" y="295" font-size="11" fill="#333333">Is / As · panic 只用于不可恢复</text>
+
+    <rect x="24" y="328" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="44" cy="348" r="9" fill="#1565C0"/>
+    <text x="44" y="352" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">3</text>
+    <text x="62" y="352" font-size="13" font-weight="700" fill="#1a1a1a">defer 的机制与坑</text>
+    <text x="62" y="373" font-size="11" fill="#333333">LIFO · 参数立即求值</text>
+    <text x="62" y="389" font-size="11" fill="#333333">循环堆积 · 关资源标配</text>
+  </g>
+
+  <!-- 课 4 → 课 5 箭头 -->
+  <line x1="292" y1="290" x2="318" y2="290" stroke="#1565C0" stroke-width="2"/>
+  <polygon points="318,290 310,286 310,294" fill="#1565C0"/>
+
+  <!-- ============ 课 5 ============ -->
+  <g>
+    <rect x="318" y="80" width="264" height="46" rx="8" fill="#1565C0"/>
+    <text x="450" y="109" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">课 5 · 结构体与方法</text>
+
+    <rect x="318" y="140" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="338" cy="160" r="9" fill="#1565C0"/>
+    <text x="338" y="164" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">1</text>
+    <text x="356" y="164" font-size="13" font-weight="700" fill="#1a1a1a">struct 与组合</text>
+    <text x="356" y="185" font-size="11" fill="#333333">匿名嵌入是组合不是继承</text>
+    <text x="356" y="201" font-size="11" fill="#333333">字段提升 · struct tag</text>
+
+    <rect x="318" y="234" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="338" cy="254" r="9" fill="#1565C0"/>
+    <text x="338" y="258" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">2</text>
+    <text x="356" y="258" font-size="13" font-weight="700" fill="#1a1a1a">方法与接收者</text>
+    <text x="356" y="279" font-size="11" fill="#333333">值接收者副本 vs 指针修改原值</text>
+    <text x="356" y="295" font-size="11" fill="#333333">方法集规则 · 接收者一致性</text>
+
+    <rect x="318" y="328" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="338" cy="348" r="9" fill="#1565C0"/>
+    <text x="338" y="352" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">3</text>
+    <text x="356" y="352" font-size="13" font-weight="700" fill="#1a1a1a">包与可见性</text>
+    <text x="356" y="373" font-size="11" fill="#333333">首字母大小写即导出</text>
+    <text x="356" y="389" font-size="11" fill="#333333">一目录一包 · init · internal</text>
+  </g>
+
+  <!-- 课 5 → 课 6 箭头 -->
+  <line x1="586" y1="290" x2="612" y2="290" stroke="#1565C0" stroke-width="2"/>
+  <polygon points="612,290 604,286 604,294" fill="#1565C0"/>
+
+  <!-- ============ 课 6 ============ -->
+  <g>
+    <rect x="612" y="80" width="264" height="46" rx="8" fill="#1565C0"/>
+    <text x="744" y="109" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">课 6 · 接口与泛型</text>
+
+    <rect x="612" y="140" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="632" cy="160" r="9" fill="#1565C0"/>
+    <text x="632" y="164" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">1</text>
+    <text x="650" y="164" font-size="13" font-weight="700" fill="#1a1a1a">接口：隐式实现</text>
+    <text x="650" y="185" font-size="11" fill="#333333">方法集匹配即实现 · 小接口哲学</text>
+    <text x="650" y="201" font-size="11" fill="#333333">接口值结构 · nil 陷阱</text>
+
+    <rect x="612" y="234" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="632" cy="254" r="9" fill="#1565C0"/>
+    <text x="632" y="258" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">2</text>
+    <text x="650" y="258" font-size="13" font-weight="700" fill="#1a1a1a">类型断言与 type switch</text>
+    <text x="650" y="279" font-size="11" fill="#333333">v, ok := x.(T) · switch x.(type)</text>
+    <text x="650" y="295" font-size="11" fill="#333333">any = interface{} · 断言是气味</text>
+
+    <rect x="612" y="328" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="632" cy="348" r="9" fill="#1565C0"/>
+    <text x="632" y="352" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">3</text>
+    <text x="650" y="352" font-size="13" font-weight="700" fill="#1a1a1a">泛型入门</text>
+    <text x="650" y="373" font-size="11" fill="#333333">Go 1.18 引入 · 约束强制</text>
+    <text x="650" y="389" font-size="11" fill="#333333">何时别用 · 1.27 泛型方法边界</text>
+  </g>
+
+  <!-- 底部递进说明 -->
+  <rect x="24" y="434" width="852" height="34" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+  <text x="450" y="456" text-anchor="middle" font-size="12" fill="#333333">前置：课 5 的 struct/方法/包建在课 4 的函数与错误之上；课 6 的接口建在课 5 的方法之上</text>
+</svg>

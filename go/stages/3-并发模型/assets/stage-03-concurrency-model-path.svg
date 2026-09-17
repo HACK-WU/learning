@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="480" viewBox="0 0 900 480">
+  <!-- 背景 -->
+  <rect width="900" height="480" fill="#ffffff"/>
+  <!-- 标题 -->
+  <text x="450" y="34" font-family="PingFang SC, sans-serif" font-size="20" font-weight="bold" fill="#1565C0" text-anchor="middle">阶段 3 · 并发模型 —— 能起 → 能通信 → 能收住</text>
+
+  <!-- ============ 课 7 卡片 ============ -->
+  <rect x="30" y="58" width="260" height="400" rx="10" fill="#fafafa" stroke="#1565C0" stroke-width="2"/>
+  <rect x="30" y="58" width="260" height="38" rx="10" fill="#1565C0"/>
+  <rect x="30" y="80" width="260" height="16" fill="#1565C0"/>
+  <text x="160" y="83" font-family="PingFang SC, sans-serif" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">课 7 · 廉价的并发单位</text>
+
+  <rect x="48" y="112" width="224" height="104" rx="8" fill="#ffffff" stroke="#90caf9"/>
+  <text x="160" y="134" font-family="PingFang SC, sans-serif" font-size="14" font-weight="bold" fill="#333333" text-anchor="middle">① goroutine 是什么</text>
+  <text x="160" y="156" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">栈仅几 KB、可动态伸缩</text>
+  <text x="160" y="176" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">GMP：G / M / P 直觉</text>
+  <text x="160" y="196" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">无 ID、无名字</text>
+
+  <rect x="48" y="228" width="224" height="104" rx="8" fill="#ffffff" stroke="#90caf9"/>
+  <text x="160" y="250" font-family="PingFang SC, sans-serif" font-size="14" font-weight="bold" fill="#333333" text-anchor="middle">② 生命周期与等待</text>
+  <text x="160" y="272" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">go f() 一行启动</text>
+  <text x="160" y="292" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">main 返回即结束</text>
+  <text x="160" y="312" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">WaitGroup 收尾</text>
+
+  <rect x="48" y="344" width="224" height="96" rx="8" fill="#ffffff" stroke="#90caf9"/>
+  <text x="160" y="366" font-family="PingFang SC, sans-serif" font-size="14" font-weight="bold" fill="#333333" text-anchor="middle">③ 并发 ≠ 并行</text>
+  <text x="160" y="388" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">应对多件事 vs 同时做</text>
+  <text x="160" y="408" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">GOMAXPROCS / CPU 与 IO</text>
+
+  <!-- 箭头 课7 -> 课8 -->
+  <path d="M 290 258 L 320 258" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <!-- ============ 课 8 卡片 ============ -->
+  <rect x="320" y="58" width="260" height="400" rx="10" fill="#fafafa" stroke="#1565C0" stroke-width="2"/>
+  <rect x="320" y="58" width="260" height="38" rx="10" fill="#1565C0"/>
+  <rect x="320" y="80" width="260" height="16" fill="#1565C0"/>
+  <text x="450" y="83" font-family="PingFang SC, sans-serif" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">课 8 · 用通信共享内存</text>
+
+  <rect x="338" y="112" width="224" height="104" rx="8" fill="#ffffff" stroke="#90caf9"/>
+  <text x="450" y="134" font-family="PingFang SC, sans-serif" font-size="14" font-weight="bold" fill="#333333" text-anchor="middle">① channel 基础</text>
+  <text x="450" y="156" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">无缓冲 = 同步交接</text>
+  <text x="450" y="176" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">有缓冲 = 队列</text>
+  <text x="450" y="196" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">close 与 for range 收尾</text>
+
+  <rect x="338" y="228" width="224" height="104" rx="8" fill="#ffffff" stroke="#90caf9"/>
+  <text x="450" y="250" font-family="PingFang SC, sans-serif" font-size="14" font-weight="bold" fill="#333333" text-anchor="middle">② select 与超时</text>
+  <text x="450" y="272" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">多路复用随机取一</text>
+  <text x="450" y="292" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">default 使 select 非阻塞</text>
+  <text x="450" y="312" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">Timer 复用的坑</text>
+
+  <rect x="338" y="344" width="224" height="96" rx="8" fill="#ffffff" stroke="#90caf9"/>
+  <text x="450" y="366" font-family="PingFang SC, sans-serif" font-size="14" font-weight="bold" fill="#333333" text-anchor="middle">③ 方向与所有权</text>
+  <text x="450" y="388" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">只发 / 只收的方向约束</text>
+  <text x="450" y="408" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">发送方负责关闭</text>
+
+  <!-- 箭头 课8 -> 课9 -->
+  <path d="M 580 258 L 610 258" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <!-- ============ 课 9 卡片 ============ -->
+  <rect x="610" y="58" width="260" height="400" rx="10" fill="#fafafa" stroke="#c62828" stroke-width="2"/>
+  <rect x="610" y="58" width="260" height="38" rx="10" fill="#c62828"/>
+  <rect x="610" y="80" width="260" height="16" fill="#c62828"/>
+  <text x="740" y="83" font-family="PingFang SC, sans-serif" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">课 9 · 同步、竞争与泄漏</text>
+
+  <rect x="628" y="112" width="224" height="104" rx="8" fill="#ffffff" stroke="#ef9a9a"/>
+  <text x="740" y="134" font-family="PingFang SC, sans-serif" font-size="14" font-weight="bold" fill="#333333" text-anchor="middle">① sync 包</text>
+  <text x="740" y="156" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">Mutex / RWMutex / Once / atomic</text>
+  <text x="740" y="176" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">锁不能复制、defer Unlock</text>
+
+  <rect x="628" y="228" width="224" height="104" rx="8" fill="#ffffff" stroke="#ef9a9a"/>
+  <text x="740" y="250" font-family="PingFang SC, sans-serif" font-size="14" font-weight="bold" fill="#333333" text-anchor="middle">② 数据竞争</text>
+  <text x="740" y="272" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">三类典型场景</text>
+  <text x="740" y="292" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">go test -race 检测器必开</text>
+  <text x="740" y="312" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">happens-before 直觉</text>
+
+  <rect x="628" y="344" width="224" height="96" rx="8" fill="#ffffff" stroke="#ef9a9a"/>
+  <text x="740" y="366" font-family="PingFang SC, sans-serif" font-size="14" font-weight="bold" fill="#333333" text-anchor="middle">③ 泄漏与取消</text>
+  <text x="740" y="388" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">四类成因 · context 收口</text>
+  <text x="740" y="408" font-family="PingFang SC, sans-serif" font-size="12" fill="#555555" text-anchor="middle">pprof / goroutineleak 观测</text>
+
+  <!-- 底部收束强调块 -->
+  <rect x="30" y="470" width="840" height="0" fill="#c62828"/>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1565C0"/>
+    </marker>
+  </defs>
+</svg>

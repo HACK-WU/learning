@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" width="960" height="560" font-family="PingFang SC, Microsoft YaHei, Helvetica, Arial, sans-serif">
+  <rect width="960" height="560" fill="#ffffff"/>
+  <rect x="24" y="24" width="912" height="512" rx="12" fill="#fafafa" stroke="#d9e2ec"/>
+  <text x="480" y="62" text-anchor="middle" font-size="24" font-weight="bold" fill="#333">性能问题不能靠猜</text>
+  <text x="480" y="88" text-anchor="middle" font-size="14" fill="#666">先量真实成本，再找证据，最后只改一个变量</text>
+
+  <g transform="translate(58,132)">
+    <rect width="242" height="300" rx="10" fill="#fff4f2" stroke="#e57373" stroke-width="2"/>
+    <rect width="242" height="42" rx="10" fill="#c62828"/>
+    <text x="121" y="27" text-anchor="middle" font-size="17" font-weight="bold" fill="#fff">眼前的症状</text>
+    <rect x="22" y="70" width="198" height="52" rx="7" fill="#fff" stroke="#ef9a9a"/>
+    <text x="121" y="92" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">感觉变慢</text>
+    <text x="121" y="111" text-anchor="middle" font-size="12" fill="#666">但不知道慢在哪里</text>
+    <rect x="22" y="140" width="198" height="52" rx="7" fill="#fff" stroke="#ef9a9a"/>
+    <text x="121" y="162" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">内存上涨</text>
+    <text x="121" y="181" text-anchor="middle" font-size="12" fill="#666">泄漏还是暂时存活？</text>
+    <rect x="22" y="210" width="198" height="62" rx="7" fill="#fff" stroke="#ef9a9a"/>
+    <text x="121" y="234" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">任务卡住</text>
+    <text x="121" y="253" text-anchor="middle" font-size="12" fill="#666">等待还是永远不醒？</text>
+  </g>
+
+  <g transform="translate(359,132)">
+    <rect width="242" height="300" rx="10" fill="#eef5ff" stroke="#64b5f6" stroke-width="2"/>
+    <rect width="242" height="42" rx="10" fill="#1565c0"/>
+    <text x="121" y="27" text-anchor="middle" font-size="17" font-weight="bold" fill="#fff">拿到的证据</text>
+    <rect x="22" y="70" width="198" height="52" rx="7" fill="#fff" stroke="#90caf9"/>
+    <text x="121" y="92" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">每次成本</text>
+    <text x="121" y="111" text-anchor="middle" font-size="12" fill="#666">时间与分配量</text>
+    <rect x="22" y="140" width="198" height="52" rx="7" fill="#fff" stroke="#90caf9"/>
+    <text x="121" y="162" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">调用热点</text>
+    <text x="121" y="181" text-anchor="middle" font-size="12" fill="#666">谁真正消耗资源</text>
+    <rect x="22" y="210" width="198" height="62" rx="7" fill="#fff" stroke="#90caf9"/>
+    <text x="121" y="234" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">存活关系</text>
+    <text x="121" y="253" text-anchor="middle" font-size="12" fill="#666">谁还被谁引用</text>
+  </g>
+
+  <g transform="translate(660,132)">
+    <rect width="242" height="300" rx="10" fill="#f1f8f2" stroke="#81c784" stroke-width="2"/>
+    <rect width="242" height="42" rx="10" fill="#2e7d32"/>
+    <text x="121" y="27" text-anchor="middle" font-size="17" font-weight="bold" fill="#fff">做出的决定</text>
+    <rect x="22" y="70" width="198" height="52" rx="7" fill="#fff" stroke="#a5d6a7"/>
+    <text x="121" y="92" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">先改最贵处</text>
+    <text x="121" y="111" text-anchor="middle" font-size="12" fill="#666">不凭直觉全局重写</text>
+    <rect x="22" y="140" width="198" height="52" rx="7" fill="#fff" stroke="#a5d6a7"/>
+    <text x="121" y="162" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">改后再测量</text>
+    <text x="121" y="181" text-anchor="middle" font-size="12" fill="#666">确认收益没有幻觉</text>
+    <rect x="22" y="210" width="198" height="62" rx="7" fill="#fff" stroke="#a5d6a7"/>
+    <text x="121" y="234" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">保留可回退性</text>
+    <text x="121" y="253" text-anchor="middle" font-size="12" fill="#666">变差时能撤回</text>
+  </g>
+
+  <g stroke="#455a64" stroke-width="2.5" fill="none">
+    <line x1="304" y1="282" x2="350" y2="282"/>
+    <polygon points="359,282 346,275 346,289" fill="#455a64"/>
+    <line x1="605" y1="282" x2="651" y2="282"/>
+    <polygon points="660,282 647,275 647,289" fill="#455a64"/>
+  </g>
+
+  <rect x="122" y="466" width="716" height="42" rx="8" fill="#fff8e1" stroke="#f9a825"/>
+  <text x="480" y="493" text-anchor="middle" font-size="15" font-weight="bold" fill="#5d4037">看图：症状只是入口；数字、调用关系和存活关系才是证据。</text>
+</svg>

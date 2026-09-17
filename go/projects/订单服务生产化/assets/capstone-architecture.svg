@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="700" viewBox="0 0 1100 700">
+  <rect width="1100" height="700" fill="#fff"/>
+  <text x="550" y="42" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="26" font-weight="700" fill="#333">Go 订单服务生产化：一条可验收链路</text>
+
+  <g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" fill="#333">
+    <rect x="40" y="95" width="210" height="110" rx="14" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
+    <text x="145" y="128" text-anchor="middle" font-size="20" font-weight="700">HTTP API</text>
+    <text x="145" y="158" text-anchor="middle" font-size="15">POST /orders</text>
+    <text x="145" y="182" text-anchor="middle" font-size="15">幂等键 + 金额校验</text>
+
+    <rect x="315" y="95" width="210" height="110" rx="14" fill="#E8F5E9" stroke="#2E7D32" stroke-width="2"/>
+    <text x="420" y="128" text-anchor="middle" font-size="20" font-weight="700">database/sql</text>
+    <text x="420" y="158" text-anchor="middle" font-size="15">SQLite pending</text>
+    <text x="420" y="182" text-anchor="middle" font-size="15">参数化 SQL + 状态机</text>
+
+    <rect x="590" y="95" width="210" height="110" rx="14" fill="#FFF3E0" stroke="#EF6C00" stroke-width="2"/>
+    <text x="695" y="128" text-anchor="middle" font-size="20" font-weight="700">有界队列</text>
+    <text x="695" y="158" text-anchor="middle" font-size="15">channel&lt;- order ID</text>
+    <text x="695" y="182" text-anchor="middle" font-size="15">背压可见</text>
+
+    <rect x="865" y="95" width="195" height="110" rx="14" fill="#FCE4EC" stroke="#AD1457" stroke-width="2"/>
+    <text x="962" y="128" text-anchor="middle" font-size="20" font-weight="700">Payment API</text>
+    <text x="962" y="158" text-anchor="middle" font-size="15">复用 http.Client</text>
+    <text x="962" y="182" text-anchor="middle" font-size="15">timeout + retry</text>
+
+    <path d="M250 150 H315 M525 150 H590 M800 150 H865" fill="none" stroke="#555" stroke-width="3"/>
+    <path d="M305 143 l10 7 -10 7 M580 143 l10 7 -10 7 M855 143 l10 7 -10 7" fill="#555"/>
+
+    <rect x="315" y="280" width="485" height="150" rx="16" fill="#FAFAFA" stroke="#555" stroke-width="2"/>
+    <text x="557" y="318" text-anchor="middle" font-size="22" font-weight="700">worker</text>
+    <text x="557" y="352" text-anchor="middle" font-size="16">goroutine + select + context</text>
+    <text x="557" y="380" text-anchor="middle" font-size="16">time.NewTimer 等待重试</text>
+    <text x="557" y="408" text-anchor="middle" font-size="16">paid / failed + slog + metrics</text>
+    <path d="M695 205 V280" fill="none" stroke="#555" stroke-width="3"/>
+    <path d="M688 270 l7 10 7-10" fill="#555"/>
+    <path d="M695 430 V505" fill="none" stroke="#555" stroke-width="3"/>
+    <path d="M688 495 l7 10 7-10" fill="#555"/>
+
+    <rect x="80" y="505" width="255" height="110" rx="14" fill="#EDE7F6" stroke="#5E35B1" stroke-width="2"/>
+    <text x="207" y="540" text-anchor="middle" font-size="19" font-weight="700">公共运维面</text>
+    <text x="207" y="571" text-anchor="middle" font-size="15">healthz / readyz / version</text>
+    <text x="207" y="595" text-anchor="middle" font-size="15">metrics</text>
+
+    <rect x="420" y="505" width="255" height="110" rx="14" fill="#FFFDE7" stroke="#F9A825" stroke-width="2"/>
+    <text x="547" y="540" text-anchor="middle" font-size="19" font-weight="700">管理端口</text>
+    <text x="547" y="571" text-anchor="middle" font-size="15">/debug/pprof/*</text>
+    <text x="547" y="595" text-anchor="middle" font-size="15">不挂到公共端口</text>
+
+    <rect x="760" y="505" width="300" height="110" rx="14" fill="#E0F2F1" stroke="#00897B" stroke-width="2"/>
+    <text x="910" y="540" text-anchor="middle" font-size="19" font-weight="700">交付边界</text>
+    <text x="910" y="571" text-anchor="middle" font-size="15">ldflags / CGO=0 / Docker</text>
+    <text x="910" y="595" text-anchor="middle" font-size="15">SIGTERM → Shutdown → Stop</text>
+  </g>
+
+  <text x="550" y="665" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#555">核心判据：业务状态可查询，失败可解释，资源可收束，产物可复现</text>
+</svg>

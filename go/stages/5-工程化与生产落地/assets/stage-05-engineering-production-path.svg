@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" width="900" height="480" font-family="PingFang SC, Microsoft YaHei, Helvetica, Arial, sans-serif">
+  <rect x="0" y="0" width="900" height="480" fill="#ffffff"/>
+  <rect x="20" y="20" width="860" height="440" rx="10" fill="#fafafa" stroke="#e0e0e0" stroke-width="1"/>
+
+  <text x="450" y="58" text-anchor="middle" font-size="22" font-weight="bold" fill="#333333">阶段 5：工程化与生产落地（从能跑到能交付）</text>
+  <text x="450" y="82" text-anchor="middle" font-size="13" fill="#666666">课 13 模块/测试/规范  →  课 14 性能与诊断  →  课 15 构建部署与选型决策</text>
+
+  <g transform="translate(45,110)">
+    <rect x="0" y="0" width="250" height="34" rx="6" fill="#1565C0"/>
+    <text x="125" y="22" text-anchor="middle" font-size="15" font-weight="bold" fill="#ffffff">课 13 模块、测试与规范</text>
+    <g fill="#333333">
+      <rect x="0" y="44" width="250" height="70" rx="6" fill="#ffffff" stroke="#1565C0" stroke-width="1"/>
+      <rect x="8" y="54" width="60" height="18" rx="4" fill="#1565C0"/><text x="38" y="67" text-anchor="middle" font-size="11" fill="#ffffff">知识点1</text>
+      <text x="74" y="63" font-size="14" font-weight="bold">模块与依赖</text>
+      <text x="74" y="80" font-size="11" fill="#555555">go.mod / go.sum / vendor / go work</text>
+      <text x="74" y="96" font-size="11" fill="#555555">语义化版本与 /v2 主版本路径</text>
+
+      <rect x="0" y="124" width="250" height="70" rx="6" fill="#ffffff" stroke="#1565C0" stroke-width="1"/>
+      <rect x="8" y="134" width="60" height="18" rx="4" fill="#1565C0"/><text x="38" y="147" text-anchor="middle" font-size="11" fill="#ffffff">知识点2</text>
+      <text x="74" y="143" font-size="14" font-weight="bold">测试</text>
+      <text x="74" y="160" font-size="11" fill="#555555">表驱动测试 / t.Run / httptest</text>
+      <text x="74" y="176" font-size="11" fill="#555555">-race / 只 mock 外部边界</text>
+
+      <rect x="0" y="204" width="250" height="70" rx="6" fill="#ffffff" stroke="#1565C0" stroke-width="1"/>
+      <rect x="8" y="214" width="60" height="18" rx="4" fill="#1565C0"/><text x="38" y="227" text-anchor="middle" font-size="11" fill="#ffffff">知识点3</text>
+      <text x="74" y="223" font-size="14" font-weight="bold">静态检查与规范</text>
+      <text x="74" y="240" font-size="11" fill="#555555">gofmt / go vet / golangci-lint</text>
+      <text x="74" y="256" font-size="11" fill="#555555">Code Review Comments / Effective Go</text>
+    </g>
+  </g>
+
+  <g transform="translate(325,110)">
+    <rect x="0" y="0" width="250" height="34" rx="6" fill="#2e7d32"/>
+    <text x="125" y="22" text-anchor="middle" font-size="15" font-weight="bold" fill="#ffffff">课 14 性能与诊断</text>
+    <g fill="#333333">
+      <rect x="0" y="44" width="250" height="70" rx="6" fill="#ffffff" stroke="#2e7d32" stroke-width="1"/>
+      <rect x="8" y="54" width="60" height="18" rx="4" fill="#2e7d32"/><text x="38" y="67" text-anchor="middle" font-size="11" fill="#ffffff">知识点1</text>
+      <text x="74" y="63" font-size="14" font-weight="bold">benchmark</text>
+      <text x="74" y="80" font-size="11" fill="#555555">b.N 循环 / 防优化写法</text>
+      <text x="74" y="96" font-size="11" fill="#555555">-benchmem / benchstat 对比</text>
+
+      <rect x="0" y="124" width="250" height="70" rx="6" fill="#ffffff" stroke="#2e7d32" stroke-width="1"/>
+      <rect x="8" y="134" width="60" height="18" rx="4" fill="#2e7d32"/><text x="38" y="147" text-anchor="middle" font-size="11" fill="#ffffff">知识点2</text>
+      <text x="74" y="143" font-size="14" font-weight="bold">pprof</text>
+      <text x="74" y="160" font-size="11" fill="#555555">CPU / heap / goroutine / block</text>
+      <text x="74" y="176" font-size="11" fill="#555555">goroutineleak / 绝不公网暴露</text>
+
+      <rect x="0" y="204" width="250" height="70" rx="6" fill="#ffffff" stroke="#2e7d32" stroke-width="1"/>
+      <rect x="8" y="214" width="60" height="18" rx="4" fill="#2e7d32"/><text x="38" y="227" text-anchor="middle" font-size="11" fill="#ffffff">知识点3</text>
+      <text x="74" y="223" font-size="14" font-weight="bold">内存与 GC 直觉</text>
+      <text x="74" y="240" font-size="11" fill="#555555">逃逸分析 / 并发 GC</text>
+      <text x="74" y="256" font-size="11" fill="#555555">先 profile 再优化</text>
+    </g>
+  </g>
+
+  <g transform="translate(605,110)">
+    <rect x="0" y="0" width="250" height="34" rx="6" fill="#6a1b9a"/>
+    <text x="125" y="22" text-anchor="middle" font-size="15" font-weight="bold" fill="#ffffff">课 15 构建部署与选型决策</text>
+    <g fill="#333333">
+      <rect x="0" y="44" width="250" height="70" rx="6" fill="#ffffff" stroke="#6a1b9a" stroke-width="1"/>
+      <rect x="8" y="54" width="60" height="18" rx="4" fill="#6a1b9a"/><text x="38" y="67" text-anchor="middle" font-size="11" fill="#ffffff">知识点1</text>
+      <text x="74" y="63" font-size="14" font-weight="bold">构建与交付</text>
+      <text x="74" y="80" font-size="11" fill="#555555">GOOS / GOARCH 交叉编译</text>
+      <text x="74" y="96" font-size="11" fill="#555555">-ldflags / 纯静态 / 多阶段构建</text>
+
+      <rect x="0" y="124" width="250" height="70" rx="6" fill="#ffffff" stroke="#6a1b9a" stroke-width="1"/>
+      <rect x="8" y="134" width="60" height="18" rx="4" fill="#6a1b9a"/><text x="38" y="147" text-anchor="middle" font-size="11" fill="#ffffff">知识点2</text>
+      <text x="74" y="143" font-size="14" font-weight="bold">线上可观测与运维</text>
+      <text x="74" y="160" font-size="11" fill="#555555">log/slog / 健康与就绪探针</text>
+      <text x="74" y="176" font-size="11" fill="#555555">优雅退出 / pprof 访问控制</text>
+
+      <rect x="0" y="204" width="250" height="70" rx="6" fill="#ffffff" stroke="#6a1b9a" stroke-width="1"/>
+      <rect x="8" y="214" width="60" height="18" rx="4" fill="#6a1b9a"/><text x="38" y="227" text-anchor="middle" font-size="11" fill="#ffffff">知识点3</text>
+      <text x="74" y="223" font-size="14" font-weight="bold">Go 生态位与选型</text>
+      <text x="74" y="240" font-size="11" fill="#555555">擅长 vs 不擅长 / 三语言取舍</text>
+      <text x="74" y="256" font-size="11" fill="#555555">决策清单 + 学习地图</text>
+    </g>
+  </g>
+
+  <g stroke="#333333" stroke-width="2" fill="none">
+    <line x1="300" y1="127" x2="320" y2="127"/>
+    <polygon points="325,127 316,122 316,132" fill="#333333"/>
+    <line x1="580" y1="127" x2="600" y2="127"/>
+    <polygon points="605,127 596,122 596,132" fill="#333333"/>
+  </g>
+
+  <rect x="45" y="408" width="810" height="36" rx="6" fill="#1565C0"/>
+  <text x="450" y="431" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">收束：交付带并发控制、可观测、可回滚的 Go 服务，并回答“该不该用 Go、用到哪一步”</text>
+</svg>

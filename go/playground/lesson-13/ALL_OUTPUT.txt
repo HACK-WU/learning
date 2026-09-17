@@ -1,0 +1,60 @@
+
+$ go version
+go version go1.27.1 darwin/arm64
+[exit=0]
+
+$ go list -m all
+example.com/go-course/lesson13
+[exit=0]
+
+$ go mod tidy -diff
+[exit=0]
+
+$ go test -v ./...
+?   	example.com/go-course/lesson13/cmd/demo	[no test files]
+=== RUN   TestValidate
+=== RUN   TestValidate/valid_order
+=== RUN   TestValidate/missing_id
+=== RUN   TestValidate/zero_quantity
+=== RUN   TestValidate/negative_quantity
+--- PASS: TestValidate (0.00s)
+    --- PASS: TestValidate/valid_order (0.00s)
+    --- PASS: TestValidate/missing_id (0.00s)
+    --- PASS: TestValidate/zero_quantity (0.00s)
+    --- PASS: TestValidate/negative_quantity (0.00s)
+=== RUN   TestHandler
+=== RUN   TestHandler/accepts_valid_order
+=== RUN   TestHandler/rejects_wrong_method
+=== RUN   TestHandler/rejects_invalid_json
+--- PASS: TestHandler (0.00s)
+    --- PASS: TestHandler/accepts_valid_order (0.00s)
+    --- PASS: TestHandler/rejects_wrong_method (0.00s)
+    --- PASS: TestHandler/rejects_invalid_json (0.00s)
+PASS
+ok  	example.com/go-course/lesson13/orders	0.009s
+[exit=0]
+
+$ go test -race ./...
+?   	example.com/go-course/lesson13/cmd/demo	[no test files]
+ok  	example.com/go-course/lesson13/orders	1.021s
+[exit=0]
+
+$ go test -cover ./...
+	example.com/go-course/lesson13/cmd/demo		coverage: 0.0% of statements
+ok  	example.com/go-course/lesson13/orders	0.010s	coverage: 90.9% of statements
+[exit=0]
+
+$ gofmt -l .
+[exit=0]
+
+$ go vet ./...
+[exit=0]
+
+$ go build ./...
+[exit=0]
+
+$ go run ./cmd/demo
+status=202 body={"status":"accepted"}
+[exit=0]
+
+ALL_OUTPUT 生成完毕

@@ -1,0 +1,162 @@
+
+$ go version
+go version go1.27.1 darwin/arm64
+[exit=0]
+
+$ go test -v -count=1 ./...
+?   	example.com/go-course/lesson14/cmd/profiledemo	[no test files]
+=== RUN   TestConcat
+--- PASS: TestConcat (0.00s)
+PASS
+ok  	example.com/go-course/lesson14/hotpath	0.005s
+[exit=0]
+
+$ go test -race -count=1 ./...
+?   	example.com/go-course/lesson14/cmd/profiledemo	[no test files]
+ok  	example.com/go-course/lesson14/hotpath	1.016s
+[exit=0]
+
+$ go test -run \^\$ -bench BenchmarkConcat -benchmem -count=3 ./hotpath
+goos: darwin
+goarch: arm64
+pkg: example.com/go-course/lesson14/hotpath
+cpu: Apple M3 Pro
+BenchmarkConcatNaive-11      	 7493462	       163.1 ns/op	     192 B/op	       9 allocs/op
+BenchmarkConcatNaive-11      	 7252801	       163.2 ns/op	     192 B/op	       9 allocs/op
+BenchmarkConcatNaive-11      	 7212307	       165.1 ns/op	     192 B/op	       9 allocs/op
+BenchmarkConcatBuilder-11    	27107208	        45.60 ns/op	      32 B/op	       1 allocs/op
+BenchmarkConcatBuilder-11    	25252237	        44.11 ns/op	      32 B/op	       1 allocs/op
+BenchmarkConcatBuilder-11    	26801892	        46.12 ns/op	      32 B/op	       1 allocs/op
+PASS
+ok  	example.com/go-course/lesson14/hotpath	7.830s
+[exit=0]
+
+$ gofmt -l .
+[exit=0]
+
+$ go vet ./...
+[exit=0]
+
+$ go build ./...
+[exit=0]
+
+$ go build -gcflags=-m=2 ./... (filtered escape-analysis lines)
+hotpath/concat.go:24:22: "strings: illegal use of non-zero Builder copied by value" escapes to heap in ConcatBuilder:
+hotpath/concat.go:24:22: append(strings.b.buf, strings.s...) escapes to heap in ConcatBuilder:
+hotpath/concat.go:16:20: parts does not escape
+hotpath/concat.go:24:22: "strings: illegal use of non-zero Builder copied by value" escapes to heap
+hotpath/concat.go:24:22: append escapes to heap
+cmd/profiledemo/main.go:28:17: make([][]byte, 0, 256) escapes to heap in makeLiveHeap:
+cmd/profiledemo/main.go:30:35: make([]byte, 4096) escapes to heap in makeLiveHeap:
+cmd/profiledemo/main.go:30:20: append(liveHeap, make([]byte, 4096)) escapes to heap in makeLiveHeap:
+cmd/profiledemo/main.go:28:17: make([][]byte, 0, 256) escapes to heap
+cmd/profiledemo/main.go:30:35: make([]byte, 4096) escapes to heap
+cmd/profiledemo/main.go:30:20: append escapes to heap
+cmd/profiledemo/main.go:66:5: func literal escapes to heap in collectBlockProfile:
+cmd/profiledemo/main.go:66:5: func literal escapes to heap
+cmd/profiledemo/main.go:92:14: make([][]byte, 0, 256) escapes to heap in main:
+cmd/profiledemo/main.go:92:14: make([]byte, 4096) escapes to heap in main:
+cmd/profiledemo/main.go:92:14: append(liveHeap, make([]byte, 4096)) escapes to heap in main:
+cmd/profiledemo/main.go:99:5: func literal escapes to heap in main:
+cmd/profiledemo/main.go:113:9: "goroutineleak profile is unavailable" escapes to heap in main:
+[exit=0]
+
+$ go run ./cmd/profiledemo -out <temporary-profile-dir>
+checksum=477405327587233034
+profiles=cpu,heap,goroutine,block,goroutineleak
+[exit=0]
+
+$ go tool pprof -top <temporary-profile-dir>/cpu.prof
+File: profiledemo
+Type: cpu
+Time: 2026-09-15 23:57:02 CST
+Duration: 1.01s, Total samples = 740ms (73.29%)
+Showing nodes accounting for 740ms, 100% of 740ms total
+      flat  flat%   sum%        cum   cum%
+     650ms 87.84% 87.84%      690ms 93.24%  main.burnCPU
+      40ms  5.41% 93.24%       40ms  5.41%  runtime.pthread_cond_signal
+      40ms  5.41% 98.65%       40ms  5.41%  runtime.walltime
+      10ms  1.35%   100%       50ms  6.76%  runtime.notewakeup
+         0     0%   100%      690ms 93.24%  main.collectCPU
+         0     0%   100%      690ms 93.24%  main.main
+         0     0%   100%       50ms  6.76%  runtime.gopreempt_m (inline)
+         0     0%   100%       50ms  6.76%  runtime.goschedImpl
+         0     0%   100%      690ms 93.24%  runtime.main
+         0     0%   100%       50ms  6.76%  runtime.morestack
+         0     0%   100%       50ms  6.76%  runtime.newstack
+         0     0%   100%       40ms  5.41%  runtime.semawakeup
+         0     0%   100%       50ms  6.76%  runtime.startm
+         0     0%   100%       50ms  6.76%  runtime.wakep
+         0     0%   100%       40ms  5.41%  time.Now
+         0     0%   100%       40ms  5.41%  time.now
+         0     0%   100%       40ms  5.41%  time.runtimeNow
+[exit=0]
+
+$ go tool pprof -top <temporary-profile-dir>/heap.prof
+File: profiledemo
+Type: inuse_space
+Time: 2026-09-15 23:57:03 CST
+Showing nodes accounting for 3081.06kB, 100% of 3081.06kB total
+      flat  flat%   sum%        cum   cum%
+ 2056.01kB 66.73% 66.73%  2056.01kB 66.73%  main.makeLiveHeap (inline)
+ 1025.05kB 33.27%   100%  1025.05kB 33.27%  runtime.mallocgc
+         0     0%   100%  2056.01kB 66.73%  main.main
+         0     0%   100%   512.05kB 16.62%  runtime.(*scavengerState).init
+         0     0%   100%      513kB 16.65%  runtime.allocm
+         0     0%   100%   512.05kB 16.62%  runtime.bgscavenge
+         0     0%   100%  2056.01kB 66.73%  runtime.main
+         0     0%   100%      513kB 16.65%  runtime.mstart
+         0     0%   100%      513kB 16.65%  runtime.mstart0
+         0     0%   100%      513kB 16.65%  runtime.mstart1
+         0     0%   100%      513kB 16.65%  runtime.newm
+         0     0%   100%  1025.05kB 33.27%  runtime.newobject
+         0     0%   100%      513kB 16.65%  runtime.resetspinning
+         0     0%   100%      513kB 16.65%  runtime.schedule
+         0     0%   100%      513kB 16.65%  runtime.startm
+         0     0%   100%      513kB 16.65%  runtime.wakep
+[exit=0]
+
+$ go tool pprof -top <temporary-profile-dir>/goroutine.prof
+File: profiledemo
+Type: goroutine
+Time: 2026-09-15 23:57:03 CST
+Showing nodes accounting for 2, 100% of 2 total
+      flat  flat%   sum%        cum   cum%
+         1 50.00% 50.00%          1 50.00%  runtime.gopark
+         1 50.00%   100%          1 50.00%  runtime.goroutineProfileWithLabels
+         0     0%   100%          1 50.00%  main.main
+         0     0%   100%          1 50.00%  main.main.func1
+         0     0%   100%          1 50.00%  main.writeProfile
+         0     0%   100%          1 50.00%  runtime.chanrecv
+         0     0%   100%          1 50.00%  runtime.chanrecv1
+         0     0%   100%          1 50.00%  runtime.main
+         0     0%   100%          1 50.00%  runtime.pprof_goroutineProfileWithLabels
+         0     0%   100%          1 50.00%  runtime/pprof.(*Profile).WriteTo
+         0     0%   100%          1 50.00%  runtime/pprof.writeGoroutine
+         0     0%   100%          1 50.00%  runtime/pprof.writeRuntimeProfile
+[exit=0]
+
+$ go tool pprof -top <temporary-profile-dir>/block.prof
+File: profiledemo
+Type: delay
+Time: 2026-09-15 23:57:03 CST
+Showing nodes accounting for 41.07ms, 100% of 41.07ms total
+Dropped 3 nodes (cum <= 0.21ms)
+      flat  flat%   sum%        cum   cum%
+   41.07ms   100%   100%    41.07ms   100%  runtime.chanrecv1
+         0     0%   100%    41.05ms 99.94%  main.collectBlockProfile.func1
+[exit=0]
+
+$ go tool pprof -top <temporary-profile-dir>/goroutineleak.prof
+File: profiledemo
+Type: goroutineleak
+Time: 2026-09-15 23:57:03 CST
+Showing nodes accounting for 1, 100% of 1 total
+      flat  flat%   sum%        cum   cum%
+         1   100%   100%          1   100%  runtime.gopark
+         0     0%   100%          1   100%  main.main.func1
+         0     0%   100%          1   100%  runtime.chanrecv
+         0     0%   100%          1   100%  runtime.chanrecv1
+[exit=0]
+
+ALL_OUTPUT 生成完毕
