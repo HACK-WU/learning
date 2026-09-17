@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="560" viewBox="0 0 1000 560">
+  <rect width="1000" height="560" fill="#fff"/>
+  <text x="40" y="48" font-family="sans-serif" font-size="26" font-weight="700" fill="#333">秒杀：把无效流量挡在原子资格判断之前</text>
+  <text x="40" y="78" font-family="sans-serif" font-size="15" fill="#555">抢到资格、订单创建、支付成功是三个不同状态</text>
+  <defs>
+    <marker id="flow-green" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#2E7D32"/></marker>
+    <marker id="flow-red" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#C62828"/></marker>
+  </defs>
+  <rect x="55" y="150" width="170" height="80" rx="10" fill="#E0E0E0"/>
+  <text x="140" y="185" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#333">客户端 / CDN</text>
+  <text x="140" y="210" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#555">静态页、活动状态</text>
+  <line x1="225" y1="190" x2="290" y2="190" stroke="#2E7D32" stroke-width="3" marker-end="url(#flow-green)"/>
+  <rect x="290" y="150" width="170" height="80" rx="10" fill="#FFECB3" stroke="#F9A825"/>
+  <text x="375" y="185" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#333">网关 / 限流</text>
+  <text x="375" y="210" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#555">挡重复与无资格</text>
+  <line x1="460" y1="190" x2="525" y2="190" stroke="#2E7D32" stroke-width="3" marker-end="url(#flow-green)"/>
+  <rect x="525" y="150" width="190" height="80" rx="10" fill="#90CAF9" stroke="#1565C0"/>
+  <text x="620" y="185" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#333">Redis Lua</text>
+  <text x="620" y="210" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#333">库存 + 去重原子判断</text>
+  <line x1="715" y1="190" x2="780" y2="190" stroke="#2E7D32" stroke-width="3" marker-end="url(#flow-green)"/>
+  <rect x="780" y="150" width="165" height="80" rx="10" fill="#A5D6A7" stroke="#2E7D32"/>
+  <text x="862" y="185" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#333">订单队列</text>
+  <text x="862" y="210" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#333">异步、幂等、补偿</text>
+  <line x1="375" y1="230" x2="375" y2="350" stroke="#C62828" stroke-width="3" stroke-dasharray="7 5" marker-end="url(#flow-red)"/>
+  <rect x="270" y="360" width="210" height="75" rx="10" fill="#FFCDD2" stroke="#C62828"/>
+  <text x="375" y="392" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#333">快速失败 / 降级</text>
+  <text x="375" y="417" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#333">售罄、限流、未开始</text>
+  <line x1="620" y1="230" x2="620" y2="350" stroke="#2E7D32" stroke-width="3" marker-end="url(#flow-green)"/>
+  <rect x="515" y="360" width="210" height="75" rx="10" fill="#E8F5E9" stroke="#2E7D32"/>
+  <text x="620" y="392" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#333">订单数据库</text>
+  <text x="620" y="417" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#333">唯一约束兜底</text>
+  <text x="55" y="495" font-family="sans-serif" font-size="16" fill="#555">绿色：进入成功路径；红色虚线：只做防护，不承担业务事实。</text>
+</svg>

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="560" viewBox="0 0 1000 560">
+  <rect width="1000" height="560" fill="#fff"/>
+  <text x="40" y="48" font-family="sans-serif" font-size="26" font-weight="700" fill="#333">大促流量：从回源尖峰到分层保护</text>
+  <text x="40" y="78" font-family="sans-serif" font-size="15" fill="#555">先分类 miss，再决定预热、single-flight、限流与扩容</text>
+  <defs>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#1565C0"/></marker>
+    <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#C62828"/></marker>
+  </defs>
+  <rect x="40" y="120" width="270" height="330" rx="12" fill="#fafafa" stroke="#bbb"/>
+  <text x="65" y="155" font-family="sans-serif" font-size="20" font-weight="700" fill="#333">原始路径</text>
+  <rect x="75" y="190" width="200" height="52" rx="8" fill="#1565C0"/>
+  <text x="175" y="222" text-anchor="middle" font-family="sans-serif" font-size="17" fill="#fff">请求 5,000 QPS</text>
+  <line x1="175" y1="242" x2="175" y2="285" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow-blue)"/>
+  <rect x="75" y="290" width="200" height="52" rx="8" fill="#90CAF9"/>
+  <text x="175" y="322" text-anchor="middle" font-family="sans-serif" font-size="17" fill="#333">Redis 命中 60%</text>
+  <line x1="175" y1="342" x2="175" y2="385" stroke="#C62828" stroke-width="3" marker-end="url(#arrow-red)"/>
+  <rect x="75" y="390" width="200" height="52" rx="8" fill="#FFCDD2" stroke="#C62828"/>
+  <text x="175" y="422" text-anchor="middle" font-family="sans-serif" font-size="17" fill="#333">40% miss 直达数据库</text>
+  <line x1="310" y1="285" x2="400" y2="285" stroke="#999" stroke-width="2" stroke-dasharray="6 5"/>
+  <text x="330" y="265" font-family="sans-serif" font-size="14" fill="#666">改造</text>
+  <rect x="400" y="120" width="550" height="330" rx="12" fill="#fafafa" stroke="#bbb"/>
+  <text x="425" y="155" font-family="sans-serif" font-size="20" font-weight="700" fill="#333">保护路径</text>
+  <rect x="430" y="190" width="150" height="55" rx="8" fill="#1565C0"/>
+  <text x="505" y="223" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#fff">请求入口</text>
+  <line x1="580" y1="217" x2="630" y2="217" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow-blue)"/>
+  <rect x="635" y="190" width="145" height="55" rx="8" fill="#90CAF9"/>
+  <text x="707" y="214" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#333">缓存 + TTL</text>
+  <text x="707" y="234" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#333">热点预热</text>
+  <line x1="780" y1="217" x2="830" y2="217" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow-blue)"/>
+  <rect x="835" y="190" width="90" height="55" rx="8" fill="#A5D6A7"/>
+  <text x="880" y="222" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#333">响应</text>
+  <line x1="707" y1="245" x2="707" y2="300" stroke="#C62828" stroke-width="3" stroke-dasharray="6 5" marker-end="url(#arrow-red)"/>
+  <rect x="610" y="305" width="195" height="55" rx="8" fill="#FFECB3" stroke="#F9A825"/>
+  <text x="707" y="328" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#333">single-flight</text>
+  <text x="707" y="348" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#333">只允许一个回源</text>
+  <line x1="610" y1="332" x2="520" y2="332" stroke="#C62828" stroke-width="3" stroke-dasharray="6 5" marker-end="url(#arrow-red)"/>
+  <rect x="430" y="305" width="150" height="55" rx="8" fill="#FFCDD2" stroke="#C62828"/>
+  <text x="505" y="328" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#333">限流 / 降级</text>
+  <text x="505" y="348" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#333">旧值或快速失败</text>
+  <line x1="805" y1="332" x2="835" y2="332" stroke="#C62828" stroke-width="3" stroke-dasharray="6 5" marker-end="url(#arrow-red)"/>
+  <rect x="835" y="305" width="90" height="55" rx="8" fill="#E0E0E0"/>
+  <text x="880" y="328" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#333">数据库</text>
+  <text x="880" y="348" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#333">受保护</text>
+  <text x="425" y="410" font-family="sans-serif" font-size="15" fill="#555">观测：hit/miss、回源 QPS、热点分布、连接池、延迟</text>
+</svg>

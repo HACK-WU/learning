@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="640" viewBox="0 0 900 640" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif">
+  <rect x="0" y="0" width="900" height="640" fill="#ffffff"/>
+
+  <text x="450" y="32" font-size="19" font-weight="700" fill="#1a1a1a" text-anchor="middle">Redis 选型三层判断：数据分类 → 能力匹配 → 发行与合规</text>
+  <text x="450" y="54" font-size="12" fill="#666666" text-anchor="middle">先看能不能丢、要不要快，再看 Redis 是否匹配，最后才谈版本与许可证</text>
+
+  <!-- 第一层：数据分类 -->
+  <rect x="24" y="70" width="852" height="150" rx="8" fill="#fafafa" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="40" y="94" font-size="14" font-weight="700" fill="#1565C0">第一层 · 数据分类（先问：丢了会怎样、要多快）</text>
+
+  <rect x="44" y="108" width="150" height="86" rx="6" fill="#ffffff" stroke="#1565C0" stroke-width="1.5"/>
+  <text x="119" y="132" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">可重建缓存</text>
+  <text x="119" y="152" font-size="11" fill="#555555" text-anchor="middle">丢了可以回源</text>
+  <text x="119" y="172" font-size="11" fill="#555555" text-anchor="middle">秒级旧值可接受</text>
+
+  <rect x="214" y="108" width="150" height="86" rx="6" fill="#ffffff" stroke="#1565C0" stroke-width="1.5"/>
+  <text x="289" y="132" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">会话 / 临时状态</text>
+  <text x="289" y="152" font-size="11" fill="#555555" text-anchor="middle">丢了要重新登录</text>
+  <text x="289" y="172" font-size="11" fill="#555555" text-anchor="middle">有明确过期时间</text>
+
+  <rect x="384" y="108" width="150" height="86" rx="6" fill="#ffffff" stroke="#1565C0" stroke-width="1.5"/>
+  <text x="459" y="132" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">计数 / 排序 / 限流</text>
+  <text x="459" y="152" font-size="11" fill="#555555" text-anchor="middle">要原子累加</text>
+  <text x="459" y="172" font-size="11" fill="#555555" text-anchor="middle">要毫秒级响应</text>
+
+  <rect x="554" y="108" width="150" height="86" rx="6" fill="#ffffff" stroke="#1565C0" stroke-width="1.5"/>
+  <text x="629" y="132" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">消息 / 事件</text>
+  <text x="629" y="152" font-size="11" fill="#555555" text-anchor="middle">要不要确认重试</text>
+  <text x="629" y="172" font-size="11" fill="#555555" text-anchor="middle">要不要重放</text>
+
+  <rect x="724" y="108" width="134" height="86" rx="6" fill="#fff5f5" stroke="#c62828" stroke-width="1.5"/>
+  <text x="791" y="132" font-size="13" font-weight="700" fill="#c62828" text-anchor="middle">主数据 / 订单</text>
+  <text x="791" y="152" font-size="11" fill="#555555" text-anchor="middle">唯一事实源</text>
+  <text x="791" y="172" font-size="11" fill="#555555" text-anchor="middle">通常不该只放 Redis</text>
+
+  <!-- 层间箭头 -->
+  <path d="M 450 220 L 450 258" stroke="#1565C0" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <text x="462" y="244" font-size="11" fill="#1565C0">带着结论往下走</text>
+
+  <!-- 第二层：能力匹配 -->
+  <rect x="24" y="262" width="852" height="178" rx="8" fill="#fafafa" stroke="#bbbbbb" stroke-width="1"/>
+  <text x="40" y="286" font-size="14" font-weight="700" fill="#1565C0">第二层 · 能力匹配（数据库够不够？Redis 放哪一层？）</text>
+
+  <path d="M 450 300 L 450 316" stroke="#888888" stroke-width="1.5" fill="none"/>
+  <path d="M 120 316 L 780 316" stroke="#888888" stroke-width="1.5" fill="none"/>
+
+  <path d="M 120 316 L 120 344" stroke="#888888" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 340 316 L 340 344" stroke="#888888" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 560 316 L 560 344" stroke="#888888" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+  <path d="M 780 316 L 780 344" stroke="#888888" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+
+  <rect x="44" y="348" width="164" height="72" rx="6" fill="#ffffff" stroke="#2E7D32" stroke-width="1.5"/>
+  <text x="126" y="370" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">解法 B · 不上 Redis</text>
+  <text x="126" y="390" font-size="11" fill="#555555" text-anchor="middle">数据库压测达标</text>
+  <text x="126" y="408" font-size="11" fill="#555555" text-anchor="middle">零新组件、零一致性成本</text>
+
+  <rect x="252" y="348" width="176" height="72" rx="6" fill="#ffffff" stroke="#2E7D32" stroke-width="1.5"/>
+  <text x="340" y="370" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">解法 A · Redis 加速层</text>
+  <text x="340" y="390" font-size="11" fill="#555555" text-anchor="middle">可失效、可重建</text>
+  <text x="340" y="408" font-size="11" fill="#555555" text-anchor="middle">退出最容易</text>
+
+  <rect x="472" y="348" width="176" height="72" rx="6" fill="#ffffff" stroke="#EF6C00" stroke-width="1.5"/>
+  <text x="560" y="370" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">解法 C · Redis 关键层</text>
+  <text x="560" y="390" font-size="11" fill="#555555" text-anchor="middle">持久化 + 复制 + 演练</text>
+  <text x="560" y="408" font-size="11" fill="#555555" text-anchor="middle">责任与退出难度最高</text>
+
+  <rect x="692" y="348" width="176" height="72" rx="6" fill="#ffffff" stroke="#1565C0" stroke-width="1.5"/>
+  <text x="780" y="370" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">解法 D · 专用 / 托管</text>
+  <text x="780" y="390" font-size="11" fill="#555555" text-anchor="middle">Kafka / OLAP / 托管 Redis</text>
+  <text x="780" y="408" font-size="11" fill="#555555" text-anchor="middle">用能力换运维责任</text>
+
+  <!-- 层间箭头 -->
+  <path d="M 450 440 L 450 478" stroke="#1565C0" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+  <text x="462" y="464" font-size="11" fill="#1565C0">只要用了 Redis，这层绕不开</text>
+
+  <!-- 第三层：发行与合规 -->
+  <rect x="24" y="482" width="852" height="132" rx="8" fill="#fff8f8" stroke="#c62828" stroke-width="1.5"/>
+  <text x="40" y="506" font-size="14" font-weight="700" fill="#c62828">第三层 · 发行与合规（决定了以后还能不能换）</text>
+
+  <rect x="44" y="518" width="188" height="80" rx="6" fill="#ffffff" stroke="#c62828" stroke-width="1"/>
+  <text x="138" y="540" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">版本与许可证</text>
+  <text x="138" y="560" font-size="11" fill="#555555" text-anchor="middle">绑定具体版本核对</text>
+  <text x="138" y="578" font-size="11" fill="#555555" text-anchor="middle">不以旧版本经验推断</text>
+
+  <rect x="252" y="518" width="188" height="80" rx="6" fill="#ffffff" stroke="#c62828" stroke-width="1"/>
+  <text x="346" y="540" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">模块 / 镜像 / 客户端</text>
+  <text x="346" y="560" font-size="11" fill="#555555" text-anchor="middle">依赖清单整体审查</text>
+  <text x="346" y="578" font-size="11" fill="#555555" text-anchor="middle">不只盯源码许可</text>
+
+  <rect x="460" y="518" width="188" height="80" rx="6" fill="#ffffff" stroke="#c62828" stroke-width="1"/>
+  <text x="554" y="540" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">托管服务条款</text>
+  <text x="554" y="560" font-size="11" fill="#555555" text-anchor="middle">数据驻留 / 备份 / SLA</text>
+  <text x="554" y="578" font-size="11" fill="#555555" text-anchor="middle">托管 SLA ≠ 业务 SLA</text>
+
+  <rect x="668" y="518" width="188" height="80" rx="6" fill="#ffffff" stroke="#c62828" stroke-width="1"/>
+  <text x="762" y="540" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">退出路径</text>
+  <text x="762" y="560" font-size="11" fill="#555555" text-anchor="middle">数据可导出？协议可替？</text>
+  <text x="762" y="578" font-size="11" fill="#555555" text-anchor="middle">现在就要写得出来</text>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1565C0"/>
+    </marker>
+  </defs>
+</svg>

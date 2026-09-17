@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="600" viewBox="0 0 1000 600">
+  <rect width="1000" height="600" fill="#fff"/>
+  <text x="40" y="48" font-family="sans-serif" font-size="26" font-weight="700" fill="#333">缓存一致性：数据库提交与缓存失效之间的窗口</text>
+  <text x="40" y="78" font-family="sans-serif" font-size="15" fill="#555">没有方案消灭所有故障；差别在窗口大小、可观测性和恢复能力</text>
+  <defs>
+    <marker id="cons-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#1565C0"/></marker>
+    <marker id="cons-red" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#C62828"/></marker>
+  </defs>
+  <rect x="65" y="135" width="190" height="60" rx="9" fill="#90CAF9"/>
+  <text x="160" y="173" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#333">写请求</text>
+  <line x1="255" y1="165" x2="330" y2="165" stroke="#1565C0" stroke-width="3" marker-end="url(#cons-arrow)"/>
+  <rect x="330" y="135" width="190" height="60" rx="9" fill="#A5D6A7" stroke="#2E7D32"/>
+  <text x="425" y="173" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#333">数据库提交</text>
+  <line x1="425" y1="195" x2="425" y2="260" stroke="#C62828" stroke-width="3" stroke-dasharray="7 5" marker-end="url(#cons-red)"/>
+  <rect x="330" y="270" width="190" height="60" rx="9" fill="#FFCDD2" stroke="#C62828"/>
+  <text x="425" y="307" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#333">失效失败窗口</text>
+  <line x1="520" y1="165" x2="610" y2="165" stroke="#1565C0" stroke-width="3" marker-end="url(#cons-arrow)"/>
+  <rect x="610" y="135" width="190" height="60" rx="9" fill="#90CAF9"/>
+  <text x="705" y="173" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#333">删除缓存</text>
+  <line x1="705" y1="195" x2="705" y2="260" stroke="#1565C0" stroke-width="3" marker-end="url(#cons-arrow)"/>
+  <rect x="610" y="270" width="190" height="60" rx="9" fill="#E8F5E9" stroke="#2E7D32"/>
+  <text x="705" y="307" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#333">读 miss 后回填</text>
+  <rect x="65" y="400" width="735" height="95" rx="10" fill="#fafafa" stroke="#bbb"/>
+  <text x="90" y="435" font-family="sans-serif" font-size="17" fill="#333">增强路径：</text>
+  <text x="190" y="435" font-family="sans-serif" font-size="16" fill="#555">Outbox 事务记录 → relay → Stream 失效事件 → 幂等消费者</text>
+  <text x="90" y="468" font-family="sans-serif" font-size="16" fill="#555">关键判断：价格/库存确认可以绕过缓存，展示路径才接受最终一致。</text>
+</svg>

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="560" viewBox="0 0 1000 560">
+  <rect width="1000" height="560" fill="#fff"/>
+  <text x="40" y="48" font-family="sans-serif" font-size="26" font-weight="700" fill="#333">容量增长：先减法，再分层，最后横向扩展</text>
+  <text x="40" y="78" font-family="sans-serif" font-size="15" fill="#555">每一步都应有容量预算、迁移校验和回滚出口</text>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#1565C0"/></marker>
+  </defs>
+  <rect x="55" y="135" width="170" height="250" rx="12" fill="#FFCDD2" stroke="#C62828"/>
+  <text x="140" y="175" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="700" fill="#333">盘点</text>
+  <text x="140" y="220" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#333">5 GB → 500 GB</text>
+  <text x="140" y="260" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#333">大 key</text>
+  <text x="140" y="290" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#333">对象编码</text>
+  <text x="140" y="320" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#333">热度 / TTL</text>
+  <line x1="225" y1="260" x2="285" y2="260" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="285" y="135" width="170" height="250" rx="12" fill="#90CAF9" stroke="#1565C0"/>
+  <text x="370" y="175" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="700" fill="#333">瘦身</text>
+  <text x="370" y="225" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#333">缩短 key</text>
+  <text x="370" y="255" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#333">拆大对象</text>
+  <text x="370" y="285" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#333">删可重建字段</text>
+  <text x="370" y="315" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#333">补 TTL</text>
+  <line x1="455" y1="260" x2="515" y2="260" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="515" y="135" width="170" height="250" rx="12" fill="#A5D6A7" stroke="#2E7D32"/>
+  <text x="600" y="175" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="700" fill="#333">分层</text>
+  <rect x="545" y="215" width="110" height="45" rx="6" fill="#1565C0"/>
+  <text x="600" y="243" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#fff">热数据</text>
+  <rect x="545" y="280" width="110" height="45" rx="6" fill="#E0E0E0"/>
+  <text x="600" y="308" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#333">冷数据</text>
+  <line x1="685" y1="260" x2="745" y2="260" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="745" y="135" width="200" height="250" rx="12" fill="#FFECB3" stroke="#F9A825"/>
+  <text x="845" y="175" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="700" fill="#333">扩展</text>
+  <text x="845" y="225" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#333">客户端分片</text>
+  <text x="845" y="260" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#333">或 Cluster</text>
+  <text x="845" y="310" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#555">多 key / 迁槽</text>
+  <text x="845" y="335" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#555">先演练再上线</text>
+  <text x="55" y="450" font-family="sans-serif" font-size="16" fill="#555">决策门：单实例容量边界是否真实存在？哪些数据可回源？多 key 是否需要同槽？</text>
+</svg>

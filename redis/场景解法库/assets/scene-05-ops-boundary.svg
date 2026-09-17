@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="560" viewBox="0 0 1000 560">
+  <rect width="1000" height="560" fill="#fff"/>
+  <text x="40" y="48" font-family="sans-serif" font-size="26" font-weight="700" fill="#333">运营后台：从直连生产到受控操作</text>
+  <text x="40" y="78" font-family="sans-serif" font-size="15" fill="#555">API 白名单、ACL、审计和隔离实例共同缩小爆炸半径</text>
+  <defs>
+    <marker id="ops-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#1565C0"/></marker>
+  </defs>
+  <rect x="45" y="140" width="255" height="285" rx="12" fill="#FFCDD2" stroke="#C62828"/>
+  <text x="172" y="180" text-anchor="middle" font-family="sans-serif" font-size="21" font-weight="700" fill="#333">直连风险</text>
+  <rect x="90" y="220" width="165" height="55" rx="8" fill="#fff" stroke="#C62828"/>
+  <text x="172" y="254" text-anchor="middle" font-family="sans-serif" font-size="17" fill="#333">Redis CLI</text>
+  <line x1="172" y1="275" x2="172" y2="320" stroke="#C62828" stroke-width="3"/>
+  <text x="172" y="350" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#333">KEYS / FLUSHALL</text>
+  <text x="172" y="380" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#333">误删、阻塞、无审计</text>
+  <line x1="300" y1="280" x2="370" y2="280" stroke="#1565C0" stroke-width="3" marker-end="url(#ops-arrow)"/>
+  <rect x="370" y="140" width="255" height="285" rx="12" fill="#90CAF9" stroke="#1565C0"/>
+  <text x="497" y="180" text-anchor="middle" font-family="sans-serif" font-size="21" font-weight="700" fill="#333">受控后台</text>
+  <rect x="410" y="215" width="175" height="45" rx="8" fill="#fff"/>
+  <text x="497" y="243" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#333">业务 API 白名单</text>
+  <rect x="410" y="280" width="175" height="45" rx="8" fill="#fff"/>
+  <text x="497" y="308" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#333">审批 + 审计</text>
+  <rect x="410" y="345" width="175" height="45" rx="8" fill="#fff"/>
+  <text x="497" y="373" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#333">窄 ACL + key 前缀</text>
+  <line x1="625" y1="280" x2="695" y2="280" stroke="#1565C0" stroke-width="3" marker-end="url(#ops-arrow)"/>
+  <rect x="695" y="140" width="255" height="285" rx="12" fill="#E8F5E9" stroke="#2E7D32"/>
+  <text x="822" y="180" text-anchor="middle" font-family="sans-serif" font-size="21" font-weight="700" fill="#333">数据边界</text>
+  <rect x="735" y="215" width="175" height="45" rx="8" fill="#A5D6A7"/>
+  <text x="822" y="243" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#333">只读副本</text>
+  <rect x="735" y="280" width="175" height="45" rx="8" fill="#A5D6A7"/>
+  <text x="822" y="308" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#333">脱敏快照</text>
+  <rect x="735" y="345" width="175" height="45" rx="8" fill="#A5D6A7"/>
+  <text x="822" y="373" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#333">隔离测试实例</text>
+  <text x="45" y="480" font-family="sans-serif" font-size="16" fill="#555">原则：运营操作的是业务动作，不是 Redis 的全部命令。</text>
+</svg>
