@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="320" viewBox="0 0 760 320" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="760" height="320" fill="#FFFFFF"/>
+  <text x="20" y="30" font-size="17" font-weight="bold" fill="#1F2937">基础实现：所有通知都走同一个流</text>
+
+  <rect x="20" y="55" width="180" height="66" rx="8" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1.5"/>
+  <text x="34" y="80" font-size="13.5" font-weight="bold" fill="#1E40AF">订单服务</text>
+  <text x="34" y="102" font-size="12.5" fill="#1E3A8A">重要消息，不能丢</text>
+
+  <rect x="220" y="55" width="180" height="66" rx="8" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1.5"/>
+  <text x="234" y="80" font-size="13.5" font-weight="bold" fill="#1E40AF">配置中心</text>
+  <text x="234" y="102" font-size="12.5" fill="#1E3A8A">丢了也无所谓</text>
+
+  <path d="M204 88 L268 88" stroke="#6B7280" stroke-width="2"/>
+  <path d="M262 82 L270 88 L262 94" fill="#6B7280"/>
+  <path d="M404 88 L468 88" stroke="#6B7280" stroke-width="2"/>
+  <path d="M462 82 L470 88 L462 94" fill="#6B7280"/>
+
+  <rect x="472" y="55" width="268" height="66" rx="8" fill="#FEF3C7" stroke="#FCD34D" stroke-width="1.5"/>
+  <text x="486" y="80" font-size="13.5" font-weight="bold" fill="#92400E">同一个流，一视同仁</text>
+  <text x="486" y="102" font-size="12.5" fill="#78350F">都要留痕、都要确认、都占内存</text>
+
+  <rect x="20" y="150" width="720" height="76" rx="8" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.5"/>
+  <text x="36" y="176" font-size="13" font-weight="bold" fill="#991B1B">它的问题</text>
+  <text x="36" y="198" font-size="12.5" fill="#7F1D1D">① 为"丢了也无所谓"的配置通知，付了持久化的内存成本（同样一万条约为普通队列 3.46 倍）</text>
+  <text x="36" y="218" font-size="12.5" fill="#7F1D1D">② 广播给所有在线节点时，流的消费组是"分摊"，做不到"每人都收到一份"</text>
+
+  <rect x="20" y="246" width="720" height="54" rx="8" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.5"/>
+  <text x="36" y="270" font-size="13" font-weight="bold" fill="#166534">本步解决了什么</text>
+  <text x="36" y="290" font-size="12.5" fill="#14532D">消息确实不丢了 —— 但为不需要保障的消息付了冤枉钱，且广播场景用错了机制</text>
+</svg>

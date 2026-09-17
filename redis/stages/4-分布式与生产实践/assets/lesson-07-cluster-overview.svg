@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="300" viewBox="0 0 720 300" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="720" height="300" fill="#FFFFFF"/>
+  <text x="20" y="30" font-size="17" font-weight="bold" fill="#1F2937">数据装不下了，扩容为什么要脱层皮？</text>
+
+  <text x="20" y="62" font-size="13" font-weight="bold" fill="#B45309">不这么做</text>
+  <rect x="20" y="72" width="290" height="176" rx="8" fill="#FFF7ED" stroke="#FDBA74" stroke-width="1.5"/>
+  <text x="38" y="100" font-size="13" fill="#7C2D12">自己在代码里算该放哪台</text>
+  <text x="38" y="122" font-size="13" fill="#7C2D12">机器数量一变，归属全乱</text>
+  <rect x="38" y="138" width="254" height="34" rx="5" fill="#FFEDD5" stroke="#FDBA74"/>
+  <text x="52" y="160" font-size="12.5" fill="#9A3412">扩容一次，全团队折腾两周</text>
+  <text x="38" y="196" font-size="13" fill="#7C2D12">要停机迁移，或写双写灰度</text>
+  <text x="38" y="222" font-size="13" fill="#7C2D12">单机内存就是硬上限</text>
+
+  <path d="M322 160 L398 160" stroke="#6B7280" stroke-width="2"/>
+  <path d="M392 154 L400 160 L392 166" fill="#6B7280"/>
+
+  <text x="410" y="62" font-size="13" font-weight="bold" fill="#047857">这么做</text>
+  <rect x="410" y="72" width="290" height="176" rx="8" fill="#ECFDF5" stroke="#6EE7B7" stroke-width="1.5"/>
+  <text x="428" y="100" font-size="13" fill="#064E3B">把空间切成很多固定格子</text>
+  <text x="428" y="122" font-size="13" fill="#064E3B">按格子分摊到各台机器</text>
+  <rect x="428" y="138" width="254" height="34" rx="5" fill="#D1FAE5" stroke="#6EE7B7"/>
+  <text x="442" y="160" font-size="12.5" fill="#065F46">扩容只搬走一部分格子</text>
+  <text x="428" y="196" font-size="13" fill="#064E3B">搬迁途中也能正常读写</text>
+  <text x="428" y="222" font-size="13" fill="#064E3B">需要同批处理的可以绑到一起</text>
+
+  <text x="20" y="278" font-size="12" fill="#6B7280">代价：客户端要听得懂"去找别台"的重定向；跨格子的批量操作会受限</text>
+</svg>

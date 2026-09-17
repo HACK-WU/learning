@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="300" viewBox="0 0 720 300" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="720" height="300" fill="#FFFFFF"/>
+  <text x="20" y="30" font-size="17" font-weight="bold" fill="#1F2937">装好了、连上了，为什么上线还会出事？</text>
+
+  <text x="20" y="62" font-size="13" font-weight="bold" fill="#B45309">不这么做</text>
+  <rect x="20" y="72" width="290" height="176" rx="8" fill="#FFF7ED" stroke="#FDBA74" stroke-width="1.5"/>
+  <text x="38" y="100" font-size="13" fill="#7C2D12">装完就照默认配置上线</text>
+  <text x="38" y="122" font-size="13" fill="#7C2D12">写了一条"取出全部"的命令</text>
+  <rect x="38" y="138" width="254" height="34" rx="5" fill="#FFEDD5" stroke="#FDBA74"/>
+  <text x="52" y="160" font-size="12.5" fill="#9A3412">其他人干等，上游接连超时</text>
+  <text x="38" y="196" font-size="13" fill="#7C2D12">开发环境数据少，怎么试都正常</text>
+  <text x="38" y="222" font-size="13" fill="#7C2D12">上线才暴露，一次就雪崩</text>
+
+  <path d="M322 160 L398 160" stroke="#6B7280" stroke-width="2"/>
+  <path d="M392 154 L400 160 L392 166" fill="#6B7280"/>
+
+  <text x="410" y="62" font-size="13" font-weight="bold" fill="#047857">这么做</text>
+  <rect x="410" y="72" width="290" height="176" rx="8" fill="#ECFDF5" stroke="#6EE7B7" stroke-width="1.5"/>
+  <text x="428" y="100" font-size="13" fill="#064E3B">先连上、会看状态、能干净关掉</text>
+  <text x="428" y="122" font-size="13" fill="#064E3B">给数据设上过期时间</text>
+  <rect x="428" y="138" width="254" height="34" rx="5" fill="#D1FAE5" stroke="#6EE7B7"/>
+  <text x="442" y="160" font-size="12.5" fill="#065F46">要遍历就分批走，不挡别人</text>
+  <text x="428" y="196" font-size="13" fill="#064E3B">危险命令提前改名或禁掉</text>
+  <text x="428" y="222" font-size="13" fill="#064E3B">生产用配置文件启动，不用默认</text>
+
+  <text x="20" y="278" font-size="12" fill="#6B7280">代价：分批遍历总耗时反而更长 —— 它换来的是"不阻塞别人"，不是自己更快</text>
+</svg>

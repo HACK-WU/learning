@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="300" viewBox="0 0 720 300" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="720" height="300" fill="#FFFFFF"/>
+  <text x="20" y="30" font-size="17" font-weight="bold" fill="#1F2937">对象怎么存、慢活怎么放，才不至于又慢又丢？</text>
+
+  <text x="20" y="62" font-size="13" font-weight="bold" fill="#B45309">不这么做</text>
+  <rect x="20" y="72" width="290" height="176" rx="8" fill="#FFF7ED" stroke="#FDBA74" stroke-width="1.5"/>
+  <text x="38" y="100" font-size="13" fill="#7C2D12">整个对象存成一大块</text>
+  <text x="38" y="122" font-size="13" fill="#7C2D12">改一个字段也要整块翻新</text>
+  <rect x="38" y="138" width="254" height="34" rx="5" fill="#FFEDD5" stroke="#FDBA74"/>
+  <text x="52" y="160" font-size="12.5" fill="#9A3412">慢活堵在下单接口里</text>
+  <text x="38" y="196" font-size="13" fill="#7C2D12">用户点"提交"要等三秒</text>
+  <text x="38" y="222" font-size="13" fill="#7C2D12">任务取走就没，崩了找不回</text>
+
+  <path d="M322 160 L398 160" stroke="#6B7280" stroke-width="2"/>
+  <path d="M392 154 L400 160 L392 166" fill="#6B7280"/>
+
+  <text x="410" y="62" font-size="13" font-weight="bold" fill="#047857">这么做</text>
+  <rect x="410" y="72" width="290" height="176" rx="8" fill="#ECFDF5" stroke="#6EE7B7" stroke-width="1.5"/>
+  <text x="428" y="100" font-size="13" fill="#064E3B">按字段分开存，可单独改</text>
+  <text x="428" y="122" font-size="13" fill="#064E3B">还能对某个数字安全加一</text>
+  <rect x="428" y="138" width="254" height="34" rx="5" fill="#D1FAE5" stroke="#6EE7B7"/>
+  <text x="442" y="160" font-size="12.5" fill="#065F46">慢活排成队，后台慢慢做</text>
+  <text x="428" y="196" font-size="13" fill="#064E3B">两端进出都很快，能等能竞争</text>
+  <text x="428" y="222" font-size="13" fill="#064E3B">但它是"凑合用"，真队列另有一套</text>
+
+  <text x="20" y="278" font-size="12" fill="#6B7280">代价：分开存只省约 9.6% 内存（不是传说的"省 5 倍"）；队列数据多了很吃内存</text>
+</svg>

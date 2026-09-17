@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="300" viewBox="0 0 720 300" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="720" height="300" fill="#FFFFFF"/>
+  <text x="20" y="30" font-size="17" font-weight="bold" fill="#1F2937">缓存加上了，为什么数据库还是被打穿？</text>
+
+  <text x="20" y="62" font-size="13" font-weight="bold" fill="#B45309">不这么做</text>
+  <rect x="20" y="72" width="290" height="176" rx="8" fill="#FFF7ED" stroke="#FDBA74" stroke-width="1.5"/>
+  <text x="38" y="100" font-size="13" fill="#7C2D12">查不到就不缓存，一直往库里打</text>
+  <text x="38" y="122" font-size="13" fill="#7C2D12">热点一过期，瞬间全打到库</text>
+  <rect x="38" y="138" width="254" height="34" rx="5" fill="#FFEDD5" stroke="#FDBA74"/>
+  <text x="52" y="160" font-size="12.5" fill="#9A3412">大批同时失效，库直接扛不住</text>
+  <text x="38" y="196" font-size="13" fill="#7C2D12">缓存层一挂，流量全转嫁过来</text>
+  <text x="38" y="222" font-size="13" fill="#7C2D12">改了库没同步，读到旧数据</text>
+
+  <path d="M322 160 L398 160" stroke="#6B7280" stroke-width="2"/>
+  <path d="M392 154 L400 160 L392 166" fill="#6B7280"/>
+
+  <text x="410" y="62" font-size="13" font-weight="bold" fill="#047857">这么做</text>
+  <rect x="410" y="72" width="290" height="176" rx="8" fill="#ECFDF5" stroke="#6EE7B7" stroke-width="1.5"/>
+  <text x="428" y="100" font-size="13" fill="#064E3B">先分清是三种里的哪一种</text>
+  <text x="428" y="122" font-size="13" fill="#064E3B">各备一道对应的防线</text>
+  <rect x="428" y="138" width="254" height="34" rx="5" fill="#D1FAE5" stroke="#6EE7B7"/>
+  <text x="442" y="160" font-size="12.5" fill="#065F46">无效请求在门口就被挡掉</text>
+  <text x="428" y="196" font-size="13" fill="#064E3B">过期时间打散，避免集体失效</text>
+  <text x="428" y="222" font-size="13" fill="#064E3B">满了该丢谁，也提前定好</text>
+
+  <text x="20" y="278" font-size="12" fill="#6B7280">代价：缓存与库的一致性没有完美解，只有过期时间、重试、订阅变更这些兜底</text>
+</svg>

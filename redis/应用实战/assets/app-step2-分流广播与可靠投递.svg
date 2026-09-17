@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="350" viewBox="0 0 760 350" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="760" height="350" fill="#FFFFFF"/>
+  <text x="20" y="30" font-size="17" font-weight="bold" fill="#1F2937">综合实现：能丢的走广播，不能丢的走留痕流</text>
+
+  <rect x="20" y="52" width="180" height="70" rx="8" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1.5"/>
+  <text x="34" y="78" font-size="13.5" font-weight="bold" fill="#1E40AF">订单服务</text>
+  <text x="34" y="100" font-size="12.5" fill="#1E3A8A">重要消息，不能丢</text>
+  <text x="34" y="117" font-size="12" fill="#1E3A8A">要留痕、要确认</text>
+
+  <rect x="20" y="140" width="180" height="70" rx="8" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1.5"/>
+  <text x="34" y="166" font-size="13.5" font-weight="bold" fill="#1E40AF">配置中心</text>
+  <text x="34" y="188" font-size="12.5" fill="#1E3A8A">丢了也无所谓</text>
+  <text x="34" y="205" font-size="12" fill="#1E3A8A">每人都收一份就行</text>
+
+  <path d="M204 87 L268 87" stroke="#6B7280" stroke-width="2"/>
+  <path d="M262 81 L270 87 L262 93" fill="#6B7280"/>
+  <path d="M204 175 L268 175" stroke="#6B7280" stroke-width="2"/>
+  <path d="M262 169 L270 175 L262 181" fill="#6B7280"/>
+
+  <rect x="272" y="52" width="248" height="70" rx="8" fill="#DCFCE7" stroke="#4ADE80" stroke-width="2.5"/>
+  <text x="286" y="78" font-size="13.5" font-weight="bold" fill="#166534">流 + 消费组</text>
+  <text x="286" y="100" font-size="12.5" fill="#14532D">留痕、分摊、可转移</text>
+  <text x="286" y="117" font-size="12" font-weight="bold" fill="#15803D">继续用于订单</text>
+
+  <rect x="272" y="140" width="248" height="70" rx="8" fill="#DCFCE7" stroke="#4ADE80" stroke-width="2.5"/>
+  <text x="286" y="166" font-size="13.5" font-weight="bold" fill="#166534">订阅 / 发布（广播）</text>
+  <text x="286" y="188" font-size="12.5" fill="#14532D">不存储、不确认、极轻</text>
+  <text x="286" y="205" font-size="12" font-weight="bold" fill="#15803D">新增：按消息性质分流</text>
+
+  <path d="M524 175 L588 175" stroke="#6B7280" stroke-width="2"/>
+  <path d="M582 169 L590 175 L582 181" fill="#6B7280"/>
+
+  <rect x="592" y="140" width="148" height="70" rx="8" fill="#FFFBEB" stroke="#FCD34D" stroke-width="1.5"/>
+  <text x="606" y="166" font-size="13" font-weight="bold" fill="#92400E">所有在线节点</text>
+  <text x="606" y="188" font-size="12" fill="#78350F">各收一份</text>
+  <text x="606" y="205" font-size="12" fill="#78350F">掉线的不补发</text>
+
+  <rect x="20" y="236" width="720" height="52" rx="8" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.5"/>
+  <text x="36" y="260" font-size="12.5" font-weight="bold" fill="#991B1B">别踩的坑</text>
+  <text x="36" y="280" font-size="12.5" fill="#7F1D1D">慢订阅者会被服务端静默断开且无报错（输出缓冲冲到约 57 万字节后即被踢）—— 必须配自动重连并监控积压</text>
+
+  <rect x="20" y="304" width="720" height="30" rx="8" fill="#ECFDF5" stroke="#6EE7B7" stroke-width="1.5"/>
+  <text x="36" y="324" font-size="12.5" fill="#065F46">本步解决了什么：按消息性质分流 —— 该保障的不省，不该保障的不浪费</text>
+</svg>

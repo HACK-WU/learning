@@ -3,6 +3,7 @@
 > 阶段 3《持久化与高可用》第 2 课
 > 前置：课 5《RDB 与 AOF 持久化》(RDB fork 与写时复制、AOF 刷盘策略、持久化选型)
 > 环境：WSL Ubuntu 24.04 + Redis 8.10.1（本机实测，核查于 2026-09）
+> 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：redis.io/docs/latest/operate/oss_and_stack/management/replication/、management/sentinel/）
 
 ---
 
@@ -49,6 +50,10 @@
 你查日志确认：支付成功的响应确实返回给了用户。但新主库上没有这条数据。
 
 为什么？因为**复制是异步的**——主库返回 OK 时，数据还没到从库。这是哨兵架构的固有缺陷，本课第三幕会详细解释。
+
+> 📌 **一句话本质**：把"一个 Redis 挂了服务就全挂"变成"数据自动复制到多个副本、主库倒下时有人自动顶上"。
+>
+> ⚖️ **处境对照**：不这么做——单点运行，实例一挂全站不可用，只能等人工恢复。这么做——主从复制保数据冗余、哨兵自动故障转移（本机实测 **7.06 秒**完成切换）。但**自动切换不等于不丢数据**：复制是异步的，主库返回 OK 时数据可能还没到从库，所以开头那个"刚支付的订单查不到"必然会发生；而决定能否增量续传的 backlog，默认 1 MB 在满载写入下**只够撑 0.05 秒**——断线再久一点就只能全量重传。
 
 ---
 
@@ -135,7 +140,36 @@ READONLY You can't write against a read only replica.
 
 ## 第三幕：层层揭示 —— 三个知识点
 
+### 一眼全局图（进入细节前先看一眼）
+
+![课 6 一眼全局图](../assets/lesson-06-replication-overview.svg)
+
+> 看图指引：左边是"只有一台、它挂了就全停"，右边是"多留副本、主库倒下有人自动顶上"。图只回答一件事：**不中断服务这件事，是靠什么机制做到的**。
+
+### 本课地图（分几步走）
+
+| 步骤 | 这一步要解决什么 | 对应知识点 |
+|------|------------------|-----------|
+| 第 1 步 | 先看数据是怎么从主库流到副本的 | 知识点 1：全量与增量复制 |
+| 第 2 步 | 再看主库真挂了，切换是怎么自动完成的 | 知识点 2：哨兵故障转移 |
+| 第 3 步 | 最后承认自动切换的代价——它会丢什么 | 知识点 3：哨兵解决不了的丢数据 |
+
 ## 知识点 1：全量与增量复制
+
+> 🧭 第 1/3 步｜承接：第一幕的困境——只有一台机器，它挂了服务就没了 → 本步：先看数据是怎么从主库流到副本的，这是"多留一份"的基础。
+
+```mermaid
+flowchart TB
+    A["副本发起同步"] --> B{"第一次连，还是断线重连"}
+    B -->|"第一次"| C["全量：主库生成一份完整数据发给它"]
+    B -->|"短暂断线"| D{"积压缓冲还留着断线期间的改动吗"}
+    D -->|"还留着"| E["增量：只补发缺的那一段"]
+    D -->|"已被覆盖"| C
+    C --> F["此后持续接收新写入"]
+    E --> F
+    F --> G["缓冲是环形的，写满会覆盖最旧的"]
+    G --> H["缓冲太小 → 断线稍久就要重来一次全量"]
+```
 
 ### 1.1 主从复制的基本形态
 
@@ -175,6 +209,10 @@ redis-cli -p 6402 info replication | grep -E "role:|master_link_status:"
 # role:slave
 # master_link_status:up
 ```
+
+> 📌 **行话锚定**：本课说的"断线后能续传的那块缓冲"，官方叫 **replication backlog**（配置项 `repl-backlog-size`，默认 1 MB）。在哪遇到：`INFO replication` 的 `master_repl_offset` 与 `backlog_histlen`（两者差值就是已挤出缓冲、无法增量续传的字节数）；从库日志里的 `Partial resynchronization` vs `Full resync`；配置项 `repl-diskless-sync`。官方文档 [replication](https://redis.io/docs/latest/operate/oss_and_stack/management/replication/)。
+>
+> 📚 官方文档：[Redis replication](https://redis.io/docs/latest/operate/oss_and_stack/management/replication/) ｜ [REPLICAOF](https://redis.io/docs/latest/commands/replicaof/) ｜ [INFO](https://redis.io/docs/latest/commands/info/)
 
 ### 1.2 全量复制：完整流程
 
@@ -344,6 +382,21 @@ bash playground/prep-lesson-06-backlog.sh
 
 ## 知识点 2：哨兵故障转移
 
+> 🧭 第 2/3 步｜承接：上一步解决了"数据多留几份"，但主库真挂了，谁来发现、谁来决定顶上 → 本步：看自动切换是怎么完成的，以及它实测要多久。
+
+```mermaid
+flowchart TB
+    A["主库失联"] --> B["单个哨兵先判定它下线"]
+    B --> C["还需其他哨兵一起确认"]
+    C --> D{"赞成票够吗"}
+    D -->|"不够"| E["不做切换，继续观察"]
+    D -->|"够了，正式判定下线"| F["哨兵之间选出领头"]
+    F --> G["挑一个数据最新的副本"]
+    G --> H["把它提升为新主库"]
+    H --> I["其余副本改为跟随新主库"]
+    I --> J["客户端自动连到新主库"]
+```
+
 ### 2.1 哨兵是什么
 
 哨兵（Sentinel）是**独立的进程**，不存数据、不做代理，只做三件事：
@@ -370,6 +423,10 @@ bash playground/prep-lesson-06-backlog.sh
 > redis-server /path/to/sentinel.conf --sentinel
 > ```
 > 启动时日志会显示 `Running mode=sentinel`，可据此确认。
+
+> 📌 **行话锚定**：本课说的"先自己觉得挂了、再大家确认"，官方叫 **SDOWN（Subjectively Down，主观下线）** 与 **ODOWN（Objectively Down，客观下线）**；"赞成票门槛"叫 **quorum**。在哪遇到：哨兵日志里的 `+sdown` / `+odown ... #quorum 3/2`；配置 `sentinel monitor <name> <ip> <port> <quorum>`；`down-after-milliseconds` 决定多久判 SDOWN。官方文档 [sentinel](https://redis.io/docs/latest/operate/oss_and_stack/management/sentinel/)。
+>
+> 📚 官方文档：[Redis Sentinel](https://redis.io/docs/latest/operate/oss_and_stack/management/sentinel/) ｜ [Redis replication](https://redis.io/docs/latest/operate/oss_and_stack/management/replication/)
 
 ### 2.2 哨兵配置
 
@@ -529,6 +586,21 @@ bash playground/prep-lesson-06-sentinel2.sh
 
 ## 知识点 3：哨兵解决不了的丢数据
 
+> 🧭 第 3/3 步｜承接：上一步证明了切换能自动完成（实测 7.06 秒），但第一幕困境三那个"刚支付的订单查不到"还没解释 → 本步：承认自动切换的代价，并给出能收窄（但无法消除）窗口的手段。
+
+```mermaid
+flowchart LR
+    A["主库写入成功"] --> B["立刻回复客户端 OK"]
+    B --> C["同一时刻，改动还没送到副本"]
+    C --> D{"此刻主库挂了"}
+    D -->|"是"| E["客户端以为成功<br/>新主库上没有这条数据"]
+    D -->|"否"| F["稍后送达，一切正常"]
+    E --> G["三种缓解，都只收窄窗口"]
+    G --> H["副本太少时拒绝写入"]
+    G --> I["写入后等副本确认"]
+    G --> J["降低判定下线的等待时间"]
+```
+
 ### 3.1 核心问题：复制是异步的
 
 这是本课最重要的一句话：
@@ -552,6 +624,18 @@ bash playground/prep-lesson-06-sentinel2.sh
 如果在"返回 OK"和"到达从库"之间主库挂了——**这条已确认的写入永久丢失**。
 
 哨兵会把从库提升为新主库，但新主库从未收到过这条数据。
+
+> 📌 **行话锚定**：本课说的"异步复制导致主库返回 OK 但数据没到从库"，业界叫 **replication lag / 异步复制窗口**；两个缓解手段对应配置项 `min-replicas-to-write` 与 `min-replicas-max-lag`，以及命令 **`WAIT`**。在哪遇到：主库返回 `NOREPLICAS` 错误就是 `min-replicas-to-write` 生效了；`WAIT <numreplicas> <timeout>` 让客户端等副本确认。官方文档 [replication](https://redis.io/docs/latest/operate/oss_and_stack/management/replication/)。
+
+**三个缓解手段的对照**（本课说法 ↔ 行业叫法 ↔ 在哪遇到 ↔ 代价）：
+
+| 本课说法（人话） | 行业标准叫法 | 典型配置 / 在哪遇到 | 代价 |
+|---|---|---|---|
+| 副本不够就拒绝写 | `min-replicas-to-write` + `min-replicas-max-lag` | 主库返回 `NOREPLICAS` | 副本不足时写入直接失败，可用性下降 |
+| 写完等副本确认 | `WAIT` | `WAIT 1 1000` | 增加写入延迟，且仍不保证不丢 |
+| 缩短判定下线的等待 | `down-after-milliseconds` | 哨兵配置 | 调太小容易误判，造成不必要切换 |
+
+> 📚 官方文档：[Redis replication](https://redis.io/docs/latest/operate/oss_and_stack/management/replication/) ｜ [WAIT](https://redis.io/docs/latest/commands/wait/) ｜ [Redis Sentinel](https://redis.io/docs/latest/operate/oss_and_stack/management/sentinel/)
 
 ### 3.2 为什么 Redis 选择异步
 
@@ -987,4 +1071,4 @@ D 错——`min-replicas-to-write` 是服务端配置，但 `WAIT` 是**客户�
 
 ➡️ **下一课**：课 7：分片与集群（待编写）
 
-📚 **返回目录**：[课程目录](../../02-课程目录.md)
+📚 **返回目录**：[课程目录](../../../02-课程目录.md)

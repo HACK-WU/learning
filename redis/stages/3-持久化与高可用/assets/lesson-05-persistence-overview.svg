@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="300" viewBox="0 0 720 300" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="720" height="300" fill="#FFFFFF"/>
+  <text x="20" y="30" font-size="17" font-weight="bold" fill="#1F2937">数据只在内存里，断电了怎么办？</text>
+
+  <text x="20" y="62" font-size="13" font-weight="bold" fill="#B45309">不这么做</text>
+  <rect x="20" y="72" width="290" height="176" rx="8" fill="#FFF7ED" stroke="#FDBA74" stroke-width="1.5"/>
+  <text x="38" y="100" font-size="13" fill="#7C2D12">一切都只放在内存</text>
+  <text x="38" y="122" font-size="13" fill="#7C2D12">进程一挂就什么都不剩</text>
+  <rect x="38" y="138" width="254" height="34" rx="5" fill="#FFEDD5" stroke="#FDBA74"/>
+  <text x="52" y="160" font-size="12.5" fill="#9A3412">缓存能重建，订单不行</text>
+  <text x="38" y="196" font-size="13" fill="#7C2D12">要么全丢，要么全记</text>
+  <text x="38" y="222" font-size="13" fill="#7C2D12">没有中间地带可选</text>
+
+  <path d="M322 160 L398 160" stroke="#6B7280" stroke-width="2"/>
+  <path d="M392 154 L400 160 L392 166" fill="#6B7280"/>
+
+  <text x="410" y="62" font-size="13" font-weight="bold" fill="#047857">这么做</text>
+  <rect x="410" y="72" width="290" height="176" rx="8" fill="#ECFDF5" stroke="#6EE7B7" stroke-width="1.5"/>
+  <text x="428" y="100" font-size="13" fill="#064E3B">定时给全量拍一张快照</text>
+  <text x="428" y="122" font-size="13" fill="#064E3B">或把每一步操作记成流水</text>
+  <rect x="428" y="138" width="254" height="34" rx="5" fill="#D1FAE5" stroke="#6EE7B7"/>
+  <text x="442" y="160" font-size="12.5" fill="#065F46">按能接受的丢失量来选</text>
+  <text x="428" y="196" font-size="13" fill="#064E3B">两者还能合起来用</text>
+  <text x="428" y="222" font-size="13" fill="#064E3B">重启后照着记录恢复</text>
+
+  <text x="20" y="278" font-size="12" fill="#6B7280">代价：拍快照时持续写入，内存实测涨到 2.15 倍；记流水则会膨胀，需要定期瘦身</text>
+</svg>

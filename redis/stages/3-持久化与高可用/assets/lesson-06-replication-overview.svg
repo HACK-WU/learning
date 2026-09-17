@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="300" viewBox="0 0 720 300" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="720" height="300" fill="#FFFFFF"/>
+  <text x="20" y="30" font-size="17" font-weight="bold" fill="#1F2937">只有一台机器，它挂了服务是不是就没了？</text>
+
+  <text x="20" y="62" font-size="13" font-weight="bold" fill="#B45309">不这么做</text>
+  <rect x="20" y="72" width="290" height="176" rx="8" fill="#FFF7ED" stroke="#FDBA74" stroke-width="1.5"/>
+  <text x="38" y="100" font-size="13" fill="#7C2D12">全部身家押在一台机器上</text>
+  <text x="38" y="122" font-size="13" fill="#7C2D12">它一挂，服务直接中断</text>
+  <rect x="38" y="138" width="254" height="34" rx="5" fill="#FFEDD5" stroke="#FDBA74"/>
+  <text x="52" y="160" font-size="12.5" fill="#9A3412">只能等人发现、手动恢复</text>
+  <text x="38" y="196" font-size="13" fill="#7C2D12">半夜出事就是几十分钟不可用</text>
+  <text x="38" y="222" font-size="13" fill="#7C2D12">数据也只有一份，丢了没了</text>
+
+  <path d="M322 160 L398 160" stroke="#6B7280" stroke-width="2"/>
+  <path d="M392 154 L400 160 L392 166" fill="#6B7280"/>
+
+  <text x="410" y="62" font-size="13" font-weight="bold" fill="#047857">这么做</text>
+  <rect x="410" y="72" width="290" height="176" rx="8" fill="#ECFDF5" stroke="#6EE7B7" stroke-width="1.5"/>
+  <text x="428" y="100" font-size="13" fill="#064E3B">多放几份一样的副本</text>
+  <text x="428" y="122" font-size="13" fill="#064E3B">主库倒下，副本自动顶上</text>
+  <rect x="428" y="138" width="254" height="34" rx="5" fill="#D1FAE5" stroke="#6EE7B7"/>
+  <text x="442" y="160" font-size="12.5" fill="#065F46">数秒内自动完成切换</text>
+  <text x="428" y="196" font-size="13" fill="#064E3B">短暂的断线还能续传，不必全量</text>
+  <text x="428" y="222" font-size="13" fill="#064E3B">客户端自动连到新的主库</text>
+
+  <text x="20" y="278" font-size="12" fill="#6B7280">代价：自动切换不等于不丢数据 —— 复制是异步的，刚确认的订单可能还没到副本</text>
+</svg>

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="330" viewBox="0 0 760 330" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="760" height="330" fill="#FFFFFF"/>
+  <text x="20" y="30" font-size="17" font-weight="bold" fill="#1F2937">基础实现：把慢活丢进队列，后台慢慢做</text>
+
+  <rect x="20" y="55" width="180" height="70" rx="8" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1.5"/>
+  <text x="34" y="82" font-size="13.5" font-weight="bold" fill="#1E40AF">下单接口</text>
+  <text x="34" y="104" font-size="12.5" fill="#1E3A8A">同步写库</text>
+
+  <path d="M204 90 L268 90" stroke="#6B7280" stroke-width="2"/>
+  <path d="M262 84 L270 90 L262 96" fill="#6B7280"/>
+
+  <rect x="272" y="55" width="200" height="70" rx="8" fill="#FEF3C7" stroke="#FCD34D" stroke-width="1.5"/>
+  <text x="286" y="82" font-size="13.5" font-weight="bold" fill="#92400E">队列（一端进一端出）</text>
+  <text x="286" y="104" font-size="12.5" fill="#78350F">消息取出即消失</text>
+
+  <path d="M476 90 L540 90" stroke="#6B7280" stroke-width="2"/>
+  <path d="M534 84 L542 90 L534 96" fill="#6B7280"/>
+
+  <rect x="544" y="55" width="196" height="70" rx="8" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1.5"/>
+  <text x="558" y="82" font-size="13.5" font-weight="bold" fill="#1E40AF">一个消费者</text>
+  <text x="558" y="104" font-size="12.5" fill="#1E3A8A">阻塞等待，来了就处理</text>
+
+  <rect x="20" y="160" width="720" height="60" rx="8" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.5"/>
+  <text x="36" y="186" font-size="13" font-weight="bold" fill="#991B1B">它的问题</text>
+  <text x="36" y="208" font-size="12.5" fill="#7F1D1D">消费者拿到消息后崩溃 → 消息已不在队列，没人重试，订单短信永久丢失</text>
+
+  <rect x="20" y="240" width="720" height="60" rx="8" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.5"/>
+  <text x="36" y="266" font-size="13" font-weight="bold" fill="#166534">本步解决了什么</text>
+  <text x="36" y="288" font-size="12.5" fill="#14532D">下单接口不再被慢活拖住，用户点了"提交"立刻返回 —— 但可靠性还没保证</text>
+</svg>

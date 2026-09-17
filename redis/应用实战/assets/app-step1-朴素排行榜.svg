@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="330" viewBox="0 0 760 330" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="760" height="330" fill="#FFFFFF"/>
+  <text x="20" y="30" font-size="17" font-weight="bold" fill="#1F2937">基础实现：榜单靠重排，日活靠 Set</text>
+
+  <rect x="20" y="55" width="200" height="76" rx="8" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1.5"/>
+  <text x="34" y="82" font-size="13.5" font-weight="bold" fill="#1E40AF">实时排行榜</text>
+  <text x="34" y="104" font-size="12.5" fill="#1E3A8A">每来一票就全量重排</text>
+  <text x="34" y="122" font-size="12" fill="#1E3A8A">再存成字符串</text>
+
+  <rect x="250" y="55" width="200" height="76" rx="8" fill="#FEF3C7" stroke="#FCD34D" stroke-width="1.5"/>
+  <text x="264" y="82" font-size="13.5" font-weight="bold" fill="#92400E">日活统计</text>
+  <text x="264" y="104" font-size="12.5" fill="#78350F">每个访客存进一个 Set</text>
+  <text x="264" y="122" font-size="12" fill="#78350F">去重靠 Set 自身</text>
+
+  <rect x="480" y="55" width="260" height="76" rx="8" fill="#F5F3FF" stroke="#C4B5FD" stroke-width="1.5"/>
+  <text x="494" y="82" font-size="13.5" font-weight="bold" fill="#5B21B6">每天一个 Set</text>
+  <text x="494" y="104" font-size="12.5" fill="#4C1D95">成员约 32 字节</text>
+  <text x="494" y="122" font-size="12" fill="#4C1D95">存 30 天做趋势</text>
+
+  <rect x="20" y="160" width="720" height="76" rx="8" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.5"/>
+  <text x="36" y="186" font-size="13" font-weight="bold" fill="#991B1B">它的问题</text>
+  <text x="36" y="208" font-size="12.5" fill="#7F1D1D">① 每票全量重排，数据一多就卡；取 Top N 还要自己截断</text>
+  <text x="36" y="228" font-size="12.5" fill="#7F1D1D">② 1 亿日活 × 30 天 ≈ 3 GB × 30 —— 内存先撑不住</text>
+
+  <rect x="20" y="256" width="720" height="54" rx="8" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.5"/>
+  <text x="36" y="280" font-size="13" font-weight="bold" fill="#166534">本步解决了什么</text>
+  <text x="36" y="300" font-size="12.5" fill="#14532D">功能都实现了 —— 但榜单的排序代价与日活的内存代价都没付得起</text>
+</svg>

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="360" viewBox="0 0 760 360" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="760" height="360" fill="#FFFFFF"/>
+  <text x="20" y="30" font-size="17" font-weight="bold" fill="#1F2937">综合实现：消息留痕可找回 + 对象按访问模式存</text>
+
+  <rect x="20" y="55" width="180" height="70" rx="8" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1.5"/>
+  <text x="34" y="82" font-size="13.5" font-weight="bold" fill="#1E40AF">下单接口</text>
+  <text x="34" y="104" font-size="12.5" fill="#1E3A8A">同步写库</text>
+
+  <path d="M204 90 L268 90" stroke="#6B7280" stroke-width="2"/>
+  <path d="M262 84 L270 90 L262 96" fill="#6B7280"/>
+
+  <rect x="272" y="48" width="200" height="86" rx="8" fill="#DCFCE7" stroke="#4ADE80" stroke-width="2.5"/>
+  <text x="286" y="74" font-size="13.5" font-weight="bold" fill="#166534">流（消息读了不删）</text>
+  <text x="286" y="96" font-size="12.5" fill="#14532D">按时间序编号，可回溯</text>
+  <text x="286" y="118" font-size="12" font-weight="bold" fill="#15803D">新增：留痕</text>
+
+  <path d="M476 90 L540 90" stroke="#6B7280" stroke-width="2"/>
+  <path d="M534 84 L542 90 L534 96" fill="#6B7280"/>
+
+  <rect x="544" y="48" width="196" height="86" rx="8" fill="#DCFCE7" stroke="#4ADE80" stroke-width="2.5"/>
+  <text x="558" y="74" font-size="13.5" font-weight="bold" fill="#166534">消费组 + 待确认清单</text>
+  <text x="558" y="96" font-size="12.5" fill="#14532D">多人分摊，各拿各的</text>
+  <text x="558" y="118" font-size="12" font-weight="bold" fill="#15803D">新增：可转移</text>
+
+  <rect x="272" y="158" width="468" height="52" rx="8" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.5"/>
+  <text x="288" y="182" font-size="12.5" font-weight="bold" fill="#166534">新增元素：待确认清单</text>
+  <text x="288" y="202" font-size="12.5" fill="#14532D">谁拿走了没确认，一目了然；崩溃后可转移给别人继续处理</text>
+
+  <rect x="20" y="232" width="720" height="52" rx="8" fill="#FFFBEB" stroke="#FCD34D" stroke-width="1.5"/>
+  <text x="36" y="256" font-size="12.5" font-weight="bold" fill="#92400E">顺带解决：对象怎么存</text>
+  <text x="36" y="276" font-size="12.5" fill="#78350F">要整存整取 → 存字符串；要单独改字段 / 对数字加一 → 存成表</text>
+
+  <rect x="20" y="300" width="720" height="40" rx="8" fill="#ECFDF5" stroke="#6EE7B7" stroke-width="1.5"/>
+  <text x="36" y="326" font-size="12.5" fill="#065F46">本步解决了什么：处理失败的消息能找回，且分摊不重复 —— 代价是内存更贵（约为普通队列的 3.46 倍）</text>
+</svg>

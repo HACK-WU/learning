@@ -9,6 +9,9 @@
 | 安装 Redis（各平台/容器） | [operate/oss_and_stack/install/install-stack/index.html.md](https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/index.html.md) | 安装 | |
 | 查 redis.conf 配置项（网络/内存/持久化） | [operate/oss_and_stack/management/config/index.html.md](https://redis.io/docs/latest/operate/oss_and_stack/management/config/index.html.md) | 配置 | |
 | 理解持久化（RDB vs AOF 与取舍） | [operate/oss_and_stack/management/persistence/index.html.md](https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/index.html.md) | 持久化 | |
+| 理解主从复制（全量/增量/backlog） | [operate/oss_and_stack/management/replication/index.html.md](https://redis.io/docs/latest/operate/oss_and_stack/management/replication/index.html.md) | 复制、replication | 2026-09-17 回补，实测 200 |
+| 用哨兵做高可用与故障转移 | [operate/oss_and_stack/management/sentinel/index.html.md](https://redis.io/docs/latest/operate/oss_and_stack/management/sentinel/index.html.md) | 哨兵、sentinel | 2026-09-17 回补，实测 200 |
+| 用集群分片（哈希槽/扩缩容） | [operate/oss_and_stack/management/scaling/index.html.md](https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/index.html.md) | 集群、scaling | 2026-09-17 回补，实测 200 |
 | 配 ACL 访问控制（用户/命令权限/键模式） | [operate/oss_and_stack/management/security/acl/index.html.md](https://redis.io/docs/latest/operate/oss_and_stack/management/security/acl/index.html.md) | acl | |
 | Redis Cloud 控制台运维 | [operate/rc/index.html.md](https://redis.io/docs/latest/operate/rc/index.html.md) | cloud | |
 | Cloud 备份与导出 | [operate/rc/databases/back-up-data/index.html.md](https://redis.io/docs/latest/operate/rc/databases/back-up-data/index.html.md) | 备份 | |

@@ -3,6 +3,7 @@
 > 阶段 3《持久化与高可用》第 1 课
 > 前置：课 4《Set、ZSet 与特殊类型》(Set 交并差、ZSet 双结构、Bitmap/HLL/Geo)
 > 环境：WSL Ubuntu 24.04 + Redis 8.10.1（本机实测，核查于 2026-09）
+> 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：redis.io/docs/latest/operate/oss_and_stack/management/persistence/、management/config/）
 
 ---
 
@@ -43,6 +44,10 @@
 你开启了 AOF 保证数据安全。运行半年后，AOF 文件膨胀到 50 GB。某次宕机重启，Redis 花了 40 分钟重放命令才恢复服务。
 
 为什么 AOF 会这么大？因为它记录**每一条写命令**——一个 key 被修改 1 万次，AOF 里就有 1 万条记录，尽管只有最后一条有意义。
+
+> 📌 **一句话本质**：把"内存数据断电即失"变成"按你能接受的数据丢失量，用快照或日志把数据落到磁盘"。
+>
+> ⚖️ **处境对照**：不这么做——进程一挂，内存里的东西全没，缓存可以重建、**订单不行**。这么做——RDB 定时拍快照、AOF 逐条记命令，重启能恢复。但代价是可量化的：RDB 快照期间持续写入实测内存涨到 **2.15x**（最坏不止 2 倍，本课测到过 3.37x），AOF 则会膨胀到"改 1 万次留 1 万条"（实测 9.41 MB，重写后压到 **0.00 MB**）——**没有白来的安全，只有按丢失量换吞吐的取舍**。
 
 ---
 
@@ -118,7 +123,37 @@ AOF 文件里是：
 
 ## 第三幕：层层揭示 —— 三个知识点
 
+### 一眼全局图（进入细节前先看一眼）
+
+![课 5 一眼全局图](../assets/lesson-05-persistence-overview.svg)
+
+> 看图指引：左边是"一切只在内存、断电即失"，右边是"拍快照"与"记流水"两条落盘路子。图只回答一件事：**按你能接受丢多少，该怎么选**。
+
+### 本课地图（分几步走）
+
+| 步骤 | 这一步要解决什么 | 对应知识点 |
+|------|------------------|-----------|
+| 第 1 步 | 先看定时拍全量快照这条路，代价在哪 | 知识点 1：RDB fork 与写时复制 |
+| 第 2 步 | 再看逐条记命令这条路，以及它为什么会膨胀 | 知识点 2：AOF 写后日志与刷盘策略 |
+| 第 3 步 | 最后把两条路摆在一起，学会怎么选 | 知识点 3：持久化选型决策 |
+
 ## 知识点 1：RDB fork 与写时复制
+
+> 🧭 第 1/3 步｜承接：第一幕的困境——内存数据断电即失，缓存能重建、订单不行 → 本步：先看"定时给全量拍快照"这条路，以及它号称不阻塞、实则有例外的真相。
+
+```mermaid
+flowchart TB
+    A["主进程收到拍照指令"] --> B["fork 子进程"]
+    B --> C{"这一瞬间"}
+    C -->|"复制页表，主线程卡住"| D["数据集越大，卡得越久"]
+    B --> E["子进程写快照文件"]
+    E --> F["主进程继续服务，正常写入"]
+    F --> G{"有数据被改动"}
+    G -->|"是"| H["被改动的页复制一份<br/>子进程用旧页，主进程用新页"]
+    G -->|"否"| I["共享同一份，不额外占内存"]
+    H --> J["持续写入时内存上涨"]
+    I --> J
+```
 
 ### 1.1 RDB 是什么
 
@@ -148,6 +183,10 @@ redis-cli info persistence | grep rdb_bgsave_in_progress
 
 redis-cli lastsave   # 最后成功保存的 Unix 时间戳
 ```
+
+> 📌 **行话锚定**：本课说的"被改动的页才复制"，官方与业界都叫 **COW（Copy-On-Write，写时复制）**；"拍照"对应 **RDB / snapshotting**。在哪遇到：主库日志里的 `Background saving started`；系统侧 `/sys/kernel/mm/transparent_hugepage/enabled`（Redis 官方建议设为 `never`）；`vm.overcommit_memory` 配置项；监控上 fork 期间内存上涨就是 COW 在起作用。官方文档 [persistence](https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/)。
+>
+> 📚 官方文档：[Redis persistence](https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/) ｜ [BGSAVE](https://redis.io/docs/latest/commands/bgsave/) ｜ [config](https://redis.io/docs/latest/operate/oss_and_stack/management/config/)
 
 ### 1.2 自动触发：save 配置
 
@@ -269,6 +308,22 @@ bash playground/prep-lesson-05-cow3.sh
 
 ## 知识点 2：AOF 写后日志与刷盘策略
 
+> 🧭 第 2/3 步｜承接：上一步的快照是"隔一段时间拍一张"，两次之间断电就会丢——困境一要的正是"少丢一点" → 本步：看逐条记命令这条路，以及它为什么会膨胀到 50 GB。
+
+```mermaid
+flowchart TB
+    A["客户端发来写命令"] --> B["先改内存里的数据"]
+    B --> C["再把命令追加进日志"]
+    C --> D{"什么时候真正落到磁盘"}
+    D -->|"每条都落"| E["最安全，但最慢"]
+    D -->|"每秒批量落一次"| F["折中：最多丢一秒"]
+    D -->|"交给操作系统决定"| G["最快，但丢多少不确定"]
+    B --> H["同一条数据被反复改"]
+    H --> I["日志里堆满无用中间步骤"]
+    I --> J["定期重写：按当前状态重记一份"]
+    J --> K["体积大幅缩小"]
+```
+
 ### 2.1 写后日志：先执行，再记录
 
 AOF（Append Only File）记录每一条**写命令**。关键在于记录的时机——
@@ -297,6 +352,18 @@ SET badkey "before"        # 成功，写入 AOF
 RPUSH badkey "x"           # 报错 WRONGTYPE，执行失败
 # AOF 中 RPUSH 出现次数：0  <-- 失败的命令不记录
 ```
+
+> 📌 **行话锚定**：本课说的"落盘时机"，标准叫法是 **appendfsync 刷盘策略**，对应配置项 `appendfsync`。在哪遇到：`redis.conf` 的 `appendfsync`；`INFO persistence` 里的 `aof_last_write_status`；官方文档 [persistence](https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/) 的 "AOF durability" 一节。
+
+**三种刷盘策略的对照**（本课说法 ↔ 行业叫法 ↔ 在哪遇到 ↔ 代价）：
+
+| 本课说法（人话） | 行业标准叫法 | 典型配置 / 在哪遇到 | 代价 |
+|---|---|---|---|
+| 每条都落盘 | `appendfsync always` | 每条写命令都刷盘 | 最安全，吞吐明显下降 |
+| 每秒批量落一次 | `appendfsync everysec` | 后台每秒刷一次（**默认**） | 折中，最多丢约 1 秒 |
+| 交给系统决定 | `appendfsync no` | 由操作系统决定何时刷 | 最快，丢多少不确定 |
+
+> 📚 官方文档：[Redis persistence](https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/) ｜ [BGREWRITEAOF](https://redis.io/docs/latest/commands/bgrewriteaof/)
 
 ### 2.2 Redis 7+ 的 multi-part AOF 结构
 
@@ -448,6 +515,21 @@ SET aof:only "I-am-AOF-only"    # 只有 AOF 有这条
 
 ## 知识点 3：持久化选型决策
 
+> 🧭 第 3/3 步｜承接：两条路各讲完了——一个怕丢、一个怕大，看起来必须二选一 → 本步：把它们摆在一起量化对比，给出按"能接受丢多少"来选的判断依据（还能两者合用）。
+
+```mermaid
+flowchart TB
+    A["能接受丢多少数据"] --> B{"一点都不能丢"}
+    B -->|"是"| C["逐条记日志 + 每条落盘<br/>代价：明显变慢"]
+    B -->|"能丢几秒"| D["逐条记日志 + 每秒落盘"]
+    B -->|"能丢几分钟"| E["定时拍快照"]
+    B -->|"丢了也能重建"| F["可以不落盘"]
+    C --> G["仍然建议叠加快照<br/>重启恢复更快"]
+    D --> G
+    E --> G
+    F --> H["仅用于纯缓存场景"]
+```
+
 ### 3.1 四种方案的量化对比
 
 本课实测（30 万 key 数据集）：
@@ -460,6 +542,19 @@ SET aof:only "I-am-AOF-only"    # 只有 AOF 有这条
 | **混合（推荐）** | **6.94 MB** | **131 ms** | **1 秒（everysec）** | 绝大多数生产场景 |
 
 **混合持久化是最优解**：它同时拿到了 RDB 的体积/速度优势和 AOF 的低丢失窗口。
+
+> 📌 **行话锚定**：本课说的"快照 + 日志合用"，官方叫 **AOF with RDB preamble**（配置项 `aof-use-rdb-preamble`，Redis 7 起默认 `yes`）。在哪遇到：`redis.conf` 的 `aof-use-rdb-preamble`；`appendonlydir/` 下同时存在 `*.rdb` 与 `*.aof` 文件；官方文档 [persistence](https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/)。
+
+**四种落盘方案的对照**（本课说法 ↔ 行业叫法 ↔ 在哪遇到 ↔ 代价）：
+
+| 本课说法（人话） | 行业标准叫法 | 典型配置 / 在哪遇到 | 代价 |
+|---|---|---|---|
+| 只拍快照 | RDB only | `appendonly no` + `save` | 两次快照之间断电会丢 |
+| 只记日志 | AOF only | `appendonly yes` | 文件会膨胀，需定期重写 |
+| 两者合用 | RDB+AOF（hybrid / RDB preamble） | `appendonly yes` + `aof-use-rdb-preamble yes` | 恢复快且丢得少，结构略复杂 |
+| 都不开 | no persistence | 仅纯缓存场景 | 断电即失 |
+
+> 📚 官方文档：[Redis persistence](https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/) ｜ [config](https://redis.io/docs/latest/operate/oss_and_stack/management/config/)
 
 ### 3.2 决策树
 
@@ -834,4 +929,4 @@ A 错——实测混合 6.94 MB，纯 AOF 13.71 MB，**混合反而更小**，�
 
 ➡️ **下一课**：课 6：主从复制与哨兵（待编写）
 
-📚 **返回目录**：[课程目录](../../02-课程目录.md)
+📚 **返回目录**：[课程目录](../../../02-课程目录.md)

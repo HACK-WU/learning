@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="330" viewBox="0 0 760 330" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="760" height="330" fill="#FFFFFF"/>
+  <text x="20" y="30" font-size="17" font-weight="bold" fill="#1F2937">基础实现：加个缓存，查不到就回源</text>
+
+  <rect x="20" y="55" width="200" height="70" rx="8" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1.5"/>
+  <text x="34" y="80" font-size="13.5" font-weight="bold" fill="#1E40AF">应用</text>
+  <text x="34" y="102" font-size="12.5" fill="#1E3A8A">先查缓存，没有再查库</text>
+
+  <path d="M224 90 L288 90" stroke="#6B7280" stroke-width="2"/>
+  <path d="M282 84 L290 90 L282 96" fill="#6B7280"/>
+
+  <rect x="292" y="55" width="180" height="70" rx="8" fill="#FEF3C7" stroke="#FCD34D" stroke-width="1.5"/>
+  <text x="306" y="80" font-size="13.5" font-weight="bold" fill="#92400E">缓存</text>
+  <text x="306" y="102" font-size="12.5" fill="#78350F">命中就返回</text>
+
+  <path d="M476 90 L540 90" stroke="#6B7280" stroke-width="2" stroke-dasharray="5 4"/>
+  <path d="M534 84 L542 90 L534 96" fill="#6B7280"/>
+
+  <rect x="544" y="55" width="196" height="70" rx="8" fill="#F5F3FF" stroke="#C4B5FD" stroke-width="1.5"/>
+  <text x="558" y="80" font-size="13.5" font-weight="bold" fill="#5B21B6">数据库</text>
+  <text x="558" y="102" font-size="12.5" fill="#4C1D95">未命中就回源</text>
+
+  <rect x="20" y="155" width="720" height="92" rx="8" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.5"/>
+  <text x="36" y="181" font-size="13" font-weight="bold" fill="#991B1B">它的问题</text>
+  <text x="36" y="203" font-size="12.5" fill="#7F1D1D">① 查不存在的数据：缓存永远填不上，每次都回源（穿透）</text>
+  <text x="36" y="223" font-size="12.5" fill="#7F1D1D">② 热点 key 过期瞬间：成千上万请求同时回源同一条数据（击穿）</text>
+  <text x="36" y="243" font-size="12.5" fill="#7F1D1D">③ 大批 key 同时过期：数据库承受的是整个缓存层的流量（雪崩）</text>
+
+  <rect x="20" y="267" width="720" height="43" rx="8" fill="#F0FDF4" stroke="#86EFAC" stroke-width="1.5"/>
+  <text x="36" y="295" font-size="12.5" fill="#14532D">本步解决了什么：命中时确实快了 —— 但三种失效场景一个都没防住</text>
+</svg>

@@ -3,6 +3,7 @@
 > 阶段 4《分布式与生产实践》第 2 课
 > 前置：课 7《分片与集群》(哈希槽与 CRC16、集群伸缩与重定向、多 key 与 Lua 限制)
 > 环境：WSL Ubuntu 24.04 + Redis 8.10.1（本机实测，核查于 2026-09）
+> 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：redis.io/docs/latest/develop/reference/eviction/、develop/use/patterns/distributed-locks/）
 
 ---
 
@@ -76,6 +77,10 @@ GET /user/abc
 | 影响范围 | 分散的无效 key | **单个**热点 key | **大批** key / 整个缓存层 |
 | 触发原因 | 恶意攻击、参数非法 | 热点 key 恰好过期 | 批量 key 同时过期、Redis 宕机 |
 | 一句话 | 查无此物，两头都空 | 单点热点，过期瞬间 | 集体失效，全军覆没 |
+
+> 📌 **一句话本质**：把"加个缓存能跑就行"变成"提前想清楚三种失效场景，并为每种备好对应的防线"。
+>
+> ⚖️ **处境对照**：不这么做——凌晨整点几十万 key 集体过期，或缓存层整体宕机，数据库承受的是**整个缓存层的流量**，直接被打穿；随机 id 攻击下空值缓存完全失效（实测第一轮就把缓存从 500 撑到 **2499 个垃圾 key**）。这么做——穿透用布隆过滤器挡（实测声明 0.1% 实际误判 **0.056%**、真实 id **误拦 0 次**）、击穿用互斥锁或逻辑过期、雪崩用随机 TTL 打散。代价是：这些防线本身有成本（布隆不支持删除，要删除得换布谷过滤器），且缓存与数据库的一致性**没有银弹**——只有 TTL、重试、binlog 订阅这些兜底。
 
 ---
 
@@ -172,7 +177,35 @@ Redis 出厂配置的淘汰策略是 `noeviction`——内存满了**不淘汰**
 
 ## 第三幕：层层揭示 —— 三个知识点
 
+### 一眼全局图（进入细节前先看一眼）
+
+![课 8 一眼全局图](../assets/lesson-08-cache-overview.svg)
+
+> 看图指引：左边是缓存"加上了却照样被打穿"的三种情形，右边是各自的防线。图只回答一件事：**为什么加了缓存，数据库还是扛不住**。
+
+### 本课地图（分几步走）
+
+| 步骤 | 这一步要解决什么 | 对应知识点 |
+|------|------------------|-----------|
+| 第 1 步 | 先分清三种失效场景，别用错药 | 知识点 1：穿透 / 击穿 / 雪崩 |
+| 第 2 步 | 再解决"改了库，缓存怎么办"的一致性难题 | 知识点 2：缓存与数据库一致性 |
+| 第 3 步 | 最后定好过期与内存满了该丢谁 | 知识点 3：内存淘汰与过期策略 |
+
 ## 知识点 1：穿透 / 击穿 / 雪崩
+
+> 🧭 第 1/3 步｜承接：第一幕的三个凌晨三点——查无此物、热点过期、整点集体失效，它们成因不同却常被混为一谈 → 本步：先把三种失效分清楚，因为用错药比不吃药更糟。
+
+```mermaid
+flowchart TB
+    A["请求没命中缓存，打到了数据库"] --> B{"数据库里有没有这条数据"}
+    B -->|"根本不存在"| C["穿透：查无此物<br/>每次都要白跑一趟数据库"]
+    B -->|"有"| D{"失效范围有多大"}
+    D -->|"就一个热点"| E["击穿：过期瞬间<br/>大量请求同时涌向一条数据"]
+    D -->|"一大批 / 整个缓存层"| F["雪崩：集体失效<br/>数据库承受的是全量流量"]
+    C --> G["门口拦掉无效请求"]
+    E --> H["只允许一个去重建"]
+    F --> I["过期时间打散 + 缓存层高可用"]
+```
 
 ### 1.1 穿透：数据不存在，缓存永远填不上
 
@@ -274,6 +307,18 @@ DB 查询次数     : 3          ← 只有误判的 3 次穿透
 
 **生产推荐组合**：参数校验（最外层）→ 布隆过滤器（拦随机 id）→ 缓存空值（兜底重复 id）。
 
+> 📌 **行话锚定**：这三种故障业界通用叫法是 **cache penetration（穿透）/ cache breakdown 或 hot-key invalid（击穿）/ cache avalanche（雪崩）**。在哪遇到：监控上命中率骤降 + 数据库 QPS 飙升；`INFO stats` 的 `keyspace_misses` 持续增长（穿透特征）；大促前压测报告里的"缓存失效演练"。官方文档 [eviction](https://redis.io/docs/latest/develop/reference/eviction/) 与 [distributed-locks](https://redis.io/docs/latest/develop/use/patterns/distributed-locks/)。
+
+**三种失效的对照**（本课说法 ↔ 行业叫法 ↔ 在哪遇到 ↔ 代价）：
+
+| 本课说法（人话） | 行业标准叫法 | 典型配置 / 在哪遇到 | 代价 |
+|---|---|---|---|
+| 查无此物，每次都打库 | cache penetration（穿透） | `keyspace_misses` 持续涨；空值缓存 / 布隆过滤器 | 空值缓存会堆积垃圾 key，布隆不支持删除 |
+| 单个热点过期瞬间 | cache breakdown（击穿） | 某个 key 的 QPS 尖刺；互斥锁 / 逻辑过期 | 加锁会降低并发，逻辑过期有短暂不一致 |
+| 大批同时失效 | cache avalanche（雪崩） | 整批 key 同时过期；随机 TTL / 多级缓存 | TTL 打散会让缓存更新时机不可控 |
+
+> 📚 官方文档：[Redis eviction](https://redis.io/docs/latest/develop/reference/eviction/) ｜ [Distributed locks](https://redis.io/docs/latest/develop/use/patterns/distributed-locks/)
+
 ### 1.2 击穿：热点 key 过期的那一瞬间
 
 **根因**：缓存 miss 之后的"重建"动作没有被并发控制。所有线程同时发现缓存没了，同时去重建。
@@ -283,15 +328,27 @@ DB 查询次数     : 3          ← 只有误判的 3 次穿透
 #### 解法一：互斥锁（SET NX）
 
 ```python
+import uuid
+import threading
+
+# 释放锁：必须用 Lua 保证「读取 value + 比对 + 删除」三步原子
+UNLOCK_LUA = """
+if redis.call("get", KEYS[1]) == ARGV[1] then
+    return redis.call("del", KEYS[1])
+else
+    return 0
+end
+"""
+
 v = redis.get(key)
 if v is None:
-    # 原子抢锁：只有抢到的去重建
-    if redis.set('lock:'+key, '1', ex=10, nx=True):
+    token = str(uuid.uuid4())          # ① 每个线程唯一 token，不能写死 '1'
+    if redis.set('lock:'+key, token, ex=10, nx=True):
         try:
             val = db.get(key)
             redis.set(key, val, ex=300)
         finally:
-            redis.delete('lock:'+key)
+            redis.eval(UNLOCK_LUA, 1, 'lock:'+key, token)   # ② 只删自己的锁
     else:
         time.sleep(0.05)
         return redis.get(key)      # 重试读缓存
@@ -307,6 +364,35 @@ DB 瞬时最大并发 : 1        ← 从 106 降到 1
 ```
 
 **必须用 `SET key val NX EX` 一条命令完成加锁+超时**，不能分两步（`SETNX` 然后 `EXPIRE`）。分两步的话，加锁后崩溃会导致锁永不释放——死锁。
+
+**⚠️ 比加锁更常写错的是解锁：不能裸 `DEL`。**
+
+很多人写成 `redis.set('lock:'+key, '1', ex=10, nx=True)` 配一个 `finally: redis.delete('lock:'+key)`。这看起来"加了锁也释放了锁"，但它会**删掉别人持有的锁**。本机实测（脚本 `playground/prep-lesson-08-lockfix.sh`）：
+
+```
+① A 加锁(value='1', TTL 1s)      -> 锁值 = 1
+② A 的业务执行超时（sleep 1.5s）  -> TTL = -2，锁已自动过期
+③ B 抢到锁(value 同样是 '1')      -> 锁值 = 1，TTL = 10
+④ A 执行完毕，finally 里裸 DEL    -> 返回 1，删掉了 B 的锁
+   现在 GET lock:order = (nil)
+   C 再抢锁 -> 成功              ← 本应失败！互斥完全失效
+```
+
+**失效链路**：A 加锁 → A 执行超过 TTL → 锁自动过期 → B 加锁 → A 完成 → A 删掉 B 的锁 → C 也能加锁。**两个线程同时持有"同一把锁"**，互斥形同虚设，而代码里没有任何报错。
+
+改成「随机 token + Lua 比对再删」后，同一场景实测：
+
+```
+① 锁属于 B：B-uuid-bbbb
+② A 用 Lua 释放（ARGV[1] = A 自己的 token）-> 返回 0，没删
+   锁仍是 B-uuid-bbbb                     ← 未被误删
+③ B 自己释放                              -> 返回 1，正常删除
+```
+
+**为什么必须用 Lua 而不是"先 GET 再 DEL"**：`GET` 返回自己的 token、判断相等、再 `DEL`——这三步之间锁可能刚好过期并被别人抢走，仍然会误删。Lua 脚本在 Redis 里**整体原子执行**，才能杜绝这个窗口。
+
+> 📌 **TTL 没有根治这个问题**：把 TTL 调大只能降低概率，A 仍可能因 GC 停顿、网络抖动而超时。官方 [distributed-locks](https://redis.io/docs/latest/develop/use/patterns/distributed-locks/) 文档明确要求"随机 value + 比对后删除"。
+> 真正严格的方案还要处理"业务没执行完锁就过期"，生产库（如 Redisson）用 **watchdog 自动续期**；Redis 作者也指出分布式锁在"客户端长时间暂停"下存在根本性困难，对强一致场景建议加 **fencing token**（递增序号，由资源侧校验）。这些超出本课范围，但你要知道**上面这版不是终点**。
 
 **代价**：未抢到锁的线程要等待或重试，高并发下会占用大量线程资源。
 
@@ -325,8 +411,10 @@ obj = json.loads(v)
 if obj['expire_at'] > time.time():
     return obj['value']                   # 未过期，直接返回
 # 已过期：抢锁异步刷新，本线程先返回旧值
-if redis.set('lock:'+key, '1', ex=10, nx=True):
-    threading.Thread(target=refresh, args=(key,)).start()
+# 同样要用随机 token（原因见上一节"不能裸 DEL"），不能写死 '1'
+token = str(uuid.uuid4())
+if redis.set('lock:'+key, token, ex=10, nx=True):
+    threading.Thread(target=refresh, args=(key, token)).start()
 return obj['value']                       # 返回旧值，不阻塞
 ```
 
@@ -451,6 +539,22 @@ redis.set(key, val, ex=ttl)
 
 ## 知识点 2：缓存与数据库一致性
 
+> 🧭 第 2/3 步｜承接：上一步挡住了"查不到"的流量，但还有个更隐蔽的问题——数据库改了，缓存里的旧数据怎么办 → 本步：直面一致性难题，并接受"没有银弹"这个结论。
+
+```mermaid
+flowchart TB
+    A["要更新数据"] --> B{"先动缓存，还是先动库"}
+    B -->|"先改库再删缓存"| C["仍有极短的不一致窗口"]
+    B -->|"先删缓存再改库"| D["窗口更长，还可能回填旧值"]
+    C --> E["兜底一：设较短过期时间"]
+    C --> F["兜底二：删完再删一次"]
+    C --> G["兜底三：订阅数据库变更来清理"]
+    D --> E
+    E --> H["都要接受：短暂不一致无法彻底消除"]
+    F --> H
+    G --> H
+```
+
 ### 2.1 Cache Aside：事实上的标准模式
 
 先说清楚标准做法，因为后面所有讨论都基于它。
@@ -473,6 +577,19 @@ redis.set(key, val, ex=ttl)
 ```
 
 **为什么是"删缓存"而不是"更新缓存"？** 这个问题 2.5 节专门讲，先记住结论：**删除比更新安全**。
+
+> 📌 **行话锚定**：本课说的"先改库再删缓存"，业界叫 **Cache Aside Pattern**（也叫 lazy loading / read-through 之外的旁路缓存）；"删完再删一次"叫 **delayed double delete（延迟双删）**；订阅数据库变更来清理对应 **CDC / binlog 订阅**。在哪遇到：代码里的更新顺序；`canal` / `Debezium` 这类订阅组件；官方文档 [distributed-locks](https://redis.io/docs/latest/develop/use/patterns/distributed-locks/) 讲到锁的正确释放方式。
+
+**一致性方案的对照**（本课说法 ↔ 行业叫法 ↔ 在哪遇到 ↔ 代价）：
+
+| 本课说法（人话） | 行业标准叫法 | 典型配置 / 在哪遇到 | 代价 |
+|---|---|---|---|
+| 先改库再删缓存 | Cache Aside（update DB then delete cache） | 最常见的实现顺序 | 仍有极短的不一致窗口 |
+| 先删缓存再改库 | delete cache then update DB | 部分老代码这么写 | 窗口更长，还可能回填旧值 |
+| 删完再删一次 | delayed double delete | 第二次删延迟数百毫秒 | 增加一次请求，仍非强一致 |
+| 订阅变更来清理 | CDC / binlog 订阅 | `canal` / `Debezium` | 引入外部组件，运维复杂度上升 |
+
+> 📚 官方文档：[Distributed locks](https://redis.io/docs/latest/develop/use/patterns/distributed-locks/) ｜ [Redis transactions](https://redis.io/docs/latest/develop/interact/transactions/)
 
 ### 2.2 两种写顺序，都有不一致窗口
 
@@ -657,6 +774,22 @@ Canal：订阅 MySQL binlog，感知到数据变更
 
 ## 知识点 3：内存淘汰与过期策略
 
+> 🧭 第 3/3 步｜承接：前面都在防"缓存没命中"，还剩最后一个问题——内存总有满的一天，以及设了过期的数据到底什么时候真被清掉 → 本步：分清"过期删除"与"内存淘汰"两件事，并避开那个会让策略静默失效的陷阱。
+
+```mermaid
+flowchart TB
+    A["内存里的 key"] --> B{"设了过期时间吗"}
+    B -->|"设了"| C["到期后未必立刻清走"]
+    C --> D["访问时才发现过期 → 顺手清掉"]
+    C --> E["定期抽样清理一批"]
+    B -->|"没设"| F["只能等内存不够时被挑走"]
+    A --> G{"内存达到上限了吗"}
+    G -->|"是"| H["按策略挑 key 淘汰"]
+    H --> I{"策略只看设了过期的 key"}
+    I -->|"是，但没人设过期"| J["无 key 可挑，退化为拒绝写入"]
+    I -->|"否，所有 key 都可挑"| K["正常淘汰"]
+```
+
 ### 3.1 先分清两件事：过期删除 vs 内存淘汰
 
 这是最高频的混淆点，两者**目标不同、触发条件不同**：
@@ -667,6 +800,10 @@ Canal：订阅 MySQL binlog，感知到数据变更
 | 触发条件 | key 的 TTL 到期 | 已用内存 ≥ `maxmemory` |
 | 作用范围 | **只处理设了 TTL 的 key** | 按策略可能是全部 key |
 | 关系 | 第一道防线 | 兜底（过期清理后仍超限才触发） |
+
+> 📌 **行话锚定**：本课说的"内存满了挑谁删"，官方叫 **eviction policy（淘汰策略）**，用 `maxmemory-policy` 配置；"过期删除"对应 **expiration（惰性删除 + 定期删除）**——两者是不同机制，别混。在哪遇到：`INFO stats` 的 `evicted_keys`；`maxmemory-policy` 配置项；官方文档 [eviction](https://redis.io/docs/latest/develop/reference/eviction/) 列出了全部 8 种策略。特别注意 `volatile-*` 组在没有任何 key 设 TTL 时会退化为 `noeviction`。
+>
+> 📚 官方文档：[Redis eviction（8 种策略）](https://redis.io/docs/latest/develop/reference/eviction/) ｜ [EXPIRE](https://redis.io/docs/latest/commands/expire/) ｜ [MEMORY](https://redis.io/docs/latest/commands/memory/)
 
 ### 3.2 过期删除：惰性 + 定期，两条路径
 
@@ -1135,6 +1272,14 @@ GET 一次后  : DBSIZE=2  ← 惰性删除生效
 **重点观察**：场景 A 和场景 B 的对比。LRU 的弱点只在"批量冲刷"时暴露，稳定负载下它和 LFU 一样好。
 
 > ⚠️ 内存实验使用独立端口 7102 并会多次重启该实例；惰性删除实验用 7103 且需要 `--enable-debug-command local`。
+
+### 4.2 应用实战：把本课知识点用起来
+
+> 本课三个知识点合起来解决一个真实场景：**商品详情页 QPS 高，加一层缓存，还要保证不被无效请求打穿、热点失效时不炸、整批 key 不同时过期**。
+>
+> 完整演练见 [应用实战 08：商品详情缓存](../../../应用实战/08-商品详情缓存.md)——从"查不到就回源的裸缓存"走到"布隆过滤器 + 互斥锁 + TTL 打散的三道防线"，含可直接运行的代码与分步设计图。
+>
+> 回目录：[应用实战索引](../../../应用实战/INDEX.md)
 
 ---
 

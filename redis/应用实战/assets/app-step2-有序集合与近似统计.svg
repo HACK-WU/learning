@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="360" viewBox="0 0 760 360" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="760" height="360" fill="#FFFFFF"/>
+  <text x="20" y="30" font-size="17" font-weight="bold" fill="#1F2937">综合实现：榜单交给有序结构，日活改用近似计数</text>
+
+  <rect x="20" y="55" width="220" height="90" rx="8" fill="#DCFCE7" stroke="#4ADE80" stroke-width="2.5"/>
+  <text x="34" y="82" font-size="13.5" font-weight="bold" fill="#166534">实时排行榜</text>
+  <text x="34" y="104" font-size="12.5" fill="#14532D">改成有序集合：写入即排序</text>
+  <text x="34" y="124" font-size="12" font-weight="bold" fill="#15803D">新增：不再全量重排</text>
+  <text x="34" y="141" font-size="12" fill="#14532D">查名次 / 取 Top N 都是现成的</text>
+
+  <rect x="270" y="55" width="220" height="90" rx="8" fill="#DCFCE7" stroke="#4ADE80" stroke-width="2.5"/>
+  <text x="284" y="82" font-size="13.5" font-weight="bold" fill="#166534">日活统计（只要数字）</text>
+  <text x="284" y="104" font-size="12.5" fill="#14532D">改用近似计数：固定十几 KB</text>
+  <text x="284" y="124" font-size="12" font-weight="bold" fill="#15803D">新增：以约 0.8% 误差换内存</text>
+  <text x="284" y="141" font-size="12" fill="#14532D">但取不回具体名单</text>
+
+  <rect x="520" y="55" width="220" height="90" rx="8" fill="#DCFCE7" stroke="#4ADE80" stroke-width="2.5"/>
+  <text x="534" y="82" font-size="13.5" font-weight="bold" fill="#166534">签到（只要二值状态）</text>
+  <text x="534" y="104" font-size="12.5" fill="#14532D">改用按位标记</text>
+  <text x="534" y="124" font-size="12" font-weight="bold" fill="#15803D">新增：一个 bit 一个人</text>
+  <text x="534" y="141" font-size="12" fill="#14532D">前提：id 连续密集</text>
+
+  <rect x="20" y="170" width="720" height="52" rx="8" fill="#FFFBEB" stroke="#FCD34D" stroke-width="1.5"/>
+  <text x="36" y="194" font-size="12.5" font-weight="bold" fill="#92400E">关键取舍：名单还要不要</text>
+  <text x="36" y="214" font-size="12.5" fill="#78350F">要精确名单 → 继续用 Set（1 亿约 3 GB）；只要个数字 → 近似计数（约 12 KB，误差 0.8%）</text>
+
+  <rect x="20" y="240" width="720" height="52" rx="8" fill="#FEF2F2" stroke="#FCA5A5" stroke-width="1.5"/>
+  <text x="36" y="264" font-size="12.5" font-weight="bold" fill="#991B1B">别踩的坑</text>
+  <text x="36" y="284" font-size="12.5" fill="#7F1D1D">按位标记在 id 稀疏时会翻车：10 个元素但 offset 到 1 亿 → 占 14 MB，而同样数据用 Set 只要 73 字节</text>
+
+  <rect x="20" y="308" width="720" height="34" rx="8" fill="#ECFDF5" stroke="#6EE7B7" stroke-width="1.5"/>
+  <text x="36" y="330" font-size="12.5" fill="#065F46">本步解决了什么：榜单写入即有序、日活内存从 GB 级降到 KB 级 —— 代价是接受近似与"取不回名单"</text>
+</svg>

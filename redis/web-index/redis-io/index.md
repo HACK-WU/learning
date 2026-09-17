@@ -3,7 +3,7 @@
 > 起始 URL：https://redis.io/docs/latest/
 > 生成日期：2026-09-10 · 范围（scope）：官方 llms.txt 精选面（57 条，覆盖核心/命令精选/开发/客户端/集成/运维/AI） · 条目数：57 · 一次性快照
 > 只索引不镜像：需要正文时用 web_fetch 打开对应 URL（带锚点直达）
-> 课程对齐：课程基线 Redis 7.4（自建 OSS）；缓存/数据类型/持久化/分布式锁为主干
+> 课程对齐：课程基线 Redis 8.10.1（WSL 本机自建，实测环境）；缓存/数据类型/持久化/分布式锁/Stream/Pub-Sub 为主干
 
 ## 怎么用
 
@@ -20,7 +20,7 @@
 | 查命令总目录（按类目分组） | [commands](https://redis.io/docs/latest/commands/) | commands |
 | 理解持久化（RDB vs AOF 与取舍） | [persistence](https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/index.html.md) | operations |
 | 查淘汰策略（内存满了删谁） | [eviction](https://redis.io/docs/latest/develop/reference/eviction/index.html.md) | development |
-| 分布式锁怎么加才对 | [distributed-locks](https://redis.io/docs/latest/develop/use/patterns/distributed-locks/index.html.md) | development |
+| 分布式锁怎么加才对 | [distributed-locks](https://redis.io/docs/latest/develop/use/patterns/distributed-locks/) | development |
 | 配 ACL 访问控制 | [acl](https://redis.io/docs/latest/operate/oss_and_stack/management/security/acl/index.html.md) | operations |
 | 查 redis.conf 配置项 | [config](https://redis.io/docs/latest/operate/oss_and_stack/management/config/index.html.md) | operations |
 | 用 Python（redis-py）客户端 | [redis-py](https://redis.io/docs/latest/develop/clients/redis-py/index.html.md) | clients |

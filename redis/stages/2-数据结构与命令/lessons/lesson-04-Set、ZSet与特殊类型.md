@@ -3,6 +3,7 @@
 > 阶段 2《数据结构与命令》第 2 课
 > 前置：课 3《List 与 Hash》(List 双向操作、List 当队列的三个硬伤、Hash vs String+JSON)
 > 环境：WSL Ubuntu 24.04 + Redis 8.10.1（本机实测，核查于 2026-09）
+> 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：redis.io/docs/latest/develop/data-types/、commands/）
 
 ---
 
@@ -55,6 +56,10 @@ SCARD uv:2026-09-01
 ```
 
 精确、简单。但当日活是 1 亿时，这个 Set 大约消耗 **3 GB 内存**（按本课实测的每成员约 32 字节推算）。而你要存 30 天的数据做趋势分析……
+
+> 📌 **一句话本质**：把"靠遍历和去重来做统计、排序、位置计算"变成"用对口的结构让 Redis 端直接给出答案"——并学会用可控的误差换内存。
+>
+> ⚖️ **处境对照**：不这么做——1 亿日活存进 Set 要吃 **3 GB**，存 30 天没法做趋势分析；交并差在应用里遍历，数据一多就卡死。这么做——用对结构后，同样的去重统计 HyperLogLog 只要 **12 KB**，误差约 0.5%~0.8%。但这些结构各有脾气：`SUNION` 实测能比 `SINTER` 慢 **5934 倍**，Bitmap 在 id 稀疏时（10 个元素 offset 到 1 亿）反而要 **14 MB**，而同样数据用 Set 只要 73 字节——**没有通吃的结构，只有对口的选择**。
 
 ---
 
@@ -165,7 +170,37 @@ SDIFF tag:B tag:A   # -> u5 u6      (B 有 A 没有)
 
 ## 第三幕：层层揭示 —— 三个知识点
 
+### 一眼全局图（进入细节前先看一眼）
+
+![课 4 一眼全局图](../assets/lesson-04-set-zset-overview.svg)
+
+> 看图指引：左边是"取回全部数据自己算"的笨办法，右边是"用对口的结构让它直接给答案"。图只回答一件事：**去重、排名、就近这些活，为什么不必自己算**。
+
+### 本课地图（分几步走）
+
+| 步骤 | 这一步要解决什么 | 对应知识点 |
+|------|------------------|-----------|
+| 第 1 步 | 先看"不重复的一组东西"能玩出什么 | 知识点 1：Set 交并差与去重 |
+| 第 2 步 | 再看带分数的排序为什么又快又能改 | 知识点 2：ZSet 跳表 + 哈希表双结构 |
+| 第 3 步 | 最后是用可控误差换内存的三个特殊结构 | 知识点 3：Bitmap / HyperLogLog / Geo |
+
 ## 知识点 1：Set 交并差与去重
+
+> 🧭 第 1/3 步｜承接：第一幕的困境——日活 1 亿时一个 Set 就要吃掉约 3 GB，存 30 天根本不现实 → 本步：先看"不重复的一组东西"能玩出什么，以及它的交并差为什么不能乱用。
+
+```mermaid
+flowchart LR
+    A["加入一批成员"] --> B{"成员类型与规模"}
+    B -->|"全是整数 且 ≤512 个"| C["紧凑整数编码<br/>省内存"]
+    B -->|"字符串 ≤128 个 且每个 ≤64 字节"| D["紧凑列表编码"]
+    B -->|"超过上述阈值"| E["哈希表编码<br/>内存明显上涨"]
+    C --> F["集合运算"]
+    D --> F
+    E --> F
+    F --> G{"取交集还是取并集"}
+    G -->|"交集：只留两边都有的"| H["以小集合为基准遍历<br/>只输出共同部分"]
+    G -->|"并集：两边合并去重"| I["要遍历并产出全部成员<br/>结果集可能很大"]
+```
 
 ### 1.1 去重：SADD 天然幂等
 
@@ -186,6 +221,10 @@ SADD uv:page:1 u2 u3 u4     # -> 1（只有 u4 是新的，u2/u3 已存在）
 上面第二条命令返回 **1** 而不是 3，因为 u2、u3 已经在集合里了，只有 u4 是新成员。用这个返回值可以判断"这次操作是否真的改变了集合"——比如做幂等去重时，返回 0 说明之前已经处理过。
 
 这就是 Set 的核心价值：**去重这件事 Redis 帮你做了，而且是 O(1)**。对比一下，如果用 List，你得先 `LRANGE` 全部取出、在客户端判断、再 `RPUSH`。
+
+> 📌 **行话锚定**：本课说的"紧凑整数编码 / 紧凑列表编码 / 哈希表编码"，官方叫 **intset / listpack / hashtable**——就是 `OBJECT ENCODING` 返回的那三个值。在哪遇到：排障时用 `OBJECT ENCODING <key>` 看类型；读官方文档 [data-types](https://redis.io/docs/latest/develop/data-types/) 的 Set 章节；内存突增时先看它是不是刚好跨过了 512 / 128 这两个阈值。
+>
+> 📚 官方文档：[Redis data types](https://redis.io/docs/latest/develop/data-types/) ｜ [SINTER](https://redis.io/docs/latest/commands/sinter/) ｜ [SUNION](https://redis.io/docs/latest/commands/sunion/)
 
 ### 1.2 交并差三件套
 
@@ -261,6 +300,21 @@ bash playground/prep-lesson-04-set-enc.sh
 
 ## 知识点 2：ZSet 跳表 + 哈希表双结构
 
+> 🧭 第 2/3 步｜承接：上一步的 Set 能去重、能做交并差，但排不了名次 → 本步：认识带分数的有序结构，搞清楚它为什么既能按分值排、又能按名字直接定位。
+
+```mermaid
+flowchart TB
+    A["有序集合：成员 + 分值"] --> B["结构一：跳跃表"]
+    A --> C["结构二：哈希表"]
+    B --> D["按分值顺序串起来"]
+    D --> E["查排名 / 取区间<br/>按分值走，逐个跳"]
+    C --> F["成员名 → 分值"]
+    F --> G["按成员名直接查分值<br/>不必遍历"]
+    E --> H["同一份数据存两遍"]
+    G --> H
+    H --> I["代价：内存更高<br/>换来两种查询都快"]
+```
+
 ### 2.1 成员唯一，但分数可覆盖
 
 和 Set 一样，ZSet 的 member 是唯一的；和 Set 不同的是，每个 member 带一个 score：
@@ -281,6 +335,10 @@ LLEN l:rank                # -> 2   <-- List 允许重复
 ```
 
 **这就是 ZSet 适合排行榜的根本原因**：同一个玩家反复刷新分数，不会在榜上出现两次。
+
+> 📌 **行话锚定**：本课说的"跳跃表 + 哈希表双结构"，官方叫 **skiplist + hashtable**，是 ZSet 在 `OBJ_ENCODING_SKIPLIST` 下的组成。在哪遇到：`OBJECT ENCODING` 返回 `skiplist`（元素多时）或 `listpack`（元素少时）；配置项 `zset-max-listpack-entries` / `zset-max-listpack-value` 控制何时切换；官方文档 [data-types#sorted-sets](https://redis.io/docs/latest/develop/data-types/)。
+>
+> 📚 官方文档：[Redis data types · Sorted sets](https://redis.io/docs/latest/develop/data-types/) ｜ [ZADD](https://redis.io/docs/latest/commands/zadd/)
 
 ### 2.2 分数相同时，按字典序排
 
@@ -390,6 +448,8 @@ ZINCRBY z:lb 500 张三
 
 ## 知识点 3：Bitmap / HyperLogLog / Geo
 
+> 🧭 第 3/3 步｜承接：前两步的结构都精确，但精确是有代价的——日活 1 亿就要 3 GB → 本步：看三个"用可控误差换内存"的特殊结构，以及它们各自什么时候会翻车。
+
 这三个类型的**共同点**：底层都是别的类型，Redis 只是提供了一组专门的命令。
 
 | 类型 | 底层 | 证据 |
@@ -397,6 +457,15 @@ ZINCRBY z:lb 500 张三
 | Bitmap | **String** | `SETBIT` 后 `TYPE` 返回 `string` |
 | HyperLogLog | **String** | `PFADD` 后 `TYPE` 返回 `string` |
 | Geo | **ZSet** | `GEOADD` 后 `TYPE` 返回 `zset` |
+
+```mermaid
+flowchart LR
+    A["要存的东西"] --> B{"要精确到名单吗"}
+    B -->|"只要二值状态<br/>签到 / 是否"| C["Bitmap 按位标记<br/>id 密集时极省<br/>id 稀疏反而更占"]
+    B -->|"只要个大概数<br/>日活 / 独立访客"| D["HyperLogLog 近似计数<br/>固定十几 KB<br/>有约 0.5% 误差"]
+    B -->|"要按位置找<br/>附近的人"| E["Geo 地理编码<br/>底层还是 ZSet<br/>坐标有微小误差"]
+    B -->|"要精确、还要名单"| F["回到 Set<br/>但 1 亿成员约 3 GB"]
+```
 
 ### 3.1 Bitmap：本质是 String 的按位操作
 
@@ -449,6 +518,18 @@ BITCOUNT d:both            # -> 2（用户 2、3）
 BITOP OR d:either d1 d2    # 任一日来
 BITCOUNT d:either          # -> 4（用户 1、2、3、4）
 ```
+
+> 📌 **行话锚定**：这三个结构官方叫 **Bitmap / HyperLogLog / Geospatial**。在哪遇到：`TYPE` 分别返回 `string`、`string`、`zset`（它们底层都不是新类型）；HLL 的标准误差率官方写的是 **0.81%**；官方文档 [data-types](https://redis.io/docs/latest/develop/data-types/) 的 Bitmaps / HyperLogLogs / Geospatial 三节。
+
+**三种"省内存"做法的对照**（本课说法 ↔ 行业叫法 ↔ 在哪遇到 ↔ 代价）：
+
+| 本课说法（人话） | 行业标准叫法 | 典型配置 / 在哪遇到 | 代价 |
+|---|---|---|---|
+| 按位标记 | Bitmap / bitfield | `SETBIT` / `BITCOUNT`；底层是 String | id 稀疏时反而更占空间 |
+| 只要个大概数 | HyperLogLog（HLL） | `PFADD` / `PFCOUNT`；固定约 12 KB | 有约 0.81% 标准误差，且**取不回名单** |
+| 按位置找 | Geospatial（Geo） | `GEOADD` / `GEOSEARCH`；底层是 ZSet | 坐标是编码后的近似值，有微小误差 |
+
+> 📚 官方文档：[Redis data types](https://redis.io/docs/latest/develop/data-types/) ｜ [PFADD](https://redis.io/docs/latest/commands/pfadd/) ｜ [GEOADD](https://redis.io/docs/latest/commands/geoadd/)
 
 ### 3.2 HyperLogLog：用 12 KB 数 1 亿人
 
@@ -590,6 +671,14 @@ MEMORY USAGE sparse         # -> 14.00 MB（理论 100000000/8/1024/1024 ≈ 11.
 ```
 
 **对照前面密集场景**：同样 100 万个连续 offset 只占 0.13 MB，而这里 10 个元素就占了 14 MB。
+
+### 4.2 应用实战：把本课知识点用起来
+
+> 本课三个知识点合起来解决一个真实场景：**百万级的实时销量排行榜，外加每天的独立访客数统计**。
+>
+> 完整演练见 [应用实战 04：排行榜与日活统计](../../../应用实战/04-排行榜与日活统计.md)——从"每次投票全量重排 + 日活存 Set"走到"有序集合 + 近似计数"，含可直接运行的代码与分步设计图。
+>
+> 回目录：[应用实战索引](../../../应用实战/INDEX.md)
 
 ---
 
@@ -775,6 +864,6 @@ A 错——Bitmap 底层就是 **String**（`SETBIT` 后 `TYPE` 返回 string）
 
 ⬅️ **上一课**：[课 3：List 与 Hash](lesson-03-List与Hash.md)
 
-➡️ **下一课**：课 5：RDB 与 AOF 持久化（待编写）
+➡️ **下一课**：[补充课：Stream 与 Pub/Sub](lesson-05-Stream与PubSub.md)（阶段 2 收尾，兑现课 3 的 Stream 承诺）
 
-📚 **返回目录**：[课程目录](../../02-课程目录.md)
+📚 **返回目录**：[课程目录](../../../02-课程目录.md)

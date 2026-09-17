@@ -3,6 +3,7 @@
 > 阶段 4《分布式与生产实践》第 3 课（**阶段收官课**）
 > 前置：课 7《分片与集群》、课 8《缓存设计》
 > 环境：WSL Ubuntu 24.04 + Redis 8.10.1（本机实测，核查于 2026-09）
+> 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：redis.io/docs/latest/operate/oss_and_stack/management/security/acl/、develop/interact/transactions/、operate/oss_and_stack/management/config/）
 
 ---
 
@@ -41,6 +42,10 @@
 需求是"一个支持多条件筛选的后台查询页"。有人主张放 Redis（快），有人主张直接查库（简单）。
 
 这类争论之所以吵不出结果，是因为双方在比"Redis 快"和"数据库简单"，而**真正该问的是：这个访问模式是不是 Redis 的适用场景**。
+
+> 📌 **一句话本质**：把"出事了只能看着、选型靠吵架"变成"有诊断路径、有安全基线、有判断该不该用的决策依据"。
+>
+> ⚖️ **处境对照**：不这么做——慢查询日志里 `HGETALL` 只记 **37 毫秒**，你以为没事，而客户端实际等了 **1501 毫秒**（差 40 倍，因为慢日志不含网络传输），排查方向从一开始就错了；默认配置无密码、default 用户能执行一切。这么做——诊断按"整体指标 → commandstats → SLOWLOG → 大 key/热 key"四层递进，安全上用 ACL 收权限（但要知道 `DEBUG` 不受 ACL 管，由 `enable-debug-command` 控制）。代价是：这些能力都在**为不用 Redis 提供依据**——多条件筛选类需求直接查库更简单，Redis 不是万能解法。
 
 ---
 
@@ -217,7 +222,33 @@ t=2.0s  命中 = 10000   ← 构建完成（此处用的是闭区间，见下方
 
 ## 第三幕：层层揭示 —— 三个知识点的原理
 
+### 一眼全局图（进入细节前先看一眼）
+
+![课 9 一眼全局图](../assets/lesson-09-production-overview.svg)
+
+> 看图指引：左边是"出事了只会盯一个数字、排查方向一开始就错"，右边是"从整体到细节层层下钻 + 最小权限"。图只回答一件事：**线上出事时，你该按什么顺序看、看什么**。
+
+### 本课地图（分几步走）
+
+| 步骤 | 这一步要解决什么 | 对应知识点 |
+|------|------------------|-----------|
+| 第 1 步 | 先学会出问题时按层下钻，别被单个数字骗了 | 知识点 1：性能诊断 |
+| 第 2 步 | 再把默认配置的口子堵上，只给最小权限 | 知识点 2：安全与运维基线 |
+| 第 3 步 | 最后回答"这个场景到底该不该用它" | 知识点 3：生态与选型 |
+
 ## 知识点 1：性能诊断
+
+> 🧭 第 1/3 步｜承接：第二幕冲突一揭示了一个残酷事实——慢日志里 37 毫秒的命令，客户端实际等了 1501 毫秒 → 本步：建立从整体到细节的诊断顺序，别再被单个数字带偏。
+
+```mermaid
+flowchart TB
+    A["感觉变慢了"] --> B["第 1 层：看整体指标<br/>命中率 / 连接数 / 内存"]
+    B --> C["第 2 层：看命令统计<br/>谁最频繁、谁最耗"]
+    C --> D["第 3 层：看慢日志与延迟<br/>找出具体慢命令"]
+    D --> E["第 4 层：定位大 key 与热 key"]
+    E --> F["定位到具体数据与调用方"]
+    A --> G["注意：慢日志不含网络传输<br/>与用户感受可能差几十倍"]
+```
 
 ### 1.1 诊断的四层模型
 
@@ -231,6 +262,10 @@ t=2.0s  命中 = 10000   ← 构建完成（此处用的是闭区间，见下方
 ```
 
 **不要跳层。** 直接从第 4 层开始（比如一上来就 `SCAN` 全量找大 key）会在大实例上造成额外压力。
+
+> 📌 **行话锚定**：本课说的四层诊断，对应官方工具 **INFO / COMMANDSTATS（commandstats 段）/ SLOWLOG / LATENCY**，以及大 key 扫描 `--bigkeys` 与热 key 的 `--hotkeys`。在哪遇到：`INFO commandstats`；`SLOWLOG GET`；`LATENCY DOCTOR`；配置项 `slowlog-log-slower-than` 与 `latency-monitor-threshold`（默认 0，即关闭）；报错 `OOM command not allowed when used memory > 'maxmemory'`。官方文档 [cli](https://redis.io/docs/latest/develop/tools/cli/)。
+>
+> 📚 官方文档：[redis-cli（含 --bigkeys / --hotkeys）](https://redis.io/docs/latest/develop/tools/cli/) ｜ [SLOWLOG](https://redis.io/docs/latest/commands/slowlog/) ｜ [LATENCY DOCTOR](https://redis.io/docs/latest/commands/latency-doctor/)
 
 ### 1.2 第 1 层：整体指标（先看这四个数）
 
@@ -447,6 +482,20 @@ user:1 idletime = 8 s
 
 ## 知识点 2：安全与运维基线
 
+> 🧭 第 2/3 步｜承接：会看病了，下一步是别让自己生病——第二幕展示了默认配置下 default 用户能做什么 → 本步：把默认配置的口子堵上，并知道权限机制防不住什么。
+
+```mermaid
+flowchart TB
+    A["默认状态：一个账号拥有全部权限"] --> B["建专用账号，只给必需的命令"]
+    B --> C["按 key 前缀限制可见范围"]
+    C --> D["禁用或重命名危险命令"]
+    D --> E{"权限机制能挡住一切吗"}
+    E -->|"能挡住"| F["普通误操作与越权访问"]
+    E -->|"挡不住"| G["部分调试类命令<br/>由单独的开关控制"]
+    E -->|"挡不住"| H["客户端输出缓冲区把内存撑爆"]
+    F --> I["还需配内存上限与客户端限制"]
+```
+
 ### 2.1 先看默认配置有多危险
 
 本课实测（本机 6379 默认实例）：
@@ -466,6 +515,10 @@ enable-protected-configs = no
 翻译成人话：**默认用户无需密码，可访问所有 key、所有频道、所有命令。**
 
 `protected-mode yes` + `bind 127.0.0.1` 提供了一定保护（只监听本地），但**一旦有人把 bind 改成 0.0.0.0 或加了公网 IP，Redis 就等于裸奔**。
+
+> 📌 **行话锚定**：本课说的"账号与权限"，官方叫 **ACL（Access Control List）**；"默认账号"是 **`default` 用户**。在哪遇到：`ACL LIST` / `ACL SETUSER`；报错 `NOPERM this user has no permissions to run the 'xxx' command`；配置项 `enable-debug-command`（`DEBUG` 不受 ACL 管，由它单独控制）；`rename-command` 已在较新版本中不推荐使用，官方建议改用 ACL。官方文档 [acl](https://redis.io/docs/latest/operate/oss_and_stack/management/security/acl/)。
+>
+> 📚 官方文档：[Redis ACL](https://redis.io/docs/latest/operate/oss_and_stack/management/security/acl/) ｜ [ACL SETUSER](https://redis.io/docs/latest/commands/acl-setuser/) ｜ [config](https://redis.io/docs/latest/operate/oss_and_stack/management/config/)
 
 ### 2.2 危险命令：default 用户能做什么
 
@@ -619,6 +672,22 @@ master_link_status            主从状态（课 6，从库视角）
 
 ## 知识点 3：生态与选型
 
+> 🧭 第 3/3 步｜承接：会诊断、也加固好了，最后回到第一幕困境三那场吵了三天的架——"要不要上 Redis" → 本步：不靠谁说得响，按访问模式给出判断依据，并坦然列出不该用它的场景。
+
+```mermaid
+flowchart TB
+    A["新需求来了"] --> B{"数据丢了能重建吗"}
+    B -->|"不能，且必须持久化"| C["先想清楚落盘与丢失量"]
+    B -->|"能，纯加速用"| D["适合引入"]
+    A --> E{"访问模式是什么"}
+    E -->|"按主键取、热点集中"| D
+    E -->|"多条件筛选、复杂查询"| F["直接查库更简单<br/>不要硬塞"]
+    E -->|"要全表扫描、分析"| G["不是它的场景"]
+    A --> H{"数据量有多大"}
+    H -->|"远超内存预算"| I["不宜全量放进去"]
+    D --> J["还要选发行版与许可协议"]
+```
+
 ### 3.1 先搞清楚：你说的"Redis"是哪个 Redis
 
 这是选型的第一道门槛，因为**许可证在两年内变了两次**。
@@ -645,6 +714,19 @@ master_link_status            主从状态（课 6，从库视角）
 
 **要点**：现在"用 Redis"和"用 Valkey"都是合理选择。决定因素通常是**许可证合规要求**与**云厂商托管服务的可用性**，而不是技术能力差异。
 
+> 📌 **行话锚定**：本课说的"选哪个发行版"，涉及 **Redis 8 的三许可（RSALv2 / SSPLv1 / AGPLv3）**、**Valkey**（Linux 基金会托管的分叉）、以及 **BSD**（7.2.4 及之前）。在哪遇到：法务评审的许可证清单；`redis-server --version`；云厂商"兼容 Redis"的服务实际可能是 Valkey。Redis 8.0 自 2025-05-01 起加入 AGPLv3，7.2.4 是最后一个 BSD 版本（本课已联网核查）。
+
+**选型的对照**（本课说法 ↔ 行业叫法 ↔ 在哪遇到 ↔ 代价）：
+
+| 本课说法（人话） | 行业标准叫法 | 典型配置 / 在哪遇到 | 代价 |
+|---|---|---|---|
+| 官方 Redis | Redis OSS / Redis 8（三许可） | `redis-server --version` | AGPLv3 对部分企业不友好 |
+| 社区分叉 | Valkey | 部分云厂商默认提供 | 生态与官方逐步分化 |
+| 纯缓存替代品 | Memcached | 只需简单 KV 缓存时 | 无持久化、无丰富结构 |
+| 干脆不用缓存 | direct DB access | 复杂查询 / 分析类需求 | 牺牲延迟，换简单与强一致 |
+
+> 📚 官方文档：[Redis 安装与版本](https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/) ｜ [redis.io/docs](https://redis.io/docs/latest/) ｜ [Redis configuration](https://redis.io/docs/latest/operate/oss_and_stack/management/config/)
+
 ### 3.2 Redis vs Valkey vs Memcached vs 不用缓存
 
 | 维度 | Redis 8 | Valkey 9 | Memcached | 不用缓存（直接查库） |
@@ -668,6 +750,9 @@ master_link_status            主从状态（课 6，从库视角）
    - 是 → 看云厂商提供哪个引擎（主流云已转向 Valkey）
 4. **是否需要 Redis 8 独占能力？**（Query Engine、JSON、TimeSeries、向量集）
    - 是 → Redis 8（Valkey 的模块生态不同，需单独评估）
+   - ⚠️ 判断前先确认你真的需要：Query Engine 见本课 3.6 的实测（快 177 倍，但索引占原数据 195.7% 内存）；
+     JSON/TimeSeries/向量集**本课程未展开**，需要时按官方 [Redis 8 数据类型](https://redis.io/docs/latest/develop/data-types/) 与
+     [Query Engine](https://redis.io/docs/latest/develop/interact/search-and-query/) 另查，不要凭"听起来很强大"决策。
 
 ### 3.3 什么时候**不该**用 Redis
 
@@ -694,6 +779,65 @@ Redis 所有数据都在内存。100 万个 100B 的对象，实测占 150.76 MB
 **信号 3：需要强事务 / 复杂关联查询**
 
 Redis 的事务（`MULTI`/`EXEC`）不支持回滚，Lua 脚本能保证原子性但调试困难。多表关联、复杂聚合这类需求，关系数据库是更好的选择。
+
+**补：那 Redis 的 `WATCH` 什么时候用？**（前面只说了事务"不行"，这里补它的正面用法）
+
+`WATCH` 提供的是**乐观锁**：监视一个或多个 key，若在 `MULTI` 到 `EXEC` 之间这些 key 被别的客户端改过，整个事务**取消执行**（`EXEC` 返回 `nil`）。
+
+先看清它解决的问题——不用 `WATCH` 的"读-改-写"会丢更新。本机实测（脚本 `playground/prep-lesson-09-watch.sh`，余额初始 100，两个客户端各扣 30）：
+
+```
+① 无 WATCH：两个客户端都读到 100，各自写回 70
+   最终结果：70     ← 应为 40，丢了 30
+```
+
+用 `WATCH` 后（同一连接内 `WATCH` → `GET` → `MULTI` → `SET` → `EXEC`）：
+
+```
+场景 A（无人打扰）：EXEC 返回 ['OK']       balance = 70      ← 事务执行
+场景 B（中途被改）：EXEC 返回 None（nil）   balance = 999     ← 事务取消，别人写的值保住了
+场景 C（UNWATCH 后）：EXEC 返回 ['OK']     balance = 1       ← 主动放弃监视
+```
+
+**关键点是 `EXEC` 返回 `nil`**：这不是报错，而是"你的事务被丢弃了"。客户端必须**自己写重试循环**：
+
+```python
+for _ in range(3):
+    r.watch('balance')
+    cur = int(r.get('balance'))
+    pipe = r.pipeline()
+    pipe.multi()
+    pipe.set('balance', cur - 30)
+    if pipe.execute() is not None:      # 不是 None 说明成功
+        break                            # 成功就退出
+    # None 说明冲突，进入下一轮重试
+r.unwatch()
+```
+
+**那为什么生产上更常用 Lua？** 因为 Lua 脚本整体原子执行，**没有"冲突"这个概念，不需要重试**。同一扣款逻辑用 Lua：
+
+```bash
+EVAL "local v = redis.call('get', KEYS[1]); redis.call('set', KEYS[1], v - ARGV[1]); return v - ARGV[1]" 1 balance 30
+-> 70
+```
+
+| | WATCH 乐观锁 | Lua 脚本 |
+|---|---|---|
+| 冲突处理 | 事务取消，**客户端重试** | 无冲突，排队执行 |
+| 适合 | 长事务、需要读外部数据再决定 | 短小的原子操作（扣款、限流、锁释放） |
+| 代价 | 冲突多时重试开销大 | 脚本慢会阻塞整个实例 |
+
+**还有一个必须知道的**：事务**不回滚**。本机实测（`MULTI` 里第 2 条命令对字符串做 `INCR` 出错）：
+
+```
+SET k1 "abc"     -> 排队
+INCR k1          -> 运行时错误（对字符串自增）
+SET k2 "still-set" -> 排队
+EXEC
+-> 第 2 条报错，但 k2 = still-set    ← 后面的命令照常执行了
+```
+
+所以 Redis 事务只能保证"**这批命令连续执行、不被打断**"，不保证"要么全做要么全不做"。需要真正的原子性，用 Lua。
 
 **信号 4：数据不能丢，且没有做好持久化**
 
@@ -816,6 +960,11 @@ Redis 8 内置了 RediSearch，可以在 Redis 里建二级索引。实测（10 
                                 ├── 是 → Redis 8
                                 └── 否 → Redis 或 Valkey 皆可
                                         （看云厂商托管与团队经验）
+
+                                ⚠️ Query Engine 的实测判据见 3.6（快 177 倍，
+                                   但索引占原数据 195.7% 内存）；
+                                   JSON / TimeSeries / 向量集本课未展开，
+                                   需要时查官方文档，不要凭"听起来强大"决策。
 
 ⚠️ 任何时候，出现以下信号就该重新评估：
    - 需要按 value 字段做条件筛选（改用数据库或 Query Engine）
@@ -1333,4 +1482,4 @@ D. 放 Redis，用 Hash 分桶存储省 20% 内存，再全量取回客户端过
 
 - **上一课**：[课 8：缓存设计](lesson-08-缓存设计.md)
 - **下一课**：结课实战项目（待编写）
-- **返回**：[阶段 4 总览](../overview.md) ｜ [课程目录](../../02-课程目录.md)
+- **返回**：[阶段 4 总览](../overview.md) ｜ [课程目录](../../../02-课程目录.md)

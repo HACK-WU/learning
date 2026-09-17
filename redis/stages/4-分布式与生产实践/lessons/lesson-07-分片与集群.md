@@ -3,6 +3,7 @@
 > 阶段 4《分布式与生产实践》第 1 课
 > 前置：课 6《主从复制与哨兵》(全量与增量复制、哨兵故障转移、哨兵解决不了的丢数据)
 > 环境：WSL Ubuntu 24.04 + Redis 8.10.1（本机实测，核查于 2026-09）
+> 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：redis.io/docs/latest/operate/oss_and_stack/management/scaling/、develop/interact/programmability/）
 
 ---
 
@@ -63,6 +64,10 @@ hash(key) % 4  →  hash(key) % 8
 **绝大部分 key 的归属都变了**。你要么停机迁移全量数据，要么写双写逻辑、灰度切流、最后清旧数据。整个团队折腾两周。
 
 这就是**取模分片的致命伤：节点数变化会导致几乎所有 key 重新分布**。
+
+> 📌 **一句话本质**：把"数据装不进一台机器、扩个容要脱层皮"变成"按槽分摊到多节点、扩容时只搬一部分数据"。
+>
+> ⚖️ **处境对照**：不这么做——单机内存就是上限，扩容到 8 个实例时 `hash(key) % 4` 变 `% 8`，**绝大部分 key 归属全变**，停机迁移加双写灰度折腾两周。这么做——官方集群把空间切成 **16384 个槽**，扩缩容只迁移受影响的那部分槽（实测从 3 主扩到 4 主只迁 1000 个槽）。代价是客户端要懂重定向：连接固定节点访问随机 key 时**大量请求会收到 MOVED/ASK**，且多 key 命令必须同槽、Lua 脚本要声明 key——批量导入按槽分组后实测 **9 毫秒**完成，比逐条跑快 **531 倍**，但这份复杂度省不掉。
 
 ---
 
@@ -144,7 +149,35 @@ errors: 1878, replies: 3000        ← 1878 条失败！
 
 ## 第三幕：层层揭示 —— 三个知识点
 
+### 一眼全局图（进入细节前先看一眼）
+
+![课 7 一眼全局图](../assets/lesson-07-cluster-overview.svg)
+
+> 看图指引：左边是"自己算该放哪台，机器一变就全乱"，右边是"按固定格子分摊，扩容只搬走一部分"。图只回答一件事：**为什么它能让扩容不必脱层皮**。
+
+### 本课地图（分几步走）
+
+| 步骤 | 这一步要解决什么 | 对应知识点 |
+|------|------------------|-----------|
+| 第 1 步 | 先看空间是怎么切分、数据怎么对号入座的 | 知识点 1：哈希槽与 CRC16 |
+| 第 2 步 | 再看加减机器时，数据是怎么搬过去的 | 知识点 2：集群伸缩与重定向 |
+| 第 3 步 | 最后弄清分摊之后，哪些操作不能照旧用了 | 知识点 3：集群下的多 key 与 Lua 限制 |
+
 ## 知识点 1：哈希槽与 CRC16
+
+> 🧭 第 1/3 步｜承接：第一幕的困境三——自己在代码里取模分片，机器数一变几乎所有 key 归属全变，扩容要折腾两周 → 本步：看它是怎么把空间切成固定格子、让数据对号入座的。
+
+```mermaid
+flowchart LR
+    A["一个 key"] --> B["对 key 做固定算法"]
+    B --> C["得到一个编号"]
+    C --> D["对 16384 取余"]
+    D --> E["落到某个格子"]
+    E --> F["每个格子归属固定的机器"]
+    F --> G{"想让几个 key 在一起"}
+    G -->|"是"| H["用花括号写相同片段<br/>它们会落进同一格"]
+    G -->|"否"| I["自然分散"]
+```
 
 ### 1.1 槽分配的实际形态
 
@@ -171,6 +204,10 @@ cluster_size:3                    ← 3 个主节点
 ```
 
 `cluster_size` 是**主节点数**，不含从库。
+
+> 📌 **行话锚定**：本课说的"格子"官方叫 **hash slot（哈希槽）**，固定 **16384** 个；"用花括号让几个 key 在一起"叫 **hash tag（哈希标签）**。在哪遇到：`CLUSTER KEYSLOT <key>` 查槽号；批量导入时的 `CROSSSLOT Keys in request don't hash to the same slot` 报错；`CLUSTER SLOTS` 看槽归属。官方文档 [scaling](https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/)。
+>
+> 📚 官方文档：[Scaling with Redis Cluster](https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/) ｜ [CLUSTER KEYSLOT](https://redis.io/docs/latest/commands/cluster-keyslot/)
 
 ### 1.2 CRC16 算法：能自己手算的那种简单
 
@@ -339,6 +376,22 @@ x{}y                     16116     16116      YES
 
 ## 知识点 2：集群伸缩与重定向
 
+> 🧭 第 2/3 步｜承接：上一步知道了数据按格子分布，那加减机器时格子怎么搬、搬迁期间还能不能读写 → 本步：看清伸缩的全过程，以及客户端为什么会收到"去找别台"的回复。
+
+```mermaid
+flowchart TB
+    A["加入新机器"] --> B["从各台匀出一部分格子"]
+    B --> C["格子标记为搬迁中"]
+    C --> D{"客户端来访问"}
+    D -->|"访问已搬走的格子"| E["回复：已永久易主，去找新机器"]
+    D -->|"访问搬迁中的格子"| F["回复：临时去找新机器取"]
+    D -->|"访问还没动的格子"| G["照常处理"]
+    E --> H["客户端更新格子归属表"]
+    F --> I["不更新归属表<br/>下次还来问"]
+    C --> J["搬完后正式易主"]
+    J --> K["缩容同理：先搬空，再下架"]
+```
+
 ### 2.1 扩容的完整流程
 
 本机实测：从 3 主扩到 4 主，迁移 1000 个槽。
@@ -387,6 +440,10 @@ Moving 333 slots from 127.0.0.1:7003 to 127.0.0.1:7007
 ```
 
 **这是正常的**。槽是分配单位，不要求连续。多次 reshard 后槽必然碎片化。
+
+> 📌 **行话锚定**：本课说的两种"去找别台"，官方叫 **MOVED**（已永久易主）与 **ASK**（迁移中的临时态）——这是集群排障最常见的两个报错关键字。在哪遇到：客户端报 `MOVED 3999 10.0.0.3:6379` 或 `ASK 3999 10.0.0.4:6379`；迁移中的 `CLUSTER SETSLOT ... MIGRATING/IMPORTING`；`redis-cli -c` 会自动跟随重定向。官方文档 [scaling](https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/)。
+>
+> 📚 官方文档：[Scaling with Redis Cluster](https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/) ｜ [CLUSTER SETSLOT](https://redis.io/docs/latest/commands/cluster-setslot/)
 
 ### 2.2 缩容：先把槽搬空，再删节点
 
@@ -608,6 +665,21 @@ CLUSTER SLOTS / CLUSTER SHARDS     # 获取完整路由表
 
 ## 知识点 3：集群下的多 key 与 Lua 限制
 
+> 🧭 第 3/3 步｜承接：数据分摊到多台之后，一个现实问题浮上来——原来能一口气处理多个 key 的操作，现在还行吗 → 本步：弄清分摊带来的限制，以及脚本为什么要声明涉及的 key。
+
+```mermaid
+flowchart TB
+    A["一次操作涉及多个 key"] --> B{"这些 key 在同一格吗"}
+    B -->|"不在"| C["直接拒绝执行"]
+    B -->|"在"| D["允许执行"]
+    A --> E["脚本类操作"]
+    E --> F{"声明了要访问哪些 key"}
+    F -->|"没声明"| G["无路由依据，可能被拒"]
+    F -->|"声明了"| H["按声明路由到对应机器"]
+    D --> I["想让它们同格：用花括号写相同片段"]
+    G --> I
+```
+
 ### 3.1 多 key 命令必须同槽
 
 已在冲突二实测过，这里补充完整的判断规则：
@@ -618,6 +690,10 @@ CLUSTER SLOTS / CLUSTER SHARDS     # 获取完整路由表
 | 多 key 且**所有 key 同槽** | 可用 |
 | 多 key 且**跨槽** | `CROSSSLOT` 错误 |
 | 用哈希标签强制同槽 | 可用 |
+
+> 📌 **行话锚定**：本课说的"跨格子报错"，官方报错原文是 **CROSSSLOT Keys in request don't hash to the same slot**；脚本里声明 key 的机制叫 **key declaration / numkeys**，未声明时报错 `@user_script:... Lua script attempted to access a non local key in a cluster node`。在哪遇到：多 key 命令与 Lua 脚本；`EVAL` 的 numkeys 参数；`redis-cli --cluster call`。官方文档 [scaling](https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/) 与 [programmability](https://redis.io/docs/latest/develop/interact/programmability/)。
+>
+> 📚 官方文档：[Scaling with Redis Cluster](https://redis.io/docs/latest/operate/oss_and_stack/management/scaling/) ｜ [EVAL](https://redis.io/docs/latest/commands/eval/) ｜ [Programmability](https://redis.io/docs/latest/develop/interact/programmability/)
 
 ### 3.2 Lua 脚本的两道检查
 
@@ -1049,6 +1125,6 @@ C 正确：哈希标签让多个 key 落进同一槽，同槽即可执行 SINTER
 
 ## 🧭 课程导航
 
-- **上一课**：[课 6：主从复制与哨兵](../3-持久化与高可用/lessons/lesson-06-主从复制与哨兵.md)
+- **上一课**：[课 6：主从复制与哨兵](../../3-持久化与高可用/lessons/lesson-06-主从复制与哨兵.md)
 - **下一课**：课 8：缓存设计（待编写）
 - **返回**：[课程目录](../../../02-课程目录.md) ｜ [学习档案](../../../00-学习档案.md)

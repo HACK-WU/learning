@@ -12,8 +12,9 @@
 | 用 Pub/Sub（与 Streams 的取舍） | [develop/interact/pubsub/index.html.md](https://redis.io/docs/latest/develop/interact/pubsub/index.html.md) | pubsub | |
 | 用 Streams（消费者组/XADD/XREADGROUP） | [develop/data-types/streams/index.html.md](https://redis.io/docs/latest/develop/data-types/streams/index.html.md) | streams | |
 | 服务端脚本（EVAL/函数，原子多键逻辑） | [develop/interact/programmability/index.html.md](https://redis.io/docs/latest/develop/interact/programmability/index.html.md) | Lua | |
+| 用事务与 WATCH 乐观锁（MULTI/EXEC） | [develop/interact/transactions/index.html.md](https://redis.io/docs/latest/develop/interact/transactions/index.html.md) | 事务、WATCH | 2026-09-17 回补，实测 200 |
 | 查淘汰策略（allkeys-lru/volatile-ttl…） | [develop/reference/eviction/index.html.md](https://redis.io/docs/latest/develop/reference/eviction/index.html.md) | eviction、淘汰 | |
 | 用 redis-cli（交互/脚本/排障） | [develop/tools/cli/index.html.md](https://redis.io/docs/latest/develop/tools/cli/index.html.md) | cli | |
 | 查 Redis Insight 更新日志 | [develop/tools/insight/release-notes/index.html.md](https://redis.io/docs/latest/develop/tools/insight/release-notes/index.html.md) | Insight | |
 | 用 VS Code 插件看键/跑命令 | [develop/tools/redis-for-vscode/index.html.md](https://redis.io/docs/latest/develop/tools/redis-for-vscode/index.html.md) | vscode | |
-| 分布式锁怎么加才对（SET NX EX/fencing） | [develop/use/patterns/distributed-locks/index.html.md](https://redis.io/docs/latest/develop/use/patterns/distributed-locks/index.html.md) | 锁 | |
+| 分布式锁怎么加才对（SET NX EX/fencing） | [develop/use/patterns/distributed-locks/](https://redis.io/docs/latest/develop/use/patterns/distributed-locks/) | 锁 | 2026-09-17 修正 llms 后缀为正式路径，实测 200 |
