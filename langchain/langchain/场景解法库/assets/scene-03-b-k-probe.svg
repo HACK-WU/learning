@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 380" width="900" height="380" font-family="PingFang SC, Helvetica Neue, Arial, sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+  <rect width="900" height="380" fill="#ffffff"/>
+
+  <text x="24" y="34" font-size="17" font-weight="bold" fill="#333">解法 B · k 值探针：先看清答案块排第几，再决定取几条</text>
+
+  <text x="24" y="72" font-size="13" fill="#555">检索排序结果（分数从高到低）</text>
+  <rect x="110" y="60" width="120" height="30" rx="4" fill="#f5f5f5" stroke="#9e9e9e"/>
+  <text x="126" y="80" font-size="12" fill="#616161">第 1 名 0.71</text>
+  <rect x="242" y="60" width="120" height="30" rx="4" fill="#f5f5f5" stroke="#9e9e9e"/>
+  <text x="258" y="80" font-size="12" fill="#616161">第 2 名 0.64</text>
+  <rect x="374" y="60" width="120" height="30" rx="4" fill="#f5f5f5" stroke="#9e9e9e"/>
+  <text x="390" y="80" font-size="12" fill="#616161">第 3 名 0.59</text>
+  <rect x="506" y="60" width="120" height="30" rx="4" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="522" y="80" font-size="12" fill="#1b5e20">第 4 名 0.56 答案</text>
+  <rect x="638" y="60" width="120" height="30" rx="4" fill="#f5f5f5" stroke="#9e9e9e"/>
+  <text x="654" y="80" font-size="12" fill="#616161">第 5 名 0.52</text>
+
+  <rect x="110" y="104" width="384" height="30" rx="4" fill="#ffebee" stroke="#c62828"/>
+  <text x="126" y="124" font-size="13" fill="#c62828">k=3 的窗口：答案块排第 4，被一刀切在门外</text>
+  <rect x="110" y="144" width="648" height="30" rx="4" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="126" y="164" font-size="13" fill="#1b5e20">k=5 的窗口：答案块进入 —— 课 11 实测案例（分数 0.5615）</text>
+
+  <text x="24" y="216" font-size="13" fill="#555">扫描方法</text>
+  <rect x="110" y="200" width="648" height="34" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="126" y="222" font-size="13" fill="#333">for k in (1,2,3,4,5)：打印「期望块是否命中 + 共几条」→ 找到命中窗口再定 k</text>
+
+  <rect x="24" y="252" width="852" height="34" rx="4" fill="#e3f2fd" stroke="#1565C0"/>
+  <text x="40" y="274" font-size="13" fill="#0d47a1">这是「定位」手段：先区分是检索没送到，还是模型没用好 —— 零报错场景唯一的证据来源</text>
+
+  <rect x="24" y="300" width="852" height="62" rx="4" fill="#ffebee" stroke="#c62828" stroke-dasharray="6 4"/>
+  <text x="40" y="324" font-size="14" font-weight="bold" fill="#c62828">失效点：k 调大引入杂质，还挤占 prompt</text>
+  <text x="40" y="348" font-size="13" fill="#333">多召回的块会进上下文（成本上升、噪声上升）；similarity_score_threshold 在 InMemoryVectorStore 上会抛 NotImplementedError，别指望它兜底。</text>
+</svg>

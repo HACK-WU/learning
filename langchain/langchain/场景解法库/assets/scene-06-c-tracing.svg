@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" width="900" height="340" font-family="PingFang SC, Helvetica Neue, Arial, sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+  <rect width="900" height="340" fill="#ffffff"/>
+
+  <text x="24" y="34" font-size="17" font-weight="bold" fill="#333">解法 C · tracing：给每次运行留一份可回放的现场记录</text>
+
+  <rect x="24" y="62" width="170" height="40" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="40" y="80" font-size="13" fill="#333">进程启动</text>
+  <text x="40" y="96" font-size="12" fill="#555">读环境变量</text>
+  <line x1="194" y1="82" x2="242" y2="82" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="246" y="62" width="220" height="40" rx="4" fill="#e3f2fd" stroke="#1565C0"/>
+  <text x="262" y="80" font-size="13" fill="#0d47a1">LANGSMITH_TRACING=true</text>
+  <text x="262" y="96" font-size="12" fill="#0d47a1">+ API key（占位符管理）</text>
+  <line x1="466" y1="82" x2="514" y2="82" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="518" y="62" width="180" height="40" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="534" y="80" font-size="13" fill="#333">每次运行上报</text>
+  <text x="534" y="96" font-size="12" fill="#555">含完整工具链</text>
+  <line x1="698" y1="82" x2="746" y2="82" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="750" y="62" width="126" height="40" rx="4" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="766" y="86" font-size="13" fill="#1b5e20">可回放排查</text>
+
+  <rect x="24" y="126" width="852" height="34" rx="4" fill="#fff8e1" stroke="#f9a825"/>
+  <text x="40" y="148" font-size="13" fill="#8d6e00">课 13 实测：环境变量在进程启动前配好才生效 —— 中途改不生效（tracing 状态进程内「固化」）</text>
+
+  <rect x="24" y="180" width="852" height="34" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="40" y="202" font-size="13" fill="#333">验收动作：配完必须「跑一次、看一眼」确认平台上真的收到了，再宣布接入完成</text>
+
+  <rect x="24" y="234" width="852" height="88" rx="4" fill="#ffebee" stroke="#c62828" stroke-dasharray="6 4"/>
+  <text x="40" y="258" font-size="14" font-weight="bold" fill="#c62828">失效点：无 key 时静默降级 —— 「以为在记录」其实一条都没有</text>
+  <text x="40" y="282" font-size="13" fill="#333">业务照跑、trace 消失，没有任何报错；等到真出问题时才发现没有现场。</text>
+  <text x="40" y="304" font-size="13" fill="#333">另：trace 含用户输入与工具返回，接入即产生数据合规义务（PII 与留存策略要先定，见场景 8）。</text>
+</svg>

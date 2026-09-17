@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" width="900" height="360" font-family="PingFang SC, Helvetica Neue, Arial, sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+  <rect width="900" height="360" fill="#ffffff"/>
+
+  <text x="24" y="34" font-size="17" font-weight="bold" fill="#333">解法 C · skills 渐进披露：先给清单，需要时才加载完整技能包</text>
+
+  <text x="24" y="76" font-size="13" fill="#555">第一层 · 始终在上下文</text>
+  <rect x="180" y="58" width="540" height="34" rx="4" fill="#e3f2fd" stroke="#1565C0"/>
+  <text x="196" y="80" font-size="13" fill="#0d47a1">技能清单：每行一句话说明（便宜，占几十个 token）</text>
+
+  <line x1="450" y1="92" x2="450" y2="114" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="180" y="116" width="540" height="34" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="196" y="138" font-size="13" fill="#333">模型判断「用得上这个技能」→ 发起加载</text>
+
+  <line x1="450" y1="150" x2="450" y2="172" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <text x="24" y="196" font-size="13" fill="#555">第二层 · 按需加载</text>
+  <rect x="180" y="180" width="540" height="52" rx="4" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="196" y="200" font-size="13" fill="#1b5e20">完整指令 + 附带工具（只有被选中的那个进上下文）</text>
+  <text x="196" y="222" font-size="12" fill="#1b5e20">课 12 实测：有状态（挂 checkpointer）时技能复用把调用从 3 降到 2</text>
+
+  <rect x="24" y="252" width="852" height="34" rx="4" fill="#e3f2fd" stroke="#1565C0"/>
+  <text x="40" y="274" font-size="13" fill="#0d47a1">省的是「每次都携带全部工具说明」的上下文税，不是调用次数</text>
+
+  <rect x="24" y="300" width="852" height="48" rx="4" fill="#ffebee" stroke="#c62828" stroke-dasharray="6 4"/>
+  <text x="40" y="322" font-size="14" font-weight="bold" fill="#c62828">失效点：无状态时不省 —— 每轮重载技能，复用根本不发生</text>
+  <text x="40" y="342" font-size="13" fill="#333">课 12 补跑：没挂 checkpointer 的「技能复用」验证会失效（08 故障模式 10）—— 效果数据必须在有状态下测。</text>
+</svg>

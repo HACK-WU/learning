@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" width="900" height="360" font-family="PingFang SC, Helvetica Neue, Arial, sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+  <rect width="900" height="360" fill="#ffffff"/>
+
+  <text x="24" y="34" font-size="17" font-weight="bold" fill="#333">解法 C · 查询改写：把检索包成工具，让模型「换个说法再查」</text>
+
+  <rect x="24" y="62" width="200" height="44" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="40" y="82" font-size="13" fill="#333">用户原话</text>
+  <text x="40" y="98" font-size="12" fill="#555">「咱们公司员工年假…」</text>
+  <line x1="224" y1="84" x2="272" y2="84" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="276" y="62" width="230" height="44" rx="4" fill="#ffebee" stroke="#c62828"/>
+  <text x="292" y="82" font-size="13" fill="#c62828">高相似度噪声词</text>
+  <text x="292" y="98" font-size="12" fill="#c62828">公司名等无关词顶到前面</text>
+  <line x1="506" y1="84" x2="554" y2="84" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="558" y="62" width="318" height="44" rx="4" fill="#f5f5f5" stroke="#9e9e9e" stroke-dasharray="5 4"/>
+  <text x="574" y="82" font-size="13" fill="#616161">检索结果：没命中答案块</text>
+  <text x="574" y="98" font-size="12" fill="#616161">模型看到「查不到」→ 自己换措辞</text>
+
+  <line x1="717" y1="106" x2="717" y2="130" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="558" y="134" width="318" height="44" rx="4" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="574" y="154" font-size="13" fill="#1b5e20">改写后查询：「员工年假天数 政策」</text>
+  <text x="574" y="170" font-size="12" fill="#1b5e20">保留实体与意图 → 命中答案块</text>
+
+  <line x1="558" y1="156" x2="530" y2="156" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="276" y="134" width="230" height="44" rx="4" fill="#e3f2fd" stroke="#1565C0"/>
+  <text x="292" y="154" font-size="13" fill="#0d47a1">检索工具（@tool）</text>
+  <text x="292" y="170" font-size="12" fill="#0d47a1">similarity_search(k=4)</text>
+
+  <rect x="24" y="206" width="852" height="34" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="40" y="228" font-size="13" fill="#333">关键在「检索是工具」：模型发现没查到会自己重试，改写发生在对话里而不是预处理管道里</text>
+
+  <rect x="24" y="260" width="852" height="80" rx="4" fill="#ffebee" stroke="#c62828" stroke-dasharray="6 4"/>
+  <text x="40" y="284" font-size="14" font-weight="bold" fill="#c62828">失效点：多一次模型调用，且改写可能改丢关键实体</text>
+  <text x="40" y="308" font-size="13" fill="#333">每轮「查不到 → 改写 → 再查」都要付费；改写由模型自由发挥，可能把订单号、日期等关键约束丢掉。</text>
+  <text x="40" y="330" font-size="13" fill="#333">防护：给工具描述写清「输入应包含关键实体与意图」，并限制重试次数（配合场景 5 的预算闸门）。</text>
+</svg>

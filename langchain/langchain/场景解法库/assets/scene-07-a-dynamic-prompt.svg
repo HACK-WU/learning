@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" width="900" height="360" font-family="PingFang SC, Helvetica Neue, Arial, sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+  <rect width="900" height="360" fill="#ffffff"/>
+
+  <text x="24" y="34" font-size="17" font-weight="bold" fill="#333">解法 A · 动态提示词：「谁在问」决定说话口径</text>
+
+  <rect x="24" y="62" width="200" height="40" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="40" y="80" font-size="13" fill="#333">运行时上下文</text>
+  <text x="40" y="96" font-size="12" fill="#555">context.role / 会员等级</text>
+  <line x1="224" y1="82" x2="272" y2="82" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="276" y="62" width="220" height="40" rx="4" fill="#e3f2fd" stroke="#1565C0"/>
+  <text x="292" y="80" font-size="13" fill="#0d47a1">@dynamic_prompt</text>
+  <text x="292" y="96" font-size="12" fill="#0d47a1">现场拼系统消息</text>
+
+  <line x1="496" y1="68" x2="554" y2="56" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <line x1="496" y1="96" x2="554" y2="108" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <rect x="558" y="40" width="318" height="32" rx="4" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="574" y="62" font-size="13" fill="#1b5e20">admin：「拥有全部操作权限」→ 答「可查/可改/可删」</text>
+  <rect x="558" y="96" width="318" height="32" rx="4" fill="#fff8e1" stroke="#f9a825"/>
+  <text x="574" y="118" font-size="13" fill="#8d6e00">viewer：「只能读取」→ 答「只能读取」</text>
+
+  <rect x="24" y="156" width="852" height="34" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="40" y="178" font-size="13" fill="#333">同一个模型、同一个问题，答案自动收敛到身份边界内 —— 课 9 实测</text>
+
+  <rect x="24" y="210" width="852" height="34" rx="4" fill="#e3f2fd" stroke="#1565C0"/>
+  <text x="40" y="232" font-size="13" fill="#0d47a1">配 context_schema 声明上下文结构，把「按人定制指令」从手工拼接变成声明式</text>
+
+  <rect x="24" y="264" width="852" height="76" rx="4" fill="#ffebee" stroke="#c62828" stroke-dasharray="6 4"/>
+  <text x="40" y="288" font-size="14" font-weight="bold" fill="#c62828">失效点：提示词管的是「说法」，不是「权限」—— 注入一试就破</text>
+  <text x="40" y="312" font-size="13" fill="#333">Chevrolet 案例：约束写在提示词里 = 没有约束，用户一句「忽略之前的规则」就能让它改口径。</text>
+  <text x="40" y="332" font-size="13" fill="#333">口径可以靠提示词（错了最多话说得不对），能力边界绝不能（见解法 B / C）。</text>
+</svg>

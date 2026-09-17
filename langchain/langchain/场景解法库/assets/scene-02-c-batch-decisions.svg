@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" width="900" height="360" font-family="PingFang SC, Helvetica Neue, Arial, sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+  <rect width="900" height="360" fill="#ffffff"/>
+
+  <text x="24" y="34" font-size="17" font-weight="bold" fill="#333">解法 C · 批量决策：一个 turn 的多个调用打包成一次中断</text>
+
+  <text x="24" y="76" font-size="13" fill="#555">模型一次发起</text>
+  <rect x="140" y="58" width="150" height="34" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="156" y="80" font-size="13" fill="#333">提案 1：退款 A</text>
+  <rect x="300" y="58" width="150" height="34" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="316" y="80" font-size="13" fill="#333">提案 2：删除 B</text>
+  <rect x="460" y="58" width="150" height="34" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="476" y="80" font-size="13" fill="#333">提案 3：发券 C</text>
+
+  <rect x="140" y="112" width="470" height="36" rx="4" fill="#fff8e1" stroke="#f9a825"/>
+  <text x="156" y="136" font-size="13" fill="#8d6e00">框架打包成一批（一次中断，不是三次）—— 审批人看到的是一个列表</text>
+  <line x1="215" y1="92" x2="215" y2="110" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <line x1="375" y1="92" x2="375" y2="110" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <line x1="535" y1="92" x2="535" y2="110" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <line x1="375" y1="148" x2="375" y2="172" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <text x="24" y="196" font-size="13" fill="#555">恢复时按序提交</text>
+  <rect x="140" y="178" width="150" height="42" rx="4" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="156" y="198" font-size="13" fill="#1b5e20">decisions[0]</text>
+  <text x="156" y="214" font-size="12" fill="#1b5e20">approve</text>
+  <rect x="300" y="178" width="150" height="42" rx="4" fill="#ffebee" stroke="#c62828"/>
+  <text x="316" y="198" font-size="13" fill="#c62828">decisions[1]</text>
+  <text x="316" y="214" font-size="12" fill="#c62828">reject + 说明</text>
+  <rect x="460" y="178" width="150" height="42" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="476" y="198" font-size="13" fill="#333">decisions[2]</text>
+  <text x="476" y="214" font-size="12" fill="#555">approve</text>
+
+  <rect x="24" y="240" width="852" height="34" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="40" y="262" font-size="13" fill="#333">被拒会生成错误回执进入对话 —— 模型据此重新评估后续计划（课 10 观察到它会主动暂停）</text>
+
+  <rect x="24" y="286" width="852" height="56" rx="4" fill="#ffebee" stroke="#c62828" stroke-dasharray="6 4"/>
+  <text x="40" y="310" font-size="14" font-weight="bold" fill="#c62828">失效点：顺序对齐是硬要求，错位即批错对象</text>
+  <text x="40" y="332" font-size="13" fill="#333">decisions 数量与提案不匹配会报 ValueError；顺序错位则把「拒绝删除」安到「退款」头上 —— 批量审批台必须按提案顺序生成。</text>
+</svg>

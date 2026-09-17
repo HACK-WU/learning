@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" width="900" height="360" font-family="PingFang SC, Helvetica Neue, Arial, sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+  <rect width="900" height="360" fill="#ffffff"/>
+
+  <text x="24" y="34" font-size="17" font-weight="bold" fill="#333">解法 D · 结构化抽字段：把「要长期记住的事」挪出消息链</text>
+
+  <text x="24" y="80" font-size="13" fill="#555">轨道一 · 消息链（可被裁剪 / 摘要）</text>
+  <rect x="230" y="62" width="460" height="34" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="246" y="84" font-size="13" fill="#333">m1…m10 对话过程（寒暄、追问、已解决的问题）</text>
+  <rect x="230" y="106" width="460" height="30" rx="4" fill="#f5f5f5" stroke="#9e9e9e" stroke-dasharray="5 4"/>
+  <text x="246" y="126" font-size="12" fill="#9e9e9e">随时可能被裁剪或压成摘要 —— 不能放长期信息</text>
+
+  <text x="24" y="184" font-size="13" fill="#555">轨道二 · 自定义 state（跨轮稳定）</text>
+  <rect x="230" y="166" width="460" height="40" rx="4" fill="#e3f2fd" stroke="#1565C0"/>
+  <text x="246" y="186" font-size="13" fill="#0d47a1">user_name / 会员等级 / 订单号 —— 结构化字段</text>
+  <text x="246" y="202" font-size="12" fill="#0d47a1">与消息链解耦：历史被砍也不受影响</text>
+
+  <rect x="710" y="150" width="166" height="52" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="726" y="172" font-size="13" fill="#333">工具用 Command 写入</text>
+  <text x="726" y="188" font-size="12" fill="#333">runtime.state 读取</text>
+  <line x1="690" y1="182" x2="706" y2="182" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <line x1="710" y1="196" x2="694" y2="196" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <rect x="24" y="232" width="852" height="34" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="40" y="254" font-size="13" fill="#333">每轮只需携带：系统提示 + 最近消息 + 按需读取的字段 —— 长期信息不再重复计费</text>
+
+  <rect x="24" y="286" width="852" height="58" rx="4" fill="#ffebee" stroke="#c62828" stroke-dasharray="6 4"/>
+  <text x="40" y="310" font-size="14" font-weight="bold" fill="#c62828">失效点：写入靠模型「记得调工具」，漏写即丢</text>
+  <text x="40" y="334" font-size="13" fill="#333">抽字段是模型行为而非框架保证 —— 必须靠测试断言「该写的字段写进去了」，还要自己设计字段的更新与治理。</text>
+</svg>

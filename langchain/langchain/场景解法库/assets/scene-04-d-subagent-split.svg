@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 380" width="900" height="380" font-family="PingFang SC, Helvetica Neue, Arial, sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+  <rect width="900" height="380" fill="#ffffff"/>
+
+  <text x="24" y="34" font-size="17" font-weight="bold" fill="#333">解法 D · 拆多智能体：工具按领域分给子代理，主代理只见一个「专家工具」</text>
+
+  <rect x="24" y="58" width="180" height="90" rx="4" fill="#e3f2fd" stroke="#1565C0"/>
+  <text x="40" y="80" font-size="13" fill="#0d47a1">主代理上下文</text>
+  <text x="40" y="100" font-size="12" fill="#0d47a1">工具：weather_expert</text>
+  <text x="40" y="118" font-size="12" fill="#0d47a1">（1 个，不是 30 个）</text>
+  <text x="40" y="138" font-size="12" fill="#0d47a1">课 12 实测：只见 4 条消息</text>
+
+  <line x1="204" y1="103" x2="262" y2="103" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="266" y="58" width="200" height="90" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="282" y="80" font-size="13" fill="#333">子代理 = 工具</text>
+  <text x="282" y="100" font-size="12" fill="#555">subagent.invoke(...)</text>
+  <text x="282" y="118" font-size="12" fill="#555">结果只回传最后一条消息</text>
+  <text x="282" y="138" font-size="12" fill="#555">内部过程主会话不可见</text>
+
+  <line x1="466" y1="103" x2="524" y2="103" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="528" y="58" width="348" height="90" rx="4" fill="#fff8e1" stroke="#f9a825"/>
+  <text x="544" y="80" font-size="13" fill="#8d6e00">子代理自己的上下文（30 个领域工具）</text>
+  <text x="544" y="100" font-size="12" fill="#8d6e00">查天气 → 解析 → 格式化 → 汇总</text>
+  <text x="544" y="118" font-size="12" fill="#8d6e00">这些中间消息留在子代理内部</text>
+  <text x="544" y="138" font-size="12" fill="#8d6e00">上下文彻底隔离</text>
+
+  <rect x="24" y="172" width="852" height="34" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="40" y="194" font-size="13" fill="#333">代价：结果多绕一跳 —— 课 12 实测 4 calls（直达是 3），且调试链变长（要看子代理内部得单独开 tracing）</text>
+
+  <rect x="24" y="226" width="852" height="34" rx="4" fill="#e3f2fd" stroke="#1565C0"/>
+  <text x="40" y="248" font-size="13" fill="#0d47a1">课 12 实测反直觉结论：16 个工具时选择并未退化 —— 拆分的理由不是「工具太多会选错」</text>
+
+  <rect x="24" y="280" width="852" height="80" rx="4" fill="#ffebee" stroke="#c62828" stroke-dasharray="6 4"/>
+  <text x="40" y="304" font-size="14" font-weight="bold" fill="#c62828">失效点：工具少于 8 个时纯增成本；没有测试网别拆</text>
+  <text x="40" y="328" font-size="13" fill="#333">拆分换来的是上下文隔离与团队分工，代价是调用数、延迟和回归难度。</text>
+  <text x="40" y="350" font-size="13" fill="#333">多智能体行为更难回归 —— 先补课 13 的测试手段，再谈拆（否则改一处坏三处都不知道）。</text>
+</svg>

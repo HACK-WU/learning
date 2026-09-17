@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 380" width="900" height="380" font-family="PingFang SC, Helvetica Neue, Arial, sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+  <rect width="900" height="380" fill="#ffffff"/>
+
+  <text x="24" y="34" font-size="17" font-weight="bold" fill="#333">解法 A · 切分参数对照：块太大杂质多，块太小答案被切碎</text>
+
+  <text x="80" y="76" font-size="13" fill="#555">chunk 过大</text>
+  <rect x="80" y="88" width="200" height="120" rx="4" fill="#ffebee" stroke="#c62828"/>
+  <line x1="80" y1="128" x2="280" y2="128" stroke="#c62828" stroke-dasharray="4 4"/>
+  <line x1="80" y1="168" x2="280" y2="168" stroke="#c62828" stroke-dasharray="4 4"/>
+  <rect x="92" y="136" width="120" height="24" rx="3" fill="#c62828" opacity="0.18"/>
+  <text x="96" y="152" font-size="12" fill="#c62828">答案</text>
+  <text x="96" y="120" font-size="12" fill="#555">无关段落</text>
+  <text x="96" y="192" font-size="12" fill="#555">无关段落</text>
+  <text x="80" y="228" font-size="12" fill="#c62828">语义被稀释 → 相似度低</text>
+
+  <text x="350" y="76" font-size="13" fill="#555">chunk 适中</text>
+  <rect x="350" y="88" width="200" height="120" rx="4" fill="#e8f5e9" stroke="#2e7d32"/>
+  <line x1="350" y1="148" x2="550" y2="148" stroke="#2e7d32" stroke-dasharray="4 4"/>
+  <line x1="350" y1="188" x2="550" y2="188" stroke="#2e7d32" stroke-dasharray="4 4"/>
+  <rect x="362" y="156" width="176" height="24" rx="3" fill="#2e7d32" opacity="0.16"/>
+  <text x="366" y="172" font-size="12" fill="#1b5e20">答案（完整落在块内）</text>
+  <text x="362" y="140" font-size="12" fill="#555">前文</text>
+  <text x="350" y="228" font-size="12" fill="#1b5e20">答案完整率 + 命中排名双高</text>
+
+  <text x="620" y="76" font-size="13" fill="#555">chunk 过小</text>
+  <rect x="620" y="88" width="200" height="120" rx="4" fill="#fff8e1" stroke="#f9a825"/>
+  <line x1="620" y1="128" x2="820" y2="128" stroke="#f9a825" stroke-dasharray="4 4"/>
+  <line x1="620" y1="168" x2="820" y2="168" stroke="#f9a825" stroke-dasharray="4 4"/>
+  <rect x="632" y="100" width="90" height="24" rx="3" fill="#f9a825" opacity="0.24"/>
+  <text x="636" y="116" font-size="12" fill="#8d6e00">答案前半</text>
+  <rect x="632" y="140" width="90" height="24" rx="3" fill="#f9a825" opacity="0.24"/>
+  <text x="636" y="156" font-size="12" fill="#8d6e00">答案后半</text>
+  <text x="620" y="228" font-size="12" fill="#8d6e00">答案被切开 → 两块都不完整</text>
+
+  <rect x="24" y="256" width="852" height="34" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="40" y="278" font-size="13" fill="#333">评估方法：同一份文档跑三档切分 → 统计块数 / 平均块长 → 对固定问题集看「期望块是否完整命中」</text>
+
+  <rect x="24" y="308" width="852" height="58" rx="4" fill="#ffebee" stroke="#c62828" stroke-dasharray="6 4"/>
+  <text x="40" y="332" font-size="14" font-weight="bold" fill="#c62828">失效点：没有万能参数，调参必须配评估基线</text>
+  <text x="40" y="356" font-size="13" fill="#333">不建问题集就调 chunk_size / overlap = 凭感觉改数字；文档结构规整时才有效，扫描件与表格类文档要另想办法。</text>
+</svg>

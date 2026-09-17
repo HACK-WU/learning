@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" width="900" height="360" font-family="PingFang SC, Helvetica Neue, Arial, sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+  <rect width="900" height="360" fill="#ffffff"/>
+
+  <text x="24" y="34" font-size="17" font-weight="bold" fill="#333">解法 B · 输出侧审查：模型说完之后，还有最后一道闸</text>
+
+  <rect x="24" y="62" width="180" height="40" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="40" y="80" font-size="13" fill="#333">模型产出最终回复</text>
+  <text x="40" y="96" font-size="12" fill="#555">after_agent 钩子拿到它</text>
+  <line x1="204" y1="82" x2="252" y2="82" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <rect x="256" y="48" width="250" height="34" rx="4" fill="#e3f2fd" stroke="#1565C0"/>
+  <text x="272" y="70" font-size="13" fill="#0d47a1">① 确定性规则：命中特征</text>
+  <rect x="256" y="94" width="250" height="34" rx="4" fill="#e3f2fd" stroke="#1565C0"/>
+  <text x="272" y="116" font-size="13" fill="#0d47a1">② 模型审查：安全分类</text>
+
+  <line x1="506" y1="65" x2="564" y2="65" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <line x1="506" y1="111" x2="564" y2="111" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="568" y="48" width="308" height="34" rx="4" fill="#ffebee" stroke="#c62828"/>
+  <text x="584" y="70" font-size="13" fill="#c62828">判定不安全 → 替换为拦截话术</text>
+  <rect x="568" y="94" width="308" height="34" rx="4" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="584" y="116" font-size="13" fill="#1b5e20">判定安全 → 原样放行</text>
+
+  <rect x="24" y="152" width="852" height="54" rx="4" fill="#fff8e1" stroke="#f9a825"/>
+  <text x="40" y="172" font-size="13" fill="#8d6e00">课 10 实测行为：替换后的文本会被再审查一遍 —— 审查链对「替换结果」也生效</text>
+  <text x="40" y="192" font-size="12" fill="#8d6e00">所以拦截话术本身要幂等（不能再次触发规则），否则会陷入反复替换</text>
+
+  <rect x="24" y="224" width="852" height="34" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="40" y="246" font-size="13" fill="#333">两版都能替换最终输出：确定性规则便宜且可解释，模型审查能抓「听起来合理但越权」的话术</text>
+
+  <rect x="24" y="276" width="852" height="66" rx="4" fill="#ffebee" stroke="#c62828" stroke-dasharray="6 4"/>
+  <text x="40" y="300" font-size="14" font-weight="bold" fill="#c62828">失效点：多一次调用 + 误伤，且「审查模型」自己也可能被骗</text>
+  <text x="40" y="324" font-size="13" fill="#333">每条回复多跑一次小模型（成本 + 延迟）；规则太严会把正常回答也替换掉（用户觉得 agent 变傻）。</text>
+  <text x="40" y="342" font-size="13" fill="#333">审查层是降风险不是清零 —— 真正兜底的是动作层（解法 C）：话术被骗，动作也出不去。</text>
+</svg>

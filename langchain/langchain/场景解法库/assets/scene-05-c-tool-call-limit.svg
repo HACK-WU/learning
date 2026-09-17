@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" width="900" height="340" font-family="PingFang SC, Helvetica Neue, Arial, sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+  <rect width="900" height="340" fill="#ffffff"/>
+
+  <text x="24" y="34" font-size="17" font-weight="bold" fill="#333">解法 C · 工具调用限额：拦住「反复调同一个工具」的死循环</text>
+
+  <rect x="24" y="62" width="180" height="40" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="40" y="80" font-size="13" fill="#333">calculator 第 1 次</text>
+  <text x="40" y="96" font-size="12" fill="#555">run_limit = 1</text>
+  <line x1="204" y1="82" x2="252" y2="82" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="256" y="62" width="180" height="40" rx="4" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="272" y="80" font-size="13" fill="#1b5e20">放行 → 正常返回</text>
+  <text x="272" y="96" font-size="12" fill="#1b5e20">结果进入对话</text>
+
+  <rect x="24" y="126" width="180" height="40" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="40" y="144" font-size="13" fill="#333">calculator 第 2 次</text>
+  <text x="40" y="160" font-size="12" fill="#555">已超额</text>
+  <line x1="204" y1="146" x2="252" y2="146" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="256" y="126" width="180" height="40" rx="4" fill="#ffebee" stroke="#c62828"/>
+  <text x="272" y="144" font-size="13" fill="#c62828">拦下 → 返回错误回执</text>
+  <text x="272" y="160" font-size="12" fill="#c62828">默认 exit_behavior="continue"</text>
+  <line x1="436" y1="146" x2="484" y2="146" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="488" y="126" width="388" height="40" rx="4" fill="#fff8e1" stroke="#f9a825"/>
+  <text x="504" y="144" font-size="13" fill="#8d6e00">模型继续跑：课 8 实测它改用心算补上，并如实说明「工具不可用」</text>
+  <text x="504" y="160" font-size="12" fill="#8d6e00">—— 不是崩溃，是换路走</text>
+
+  <rect x="24" y="192" width="852" height="34" rx="4" fill="#e3f2fd" stroke="#1565C0"/>
+  <text x="40" y="214" font-size="13" fill="#0d47a1">粒度是「按工具名」配置的 —— 高风险 / 高成本工具单独设限，普通工具不设</text>
+
+  <rect x="24" y="244" width="852" height="80" rx="4" fill="#ffebee" stroke="#c62828" stroke-dasharray="6 4"/>
+  <text x="40" y="268" font-size="14" font-weight="bold" fill="#c62828">失效点：只拦次数，不治「为什么会反复调」；被拦后可能换个马甲重试</text>
+  <text x="40" y="292" font-size="13" fill="#333">限额是止损不是根治 —— 真正要修的是让模型不收敛的工具返回值（把错误写清楚，见场景 8 的 wrap_tool_call）。</text>
+  <text x="40" y="314" font-size="13" fill="#333">按工具名配置 = 新增工具忘记配就是裸奔；建议按「工具危险等级」批量设默认限额。</text>
+</svg>

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 300" width="900" height="300" font-family="PingFang SC, Helvetica Neue, Arial, sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+  <rect width="900" height="300" fill="#ffffff"/>
+
+  <text x="24" y="34" font-size="17" font-weight="bold" fill="#333">解法 A 配套 · 工程分流：默认跑快的，显式才跑慢的</text>
+
+  <rect x="24" y="58" width="220" height="40" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="40" y="76" font-size="13" fill="#333">pytest 默认运行</text>
+  <text x="40" y="92" font-size="12" fill="#555">addopts = -m "not integration"</text>
+  <line x1="244" y1="78" x2="292" y2="78" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="296" y="58" width="240" height="40" rx="4" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="312" y="76" font-size="13" fill="#1b5e20">只跑单元层（剧本模型）</text>
+  <text x="312" y="92" font-size="12" fill="#1b5e20">秒级、零费用、零网络</text>
+  <line x1="536" y1="78" x2="584" y2="78" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="588" y="58" width="288" height="40" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="604" y="76" font-size="13" fill="#333">每次改动都能跑 —— 反馈快才有人跑</text>
+  <text x="604" y="92" font-size="12" fill="#555">本项目三层套件离线约 1 秒可回归</text>
+
+  <rect x="24" y="118" width="220" height="40" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="40" y="136" font-size="13" fill="#333">显式 -m integration</text>
+  <text x="40" y="152" font-size="12" fill="#555">CI / 发布前</text>
+  <line x1="244" y1="138" x2="292" y2="138" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="296" y="118" width="240" height="40" rx="4" fill="#fff8e1" stroke="#f9a825"/>
+  <text x="312" y="136" font-size="13" fill="#8d6e00">真调模型（慢 / 要 key / 花钱）</text>
+  <text x="312" y="152" font-size="12" fill="#8d6e00">跑批而非每次提交</text>
+  <line x1="536" y1="138" x2="584" y2="138" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="588" y="118" width="288" height="40" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="604" y="136" font-size="13" fill="#333">验证「模型真的这么干」</text>
+  <text x="604" y="152" font-size="12" fill="#555">抓的是行为漂移</text>
+
+  <rect x="24" y="186" width="852" height="34" rx="4" fill="#e3f2fd" stroke="#1565C0"/>
+  <text x="40" y="208" font-size="13" fill="#0d47a1">分流的意义：让「便宜的测试」成为默认动作 —— 跑得起的测试才会真的被跑</text>
+
+  <rect x="24" y="238" width="852" height="44" rx="4" fill="#ffebee" stroke="#c62828" stroke-dasharray="6 4"/>
+  <text x="40" y="260" font-size="14" font-weight="bold" fill="#c62828">失效点：集成测试被长期跳过 = 等于没有</text>
+  <text x="40" y="276" font-size="13" fill="#333">marker 只是分流，不是豁免 —— CI 里必须有地方真的跑 -m integration，否则模型漂移永远发现不了。</text>
+</svg>

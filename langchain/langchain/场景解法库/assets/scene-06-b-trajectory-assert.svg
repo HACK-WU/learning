@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" width="900" height="360" font-family="PingFang SC, Helvetica Neue, Arial, sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+  <rect width="900" height="360" fill="#ffffff"/>
+
+  <text x="24" y="34" font-size="17" font-weight="bold" fill="#333">解法 B（Evals 层）· 轨迹断言：不比对文本，只核对「该做的动作」</text>
+
+  <text x="24" y="76" font-size="13" fill="#555">参考轨迹（期望行为）</text>
+  <rect x="180" y="58" width="150" height="34" rx="4" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="196" y="80" font-size="13" fill="#1b5e20">查订单</text>
+  <line x1="330" y1="75" x2="358" y2="75" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="362" y="58" width="150" height="34" rx="4" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="378" y="80" font-size="13" fill="#1b5e20">发起退货</text>
+  <line x1="512" y1="75" x2="540" y2="75" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="544" y="58" width="150" height="34" rx="4" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="560" y="80" font-size="13" fill="#1b5e20">告知结果</text>
+
+  <text x="24" y="136" font-size="13" fill="#555">实际轨迹（一次没办成事的运行）</text>
+  <rect x="180" y="118" width="150" height="34" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="196" y="140" font-size="13" fill="#333">查订单</text>
+  <line x1="330" y1="135" x2="358" y2="135" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="362" y="118" width="150" height="34" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="378" y="140" font-size="13" fill="#333">查物流</text>
+  <line x1="512" y1="135" x2="540" y2="135" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="544" y="118" width="150" height="34" rx="4" fill="#ffebee" stroke="#c62828" stroke-dasharray="5 4"/>
+  <text x="560" y="140" font-size="13" fill="#c62828">缺少「发起退货」</text>
+
+  <line x1="619" y1="152" x2="619" y2="176" stroke="#c62828" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="24" y="180" width="852" height="34" rx="4" fill="#ffebee" stroke="#c62828"/>
+  <text x="40" y="202" font-size="13" fill="#c62828">trajectory_match_mode='superset' → score = False：缺「必须调用的工具」当场判失败</text>
+
+  <rect x="24" y="234" width="852" height="34" rx="4" fill="#e3f2fd" stroke="#1565C0"/>
+  <text x="40" y="256" font-size="13" fill="#0d47a1">为什么有效：回复措辞 100% 在飘，但「该调的工具」不该飘 —— 课 13 实测 5 次跑出 4 种路径</text>
+
+  <rect x="24" y="288" width="852" height="60" rx="4" fill="#ffebee" stroke="#c62828" stroke-dasharray="6 4"/>
+  <text x="40" y="312" font-size="14" font-weight="bold" fill="#c62828">失效点：参考轨迹要人工维护，且只锁动作不锁质量</text>
+  <text x="40" y="336" font-size="13" fill="#333">业务一改流程，参考轨迹就得跟着改（维护成本）；「动作对了但答案错了」它照样判通过 —— 需配合结果层断言。</text>
+</svg>

@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 380" width="900" height="380" font-family="PingFang SC, Helvetica Neue, Arial, sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+  <rect width="900" height="380" fill="#ffffff"/>
+
+  <text x="24" y="34" font-size="17" font-weight="bold" fill="#333">解法 B · 工具按角色过滤：三种角色，三份「看得见的能力」</text>
+
+  <text x="150" y="76" font-size="13" fill="#555">普通用户（V1）</text>
+  <text x="430" y="76" font-size="13" fill="#555">金卡会员（V3）</text>
+  <text x="710" y="76" font-size="13" fill="#555">内部运营</text>
+
+  <rect x="40" y="88" width="220" height="150" rx="4" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="56" y="110" font-size="13" fill="#1b5e20">read_order</text>
+  <text x="56" y="132" font-size="13" fill="#1b5e20">read_policy</text>
+  <text x="56" y="154" font-size="13" fill="#1b5e20">apply_return</text>
+  <line x1="56" y1="168" x2="244" y2="168" stroke="#9e9e9e" stroke-dasharray="4 4"/>
+  <text x="56" y="190" font-size="12" fill="#9e9e9e">query_user_data ✗</text>
+  <text x="56" y="210" font-size="12" fill="#9e9e9e">export_report ✗</text>
+  <text x="56" y="228" font-size="12" fill="#9e9e9e">change_price ✗</text>
+
+  <rect x="320" y="88" width="220" height="150" rx="4" fill="#e3f2fd" stroke="#1565C0"/>
+  <text x="336" y="110" font-size="13" fill="#0d47a1">read_order</text>
+  <text x="336" y="132" font-size="13" fill="#0d47a1">read_policy</text>
+  <text x="336" y="154" font-size="13" fill="#0d47a1">apply_return</text>
+  <text x="336" y="176" font-size="13" fill="#0d47a1">fast_track_return</text>
+  <line x1="336" y1="190" x2="524" y2="190" stroke="#9e9e9e" stroke-dasharray="4 4"/>
+  <text x="336" y="212" font-size="12" fill="#9e9e9e">query_user_data ✗</text>
+  <text x="336" y="230" font-size="12" fill="#9e9e9e">change_price ✗</text>
+
+  <rect x="600" y="88" width="260" height="150" rx="4" fill="#fff8e1" stroke="#f9a825"/>
+  <text x="616" y="110" font-size="13" fill="#8d6e00">query_user_data</text>
+  <text x="616" y="132" font-size="13" fill="#8d6e00">export_report</text>
+  <text x="616" y="154" font-size="13" fill="#8d6e00">read_order / read_policy</text>
+  <line x1="616" y1="168" x2="844" y2="168" stroke="#9e9e9e" stroke-dasharray="4 4"/>
+  <text x="616" y="190" font-size="12" fill="#9e9e9e">change_price ✗（需审批）</text>
+  <text x="616" y="212" font-size="12" fill="#8d6e00">运营也拿不到改价权</text>
+
+  <rect x="24" y="258" width="852" height="34" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="40" y="280" font-size="13" fill="#333">过滤发生在模型调用之前：viewer 提问「请删除数据」→ 模型直接拒绝（它手上没有那个工具）</text>
+
+  <rect x="24" y="312" width="852" height="56" rx="4" fill="#ffebee" stroke="#c62828" stroke-dasharray="6 4"/>
+  <text x="40" y="336" font-size="14" font-weight="bold" fill="#c62828">失效点：映射是手工清单，且「看不到」不等于「调不到」</text>
+  <text x="40" y="358" font-size="13" fill="#333">新增工具忘记归类 = 默认对所有角色开放；前端过滤挡不住直接构造调用 —— 真边界在数据层（解法 C）。</text>
+</svg>

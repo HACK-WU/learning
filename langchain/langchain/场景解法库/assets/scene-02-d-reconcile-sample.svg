@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" width="900" height="340" font-family="PingFang SC, Helvetica Neue, Arial, sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+  <rect width="900" height="340" fill="#ffffff"/>
+
+  <text x="24" y="34" font-size="17" font-weight="bold" fill="#333">解法 D · 自动对账 + 抽样复核：把人力从「事前全审」挪到「事后抽查」</text>
+
+  <rect x="24" y="62" width="160" height="40" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="40" y="80" font-size="13" fill="#333">风险分级</text>
+  <text x="40" y="96" font-size="12" fill="#555">低风险账号放额度</text>
+  <line x1="184" y1="82" x2="232" y2="82" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="236" y="62" width="160" height="40" rx="4" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="252" y="80" font-size="13" fill="#1b5e20">自动执行</text>
+  <text x="252" y="96" font-size="12" fill="#1b5e20">不再事前中断</text>
+  <line x1="396" y1="82" x2="444" y2="82" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="448" y="62" width="160" height="40" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="464" y="80" font-size="13" fill="#333">每日自动对账</text>
+  <text x="464" y="96" font-size="12" fill="#555">比对预期与实际</text>
+  <line x1="608" y1="82" x2="656" y2="82" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="660" y="62" width="216" height="40" rx="4" fill="#fff8e1" stroke="#f9a825"/>
+  <text x="676" y="80" font-size="13" fill="#8d6e00">异常样本 + 随机抽样</text>
+  <text x="676" y="96" font-size="12" fill="#8d6e00">人工复核（只审该审的）</text>
+
+  <rect x="24" y="132" width="852" height="34" rx="4" fill="#e3f2fd" stroke="#1565C0"/>
+  <text x="40" y="154" font-size="13" fill="#0d47a1">审批量：全量 300 笔 → 只剩抽样与异常，人力集中在大额与可疑样本上</text>
+
+  <rect x="24" y="186" width="852" height="34" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="40" y="208" font-size="13" fill="#333">前提：动作本身可追溯（有日志 / 有回执）且可追回（有撤销或补偿路径）</text>
+
+  <rect x="24" y="240" width="852" height="80" rx="4" fill="#ffebee" stroke="#c62828" stroke-dasharray="6 4"/>
+  <text x="40" y="264" font-size="14" font-weight="bold" fill="#c62828">失效点：错误先发生 —— 不可逆动作不能这么干</text>
+  <text x="40" y="288" font-size="13" fill="#333">事前审批是「阻止」，事后对账是「发现 + 追回」；删库、对外发消息、已发出的转账都不适用。</text>
+  <text x="40" y="310" font-size="13" fill="#333">另：抽样率决定检出率，抽太少等于没查 —— 抽样比例要按「漏放代价」定，不是按人力剩余定。</text>
+</svg>

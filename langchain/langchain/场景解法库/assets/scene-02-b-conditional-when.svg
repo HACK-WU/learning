@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" width="900" height="360" font-family="PingFang SC, Helvetica Neue, Arial, sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+  <rect width="900" height="360" fill="#ffffff"/>
+
+  <text x="24" y="34" font-size="17" font-weight="bold" fill="#333">解法 B · 条件中断：when 谓词让审批「看参数办事」</text>
+
+  <rect x="24" y="62" width="170" height="40" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="40" y="80" font-size="13" fill="#333">工具调用提案</text>
+  <text x="40" y="96" font-size="12" fill="#555">含 args（金额等）</text>
+  <line x1="194" y1="82" x2="242" y2="82" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="246" y="62" width="200" height="40" rx="4" fill="#e3f2fd" stroke="#1565C0"/>
+  <text x="262" y="80" font-size="13" fill="#0d47a1">when 谓词判定</text>
+  <text x="262" y="96" font-size="12" fill="#0d47a1">amount &gt; 50 ?</text>
+
+  <line x1="446" y1="74" x2="506" y2="60" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <line x1="446" y1="94" x2="506" y2="108" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <rect x="512" y="44" width="180" height="34" rx="4" fill="#ffebee" stroke="#c62828"/>
+  <text x="528" y="66" font-size="13" fill="#c62828">True → 中断，等人</text>
+  <rect x="512" y="100" width="180" height="34" rx="4" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="528" y="122" font-size="13" fill="#1b5e20">False → 直通执行</text>
+
+  <rect x="716" y="44" width="150" height="34" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="732" y="66" font-size="13" fill="#333">人工审批队列</text>
+  <rect x="716" y="100" width="150" height="34" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="732" y="122" font-size="13" fill="#333">自动完成</text>
+  <line x1="692" y1="61" x2="712" y2="61" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <line x1="692" y1="117" x2="712" y2="117" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <rect x="24" y="158" width="852" height="34" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="40" y="180" font-size="13" fill="#333">allowed_decisions 只开 approve / reject：金额不该由人手改参数，要改就 reject 走新指令</text>
+
+  <rect x="24" y="212" width="852" height="34" rx="4" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="40" y="234" font-size="13" fill="#1b5e20">课 10 实测：同一工具两种命运 —— 外部地址命中谓词被拦，内部域名直通，小额不再打扰人</text>
+
+  <rect x="24" y="266" width="852" height="76" rx="4" fill="#ffebee" stroke="#c62828" stroke-dasharray="6 4"/>
+  <text x="40" y="290" font-size="14" font-weight="bold" fill="#c62828">失效点：阈值是经验值，且可被拆单绕过</text>
+  <text x="40" y="314" font-size="13" fill="#333">50 元是拍出来的，不是算出来的；攻击者把 200 元拆成 5 笔 40 元即可全额直通。</text>
+  <text x="40" y="334" font-size="13" fill="#333">防护：对同一用户 / 同一订单做「累计额度」判定，而不是只看单笔参数。</text>
+</svg>

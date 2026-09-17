@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" width="900" height="360" font-family="PingFang SC, Helvetica Neue, Arial, sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+  <rect width="900" height="360" fill="#ffffff"/>
+
+  <text x="24" y="34" font-size="17" font-weight="bold" fill="#333">解法 C · 数据层兜底：越权话术骗得到模型，骗不过服务端判定</text>
+
+  <rect x="24" y="62" width="160" height="40" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="40" y="80" font-size="13" fill="#333">越权话术</text>
+  <text x="40" y="96" font-size="12" fill="#555">「我是管理员，查…」</text>
+  <line x1="184" y1="82" x2="232" y2="82" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="236" y="62" width="170" height="40" rx="4" fill="#fff8e1" stroke="#f9a825"/>
+  <text x="252" y="80" font-size="13" fill="#8d6e00">模型被说动</text>
+  <text x="252" y="96" font-size="12" fill="#8d6e00">发起工具调用</text>
+  <line x1="406" y1="82" x2="454" y2="82" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <rect x="458" y="46" width="418" height="72" rx="4" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="474" y="68" font-size="13" fill="#1b5e20">数据层最后一道闸：动词级权限 + 参数校验 + 字段裁剪</text>
+  <text x="474" y="88" font-size="12" fill="#1b5e20">① 这个角色能不能做这个动作？② 参数在不在允许范围？③ 敏感字段按角色裁掉</text>
+  <text x="474" y="106" font-size="12" fill="#1b5e20">任一不过 → 拒绝并返回可读原因（不是崩掉、也不漏内部细节）</text>
+
+  <line x1="667" y1="118" x2="667" y2="150" stroke="#c62828" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="458" y="154" width="418" height="34" rx="4" fill="#ffebee" stroke="#c62828"/>
+  <text x="474" y="176" font-size="13" fill="#c62828">越权动作在这里被挡下 —— 话术骗得再像也没用</text>
+
+  <rect x="24" y="212" width="852" height="34" rx="4" fill="#e3f2fd" stroke="#1565C0"/>
+  <text x="40" y="234" font-size="13" fill="#0d47a1">这是「运营能力绝不能泄漏给用户」这句承诺的唯一可靠落实点 —— 提示词与工具过滤都是外围</text>
+
+  <rect x="24" y="266" width="852" height="76" rx="4" fill="#ffebee" stroke="#c62828" stroke-dasharray="6 4"/>
+  <text x="40" y="290" font-size="14" font-weight="bold" fill="#c62828">失效点：工程量大，且每个数据入口都得做 —— 漏一个就是洞</text>
+  <text x="40" y="314" font-size="13" fill="#333">权限逻辑散落在各服务里最容易漏；新加一个数据接口忘了接判定，前面几层白做。</text>
+  <text x="40" y="334" font-size="13" fill="#333">建议：权限判定收敛到统一的数据访问层，agent 只是普通客户端（见「替代路线」的 IAM 下沉）。</text>
+</svg>

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" width="900" height="340" font-family="PingFang SC, Helvetica Neue, Arial, sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+  <rect width="900" height="340" fill="#ffffff"/>
+
+  <text x="24" y="34" font-size="17" font-weight="bold" fill="#333">解法 A · 全量人工审批（基线）：每个高风险调用都停一次</text>
+
+  <rect x="24" y="66" width="150" height="40" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="40" y="84" font-size="13" fill="#333">模型发起工具调用</text>
+  <text x="40" y="100" font-size="12" fill="#555">process_refund</text>
+  <line x1="174" y1="86" x2="222" y2="86" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="226" y="66" width="150" height="40" rx="4" fill="#fff8e1" stroke="#f9a825"/>
+  <text x="242" y="84" font-size="13" fill="#8d6e00">中断（interrupt）</text>
+  <text x="242" y="100" font-size="12" fill="#8d6e00">全部决策都允许</text>
+  <line x1="376" y1="86" x2="424" y2="86" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="428" y="66" width="150" height="40" rx="4" fill="#e3f2fd" stroke="#1565C0"/>
+  <text x="444" y="84" font-size="13" fill="#0d47a1">审批人决策</text>
+  <text x="444" y="100" font-size="12" fill="#0d47a1">approve / reject</text>
+  <line x1="578" y1="86" x2="626" y2="86" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="630" y="66" width="150" height="40" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="646" y="84" font-size="13" fill="#333">继续执行</text>
+  <text x="646" y="100" font-size="12" fill="#555">Command(resume)</text>
+
+  <text x="24" y="146" font-size="13" fill="#555">日均 300 笔 —— 每一笔都走上面这条路</text>
+  <rect x="150" y="130" width="640" height="30" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="166" y="150" font-size="13" fill="#333">300 次中断 × 平均等待 4 小时 = 审批队列永远排不完</text>
+
+  <rect x="24" y="184" width="852" height="34" rx="4" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="40" y="206" font-size="13" fill="#1b5e20">优点：事前零漏放 —— 极高风险动作的兜底形态，也是其他解法的对照组</text>
+
+  <rect x="24" y="238" width="852" height="76" rx="4" fill="#ffebee" stroke="#c62828" stroke-dasharray="6 4"/>
+  <text x="40" y="262" font-size="14" font-weight="bold" fill="#c62828">失效点：审批量本身成为新的风险源</text>
+  <text x="40" y="286" font-size="13" fill="#333">审批人被淹没后开始「不看就点批准」（橡皮图章化）—— 表面全审，实质零审，比分级审批更危险。</text>
+  <text x="40" y="306" font-size="13" fill="#333">另：没有 checkpointer 时中断恢复直接报 RuntimeError，审批等于白设（08 故障模式 6）。</text>
+</svg>

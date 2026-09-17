@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" width="900" height="340" font-family="PingFang SC, Helvetica Neue, Arial, sans-serif">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+  <rect width="900" height="340" fill="#ffffff"/>
+
+  <text x="24" y="34" font-size="17" font-weight="bold" fill="#333">解法 D · 强制引用 + 兜底话术：检索修不好时，至少别编</text>
+
+  <rect x="24" y="62" width="180" height="40" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="40" y="80" font-size="13" fill="#333">检索资料</text>
+  <text x="40" y="96" font-size="12" fill="#555">k 条块 + 文档名</text>
+  <line x1="204" y1="82" x2="252" y2="82" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <rect x="256" y="62" width="220" height="40" rx="4" fill="#e3f2fd" stroke="#1565C0"/>
+  <text x="272" y="80" font-size="13" fill="#0d47a1">提示词约束</text>
+  <text x="272" y="96" font-size="12" fill="#0d47a1">只依据资料 / 标注来源</text>
+
+  <line x1="476" y1="66" x2="524" y2="56" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <line x1="476" y1="98" x2="524" y2="108" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <rect x="528" y="40" width="348" height="34" rx="4" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="544" y="62" font-size="13" fill="#1b5e20">资料涵盖 → 结论 + [来源: 文档名]（可追溯）</text>
+  <rect x="528" y="92" width="348" height="34" rx="4" fill="#fff8e1" stroke="#f9a825"/>
+  <text x="544" y="114" font-size="13" fill="#8d6e00">未涵盖 → 「资料未涵盖，建议咨询人工」</text>
+
+  <rect x="24" y="152" width="852" height="34" rx="4" fill="#fafafa" stroke="#333"/>
+  <text x="40" y="174" font-size="13" fill="#333">对照 Air Canada 判例：编造政策由公司担责 —— 「不知道」比「自信编造」便宜得多</text>
+
+  <rect x="24" y="204" width="852" height="34" rx="4" fill="#e3f2fd" stroke="#1565C0"/>
+  <text x="40" y="226" font-size="13" fill="#0d47a1">代价：不改善召回 —— 它是「诚实层」，不是「准确层」，必须与 A / B / C 同时用</text>
+
+  <rect x="24" y="252" width="852" height="68" rx="4" fill="#ffebee" stroke="#c62828" stroke-dasharray="6 4"/>
+  <text x="40" y="276" font-size="14" font-weight="bold" fill="#c62828">失效点：来源也可能是编的，且提示词约束会漂移</text>
+  <text x="40" y="300" font-size="13" fill="#333">模型可能标出一个并不存在的文档名 —— 必须校验引用是否真来自检索块（字符串比对 / 阻断无来源输出）。</text>
+  <text x="40" y="318" font-size="13" fill="#333">提示词约束不是强制层：换模型 / 改提示词后要回归（见场景 6），别假设它一直生效。</text>
+</svg>
