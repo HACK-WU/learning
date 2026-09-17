@@ -10,7 +10,7 @@
 |--------|--------|-------------|
 | ① Core / Enterprise / Cloud 选型 | **判据：是否要查历史数据**（Core 无 compactor、单机） | 面对一个业务需求，给出形态选择并说明判据 |
 | ② 容量规划与硬件 | 点数 × 每点字节数 × 保留期 × 副本数 | 用公式算出存储量，并知道内存为什么比 CPU 先到瓶颈 |
-| ③ 高可用与备份 | ⚠️ 升级前必须备份 catalog（3.10+ 格式迁移单向） | 说出 Core 的 HA 边界，以及升级前必须做的动作 |
+| ③ 高可用、备份与认证 | ⚠️ 升级前必须备份 catalog（3.10+ 格式迁移单向）；生产凭据还要能轮换与撤销 | 说出 Core 的 HA 边界、升级前动作，以及 Token 的日常运维闭环 |
 
 ---
 
@@ -385,6 +385,34 @@ L12 学过 `--max-concurrent-queries` 可运行时调整，同批（3.10）还�
 ⚠️ **为什么这比检查 uptime 好**：Core 是**无盘架构**，数据全在对象存储里。**进程活着 ≠ 能服务**——如果对象存储连不上，进程可能还在跑但查询全失败。**`GET /ready` 直接校验"能否连通底层对象存储"**，这才是真正的就绪判据。
 
 → 落地推论：**Core 的负载均衡与 K8s 探针应该配 `GET /ready`，不要只配 TCP 端口检查**。
+
+#### 生产增补：认证与 Token 生命周期
+
+部署能启动、数据能写进去，不等于凭据已经可运维。Core 默认开启认证；第一个 admin token 是拥有全部权限的 operator token（名称为 `_admin`）。它适合初始化，不适合被所有采集器、仪表盘和脚本长期共用。
+
+把 Token 想成生产环境的钥匙串：**创建时拿到明文，日常只查元数据；泄露时轮换，服务下线时删除；任何时候都不能把唯一的管理钥匙锁在正在被替换的门里。**
+
+| 生命周期动作 | Core 做法 | 关键边界 |
+|--------------|-----------|----------|
+| 创建 / 注入 | `influxdb3 create token --admin`；运行时用 `INFLUXDB3_AUTH_TOKEN` 或密钥管理系统注入 | 明文只在创建/返回时出现；不要写进 Git、镜像层或 Compose 明文配置 |
+| 盘点 | `influxdb3 show tokens`；必要时查询 `_internal.system.tokens` | 只能看到 token 元数据/哈希，不能把哈希当作原始 token 找回 |
+| 轮换 operator token | `influxdb3 create token --admin --regenerate --token "$OPERATOR_TOKEN"` | 旧 operator token 会立即失效；必须先列出所有消费者并准备更新窗口 |
+| 删除废弃 token | `influxdb3 delete token --token-name TOKEN_NAME --token "$ADMIN_TOKEN"` | 删除前确认没有任务、Telegraf、Grafana 或 CI 仍在使用 |
+| 自动化部署 | `create token --admin --offline --expiry ... --output-file ...`，或使用 Docker Compose secrets | token 文件权限建议 `0600`；短期、可过期凭据优先 |
+
+认证方式还要跟兼容 API 对齐：
+
+| API 家族 | 常见认证方式 | 迁移提醒 |
+|----------|--------------|----------|
+| v3 原生 API | `Authorization: Bearer <TOKEN>` | 课程 L4 的 `/api/v3/*` 统一按此理解 |
+| v2 兼容 API | `Authorization: Token <TOKEN>` 或 Bearer | 不要把 v2 的 `organization` 语义误套到 Core 原生 API |
+| v1 兼容 API | Basic 认证或 `u` / `p` 查询参数 | 用户名会被忽略，密码/`p` 才是授权 token；查询串带凭据只适合受控兼容场景 |
+
+**推荐的轮换顺序**：①盘点 `show tokens` 与 `system.tokens`；②确认新凭据能访问目标数据库和端点；③更新 Telegraf、Grafana、CI/CD、脚本与探针；④再执行 operator token 轮换或删除废弃 token；⑤用一次真实读写和一次 `/ready` 检查确认旧凭据已失效、新凭据生效。
+
+⚠️ **不要把“能用 admin token”当作权限设计完成**。本课只覆盖 Core 的 Token 运维动作；具体部署仍应按最小权限、密钥托管、TLS 和回滚窗口制定团队策略。
+
+📚 官方文档：[Manage tokens](https://docs.influxdata.com/influxdb3/core/admin/tokens/) ｜ [List admin tokens](https://docs.influxdata.com/influxdb3/core/admin/tokens/admin/list/) ｜ [Regenerate an admin token](https://docs.influxdata.com/influxdb3/core/admin/tokens/admin/regenerate/) ｜ [Use a preconfigured admin token](https://docs.influxdata.com/influxdb3/core/admin/tokens/admin/preconfigured/) ｜ [Authentication](https://docs.influxdata.com/influxdb3/core/api/authentication/) ｜ [Security](https://docs.influxdata.com/influxdb3/core/admin/security/)
 
 📚 官方文档：[InfluxDB 3 Core release notes](https://docs.influxdata.com/influxdb3/core/release-notes/) ｜ [Enterprise 备份与恢复](https://docs.influxdata.com/influxdb3/enterprise/admin/backup-restore/) ｜ [升级指南](https://docs.influxdata.com/influxdb3/core/admin/upgrade/)
 
@@ -1101,6 +1129,12 @@ InfluxDB 3 系统学习 · 6 阶段 / 19 课 / 57 知识点
 | Core release notes（3.10 单向迁移、备份路径、`/ready`） | [InfluxDB 3 Core release notes](https://docs.influxdata.com/influxdb3/core/release-notes/) |
 | 升级指南 | [Upgrade InfluxDB 3 Core](https://docs.influxdata.com/influxdb3/core/admin/upgrade/) |
 | Enterprise 备份与恢复 | [Back up and restore](https://docs.influxdata.com/influxdb3/enterprise/admin/backup-restore/) |
+| 认证与 Token 总览 | [Manage tokens](https://docs.influxdata.com/influxdb3/core/admin/tokens/) |
+| Token 盘点与元数据 | [List admin tokens](https://docs.influxdata.com/influxdb3/core/admin/tokens/admin/list/) |
+| Operator Token 轮换 | [Regenerate an admin token](https://docs.influxdata.com/influxdb3/core/admin/tokens/admin/regenerate/) |
+| 自动化部署 Token | [Use a preconfigured admin token](https://docs.influxdata.com/influxdb3/core/admin/tokens/admin/preconfigured/) |
+| API 认证方式 | [Authentication](https://docs.influxdata.com/influxdb3/core/api/authentication/) |
+| Linux 原生部署加固 | [Security](https://docs.influxdata.com/influxdb3/core/admin/security/) |
 
 ---
 
@@ -1169,6 +1203,17 @@ InfluxDB 3 系统学习 · 6 阶段 / 19 课 / 57 知识点
 | Enterprise 备份 | `influxdb3 create backup` / `restore`（3.10+，需 `--use-pacha-tree`） |
 | 离线检查 catalog | `influxdb3 debug catalog list/snapshot/sequence`（3.10+，Core 与 Enterprise 都有） |
 | 就绪探针 | `GET /ready` → 200（能连对象存储）/ 503（不能） |
+
+### 认证与 Token 运维
+
+| 动作 | 命令 / 规则 |
+|------|-------------|
+| 盘点 | `influxdb3 show tokens`；原始 token 不可从哈希恢复 |
+| 轮换 | `influxdb3 create token --admin --regenerate --token "$OPERATOR_TOKEN"`；旧 token 立即失效 |
+| 删除 | `influxdb3 delete token --token-name TOKEN_NAME --token "$ADMIN_TOKEN"` |
+| 自动化 | offline token + `--expiry` + `--output-file`；文件权限 `0600` |
+| 注入 | `INFLUXDB3_AUTH_TOKEN` / Docker Compose secrets；禁止进 Git |
+| 兼容端点 | v3 Bearer；v2 Token/Bearer；v1 Basic 或 `u`/`p` |
 
 ### Enterprise 五种模式
 

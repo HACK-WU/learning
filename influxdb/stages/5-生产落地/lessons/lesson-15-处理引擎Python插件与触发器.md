@@ -598,7 +598,7 @@ except Exception as err:
 
 #### 官方插件库一览
 
-官方文档页（Core 版）列出的官方插件共 11 个，按用途分组：
+官方文档页（Core 版）列出的**课程主线插件**共 11 个，按用途分组。它们覆盖本课要讲的「降采样 → 检测 → 抑制 → 发送 → 自监控」闭环，不等于官方目录的全部插件：
 
 | 插件 | 用途 | 依赖 | 支持的触发器 |
 |------|------|------|------------|
@@ -614,7 +614,28 @@ except Exception as err:
 | **System metrics** | ⭐ 采集**宿主机** CPU / 内存 / 磁盘 / 网络 | `psutil` | scheduled |
 | **InfluxDB to Iceberg** | 导出到 Iceberg 数据湖 | `pandas`, `pyarrow`, `pyiceberg` | scheduled + http |
 
-> 📌 数量提示：InfluxData 官网的 Plugin Directory 页面显示 **23 个**官方插件，而 Core 文档页列了 **11 个**。差异来源：官网目录还包含 MQTT / Kafka / AMQP Subscriber、Schema Validator、Import、NWS Weather Sampler、River 系列等较新或偏集成的插件。**两者都是官方口径，只是更新节奏不同**，以你实际参考的页面为准。
+> 📌 **数量口径更新（2026-09-10）**：旧版讲义记录的「Core 文档页 11 个 / Plugin Directory 23 个」是历史快照。当前 `influxdb/web-index/influxdata-influxdb3/topics/plugins.md` 登记 **42 条插件相关路由**，其中包含 **35 个具名官方插件页面**。这些页面的成熟度和用途并不相同，既有生产集成，也有采样器、演示插件和算法扩展；因此本课不把“页面数量”直接当作“必学能力数量”。
+
+#### 当前官方插件生态地图：按问题选插件
+
+| 你要解决的问题 | 当前目录中的代表插件 | 本课程建议 |
+|----------------|----------------------|------------|
+| 从消息/工业协议直接进库 | **Kafka subscriber**、**MQTT subscriber**、**AMQP subscriber**、**OPC UA** | 有对应数据源时优先看；不要为了“少一个组件”把复杂协议解析全塞进自定义插件 |
+| 写入前转换与质量校验 | **Basic transformation**、**Geo enrichment**、**Schema validator**、**Signal filter** | 与 L7 Schema 设计、L16 采集配置联动；生产写入链路建议先校验再落库 |
+| 降采样、补点与重采样 | **Downsampler**、**Gapfill**、**Resampler**、**Valuecounter** | Downsampler 是主线；Gapfill / Resampler 按查询和采集缺口再选，不要重复造三套调度逻辑 |
+| 告警、状态和数据断流 | **Notifier**、**Threshold deadman checks**、**State change**、**MAD-based anomaly detection**、**Stateless ADTK detector** | 继续遵守本课核心结论：检测器 + Notifier + deadman，不要只装发送器或只装阈值检测器 |
+| 预测与预测质量评估 | **Chronos / Nori / Prophet / River / Synthefy forecasting**、**Forecast error evaluator**、**SageMaker** | 可选扩展；先验证预测误差、依赖和资源成本，再决定是否放进数据库进程 |
+| 导入、复制与湖仓出口 | **Import**、**Simple data replicator**、**InfluxDB to Iceberg** | 迁移、跨库复制、湖仓归档时使用；先明确“复制的是原始数据还是降采样结果” |
+| 宿主机与样例数据 | **System metrics**、**Bird / Earthquake / NWS weather / Stock**、**Signal generator** | System metrics 用于主机观测；其余多用于演示、压测或样例，不要误当生产采集方案 |
+
+**面向本课程的最小补充路径**：
+
+1. 已有告警需求：`Threshold deadman checks` + `Notifier` + `State change`。
+2. 已有 Kafka / MQTT / AMQP 数据源：先用对应 subscriber，只有协议转换或业务富化明显特殊时才写 Python 插件。
+3. 有历史迁移或跨层存储：在 `Import`、`Simple data replicator`、`InfluxDB to Iceberg` 之间按数据方向选，不把“导出到 Iceberg”误称为备份。
+4. 有质量门禁：在写入入口加 `Schema validator`，让字段类型和必需列尽早失败。
+
+当前目录入口：[Official plugins](https://docs.influxdata.com/influxdb3/core/plugins/library/official/)；代表页面：[Kafka subscriber](https://docs.influxdata.com/influxdb3/core/plugins/library/official/kafka-subscriber/)、[MQTT subscriber](https://docs.influxdata.com/influxdb3/core/plugins/library/official/mqtt-subscriber/)、[AMQP subscriber](https://docs.influxdata.com/influxdb3/core/plugins/library/official/amqp-subscriber/)、[Schema validator](https://docs.influxdata.com/influxdb3/core/plugins/library/official/schema-validator/)、[Simple data replicator](https://docs.influxdata.com/influxdb3/core/plugins/library/official/simple-data-replicator/)、[InfluxDB to Iceberg](https://docs.influxdata.com/influxdb3/core/plugins/library/official/influxdb-to-iceberg/)。
 
 ⚠️ **一个重要的 SKU 限制**：Amazon Timestream for InfluxDB 的官方文档明确写着——
 
@@ -2236,14 +2257,14 @@ flowchart LR
 
 | # | 文档 | 链接 | 本课用处 |
 |---|------|------|---------|
-| 1 | Processing engine（InfluxDB 3 Core） | [InfluxDB 3 Core processing engine](https://docs.influxdata.com/influxdb3/core/process-data/) | 架构总览、启用方式、触发器的官方定义 |
-| 2 | Python plugins API reference | [Python plugins API reference](https://docs.influxdata.com/influxdb3/core/process-data/python-plugins/api-reference/) | **三个入口函数签名、`influxdb3_local` 全部方法、`table_batches` 结构**（本课最权威的一手来源） |
-| 3 | Create a Python plugin | [Create a Python plugin](https://docs.influxdata.com/influxdb3/core/process-data/python-plugins/create-a-plugin/) | 第一个插件从零写起、目录结构 |
-| 4 | Triggers（trigger-spec / error-behavior / run-asynchronous） | [Create triggers](https://docs.influxdata.com/influxdb3/core/process-data/create-triggers/) | `--trigger-spec` 三种写法、`--error-behavior` 三档、`--run-asynchronous` |
-| 5 | Plugin cache | [Use the plugin cache](https://docs.influxdata.com/influxdb3/core/process-data/python-plugins/use-plugin-cache/) | 触发器级缓存 vs 全局缓存、TTL 语义 |
+| 1 | Processing engine（InfluxDB 3 Core） | [InfluxDB 3 Core plugins](https://docs.influxdata.com/influxdb3/core/plugins/) | 当前插件总览、处理引擎入口与触发器上下文 |
+| 2 | Python plugins API reference | [Python plugins API reference](https://docs.influxdata.com/influxdb3/core/plugins/python-api-reference/) | **三个入口函数签名、`influxdb3_local` 全部方法、`table_batches` 结构**（本课最权威的一手来源） |
+| 3 | Create / extend a Python plugin | [Extend plugins](https://docs.influxdata.com/influxdb3/core/plugins/extend-plugin/) · [Example plugins](https://docs.influxdata.com/influxdb3/core/plugins/library/examples/) | 当前站点将“扩展机制”和“示例插件”分开；用于替代旧的单页创建教程 |
+| 4 | Triggers（trigger-spec / error-behavior / run-asynchronous） | [Create trigger CLI](https://docs.influxdata.com/influxdb3/core/reference/cli/influxdb3/create/trigger/) · [Plugins](https://docs.influxdata.com/influxdb3/core/plugins/) | 当前站点以 CLI 创建入口 + 插件总览承载触发器资料 |
+| 5 | Plugin cache（待复核） | [Plugins](https://docs.influxdata.com/influxdb3/core/plugins/) | 当前 Core 索引未发现旧“Use the plugin cache”页面的一对一替代；本课保留语义说明，不把插件总览冒充缓存专页 |
 | 6 | Official plugins（InfluxData 插件库） | [influxdb3_plugins (GitHub)](https://github.com/influxdata/influxdb3_plugins) | 11 个官方插件源码，含 Notifier 与五个检测器 |
 | 7 | Notifier plugin | [Notifier plugin](https://github.com/influxdata/influxdb3_plugins/tree/master/influxdata/notifier) | 告警发送端的配置与五种通知渠道 |
-| 8 | Troubleshoot the processing engine | [Troubleshoot](https://docs.influxdata.com/influxdb3/core/process-data/troubleshoot/) | `system.processing_engine_logs` 等三张系统表、常见故障 |
+| 8 | Troubleshoot the processing engine（当前入口） | [Plugins](https://docs.influxdata.com/influxdb3/core/plugins/) · [`influxdb3 test`](https://docs.influxdata.com/influxdb3/core/reference/cli/influxdb3/test/schedule_plugin/) | 当前 Core 索引未发现旧排障页；先从插件总览与 CLI test 入口定位 |
 | 9 | `influxdb3` CLI reference | [influxdb3 CLI](https://docs.influxdata.com/influxdb3/core/reference/cli/influxdb3/) | `influxdb3 test`（干跑）、`enable/disable trigger`、`show plugins` |
 | 10 | HTTP API（webhook 端点） | [InfluxDB 3 HTTP API](https://docs.influxdata.com/influxdb3/core/reference/api/) | `/api/v3/engine/webhook` 的鉴权与请求格式 |
 

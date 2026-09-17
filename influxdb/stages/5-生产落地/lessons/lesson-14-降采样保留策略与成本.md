@@ -1567,9 +1567,9 @@ InfluxDB 3 系统学习 · 6 阶段 / 19 课 / 57 知识点
 |------|------|
 | 数据保留（机制、单位换算、immutable、零值语义） | [InfluxDB 3 Core data retention](https://docs.influxdata.com/influxdb3/core/reference/internals/data-retention/) |
 | Core 配置项（delete-grace-period、retention-check-interval 等默认值） | [InfluxDB 3 Core configuration options](https://docs.influxdata.com/influxdb3/core/reference/config-options/) |
-| 降采样指南（两种模式、DATE_BIN、处理引擎） | [Downsample data in InfluxDB 3](https://docs.influxdata.com/influxdb3/core/process-data/downsample/) |
+| 降采样指南（官方 downsampler 插件、DATE_BIN） | [Downsampler plugin](https://docs.influxdata.com/influxdb3/core/plugins/library/official/downsampler/) |
 | 官方 downsampler 插件源码 | [influxdata/downsampler · downsampler.py](https://github.com/influxdata/downsampler/blob/main/downsampler.py) |
-| 处理引擎与触发器（`create trigger`、`--trigger-spec`） | [Processing engine and triggers](https://docs.influxdata.com/influxdb3/core/process-data/) |
+| 处理引擎与触发器（插件总览、`create trigger`） | [Plugins](https://docs.influxdata.com/influxdb3/core/plugins/) · [Create trigger](https://docs.influxdata.com/influxdb3/core/reference/cli/influxdb3/create/trigger/) |
 | 存储引擎架构（gen1-duration、文件持久化机制） | [InfluxDB 3 storage engine architecture](https://docs.influxdata.com/influxdb3/core/reference/internals/storage-engine/) |
 | Core release notes（`update database --retention-period` 新增记录） | [InfluxDB 3 Core release notes](https://docs.influxdata.com/influxdb3/core/release-notes/) |
 | 删除数据（软删除/硬删除、宽限期） | [Delete data in InfluxDB 3](https://docs.influxdata.com/influxdb3/core/write-data/delete-data/) |
@@ -1758,7 +1758,6 @@ every:1d →    90 文件 ✅
 ⬅️ **上一课**：[第 13 课《部署形态与容量规划》](./lesson-13-部署形态与容量规划.md)
 
 📚 **返回目录**：[课程目录](../../../02-课程目录.md) ｜ 🗺️ **路径总览**：[学习路径总览](../../../01-学习路径总览.md) ｜ 📖 **阶段导览**：[阶段 5 概览](../overview.md)
-
 
 
 

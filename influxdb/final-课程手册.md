@@ -284,7 +284,7 @@ flowchart TD
 带四条结论回团队：
 
 1. **镜像标签必须写死**。不要用 `influxdb` 或 `latest`——2026-09-15 起 `latest` 会改指 3 Core，今天是 `influxdb:2`，下个月可能是 `influxdb:3-core`。**用 `influxdb:3-core` 或具体版本号。**
-2. **operator token 当密钥管**。只显示一次，丢了只能重建。进密钥管理系统，不要写进代码或 docker-compose 文件。
+2. **operator token 当密钥管**。创建结果只在当次显示；丢失或泄露要按官方恢复/轮换/删除流程处理，并同步所有调用方。进密钥管理系统，不要写进代码或 docker-compose 文件。
 3. **Core 的 72 小时限制要在选型时讲清楚**。如果业务方要求"查三个月趋势"，Core 直接不合格，必须 Enterprise——这个结论要在立项时就摆上桌，别等上线才发现。
 4. **端口是版本指纹**：8181 = 3.x，8086 = 1.x/2.x。巡检时一眼能看出环境是不是搞错了。
 
@@ -354,7 +354,7 @@ flowchart TD
 
 ### L05 · Python 客户端与 CLI 工具
 
-📖 [完整讲义](stages/2-上手篇/lessons/lesson-05-Python客户端与CLI工具.md)（1018 行）
+📖 [完整讲义](stages/2-上手篇/lessons/lesson-05-Python客户端与CLI工具.md)（1047 行）
 
 **本课目标**
 
@@ -578,7 +578,7 @@ flowchart TD
 
 ### L08 · SQL 查询：从 SELECT 到窗口函数
 
-📖 [完整讲义](stages/3-数据模型与查询/lessons/lesson-08-SQL查询-从SELECT到窗口函数.md)（1038 行）
+📖 [完整讲义](stages/3-数据模型与查询/lessons/lesson-08-SQL查询-从SELECT到窗口函数.md)（1069 行）
 
 **本课目标**
 
@@ -968,7 +968,7 @@ graph TD
 
 ### L13 · 部署形态与容量规划
 
-📖 [完整讲义](stages/5-生产落地/lessons/lesson-13-部署形态与容量规划.md)（1260 行）
+📖 [完整讲义](stages/5-生产落地/lessons/lesson-13-部署形态与容量规划.md)（1305 行）
 
 **本课目标**
 
@@ -976,7 +976,7 @@ graph TD
 |--------|--------|-------------|
 | ① Core / Enterprise / Cloud 选型 | **判据：是否要查历史数据**（Core 无 compactor、单机） | 面对一个业务需求，给出形态选择并说明判据 |
 | ② 容量规划与硬件 | 点数 × 每点字节数 × 保留期 × 副本数 | 用公式算出存储量，并知道内存为什么比 CPU 先到瓶颈 |
-| ③ 高可用与备份 | ⚠️ 升级前必须备份 catalog（3.10+ 格式迁移单向） | 说出 Core 的 HA 边界，以及升级前必须做的动作 |
+| ③ 高可用、备份与认证 | ⚠️ 升级前必须备份 catalog（3.10+ 格式迁移单向）；Token 要可盘点、轮换、删除 | 说出 Core 的 HA 边界，以及升级备份和 Token 生命周期动作 |
 
 ---
 
@@ -1042,7 +1042,7 @@ graph TD
 
 ### L14 · 降采样、保留策略与成本
 
-📖 [完整讲义](stages/5-生产落地/lessons/lesson-14-降采样保留策略与成本.md)（1764 行）
+📖 [完整讲义](stages/5-生产落地/lessons/lesson-14-降采样保留策略与成本.md)（1763 行）
 
 **本课目标**
 
@@ -1114,7 +1114,7 @@ graph TD
 
 ### L15 · 处理引擎：Python 插件与触发器
 
-📖 [完整讲义](stages/5-生产落地/lessons/lesson-15-处理引擎Python插件与触发器.md)（2567 行）
+📖 [完整讲义](stages/5-生产落地/lessons/lesson-15-处理引擎Python插件与触发器.md)（2588 行）
 
 **本课目标**
 

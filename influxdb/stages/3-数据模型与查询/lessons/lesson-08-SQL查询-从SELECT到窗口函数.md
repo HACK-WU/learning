@@ -869,6 +869,37 @@ flowchart TD
 
 ---
 
+## 🔎 参考层增补：标准 SQL 还差一张“边界卡”
+
+本课主线已经覆盖 `JOIN`、`CAST`、窗口函数和 CTE；真正容易在迁移或排查时漏掉的，是聚合之后的筛选、结果集合并、子查询位置，以及参数如何安全传入。把它们放在参考层，避免把主线讲成 SQL 语法百科。
+
+| 语法/能力 | 解决什么问题 | 时序查询中的边界 |
+|------|------|------|
+| `WHERE` | 聚合前过滤原始行 | 时间范围、tag、field 过滤优先放这里；不要用字符串拼接代替参数 |
+| `HAVING` | 聚合后过滤分组 | 必须在 `GROUP BY` 之后判断 `AVG/COUNT/SUM` 等结果，不能拿它替代时间下界 |
+| `JOIN` | 横向拼接表或自连接 | 能力存在不代表适合高频时序查询；先确认连接键和时间范围，避免笛卡尔积 |
+| `UNION` / `UNION ALL` | 纵向合并多个结果集 | 列数、顺序和类型要兼容；`UNION` 去重，`UNION ALL` 保留重复行 |
+| 子查询 | 把一段查询作为值、表或条件 | 可放在 `SELECT`、`FROM`、`WHERE`、`HAVING`；相关子查询要警惕逐行执行成本 |
+| 参数化查询 | 把值与 SQL 代码分离 | Core 的参数主要用于 `WHERE` 谓词；不能拿参数替换表名、列名、函数名或 interval |
+
+```sql
+-- HAVING：先按 host 聚合，再筛选高延迟分组
+SELECT host, AVG(latency) AS mean_latency
+FROM api_latency
+WHERE time >= now() - INTERVAL '1 day'
+GROUP BY host
+HAVING AVG(latency) > 500;
+
+-- 参数化：把值交给客户端的 params，不要 f-string 拼接
+SELECT time, room, temp
+FROM home
+WHERE time >= $min_time AND room = $room;
+```
+
+Python、HTTP API 或 BI 适配层应优先使用参数化接口，不要把不可信输入塞进 f-string、`%` 或 `.format()`。Core 的 HTTP SQL 请求使用 `q` + `params` 传值；但并非所有 Flight SQL 客户端都支持参数化，若客户端不支持，就要在边界层做严格类型校验和白名单约束，而不是退回字符串拼接。
+
+延伸入口：[`HAVING`](https://docs.influxdata.com/influxdb3/core/reference/sql/having/)、[`JOIN`](https://docs.influxdata.com/influxdb3/core/reference/sql/join/)、[`UNION`](https://docs.influxdata.com/influxdb3/core/reference/sql/union/)、[Subqueries](https://docs.influxdata.com/influxdb3/core/reference/sql/subqueries/) 与 [Parameterized queries](https://docs.influxdata.com/influxdb3/core/query-data/sql/parameterized-queries/)。
+
 ## 🐞 本课误区速查
 
 | # | 误区 | 真相 |
@@ -899,7 +930,7 @@ flowchart TD
 | SQL time and date functions（`date_bin` / gapfill / wallclock 完整参数） | https://docs.influxdata.com/influxdb3/core/reference/sql/functions/time-and-date/ |
 | Fill gaps in data with SQL（Core，gapfill + interpolate/locf 官方案例） | https://docs.influxdata.com/influxdb3/core/query-data/sql/fill-gaps/ |
 | Compare values across rows（Core，窗口函数完整案例：差值/百分比/计数器重置） | https://docs.influxdata.com/influxdb3/core/query-data/sql/compare-values/ |
-| Aggregate data with SQL（Core，聚合与选择器） | https://docs.influxdata.com/influxdb3/core/query-data/sql/aggregate-data/ |
+| Aggregate data with SQL（Core，聚合与选择器） | https://docs.influxdata.com/influxdb3/core/query-data/sql/aggregate-select/ |
 | Explore your schema with SQL（Core，`SHOW TABLES` / `SHOW COLUMNS`） | https://docs.influxdata.com/influxdb3/core/query-data/sql/explore-schema/ |
 | Home sensor sample data（本课官方案例用的示例数据集） | https://docs.influxdata.com/influxdb3/core/reference/sample-data/ |
 

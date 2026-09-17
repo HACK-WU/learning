@@ -856,6 +856,9 @@ flowchart TD
 | influxdb3-python 源码与 Windows 证书说明 | https://github.com/InfluxCommunity/influxdb3-python |
 | Apache Arrow Flight RPC 客户端（含 HTTP/2 警示） | https://docs.influxdata.com/influxdb3/core/reference/client-libraries/flight/ |
 | Python Flight SQL DBAPI 客户端 | https://docs.influxdata.com/influxdb3/core/reference/client-libraries/flight/python-flightsql-dbapi/ |
+| 客户端库总入口（含 v1/v2/v3/Flight 与多语言） | https://docs.influxdata.com/influxdb3/core/reference/client-libraries/ |
+| v1 / v2 / v3 客户端兼容入口 | v1：`https://docs.influxdata.com/influxdb3/core/reference/client-libraries/v1/` · v2：`https://docs.influxdata.com/influxdb3/core/reference/client-libraries/v2/` · v3：`https://docs.influxdata.com/influxdb3/core/reference/client-libraries/v3/` |
+| `influxdb3` CLI 总参考 | https://docs.influxdata.com/influxdb3/core/reference/cli/influxdb3/ |
 | `influxdb3 query` CLI 参考 | https://docs.influxdata.com/influxdb3/core/reference/cli/influxdb3/query/ |
 | Grafana 配置（SQL 需 HTTP/2） | https://docs.influxdata.com/influxdb3/core/visualize-data/grafana/ |
 
@@ -926,6 +929,32 @@ influx3 query -d mydb -f q.sql                                 # 从文件
 | 查询 | gRPC Flight（**需 HTTP/2**） | 8181（同端口复用） |
 
 > Flight 端口若为 8082 → 多半是 InfluxDB 3 社区版/IOx，不是 Core。
+
+### 客户端与 API 选型矩阵（参考层）
+
+| 你的任务 | 首选入口 | 协议/端点 | 关键边界 |
+|------|------|------|------|
+| 新 Python/应用代码读写 Core | `influxdb3-python` / `InfluxDBClient3` | HTTP 写入 + Flight 查询；写入可选 `/api/v3/write_lp` | 按 Core v3 客户端文档建连；不要混用 Cloud、Core、1.x 参数 |
+| 维护已有 v1/v2 客户端 | 对应 v1/v2 client library 与兼容端点 | `/api/v1/write`、`/api/v2/write` 等 | 兼容不等于所有 3.x 能力都可用；确认 token、组织、bucket/database 映射 |
+| 大结果集、BI 或列式分析 | Flight / Flight SQL | gRPC + HTTP/2 | 代理、负载均衡和客户端都必须支持 HTTP/2；先做连通性验证 |
+| 临时查数、导出、脚本排查 | `influx3 query` | Flight 查询 | 只读、默认 JSON；适合运维手工操作，不替代应用客户端 |
+| 建库、Token、插件、触发器和服务管理 | `influxdb3` | 服务端 CLI / 管理 API | 需要管理员边界；不要把管理员 Token 放进业务容器 |
+
+官方客户端总入口：[Client libraries](https://docs.influxdata.com/influxdb3/core/reference/client-libraries/)。需要迁移兼容时，分别看 [v1](https://docs.influxdata.com/influxdb3/core/reference/client-libraries/v1/)、[v2](https://docs.influxdata.com/influxdb3/core/reference/client-libraries/v2/)、[v3](https://docs.influxdata.com/influxdb3/core/reference/client-libraries/v3/) 与 [Flight](https://docs.influxdata.com/influxdb3/core/reference/client-libraries/flight/) 文档。
+
+### `influx3` 与 `influxdb3`：CLI 能力边界
+
+| 命令族 | 适合做什么 | 生产使用提醒 |
+|------|------|------|
+| `influx3 query` | 查数、保存查询、JSON/CSV/pretty 导出 | 只读；把它当“查数员” |
+| `influxdb3 query` / `write` | 服务端 CLI 查询与写入 | 明确当前 shell 使用的 Token 与 database |
+| `influxdb3 show` | 查看 databases、tokens、plugins、system、retention 等管理状态 | 表/列结构优先用 SQL `SHOW`；先 `show` 再 `create/update/delete`，避免凭名称猜状态 |
+| `influxdb3 create` / `update` | 建库、缓存、表、Token、触发器及更新配置 | 变更前记录旧值；Token 创建后只在安全渠道分发 |
+| `influxdb3 delete` | 删除 database、table、cache、Token、trigger | 先确认目标和恢复手段；删除 Token 会立即影响调用方 |
+| `influxdb3 enable` / `disable` | 启停 trigger | 维护窗口内操作，并验证状态与告警恢复 |
+| `influxdb3 test` / `debug` | 验证插件、触发器和服务问题 | 用最小数据集复现，不直接在生产数据上试错 |
+
+记忆法：`influx3` 是**查数员**，`influxdb3` 是**管理员**。完整命令入口见 [influxdb3 CLI reference](https://docs.influxdata.com/influxdb3/core/reference/cli/influxdb3/)，查询子命令见 [`influxdb3 query`](https://docs.influxdata.com/influxdb3/core/reference/cli/influxdb3/query/)。
 
 ## 课后小测
 

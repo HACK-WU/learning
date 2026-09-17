@@ -804,7 +804,7 @@ flowchart TD
 | **Manage the node lifecycle**（优雅停机三动作、节点状态） | https://docs.influxdata.com/influxdb3/core/admin/node-lifecycle/ |
 | Enterprise storage engine（**upgraded storage engine 与压实模型**） | https://docs.influxdata.com/influxdb3/enterprise/reference/internals/storage-engine/ |
 | Core internals 总览 | https://docs.influxdata.com/influxdb3/core/reference/internals/ |
-| Configure object storage（S3 / MinIO / GCS / Azure 配置） | https://docs.influxdata.com/influxdb3/core/admin/object-storage/ |
+| Configure object storage（S3 / MinIO / GCS / Azure 配置） | https://docs.influxdata.com/influxdb3/core/object-storage/ |
 
 ## 📋 本课速查卡
 

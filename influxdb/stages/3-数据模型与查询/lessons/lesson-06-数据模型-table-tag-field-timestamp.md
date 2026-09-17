@@ -671,7 +671,7 @@ flowchart TD
 | Naming restrictions and conventions（Core） | https://docs.influxdata.com/influxdb3/core/reference/naming-restrictions/ |
 | Manage databases（Core 库/表/列上限） | https://docs.influxdata.com/influxdb3/core/admin/databases |
 | v3 write_lp API（类型冲突与 partial write 原文） | https://docs.influxdata.com/influxdb3/core/write-data/http-api/v3-write-lp/ |
-| Line protocol 参考（转义 / 保留键 / 引号） | https://docs.influxdata.com/influxdb3/core/reference/syntax/line-protocol/ |
+| Line protocol 参考（转义 / 保留键 / 引号） | https://docs.influxdata.com/influxdb3/core/reference/line-protocol/ |
 | InfluxQL reference（Core，含 `time` 保留规则） | https://docs.influxdata.com/influxdb3/core/reference/influxql |
 | Enterprise config options（表/列上限可调项） | https://docs.influxdata.com/influxdb3/enterprise/reference/config-options/ |
 
