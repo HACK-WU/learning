@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 400" width="700" height="400" role="img" aria-label="第2版设计：标准消息对象">
+  <style>
+    .t { font-family: "Microsoft YaHei","PingFang SC",sans-serif; }
+    .box { fill: #ffffff; stroke: #334155; stroke-width: 1.5; }
+    .new { fill: #fef3c7; stroke: #d97706; stroke-width: 2; }
+    .ok { fill: #dcfce7; stroke: #16a34a; stroke-width: 1.5; }
+    .lbl { font-size: 13px; fill: #0f172a; }
+    .sm { font-size: 11px; fill: #475569; }
+    .hd { font-size: 15px; font-weight: bold; fill: #0f172a; }
+    .tag { font-size: 11px; fill: #92400e; font-weight: bold; }
+  </style>
+  <text class="t hd" x="20" y="26">第 2 版：标准消息对象（改进实现）</text>
+
+  <rect class="new" x="30" y="52" width="230" height="130" rx="6"/>
+  <text class="t tag" x="145" y="72" text-anchor="middle">新增：消息对象列表</text>
+  <rect class="box" x="46" y="82" width="198" height="26" rx="4"/>
+  <text class="t sm" x="145" y="99" text-anchor="middle">SystemMessage  你是客服</text>
+  <rect class="box" x="46" y="112" width="198" height="26" rx="4"/>
+  <text class="t sm" x="145" y="129" text-anchor="middle">HumanMessage   我叫小明</text>
+  <rect class="box" x="46" y="142" width="198" height="26" rx="4"/>
+  <text class="t sm" x="145" y="159" text-anchor="middle">AIMessage      你好小明</text>
+
+  <line x1="260" y1="117" x2="340" y2="117" stroke="#334155" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect class="box" x="340" y="92" width="140" height="50" rx="6"/>
+  <text class="t lbl" x="410" y="112" text-anchor="middle">模型</text>
+  <text class="t sm" x="410" y="130" text-anchor="middle">invoke([messages])</text>
+
+  <line x1="480" y1="117" x2="560" y2="117" stroke="#334155" stroke-width="1.5" marker-end="url(#a)"/>
+  <rect class="ok" x="560" y="92" width="110" height="50" rx="6"/>
+  <text class="t sm" x="615" y="112" text-anchor="middle" fill="#15803d">AIMessage</text>
+  <text class="t sm" x="615" y="130" text-anchor="middle" fill="#15803d">角色明确</text>
+
+  <text class="t tag" x="30" y="212">多模态：content blocks 分格箱（同一条消息里并排放）</text>
+  <rect class="box" x="30" y="222" width="200" height="50" rx="6"/>
+  <text class="t sm" x="130" y="242" text-anchor="middle">{'type':'text', ...}</text>
+  <text class="t sm" x="130" y="260" text-anchor="middle">文字格</text>
+  <rect class="box" x="245" y="222" width="200" height="50" rx="6"/>
+  <text class="t sm" x="345" y="242" text-anchor="middle">{'type':'image', ...}</text>
+  <text class="t sm" x="345" y="260" text-anchor="middle">图片格</text>
+  <text class="t sm" x="460" y="248">实测：content_blocks 正确解析为 ['text','image']</text>
+
+  <text class="t lbl" x="30" y="304" font-weight="bold">它的问题</text>
+
+  <rect class="box" x="30" y="318" width="310" height="58" rx="6" stroke="#dc2626" stroke-dasharray="5 3"/>
+  <text class="t sm" x="185" y="338" text-anchor="middle" fill="#991b1b">① 只在内存里，进程一退就没了</text>
+  <text class="t sm" x="185" y="356" text-anchor="middle" fill="#475569">刷新页面 / 重启服务 = 失忆</text>
+
+  <rect class="box" x="355" y="318" width="315" height="58" rx="6" stroke="#dc2626" stroke-dasharray="5 3"/>
+  <text class="t sm" x="512" y="338" text-anchor="middle" fill="#991b1b">② 工具调用记忆无法带出进程</text>
+  <text class="t sm" x="512" y="356" text-anchor="middle" fill="#475569">tool_calls / ToolMessage 需配对才有效</text>
+
+  <text class="t sm" x="30" y="392">比上张多了什么：历史从「一串文本」变成「带角色的对象列表」，多模态也有了位置。</text>
+
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#334155"/></marker>
+  </defs>
+</svg>

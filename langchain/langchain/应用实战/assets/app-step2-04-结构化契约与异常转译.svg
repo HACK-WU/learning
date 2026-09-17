@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 410" width="700" height="410" role="img" aria-label="第2版设计：结构化契约与异常转译">
+  <style>
+    .t { font-family: "Microsoft YaHei","PingFang SC",sans-serif; }
+    .box { fill: #ffffff; stroke: #334155; stroke-width: 1.5; }
+    .new { fill: #fef3c7; stroke: #d97706; stroke-width: 2; }
+    .ok { fill: #dcfce7; stroke: #16a34a; stroke-width: 1.5; }
+    .lbl { font-size: 13px; fill: #0f172a; }
+    .sm { font-size: 11px; fill: #475569; }
+    .mono { font-family: Consolas, monospace; font-size: 10px; fill: #475569; }
+    .hd { font-size: 15px; font-weight: bold; fill: #0f172a; }
+    .tag { font-size: 11px; fill: #92400e; font-weight: bold; }
+  </style>
+  <text class="t hd" x="20" y="26">第 2 版：结构化契约 + 异常转译（改进实现）</text>
+
+  <rect class="new" x="24" y="50" width="260" height="96" rx="6"/>
+  <text class="t tag" x="154" y="70" text-anchor="middle">新增：结构化契约</text>
+  <text class="t mono" x="36" y="90">@tool(args_schema=OrderInput)</text>
+  <text class="t mono" x="36" y="108">order_id: str = Field(description=...)</text>
+  <text class="t mono" x="36" y="126">+ docstring 描述用途</text>
+
+  <line x1="284" y1="98" x2="350" y2="98" stroke="#334155" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect class="box" x="350" y="70" width="120" height="56" rx="6"/>
+  <text class="t sm" x="410" y="90" text-anchor="middle">模型</text>
+  <text class="t sm" x="410" y="108" text-anchor="middle">按契约填参</text>
+
+  <line x1="470" y1="98" x2="530" y2="98" stroke="#334155" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect class="box" x="530" y="70" width="140" height="56" rx="6"/>
+  <text class="t sm" x="600" y="90" text-anchor="middle">Pydantic 校验</text>
+  <text class="t sm" x="600" y="108" text-anchor="middle">非法值 → ValidationError</text>
+
+  <text class="t sm" x="290" y="170" fill="#475569">循环：模型 → 工具 → 回执 → 模型（出错时回执是「可读的错误」）</text>
+
+  <rect class="new" x="24" y="186" width="646" height="82" rx="6"/>
+  <text class="t tag" x="347" y="206" text-anchor="middle">新增：wrap_tool_call 异常转译（官方写法）</text>
+  <text class="t mono" x="38" y="228">@wrap_tool_call</text>
+  <text class="t mono" x="38" y="246">def handle_tool_errors(request, handler):</text>
+  <text class="t mono" x="58" y="262">    try: return handler(request)</text>
+  <text class="t mono" x="58" y="262"/>
+  <text class="t sm" x="347" y="258" text-anchor="middle" fill="#475569">异常 → ToolMessage("Tool error: ...请重试") → 模型看得懂，可自我修正</text>
+
+  <text class="t sm" x="24" y="296" fill="#15803d">实测：ValidationError 拦下 units 非法值 / 缺参 / 类型错（多余参数静默通过——是默认行为，需留意）</text>
+
+  <text class="t lbl" x="24" y="326" font-weight="bold">它的问题</text>
+
+  <rect class="box" x="24" y="340" width="310" height="56" rx="6" stroke="#dc2626" stroke-dasharray="5 3"/>
+  <text class="t sm" x="179" y="360" text-anchor="middle" fill="#991b1b">① 权限仍无差别</text>
+  <text class="t sm" x="179" y="378" text-anchor="middle" fill="#475569">所有工具对所有调用者可见</text>
+
+  <rect class="box" x="350" y="340" width="320" height="56" rx="6" stroke="#dc2626" stroke-dasharray="5 3"/>
+  <text class="t sm" x="510" y="360" text-anchor="middle" fill="#991b1b">② 工具集写死在装配处</text>
+  <text class="t sm" x="510" y="378" text-anchor="middle" fill="#475569">换角色要重建 agent</text>
+
+  <text class="t sm" x="24" y="404">比上张多了什么：契约（黄框）让参数可校验，异常转译让「崩」变成「模型可读的反馈并重试」。</text>
+
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#334155"/></marker>
+  </defs>
+</svg>

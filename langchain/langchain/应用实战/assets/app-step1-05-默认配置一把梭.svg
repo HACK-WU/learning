@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 400" width="700" height="400" role="img" aria-label="第1版设计：默认配置一把梭">
+  <style>
+    .t { font-family: "Microsoft YaHei","PingFang SC",sans-serif; }
+    .box { fill: #ffffff; stroke: #334155; stroke-width: 1.5; }
+    .bad { fill: #fee2e2; stroke: #dc2626; stroke-width: 1.5; stroke-dasharray: 5 3; }
+    .lbl { font-size: 13px; fill: #0f172a; }
+    .sm { font-size: 11px; fill: #475569; }
+    .mono { font-family: Consolas, monospace; font-size: 11px; fill: #475569; }
+    .hd { font-size: 15px; font-weight: bold; fill: #0f172a; }
+  </style>
+  <text class="t hd" x="20" y="26">第 1 版：默认配置一把梭（基础实现）</text>
+
+  <rect class="box" x="30" y="56" width="150" height="50" rx="6"/>
+  <text class="t lbl" x="105" y="76" text-anchor="middle">用户输入</text>
+  <text class="t sm" x="105" y="94" text-anchor="middle">「查订单 A1024」</text>
+
+  <line x1="180" y1="81" x2="250" y2="81" stroke="#334155" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect class="box" x="250" y="48" width="230" height="66" rx="6"/>
+  <text class="t sm" x="365" y="68" text-anchor="middle">create_agent（全默认）</text>
+  <text class="t mono" x="262" y="88">create_agent(model, tools=[...])</text>
+  <text class="t mono" x="262" y="104">无上限 / 无提示词 / 无解析</text>
+
+  <line x1="480" y1="81" x2="550" y2="81" stroke="#334155" stroke-width="1.5" marker-end="url(#a)"/>
+  <rect class="box" x="550" y="56" width="120" height="50" rx="6"/>
+  <text class="t sm" x="610" y="76" text-anchor="middle">自然语言答复</text>
+  <text class="t sm" x="610" y="94" text-anchor="middle">「共 710 元」</text>
+
+  <text class="t sm" x="30" y="146">返回里只有 messages，程序要结果只能去解析那串中文</text>
+  <rect class="box" x="30" y="158" width="300" height="42" rx="6" stroke="#dc2626" stroke-dasharray="5 3"/>
+  <text class="t mono" x="180" y="176" text-anchor="middle">res['messages'][-1].content</text>
+  <text class="t sm" x="180" y="192" text-anchor="middle" fill="#991b1b">→ 字符串，下游系统没法直接用</text>
+
+  <text class="t lbl" x="30" y="234" font-weight="bold">它的问题</text>
+
+  <rect class="bad" x="30" y="248" width="200" height="72" rx="6"/>
+  <text class="t sm" x="130" y="268" text-anchor="middle" fill="#991b1b">① 步数无上限</text>
+  <text class="t sm" x="130" y="286" text-anchor="middle" fill="#475569">模型打转 / 反复调工具</text>
+  <text class="t sm" x="130" y="304" text-anchor="middle" fill="#475569">烧 token 且可能不收敛</text>
+
+  <rect class="bad" x="245" y="248" width="200" height="72" rx="6"/>
+  <text class="t sm" x="345" y="268" text-anchor="middle" fill="#991b1b">② 结果不可编程</text>
+  <text class="t sm" x="345" y="286" text-anchor="middle" fill="#475569">只有自然语言</text>
+  <text class="t sm" x="345" y="304" text-anchor="middle" fill="#475569">改个措辞下游就解析失败</text>
+
+  <rect class="bad" x="460" y="248" width="210" height="72" rx="6"/>
+  <text class="t sm" x="565" y="268" text-anchor="middle" fill="#991b1b">③ 行为不可控</text>
+  <text class="t sm" x="565" y="286" text-anchor="middle" fill="#475569">无 system_prompt 约束</text>
+  <text class="t sm" x="565" y="304" text-anchor="middle" fill="#475569">风格 / 边界全凭模型发挥</text>
+
+  <text class="t sm" x="30" y="348">本版解决了什么：能跑——查订单、算账、答复，一个 loop 全走通了。</text>
+  <text class="t sm" x="30" y="370">代价：跑多久、吐什么、怎么用，三件事全没约束。</text>
+  <text class="t sm" x="30" y="388">实测：默认返回 keys = ['messages']，终答 tool_calls 为空列表。</text>
+
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#334155"/></marker>
+  </defs>
+</svg>

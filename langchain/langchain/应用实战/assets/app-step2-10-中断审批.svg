@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 440" width="700" height="440" role="img" aria-label="第2版设计：中断审批">
+  <style>
+    .t { font-family: "Microsoft YaHei","PingFang SC",sans-serif; }
+    .box { fill: #ffffff; stroke: #334155; stroke-width: 1.5; }
+    .new { fill: #fef3c7; stroke: #d97706; stroke-width: 2; }
+    .ok { fill: #dcfce7; stroke: #16a34a; stroke-width: 1.5; }
+    .bad { fill: #fee2e2; stroke: #dc2626; stroke-width: 1.5; stroke-dasharray: 5 3; }
+    .lbl { font-size: 13px; fill: #0f172a; }
+    .sm { font-size: 11px; fill: #475569; }
+    .mono { font-family: Consolas, monospace; font-size: 10px; fill: #475569; }
+    .hd { font-size: 15px; font-weight: bold; fill: #0f172a; }
+    .tag { font-size: 11px; fill: #92400e; font-weight: bold; }
+  </style>
+  <text class="t hd" x="20" y="26">第 2 版：高风险操作先中断、等人批准（改进实现）</text>
+
+  <text class="t sm" x="24" y="50">工具被冻结在「提案」状态，人做决定后才真正执行</text>
+
+  <rect class="box" x="24" y="60" width="104" height="58" rx="6"/>
+  <text class="t sm" x="76" y="82" text-anchor="middle">模型发起</text>
+  <text class="t mono" x="32" y="100">send_email</text>
+  <text class="t sm" x="76" y="114" text-anchor="middle" fill="#475569">只是提案</text>
+
+  <line x1="128" y1="89" x2="168" y2="89" stroke="#334155" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect class="new" x="168" y="60" width="196" height="58" rx="6"/>
+  <text class="t tag" x="266" y="80" text-anchor="middle">新增：HumanInTheLoopMiddleware</text>
+  <text class="t mono" x="178" y="98">interrupt_on={"send_email": {...}}</text>
+  <text class="t sm" x="266" y="114" text-anchor="middle" fill="#475569">此刻工具执行过吗：False</text>
+
+  <line x1="364" y1="89" x2="404" y2="89" stroke="#d97706" stroke-width="1.5" marker-end="url(#o)"/>
+  <rect class="ok" x="404" y="60" width="120" height="58" rx="6"/>
+  <text class="t sm" x="464" y="82" text-anchor="middle" fill="#15803d">人来做决定</text>
+  <text class="t mono" x="414" y="100">approve/edit/reject</text>
+  <text class="t sm" x="464" y="114" text-anchor="middle" fill="#475569">respond 人工代答</text>
+
+  <line x1="524" y1="89" x2="564" y2="89" stroke="#16a34a" stroke-width="1.5" marker-end="url(#g)"/>
+  <rect class="ok" x="564" y="60" width="106" height="58" rx="6"/>
+  <text class="t sm" x="617" y="82" text-anchor="middle" fill="#15803d">然后才恢复</text>
+  <text class="t mono" x="574" y="100">Command(resume=)</text>
+  <text class="t sm" x="617" y="114" text-anchor="middle" fill="#475569">工具真正执行</text>
+
+  <text class="t sm" x="24" y="148">中断提案里有什么（实测结构）</text>
+
+  <rect class="box" x="24" y="158" width="320" height="82" rx="6"/>
+  <text class="t tag" x="184" y="178" text-anchor="middle" fill="#475569">action_requests（要审批的动作）</text>
+  <text class="t mono" x="36" y="198">name='send_email'</text>
+  <text class="t mono" x="36" y="214">args={'recipient':'alice@corp.com',...}</text>
+  <text class="t mono" x="36" y="230">description='工具执行待审批\nTool: send_email...'</text>
+
+  <rect class="box" x="356" y="158" width="314" height="82" rx="6"/>
+  <text class="t tag" x="513" y="178" text-anchor="middle" fill="#475569">review_configs（每种动作允许哪些决定）</text>
+  <text class="t mono" x="368" y="198">[{'action_name': 'send_email',</text>
+  <text class="t mono" x="368" y="214">  'allowed_decisions': ['approve','edit','reject']}]</text>
+  <text class="t sm" x="513" y="232" text-anchor="middle" fill="#475569">UI 据此决定渲染哪些按钮</text>
+
+  <text class="t sm" x="24" y="266">三种决定的实测结果</text>
+
+  <rect class="ok" x="24" y="276" width="210" height="66" rx="6"/>
+  <text class="t sm" x="129" y="296" text-anchor="middle">approve（批准）</text>
+  <text class="t mono" x="34" y="314">执行账本: [('send_email',</text>
+  <text class="t mono" x="34" y="330">'alice@corp.com', '周会提醒')]</text>
+  <text class="t sm" x="129" y="342" text-anchor="middle" fill="#475569">原样执行</text>
+
+  <rect class="new" x="244" y="276" width="210" height="66" rx="6"/>
+  <text class="t sm" x="349" y="296" text-anchor="middle">edit（改参数后执行）</text>
+  <text class="t mono" x="254" y="314">执行账本: [('send_email',</text>
+  <text class="t mono" x="254" y="330">'dave@corp.com', '改后主题')]</text>
+  <text class="t sm" x="349" y="342" text-anchor="middle" fill="#475569">执行的是改后的参数</text>
+
+  <rect class="box" x="464" y="276" width="206" height="66" rx="6"/>
+  <text class="t sm" x="567" y="296" text-anchor="middle">reject（拒绝）</text>
+  <text class="t mono" x="474" y="314">执行账本: []</text>
+  <text class="t mono" x="474" y="330">tool(status=error): User rejected...</text>
+  <text class="t sm" x="567" y="342" text-anchor="middle" fill="#475569">错误回执回到模型，它据此改道</text>
+
+  <text class="t sm" x="24" y="372">两个易踩的坑（实测）</text>
+
+  <rect class="bad" x="24" y="382" width="320" height="46" rx="6"/>
+  <text class="t sm" x="184" y="402" text-anchor="middle" fill="#991b1b">① 无 checkpointer：首次不报错，恢复时才炸</text>
+  <text class="t sm" x="184" y="420" text-anchor="middle" fill="#475569">RuntimeError: Cannot use Command(resume=...)</text>
+
+  <rect class="bad" x="356" y="382" width="314" height="46" rx="6"/>
+  <text class="t sm" x="513" y="402" text-anchor="middle" fill="#991b1b">② 决策数与动作数必须严格对齐</text>
+  <text class="t sm" x="513" y="420" text-anchor="middle" fill="#475569">ValueError: Number of human decisions (2) != (1)</text>
+
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#334155"/></marker>
+    <marker id="o" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#d97706"/></marker>
+    <marker id="g" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#16a34a"/></marker>
+  </defs>
+</svg>

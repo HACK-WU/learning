@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 400" width="700" height="400" role="img" aria-label="第1版设计：模型直接执行高风险操作">
+  <style>
+    .t { font-family: "Microsoft YaHei","PingFang SC",sans-serif; }
+    .box { fill: #ffffff; stroke: #334155; stroke-width: 1.5; }
+    .bad { fill: #fee2e2; stroke: #dc2626; stroke-width: 1.5; stroke-dasharray: 5 3; }
+    .lbl { font-size: 13px; fill: #0f172a; }
+    .sm { font-size: 11px; fill: #475569; }
+    .mono { font-family: Consolas, monospace; font-size: 11px; fill: #475569; }
+    .hd { font-size: 15px; font-weight: bold; fill: #0f172a; }
+  </style>
+  <text class="t hd" x="20" y="26">第 1 版：模型直接执行高风险操作（基础实现）</text>
+
+  <text class="t sm" x="24" y="52">用户一句话 → 模型直接调用 → 副作用立刻发生，中间没有人</text>
+
+  <rect class="box" x="24" y="62" width="120" height="66" rx="6"/>
+  <text class="t sm" x="84" y="86" text-anchor="middle">用户</text>
+  <text class="t sm" x="84" y="104" text-anchor="middle">「退款 5000 元」</text>
+  <text class="t sm" x="84" y="120" text-anchor="middle" fill="#475569">一句话</text>
+
+  <line x1="144" y1="95" x2="188" y2="95" stroke="#334155" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect class="box" x="188" y="62" width="150" height="66" rx="6"/>
+  <text class="t sm" x="263" y="86" text-anchor="middle">模型</text>
+  <text class="t mono" x="200" y="106">refund(order_id, 5000)</text>
+  <text class="t sm" x="263" y="122" text-anchor="middle" fill="#991b1b">它认为该这么做</text>
+
+  <line x1="338" y1="95" x2="382" y2="95" stroke="#dc2626" stroke-width="2" marker-end="url(#r)"/>
+
+  <rect class="bad" x="382" y="62" width="150" height="66" rx="6"/>
+  <text class="t sm" x="457" y="86" text-anchor="middle" fill="#991b1b">工具立即执行</text>
+  <text class="t sm" x="457" y="104" text-anchor="middle" fill="#991b1b">钱已经出去了</text>
+  <text class="t sm" x="457" y="120" text-anchor="middle" fill="#475569">不可逆</text>
+
+  <line x1="532" y1="95" x2="576" y2="95" stroke="#dc2626" stroke-width="2" marker-end="url(#r)"/>
+  <rect class="bad" x="576" y="62" width="94" height="66" rx="6"/>
+  <text class="t sm" x="623" y="86" text-anchor="middle" fill="#991b1b">事后才发现</text>
+  <text class="t sm" x="623" y="104" text-anchor="middle" fill="#991b1b">退错了 / 退多了</text>
+  <text class="t sm" x="623" y="120" text-anchor="middle" fill="#475569">无法撤回</text>
+
+  <text class="t sm" x="24" y="158">代码：什么闸门都没有，工具函数直接产生副作用</text>
+
+  <rect class="box" x="24" y="168" width="646" height="76" rx="6"/>
+  <text class="t mono" x="38" y="190">@tool</text>
+  <text class="t mono" x="38" y="208">def refund(order_id: str, amount: float) -&gt; str:</text>
+  <text class="t mono" x="56" y="226">    """给用户退款。"""                 # ← 一旦被调用，钱就出去了</text>
+  <text class="t sm" x="347" y="240" text-anchor="middle" fill="#991b1b">模型决定 = 执行结果，人的第一次知道是在事后</text>
+
+  <text class="t lbl" x="24" y="272" font-weight="bold">它的问题</text>
+
+  <rect class="bad" x="24" y="286" width="200" height="66" rx="6"/>
+  <text class="t sm" x="124" y="306" text-anchor="middle" fill="#991b1b">① 误操作无法挽回</text>
+  <text class="t sm" x="124" y="324" text-anchor="middle" fill="#475569">退款 / 删库 / 发公告</text>
+  <text class="t sm" x="124" y="340" text-anchor="middle" fill="#475569">都是不可逆副作用</text>
+  <text class="t sm" x="124" y="352" text-anchor="middle" fill="#475569">模型理解错了照样执行</text>
+
+  <rect class="bad" x="242" y="286" width="200" height="66" rx="6"/>
+  <text class="t sm" x="342" y="306" text-anchor="middle" fill="#991b1b">② 敏感信息裸奔</text>
+  <text class="t sm" x="342" y="324" text-anchor="middle" fill="#475569">手机号 / 卡号 / 密钥</text>
+  <text class="t sm" x="342" y="340" text-anchor="middle" fill="#475569">原文进模型、原文出模型</text>
+  <text class="t sm" x="342" y="352" text-anchor="middle" fill="#475569">还留在状态里</text>
+
+  <rect class="bad" x="458" y="286" width="212" height="66" rx="6"/>
+  <text class="t sm" x="564" y="306" text-anchor="middle" fill="#991b1b">③ 没有「看一眼」的机会</text>
+  <text class="t sm" x="564" y="324" text-anchor="middle" fill="#475569">想改收件人、想拒掉</text>
+  <text class="t sm" x="564" y="340" text-anchor="middle" fill="#475569">都只能在发生之后追悔</text>
+  <text class="t sm" x="564" y="352" text-anchor="middle" fill="#475569">（事后审计 ≠ 事前拦截）</text>
+
+  <text class="t sm" x="24" y="376">本版解决了什么：实现最简单——模型有工具就能干，人工零介入、延迟最低。</text>
+
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#334155"/></marker>
+    <marker id="r" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#dc2626"/></marker>
+  </defs>
+</svg>

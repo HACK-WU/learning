@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 400" width="700" height="400" role="img" aria-label="第1版设计：单agent挂满工具">
+  <style>
+    .t { font-family: "Microsoft YaHei","PingFang SC",sans-serif; }
+    .box { fill: #ffffff; stroke: #334155; stroke-width: 1.5; }
+    .bad { fill: #fee2e2; stroke: #dc2626; stroke-width: 1.5; stroke-dasharray: 5 3; }
+    .lbl { font-size: 13px; fill: #0f172a; }
+    .sm { font-size: 11px; fill: #475569; }
+    .mono { font-family: Consolas, monospace; font-size: 10px; fill: #475569; }
+    .hd { font-size: 15px; font-weight: bold; fill: #0f172a; }
+  </style>
+  <text class="t hd" x="20" y="26">第 1 版：一个 agent 挂满所有工具（基础实现）</text>
+
+  <text class="t sm" x="24" y="50">四个领域的 8 个工具 + 四份领域知识，全塞进一个提示词</text>
+
+  <rect class="box" x="24" y="60" width="180" height="118" rx="6"/>
+  <text class="t sm" x="114" y="80" text-anchor="middle">单个 agent</text>
+  <text class="t mono" x="32" y="100">system_prompt 247 字符</text>
+  <text class="t mono" x="32" y="116">四份领域知识全在里面</text>
+  <text class="t mono" x="32" y="136">工具 schema 1736 字符</text>
+  <text class="t mono" x="32" y="152">8 个工具混在一起</text>
+  <text class="t sm" x="114" y="170" text-anchor="middle" fill="#991b1b">合计 1983 字符</text>
+
+  <line x1="204" y1="119" x2="248" y2="119" stroke="#dc2626" stroke-width="2" marker-end="url(#r)"/>
+
+  <rect class="bad" x="248" y="60" width="180" height="118" rx="6"/>
+  <text class="t sm" x="338" y="80" text-anchor="middle" fill="#991b1b">每次模型调用都携带全部</text>
+  <text class="t mono" x="256" y="100">查天气 → 也带着 SQL 知识</text>
+  <text class="t mono" x="256" y="116">发邮件 → 也带着股票知识</text>
+  <text class="t mono" x="256" y="136">一次问答 = 1983 字符 × N 轮</text>
+  <text class="t sm" x="338" y="156" text-anchor="middle" fill="#475569">多轮时还要再叠加历史</text>
+  <text class="t sm" x="338" y="170" text-anchor="middle" fill="#475569">成本随轮次线性膨胀</text>
+
+  <line x1="428" y1="119" x2="472" y2="119" stroke="#dc2626" stroke-width="2" marker-end="url(#r)"/>
+  <rect class="bad" x="472" y="60" width="198" height="118" rx="6"/>
+  <text class="t sm" x="571" y="80" text-anchor="middle" fill="#991b1b">模型要在 8 个里选一个</text>
+  <text class="t mono" x="480" y="100">工具越多，选错概率越高</text>
+  <text class="t mono" x="480" y="116">描述越像，越容易混淆</text>
+  <text class="t mono" x="480" y="136">get_stock vs search_docs</text>
+  <text class="t sm" x="571" y="156" text-anchor="middle" fill="#475569">且领域知识互相干扰：</text>
+  <text class="t sm" x="571" y="170" text-anchor="middle" fill="#475569">「数据库慢查询阈值」与天气无关</text>
+
+  <text class="t sm" x="24" y="206">代码：把所有工具一次性交给 create_agent</text>
+
+  <rect class="box" x="24" y="216" width="646" height="52" rx="6"/>
+  <text class="t mono" x="38" y="236">ALL_TOOLS = [get_weather, get_stock, convert_currency, explain_sql,</text>
+  <text class="t mono" x="38" y="252">             send_email, create_event, translate_text, search_docs]</text>
+  <text class="t mono" x="38" y="264">agent = create_agent(model, tools=ALL_TOOLS, system_prompt=OMNI_PROMPT)</text>
+
+  <text class="t lbl" x="24" y="296" font-weight="bold">它的问题</text>
+
+  <rect class="bad" x="24" y="306" width="200" height="64" rx="6"/>
+  <text class="t sm" x="124" y="326" text-anchor="middle" fill="#991b1b">① 上下文成本刚性</text>
+  <text class="t sm" x="124" y="344" text-anchor="middle" fill="#475569">单轮就要 1983 字符，</text>
+  <text class="t sm" x="124" y="358" text-anchor="middle" fill="#475569">不管这次用不用得上</text>
+
+  <rect class="bad" x="242" y="306" width="200" height="64" rx="6"/>
+  <text class="t sm" x="342" y="326" text-anchor="middle" fill="#991b1b">② 工具选择变难</text>
+  <text class="t sm" x="342" y="344" text-anchor="middle" fill="#475569">8 选 1 比 2 选 1 难得多，</text>
+  <text class="t sm" x="342" y="358" text-anchor="middle" fill="#475569">模型会调错或漏调</text>
+
+  <rect class="bad" x="458" y="306" width="212" height="64" rx="6"/>
+  <text class="t sm" x="564" y="326" text-anchor="middle" fill="#991b1b">③ 领域知识互相污染</text>
+  <text class="t sm" x="564" y="344" text-anchor="middle" fill="#475569">「不提供投资建议」</text>
+  <text class="t sm" x="564" y="358" text-anchor="middle" fill="#475569">可能出现在天气回答里</text>
+
+  <text class="t sm" x="24" y="390">本版解决了什么：实现最简单——一个 agent、一份提示词、一次配置，小工具集（≤5 个）下这样做最划算。</text>
+
+  <defs>
+    <marker id="r" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#dc2626"/></marker>
+  </defs>
+</svg>

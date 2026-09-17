@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 460" width="700" height="460" role="img" aria-label="第3版设计：瞬时与持久的分工">
+  <style>
+    .t { font-family: "Microsoft YaHei","PingFang SC",sans-serif; }
+    .box { fill: #ffffff; stroke: #334155; stroke-width: 1.5; }
+    .new { fill: #fef3c7; stroke: #d97706; stroke-width: 2; }
+    .ok { fill: #dcfce7; stroke: #16a34a; stroke-width: 1.5; }
+    .lbl { font-size: 13px; fill: #0f172a; }
+    .sm { font-size: 11px; fill: #475569; }
+    .mono { font-family: Consolas, monospace; font-size: 10px; fill: #475569; }
+    .hd { font-size: 15px; font-weight: bold; fill: #0f172a; }
+    .tag { font-size: 11px; fill: #92400e; font-weight: bold; }
+  </style>
+  <text class="t hd" x="20" y="26">第 3 版：瞬时与持久的分工 + 工具结果瘦身（综合实现）</text>
+
+  <text class="t sm" x="24" y="50">关键区分：改「模型看到的」还是改「状态里存的」</text>
+
+  <rect class="new" x="24" y="60" width="318" height="120" rx="6"/>
+  <text class="t tag" x="183" y="80" text-anchor="middle">瞬时（transient）：只改本次视图</text>
+  <text class="t mono" x="36" y="100">handler(request.override(messages=msgs))</text>
+  <text class="t sm" x="183" y="120" text-anchor="middle" fill="#475569">实测：注入后模型能答出 LYRA-9</text>
+  <text class="t sm" x="183" y="138" text-anchor="middle" fill="#15803d">状态中含注入标记的消息数 = 0</text>
+  <text class="t sm" x="183" y="156" text-anchor="middle" fill="#475569">下一轮重新注入，状态干净不膨胀</text>
+  <text class="t sm" x="183" y="174" text-anchor="middle" fill="#475569">适合：每轮都变的内容（时间、实时档案）</text>
+
+  <rect class="new" x="356" y="60" width="318" height="120" rx="6"/>
+  <text class="t tag" x="515" y="80" text-anchor="middle">持久（persistent）：写入状态</text>
+  <text class="t mono" x="368" y="100">ExtendedModelResponse(command=Command(update=...))</text>
+  <text class="t sm" x="515" y="120" text-anchor="middle" fill="#475569">实测：第一轮后含标记消息数 = 1</text>
+  <text class="t sm" x="515" y="138" text-anchor="middle" fill="#15803d">第二轮日志：已在消息中，本次不再注入</text>
+  <text class="t sm" x="515" y="156" text-anchor="middle" fill="#15803d">第二轮后仍为 1（不重复累积）</text>
+  <text class="t sm" x="515" y="174" text-anchor="middle" fill="#475569">适合：稳定不变的内容（项目代号、用户档案）</text>
+
+  <text class="t sm" x="24" y="210">工具结果瘦身：两种做法都是「瞬时」的（实测 1144 字报告）</text>
+
+  <rect class="box" x="24" y="220" width="318" height="96" rx="6"/>
+  <text class="t tag" x="183" y="240" text-anchor="middle" fill="#475569">A. 自写截断中间件</text>
+  <text class="t mono" x="36" y="260">if len(content) &gt; 120: 截断 + "……（已截断）"</text>
+  <text class="t sm" x="183" y="280" text-anchor="middle" fill="#475569">模型侧 len = 127（看到短版）</text>
+  <text class="t sm" x="183" y="298" text-anchor="middle" fill="#991b1b">状态侧 len = 1144（全量保留）</text>
+  <text class="t sm" x="183" y="314" text-anchor="middle" fill="#475569">可控、可自定义保留策略</text>
+
+  <rect class="box" x="356" y="220" width="318" height="96" rx="6"/>
+  <text class="t tag" x="515" y="240" text-anchor="middle" fill="#475569">B. 内置 ContextEditingMiddleware</text>
+  <text class="t mono" x="368" y="260">ClearToolUsesEdit(trigger=100, keep=0)</text>
+  <text class="t sm" x="515" y="280" text-anchor="middle" fill="#475569">模型侧 len = 9，cleared = True</text>
+  <text class="t sm" x="515" y="298" text-anchor="middle" fill="#991b1b">状态侧 len = 1144（同样全量保留）</text>
+  <text class="t sm" x="515" y="314" text-anchor="middle" fill="#475569">开箱即用，但清理更激进</text>
+
+  <rect class="ok" x="24" y="330" width="650" height="42" rx="6"/>
+  <text class="t sm" x="349" y="350" text-anchor="middle" fill="#15803d">共同点（易误解）：两者都只影响「模型看到的」，状态里的原文一字不删</text>
+  <text class="t sm" x="349" y="366" text-anchor="middle" fill="#475569">想真正缩小状态，要用课 7 的裁剪 / 摘要中间件（那里才会改状态）</text>
+
+  <text class="t lbl" x="24" y="398" font-weight="bold">选型速查</text>
+
+  <rect class="box" x="24" y="410" width="155" height="48" rx="6"/>
+  <text class="t sm" x="101" y="430" text-anchor="middle">每轮都变</text>
+  <text class="t sm" x="101" y="448" text-anchor="middle" fill="#475569">→ 瞬时注入</text>
+
+  <rect class="box" x="189" y="410" width="155" height="48" rx="6"/>
+  <text class="t sm" x="266" y="430" text-anchor="middle">稳定不变</text>
+  <text class="t sm" x="266" y="448" text-anchor="middle" fill="#475569">→ 持久写入</text>
+
+  <rect class="box" x="354" y="410" width="155" height="48" rx="6"/>
+  <text class="t sm" x="431" y="430" text-anchor="middle">超大工具结果</text>
+  <text class="t sm" x="431" y="448" text-anchor="middle" fill="#475569">→ 截断 / ContextEditing</text>
+
+  <rect class="box" x="519" y="410" width="155" height="48" rx="6"/>
+  <text class="t sm" x="596" y="430" text-anchor="middle">历史本身太长</text>
+  <text class="t sm" x="596" y="448" text-anchor="middle" fill="#475569">→ 裁剪 / 摘要（课 7）</text>
+
+  <defs></defs>
+</svg>

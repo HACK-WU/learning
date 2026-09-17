@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 450" width="700" height="450" role="img" aria-label="第3版设计：四种编排模式对照">
+  <style>
+    .t { font-family: "Microsoft YaHei","PingFang SC",sans-serif; }
+    .box { fill: #ffffff; stroke: #334155; stroke-width: 1.5; }
+    .new { fill: #fef3c7; stroke: #d97706; stroke-width: 2; }
+    .ok { fill: #dcfce7; stroke: #16a34a; stroke-width: 1.5; }
+    .bad { fill: #fee2e2; stroke: #dc2626; stroke-width: 1.5; stroke-dasharray: 5 3; }
+    .lbl { font-size: 13px; fill: #0f172a; }
+    .sm { font-size: 11px; fill: #475569; }
+    .mono { font-family: Consolas, monospace; font-size: 10px; fill: #475569; }
+    .hd { font-size: 15px; font-weight: bold; fill: #0f172a; }
+    .tag { font-size: 11px; fill: #92400e; font-weight: bold; }
+  </style>
+  <text class="t hd" x="20" y="26">第 3 版：四种编排模式——按任务选（综合实现）</text>
+
+  <text class="t sm" x="24" y="50">同一任务「南京今天天气怎么样？」，真实模型实测的模型调用次数</text>
+
+  <rect class="box" x="24" y="60" width="160" height="90" rx="6"/>
+  <text class="t tag" x="104" y="80" text-anchor="middle" fill="#475569">A. subagents</text>
+  <text class="t sm" x="104" y="98" text-anchor="middle">主代理把专家当工具</text>
+  <text class="t mono" x="32" y="116">turn1=4  turn2=4</text>
+  <text class="t sm" x="104" y="132" text-anchor="middle" fill="#475569">结果回到主代理，</text>
+  <text class="t sm" x="104" y="146" text-anchor="middle" fill="#475569">主代理继续汇总</text>
+
+  <rect class="box" x="192" y="60" width="160" height="90" rx="6"/>
+  <text class="t tag" x="272" y="80" text-anchor="middle" fill="#475569">B. skills</text>
+  <text class="t sm" x="272" y="98" text-anchor="middle">按需加载流程技能</text>
+  <text class="t mono" x="200" y="116">turn1=3  turn2=2</text>
+  <text class="t sm" x="272" y="132" text-anchor="middle" fill="#15803d">turn2 不再重复加载</text>
+  <text class="t sm" x="272" y="146" text-anchor="middle" fill="#475569">（实测未重新加载）</text>
+
+  <rect class="box" x="360" y="60" width="160" height="90" rx="6"/>
+  <text class="t tag" x="440" y="80" text-anchor="middle" fill="#475569">C. router</text>
+  <text class="t sm" x="440" y="98" text-anchor="middle">先分类再分派</text>
+  <text class="t mono" x="368" y="116">turn1=3  turn2=3</text>
+  <text class="t sm" x="440" y="132" text-anchor="middle" fill="#475569">只有命中的领域</text>
+  <text class="t sm" x="440" y="146" text-anchor="middle" fill="#475569">被激活</text>
+
+  <rect class="new" x="528" y="60" width="142" height="90" rx="6"/>
+  <text class="t tag" x="599" y="80" text-anchor="middle">D. handoffs</text>
+  <text class="t sm" x="599" y="98" text-anchor="middle">状态机迁移交接</text>
+  <text class="t mono" x="536" y="116">turn1=1  turn3=1</text>
+  <text class="t sm" x="599" y="132" text-anchor="middle" fill="#15803d">成本跟着阶段走</text>
+  <text class="t sm" x="599" y="146" text-anchor="middle" fill="#475569">turn2 补齐=3</text>
+
+  <text class="t sm" x="24" y="176">读这张表的关键</text>
+
+  <rect class="ok" x="24" y="186" width="320" height="56" rx="6"/>
+  <text class="t sm" x="184" y="206" text-anchor="middle" fill="#15803d">D 的 turn1 只要 1 次：还没问到城市，先问</text>
+  <text class="t sm" x="184" y="222" text-anchor="middle" fill="#475569">turn3 也只要 1 次：状态保持 ready，直接执行</text>
+  <text class="t sm" x="184" y="236" text-anchor="middle" fill="#475569">——它不会为「已经知道的事」重复付费</text>
+
+  <rect class="box" x="356" y="186" width="314" height="56" rx="6"/>
+  <text class="t sm" x="513" y="206" text-anchor="middle">A / C 每轮都是固定成本</text>
+  <text class="t sm" x="513" y="222" text-anchor="middle" fill="#475569">turn1 与 turn2 数字一模一样（4/4、3/3）</text>
+  <text class="t sm" x="513" y="236" text-anchor="middle" fill="#475569">——无状态，每轮重走全流程</text>
+
+  <text class="t sm" x="24" y="272">三种编排的本质差别（一句话判据）</text>
+
+  <rect class="box" x="24" y="282" width="212" height="76" rx="6"/>
+  <text class="t tag" x="130" y="302" text-anchor="middle" fill="#475569">subagents</text>
+  <text class="t sm" x="130" y="322" text-anchor="middle">主代理把子代理当【工具】</text>
+  <text class="t sm" x="130" y="338" text-anchor="middle" fill="#475569">结果回到主代理</text>
+  <text class="t sm" x="130" y="352" text-anchor="middle" fill="#475569">适合：要汇总多个专家</text>
+
+  <rect class="box" x="244" y="282" width="212" height="76" rx="6"/>
+  <text class="t tag" x="350" y="302" text-anchor="middle" fill="#475569">handoffs</text>
+  <text class="t sm" x="350" y="322" text-anchor="middle">子代理接【整段对话】</text>
+  <text class="t sm" x="350" y="338" text-anchor="middle" fill="#475569">主代理交出控制权</text>
+  <text class="t sm" x="350" y="352" text-anchor="middle" fill="#475569">适合：分阶段流程</text>
+
+  <rect class="box" x="464" y="282" width="206" height="76" rx="6"/>
+  <text class="t tag" x="567" y="302" text-anchor="middle" fill="#475569">router</text>
+  <text class="t sm" x="567" y="322" text-anchor="middle">先【分类】再分派</text>
+  <text class="t sm" x="567" y="338" text-anchor="middle" fill="#475569">只有命中的被激活</text>
+  <text class="t sm" x="567" y="352" text-anchor="middle" fill="#475569">适合：领域互斥</text>
+
+  <text class="t sm" x="24" y="386">实测踩到的坑（并行分支写同一字段）</text>
+
+  <rect class="bad" x="24" y="396" width="646" height="44" rx="6"/>
+  <text class="t mono" x="38" y="414">InvalidUpdateError: At key 'results': Can receive only one value per step. Use an Annotated key…</text>
+  <text class="t mono" x="38" y="430">修法：results: Annotated[list, operator.add]   # 并行分支都要写 → 必须是累加器</text>
+
+  <defs>
+    <marker id="o" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#d97706"/></marker>
+  </defs>
+</svg>

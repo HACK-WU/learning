@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 480" width="700" height="480" role="img" aria-label="第3版设计：多中间件组合与执行顺序">
+  <style>
+    .t { font-family: "Microsoft YaHei","PingFang SC",sans-serif; }
+    .box { fill: #ffffff; stroke: #334155; stroke-width: 1.5; }
+    .new { fill: #fef3c7; stroke: #d97706; stroke-width: 2; }
+    .ok { fill: #dcfce7; stroke: #16a34a; stroke-width: 1.5; }
+    .lbl { font-size: 13px; fill: #0f172a; }
+    .sm { font-size: 11px; fill: #475569; }
+    .mono { font-family: Consolas, monospace; font-size: 10px; fill: #475569; }
+    .hd { font-size: 15px; font-weight: bold; fill: #0f172a; }
+    .tag { font-size: 11px; fill: #92400e; font-weight: bold; }
+  </style>
+  <text class="t hd" x="20" y="26">第 3 版：多中间件组合与执行顺序（综合实现）</text>
+
+  <text class="t sm" x="24" y="52">三个中间件 M1 / M2 / M3 的实测触发顺序（关键结论）</text>
+
+  <rect class="box" x="24" y="62" width="318" height="128" rx="6"/>
+  <text class="t tag" x="183" y="82" text-anchor="middle" fill="#475569">before_* 正序 · after_* 逆序</text>
+  <text class="t mono" x="36" y="102">before_agent: M1 → M2 → M3</text>
+  <text class="t mono" x="36" y="120">before_model: M1 → M2 → M3</text>
+  <text class="t mono" x="36" y="138">after_model : M3 → M2 → M1</text>
+  <text class="t mono" x="36" y="156">after_agent : M3 → M2 → M1</text>
+  <text class="t sm" x="183" y="176" text-anchor="middle" fill="#475569">洋葱模型：进正向、出反向</text>
+
+  <rect class="new" x="356" y="62" width="318" height="128" rx="6"/>
+  <text class="t tag" x="515" y="82" text-anchor="middle">wrap_* 嵌套：进入正序、返回逆序</text>
+  <text class="t mono" x="368" y="102">wrap_model_call 进入: M1 → M2 → M3</text>
+  <text class="t mono" x="368" y="120">（此处调用内层 / 真实模型）</text>
+  <text class="t mono" x="368" y="138">wrap_model_call 返回: M3 → M2 → M1</text>
+  <text class="t mono" x="368" y="156">wrap_tool_call  同理（进 M1→M3，出 M3→M1）</text>
+  <text class="t sm" x="515" y="176" text-anchor="middle" fill="#475569">写在前面的是外层，包住后面所有</text>
+
+  <text class="t sm" x="24" y="216">顺序为什么重要：同一个「工具选择器 + 观察者」，换位置结果不同</text>
+
+  <rect class="box" x="24" y="226" width="318" height="88" rx="6"/>
+  <text class="t tag" x="183" y="246" text-anchor="middle" fill="#15803d">顺序 A：selector 在前（外层）</text>
+  <text class="t mono" x="36" y="266">middleware=[Selector, Observer]</text>
+  <text class="t sm" x="183" y="286" text-anchor="middle" fill="#475569">Selector 先把 6 个工具过滤成 2 个</text>
+  <text class="t sm" x="183" y="304" text-anchor="middle" fill="#475569">Observer 在内层看到的是「已过滤的 2 个」</text>
+
+  <rect class="box" x="356" y="226" width="318" height="88" rx="6"/>
+  <text class="t tag" x="515" y="246" text-anchor="middle" fill="#991b1b">顺序 B：Observer 在前（外层）</text>
+  <text class="t mono" x="368" y="266">middleware=[Observer, Selector]</text>
+  <text class="t sm" x="515" y="286" text-anchor="middle" fill="#475569">Observer 在外层先跑，看到原始 6 个</text>
+  <text class="t sm" x="515" y="304" text-anchor="middle" fill="#991b1b">它看到的不是模型最终可用的清单</text>
+
+  <text class="t sm" x="24" y="340">选型速查：想做的事挂哪个钩子</text>
+
+  <rect class="box" x="24" y="350" width="155" height="70" rx="6"/>
+  <text class="t sm" x="101" y="370" text-anchor="middle">before_model</text>
+  <text class="t sm" x="101" y="388" text-anchor="middle" fill="#475569">改输入 / 拦请求</text>
+  <text class="t sm" x="101" y="404" text-anchor="middle" fill="#475569">守护、裁剪、注入</text>
+
+  <rect class="box" x="189" y="350" width="155" height="70" rx="6"/>
+  <text class="t sm" x="266" y="370" text-anchor="middle">after_model</text>
+  <text class="t sm" x="266" y="388" text-anchor="middle" fill="#475569">看输出 / 记账</text>
+  <text class="t sm" x="266" y="404" text-anchor="middle" fill="#475569">计数、审计、审查</text>
+
+  <rect class="box" x="354" y="350" width="155" height="70" rx="6"/>
+  <text class="t sm" x="431" y="370" text-anchor="middle">wrap_model_call</text>
+  <text class="t sm" x="431" y="388" text-anchor="middle" fill="#475569">改写整个请求</text>
+  <text class="t sm" x="431" y="404" text-anchor="middle" fill="#475569">换模型、改消息/工具</text>
+
+  <rect class="box" x="519" y="350" width="155" height="70" rx="6"/>
+  <text class="t sm" x="596" y="370" text-anchor="middle">wrap_tool_call</text>
+  <text class="t sm" x="596" y="388" text-anchor="middle" fill="#475569">包住工具执行</text>
+  <text class="t sm" x="596" y="404" text-anchor="middle" fill="#475569">重试、缓存、mock</text>
+
+  <text class="t lbl" x="24" y="446" font-weight="bold">三条经验</text>
+  <text class="t sm" x="24" y="462">① 越靠前的中间件越「外层」，能改写后面所有中间件看到的请求。</text>
+  <text class="t sm" x="24" y="476">② 有依赖关系的中间件按「过滤者在前、观察者在后」排，否则读到的是未处理的数据。</text>
+
+  <defs></defs>
+</svg>

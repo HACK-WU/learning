@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 400" width="700" height="400" role="img" aria-label="第1版设计：横切逻辑散落在业务代码里">
+  <style>
+    .t { font-family: "Microsoft YaHei","PingFang SC",sans-serif; }
+    .box { fill: #ffffff; stroke: #334155; stroke-width: 1.5; }
+    .bad { fill: #fee2e2; stroke: #dc2626; stroke-width: 1.5; stroke-dasharray: 5 3; }
+    .lbl { font-size: 13px; fill: #0f172a; }
+    .sm { font-size: 11px; fill: #475569; }
+    .mono { font-family: Consolas, monospace; font-size: 11px; fill: #475569; }
+    .hd { font-size: 15px; font-weight: bold; fill: #0f172a; }
+  </style>
+  <text class="t hd" x="20" y="26">第 1 版：横切逻辑散落在业务代码里（基础实现）</text>
+
+  <text class="t sm" x="24" y="54">每处调用点都要手写一遍：日志、限额、重试、错误处理</text>
+
+  <rect class="box" x="24" y="64" width="200" height="150" rx="6"/>
+  <text class="t sm" x="124" y="86" text-anchor="middle">调用点 A（查天气）</text>
+  <text class="t mono" x="36" y="108">try:</text>
+  <text class="t mono" x="48" y="126">log(...)</text>
+  <text class="t mono" x="48" y="142">if count &gt; N: raise</text>
+  <text class="t mono" x="48" y="158">for i in range(3): retry</text>
+  <text class="t mono" x="48" y="174">except: ...</text>
+  <text class="t mono" x="48" y="192">log(...)</text>
+
+  <rect class="box" x="250" y="64" width="200" height="150" rx="6"/>
+  <text class="t sm" x="350" y="86" text-anchor="middle">调用点 B（查订单）</text>
+  <text class="t mono" x="262" y="108">try:</text>
+  <text class="t mono" x="274" y="126">log(...)</text>
+  <text class="t mono" x="274" y="142">if count &gt; N: raise</text>
+  <text class="t mono" x="274" y="158">for i in range(3): retry</text>
+  <text class="t mono" x="274" y="174">except: ...</text>
+  <text class="t mono" x="274" y="192">log(...)</text>
+
+  <rect class="box" x="476" y="64" width="194" height="150" rx="6"/>
+  <text class="t sm" x="573" y="86" text-anchor="middle">调用点 C（退款）</text>
+  <text class="t mono" x="488" y="108">try:</text>
+  <text class="t mono" x="500" y="126">log(...)</text>
+  <text class="t mono" x="500" y="142">if count &gt; N: raise</text>
+  <text class="t mono" x="500" y="158">for i in range(3): retry</text>
+  <text class="t mono" x="500" y="174">except: ...</text>
+  <text class="t mono" x="500" y="192">log(...)</text>
+
+  <text class="t sm" x="24" y="240">三份代码里，同样的四件事重复三遍（红框为重复片段）</text>
+
+  <rect class="bad" x="24" y="252" width="200" height="34" rx="4"/>
+  <text class="t sm" x="124" y="272" text-anchor="middle" fill="#991b1b">重复 1：日志埋点</text>
+  <rect class="bad" x="250" y="252" width="200" height="34" rx="4"/>
+  <text class="t sm" x="350" y="272" text-anchor="middle" fill="#991b1b">重复 2：调用限额</text>
+  <rect class="bad" x="476" y="252" width="194" height="34" rx="4"/>
+  <text class="t sm" x="573" y="272" text-anchor="middle" fill="#991b1b">重复 3/4：重试 + 兜错</text>
+
+  <text class="t lbl" x="24" y="312" font-weight="bold">它的问题</text>
+
+  <rect class="bad" x="24" y="326" width="200" height="58" rx="6"/>
+  <text class="t sm" x="124" y="346" text-anchor="middle" fill="#991b1b">① 改一处要改 N 处</text>
+  <text class="t sm" x="124" y="364" text-anchor="middle" fill="#475569">重试从 3 次改 5 次</text>
+  <text class="t sm" x="124" y="378" text-anchor="middle" fill="#475569">得翻遍所有调用点</text>
+
+  <rect class="bad" x="250" y="326" width="200" height="58" rx="6"/>
+  <text class="t sm" x="350" y="346" text-anchor="middle" fill="#991b1b">② 业务与横切耦合</text>
+  <text class="t sm" x="350" y="364" text-anchor="middle" fill="#475569">「查天气」里混着</text>
+  <text class="t sm" x="350" y="378" text-anchor="middle" fill="#475569">重试与计数的代码</text>
+
+  <rect class="bad" x="476" y="326" width="194" height="58" rx="6"/>
+  <text class="t sm" x="573" y="346" text-anchor="middle" fill="#991b1b">③ 漏一处就裸奔</text>
+  <text class="t sm" x="573" y="364" text-anchor="middle" fill="#475569">新加的调用点忘了包</text>
+  <text class="t sm" x="573" y="378" text-anchor="middle" fill="#475569">就没有限额与重试</text>
+
+  <defs></defs>
+</svg>

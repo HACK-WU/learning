@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 400" width="700" height="400" role="img" aria-label="第1版设计：直接问模型，没有依据">
+  <style>
+    .t { font-family: "Microsoft YaHei","PingFang SC",sans-serif; }
+    .box { fill: #ffffff; stroke: #334155; stroke-width: 1.5; }
+    .bad { fill: #fee2e2; stroke: #dc2626; stroke-width: 1.5; stroke-dasharray: 5 3; }
+    .lbl { font-size: 13px; fill: #0f172a; }
+    .sm { font-size: 11px; fill: #475569; }
+    .mono { font-family: Consolas, monospace; font-size: 11px; fill: #475569; }
+    .hd { font-size: 15px; font-weight: bold; fill: #0f172a; }
+  </style>
+  <text class="t hd" x="20" y="26">第 1 版：直接问模型，它对公司内部政策一无所知（基础实现）</text>
+
+  <text class="t sm" x="24" y="52">模型的知识来自训练数据——而公司制度不在里面</text>
+
+  <rect class="box" x="24" y="62" width="150" height="66" rx="6"/>
+  <text class="t sm" x="99" y="86" text-anchor="middle">用户提问</text>
+  <text class="t mono" x="32" y="106">「星云科技员工</text>
+  <text class="t mono" x="32" y="122">每年多少天年假？」</text>
+
+  <line x1="174" y1="95" x2="218" y2="95" stroke="#334155" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect class="box" x="218" y="62" width="176" height="66" rx="6"/>
+  <text class="t sm" x="306" y="86" text-anchor="middle">模型（只有训练知识）</text>
+  <text class="t sm" x="306" y="106" text-anchor="middle" fill="#475569">通用常识：有</text>
+  <text class="t sm" x="306" y="122" text-anchor="middle" fill="#991b1b">星云科技制度：无</text>
+
+  <line x1="394" y1="95" x2="438" y2="95" stroke="#dc2626" stroke-width="2" marker-end="url(#r)"/>
+
+  <rect class="bad" x="438" y="62" width="232" height="66" rx="6"/>
+  <text class="t sm" x="554" y="86" text-anchor="middle" fill="#991b1b">两种都不对</text>
+  <text class="t sm" x="554" y="104" text-anchor="middle" fill="#475569">要么编一个看似合理的数字</text>
+  <text class="t sm" x="554" y="122" text-anchor="middle" fill="#475569">要么诚实说「不知道」但答不了</text>
+
+  <text class="t sm" x="24" y="158">实测：真实模型的回答</text>
+
+  <rect class="box" x="24" y="168" width="646" height="64" rx="6"/>
+  <text class="t mono" x="38" y="192">提问：星云科技员工每年有多少天年假？请只回答天数。</text>
+  <text class="t mono" x="38" y="212">模型回答：未知</text>
+  <text class="t sm" x="347" y="226" text-anchor="middle" fill="#991b1b">诚实拒答——但用户的问题依然没被解决，等于 agent 不可用</text>
+
+  <rect class="bad" x="24" y="244" width="310" height="52" rx="6"/>
+  <text class="t sm" x="179" y="264" text-anchor="middle" fill="#991b1b">⚠️ 更危险的是「编」而不是「不知道」</text>
+  <text class="t sm" x="179" y="282" text-anchor="middle" fill="#475569">本次实测模型诚实拒答，但换个问法、</text>
+  <text class="t sm" x="179" y="292" text-anchor="middle" fill="#475569">或问题碰巧贴近通用常识时，它会给出</text>
+  <text class="t sm" x="179" y="302" text-anchor="middle" fill="#475569">一个听起来合理但无从核实的数字</text>
+
+  <rect class="box" x="350" y="244" width="320" height="52" rx="6"/>
+  <text class="t sm" x="510" y="264" text-anchor="middle">知识库里有答案</text>
+  <text class="t sm" x="510" y="282" text-anchor="middle" fill="#475569">kb/01-考勤与休假制度.md 明确写着</text>
+  <text class="t sm" x="510" y="292" text-anchor="middle" fill="#475569">满 1 年不满 3 年：每年 5 天（阶梯计算）</text>
+  <text class="t sm" x="510" y="302" text-anchor="middle" fill="#475569">——模型只是拿不到</text>
+
+  <text class="t lbl" x="24" y="324" font-weight="bold">它的问题</text>
+
+  <rect class="bad" x="24" y="338" width="200" height="54" rx="6"/>
+  <text class="t sm" x="124" y="358" text-anchor="middle" fill="#991b1b">① 私有知识进不去</text>
+  <text class="t sm" x="124" y="376" text-anchor="middle" fill="#475569">制度、流程、价格</text>
+  <text class="t sm" x="124" y="388" text-anchor="middle" fill="#475569">都不在训练数据里</text>
+
+  <rect class="bad" x="242" y="338" width="200" height="54" rx="6"/>
+  <text class="t sm" x="342" y="358" text-anchor="middle" fill="#991b1b">② 答案不可核实</text>
+  <text class="t sm" x="342" y="376" text-anchor="middle" fill="#475569">没有出处，用户</text>
+  <text class="t sm" x="342" y="388" text-anchor="middle" fill="#475569">无从判断真假</text>
+
+  <rect class="bad" x="458" y="338" width="212" height="54" rx="6"/>
+  <text class="t sm" x="564" y="358" text-anchor="middle" fill="#991b1b">③ 更新即过期</text>
+  <text class="t sm" x="564" y="376" text-anchor="middle" fill="#475569">制度改了，模型</text>
+  <text class="t sm" x="564" y="388" text-anchor="middle" fill="#475569">仍按旧知识答</text>
+
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#334155"/></marker>
+    <marker id="r" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#dc2626"/></marker>
+  </defs>
+</svg>

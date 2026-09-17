@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 430" width="700" height="430" role="img" aria-label="第3版设计：序列化落库与回放">
+  <style>
+    .t { font-family: "Microsoft YaHei","PingFang SC",sans-serif; }
+    .box { fill: #ffffff; stroke: #334155; stroke-width: 1.5; }
+    .new { fill: #fef3c7; stroke: #d97706; stroke-width: 2; }
+    .store { fill: #ede9fe; stroke: #7c3aed; stroke-width: 1.5; }
+    .ok { fill: #dcfce7; stroke: #16a34a; stroke-width: 1.5; }
+    .lbl { font-size: 13px; fill: #0f172a; }
+    .sm { font-size: 11px; fill: #475569; }
+    .hd { font-size: 15px; font-weight: bold; fill: #0f172a; }
+    .tag { font-size: 11px; fill: #6d28d9; font-weight: bold; }
+    .mono { font-family: Consolas, monospace; font-size: 10px; fill: #475569; }
+  </style>
+  <text class="t hd" x="20" y="26">第 3 版：序列化落库 + 回放（综合实现）</text>
+
+  <rect class="box" x="24" y="48" width="120" height="46" rx="6"/>
+  <text class="t lbl" x="84" y="68" text-anchor="middle">消息对象</text>
+  <text class="t sm" x="84" y="86" text-anchor="middle">内存中的列表</text>
+
+  <line x1="144" y1="71" x2="208" y2="71" stroke="#334155" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect class="new" x="208" y="46" width="150" height="50" rx="6"/>
+  <text class="t tag" x="283" y="66" text-anchor="middle">新增：dumpd()</text>
+  <text class="t sm" x="283" y="86" text-anchor="middle">对象 → 纯数据 dict</text>
+
+  <line x1="358" y1="71" x2="430" y2="71" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#p)"/>
+
+  <rect class="store" x="430" y="46" width="150" height="50" rx="6"/>
+  <text class="t tag" x="505" y="66" text-anchor="middle">新增：持久存储</text>
+  <text class="t sm" x="505" y="86" text-anchor="middle">DB / JSON / Redis</text>
+
+  <line x1="505" y1="96" x2="505" y2="140" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#p)"/>
+  <text class="t sm" x="520" y="122" fill="#6d28d9">load()</text>
+
+  <rect class="box" x="400" y="140" width="180" height="46" rx="6"/>
+  <text class="t lbl" x="490" y="160" text-anchor="middle">还原为消息对象</text>
+  <text class="t sm" x="490" y="178" text-anchor="middle">tool_calls 原样保留</text>
+
+  <line x1="400" y1="163" x2="320" y2="163" stroke="#334155" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect class="box" x="200" y="140" width="120" height="46" rx="6"/>
+  <text class="t sm" x="260" y="160" text-anchor="middle">回放</text>
+  <text class="t sm" x="260" y="178" text-anchor="middle">继续 invoke</text>
+
+  <text class="t sm" x="24" y="128" fill="#15803d">实测往返：</text>
+  <text class="t mono" x="24" y="146">Human → AI → Tool → AI</text>
+  <text class="t sm" x="24" y="164" fill="#15803d">tool_calls 完整保留</text>
+
+  <rect class="new" x="24" y="212" width="300" height="80" rx="6"/>
+  <text class="t tag" x="174" y="232" text-anchor="middle">新增：存储契约（按会话存结构化行）</text>
+  <text class="t mono" x="38" y="252">session_id | seq | role | content</text>
+  <text class="t mono" x="38" y="270">tool_call_id | created_at</text>
+  <text class="t sm" x="174" y="288" text-anchor="middle" fill="#92400e">可按轮次检索 / 裁剪 / 单独回放</text>
+
+  <rect class="ok" x="340" y="212" width="340" height="80" rx="6"/>
+  <text class="t tag" x="510" y="232" text-anchor="middle" fill="#15803d">新增：安全边界</text>
+  <text class="t sm" x="510" y="252" text-anchor="middle" fill="#15803d">load() 会实例化对象、可能触发副作用</text>
+  <text class="t sm" x="510" y="270" text-anchor="middle" fill="#475569">绝不对不可信来源调用</text>
+  <text class="t sm" x="510" y="288" text-anchor="middle" fill="#475569">beta 期：显式传 allowed_objects</text>
+
+  <text class="t lbl" x="24" y="324" font-weight="bold">三层各就各位</text>
+  <text class="t sm" x="24" y="346">构造层：用标准消息对象，角色由类型保证（不再靠「用户:」这种文字约定）。</text>
+  <text class="t sm" x="24" y="366">存储层：dumpd → 纯数据落库；load 还原（含 tool_calls），支持按轮次裁剪与回放。</text>
+  <text class="t sm" x="24" y="386">安全层：只 load 自己存的数据；不可信输入视为红线。</text>
+  <text class="t sm" x="24" y="410">比上张多了什么：紫色的存储闭环 + 存储契约 + 安全边界（黄/紫/绿三块）。</text>
+
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#334155"/></marker>
+    <marker id="p" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#7c3aed"/></marker>
+  </defs>
+</svg>

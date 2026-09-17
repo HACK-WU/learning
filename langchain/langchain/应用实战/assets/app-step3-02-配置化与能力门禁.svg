@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 440" width="700" height="440" role="img" aria-label="第3版设计：配置化主备与能力门禁">
+  <style>
+    .t { font-family: "Microsoft YaHei","PingFang SC",sans-serif; }
+    .box { fill: #ffffff; stroke: #334155; stroke-width: 1.5; }
+    .conf { fill: #ede9fe; stroke: #7c3aed; stroke-width: 1.5; }
+    .gate { fill: #fef3c7; stroke: #d97706; stroke-width: 2; }
+    .model { fill: #dcfce7; stroke: #16a34a; stroke-width: 1.5; }
+    .mon { fill: #e0f2fe; stroke: #0284c7; stroke-width: 1.5; }
+    .lbl { font-size: 13px; fill: #0f172a; }
+    .sm { font-size: 11px; fill: #475569; }
+    .hd { font-size: 15px; font-weight: bold; fill: #0f172a; }
+    .tag { font-size: 11px; fill: #6d28d9; font-weight: bold; }
+  </style>
+  <text class="t hd" x="20" y="26">第 3 版：配置化主备 + 能力门禁（综合实现）</text>
+
+  <rect class="conf" x="30" y="48" width="150" height="60" rx="6"/>
+  <text class="t tag" x="105" y="68" text-anchor="middle">新增：配置层</text>
+  <text class="t sm" x="105" y="86" text-anchor="middle">models.yaml / .env</text>
+  <text class="t sm" x="105" y="100" text-anchor="middle">主备 + 权重 + 超时</text>
+
+  <line x1="180" y1="78" x2="250" y2="78" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#p)"/>
+
+  <rect class="gate" x="250" y="48" width="170" height="60" rx="6"/>
+  <text class="t tag" x="335" y="68" text-anchor="middle">新增：能力门禁</text>
+  <text class="t sm" x="335" y="86" text-anchor="middle">profile 探测 + 手动覆写</text>
+  <text class="t sm" x="335" y="100" text-anchor="middle">缺能力 = 启动即失败</text>
+
+  <line x1="420" y1="78" x2="490" y2="78" stroke="#d97706" stroke-width="1.5" marker-end="url(#o)"/>
+
+  <rect class="box" x="490" y="48" width="180" height="60" rx="6"/>
+  <text class="t lbl" x="580" y="70" text-anchor="middle">可配置模型链</text>
+  <text class="t sm" x="580" y="88" text-anchor="middle">configurable_fields</text>
+  <text class="t sm" x="580" y="102" text-anchor="middle">+ with_fallbacks</text>
+
+  <line x1="580" y1="108" x2="580" y2="150" stroke="#334155" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect class="box" x="440" y="150" width="130" height="42" rx="6"/>
+  <text class="t sm" x="505" y="168" text-anchor="middle">① 主 qwen3.8-flash</text>
+  <text class="t sm" x="505" y="184" text-anchor="middle">百炼 endpoint</text>
+
+  <rect class="box" x="590" y="150" width="90" height="42" rx="6"/>
+  <text class="t sm" x="635" y="168" text-anchor="middle">② 备用</text>
+  <text class="t sm" x="635" y="184" text-anchor="middle">另一端点</text>
+
+  <line x1="505" y1="192" x2="505" y2="226" stroke="#16a34a" stroke-width="1.5" marker-end="url(#c)"/>
+  <text class="t sm" x="430" y="216" fill="#15803d">成功</text>
+  <line x1="540" y1="171" x2="588" y2="171" stroke="#d97706" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#o)"/>
+  <text class="t sm" x="562" y="163" fill="#b45309">失败</text>
+  <line x1="635" y1="192" x2="635" y2="226" stroke="#d97706" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#o)"/>
+
+  <rect class="mon" x="30" y="226" width="330" height="76" rx="6"/>
+  <text class="t tag" x="195" y="246" text-anchor="middle" fill="#075985">新增：可观测降级</text>
+  <text class="t sm" x="195" y="266" text-anchor="middle" fill="#075985">每次切换打日志：谁失败、原因、走了哪个备用</text>
+  <text class="t sm" x="195" y="284" text-anchor="middle" fill="#075985">降级不是黑盒 —— 出事能复盘</text>
+
+  <rect class="model" x="430" y="226" width="250" height="76" rx="6"/>
+  <text class="t sm" x="555" y="248" text-anchor="middle" fill="#15803d">结果（含走的是哪个模型）</text>
+  <text class="t sm" x="555" y="268" text-anchor="middle" fill="#475569">response_metadata 里留痕</text>
+  <text class="t sm" x="555" y="288" text-anchor="middle" fill="#475569">便于事后核对与统计</text>
+
+  <text class="t lbl" x="30" y="336" font-weight="bold">三层各就各位</text>
+  <text class="t sm" x="30" y="358">配置层：改 yaml 不改代码 → 换环境、换模型、加备用都只动配置。</text>
+  <text class="t sm" x="30" y="378">门禁层：启动先探测 profile，缺关键能力直接失败 → 不在运行时才发现「这个模型不支持工具调用」。</text>
+  <text class="t sm" x="30" y="398">观测层：降级打日志 → 「悄悄降级」变「看得见的降级」，故障可复盘。</text>
+  <text class="t sm" x="30" y="420">比上张多了什么：配置外置 + 启动期能力门禁 + 降级留痕（黄/紫/蓝三块）。</text>
+
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#334155"/></marker>
+    <marker id="c" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#16a34a"/></marker>
+    <marker id="o" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#d97706"/></marker>
+    <marker id="p" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#7c3aed"/></marker>
+  </defs>
+</svg>

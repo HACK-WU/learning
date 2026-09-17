@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 450" width="700" height="450" role="img" aria-label="第3版设计：检索增强与引用溯源">
+  <style>
+    .t { font-family: "Microsoft YaHei","PingFang SC",sans-serif; }
+    .box { fill: #ffffff; stroke: #334155; stroke-width: 1.5; }
+    .new { fill: #fef3c7; stroke: #d97706; stroke-width: 2; }
+    .ok { fill: #dcfce7; stroke: #16a34a; stroke-width: 1.5; }
+    .bad { fill: #fee2e2; stroke: #dc2626; stroke-width: 1.5; stroke-dasharray: 5 3; }
+    .lbl { font-size: 13px; fill: #0f172a; }
+    .sm { font-size: 11px; fill: #475569; }
+    .mono { font-family: Consolas, monospace; font-size: 10px; fill: #475569; }
+    .hd { font-size: 15px; font-weight: bold; fill: #0f172a; }
+    .tag { font-size: 11px; fill: #92400e; font-weight: bold; }
+  </style>
+  <text class="t hd" x="20" y="26">第 3 版：检索增强生成 + 引用溯源（综合实现）</text>
+
+  <text class="t sm" x="24" y="50">把检索到的片段塞进提示词，让模型「只根据资料回答」并标注来源</text>
+
+  <rect class="box" x="24" y="60" width="134" height="60" rx="6"/>
+  <text class="t sm" x="91" y="80" text-anchor="middle">用户问题</text>
+  <text class="t mono" x="32" y="100">年假多少天？</text>
+  <text class="t sm" x="91" y="114" text-anchor="middle" fill="#475569">同一个问题</text>
+
+  <line x1="158" y1="90" x2="196" y2="90" stroke="#334155" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect class="new" x="196" y="60" width="200" height="60" rx="6"/>
+  <text class="t tag" x="296" y="80" text-anchor="middle">新增：检索到的片段进提示词</text>
+  <text class="t mono" x="206" y="100">[1] 来源：01-考勤与休假制度.md</text>
+  <text class="t sm" x="296" y="114" text-anchor="middle" fill="#475569">实测注入 711 字</text>
+
+  <line x1="396" y1="90" x2="434" y2="90" stroke="#d97706" stroke-width="1.5" marker-end="url(#o)"/>
+  <rect class="ok" x="434" y="60" width="120" height="60" rx="6"/>
+  <text class="t sm" x="494" y="80" text-anchor="middle" fill="#15803d">模型据实回答</text>
+  <text class="t sm" x="494" y="100" text-anchor="middle" fill="#475569">带 [1] 编号</text>
+  <text class="t sm" x="494" y="114" text-anchor="middle" fill="#475569">可回溯到文件</text>
+
+  <line x1="554" y1="90" x2="592" y2="90" stroke="#16a34a" stroke-width="1.5" marker-end="url(#g)"/>
+  <rect class="ok" x="592" y="60" width="78" height="60" rx="6"/>
+  <text class="t sm" x="631" y="80" text-anchor="middle" fill="#15803d">用户可核实</text>
+  <text class="t sm" x="631" y="100" text-anchor="middle" fill="#475569">点开文件</text>
+  <text class="t sm" x="631" y="114" text-anchor="middle" fill="#475569">自己看</text>
+
+  <text class="t sm" x="24" y="148">效果对照（同一问题，真实模型实测）</text>
+
+  <rect class="bad" x="24" y="158" width="310" height="60" rx="6"/>
+  <text class="t tag" x="179" y="178" text-anchor="middle" fill="#991b1b">第 1 版：不检索</text>
+  <text class="t mono" x="34" y="198">模型回答：未知</text>
+  <text class="t sm" x="179" y="214" text-anchor="middle" fill="#475569">诚实，但问题没解决</text>
+
+  <rect class="ok" x="350" y="158" width="320" height="60" rx="6"/>
+  <text class="t tag" x="510" y="178" text-anchor="middle" fill="#15803d">第 3 版：检索增强 + agent 自主检索</text>
+  <text class="t mono" x="360" y="198">年假天数按连续服务年限阶梯计算（5/10/15 天）</text>
+  <text class="t sm" x="510" y="214" text-anchor="middle" fill="#475569">实测发起检索 2 次后给出完整阶梯表</text>
+
+  <text class="t sm" x="24" y="248">两种用法</text>
+
+  <rect class="box" x="24" y="258" width="320" height="80" rx="6"/>
+  <text class="t tag" x="184" y="278" text-anchor="middle" fill="#475569">A. 手工注入（外部拼好上下文）</text>
+  <text class="t mono" x="34" y="298">ctx = build_context(q)</text>
+  <text class="t mono" x="34" y="316">prompt = f"只根据资料回答…\n{ctx}\n问题：{q}"</text>
+  <text class="t sm" x="184" y="332" text-anchor="middle" fill="#475569">流程可控，适合固定问答场景</text>
+
+  <rect class="new" x="350" y="258" width="320" height="80" rx="6"/>
+  <text class="t tag" x="510" y="278" text-anchor="middle">B. 检索工具化（agent 自主决定）</text>
+  <text class="t mono" x="360" y="298">@tool</text>
+  <text class="t mono" x="360" y="316">def search_kb(query: str) -&gt; str: ...</text>
+  <text class="t sm" x="510" y="332" text-anchor="middle" fill="#475569">agent 自己判断要不要查、查几次</text>
+
+  <text class="t sm" x="24" y="368">实测踩到的两个坑</text>
+
+  <rect class="bad" x="24" y="378" width="320" height="56" rx="6"/>
+  <text class="t sm" x="184" y="398" text-anchor="middle" fill="#991b1b">① embedding 不保证逐次稳定</text>
+  <text class="t mono" x="34" y="416">query 第1次 vs 第2次: 0.000000</text>
+  <text class="t mono" x="34" y="430">query 第2次 vs 第3次: 0.479082</text>
+
+  <rect class="bad" x="350" y="378" width="320" height="56" rx="6"/>
+  <text class="t sm" x="510" y="398" text-anchor="middle" fill="#991b1b">② 同名前缀会拉高噪音块分数</text>
+  <text class="t sm" x="510" y="416" text-anchor="middle" fill="#475569">「星云科技」出现在每份文档里，</text>
+  <text class="t sm" x="510" y="430" text-anchor="middle" fill="#475569">第 2、3 名是无关文档（0.57 / 0.56）</text>
+
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#334155"/></marker>
+    <marker id="o" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#d97706"/></marker>
+    <marker id="g" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#16a34a"/></marker>
+  </defs>
+</svg>

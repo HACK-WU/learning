@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 450" width="700" height="450" role="img" aria-label="第3版设计：护栏纵深防御">
+  <style>
+    .t { font-family: "Microsoft YaHei","PingFang SC",sans-serif; }
+    .box { fill: #ffffff; stroke: #334155; stroke-width: 1.5; }
+    .new { fill: #fef3c7; stroke: #d97706; stroke-width: 2; }
+    .ok { fill: #dcfce7; stroke: #16a34a; stroke-width: 1.5; }
+    .bad { fill: #fee2e2; stroke: #dc2626; stroke-width: 1.5; stroke-dasharray: 5 3; }
+    .lbl { font-size: 13px; fill: #0f172a; }
+    .sm { font-size: 11px; fill: #475569; }
+    .mono { font-family: Consolas, monospace; font-size: 10px; fill: #475569; }
+    .hd { font-size: 15px; font-weight: bold; fill: #0f172a; }
+    .tag { font-size: 11px; fill: #92400e; font-weight: bold; }
+  </style>
+  <text class="t hd" x="20" y="26">第 3 版：护栏体系——输入输出两侧自动脱敏与审查（综合实现）</text>
+
+  <text class="t sm" x="24" y="50">纵深防御：进模型前脱敏、出模型前审查、高风险再叠加人工审批</text>
+
+  <rect class="box" x="24" y="60" width="130" height="56" rx="6"/>
+  <text class="t sm" x="89" y="80" text-anchor="middle">用户输入</text>
+  <text class="t sm" x="89" y="98" text-anchor="middle" fill="#475569">含手机号 / 卡号 / 密钥</text>
+  <text class="t sm" x="89" y="112" text-anchor="middle" fill="#475569">原文</text>
+
+  <line x1="154" y1="88" x2="192" y2="88" stroke="#334155" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect class="new" x="192" y="60" width="196" height="56" rx="6"/>
+  <text class="t tag" x="290" y="80" text-anchor="middle">第 1 道：PIIMiddleware（输入侧）</text>
+  <text class="t mono" x="202" y="98">redact / mask / hash / block</text>
+  <text class="t sm" x="290" y="114" text-anchor="middle" fill="#475569">自动执行，不需要人在环</text>
+
+  <line x1="388" y1="88" x2="426" y2="88" stroke="#d97706" stroke-width="1.5" marker-end="url(#o)"/>
+  <rect class="ok" x="426" y="60" width="120" height="56" rx="6"/>
+  <text class="t sm" x="486" y="80" text-anchor="middle" fill="#15803d">模型看到脱敏版</text>
+  <text class="t mono" x="436" y="98">[REDACTED_EMAIL]</text>
+  <text class="t sm" x="486" y="114" text-anchor="middle" fill="#475569">原文根本没出门</text>
+
+  <line x1="546" y1="88" x2="584" y2="88" stroke="#16a34a" stroke-width="1.5" marker-end="url(#g)"/>
+  <rect class="ok" x="584" y="60" width="86" height="56" rx="6"/>
+  <text class="t sm" x="627" y="80" text-anchor="middle" fill="#15803d">第 2 道</text>
+  <text class="t sm" x="627" y="98" text-anchor="middle" fill="#475569">输出审查</text>
+  <text class="t sm" x="627" y="112" text-anchor="middle" fill="#475569">after_agent</text>
+
+  <text class="t sm" x="24" y="146">四策略实测（脱敏结果写入状态，不是瞬时视图）</text>
+
+  <rect class="box" x="24" y="156" width="160" height="76" rx="6"/>
+  <text class="t tag" x="104" y="176" text-anchor="middle" fill="#475569">redact（整段替换）</text>
+  <text class="t mono" x="32" y="196">john.doe@example.com</text>
+  <text class="t mono" x="32" y="212">→ [REDACTED_EMAIL]</text>
+  <text class="t sm" x="104" y="228" text-anchor="middle" fill="#475569">看不出原值</text>
+
+  <rect class="box" x="192" y="156" width="168" height="76" rx="6"/>
+  <text class="t tag" x="276" y="176" text-anchor="middle" fill="#475569">mask（保留后四位）</text>
+  <text class="t mono" x="200" y="196">5105-1051-0510-5100</text>
+  <text class="t mono" x="200" y="212">→ ****-****-****-5100</text>
+  <text class="t sm" x="276" y="228" text-anchor="middle" fill="#475569">人工核对够用</text>
+
+  <rect class="box" x="368" y="156" width="160" height="76" rx="6"/>
+  <text class="t tag" x="448" y="176" text-anchor="middle" fill="#475569">hash（确定性哈希）</text>
+  <text class="t mono" x="376" y="196">192.168.1.100</text>
+  <text class="t mono" x="376" y="212">→ &lt;ip_hash:2a39f1ee&gt;</text>
+  <text class="t sm" x="448" y="228" text-anchor="middle" fill="#475569">可关联、不可还原</text>
+
+  <rect class="bad" x="536" y="156" width="134" height="76" rx="6"/>
+  <text class="t tag" x="603" y="176" text-anchor="middle" fill="#991b1b">block（直接拒收）</text>
+  <text class="t mono" x="544" y="196">sk-aaaa…（32 位）</text>
+  <text class="t mono" x="544" y="212">→ PIIDetectionError</text>
+  <text class="t sm" x="603" y="228" text-anchor="middle" fill="#475569">整条请求中断</text>
+
+  <rect class="new" x="24" y="244" width="646" height="40" rx="6"/>
+  <text class="t sm" x="347" y="262" text-anchor="middle" fill="#92400e">关键：脱敏结果写入状态（实测状态中不含原文）——与课 9 的 transient override 恰好相反，那里改视图不改状态</text>
+  <text class="t sm" x="347" y="278" text-anchor="middle" fill="#475569">自定义 detector：PIIMiddleware("employee_id", detector=r"EMP-\d{5}", strategy="mask") → 工号 EMP-12345 变 ****2345</text>
+
+  <text class="t sm" x="24" y="312">自定义护栏：两个时机的分工</text>
+
+  <rect class="box" x="24" y="322" width="320" height="76" rx="6"/>
+  <text class="t tag" x="184" y="342" text-anchor="middle" fill="#475569">before_agent：进模型前拦截</text>
+  <text class="t sm" x="184" y="362" text-anchor="middle" fill="#475569">实测：命中「hack」→ 消息数 2，模型未参与</text>
+  <text class="t sm" x="184" y="380" text-anchor="middle" fill="#15803d">省一次模型调用，最快也最省钱</text>
+  <text class="t sm" x="184" y="394" text-anchor="middle" fill="#475569">适合：确定性规则（黑名单、格式校验）</text>
+
+  <rect class="box" x="356" y="322" width="314" height="76" rx="6"/>
+  <text class="t tag" x="513" y="342" text-anchor="middle" fill="#475569">after_agent：出模型前审查</text>
+  <text class="t sm" x="513" y="362" text-anchor="middle" fill="#475569">实测：末条被替换为「[输出已拦截…]」</text>
+  <text class="t sm" x="513" y="380" text-anchor="middle" fill="#15803d">能挡住模型自己生成的泄露</text>
+  <text class="t sm" x="513" y="394" text-anchor="middle" fill="#475569">适合：输出合规、可用小模型做审查</text>
+
+  <text class="t lbl" x="24" y="424" font-weight="bold">三道防线的定位</text>
+  <text class="t sm" x="24" y="440">护栏（自动、零延迟）挡住「绝对不行」的；人工审批（慢、有成本）留给「拿不准但影响大」的——两者不是替代关系。</text>
+
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#334155"/></marker>
+    <marker id="o" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#d97706"/></marker>
+    <marker id="g" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#16a34a"/></marker>
+  </defs>
+</svg>

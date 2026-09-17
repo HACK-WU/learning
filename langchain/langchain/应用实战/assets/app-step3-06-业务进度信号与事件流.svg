@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 490" width="700" height="490" role="img" aria-label="第3版设计：业务进度信号与事件流">
+  <style>
+    .t { font-family: "Microsoft YaHei","PingFang SC",sans-serif; }
+    .box { fill: #ffffff; stroke: #334155; stroke-width: 1.5; }
+    .new { fill: #fef3c7; stroke: #d97706; stroke-width: 2; }
+    .str { fill: #e0f2fe; stroke: #0284c7; stroke-width: 1.5; }
+    .ok { fill: #dcfce7; stroke: #16a34a; stroke-width: 1.5; }
+    .lbl { font-size: 13px; fill: #0f172a; }
+    .sm { font-size: 11px; fill: #475569; }
+    .mono { font-family: Consolas, monospace; font-size: 10px; fill: #475569; }
+    .hd { font-size: 15px; font-weight: bold; fill: #0f172a; }
+    .tag { font-size: 11px; fill: #92400e; font-weight: bold; }
+  </style>
+  <text class="t hd" x="20" y="26">第 3 版：业务进度信号 + 事件流（综合实现）</text>
+
+  <rect class="box" x="24" y="50" width="130" height="60" rx="6"/>
+  <text class="t sm" x="89" y="70" text-anchor="middle">工具内部</text>
+  <text class="t sm" x="89" y="88" text-anchor="middle">（慢搜索 / 多步）</text>
+  <text class="t sm" x="89" y="102" text-anchor="middle">执行中</text>
+
+  <line x1="154" y1="80" x2="206" y2="80" stroke="#334155" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <rect class="new" x="206" y="52" width="230" height="56" rx="6"/>
+  <text class="t tag" x="321" y="72" text-anchor="middle">新增：get_stream_writer()</text>
+  <text class="t mono" x="218" y="92">writer(f"已检索 {n} 条记录")</text>
+  <text class="t sm" x="321" y="106" text-anchor="middle" fill="#475569">工具随时吐业务语义的进度</text>
+
+  <line x1="436" y1="80" x2="486" y2="80" stroke="#d97706" stroke-width="1.5" marker-end="url(#o)"/>
+
+  <rect class="str" x="486" y="52" width="188" height="56" rx="6"/>
+  <text class="t tag" x="580" y="72" text-anchor="middle">stream_mode='custom'</text>
+  <text class="t sm" x="580" y="92" text-anchor="middle">前端直接显示</text>
+  <text class="t sm" x="580" y="106" text-anchor="middle" fill="#475569">「已检索 3 条 / 正在搜索」</text>
+
+  <text class="t sm" x="24" y="140">实测：两条自定义信号按发出顺序抵达（chunk['type'] == 'custom'）</text>
+
+  <rect class="box" x="24" y="150" width="646" height="46" rx="6"/>
+  <text class="t mono" x="38" y="170">custom → 正在搜索：LangChain streaming</text>
+  <text class="t mono" x="38" y="188">custom → 已检索 3 条记录</text>
+
+  <rect class="new" x="24" y="212" width="646" height="80" rx="6"/>
+  <text class="t tag" x="347" y="232" text-anchor="middle">新增：stream_events(version='v3')（官方推荐新写法）</text>
+  <text class="t mono" x="38" y="254">stream = agent.stream_events(..., version='v3')</text>
+  <text class="t mono" x="58" y="272">for msg in stream.messages: for delta in msg.text: print(delta)</text>
+  <text class="t sm" x="347" y="288" text-anchor="middle" fill="#475569">实测返回 GraphRunStream，含 .messages（按消息聚合）与 .output（最终状态）</text>
+
+  <text class="t sm" x="24" y="318">三种模式怎么选（同一任务的实测结论）：</text>
+
+  <rect class="box" x="24" y="328" width="205" height="72" rx="6"/>
+  <text class="t sm" x="126" y="348" text-anchor="middle">updates</text>
+  <text class="t sm" x="126" y="366" text-anchor="middle" fill="#475569">节点级进度</text>
+  <text class="t sm" x="126" y="384" text-anchor="middle" fill="#475569">「跑到哪一步」</text>
+  <text class="t sm" x="126" y="396" text-anchor="middle" fill="#475569">配 version='v2'</text>
+
+  <rect class="box" x="242" y="328" width="205" height="72" rx="6"/>
+  <text class="t sm" x="344" y="348" text-anchor="middle">messages</text>
+  <text class="t sm" x="344" y="366" text-anchor="middle" fill="#475569">token 级文本</text>
+  <text class="t sm" x="344" y="384" text-anchor="middle" fill="#475569">「正在说什么」</text>
+  <text class="t sm" x="344" y="396" text-anchor="middle" fill="#475569">打字机效果</text>
+
+  <rect class="new" x="464" y="328" width="206" height="72" rx="6"/>
+  <text class="t sm" x="567" y="348" text-anchor="middle">custom</text>
+  <text class="t sm" x="567" y="366" text-anchor="middle" fill="#475569">业务自定义信号</text>
+  <text class="t sm" x="567" y="384" text-anchor="middle" fill="#475569">「搜到第几条」</text>
+  <text class="t sm" x="567" y="396" text-anchor="middle" fill="#92400e">框架节点名不含的语义</text>
+
+  <text class="t lbl" x="24" y="424" font-weight="bold">三层各就各位</text>
+  <text class="t sm" x="24" y="442">传输层：stream 把「一次性返回」改成「持续吐」（蓝框）。</text>
+  <text class="t sm" x="24" y="458">语义层：get_stream_writer + custom 让工具吐业务进度（黄框）。</text>
+  <text class="t sm" x="24" y="474">聚合层：stream_events v3 按消息聚合，省去手工拼 chunk（黄框）。</text>
+
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#334155"/></marker>
+    <marker id="o" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#d97706"/></marker>
+  </defs>
+</svg>
