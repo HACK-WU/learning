@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="330" viewBox="0 0 720 330" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <rect width="720" height="330" fill="#ffffff"/>
+  <text x="360" y="28" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">综合版：按快慢拆队列 + 专属 worker，各走各的道</text>
+
+  <rect x="20" y="70" width="90" height="60" rx="6" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="65" y="98" text-anchor="middle" font-size="13" fill="#0d47a1">下单请求</text>
+  <text x="65" y="116" text-anchor="middle" font-size="11" fill="#0d47a1">（三类任务）</text>
+
+  <path d="M110 90 L160 90" stroke="#555" stroke-width="2" marker-end="url(#ar2)"/>
+  <path d="M110 120 L160 160" stroke="#555" stroke-width="2" marker-end="url(#ar2)"/>
+
+  <rect x="165" y="60" width="185" height="60" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="257" y="83" text-anchor="middle" font-size="13" font-weight="bold" fill="#1b5e20">fast 队列</text>
+  <text x="257" y="101" text-anchor="middle" font-size="11" fill="#1b5e20">发券 / 通知（50ms 级）</text>
+
+  <rect x="165" y="132" width="185" height="60" rx="6" fill="#fff3e0" stroke="#ef6c00" stroke-width="2"/>
+  <text x="257" y="155" text-anchor="middle" font-size="13" font-weight="bold" fill="#e65100">slow 队列</text>
+  <text x="257" y="173" text-anchor="middle" font-size="11" fill="#e65100">写流水 / 对账（分钟级）</text>
+
+  <path d="M350 90 L400 90" stroke="#555" stroke-width="2" marker-end="url(#ar2)"/>
+  <path d="M350 162 L400 162" stroke="#555" stroke-width="2" marker-end="url(#ar2)"/>
+
+  <rect x="405" y="60" width="130" height="60" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="470" y="83" text-anchor="middle" font-size="13" font-weight="bold" fill="#1b5e20">专属 worker</text>
+  <text x="470" y="101" text-anchor="middle" font-size="11" fill="#1b5e20">-Q fast -c 8</text>
+
+  <rect x="405" y="132" width="130" height="60" rx="6" fill="#fff3e0" stroke="#ef6c00" stroke-width="2"/>
+  <text x="470" y="155" text-anchor="middle" font-size="13" font-weight="bold" fill="#e65100">专属 worker</text>
+  <text x="470" y="173" text-anchor="middle" font-size="11" fill="#e65100">-Q slow -c 2</text>
+
+  <rect x="20" y="215" width="685" height="95" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2" stroke-dasharray="5 3"/>
+  <text x="360" y="242" text-anchor="middle" font-size="13" font-weight="bold" fill="#1b5e20">本步解决了什么：慢任务再也堵不住快任务</text>
+  <text x="360" y="264" text-anchor="middle" font-size="11.5" fill="#33691e">两条道互不干扰：slow 堆积 1000 条，fast 依然是秒级清空</text>
+  <text x="360" y="283" text-anchor="middle" font-size="11.5" fill="#33691e">队列长度可分别监控，谁堵了一目了然，还能单独给 fast 扩容</text>
+  <text x="360" y="301" text-anchor="middle" font-size="11.5" fill="#33691e">代价：worker 要按队列分别起，运维复杂度上升</text>
+
+  <defs>
+    <marker id="ar2" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#555"/>
+    </marker>
+  </defs>
+</svg>

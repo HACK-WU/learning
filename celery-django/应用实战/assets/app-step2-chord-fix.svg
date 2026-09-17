@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="730" height="310" viewBox="0 0 730 310" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <rect width="730" height="310" fill="#ffffff"/>
+  <text x="365" y="28" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">综合版：路由配齐 + 解出积压消息定位真因</text>
+
+  <rect x="20" y="65" width="130" height="55" rx="6" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="85" y="88" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#0d47a1">chord：3 个子任务</text>
+  <text x="85" y="106" text-anchor="middle" font-size="10.5" fill="#0d47a1">+ 1 个回调</text>
+
+  <path d="M150 92 L205 92" stroke="#555" stroke-width="2" marker-end="url(#k1)"/>
+
+  <rect x="210" y="58" width="150" height="70" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="285" y="80" text-anchor="middle" font-size="12" font-weight="bold" fill="#1b5e20">子任务 → fast 队列</text>
+  <text x="285" y="99" text-anchor="middle" font-size="10" fill="#1b5e20">已配路由 ✓</text>
+  <text x="285" y="117" text-anchor="middle" font-size="10" fill="#1b5e20">编排入口也配了 ✓</text>
+
+  <path d="M360 92 L415 92" stroke="#555" stroke-width="2" marker-end="url(#k1)"/>
+
+  <rect x="420" y="58" width="140" height="70" rx="6" fill="#f5f5f5" stroke="#616161" stroke-width="2"/>
+  <text x="490" y="80" text-anchor="middle" font-size="12" fill="#333">worker -Q fast</text>
+  <text x="490" y="99" text-anchor="middle" font-size="10" fill="#666">消费全部相关任务</text>
+  <text x="490" y="117" text-anchor="middle" font-size="10" fill="#666">无需 default</text>
+
+  <path d="M560 92 L610 92" stroke="#2e7d32" stroke-width="2" marker-end="url(#k2)"/>
+
+  <rect x="615" y="58" width="100" height="70" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="665" y="80" text-anchor="middle" font-size="12" font-weight="bold" fill="#1b5e20">回调触发</text>
+  <text x="665" y="99" text-anchor="middle" font-size="10" fill="#1b5e20">chord 完成</text>
+  <text x="665" y="117" text-anchor="middle" font-size="10" fill="#1b5e20">0 条中间任务</text>
+
+  <rect x="20" y="155" width="695" height="55" rx="6" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="365" y="177" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#0d47a1">定位手法：别猜积压的是什么，直接解出来看任务名</text>
+  <text x="365" y="197" text-anchor="middle" font-size="11" fill="#0d47a1">redis-cli lindex default 0 → 取 headers.task</text>
+
+  <rect x="20" y="225" width="695" height="70" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2" stroke-dasharray="5 3"/>
+  <text x="365" y="250" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#1b5e20">本步解决了什么：chord 正常完成，且真因被定位而非掩盖</text>
+  <text x="365" y="271" text-anchor="middle" font-size="11" fill="#33691e">Redis backend 有原生 chord 协调（ZADD/ZCOUNT），不产生 chord_unlock 中间任务</text>
+  <text x="365" y="288" text-anchor="middle" font-size="11" fill="#33691e">代价：路由表要覆盖全部任务（含编排入口），漏一个就可能再挂一次</text>
+
+  <defs>
+    <marker id="k1" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#555"/>
+    </marker>
+    <marker id="k2" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2e7d32"/>
+    </marker>
+  </defs>
+</svg>

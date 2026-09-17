@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="320" viewBox="0 0 760 320" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <rect width="760" height="320" fill="#ffffff"/>
+  <text x="380" y="28" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">幂等三层的强度递增：从应用层到外部幂等键</text>
+
+  <rect x="20" y="52" width="230" height="150" rx="6" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="135" y="76" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#b71c1c">第 1 层 · 先查再写 ❌</text>
+  <text x="40" y="102" font-size="11" fill="#5f2121">if not exists: create</text>
+  <text x="40" y="126" font-size="11" fill="#5f2121">两个 worker 同时通过检查</text>
+  <text x="40" y="144" font-size="11" fill="#5f2121">→ 都去扣款</text>
+  <text x="40" y="176" font-size="11.5" font-weight="bold" fill="#b71c1c">并发下直接不可用</text>
+
+  <rect x="265" y="52" width="230" height="150" rx="6" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+  <text x="380" y="76" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#795548">第 2 层 · CAS / 唯一约束 ✅</text>
+  <text x="285" y="102" font-size="11" fill="#795548">filter(status=PENDING)</text>
+  <text x="285" y="118" font-size="11" fill="#795548">    .update(status=CHARGING)</text>
+  <text x="285" y="142" font-size="11" fill="#795548">看影响行数：1 = 抢到</text>
+  <text x="285" y="160" font-size="11" fill="#795548">0 = 已处理，跳过</text>
+  <text x="285" y="190" font-size="11.5" font-weight="bold" fill="#795548">实测三次：[1, 0, 0]</text>
+
+  <rect x="510" y="52" width="230" height="150" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="625" y="76" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#1b5e20">第 3 层 · 外部幂等键 ⭐</text>
+  <text x="530" y="102" font-size="11" fill="#1b5e20">请求发出 → 网关扣款成功</text>
+  <text x="530" y="120" font-size="11" fill="#1b5e20">→ 但响应超时了</text>
+  <text x="530" y="144" font-size="11" fill="#1b5e20">唯一解：同一个幂等键重试</text>
+  <text x="530" y="162" font-size="11" fill="#1b5e20">让网关自己去重</text>
+  <text x="530" y="190" font-size="11.5" font-weight="bold" fill="#1b5e20">你的数据库挡不住这一层</text>
+
+  <path d="M250 127 L262 127" stroke="#555" stroke-width="2" marker-end="url(#p1)"/>
+  <path d="M495 127 L507 127" stroke="#555" stroke-width="2" marker-end="url(#p1)"/>
+
+  <rect x="20" y="218" width="720" height="86" rx="6" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="380" y="240" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#0d47a1">三层的关系：不是三选一，是逐层加码</text>
+  <text x="42" y="263" font-size="11" fill="#0d47a1">· 第 2 层（CAS + 唯一约束）挡住绝大多数重复 —— 这是必做的基础</text>
+  <text x="42" y="281" font-size="11" fill="#0d47a1">· 第 3 层只在"调用外部 API"时才需要，但它防的失败模式（扣款成功但响应超时）前两层完全无能为力</text>
+  <text x="42" y="297" font-size="11" fill="#0d47a1">· Redis 分布式锁的定位：跨服务、无共享数据库时的替代品；同库场景下优先用唯一约束（没有"锁过期"这个额外失效模式）</text>
+
+  <defs>
+    <marker id="p1" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#555"/>
+    </marker>
+  </defs>
+</svg>

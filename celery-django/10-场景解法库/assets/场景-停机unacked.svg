@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="320" viewBox="0 0 760 320" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <rect width="760" height="320" fill="#ffffff"/>
+  <text x="380" y="28" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">停机时消息去哪了：unacked 停泊与恢复（本机实测）</text>
+
+  <rect x="20" y="48" width="720" height="62" rx="6" fill="#fafafa" stroke="#9e9e9e" stroke-width="1.5"/>
+  <text x="380" y="70" text-anchor="middle" font-size="12" font-weight="bold" fill="#333">Redis broker 的两个关键结构</text>
+  <text x="45" y="94" font-size="11.5" fill="#333">队列 celery（list）</text>
+  <text x="45" y="94" font-size="11.5" fill="#333" opacity="0"> </text>
+  <text x="330" y="94" text-anchor="end" font-size="11.5" fill="#2e7d32">等待被消费的消息 —— 大家都会看这里</text>
+  <text x="400" y="94" font-size="11.5" fill="#333">unacked（hash）</text>
+  <text x="720" y="94" text-anchor="end" font-size="11.5" font-weight="bold" fill="#c62828">已取走、未确认 —— 强杀后停在这里</text>
+
+  <rect x="20" y="126" width="350" height="130" rx="6" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="195" y="150" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#b71c1c">kill -9 主进程（20 秒任务，vt=10）</text>
+  <text x="42" y="176" font-size="11" fill="#5f2121">[1] 运行中：        队列=0  unacked=1</text>
+  <text x="42" y="194" font-size="11" fill="#5f2121">[3] 强杀后（4/20）：队列=0  unacked=1</text>
+  <text x="42" y="212" font-size="11" fill="#5f2121">[4] 干等 14 秒：    队列=0  unacked=1</text>
+  <text x="42" y="230" font-size="11" font-weight="bold" fill="#b71c1c">     ↑ 自己不会回来，必须有 worker 存活</text>
+  <text x="42" y="248" font-size="11" fill="#5f2121">默认 vt = 3600 秒 → 用户感知"消失 1 小时"</text>
+
+  <rect x="390" y="126" width="350" height="130" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="565" y="150" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#1b5e20">优雅停机 / 重启新 worker</text>
+  <text x="412" y="176" font-size="11" fill="#1b5e20">kill -TERM → 任务跑完 6/6 才退出</text>
+  <text x="412" y="194" font-size="11" fill="#1b5e20">停机后 unacked 与 unacked_index 全清空</text>
+  <text x="412" y="214" font-size="11" fill="#1b5e20">[5] 起新 worker：队列=1  unacked=0 ✅</text>
+  <text x="412" y="232" font-size="11" fill="#1b5e20">[7] 任务重跑至 20/20，状态 SUCCESS</text>
+  <text x="412" y="250" font-size="11" font-weight="bold" fill="#1b5e20">日志可验证：Restoring N unacknowledged message(s)</text>
+
+  <rect x="20" y="270" width="720" height="40" rx="6" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+  <text x="380" y="288" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#795548">⚠ 常见误解："配了 acks_late 就不会丢任务" —— 错</text>
+  <text x="380" y="303" text-anchor="middle" font-size="11" fill="#795548">acks_late 只让消息在 broker 有留存；把消息还回队列是主进程退出时的动作，kill -9 没有退出流程</text>
+</svg>

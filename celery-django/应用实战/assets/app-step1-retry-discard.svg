@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="290" viewBox="0 0 720 290" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <rect width="720" height="290" fill="#ffffff"/>
+  <text x="360" y="28" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">基础版：重试全靠 autoretry，耗尽即丢弃</text>
+
+  <rect x="20" y="70" width="95" height="55" rx="6" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+  <text x="67" y="94" text-anchor="middle" font-size="13" fill="#e65100">broker 队列</text>
+  <text x="67" y="111" text-anchor="middle" font-size="11" fill="#e65100">任务消息</text>
+
+  <path d="M115 97 L175 97" stroke="#555" stroke-width="2" marker-end="url(#d1)"/>
+
+  <rect x="180" y="65" width="150" height="65" rx="6" fill="#f5f5f5" stroke="#616161" stroke-width="2"/>
+  <text x="255" y="88" text-anchor="middle" font-size="13" fill="#333">worker</text>
+  <text x="255" y="107" text-anchor="middle" font-size="11" fill="#666">autoretry 重试 3 次</text>
+  <text x="255" y="123" text-anchor="middle" font-size="10.5" fill="#666">每次都失败</text>
+
+  <path d="M330 97 L390 97" stroke="#c62828" stroke-width="2" marker-end="url(#d2)"/>
+  <text x="360" y="87" text-anchor="middle" font-size="10" fill="#c62828">耗尽</text>
+
+  <rect x="395" y="65" width="150" height="65" rx="6" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="470" y="88" text-anchor="middle" font-size="13" font-weight="bold" fill="#b71c1c">消息丢弃</text>
+  <text x="470" y="107" text-anchor="middle" font-size="11" fill="#b71c1c">broker 已删除</text>
+  <text x="470" y="123" text-anchor="middle" font-size="10.5" fill="#b71c1c">只剩一行日志</text>
+
+  <path d="M545 97 L605 97" stroke="#c62828" stroke-width="2" marker-end="url(#d2)"/>
+
+  <rect x="610" y="65" width="95" height="65" rx="6" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="657" y="88" text-anchor="middle" font-size="13" font-weight="bold" fill="#b71c1c">无人知晓</text>
+  <text x="657" y="107" text-anchor="middle" font-size="10.5" fill="#b71c1c">用户投诉了</text>
+  <text x="657" y="123" text-anchor="middle" font-size="10.5" fill="#b71c1c">才知道</text>
+
+  <rect x="20" y="175" width="685" height="90" rx="6" fill="#ffebee" stroke="#c62828" stroke-width="2" stroke-dasharray="5 3"/>
+  <text x="360" y="203" text-anchor="middle" font-size="13" font-weight="bold" fill="#b71c1c">本步的问题：失败的任务人间蒸发</text>
+  <text x="360" y="226" text-anchor="middle" font-size="11.5" fill="#5f2121">重试耗尽后消息从 broker 删除，没有任何地方留下"这条失败了"的记录</text>
+  <text x="360" y="245" text-anchor="middle" font-size="11.5" fill="#5f2121">日志会被滚动覆盖，等你发现时原始参数早就找不回来，无法重放</text>
+
+  <defs>
+    <marker id="d1" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#555"/>
+    </marker>
+    <marker id="d2" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#c62828"/>
+    </marker>
+  </defs>
+</svg>

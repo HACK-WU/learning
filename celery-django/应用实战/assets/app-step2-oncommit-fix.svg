@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="290" viewBox="0 0 720 290" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <rect width="720" height="290" fill="#ffffff"/>
+  <text x="360" y="28" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">综合版：on_commit 挂到提交之后，顺序由框架保证</text>
+
+  <rect x="20" y="60" width="250" height="125" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="145" y="82" text-anchor="middle" font-size="13" font-weight="bold" fill="#1b5e20">Web 进程（Django 视图）</text>
+  <text x="145" y="104" text-anchor="middle" font-size="11.5" fill="#1b5e20">① Order.objects.create(...)</text>
+  <text x="145" y="123" text-anchor="middle" font-size="11.5" fill="#1b5e20">② transaction.on_commit(</text>
+  <text x="145" y="140" text-anchor="middle" font-size="11.5" fill="#1b5e20">　　回调里再 delay)</text>
+  <text x="145" y="159" text-anchor="middle" font-size="11.5" fill="#1b5e20">③ 事务提交</text>
+  <text x="145" y="177" text-anchor="middle" font-size="10.5" fill="#33691e">④ 提交成功后框架自动跑回调</text>
+
+  <path d="M270 122 L330 122" stroke="#2e7d32" stroke-width="2" marker-end="url(#g1)"/>
+  <text x="300" y="112" text-anchor="middle" font-size="10" fill="#2e7d32">提交后才发</text>
+
+  <rect x="335" y="60" width="120" height="60" rx="6" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+  <text x="395" y="83" text-anchor="middle" font-size="13" font-weight="bold" fill="#e65100">broker</text>
+  <text x="395" y="101" text-anchor="middle" font-size="11" fill="#e65100">消息已投递</text>
+
+  <path d="M455 90 L510 90" stroke="#2e7d32" stroke-width="2" marker-end="url(#g1)"/>
+
+  <rect x="515" y="55" width="185" height="70" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="607" y="78" text-anchor="middle" font-size="13" font-weight="bold" fill="#1b5e20">worker 查得到订单</text>
+  <text x="607" y="97" text-anchor="middle" font-size="11" fill="#1b5e20">数据已落库可见</text>
+  <text x="607" y="114" text-anchor="middle" font-size="10.5" fill="#1b5e20">顺序由框架保证，不靠运气</text>
+
+  <rect x="20" y="205" width="685" height="70" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2" stroke-dasharray="5 3"/>
+  <text x="360" y="231" text-anchor="middle" font-size="13" font-weight="bold" fill="#1b5e20">本步解决了什么：顺序由框架保证，不是靠"跑得慢"</text>
+  <text x="360" y="254" text-anchor="middle" font-size="11.5" fill="#33691e">事务回滚时回调根本不会执行 —— 顺带避免了"订单没创建成功却发了邮件"</text>
+  <text x="360" y="271" text-anchor="middle" font-size="11.5" fill="#33691e">代价：回调里的异常不会被视图感知，需自行记日志/告警</text>
+
+  <defs>
+    <marker id="g1" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2e7d32"/>
+    </marker>
+  </defs>
+</svg>

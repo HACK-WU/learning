@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="730" height="330" viewBox="0 0 730 330" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <rect width="730" height="330" fill="#ffffff"/>
+  <text x="365" y="28" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">综合版：执行记录表 + 心跳任务，不重不漏可观测</text>
+
+  <rect x="20" y="60" width="120" height="55" rx="6" fill="#f5f5f5" stroke="#616161" stroke-width="2"/>
+  <text x="80" y="92" text-anchor="middle" font-size="13" font-weight="bold" fill="#333">beat 进程</text>
+
+  <path d="M140 87 L195 87" stroke="#555" stroke-width="2" marker-end="url(#i1)"/>
+
+  <rect x="200" y="58" width="105" height="58" rx="6" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+  <text x="252" y="81" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#e65100">broker</text>
+  <text x="252" y="99" text-anchor="middle" font-size="10.5" fill="#e65100">定时 + 心跳</text>
+
+  <path d="M305 87 L355 87" stroke="#555" stroke-width="2" marker-end="url(#i1)"/>
+
+  <rect x="360" y="58" width="105" height="58" rx="6" fill="#f5f5f5" stroke="#616161" stroke-width="2"/>
+  <text x="412" y="81" text-anchor="middle" font-size="12.5" fill="#333">worker</text>
+  <text x="412" y="99" text-anchor="middle" font-size="10.5" fill="#666">执行对账</text>
+
+  <path d="M465 87 L520 87" stroke="#555" stroke-width="2" marker-end="url(#i1)"/>
+
+  <rect x="525" y="52" width="185" height="70" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="617" y="74" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#1b5e20">执行记录表</text>
+  <text x="617" y="93" text-anchor="middle" font-size="10.5" fill="#1b5e20">date / job / status</text>
+  <text x="617" y="110" text-anchor="middle" font-size="10.5" fill="#1b5e20">PENDING→RUNNING→SUCCESS</text>
+
+  <rect x="20" y="140" width="185" height="58" rx="6" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="112" y="163" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#0d47a1">心跳任务（每分钟）</text>
+  <text x="112" y="182" text-anchor="middle" font-size="10.5" fill="#0d47a1">beat 存活的第一道防线</text>
+
+  <path d="M112 198 L112 235 L330 235 L330 130" stroke="#1565c0" stroke-width="2" marker-end="url(#i2)"/>
+  <text x="220" y="252" text-anchor="middle" font-size="10.5" fill="#1565c0">心跳写时间戳，监控查"距今多久"就能发现 beat 静默失效</text>
+
+  <path d="M330 130 L520 130" stroke="#2e7d32" stroke-width="2" marker-end="url(#i3)"/>
+  <text x="425" y="146" text-anchor="middle" font-size="10.5" fill="#2e7d32">任务开工先抢状态，抢不到就跳过（防重）</text>
+
+  <rect x="20" y="270" width="690" height="48" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2" stroke-dasharray="5 3"/>
+  <text x="365" y="291" text-anchor="middle" font-size="12" font-weight="bold" fill="#1b5e20">本步解决了什么：跑没跑有记录、跑重了能挡、beat 挂了能发现</text>
+  <text x="365" y="310" text-anchor="middle" font-size="11" fill="#33691e">代价：多一张表 + 一个心跳任务；记录表要有清理策略与告警阈值</text>
+
+  <defs>
+    <marker id="i1" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#555"/>
+    </marker>
+    <marker id="i2" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#1565c0"/>
+    </marker>
+    <marker id="i3" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2e7d32"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="300" viewBox="0 0 760 300" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <rect width="760" height="300" fill="#ffffff"/>
+  <text x="380" y="28" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">解法对比：单队列混跑 vs 快慢队列隔离</text>
+
+  <rect x="20" y="48" width="350" height="200" rx="6" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="195" y="70" text-anchor="middle" font-size="13" font-weight="bold" fill="#b71c1c">❌ 单队列混跑（实测：30 秒零消化）</text>
+
+  <rect x="40" y="86" width="310" height="34" rx="4" fill="#fff" stroke="#c62828" stroke-width="1.5"/>
+  <text x="195" y="102" text-anchor="middle" font-size="11" fill="#5f2121">队列 celery：[慢×N][快][慢][快][慢...]</text>
+  <text x="195" y="116" text-anchor="middle" font-size="10" fill="#5f2121">50ms 的快任务排在慢任务后面</text>
+
+  <rect x="40" y="130" width="150" height="40" rx="4" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="115" y="148" text-anchor="middle" font-size="11" font-weight="bold" fill="#0d47a1">worker -c 8</text>
+  <text x="115" y="163" text-anchor="middle" font-size="10" fill="#0d47a1">8 个槽位被慢任务占满</text>
+
+  <rect x="200" y="130" width="150" height="40" rx="4" fill="#ffcdd2" stroke="#c62828" stroke-width="1.5"/>
+  <text x="275" y="148" text-anchor="middle" font-size="11" font-weight="bold" fill="#b71c1c">快任务排队等待</text>
+  <text x="275" y="163" text-anchor="middle" font-size="10" fill="#b71c1c">P95 延迟飙升</text>
+
+  <rect x="40" y="182" width="310" height="52" rx="4" fill="#fff" stroke="#c62828" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="195" y="202" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#b71c1c">实测：98 → 98 → 98</text>
+  <text x="195" y="220" text-anchor="middle" font-size="10.5" fill="#5f2121">30 秒观察窗内队列长度纹丝不动</text>
+
+  <rect x="390" y="48" width="350" height="200" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="565" y="70" text-anchor="middle" font-size="13" font-weight="bold" fill="#1b5e20">✅ 快慢队列隔离（实测：10 秒清空）</text>
+
+  <rect x="410" y="86" width="145" height="34" rx="4" fill="#fff" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="482" y="102" text-anchor="middle" font-size="11" font-weight="bold" fill="#1b5e20">fast 队列</text>
+  <text x="482" y="116" text-anchor="middle" font-size="10" fill="#1b5e20">只放毫秒级任务</text>
+
+  <rect x="565" y="86" width="155" height="34" rx="4" fill="#fff" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="642" y="102" text-anchor="middle" font-size="11" font-weight="bold" fill="#1b5e20">slow 队列</text>
+  <text x="642" y="116" text-anchor="middle" font-size="10" fill="#1b5e20">批处理 / 长任务</text>
+
+  <rect x="410" y="130" width="145" height="40" rx="4" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="482" y="148" text-anchor="middle" font-size="11" font-weight="bold" fill="#0d47a1">worker -Q fast -c 16</text>
+  <text x="482" y="163" text-anchor="middle" font-size="10" fill="#0d47a1">快任务专属算力</text>
+
+  <rect x="565" y="130" width="155" height="40" rx="4" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="642" y="148" text-anchor="middle" font-size="11" font-weight="bold" fill="#0d47a1">worker -Q slow -c 4</text>
+  <text x="642" y="163" text-anchor="middle" font-size="10" fill="#0d47a1">慢任务自成一池</text>
+
+  <rect x="410" y="182" width="310" height="52" rx="4" fill="#fff" stroke="#2e7d32" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="565" y="202" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#1b5e20">实测：fast 43 → 0</text>
+  <text x="565" y="220" text-anchor="middle" font-size="10.5" fill="#1b5e20">10 秒清空；慢任务不再影响 P95</text>
+
+  <rect x="20" y="262" width="720" height="28" rx="5" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+  <text x="380" y="281" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#795548">⚠ 拆队列时必须把"编排入口任务"也配进路由，否则整条链路静默挂死（故障模式 1）</text>
+</svg>

@@ -16,7 +16,7 @@ grep -oE '^## [0-9]+ · .*' 09-排障速查手册.md
 
 echo
 echo "############ 2. 10 里的「原理」回指编号 ############"
-grep -oE '故障模式 [0-9]+' 10-场景解法库.md | sort | uniq -c
+grep -rhoE '故障模式 [0-9]+' 10-场景解法库/ | sort | uniq -c
 
 echo
 echo "############ 3. 锚点链接是否可达（09 索引表）############"
@@ -40,12 +40,13 @@ diff /tmp/anchors_used.txt /tmp/anchors_actual.txt && echo "✅ 锚点完全一�
 
 echo
 echo "############ 4. 跨文件链接可达性 ############"
-for f in 08-实战经验.md 09-排障速查手册.md 10-场景解法库.md; do
+for f in 08-实战经验.md 09-排障速查手册.md 10-场景解法库/INDEX.md 应用实战/INDEX.md; do
+  d=$(dirname "$f")
   echo "--- $f ---"
   grep -oE '\]\(\.\.?/[^)]+\)' "$f" | sed 's/](\(.*\))/\1/' | sort -u | while read -r link; do
     target=$(echo "$link" | sed 's/#.*//')
     if [ -z "$target" ]; then continue; fi
-    if [ -e "$target" ]; then
+    if [ -e "$d/$target" ]; then
       echo "  ✅ $link"
     else
       echo "  ❌ $link (不存在)"
@@ -54,18 +55,25 @@ for f in 08-实战经验.md 09-排障速查手册.md 10-场景解法库.md; do
 done
 
 echo
-echo "############ 5. 场景解法库硬要求检查 ############"
-echo "场景数: $(grep -cE '^## 场景 [0-9]+' 10-场景解法库.md)"
-echo "每个场景的四个必备块:"
-echo "  🔒 先自己想: $(grep -c '🔒 \*\*先自己想\*\*\|🔒 先自己想' 10-场景解法库.md)"
-echo "  💡 提示折叠: $(grep -c 'summary>💡 提示' 10-场景解法库.md)"
-echo "  📖 展开解法: $(grep -c 'summary>📖 展开解法' 10-场景解法库.md)"
-echo "  知识点挂钩: $(grep -c '知识点挂钩' 10-场景解法库.md)"
-echo "  不适用边界: $(grep -c '不适用边界' 10-场景解法库.md)"
-echo "  推荐路径: $(grep -c '推荐路径' 10-场景解法库.md)"
+echo "############ 5. 场景解法库硬要求检查（目录形态）############"
+echo "场景文件数: $(ls 10-场景解法库/场景-*.md 2>/dev/null | wc -l)"
+echo "每个场景的必备块（按文件逐一核对）:"
+for sf in 10-场景解法库/场景-*.md; do
+  n=$(basename "$sf" .md)
+  printf "  %-28s" "$n"
+  printf " 先想:%s" "$(grep -c '🔒 先自己想\|🔒 \*\*先自己想\*\*' "$sf")"
+  printf " 提示:%s" "$(grep -c 'summary>💡 提示' "$sf")"
+  printf " 展开:%s" "$(grep -c 'summary>📖 展开解法' "$sf")"
+  printf " 挂钩:%s" "$(grep -c '知识点挂钩' "$sf")"
+  printf " 边界:%s" "$(grep -c '不适用\|什么情况下此方案不适用' "$sf")"
+  printf " 路径:%s" "$(grep -c '推荐路径' "$sf")"
+  printf " 非本栈:%s" "$(grep -c '非本栈替代路线' "$sf")"
+  printf " 对比:%s" "$(grep -c '效果对比' "$sf")"
+  echo
+done
 echo
-echo "每个场景的解法数量（解法一览表格行数）:"
-grep -oE '^\| \*\*[A-E] · ' 10-场景解法库.md | wc -l
+echo "解法条目总数（解法一览表格行数）:"
+grep -rhoE '^\| \*\*[A-E] · ' 10-场景解法库/ | wc -l
 
 echo
 echo "############ 6. 手册五特征检查 ############"

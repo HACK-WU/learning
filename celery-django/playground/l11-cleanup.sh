@@ -27,8 +27,15 @@ cd "$BASE" || exit 1
 echo "--- 根目录 Markdown ---"
 ls -1 *.md
 echo
-echo "--- Phase 5 三份产物大小 ---"
-wc -l 08-实战经验.md 09-排障速查手册.md 10-场景解法库.md
+echo "--- Phase 5 三份产物 ---"
+wc -l 08-实战经验.md 09-排障速查手册.md
+echo "  10-场景解法库/ （目录形态）"
+wc -l 10-场景解法库/*.md | tail -1
+echo "  应用实战/ （7 篇）"
+wc -l 应用实战/*.md | tail -1
+echo
+echo "--- 场景库与应用实战文件清单 ---"
+ls -1 10-场景解法库/*.md 应用实战/*.md
 echo
 echo "--- playground 保留的验证脚本（l11 取证/测量用）---"
 ls -1 playground/l11-*.sh 2>/dev/null || echo "(无)"

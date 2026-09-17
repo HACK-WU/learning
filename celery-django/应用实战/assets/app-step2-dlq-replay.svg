@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="330" viewBox="0 0 720 330" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <rect width="720" height="330" fill="#ffffff"/>
+  <text x="360" y="28" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">综合版：task_failure 信号落库，死信可查可重放</text>
+
+  <rect x="20" y="65" width="95" height="55" rx="6" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+  <text x="67" y="89" text-anchor="middle" font-size="13" fill="#e65100">broker 队列</text>
+  <text x="67" y="106" text-anchor="middle" font-size="11" fill="#e65100">任务消息</text>
+
+  <path d="M115 92 L175 92" stroke="#555" stroke-width="2" marker-end="url(#e1)"/>
+
+  <rect x="180" y="60" width="150" height="65" rx="6" fill="#f5f5f5" stroke="#616161" stroke-width="2"/>
+  <text x="255" y="83" text-anchor="middle" font-size="13" fill="#333">worker</text>
+  <text x="255" y="102" text-anchor="middle" font-size="11" fill="#666">autoretry 重试 3 次</text>
+  <text x="255" y="118" text-anchor="middle" font-size="10.5" fill="#666">每次都失败</text>
+
+  <path d="M330 92 L390 92" stroke="#2e7d32" stroke-width="2" marker-end="url(#e2)"/>
+  <text x="360" y="82" text-anchor="middle" font-size="10" fill="#2e7d32">耗尽时触发</text>
+
+  <rect x="395" y="58" width="160" height="70" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="475" y="80" text-anchor="middle" font-size="13" font-weight="bold" fill="#1b5e20">task_failure 信号</text>
+  <text x="475" y="99" text-anchor="middle" font-size="10.5" fill="#1b5e20">捕获：任务名 / task_id / 参数</text>
+  <text x="475" y="116" text-anchor="middle" font-size="10.5" fill="#1b5e20">异常类型 / 堆栈 / 时间</text>
+
+  <path d="M555 92 L610 92" stroke="#2e7d32" stroke-width="2" marker-end="url(#e2)"/>
+
+  <rect x="615" y="58" width="90" height="70" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="660" y="84" text-anchor="middle" font-size="13" font-weight="bold" fill="#1b5e20">死信表</text>
+  <text x="660" y="103" text-anchor="middle" font-size="10.5" fill="#1b5e20">落库持久化</text>
+  <text x="660" y="120" text-anchor="middle" font-size="10.5" fill="#1b5e20">可查询</text>
+
+  <path d="M660 128 L660 165 L300 165 L300 205" stroke="#1565c0" stroke-width="2" marker-end="url(#e3)"/>
+  <text x="480" y="182" text-anchor="middle" font-size="10.5" fill="#1565c0">运维查表 → 修 bug → 按原始参数重放</text>
+
+  <rect x="150" y="205" width="290" height="55" rx="6" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="295" y="228" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#0d47a1">重放：原参数重新投递</text>
+  <text x="295" y="247" text-anchor="middle" font-size="10.5" fill="#0d47a1">修好外部依赖后再跑一次即可</text>
+
+  <rect x="20" y="280" width="685" height="40" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2" stroke-dasharray="5 3"/>
+  <text x="360" y="297" text-anchor="middle" font-size="12" font-weight="bold" fill="#1b5e20">本步解决了什么：失败留痕、可查、可重放</text>
+  <text x="360" y="313" text-anchor="middle" font-size="11" fill="#33691e">代价：多一张表 + 一段信号代码；死信表本身也要有清理与告警（否则变成新的垃圾堆）</text>
+
+  <defs>
+    <marker id="e1" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#555"/>
+    </marker>
+    <marker id="e2" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2e7d32"/>
+    </marker>
+    <marker id="e3" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#1565c0"/>
+    </marker>
+  </defs>
+</svg>

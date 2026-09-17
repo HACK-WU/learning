@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="360" viewBox="0 0 760 360" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <rect width="760" height="360" fill="#ffffff"/>
+  <text x="380" y="28" text-anchor="middle" font-size="15" font-weight="bold" fill="#333">综合版：REMAP_SIGTERM + soft shutdown，收尾或归还</text>
+
+  <rect x="20" y="48" width="340" height="230" rx="6" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="190" y="70" text-anchor="middle" font-size="13" font-weight="bold" fill="#b71c1c">❌ 错误做法：sleep 5 ; kill -9</text>
+  <text x="42" y="94" font-size="11.5" fill="#5f2121">TERM（warm）→ 无限期等待，无超时</text>
+  <rect x="42" y="104" width="296" height="30" rx="4" fill="#fff" stroke="#c62828" stroke-width="1.5"/>
+  <text x="190" y="118" text-anchor="middle" font-size="11" font-weight="bold" fill="#b71c1c">t=5s 强杀主进程 → 无退出流程</text>
+  <text x="42" y="150" font-size="11.5" fill="#5f2121">结果：消息冻结在 unacked</text>
+  <text x="42" y="170" font-size="11.5" font-weight="bold" fill="#b71c1c">等 3600 秒才可能重投</text>
+  <text x="42" y="192" font-size="11" fill="#5f2121">且必须有新 worker 起来才搬回队列</text>
+  <text x="42" y="214" font-size="11" fill="#5f2121">用户感知：任务"消失"了 1 小时</text>
+  <text x="42" y="248" font-size="11.5" font-weight="bold" fill="#b71c1c">⚠ acks_late 救不了：归还是主进程</text>
+  <text x="42" y="266" font-size="11.5" font-weight="bold" fill="#b71c1c">退出时的动作，强杀没有退出流程</text>
+
+  <rect x="400" y="48" width="340" height="230" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="570" y="70" text-anchor="middle" font-size="13" font-weight="bold" fill="#1b5e20">✅ 正确组合：限时宽限 + 显式归还</text>
+  <text x="422" y="94" font-size="11.5" fill="#1b5e20">REMAP_SIGTERM=SIGQUIT（环境变量）</text>
+  <rect x="422" y="104" width="296" height="30" rx="4" fill="#fff" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="570" y="118" text-anchor="middle" font-size="11" font-weight="bold" fill="#1b5e20">TERM → cold 流程，不再无限期等</text>
+  <text x="422" y="150" font-size="11.5" fill="#1b5e20">+ worker_soft_shutdown_timeout=15</text>
+  <rect x="422" y="160" width="296" height="30" rx="4" fill="#fff" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="570" y="174" text-anchor="middle" font-size="11" font-weight="bold" fill="#1b5e20">先给 15 秒宽限（写进 settings.py！）</text>
+  <text x="422" y="206" font-size="11.5" fill="#1b5e20">结果：跑得完 → 跑完退出</text>
+  <text x="422" y="226" font-size="11.5" fill="#1b5e20">跑不完 → Restoring 显式归还队列</text>
+  <text x="422" y="248" font-size="11.5" font-weight="bold" fill="#1b5e20">日志可验证：Initiating Soft Shutdown</text>
+  <text x="422" y="266" font-size="11.5" font-weight="bold" fill="#1b5e20">+ Restoring N unacknowledged message(s)</text>
+
+  <rect x="20" y="296" width="720" height="52" rx="6" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="380" y="316" text-anchor="middle" font-size="12" font-weight="bold" fill="#0d47a1">配套约束：TimeoutStopSec（systemd）必须 &gt; worker_soft_shutdown_timeout</text>
+  <text x="380" y="334" text-anchor="middle" font-size="11" fill="#0d47a1">否则宽限期没走完就被强杀 —— 15 秒白配，症状和左边一模一样</text>
+
+  <defs>
+    <marker id="g1" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#2e7d32"/>
+    </marker>
+  </defs>
+</svg>
