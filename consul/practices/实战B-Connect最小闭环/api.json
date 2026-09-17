@@ -1,0 +1,11 @@
+{
+  "service": {
+    "id": "api-1",
+    "name": "api",
+    "address": "127.0.0.1",
+    "port": 9090,
+    "connect": {
+      "sidecar_service": {}
+    }
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "Name": "app-readonly",
+  "Description": "只读 app/ 前缀的 KV 与全部服务、节点",
+  "Rules": "key_prefix \"app/\" {\n  policy = \"read\"\n}\nservice_prefix \"\" {\n  policy = \"read\"\n}\nnode_prefix \"\" {\n  policy = \"read\"\n}"
+}

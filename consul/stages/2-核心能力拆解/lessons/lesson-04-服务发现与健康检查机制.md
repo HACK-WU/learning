@@ -312,7 +312,7 @@ flowchart TD
     K2["知识点 2 检查类型与语义<br/>六类体检 + DCSA + maintenance"] --> N6["课 6 KV/配置中心<br/>(watch 的 key/keyprefix)"]
     K3["知识点 3 阻塞查询与 watch<br/>长轮询 + handler 订阅"] --> N9["阶段 3 对比矩阵<br/>(推送机制、检查能力、接口策略)"]
     N5 --> N6
-    N9 --> FINAL["课 11 选型决策"]
+    N9 --> FINAL["课 12 选型决策"]
     style N9 fill:#dbeafe,stroke:#2563eb,stroke-width:2px
 ```
 
@@ -360,6 +360,6 @@ flowchart TD
 
 ## 🧭 课程导航
 
-- [上一课：课 3 五分钟跑起来看一眼](../1-认识Consul/lessons/lesson-03-五分钟跑起来看一眼.md)
+- [上一课：课 3 五分钟跑起来看一眼](../../1-认识Consul/lessons/lesson-03-五分钟跑起来看一眼.md)
 - [下一课：课 5 Raft 与 Gossip 一致性成色](./lesson-05-Raft与Gossip一致性成色.md)
-- [返回课程目录](../../02-课程目录.md)
+- [返回课程目录](../../../02-课程目录.md)

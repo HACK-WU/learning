@@ -4,7 +4,10 @@
 - 课 1 服务注册与发现：服务启动时自注册、下线时自注销，消费方按名字查实例
 - 课 3 注册与查询：agent 本地注册 + 三视图差异
 - 课 4 健康检查：TTL 检查由应用主动上报心跳（push 模型）
-- 课 5 读模式：发现用 default（走 leader 但省一次往返），配置用 stale（可读 follower）
+- 课 5 读模式：发现用 stale（可读 follower，换取选举期间可用性），配置用 default
+  （2026-09-17 修正：此处原写"发现用 default、配置用 stale"，与实战篇 A 实测结论
+  相反——stale 写后立即读会稳定落后一个版本，不适合配置；而服务发现容忍轻微陈旧，
+  却很在意 leader 选举期间别直接 500。已按实测结论纠正。）
 """
 
 import time
@@ -83,14 +86,26 @@ class ServiceRegistry:
         self.consul.deregister(self.service_id)
 
 
-def discover(consul, name, dc=None):
+def discover(consul, name, dc=None, consistency='stale'):
     """按服务名查健康实例，返回规格化后的列表。
 
     知识点回指（课 4）：这里用 /v1/health/service 而不是 /v1/catalog/service——
     后者是目录视角，不反映健康状态，会返回已经挂掉的实例。
+
+    consistency 默认改为 stale（2026-09-17，吸收实战篇 A 实测）：
+      - 服务发现容忍"少一个实例晚几毫秒被发现"，但很难容忍"leader 一挂就 500"
+      - 实测：leader 被强杀后约 9.5 秒内，default/consistent 全部返回 500，
+        而 stale 持续返回旧列表——服务发现要的正是这个行为
+      - 代价是 stale 可能返回已被摘除的实例，调用方仍需保留超时与重试
+
+    ⚠️ 不要照搬这条去读配置：实战篇 A 实测 stale 写后立即读稳定落后一个版本
+    （10/10 次），配置热更新会静默失效。配置场景请用 default/consistent。
+
+    若确需强一致（如选主前的成员确认），显式传 consistency='consistent'。
     """
     try:
-        result = consul.health_service(name, passing=True, dc=dc)
+        result = consul.health_service(name, passing=True, dc=dc,
+                                       consistency=consistency)
     except ConsulError as e:
         if e.status == 404:
             return []
@@ -119,12 +134,12 @@ def call_instance(address, port, path='/', timeout=3.0):
         return resp.read().decode('utf-8')
 
 
-def discover_and_call(consul, name, path='/', dc=None):
+def discover_and_call(consul, name, path='/', dc=None, consistency='stale'):
     """组合动作：发现 → 取第一个健康实例 → 调用。
 
     简化版：取第一个（轮询/随机等负载均衡策略是另一个话题）。
     """
-    instances = discover(consul, name, dc=dc)
+    instances = discover(consul, name, dc=dc, consistency=consistency)
     if not instances:
         raise RuntimeError(f'服务 {name} 无健康实例')
     inst = instances[0]

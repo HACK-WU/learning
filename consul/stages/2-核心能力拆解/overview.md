@@ -9,6 +9,7 @@
 3. 掌握三种读模式，理解 Consul 在一致性与可用性上的灵活取舍
 4. 评估 KV 做配置中心的用法与局限
 5. 评估多数据中心与 Connect 服务网格的真实成色
+6. 理解 ACL 三层授权模型，能判断"谁有权改 Consul"以及开启 ACL 的运维代价
 
 ## 学习重点
 
@@ -20,6 +21,7 @@
 - default / consistent / stale 三种读模式
 - KV API：CAS、前缀查询；与专业配置中心的差距
 - Consul Template 生态；多 DC 联邦；Connect（mTLS、intentions）
+- ACL：token/policy/rule 三层模型；匿名 token 默认非零权限；ACL 与 gossip 加密、TLS 是三件独立的事
 
 ## 必须掌握的知识点
 
@@ -29,6 +31,7 @@
 | 课 5 | Raft 写路径与 quorum；Gossip 两层池；三种读模式 |
 | 课 6 | KV API 与核心操作；KV 当配置中心的用法与局限；Consul Template 与集成生态 |
 | 课 7 | 多数据中心联邦；Connect 服务网格；网格能力成色评估 |
+| 课 8 | ACL 三层授权模型（token/policy/rule）；默认策略与匿名 token；ACL 与 gossip 加密、TLS 的边界 |
 
 ## 阶段路径图
 

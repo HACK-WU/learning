@@ -1,0 +1,20 @@
+{
+  "service": {
+    "id": "web-1",
+    "name": "web",
+    "address": "127.0.0.1",
+    "port": 8080,
+    "connect": {
+      "sidecar_service": {
+        "proxy": {
+          "upstreams": [
+            {
+              "destination_name": "api",
+              "local_bind_port": 21002
+            }
+          ]
+        }
+      }
+    }
+  }
+}
