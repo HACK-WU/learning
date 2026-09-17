@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="364" viewBox="0 0 1000 364">
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#455a64"/></marker></defs>
+<rect width="1000" height="364" fill="#fff"/>
+<text x="500" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#263238">解法 C · 放 slow 队列：批处理不抢在线任务</text>
+<text x="500" y="58" text-anchor="middle" font-size="13" fill="#546e7a">5 小时的对账绝不能和在线任务共用一条队列</text>
+<rect x="55.0" y="95" width="267.3" height="78" rx="9" fill="#f5f7f8" stroke="#607d8b" stroke-width="2"/>
+<text x="188.7" y="127.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#37474f">批处理任务</text>
+<text x="188.7" y="147.0" text-anchor="middle" font-size="12" fill="#37474f">reconcile_chunk</text>
+<path d="M322.3 134.0 L360.3 134.0" stroke="#455a64" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="366.3" y="95" width="267.3" height="78" rx="9" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+<text x="500.0" y="127.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#0d47a1">slow 队列</text>
+<text x="500.0" y="147.0" text-anchor="middle" font-size="12" fill="#37474f">专属 worker -c 2</text>
+<path d="M633.7 134.0 L671.7 134.0" stroke="#455a64" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="677.7" y="95" width="267.3" height="78" rx="9" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+<text x="811.3" y="127.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#1b5e20">fast 队列</text>
+<text x="811.3" y="147.0" text-anchor="middle" font-size="12" fill="#37474f">在线任务不受影响</text>
+<rect x="90" y="228" width="820" height="110" rx="10" fill="#fff8f6" stroke="#c62828" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="110" y="256" font-size="16" font-weight="bold" fill="#b71c1c">失效点 / 代价</text>
+<text x="110" y="280" font-size="13" fill="#37474f">失效点：route 配了却没给 worker 配 -Q slow，任务永远没人消费（静默挂死）。</text>
+<text x="110" y="302" font-size="13" fill="#37474f">route 与 -Q 必须成对验收，这是最容易被漏掉的一半。</text>
+</svg>

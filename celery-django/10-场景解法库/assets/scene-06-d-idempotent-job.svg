@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="342" viewBox="0 0 1000 342">
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#455a64"/></marker></defs>
+<rect width="1000" height="342" fill="#fff"/>
+<text x="500" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#263238">解法 D · 幂等兜底：跑两次结果也对</text>
+<text x="500" y="58" text-anchor="middle" font-size="13" fill="#546e7a">最后一道防线，不是调度记录的替代品</text>
+<rect x="55.0" y="95" width="267.3" height="78" rx="9" fill="#f5f7f8" stroke="#607d8b" stroke-width="2"/>
+<text x="188.7" y="127.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#37474f">重复调度两次</text>
+<text x="188.7" y="147.0" text-anchor="middle" font-size="12" fill="#37474f">同一 date</text>
+<path d="M322.3 134.0 L360.3 134.0" stroke="#455a64" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="366.3" y="95" width="267.3" height="78" rx="9" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+<text x="500.0" y="127.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#0d47a1">对账逻辑幂等</text>
+<text x="500.0" y="147.0" text-anchor="middle" font-size="12" fill="#37474f">CAS / 唯一约束</text>
+<path d="M633.7 134.0 L671.7 134.0" stroke="#455a64" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="677.7" y="95" width="267.3" height="78" rx="9" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+<text x="811.3" y="127.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#1b5e20">结果一致</text>
+<text x="811.3" y="147.0" text-anchor="middle" font-size="12" fill="#37474f">数据不翻倍</text>
+<rect x="90" y="228" width="820" height="88" rx="10" fill="#fff8f6" stroke="#c62828" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="110" y="256" font-size="16" font-weight="bold" fill="#b71c1c">失效点 / 代价</text>
+<text x="110" y="280" font-size="13" fill="#37474f">失效点：幂等只能防重复副作用，不能替代调度记录 —— 漏跑依然无感知。</text>
+</svg>

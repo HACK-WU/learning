@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="600" viewBox="0 0 1000 600">
+  <rect width="1000" height="600" fill="#fff"/>
+  <text x="500" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#263238">测试分层：成本上升，环境真实性上升</text>
+  <text x="500" y="60" text-anchor="middle" font-size="13" fill="#546e7a">路由契约不是某一层的附属检查，而是贯穿集成与发布 smoke</text>
+
+  <line x1="115" y1="490" x2="880" y2="490" stroke="#455a64" stroke-width="2"/>
+  <line x1="115" y1="490" x2="115" y2="105" stroke="#455a64" stroke-width="2"/>
+  <text x="500" y="535" text-anchor="middle" font-size="15" font-weight="bold" fill="#37474f">环境成本 / CI 时间 →</text>
+  <text x="42" y="300" text-anchor="middle" font-size="15" font-weight="bold" fill="#37474f" transform="rotate(-90 42 300)">生产真实性 →</text>
+
+  <rect x="170" y="390" width="250" height="70" rx="9" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="295" y="419" text-anchor="middle" font-size="16" font-weight="bold" fill="#0d47a1">A · Service 单测</text>
+  <text x="295" y="442" text-anchor="middle" font-size="12" fill="#37474f">mock task / 外部服务</text>
+
+  <rect x="350" y="280" width="280" height="76" rx="9" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="490" y="310" text-anchor="middle" font-size="16" font-weight="bold" fill="#1b5e20">B · Embedded worker</text>
+  <text x="490" y="334" text-anchor="middle" font-size="12" fill="#37474f">broker / serializer / result</text>
+
+  <rect x="540" y="165" width="280" height="80" rx="9" fill="#fff3e0" stroke="#ef6c00" stroke-width="2"/>
+  <text x="680" y="196" text-anchor="middle" font-size="16" font-weight="bold" fill="#e65100">C · 路由契约 smoke</text>
+  <text x="680" y="220" text-anchor="middle" font-size="12" fill="#37474f">task route / worker -Q / canary</text>
+
+  <rect x="690" y="80" width="240" height="60" rx="9" fill="#fce4ec" stroke="#ad1457" stroke-width="2"/>
+  <text x="810" y="106" text-anchor="middle" font-size="16" font-weight="bold" fill="#880e4f">D · Docker 拓扑 smoke</text>
+  <text x="810" y="127" text-anchor="middle" font-size="12" fill="#37474f">真实启动参数与依赖</text>
+
+  <path d="M420 425 L465 356" stroke="#90a4ae" stroke-width="2"/>
+  <path d="M630 280 L680 245" stroke="#90a4ae" stroke-width="2"/>
+  <path d="M820 165 L820 140" stroke="#90a4ae" stroke-width="2"/>
+
+  <rect x="160" y="570" width="680" height="20" fill="#fafafa"/>
+  <text x="500" y="585" text-anchor="middle" font-size="12" fill="#546e7a">每层只证明自己的命题：SUCCESS ≠ route 正确 ≠ 生产拓扑可用</text>
+</svg>

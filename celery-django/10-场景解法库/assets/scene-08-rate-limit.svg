@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="500" viewBox="0 0 1000 500">
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#455a64"/></marker></defs>
+  <rect width="1000" height="500" fill="#fff"/>
+  <text x="500" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#263238">第三方限流：per-worker 不是 global</text>
+  <text x="500" y="60" text-anchor="middle" font-size="13" fill="#546e7a">20 个 worker 各自 10/s，必须把共享配额放到共同可见的位置</text>
+  <rect x="45" y="110" width="170" height="80" rx="9" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="130" y="142" text-anchor="middle" font-size="16" font-weight="bold" fill="#b71c1c">20 workers</text>
+  <text x="130" y="167" text-anchor="middle" font-size="12" fill="#37474f">本地 rate_limit</text>
+  <path d="M215 150 L285 150" stroke="#455a64" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="285" y="90" width="205" height="80" rx="9" fill="#fff3e0" stroke="#ef6c00" stroke-width="2"/>
+  <text x="387" y="122" text-anchor="middle" font-size="15" font-weight="bold" fill="#e65100">可能 200/s</text>
+  <text x="387" y="147" text-anchor="middle" font-size="12" fill="#37474f">429 / 封 IP</text>
+  <rect x="285" y="220" width="205" height="80" rx="9" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="387" y="252" text-anchor="middle" font-size="15" font-weight="bold" fill="#1b5e20">Redis global counter</text>
+  <text x="387" y="277" text-anchor="middle" font-size="12" fill="#37474f">共享一秒窗口配额</text>
+  <path d="M490 130 L565 130" stroke="#c62828" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M490 260 L565 260" stroke="#2e7d32" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="565" y="90" width="205" height="80" rx="9" fill="#fce4ec" stroke="#ad1457" stroke-width="2"/>
+  <text x="667" y="122" text-anchor="middle" font-size="15" font-weight="bold" fill="#880e4f">第三方 API</text>
+  <text x="667" y="147" text-anchor="middle" font-size="12" fill="#37474f">收到尖峰</text>
+  <rect x="565" y="220" width="205" height="80" rx="9" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="667" y="252" text-anchor="middle" font-size="15" font-weight="bold" fill="#0d47a1">≤ 10/s</text>
+  <text x="667" y="277" text-anchor="middle" font-size="12" fill="#37474f">退避 + jitter</text>
+  <rect x="180" y="365" width="640" height="70" rx="10" fill="#fafafa" stroke="#90a4ae" stroke-width="2"/>
+  <text x="500" y="395" text-anchor="middle" font-size="16" font-weight="bold" fill="#37474f">别把限流和重试混为一谈</text>
+  <text x="500" y="418" text-anchor="middle" font-size="13" fill="#455a64">全局配额负责“能不能发”，backoff + jitter 负责“失败后何时再试”</text>
+</svg>

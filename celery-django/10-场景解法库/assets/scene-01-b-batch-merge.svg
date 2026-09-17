@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="364" viewBox="0 0 1000 364">
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#455a64"/></marker></defs>
+<rect width="1000" height="364" fill="#fff"/>
+<text x="500" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#263238">解法 B · 批量合并：任务数降到 1/3</text>
+<text x="500" y="58" text-anchor="middle" font-size="13" fill="#546e7a">减少 producer 到 broker 的往返，代价是失败影响面变大</text>
+<rect x="55.0" y="95" width="267.3" height="78" rx="9" fill="#f5f7f8" stroke="#607d8b" stroke-width="2"/>
+<text x="188.7" y="127.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#37474f">订单事件</text>
+<text x="188.7" y="147.0" text-anchor="middle" font-size="12" fill="#37474f">3 个任务 / 单</text>
+<path d="M322.3 134.0 L360.3 134.0" stroke="#455a64" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="366.3" y="95" width="267.3" height="78" rx="9" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+<text x="500.0" y="127.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#0d47a1">批量任务</text>
+<text x="500.0" y="147.0" text-anchor="middle" font-size="12" fill="#37474f">一次携带 N 个业务 id</text>
+<path d="M633.7 134.0 L671.7 134.0" stroke="#455a64" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="677.7" y="95" width="267.3" height="78" rx="9" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+<text x="811.3" y="127.0" text-anchor="middle" font-size="15" font-weight="bold" fill="#1b5e20">bulk_create</text>
+<text x="811.3" y="147.0" text-anchor="middle" font-size="12" fill="#37474f">ignore_conflicts</text>
+<rect x="90" y="228" width="820" height="110" rx="10" fill="#fff8f6" stroke="#c62828" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="110" y="256" font-size="16" font-weight="bold" fill="#b71c1c">失效点 / 代价</text>
+<text x="110" y="280" font-size="13" fill="#37474f">失效点：一次批量失败会影响整批条目，必须靠唯一约束 / 幂等键兜底。</text>
+<text x="110" y="302" font-size="13" fill="#37474f">实时通知、任务间有依赖、单条需独立补偿的场景，不要强行合并。</text>
+</svg>

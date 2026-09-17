@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="500" viewBox="0 0 1000 500">
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#455a64"/></marker></defs>
+  <rect width="1000" height="500" fill="#fff"/>
+  <text x="500" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#263238">2 小时任务：先修可见性，再决定是否换模型</text>
+  <text x="500" y="60" text-anchor="middle" font-size="13" fill="#546e7a">visibility timeout 只改变重投窗口，幂等才改变重复副作用</text>
+  <rect x="45" y="110" width="180" height="75" rx="9" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="135" y="140" text-anchor="middle" font-size="16" font-weight="bold" fill="#b71c1c">单个长任务</text>
+  <text x="135" y="164" text-anchor="middle" font-size="12" fill="#37474f">耗时超过 vt？</text>
+  <path d="M225 148 L285 148" stroke="#455a64" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="285" y="90" width="190" height="80" rx="9" fill="#fff3e0" stroke="#ef6c00" stroke-width="2"/>
+  <text x="380" y="122" text-anchor="middle" font-size="15" font-weight="bold" fill="#e65100">A · 调大 vt</text>
+  <text x="380" y="147" text-anchor="middle" font-size="12" fill="#37474f">止误判，不治崩溃</text>
+  <rect x="285" y="205" width="190" height="80" rx="9" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="380" y="237" text-anchor="middle" font-size="15" font-weight="bold" fill="#1b5e20">B · 幂等</text>
+  <text x="380" y="262" text-anchor="middle" font-size="12" fill="#37474f">重投也无害</text>
+  <path d="M475 130 L545 130" stroke="#455a64" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M475 245 L545 245" stroke="#455a64" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="545" y="90" width="190" height="80" rx="9" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="640" y="122" text-anchor="middle" font-size="15" font-weight="bold" fill="#0d47a1">C · 拆阶段</text>
+  <text x="640" y="147" text-anchor="middle" font-size="12" fill="#37474f">短任务 + 可续跑</text>
+  <rect x="545" y="205" width="190" height="80" rx="9" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="2"/>
+  <text x="640" y="237" text-anchor="middle" font-size="15" font-weight="bold" fill="#4a148c">D / E · 换模型</text>
+  <text x="640" y="262" text-anchor="middle" font-size="12" fill="#37474f">心跳 / workflow / broker</text>
+  <rect x="200" y="365" width="600" height="70" rx="10" fill="#fafafa" stroke="#90a4ae" stroke-width="2"/>
+  <text x="500" y="395" text-anchor="middle" font-size="16" font-weight="bold" fill="#37474f">决策线</text>
+  <text x="500" y="418" text-anchor="middle" font-size="13" fill="#455a64">偶发长任务：A + B；可拆：A + B + C；长工作流核心：评估 D / E</text>
+  <path d="M640 285 L600 365" stroke="#6a1b9a" stroke-width="2" marker-end="url(#arrow)"/>
+</svg>

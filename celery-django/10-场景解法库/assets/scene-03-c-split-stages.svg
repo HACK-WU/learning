@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="364" viewBox="0 0 1000 364">
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#455a64"/></marker></defs>
+<rect width="1000" height="364" fill="#fff"/>
+<text x="500" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#263238">解法 C · 拆阶段：让每个子任务都短</text>
+<text x="500" y="58" text-anchor="middle" font-size="13" fill="#546e7a">失败只需重试一小段，而不是 2 小时从头再来</text>
+<rect x="55.0" y="95" width="189.5" height="78" rx="9" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+<text x="149.8" y="127.0" text-anchor="middle" font-size="14" font-weight="bold" fill="#b71c1c">2 小时单任务</text>
+<text x="149.8" y="147.0" text-anchor="middle" font-size="11" fill="#37474f">失败成本极高</text>
+<path d="M244.5 134.0 L282.5 134.0" stroke="#455a64" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="288.5" y="95" width="189.5" height="78" rx="9" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+<text x="383.2" y="127.0" text-anchor="middle" font-size="14" font-weight="bold" fill="#0d47a1">download</text>
+<text x="383.2" y="147.0" text-anchor="middle" font-size="11" fill="#37474f">&lt; 5 分钟</text>
+<path d="M478.0 134.0 L516.0 134.0" stroke="#455a64" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="522.0" y="95" width="189.5" height="78" rx="9" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+<text x="616.8" y="127.0" text-anchor="middle" font-size="14" font-weight="bold" fill="#1b5e20">chord 分片转码</text>
+<text x="616.8" y="147.0" text-anchor="middle" font-size="11" fill="#37474f">并行 + 独立幂等</text>
+<path d="M711.5 134.0 L749.5 134.0" stroke="#455a64" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="755.5" y="95" width="189.5" height="78" rx="9" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+<text x="850.2" y="127.0" text-anchor="middle" font-size="14" font-weight="bold" fill="#1b5e20">merge 合并</text>
+<text x="850.2" y="147.0" text-anchor="middle" font-size="11" fill="#37474f">最终收口</text>
+<rect x="90" y="228" width="820" height="110" rx="10" fill="#fff8f6" stroke="#c62828" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="110" y="256" font-size="16" font-weight="bold" fill="#b71c1c">失效点 / 代价</text>
+<text x="110" y="280" font-size="13" fill="#37474f">失效点：原子操作（如一次完整转码）未必能拆，强拆会引入中间态与一致性问题。</text>
+<text x="110" y="302" font-size="13" fill="#37474f">拆完每个子任务仍须独立幂等，否则只是把风险分散而不是消除。</text>
+</svg>

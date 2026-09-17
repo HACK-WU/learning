@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="364" viewBox="0 0 1000 364">
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#455a64"/></marker></defs>
+<rect width="1000" height="364" fill="#fff"/>
+<text x="500" y="34" text-anchor="middle" font-size="21" font-weight="bold" fill="#263238">解法 B · chunks 拆并行：提速，但要先看数据库余量</text>
+<text x="500" y="58" text-anchor="middle" font-size="13" fill="#546e7a">拆得越细，单条失败影响越小，但总开销与并发压力越大</text>
+<rect x="55.0" y="95" width="189.5" height="78" rx="9" fill="#f5f7f8" stroke="#607d8b" stroke-width="2"/>
+<text x="149.8" y="127.0" text-anchor="middle" font-size="14" font-weight="bold" fill="#37474f">捞 id 列表</text>
+<text x="149.8" y="147.0" text-anchor="middle" font-size="11" fill="#37474f">values_list('id')</text>
+<path d="M244.5 134.0 L282.5 134.0" stroke="#455a64" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="288.5" y="95" width="189.5" height="78" rx="9" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+<text x="383.2" y="127.0" text-anchor="middle" font-size="14" font-weight="bold" fill="#0d47a1">切成 1000 个 chunk</text>
+<text x="383.2" y="147.0" text-anchor="middle" font-size="11" fill="#37474f">每块 1000 条</text>
+<path d="M478.0 134.0 L516.0 134.0" stroke="#455a64" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="522.0" y="95" width="189.5" height="78" rx="9" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+<text x="616.8" y="127.0" text-anchor="middle" font-size="14" font-weight="bold" fill="#1b5e20">chord 并行执行</text>
+<text x="616.8" y="147.0" text-anchor="middle" font-size="11" fill="#37474f">子任务并发</text>
+<path d="M711.5 134.0 L749.5 134.0" stroke="#455a64" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="755.5" y="95" width="189.5" height="78" rx="9" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+<text x="850.2" y="127.0" text-anchor="middle" font-size="14" font-weight="bold" fill="#b71c1c">主库</text>
+<text x="850.2" y="147.0" text-anchor="middle" font-size="11" fill="#37474f">并发查询 + 连接数</text>
+<rect x="90" y="228" width="820" height="110" rx="10" fill="#fff8f6" stroke="#c62828" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="110" y="256" font-size="16" font-weight="bold" fill="#b71c1c">失效点 / 代价</text>
+<text x="110" y="280" font-size="13" fill="#37474f">失效点：1000 个并发查询可能把主库打挂；数据库已是瓶颈时千万别拆并行。</text>
+<text x="110" y="302" font-size="13" fill="#37474f">数据分布不均时按固定条数分块会产生热块，要按实际量分。</text>
+</svg>

@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="560" viewBox="0 0 1000 560">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#455a64"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="560" fill="#fff"/>
+  <text x="500" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#263238">失败任务的去向：重试、隔离、检查、重放</text>
+  <text x="500" y="60" text-anchor="middle" font-size="13" fill="#546e7a">最终失败要可检索；重放要经过业务状态与幂等检查</text>
+
+  <rect x="36" y="100" width="150" height="80" rx="9" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="111" y="132" text-anchor="middle" font-size="16" font-weight="bold" fill="#0d47a1">执行</text>
+  <text x="111" y="158" text-anchor="middle" font-size="12" fill="#37474f">调用外部 API</text>
+  <path d="M186 140 L245 140" stroke="#455a64" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="245" y="100" width="150" height="80" rx="9" fill="#fff3e0" stroke="#ef6c00" stroke-width="2"/>
+  <text x="320" y="132" text-anchor="middle" font-size="16" font-weight="bold" fill="#e65100">可重试？</text>
+  <text x="320" y="158" text-anchor="middle" font-size="12" fill="#37474f">429 / 503 / timeout</text>
+  <path d="M395 125 L455 125" stroke="#455a64" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="425" y="112" text-anchor="middle" font-size="11" fill="#455a64">是</text>
+  <path d="M320 180 L320 260" stroke="#ef6c00" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="340" y="225" font-size="11" fill="#e65100">否 / 重试耗尽</text>
+
+  <rect x="455" y="85" width="180" height="110" rx="9" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="545" y="118" text-anchor="middle" font-size="16" font-weight="bold" fill="#1b5e20">退避重试</text>
+  <text x="545" y="145" text-anchor="middle" font-size="12" fill="#37474f">max_retries 有上限</text>
+  <text x="545" y="169" text-anchor="middle" font-size="12" fill="#37474f">backoff + jitter</text>
+  <path d="M545 195 L545 260" stroke="#455a64" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="230" y="260" width="180" height="100" rx="9" fill="#fce4ec" stroke="#ad1457" stroke-width="2"/>
+  <text x="320" y="294" text-anchor="middle" font-size="16" font-weight="bold" fill="#880e4f">Quarantine</text>
+  <text x="320" y="321" text-anchor="middle" font-size="12" fill="#37474f">失败账本 / DLX</text>
+  <text x="320" y="343" text-anchor="middle" font-size="12" fill="#37474f">脱敏 + 可检索</text>
+  <path d="M410 310 L485 310" stroke="#455a64" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="485" y="260" width="180" height="100" rx="9" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="2"/>
+  <text x="575" y="294" text-anchor="middle" font-size="16" font-weight="bold" fill="#4a148c">人工 / 程序检查</text>
+  <text x="575" y="321" text-anchor="middle" font-size="12" fill="#37474f">数据修复、权限</text>
+  <text x="575" y="343" text-anchor="middle" font-size="12" fill="#37474f">供应商状态确认</text>
+  <path d="M665 310 L740 310" stroke="#455a64" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="740" y="260" width="220" height="100" rx="9" fill="#e0f2f1" stroke="#00695c" stroke-width="2"/>
+  <text x="850" y="294" text-anchor="middle" font-size="16" font-weight="bold" fill="#004d40">受控重放</text>
+  <text x="850" y="321" text-anchor="middle" font-size="12" fill="#37474f">新 task id</text>
+  <text x="850" y="343" text-anchor="middle" font-size="12" fill="#37474f">同 business id / 幂等键</text>
+
+  <rect x="170" y="430" width="660" height="75" rx="10" fill="#fafafa" stroke="#90a4ae" stroke-width="2"/>
+  <text x="500" y="460" text-anchor="middle" font-size="16" font-weight="bold" fill="#37474f">终态判据</text>
+  <text x="500" y="484" text-anchor="middle" font-size="13" fill="#455a64">记录可审计 · 失败不热循环 · 重放不重复副作用 · 结果核对业务数据库</text>
+  <path d="M850 360 L700 430" stroke="#00695c" stroke-width="2" marker-end="url(#arrow)"/>
+</svg>

@@ -19,19 +19,23 @@
 
 ### 解法一览
 
-| 解法 | 能解决到 | 代价 | 适用边界 |
-|------|---------|------|---------|
-| **A · `priority` 参数** | 软性优先 | Redis 上是**模拟**的，不可靠 | 官方不推荐；RabbitMQ 上才可靠 |
-| **B · 多队列 + 加权 worker** | 语义明确的差异化服务 | 运维复杂度 | **推荐** |
-| **C · 多队列 + 顺序消费** | 简单有效 | 可能饿死低优先级 | 简单场景 |
-| **D · 队列内排序（自维护有序集合）** | 精确优先级 | 实现复杂 | 极致要求时 |
-| **E · 换 RabbitMQ** | 原生 `x-max-priority` | 引入新组件 | 优先级是核心需求时 |
+| 解法 | 效果（VIP 优先强度 / 低优先级饿死风险） | 代价 | 适用边界 |
+|------|----------------------------|------|---------|
+| **A · `priority` 参数** | 优先强度：**软性，`prefetch>1` 即失效** / 饿死风险：中 | Redis 上是**模拟**的，不可靠 | 官方不推荐；RabbitMQ 上才可靠 |
+| **B · 多队列 + 加权 worker** | 优先强度：**明确** / 饿死风险：**低（可留最小并发）** | 运维复杂度 | **推荐** |
+| **C · 多队列 + 顺序消费** | 优先强度：轮询偏好，高负载会稀释 / 饿死风险：中 | 可能饿死低优先级 | 简单场景 |
+| **D · 队列内排序（自维护有序集合）** | 优先强度：**精确** / 饿死风险：低（配 aging 规则后） | 实现复杂 | 极致要求时 |
+| **E · 换 RabbitMQ** | 优先强度：broker 级原生 / 饿死风险：中（已 prefetch 的仍先完成） | 引入新组件 | 优先级是核心需求时 |
 
 ### 各解法详解
 
-![队列隔离对比：优先级同样依赖队列隔离与 prefetch=1](./assets/场景-队列隔离对比.svg)
+> 本场景不复用场景 1 的队列隔离总览图——优先级的实现差异（模拟 vs 原生、prefetch 是否失效）只有在下面每个解法各自的机制图里才说得清。
 
 #### 解法 A · `priority` 参数（先看清楚限制）
+
+![priority 参数：Redis 上的模拟优先级](./assets/scene-07-a-priority-param.svg)
+
+> **读图**：`priority` 在 Redis 上被拆成子队列按序消费来模拟；红框处 `prefetch > 1` 已经把优先级吃掉，而且不报错。
 
 ```python
 process_ticket.apply_async(args=[tid], priority=9)
@@ -43,7 +47,23 @@ process_ticket.apply_async(args=[tid], priority=9)
 > ⚠️ **模拟优先级在 `prefetch_multiplier > 1` 时明显失效**——worker 已经预取了一堆低优先级任务，
 > 新来的高优先级任务只能排在预取批次之后。这是"配了却完全没生效且无感知"的典型。
 
+#### 解法 B · VIP 内部分级（拆三个队列 + 不同并发）
+
+![VIP 内部分级：三档队列各自配并发](./assets/scene-07-b-weighted-workers.svg)
+
+> **读图**：VIP 三档各占一份并发，`normal` 也保留 1 个；红框提醒不留最小并发就是饿死普通工单。
+
+```bash
+celery -A proj worker -Q vip_diamond -c 4 ...
+celery -A proj worker -Q vip_gold,vip_silver -c 3 ...
+celery -A proj worker -Q normal -c 1 ...     # ⭐ 保证普通工单不会被完全饿死
+```
+
 #### 解法 C · 多队列 + 顺序消费（推荐做法）
+
+![多队列 + 顺序消费：轮询偏好与 prefetch](./assets/scene-07-c-ordered-queues.svg)
+
+> **读图**：两个队列按 `-Q` 顺序被轮询，`--prefetch-multiplier=1` 是让它成立的前提；红框提醒高负载下这只是偏好，不是保证。
 
 ```python
 # settings.py
@@ -59,13 +79,55 @@ celery -A proj worker -Q vip,normal -c 8 --prefetch-multiplier=1
 
 > ⚠️ `--prefetch-multiplier=1` 是**关键**——不设的话 worker 会一次抓一批，优先级形同虚设。
 
-#### 解法 B · VIP 内部分级（拆三个队列 + 不同并发）
+#### 解法 D · 数据库调度层（等级多、还要防饿死）
 
-```bash
-celery -A proj worker -Q vip_diamond -c 4 ...
-celery -A proj worker -Q vip_gold,vip_silver -c 3 ...
-celery -A proj worker -Q normal -c 1 ...     # ⭐ 保证普通工单不会被完全饿死
+![数据库调度层：优先级表达搬到数据库](./assets/scene-07-d-db-dispatcher.svg)
+
+> **读图**：优先级从队列搬到数据库的排序与抢占；红框提醒没有 aging 规则时，普通用户会永久垫底。
+
+如果 VIP 等级从 3 档增长到十几档，继续为每档维护一个 Celery 队列会让路由和 worker 数失控。可以把工单落在数据库，dispatcher 用数据库排序和 `select_for_update(skip_locked=True)` 抢占，再把一条工单投给普通 Celery task；队列只负责执行，不负责表达所有业务优先级。
+
+```python
+with transaction.atomic():
+    ticket = (
+        Ticket.objects
+        .select_for_update(skip_locked=True)
+        .filter(status='PENDING')
+        .order_by('-vip_score', 'created_at')
+        .first()
+    )
+    if ticket:
+        ticket.status = 'DISPATCHED'
+        ticket.save(update_fields=['status'])
+        process_ticket.delay(ticket.id)
 ```
+
+要额外增加等待时长加权或 aging 规则，否则“按分数排序”只是把普通用户永久压在后面。D 适合需要精确 SLA 的场景，但它要求你维护 dispatcher、抢占状态和恢复扫描。
+
+#### 解法 E · RabbitMQ 原生消息优先级
+
+![RabbitMQ 原生优先级：broker 层能力](./assets/scene-07-e-rabbitmq-priority.svg)
+
+> **读图**：优先级下沉到 broker 层的 `x-max-priority`；红框提醒已被 prefetch 的普通任务仍会先完成，饿死风险要靠 aging 与独立容量解决。
+
+当优先级是 broker 层的核心能力，且可以接受 RabbitMQ 运维，可以声明 `x-max-priority`，再用 `priority` 投递任务：
+
+```python
+from kombu import Exchange, Queue
+
+CELERY_TASK_QUEUES = [
+    Queue(
+        'tickets', Exchange('tickets'), routing_key='tickets',
+        queue_arguments={'x-max-priority': 10},
+    ),
+]
+```
+
+```python
+process_ticket.apply_async(args=[ticket_id], priority=9)
+```
+
+这是 broker 层优先级，不是“VIP 永远先完成”的业务保证：已经被 worker prefetch 的普通任务仍可能先完成，低优先级任务也仍需 aging / 独立容量来防饿死。
 
 #### 隐藏陷阱：低优先级饿死
 
@@ -110,7 +172,18 @@ celery -A proj worker -Q normal -c 1 ...     # ⭐ 保证普通工单不会被�
 |------|---------|
 | A · priority 与 Redis 模拟 | 课 9《生产部署与并发模型》· 路由与队列隔离 |
 | B/C · 多队列 | 课 9 · 路由与队列隔离；本项目[决策 1](../projects/电商订单履约系统/设计决策.md) |
+| D · 数据库调度层 | 课 6《Django 事务与 ORM 的坑》· `select_for_update` 与状态抢占 |
+| E · RabbitMQ 原生优先级 | 课 3《第一个 Celery + Django 项目》· Broker 选型；课 9 · 优先级与队列 |
 | prefetch 影响 | 课 2《Celery 架构全景》；课 9 · 并发模型 |
+
+### 证据与核查
+
+| 解法 | 依据 | 核查边界 |
+|------|------|---------|
+| A | 【官方】[Celery routing：Redis message priorities](https://docs.celeryq.dev/en/stable/userguide/routing.html#redis-message-priorities) | Redis 是模拟优先级，官方提示它可能只是近似行为 |
+| B/C | 【官方】[Celery routing：manual routing / worker `-Q`](https://docs.celeryq.dev/en/stable/userguide/routing.html) | 队列隔离不能自动保证严格完成顺序 |
+| D | 【公认】数据库排序 + aging + 可恢复 dispatcher | `select_for_update`、索引和抢占超时需按数据库验证 |
+| E | 【官方】[Celery routing：RabbitMQ message priorities](https://docs.celeryq.dev/en/stable/userguide/routing.html#rabbitmq-message-priorities) | RabbitMQ 原生优先级仍不等于业务级“不饿死” |
 
 ### 什么情况下此方案不适用
 

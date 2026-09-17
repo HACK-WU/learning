@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="500" viewBox="0 0 1000 500">
+  <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#455a64"/></marker></defs>
+  <rect width="1000" height="500" fill="#fff"/>
+  <text x="500" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#263238">定时任务不重不漏：让数据库记录周期状态</text>
+  <text x="500" y="60" text-anchor="middle" font-size="13" fill="#546e7a">调度器负责“发起”，状态机负责“是否做过与能否接管”</text>
+  <rect x="45" y="120" width="175" height="75" rx="9" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="132" y="150" text-anchor="middle" font-size="16" font-weight="bold" fill="#0d47a1">beat / 外部调度器</text>
+  <text x="132" y="174" text-anchor="middle" font-size="12" fill="#37474f">schedule_key</text>
+  <path d="M220 157 L285 157" stroke="#455a64" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="285" y="105" width="205" height="105" rx="9" fill="#fff3e0" stroke="#ef6c00" stroke-width="2"/>
+  <text x="387" y="137" text-anchor="middle" font-size="16" font-weight="bold" fill="#e65100">JobExecution</text>
+  <text x="387" y="162" text-anchor="middle" font-size="12" fill="#37474f">PENDING / RUNNING</text>
+  <text x="387" y="184" text-anchor="middle" font-size="12" fill="#37474f">SUCCESS / FAILED</text>
+  <path d="M490 157 L555 157" stroke="#455a64" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="555" y="120" width="175" height="75" rx="9" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="642" y="150" text-anchor="middle" font-size="16" font-weight="bold" fill="#1b5e20">Celery worker</text>
+  <text x="642" y="174" text-anchor="middle" font-size="12" fill="#37474f">幂等执行</text>
+  <path d="M730 157 L795 157" stroke="#455a64" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="795" y="120" width="160" height="75" rx="9" fill="#fce4ec" stroke="#ad1457" stroke-width="2"/>
+  <text x="875" y="150" text-anchor="middle" font-size="16" font-weight="bold" fill="#880e4f">业务终态</text>
+  <text x="875" y="174" text-anchor="middle" font-size="12" fill="#37474f">可审计 / 可补偿</text>
+  <rect x="200" y="320" width="600" height="75" rx="10" fill="#fafafa" stroke="#90a4ae" stroke-width="2"/>
+  <text x="500" y="350" text-anchor="middle" font-size="16" font-weight="bold" fill="#37474f">故障接管规则</text>
+  <text x="500" y="374" text-anchor="middle" font-size="13" fill="#455a64">RUNNING 超过历史耗时阈值 → 人工确认 / 接管重跑；锁只能防重，不能发现漏跑</text>
+  <path d="M387 210 L430 320" stroke="#ef6c00" stroke-width="2" marker-end="url(#arrow)"/>
+</svg>
