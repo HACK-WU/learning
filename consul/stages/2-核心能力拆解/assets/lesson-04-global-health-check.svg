@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="370" viewBox="0 0 880 370" font-family="Segoe UI, Microsoft YaHei, sans-serif">
+<defs>
+<marker id="green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#188038"/></marker>
+<marker id="red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d93025"/></marker>
+<marker id="blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1a73e8"/></marker>
+</defs>
+<rect width="880" height="370" fill="#ffffff"/>
+<text x="24" y="34" font-size="17" font-weight="700" fill="#202124">名单记下来了，可谁来保证名单上的人还算数</text>
+
+<rect x="24" y="66" width="180" height="60" rx="10" fill="#f1f3f4" stroke="#5f6368" stroke-width="2"/>
+<text x="114" y="92" font-size="14" font-weight="600" text-anchor="middle" fill="#202124">来报到的服务</text>
+<text x="114" y="114" font-size="12" text-anchor="middle" fill="#5f6368">我叫 web，在 8080</text>
+
+<line x1="204" y1="96" x2="300" y2="96" stroke="#188038" stroke-width="3" marker-end="url(#green)"/>
+<text x="252" y="86" font-size="12" text-anchor="middle" fill="#0d652d">报到</text>
+
+<rect x="304" y="60" width="240" height="72" rx="10" fill="#e8f0fe" stroke="#1a73e8" stroke-width="3"/>
+<text x="424" y="86" font-size="14" font-weight="700" text-anchor="middle" fill="#174ea6">花名册</text>
+<text x="424" y="110" font-size="12" text-anchor="middle" fill="#174ea6">名字 → 地址 → 身体状态</text>
+
+<line x1="544" y1="96" x2="640" y2="96" stroke="#1a73e8" stroke-width="3" marker-end="url(#blue)"/>
+<text x="592" y="86" font-size="12" text-anchor="middle" fill="#174ea6">查名单</text>
+
+<rect x="644" y="60" width="216" height="72" rx="10" fill="#f1f3f4" stroke="#5f6368" stroke-width="2"/>
+<text x="752" y="86" font-size="14" font-weight="600" text-anchor="middle" fill="#202124">要调用别人的服务</text>
+<text x="752" y="110" font-size="12" text-anchor="middle" fill="#5f6368">只想要"还能用"的那几个</text>
+
+<text x="424" y="164" font-size="14" font-weight="700" text-anchor="middle" fill="#202124">它怎么知道还算不算数</text>
+
+<rect x="60" y="182" width="200" height="86" rx="10" fill="#f8f9fa" stroke="#5f6368" stroke-width="2"/>
+<text x="160" y="208" font-size="13" font-weight="600" text-anchor="middle" fill="#202124">隔一会儿敲敲门</text>
+<text x="160" y="232" font-size="12" text-anchor="middle" fill="#5f6368">敲门没人应 → 划掉</text>
+<text x="160" y="252" font-size="12" text-anchor="middle" fill="#5f6368">（它主动去问）</text>
+
+<rect x="280" y="182" width="200" height="86" rx="10" fill="#f8f9fa" stroke="#5f6368" stroke-width="2"/>
+<text x="380" y="208" font-size="13" font-weight="600" text-anchor="middle" fill="#202124">让他自己报平安</text>
+<text x="380" y="232" font-size="12" text-anchor="middle" fill="#5f6368">太久没报 → 划掉</text>
+<text x="380" y="252" font-size="12" text-anchor="middle" fill="#5f6368">（服务自己来说）</text>
+
+<rect x="500" y="182" width="200" height="86" rx="10" fill="#f8f9fa" stroke="#5f6368" stroke-width="2"/>
+<text x="600" y="208" font-size="13" font-weight="600" text-anchor="middle" fill="#202124">真去调一次试试</text>
+<text x="600" y="232" font-size="12" text-anchor="middle" fill="#5f6368">调不通 → 划掉</text>
+<text x="600" y="252" font-size="12" text-anchor="middle" fill="#5f6368">（最像真实使用）</text>
+
+<rect x="720" y="182" width="140" height="86" rx="10" fill="#fef7e0" stroke="#f29900" stroke-width="2"/>
+<text x="790" y="208" font-size="13" font-weight="600" text-anchor="middle" fill="#b06000">别一直盯着问</text>
+<text x="790" y="232" font-size="12" text-anchor="middle" fill="#7a4a00">改了再通知我</text>
+<text x="790" y="252" font-size="12" text-anchor="middle" fill="#7a4a00">（省力气）</text>
+
+<line x1="424" y1="140" x2="424" y2="176" stroke="#d93025" stroke-width="3" marker-end="url(#red)"/>
+
+<rect x="24" y="292" width="836" height="56" rx="8" fill="#fce8e6" stroke="#d93025" stroke-width="2"/>
+<text x="40" y="314" font-size="13" font-weight="600" fill="#a52714">最容易踩的坑：名字一样，就算两台机器</text>
+<text x="40" y="336" font-size="12" fill="#a52714">查的时候看到 2 个"能用"，实际是同一个人报到了两次 —— 划掉的依据是"这一份"，不是"这个服务"。</text>
+</svg>

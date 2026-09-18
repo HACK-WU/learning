@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="350" viewBox="0 0 880 350" font-family="Segoe UI, Microsoft YaHei, sans-serif">
+<rect width="880" height="350" fill="#ffffff"/>
+<text x="24" y="34" font-size="17" font-weight="700" fill="#202124">别问"哪个最好"——先看清你在意的到底是哪一头</text>
+
+<text x="440" y="60" font-size="13" font-weight="600" text-anchor="middle" fill="#5f6368">四个看的角度，每一头都有人比你更在乎</text>
+
+<rect x="24" y="78" width="200" height="118" rx="12" fill="#fef7e0" stroke="#f29900" stroke-width="2"/>
+<text x="124" y="106" font-size="14" font-weight="700" text-anchor="middle" fill="#b06000">答错 vs 答不上</text>
+<text x="44" y="134" font-size="12" text-anchor="middle" fill="#7a4a00">出事那一刻</text>
+<text x="44" y="156" font-size="12" text-anchor="middle" fill="#7a4a00">它选哪一头？</text>
+<text x="44" y="180" font-size="12" text-anchor="middle" fill="#7a4a00">（没有两头都占的）</text>
+
+<rect x="238" y="78" width="200" height="118" rx="12" fill="#e8f0fe" stroke="#1a73e8" stroke-width="2"/>
+<text x="338" y="106" font-size="14" font-weight="700" text-anchor="middle" fill="#174ea6">顺手 vs 齐全</text>
+<text x="258" y="134" font-size="12" text-anchor="middle" fill="#174ea6">要它干的活</text>
+<text x="258" y="156" font-size="12" text-anchor="middle" fill="#174ea6">它自己带了多少？</text>
+<text x="258" y="180" font-size="12" text-anchor="middle" fill="#174ea6">少的要自己补</text>
+
+<rect x="452" y="78" width="200" height="118" rx="12" fill="#e6f4ea" stroke="#188038" stroke-width="2"/>
+<text x="552" y="106" font-size="14" font-weight="700" text-anchor="middle" fill="#0d652d">跟谁合得来</text>
+<text x="472" y="134" font-size="12" text-anchor="middle" fill="#0d652d">你现有的家伙</text>
+<text x="472" y="156" font-size="12" text-anchor="middle" fill="#0d652d">能不能直接接上？</text>
+<text x="472" y="180" font-size="12" text-anchor="middle" fill="#0d652d">（接不上就得自己写）</text>
+
+<rect x="666" y="78" width="194" height="118" rx="12" fill="#f8f9fa" stroke="#5f6368" stroke-width="2"/>
+<text x="763" y="106" font-size="14" font-weight="700" text-anchor="middle" fill="#202124">能撑多大</text>
+<text x="686" y="134" font-size="12" text-anchor="middle" fill="#5f6368">你的量级</text>
+<text x="686" y="156" font-size="12" text-anchor="middle" fill="#5f6368">它够不够用？</text>
+<text x="686" y="180" font-size="12" text-anchor="middle" fill="#5f6368">（往往不是最先卡住的）</text>
+
+<rect x="24" y="212" width="836" height="48" rx="8" fill="#fce8e6" stroke="#d93025" stroke-width="2"/>
+<text x="40" y="234" font-size="13" font-weight="700" fill="#a52714">最容易比错的地方：拿自己最在行的一项，去比别人最不在行的一项</text>
+<text x="40" y="254" font-size="12" fill="#a52714">"它这方面弱"常常只是"它没把力气花在这" —— 先看清各自打算解决什么，再打分。</text>
+
+<text x="440" y="286" font-size="13" font-weight="700" text-anchor="middle" fill="#202124">怎么把它变成能拍板的依据</text>
+
+<rect x="24" y="296" width="836" height="40" rx="8" fill="#f1f3f4" stroke="#dadce0"/>
+<text x="40" y="316" font-size="12" fill="#3c4043">按上面四个角度各自打分 → 乘上你这边"有多在乎"的权重 → 加起来，高低就出来了。</text>
+<text x="40" y="331" font-size="12" fill="#5f6368">权重一变，赢的那个就可能换人 —— 所以别人的结论不能直接抄。</text>
+</svg>

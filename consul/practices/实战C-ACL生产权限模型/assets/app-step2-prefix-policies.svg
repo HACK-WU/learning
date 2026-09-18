@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="400" viewBox="0 0 880 400" font-family="Segoe UI, Microsoft YaHei, sans-serif">
+<defs>
+<marker id="green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#188038"/></marker>
+<marker id="red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d93025"/></marker>
+</defs>
+<rect width="880" height="400" fill="#ffffff"/>
+<text x="24" y="36" font-size="18" font-weight="700" fill="#202124">② 综合版：按前缀切分的三个角色（高亮 = 本步新增的边界）</text>
+
+<rect x="30" y="120" width="150" height="58" rx="10" fill="#f1f3f4" stroke="#5f6368" stroke-width="2"/>
+<text x="105" y="146" font-size="14" font-weight="600" text-anchor="middle" fill="#202124">web 团队</text>
+<text x="105" y="168" font-size="12" text-anchor="middle" fill="#5f6368">token-web</text>
+
+<rect x="30" y="190" width="150" height="58" rx="10" fill="#f1f3f4" stroke="#5f6368" stroke-width="2"/>
+<text x="105" y="216" font-size="14" font-weight="600" text-anchor="middle" fill="#202124">api 团队</text>
+<text x="105" y="238" font-size="12" text-anchor="middle" fill="#5f6368">token-api</text>
+
+<rect x="30" y="260" width="150" height="58" rx="10" fill="#f1f3f4" stroke="#5f6368" stroke-width="2"/>
+<text x="105" y="286" font-size="14" font-weight="600" text-anchor="middle" fill="#202124">运维值班</text>
+<text x="105" y="308" font-size="12" text-anchor="middle" fill="#5f6368">token-ops</text>
+
+<rect x="230" y="120" width="176" height="58" rx="10" fill="#e6f4ea" stroke="#188038" stroke-width="3"/>
+<text x="318" y="146" font-size="13" font-weight="700" text-anchor="middle" fill="#0d652d">pol-team-web</text>
+<text x="318" y="168" font-size="12" text-anchor="middle" fill="#0d652d">key web/: write</text>
+
+<rect x="230" y="190" width="176" height="58" rx="10" fill="#e6f4ea" stroke="#188038" stroke-width="3"/>
+<text x="318" y="216" font-size="13" font-weight="700" text-anchor="middle" fill="#0d652d">pol-team-api</text>
+<text x="318" y="238" font-size="12" text-anchor="middle" fill="#0d652d">key api/: write</text>
+
+<rect x="230" y="260" width="176" height="58" rx="10" fill="#e6f4ea" stroke="#188038" stroke-width="3"/>
+<text x="318" y="286" font-size="13" font-weight="700" text-anchor="middle" fill="#0d652d">pol-ops-readonly</text>
+<text x="318" y="308" font-size="12" text-anchor="middle" fill="#0d652d">全前缀: read</text>
+
+<line x1="180" y1="149" x2="226" y2="149" stroke="#188038" stroke-width="2" marker-end="url(#green)"/>
+<line x1="180" y1="219" x2="226" y2="219" stroke="#188038" stroke-width="2" marker-end="url(#green)"/>
+<line x1="180" y1="289" x2="226" y2="289" stroke="#188038" stroke-width="2" marker-end="url(#green)"/>
+
+<rect x="480" y="120" width="112" height="70" rx="10" fill="#f1f3f4" stroke="#5f6368" stroke-width="2"/>
+<text x="536" y="146" font-size="13" font-weight="600" text-anchor="middle" fill="#202124">KV web/</text>
+<text x="536" y="168" font-size="12" text-anchor="middle" fill="#5f6368">web 可写</text>
+
+<rect x="480" y="200" width="112" height="70" rx="10" fill="#f1f3f4" stroke="#5f6368" stroke-width="2"/>
+<text x="536" y="226" font-size="13" font-weight="600" text-anchor="middle" fill="#202124">KV api/</text>
+<text x="536" y="248" font-size="12" text-anchor="middle" fill="#5f6368">api 可写</text>
+
+<rect x="480" y="280" width="112" height="70" rx="10" fill="#f1f3f4" stroke="#5f6368" stroke-width="2"/>
+<text x="536" y="306" font-size="13" font-weight="600" text-anchor="middle" fill="#202124">KV shared/</text>
+<text x="536" y="328" font-size="12" text-anchor="middle" fill="#5f6368">全员只读</text>
+
+<line x1="406" y1="149" x2="476" y2="155" stroke="#188038" stroke-width="3" marker-end="url(#green)"/>
+<line x1="406" y1="219" x2="476" y2="225" stroke="#188038" stroke-width="3" marker-end="url(#green)"/>
+<line x1="406" y1="289" x2="476" y2="308" stroke="#188038" stroke-width="2" marker-end="url(#green)"/>
+<line x1="406" y1="149" x2="476" y2="228" stroke="#d93025" stroke-width="3" stroke-dasharray="6 4" marker-end="url(#red)"/>
+<line x1="406" y1="219" x2="476" y2="158" stroke="#d93025" stroke-width="3" stroke-dasharray="6 4" marker-end="url(#red)"/>
+
+<rect x="660" y="120" width="196" height="230" rx="8" fill="#fef7e0" stroke="#f29900" stroke-width="2"/>
+<text x="676" y="144" font-size="13" font-weight="700" fill="#b06000">三条必带的规则</text>
+<text x="676" y="168" font-size="12" fill="#7a4a00">1. service_prefix "" = read</text>
+<text x="676" y="192" font-size="12" fill="#7a4a00">   （能发现别人，不能改别人）</text>
+<text x="676" y="218" font-size="12" fill="#7a4a00">2. node_prefix "" = read（必需）</text>
+<text x="676" y="242" font-size="12" fill="#7a4a00">   漏了连健康状态都查不到</text>
+<text x="676" y="268" font-size="12" fill="#7a4a00">3. session_prefix（最易漏）</text>
+<text x="676" y="292" font-size="12" fill="#7a4a00">   缺了分布式锁用不了</text>
+<text x="676" y="318" font-size="12" fill="#7a4a00">   实测：建 session → 403</text>
+
+<text x="24" y="384" font-size="12" fill="#5f6368">本步形态：写权限按前缀切死（绿线），跨前缀一律拒绝（红虚线）；ops 只能看不能改。</text>
+</svg>

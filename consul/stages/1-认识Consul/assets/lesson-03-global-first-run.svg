@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="340" viewBox="0 0 880 340" font-family="Segoe UI, Microsoft YaHei, sans-serif">
+<defs>
+<marker id="green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#188038"/></marker>
+</defs>
+<rect width="880" height="340" fill="#ffffff"/>
+<text x="24" y="34" font-size="17" font-weight="700" fill="#202124">先让它跑起来，看看它到底在记什么</text>
+
+<rect x="24" y="70" width="248" height="230" rx="12" fill="#f8f9fa" stroke="#5f6368" stroke-width="2"/>
+<text x="148" y="98" font-size="14" font-weight="700" text-anchor="middle" fill="#202124">第 1 步：开一个试试</text>
+<rect x="44" y="112" width="208" height="42" rx="6" fill="#ffffff" stroke="#dadce0"/>
+<text x="148" y="138" font-size="12" text-anchor="middle" fill="#3c4043">敲一行命令，它就起来了</text>
+<text x="148" y="176" font-size="12" text-anchor="middle" fill="#5f6368">不用装数据库</text>
+<text x="148" y="200" font-size="12" text-anchor="middle" fill="#5f6368">不用改配置</text>
+<text x="148" y="224" font-size="12" text-anchor="middle" fill="#5f6368">关掉就干净消失</text>
+<rect x="44" y="244" width="208" height="40" rx="6" fill="#e6f4ea" stroke="#188038" stroke-width="2"/>
+<text x="148" y="269" font-size="12" font-weight="600" text-anchor="middle" fill="#0d652d">代价：重启什么都不剩</text>
+
+<line x1="272" y1="185" x2="316" y2="185" stroke="#188038" stroke-width="3" marker-end="url(#green)"/>
+
+<rect x="320" y="70" width="248" height="230" rx="12" fill="#f8f9fa" stroke="#5f6368" stroke-width="2"/>
+<text x="444" y="98" font-size="14" font-weight="700" text-anchor="middle" fill="#202124">第 2 步：报个到</text>
+<rect x="340" y="112" width="208" height="42" rx="6" fill="#ffffff" stroke="#dadce0"/>
+<text x="444" y="138" font-size="12" text-anchor="middle" fill="#3c4043">告诉它：我叫 web，在 8080</text>
+<text x="444" y="176" font-size="12" text-anchor="middle" fill="#5f6368">两种问法都能问到：</text>
+<text x="444" y="200" font-size="12" text-anchor="middle" fill="#5f6368">• 发个请求去问</text>
+<text x="444" y="224" font-size="12" text-anchor="middle" fill="#5f6368">• 像查网址一样查</text>
+<rect x="340" y="244" width="208" height="40" rx="6" fill="#e8f0fe" stroke="#1a73e8" stroke-width="2"/>
+<text x="444" y="269" font-size="12" font-weight="600" text-anchor="middle" fill="#174ea6">它记住了：名字 → 地址</text>
+
+<line x1="568" y1="185" x2="612" y2="185" stroke="#188038" stroke-width="3" marker-end="url(#green)"/>
+
+<rect x="616" y="70" width="244" height="230" rx="12" fill="#f8f9fa" stroke="#5f6368" stroke-width="2"/>
+<text x="738" y="98" font-size="14" font-weight="700" text-anchor="middle" fill="#202124">第 3 步：让它自己盯着</text>
+<rect x="636" y="112" width="204" height="42" rx="6" fill="#ffffff" stroke="#dadce0"/>
+<text x="738" y="138" font-size="12" text-anchor="middle" fill="#3c4043">每隔一会儿来看一眼</text>
+<text x="738" y="176" font-size="12" text-anchor="middle" fill="#5f6368">活着 → 留在名单里</text>
+<text x="738" y="200" font-size="12" text-anchor="middle" fill="#5f6368">挂了 → 从名单上划掉</text>
+<text x="738" y="224" font-size="12" text-anchor="middle" fill="#5f6368">问的人就不用再撞墙</text>
+<rect x="636" y="244" width="204" height="40" rx="6" fill="#fef7e0" stroke="#f29900" stroke-width="2"/>
+<text x="738" y="269" font-size="12" font-weight="600" text-anchor="middle" fill="#b06000">亲眼看看它划掉的过程</text>
+
+<rect x="24" y="312" width="836" height="20" rx="6" fill="#f1f3f4" stroke="#dadce0"/>
+<text x="36" y="327" font-size="12" fill="#5f6368">三步走完你就知道：它记的是"名字和地址的对应关系"，而且会自己更新。</text>
+</svg>

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="340" viewBox="0 0 880 340" font-family="Segoe UI, Microsoft YaHei, sans-serif">
+<rect width="880" height="340" fill="#ffffff"/>
+<text x="24" y="34" font-size="17" font-weight="700" fill="#202124">名字都叫"问路工具"，但出身不同，脾气就不同</text>
+
+<text x="440" y="60" font-size="13" font-weight="600" text-anchor="middle" fill="#5f6368">四个候选，各在一条不同的道上跑</text>
+
+<rect x="24" y="78" width="196" height="196" rx="12" fill="#f8f9fa" stroke="#5f6368" stroke-width="2"/>
+<text x="122" y="106" font-size="14" font-weight="700" text-anchor="middle" fill="#202124">老前辈</text>
+<text x="122" y="134" font-size="12" text-anchor="middle" fill="#5f6368">出身：大数据那边</text>
+<text x="122" y="158" font-size="12" text-anchor="middle" fill="#5f6368">脾气：最讲规矩</text>
+<text x="122" y="182" font-size="12" text-anchor="middle" fill="#5f6368">认死理：宁可不答</text>
+<text x="122" y="206" font-size="12" text-anchor="middle" fill="#5f6368">也不答错</text>
+<rect x="44" y="222" width="156" height="36" rx="6" fill="#fef7e0" stroke="#f29900" stroke-width="2"/>
+<text x="122" y="245" font-size="11" font-weight="600" text-anchor="middle" fill="#b06000">用起来偏重，学习成本高</text>
+
+<rect x="234" y="78" width="196" height="196" rx="12" fill="#f8f9fa" stroke="#5f6368" stroke-width="2"/>
+<text x="332" y="106" font-size="14" font-weight="700" text-anchor="middle" fill="#202124">幕后基石</text>
+<text x="332" y="134" font-size="12" text-anchor="middle" fill="#5f6368">出身：容器平台那边</text>
+<text x="332" y="158" font-size="12" text-anchor="middle" fill="#5f6368">脾气：一样讲规矩</text>
+<text x="332" y="182" font-size="12" text-anchor="middle" fill="#5f6368">特点：小而快</text>
+<text x="332" y="206" font-size="12" text-anchor="middle" fill="#5f6368">专注存东西这一件事</text>
+<rect x="254" y="222" width="156" height="36" rx="6" fill="#e8f0fe" stroke="#1a73e8" stroke-width="2"/>
+<text x="332" y="245" font-size="11" font-weight="600" text-anchor="middle" fill="#174ea6">本身不带"问路"全套</text>
+
+<rect x="444" y="78" width="196" height="196" rx="12" fill="#f8f9fa" stroke="#5f6368" stroke-width="2"/>
+<text x="542" y="106" font-size="14" font-weight="700" text-anchor="middle" fill="#202124">二合一</text>
+<text x="542" y="134" font-size="12" text-anchor="middle" fill="#5f6368">出身：国内业务场景</text>
+<text x="542" y="158" font-size="12" text-anchor="middle" fill="#5f6368">脾气：两边都能商量</text>
+<text x="542" y="182" font-size="12" text-anchor="middle" fill="#5f6368">问路 + 存配置</text>
+<text x="542" y="206" font-size="12" text-anchor="middle" fill="#5f6368">一个东西全包</text>
+<rect x="464" y="222" width="156" height="36" rx="6" fill="#e6f4ea" stroke="#188038" stroke-width="2"/>
+<text x="542" y="245" font-size="11" font-weight="600" text-anchor="middle" fill="#0d652d">开箱即用最像"全套"</text>
+
+<rect x="654" y="78" width="196" height="196" rx="12" fill="#f8f9fa" stroke="#9aa0a6" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="752" y="106" font-size="14" font-weight="700" text-anchor="middle" fill="#5f6368">时代的符号</text>
+<text x="752" y="134" font-size="12" text-anchor="middle" fill="#5f6368">出身：早年那套体系</text>
+<text x="752" y="158" font-size="12" text-anchor="middle" fill="#5f6368">脾气：先保能用</text>
+<text x="752" y="182" font-size="12" text-anchor="middle" fill="#5f6368">就算名单旧一点</text>
+<text x="752" y="206" font-size="12" text-anchor="middle" fill="#5f6368">也比没人答强</text>
+<rect x="674" y="222" width="156" height="36" rx="6" fill="#f1f3f4" stroke="#9aa0a6" stroke-width="2"/>
+<text x="752" y="245" font-size="11" font-weight="600" text-anchor="middle" fill="#5f6368">已不再往前走了</text>
+
+<rect x="24" y="292" width="836" height="34" rx="8" fill="#e8f0fe" stroke="#1a73e8" stroke-width="2"/>
+<text x="40" y="314" font-size="12" fill="#174ea6">看它们别只看功能表 —— 先看各自为什么被造出来：出身决定了它在"答错"和"不答"之间选哪头。</text>
+</svg>

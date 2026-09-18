@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="360" viewBox="0 0 880 360" font-family="Segoe UI, Microsoft YaHei, sans-serif">
+<defs>
+<marker id="green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#188038"/></marker>
+<marker id="red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d93025"/></marker>
+</defs>
+<rect width="880" height="360" fill="#ffffff"/>
+<text x="24" y="34" font-size="17" font-weight="700" fill="#202124">学了一圈，最后一课：把选择变成能交给别人的一句话</text>
+
+<text x="440" y="60" font-size="13" font-weight="600" text-anchor="middle" fill="#5f6368">从"我该用哪个"到"我们为什么用这个"，中间隔着三步</text>
+
+<rect x="24" y="78" width="256" height="130" rx="12" fill="#f8f9fa" stroke="#5f6368" stroke-width="2"/>
+<text x="152" y="106" font-size="14" font-weight="700" text-anchor="middle" fill="#202124">第 1 步：先说清楚你自己</text>
+<text x="44" y="134" font-size="12" fill="#5f6368">• 有多少服务、多少人</text>
+<text x="44" y="156" font-size="12" fill="#5f6368">• 最怕哪种事发生</text>
+<text x="44" y="178" font-size="12" fill="#5f6368">• 现在手上已有什么</text>
+<text x="44" y="200" font-size="12" fill="#5f6368">（不写清楚，后面都是空谈）</text>
+
+<line x1="280" y1="143" x2="308" y2="143" stroke="#188038" stroke-width="3" marker-end="url(#green)"/>
+
+<rect x="312" y="78" width="256" height="130" rx="12" fill="#e8f0fe" stroke="#1a73e8" stroke-width="3"/>
+<text x="440" y="106" font-size="14" font-weight="700" text-anchor="middle" fill="#174ea6">第 2 步：按你的情况对号入座</text>
+<text x="332" y="134" font-size="12" text-anchor="middle" fill="#174ea6">小团队、要快 → 别上重的</text>
+<text x="332" y="156" text-anchor="middle" font-size="12" fill="#174ea6">规矩严、不能错 → 选认死理的</text>
+<text x="332" y="178" font-size="12" text-anchor="middle" fill="#174ea6">已经在用容器平台 → 看自带的</text>
+<text x="332" y="200" font-size="12" text-anchor="middle" fill="#174ea6">（没有通吃的一条路）</text>
+
+<line x1="568" y1="143" x2="596" y2="143" stroke="#188038" stroke-width="3" marker-end="url(#green)"/>
+
+<rect x="600" y="78" width="256" height="130" rx="12" fill="#e6f4ea" stroke="#188038" stroke-width="3"/>
+<text x="728" y="106" font-size="14" font-weight="700" text-anchor="middle" fill="#0d652d">第 3 步：写成能交出去的话</text>
+<text x="620" y="134" font-size="12" text-anchor="middle" fill="#0d652d">不是"它最好"</text>
+<text x="620" y="156" text-anchor="middle" font-size="12" fill="#0d652d">而是"我们因为 A、B、C</text>
+<text x="620" y="176" text-anchor="middle" font-size="12" fill="#0d652d">　 选它，代价是 D，</text>
+<text x="620" y="196" text-anchor="middle" font-size="12" fill="#0d652d">　 万一 E 发生我们就换"</text>
+
+<rect x="24" y="226" width="836" height="52" rx="8" fill="#fce8e6" stroke="#d93025" stroke-width="2"/>
+<text x="40" y="248" font-size="13" font-weight="700" fill="#a52714">最常交不出去的说法：「它是业界最佳实践」</text>
+<text x="40" y="268" font-size="12" fill="#a52714">这句话没有你的情况、没有权衡、也没有退路 —— 评审问第二句就答不上来。能交出去的，一定带着"我们不选它的理由"。</text>
+
+<rect x="24" y="290" width="836" height="54" rx="8" fill="#f1f3f4" stroke="#dadce0"/>
+<text x="40" y="312" font-size="12" font-weight="600" fill="#3c4043">交出去之前再过一遍：① 用一张检查表对着查（漏什么补什么）② 说清分几步走、每步到哪算完</text>
+<text x="40" y="334" font-size="12" fill="#5f6368">③ 想好万一要换怎么办 —— 这三点齐了，才算一份能拍板的结论，而不是一篇读后感。</text>
+</svg>

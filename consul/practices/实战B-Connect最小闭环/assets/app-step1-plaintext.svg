@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="330" viewBox="0 0 880 330" font-family="Segoe UI, Microsoft YaHei, sans-serif">
+<defs>
+<marker id="red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d93025"/></marker>
+<marker id="grey" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#9aa0a6"/></marker>
+</defs>
+<rect width="880" height="330" fill="#ffffff"/>
+<text x="24" y="36" font-size="18" font-weight="700" fill="#202124">① 基础版：服务间明文 HTTP 直连</text>
+
+<rect x="40" y="140" width="160" height="80" rx="10" fill="#f1f3f4" stroke="#5f6368" stroke-width="2"/>
+<text x="120" y="170" font-size="15" font-weight="600" text-anchor="middle" fill="#202124">web 服务</text>
+<text x="120" y="194" font-size="12" text-anchor="middle" fill="#5f6368">:8080</text>
+
+<line x1="200" y1="180" x2="486" y2="180" stroke="#d93025" stroke-width="4" marker-end="url(#red)"/>
+<text x="343" y="168" font-size="13" font-weight="600" text-anchor="middle" fill="#a52714">明文 HTTP（无加密、无身份认证）</text>
+
+<rect x="490" y="140" width="160" height="80" rx="10" fill="#f1f3f4" stroke="#5f6368" stroke-width="2"/>
+<text x="570" y="170" font-size="15" font-weight="600" text-anchor="middle" fill="#202124">api 服务</text>
+<text x="570" y="194" font-size="12" text-anchor="middle" fill="#5f6368">:9090</text>
+
+<line x1="120" y1="220" x2="120" y2="262" stroke="#9aa0a6" stroke-width="2" marker-end="url(#grey)"/>
+<text x="150" y="256" font-size="12" fill="#5f6368">任何能连到 9090 的进程都能调它</text>
+
+<rect x="40" y="278" width="820" height="34" rx="8" fill="#fce8e6" stroke="#d93025" stroke-width="2"/>
+<text x="56" y="300" font-size="13" fill="#a52714">本步形态：能跑，但安全评审过不了 —— 没有加密，也没有"你是谁"的判断</text>
+</svg>

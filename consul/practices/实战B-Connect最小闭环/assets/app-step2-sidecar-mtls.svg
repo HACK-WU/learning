@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="420" viewBox="0 0 880 420" font-family="Segoe UI, Microsoft YaHei, sans-serif">
+<defs>
+<marker id="green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#188038"/></marker>
+<marker id="grey" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#9aa0a6"/></marker>
+</defs>
+<rect width="880" height="420" fill="#ffffff"/>
+<text x="24" y="36" font-size="18" font-weight="700" fill="#202124">② 综合版：加 sidecar，流量变成 mTLS（高亮 = 本步新增）</text>
+
+<rect x="30" y="150" width="132" height="72" rx="10" fill="#f1f3f4" stroke="#5f6368" stroke-width="2"/>
+<text x="96" y="178" font-size="14" font-weight="600" text-anchor="middle" fill="#202124">web 应用</text>
+<text x="96" y="200" font-size="12" text-anchor="middle" fill="#5f6368">代码零改动</text>
+
+<line x1="162" y1="186" x2="238" y2="186" stroke="#9aa0a6" stroke-width="2" marker-end="url(#grey)"/>
+
+<rect x="242" y="146" width="150" height="80" rx="10" fill="#e6f4ea" stroke="#188038" stroke-width="3"/>
+<text x="317" y="174" font-size="14" font-weight="700" text-anchor="middle" fill="#0d652d">web sidecar</text>
+<text x="317" y="196" font-size="12" text-anchor="middle" fill="#0d652d">出向代理</text>
+
+<line x1="392" y1="186" x2="498" y2="186" stroke="#188038" stroke-width="4" marker-end="url(#green)"/>
+<text x="445" y="174" font-size="13" font-weight="700" text-anchor="middle" fill="#0d652d">mTLS</text>
+
+<rect x="502" y="146" width="150" height="80" rx="10" fill="#e6f4ea" stroke="#188038" stroke-width="3"/>
+<text x="577" y="174" font-size="14" font-weight="700" text-anchor="middle" fill="#0d652d">api sidecar</text>
+<text x="577" y="196" font-size="12" text-anchor="middle" fill="#0d652d">入向 :21000</text>
+
+<line x1="652" y1="186" x2="728" y2="186" stroke="#9aa0a6" stroke-width="2" marker-end="url(#grey)"/>
+
+<rect x="732" y="150" width="120" height="72" rx="10" fill="#f1f3f4" stroke="#5f6368" stroke-width="2"/>
+<text x="792" y="178" font-size="14" font-weight="600" text-anchor="middle" fill="#202124">api 应用</text>
+<text x="792" y="200" font-size="12" text-anchor="middle" fill="#5f6368">:9090</text>
+
+<rect x="242" y="258" width="410" height="72" rx="8" fill="#e6f4ea" stroke="#188038" stroke-width="2"/>
+<text x="258" y="280" font-size="13" font-weight="700" fill="#0d652d">身份 = SPIFFE ID（不是 IP）</text>
+<text x="258" y="302" font-size="12" fill="#0d652d">spiffe://&lt;trust-domain&gt;.consul/ns/default/dc/dc1/svc/web</text>
+<text x="258" y="320" font-size="11" fill="#137333">证书由内置 CA 签发：根证书 10 年，叶子证书 3 天，自动轮转</text>
+
+<rect x="672" y="258" width="180" height="72" rx="8" fill="#f1f3f4" stroke="#9aa0a6" stroke-width="2"/>
+<text x="762" y="282" font-size="12" font-weight="600" text-anchor="middle" fill="#3c4043">最后一段是明文</text>
+<text x="762" y="304" font-size="11" text-anchor="middle" fill="#5f6368">sidecar → 本机应用走 localhost</text>
+<text x="762" y="322" font-size="11" text-anchor="middle" fill="#5f6368">（下一张图的伏笔）</text>
+
+<text x="24" y="366" font-size="13" fill="#5f6368">本步形态：应用一行不改，sidecar 替它完成加密与身份认证 —— 实测无需安装 Envoy。</text>
+<text x="24" y="392" font-size="12" fill="#137333">验证点：不带客户端证书直连 21000，握手即失败 TLSV13_ALERT_CERTIFICATE_REQUIRED</text>
+</svg>

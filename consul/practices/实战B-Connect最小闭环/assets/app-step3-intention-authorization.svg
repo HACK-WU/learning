@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="420" viewBox="0 0 880 420" font-family="Segoe UI, Microsoft YaHei, sans-serif">
+<defs>
+<marker id="green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#188038"/></marker>
+<marker id="red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d93025"/></marker>
+<marker id="grey" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#9aa0a6"/></marker>
+</defs>
+<rect width="880" height="420" fill="#ffffff"/>
+<text x="24" y="36" font-size="18" font-weight="700" fill="#202124">③ 加授权层（intention）与必须知道的绕过路径</text>
+
+<rect x="30" y="140" width="124" height="66" rx="10" fill="#f1f3f4" stroke="#5f6368" stroke-width="2"/>
+<text x="92" y="166" font-size="14" font-weight="600" text-anchor="middle" fill="#202124">web 应用</text>
+<text x="92" y="188" font-size="12" text-anchor="middle" fill="#5f6368">:8080</text>
+
+<line x1="154" y1="173" x2="222" y2="173" stroke="#9aa0a6" stroke-width="2" marker-end="url(#grey)"/>
+
+<rect x="226" y="136" width="142" height="74" rx="10" fill="#e6f4ea" stroke="#188038" stroke-width="3"/>
+<text x="297" y="162" font-size="14" font-weight="700" text-anchor="middle" fill="#0d652d">web sidecar</text>
+<text x="297" y="184" font-size="12" text-anchor="middle" fill="#0d652d">upstream :21002</text>
+
+<line x1="368" y1="173" x2="466" y2="173" stroke="#188038" stroke-width="4" marker-end="url(#green)"/>
+<text x="417" y="161" font-size="13" font-weight="700" text-anchor="middle" fill="#0d652d">mTLS</text>
+
+<rect x="470" y="136" width="142" height="74" rx="10" fill="#e6f4ea" stroke="#188038" stroke-width="3"/>
+<text x="541" y="162" font-size="14" font-weight="700" text-anchor="middle" fill="#0d652d">api sidecar</text>
+<text x="541" y="184" font-size="12" text-anchor="middle" fill="#0d652d">入向 :21000</text>
+
+<line x1="612" y1="173" x2="672" y2="173" stroke="#9aa0a6" stroke-width="2" marker-end="url(#grey)"/>
+
+<rect x="676" y="140" width="112" height="66" rx="10" fill="#f1f3f4" stroke="#5f6368" stroke-width="2"/>
+<text x="732" y="166" font-size="14" font-weight="600" text-anchor="middle" fill="#202124">api 应用</text>
+<text x="732" y="188" font-size="12" text-anchor="middle" fill="#5f6368">:9090</text>
+
+<rect x="470" y="36" width="142" height="46" rx="8" fill="#e8f0fe" stroke="#1a73e8" stroke-width="2"/>
+<text x="541" y="58" font-size="13" font-weight="700" text-anchor="middle" fill="#174ea6">intention 授权</text>
+<text x="541" y="76" font-size="12" text-anchor="middle" fill="#174ea6">web → api : deny</text>
+<line x1="541" y1="82" x2="541" y2="132" stroke="#1a73e8" stroke-width="2" stroke-dasharray="5 4"/>
+
+<path d="M92,216 C92,268 300,268 300,300" stroke="#d93025" stroke-width="3" fill="none" marker-end="url(#red)"/>
+<path d="M732,216" stroke="#d93025" stroke-width="3" fill="none"/>
+<path d="M92,216 C60,300 120,330 300,330" stroke="#d93025" stroke-width="3" fill="none"/>
+
+<rect x="196" y="292" width="330" height="94" rx="8" fill="#fce8e6" stroke="#d93025" stroke-width="2"/>
+<text x="212" y="314" font-size="13" font-weight="700" fill="#a52714">绕过路径：直连应用端口 9090</text>
+<text x="212" y="336" font-size="12" fill="#a52714">实测返回 HTTP/1.0 200 OK —— 明文连通，无任何阻拦</text>
+<text x="212" y="356" font-size="12" fill="#a52714">sidecar 管的是"进 sidecar 的流量"，管不到应用端口</text>
+
+<rect x="546" y="292" width="316" height="94" rx="8" fill="#e6f4ea" stroke="#188038" stroke-width="2"/>
+<text x="562" y="314" font-size="13" font-weight="700" fill="#0d652d">intention 生效实测：82ms</text>
+<text x="562" y="336" font-size="12" fill="#0d652d">deny 写入后连接立即被切断，allow 恢复 82ms 生效</text>
+<text x="562" y="356" font-size="12" fill="#137333">日志含 Matched L4 intention ... Action: DENY</text>
+
+<text x="24" y="406" font-size="12" fill="#5f6368">前提：应用只监听 127.0.0.1 + 网络策略限制端口 —— 否则上面那条红线能一步绕过整个网格。</text>
+</svg>

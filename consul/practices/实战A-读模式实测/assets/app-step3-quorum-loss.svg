@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="380" viewBox="0 0 880 380" font-family="Segoe UI, Microsoft YaHei, sans-serif">
+<defs>
+<marker id="amber" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#f29900"/></marker>
+<marker id="red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d93025"/></marker>
+</defs>
+<rect width="880" height="380" fill="#ffffff"/>
+<text x="24" y="36" font-size="18" font-weight="700" fill="#202124">③ 边界：quorum 丢失时，stale 也救不了</text>
+
+<rect x="24" y="168" width="132" height="72" rx="10" fill="#f1f3f4" stroke="#5f6368" stroke-width="2"/>
+<text x="90" y="196" font-size="15" font-weight="600" text-anchor="middle" fill="#202124">应用</text>
+<text x="90" y="218" font-size="12" text-anchor="middle" fill="#5f6368">只剩 node3 可连</text>
+
+<line x1="156" y1="204" x2="696" y2="204" stroke="#f29900" stroke-width="3" marker-end="url(#amber)"/>
+<text x="420" y="196" font-size="12" text-anchor="middle" fill="#b06000">stale 读（本以为不联系 leader 就安全）</text>
+
+<rect x="300" y="148" width="150" height="76" rx="10" fill="#f1f3f4" stroke="#bdc1c6" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="375" y="176" font-size="14" font-weight="600" text-anchor="middle" fill="#9aa0a6">node1 · 已挂</text>
+<text x="375" y="200" font-size="12" text-anchor="middle" fill="#9aa0a6">（原 leader）</text>
+<line x1="320" y1="160" x2="430" y2="212" stroke="#d93025" stroke-width="3"/>
+<line x1="430" y1="160" x2="320" y2="212" stroke="#d93025" stroke-width="3"/>
+
+<rect x="500" y="148" width="150" height="76" rx="10" fill="#f1f3f4" stroke="#bdc1c6" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="575" y="176" font-size="14" font-weight="600" text-anchor="middle" fill="#9aa0a6">node2 · 已挂</text>
+<text x="575" y="200" font-size="12" text-anchor="middle" fill="#9aa0a6">quorum 不足</text>
+<line x1="520" y1="160" x2="630" y2="212" stroke="#d93025" stroke-width="3"/>
+<line x1="630" y1="160" x2="520" y2="212" stroke="#d93025" stroke-width="3"/>
+
+<rect x="700" y="148" width="150" height="76" rx="10" fill="#fce8e6" stroke="#d93025" stroke-width="3"/>
+<text x="775" y="176" font-size="14" font-weight="700" text-anchor="middle" fill="#a52714">node3 · 孤立存活</text>
+<text x="775" y="200" font-size="12" text-anchor="middle" fill="#a52714">agent 自身不可用</text>
+
+<line x1="775" y1="224" x2="775" y2="262" stroke="#d93025" stroke-width="3" marker-end="url(#red)"/>
+<text x="760" y="280" font-size="16" font-weight="700" text-anchor="middle" fill="#a52714">404</text>
+
+<rect x="24" y="300" width="826" height="52" rx="8" fill="#fce8e6" stroke="#d93025" stroke-width="2"/>
+<text x="40" y="322" font-size="13" font-weight="600" fill="#a52714">本步划出的边界：stale 不联系 leader，但仍要求本地 agent 健康 —— quorum 丢失时 agent 自身状态机已不可用</text>
+<text x="40" y="341" font-size="12" fill="#a52714">所以 stale 换来的是「选举期间可用」，不是灾备能力；把它当灾备方案是错的</text>
+</svg>

@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="380" viewBox="0 0 880 380" font-family="Segoe UI, Microsoft YaHei, sans-serif">
+<defs>
+<marker id="red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d93025"/></marker>
+<marker id="green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#188038"/></marker>
+</defs>
+<rect width="880" height="380" fill="#ffffff"/>
+<text x="24" y="36" font-size="18" font-weight="700" fill="#202124">③ 边界：两种"看起来正常"的静默失效</text>
+
+<text x="40" y="76" font-size="14" font-weight="700" fill="#202124">左：同一个越权请求，两种读法给出两种结果</text>
+
+<rect x="40" y="100" width="150" height="56" rx="10" fill="#f1f3f4" stroke="#5f6368" stroke-width="2"/>
+<text x="115" y="126" font-size="13" font-weight="600" text-anchor="middle" fill="#202124">web token</text>
+<text x="115" y="146" font-size="12" text-anchor="middle" fill="#5f6368">无 api/ 读权限</text>
+
+<line x1="190" y1="118" x2="368" y2="118" stroke="#188038" stroke-width="3" marker-end="url(#green)"/>
+<line x1="190" y1="146" x2="368" y2="186" stroke="#d93025" stroke-width="3" marker-end="url(#red)"/>
+
+<rect x="372" y="92" width="176" height="52" rx="8" fill="#e6f4ea" stroke="#188038" stroke-width="2"/>
+<text x="460" y="114" font-size="13" font-weight="700" text-anchor="middle" fill="#0d652d">单键读 api/db_host</text>
+<text x="460" y="134" font-size="13" text-anchor="middle" fill="#0d652d">→ 403 明确拒绝</text>
+
+<rect x="372" y="160" width="176" height="52" rx="8" fill="#fce8e6" stroke="#d93025" stroke-width="2"/>
+<text x="460" y="182" font-size="13" font-weight="700" text-anchor="middle" fill="#a52714">递归读 api/ ?recurse</text>
+<text x="460" y="202" font-size="13" text-anchor="middle" fill="#a52714">→ 404 伪装成"没数据"</text>
+
+<path d="M548,186 C610,186 610,240 660,240" stroke="#d93025" stroke-width="2" fill="none"/>
+<rect x="372" y="228" width="288" height="66" rx="8" fill="#fce8e6" stroke="#d93025" stroke-width="2"/>
+<text x="388" y="250" font-size="13" font-weight="700" fill="#a52714">后果：配置热更新的阻塞查询静默失效</text>
+<text x="388" y="272" font-size="12" fill="#a52714">客户端把 404 当"配置还不存在" → 一直用旧配置跑，无任何报错</text>
+
+<line x1="440" y1="80" x2="440" y2="316" stroke="#dadce0" stroke-width="2" stroke-dasharray="5 5"/>
+
+<text x="480" y="76" font-size="14" font-weight="700" fill="#202124">右：不带 label 的资源写错也不报错</text>
+
+<rect x="480" y="100" width="356" height="52" rx="8" fill="#f1f3f4" stroke="#5f6368" stroke-width="2"/>
+<text x="496" y="122" font-size="12" fill="#202124">operator = "read"</text>
+<text x="496" y="142" font-size="12" fill="#188038">→ 实测 200，权限生效</text>
+
+<rect x="480" y="164" width="356" height="52" rx="8" fill="#fce8e6" stroke="#d93025" stroke-width="2"/>
+<text x="496" y="186" font-size="12" fill="#202124">operator_prefix "" { policy = "read" }</text>
+<text x="496" y="206" font-size="12" fill="#a52714">→ 创建 200，但权限静默不生效（实测 403）</text>
+
+<rect x="480" y="228" width="356" height="66" rx="8" fill="#fef7e0" stroke="#f29900" stroke-width="2"/>
+<text x="496" y="250" font-size="13" font-weight="700" fill="#b06000">不带 label 的资源</text>
+<text x="496" y="272" font-size="12" fill="#7a4a00">operator / acl / keyring / mesh / peering</text>
+<text x="496" y="288" font-size="11" fill="#7a4a00">判定权限是否生效，必须实测调用一次 —— 不能只看创建返回 200</text>
+
+<text x="24" y="336" font-size="13" fill="#5f6368">共同点：都不报错。ACL 的难点不在"配权限"，而在"配错了它不告诉你"。</text>
+<text x="24" y="360" font-size="12" fill="#5f6368">匿名访问也同型：列目录 / 列 keys / 查健康实例均返回 200 空结果 —— 看着像"集群是空的"，实际是"你没权限"。</text>
+</svg>

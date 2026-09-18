@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="380" viewBox="0 0 880 380" font-family="Segoe UI, Microsoft YaHei, sans-serif">
+<defs>
+<marker id="grey" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#9aa0a6"/></marker>
+</defs>
+<rect width="880" height="380" fill="#ffffff"/>
+<text x="24" y="34" font-size="17" font-weight="700" fill="#202124">一个工具，还是一组能力</text>
+
+<text x="200" y="62" font-size="14" font-weight="700" text-anchor="middle" fill="#5f6368">只干一件事的工具</text>
+<text x="650" y="62" font-size="14" font-weight="700" text-anchor="middle" fill="#174ea6">一件外套上的多个口袋</text>
+
+<rect x="60" y="90" width="280" height="60" rx="10" fill="#f1f3f4" stroke="#9aa0a6" stroke-width="2"/>
+<text x="200" y="116" font-size="14" font-weight="600" text-anchor="middle" fill="#3c4043">问路工具</text>
+<text x="200" y="138" font-size="12" text-anchor="middle" fill="#5f6368">只知道"谁在哪"</text>
+
+<rect x="60" y="160" width="280" height="60" rx="10" fill="#f1f3f4" stroke="#9aa0a6" stroke-width="2"/>
+<text x="200" y="186" font-size="14" font-weight="600" text-anchor="middle" fill="#3c4043">体检工具</text>
+<text x="200" y="208" font-size="12" text-anchor="middle" fill="#5f6368">只回答"还活着吗"</text>
+
+<rect x="60" y="230" width="280" height="60" rx="10" fill="#f1f3f4" stroke="#9aa0a6" stroke-width="2"/>
+<text x="200" y="256" font-size="14" font-weight="600" text-anchor="middle" fill="#3c4043">小本子</text>
+<text x="200" y="278" font-size="12" text-anchor="middle" fill="#5f6368">只负责"存个配置"</text>
+
+<text x="200" y="318" font-size="13" font-weight="600" text-anchor="middle" fill="#a52714">三个工具，三套装法，三种脾气</text>
+
+<line x1="370" y1="190" x2="470" y2="190" stroke="#9aa0a6" stroke-width="3" marker-end="url(#grey)"/>
+
+<rect x="474" y="82" width="380" height="216" rx="14" fill="#e8f0fe" stroke="#1a73e8" stroke-width="3"/>
+<text x="664" y="112" font-size="15" font-weight="700" text-anchor="middle" fill="#174ea6">我们要看的那一个</text>
+
+<rect x="496" y="128" width="160" height="48" rx="8" fill="#ffffff" stroke="#1a73e8" stroke-width="2"/>
+<text x="576" y="150" font-size="13" font-weight="600" text-anchor="middle" fill="#174ea6">问路</text>
+<text x="576" y="168" font-size="11" text-anchor="middle" fill="#174ea6">谁在哪</text>
+
+<rect x="672" y="128" width="160" height="48" rx="8" fill="#ffffff" stroke="#1a73e8" stroke-width="2"/>
+<text x="752" y="150" font-size="13" font-weight="600" text-anchor="middle" fill="#174ea6">体检</text>
+<text x="752" y="168" font-size="11" text-anchor="middle" fill="#174ea6">还活着吗</text>
+
+<rect x="496" y="188" width="160" height="48" rx="8" fill="#ffffff" stroke="#1a73e8" stroke-width="2"/>
+<text x="576" y="210" font-size="13" font-weight="600" text-anchor="middle" fill="#174ea6">小本子</text>
+<text x="576" y="228" font-size="11" text-anchor="middle" fill="#174ea6">存配置</text>
+
+<rect x="672" y="188" width="160" height="48" rx="8" fill="#ffffff" stroke="#1a73e8" stroke-width="2"/>
+<text x="752" y="210" font-size="13" font-weight="600" text-anchor="middle" fill="#174ea6">门禁</text>
+<text x="752" y="228" font-size="11" text-anchor="middle" fill="#174ea6">谁能进</text>
+
+<rect x="496" y="248" width="336" height="40" rx="8" fill="#ffffff" stroke="#1a73e8" stroke-width="2"/>
+<text x="664" y="268" font-size="13" font-weight="600" text-anchor="middle" fill="#174ea6">加密通话 + 跨园区</text>
+<text x="664" y="284" font-size="11" text-anchor="middle" fill="#174ea6">说话不被偷听、隔壁楼也能叫到</text>
+
+<text x="664" y="322" font-size="13" font-weight="600" text-anchor="middle" fill="#0d652d">一个东西，一套装法，都在一起</text>
+
+<rect x="24" y="344" width="836" height="22" rx="6" fill="#f1f3f4" stroke="#dadce0"/>
+<text x="36" y="360" font-size="12" fill="#5f6368">差别：左边三件事要装三回；右边一件事，顺手就都带上了。</text>
+</svg>

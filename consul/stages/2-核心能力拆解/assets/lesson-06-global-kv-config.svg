@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="360" viewBox="0 0 880 360" font-family="Segoe UI, Microsoft YaHei, sans-serif">
+<defs>
+<marker id="green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#188038"/></marker>
+<marker id="red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d93025"/></marker>
+</defs>
+<rect width="880" height="360" fill="#ffffff"/>
+<text x="24" y="34" font-size="17" font-weight="700" fill="#202124">顺手当配置柜用可以，但它终究是个柜子，不是仓库</text>
+
+<rect x="24" y="60" width="300" height="120" rx="12" fill="#e6f4ea" stroke="#188038" stroke-width="2"/>
+<text x="174" y="88" font-size="14" font-weight="700" text-anchor="middle" fill="#0d652d">用起来顺手的地方</text>
+<text x="44" y="116" font-size="12" fill="#0d652d">• 按"文件夹"一层层放，好找</text>
+<text x="44" y="140" font-size="12" fill="#0d652d">• 改完它自己通知，服务不用重启</text>
+<text x="44" y="164" font-size="12" fill="#0d652d">• 一把锁一次只准一个人改，不会互相踩</text>
+
+<rect x="348" y="60" width="300" height="120" rx="12" fill="#fef7e0" stroke="#f29900" stroke-width="2"/>
+<text x="498" y="88" font-size="14" font-weight="700" text-anchor="middle" fill="#b06000">要知道的几条规矩</text>
+<text x="368" y="116" font-size="12" fill="#7a4a00">• 一格最多放一小段（约半兆）</text>
+<text x="368" y="140" font-size="12" fill="#7a4a00">• 只能整个换掉，不能改一半</text>
+<text x="368" y="164" font-size="12" fill="#7a4a00">• 没有"谁在什么时候改的"这种流水账</text>
+
+<rect x="672" y="60" width="188" height="120" rx="12" fill="#fce8e6" stroke="#d93025" stroke-width="2"/>
+<text x="766" y="88" font-size="14" font-weight="700" text-anchor="middle" fill="#a52714">别指望它</text>
+<text x="688" y="116" font-size="12" fill="#a52714">• 存业务数据</text>
+<text x="688" y="140" font-size="12" fill="#a52714">• 翻历史版本</text>
+<text x="688" y="164" font-size="12" fill="#a52714">• 当数据库查</text>
+
+<text x="440" y="212" font-size="14" font-weight="700" text-anchor="middle" fill="#202124">改配置这条链子是怎么串起来的</text>
+
+<rect x="24" y="228" width="150" height="66" rx="10" fill="#f1f3f4" stroke="#5f6368" stroke-width="2"/>
+<text x="99" y="254" font-size="13" font-weight="600" text-anchor="middle" fill="#202124">有人改了一格</text>
+<text x="99" y="276" font-size="12" text-anchor="middle" fill="#5f6368">写进柜子</text>
+
+<line x1="174" y1="261" x2="266" y2="261" stroke="#188038" stroke-width="3" marker-end="url(#green)"/>
+<text x="220" y="250" font-size="11" text-anchor="middle" fill="#0d652d">有变化才说</text>
+
+<rect x="270" y="228" width="180" height="66" rx="10" fill="#e8f0fe" stroke="#1a73e8" stroke-width="3"/>
+<text x="360" y="254" font-size="13" font-weight="700" text-anchor="middle" fill="#174ea6">柜子主动通知</text>
+<text x="360" y="276" font-size="12" text-anchor="middle" fill="#174ea6">（不用一遍遍去翻）</text>
+
+<line x1="450" y1="261" x2="542" y2="261" stroke="#188038" stroke-width="3" marker-end="url(#green)"/>
+<text x="496" y="250" font-size="11" text-anchor="middle" fill="#0d652d">照着改文件</text>
+
+<rect x="546" y="228" width="180" height="66" rx="10" fill="#f1f3f4" stroke="#5f6368" stroke-width="2"/>
+<text x="636" y="254" font-size="13" font-weight="600" text-anchor="middle" fill="#202124">帮手改好文件</text>
+<text x="636" y="276" font-size="12" text-anchor="middle" fill="#5f6368">再让服务重新读一遍</text>
+
+<line x1="726" y1="261" x2="800" y2="261" stroke="#188038" stroke-width="3" marker-end="url(#green)"/>
+
+<rect x="804" y="228" width="56" height="66" rx="10" fill="#e6f4ea" stroke="#188038" stroke-width="2"/>
+<text x="832" y="254" font-size="13" font-weight="700" text-anchor="middle" fill="#0d652d">生效</text>
+<text x="832" y="274" font-size="11" text-anchor="middle" fill="#0d652d">不用重启</text>
+
+<line x1="99" y1="294" x2="99" y2="316" stroke="#d93025" stroke-width="2" marker-end="url(#red)"/>
+<rect x="24" y="316" width="836" height="30" rx="8" fill="#fce8e6" stroke="#d93025" stroke-width="2"/>
+<text x="40" y="336" font-size="12" fill="#a52714">断链风险：中间那个"帮手"要是挂了，配置就不会再自动更新 —— 服务还跑得好好的，只是用的永远是旧配置。</text>
+</svg>

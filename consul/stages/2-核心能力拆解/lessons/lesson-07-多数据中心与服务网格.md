@@ -57,6 +57,10 @@ PS> Invoke-RestMethod http://127.0.0.1:8530/v1/kv/geo/region
 
 ## 第三幕：三张牌逐一摊开
 
+![一眼全局图：两个园区——能互相叫到人，但各记各的账](../assets/lesson-07-global-multidc-mesh.svg)
+
+> **看图**：上面两栋楼各有一本花名册，两本不互抄——A 楼查不到 B 楼的人，除非点名要跨楼；点名了它能把答案带回来。下面是让两边说话不被偷听：各派一个传话员替自己加密、亮身份，代码一行没改。但**绕过传话员直接敲门照样进得去**——光加密不够，还得管住门。
+
 ### 知识点 1：多数据中心联邦
 
 #### 一句话定义
@@ -414,6 +418,12 @@ Invoke-RestMethod "http://127.0.0.1:8500/v1/query/<id>/execute"            # 自
 
 附注：A8 的 python 客户端核心为 `ssl.SSLContext(PROTOCOL_TLS_CLIENT)` + `load_cert_chain(证书, 私钥)` + `wrap_socket` 后发送 HTTP GET；deny 时表现为收到 `SSLS3_ALERT_BAD_CERTIFICATE` 且 0 字节响应。实验素材在 `consul/playground/`（api-connect.json、web-connect.json、mtls-request.py 等）。
 
+### 4.2 应用实战：不装 Envoy，把"服务之间必须是 mTLS"跑通一遍
+
+> 🎯 **练一练**：本课给过一句劝退——内置代理"不支持生产、不支持很多特性"，生产数据面是 Envoy。于是最容易出现的理解是"那我现在什么也跑不了"。**这是个误会**：Consul 2.0.2 自带的 `consul connect proxy` 足以跑通完整的 mTLS 数据面——申请证书、握手、被 intention 拒绝、改回 allow 后恢复，全都能实测。实战篇 B 就走这条线，并顺手测出一个反直觉结果：**绕过 sidecar 直连应用端口，拿到的是明文 200**。
+>
+> 👉 [实战篇 B：Connect 最小闭环](../../../practices/实战B-Connect最小闭环/README.md)｜全索引见 [`应用实战/INDEX.md`](../../../应用实战/INDEX.md)
+
 ---
 
 ## 第五幕：体系收束
@@ -467,6 +477,7 @@ Invoke-RestMethod "http://127.0.0.1:8500/v1/query/<id>/execute"            # 自
 
 ## 🧭 课程导航
 
+- 🎯 **练一练**：[实战篇 B：Connect 最小闭环](../../../practices/实战B-Connect最小闭环/README.md)（无需 Envoy 跑通 mTLS，intention 82ms 生效）｜[全部应用实战](../../../应用实战/INDEX.md)
 - [下一课：课 8 ACL 与安全模型](./lesson-08-ACL与安全模型.md)（同属阶段 2，2026-09-17 增补课：Consul 默认不设防，谁有权改它）
 - [下下课：课 9 四大竞品逐个看](../../3-横向对比/lessons/lesson-09-四大竞品逐个看.md)（阶段 3 开篇：ZooKeeper / etcd / Nacos / Eureka 逐个登台）
 - 返回 [课程目录](../../../02-课程目录.md)

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="360" viewBox="0 0 880 360" font-family="Segoe UI, Microsoft YaHei, sans-serif">
+<defs>
+<marker id="red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d93025"/></marker>
+</defs>
+<rect width="880" height="360" fill="#ffffff"/>
+<text x="24" y="36" font-size="18" font-weight="700" fill="#202124">① 基础版：一个 token 人人共用，等于没有边界</text>
+
+<rect x="40" y="140" width="140" height="64" rx="10" fill="#f1f3f4" stroke="#5f6368" stroke-width="2"/>
+<text x="110" y="168" font-size="14" font-weight="600" text-anchor="middle" fill="#202124">web 团队</text>
+<text x="110" y="190" font-size="12" text-anchor="middle" fill="#5f6368">持有 token</text>
+
+<rect x="40" y="222" width="140" height="64" rx="10" fill="#f1f3f4" stroke="#5f6368" stroke-width="2"/>
+<text x="110" y="250" font-size="14" font-weight="600" text-anchor="middle" fill="#202124">api 团队</text>
+<text x="110" y="272" font-size="12" text-anchor="middle" fill="#5f6368">持有同一 token</text>
+
+<line x1="180" y1="172" x2="470" y2="186" stroke="#d93025" stroke-width="3" marker-end="url(#red)"/>
+<line x1="180" y1="254" x2="470" y2="196" stroke="#d93025" stroke-width="3" marker-end="url(#red)"/>
+
+<rect x="474" y="120" width="220" height="150" rx="10" fill="#fce8e6" stroke="#d93025" stroke-width="3"/>
+<text x="584" y="150" font-size="14" font-weight="700" text-anchor="middle" fill="#a52714">同一个 token</text>
+<line x1="500" y1="170" x2="668" y2="170" stroke="#d93025" stroke-width="1.5" stroke-dasharray="4 4"/>
+<text x="584" y="194" font-size="12" text-anchor="middle" fill="#a52714">KV 全库可读写</text>
+<text x="584" y="216" font-size="12" text-anchor="middle" fill="#a52714">服务可任意注册 / 顶替</text>
+<text x="584" y="238" font-size="12" text-anchor="middle" fill="#a52714">谁改的完全无法追溯</text>
+
+<rect x="724" y="140" width="128" height="120" rx="10" fill="#f1f3f4" stroke="#5f6368" stroke-width="2"/>
+<text x="788" y="168" font-size="14" font-weight="600" text-anchor="middle" fill="#202124">Consul KV</text>
+<text x="788" y="196" font-size="12" text-anchor="middle" fill="#5f6368">web/</text>
+<text x="788" y="218" font-size="12" text-anchor="middle" fill="#5f6368">api/</text>
+<text x="788" y="240" font-size="12" text-anchor="middle" fill="#5f6368">shared/</text>
+
+<line x1="694" y1="195" x2="720" y2="195" stroke="#d93025" stroke-width="3" marker-end="url(#red)"/>
+
+<rect x="40" y="306" width="820" height="34" rx="8" fill="#fce8e6" stroke="#d93025" stroke-width="2"/>
+<text x="56" y="328" font-size="13" fill="#a52714">本步形态：token 只是身份，权限挂在 policy 上 —— 只发 token 不发 policy，等于发了一堆空头名片</text>
+</svg>

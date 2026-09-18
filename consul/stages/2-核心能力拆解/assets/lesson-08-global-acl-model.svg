@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="370" viewBox="0 0 880 370" font-family="Segoe UI, Microsoft YaHei, sans-serif">
+<defs>
+<marker id="green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#188038"/></marker>
+<marker id="red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d93025"/></marker>
+</defs>
+<rect width="880" height="370" fill="#ffffff"/>
+<text x="24" y="34" font-size="17" font-weight="700" fill="#202124">门装上了，可谁都能进——因为默认就是"不设防"</text>
+
+<text x="440" y="62" font-size="14" font-weight="700" text-anchor="middle" fill="#202124">进门三步：先亮证件，再看证件上写了什么权限，最后才看你能动哪一片</text>
+
+<rect x="24" y="80" width="230" height="90" rx="10" fill="#f1f3f4" stroke="#5f6368" stroke-width="2"/>
+<text x="139" y="108" font-size="14" font-weight="700" text-anchor="middle" fill="#202124">第 1 层：证件本身</text>
+<text x="139" y="134" font-size="12" text-anchor="middle" fill="#5f6368">只是一张卡</text>
+<text x="139" y="156" font-size="12" text-anchor="middle" fill="#5f6368">它自己不带任何权限</text>
+
+<line x1="254" y1="125" x2="316" y2="125" stroke="#188038" stroke-width="3" marker-end="url(#green)"/>
+
+<rect x="320" y="80" width="230" height="90" rx="10" fill="#e6f4ea" stroke="#188038" stroke-width="3"/>
+<text x="435" y="108" font-size="14" font-weight="700" text-anchor="middle" fill="#0d652d">第 2 层：证件上的说明</text>
+<text x="435" y="134" font-size="12" text-anchor="middle" fill="#0d652d">写着"能进哪几间"</text>
+<text x="435" y="156" text-anchor="middle" font-size="12" fill="#0d652d">真正管用的是这一层</text>
+
+<line x1="550" y1="125" x2="612" y2="125" stroke="#188038" stroke-width="3" marker-end="url(#green)"/>
+
+<rect x="616" y="80" width="240" height="90" rx="10" fill="#e8f0fe" stroke="#1a73e8" stroke-width="3"/>
+<text x="736" y="108" font-size="14" font-weight="700" text-anchor="middle" fill="#174ea6">第 3 层：具体到哪一格</text>
+<text x="736" y="134" font-size="12" text-anchor="middle" fill="#174ea6">web/ 这一片能改</text>
+<text x="736" y="156" font-size="12" text-anchor="middle" fill="#174ea6">api/ 这一片看都不行</text>
+
+<rect x="24" y="192" width="400" height="124" rx="12" fill="#fce8e6" stroke="#d93025" stroke-width="2"/>
+<text x="224" y="220" font-size="14" font-weight="700" text-anchor="middle" fill="#a52714">最反直觉的一件事</text>
+<text x="44" y="248" font-size="12" fill="#a52714">装了门禁，但没把"默认"改成"不许进"</text>
+<text x="44" y="270" font-size="12" fill="#a52714">→ 没带证件的照样进，白忙一场</text>
+<text x="44" y="292" font-size="12" fill="#a52714">证件发了但没写权限 → 也是一张空卡</text>
+
+<rect x="456" y="192" width="400" height="124" rx="12" fill="#fef7e0" stroke="#f29900" stroke-width="2"/>
+<text x="656" y="220" font-size="14" font-weight="700" text-anchor="middle" fill="#b06000">最该怕的不是报错，是"没报错"</text>
+<text x="476" y="248" font-size="12" fill="#7a4a00">问"有没有这个东西" → 回"没有"</text>
+<text x="476" y="270" font-size="12" fill="#7a4a00">实际是"你不配看"，但它说成了"没有"</text>
+<text x="476" y="292" font-size="12" fill="#7a4a00">于是你以为还没配，就这么一直用旧的跑下去</text>
+
+<rect x="24" y="330" width="836" height="28" rx="8" fill="#f1f3f4" stroke="#dadce0"/>
+<text x="36" y="349" font-size="12" fill="#5f6368">发完证件别急着走 —— 拿它真去试一次，看看到底拦没拦住。只看"发成功了"不算数。</text>
+</svg>

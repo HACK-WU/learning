@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="360" viewBox="0 0 880 360" font-family="Segoe UI, Microsoft YaHei, sans-serif">
+<defs>
+<marker id="red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d93025"/></marker>
+<marker id="green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#188038"/></marker>
+</defs>
+<rect width="880" height="360" fill="#ffffff"/>
+<text x="24" y="34" font-size="17" font-weight="700" fill="#202124">同一件事，两拨人用两种办法传话</text>
+
+<rect x="24" y="56" width="400" height="150" rx="12" fill="#fce8e6" stroke="#d93025" stroke-width="2"/>
+<text x="224" y="84" font-size="14" font-weight="700" text-anchor="middle" fill="#a52714">要紧的事：改名单（得有个准信）</text>
+<rect x="44" y="98" width="110" height="56" rx="8" fill="#ffffff" stroke="#d93025" stroke-width="2"/>
+<text x="99" y="122" font-size="13" font-weight="700" text-anchor="middle" fill="#a52714">管事的</text>
+<text x="99" y="142" font-size="11" text-anchor="middle" fill="#a52714">只有 1 个</text>
+<line x1="154" y1="118" x2="196" y2="112" stroke="#d93025" stroke-width="2" marker-end="url(#red)"/>
+<line x1="154" y1="134" x2="196" y2="146" stroke="#d93025" stroke-width="2" marker-end="url(#red)"/>
+<rect x="200" y="98" width="94" height="56" rx="8" fill="#ffffff" stroke="#d93025" stroke-width="2"/>
+<text x="247" y="126" font-size="13" text-anchor="middle" fill="#a52714">跟班 1</text>
+<rect x="306" y="98" width="94" height="56" rx="8" fill="#ffffff" stroke="#d93025" stroke-width="2"/>
+<text x="353" y="126" font-size="13" text-anchor="middle" fill="#a52714">跟班 2</text>
+<text x="224" y="176" font-size="12" text-anchor="middle" fill="#a52714">过半的人点头才算数 —— 所以慢，但不会记错</text>
+<text x="224" y="196" font-size="12" text-anchor="middle" fill="#a52714">管事的要是倒了，得先选出新的，这期间谁也改不了</text>
+
+<rect x="456" y="56" width="400" height="150" rx="12" fill="#e6f4ea" stroke="#188038" stroke-width="2"/>
+<text x="656" y="84" font-size="14" font-weight="700" text-anchor="middle" fill="#0d652d">不要紧的事：发现有人倒了（传得开就行）</text>
+<rect x="490" y="98" width="80" height="46" rx="8" fill="#ffffff" stroke="#188038" stroke-width="2"/>
+<text x="530" y="126" font-size="12" text-anchor="middle" fill="#0d652d">A</text>
+<rect x="586" y="98" width="80" height="46" rx="8" fill="#ffffff" stroke="#188038" stroke-width="2"/>
+<text x="626" y="126" font-size="12" text-anchor="middle" fill="#0d652d">B</text>
+<rect x="682" y="98" width="80" height="46" rx="8" fill="#ffffff" stroke="#188038" stroke-width="2"/>
+<text x="722" y="126" font-size="12" text-anchor="middle" fill="#0d652d">C</text>
+<rect x="778" y="98" width="60" height="46" rx="8" fill="#ffffff" stroke="#188038" stroke-width="2"/>
+<text x="808" y="126" font-size="12" text-anchor="middle" fill="#0d652d">D</text>
+<line x1="570" y1="112" x2="582" y2="112" stroke="#188038" stroke-width="2" marker-end="url(#green)"/>
+<line x1="666" y1="112" x2="678" y2="112" stroke="#188038" stroke-width="2" marker-end="url(#green)"/>
+<line x1="762" y1="112" x2="774" y2="112" stroke="#188038" stroke-width="2" marker-end="url(#green)"/>
+<line x1="530" y1="144" x2="626" y2="144" stroke="#188038" stroke-width="2" marker-end="url(#green)"/>
+<text x="656" y="176" font-size="12" text-anchor="middle" fill="#0d652d">一个传一个、一传十 —— 所以快，但可能晚半拍才知道</text>
+<text x="656" y="196" font-size="12" text-anchor="middle" fill="#0d652d">就算管事的没了，这件事照常传得出去</text>
+
+<rect x="24" y="226" width="836" height="46" rx="8" fill="#e8f0fe" stroke="#1a73e8" stroke-width="2"/>
+<text x="40" y="248" font-size="13" font-weight="700" fill="#174ea6">所以"问它"也有三种问法</text>
+<text x="40" y="268" font-size="12" fill="#174ea6">问管事的（一定准、可能等）｜ 过半点头再答（最准、最慢）｜ 随便抓一个就答（最快、可能旧一点）</text>
+
+<rect x="24" y="288" width="836" height="52" rx="8" fill="#fef7e0" stroke="#f29900" stroke-width="2"/>
+<text x="40" y="310" font-size="13" font-weight="700" fill="#b06000">别把"快"当成"保险"</text>
+<text x="40" y="331" font-size="12" fill="#7a4a00">第三种问法不用等管事的，但要是管事的和跟班的多数都倒了，它照样答不上来 —— 它图的是换班那几秒不断线，不是灾备。</text>
+</svg>

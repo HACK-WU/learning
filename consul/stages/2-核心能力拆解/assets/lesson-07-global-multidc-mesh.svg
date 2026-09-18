@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="380" viewBox="0 0 880 380" font-family="Segoe UI, Microsoft YaHei, sans-serif">
+<defs>
+<marker id="red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d93025"/></marker>
+<marker id="green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#188038"/></marker>
+</defs>
+<rect width="880" height="380" fill="#ffffff"/>
+<text x="24" y="34" font-size="17" font-weight="700" fill="#202124">两个园区：能互相叫到人，但各记各的账</text>
+
+<rect x="24" y="60" width="380" height="150" rx="12" fill="#e8f0fe" stroke="#1a73e8" stroke-width="2"/>
+<text x="214" y="88" font-size="14" font-weight="700" text-anchor="middle" fill="#174ea6">A 楼（自己有一本花名册）</text>
+<rect x="48" y="102" width="150" height="52" rx="8" fill="#ffffff" stroke="#1a73e8" stroke-width="2"/>
+<text x="123" y="132" font-size="13" text-anchor="middle" fill="#174ea6">下单 web</text>
+<rect x="216" y="102" width="150" height="52" rx="8" fill="#ffffff" stroke="#1a73e8" stroke-width="2"/>
+<text x="291" y="132" font-size="13" text-anchor="middle" fill="#174ea6">库存 api</text>
+<text x="214" y="178" font-size="12" text-anchor="middle" fill="#174ea6">只记本楼的人和事</text>
+<text x="214" y="198" font-size="12" text-anchor="middle" fill="#174ea6">本楼的事，本楼说了算</text>
+
+<rect x="476" y="60" width="380" height="150" rx="12" fill="#e8f0fe" stroke="#1a73e8" stroke-width="2"/>
+<text x="666" y="88" font-size="14" font-weight="700" text-anchor="middle" fill="#174ea6">B 楼（另一本花名册）</text>
+<rect x="500" y="102" width="150" height="52" rx="8" fill="#ffffff" stroke="#1a73e8" stroke-width="2"/>
+<text x="575" y="132" font-size="13" text-anchor="middle" fill="#174ea6">支付 payment</text>
+<rect x="668" y="102" width="150" height="52" rx="8" fill="#ffffff" stroke="#1a73e8" stroke-width="2"/>
+<text x="743" y="132" font-size="13" text-anchor="middle" fill="#174ea6">对账 settle</text>
+<text x="666" y="178" font-size="12" text-anchor="middle" fill="#174ea6">两本册子不互抄</text>
+<text x="666" y="198" font-size="12" text-anchor="middle" fill="#174ea6">A 楼查不到 B 楼的人，除非点名要跨楼</text>
+
+<line x1="404" y1="112" x2="472" y2="112" stroke="#188038" stroke-width="3" marker-end="url(#green)"/>
+<text x="438" y="102" font-size="11" text-anchor="middle" fill="#0d652d">点名跨楼</text>
+<line x1="472" y1="152" x2="404" y2="152" stroke="#188038" stroke-width="3" marker-end="url(#green)"/>
+<text x="438" y="172" font-size="11" text-anchor="middle" fill="#0d652d">把答案带回来</text>
+
+<text x="440" y="248" font-size="14" font-weight="700" text-anchor="middle" fill="#202124">让它们之间说话不被偷听</text>
+
+<rect x="60" y="266" width="200" height="72" rx="10" fill="#f1f3f4" stroke="#5f6368" stroke-width="2"/>
+<text x="160" y="292" font-size="13" font-weight="600" text-anchor="middle" fill="#202124">下单 web</text>
+<text x="160" y="314" font-size="12" text-anchor="middle" fill="#5f6368">代码一行没改</text>
+
+<line x1="260" y1="302" x2="336" y2="302" stroke="#9aa0a6" stroke-width="2"/>
+
+<rect x="340" y="266" width="200" height="72" rx="10" fill="#e6f4ea" stroke="#188038" stroke-width="3"/>
+<text x="440" y="292" font-size="13" font-weight="700" text-anchor="middle" fill="#0d652d">派出个"传话员"</text>
+<text x="440" y="314" font-size="12" text-anchor="middle" fill="#0d652d">替它加密、替它亮身份</text>
+
+<line x1="540" y1="302" x2="616" y2="302" stroke="#188038" stroke-width="4" marker-end="url(#green)"/>
+<text x="578" y="292" font-size="11" text-anchor="middle" fill="#0d652d">加密</text>
+
+<rect x="620" y="266" width="200" height="72" rx="10" fill="#f1f3f4" stroke="#5f6368" stroke-width="2"/>
+<text x="720" y="292" font-size="13" font-weight="600" text-anchor="middle" fill="#202124">库存 api</text>
+<text x="720" y="314" font-size="12" text-anchor="middle" fill="#5f6368">也配一个</text>
+
+<path d="M160,338 L160,356 L720,356 L720,338" stroke="#d93025" stroke-width="3" fill="none" marker-end="url(#red)"/>
+<text x="440" y="374" font-size="12" text-anchor="middle" fill="#a52714">绕过传话员、直接敲 api 的门 —— 照样进得去，还是明话。光加密不够，还得管住门。</text>
+</svg>
