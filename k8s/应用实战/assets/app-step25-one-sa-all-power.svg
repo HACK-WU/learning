@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 300" width="760" height="300">
+  <rect width="760" height="300" fill="#fdf6f6"/>
+  <text x="380" y="28" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#333">基础版：一个身份，一把万能钥匙</text>
+
+  <rect x="40" y="60" width="180" height="60" rx="8" fill="#e8f0fe" stroke="#5b8def" stroke-width="2"/>
+  <text x="130" y="86" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#333">日志采集程序</text>
+  <text x="130" y="105" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">本该只读</text>
+
+  <line x1="220" y1="90" x2="330" y2="90" stroke="#d9534f" stroke-width="3" marker-end="url(#ar)"/>
+  <text x="275" y="80" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#d9534f">绑了万能钥匙</text>
+
+  <rect x="330" y="55" width="170" height="70" rx="8" fill="#fde8e8" stroke="#d9534f" stroke-width="2"/>
+  <text x="415" y="80" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="bold" fill="#d9534f">万能钥匙</text>
+  <text x="415" y="99" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">整个集群通吃</text>
+  <text x="415" y="115" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">不限命名空间</text>
+
+  <line x1="500" y1="90" x2="600" y2="90" stroke="#d9534f" stroke-width="3" marker-end="url(#ar)"/>
+
+  <rect x="600" y="50" width="130" height="180" rx="8" fill="#fde8e8" stroke="#d9534f" stroke-width="2"/>
+  <text x="665" y="72" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="bold" fill="#d9534f">能碰到的东西</text>
+  <text x="665" y="96" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#333">所有密钥</text>
+  <text x="665" y="116" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#333">所有应用</text>
+  <text x="665" y="136" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#333">删除权限</text>
+  <text x="665" y="156" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#333">改配置</text>
+  <text x="665" y="176" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#333">看日志</text>
+  <text x="665" y="200" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#d9534f">…没有边界</text>
+
+  <text x="40" y="200" font-family="sans-serif" font-size="12" fill="#d9534f">程序被攻破 =</text>
+  <text x="40" y="220" font-family="sans-serif" font-size="12" fill="#d9534f">攻击者拿到全部</text>
+
+  <text x="40" y="262" font-family="sans-serif" font-size="12" fill="#666">问题：钥匙只有一把，丢了就全丢；</text>
+  <text x="40" y="280" font-family="sans-serif" font-size="12" fill="#666">且权限只能加不能减，一开始就给多 = 永远收不回。</text>
+
+  <defs>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#d9534f"/>
+    </marker>
+  </defs>
+</svg>

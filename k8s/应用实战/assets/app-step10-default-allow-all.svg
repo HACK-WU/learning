@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 340" width="860" height="340" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+  <rect width="860" height="340" fill="#fdf6f6"/>
+  <text x="430" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#7a2b2b">基础版：命名空间不是安全边界，谁都能连数据库</text>
+
+  <!-- db -->
+  <rect x="330" y="120" width="200" height="90" rx="12" fill="#ffe3e3" stroke="#c94f4f" stroke-width="2.5"/>
+  <text x="430" y="152" text-anchor="middle" font-size="15" font-weight="700" fill="#7a2b2b">数据库</text>
+  <text x="430" y="176" text-anchor="middle" font-size="12" fill="#5a3a3a">最该保护的东西</text>
+  <text x="430" y="196" text-anchor="middle" font-size="12" fill="#5a3a3a">端口 80</text>
+
+  <!-- attackers -->
+  <rect x="40" y="70" width="230" height="34" rx="8" fill="#fff" stroke="#c94f4f"/>
+  <text x="155" y="92" text-anchor="middle" font-size="12" font-weight="600" fill="#7a2b2b">应用服务（应该能连）</text>
+  <line x1="272" y1="87" x2="326" y2="130" stroke="#2e8b57" stroke-width="2.5"/>
+  <polygon points="326,130 317,125 319,134" fill="#2e8b57"/>
+
+  <rect x="40" y="120" width="230" height="34" rx="8" fill="#ffe3e3" stroke="#c94f4f"/>
+  <text x="155" y="142" text-anchor="middle" font-size="12" font-weight="600" fill="#c0392b">随便一个 Pod（不该能连）</text>
+  <line x1="272" y1="137" x2="326" y2="152" stroke="#c0392b" stroke-width="2.5"/>
+  <polygon points="326,152 317,147 319,156" fill="#c0392b"/>
+
+  <rect x="40" y="170" width="230" height="34" rx="8" fill="#ffe3e3" stroke="#c94f4f"/>
+  <text x="155" y="192" text-anchor="middle" font-size="12" font-weight="600" fill="#c0392b">别的命名空间（更不该）</text>
+  <line x1="272" y1="187" x2="326" y2="176" stroke="#c0392b" stroke-width="2.5"/>
+  <polygon points="326,176 317,171 319,180" fill="#c0392b"/>
+
+  <!-- right box -->
+  <rect x="580" y="96" width="250" height="130" rx="10" fill="#fff" stroke="#c94f4f" stroke-width="1.5"/>
+  <text x="598" y="122" font-size="13" font-weight="600" fill="#c0392b">实测：三条线全通</text>
+  <text x="598" y="146" font-size="12" fill="#5a3a3a">应用服务     → I am DATABASE</text>
+  <text x="598" y="168" font-size="12" fill="#5a3a3a">随便一个 Pod → I am DATABASE</text>
+  <text x="598" y="190" font-size="12" fill="#5a3a3a">跨命名空间   → I am DATABASE</text>
+  <text x="598" y="214" font-size="12" font-weight="600" fill="#c0392b">一条策略都没有</text>
+
+  <!-- bottom -->
+  <rect x="40" y="256" width="790" height="66" rx="8" fill="#fff" stroke="#c94f4f" stroke-width="1.5"/>
+  <text x="56" y="280" font-size="13" font-weight="600" fill="#c0392b">问题</text>
+  <text x="56" y="302" font-size="12" fill="#5a3a3a">分组只管"归谁管"，不管"谁能连" —— 出事时任何一处失守，数据库就整体暴露。</text>
+</svg>

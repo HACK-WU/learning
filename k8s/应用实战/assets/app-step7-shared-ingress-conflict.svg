@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 340" width="860" height="340" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+  <rect width="860" height="340" fill="#fdf6f6"/>
+  <text x="430" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#7a2b2b">基础版：所有团队共用一份入口规则</text>
+
+  <!-- internet -->
+  <rect x="40" y="120" width="130" height="76" rx="10" fill="#fff" stroke="#c94f4f" stroke-width="2"/>
+  <text x="105" y="150" text-anchor="middle" font-size="14" font-weight="600" fill="#7a2b2b">外部流量</text>
+  <text x="105" y="172" text-anchor="middle" font-size="12" fill="#5a3a3a">一个域名</text>
+
+  <line x1="172" y1="158" x2="262" y2="158" stroke="#c0392b" stroke-width="2.5"/>
+  <polygon points="262,158 252,153 252,163" fill="#c0392b"/>
+
+  <!-- single blob -->
+  <rect x="274" y="106" width="230" height="104" rx="12" fill="#ffe3e3" stroke="#c94f4f" stroke-width="2.5"/>
+  <text x="389" y="134" text-anchor="middle" font-size="14" font-weight="700" fill="#7a2b2b">一整份规则</text>
+  <text x="389" y="156" text-anchor="middle" font-size="12" fill="#5a3a3a">商城 + 后台 + 接口</text>
+  <text x="389" y="176" text-anchor="middle" font-size="12" font-weight="600" fill="#c0392b">谁都能改</text>
+  <text x="389" y="196" text-anchor="middle" font-size="12" fill="#5a3a3a">改一处 = 动全身</text>
+
+  <!-- teams -->
+  <rect x="540" y="96" width="284" height="30" rx="8" fill="#fff" stroke="#c94f4f"/>
+  <text x="682" y="116" text-anchor="middle" font-size="12" fill="#7a2b2b">商城团队</text>
+  <rect x="540" y="130" width="284" height="30" rx="8" fill="#fff" stroke="#c94f4f"/>
+  <text x="682" y="150" text-anchor="middle" font-size="12" fill="#7a2b2b">后台团队</text>
+  <rect x="540" y="164" width="284" height="30" rx="8" fill="#fff" stroke="#c94f4f"/>
+  <text x="682" y="184" text-anchor="middle" font-size="12" fill="#7a2b2b">接口团队</text>
+  <text x="682" y="212" text-anchor="middle" font-size="12" font-weight="600" fill="#c0392b">三个团队挤在同一份配置里</text>
+
+  <!-- bottom -->
+  <rect x="40" y="252" width="784" height="70" rx="8" fill="#fff" stroke="#c94f4f" stroke-width="1.5"/>
+  <text x="56" y="276" font-size="13" font-weight="600" fill="#c0392b">问题（都在协作时才暴露）</text>
+  <text x="56" y="298" font-size="12" fill="#5a3a3a">没有「谁能用哪个域名」的边界，任何团队改错都会影响所有人。</text>
+  <text x="56" y="318" font-size="12" fill="#5a3a3a">灰度这类能力各家写法不同（注解不是标准），换一个入口实现就得重写。</text>
+</svg>

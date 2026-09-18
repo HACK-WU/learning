@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 440" width="900" height="440" font-family="system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="900" height="440" fill="#fdfcf8"/>
+
+  <text x="450" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#1f2937">② 改进实现：按脾气分类安排，各用各的</text>
+
+  <!-- StatefulSet -->
+  <rect x="26" y="60" width="278" height="215" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
+  <text x="165" y="84" text-anchor="middle" font-size="13.5" font-weight="700" fill="#14532d">有身份的 → 固定工号</text>
+
+  <rect x="42" y="96" width="246" height="40" rx="6" fill="#ffffff" stroke="#d1d5db" stroke-width="1.2"/>
+  <text x="54" y="113" font-size="11.5" fill="#374151">Pod 名：<tspan font-weight="700" font-family="monospace">db-0</tspan> / <tspan font-weight="700" font-family="monospace">db-1</tspan>（固定序号）</text>
+  <text x="54" y="129" font-size="11" fill="#6b7280">不再是一串随机字符</text>
+
+  <rect x="42" y="144" width="246" height="40" rx="6" fill="#ffffff" stroke="#d1d5db" stroke-width="1.2"/>
+  <text x="54" y="161" font-size="11.5" fill="#374151">每个配一本<tspan font-weight="700">专属本子</tspan>（存储）</text>
+  <text x="54" y="177" font-size="11" fill="#6b7280">删了重建，本子还在</text>
+
+  <rect x="42" y="192" width="246" height="72" rx="6" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="54" y="209" font-size="11.5" font-weight="700" fill="#14532d">实测（严格复验）</text>
+  <text x="54" y="227" font-size="11" fill="#374151">删 db-0 → 确实重建（UID 变了）</text>
+  <text x="54" y="244" font-size="11" fill="#374151">数据：<tspan font-weight="700">DATA-db-0 还在 ✓</tspan></text>
+  <text x="54" y="259" font-size="11" fill="#374151">日志：「重新启动，读到已有数据」</text>
+
+  <!-- DaemonSet -->
+  <rect x="311" y="60" width="278" height="215" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
+  <text x="450" y="84" text-anchor="middle" font-size="13.5" font-weight="700" fill="#14532d">每台都要有的 → 数机器</text>
+
+  <rect x="327" y="96" width="246" height="40" rx="6" fill="#ffffff" stroke="#d1d5db" stroke-width="1.2"/>
+  <text x="339" y="113" font-size="11.5" fill="#374151">不看「总共几个」，看<tspan font-weight="700">几台机器</tspan></text>
+  <text x="339" y="129" font-size="11" fill="#6b7280">新加机器自动补上</text>
+
+  <rect x="327" y="144" width="246" height="40" rx="6" fill="#ffffff" stroke="#d1d5db" stroke-width="1.2"/>
+  <text x="339" y="161" font-size="11.5" fill="#374151">没有「要几个」这个字段</text>
+  <text x="339" y="177" font-size="11" fill="#6b7280">实测：desired=1（= 机器数）</text>
+
+  <rect x="327" y="192" width="246" height="72" rx="6" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="339" y="209" font-size="11.5" font-weight="700" fill="#14532d">实测对照</text>
+  <text x="339" y="227" font-size="11" fill="#374151">不加限制：每机器 1 个 ✓</text>
+  <text x="339" y="244" font-size="11" fill="#374151">加「只跑带某标签的机器」→ 匹配</text>
+  <text x="339" y="259" font-size="11" fill="#374151">不到就变成 0 个（可用来排除）</text>
+
+  <!-- Job -->
+  <rect x="596" y="60" width="278" height="215" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
+  <text x="735" y="84" text-anchor="middle" font-size="13.5" font-weight="700" fill="#14532d">干完就走的 → 干完就走</text>
+
+  <rect x="612" y="96" width="246" height="40" rx="6" fill="#ffffff" stroke="#d1d5db" stroke-width="1.2"/>
+  <text x="624" y="113" font-size="11.5" fill="#374151">跑完 → 状态「已完成」，<tspan font-weight="700">不管了</tspan></text>
+  <text x="624" y="129" font-size="11" fill="#6b7280">不再重启</text>
+
+  <rect x="612" y="144" width="246" height="40" rx="6" fill="#ffffff" stroke="#d1d5db" stroke-width="1.2"/>
+  <text x="624" y="161" font-size="11.5" fill="#374151">退出策略只能选「不重启」类</text>
+  <text x="624" y="177" font-size="11" fill="#6b7280">选「总是重启」会被直接拒绝</text>
+
+  <rect x="612" y="192" width="246" height="72" rx="6" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="624" y="209" font-size="11.5" font-weight="700" fill="#14532d">实测</text>
+  <text x="624" y="227" font-size="11" fill="#374151">Job 状态：Complete 1/1</text>
+  <text x="624" y="244" font-size="11" fill="#374151">Pod 状态：Completed 0/1</text>
+  <text x="624" y="259" font-size="11" fill="#374151">等 20 秒：仍是 Completed ✓</text>
+
+  <!-- 老实说 -->
+  <rect x="26" y="292" width="848" height="74" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="42" y="315" font-size="13" font-weight="700" fill="#92400e">一个必须说清的坑：光说「配专属本子」还不够</text>
+  <text x="42" y="337" font-size="12.5" fill="#92400e">那句配置只负责<tspan font-weight="700">「把本子准备好」</tspan>，不会自动发到容器手里。<tspan font-weight="700">必须再写一句「挂到哪个目录」</tspan>，否则本子准备好了却没递过去，</text>
+  <text x="42" y="356" font-size="12.5" fill="#92400e">数据仍写在容器自己的临时层上，一删就没 —— 而且本子显示「已就绪」，让你误以为万无一失。</text>
+
+  <!-- 底部 -->
+  <rect x="26" y="382" width="848" height="42" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="42" y="408" font-size="12.5" fill="#475569"><tspan font-weight="700">还没完：</tspan>任务干完了，但「干完」这个<tspan font-weight="700">记录</tspan>还留着 —— 每分钟一次的定时任务，一天就是 1440 条。下一步解决它。</text>
+</svg>

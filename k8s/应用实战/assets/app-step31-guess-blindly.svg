@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 300" width="760" height="300">
+  <rect width="760" height="300" fill="#fdf6f6"/>
+  <text x="380" y="28" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#333">基础版：只看"是否在跑"，于是瞎猜</text>
+
+  <rect x="40" y="60" width="170" height="70" rx="8" fill="#e8f0fe" stroke="#5b8ef" stroke-width="2"/>
+  <text x="125" y="85" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#333">服务访问不通</text>
+  <text x="125" y="105" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">用户报障</text>
+
+  <line x1="210" y1="95" x2="300" y2="95" stroke="#d9534f" stroke-width="3" marker-end="url(#a1)"/>
+
+  <rect x="300" y="55" width="180" height="80" rx="8" fill="#fde8e8" stroke="#d9534f" stroke-width="2"/>
+  <text x="390" y="80" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="bold" fill="#d9534f">只看一层</text>
+  <text x="390" y="99" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">"在跑啊"</text>
+  <text x="390" y="117" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">看不出问题</text>
+
+  <line x1="480" y1="95" x2="560" y2="95" stroke="#d9534f" stroke-width="3" marker-end="url(#a1)"/>
+
+  <rect x="560" y="50" width="170" height="180" rx="8" fill="#fde8e8" stroke="#d9534f" stroke-width="2"/>
+  <text x="645" y="74" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="bold" fill="#d9534f">于是开始瞎猜</text>
+  <text x="645" y="100" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#333">重启试试</text>
+  <text x="645" y="120" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#333">删了重建</text>
+  <text x="645" y="140" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#333">改配置碰运气</text>
+  <text x="645" y="168" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#d9534f">越改越乱</text>
+  <text x="645" y="192" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">问题还在，多了新伤</text>
+
+  <rect x="40" y="175" width="400" height="75" rx="8" fill="#fff" stroke="#ccc" stroke-width="1"/>
+  <text x="55" y="197" font-family="sans-serif" font-size="12" fill="#333">真相是：它在跑，但没"准备好"。</text>
+  <text x="55" y="217" font-family="sans-serif" font-size="12" fill="#333">"在跑"和"能服务"是两件事。</text>
+  <text x="55" y="238" font-family="sans-serif" font-size="12" fill="#666">只看前一层，永远看不到这个区别。</text>
+
+  <text x="40" y="278" font-family="sans-serif" font-size="12" fill="#666">问题：定位靠猜，改了不知道改没改对。</text>
+
+  <defs>
+    <marker id="a1" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#d9534f"/>
+    </marker>
+  </defs>
+</svg>

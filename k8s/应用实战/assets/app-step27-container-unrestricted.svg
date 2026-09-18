@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 300" width="760" height="300">
+  <rect width="760" height="300" fill="#fdf6f6"/>
+  <text x="380" y="28" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#333">基础版：容器里想干什么就干什么</text>
+
+  <rect x="40" y="60" width="160" height="70" rx="8" fill="#e8f0fe" stroke="#5b8def" stroke-width="2"/>
+  <text x="120" y="85" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#333">应用容器</text>
+  <text x="120" y="105" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">以最高权限运行</text>
+
+  <line x1="200" y1="95" x2="290" y2="95" stroke="#d9534f" stroke-width="3" marker-end="url(#ar2)"/>
+
+  <rect x="290" y="55" width="180" height="80" rx="8" fill="#fde8e8" stroke="#d9534f" stroke-width="2"/>
+  <text x="380" y="80" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="bold" fill="#d9534f">几乎无限制</text>
+  <text x="380" y="100" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">能提权 · 能改系统设置</text>
+  <text x="380" y="118" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">能碰宿主机设备</text>
+
+  <line x1="470" y1="95" x2="560" y2="95" stroke="#d9534f" stroke-width="3" marker-end="url(#ar2)"/>
+
+  <rect x="560" y="50" width="170" height="180" rx="8" fill="#fde8e8" stroke="#d9534f" stroke-width="2"/>
+  <text x="645" y="72" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="bold" fill="#d9534f">逃出容器之后</text>
+  <text x="645" y="98" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#333">宿主机上的文件</text>
+  <text x="645" y="118" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#333">其他容器的东西</text>
+  <text x="645" y="138" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#333">节点本身的控制权</text>
+  <text x="645" y="166" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#d9534f">一个容器 = 一台机器</text>
+  <text x="645" y="190" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">边界几乎不存在</text>
+
+  <rect x="40" y="170" width="400" height="80" rx="8" fill="#fff" stroke="#ccc" stroke-width="1"/>
+  <text x="55" y="192" font-family="sans-serif" font-size="12" fill="#333">更麻烦的是：没人拦你。</text>
+  <text x="55" y="212" font-family="sans-serif" font-size="12" fill="#333">提交就放行，跑起来也不知道自己"裸"着。</text>
+  <text x="55" y="234" font-family="sans-serif" font-size="12" fill="#666">合规检查一来，才发现全是问题。</text>
+
+  <text x="40" y="278" font-family="sans-serif" font-size="12" fill="#666">问题：安全靠自觉，没有底线；出事前看不出，出事后来不及。</text>
+
+  <defs>
+    <marker id="ar2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#d9534f"/>
+    </marker>
+  </defs>
+</svg>

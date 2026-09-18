@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 360" width="880" height="360" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+  <rect width="880" height="360" fill="#f6faf6"/>
+  <text x="440" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#1e5e34">综合版：光有门牌还不够，得告诉它谁能接客</text>
+
+  <!-- left: no probe -->
+  <rect x="30" y="52" width="390" height="180" rx="10" fill="#fff" stroke="#c94f4f" stroke-width="2"/>
+  <text x="225" y="78" text-anchor="middle" font-size="14" font-weight="700" fill="#a33">没有就绪探针</text>
+
+  <text x="50" y="106" font-size="12" fill="#5a3a3a">Pod 状态：Running（进程在跑就算好）</text>
+  <text x="50" y="126" font-size="12" fill="#c0392b">实际：还在 sleep 15，服务根本没起</text>
+
+  <rect x="50" y="140" width="350" height="34" rx="6" fill="#ffe3e3" stroke="#c94f4f"/>
+  <text x="225" y="162" text-anchor="middle" font-size="12" font-weight="600" fill="#a33">未就绪的 Pod 仍被放进转发名单</text>
+
+  <text x="50" y="196" font-size="12" fill="#5a3a3a">实测：删 Pod 期间 25 次采样，随机失败 2~4 次</text>
+  <text x="50" y="214" font-size="13" font-weight="700" fill="#c0392b">成功 21~23 / 失败 2~4</text>
+
+  <!-- right: with probe -->
+  <rect x="450" y="52" width="400" height="180" rx="10" fill="#fff" stroke="#2e8b57" stroke-width="2"/>
+  <text x="650" y="78" text-anchor="middle" font-size="14" font-weight="700" fill="#1e5e34">加上就绪探针</text>
+
+  <text x="470" y="106" font-size="12" fill="#3a5a3a">探针每 2 秒问一次：能接客了吗</text>
+  <text x="470" y="126" font-size="12" fill="#2e8b57">答不上来的，先踢出转发名单</text>
+
+  <rect x="470" y="140" width="360" height="34" rx="6" fill="#e6f5ec" stroke="#2e8b57"/>
+  <text x="650" y="162" text-anchor="middle" font-size="12" font-weight="600" fill="#1e5e34">只有确认能接客的才收请求</text>
+
+  <text x="470" y="196" font-size="12" fill="#3a5a3a">实测：删 Pod 期间 25 次采样，</text>
+  <text x="470" y="214" font-size="13" font-weight="700" fill="#1e5e34">成功 25 / 失败 0</text>
+
+  <!-- bottom -->
+  <rect x="30" y="250" width="820" height="88" rx="8" fill="#fff" stroke="#2e8b57" stroke-width="1.5"/>
+  <text x="50" y="274" font-size="13" font-weight="700" fill="#1e5e34">为什么「能跑」和「能接客」是两件事</text>
+  <text x="50" y="296" font-size="12" fill="#3a5a3a">容器进程活着 ≠ 服务可用。慢启动的进程（加载缓存、预热连接池）在启动后十几秒内</text>
+  <text x="50" y="314" font-size="12" fill="#3a5a3a">根本接不了请求，但平台并不知道——除非你用就绪探针明确告诉它。</text>
+  <text x="50" y="332" font-size="12" fill="#3a5a3a">Service 只认「名单」，而谁进名单，由就绪探针说了算。</text>
+</svg>

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 440" width="880" height="440" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+  <rect width="880" height="440" fill="#f4f8fd"/>
+  <text x="440" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#1f4e79">改进版：一份源头 + 版本台账，出事一键退回去</text>
+
+  <!-- left: kustomize -->
+  <text x="220" y="62" text-anchor="middle" font-size="15" font-weight="700" fill="#1f4e79">方案一：叠补丁（Kustomize）</text>
+  <rect x="60" y="78" width="320" height="70" rx="10" fill="#e8f2fd" stroke="#2b7ac9" stroke-width="2.5"/>
+  <text x="220" y="102" text-anchor="middle" font-size="13" font-weight="700" fill="#1f4e79">源头（base）</text>
+  <text x="220" y="124" text-anchor="middle" font-size="12" fill="#3a5a7a">纯 YAML，没有模板语法</text>
+  <text x="220" y="140" text-anchor="middle" font-size="11" fill="#3a5a7a">12 个服务各自一份</text>
+
+  <line x1="220" y1="150" x2="220" y2="176" stroke="#2b7ac9" stroke-width="2"/>
+  <polygon points="220,178 214,170 226,170" fill="#2b7ac9"/>
+
+  <rect x="60" y="180" width="100" height="56" rx="8" fill="#fff" stroke="#2b7ac9" stroke-width="2"/>
+  <text x="110" y="206" text-anchor="middle" font-size="12" font-weight="700" fill="#1f4e79">开发补丁</text>
+  <text x="110" y="224" text-anchor="middle" font-size="11" fill="#3a5a7a">副本 2</text>
+
+  <rect x="170" y="180" width="100" height="56" rx="8" fill="#fff" stroke="#2b7ac9" stroke-width="2"/>
+  <text x="220" y="206" text-anchor="middle" font-size="12" font-weight="700" fill="#1f4e79">测试补丁</text>
+  <text x="220" y="224" text-anchor="middle" font-size="11" fill="#3a5a7a">副本 3</text>
+
+  <rect x="280" y="180" width="100" height="56" rx="8" fill="#fff" stroke="#2b7ac9" stroke-width="2"/>
+  <text x="330" y="206" text-anchor="middle" font-size="12" font-weight="700" fill="#1f4e79">生产补丁</text>
+  <text x="330" y="224" text-anchor="middle" font-size="11" fill="#3a5a7a">副本 5</text>
+
+  <rect x="60" y="248" width="320" height="46" rx="8" fill="#eef8f0" stroke="#2e8b57" stroke-width="2"/>
+  <text x="220" y="272" text-anchor="middle" font-size="12" font-weight="700" fill="#1e5e34">加环境变量：源头改一处</text>
+  <text x="220" y="288" text-anchor="middle" font-size="11" fill="#3a5a3a">各环境补丁自动继承</text>
+
+  <!-- right: helm -->
+  <text x="660" y="62" text-anchor="middle" font-size="15" font-weight="700" fill="#1f4e79">方案二：打包分发（Helm）</text>
+  <rect x="470" y="78" width="350" height="70" rx="10" fill="#e8f2fd" stroke="#2b7ac9" stroke-width="2.5"/>
+  <text x="645" y="102" text-anchor="middle" font-size="13" font-weight="700" fill="#1f4e79">包（chart）+ 参数文件</text>
+  <text x="645" y="124" text-anchor="middle" font-size="12" fill="#3a5a7a">模板 + values，参数集中一处</text>
+  <text x="645" y="140" text-anchor="middle" font-size="11" fill="#3a5a7a">别人的包拿过来直接装</text>
+
+  <line x1="645" y1="150" x2="645" y2="176" stroke="#2b7ac9" stroke-width="2"/>
+  <polygon points="645,178 639,170 651,170" fill="#2b7ac9"/>
+
+  <rect x="470" y="180" width="350" height="56" rx="8" fill="#fff" stroke="#2b7ac9" stroke-width="2"/>
+  <text x="645" y="204" text-anchor="middle" font-size="12" font-weight="700" fill="#1f4e79">版本台账（每次发布一条记录）</text>
+  <text x="645" y="222" text-anchor="middle" font-size="11" fill="#3a5a7a">1 安装 → 2 升级 → 3 回滚到 1</text>
+
+  <rect x="470" y="248" width="350" height="46" rx="8" fill="#eef8f0" stroke="#2e8b57" stroke-width="2"/>
+  <text x="645" y="272" text-anchor="middle" font-size="12" font-weight="700" fill="#1e5e34">出事：一条命令退回上一版</text>
+  <text x="645" y="288" text-anchor="middle" font-size="11" fill="#3a5a3a">不用翻 Git，不用猜集群里是什么</text>
+
+  <!-- evidence -->
+  <rect x="60" y="308" width="760" height="56" rx="10" fill="#fff" stroke="#2b7ac9" stroke-width="1.5"/>
+  <text x="80" y="332" font-size="13" font-weight="700" fill="#1f4e79">本机实测（Helm v3.22.0）</text>
+  <text x="80" y="356" font-size="12" fill="#3a5a7a">版本台账：1 安装 → 2 升级（副本 2→4）→ 3 回滚到 1（副本回到 2）；台账存在命名空间的 Secret 里。</text>
+
+  <!-- bottom -->
+  <rect x="60" y="376" width="760" height="48" rx="10" fill="#fff5f5" stroke="#c92a2a" stroke-width="1.5"/>
+  <text x="80" y="400" font-size="12" font-weight="700" fill="#c0392b">遗留问题</text>
+  <text x="80" y="418" font-size="12" fill="#5a3a3a">日志只在 Pod 当时所在的那一台机器上，Pod 一删就没了 —— 「它健康吗」这个问题，集群只答了一半。</text>
+</svg>

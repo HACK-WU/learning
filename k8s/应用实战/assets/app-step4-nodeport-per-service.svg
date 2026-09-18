@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 340" width="860" height="340" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+  <rect width="860" height="340" fill="#fdf6f6"/>
+  <text x="430" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#7a2b2b">基础版：一个服务开一个对外端口</text>
+
+  <!-- internet -->
+  <rect x="40" y="112" width="140" height="80" rx="10" fill="#fff" stroke="#c94f4f" stroke-width="2"/>
+  <text x="110" y="146" text-anchor="middle" font-size="14" font-weight="600" fill="#7a2b2b">外部用户</text>
+  <text x="110" y="168" text-anchor="middle" font-size="12" fill="#5a3a3a">要记住 N 个端口</text>
+
+  <!-- lines -->
+  <line x1="182" y1="130" x2="300" y2="130" stroke="#c0392b" stroke-width="2"/>
+  <polygon points="300,130 290,125 290,135" fill="#c0392b"/>
+  <text x="300" y="124" font-size="11" fill="#c0392b">:30001</text>
+
+  <line x1="182" y1="152" x2="300" y2="152" stroke="#c0392b" stroke-width="2"/>
+  <polygon points="300,152 290,147 290,157" fill="#c0392b"/>
+  <text x="300" y="146" font-size="11" fill="#c0392b">:30002</text>
+
+  <line x1="182" y1="174" x2="300" y2="174" stroke="#c0392b" stroke-width="2"/>
+  <polygon points="300,174 290,169 290,179" fill="#c0392b"/>
+  <text x="300" y="168" font-size="11" fill="#c0392b">:30003</text>
+
+  <!-- services -->
+  <rect x="312" y="112" width="150" height="36" rx="8" fill="#ffe3e3" stroke="#c94f4f"/>
+  <text x="387" y="135" text-anchor="middle" font-size="12" fill="#7a2b2b">主页服务 :30001</text>
+  <rect x="312" y="152" width="150" height="36" rx="8" fill="#ffe3e3" stroke="#c94f4f"/>
+  <text x="387" y="175" text-anchor="middle" font-size="12" fill="#7a2b2b">接口服务 :30002</text>
+  <rect x="312" y="192" width="150" height="36" rx="8" fill="#ffe3e3" stroke="#c94f4f"/>
+  <text x="387" y="215" text-anchor="middle" font-size="12" fill="#7a2b2b">后台服务 :30003</text>
+
+  <!-- problem -->
+  <rect x="500" y="112" width="322" height="116" rx="10" fill="#fff" stroke="#c94f4f" stroke-width="2"/>
+  <text x="516" y="138" font-size="13" font-weight="700" fill="#c0392b">每加一个服务就多一个端口</text>
+  <text x="516" y="162" font-size="12" fill="#5a3a3a">shop.example.com:30001  主页</text>
+  <text x="516" y="182" font-size="12" fill="#5a3a3a">shop.example.com:30002  接口</text>
+  <text x="516" y="202" font-size="12" fill="#5a3a3a">shop.example.com:30003  后台</text>
+  <text x="516" y="220" font-size="12" font-weight="600" fill="#c0392b">用户记不住，防火墙开不完</text>
+
+  <!-- bottom -->
+  <rect x="40" y="256" width="782" height="62" rx="8" fill="#fff" stroke="#c94f4f" stroke-width="1.5"/>
+  <text x="56" y="280" font-size="13" font-weight="600" fill="#c0392b">实测结果</text>
+  <text x="56" y="301" font-size="12" fill="#5a3a3a">三个服务分别开 30001 / 30002 / 30003，都能访问通——所以这个做法「能跑」。</text>
+  <text x="56" y="319" font-size="12" fill="#5a3a3a">问题不在能不能通，在「规模一大就没法管」。</text>
+</svg>

@@ -95,11 +95,10 @@ kubectl scale deploy myapp --replicas=8
 
 **这里出现了第一个认知冲突**。真相是：三向合并确实"考虑"了现场状态，但**不是无脑保留**。规则是——
 
-- 这个字段 **Helm 管着**（在 manifest 里出现过），且新旧版本**值变了** → **覆盖**手工改动
-- 这个字段 **Helm 管着**，但新旧版本**值没变** → 保留手工改动
-- 这个字段 **Helm 不管**（比如别人注入的 sidecar）→ 原样保留
+- 这个字段 **Helm 管着**（在 manifest 里出现过）→ **不管这次改没改它，一律被 chart 值覆盖**
+- 这个字段 **Helm 不管**（比如别人注入的 sidecar、注解）→ 原样保留
 
-我实测的那个场景里 `replicaCount` 从 2 变 3，**值变了**，所以覆盖了 8。
+我实测的场景里 `replicaCount` 从 2 变 3，手工的 8 被覆盖了。但真正反直觉的是后半句——**就算这次压根没动 `replicaCount`、chart 值原封不动，8 照样被覆盖**。不少教程（包括我最初写这一课时参考的那篇）都写着"值没变就保留"，这是错的。实测过程见知识点 1。
 
 **第二个认知冲突**来自 Kustomize。你听说"Kustomize 更简单"，于是试着在 YAML 里写个判断：
 
@@ -306,26 +305,51 @@ annotations:
 
 #### 三向合并：手工改动到底保不保留
 
-这是第二幕认知冲突的答案。实测：
+这是第二幕认知冲突的答案。我把三格都实测了一遍（helm v3.22.0 / kind）：
 
 ```bash
-# Helm 管着 replicas（当前 3），手工改成 8
-kubectl scale deploy myapp -n ns-helm --replicas=8
+# ── 前置：建环境（照抄可跑，此前漏了这三行）──
+kubectl create ns ns-helm
+cd /tmp && rm -rf lab14 && mkdir lab14 && cd lab14
+helm create myapp                                    # 生成示例 chart，目录名即 ./myapp
+helm install myapp ./myapp -n ns-helm --set replicaCount=3 --wait
 
-# upgrade 时 replicaCount 从 3 变成 6（值变了）
+# 【格 A】Helm 管着 replicas，且这次值变了（3→6）
+kubectl scale deploy myapp -n ns-helm --replicas=8
 helm upgrade myapp ./myapp -n ns-helm --set replicaCount=6
-# 结果：replicas = 6   ← 手工的 8 被覆盖
+# 结果：replicas = 6   ← 手工的 8 被覆盖（符合预期）
+
+# 【格 B】Helm 管着 replicas，但这次值没变（3→3）
+kubectl scale deploy myapp -n ns-helm --replicas=8
+helm upgrade myapp ./myapp -n ns-helm --set replicaCount=3   # 与上次相同
+# 结果：replicas = 3   ← 手工的 8 照样被覆盖！(8 → 3)
+
+# 【格 B'】换字段再验：image
+kubectl set image deploy myapp myapp=alpine:3.20 -n ns-helm
+helm upgrade myapp ./myapp -n ns-helm                        # chart 未改动
+# 结果：image 回到 nginx:1.16.0   ← 照样被覆盖
+
+# 【格 C】Helm 不管的字段
+kubectl annotate deploy myapp handmade=yes -n ns-helm
+helm upgrade myapp ./myapp -n ns-helm --set replicaCount=6
+# 结果：handmade=yes 还在   ← 保留
 ```
 
-**规则表**：
+**规则表**（注意第二行，它与流传甚广的说法相反）：
 
 | 字段情况 | upgrade 后 |
 |---|---|
 | Helm 管着，且新旧 manifest **值变了** | **覆盖**手工改动 |
-| Helm 管着，且新旧 manifest **值没变** | **保留**手工改动 |
-| Helm **不管**（如服务网格注入的 sidecar） | **保留**（这是 Helm 3 相对 Helm 2 的关键改进） |
+| Helm 管着，但新旧 manifest **值没变** | **照样覆盖**（实测 8 → 3） |
+| Helm **不管**（如服务网格注入的 sidecar、别人加的注解） | **保留**（这是 Helm 3 相对 Helm 2 的关键改进） |
 
-> 🎯 **实践结论**：三向合并解决的是"**别人注入的东西别被我删掉**"（sidecar、mutating webhook 加的字段），**不是**"让我手工改了还能赖着不走"。想强制重置手工改动，用 `--reset-values`。
+**map 字段还有一层细节**（实测补充）：map 是**深度合并**而非整体替换——chart 里**已存在的键**改了值会被覆盖（`app.kubernetes.io/version` 手工改 9.9.9 → 被覆盖回 1.16.0），但**手工新增的键**会留下（`handmade=yes` 保留）。
+
+> 🎯 **实践结论**：三向合并解决的是"**别人注入的东西别被我删掉**"（sidecar、mutating webhook 加的字段），**不是**"让我手工改了还能赖着不走"。判据只有一条：**这个字段在不在 chart 渲染出的 manifest 里**——在，就会被覆盖；不在，就留着。
+>
+> ⚠️ **关于 `--reset-values`**：它管的不是这个。实测手工 scale 到 8 后 `--reset-values` upgrade，结果是 **1**（chart 默认值）而不是 8——它重置的是 **values 来源**（丢掉上次 `--set` 的值、回落到 `values.yaml`），**压根不看集群现场**。想彻底按渲染结果替换、连 chart 不管的字段一起清掉，用 `--force`（改发 PUT）。
+
+> 📌 **为什么敢说流传的说法是错的**：Helm 官方维护者 `bacongobbler` 在 [issue #13411](https://github.com/helm/helm/issues/13411) 里对同样的实验回复 "Yes, that is the expected behaviour"，并承认自己此前写的博客有误。另有 [helmfile 作者 derlin 的规则归纳](https://dev.to/derlin/helmfile-difference-between-sync-and-apply-helm-3-28o1) 与上面的实测完全吻合。网上仍有人写"值没变就不动"（如 [elpa.dev](http://elpa.dev/2025/11/02/helm-3-ways-strategic-merge-patches.html)），别采信。
 
 #### 常见误区
 
@@ -335,8 +359,8 @@ helm upgrade myapp ./myapp -n ns-helm --set replicaCount=6
 > 🐞 **误区 2**："回滚是把历史删掉，回到过去。"
 > 错。回滚是**新增一条 REVISION**，历史只增不减。
 
-> 🐞 **误区 3**："Helm 会保留我所有手工改动。"
-> 错。只有 **Helm 不管的字段**和**新旧值未变的字段**才保留。
+> 🐞 **误区 3**："Helm 会保留我所有手工改动。"（还有个更隐蔽的版本："只要这次没改这个字段，手工改动就留得住。"）
+> 错。只有 **Helm 不管的字段**才保留。**chart 声明过的字段，不管这次改没改它，一律被 chart 值覆盖。**
 
 #### 一句话记住
 
@@ -872,6 +896,18 @@ rm -rf /tmp/l14helm /tmp/l14kus /tmp/l14kus2
 
 > ⚠️ 本课会在集群里留下 release Secret 和打日志的 Pod，**不清理会持续占用资源**（打日志的 Pod 会一直写到节点磁盘）。
 
+### 4.2 应用实战：12 个服务 × 3 套环境，改一处要改 36 遍
+
+> 🎯 **想看它解决什么真实问题？** → [应用实战 · 一份源头多套环境](../../../应用实战/14-一份源头多套环境.md)
+>
+> 课内验证的是「生命周期怎么用、哈希会不会变」；实战里是一个**真实的交付场景**：36 份 YAML 怎么收敛成一份源头，以及**出事怎么退回去**。核心结论是 Helm 与 Kustomize 的**本质差异**——打包分发（带版本台账）vs 叠补丁（YAML 保持纯 YAML）。
+>
+> ✅ **本课第二幕/第三幕已按实测修正**，与实战结论一致：真实规则是**字段只要出现在 chart 里，upgrade 时一律被 chart 值覆盖，与"这次改没改它"无关**；只有 chart 完全不管的字段（别人注入的 sidecar、注解）才保留。依据为 Helm 官方维护者 `bacongobbler` 在 [issue #13411](https://github.com/helm/helm/issues/13411) 中对实验的确认回复（"Yes, that is the expected behaviour"），并用其实验精确复现：`a` 从 2 被覆盖回 1，`b=3` 保留。
+>
+> 本轮另补两处边界实测：① **map 是深度合并**——chart 已有的键改了值会被覆盖，手工**新增的键**会留下；② **`--reset-values` 重置的是 values 来源而非集群现场**（手工 scale 8 后 `--reset-values` 得到 1，不是 8），想连 chart 不管的字段一起清掉要用 `--force`。
+>
+> 另含三个实测抓到的坑：① **配置名不带哈希 → 改了内容也不生效**（`deployment unchanged`、值仍是旧值，且 apply **全程无报错**）；② **日志只在 Pod 当时所在的那一台机器**，Pod 一删就没（`kubectl logs` 直接 `NotFound`，节点文件也消失）；③ **`--force` 会连带清掉 chart 不管的字段**（改用 PUT 替换而非 PATCH）。详见 [应用实战索引](../../../应用实战/INDEX.md)。
+
 ---
 
 ## 第五幕：体系收束
@@ -984,7 +1020,7 @@ kubectl top  kubectl logs  k8s 不自带
 |---|---|---|
 | 1 | release Secret 是加密的，可以放密码 | 只是 `gzip + base64`，一行命令解出明文 |
 | 2 | 回滚是删除历史回到过去 | 回滚是**新增** REVISION，历史只增不减 |
-| 3 | Helm 会保留所有手工改动 | 只保留「Helm 不管的字段」和「新旧值未变的字段」 |
+| 3 | Helm 会保留所有手工改动 / 没改的字段就留得住 | **只保留「Helm 不管的字段」**；chart 声明过的字段**不管这次改没改**，一律被覆盖 |
 | 4 | `--set` 的点号都要转义 | **只有 KEY 里的点号**要转义；VALUE 里的无所谓（实测两者结果相同） |
 | 5 | Kustomize 更简单，应总用它 | 需要打包分发时 Helm 是事实标准，Kustomize 做不到 |
 | 6 | Kustomize 有回滚功能 | 无状态，回滚靠 Git revert + 重新 apply |
@@ -1005,8 +1041,10 @@ kubectl top  kubectl logs  k8s 不自带
 | release 可解出明文（gz + base64，非加密） | 本机实测 | ✅ 已实测 |
 | values 优先级：`values.yaml` < `-f`（后者胜）< `--set` | 本机实测 | ✅ 已实测 |
 | **点号陷阱在 KEY 而非 VALUE** | 本机实测（纠正了我最初的误判） | ✅ 已实测 |
-| 三向合并：Helm 管理字段值变则覆盖手工改动 | 本机实测（scale 8 → upgrade 3 → 得 3） | ✅ 已实测 |
-| Helm 3 保留非 Helm 管理字段（sidecar 等） | [Helm 官方文档](https://v3.helm.sh/docs/v3/faq/changes_since_helm2/) + 多方印证 | 📄 文档结论（机制说明） |
+| 三向合并：Helm 管理字段**一律覆盖**手工改动（含"值没变"场景） | 本机实测（grid 三格：8→3、alpine→nginx、注解保留）+ 官方维护者确认 | ✅ 已实测 |
+| 三向合并：map 深度合并——已有键被覆盖、手工新增键保留 | 本机实测（label 键两类） | ✅ 已实测 |
+| `--reset-values` 重置的是 values 来源、非集群现场（实测 8 → 1） | 本机实测 | ✅ 已实测 |
+| Helm 3 保留非 Helm 管理字段（sidecar 等） | 本机实测（handmade 注解）+ [Helm 官方文档](https://v3.helm.sh/docs/v3/faq/changes_since_helm2/) | ✅ 已实测 |
 | Helm 3 移除 Tiller、改用 kubeconfig 权限 | [Helm 官方 FAQ](https://v3.helm.sh/docs/v3/faq/changes_since_helm2/) | 📄 文档结论 |
 | Helm 1.0 (2016-02) / 3.0 (2019-11) 发布时间 | 公开资料（核查于 2026-09） | 📄 低时效风险 |
 | Kustomize base/overlay、namePrefix、replicas、images、patch | 本机实测（kubectl 内置 v5.7.1） | ✅ 已实测 |

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 300" width="760" height="300">
+  <rect width="760" height="300" fill="#fdf6f6"/>
+  <text x="380" y="28" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#333">基础版：什么都往通用字典里塞</text>
+
+  <rect x="40" y="60" width="160" height="70" rx="8" fill="#e8f0fe" stroke="#5b8def" stroke-width="2"/>
+  <text x="120" y="85" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#333">业务配置</text>
+  <text x="120" y="105" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">塞进通用字典</text>
+
+  <line x1="200" y1="95" x2="290" y2="95" stroke="#d9534f" stroke-width="3" marker-end="url(#a5)"/>
+
+  <rect x="290" y="55" width="180" height="80" rx="8" fill="#fde8e8" stroke="#d9534f" stroke-width="2"/>
+  <text x="380" y="80" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="bold" fill="#d9534f">只是字符串</text>
+  <text x="380" y="99" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">写错没人拦</text>
+  <text x="380" y="117" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">状态也能被改</text>
+
+  <line x1="470" y1="95" x2="550" y2="95" stroke="#d9534f" stroke-width="3" marker-end="url(#a5)"/>
+
+  <rect x="550" y="50" width="180" height="180" rx="8" fill="#fde8e8" stroke="#d9534f" stroke-width="2"/>
+  <text x="640" y="74" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="bold" fill="#d9534f">后果</text>
+  <text x="640" y="100" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#333">写错的值照样收下</text>
+  <text x="640" y="120" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#333">运行到一半才炸</text>
+  <text x="640" y="148" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#d9534f">"实际状态"可被随手改</text>
+  <text x="640" y="168" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">和实际不符也无人知</text>
+  <text x="640" y="196" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">排障时先怀疑状态真假</text>
+
+  <rect x="40" y="175" width="400" height="75" rx="8" fill="#fff" stroke="#ccc" stroke-width="1"/>
+  <text x="55" y="197" font-family="sans-serif" font-size="12" fill="#333">通用字典只保证"能存下来"，</text>
+  <text x="55" y="217" font-family="sans-serif" font-size="12" fill="#333">不保证"存的是对的"。</text>
+  <text x="55" y="238" font-family="sans-serif" font-size="12" fill="#666">校验和状态保护，都得自己想办法。</text>
+
+  <text x="40" y="278" font-family="sans-serif" font-size="12" fill="#666">问题：错误在运行时才暴露，且状态不可信。</text>
+
+  <defs>
+    <marker id="a5" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#d9534f"/>
+    </marker>
+  </defs>
+</svg>

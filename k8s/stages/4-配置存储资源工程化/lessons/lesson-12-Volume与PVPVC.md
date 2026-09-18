@@ -1273,6 +1273,14 @@ kubectl patch pv <pv> --type json -p '[{"op":"remove","path":"/spec/claimRef"}]'
 #    扩容报 Forbidden         → StorageClass 的 allowVolumeExpansion 未开启
 ```
 
+### 4.2 应用实战：数据活过容器
+
+> 🎯 **想看它解决什么真实问题？** → [应用实战 · 数据活过容器](../../../应用实战/12-数据活过容器.md)
+>
+> 课内验证的是「四类存储各自的存活边界」；实战里是一个**真实的交付场景**：一个有状态应用要扛住崩溃、更新、重建，数据都不丢。核心结论是 **StatefulSet 给每个副本独立盘**，重建后还认得回自己那块。
+>
+> 另含三个实测抓到的坑：① **3 副本共用一份 RWO 盘确实能跑，但全被钉在同一台机器**（RWO 限的是**节点**不是 Pod）；② **用 `nodeName` 指定节点会绕过调度器，导致 PVC 永远绑不上**（要改用 `nodeSelector`）；③ **`Delete` 策略下删 PVC 会连带删盘和数据**，`Retain` 则留下 `Released` 盘需手工清 `claimRef`。详见 [应用实战索引](../../../应用实战/INDEX.md)。
+
 ---
 
 ## 第五幕：体系收束

@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 330" width="760" height="330">
+  <rect width="760" height="330" fill="#f4fbf4"/>
+  <text x="380" y="28" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#333">综合版：安全基线拦住不合规的（高亮 = 本步新增）</text>
+
+  <rect x="30" y="55" width="150" height="60" rx="8" fill="#e8f0fe" stroke="#5b8def" stroke-width="2"/>
+  <text x="105" y="80" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#333">应用配置</text>
+  <text x="105" y="98" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">提交上来</text>
+
+  <line x1="180" y1="85" x2="240" y2="85" stroke="#555" stroke-width="2" marker-end="url(#ag2)"/>
+
+  <rect x="240" y="50" width="200" height="70" rx="8" fill="#fff8e1" stroke="#f0ad4e" stroke-width="3"/>
+  <text x="340" y="74" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="bold" fill="#333">安全基线检查</text>
+  <text x="340" y="93" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">按档位逐条核对</text>
+  <text x="340" y="110" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">不过就拦下</text>
+
+  <line x1="440" y1="85" x2="510" y2="60" stroke="#4caf50" stroke-width="2" marker-end="url(#ag2)"/>
+  <line x1="440" y1="85" x2="510" y2="125" stroke="#d9534f" stroke-width="2" marker-end="url(#ar3)"/>
+
+  <rect x="510" y="40" width="220" height="45" rx="8" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+  <text x="620" y="60" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#333">合规：放行</text>
+  <text x="620" y="76" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">正常调度运行</text>
+
+  <rect x="510" y="105" width="220" height="50" rx="8" fill="#fde8e8" stroke="#d9534f" stroke-width="2"/>
+  <text x="620" y="125" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#333">不合规：拦下</text>
+  <text x="620" y="143" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">并列出违反的具体条款</text>
+
+  <rect x="30" y="175" width="700" height="60" rx="8" fill="#fff" stroke="#f0ad4e" stroke-width="2"/>
+  <text x="45" y="197" font-family="sans-serif" font-size="12" font-weight="bold" fill="#d9534f">陷阱：管应用的那一层，会显示"起不来"但没有任何报错</text>
+  <text x="45" y="218" font-family="sans-serif" font-size="11" fill="#666">真相在下一层的事件里——必须往下追一层才看得到。</text>
+  <text x="45" y="232" font-family="sans-serif" font-size="11" fill="#666">应对：改标前先用预演跑一遍，把会拦的先列出来。</text>
+
+  <rect x="30" y="250" width="340" height="60" rx="8" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+  <text x="200" y="272" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="bold" fill="#333">到这一步：不合规的根本进不来</text>
+  <text x="200" y="291" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">底线由集群守，不靠自觉</text>
+
+  <rect x="390" y="250" width="340" height="60" rx="8" fill="#e6f7e6" stroke="#4caf50" stroke-width="2"/>
+  <text x="560" y="272" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="bold" fill="#333">且能提前知道哪条会拦</text>
+  <text x="560" y="291" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">预演 + 告警双保险</text>
+
+  <defs>
+    <marker id="ag2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#4caf50"/>
+    </marker>
+    <marker id="ar3" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#d9534f"/>
+    </marker>
+  </defs>
+</svg>

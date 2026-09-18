@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="330" viewBox="0 0 720 330" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="720" height="330" fill="#fbfcfd"/>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+    <marker id="arrowR" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+
+  <rect x="28" y="130" width="104" height="66" rx="10" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+  <text x="80" y="158" text-anchor="middle" font-size="15" fill="#0c4a6e" font-weight="600">访问方</text>
+  <text x="80" y="180" text-anchor="middle" font-size="12" fill="#075985">用户请求</text>
+
+  <rect x="180" y="130" width="112" height="66" rx="10" fill="#eef2ff" stroke="#6366f1" stroke-width="2"/>
+  <text x="236" y="158" text-anchor="middle" font-size="15" fill="#312e81" font-weight="600">转发口</text>
+  <text x="236" y="180" text-anchor="middle" font-size="12" fill="#4338ca">按名单转发</text>
+
+  <rect x="334" y="130" width="150" height="70" rx="10" fill="#fee2e2" stroke="#dc2626" stroke-width="2.5"/>
+  <text x="409" y="158" text-anchor="middle" font-size="15" fill="#7f1d1d" font-weight="600">服务</text>
+  <text x="409" y="178" text-anchor="middle" font-size="12" fill="#991b1b">启动中 / 假死中</text>
+
+  <!-- 新增：存活检查（高亮） -->
+  <rect x="536" y="118" width="160" height="94" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="3"/>
+  <text x="616" y="142" text-anchor="middle" font-size="15" fill="#78350f" font-weight="700">存活检查（新加）</text>
+  <text x="616" y="164" text-anchor="middle" font-size="12" fill="#92400e">只问一句：还活着吗</text>
+  <text x="616" y="182" text-anchor="middle" font-size="12" fill="#92400e">答不上来就重启</text>
+  <text x="616" y="200" text-anchor="middle" font-size="12" fill="#b45309">⚠ 不区分「在启动」还是「真死了」</text>
+
+  <line x1="132" y1="163" x2="176" y2="163" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="292" y1="163" x2="330" y2="163" stroke="#dc2626" stroke-width="2.5" marker-end="url(#arrowR)"/>
+  <line x1="484" y1="163" x2="532" y2="163" stroke="#d97706" stroke-width="2.5" marker-end="url(#arrowR)"/>
+
+  <!-- 循环重启箭头 -->
+  <path d="M616 212 C 616 244, 409 250, 409 208" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arrowR)"/>
+  <text x="512" y="262" text-anchor="middle" font-size="13" fill="#b91c1c" font-weight="600">反复重启</text>
+
+  <rect x="28" y="278" width="666" height="40" rx="8" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.5"/>
+  <text x="44" y="303" font-size="13" fill="#78350f" font-weight="600">新问题：启动慢的服务还没起来就被判死 → 重启 → 又没起来 → 一直重启，永远起不来。</text>
+</svg>

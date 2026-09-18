@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 500" width="880" height="500" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+  <rect width="880" height="500" fill="#f6faf6"/>
+  <text x="440" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#1e5e34">综合版：副本数跟着压力走，还能管住谁能占多少</text>
+
+  <!-- hpa flow -->
+  <rect x="50" y="62" width="170" height="76" rx="12" fill="#e6f5ec" stroke="#2e8b57" stroke-width="2.5"/>
+  <text x="135" y="92" text-anchor="middle" font-size="14" font-weight="700" fill="#1e5e34">压力上来</text>
+  <text x="135" y="116" text-anchor="middle" font-size="12" fill="#3a5a3a">CPU 用到申请量的 301%</text>
+  <text x="135" y="134" text-anchor="middle" font-size="11" fill="#3a5a3a">（目标只有 30%）</text>
+
+  <line x1="222" y1="100" x2="266" y2="100" stroke="#2e8b57" stroke-width="2.5"/>
+  <polygon points="266,100 258,95 258,105" fill="#2e8b57"/>
+
+  <rect x="270" y="62" width="170" height="76" rx="12" fill="#fff" stroke="#2e8b57" stroke-width="2.5"/>
+  <text x="355" y="92" text-anchor="middle" font-size="14" font-weight="700" fill="#1e5e34">自动加副本</text>
+  <text x="355" y="116" text-anchor="middle" font-size="12" fill="#3a5a3a">1 → 4 → 5</text>
+  <text x="355" y="134" text-anchor="middle" font-size="11" fill="#3a5a3a">（约 25/50 秒各跳一次）</text>
+
+  <line x1="442" y1="100" x2="486" y2="100" stroke="#2e8b57" stroke-width="2.5"/>
+  <polygon points="486,100 478,95 478,105" fill="#2e8b57"/>
+
+  <rect x="490" y="62" width="170" height="76" rx="12" fill="#e6f5ec" stroke="#2e8b57" stroke-width="2.5"/>
+  <text x="575" y="92" text-anchor="middle" font-size="14" font-weight="700" fill="#1e5e34">压力下去</text>
+  <text x="575" y="116" text-anchor="middle" font-size="12" fill="#3a5a3a">CPU 回到 0%</text>
+  <text x="575" y="134" text-anchor="middle" font-size="11" fill="#3a5a3a">副本缩回 1（约 60 秒）</text>
+
+  <rect x="680" y="62" width="150" height="76" rx="12" fill="#fff" stroke="#2e8b57" stroke-width="2.5"/>
+  <text x="755" y="92" text-anchor="middle" font-size="13" font-weight="700" fill="#1e5e34">有冷却期</text>
+  <text x="755" y="116" text-anchor="middle" font-size="12" fill="#3a5a3a">缩得比扩得慢</text>
+  <text x="755" y="134" text-anchor="middle" font-size="11" fill="#3a5a3a">（默认约 5 分钟）</text>
+
+  <!-- evidence -->
+  <rect x="50" y="154" width="780" height="72" rx="10" fill="#fff" stroke="#2e8b57" stroke-width="1.5"/>
+  <text x="70" y="180" font-size="13" font-weight="700" fill="#1e5e34">本机实测：从 1 副本打到 5 副本，再缩回 1</text>
+  <text x="70" y="204" font-size="12" fill="#3a5a3a">cpu: 301%/30% → 1 副本　｜　25 秒后 4 副本　｜　50 秒后 5 副本（到上限）</text>
+  <text x="70" y="222" font-size="12" fill="#3a5a3a">压力消失后：cpu: 0%/30% → 约 60 秒缩回 1 副本</text>
+
+  <!-- quota -->
+  <text x="440" y="256" text-anchor="middle" font-size="15" font-weight="700" fill="#1e5e34">配套：管住「谁能在这一片里占多少」</text>
+
+  <rect x="50" y="272" width="780" height="70" rx="10" fill="#fff" stroke="#2e8b57" stroke-width="2"/>
+  <text x="70" y="298" font-size="13" font-weight="700" fill="#1e5e34">账本验证：申请量是「记账」，不是「实际用量」</text>
+  <text x="70" y="322" font-size="12" fill="#3a5a3a">实测：9 个各申请 2 核的实例（账本划走 18 核 → 节点 91%），实际用量全是 0m。</text>
+  <text x="70" y="338" font-size="12" fill="#3a5a3a">此时再申请 5 核 → 被拒（Insufficient cpu）；但不写申请量的裸奔实例照样进得去。</text>
+
+  <!-- warn -->
+  <rect x="50" y="352" width="780" height="132" rx="10" fill="#fff5f5" stroke="#c92a2a" stroke-width="2"/>
+  <text x="70" y="378" font-size="13" font-weight="700" fill="#c0392b">三个必踩的坑（全部实测）</text>
+  <text x="70" y="402" font-size="12" fill="#c0392b">坑一：不写申请量 → 自动扩缩容根本没基准，百分比无从算起（实测目标值算不出来）。</text>
+  <text x="70" y="424" font-size="12" fill="#c0392b">坑二：以为「只写上限」就够 —— 实测它会被自动补成同值，反而变成最高等级，超限即死。</text>
+  <text x="70" y="446" font-size="12" fill="#c0392b">坑三：申请量填太大 → 账本被划光，机器明明闲着却谁也调度不进来（实测 91% 后 5 核被拒）。</text>
+  <text x="70" y="468" font-size="12" fill="#c0392b">坑四：裸奔实例不占账，账本满了它照样进 —— 这才是「不声明」最危险的地方。</text>
+</svg>

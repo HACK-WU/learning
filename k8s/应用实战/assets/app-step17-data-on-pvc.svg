@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 360" width="880" height="360" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+  <rect width="880" height="360" fill="#f4f8fd"/>
+  <text x="440" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#1f4e79">改进版：数据搬到容器外面，重启和重建都丢不了</text>
+
+  <!-- pod -->
+  <rect x="280" y="76" width="230" height="96" rx="14" fill="#fff" stroke="#2b7ac9" stroke-width="2.5"/>
+  <text x="395" y="106" text-anchor="middle" font-size="14" font-weight="700" fill="#1f4e79">实例（随时可换）</text>
+  <text x="395" y="132" text-anchor="middle" font-size="12" fill="#3a5a7a">崩溃 / 更新 / 被驱逐</text>
+  <text x="395" y="156" text-anchor="middle" font-size="12" fill="#3a5a7a">都不影响外面那块盘</text>
+
+  <!-- pvc -->
+  <rect x="570" y="70" width="250" height="108" rx="14" fill="#e8f2fd" stroke="#2b7ac9" stroke-width="2.5"/>
+  <text x="695" y="100" text-anchor="middle" font-size="14" font-weight="700" fill="#1f4e79">存储卷</text>
+  <text x="695" y="124" text-anchor="middle" font-size="12" fill="#3a5a7a">挂在容器外面</text>
+  <text x="695" y="146" text-anchor="middle" font-size="12" fill="#3a5a7a">容器没了它还在</text>
+  <text x="695" y="170" text-anchor="middle" font-size="12" font-weight="600" fill="#2b7ac9">计数一直在涨</text>
+
+  <line x1="512" y1="124" x2="566" y2="124" stroke="#2b7ac9" stroke-width="2.5"/>
+  <polygon points="566,124 558,119 558,129" fill="#2b7ac9"/>
+
+  <!-- good -->
+  <rect x="60" y="76" width="180" height="96" rx="12" fill="#eef8f0" stroke="#2e8b57" stroke-width="2"/>
+  <text x="150" y="106" text-anchor="middle" font-size="14" font-weight="700" fill="#1e5e34">活过重启 ✅</text>
+  <text x="150" y="130" text-anchor="middle" font-size="12" fill="#3a5a3a">进程崩溃、内存溢出</text>
+  <text x="150" y="152" text-anchor="middle" font-size="12" fill="#3a5a3a">数据都还在</text>
+  <line x1="242" y1="124" x2="276" y2="124" stroke="#2e8b57" stroke-width="2"/>
+  <polygon points="276,124 268,119 268,129" fill="#2e8b57"/>
+
+  <!-- evidence -->
+  <rect x="60" y="200" width="760" height="58" rx="10" fill="#fff" stroke="#2b7ac9" stroke-width="1.5"/>
+  <text x="80" y="226" font-size="13" font-weight="700" fill="#1f4e79">本机实测：崩溃重启 2 次 + 删除重建 1 次</text>
+  <text x="80" y="250" font-size="12" fill="#3a5a7a">崩溃重启 2 次：计数每轮 +1（第 1 次 → 第 3 次）　写在容器里则永远是 1</text>
+
+  <!-- bottom -->
+  <rect x="60" y="272" width="760" height="72" rx="10" fill="#fff" stroke="#2b7ac9" stroke-width="1.5"/>
+  <text x="80" y="298" font-size="13" font-weight="700" fill="#1f4e79">改进与遗留</text>
+  <text x="80" y="322" font-size="12" fill="#3a5a7a">数据活过重启与重建 ✅　但每个实例都得有自己那份数据 —— 多个副本共用一份，会互相踩。</text>
+</svg>

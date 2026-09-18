@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 420" width="880" height="420" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+  <rect width="880" height="420" fill="#f6faf6"/>
+  <text x="440" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#1e5e34">综合版：灰度是标准字段，换实现不用重写</text>
+
+  <!-- traffic -->
+  <rect x="32" y="72" width="112" height="60" rx="10" fill="#fff" stroke="#2e8b57" stroke-width="2"/>
+  <text x="88" y="98" text-anchor="middle" font-size="13" font-weight="600" fill="#1e5e34">全部流量</text>
+  <text x="88" y="118" text-anchor="middle" font-size="12" fill="#3a5a3a">100%</text>
+
+  <line x1="146" y1="102" x2="212" y2="102" stroke="#2e8b57" stroke-width="2.5"/>
+  <polygon points="212,102 202,97 202,107" fill="#2e8b57"/>
+
+  <!-- route -->
+  <rect x="224" y="66" width="180" height="72" rx="12" fill="#e6f5ec" stroke="#2e8b57" stroke-width="3"/>
+  <text x="314" y="94" text-anchor="middle" font-size="14" font-weight="700" fill="#1e5e34">HTTPRoute</text>
+  <text x="314" y="116" text-anchor="middle" font-size="12" fill="#3a5a3a">weight 是标准字段</text>
+  <text x="314" y="134" text-anchor="middle" font-size="12" font-weight="600" fill="#2e8b57">不是某家的注解</text>
+
+  <line x1="406" y1="102" x2="480" y2="78" stroke="#2e8b57" stroke-width="2.5"/>
+  <polygon points="480,78 470,74 472,82" fill="#2e8b57"/>
+  <line x1="406" y1="102" x2="480" y2="126" stroke="#2e8b57" stroke-width="2"/>
+  <polygon points="480,126 470,122 472,130" fill="#2e8b57"/>
+
+  <rect x="492" y="56" width="356" height="40" rx="8" fill="#fff" stroke="#2e8b57"/>
+  <text x="670" y="82" text-anchor="middle" font-size="13" fill="#1e5e34">稳定版 v1（老版本）</text>
+  <rect x="492" y="108" width="356" height="40" rx="8" fill="#e6f5ec" stroke="#2e8b57" stroke-width="2"/>
+  <text x="670" y="134" text-anchor="middle" font-size="13" font-weight="600" fill="#1e5e34">灰度版 v2（新版本）</text>
+
+  <!-- table -->
+  <text x="32" y="186" font-size="14" font-weight="700" fill="#1e5e34">实测：每档采样 300 次，比例精确跟随</text>
+
+  <rect x="32" y="200" width="816" height="30" rx="4" fill="#e6f5ec"/>
+  <text x="52" y="220" font-size="12" font-weight="700" fill="#1e5e34">设置的权重 v1 : v2</text>
+  <text x="290" y="220" font-size="12" font-weight="700" fill="#1e5e34">期望 v2 占比</text>
+  <text x="470" y="220" font-size="12" font-weight="700" fill="#1e5e34">实测 v2 占比</text>
+  <text x="650" y="220" font-size="12" font-weight="700" fill="#1e5e34">结论</text>
+
+  <rect x="32" y="232" width="816" height="28" rx="4" fill="#fff"/>
+  <text x="52" y="251" font-size="12" fill="#3a5a3a">90 : 10</text>
+  <text x="290" y="251" font-size="12" fill="#3a5a3a">10%</text>
+  <text x="470" y="251" font-size="12" fill="#3a5a3a">10%</text>
+  <text x="650" y="251" font-size="12" fill="#3a5a3a">准确</text>
+
+  <rect x="32" y="262" width="816" height="28" rx="4" fill="#fff"/>
+  <text x="52" y="281" font-size="12" fill="#3a5a3a">70 : 30</text>
+  <text x="290" y="281" font-size="12" fill="#3a5a3a">30%</text>
+  <text x="470" y="281" font-size="12" fill="#3a5a3a">31%</text>
+  <text x="650" y="281" font-size="12" fill="#3a5a3a">准确</text>
+
+  <rect x="32" y="292" width="816" height="28" rx="4" fill="#fff"/>
+  <text x="52" y="311" font-size="12" fill="#3a5a3a">50 : 50</text>
+  <text x="290" y="311" font-size="12" fill="#3a5a3a">50%</text>
+  <text x="470" y="311" font-size="12" fill="#3a5a3a">49%</text>
+  <text x="650" y="311" font-size="12" fill="#3a5a3a">准确</text>
+
+  <rect x="32" y="322" width="816" height="28" rx="4" fill="#fff"/>
+  <text x="52" y="341" font-size="12" fill="#3a5a3a">30 : 70</text>
+  <text x="290" y="341" font-size="12" fill="#3a5a3a">70%</text>
+  <text x="470" y="341" font-size="12" fill="#3a5a3a">70%</text>
+  <text x="650" y="341" font-size="12" fill="#3a5a3a">准确</text>
+
+  <rect x="32" y="352" width="816" height="28" rx="4" fill="#fff"/>
+  <text x="52" y="371" font-size="12" fill="#3a5a3a">0 : 10</text>
+  <text x="290" y="371" font-size="12" fill="#3a5a3a">100%</text>
+  <text x="470" y="371" font-size="12" fill="#3a5a3a">100%</text>
+  <text x="650" y="371" font-size="12" fill="#3a5a3a">全量切换</text>
+
+  <rect x="32" y="382" width="816" height="28" rx="4" fill="#e6f5ec"/>
+  <text x="52" y="401" font-size="12" font-weight="700" fill="#1e5e34">10 : 0（回滚）</text>
+  <text x="290" y="401" font-size="12" font-weight="700" fill="#1e5e34">0%</text>
+  <text x="470" y="401" font-size="12" font-weight="700" fill="#1e5e34">0%</text>
+  <text x="650" y="401" font-size="12" font-weight="700" fill="#1e5e34">秒级撤回</text>
+</svg>

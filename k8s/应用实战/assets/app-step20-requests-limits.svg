@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 420" width="880" height="420" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+  <rect width="880" height="420" fill="#f4f8fd"/>
+  <text x="440" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#1f4e79">改进版：两个数字分工不同 —— 一个管往哪放，一个管能用多少</text>
+
+  <!-- two numbers -->
+  <rect x="60" y="64" width="360" height="112" rx="12" fill="#e8f2fd" stroke="#2b7ac9" stroke-width="2.5"/>
+  <text x="240" y="94" text-anchor="middle" font-size="15" font-weight="700" fill="#1f4e79">申请量</text>
+  <text x="240" y="118" text-anchor="middle" font-size="12" fill="#3a5a7a">管「往哪放」—— 调度时记账用的</text>
+  <text x="240" y="140" text-anchor="middle" font-size="12" fill="#3a5a7a">写 2 核，账本上就划走 2 核</text>
+  <text x="240" y="162" text-anchor="middle" font-size="12" font-weight="600" fill="#2b7ac9">哪怕你实际一个核都没用</text>
+
+  <rect x="460" y="64" width="360" height="112" rx="12" fill="#fff" stroke="#2b7ac9" stroke-width="2.5"/>
+  <text x="640" y="94" text-anchor="middle" font-size="15" font-weight="700" fill="#1f4e79">上限</text>
+  <text x="640" y="118" text-anchor="middle" font-size="12" fill="#3a5a7a">管「能用多少」—— 运行时的天花板</text>
+  <text x="640" y="140" text-anchor="middle" font-size="12" fill="#3a5a7a">超过就被限制或终止</text>
+  <text x="640" y="162" text-anchor="middle" font-size="12" font-weight="600" fill="#2b7ac9">可以比申请量大（允许超卖）</text>
+
+  <!-- cpu vs mem -->
+  <text x="440" y="204" text-anchor="middle" font-size="15" font-weight="700" fill="#1f4e79">但同样是「超限」，CPU 和内存待遇完全不同</text>
+
+  <rect x="60" y="222" width="360" height="124" rx="12" fill="#eef8f0" stroke="#2e8b57" stroke-width="2.5"/>
+  <text x="240" y="252" text-anchor="middle" font-size="14" font-weight="700" fill="#1e5e34">CPU 超限 → 被限流，不死</text>
+  <text x="240" y="278" text-anchor="middle" font-size="12" fill="#3a5a3a">实测：上限 200m，跑了 40 秒</text>
+  <text x="240" y="300" text-anchor="middle" font-size="12" fill="#3a5a3a">被掐住 414 次 / 共 415 个周期</text>
+  <text x="240" y="324" text-anchor="middle" font-size="12" font-weight="600" fill="#2e8b57">状态还是 Running，重启 0 次</text>
+
+  <rect x="460" y="222" width="360" height="124" rx="12" fill="#fff5f5" stroke="#c92a2a" stroke-width="2.5"/>
+  <text x="640" y="252" text-anchor="middle" font-size="14" font-weight="700" fill="#c0392b">内存超限 → 立刻被杀</text>
+  <text x="640" y="278" text-anchor="middle" font-size="12" fill="#c0392b">实测：上限 100Mi，申请 200Mi</text>
+  <text x="640" y="300" text-anchor="middle" font-size="12" fill="#c0392b">退出码 137，原因 OOMKilled</text>
+  <text x="640" y="324" text-anchor="middle" font-size="12" font-weight="600" fill="#c0392b">没有缓冲，直接终止</text>
+
+  <!-- why -->
+  <rect x="60" y="360" width="760" height="46" rx="10" fill="#fff" stroke="#2b7ac9" stroke-width="1.5"/>
+  <text x="80" y="388" font-size="12" fill="#3a5a7a">为什么：CPU 是「可压缩」的 —— 少给一点只是变慢；内存是「不可压缩」的 —— 不给就没法跑，只能杀。</text>
+</svg>

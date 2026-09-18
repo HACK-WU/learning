@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 500" width="880" height="500" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+  <rect width="880" height="500" fill="#f6faf6"/>
+  <text x="440" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#1e5e34">综合版：配置变了自动生效，外加一条查问题的路径</text>
+
+  <!-- hash flow -->
+  <rect x="50" y="62" width="230" height="80" rx="12" fill="#e6f5ec" stroke="#2e8b57" stroke-width="2.5"/>
+  <text x="165" y="90" text-anchor="middle" font-size="14" font-weight="700" fill="#1e5e34">配置内容变了</text>
+  <text x="165" y="114" text-anchor="middle" font-size="12" fill="#3a5a3a">debug → info</text>
+  <text x="165" y="132" text-anchor="middle" font-size="11" fill="#3a5a3a">（源头改一处）</text>
+
+  <line x1="282" y1="102" x2="326" y2="102" stroke="#2e8b57" stroke-width="2.5"/>
+  <polygon points="326,102 318,97 318,107" fill="#2e8b57"/>
+
+  <rect x="330" y="62" width="230" height="80" rx="12" fill="#fff" stroke="#2e8b57" stroke-width="2.5"/>
+  <text x="445" y="90" text-anchor="middle" font-size="14" font-weight="700" fill="#1e5e34">名字跟着变</text>
+  <text x="445" y="112" text-anchor="middle" font-size="11" fill="#3a5a3a">配置名带哈希后缀</text>
+  <text x="445" y="130" text-anchor="middle" font-size="11" fill="#3a5a3a">引用它的地方也跟着改</text>
+
+  <line x1="562" y1="102" x2="606" y2="102" stroke="#2e8b57" stroke-width="2.5"/>
+  <polygon points="606,102 598,97 598,107" fill="#2e8b57"/>
+
+  <rect x="610" y="62" width="220" height="80" rx="12" fill="#e6f5ec" stroke="#2e8b57" stroke-width="2.5"/>
+  <text x="720" y="90" text-anchor="middle" font-size="14" font-weight="700" fill="#1e5e34">实例自动换新</text>
+  <text x="720" y="114" text-anchor="middle" font-size="12" fill="#3a5a3a">新配置生效</text>
+  <text x="720" y="132" text-anchor="middle" font-size="11" fill="#3a5a3a">不用手工重启</text>
+
+  <!-- evidence -->
+  <rect x="50" y="154" width="780" height="72" rx="10" fill="#fff" stroke="#2e8b57" stroke-width="1.5"/>
+  <text x="70" y="180" font-size="13" font-weight="700" fill="#1e5e34">本机实测：带哈希 vs 不带哈希，差别是「生效」还是「没生效」</text>
+  <text x="70" y="204" font-size="12" fill="#3a5a3a">带哈希：配置名 26mmg88m44 → k267b76fm8，实例重建，值 debug → info ✅</text>
+  <text x="70" y="222" font-size="12" fill="#3a5a3a">不带哈希：配置名不变，部署「unchanged」，实例原地不动，值还是 debug ❌</text>
+
+  <!-- observability -->
+  <text x="440" y="256" text-anchor="middle" font-size="15" font-weight="700" fill="#1e5e34">「它健康吗」—— 三根支柱，集群自带到什么程度</text>
+
+  <rect x="50" y="272" width="245" height="96" rx="10" fill="#eef8f0" stroke="#2e8b57" stroke-width="2"/>
+  <text x="172" y="298" text-anchor="middle" font-size="13" font-weight="700" fill="#1e5e34">指标</text>
+  <text x="172" y="320" text-anchor="middle" font-size="12" fill="#3a5a3a">「用了多少」</text>
+  <text x="172" y="342" text-anchor="middle" font-size="11" fill="#3a5a3a">需另装采集器</text>
+  <text x="172" y="360" text-anchor="middle" font-size="11" fill="#3a5a3a">（本机已装，可用）</text>
+
+  <rect x="310" y="272" width="245" height="96" rx="10" fill="#fff5f5" stroke="#c92a2a" stroke-width="2"/>
+  <text x="432" y="298" text-anchor="middle" font-size="13" font-weight="700" fill="#c0392b">日志</text>
+  <text x="432" y="320" text-anchor="middle" font-size="12" fill="#c0392b">「发生过什么」</text>
+  <text x="432" y="342" text-anchor="middle" font-size="11" fill="#c0392b">只给到读取命令</text>
+  <text x="432" y="360" text-anchor="middle" font-size="11" fill="#c0392b">（实测：Pod 删了就没了）</text>
+
+  <rect x="580" y="272" width="250" height="96" rx="10" fill="#f2f2f2" stroke="#999" stroke-width="2"/>
+  <text x="705" y="298" text-anchor="middle" font-size="13" font-weight="700" fill="#666">链路</text>
+  <text x="705" y="320" text-anchor="middle" font-size="12" fill="#666">「卡在哪一环」</text>
+  <text x="705" y="342" text-anchor="middle" font-size="11" fill="#999">完全不带</text>
+  <text x="705" y="360" text-anchor="middle" font-size="11" fill="#999">（得自己接）</text>
+
+  <!-- warn -->
+  <rect x="50" y="382" width="780" height="104" rx="10" fill="#fff5f5" stroke="#c92a2a" stroke-width="2"/>
+  <text x="70" y="408" font-size="13" font-weight="700" fill="#c0392b">四个必踩的坑（全部实测）</text>
+  <text x="70" y="432" font-size="12" fill="#c0392b">坑一：以为什么都不动就保留了手工改动 —— 实测：字段只要写进了包里，发布时一律被覆盖。</text>
+  <text x="70" y="452" font-size="12" fill="#c0392b">坑二：配置名不带哈希 —— 内容改了名字没变，实例不会重建，新配置根本不生效。</text>
+  <text x="70" y="472" font-size="12" fill="#c0392b">坑三：以为日志一直在 —— 实测：Pod 删除后读取命令直接报「找不到」，文件也随容器目录消失。</text>
+</svg>

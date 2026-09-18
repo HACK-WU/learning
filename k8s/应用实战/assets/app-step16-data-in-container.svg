@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 340" width="880" height="340" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+  <rect width="880" height="340" fill="#fdf6f6"/>
+  <text x="440" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#7a2b2b">基础版：数据写在容器里，重启就归零</text>
+
+  <!-- container -->
+  <rect x="60" y="74" width="300" height="150" rx="14" fill="#fff" stroke="#c94f4f" stroke-width="2.5"/>
+  <text x="210" y="104" text-anchor="middle" font-size="14" font-weight="700" fill="#7a2b2b">容器</text>
+  <rect x="84" y="118" width="252" height="40" rx="6" fill="#f6e6e6" stroke="#c94f4f" stroke-width="1.5"/>
+  <text x="210" y="143" text-anchor="middle" font-size="12" fill="#5a3a3a">镜像层：只读</text>
+  <rect x="84" y="166" width="252" height="40" rx="6" fill="#ffe3e3" stroke="#c94f4f" stroke-width="1.5"/>
+  <text x="210" y="191" text-anchor="middle" font-size="12" fill="#5a3a3a">可写层：用户上传的文件</text>
+
+  <!-- arrow crash -->
+  <line x1="366" y1="149" x2="470" y2="149" stroke="#c92a2a" stroke-width="2.5"/>
+  <polygon points="470,149 462,144 462,154" fill="#c92a2a"/>
+  <text x="418" y="139" text-anchor="middle" font-size="12" font-weight="700" fill="#c92a2a">崩溃</text>
+
+  <!-- after -->
+  <rect x="476" y="74" width="300" height="150" rx="14" fill="#fff" stroke="#c94f4f" stroke-width="2.5"/>
+  <text x="626" y="104" text-anchor="middle" font-size="14" font-weight="700" fill="#7a2b2b">重启后的容器</text>
+  <rect x="500" y="118" width="252" height="40" rx="6" fill="#f6e6e6" stroke="#c94f4f" stroke-width="1.5"/>
+  <text x="626" y="143" text-anchor="middle" font-size="12" fill="#5a3a3a">镜像层：只读（还是那份）</text>
+  <rect x="500" y="166" width="252" height="40" rx="6" fill="#f2f2f2" stroke="#999" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="626" y="191" text-anchor="middle" font-size="12" fill="#888">可写层：空（原来那个被扔了）</text>
+
+  <!-- evidence -->
+  <rect x="60" y="244" width="716" height="76" rx="10" fill="#fff" stroke="#c94f4f" stroke-width="1.5"/>
+  <text x="80" y="270" font-size="13" font-weight="700" fill="#c0392b">本机实测：崩溃重启 2 次，计数永远是 1</text>
+  <text x="80" y="294" font-size="12" fill="#5a3a3a">[启动] 第 1 次启动，计数 = 1　←　重启后再看，还是 1</text>
+  <text x="80" y="312" font-size="12" fill="#5a3a3a">每一次重启都像换了个新容器，之前写的东西一次都没留下。</text>
+
+  <text x="800" y="120" font-size="30" text-anchor="middle">💥</text>
+  <text x="800" y="200" font-size="13" font-weight="700" fill="#c0392b" text-anchor="middle">数据</text>
+  <text x="800" y="220" font-size="13" font-weight="700" fill="#c0392b" text-anchor="middle">丢失</text>
+</svg>

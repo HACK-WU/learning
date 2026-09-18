@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 360" width="880" height="360" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+  <rect width="880" height="360" fill="#f4f8fd"/>
+  <text x="440" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#1f4e79">改进版：入口归平台，路由归各团队</text>
+
+  <!-- internet -->
+  <rect x="32" y="150" width="112" height="60" rx="10" fill="#fff" stroke="#2b7ac9" stroke-width="2"/>
+  <text x="88" y="176" text-anchor="middle" font-size="13" font-weight="600" fill="#1f4e79">外部流量</text>
+  <text x="88" y="196" text-anchor="middle" font-size="12" fill="#3a5a7a">一个域名</text>
+
+  <line x1="146" y1="180" x2="212" y2="180" stroke="#2b7ac9" stroke-width="2.5"/>
+  <polygon points="212,180 202,175 202,185" fill="#2b7ac9"/>
+
+  <!-- gateway -->
+  <rect x="224" y="140" width="176" height="80" rx="12" fill="#e8f2fd" stroke="#2b7ac9" stroke-width="3"/>
+  <text x="312" y="168" text-anchor="middle" font-size="14" font-weight="700" fill="#1f4e79">Gateway</text>
+  <text x="312" y="190" text-anchor="middle" font-size="12" fill="#3a5a7a">平台团队管</text>
+  <text x="312" y="210" text-anchor="middle" font-size="12" fill="#3a5a7a">端口 / 证书 / 容量</text>
+
+  <line x1="402" y1="180" x2="470" y2="180" stroke="#2b7ac9" stroke-width="2.5"/>
+  <polygon points="470,180 460,175 460,185" fill="#2b7ac9"/>
+
+  <!-- routes -->
+  <rect x="482" y="76" width="366" height="34" rx="8" fill="#fff" stroke="#2b7ac9"/>
+  <text x="500" y="98" font-size="12" fill="#1f4e79">商城团队：只管 shop 的路由</text>
+  <rect x="482" y="114" width="366" height="34" rx="8" fill="#fff" stroke="#2b7ac9"/>
+  <text x="500" y="136" font-size="12" fill="#1f4e79">后台团队：只管 admin 的路由</text>
+  <rect x="482" y="152" width="366" height="34" rx="8" fill="#fff" stroke="#2b7ac9"/>
+  <text x="500" y="174" font-size="12" fill="#1f4e79">接口团队：只管 api 的路由</text>
+  <text x="665" y="208" text-anchor="middle" font-size="12" font-weight="600" fill="#2b7ac9">各写各的，互不干扰</text>
+
+  <!-- bottom -->
+  <rect x="32" y="240" width="816" height="104" rx="8" fill="#fff" stroke="#2b7ac9" stroke-width="1.5"/>
+  <text x="52" y="264" font-size="13" font-weight="600" fill="#1f4e79">实测结果</text>
+  <text x="52" y="286" font-size="12" fill="#3a5a7a">三条路由挂在同一个入口上，各自独立：删掉「接口」那条，商城和后台照常服务。</text>
+  <text x="52" y="308" font-size="12" font-weight="600" fill="#c0392b">某条路由写错时，状态里会直接指名：</text>
+  <text x="52" y="330" font-size="12" fill="#3a5a7a">ResolvedRefs=False  reason=BackendNotFound  service shop/no-such-svc not found</text>
+</svg>

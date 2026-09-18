@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 360" width="880" height="360" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+  <rect width="880" height="360" fill="#fdf6f6"/>
+  <text x="440" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#7a2b2b">基础版：配置写在应用里，换个日志级别要重打镜像</text>
+
+  <!-- three envs -->
+  <rect x="40" y="80" width="200" height="110" rx="12" fill="#ffe3e3" stroke="#c94f4f" stroke-width="2"/>
+  <text x="140" y="108" text-anchor="middle" font-size="14" font-weight="700" fill="#7a2b2b">开发环境</text>
+  <text x="140" y="132" text-anchor="middle" font-size="12" fill="#5a3a3a">镜像 A</text>
+  <text x="140" y="152" text-anchor="middle" font-size="12" fill="#5a3a3a">（配置写在里面）</text>
+  <text x="140" y="176" text-anchor="middle" font-size="12" fill="#5a3a3a">日志级别 = 调试</text>
+
+  <rect x="280" y="80" width="200" height="110" rx="12" fill="#ffe3e3" stroke="#c94f4f" stroke-width="2"/>
+  <text x="380" y="108" text-anchor="middle" font-size="14" font-weight="700" fill="#7a2b2b">预发环境</text>
+  <text x="380" y="132" text-anchor="middle" font-size="12" fill="#5a3a3a">镜像 B</text>
+  <text x="380" y="152" text-anchor="middle" font-size="12" fill="#5a3a3a">（配置写在里面）</text>
+  <text x="380" y="176" text-anchor="middle" font-size="12" fill="#5a3a3a">日志级别 = 调试</text>
+
+  <rect x="520" y="80" width="200" height="110" rx="12" fill="#ffe3e3" stroke="#c94f4f" stroke-width="2"/>
+  <text x="620" y="108" text-anchor="middle" font-size="14" font-weight="700" fill="#7a2b2b">生产环境</text>
+  <text x="620" y="132" text-anchor="middle" font-size="12" fill="#5a3a3a">镜像 C</text>
+  <text x="620" y="152" text-anchor="middle" font-size="12" fill="#5a3a3a">（配置写在里面）</text>
+  <text x="620" y="176" text-anchor="middle" font-size="12" fill="#5a3a3a">日志级别 = 只报错</text>
+
+  <text x="748" y="120" font-size="13" font-weight="700" fill="#c0392b">三份代码</text>
+  <text x="748" y="142" font-size="12" fill="#c0392b">三个镜像</text>
+  <text x="748" y="164" font-size="12" fill="#c0392b">三次构建</text>
+
+  <!-- arrow down -->
+  <line x1="440" y1="196" x2="440" y2="226" stroke="#c94f4f" stroke-width="2"/>
+  <polygon points="440,226 434,219 446,219" fill="#c94f4f"/>
+
+  <rect x="150" y="232" width="580" height="44" rx="8" fill="#fff" stroke="#c94f4f" stroke-width="1.5"/>
+  <text x="440" y="260" text-anchor="middle" font-size="13" font-weight="600" fill="#c0392b">改一个日志级别 → 改代码 / 改模板 → 重新构建 → 推镜像 → 发布</text>
+
+  <!-- bottom -->
+  <rect x="40" y="292" width="800" height="52" rx="8" fill="#fff" stroke="#c94f4f" stroke-width="1.5"/>
+  <text x="56" y="314" font-size="13" font-weight="600" fill="#c0392b">问题</text>
+  <text x="56" y="336" font-size="12" fill="#5a3a3a">镜像不再通用：同一份代码因为配置不同，被打成三个不同的东西，还要分别测试、分别维护。</text>
+</svg>

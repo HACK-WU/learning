@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 350" width="880" height="350" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+  <rect width="880" height="350" fill="#f4f8fd"/>
+  <text x="440" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#1f4e79">改进版：一个入口，靠路径区分服务</text>
+
+  <!-- user -->
+  <rect x="36" y="130" width="130" height="76" rx="10" fill="#fff" stroke="#2b7ac9" stroke-width="2"/>
+  <text x="101" y="160" text-anchor="middle" font-size="14" font-weight="600" fill="#1f4e79">外部用户</text>
+  <text x="101" y="182" text-anchor="middle" font-size="12" fill="#3a5a7a">只记一个地址</text>
+
+  <line x1="168" y1="168" x2="270" y2="168" stroke="#2b7ac9" stroke-width="2.5"/>
+  <polygon points="270,168 260,163 260,173" fill="#2b7ac9"/>
+  <text x="219" y="158" text-anchor="middle" font-size="11" fill="#2b7ac9">:31124</text>
+
+  <!-- ingress -->
+  <rect x="282" y="118" width="180" height="100" rx="12" fill="#e8f2fd" stroke="#2b7ac9" stroke-width="3"/>
+  <text x="372" y="146" text-anchor="middle" font-size="14" font-weight="700" fill="#1f4e79">Ingress</text>
+  <text x="372" y="168" text-anchor="middle" font-size="12" fill="#3a5a7a">看路径分发</text>
+  <text x="372" y="190" text-anchor="middle" font-size="12" font-weight="600" fill="#2b7ac9">/ 、/api 、/admin</text>
+
+  <!-- arrows to services -->
+  <line x1="464" y1="140" x2="580" y2="140" stroke="#2b7ac9" stroke-width="2"/>
+  <polygon points="580,140 570,135 570,145" fill="#2b7ac9"/>
+  <text x="522" y="133" text-anchor="middle" font-size="11" fill="#2b7ac9">/</text>
+
+  <line x1="464" y1="168" x2="580" y2="168" stroke="#2b7ac9" stroke-width="2"/>
+  <polygon points="580,168 570,163 570,173" fill="#2b7ac9"/>
+  <text x="522" y="161" text-anchor="middle" font-size="11" fill="#2b7ac9">/api</text>
+
+  <line x1="464" y1="196" x2="580" y2="196" stroke="#2b7ac9" stroke-width="2"/>
+  <polygon points="580,196 570,191 570,201" fill="#2b7ac9"/>
+  <text x="522" y="189" text-anchor="middle" font-size="11" fill="#2b7ac9">/admin</text>
+
+  <rect x="592" y="122" width="252" height="34" rx="8" fill="#fff" stroke="#2b7ac9"/>
+  <text x="718" y="144" text-anchor="middle" font-size="12" fill="#1f4e79">主页服务</text>
+  <rect x="592" y="150" width="252" height="34" rx="8" fill="#fff" stroke="#2b7ac9"/>
+  <text x="718" y="172" text-anchor="middle" font-size="12" fill="#1f4e79">接口服务</text>
+  <rect x="592" y="178" width="252" height="34" rx="8" fill="#fff" stroke="#2b7ac9"/>
+  <text x="718" y="200" text-anchor="middle" font-size="12" fill="#1f4e79">后台服务</text>
+
+  <!-- bottom -->
+  <rect x="36" y="246" width="808" height="84" rx="8" fill="#fff" stroke="#2b7ac9" stroke-width="1.5"/>
+  <text x="56" y="270" font-size="13" font-weight="600" fill="#1f4e79">实测结果</text>
+  <text x="56" y="292" font-size="12" fill="#3a5a7a">shop.example.com/  → 主页    /api → 接口    /admin → 后台（一个端口全搞定）</text>
+  <text x="56" y="313" font-size="12" font-weight="600" fill="#c0392b">易踩的坑：路径是原样透传的。访问 /api，后端收到的就是 /api，不是 /。</text>
+  <text x="56" y="332" font-size="12" fill="#3a5a7a">后端若只认 /，就会返回 404——这时不是路由配错，是没做路径重写。</text>
+</svg>

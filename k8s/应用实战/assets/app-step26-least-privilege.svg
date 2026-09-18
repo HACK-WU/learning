@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 320" width="760" height="320">
+  <rect width="760" height="320" fill="#f4fbf4"/>
+  <text x="380" y="28" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#333">综合版：分身份 + 最小权限（高亮 = 本步新增）</text>
+
+  <rect x="30" y="55" width="150" height="55" rx="8" fill="#e8f0fe" stroke="#5b8def" stroke-width="2"/>
+  <text x="105" y="78" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#333">日志采集程序</text>
+  <text x="105" y="96" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">身份 A</text>
+
+  <rect x="30" y="130" width="150" height="55" rx="8" fill="#e8f0fe" stroke="#5b8def" stroke-width="2"/>
+  <text x="105" y="153" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#333">发版工具</text>
+  <text x="105" y="171" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">身份 B</text>
+
+  <rect x="30" y="205" width="150" height="55" rx="8" fill="#e8f0fe" stroke="#5b8def" stroke-width="2"/>
+  <text x="105" y="228" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#333">监控采集</text>
+  <text x="105" y="246" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">身份 C</text>
+
+  <rect x="215" y="55" width="150" height="55" rx="8" fill="#e6f7e6" stroke="#4caf50" stroke-width="3"/>
+  <text x="290" y="78" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#333">只读规则</text>
+  <text x="290" y="96" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">限本区 · 只给读</text>
+
+  <rect x="215" y="130" width="150" height="55" rx="8" fill="#e6f7e6" stroke="#4caf50" stroke-width="3"/>
+  <text x="290" y="153" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#333">改应用规则</text>
+  <text x="290" y="171" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">限本区 · 可改不可删</text>
+
+  <rect x="215" y="205" width="150" height="55" rx="8" fill="#e6f7e6" stroke="#4caf50" stroke-width="3"/>
+  <text x="290" y="228" text-anchor="middle" font-family="sans-serif" font-size="12" fill="#333">看指标规则</text>
+  <text x="290" y="246" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">跨区读 · 不给密钥</text>
+
+  <line x1="180" y1="82" x2="213" y2="82" stroke="#4caf50" stroke-width="2" marker-end="url(#ag)"/>
+  <line x1="180" y1="157" x2="213" y2="157" stroke="#4caf50" stroke-width="2" marker-end="url(#ag)"/>
+  <line x1="180" y1="232" x2="213" y2="232" stroke="#4caf50" stroke-width="2" marker-end="url(#ag)"/>
+
+  <rect x="400" y="60" width="200" height="200" rx="8" fill="#fff8e1" stroke="#f0ad4e" stroke-width="3"/>
+  <text x="500" y="85" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="bold" fill="#333">各拿各的钥匙</text>
+  <text x="500" y="112" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#333">身份 A：只读本区日志 ✓</text>
+  <text x="500" y="132" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#d9534f">身份 A：读密钥 ✗ 被拒</text>
+  <text x="500" y="152" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#d9534f">身份 A：删东西 ✗ 被拒</text>
+  <text x="500" y="182" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#333">身份 B：改本区应用 ✓</text>
+  <text x="500" y="202" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#d9534f">身份 B：删东西 ✗ 被拒</text>
+  <text x="500" y="232" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#333">身份 C：跨区看指标 ✓</text>
+
+  <rect x="625" y="60" width="110" height="200" rx="8" fill="#e8f5e9" stroke="#4caf50" stroke-width="3"/>
+  <text x="680" y="85" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="bold" fill="#4caf50">被攻破时</text>
+  <text x="680" y="115" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#333">只能干</text>
+  <text x="680" y="133" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#333">它被允许的</text>
+  <text x="680" y="151" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#333">那些事</text>
+  <text x="680" y="185" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#4caf50">损失有边界</text>
+  <text x="680" y="215" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">其余一律</text>
+  <text x="680" y="233" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">拒绝</text>
+
+  <text x="30" y="295" font-family="sans-serif" font-size="12" fill="#333">到这一步：一个程序被攻破，不再等于整个集群失守。</text>
+  <text x="30" y="313" font-family="sans-serif" font-size="12" fill="#666">判断依据：每条规则都写清"哪个区、哪种动作、允不允许"。</text>
+
+  <defs>
+    <marker id="ag" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#4caf50"/>
+    </marker>
+  </defs>
+</svg>

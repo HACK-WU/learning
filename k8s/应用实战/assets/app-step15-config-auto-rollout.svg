@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 470" width="880" height="470" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+  <rect width="880" height="470" fill="#f6faf6"/>
+  <text x="440" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#1e5e34">综合版：给内容算个指纹，改了就自动重建</text>
+
+  <!-- flow -->
+  <rect x="32" y="70" width="176" height="66" rx="10" fill="#fff" stroke="#2e8b57" stroke-width="2"/>
+  <text x="120" y="98" text-anchor="middle" font-size="13" font-weight="700" fill="#1e5e34">① 改配置项</text>
+  <text x="120" y="120" text-anchor="middle" font-size="12" fill="#3a5a3a">日志级别 → 调试</text>
+
+  <line x1="210" y1="103" x2="256" y2="103" stroke="#2e8b57" stroke-width="2.5"/>
+  <polygon points="256,103 248,98 248,108" fill="#2e8b57"/>
+
+  <rect x="258" y="70" width="176" height="66" rx="10" fill="#e6f5ec" stroke="#2e8b57" stroke-width="2"/>
+  <text x="346" y="98" text-anchor="middle" font-size="13" font-weight="700" fill="#1e5e34">② 重算指纹</text>
+  <text x="346" y="120" text-anchor="middle" font-size="12" fill="#3a5a3a">内容变了 → 指纹变了</text>
+
+  <line x1="436" y1="103" x2="482" y2="103" stroke="#2e8b57" stroke-width="2.5"/>
+  <polygon points="482,103 474,98 474,108" fill="#2e8b57"/>
+
+  <rect x="484" y="70" width="176" height="66" rx="10" fill="#e6f5ec" stroke="#2e8b57" stroke-width="2"/>
+  <text x="572" y="98" text-anchor="middle" font-size="13" font-weight="700" fill="#1e5e34">③ 自动重建</text>
+  <text x="572" y="120" text-anchor="middle" font-size="12" fill="#3a5a3a">不用记着敲命令</text>
+
+  <line x1="662" y1="103" x2="708" y2="103" stroke="#2e8b57" stroke-width="2.5"/>
+  <polygon points="708,103 700,98 700,108" fill="#2e8b57"/>
+
+  <rect x="710" y="70" width="140" height="66" rx="10" fill="#fff" stroke="#2e8b57" stroke-width="2"/>
+  <text x="780" y="98" text-anchor="middle" font-size="13" font-weight="700" fill="#1e5e34">④ 新配置生效</text>
+  <text x="780" y="120" text-anchor="middle" font-size="12" fill="#3a5a3a">日志级别 = 调试</text>
+
+  <!-- evidence -->
+  <rect x="32" y="158" width="818" height="96" rx="10" fill="#fff" stroke="#2e8b57" stroke-width="1.5"/>
+  <text x="52" y="184" font-size="13" font-weight="700" fill="#1e5e34">本机实测：严格对照，证明是指纹在起作用</text>
+  <text x="52" y="210" font-size="12" fill="#3a5a7a">只改配置、不动指纹 → 等 45 秒，实例没换（旧值不变）</text>
+  <text x="52" y="232" font-size="12" fill="#3a5a7a">补上指纹         → 立即重建，新实例取到新值</text>
+  <text x="52" y="252" font-size="12" fill="#3a5a3a">同一套配置、同一个节点，唯一变量就是指纹有没有变。</text>
+
+  <!-- warning -->
+  <rect x="32" y="270" width="818" height="88" rx="10" fill="#fff5f5" stroke="#c92a2a" stroke-width="2"/>
+  <text x="52" y="296" font-size="13" font-weight="700" fill="#c0392b">但别忘了：文件更新 ≠ 应用生效</text>
+  <text x="52" y="322" font-size="12" fill="#c0392b">实测：挂载的文件 80 秒后变成新值，但应用内存里永远是启动时读到的旧值。</text>
+  <text x="52" y="344" font-size="12" fill="#c0392b">应用不支持重新读取的话，配什么机制都白搭 —— 只能靠重建实例。</text>
+
+  <!-- secret -->
+  <rect x="32" y="374" width="818" height="80" rx="10" fill="#fff" stroke="#2e8b57" stroke-width="1.5"/>
+  <text x="52" y="400" font-size="13" font-weight="700" fill="#1e5e34">密码类配置：别倒进环境</text>
+  <text x="52" y="424" font-size="12" fill="#3a5a3a">一次性倒进环境 → 任何子进程都能看到，进程环境里也留着明文（实测可读出）。</text>
+  <text x="52" y="444" font-size="12" fill="#3a5a3a">改成挂载成文件并收紧权限 → 环境里干干净净，非授权用户读被拒。</text>
+</svg>

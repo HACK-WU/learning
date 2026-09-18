@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 380" width="880" height="380" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+  <rect width="880" height="380" fill="#fdf6f6"/>
+  <text x="440" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#7a2b2b">基础版：每个环境抄一份，改一处要改 N 遍</text>
+
+  <!-- three envs -->
+  <rect x="60" y="66" width="230" height="150" rx="12" fill="#fff" stroke="#c94f4f" stroke-width="2.5"/>
+  <text x="175" y="94" text-anchor="middle" font-size="14" font-weight="700" fill="#7a2b2b">开发环境</text>
+  <rect x="80" y="108" width="190" height="22" rx="4" fill="#f2f2f2" stroke="#999"/>
+  <text x="175" y="124" text-anchor="middle" font-size="11" fill="#666">order.yaml（副本 1）</text>
+  <rect x="80" y="136" width="190" height="22" rx="4" fill="#f2f2f2" stroke="#999"/>
+  <text x="175" y="152" text-anchor="middle" font-size="11" fill="#666">payment.yaml</text>
+  <rect x="80" y="164" width="190" height="22" rx="4" fill="#f2f2f2" stroke="#999"/>
+  <text x="175" y="180" text-anchor="middle" font-size="11" fill="#666">… 共 12 个</text>
+  <text x="175" y="204" text-anchor="middle" font-size="11" fill="#c0392b">改一遍</text>
+
+  <rect x="325" y="66" width="230" height="150" rx="12" fill="#fff" stroke="#c94f4f" stroke-width="2.5"/>
+  <text x="440" y="94" text-anchor="middle" font-size="14" font-weight="700" fill="#7a2b2b">测试环境</text>
+  <rect x="345" y="108" width="190" height="22" rx="4" fill="#f2f2f2" stroke="#999"/>
+  <text x="440" y="124" text-anchor="middle" font-size="11" fill="#666">order.yaml（副本 2）</text>
+  <rect x="345" y="136" width="190" height="22" rx="4" fill="#f2f2f2" stroke="#999"/>
+  <text x="440" y="152" text-anchor="middle" font-size="11" fill="#666">payment.yaml</text>
+  <rect x="345" y="164" width="190" height="22" rx="4" fill="#f2f2f2" stroke="#999"/>
+  <text x="440" y="180" text-anchor="middle" font-size="11" fill="#666">… 共 12 个</text>
+  <text x="440" y="204" text-anchor="middle" font-size="11" fill="#c0392b">再改一遍</text>
+
+  <rect x="590" y="66" width="230" height="150" rx="12" fill="#fff" stroke="#c94f4f" stroke-width="2.5"/>
+  <text x="705" y="94" text-anchor="middle" font-size="14" font-weight="700" fill="#7a2b2b">生产环境</text>
+  <rect x="610" y="108" width="190" height="22" rx="4" fill="#f2f2f2" stroke="#999"/>
+  <text x="705" y="124" text-anchor="middle" font-size="11" fill="#666">order.yaml（副本 5）</text>
+  <rect x="610" y="136" width="190" height="22" rx="4" fill="#f2f2f2" stroke="#999"/>
+  <text x="705" y="152" text-anchor="middle" font-size="11" fill="#666">payment.yaml</text>
+  <rect x="610" y="164" width="190" height="22" rx="4" fill="#f2f2f2" stroke="#999"/>
+  <text x="705" y="180" text-anchor="middle" font-size="11" fill="#666">… 共 12 个</text>
+  <text x="705" y="204" text-anchor="middle" font-size="11" fill="#c0392b">还改一遍</text>
+
+  <!-- result -->
+  <rect x="60" y="230" width="760" height="60" rx="10" fill="#fff5f5" stroke="#c92a2a" stroke-width="2"/>
+  <text x="80" y="256" font-size="13" font-weight="700" fill="#c0392b">加一条环境变量？打开 36 个文件，改 36 遍</text>
+  <text x="80" y="280" font-size="12" fill="#c0392b">改到第 20 个开始怀疑人生，而且知道：改得越多，越可能漏掉一个。</text>
+
+  <!-- bottom -->
+  <rect x="60" y="302" width="760" height="62" rx="10" fill="#fff" stroke="#c94f4f" stroke-width="1.5"/>
+  <text x="80" y="326" font-size="12" font-weight="700" fill="#c0392b">还有更要命的：出事要回滚</text>
+  <text x="80" y="350" font-size="12" fill="#5a3a3a">翻 Git 找上一版，手工 apply 回去。但你不确定：集群里跑的，跟 Git 里那份真的一样吗？</text>
+</svg>

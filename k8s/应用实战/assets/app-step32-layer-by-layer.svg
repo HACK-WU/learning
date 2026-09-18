@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 350" width="760" height="350">
+  <rect width="760" height="350" fill="#f4fbf4"/>
+  <text x="380" y="28" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#333">综合版：逐层往下问，每层都有判据</text>
+
+  <rect x="30" y="50" width="700" height="42" rx="8" fill="#e6f7e6" stroke="#4caf50" stroke-width="2"/>
+  <text x="45" y="70" font-family="sans-serif" font-size="12" font-weight="bold" fill="#333">L1 节点层</text>
+  <text x="150" y="70" font-family="sans-serif" font-size="11" fill="#666">判据：节点是否就绪 → 实测 3 个节点全部 Ready，排除</text>
+
+  <rect x="30" y="100" width="700" height="42" rx="8" fill="#e6f7e6" stroke="#4caf50" stroke-width="2"/>
+  <text x="45" y="120" font-family="sans-serif" font-size="12" font-weight="bold" fill="#333">L2 控制面层</text>
+  <text x="150" y="120" font-family="sans-serif" font-size="11" fill="#666">判据：核心组件在不在 → 实测均在运行，排除</text>
+
+  <rect x="30" y="150" width="700" height="55" rx="8" fill="#fff8e1" stroke="#f0ad4e" stroke-width="3"/>
+  <text x="45" y="170" font-family="sans-serif" font-size="12" font-weight="bold" fill="#d9534f">L3 应用层 ← 真相在这里</text>
+  <text x="150" y="170" font-family="sans-serif" font-size="11" fill="#333">实测：状态"在跑"，但就绪数是 0/1</text>
+  <text x="150" y="190" font-family="sans-serif" font-size="11" fill="#d9534f">事件原文：健康检查失败，返回 404</text>
+
+  <rect x="30" y="213" width="700" height="55" rx="8" fill="#fff8e1" stroke="#f0ad4e" stroke-width="3"/>
+  <text x="45" y="233" font-family="sans-serif" font-size="12" font-weight="bold" fill="#333">L4 网络层 ← 症状在这一层显现</text>
+  <text x="150" y="233" font-family="sans-serif" font-size="11" fill="#333">实测：后端列表里那两条都标记为「未就绪」</text>
+  <text x="150" y="253" font-family="sans-serif" font-size="11" fill="#333">于是转发目标为空 → 访问返回 000（不通）</text>
+
+  <line x1="380" y1="268" x2="380" y2="288" stroke="#4caf50" stroke-width="2" marker-end="url(#a2)"/>
+
+  <rect x="30" y="290" width="340" height="48" rx="8" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+  <text x="200" y="311" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="bold" fill="#333">改对检查路径 → 1/1 → 访问 200</text>
+  <text x="200" y="330" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">一次改一处，改完立刻验</text>
+
+  <rect x="390" y="290" width="340" height="48" rx="8" fill="#e6f7e6" stroke="#4caf50" stroke-width="2"/>
+  <text x="560" y="311" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="bold" fill="#333">结论：症状层 ≠ 根因层</text>
+  <text x="560" y="330" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">在网络层看到，在应用层修好</text>
+
+  <defs>
+    <marker id="a2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#4caf50"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 300" width="760" height="300">
+  <rect width="760" height="300" fill="#fdf6f6"/>
+  <text x="380" y="28" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#333">基础版：直接腾空节点，等于把服务一起端走</text>
+
+  <rect x="40" y="60" width="160" height="70" rx="8" fill="#e8f0fe" stroke="#5b8def" stroke-width="2"/>
+  <text x="120" y="85" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#333">要维护这台机器</text>
+  <text x="120" y="105" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">直接腾空</text>
+
+  <line x1="200" y1="95" x2="280" y2="95" stroke="#d9534f" stroke-width="3" marker-end="url(#a3)"/>
+
+  <rect x="280" y="55" width="180" height="80" rx="8" fill="#fde8e8" stroke="#d9534f" stroke-width="2"/>
+  <text x="370" y="80" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="bold" fill="#d9534f">上面的东西全被赶走</text>
+  <text x="370" y="99" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">没人问"能不能走"</text>
+  <text x="370" y="117" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">也没人说"至少留几个"</text>
+
+  <line x1="460" y1="95" x2="540" y2="95" stroke="#d9534f" stroke-width="3" marker-end="url(#a3)"/>
+
+  <rect x="540" y="50" width="190" height="180" rx="8" fill="#fde8e8" stroke="#d9534f" stroke-width="2"/>
+  <text x="635" y="74" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="bold" fill="#d9534f">后果</text>
+  <text x="635" y="100" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#333">同一服务的多个副本</text>
+  <text x="635" y="117" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#333">可能被同时赶走</text>
+  <text x="635" y="142" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#d9534f">服务瞬间无人可用</text>
+  <text x="635" y="170" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">或者：腾空卡住不动</text>
+  <text x="635" y="188" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#666">反复重试，不知为何卡</text>
+
+  <rect x="40" y="175" width="400" height="75" rx="8" fill="#fff" stroke="#ccc" stroke-width="1"/>
+  <text x="55" y="197" font-family="sans-serif" font-size="12" fill="#333">默认只保证"会重新建"，</text>
+  <text x="55" y="217" font-family="sans-serif" font-size="12" fill="#333">不保证"重建期间还有人干活"。</text>
+  <text x="55" y="238" font-family="sans-serif" font-size="12" fill="#666">这两者差着一个业务中断。</text>
+
+  <text x="40" y="278" font-family="sans-serif" font-size="12" fill="#666">问题：维护动作变成事故，且事前看不出来。</text>
+
+  <defs>
+    <marker id="a3" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#d9534f"/>
+    </marker>
+  </defs>
+</svg>

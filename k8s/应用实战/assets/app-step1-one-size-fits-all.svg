@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 430" width="900" height="430" font-family="system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="900" height="430" fill="#fdfcf8"/>
+
+  <text x="450" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#1f2937">① 基础实现：三类活儿全用「多备几个一模一样的」，三类全错</text>
+
+  <!-- 三类 -->
+  <rect x="30" y="70" width="265" height="150" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="2"/>
+  <text x="162" y="94" text-anchor="middle" font-size="13.5" font-weight="700" fill="#7f1d1d">有身份的（数据库）</text>
+  <text x="45" y="118" font-size="12" fill="#7f1d1d">Pod 名：db-6fc497564c-787rk</text>
+  <text x="45" y="138" font-size="12" fill="#7f1d1d">（随机后缀）</text>
+  <text x="45" y="164" font-size="12" font-weight="700" fill="#7f1d1d">删掉重建 → 名字全变</text>
+  <text x="45" y="184" font-size="12" font-weight="700" fill="#7f1d1d">数据跟着容器一起没了 ❌</text>
+  <text x="45" y="206" font-size="11.5" fill="#991b1b">实测：原数据彻底找不到</text>
+
+  <rect x="318" y="70" width="265" height="150" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="2"/>
+  <text x="450" y="94" text-anchor="middle" font-size="13.5" font-weight="700" fill="#7f1d1d">干完就走的（备份）</text>
+  <text x="333" y="118" font-size="12" fill="#7f1d1d">任务跑完 → 进程退出</text>
+  <text x="333" y="142" font-size="12" font-weight="700" fill="#7f1d1d">平台：「咦，没了？补一个！」</text>
+  <text x="333" y="166" font-size="12" font-weight="700" fill="#7f1d1d">→ 无限循环备份 ❌</text>
+  <text x="333" y="192" font-size="11.5" fill="#991b1b">实测：CrashLoopBackOff，</text>
+  <text x="333" y="209" font-size="11.5" fill="#991b1b">已重启 2 次</text>
+
+  <rect x="606" y="70" width="265" height="150" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="2"/>
+  <text x="738" y="94" text-anchor="middle" font-size="13.5" font-weight="700" fill="#7f1d1d">每台都要有的（采集）</text>
+  <text x="621" y="118" font-size="12" fill="#7f1d1d">「我要 3 个」→ 按总数铺</text>
+  <text x="621" y="144" font-size="12" font-weight="700" fill="#7f1d1d">不管几台机器 ❌</text>
+  <text x="621" y="170" font-size="11.5" fill="#991b1b">实测：3 个副本全挤在</text>
+  <text x="621" y="188" font-size="11.5" fill="#991b1b">同一台（节点去重只有 1 个）</text>
+  <text x="621" y="208" font-size="11.5" fill="#991b1b">新加机器也不会自动补</text>
+
+  <!-- 问题根源 -->
+  <rect x="30" y="248" width="841" height="72" rx="8" fill="#fff7ed" stroke="#fdba74" stroke-width="2"/>
+  <text x="46" y="272" font-size="13" font-weight="700" fill="#9a3412">共同的根子：它们要的东西，跟「多备几个一模一样的」根本不是一回事</text>
+  <text x="46" y="294" font-size="12.5" fill="#9a3412">数据库要「还是原来那个人、本子还在」；备份要「干完就别管我」；采集要「每台机器都有一个」。</text>
+  <text x="46" y="312" font-size="12.5" fill="#9a3412">而「多备几个一模一样的」只会回答一件事：<tspan font-weight="700">总共凑够几个</tspan>。</text>
+
+  <!-- 底部 -->
+  <rect x="30" y="340" width="841" height="66" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+  <text x="46" y="362" font-size="12.5" font-weight="700" fill="#1f2937">一句话诊断</text>
+  <text x="46" y="382" font-size="12.5" fill="#475569">问自己的应用：<tspan font-weight="700">「它死了一个，补个新的行不行？」</tspan></text>
+  <text x="46" y="399" font-size="12.5" fill="#475569">行 → 那套没问题；<tspan font-weight="700">不行 → 就得换安排方式</tspan>（下一步）。</text>
+</svg>

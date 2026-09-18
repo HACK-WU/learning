@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" width="900" height="420" font-family="system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="900" height="420" fill="#fdfcf8"/>
+
+  <text x="450" y="32" text-anchor="middle" font-size="18" font-weight="700" fill="#1f2937">① 基础实现：只看「在不在」，不问「能不能干活」</text>
+
+  <!-- 访问方 -->
+  <rect x="30" y="150" width="120" height="66" rx="10" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+  <text x="90" y="177" text-anchor="middle" font-size="14" font-weight="600" fill="#0c4a6e">访问方</text>
+  <text x="90" y="197" text-anchor="middle" font-size="12" fill="#0c4a6e">持续发请求</text>
+
+  <!-- 转发口 -->
+  <rect x="205" y="150" width="130" height="66" rx="10" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+  <text x="270" y="177" text-anchor="middle" font-size="14" font-weight="600" fill="#5b21b6">转发口</text>
+  <text x="270" y="197" text-anchor="middle" font-size="12" fill="#5b21b6">按名单分发</text>
+
+  <!-- 名单框 -->
+  <rect x="205" y="60" width="130" height="62" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="270" y="82" text-anchor="middle" font-size="12" font-weight="700" fill="#92400e">可服务名单</text>
+  <text x="270" y="100" text-anchor="middle" font-size="11" fill="#92400e">判据：起来就算</text>
+  <text x="270" y="115" text-anchor="middle" font-size="11" fill="#92400e">（不看能不能干活）</text>
+
+  <line x1="270" y1="122" x2="270" y2="148" stroke="#d97706" stroke-width="2" marker-end="url(#arrowA)"/>
+
+  <!-- 三副本 -->
+  <rect x="400" y="130" width="140" height="58" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="470" y="155" text-anchor="middle" font-size="13" font-weight="600" fill="#14532d">旧副本 1</text>
+  <text x="470" y="174" text-anchor="middle" font-size="12" fill="#14532d">正常干活 ✓</text>
+
+  <rect x="400" y="205" width="140" height="58" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="470" y="230" text-anchor="middle" font-size="13" font-weight="600" fill="#14532d">旧副本 2</text>
+  <text x="470" y="249" text-anchor="middle" font-size="12" fill="#14532d">正常干活 ✓</text>
+
+  <rect x="400" y="280" width="140" height="58" rx="9" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="470" y="305" text-anchor="middle" font-size="13" font-weight="600" fill="#14532d">旧副本 3</text>
+  <text x="470" y="324" text-anchor="middle" font-size="12" fill="#14532d">正常干活 ✓</text>
+
+  <line x1="335" y1="183" x2="398" y2="165" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrowA)"/>
+  <line x1="335" y1="183" x2="398" y2="234" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrowA)"/>
+  <line x1="335" y1="190" x2="398" y2="309" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrowA)"/>
+
+  <!-- 换新版 -->
+  <rect x="610" y="150" width="150" height="66" rx="10" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+  <text x="685" y="177" text-anchor="middle" font-size="14" font-weight="600" fill="#7f1d1d">新副本（换了新版）</text>
+  <text x="685" y="197" text-anchor="middle" font-size="12" fill="#7f1d1d">刚起来，还没准备好</text>
+
+  <line x1="685" y1="150" x2="685" y2="120" stroke="#dc2626" stroke-width="2" marker-end="url(#arrowA)"/>
+  <text x="685" y="108" text-anchor="middle" font-size="12" font-weight="600" fill="#7f1d1d">一「起来」就被算进名单</text>
+
+  <!-- 旧副本被撤 -->
+  <line x1="545" y1="159" x2="608" y2="175" stroke="#dc2626" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrowR)"/>
+  <text x="577" y="150" text-anchor="middle" font-size="11" font-weight="600" fill="#7f1d1d">撤旧</text>
+
+  <!-- 底部说明 -->
+  <rect x="30" y="358" width="840" height="46" rx="8" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="46" y="378" font-size="12.5" fill="#7f1d1d">
+    <tspan font-weight="700">结果：</tspan>新副本还没预热完（15 秒），旧副本已被撤走 → 这十几秒里<tspan font-weight="700">没有能干活的</tspan>，用户看到连接失败。
+  </text>
+  <text x="46" y="396" font-size="12.5" fill="#7f1d1d">
+    <tspan font-weight="700">更糟的是：</tspan>平台自己的状态一直显示「3 个可用」，因为它判「可用」的口径就是「容器起来了」——监控看不出问题。
+  </text>
+
+  <defs>
+    <marker id="arrowA" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#6b7280"/>
+    </marker>
+    <marker id="arrowR" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+</svg>
