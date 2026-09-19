@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="820" viewBox="0 0 1200 820">
+  <rect width="1200" height="820" fill="#fafafa"/>
+  <text x="60" y="58" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="30" font-weight="700" fill="#333">从症状到工具：先决定问题，再读数字</text>
+  <text x="60" y="90" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#666">观测工具不是答案机；每一把尺子都有自己的对象、时间窗口和边界。</text>
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,3 L0,6 Z" fill="#1565c0"/>
+    </marker>
+    <style>
+      .font { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+      .title { font-size: 20px; font-weight: 700; fill: #fff; }
+      .body { font-size: 16px; fill: #333; }
+      .small { font-size: 14px; fill: #666; }
+      .card { fill: #fff; stroke: #cfd8dc; stroke-width: 2; }
+    </style>
+  </defs>
+
+  <rect x="60" y="125" width="230" height="90" rx="12" fill="#1565c0"/>
+  <text x="175" y="162" text-anchor="middle" class="font title">症状 / 问题</text>
+  <text x="175" y="190" text-anchor="middle" class="font" font-size="16" fill="#e3f2fd">我到底想知道什么？</text>
+
+  <path d="M290 170 H340" stroke="#1565c0" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g>
+    <rect x="350" y="112" width="245" height="118" rx="12" class="card"/>
+    <rect x="350" y="112" width="245" height="34" rx="12" fill="#2e7d32"/>
+    <text x="472" y="136" text-anchor="middle" class="font title" font-size="18">CPU / 调度</text>
+    <text x="370" y="171" class="font body">top / ps：谁在吃</text>
+    <text x="370" y="198" class="font body">vmstat：系统是否排队</text>
+    <text x="370" y="220" class="font small">pidstat：具体进程/线程</text>
+  </g>
+  <g>
+    <rect x="620" y="112" width="245" height="118" rx="12" class="card"/>
+    <rect x="620" y="112" width="245" height="34" rx="12" fill="#6a1b9a"/>
+    <text x="742" y="136" text-anchor="middle" class="font title" font-size="18">内存 / 缓存</text>
+    <text x="640" y="171" class="font body">free / /proc：全局</text>
+    <text x="640" y="198" class="font body">RSS / VSZ：进程口径</text>
+    <text x="640" y="220" class="font small">cgroup：容器边界</text>
+  </g>
+  <g>
+    <rect x="890" y="112" width="245" height="118" rx="12" class="card"/>
+    <rect x="890" y="112" width="245" height="34" rx="12" fill="#ef6c00"/>
+    <text x="1012" y="136" text-anchor="middle" class="font title" font-size="18">IO / 网络 / 句柄</text>
+    <text x="910" y="171" class="font body">iostat：设备是否忙</text>
+    <text x="910" y="198" class="font body">ss：socket 处于什么状态</text>
+    <text x="910" y="220" class="font small">lsof：fd 指向了什么</text>
+  </g>
+
+  <path d="M472 230 V278" stroke="#2e7d32" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M742 230 V278" stroke="#6a1b9a" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M1012 230 V278" stroke="#ef6c00" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <rect x="60" y="285" width="1075" height="145" rx="14" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+  <text x="88" y="322" class="font" font-size="21" font-weight="700" fill="#8d6e00">先做三项校准：范围、窗口、单位</text>
+  <g class="font body">
+    <text x="90" y="362">范围 scope</text><text x="255" y="362">系统 / 进程 / 线程 / 容器 cgroup</text>
+    <text x="90" y="394">窗口 window</text><text x="255" y="394">快照 / 采样间隔 / 开机以来累计</text>
+    <text x="650" y="362">单位 unit</text><text x="785" y="362">百分比 / 每秒速率 / 字节 / 队列长度</text>
+    <text x="650" y="394">边界 boundary</text><text x="785" y="394">虚拟机、共享页、并行设备都会改变解释</text>
+  </g>
+
+  <path d="M598 455 C520 492 430 492 350 455" fill="none" stroke="#90a4ae" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M602 455 C680 492 770 492 850 455" fill="none" stroke="#90a4ae" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="600" y="486" text-anchor="middle" class="font" font-size="18" font-weight="700" fill="#455a64">一次体检的证据链</text>
+
+  <g>
+    <rect x="60" y="525" width="330" height="205" rx="12" class="card"/>
+    <rect x="60" y="525" width="330" height="38" rx="12" fill="#37474f"/>
+    <text x="225" y="551" text-anchor="middle" class="font title" font-size="18">1 · 发现异常</text>
+    <text x="84" y="594" class="font body">top / free / vmstat</text>
+    <text x="84" y="625" class="font small">看到 CPU、内存、队列、IO 的</text>
+    <text x="84" y="649" class="font small">系统级轮廓；不急着下结论。</text>
+    <text x="84" y="690" class="font" font-size="15" fill="#1565c0">回答：系统哪里“不对劲”？</text>
+  </g>
+  <g>
+    <rect x="435" y="525" width="330" height="205" rx="12" class="card"/>
+    <rect x="435" y="525" width="330" height="38" rx="12" fill="#37474f"/>
+    <text x="600" y="551" text-anchor="middle" class="font title" font-size="18">2 · 锁定对象</text>
+    <text x="459" y="594" class="font body">pidstat / lsof / ss</text>
+    <text x="459" y="625" class="font small">把系统症状落到进程、fd、</text>
+    <text x="459" y="649" class="font small">socket 和具体时间窗口。</text>
+    <text x="459" y="690" class="font" font-size="15" fill="#1565c0">回答：谁在制造现象？</text>
+  </g>
+  <g>
+    <rect x="810" y="525" width="325" height="205" rx="12" class="card"/>
+    <rect x="810" y="525" width="325" height="38" rx="12" fill="#37474f"/>
+    <text x="972" y="551" text-anchor="middle" class="font title" font-size="18">3 · 复现并验证</text>
+    <text x="834" y="594" class="font body">yes / stress-ng + 同步采样</text>
+    <text x="834" y="625" class="font small">一次只改变一个变量；</text>
+    <text x="834" y="649" class="font small">清理后再确认指标回落。</text>
+    <text x="834" y="690" class="font" font-size="15" fill="#1565c0">回答：指标联动是否说得通？</text>
+  </g>
+
+  <text x="60" y="780" class="font small">图中“工具”是起点而非根因；根因仍需回到课程 5–13 的页表、缓存、调度、fd、epoll 和数据路径。</text>
+</svg>

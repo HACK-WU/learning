@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="740" viewBox="0 0 1200 740">
+  <style>
+    .title { font: 700 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #222; }
+    .head { font: 700 21px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #fff; }
+    .rowhead { font: 600 17px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #333; }
+    .cell { font: 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #444; }
+    .note { font: 15px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #555; }
+  </style>
+  <rect width="1200" height="740" fill="#FAFAFA"/>
+  <text x="600" y="48" text-anchor="middle" class="title">三代登记处：每次等待时，谁还要被重新点名</text>
+  <rect x="55" y="90" width="205" height="510" fill="#ECEFF1" stroke="#90A4AE" stroke-width="2"/>
+  <rect x="260" y="90" width="290" height="510" fill="#E3F2FD" stroke="#64B5F6" stroke-width="2"/>
+  <rect x="550" y="90" width="290" height="510" fill="#FFF8E1" stroke="#F9A825" stroke-width="2"/>
+  <rect x="840" y="90" width="305" height="510" fill="#E8F5E9" stroke="#66BB6A" stroke-width="2"/>
+  <rect x="55" y="90" width="205" height="62" fill="#455A64"/>
+  <rect x="260" y="90" width="290" height="62" fill="#1565C0"/>
+  <rect x="550" y="90" width="290" height="62" fill="#EF8C00"/>
+  <rect x="840" y="90" width="305" height="62" fill="#2E7D32"/>
+  <text x="157" y="130" text-anchor="middle" class="head">比较项</text>
+  <text x="405" y="130" text-anchor="middle" class="head">select</text>
+  <text x="695" y="130" text-anchor="middle" class="head">poll</text>
+  <text x="992" y="130" text-anchor="middle" class="head">epoll</text>
+  <g stroke="#CFD8DC" stroke-width="1">
+    <line x1="55" y1="235" x2="1145" y2="235"/><line x1="55" y1="345" x2="1145" y2="345"/>
+    <line x1="55" y1="465" x2="1145" y2="465"/><line x1="55" y1="600" x2="1145" y2="600"/>
+  </g>
+  <text x="157" y="205" text-anchor="middle" class="rowhead">每次等待时</text>
+  <text x="157" y="225" text-anchor="middle" class="rowhead">怎么交名单</text>
+  <text x="405" y="190" text-anchor="middle" class="cell">把整套位图</text><text x="405" y="215" text-anchor="middle" class="cell">重新交一遍</text>
+  <text x="695" y="190" text-anchor="middle" class="cell">把整个数组</text><text x="695" y="215" text-anchor="middle" class="cell">重新交一遍</text>
+  <text x="992" y="190" text-anchor="middle" class="cell">提前登记一次</text><text x="992" y="215" text-anchor="middle" class="cell">等待时取就绪项</text>
+  <text x="157" y="285" text-anchor="middle" class="rowhead">谁被扫描</text>
+  <text x="405" y="270" text-anchor="middle" class="cell">从 0 扫到最高 fd</text><text x="405" y="298" text-anchor="middle" class="cell">再判断哪些位被置上</text>
+  <text x="695" y="270" text-anchor="middle" class="cell">数组里的每个 pollfd</text><text x="695" y="298" text-anchor="middle" class="cell">逐个检查 revents</text>
+  <text x="992" y="270" text-anchor="middle" class="cell">内核维护关注集合</text><text x="992" y="298" text-anchor="middle" class="cell">返回就绪集合</text>
+  <text x="157" y="405" text-anchor="middle" class="rowhead">高 fd 边界</text>
+  <text x="405" y="390" text-anchor="middle" class="cell">glibc fd_set</text><text x="405" y="418" text-anchor="middle" class="cell">通常上限 1024</text>
+  <text x="695" y="390" text-anchor="middle" class="cell">没有 select 的</text><text x="695" y="418" text-anchor="middle" class="cell">固定 1024 位图限制</text>
+  <text x="992" y="390" text-anchor="middle" class="cell">没有该位图限制</text><text x="992" y="418" text-anchor="middle" class="cell">仍受 fd / 内存上限影响</text>
+  <text x="157" y="530" text-anchor="middle" class="rowhead">思路变化</text>
+  <text x="405" y="505" text-anchor="middle" class="cell">每次全量问：</text><text x="405" y="533" text-anchor="middle" class="cell">“谁有事？”</text>
+  <text x="695" y="505" text-anchor="middle" class="cell">换名单格式，</text><text x="695" y="533" text-anchor="middle" class="cell">仍全量问</text>
+  <text x="992" y="505" text-anchor="middle" class="cell">登记与等待分离：</text><text x="992" y="533" text-anchor="middle" class="cell">“有事的直接来”</text>
+  <text x="600" y="660" text-anchor="middle" class="note">注意：三者都属于“等待 fd 就绪”的同步 I/O 多路复用；epoll 不是自动完成读写。</text>
+  <text x="600" y="685" text-anchor="middle" class="note">读到就绪通知后，应用仍要调用 recv/read/send/write，并处理部分读写与 EAGAIN。</text>
+</svg>

@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="720" viewBox="0 0 1120 720">
+  <title>IO 的两条选择题</title>
+  <desc>用两个日常问题把 IO 分成四种做法：调用时是否等待，以及完成后由谁把结果交给程序。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1565C0"/>
+    </marker>
+    <style>
+      .title { font: 700 26px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #333; }
+      .heading { font: 700 18px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #333; }
+      .body { font: 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #333; }
+      .small { font: 14px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #555; }
+      .axis { stroke: #546E7A; stroke-width: 2.5; fill: none; marker-end: url(#arrow); }
+      .blue { fill: #E3F2FD; stroke: #1565C0; stroke-width: 2; rx: 12; }
+      .green { fill: #E8F5E9; stroke: #2E7D32; stroke-width: 2; rx: 12; }
+      .amber { fill: #FFF8E1; stroke: #F9A825; stroke-width: 2; rx: 12; }
+      .purple { fill: #F3E5F5; stroke: #6A1B9A; stroke-width: 2; rx: 12; }
+      .note { fill: #fff; stroke: #B0BEC5; stroke-width: 1.5; rx: 10; }
+    </style>
+  </defs>
+
+  <rect width="1120" height="720" fill="#FAFAFA"/>
+  <text x="560" y="43" text-anchor="middle" class="title">IO 的两条选择题</text>
+  <text x="560" y="70" text-anchor="middle" class="small">先别背术语：先问“现在等不等？”和“完成后谁来交结果？”</text>
+
+  <rect x="105" y="116" width="910" height="475" class="note"/>
+  <line x1="560" y1="180" x2="560" y2="550" stroke="#CFD8DC" stroke-width="2"/>
+  <line x1="210" y1="365" x2="910" y2="365" stroke="#CFD8DC" stroke-width="2"/>
+
+  <line x1="210" y1="550" x2="910" y2="550" class="axis"/>
+  <line x1="210" y1="550" x2="210" y2="180" class="axis"/>
+  <text x="560" y="580" text-anchor="middle" class="heading">调用时会不会站着等</text>
+  <text x="235" y="574" text-anchor="middle" class="small">可能要等</text>
+  <text x="880" y="574" text-anchor="middle" class="small">先回来</text>
+  <text x="128" y="370" text-anchor="middle" class="heading" transform="rotate(-90 128 370)">结果由谁交到手里</text>
+  <text x="175" y="225" text-anchor="middle" class="small">后台完成后通知</text>
+  <text x="175" y="520" text-anchor="middle" class="small">自己反复回来拿</text>
+
+  <rect x="250" y="205" width="260" height="125" class="purple"/>
+  <text x="380" y="238" text-anchor="middle" class="heading">先排队，完成会通知</text>
+  <text x="380" y="269" text-anchor="middle" class="body">调用可能等资源</text>
+  <text x="380" y="296" text-anchor="middle" class="body">结果另有通知渠道</text>
+  <text x="380" y="320" text-anchor="middle" class="small">少见，具体看接口</text>
+
+  <rect x="625" y="205" width="260" height="125" class="green"/>
+  <text x="755" y="238" text-anchor="middle" class="heading">先交任务，完成通知</text>
+  <text x="755" y="269" text-anchor="middle" class="body">程序先去做别的</text>
+  <text x="755" y="296" text-anchor="middle" class="body">完成后取回结果</text>
+  <text x="755" y="320" text-anchor="middle" class="small">连接多时更有吸引力</text>
+
+  <rect x="250" y="400" width="260" height="125" class="blue"/>
+  <text x="380" y="433" text-anchor="middle" class="heading">自己等到数据交手</text>
+  <text x="380" y="464" text-anchor="middle" class="body">最直观</text>
+  <text x="380" y="491" text-anchor="middle" class="body">代码顺着写</text>
+  <text x="380" y="515" text-anchor="middle" class="small">连接少、逻辑重时常见</text>
+
+  <rect x="625" y="400" width="260" height="125" class="amber"/>
+  <text x="755" y="433" text-anchor="middle" class="heading">先回来，之后再试</text>
+  <text x="755" y="464" text-anchor="middle" class="body">没准备好就立即返回</text>
+  <text x="755" y="491" text-anchor="middle" class="body">程序自己安排下一步</text>
+  <text x="755" y="515" text-anchor="middle" class="small">要配合等待或事件通知</text>
+
+  <text x="560" y="645" text-anchor="middle" class="small">同一件 IO 事情，可以在两条轴上分别做选择；“不等”不自动等于“后台完成”。</text>
+  <text x="560" y="671" text-anchor="middle" class="small">本图先用人话定位，下一步再把四格换成行业术语。</text>
+</svg>

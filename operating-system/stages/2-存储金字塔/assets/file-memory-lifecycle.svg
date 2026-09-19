@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#1565c0"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#2e7d32"/>
+    </marker>
+    <marker id="arrow-orange" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#ef6c00"/>
+    </marker>
+    <style>
+      .title { font: 700 28px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #333; }
+      .subtitle { font: 400 16px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #555; }
+      .label { font: 700 20px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #333; }
+      .body { font: 400 17px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #333; }
+      .small { font: 400 15px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #555; }
+      .panel { fill: #fff; stroke: #b0bec5; stroke-width: 2; rx: 14; }
+      .blue { fill: #e3f2fd; stroke: #1565c0; stroke-width: 2; rx: 12; }
+      .green { fill: #e8f5e9; stroke: #2e7d32; stroke-width: 2; rx: 12; }
+      .orange { fill: #fff3e0; stroke: #ef6c00; stroke-width: 2; rx: 12; }
+      .gray { fill: #f5f7f8; stroke: #78909c; stroke-width: 2; rx: 12; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="680" fill="#ffffff"/>
+  <text x="600" y="45" text-anchor="middle" class="title">文件在内存里会经历什么</text>
+  <text x="600" y="74" text-anchor="middle" class="subtitle">同一个文件，可能先变成“手边小抄”，再变成“改过但未保存的草稿”</text>
+
+  <rect x="55" y="115" width="250" height="190" class="panel"/>
+  <text x="180" y="150" text-anchor="middle" class="label">程序要读文件</text>
+  <rect x="92" y="180" width="176" height="78" class="blue"/>
+  <text x="180" y="214" text-anchor="middle" class="body">“给我这段内容”</text>
+  <text x="180" y="240" text-anchor="middle" class="small">第一次可能要去找原件</text>
+
+  <rect x="380" y="105" width="300" height="220" class="blue"/>
+  <text x="530" y="145" text-anchor="middle" class="label">内存里的小抄</text>
+  <text x="530" y="177" text-anchor="middle" class="body">文件内容的临时副本</text>
+  <text x="530" y="207" text-anchor="middle" class="small">按一页一页保存</text>
+  <text x="530" y="236" text-anchor="middle" class="small">再次读取：直接从手边拿</text>
+  <text x="530" y="274" text-anchor="middle" class="body">可以再利用，也可以腾出来</text>
+
+  <rect x="875" y="115" width="270" height="190" class="gray"/>
+  <text x="1010" y="150" text-anchor="middle" class="label">磁盘上的文件原件</text>
+  <rect x="925" y="180" width="170" height="78" class="gray"/>
+  <text x="1010" y="214" text-anchor="middle" class="body">长期保存的位置</text>
+  <text x="1010" y="240" text-anchor="middle" class="small">速度慢，但不会因腾内存消失</text>
+
+  <path d="M305 210 H370" stroke="#1565c0" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+  <path d="M380 255 C330 280 330 280 305 255" stroke="#2e7d32" stroke-width="3" fill="none" marker-end="url(#arrow-green)"/>
+  <path d="M680 205 H865" stroke="#1565c0" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+  <text x="772" y="190" text-anchor="middle" class="small">小抄没有时，去拿原件</text>
+
+  <rect x="110" y="390" width="360" height="170" class="orange"/>
+  <text x="290" y="430" text-anchor="middle" class="label">程序改了内容</text>
+  <text x="290" y="464" text-anchor="middle" class="body">内存里的小抄先变成草稿</text>
+  <text x="290" y="494" text-anchor="middle" class="small">改动已经发生，但原件还没更新</text>
+  <text x="290" y="530" text-anchor="middle" class="body">草稿越多，回写压力越大</text>
+
+  <rect x="730" y="390" width="360" height="170" class="green"/>
+  <text x="910" y="430" text-anchor="middle" class="label">内存真的紧张</text>
+  <text x="910" y="464" text-anchor="middle" class="body">没改过的小抄：可以直接丢</text>
+  <text x="910" y="494" text-anchor="middle" class="body">改过的草稿：先写回原件</text>
+  <text x="910" y="530" text-anchor="middle" class="small">腾出位置，尽量不丢数据</text>
+
+  <path d="M470 475 H720" stroke="#ef6c00" stroke-width="3" fill="none" marker-end="url(#arrow-orange)"/>
+  <text x="595" y="458" text-anchor="middle" class="small">先保存，再腾位置</text>
+  <path d="M910 390 V325 C910 305 880 295 850 295 H680" stroke="#2e7d32" stroke-width="3" fill="none" marker-end="url(#arrow-green)"/>
+
+  <rect x="55" y="610" width="1090" height="42" class="gray"/>
+  <text x="600" y="637" text-anchor="middle" class="body">内存报告里看到“空闲少”并不等于危险：先看还能否随时腾出可用空间，再看是否正在回写或换页。</text>
+</svg>

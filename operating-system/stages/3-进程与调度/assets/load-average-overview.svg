@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="720" viewBox="0 0 1120 720">
+  <rect width="1120" height="720" fill="#fff"/>
+  <text x="560" y="48" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="28" font-weight="700" fill="#333">load average：不是“CPU 百分比”，而是系统在办的队伍</text>
+  <text x="560" y="80" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="16" fill="#666">把“正在用 CPU”和“等不可中断 I/O”放进同一份排队账本，再用不同时间尺度做衰减平均</text>
+
+  <rect x="45" y="125" width="300" height="435" rx="16" fill="#f7f9fc" stroke="#b9c7d8" stroke-width="2"/>
+  <text x="195" y="164" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="21" font-weight="700" fill="#1565C0">今天系统在处理谁</text>
+  <rect x="82" y="205" width="226" height="100" rx="14" fill="#e3f2fd" stroke="#64b5f6"/>
+  <text x="195" y="239" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="20" font-weight="700" fill="#0d47a1">R：等 CPU 的人</text>
+  <text x="195" y="270" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" fill="#333">正在跑，或准备跑</text>
+  <text x="195" y="292" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" fill="#333">像等下一张桌子</text>
+  <rect x="82" y="335" width="226" height="100" rx="14" fill="#fff3e0" stroke="#ffb74d"/>
+  <text x="195" y="369" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="20" font-weight="700" fill="#e65100">D：等 I/O 的人</text>
+  <text x="195" y="400" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" fill="#333">磁盘/设备还没回应</text>
+  <text x="195" y="422" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" fill="#333">也先记进这本账</text>
+  <text x="195" y="490" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="16" font-weight="700" fill="#455a64">load 看的不是“谁占了多少%”</text>
+  <text x="195" y="518" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" fill="#555">而是“有多少工作在系统里占位”</text>
+
+  <rect x="410" y="125" width="300" height="435" rx="16" fill="#fff8e1" stroke="#e0b04b" stroke-width="2"/>
+  <text x="560" y="164" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="21" font-weight="700" fill="#8d5b00">三只时间镜头</text>
+  <rect x="465" y="205" width="190" height="68" rx="12" fill="#1565C0"/>
+  <text x="560" y="233" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="20" font-weight="700" fill="#fff">1 分钟</text>
+  <text x="560" y="256" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" fill="#e3f2fd">最近的变化，最敏感</text>
+  <rect x="465" y="300" width="190" height="68" rx="12" fill="#5c6bc0"/>
+  <text x="560" y="328" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="20" font-weight="700" fill="#fff">5 分钟</text>
+  <text x="560" y="351" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" fill="#e8eaf6">中等长度的趋势</text>
+  <rect x="465" y="395" width="190" height="68" rx="12" fill="#7986cb"/>
+  <text x="560" y="423" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="20" font-weight="700" fill="#fff">15 分钟</text>
+  <text x="560" y="446" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" fill="#fff">更慢、更平滑的背景</text>
+  <text x="560" y="505" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" fill="#555">突发压力会先抬高 1 分钟值</text>
+  <text x="560" y="530" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" fill="#555">停止后也不会立刻归零</text>
+
+  <rect x="775" y="125" width="300" height="435" rx="16" fill="#f7f9fc" stroke="#b9c7d8" stroke-width="2"/>
+  <text x="925" y="164" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="21" font-weight="700" fill="#1565C0">最后要除以几张桌子</text>
+  <rect x="830" y="210" width="190" height="92" rx="14" fill="#1565C0"/>
+  <text x="925" y="248" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="22" font-weight="700" fill="#fff">load = 8</text>
+  <text x="925" y="277" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" fill="#e3f2fd">先别急着说满载</text>
+  <text x="925" y="339" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="16" font-weight="700" fill="#333">8 核机器：8 ÷ 8 = 1</text>
+  <text x="925" y="367" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" fill="#555">大致满载的量级</text>
+  <text x="925" y="415" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="16" font-weight="700" fill="#333">16 核机器：8 ÷ 16 = 0.5</text>
+  <text x="925" y="443" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" fill="#555">平均每核还有余量，但 D 等待仍要查</text>
+  <text x="925" y="505" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" fill="#555">load 不会自动按核心数归一化</text>
+  <text x="925" y="530" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" fill="#555">比较机器时才手动换算拥挤度</text>
+
+  <path d="M345 340 L400 340" stroke="#607d8b" stroke-width="4"/>
+  <path d="M390 329 L407 340 L390 351" fill="#607d8b"/>
+  <path d="M710 340 L765 340" stroke="#607d8b" stroke-width="4"/>
+  <path d="M755 329 L772 340 L755 351" fill="#607d8b"/>
+
+  <rect x="45" y="600" width="1030" height="78" rx="14" fill="#eef5ff" stroke="#90caf9"/>
+  <text x="70" y="632" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="17" font-weight="700" fill="#0d47a1">排障分叉：</text>
+  <text x="180" y="632" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="16" fill="#333">load 高 + r 高 + us 高 → CPU 排队；load 高 + b/D 多 + wa 高 → I/O 等待。</text>
+  <text x="70" y="658" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="16" fill="#333">load 高 + CPU 闲并不矛盾：load 账本把“等设备”的人也算进去；要看 r/b、wa 和进程状态一起判断。</text>
+</svg>

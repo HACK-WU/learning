@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="620" viewBox="0 0 1000 620" font-family="-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+  <rect x="0" y="0" width="1000" height="620" fill="#fafafa"/>
+  <text x="40" y="44" font-size="24" font-weight="bold" fill="#333">Linux 操作系统基础 · 学习路径图</text>
+  <text x="40" y="70" font-size="13" fill="#666">5 阶段 · 16 课 · 48 知识点 ｜ 实操环境：Docker Linux 容器（ubuntu:26.04）｜ 严格线性递进</text>
+
+  <rect x="40" y="90" width="920" height="34" rx="8" fill="#E3F2FD" stroke="#90CAF9"/>
+  <text x="500" y="112" font-size="13" fill="#0D47A1" text-anchor="middle">故事主线：周五晚告警——体检报告每个词都认识、连起来读不懂 → 五个阶段解锁五组指标 → 一份《症状 → 机制 → 动作》会诊地图</text>
+
+  <!-- 阶段 1 -->
+  <rect x="40" y="146" width="920" height="72" rx="10" fill="#ffffff" stroke="#B0BEC5"/>
+  <rect x="56" y="161" width="132" height="42" rx="8" fill="#1565C0"/>
+  <text x="122" y="179" font-size="15" font-weight="bold" fill="#ffffff" text-anchor="middle">阶段 1</text>
+  <text x="122" y="196" font-size="12" fill="#ffffff" text-anchor="middle">算力的来源</text>
+  <rect x="204" y="160" width="200" height="24" rx="6" fill="#F5F5F5" stroke="#CFD8DC"/>
+  <text x="304" y="176" font-size="11" fill="#333" text-anchor="middle">课 1 CPU 怎么执行代码</text>
+  <rect x="416" y="160" width="200" height="24" rx="6" fill="#F5F5F5" stroke="#CFD8DC"/>
+  <text x="516" y="176" font-size="11" fill="#333" text-anchor="middle">课 2 核心数与超线程</text>
+  <rect x="628" y="160" width="200" height="24" rx="6" fill="#F5F5F5" stroke="#CFD8DC"/>
+  <text x="728" y="176" font-size="11" fill="#333" text-anchor="middle">课 3 GPU 何时上场</text>
+  <text x="204" y="202" font-size="11" fill="#78909C">体检报告第一页：这台机器有多大马力（含：什么时候才轮到 GPU）</text>
+  <text x="944" y="178" font-size="12" font-weight="bold" fill="#455A64" text-anchor="end">9 知识点</text>
+  <text x="944" y="196" font-size="11" fill="#78909C" text-anchor="end">3 课</text>
+  <line x1="122" y1="218" x2="122" y2="230" stroke="#90A4AE"/>
+  <polygon points="118,228 126,228 122,234" fill="#90A4AE"/>
+
+  <!-- 阶段 2 -->
+  <rect x="40" y="234" width="920" height="72" rx="10" fill="#ffffff" stroke="#B0BEC5"/>
+  <rect x="56" y="249" width="132" height="42" rx="8" fill="#00695C"/>
+  <text x="122" y="267" font-size="15" font-weight="bold" fill="#ffffff" text-anchor="middle">阶段 2</text>
+  <text x="122" y="284" font-size="12" fill="#ffffff" text-anchor="middle">存储金字塔</text>
+  <rect x="204" y="248" width="200" height="24" rx="6" fill="#F5F5F5" stroke="#CFD8DC"/>
+  <text x="304" y="264" font-size="11" fill="#333" text-anchor="middle">课 4 CPU 缓存与局部性</text>
+  <rect x="416" y="248" width="200" height="24" rx="6" fill="#F5F5F5" stroke="#CFD8DC"/>
+  <text x="516" y="264" font-size="11" fill="#333" text-anchor="middle">课 5 虚拟内存与页表</text>
+  <rect x="628" y="248" width="200" height="24" rx="6" fill="#F5F5F5" stroke="#CFD8DC"/>
+  <text x="728" y="264" font-size="11" fill="#333" text-anchor="middle">课 6 cache 与 buffer</text>
+  <text x="204" y="290" font-size="11" fill="#78909C">数据都藏在哪：CPU 的私人小抄、进程的幻觉、free 里的双胞胎</text>
+  <text x="944" y="266" font-size="12" font-weight="bold" fill="#455A64" text-anchor="end">9 知识点</text>
+  <text x="944" y="284" font-size="11" fill="#78909C" text-anchor="end">3 课</text>
+  <line x1="122" y1="306" x2="122" y2="318" stroke="#90A4AE"/>
+  <polygon points="118,316 126,316 122,322" fill="#90A4AE"/>
+
+  <!-- 阶段 3 -->
+  <rect x="40" y="322" width="920" height="72" rx="10" fill="#ffffff" stroke="#B0BEC5"/>
+  <rect x="56" y="337" width="132" height="42" rx="8" fill="#6A1B9A"/>
+  <text x="122" y="355" font-size="15" font-weight="bold" fill="#ffffff" text-anchor="middle">阶段 3</text>
+  <text x="122" y="372" font-size="12" fill="#ffffff" text-anchor="middle">进程与调度</text>
+  <rect x="204" y="336" width="200" height="24" rx="6" fill="#F5F5F5" stroke="#CFD8DC"/>
+  <text x="304" y="352" font-size="11" fill="#333" text-anchor="middle">课 7 进程与线程</text>
+  <rect x="416" y="336" width="200" height="24" rx="6" fill="#F5F5F5" stroke="#CFD8DC"/>
+  <text x="516" y="352" font-size="11" fill="#333" text-anchor="middle">课 8 调度与上下文切换</text>
+  <rect x="628" y="336" width="200" height="24" rx="6" fill="#F5F5F5" stroke="#CFD8DC"/>
+  <text x="728" y="352" font-size="11" fill="#333" text-anchor="middle">课 9 load average</text>
+  <text x="204" y="378" font-size="11" fill="#78909C">CPU 排队之谜：load、上下文切换的票价、"同时"的真相</text>
+  <text x="944" y="354" font-size="12" font-weight="bold" fill="#455A64" text-anchor="end">9 知识点</text>
+  <text x="944" y="372" font-size="11" fill="#78909C" text-anchor="end">3 课</text>
+  <line x1="122" y1="394" x2="122" y2="406" stroke="#90A4AE"/>
+  <polygon points="118,404 126,404 122,410" fill="#90A4AE"/>
+
+  <!-- 阶段 4 -->
+  <rect x="40" y="410" width="920" height="72" rx="10" fill="#ffffff" stroke="#B0BEC5"/>
+  <rect x="56" y="425" width="132" height="42" rx="8" fill="#AD1457"/>
+  <text x="122" y="443" font-size="15" font-weight="bold" fill="#ffffff" text-anchor="middle">阶段 4</text>
+  <text x="122" y="460" font-size="12" fill="#ffffff" text-anchor="middle">IO 与异步</text>
+  <rect x="204" y="424" width="152" height="24" rx="6" fill="#F5F5F5" stroke="#CFD8DC"/>
+  <text x="280" y="440" font-size="11" fill="#333" text-anchor="middle">课 10 文件句柄</text>
+  <rect x="368" y="424" width="152" height="24" rx="6" fill="#F5F5F5" stroke="#CFD8DC"/>
+  <text x="444" y="440" font-size="11" fill="#333" text-anchor="middle">课 11 IO 四象限</text>
+  <rect x="532" y="424" width="152" height="24" rx="6" fill="#F5F5F5" stroke="#CFD8DC"/>
+  <text x="608" y="440" font-size="11" fill="#333" text-anchor="middle">课 12 epoll</text>
+  <rect x="696" y="424" width="152" height="24" rx="6" fill="#F5F5F5" stroke="#CFD8DC"/>
+  <text x="772" y="440" font-size="11" fill="#333" text-anchor="middle">课 13 零拷贝与 DMA</text>
+  <text x="204" y="466" font-size="11" fill="#78909C">数据的进出：句柄爆仓、一个线程看住一万扇门、少搬几次家</text>
+  <text x="944" y="442" font-size="12" font-weight="bold" fill="#455A64" text-anchor="end">12 知识点</text>
+  <text x="944" y="460" font-size="11" fill="#78909C" text-anchor="end">4 课</text>
+  <line x1="122" y1="482" x2="122" y2="494" stroke="#90A4AE"/>
+  <polygon points="118,492 126,492 122,498" fill="#90A4AE"/>
+
+  <!-- 阶段 5 -->
+  <rect x="40" y="498" width="920" height="72" rx="10" fill="#ffffff" stroke="#B0BEC5"/>
+  <rect x="56" y="513" width="132" height="42" rx="8" fill="#2E7D32"/>
+  <text x="122" y="531" font-size="15" font-weight="bold" fill="#ffffff" text-anchor="middle">阶段 5</text>
+  <text x="122" y="548" font-size="12" fill="#ffffff" text-anchor="middle">综合会诊</text>
+  <rect x="204" y="512" width="200" height="24" rx="6" fill="#F5F5F5" stroke="#CFD8DC"/>
+  <text x="304" y="528" font-size="11" fill="#333" text-anchor="middle">课 14 观测工具箱</text>
+  <rect x="416" y="512" width="200" height="24" rx="6" fill="#F5F5F5" stroke="#CFD8DC"/>
+  <text x="516" y="528" font-size="11" fill="#333" text-anchor="middle">课 15 三个经典病例</text>
+  <rect x="628" y="512" width="200" height="24" rx="6" fill="#F5F5F5" stroke="#CFD8DC"/>
+  <text x="728" y="528" font-size="11" fill="#333" text-anchor="middle">课 16 结课会诊地图</text>
+  <text x="204" y="554" font-size="11" fill="#78909C">把地图连起来：三条排查链 + 四张设计决策卡</text>
+  <text x="944" y="530" font-size="12" font-weight="bold" fill="#455A64" text-anchor="end">9 知识点</text>
+  <text x="944" y="548" font-size="11" fill="#78909C" text-anchor="end">3 课</text>
+
+  <rect x="40" y="578" width="920" height="30" rx="15" fill="#E8F5E9" stroke="#66BB6A"/>
+  <text x="500" y="598" font-size="13" fill="#1B5E20" text-anchor="middle">起点：告警响起，体检报告读不懂　→　终点：《症状 → 机制 → 动作》会诊地图 + 四张设计决策卡</text>
+</svg>

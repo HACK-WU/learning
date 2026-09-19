@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="820" viewBox="0 0 1200 820">
+  <title>Linux 操作系统基础课程收束图：从症状到动作</title>
+  <desc>五个阶段从硬件与系统调用、进程与调度、内存与文件系统、观测工具到综合会诊；底部四张决策卡覆盖并发度、同步异步、零拷贝与 GPU。</desc>
+  <rect width="1200" height="820" fill="#fafafa"/>
+  <text x="60" y="54" font-family="sans-serif" font-size="28" font-weight="700" fill="#263238">从症状到动作：Linux 操作系统基础收束地图</text>
+  <text x="60" y="84" font-family="sans-serif" font-size="15" fill="#546e7a">先量现象 → 再定位子系统 → 用证据确认机制 → 最后选择动作；数字是路标，不是结论。</text>
+
+  <rect x="60" y="116" width="1080" height="238" rx="14" fill="#ffffff" stroke="#cfd8dc" stroke-width="2"/>
+  <text x="84" y="148" font-family="sans-serif" font-size="17" font-weight="700" fill="#37474f">五阶段主线</text>
+  <line x1="150" y1="228" x2="1040" y2="228" stroke="#90a4ae" stroke-width="4"/>
+  <polygon points="1040,228 1025,220 1025,236" fill="#90a4ae"/>
+
+  <g font-family="sans-serif">
+    <circle cx="160" cy="228" r="38" fill="#1565c0"/>
+    <text x="160" y="222" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">阶段 1</text>
+    <text x="160" y="243" text-anchor="middle" font-size="13" fill="#ffffff">底层地基</text>
+    <text x="160" y="185" text-anchor="middle" font-size="15" font-weight="700" fill="#263238">硬件与系统调用</text>
+    <text x="160" y="301" text-anchor="middle" font-size="13" fill="#546e7a">CPU / syscall / DMA</text>
+
+    <circle cx="380" cy="228" r="38" fill="#00897b"/>
+    <text x="380" y="222" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">阶段 2</text>
+    <text x="380" y="243" text-anchor="middle" font-size="13" fill="#ffffff">执行单元</text>
+    <text x="380" y="185" text-anchor="middle" font-size="15" font-weight="700" fill="#263238">进程与调度</text>
+    <text x="380" y="301" text-anchor="middle" font-size="13" fill="#546e7a">进程 / 线程 / 上下文</text>
+
+    <circle cx="600" cy="228" r="38" fill="#6a1b9a"/>
+    <text x="600" y="222" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">阶段 3</text>
+    <text x="600" y="243" text-anchor="middle" font-size="13" fill="#ffffff">资源与数据</text>
+    <text x="600" y="185" text-anchor="middle" font-size="15" font-weight="700" fill="#263238">内存与文件系统</text>
+    <text x="600" y="301" text-anchor="middle" font-size="13" fill="#546e7a">VM / cache / fd / IO</text>
+
+    <circle cx="820" cy="228" r="38" fill="#ef6c00"/>
+    <text x="820" y="222" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">阶段 4</text>
+    <text x="820" y="243" text-anchor="middle" font-size="13" fill="#ffffff">证据工具</text>
+    <text x="820" y="185" text-anchor="middle" font-size="15" font-weight="700" fill="#263238">指标与观测</text>
+    <text x="820" y="301" text-anchor="middle" font-size="13" fill="#546e7a">top / vmstat / proc / lsof</text>
+
+    <circle cx="1040" cy="228" r="38" fill="#c62828"/>
+    <text x="1040" y="222" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">阶段 5</text>
+    <text x="1040" y="243" text-anchor="middle" font-size="13" fill="#ffffff">会诊决策</text>
+    <text x="1040" y="185" text-anchor="middle" font-size="15" font-weight="700" fill="#263238">症状 → 动作</text>
+    <text x="1040" y="301" text-anchor="middle" font-size="13" fill="#546e7a">地图 / 病例 / 选型</text>
+  </g>
+
+  <rect x="60" y="382" width="1080" height="386" rx="14" fill="#ffffff" stroke="#cfd8dc" stroke-width="2"/>
+  <text x="84" y="416" font-family="sans-serif" font-size="17" font-weight="700" fill="#37474f">四张决策卡：每次都问“什么情况该改选另一个？”</text>
+
+  <g font-family="sans-serif">
+    <rect x="84" y="444" width="500" height="124" rx="10" fill="#e3f2fd" stroke="#90caf9" stroke-width="2"/>
+    <circle cx="116" cy="480" r="21" fill="#1565c0"/>
+    <text x="116" y="486" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">A</text>
+    <text x="151" y="477" font-size="17" font-weight="700" fill="#0d47a1">线程池 / 并发度</text>
+    <text x="151" y="504" font-size="14" fill="#37474f">Amdahl 上限 + I/O 等待 + 切换 / 内存代价</text>
+    <text x="151" y="532" font-size="14" fill="#c62828">CPU 饱和且 run queue / cs 上升 → 降；I/O 阻塞且资源有余 → 才增</text>
+
+    <rect x="616" y="444" width="500" height="124" rx="10" fill="#e0f2f1" stroke="#80cbc4" stroke-width="2"/>
+    <circle cx="648" cy="480" r="21" fill="#00897b"/>
+    <text x="648" y="486" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">B</text>
+    <text x="683" y="477" font-size="17" font-weight="700" fill="#00695c">同步 / 异步</text>
+    <text x="683" y="504" font-size="14" fill="#37474f">连接数 × I/O 密度 + 代码复杂度 + 延迟目标</text>
+    <text x="683" y="532" font-size="14" fill="#c62828">少连接 / CPU 重 → 同步；事件循环被阻塞或状态机失控 → 换模型</text>
+
+    <rect x="84" y="596" width="500" height="124" rx="10" fill="#f3e5f5" stroke="#ce93d8" stroke-width="2"/>
+    <circle cx="116" cy="632" r="21" fill="#6a1b9a"/>
+    <text x="116" y="638" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">C</text>
+    <text x="151" y="629" font-size="17" font-weight="700" fill="#4a148c">零拷贝</text>
+    <text x="151" y="656" font-size="14" fill="#37474f">大块数据 + 纯转发 + 少修改，才值得优化搬运路径</text>
+    <text x="151" y="684" font-size="14" fill="#c62828">需要解析 / 加密 / 压缩，或小消息占主导 → 普通拷贝更合适</text>
+
+    <rect x="616" y="596" width="500" height="124" rx="10" fill="#fff3e0" stroke="#ffcc80" stroke-width="2"/>
+    <circle cx="648" cy="632" r="21" fill="#ef6c00"/>
+    <text x="648" y="638" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">D</text>
+    <text x="683" y="629" font-size="17" font-weight="700" fill="#e65100">GPU</text>
+    <text x="683" y="656" font-size="14" fill="#37474f">数据并行 + 批量足够大 + 传输成本能摊薄 + 库支持</text>
+    <text x="683" y="684" font-size="14" fill="#c62828">分支多 / 小批次 / 低延迟 → CPU；搬运和排队超过计算 → 改选 CPU</text>
+  </g>
+
+  <text x="600" y="802" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="700" fill="#455a64">毕业动作：先写症状，再选证据；先证实机制，再承担优化代价。</text>
+</svg>

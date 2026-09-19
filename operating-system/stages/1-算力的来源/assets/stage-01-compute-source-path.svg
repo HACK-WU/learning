@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="480" viewBox="0 0 900 480" font-family="-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+  <rect x="0" y="0" width="900" height="480" fill="#fafafa"/>
+
+  <!-- 标题区 -->
+  <text x="40" y="42" font-size="20" font-weight="bold" fill="#333">阶段 1 · 算力的来源</text>
+  <text x="860" y="40" font-size="13" fill="#78909C" text-anchor="end">3 课 · 9 知识点</text>
+  <text x="40" y="66" font-size="13" fill="#666">故事章节 · 体检报告第一页：这台机器有多大马力</text>
+
+  <!-- 课 1 -->
+  <rect x="30" y="84" width="250" height="196" rx="10" fill="#ffffff" stroke="#B0BEC5"/>
+  <rect x="110" y="98" width="90" height="26" rx="6" fill="#1565C0"/>
+  <text x="155" y="116" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">课 1</text>
+  <text x="155" y="160" font-size="14" font-weight="bold" fill="#333" text-anchor="middle">CPU 是怎么执行你的代码的</text>
+  <line x1="50" y1="186" x2="260" y2="186" stroke="#ECEFF1" stroke-width="1"/>
+  <circle cx="54" cy="208" r="2.5" fill="#78909C"/>
+  <text x="64" y="212" font-size="11.5" fill="#333">取指—译码—执行的最小循环</text>
+  <circle cx="54" cy="234" r="2.5" fill="#78909C"/>
+  <text x="64" y="238" font-size="11.5" fill="#333">编译 vs 解释：代码怎么上机</text>
+  <circle cx="54" cy="260" r="2.5" fill="#78909C"/>
+  <text x="64" y="264" font-size="11.5" fill="#333">容器里的 Linux 到底是谁</text>
+
+  <!-- 课 2 -->
+  <rect x="325" y="84" width="250" height="196" rx="10" fill="#ffffff" stroke="#B0BEC5"/>
+  <rect x="405" y="98" width="90" height="26" rx="6" fill="#1565C0"/>
+  <text x="450" y="116" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">课 2</text>
+  <text x="450" y="150" font-size="14" font-weight="bold" fill="#333" text-anchor="middle">核心数与超线程</text>
+  <text x="450" y="170" font-size="14" font-weight="bold" fill="#333" text-anchor="middle">为什么 16 核不是 16 倍快</text>
+  <line x1="345" y1="186" x2="555" y2="186" stroke="#ECEFF1" stroke-width="1"/>
+  <circle cx="349" cy="208" r="2.5" fill="#78909C"/>
+  <text x="359" y="212" font-size="11.5" fill="#333">物理核 / 逻辑核与超线程</text>
+  <circle cx="349" cy="234" r="2.5" fill="#78909C"/>
+  <text x="359" y="238" font-size="11.5" fill="#333">SMP 与 NUMA：内存谁离得近</text>
+  <circle cx="349" cy="260" r="2.5" fill="#78909C"/>
+  <text x="359" y="264" font-size="11.5" fill="#333">Amdahl：加速的天花板</text>
+
+  <!-- 课 3 -->
+  <rect x="620" y="84" width="250" height="196" rx="10" fill="#ffffff" stroke="#B0BEC5"/>
+  <rect x="700" y="98" width="90" height="26" rx="6" fill="#1565C0"/>
+  <text x="745" y="116" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">课 3</text>
+  <text x="745" y="160" font-size="14" font-weight="bold" fill="#333" text-anchor="middle">GPU：什么时候该请它上场</text>
+  <line x1="640" y1="186" x2="850" y2="186" stroke="#ECEFF1" stroke-width="1"/>
+  <circle cx="644" cy="208" r="2.5" fill="#78909C"/>
+  <text x="654" y="212" font-size="11.5" fill="#333">CPU 少而强 vs GPU 多而简</text>
+  <circle cx="644" cy="234" r="2.5" fill="#78909C"/>
+  <text x="654" y="238" font-size="11.5" fill="#333">什么活适合 GPU，什么活反而慢</text>
+  <circle cx="644" cy="260" r="2.5" fill="#78909C"/>
+  <text x="654" y="264" font-size="11.5" fill="#333">后端服务的 GPU 决策卡</text>
+
+  <!-- 卡间箭头 -->
+  <line x1="286" y1="182" x2="314" y2="182" stroke="#90A4AE" stroke-width="2"/>
+  <polygon points="314,177 314,187 321,182" fill="#90A4AE"/>
+  <line x1="581" y1="182" x2="609" y2="182" stroke="#90A4AE" stroke-width="2"/>
+  <polygon points="609,177 609,187 616,182" fill="#90A4AE"/>
+
+  <!-- 输入 → 输出条 -->
+  <rect x="30" y="326" width="840" height="64" rx="10" fill="#E8F5E9" stroke="#66BB6A"/>
+  <rect x="48" y="344" width="50" height="28" rx="6" fill="#2E7D32"/>
+  <text x="73" y="363" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">输入</text>
+  <text x="108" y="363" font-size="12.5" fill="#333">会用命令，但不知道机器有多大马力</text>
+  <line x1="336" y1="358" x2="540" y2="358" stroke="#66BB6A" stroke-width="3"/>
+  <polygon points="540,352 540,364 552,358" fill="#66BB6A"/>
+  <rect x="566" y="344" width="50" height="28" rx="6" fill="#2E7D32"/>
+  <text x="591" y="363" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">输出</text>
+  <text x="856" y="363" font-size="12.5" fill="#333" text-anchor="end">能报出核心数口径、能判断要不要 GPU</text>
+
+  <!-- 底部注脚 -->
+  <text x="450" y="428" font-size="12" fill="#78909C" text-anchor="middle">阶段 1 / 5 ｜ 下一站：阶段 2 · 存储金字塔（数据都藏在哪）</text>
+  <text x="450" y="450" font-size="11.5" fill="#78909C" text-anchor="middle">注：课 3 为概念课，本机无 GPU 实操环境（全课无容器实操）</text>
+</svg>

@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="480" viewBox="0 0 900 480" font-family="-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+  <rect x="0" y="0" width="900" height="480" fill="#fafafa"/>
+
+  <!-- 顶部标题与章节定位 -->
+  <text x="40" y="42" font-size="22" font-weight="bold" fill="#333">阶段 3 · 进程与调度</text>
+  <text x="860" y="40" font-size="12" fill="#78909C" text-anchor="end">3 课 · 9 知识点</text>
+  <text x="40" y="68" font-size="13" fill="#666">CPU 排队之谜：load、上下文切换与"同时"的真相</text>
+
+  <!-- 课 7 卡片 -->
+  <rect x="40" y="100" width="250" height="290" rx="10" fill="#ffffff" stroke="#B0BEC5"/>
+  <rect x="60" y="118" width="64" height="26" rx="6" fill="#6A1B9A"/>
+  <text x="92" y="136" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">课 7</text>
+  <text x="60" y="172" font-size="16" font-weight="bold" fill="#333">进程与线程</text>
+  <text x="60" y="192" font-size="12" fill="#666">一段程序的两种形态</text>
+  <line x1="60" y1="204" x2="270" y2="204" stroke="#ECEFF1" stroke-width="2"/>
+  <text x="60" y="226" font-size="12" fill="#333">· 7.1 进程 = 资源的独立包房</text>
+  <text x="72" y="246" font-size="12" fill="#666">地址空间／fd 表／凭据</text>
+  <text x="60" y="268" font-size="12" fill="#333">· 7.2 线程 = 共享正厅的服务员</text>
+  <text x="72" y="288" font-size="12" fill="#666">共享堆与 fd 表，独享栈</text>
+  <text x="60" y="310" font-size="12" fill="#333">· 7.3 选型的第一性原理</text>
+  <text x="72" y="330" font-size="12" fill="#666">隔离性 vs 通信成本</text>
+
+  <!-- 箭头：课 7 → 课 8 -->
+  <line x1="293" y1="245" x2="317" y2="245" stroke="#90A4AE" stroke-width="2"/>
+  <polygon points="317,240 325,245 317,250" fill="#90A4AE"/>
+
+  <!-- 课 8 卡片 -->
+  <rect x="325" y="100" width="250" height="290" rx="10" fill="#ffffff" stroke="#B0BEC5"/>
+  <rect x="345" y="118" width="64" height="26" rx="6" fill="#6A1B9A"/>
+  <text x="377" y="136" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">课 8</text>
+  <text x="345" y="172" font-size="16" font-weight="bold" fill="#333">调度与上下文切换</text>
+  <text x="345" y="192" font-size="12" fill="#666">CPU 怎么"同时"跑一百个程序</text>
+  <line x1="345" y1="204" x2="555" y2="204" stroke="#ECEFF1" stroke-width="2"/>
+  <text x="345" y="226" font-size="12" fill="#333">· 8.1 时间片与 CFS 直觉</text>
+  <text x="357" y="246" font-size="12" fill="#666">抢不抢、轮到谁，调度器说了算</text>
+  <text x="345" y="268" font-size="12" fill="#333">· 8.2 上下文切换的票价</text>
+  <text x="357" y="288" font-size="12" fill="#666">换页表（TLB）+ 缓存污染</text>
+  <text x="345" y="310" font-size="12" fill="#333">· 8.3 用户态 / 内核态与系统调用</text>
+  <text x="357" y="330" font-size="12" fill="#666">strace 实测进内核的正门</text>
+
+  <!-- 箭头：课 8 → 课 9 -->
+  <line x1="578" y1="245" x2="602" y2="245" stroke="#90A4AE" stroke-width="2"/>
+  <polygon points="602,240 610,245 602,250" fill="#90A4AE"/>
+
+  <!-- 课 9 卡片 -->
+  <rect x="610" y="100" width="250" height="290" rx="10" fill="#ffffff" stroke="#B0BEC5"/>
+  <rect x="630" y="118" width="64" height="26" rx="6" fill="#6A1B9A"/>
+  <text x="662" y="136" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">课 9</text>
+  <text x="630" y="172" font-size="16" font-weight="bold" fill="#333">load average</text>
+  <text x="630" y="192" font-size="12" fill="#666">三个数字背后的排队论</text>
+  <line x1="630" y1="204" x2="840" y2="204" stroke="#ECEFF1" stroke-width="2"/>
+  <text x="630" y="226" font-size="12" fill="#333">· 9.1 load = 排队 + 在办</text>
+  <text x="642" y="246" font-size="12" fill="#666">R + D 都计入，不是使用率</text>
+  <text x="630" y="268" font-size="12" fill="#333">· 9.2 load 高、CPU 闲的真相</text>
+  <text x="642" y="288" font-size="12" fill="#666">D 状态堆积 = IO 在等</text>
+  <text x="630" y="310" font-size="12" fill="#333">· 9.3 并发 vs 并行</text>
+  <text x="642" y="330" font-size="12" fill="#666">异步前的最后一块地基</text>
+
+  <!-- 底部输入 → 输出条 -->
+  <rect x="40" y="412" width="820" height="44" rx="10" fill="#E8F5E9" stroke="#66BB6A"/>
+  <text x="450" y="439" font-size="13" fill="#1B5E20" text-anchor="middle">输入：load 响了只会重启　→　输出：能读懂 load 与切换代价、会选进程还是线程</text>
+</svg>

@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="480" viewBox="0 0 900 480" font-family="-apple-system,'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+  <rect x="0" y="0" width="900" height="480" fill="#fafafa"/>
+
+  <!-- 顶部标题与章节定位 -->
+  <text x="35" y="42" font-size="22" font-weight="bold" fill="#333">阶段 4 · IO 与异步</text>
+  <text x="865" y="40" font-size="12" fill="#78909C" text-anchor="end">4 课 · 12 知识点</text>
+  <text x="35" y="68" font-size="13" fill="#666">数据的进出：句柄爆仓、一万扇门与少搬几次家</text>
+
+  <!-- 课 10 卡片 -->
+  <rect x="35" y="100" width="185" height="290" rx="10" fill="#ffffff" stroke="#B0BEC5"/>
+  <rect x="49" y="118" width="64" height="26" rx="6" fill="#AD1457"/>
+  <text x="81" y="136" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">课 10</text>
+  <text x="49" y="172" font-size="15" font-weight="bold" fill="#333">文件句柄</text>
+  <text x="49" y="191" font-size="12" fill="#666">一切皆文件的入口</text>
+  <line x1="49" y1="202" x2="206" y2="202" stroke="#ECEFF1" stroke-width="2"/>
+  <text x="49" y="224" font-size="11" fill="#333">· 10.1 fd：进程的窗口编号</text>
+  <text x="59" y="243" font-size="11" fill="#666">0/1/2 与一切皆 fd</text>
+  <text x="49" y="264" font-size="11" fill="#333">· 10.2 一切皆文件（VFS）</text>
+  <text x="59" y="283" font-size="11" fill="#666">同套 API 的普适与边界</text>
+  <text x="49" y="304" font-size="11" fill="#333">· 10.3 句柄上限与泄漏</text>
+  <text x="59" y="323" font-size="11" fill="#666">ulimit／lsof 排查链</text>
+
+  <!-- 箭头：课 10 → 课 11 -->
+  <line x1="224" y1="245" x2="240" y2="245" stroke="#90A4AE" stroke-width="2"/>
+  <polygon points="240,240 248,245 240,250" fill="#90A4AE"/>
+
+  <!-- 课 11 卡片 -->
+  <rect x="250" y="100" width="185" height="290" rx="10" fill="#ffffff" stroke="#B0BEC5"/>
+  <rect x="264" y="118" width="64" height="26" rx="6" fill="#AD1457"/>
+  <text x="296" y="136" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">课 11</text>
+  <text x="264" y="172" font-size="15" font-weight="bold" fill="#333">IO 四象限</text>
+  <text x="264" y="191" font-size="12" fill="#666">同步异步 × 阻塞非阻塞</text>
+  <line x1="264" y1="202" x2="421" y2="202" stroke="#ECEFF1" stroke-width="2"/>
+  <text x="264" y="224" font-size="11" fill="#333">· 11.1 两个维度（四象限）</text>
+  <text x="274" y="243" font-size="11" fill="#666">等不等 × 谁来搬运</text>
+  <text x="264" y="264" font-size="11" fill="#333">· 11.2 阻塞时谁在哪</text>
+  <text x="274" y="283" font-size="11" fill="#666">1 万连接 = 1 万线程</text>
+  <text x="264" y="304" font-size="11" fill="#333">· 11.3 异步的代价与边界</text>
+  <text x="274" y="323" font-size="11" fill="#666">连接多 IO 密才值得</text>
+
+  <!-- 箭头：课 11 → 课 12 -->
+  <line x1="439" y1="245" x2="455" y2="245" stroke="#90A4AE" stroke-width="2"/>
+  <polygon points="455,240 463,245 455,250" fill="#90A4AE"/>
+
+  <!-- 课 12 卡片 -->
+  <rect x="465" y="100" width="185" height="290" rx="10" fill="#ffffff" stroke="#B0BEC5"/>
+  <rect x="479" y="118" width="64" height="26" rx="6" fill="#AD1457"/>
+  <text x="511" y="136" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">课 12</text>
+  <text x="479" y="172" font-size="15" font-weight="bold" fill="#333">epoll</text>
+  <text x="479" y="191" font-size="12" fill="#666">一个线程看住一万个连接</text>
+  <line x1="479" y1="202" x2="636" y2="202" stroke="#ECEFF1" stroke-width="2"/>
+  <text x="479" y="224" font-size="11" fill="#333">· 12.1 三代登记处</text>
+  <text x="489" y="243" font-size="11" fill="#666">select→poll→epoll</text>
+  <text x="479" y="264" font-size="11" fill="#333">· 12.2 三件套与事件循环</text>
+  <text x="489" y="283" font-size="11" fill="#666">Python selectors 实测</text>
+  <text x="479" y="304" font-size="11" fill="#333">· 12.3 Reactor 直觉</text>
+  <text x="489" y="323" font-size="11" fill="#666">Redis／Nginx 为何长这样</text>
+
+  <!-- 箭头：课 12 → 课 13 -->
+  <line x1="654" y1="245" x2="670" y2="245" stroke="#90A4AE" stroke-width="2"/>
+  <polygon points="670,240 678,245 670,250" fill="#90A4AE"/>
+
+  <!-- 课 13 卡片 -->
+  <rect x="680" y="100" width="185" height="290" rx="10" fill="#ffffff" stroke="#B0BEC5"/>
+  <rect x="694" y="118" width="64" height="26" rx="6" fill="#AD1457"/>
+  <text x="726" y="136" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">课 13</text>
+  <text x="694" y="172" font-size="15" font-weight="bold" fill="#333">零拷贝与 DMA</text>
+  <text x="694" y="191" font-size="12" fill="#666">数据少搬一次就快一分</text>
+  <line x1="694" y1="202" x2="851" y2="202" stroke="#ECEFF1" stroke-width="2"/>
+  <text x="694" y="224" font-size="11" fill="#333">· 13.1 搬了几次家</text>
+  <text x="704" y="243" font-size="11" fill="#666">4 次拷贝 + 4 次切换</text>
+  <text x="694" y="264" font-size="11" fill="#333">· 13.2 mmap 与 sendfile</text>
+  <text x="704" y="283" font-size="11" fill="#666">内核内直转省 CPU 拷</text>
+  <text x="694" y="304" font-size="11" fill="#333">· 13.3 值不值得上</text>
+  <text x="704" y="323" font-size="11" fill="#666">大文件纯转发才值得</text>
+
+  <!-- 底部输入 → 输出条 -->
+  <rect x="35" y="412" width="830" height="44" rx="10" fill="#E8F5E9" stroke="#66BB6A"/>
+  <text x="450" y="439" font-size="13" fill="#1B5E20" text-anchor="middle">输入：连接一多就加线程　→　输出：能算句柄账、能选 IO 模型、能判断零拷贝</text>
+</svg>

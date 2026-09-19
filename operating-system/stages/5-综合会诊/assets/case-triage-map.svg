@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760">
+  <title>三个经典病例的 Linux 会诊地图</title>
+  <desc>从 CPU 打满、文件句柄爆仓、内存失踪三个症状出发，经过发现、锁定、复现验证，落到止血和修复动作。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#607d8b"/>
+    </marker>
+    <style>
+      .title { font: 700 28px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; fill:#263238; }
+      .subtitle { font: 15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; fill:#546e7a; }
+      .lane-title { font: 700 18px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; fill:#fff; }
+      .label { font: 700 15px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; fill:#263238; }
+      .body { font: 14px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; fill:#37474f; }
+      .small { font: 13px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; fill:#546e7a; }
+      .step { fill:#fff; stroke:#b0bec5; stroke-width:2; rx:12; }
+      .action { fill:#fff8e1; stroke:#f9a825; stroke-width:2; rx:12; }
+      .calibration { fill:#e3f2fd; stroke:#1565c0; stroke-width:2; rx:12; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="760" fill="#fff"/>
+  <text x="50" y="48" class="title">三个经典病例：先锁定对象，再证明根因</text>
+  <text x="50" y="76" class="subtitle">每条链都遵循：发现异常 → 锁定粒度 → 单变量复现 → 止血并记录修复代价</text>
+
+  <text x="50" y="112" class="small">症状 / 告警</text>
+  <text x="310" y="112" class="small">第一判断</text>
+  <text x="575" y="112" class="small">观测与分类</text>
+  <text x="840" y="112" class="small">复现 / 验证</text>
+  <text x="1050" y="112" class="small">动作</text>
+
+  <rect x="40" y="130" width="1120" height="150" fill="#fff3f3" stroke="#ef9a9a" stroke-width="1.5" rx="16"/>
+  <rect x="55" y="145" width="205" height="52" fill="#c62828" rx="10"/>
+  <text x="72" y="178" class="lane-title">病例一 · CPU 打满</text>
+  <text x="72" y="222" class="body">延迟升高、CPU 100%</text>
+  <text x="72" y="244" class="body">先分清 us / sy / wa</text>
+  <rect x="295" y="150" width="215" height="100" class="step"/>
+  <text x="315" y="180" class="label">top / ps 找对象</text>
+  <text x="315" y="207" class="body">进程？线程？子进程？</text>
+  <text x="315" y="230" class="body">不要只盯父 PID</text>
+  <rect x="555" y="150" width="215" height="100" class="step"/>
+  <text x="575" y="180" class="label">pidstat / vmstat</text>
+  <text x="575" y="207" class="body">看时间窗口与 CPU 去向</text>
+  <text x="575" y="230" class="body">必要时 strace</text>
+  <rect x="815" y="150" width="195" height="100" class="step"/>
+  <text x="835" y="180" class="label">单变量压力</text>
+  <text x="835" y="207" class="body">对照采样</text>
+  <text x="835" y="230" class="body">恢复后再下结论</text>
+  <rect x="1055" y="150" width="90" height="100" class="action"/>
+  <text x="1071" y="180" class="label">限流</text>
+  <text x="1071" y="207" class="body">降并发</text>
+  <text x="1071" y="230" class="body">修热路</text>
+  <line x1="260" y1="198" x2="290" y2="198" stroke="#607d8b" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="510" y1="198" x2="550" y2="198" stroke="#607d8b" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="770" y1="198" x2="810" y2="198" stroke="#607d8b" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="1010" y1="198" x2="1050" y2="198" stroke="#607d8b" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="40" y="300" width="1120" height="150" fill="#f3f8ff" stroke="#90caf9" stroke-width="1.5" rx="16"/>
+  <rect x="55" y="315" width="205" height="52" fill="#1565c0" rx="10"/>
+  <text x="72" y="348" class="lane-title">病例二 · 句柄爆仓</text>
+  <text x="72" y="392" class="body">EMFILE / accept 失败</text>
+  <text x="72" y="414" class="body">先保护现场，再计数</text>
+  <rect x="295" y="320" width="215" height="100" class="step"/>
+  <text x="315" y="350" class="label">limits / prlimit</text>
+  <text x="315" y="377" class="body">软上限？硬上限？</text>
+  <text x="315" y="400" class="body">进程还是全局耗尽？</text>
+  <rect x="555" y="320" width="215" height="100" class="step"/>
+  <text x="575" y="350" class="label">/proc + lsof</text>
+  <text x="575" y="377" class="body">fd 数量与对象类型</text>
+  <text x="575" y="400" class="body">文件、pipe、socket？</text>
+  <rect x="815" y="320" width="195" height="100" class="step"/>
+  <text x="835" y="350" class="label">增长趋势</text>
+  <text x="835" y="377" class="body">关闭/回收后是否回落</text>
+  <text x="835" y="400" class="body">重放连接或请求</text>
+  <rect x="1055" y="320" width="90" height="100" class="action"/>
+  <text x="1071" y="350" class="label">降流</text>
+  <text x="1071" y="377" class="body">临调</text>
+  <text x="1071" y="400" class="body">修泄漏</text>
+  <line x1="260" y1="368" x2="290" y2="368" stroke="#607d8b" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="510" y1="368" x2="550" y2="368" stroke="#607d8b" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="770" y1="368" x2="810" y2="368" stroke="#607d8b" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="1010" y1="368" x2="1050" y2="368" stroke="#607d8b" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="40" y="470" width="1120" height="150" fill="#f7f4ff" stroke="#b39ddb" stroke-width="1.5" rx="16"/>
+  <rect x="55" y="485" width="205" height="52" fill="#6a1b9a" rx="10"/>
+  <text x="72" y="518" class="lane-title">病例三 · 内存失踪</text>
+  <text x="72" y="562" class="body">free 变少、延迟抖动</text>
+  <text x="72" y="584" class="body">先看 available 与边界</text>
+  <rect x="295" y="490" width="215" height="100" class="step"/>
+  <text x="315" y="520" class="label">free + cgroup</text>
+  <text x="315" y="547" class="body">系统可用？容器受限？</text>
+  <text x="315" y="570" class="body">swap 是否持续增长？</text>
+  <rect x="555" y="490" width="215" height="100" class="step"/>
+  <text x="575" y="520" class="label">RSS / meminfo</text>
+  <text x="575" y="547" class="body">RssAnon 还是 Cached？</text>
+  <text x="575" y="570" class="body">进程增长还是缓存增长？</text>
+  <rect x="815" y="490" width="195" height="100" class="step"/>
+  <text x="835" y="520" class="label">压力 + 恢复</text>
+  <text x="835" y="547" class="body">回收后 RSS 是否回落</text>
+  <text x="835" y="570" class="body">触顶是否 OOM kill</text>
+  <rect x="1055" y="490" width="90" height="100" class="action"/>
+  <text x="1071" y="520" class="label">降载</text>
+  <text x="1071" y="547" class="body">控界</text>
+  <text x="1071" y="570" class="body">修泄漏</text>
+  <line x1="260" y1="538" x2="290" y2="538" stroke="#607d8b" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="510" y1="538" x2="550" y2="538" stroke="#607d8b" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="770" y1="538" x2="810" y2="538" stroke="#607d8b" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="1010" y1="538" x2="1050" y2="538" stroke="#607d8b" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="40" y="650" width="1120" height="76" class="calibration"/>
+  <text x="65" y="679" class="label">每一步都要写下三件事</text>
+  <text x="65" y="704" class="body">范围：系统 / 进程 / 线程 / cgroup　　窗口：快照 / 采样速率 / 趋势　　单位：% / KiB / fd 数 / 队列</text>
+</svg>

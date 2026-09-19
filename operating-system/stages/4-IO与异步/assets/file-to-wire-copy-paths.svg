@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900">
+  <rect width="1200" height="900" fill="#ffffff"/>
+  <text x="60" y="48" font-size="26" font-family="Arial, sans-serif" font-weight="700" fill="#263238">同一个文件发到网络：数据到底经过哪些“家”</text>
+  <text x="60" y="78" font-size="15" font-family="Arial, sans-serif" fill="#546e7a">对象：普通文件 → TCP socket；蓝色 = DMA，橙色 = CPU 拷贝，虚线 = 映射 / 逻辑关联</text>
+
+  <g font-family="Arial, sans-serif">
+    <rect x="55" y="105" width="1090" height="54" rx="10" fill="#1565c0"/>
+    <text x="155" y="139" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">存储设备</text>
+    <text x="380" y="139" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Kernel Page Cache</text>
+    <text x="625" y="139" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">用户态地址空间</text>
+    <text x="865" y="139" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">Kernel Socket Buffer</text>
+    <text x="1080" y="139" text-anchor="middle" font-size="17" font-weight="700" fill="#ffffff">网卡</text>
+
+    <line x1="270" y1="105" x2="270" y2="850" stroke="#cfd8dc"/>
+    <line x1="495" y1="105" x2="495" y2="850" stroke="#cfd8dc"/>
+    <line x1="745" y1="105" x2="745" y2="850" stroke="#cfd8dc"/>
+    <line x1="985" y1="105" x2="985" y2="850" stroke="#cfd8dc"/>
+
+    <rect x="55" y="180" width="1090" height="195" rx="12" fill="#f8fbff" stroke="#90caf9" stroke-width="2"/>
+    <text x="78" y="212" font-size="20" font-weight="700" fill="#0d47a1">A · read + write（冷路径概念账本）</text>
+    <rect x="95" y="250" width="120" height="58" rx="8" fill="#e3f2fd" stroke="#1976d2"/>
+    <text x="155" y="276" text-anchor="middle" font-size="15" fill="#0d47a1">文件块</text>
+    <text x="155" y="297" text-anchor="middle" font-size="13" fill="#546e7a">设备数据</text>
+    <rect x="320" y="250" width="120" height="58" rx="8" fill="#e8f5e9" stroke="#43a047"/>
+    <text x="380" y="276" text-anchor="middle" font-size="15" fill="#1b5e20">页缓存</text>
+    <text x="380" y="297" text-anchor="middle" font-size="13" fill="#546e7a">内核页</text>
+    <rect x="565" y="250" width="120" height="58" rx="8" fill="#fff3e0" stroke="#fb8c00"/>
+    <text x="625" y="276" text-anchor="middle" font-size="15" fill="#e65100">用户 buffer</text>
+    <text x="625" y="297" text-anchor="middle" font-size="13" fill="#546e7a">read() 得到</text>
+    <rect x="805" y="250" width="120" height="58" rx="8" fill="#ffebee" stroke="#e53935"/>
+    <text x="865" y="276" text-anchor="middle" font-size="15" fill="#b71c1c">socket buffer</text>
+    <text x="865" y="297" text-anchor="middle" font-size="13" fill="#546e7a">write() 进入</text>
+    <rect x="1020" y="250" width="120" height="58" rx="8" fill="#e3f2fd" stroke="#1976d2"/>
+    <text x="1080" y="276" text-anchor="middle" font-size="15" fill="#0d47a1">网卡队列</text>
+    <text x="1080" y="297" text-anchor="middle" font-size="13" fill="#546e7a">发出</text>
+    <path d="M215 279 H315" stroke="#1565c0" stroke-width="3" marker-end="url(#arrowBlue)"/>
+    <text x="265" y="254" text-anchor="middle" font-size="13" fill="#1565c0">1 DMA</text>
+    <path d="M440 279 H560" stroke="#ef6c00" stroke-width="3" marker-end="url(#arrowOrange)"/>
+    <text x="500" y="254" text-anchor="middle" font-size="13" fill="#e65100">2 CPU 拷贝</text>
+    <path d="M685 279 H800" stroke="#ef6c00" stroke-width="3" marker-end="url(#arrowOrange)"/>
+    <text x="742" y="254" text-anchor="middle" font-size="13" fill="#e65100">3 CPU 拷贝</text>
+    <path d="M925 279 H1015" stroke="#1565c0" stroke-width="3" marker-end="url(#arrowBlue)"/>
+    <text x="970" y="254" text-anchor="middle" font-size="13" fill="#1565c0">4 DMA</text>
+    <text x="80" y="346" font-size="14" fill="#455a64">两次系统调用：read + write → 4 次用户/内核边界穿越（不是 4 次调度上下文切换）</text>
+
+    <rect x="55" y="395" width="1090" height="195" rx="12" fill="#fffaf3" stroke="#ffcc80" stroke-width="2"/>
+    <text x="78" y="427" font-size="20" font-weight="700" fill="#e65100">B · mmap + write（少一段显式 CPU 拷贝）</text>
+    <rect x="95" y="465" width="120" height="58" rx="8" fill="#e3f2fd" stroke="#1976d2"/><text x="155" y="500" text-anchor="middle" font-size="15" fill="#0d47a1">文件块</text>
+    <rect x="320" y="465" width="120" height="58" rx="8" fill="#e8f5e9" stroke="#43a047"/><text x="380" y="500" text-anchor="middle" font-size="15" fill="#1b5e20">页缓存</text>
+    <rect x="565" y="465" width="120" height="58" rx="8" fill="#fff3e0" stroke="#fb8c00"/><text x="625" y="492" text-anchor="middle" font-size="15" fill="#e65100">mmap 映射</text><text x="625" y="513" text-anchor="middle" font-size="13" fill="#546e7a">同一页的地址视图</text>
+    <rect x="805" y="465" width="120" height="58" rx="8" fill="#ffebee" stroke="#e53935"/><text x="865" y="492" text-anchor="middle" font-size="15" fill="#b71c1c">socket buffer</text><text x="865" y="513" text-anchor="middle" font-size="13" fill="#546e7a">write() 进入</text>
+    <rect x="1020" y="465" width="120" height="58" rx="8" fill="#e3f2fd" stroke="#1976d2"/><text x="1080" y="492" text-anchor="middle" font-size="15" fill="#0d47a1">网卡队列</text><text x="1080" y="513" text-anchor="middle" font-size="13" fill="#546e7a">发出</text>
+    <path d="M215 494 H315" stroke="#1565c0" stroke-width="3" marker-end="url(#arrowBlue)"/>
+    <text x="265" y="469" text-anchor="middle" font-size="13" fill="#1565c0">1 DMA</text>
+    <path d="M440 494 H560" stroke="#78909c" stroke-width="3" stroke-dasharray="7 5" marker-end="url(#arrowGray)"/>
+    <text x="500" y="469" text-anchor="middle" font-size="13" fill="#546e7a">2 映射</text>
+    <path d="M685 494 H800" stroke="#ef6c00" stroke-width="3" marker-end="url(#arrowOrange)"/>
+    <text x="742" y="469" text-anchor="middle" font-size="13" fill="#e65100">3 CPU 拷贝</text>
+    <path d="M925 494 H1015" stroke="#1565c0" stroke-width="3" marker-end="url(#arrowBlue)"/>
+    <text x="970" y="469" text-anchor="middle" font-size="13" fill="#1565c0">4 DMA</text>
+    <text x="80" y="565" font-size="14" fill="#455a64">mmap 省掉“页缓存 → 用户 bytes 缓冲区”的显式读拷贝，但 write 到 socket 的代价仍在</text>
+
+    <rect x="55" y="610" width="1090" height="195" rx="12" fill="#f6fbf7" stroke="#a5d6a7" stroke-width="2"/>
+    <text x="78" y="642" font-size="20" font-weight="700" fill="#2e7d32">C · sendfile（把转发留在内核）</text>
+    <rect x="95" y="680" width="120" height="58" rx="8" fill="#e3f2fd" stroke="#1976d2"/><text x="155" y="715" text-anchor="middle" font-size="15" fill="#0d47a1">文件块</text>
+    <rect x="320" y="680" width="120" height="58" rx="8" fill="#e8f5e9" stroke="#43a047"/><text x="380" y="706" text-anchor="middle" font-size="15" fill="#1b5e20">页缓存</text><text x="380" y="727" text-anchor="middle" font-size="13" fill="#546e7a">内核页</text>
+    <rect x="565" y="680" width="120" height="58" rx="8" fill="#f3e5f5" stroke="#8e24aa"/><text x="625" y="706" text-anchor="middle" font-size="15" fill="#6a1b9a">内核内转发</text><text x="625" y="727" text-anchor="middle" font-size="13" fill="#546e7a">sendfile()</text>
+    <rect x="805" y="680" width="120" height="58" rx="8" fill="#ffebee" stroke="#e53935"/><text x="865" y="706" text-anchor="middle" font-size="15" fill="#b71c1c">socket buffer</text><text x="865" y="727" text-anchor="middle" font-size="13" fill="#546e7a">内核路径</text>
+    <rect x="1020" y="680" width="120" height="58" rx="8" fill="#e3f2fd" stroke="#1976d2"/><text x="1080" y="706" text-anchor="middle" font-size="15" fill="#0d47a1">网卡队列</text><text x="1080" y="727" text-anchor="middle" font-size="13" fill="#546e7a">发出</text>
+    <path d="M215 709 H315" stroke="#1565c0" stroke-width="3" marker-end="url(#arrowBlue)"/>
+    <text x="265" y="684" text-anchor="middle" font-size="13" fill="#1565c0">1 DMA</text>
+    <path d="M440 709 C480 660 530 660 560 709" stroke="#8e24aa" stroke-width="3" marker-end="url(#arrowPurple)"/>
+    <text x="500" y="665" text-anchor="middle" font-size="13" fill="#6a1b9a">2 内核处理</text>
+    <path d="M685 709 H800" stroke="#8e24aa" stroke-width="3" marker-end="url(#arrowPurple)"/>
+    <text x="742" y="684" text-anchor="middle" font-size="13" fill="#6a1b9a">3 无用户态往返</text>
+    <path d="M925 709 H1015" stroke="#1565c0" stroke-width="3" marker-end="url(#arrowBlue)"/>
+    <text x="970" y="684" text-anchor="middle" font-size="13" fill="#1565c0">4 DMA</text>
+    <text x="80" y="780" font-size="14" fill="#455a64">“零拷贝”更准确的说法：避免应用层 read/write 的用户态中转；不是物理世界绝对没有任何复制</text>
+  </g>
+
+  <defs>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L10,3 L0,6 Z" fill="#1565c0"/></marker>
+    <marker id="arrowOrange" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L10,3 L0,6 Z" fill="#ef6c00"/></marker>
+    <marker id="arrowGray" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L10,3 L0,6 Z" fill="#78909c"/></marker>
+    <marker id="arrowPurple" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L10,3 L0,6 Z" fill="#8e24aa"/></marker>
+  </defs>
+</svg>

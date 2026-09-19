@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="720" viewBox="0 0 1100 720">
+  <rect width="1100" height="720" fill="#fff"/>
+  <text x="550" y="48" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="28" font-weight="700" fill="#333">CPU 只有一张桌子，任务为什么看起来一起做</text>
+  <text x="550" y="80" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="16" fill="#666">调度器让可运行的任务轮流获得短暂的执行机会；每次换人，都要先保存上一个人的进度</text>
+
+  <rect x="55" y="130" width="260" height="430" rx="16" fill="#f7f9fc" stroke="#b9c7d8" stroke-width="2"/>
+  <text x="185" y="168" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="20" font-weight="700" fill="#1565C0">等待上桌的任务</text>
+  <text x="185" y="194" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" fill="#666">它们都还没结束，只是在排队</text>
+  <rect x="90" y="235" width="190" height="62" rx="12" fill="#e3f2fd" stroke="#64b5f6"/>
+  <text x="185" y="273" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="20" font-weight="700" fill="#0d47a1">任务 A</text>
+  <rect x="90" y="325" width="190" height="62" rx="12" fill="#e8f5e9" stroke="#81c784"/>
+  <text x="185" y="363" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="20" font-weight="700" fill="#2e7d32">任务 B</text>
+  <rect x="90" y="415" width="190" height="62" rx="12" fill="#fff3e0" stroke="#ffb74d"/>
+  <text x="185" y="453" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="20" font-weight="700" fill="#e65100">任务 C</text>
+  <text x="185" y="520" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" fill="#555">一百个程序也类似：
+    </text>
+  <text x="185" y="544" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" fill="#555">可运行 ≠ 同一瞬间都在跑</text>
+
+  <rect x="415" y="130" width="270" height="430" rx="16" fill="#fff8e1" stroke="#e0b04b" stroke-width="2"/>
+  <text x="550" y="168" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="20" font-weight="700" fill="#8d5b00">调度器</text>
+  <text x="550" y="194" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" fill="#666">决定“下一个轮到谁”</text>
+  <circle cx="550" cy="315" r="80" fill="#1565C0"/>
+  <text x="550" y="307" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="24" font-weight="700" fill="#fff">公平尺</text>
+  <text x="550" y="338" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" fill="#fff">谁最近跑得少</text>
+  <text x="550" y="360" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" fill="#fff">谁更该被选中</text>
+  <rect x="462" y="445" width="176" height="66" rx="12" fill="#fff" stroke="#d39b27"/>
+  <text x="550" y="472" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="16" font-weight="700" fill="#6d4c41">可调整“礼让程度”</text>
+  <text x="550" y="496" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" fill="#555">nice 越大，越礼让</text>
+
+  <rect x="785" y="130" width="260" height="430" rx="16" fill="#f7f9fc" stroke="#b9c7d8" stroke-width="2"/>
+  <text x="915" y="168" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="20" font-weight="700" fill="#1565C0">CPU 的一张桌子</text>
+  <text x="915" y="194" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="14" fill="#666">同一时刻一个逻辑 CPU 只执行一条路线</text>
+  <rect x="825" y="245" width="180" height="92" rx="15" fill="#1565C0"/>
+  <text x="915" y="284" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="22" font-weight="700" fill="#fff">任务 A</text>
+  <text x="915" y="311" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" fill="#e3f2fd">短暂执行</text>
+  <path d="M915 350 L915 389" stroke="#1565C0" stroke-width="4"/>
+  <path d="M904 379 L915 395 L926 379" fill="#1565C0"/>
+  <rect x="825" y="405" width="180" height="92" rx="15" fill="#455a64"/>
+  <text x="915" y="444" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="22" font-weight="700" fill="#fff">任务 B</text>
+  <text x="915" y="471" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" fill="#eceff1">接着执行</text>
+  <text x="915" y="535" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="15" fill="#555">看起来像同时，实质是高速交替</text>
+
+  <path d="M315 330 C350 330 370 330 405 330" fill="none" stroke="#607d8b" stroke-width="4"/>
+  <path d="M395 319 L412 330 L395 341" fill="#607d8b"/>
+  <path d="M695 330 C730 330 750 330 775 330" fill="none" stroke="#607d8b" stroke-width="4"/>
+  <path d="M765 319 L782 330 L765 341" fill="#607d8b"/>
+  <path d="M915 575 C700 650 400 650 185 575" fill="none" stroke="#90a4ae" stroke-width="3" stroke-dasharray="9 8"/>
+  <path d="M196 568 L181 575 L196 582" fill="#90a4ae"/>
+
+  <rect x="55" y="605" width="990" height="82" rx="14" fill="#eef5ff" stroke="#90caf9"/>
+  <text x="75" y="637" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="17" font-weight="700" fill="#0d47a1">每次换人都要付账：</text>
+  <text x="245" y="637" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="16" fill="#333">保存寄存器和内核现场；进程换人时还可能换页表、冲击 TLB，并让缓存里的热数据失效。</text>
+  <text x="75" y="665" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="16" fill="#333">因此“并发很多”不等于“免费”：任务越碎、切换越频繁，真正做业务的时间越少。</text>
+</svg>

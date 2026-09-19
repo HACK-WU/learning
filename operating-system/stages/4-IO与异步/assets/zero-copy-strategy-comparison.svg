@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#ffffff"/>
+  <text x="60" y="48" font-size="26" font-family="Arial, sans-serif" font-weight="700" fill="#263238">三种文件发送路线：省掉的到底是哪一段</text>
+  <text x="60" y="78" font-size="15" font-family="Arial, sans-serif" fill="#546e7a">先看数据是否需要进入用户态，再决定 API；“零拷贝”是路径优化，不是性能保证</text>
+  <g font-family="Arial, sans-serif" font-size="15">
+    <rect x="55" y="105" width="1090" height="55" rx="8" fill="#1565c0"/>
+    <text x="155" y="139" text-anchor="middle" fill="#ffffff" font-weight="700">路线</text>
+    <text x="355" y="139" text-anchor="middle" fill="#ffffff" font-weight="700">用户态是否拿到完整数据</text>
+    <text x="600" y="139" text-anchor="middle" fill="#ffffff" font-weight="700">主要省掉什么</text>
+    <text x="825" y="139" text-anchor="middle" fill="#ffffff" font-weight="700">适合的工作</text>
+    <text x="1055" y="139" text-anchor="middle" fill="#ffffff" font-weight="700">主要代价 / 边界</text>
+
+    <rect x="55" y="160" width="1090" height="105" fill="#f8fbff" stroke="#cfd8dc"/>
+    <rect x="75" y="180" width="160" height="62" rx="8" fill="#e3f2fd" stroke="#1976d2"/>
+    <text x="155" y="207" text-anchor="middle" fill="#0d47a1" font-weight="700">read + write</text><text x="155" y="228" text-anchor="middle" fill="#546e7a">最直观基线</text>
+    <text x="355" y="208" text-anchor="middle" fill="#37474f">是</text>
+    <text x="600" y="198" text-anchor="middle" fill="#37474f">无</text><text x="600" y="220" text-anchor="middle" fill="#37474f">（两段 CPU 拷贝保留）</text>
+    <text x="825" y="198" text-anchor="middle" fill="#37474f">解析、改写、加密、压缩</text><text x="825" y="220" text-anchor="middle" fill="#37474f">业务逻辑需要 bytes</text>
+    <text x="1055" y="198" text-anchor="middle" fill="#b71c1c">CPU 拷贝与 2 次 syscall</text><text x="1055" y="220" text-anchor="middle" fill="#b71c1c">代码最容易写对</text>
+
+    <rect x="55" y="265" width="1090" height="105" fill="#fffaf3" stroke="#cfd8dc"/>
+    <rect x="75" y="285" width="160" height="62" rx="8" fill="#fff3e0" stroke="#fb8c00"/>
+    <text x="155" y="312" text-anchor="middle" fill="#e65100" font-weight="700">mmap + write</text><text x="155" y="333" text-anchor="middle" fill="#546e7a">映射后加工</text>
+    <text x="355" y="313" text-anchor="middle" fill="#37474f">是（按需触页）</text>
+    <text x="600" y="303" text-anchor="middle" fill="#37474f">页缓存 → 用户 bytes</text><text x="600" y="325" text-anchor="middle" fill="#37474f">的显式 read 拷贝</text>
+    <text x="825" y="303" text-anchor="middle" fill="#37474f">随机访问、搜索、解析</text><text x="825" y="325" text-anchor="middle" fill="#37474f">避免额外 read 缓冲</text>
+    <text x="1055" y="303" text-anchor="middle" fill="#b71c1c">页错误 / 地址空间 / 生命周期</text><text x="1055" y="325" text-anchor="middle" fill="#b71c1c">write 拷贝仍然存在</text>
+
+    <rect x="55" y="370" width="1090" height="105" fill="#f6fbf7" stroke="#cfd8dc"/>
+    <rect x="75" y="390" width="160" height="62" rx="8" fill="#e8f5e9" stroke="#43a047"/>
+    <text x="155" y="417" text-anchor="middle" fill="#1b5e20" font-weight="700">sendfile</text><text x="155" y="438" text-anchor="middle" fill="#546e7a">内核内转发</text>
+    <text x="355" y="418" text-anchor="middle" fill="#37474f">否</text>
+    <text x="600" y="408" text-anchor="middle" fill="#37474f">应用层用户态中转</text><text x="600" y="430" text-anchor="middle" fill="#37474f">和一次数据搬运</text>
+    <text x="825" y="408" text-anchor="middle" fill="#37474f">文件静态转发到 socket</text><text x="825" y="430" text-anchor="middle" fill="#37474f">下载 / 代理 / 静态文件</text>
+    <text x="1055" y="408" text-anchor="middle" fill="#b71c1c">输入需 mmap-like 文件</text><text x="1055" y="430" text-anchor="middle" fill="#b71c1c">仍可能部分写 / EAGAIN</text>
+
+    <rect x="55" y="475" width="1090" height="105" fill="#faf7ff" stroke="#cfd8dc"/>
+    <rect x="75" y="495" width="160" height="62" rx="8" fill="#f3e5f5" stroke="#8e24aa"/>
+    <text x="155" y="522" text-anchor="middle" fill="#6a1b9a" font-weight="700">splice</text><text x="155" y="543" text-anchor="middle" fill="#546e7a">pipe 中转</text>
+    <text x="355" y="523" text-anchor="middle" fill="#37474f">否</text>
+    <text x="600" y="513" text-anchor="middle" fill="#37474f">用户态读写拷贝</text><text x="600" y="535" text-anchor="middle" fill="#37474f">但至少一端必须是 pipe</text>
+    <text x="825" y="513" text-anchor="middle" fill="#37474f">构建内核态 fd 管道</text><text x="825" y="535" text-anchor="middle" fill="#37474f">复杂转发链</text>
+    <text x="1055" y="513" text-anchor="middle" fill="#b71c1c">Linux 专属、约束更多</text><text x="1055" y="535" text-anchor="middle" fill="#b71c1c">页移动只是 hint</text>
+
+    <rect x="80" y="620" width="1040" height="55" rx="10" fill="#fff8e1" stroke="#f9a825"/>
+    <text x="600" y="653" text-anchor="middle" fill="#5d4037" font-weight="700">决策核心：如果业务要看懂/改写数据，用户态不是浪费；如果只是把文件原样送出，用户态中转才可能是浪费。</text>
+  </g>
+</svg>
