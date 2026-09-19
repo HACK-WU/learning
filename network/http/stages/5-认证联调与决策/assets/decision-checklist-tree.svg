@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="720" viewBox="0 0 1120 720">
+  <title>HTTP 请求排障决策树</title>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#1565c0"/>
+    </marker>
+    <style>
+      .title { font: 700 28px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; fill: #333; }
+      .root { fill: #1565c0; stroke: #0d47a1; stroke-width: 2; rx: 13; }
+      .node { fill: #fff; stroke: #90caf9; stroke-width: 2; rx: 13; }
+      .leaf { fill: #e8f5e9; stroke: #66bb6a; stroke-width: 2; rx: 13; }
+      .white { font: 700 19px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; fill: #fff; }
+      .label { font: 700 17px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; fill: #333; }
+      .small { font: 15px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; fill: #555; }
+      .edge { stroke: #1565c0; stroke-width: 2.5; fill: none; marker-end: url(#arrow); }
+      .edge-text { font: 700 14px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; fill: #1565c0; }
+    </style>
+  </defs>
+  <rect width="1120" height="720" fill="#fff"/>
+  <text x="560" y="44" text-anchor="middle" class="title">先找证据落点，再选择修复路线</text>
+
+  <rect x="410" y="80" width="300" height="70" class="root"/>
+  <text x="560" y="112" text-anchor="middle" class="white">一次真实请求</text>
+  <text x="560" y="137" text-anchor="middle" class="white">到底哪里出了问题？</text>
+
+  <rect x="55" y="235" width="260" height="88" class="node"/>
+  <text x="185" y="270" text-anchor="middle" class="label">没有发出 / 到不了</text>
+  <text x="185" y="298" text-anchor="middle" class="small">看 DNS、连接、代理、浏览器阻止</text>
+
+  <rect x="430" y="235" width="260" height="88" class="node"/>
+  <text x="560" y="270" text-anchor="middle" class="label">发出但首字节晚</text>
+  <text x="560" y="298" text-anchor="middle" class="small">看 TTFB、重定向、服务端处理</text>
+
+  <rect x="805" y="235" width="260" height="88" class="node"/>
+  <text x="935" y="270" text-anchor="middle" class="label">首字节到了但读完晚</text>
+  <text x="935" y="298" text-anchor="middle" class="small">看正文大小、编码、网络读取</text>
+
+  <path d="M490 150 C400 185 280 205 185 235" class="edge"/>
+  <path d="M560 150 L560 235" class="edge"/>
+  <path d="M630 150 C720 185 840 205 935 235" class="edge"/>
+  <text x="300" y="192" class="edge-text">请求不存在</text>
+  <text x="580" y="205" class="edge-text">TTFB</text>
+  <text x="770" y="192" class="edge-text">下载阶段</text>
+
+  <rect x="40" y="430" width="300" height="100" class="leaf"/>
+  <text x="190" y="466" text-anchor="middle" class="label">动作：先保留现场</text>
+  <text x="190" y="495" text-anchor="middle" class="small">复制 URL / 状态 / 代理设置</text>
+  <text x="190" y="518" text-anchor="middle" class="small">再判断浏览器还是服务端</text>
+
+  <rect x="410" y="430" width="300" height="100" class="leaf"/>
+  <text x="560" y="466" text-anchor="middle" class="label">动作：优先查服务端等待</text>
+  <text x="560" y="495" text-anchor="middle" class="small">不要先换协议；先证实是否真的</text>
+  <text x="560" y="518" text-anchor="middle" class="small">卡在连接、缓存或业务处理</text>
+
+  <rect x="780" y="430" width="300" height="100" class="leaf"/>
+  <text x="930" y="466" text-anchor="middle" class="label">动作：比较传输与解压后大小</text>
+  <text x="930" y="495" text-anchor="middle" class="small">确认压缩、读取和浏览器工作</text>
+  <text x="930" y="518" text-anchor="middle" class="small">不要把大正文误判成服务端慢</text>
+
+  <path d="M185 323 L185 430" class="edge"/>
+  <path d="M560 323 L560 430" class="edge"/>
+  <path d="M935 323 L935 430" class="edge"/>
+
+  <rect x="270" y="600" width="580" height="62" fill="#fff8e1" stroke="#ffb300" stroke-width="2" rx="12"/>
+  <text x="560" y="626" text-anchor="middle" class="label">任何分支都要留下：证据、动作、验证方式、回滚出口</text>
+  <text x="560" y="649" text-anchor="middle" class="small">读图：从一次请求向下分成三个可观察时间段，叶子节点只给与证据相匹配的第一动作。</text>
+</svg>

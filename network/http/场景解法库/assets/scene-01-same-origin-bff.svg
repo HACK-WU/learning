@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="420" viewBox="0 0 960 420">
+  <rect width="960" height="420" fill="#fff"/>
+  <style>.t{font:20px sans-serif;fill:#333}.s{font:16px sans-serif;fill:#333}.box{fill:#e3f2fd;stroke:#1565c0;stroke-width:2}.gray{fill:#f5f5f5;stroke:#777;stroke-width:2}.bad{fill:#ffebee;stroke:#c62828;stroke-width:2}.arrow{stroke:#1565c0;stroke-width:3;fill:none}</style>
+  <text x="40" y="42" class="t">同源 BFF：浏览器只面对一个 Origin</text>
+  <rect x="50" y="115" width="210" height="90" rx="10" class="box"/><text x="95" y="155" class="t">浏览器</text><text x="78" y="182" class="s">app.example.com</text>
+  <rect x="375" y="115" width="210" height="90" rx="10" class="box"/><text x="428" y="155" class="t">BFF</text><text x="402" y="182" class="s">同源 / 观测点</text>
+  <rect x="700" y="115" width="210" height="90" rx="10" class="gray"/><text x="760" y="155" class="t">API</text><text x="727" y="182" class="s">api.example.com</text>
+  <path d="M260 160H375M585 160H700" class="arrow"/><text x="277" y="145" class="s">同源请求</text><text x="600" y="145" class="s">服务端转发</text>
+  <rect x="300" y="285" width="360" height="70" rx="10" class="bad"/><text x="330" y="315" class="s">代价：BFF 承担超时、容量、重试</text><text x="360" y="340" class="s">和请求 ID 传递</text>
+  <path d="M480 205V285" stroke="#c62828" stroke-width="2" stroke-dasharray="7 5"/>
+</svg>

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="760" viewBox="0 0 1000 760">
+  <title>HTTP/1.1 性能手段与代价</title>
+  <desc>对比合并文件、内联、图片精灵和域名分片在 HTTP/1.1 时代解决的问题，以及 HTTP/2 时代的代价。</desc>
+  <rect width="1000" height="760" fill="#fff"/>
+  <text x="48" y="54" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="27" font-weight="700" fill="#333">性能补丁：绕开限制，也把代价带进来</text>
+  <text x="48" y="84" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" fill="#666">HTTP/1.1 时代，少发请求常常等于更快；多路复用出现后，目标和副作用都变了。</text>
+
+  <rect x="48" y="122" width="904" height="52" rx="9" fill="#263238"/>
+  <text x="92" y="155" font-family="sans-serif" font-size="15" font-weight="700" fill="#fff">手段</text>
+  <text x="265" y="155" font-family="sans-serif" font-size="15" font-weight="700" fill="#fff">HTTP/1.1 时想解决什么</text>
+  <text x="625" y="155" font-family="sans-serif" font-size="15" font-weight="700" fill="#fff">后来暴露的代价</text>
+  <text x="875" y="155" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="700" fill="#fff">判断</text>
+
+  <rect x="48" y="184" width="904" height="112" rx="8" fill="#e3f2fd" stroke="#90caf9"/>
+  <text x="72" y="225" font-family="sans-serif" font-size="16" font-weight="700" fill="#0d47a1">合并文件</text>
+  <text x="232" y="216" font-family="sans-serif" font-size="14" fill="#333">把多个 JS/CSS 合成一个，</text>
+  <text x="232" y="240" font-family="sans-serif" font-size="14" fill="#333">减少请求次数与排队</text>
+  <text x="592" y="216" font-family="sans-serif" font-size="14" fill="#333">一处修改让整包失效；</text>
+  <text x="592" y="240" font-family="sans-serif" font-size="14" fill="#333">缓存粒度变粗、下载变大</text>
+  <rect x="842" y="214" width="82" height="34" rx="7" fill="#bbdefb"/>
+  <text x="883" y="236" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="700" fill="#0d47a1">谨慎</text>
+
+  <rect x="48" y="308" width="904" height="112" rx="8" fill="#e8f5e9" stroke="#81c784"/>
+  <text x="72" y="349" font-family="sans-serif" font-size="16" font-weight="700" fill="#1b5e20">内联</text>
+  <text x="232" y="340" font-family="sans-serif" font-size="14" fill="#333">把小资源直接塞进 HTML，</text>
+  <text x="232" y="364" font-family="sans-serif" font-size="14" fill="#333">省掉一次独立请求</text>
+  <text x="592" y="340" font-family="sans-serif" font-size="14" fill="#333">HTML 变大、不能单独复用；</text>
+  <text x="592" y="364" font-family="sans-serif" font-size="14" fill="#333">每次 HTML 更新都可能重下</text>
+  <rect x="842" y="338" width="82" height="34" rx="7" fill="#c8e6c9"/>
+  <text x="883" y="360" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="700" fill="#1b5e20">小而稳</text>
+
+  <rect x="48" y="432" width="904" height="112" rx="8" fill="#fff3e0" stroke="#ffb74d"/>
+  <text x="72" y="473" font-family="sans-serif" font-size="16" font-weight="700" fill="#e65100">图片精灵</text>
+  <text x="232" y="464" font-family="sans-serif" font-size="14" fill="#333">把多张小图拼成一张，</text>
+  <text x="232" y="488" font-family="sans-serif" font-size="14" fill="#333">减少图片请求与连接开销</text>
+  <text x="592" y="464" font-family="sans-serif" font-size="14" fill="#333">更新、定位和响应式裁剪复杂；</text>
+  <text x="592" y="488" font-family="sans-serif" font-size="14" fill="#333">不需要的区域也会被下载</text>
+  <rect x="842" y="462" width="82" height="34" rx="7" fill="#ffe0b2"/>
+  <text x="883" y="484" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="700" fill="#e65100">特定场景</text>
+
+  <rect x="48" y="556" width="904" height="112" rx="8" fill="#ffebee" stroke="#ef9a9a"/>
+  <text x="72" y="597" font-family="sans-serif" font-size="16" font-weight="700" fill="#b71c1c">域名分片</text>
+  <text x="232" y="588" font-family="sans-serif" font-size="14" fill="#333">把资源分到多个域名，</text>
+  <text x="232" y="612" font-family="sans-serif" font-size="14" fill="#333">绕开每个域名的连接上限</text>
+  <text x="592" y="588" font-family="sans-serif" font-size="14" fill="#333">HTTP/2 已能在一条连接上并发；</text>
+  <text x="592" y="612" font-family="sans-serif" font-size="14" fill="#333">多连接、握手与拥塞控制反而增加</text>
+  <rect x="842" y="586" width="82" height="34" rx="7" fill="#ffcdd2"/>
+  <text x="883" y="608" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="700" fill="#b71c1c">已过时</text>
+
+  <rect x="48" y="698" width="904" height="38" rx="8" fill="#f5f7f8" stroke="#cfd8dc"/>
+  <text x="500" y="723" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="700" fill="#333">原则：先确认瓶颈属于哪个协议版本，再决定是减少请求、改善缓存，还是取消旧补丁</text>
+</svg>

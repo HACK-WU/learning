@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="700" viewBox="0 0 1000 700">
+  <rect width="1000" height="700" fill="#fff"/>
+  <text x="45" y="50" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="700" fill="#333">HTTP/2：把一条连接用得更细</text>
+  <text x="45" y="80" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#666">语义层不变，连接上的组织方式改变；性能收益有边界</text>
+  <rect x="45" y="115" width="910" height="460" rx="20" fill="#f7fbff" stroke="#1565c0" stroke-width="2"/>
+  <rect x="85" y="155" width="830" height="80" rx="14" fill="#e3f2fd"/>
+  <text x="110" y="190" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="19" font-weight="700" fill="#1565c0">HTTP 语义</text>
+  <text x="110" y="218" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#333">方法 · 状态码 · URI · 字段含义仍然沿用</text>
+  <path d="M500 235 V278" stroke="#1565c0" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="85" y="290" width="830" height="100" rx="14" fill="#fff" stroke="#90caf9"/>
+  <text x="110" y="327" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="19" font-weight="700" fill="#333">一条连接</text>
+  <text x="110" y="357" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#555">多个并发流 · 每条流由多个帧组成 · 帧可以交错</text>
+  <path d="M500 390 V433" stroke="#1565c0" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="85" y="445" width="385" height="88" rx="14" fill="#e8f5e9"/>
+  <text x="110" y="480" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="18" font-weight="700" fill="#2e7d32">HPACK</text>
+  <text x="110" y="508" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#333">静态表 + 动态表，压掉重复字段</text>
+  <rect x="530" y="445" width="385" height="88" rx="14" fill="#fff3e0"/>
+  <text x="555" y="480" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="18" font-weight="700" fill="#b85c00">边界</text>
+  <text x="555" y="508" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#333">TCP 丢包仍可能卡住整条连接</text>
+  <rect x="85" y="602" width="830" height="48" rx="12" fill="#fff" stroke="#ef9a9a"/>
+  <text x="110" y="633" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#8e2c2c">下一课：HTTP/3 / QUIC 继续处理“底层队头阻塞”</text>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1565c0"/></marker></defs>
+</svg>

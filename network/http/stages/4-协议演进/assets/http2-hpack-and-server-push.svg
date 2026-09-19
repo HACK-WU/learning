@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="690" viewBox="0 0 1000 690">
+  <rect width="1000" height="690" fill="#fff"/>
+  <text x="45" y="48" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="27" font-weight="700" fill="#333">头部压缩与服务器主动发送</text>
+  <rect x="45" y="88" width="430" height="530" rx="18" fill="#f6fbff" stroke="#1565c0" stroke-width="2"/>
+  <text x="75" y="128" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="21" font-weight="700" fill="#1565c0">重复的字段，第二次可短写</text>
+  <rect x="75" y="165" width="370" height="86" rx="12" fill="#fff" stroke="#90caf9"/>
+  <text x="95" y="197" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#333">静态表：协议预先约定</text>
+  <text x="95" y="226" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#555">例如：常见方法、路径、状态</text>
+  <rect x="75" y="280" width="370" height="104" rx="12" fill="#fff" stroke="#a5d6a7"/>
+  <text x="95" y="312" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#333">动态表：这条连接刚见过的字段</text>
+  <text x="95" y="341" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#555">空间有限；新的进来，旧的可能被挤出</text>
+  <text x="95" y="366" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#555">敏感值可选择“不记入表”</text>
+  <path d="M260 251 V275" stroke="#1565c0" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M260 384 V430" stroke="#1565c0" stroke-width="3" marker-end="url(#arrow)"/>
+  <rect x="75" y="445" width="370" height="115" rx="12" fill="#e3f2fd"/>
+  <text x="95" y="480" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" font-weight="700" fill="#1565c0">结果：少传重复文字</text>
+  <text x="95" y="511" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#333">注意：这是压缩，不是加密；保密仍靠 TLS</text>
+  <rect x="525" y="88" width="430" height="530" rx="18" fill="#fffaf3" stroke="#f57c00" stroke-width="2"/>
+  <text x="555" y="128" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="21" font-weight="700" fill="#b85c00">服务器“猜”你接下来要什么</text>
+  <text x="555" y="161" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#666">协议允许，但猜错就浪费线路和缓存空间</text>
+  <circle cx="595" cy="230" r="29" fill="#90caf9"/><text x="578" y="237" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#123">页面</text>
+  <path d="M627 230 H710" stroke="#777" stroke-width="3" marker-end="url(#arrow)"/>
+  <circle cx="755" cy="230" r="29" fill="#ffe082"/><text x="738" y="237" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#5d4500">主动送</text>
+  <path d="M784 230 H867" stroke="#777" stroke-width="3" marker-end="url(#arrow)"/>
+  <circle cx="900" cy="230" r="29" fill="#a5d6a7"/><text x="883" y="237" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#174a1b">资源</text>
+  <rect x="555" y="300" width="370" height="112" rx="12" fill="#fff" stroke="#f6b26b"/>
+  <text x="575" y="332" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" font-weight="700" fill="#b85c00">现实难点</text>
+  <text x="575" y="360" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#555">用户可能已经缓存；内容可能协商不同；</text>
+  <text x="575" y="386" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#555">主动发送还会和真正请求竞争带宽</text>
+  <rect x="555" y="445" width="370" height="115" rx="12" fill="#fff3e0"/>
+  <text x="575" y="480" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" font-weight="700" fill="#b85c00">现在的工程取舍</text>
+  <text x="575" y="511" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#333">主流浏览器已移除 / 默认禁用该能力；</text>
+  <text x="575" y="537" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#333">优先考虑 preload 或 103 Early Hints</text>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#777"/></marker></defs>
+</svg>

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="520" viewBox="0 0 1100 520" role="img" aria-labelledby="title desc">
+  <title id="title">请求在路上遇到的中间站</title>
+  <desc id="desc">请求从设备出发，经过可选的中转站和附近存放点，最终到达服务；有现成结果时可以直接返回，没有时再去最终服务取回。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#1565C0"/>
+    </marker>
+  </defs>
+  <rect width="1100" height="520" fill="#ffffff"/>
+  <text x="550" y="42" text-anchor="middle" font-size="25" font-weight="700" fill="#222">请求在路上遇到的中间站</text>
+  <text x="550" y="72" text-anchor="middle" font-size="15" fill="#555">同一条请求，不一定直达最终服务；中间站可以转发、检查，也可以直接拿出已有结果</text>
+
+  <rect x="55" y="190" width="190" height="100" rx="14" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
+  <text x="150" y="230" text-anchor="middle" font-size="21" font-weight="700" fill="#0D47A1">人 / 设备</text>
+  <text x="150" y="260" text-anchor="middle" font-size="14" fill="#333">发出问题</text>
+
+  <rect x="330" y="155" width="210" height="170" rx="14" fill="#FFF8E1" stroke="#F9A825" stroke-width="2"/>
+  <text x="435" y="202" text-anchor="middle" font-size="21" font-weight="700" fill="#7A4F00">路上中转站</text>
+  <text x="435" y="232" text-anchor="middle" font-size="14" fill="#333">按规则转发</text>
+  <text x="435" y="258" text-anchor="middle" font-size="14" fill="#333">记录来路</text>
+  <text x="435" y="284" text-anchor="middle" font-size="14" fill="#333">必要时拦截</text>
+
+  <rect x="650" y="155" width="210" height="170" rx="14" fill="#E8F5E9" stroke="#2E7D32" stroke-width="2"/>
+  <text x="755" y="202" text-anchor="middle" font-size="21" font-weight="700" fill="#1B5E20">附近存放点</text>
+  <text x="755" y="232" text-anchor="middle" font-size="14" fill="#333">有现成结果？</text>
+  <text x="755" y="258" text-anchor="middle" font-size="14" fill="#333">直接返回</text>
+  <text x="755" y="284" text-anchor="middle" font-size="14" fill="#333">没有就继续问</text>
+
+  <rect x="930" y="190" width="125" height="100" rx="14" fill="#F3E5F5" stroke="#7B1FA2" stroke-width="2"/>
+  <text x="992" y="230" text-anchor="middle" font-size="20" font-weight="700" fill="#4A148C">最终服务</text>
+  <text x="992" y="260" text-anchor="middle" font-size="14" fill="#333">产生结果</text>
+
+  <line x1="245" y1="240" x2="325" y2="240" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="540" y1="240" x2="645" y2="240" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="860" y1="240" x2="925" y2="240" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M992 305 C992 405 755 420 755 330" fill="none" stroke="#2E7D32" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="875" y="405" text-anchor="middle" font-size="15" font-weight="700" fill="#1B5E20">拿到结果后沿原路返回</text>
+
+  <rect x="130" y="430" width="840" height="45" rx="10" fill="#FAFAFA" stroke="#BDBDBD"/>
+  <text x="550" y="458" text-anchor="middle" font-size="15" fill="#333">本课要解决：谁在中间？它改了什么？什么时候可以不去最终服务？</text>
+</svg>

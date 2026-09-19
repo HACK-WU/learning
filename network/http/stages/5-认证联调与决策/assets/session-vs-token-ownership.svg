@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="650" viewBox="0 0 1100 650">
+  <rect width="1100" height="650" fill="#fff"/>
+  <text x="44" y="48" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="700" fill="#333">连续登录：状态放在哪里？</text>
+  <text x="44" y="80" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#666">两条路线都能完成认证，关键差异是每次请求要查什么、撤销时改哪里</text>
+
+  <rect x="44" y="112" width="490" height="470" rx="18" fill="#f6fbff" stroke="#90caf9" stroke-width="2"/>
+  <text x="76" y="154" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="23" font-weight="700" fill="#1565c0">路线 A：手里只有编号</text>
+  <rect x="92" y="205" width="140" height="72" rx="12" fill="#ffe082" stroke="#f9a825" stroke-width="2"/>
+  <text x="125" y="248" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="19" fill="#5d4500">浏览器</text>
+  <path d="M242 241 H322" stroke="#1565c0" stroke-width="4" marker-end="url(#arrow-blue)"/>
+  <text x="255" y="220" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="15" fill="#555">sid=编号</text>
+  <rect x="332" y="188" width="154" height="106" rx="12" fill="#e8f5e9" stroke="#66bb6a" stroke-width="2"/>
+  <text x="366" y="232" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="19" fill="#1b5e20">服务端记录</text>
+  <text x="355" y="263" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="14" fill="#555">编号 → 用户 / 权限</text>
+  <path d="M409 306 V365" stroke="#2e7d32" stroke-width="4" marker-end="url(#arrow-green)"/>
+  <rect x="106" y="380" width="362" height="108" rx="12" fill="#fff" stroke="#c5e1c7"/>
+  <text x="132" y="417" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" font-weight="700" fill="#1b5e20">撤销：删除服务端记录</text>
+  <text x="132" y="449" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#555">优点：立即生效，权限变化易反映</text>
+  <text x="132" y="475" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#555">代价：多实例要共享记录或粘性路由</text>
+
+  <rect x="566" y="112" width="490" height="470" rx="18" fill="#fffaf2" stroke="#ffb74d" stroke-width="2"/>
+  <text x="598" y="154" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="23" font-weight="700" fill="#e65100">路线 B：凭证带着声明</text>
+  <rect x="614" y="188" width="180" height="106" rx="12" fill="#ffe0b2" stroke="#fb8c00" stroke-width="2"/>
+  <text x="642" y="232" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="19" fill="#e65100">凭证</text>
+  <text x="635" y="263" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="14" fill="#555">谁 / 给谁 / 到何时</text>
+  <path d="M804 241 H884" stroke="#ef6c00" stroke-width="4" marker-end="url(#arrow-orange)"/>
+  <text x="811" y="220" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#555">验签 + 约束</text>
+  <rect x="894" y="205" width="126" height="72" rx="12" fill="#e8f5e9" stroke="#66bb6a" stroke-width="2"/>
+  <text x="922" y="248" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="19" fill="#1b5e20">服务端</text>
+  <path d="M957 306 V365" stroke="#ef6c00" stroke-width="4" marker-end="url(#arrow-orange)"/>
+  <rect x="628" y="380" width="362" height="108" rx="12" fill="#fff" stroke="#ffe0b2"/>
+  <text x="654" y="417" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" font-weight="700" fill="#e65100">撤销：过期 / 撤销记录 / 轮换</text>
+  <text x="654" y="449" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#555">优点：减少每次查会话记录的依赖</text>
+  <text x="654" y="475" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#555">代价：即时失效需要额外策略或状态</text>
+
+  <defs>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1565c0"/></marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2e7d32"/></marker>
+    <marker id="arrow-orange" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#ef6c00"/></marker>
+  </defs>
+</svg>

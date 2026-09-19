@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="500" viewBox="0 0 1100 500">
+  <title>从裸奔消息到受保护消息</title>
+  <desc>左侧是普通网络消息，途中可能被偷看、改写或冒名；右侧是受保护消息，内容被隐藏、改写会失败、发送前先确认对方。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1565C0"/>
+    </marker>
+  </defs>
+  <rect width="1100" height="500" fill="#fff"/>
+  <rect x="35" y="45" width="310" height="360" rx="16" fill="#FFF4F2" stroke="#C62828" stroke-width="2"/>
+  <rect x="755" y="45" width="310" height="360" rx="16" fill="#F1F8E9" stroke="#2E7D32" stroke-width="2"/>
+  <rect x="420" y="170" width="260" height="110" rx="18" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
+
+  <text x="190" y="92" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="25" font-weight="700" fill="#333">普通网络上的消息</text>
+  <text x="910" y="92" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="25" font-weight="700" fill="#333">受保护的消息</text>
+  <text x="550" y="212" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="24" font-weight="700" fill="#0D47A1">先商量秘密</text>
+  <text x="550" y="250" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="20" fill="#333">再传送内容</text>
+
+  <line x1="345" y1="225" x2="415" y2="225" stroke="#1565C0" stroke-width="4" marker-end="url(#arrow)"/>
+  <line x1="685" y1="225" x2="745" y2="225" stroke="#1565C0" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <circle cx="95" cy="155" r="9" fill="#C62828"/>
+  <text x="120" y="163" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="21" fill="#333">途中有人能偷看</text>
+  <circle cx="95" cy="235" r="9" fill="#C62828"/>
+  <text x="120" y="243" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="21" fill="#333">途中有人能改写</text>
+  <circle cx="95" cy="315" r="9" fill="#C62828"/>
+  <text x="120" y="323" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="21" fill="#333">途中有人能冒名</text>
+
+  <circle cx="815" cy="155" r="9" fill="#2E7D32"/>
+  <text x="840" y="163" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="21" fill="#333">内容被隐藏</text>
+  <circle cx="815" cy="235" r="9" fill="#2E7D32"/>
+  <text x="840" y="243" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="21" fill="#333">改写会被发现</text>
+  <circle cx="815" cy="315" r="9" fill="#2E7D32"/>
+  <text x="840" y="323" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="21" fill="#333">先确认对方</text>
+
+  <text x="550" y="455" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="19" fill="#555">读图：左边是普通消息的三个漏洞，中间是建立秘密通道，右边是三个对应的保护结果。</text>
+</svg>

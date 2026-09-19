@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" width="900" height="480" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="900" height="480" fill="#ffffff"/>
+
+  <!-- 标题 -->
+  <text x="450" y="36" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">阶段 5 · 认证联调与决策：回到日常，收束成决策</text>
+  <text x="450" y="60" text-anchor="middle" font-size="13" fill="#666666">课 13 → 课 14 → 课 15（9 个知识点，从左到右递进）</text>
+
+  <!-- ============ 课 13 ============ -->
+  <g>
+    <rect x="24" y="80" width="264" height="46" rx="8" fill="#e65100"/>
+    <text x="156" y="109" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">课 13 · 会话与认证</text>
+
+    <!-- 课 13 知识点卡 -->
+    <rect x="24" y="140" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="44" cy="160" r="9" fill="#e65100"/>
+    <text x="44" y="164" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">1</text>
+    <text x="62" y="164" font-size="13" font-weight="700" fill="#1a1a1a">Cookie 机制与安全属性</text>
+    <text x="62" y="185" font-size="11" fill="#333333">Set-Cookie 与浏览器存储 · 域与路径</text>
+    <text x="62" y="201" font-size="11" fill="#333333">Secure · HttpOnly · SameSite</text>
+
+    <rect x="24" y="234" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="44" cy="254" r="9" fill="#e65100"/>
+    <text x="44" y="258" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">2</text>
+    <text x="62" y="258" font-size="13" font-weight="700" fill="#1a1a1a">Session 与 Token 两条路线</text>
+    <text x="62" y="279" font-size="11" fill="#333333">服务端 Session 的有状态本质</text>
+    <text x="62" y="295" font-size="11" fill="#333333">JWT 自包含校验 · 注销与续期的代价</text>
+
+    <rect x="24" y="328" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="44" cy="348" r="9" fill="#e65100"/>
+    <text x="44" y="352" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">3</text>
+    <text x="62" y="352" font-size="13" font-weight="700" fill="#1a1a1a">HTTP 认证头</text>
+    <text x="62" y="373" font-size="11" fill="#333333">Authorization 头 · Basic 与 Bearer</text>
+    <text x="62" y="389" font-size="11" fill="#333333">401 与 WWW-Authenticate 的配合</text>
+  </g>
+
+  <!-- 课 13 → 课 14 箭头 -->
+  <line x1="292" y1="290" x2="318" y2="290" stroke="#e65100" stroke-width="2"/>
+  <polygon points="318,290 310,286 310,294" fill="#e65100"/>
+
+  <!-- ============ 课 14 ============ -->
+  <g>
+    <rect x="318" y="80" width="264" height="46" rx="8" fill="#e65100"/>
+    <text x="450" y="109" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">课 14 · CORS 与同源</text>
+
+    <rect x="318" y="140" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="338" cy="160" r="9" fill="#e65100"/>
+    <text x="338" y="164" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">1</text>
+    <text x="356" y="164" font-size="13" font-weight="700" fill="#1a1a1a">同源策略</text>
+    <text x="356" y="185" font-size="11" fill="#333333">源 = 协议 + 域名 + 端口</text>
+    <text x="356" y="201" font-size="11" fill="#333333">限制跨源读取 · CORS 是受控放宽</text>
+
+    <rect x="318" y="234" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="338" cy="254" r="9" fill="#e65100"/>
+    <text x="338" y="258" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">2</text>
+    <text x="356" y="258" font-size="13" font-weight="700" fill="#1a1a1a">CORS 机制</text>
+    <text x="356" y="279" font-size="11" fill="#333333">简单请求与预检 OPTIONS</text>
+    <text x="356" y="295" font-size="11" fill="#333333">Allow-* 响应头 · 带凭证不能为 *</text>
+
+    <rect x="318" y="328" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="338" cy="348" r="9" fill="#e65100"/>
+    <text x="338" y="352" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">3</text>
+    <text x="356" y="352" font-size="13" font-weight="700" fill="#1a1a1a">高频 CORS 报错排查</text>
+    <text x="356" y="373" font-size="11" fill="#333333">'No Access-Control-Allow-Origin' 定位</text>
+    <text x="356" y="389" font-size="11" fill="#333333">预检失败原因 · 配了仍报错的排查顺序</text>
+  </g>
+
+  <!-- 课 14 → 课 15 箭头 -->
+  <line x1="586" y1="290" x2="612" y2="290" stroke="#e65100" stroke-width="2"/>
+  <polygon points="612,290 604,286 604,294" fill="#e65100"/>
+
+  <!-- ============ 课 15 ============ -->
+  <g>
+    <rect x="612" y="80" width="264" height="46" rx="8" fill="#e65100"/>
+    <text x="744" y="109" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">课 15 · 排障与决策</text>
+
+    <rect x="612" y="140" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="632" cy="160" r="9" fill="#e65100"/>
+    <text x="632" y="164" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">1</text>
+    <text x="650" y="164" font-size="13" font-weight="700" fill="#1a1a1a">抓包方法论</text>
+    <text x="650" y="185" font-size="11" fill="#333333">DevTools Network 系统用法</text>
+    <text x="650" y="201" font-size="11" fill="#333333">curl -v · mitmproxy 看 HTTPS 解密</text>
+
+    <rect x="612" y="234" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="632" cy="254" r="9" fill="#e65100"/>
+    <text x="632" y="258" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">2</text>
+    <text x="650" y="258" font-size="13" font-weight="700" fill="#1a1a1a">综合排障推演</text>
+    <text x="650" y="279" font-size="11" fill="#333333">从症状到定位的决策树</text>
+    <text x="650" y="295" font-size="11" fill="#333333">推演：接口慢 · 登录失效</text>
+
+    <rect x="612" y="328" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="632" cy="348" r="9" fill="#e65100"/>
+    <text x="632" y="352" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">3</text>
+    <text x="650" y="352" font-size="13" font-weight="700" fill="#1a1a1a">决策清单</text>
+    <text x="650" y="373" font-size="11" fill="#333333">缓存决策树 · h2/h3 升级决策</text>
+    <text x="650" y="389" font-size="11" fill="#333333">认证选型 Session vs JWT —— 回扣收束</text>
+  </g>
+
+  <!-- 底部递进说明 -->
+  <rect x="24" y="434" width="852" height="34" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+  <text x="450" y="456" text-anchor="middle" font-size="12" fill="#333333">前置：先有课 13 的会话与凭证，课 14 才谈跨源怎么带；课 15 用抓包把前四个阶段收束成决策清单——故事在此收束</text>
+</svg>

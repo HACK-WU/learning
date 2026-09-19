@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680" role="img" aria-labelledby="title desc">
+  <title id="title">代理家族对比</title>
+  <desc id="desc">正向代理站在客户端一侧，反向代理站在服务端一侧；网关、负载均衡、缓存和 TLS 终止是可以叠加在中间层上的功能。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#1565C0"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="680" fill="#ffffff"/>
+  <text x="600" y="42" text-anchor="middle" font-size="26" font-weight="700" fill="#222">代理家族：先看“替谁站岗”，再看“顺手做什么”</text>
+
+  <rect x="45" y="85" width="350" height="420" rx="16" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
+  <text x="220" y="130" text-anchor="middle" font-size="23" font-weight="700" fill="#0D47A1">正向代理</text>
+  <text x="220" y="160" text-anchor="middle" font-size="14" fill="#333">代表客户端去访问外部服务</text>
+  <rect x="80" y="220" width="105" height="60" rx="10" fill="#fff" stroke="#1565C0"/>
+  <text x="132" y="256" text-anchor="middle" font-size="16" fill="#222">客户端</text>
+  <rect x="205" y="220" width="105" height="60" rx="10" fill="#BBDEFB" stroke="#1565C0"/>
+  <text x="257" y="256" text-anchor="middle" font-size="16" fill="#222">代理</text>
+  <rect x="330" y="220" width="30" height="60" rx="8" fill="#7E57C2" stroke="#512DA8"/>
+  <line x1="185" y1="250" x2="198" y2="250" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="310" y1="250" x2="325" y2="250" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="345" y="305" text-anchor="middle" font-size="13" fill="#333">外部</text>
+  <text x="220" y="355" text-anchor="middle" font-size="16" font-weight="700" fill="#0D47A1">客户端配置 `-x`</text>
+  <text x="220" y="385" text-anchor="middle" font-size="14" fill="#333">出口控制 / 访问审计 / 隐藏客户端地址</text>
+  <text x="220" y="440" text-anchor="middle" font-size="14" fill="#333">HTTPS 常用 CONNECT 建立隧道</text>
+
+  <rect x="425" y="85" width="350" height="420" rx="16" fill="#FFF8E1" stroke="#F9A825" stroke-width="2"/>
+  <text x="600" y="130" text-anchor="middle" font-size="23" font-weight="700" fill="#7A4F00">反向代理</text>
+  <text x="600" y="160" text-anchor="middle" font-size="14" fill="#333">代表服务端接住外部请求</text>
+  <rect x="460" y="220" width="30" height="60" rx="8" fill="#7E57C2" stroke="#512DA8"/>
+  <rect x="515" y="220" width="105" height="60" rx="10" fill="#FFE082" stroke="#F9A825"/>
+  <text x="567" y="256" text-anchor="middle" font-size="16" fill="#222">代理</text>
+  <rect x="650" y="205" width="95" height="40" rx="8" fill="#C8E6C9" stroke="#2E7D32"/>
+  <text x="697" y="230" text-anchor="middle" font-size="14" fill="#222">服务 A</text>
+  <rect x="650" y="260" width="95" height="40" rx="8" fill="#C8E6C9" stroke="#2E7D32"/>
+  <text x="697" y="285" text-anchor="middle" font-size="14" fill="#222">服务 B</text>
+  <line x1="495" y1="250" x2="508" y2="250" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="620" y1="235" x2="642" y2="225" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="620" y1="265" x2="642" y2="280" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="600" y="355" text-anchor="middle" font-size="16" font-weight="700" fill="#7A4F00">外部只看到一个入口</text>
+  <text x="600" y="385" text-anchor="middle" font-size="14" fill="#333">路由 / TLS 终止 / 缓存 / 限流</text>
+  <text x="600" y="440" text-anchor="middle" font-size="14" fill="#333">后端可以扩容、迁移、隐藏</text>
+
+  <rect x="805" y="85" width="350" height="420" rx="16" fill="#F3E5F5" stroke="#7B1FA2" stroke-width="2"/>
+  <text x="980" y="130" text-anchor="middle" font-size="23" font-weight="700" fill="#4A148C">网关 / 负载均衡</text>
+  <text x="980" y="160" text-anchor="middle" font-size="14" fill="#333">更像“功能角色”，不一定是独立站点</text>
+  <rect x="840" y="220" width="280" height="60" rx="10" fill="#E1BEE7" stroke="#7B1FA2"/>
+  <text x="980" y="256" text-anchor="middle" font-size="16" fill="#222">中间层</text>
+  <text x="980" y="340" text-anchor="middle" font-size="15" font-weight="700" fill="#4A148C">网关：翻译 / 鉴权 / 策略</text>
+  <text x="980" y="375" text-anchor="middle" font-size="15" font-weight="700" fill="#4A148C">负载均衡：选择后端</text>
+  <text x="980" y="410" text-anchor="middle" font-size="14" fill="#333">常常运行在反向代理里面</text>
+  <text x="980" y="455" text-anchor="middle" font-size="14" fill="#333">“位置”和“功能”是两种分类轴</text>
+
+  <rect x="120" y="560" width="960" height="62" rx="12" fill="#FAFAFA" stroke="#BDBDBD"/>
+  <text x="600" y="588" text-anchor="middle" font-size="16" font-weight="700" fill="#333">不要把它们当四个互斥产品：正/反向代理描述站位，网关/负载均衡描述职责。</text>
+  <text x="600" y="612" text-anchor="middle" font-size="14" fill="#555">看图：左边回答“替谁出面”，右边回答“中间层顺手做什么”。</text>
+</svg>

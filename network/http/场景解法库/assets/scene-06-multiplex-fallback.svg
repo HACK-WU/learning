@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="420" viewBox="0 0 960 420">
+  <rect width="960" height="420" fill="#fff"/>
+  <style>.t{font:20px sans-serif;fill:#333}.s{font:16px sans-serif;fill:#333}.b{fill:#e3f2fd;stroke:#1565c0;stroke-width:2}.g{fill:#f5f5f5;stroke:#777;stroke-width:2}.bad{fill:#ffebee;stroke:#c62828;stroke-width:2}.a{stroke:#1565c0;stroke-width:3;fill:none}.d{stroke:#777;stroke-width:3;fill:none;stroke-dasharray:8 6}</style>
+  <text x="40" y="42" class="t">关键资源复用：优先首屏，协议可回退</text>
+  <rect x="35" y="105" width="175" height="90" rx="10" class="b"/><text x="83" y="145" class="t">移动端</text><text x="60" y="174" class="s">HTML/CSS/JS</text>
+  <rect x="330" y="80" width="220" height="70" rx="10" class="b"/><text x="405" y="122" class="t">H3</text><text x="385" y="142" class="s">关键资源优先</text>
+  <rect x="330" y="190" width="220" height="70" rx="10" class="g"/><text x="405" y="232" class="t">H2/H1</text><text x="380" y="252" class="s">可靠回退</text>
+  <rect x="720" y="105" width="195" height="90" rx="10" class="g"/><text x="774" y="145" class="t">入口</text><text x="747" y="174" class="s">协商 + 观测</text>
+  <path d="M210 145H330M550 115H720" class="a"/><path d="M210 175L330 225M550 225L720 175" class="d"/>
+  <rect x="235" y="310" width="490" height="62" rx="10" class="bad"/><text x="271" y="346" class="s">代价：过度 preload 会抢占真正关键资源</text>
+</svg>

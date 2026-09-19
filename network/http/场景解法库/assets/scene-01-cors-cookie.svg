@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="420" viewBox="0 0 960 420">
+  <rect width="960" height="420" fill="#fff"/>
+  <style>.t{font:20px sans-serif;fill:#333}.s{font:16px sans-serif;fill:#333}.box{fill:#e8f5e9;stroke:#2e7d32;stroke-width:2}.warn{fill:#fff3e0;stroke:#ef6c00;stroke-width:2}.bad{fill:#ffebee;stroke:#c62828;stroke-width:2}.a{stroke:#2e7d32;stroke-width:3;fill:none}</style>
+  <text x="40" y="42" class="t">精确 CORS + Cookie：先预检，再带凭据</text>
+  <rect x="45" y="110" width="190" height="90" rx="10" class="box"/><text x="92" y="150" class="t">浏览器</text><text x="73" y="178" class="s">Origin: app</text>
+  <rect x="385" y="95" width="190" height="60" rx="10" class="warn"/><text x="433" y="132" class="t">OPTIONS</text>
+  <rect x="385" y="180" width="190" height="60" rx="10" class="box"/><text x="437" y="217" class="t">实际请求</text>
+  <rect x="730" y="110" width="185" height="90" rx="10" class="box"/><text x="785" y="150" class="t">API</text><text x="752" y="178" class="s">Allow + Cookie</text>
+  <path d="M235 140H385M575 125H730M235 170H385M575 210H730" class="a"/><text x="250" y="126" class="s">预检</text><text x="600" y="112" class="s">允许</text><text x="250" y="190" class="s">凭据</text>
+  <rect x="285" y="300" width="390" height="68" rx="10" class="bad"/><text x="315" y="329" class="s">失败点：凭据不能搭配 Allow-Origin: *</text><text x="355" y="352" class="s">动态来源还需考虑 Vary: Origin</text>
+</svg>

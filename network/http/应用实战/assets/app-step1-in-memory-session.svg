@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="560" viewBox="0 0 1000 560">
+  <rect width="1000" height="560" fill="#fff"/>
+  <text x="42" y="46" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="27" font-weight="700" fill="#333">基础版：一台实例 + 一份内存会话</text>
+  <text x="42" y="78" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#666">能跑起来，但状态只在当前进程里</text>
+
+  <rect x="52" y="130" width="190" height="220" rx="16" fill="#e3f2fd" stroke="#90caf9" stroke-width="2"/>
+  <text x="93" y="174" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="22" font-weight="700" fill="#0d47a1">浏览器</text>
+  <rect x="88" y="214" width="118" height="62" rx="10" fill="#ffe082" stroke="#f9a825" stroke-width="2"/>
+  <text x="110" y="253" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="16" fill="#5d4500">sid=编号</text>
+  <text x="84" y="316" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#555">自动带上小卡</text>
+
+  <path d="M260 240 H364" stroke="#1565c0" stroke-width="4" marker-end="url(#arrow)"/>
+  <text x="272" y="217" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#555">每次请求</text>
+
+  <rect x="386" y="112" width="300" height="260" rx="16" fill="#f6fbff" stroke="#1565c0" stroke-width="3"/>
+  <text x="453" y="158" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="22" font-weight="700" fill="#1565c0">应用实例</text>
+  <rect x="433" y="202" width="206" height="104" rx="12" fill="#e8f5e9" stroke="#81c784" stroke-width="2"/>
+  <text x="484" y="242" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="18" fill="#1b5e20">内存记录</text>
+  <text x="452" y="274" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="15" fill="#555">编号 → 用户 / 过期时间</text>
+
+  <path d="M704 240 H808" stroke="#2e7d32" stroke-width="4" marker-end="url(#arrow-green)"/>
+  <text x="711" y="217" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#555">查记录</text>
+  <rect x="830" y="130" width="120" height="220" rx="16" fill="#fafafa" stroke="#bdbdbd" stroke-width="2"/>
+  <text x="854" y="174" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="20" font-weight="700" fill="#555">订单</text>
+  <text x="852" y="232" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#555">用户是谁？</text>
+  <text x="852" y="267" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#1b5e20">查到后放行</text>
+
+  <rect x="52" y="412" width="898" height="82" rx="14" fill="#fff3e0" stroke="#ffb74d" stroke-width="2"/>
+  <text x="82" y="447" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="18" font-weight="700" fill="#e65100">本步解决了什么：</text>
+  <text x="270" y="447" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" fill="#555">后续请求能认出用户；本步新增：小卡 + 内存记录。</text>
+  <text x="270" y="474" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#8a4b08">未解决：多实例共享、进程重启、注销与轮换。</text>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1565c0"/></marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2e7d32"/></marker>
+  </defs>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="420" viewBox="0 0 960 420">
+  <rect width="960" height="420" fill="#fff"/>
+  <style>.t{font:20px sans-serif;fill:#333}.s{font:16px sans-serif;fill:#333}.b{fill:#e8f5e9;stroke:#2e7d32;stroke-width:2}.g{fill:#f5f5f5;stroke:#777;stroke-width:2}.bad{fill:#ffebee;stroke:#c62828;stroke-width:2}.a{stroke:#2e7d32;stroke-width:3;fill:none}</style>
+  <text x="40" y="42" class="t">压缩 + 局部响应：先减少必须下载的字节</text>
+  <rect x="35" y="110" width="180" height="85" rx="10" class="g"/><text x="88" y="148" class="t">客户端</text><text x="66" y="176" class="s">page=1</text>
+  <rect x="320" y="110" width="220" height="85" rx="10" class="b"/><text x="389" y="148" class="t">服务端</text><text x="352" y="176" class="s">裁剪字段 + 编码</text>
+  <rect x="700" y="110" width="215" height="85" rx="10" class="b"/><text x="751" y="148" class="t">小响应</text><text x="735" y="176" class="s">br / gzip</text>
+  <path d="M215 152H320M540 152H700" class="a"/><text x="230" y="137" class="s">分页</text><text x="562" y="137" class="s">Content-Encoding</text>
+  <rect x="245" y="300" width="470" height="72" rx="10" class="bad"/><text x="282" y="330" class="s">代价：压缩 CPU + 客户端组装 + 更多请求</text><text x="388" y="354" class="s">不等于后端计算变快</text>
+</svg>

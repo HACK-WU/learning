@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="690" viewBox="0 0 1000 690">
+  <title>HTTP 版本演进：从 0.9 到 1.1</title>
+  <desc>按痛点和解决方案展示 HTTP/0.9、HTTP/1.0、HTTP/1.1 的演进，并连接到后续 HTTP/2 与 HTTP/3。</desc>
+  <rect width="1000" height="690" fill="#fff"/>
+  <text x="48" y="54" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="27" font-weight="700" fill="#333">版本不是编号升级，而是问题清单升级</text>
+  <text x="48" y="84" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" fill="#666">每一代都在补上一代暴露的缺口；HTTP/1.1 的遗产会在后续版本中继续被优化。</text>
+
+  <line x1="108" y1="142" x2="892" y2="142" stroke="#90caf9" stroke-width="5"/>
+  <circle cx="180" cy="142" r="14" fill="#607d8b"/>
+  <circle cx="420" cy="142" r="14" fill="#1565c0"/>
+  <circle cx="660" cy="142" r="14" fill="#2e7d32"/>
+  <circle cx="880" cy="142" r="14" fill="#ef6c00"/>
+  <text x="180" y="178" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="700" fill="#455a64">1989–1991</text>
+  <text x="420" y="178" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="700" fill="#0d47a1">1996</text>
+  <text x="660" y="178" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="700" fill="#1b5e20">1997</text>
+  <text x="880" y="178" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="700" fill="#e65100">2015+</text>
+
+  <rect x="48" y="214" width="264" height="314" rx="12" fill="#f5f7f8" stroke="#b0bec5" stroke-width="2"/>
+  <text x="72" y="253" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="23" font-weight="700" fill="#455a64">HTTP/0.9</text>
+  <text x="72" y="282" font-family="sans-serif" font-size="14" fill="#607d8b">“一行协议”</text>
+  <line x1="72" y1="306" x2="288" y2="306" stroke="#cfd8dc"/>
+  <text x="72" y="341" font-family="sans-serif" font-size="15" fill="#333">请求：GET + 路径</text>
+  <text x="72" y="375" font-family="sans-serif" font-size="15" fill="#333">响应：直接给文件</text>
+  <text x="72" y="409" font-family="sans-serif" font-size="15" fill="#333">缺口：没有头、状态、</text>
+  <text x="72" y="433" font-family="sans-serif" font-size="15" fill="#333">类型协商与复用</text>
+  <rect x="72" y="466" width="216" height="38" rx="7" fill="#eceff1"/>
+  <text x="180" y="491" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="700" fill="#455a64">能取文件，但不像完整协议</text>
+
+  <rect x="336" y="214" width="264" height="314" rx="12" fill="#e3f2fd" stroke="#90caf9" stroke-width="2"/>
+  <text x="360" y="253" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="23" font-weight="700" fill="#0d47a1">HTTP/1.0</text>
+  <text x="360" y="282" font-family="sans-serif" font-size="14" fill="#1565c0">RFC 1945 · 1996-11</text>
+  <line x1="360" y1="306" x2="576" y2="306" stroke="#90caf9"/>
+  <text x="360" y="341" font-family="sans-serif" font-size="15" fill="#333">补上版本与状态码</text>
+  <text x="360" y="375" font-family="sans-serif" font-size="15" fill="#333">头部描述类型与元数据</text>
+  <text x="360" y="409" font-family="sans-serif" font-size="15" fill="#333">缺口：默认短连接</text>
+  <text x="360" y="433" font-family="sans-serif" font-size="15" fill="#333">多资源会反复握手</text>
+  <rect x="360" y="466" width="216" height="38" rx="7" fill="#bbdefb"/>
+  <text x="468" y="491" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="700" fill="#0d47a1">能表达更多，但每次再开门</text>
+
+  <rect x="624" y="214" width="264" height="314" rx="12" fill="#e8f5e9" stroke="#81c784" stroke-width="2"/>
+  <text x="648" y="253" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="23" font-weight="700" fill="#1b5e20">HTTP/1.1</text>
+  <text x="648" y="282" font-family="sans-serif" font-size="14" fill="#2e7d32">RFC 2068 · 1997-01</text>
+  <line x1="648" y1="306" x2="864" y2="306" stroke="#81c784"/>
+  <text x="648" y="341" font-family="sans-serif" font-size="15" fill="#333">持久连接成为默认</text>
+  <text x="648" y="375" font-family="sans-serif" font-size="15" fill="#333">Host 支持虚拟主机</text>
+  <text x="648" y="409" font-family="sans-serif" font-size="15" fill="#333">chunked 解决未知长度</text>
+  <rect x="648" y="466" width="216" height="38" rx="7" fill="#c8e6c9"/>
+  <text x="756" y="491" text-anchor="middle" font-family="sans-serif" font-size="14" font-weight="700" fill="#1b5e20">今天仍能看见的基础</text>
+
+  <path d="M180 564 H880" stroke="#ffb74d" stroke-width="3" stroke-dasharray="8 7"/>
+  <text x="180" y="596" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#666">2014：RFC 7230–7235 重组</text>
+  <text x="660" y="596" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#666">2022：RFC 9110/9111/9112 分拆并更新</text>
+  <text x="880" y="596" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#e65100">HTTP/2 / HTTP/3 继续解决性能瓶颈</text>
+  <text x="500" y="646" text-anchor="middle" font-family="sans-serif" font-size="15" font-weight="700" fill="#333">规范拆分不等于语义消失：语义、缓存、1.1 报文分别有自己的现行文档</text>
+</svg>

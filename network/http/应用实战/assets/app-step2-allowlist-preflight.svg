@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="650" viewBox="0 0 1080 650">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#1565C0"/>
+    </marker>
+  </defs>
+  <rect width="1080" height="650" fill="#fff"/>
+  <text x="50" y="48" font-family="sans-serif" font-size="26" font-weight="700" fill="#333">综合版：精确来源 + 凭证 + 预检</text>
+  <text x="50" y="80" font-family="sans-serif" font-size="16" fill="#666">比基础版新增：允许列表、预检处理、真实响应也补头、动态源配 Vary</text>
+
+  <rect x="55" y="135" width="260" height="380" rx="14" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
+  <text x="185" y="177" text-anchor="middle" font-family="sans-serif" font-size="21" font-weight="700" fill="#0D47A1">前端页面</text>
+  <text x="185" y="215" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#333">credentials: include</text>
+  <rect x="90" y="250" width="190" height="75" rx="10" fill="#fff" stroke="#64B5F6"/>
+  <text x="185" y="295" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#333">先发 OPTIONS</text>
+  <rect x="90" y="360" width="190" height="75" rx="10" fill="#fff" stroke="#64B5F6"/>
+  <text x="185" y="405" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#333">再发真实请求</text>
+
+  <rect x="395" y="135" width="290" height="380" rx="14" fill="#FFF8E1" stroke="#F9A825" stroke-width="2"/>
+  <text x="540" y="177" text-anchor="middle" font-family="sans-serif" font-size="21" font-weight="700" fill="#8D6E00">CORS 配置层</text>
+  <rect x="435" y="215" width="210" height="70" rx="10" fill="#FFF" stroke="#FFCA28"/>
+  <text x="540" y="257" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="700" fill="#333">允许列表</text>
+  <text x="540" y="279" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#666">只回显可信 Origin</text>
+  <rect x="435" y="315" width="210" height="70" rx="10" fill="#FFF" stroke="#FFCA28"/>
+  <text x="540" y="357" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="700" fill="#333">OPTIONS 处理</text>
+  <text x="540" y="379" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#666">核对方法与请求头</text>
+  <rect x="435" y="415" width="210" height="70" rx="10" fill="#FFF" stroke="#FFCA28"/>
+  <text x="540" y="457" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="700" fill="#333">Vary: Origin</text>
+  <text x="540" y="479" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#666">避免缓存串源</text>
+
+  <rect x="765" y="135" width="260" height="380" rx="14" fill="#E8F5E9" stroke="#43A047" stroke-width="2"/>
+  <text x="895" y="177" text-anchor="middle" font-family="sans-serif" font-size="21" font-weight="700" fill="#2E7D32">订单 API</text>
+  <text x="895" y="215" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#333">不使用 * + 凭证</text>
+  <rect x="800" y="250" width="190" height="75" rx="10" fill="#fff" stroke="#81C784"/>
+  <text x="895" y="295" text-anchor="middle" font-family="sans-serif" font-size="17" fill="#333">精确 Allow-Origin</text>
+  <rect x="800" y="360" width="190" height="75" rx="10" fill="#fff" stroke="#81C784"/>
+  <text x="895" y="405" text-anchor="middle" font-family="sans-serif" font-size="17" fill="#333">Allow-Credentials</text>
+
+  <path d="M315 285 L390 285" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M685 285 L760 285" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M760 415 L685 415" stroke="#43A047" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M390 415 L315 415" stroke="#43A047" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="352" y="265" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#1565C0">申请</text>
+  <text x="723" y="265" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#1565C0">核对</text>
+  <text x="723" y="445" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#43A047">许可</text>
+  <text x="352" y="445" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#43A047">读取</text>
+
+  <rect x="160" y="555" width="760" height="58" rx="12" fill="#1565C0"/>
+  <text x="540" y="592" text-anchor="middle" font-family="sans-serif" font-size="19" font-weight="700" fill="#fff">本步解决：登录态与复杂请求的跨源联调，同时保留精确边界</text>
+</svg>

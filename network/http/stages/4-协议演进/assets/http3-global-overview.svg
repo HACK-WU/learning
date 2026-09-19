@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="560" viewBox="0 0 1000 560">
+  <rect width="1000" height="560" fill="#fff"/>
+  <text x="48" y="48" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="700" fill="#333">网页请求：从一条共用长队，到多条能独立前进的车道</text>
+  <text x="48" y="80" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#666">先不记术语，只看一个问题：一份货物出问题，会不会把所有货物都拦住？</text>
+
+  <rect x="48" y="116" width="414" height="350" rx="18" fill="#fafafa" stroke="#bdbdbd" stroke-width="2"/>
+  <text x="78" y="154" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="22" font-weight="700" fill="#555">旧路：所有车共用一条顺序队伍</text>
+  <rect x="84" y="190" width="342" height="48" rx="10" fill="#90caf9"/>
+  <text x="108" y="221" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" fill="#123">大件 A1</text>
+  <rect x="84" y="250" width="342" height="48" rx="10" fill="#ffe082"/>
+  <text x="108" y="281" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" fill="#5d4500">小件 B1</text>
+  <rect x="84" y="310" width="342" height="48" rx="10" fill="#ef9a9a" stroke="#c62828" stroke-width="3"/>
+  <text x="108" y="341" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" fill="#6d1b1b">A2：路上损坏</text>
+  <rect x="84" y="370" width="342" height="48" rx="10" fill="#ffe082" opacity="0.62"/>
+  <text x="108" y="401" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" fill="#7b6500">B2：也只能等</text>
+  <text x="84" y="448" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#b04a3a">一件卡住，后面的到不了收货人</text>
+
+  <rect x="538" y="116" width="414" height="350" rx="18" fill="#f6fbff" stroke="#1565c0" stroke-width="2"/>
+  <text x="568" y="154" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="22" font-weight="700" fill="#1565c0">新路：每条车道可以独立前进</text>
+  <path d="M580 224 H914" stroke="#90a4ae" stroke-width="4" stroke-linecap="round"/>
+  <path d="M580 306 H914" stroke="#90a4ae" stroke-width="4" stroke-linecap="round"/>
+  <path d="M580 388 H914" stroke="#90a4ae" stroke-width="4" stroke-linecap="round"/>
+  <rect x="592" y="198" width="92" height="52" rx="10" fill="#90caf9"/><text x="622" y="231" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" fill="#123">A1</text>
+  <rect x="706" y="198" width="92" height="52" rx="10" fill="#ef9a9a" stroke="#c62828" stroke-width="3"/><text x="724" y="231" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#6d1b1b">A2 损坏</text>
+  <rect x="820" y="198" width="78" height="52" rx="10" fill="#e0e0e0" stroke="#9e9e9e" stroke-dasharray="6 5"/><text x="842" y="231" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#777">待补</text>
+  <rect x="592" y="280" width="92" height="52" rx="10" fill="#ffe082"/><text x="622" y="313" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" fill="#5d4500">B1</text>
+  <rect x="706" y="280" width="92" height="52" rx="10" fill="#ffe082"/><text x="736" y="313" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" fill="#5d4500">B2</text>
+  <rect x="820" y="280" width="78" height="52" rx="10" fill="#ffe082"/><text x="842" y="313" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" fill="#5d4500">B3</text>
+  <rect x="592" y="362" width="92" height="52" rx="10" fill="#a5d6a7"/><text x="622" y="395" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" fill="#174a1b">C1</text>
+  <rect x="706" y="362" width="92" height="52" rx="10" fill="#a5d6a7"/><text x="736" y="395" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" fill="#174a1b">C2</text>
+  <text x="568" y="448" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#1565c0">A 这一车道补货时，B、C 仍可继续到达</text>
+
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#777"/></marker></defs>
+</svg>

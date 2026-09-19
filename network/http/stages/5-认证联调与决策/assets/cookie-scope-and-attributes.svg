@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="720" viewBox="0 0 1100 720">
+  <rect width="1100" height="720" fill="#fff"/>
+  <text x="44" y="48" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="700" fill="#333">一张 Cookie 经过哪些门，才会被带上？</text>
+  <text x="44" y="80" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#666">服务端设置，浏览器保存；下一次请求由浏览器逐项筛选</text>
+
+  <rect x="44" y="112" width="1012" height="188" rx="18" fill="#f6fbff" stroke="#90caf9" stroke-width="2"/>
+  <text x="72" y="150" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="21" font-weight="700" fill="#1565c0">响应：服务端给出一张卡及其规则</text>
+  <rect x="78" y="190" width="510" height="58" rx="10" fill="#e3f2fd" stroke="#64b5f6"/>
+  <text x="100" y="226" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="17" fill="#123">Set-Cookie: sid=编号; Path=/; Secure; HttpOnly</text>
+  <path d="M610 219 H676" stroke="#1565c0" stroke-width="4" marker-end="url(#arrow-blue)"/>
+  <rect x="700" y="190" width="316" height="58" rx="10" fill="#fff" stroke="#90caf9"/>
+  <text x="730" y="226" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" fill="#333">浏览器保存：编号 + 规则</text>
+
+  <rect x="44" y="332" width="1012" height="170" rx="18" fill="#fafafa" stroke="#bdbdbd" stroke-width="2"/>
+  <text x="72" y="370" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="21" font-weight="700" fill="#555">请求：四道发送门逐项通过</text>
+  <g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16">
+    <rect x="78" y="405" width="205" height="60" rx="10" fill="#e8f5e9" stroke="#81c784"/>
+    <text x="126" y="442" fill="#1b5e20">主机是否匹配？</text>
+    <rect x="304" y="405" width="205" height="60" rx="10" fill="#e8f5e9" stroke="#81c784"/>
+    <text x="352" y="442" fill="#1b5e20">路径是否匹配？</text>
+    <rect x="530" y="405" width="205" height="60" rx="10" fill="#fff3e0" stroke="#ffb74d"/>
+    <text x="578" y="442" fill="#8a4b08">是否走安全连接？</text>
+    <rect x="756" y="405" width="260" height="60" rx="10" fill="#fff3e0" stroke="#ffb74d"/>
+    <text x="806" y="442" fill="#8a4b08">是否属于允许的跨站场景？</text>
+  </g>
+
+  <rect x="44" y="534" width="1012" height="144" rx="18" fill="#fff" stroke="#d0d0d0" stroke-width="2"/>
+  <text x="72" y="572" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="21" font-weight="700" fill="#333">属性各管一件事</text>
+  <g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15">
+    <rect x="72" y="594" width="176" height="52" rx="9" fill="#e3f2fd"/><text x="99" y="626" fill="#0d47a1"><tspan font-weight="700">Domain / Path</tspan><tspan x="99" dy="18" fill="#555">发送范围</tspan></text>
+    <rect x="270" y="594" width="176" height="52" rx="9" fill="#ffebee"/><text x="300" y="626" fill="#b71c1c"><tspan font-weight="700">Secure</tspan><tspan x="300" dy="18" fill="#555">安全连接</tspan></text>
+    <rect x="468" y="594" width="176" height="52" rx="9" fill="#f3e5f5"/><text x="498" y="626" fill="#4a148c"><tspan font-weight="700">HttpOnly</tspan><tspan x="498" dy="18" fill="#555">脚本读取</tspan></text>
+    <rect x="666" y="594" width="176" height="52" rx="9" fill="#fff3e0"/><text x="695" y="626" fill="#e65100"><tspan font-weight="700">SameSite</tspan><tspan x="695" dy="18" fill="#555">跨站发送</tspan></text>
+    <rect x="864" y="594" width="152" height="52" rx="9" fill="#e8f5e9"/><text x="886" y="626" fill="#1b5e20"><tspan font-weight="700">Max-Age</tspan><tspan x="886" dy="18" fill="#555">生命周期</tspan></text>
+  </g>
+  <defs>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1565c0"/></marker>
+  </defs>
+</svg>

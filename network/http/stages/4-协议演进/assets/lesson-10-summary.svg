@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="620" viewBox="0 0 960 620">
+  <title>课 10 一图总结：HTTP/1.1 的遗产与天花板</title>
+  <desc>用三段收束 HTTP/1.1：版本演进解决的痛点、三项基础能力和性能补丁的天花板。</desc>
+  <rect width="960" height="620" fill="#fff"/>
+  <text x="48" y="56" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="28" font-weight="700" fill="#333">HTTP/1.1：把路修通，也留下拥堵点</text>
+  <text x="48" y="86" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" fill="#666">理解它的设计动因，才能看懂 HTTP/2 为什么要换一套表达方式。</text>
+
+  <line x1="118" y1="148" x2="842" y2="148" stroke="#90caf9" stroke-width="4"/>
+  <circle cx="160" cy="148" r="15" fill="#1565c0"/>
+  <circle cx="480" cy="148" r="15" fill="#2e7d32"/>
+  <circle cx="800" cy="148" r="15" fill="#ef6c00"/>
+  <text x="160" y="154" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="700" fill="#fff">1</text>
+  <text x="480" y="154" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="700" fill="#fff">2</text>
+  <text x="800" y="154" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="700" fill="#fff">3</text>
+
+  <rect x="48" y="190" width="270" height="284" rx="12" fill="#e3f2fd" stroke="#90caf9" stroke-width="2"/>
+  <text x="72" y="232" font-family="sans-serif" font-size="20" font-weight="700" fill="#0d47a1">版本在解决什么？</text>
+  <text x="72" y="274" font-family="sans-serif" font-size="15" fill="#333">0.9：能取文件</text>
+  <text x="72" y="304" font-family="sans-serif" font-size="15" fill="#333">1.0：能表达状态和类型</text>
+  <text x="72" y="334" font-family="sans-serif" font-size="15" fill="#333">1.1：能长期复用这条路</text>
+  <line x1="72" y1="366" x2="294" y2="366" stroke="#90caf9"/>
+  <text x="72" y="402" font-family="sans-serif" font-size="14" fill="#0d47a1">现行理解：语义与 1.1 报文</text>
+  <text x="72" y="426" font-family="sans-serif" font-size="14" fill="#0d47a1">已经拆进 RFC 9110/9112</text>
+
+  <rect x="345" y="190" width="270" height="284" rx="12" fill="#e8f5e9" stroke="#81c784" stroke-width="2"/>
+  <text x="369" y="232" font-family="sans-serif" font-size="20" font-weight="700" fill="#1b5e20">1.1 留下什么？</text>
+  <text x="369" y="274" font-family="sans-serif" font-size="15" fill="#333">持久连接：少重复开门</text>
+  <text x="369" y="304" font-family="sans-serif" font-size="15" fill="#333">Host：找到正确的站</text>
+  <text x="369" y="334" font-family="sans-serif" font-size="15" fill="#333">chunked：边做边送</text>
+  <line x1="369" y1="366" x2="591" y2="366" stroke="#81c784"/>
+  <text x="369" y="402" font-family="sans-serif" font-size="14" fill="#1b5e20">共同前提：必须能判断</text>
+  <text x="369" y="426" font-family="sans-serif" font-size="14" fill="#1b5e20">每条消息在哪里结束</text>
+
+  <rect x="642" y="190" width="270" height="284" rx="12" fill="#fff3e0" stroke="#ffb74d" stroke-width="2"/>
+  <text x="666" y="232" font-family="sans-serif" font-size="20" font-weight="700" fill="#e65100">为什么还要升级？</text>
+  <text x="666" y="274" font-family="sans-serif" font-size="15" fill="#333">1.1：一个连接上的请求</text>
+  <text x="666" y="304" font-family="sans-serif" font-size="15" fill="#333">仍容易互相排队</text>
+  <text x="666" y="334" font-family="sans-serif" font-size="15" fill="#333">旧补丁：合并、内联、分片</text>
+  <line x1="666" y1="366" x2="888" y2="366" stroke="#ffb74d"/>
+  <text x="666" y="402" font-family="sans-serif" font-size="14" fill="#e65100">HTTP/2 的问题：如何在同一条</text>
+  <text x="666" y="426" font-family="sans-serif" font-size="14" fill="#e65100">连接上真正并发？</text>
+
+  <rect x="48" y="514" width="864" height="56" rx="10" fill="#263238"/>
+  <text x="480" y="548" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="700" fill="#fff">记忆链：少重连 → 找对站 → 知道边界 → 看见队头阻塞</text>
+</svg>

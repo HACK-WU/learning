@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" width="900" height="480" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="900" height="480" fill="#ffffff"/>
+
+  <!-- 标题 -->
+  <text x="450" y="36" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">阶段 3 · 缓存与性能：让它快起来</text>
+  <text x="450" y="60" text-anchor="middle" font-size="13" fill="#666666">课 7 → 课 8 → 课 9（9 个知识点，从左到右递进）</text>
+
+  <!-- ============ 课 7 ============ -->
+  <g>
+    <rect x="24" y="80" width="264" height="46" rx="8" fill="#2e7d32"/>
+    <text x="156" y="109" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">课 7 · HTTP 缓存</text>
+
+    <!-- 课 7 知识点卡 -->
+    <rect x="24" y="140" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="44" cy="160" r="9" fill="#2e7d32"/>
+    <text x="44" y="164" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">1</text>
+    <text x="62" y="164" font-size="13" font-weight="700" fill="#1a1a1a">强缓存</text>
+    <text x="62" y="185" font-size="11" fill="#333333">Cache-Control：max-age / no-cache / no-store</text>
+    <text x="62" y="201" font-size="11" fill="#333333">Expires 与 max-age · no-cache 不是不缓存</text>
+
+    <rect x="24" y="234" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="44" cy="254" r="9" fill="#2e7d32"/>
+    <text x="44" y="258" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">2</text>
+    <text x="62" y="258" font-size="13" font-weight="700" fill="#1a1a1a">协商缓存</text>
+    <text x="62" y="279" font-size="11" fill="#333333">ETag 与 If-None-Match</text>
+    <text x="62" y="295" font-size="11" fill="#333333">Last-Modified 系 · 304 只省正文不省请求</text>
+
+    <rect x="24" y="328" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="44" cy="348" r="9" fill="#2e7d32"/>
+    <text x="44" y="352" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">3</text>
+    <text x="62" y="352" font-size="13" font-weight="700" fill="#1a1a1a">缓存决策实战</text>
+    <text x="62" y="373" font-size="11" fill="#333333">HTML 不缓存 · hash 文件名长缓存</text>
+    <text x="62" y="389" font-size="11" fill="#333333">刷新与强制刷新差异 · 缓存决策树</text>
+  </g>
+
+  <!-- 课 7 → 课 8 箭头 -->
+  <line x1="292" y1="290" x2="318" y2="290" stroke="#2e7d32" stroke-width="2"/>
+  <polygon points="318,290 310,286 310,294" fill="#2e7d32"/>
+
+  <!-- ============ 课 8 ============ -->
+  <g>
+    <rect x="318" y="80" width="264" height="46" rx="8" fill="#2e7d32"/>
+    <text x="450" y="109" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">课 8 · 性能测量与优化</text>
+
+    <rect x="318" y="140" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="338" cy="160" r="9" fill="#2e7d32"/>
+    <text x="338" y="164" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">1</text>
+    <text x="356" y="164" font-size="13" font-weight="700" fill="#1a1a1a">响应压缩</text>
+    <text x="356" y="185" font-size="11" fill="#333333">Content-Encoding 与 Accept-Encoding 协商</text>
+    <text x="356" y="201" font-size="11" fill="#333333">gzip 与 brotli 取舍 · CPU 代价与不适用场景</text>
+
+    <rect x="318" y="234" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="338" cy="254" r="9" fill="#2e7d32"/>
+    <text x="338" y="258" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">2</text>
+    <text x="356" y="258" font-size="13" font-weight="700" fill="#1a1a1a">性能测量</text>
+    <text x="356" y="279" font-size="11" fill="#333333">DevTools 瀑布图读法</text>
+    <text x="356" y="295" font-size="11" fill="#333333">TTFB 与各段耗时 · curl -w 看时间分布</text>
+
+    <rect x="318" y="328" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="338" cy="348" r="9" fill="#2e7d32"/>
+    <text x="338" y="352" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">3</text>
+    <text x="356" y="352" font-size="13" font-weight="700" fill="#1a1a1a">HTTP 视角的加载优化</text>
+    <text x="356" y="373" font-size="11" fill="#333333">少请求与连接复用</text>
+    <text x="356" y="389" font-size="11" fill="#333333">域名分片的教训 · preload / prefetch</text>
+  </g>
+
+  <!-- 课 8 → 课 9 箭头 -->
+  <line x1="586" y1="290" x2="612" y2="290" stroke="#2e7d32" stroke-width="2"/>
+  <polygon points="612,290 604,286 604,294" fill="#2e7d32"/>
+
+  <!-- ============ 课 9 ============ -->
+  <g>
+    <rect x="612" y="80" width="264" height="46" rx="8" fill="#2e7d32"/>
+    <text x="744" y="109" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">课 9 · 代理网关与 CDN</text>
+
+    <rect x="612" y="140" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="632" cy="160" r="9" fill="#2e7d32"/>
+    <text x="632" y="164" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">1</text>
+    <text x="650" y="164" font-size="13" font-weight="700" fill="#1a1a1a">代理家族</text>
+    <text x="650" y="185" font-size="11" fill="#333333">正向代理 vs 反向代理</text>
+    <text x="650" y="201" font-size="11" fill="#333333">网关与负载均衡 · Via 头与中间人改动</text>
+
+    <rect x="612" y="234" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="632" cy="254" r="9" fill="#2e7d32"/>
+    <text x="632" y="258" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">2</text>
+    <text x="650" y="258" font-size="13" font-weight="700" fill="#1a1a1a">真实 IP 与转发头</text>
+    <text x="650" y="279" font-size="11" fill="#333333">X-Forwarded-For 追加语义 · X-Real-IP</text>
+    <text x="650" y="295" font-size="11" fill="#333333">可伪造性 · 只信最后一跳</text>
+
+    <rect x="612" y="328" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="632" cy="348" r="9" fill="#2e7d32"/>
+    <text x="632" y="352" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">3</text>
+    <text x="650" y="352" font-size="13" font-weight="700" fill="#1a1a1a">CDN 与边缘缓存</text>
+    <text x="650" y="373" font-size="11" fill="#333333">CDN 命中与回源</text>
+    <text x="650" y="389" font-size="11" fill="#333333">s-maxage 与共享缓存 · Cache-Control 配合</text>
+  </g>
+
+  <!-- 底部递进说明 -->
+  <rect x="24" y="434" width="852" height="34" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+  <text x="450" y="456" text-anchor="middle" font-size="12" fill="#333333">递进：课 7 的缓存策略到课 9 要扩展到整条链路（共享缓存）；课 8 的测量手段是验证课 7 / 课 9 配置是否生效的尺子</text>
+</svg>

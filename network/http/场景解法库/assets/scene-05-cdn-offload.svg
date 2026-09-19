@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="420" viewBox="0 0 960 420">
+  <rect width="960" height="420" fill="#fff"/>
+  <style>.t{font:20px sans-serif;fill:#333}.s{font:16px sans-serif;fill:#333}.b{fill:#e8f5e9;stroke:#2e7d32;stroke-width:2}.g{fill:#f5f5f5;stroke:#777;stroke-width:2}.bad{fill:#ffebee;stroke:#c62828;stroke-width:2}.a{stroke:#2e7d32;stroke-width:3;fill:none}</style>
+  <text x="40" y="42" class="t">十倍流量：公共 GET 先在边缘结束</text>
+  <rect x="35" y="115" width="175" height="80" rx="10" class="b"/><text x="82" y="152" class="t">客户端群</text><text x="65" y="180" class="s">500 → 5000</text>
+  <rect x="325" y="115" width="220" height="80" rx="10" class="b"/><text x="396" y="152" class="t">CDN</text><text x="380" y="180" class="s">公共 GET HIT</text>
+  <rect x="700" y="115" width="205" height="80" rx="10" class="g"/><text x="752" y="152" class="t">源站</text><text x="728" y="180" class="s">只收 MISS</text>
+  <path d="M210 155H325M545 155H700" class="a"/><text x="235" y="140" class="s">大量读</text><text x="565" y="140" class="s">回源</text>
+  <rect x="230" y="305" width="500" height="68" rx="10" class="bad"/><text x="266" y="335" class="s">失败点：把个性化响应错误放进共享缓存</text><text x="383" y="358" class="s">会变成数据串用</text>
+</svg>

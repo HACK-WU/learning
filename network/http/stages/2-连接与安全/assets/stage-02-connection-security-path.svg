@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" width="900" height="480" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="900" height="480" fill="#ffffff"/>
+
+  <!-- 标题 -->
+  <text x="450" y="36" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">阶段 2 · 连接与安全：先确认对方是谁</text>
+  <text x="450" y="60" text-anchor="middle" font-size="13" fill="#666666">课 4 → 课 5 → 课 6（9 个知识点，从左到右递进）</text>
+
+  <!-- ============ 课 4 ============ -->
+  <g>
+    <rect x="24" y="80" width="264" height="46" rx="8" fill="#1565C0"/>
+    <text x="156" y="109" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">课 4 · 连接管理</text>
+
+    <!-- 课 4 知识点卡 -->
+    <rect x="24" y="140" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="44" cy="160" r="9" fill="#1565C0"/>
+    <text x="44" y="164" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">1</text>
+    <text x="62" y="164" font-size="13" font-weight="700" fill="#1a1a1a">TCP 连接的建立成本</text>
+    <text x="62" y="185" font-size="11" fill="#333333">三次握手 · RTT 与延迟</text>
+    <text x="62" y="201" font-size="11" fill="#333333">为什么要少建连接</text>
+
+    <rect x="24" y="234" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="44" cy="254" r="9" fill="#1565C0"/>
+    <text x="44" y="258" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">2</text>
+    <text x="62" y="258" font-size="13" font-weight="700" fill="#1a1a1a">Keep-Alive 与连接复用</text>
+    <text x="62" y="279" font-size="11" fill="#333333">短连接的代价 · Connection 头</text>
+    <text x="62" y="295" font-size="11" fill="#333333">浏览器并发连接数限制</text>
+
+    <rect x="24" y="328" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="44" cy="348" r="9" fill="#1565C0"/>
+    <text x="44" y="352" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">3</text>
+    <text x="62" y="352" font-size="13" font-weight="700" fill="#1a1a1a">HTTP/1.1 的队头阻塞</text>
+    <text x="62" y="373" font-size="11" fill="#333333">请求-响应串行等待 · 管线化失败</text>
+    <text x="62" y="389" font-size="11" fill="#333333">HTTP/2/3 的引子（课 11/12 伏笔）</text>
+  </g>
+
+  <!-- 课 4 → 课 5 箭头 -->
+  <line x1="292" y1="290" x2="318" y2="290" stroke="#1565C0" stroke-width="2"/>
+  <polygon points="318,290 310,286 310,294" fill="#1565C0"/>
+
+  <!-- ============ 课 5 ============ -->
+  <g>
+    <rect x="318" y="80" width="264" height="46" rx="8" fill="#1565C0"/>
+    <text x="450" y="109" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">课 5 · HTTPS 加密</text>
+
+    <rect x="318" y="140" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="338" cy="160" r="9" fill="#1565C0"/>
+    <text x="338" y="164" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">1</text>
+    <text x="356" y="164" font-size="13" font-weight="700" fill="#1a1a1a">明文传输的三大威胁</text>
+    <text x="356" y="185" font-size="11" fill="#333333">窃听（机密性）· 篡改（完整性）</text>
+    <text x="356" y="201" font-size="11" fill="#333333">冒充（身份认证）</text>
+
+    <rect x="318" y="234" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="338" cy="254" r="9" fill="#1565C0"/>
+    <text x="338" y="258" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">2</text>
+    <text x="356" y="258" font-size="13" font-weight="700" fill="#1a1a1a">混合加密</text>
+    <text x="356" y="279" font-size="11" fill="#333333">对称快但密钥难分发 · 非对称慢</text>
+    <text x="356" y="295" font-size="11" fill="#333333">非对称交换密钥 · 对称传输数据</text>
+
+    <rect x="318" y="328" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="338" cy="348" r="9" fill="#1565C0"/>
+    <text x="338" y="352" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">3</text>
+    <text x="356" y="352" font-size="13" font-weight="700" fill="#1a1a1a">TLS 握手</text>
+    <text x="356" y="373" font-size="11" fill="#333333">TLS 1.2 握手轮次 · 1.3 的 1-RTT</text>
+    <text x="356" y="389" font-size="11" fill="#333333">用 Wireshark / 抓包观察握手</text>
+  </g>
+
+  <!-- 课 5 → 课 6 箭头 -->
+  <line x1="586" y1="290" x2="612" y2="290" stroke="#1565C0" stroke-width="2"/>
+  <polygon points="612,290 604,286 604,294" fill="#1565C0"/>
+
+  <!-- ============ 课 6 ============ -->
+  <g>
+    <rect x="612" y="80" width="264" height="46" rx="8" fill="#1565C0"/>
+    <text x="744" y="109" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">课 6 · 证书与信任</text>
+
+    <rect x="612" y="140" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="632" cy="160" r="9" fill="#1565C0"/>
+    <text x="632" y="164" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">1</text>
+    <text x="650" y="164" font-size="13" font-weight="700" fill="#1a1a1a">证书与 CA 信任链</text>
+    <text x="650" y="185" font-size="11" fill="#333333">域名 · 公钥 · 有效期 · 签名</text>
+    <text x="650" y="201" font-size="11" fill="#333333">中间 CA 链 · 系统与浏览器根证书库</text>
+
+    <rect x="612" y="234" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="632" cy="254" r="9" fill="#1565C0"/>
+    <text x="632" y="258" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">2</text>
+    <text x="650" y="258" font-size="13" font-weight="700" fill="#1a1a1a">证书校验失败的常见场景</text>
+    <text x="650" y="279" font-size="11" fill="#333333">证书过期 · 域名不匹配（SAN）</text>
+    <text x="650" y="295" font-size="11" fill="#333333">自签证书与私有 CA</text>
+
+    <rect x="612" y="328" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="632" cy="348" r="9" fill="#1565C0"/>
+    <text x="632" y="352" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">3</text>
+    <text x="650" y="352" font-size="13" font-weight="700" fill="#1a1a1a">本地开发配 HTTPS 实操</text>
+    <text x="650" y="373" font-size="11" fill="#333333">mkcert 签发本地证书 · 装入系统信任</text>
+    <text x="650" y="389" font-size="11" fill="#333333">浏览器地址栏锁标验证</text>
+  </g>
+
+  <!-- 底部递进说明 -->
+  <rect x="24" y="434" width="852" height="34" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+  <text x="450" y="456" text-anchor="middle" font-size="12" fill="#333333">前置：先有课 4 的连接，才谈得上课 5 的加密；课 6 回答"加密之外，还要确认对方到底是谁"——本阶段是全课程认知最陡的一段</text>
+</svg>

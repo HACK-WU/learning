@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="560" viewBox="0 0 960 560">
+  <title>HTTP/1.1 课级全局图：一条请求路上的三次修路</title>
+  <desc>用不带技术术语的三步图解释 HTTP/1.1 解决的三个生活化问题：重复开门、门牌不清、东西大小未知。</desc>
+  <rect width="960" height="560" fill="#fff"/>
+  <text x="48" y="58" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="28" font-weight="700" fill="#333">一条请求路上的三次修路</text>
+  <text x="48" y="88" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" fill="#666">先看旧路为什么卡，再看每次改造换来了什么、又留下了什么。</text>
+
+  <line x1="128" y1="154" x2="832" y2="154" stroke="#90caf9" stroke-width="5"/>
+  <circle cx="160" cy="154" r="17" fill="#1565c0"/>
+  <circle cx="480" cy="154" r="17" fill="#2e7d32"/>
+  <circle cx="800" cy="154" r="17" fill="#ef6c00"/>
+  <text x="160" y="160" text-anchor="middle" font-family="sans-serif" font-size="17" font-weight="700" fill="#fff">1</text>
+  <text x="480" y="160" text-anchor="middle" font-family="sans-serif" font-size="17" font-weight="700" fill="#fff">2</text>
+  <text x="800" y="160" text-anchor="middle" font-family="sans-serif" font-size="17" font-weight="700" fill="#fff">3</text>
+
+  <rect x="48" y="198" width="224" height="220" rx="12" fill="#e3f2fd" stroke="#90caf9" stroke-width="2"/>
+  <text x="160" y="240" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20" font-weight="700" fill="#0d47a1">每次都重新开门</text>
+  <path d="M105 305 H215" stroke="#1565c0" stroke-width="8" stroke-linecap="round"/>
+  <path d="M105 337 H215" stroke="#1565c0" stroke-width="8" stroke-linecap="round"/>
+  <path d="M105 369 H215" stroke="#1565c0" stroke-width="8" stroke-linecap="round"/>
+  <text x="160" y="454" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#333">重复的准备时间</text>
+
+  <rect x="368" y="198" width="224" height="220" rx="12" fill="#e8f5e9" stroke="#81c784" stroke-width="2"/>
+  <text x="480" y="240" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20" font-weight="700" fill="#1b5e20">门开着继续办事</text>
+  <rect x="425" y="291" width="110" height="83" rx="8" fill="#2e7d32"/>
+  <path d="M480 291 V374" stroke="#fff" stroke-width="3"/>
+  <circle cx="480" cy="320" r="8" fill="#fff"/>
+  <circle cx="480" cy="348" r="8" fill="#fff"/>
+  <text x="480" y="454" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#333">同一条路办多件事</text>
+
+  <rect x="688" y="198" width="224" height="220" rx="12" fill="#fff3e0" stroke="#ffb74d" stroke-width="2"/>
+  <text x="800" y="240" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20" font-weight="700" fill="#e65100">东西大小未知</text>
+  <rect x="738" y="293" width="124" height="72" rx="8" fill="#ef6c00"/>
+  <path d="M754 329 H846" stroke="#fff" stroke-width="3" stroke-dasharray="8 7"/>
+  <path d="M800 277 V293 M800 365 V381" stroke="#e65100" stroke-width="3"/>
+  <text x="800" y="454" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" fill="#333">边做边送，也要知道终点</text>
+
+  <rect x="48" y="490" width="864" height="44" rx="9" fill="#263238"/>
+  <text x="480" y="518" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="16" font-weight="700" fill="#fff">本课路线：演进动因 → 1.1 基础 → 性能补丁与天花板</text>
+</svg>

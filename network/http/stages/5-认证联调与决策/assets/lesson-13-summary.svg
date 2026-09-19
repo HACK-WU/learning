@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="700" viewBox="0 0 1100 700">
+  <rect width="1100" height="700" fill="#fff"/>
+  <text x="44" y="48" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="700" fill="#333">从登录到资源访问：三层判断</text>
+  <text x="44" y="80" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#666">载体解决“怎么带”，状态路线解决“怎么认”，授权解决“能不能进”</text>
+
+  <rect x="44" y="118" width="1012" height="134" rx="16" fill="#e3f2fd" stroke="#64b5f6" stroke-width="2"/>
+  <text x="76" y="158" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="21" font-weight="700" fill="#0d47a1">第一层：凭证怎么带</text>
+  <rect x="76" y="181" width="250" height="44" rx="9" fill="#fff" stroke="#90caf9"/><text x="126" y="209" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" fill="#333">Cookie：浏览器自动带</text>
+  <rect x="366" y="181" width="300" height="44" rx="9" fill="#fff" stroke="#90caf9"/><text x="414" y="209" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" fill="#333">Authorization：客户端显式带</text>
+  <rect x="706" y="181" width="300" height="44" rx="9" fill="#fff" stroke="#90caf9"/><text x="747" y="209" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" fill="#333">属性 / 日志 / 传输要治理</text>
+
+  <path d="M550 252 V292" stroke="#1565c0" stroke-width="4" marker-end="url(#arrow-blue)"/>
+
+  <rect x="44" y="310" width="1012" height="148" rx="16" fill="#e8f5e9" stroke="#81c784" stroke-width="2"/>
+  <text x="76" y="350" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="21" font-weight="700" fill="#1b5e20">第二层：凭证背后的状态怎么认</text>
+  <rect x="76" y="376" width="400" height="52" rx="9" fill="#fff" stroke="#a5d6a7"/><text x="120" y="409" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" fill="#333">Session：拿编号查服务端记录</text>
+  <rect x="520" y="376" width="486" height="52" rx="9" fill="#fff" stroke="#a5d6a7"/><text x="568" y="409" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" fill="#333">Token / JWT：验签 + exp / aud / iss</text>
+
+  <path d="M550 458 V498" stroke="#2e7d32" stroke-width="4" marker-end="url(#arrow-green)"/>
+
+  <rect x="44" y="516" width="1012" height="134" rx="16" fill="#fff3e0" stroke="#ffb74d" stroke-width="2"/>
+  <text x="76" y="556" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="21" font-weight="700" fill="#e65100">第三层：身份能不能进入这个资源</text>
+  <rect x="76" y="579" width="280" height="44" rx="9" fill="#ffebee" stroke="#ef9a9a"/><text x="143" y="607" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" fill="#b71c1c">401：缺有效凭证</text>
+  <rect x="410" y="579" width="280" height="44" rx="9" fill="#fff" stroke="#ffcc80"/><text x="477" y="607" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" fill="#8a4b08">WWW-Authenticate：怎么补</text>
+  <rect x="744" y="579" width="262" height="44" rx="9" fill="#f3e5f5" stroke="#ce93d8"/><text x="816" y="607" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" fill="#4a148c">403：身份有，权限不够</text>
+
+  <defs>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1565c0"/></marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2e7d32"/></marker>
+  </defs>
+</svg>

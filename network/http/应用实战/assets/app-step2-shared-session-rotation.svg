@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="660" viewBox="0 0 1100 660">
+  <rect width="1100" height="660" fill="#fff"/>
+  <text x="42" y="46" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="27" font-weight="700" fill="#333">综合版：共享状态 + 登录时换新编号</text>
+  <text x="42" y="78" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#666">高亮是相对基础版的新增：多个实例看同一份记录，旧编号可被删除</text>
+
+  <rect x="48" y="126" width="180" height="196" rx="16" fill="#e3f2fd" stroke="#90caf9" stroke-width="2"/>
+  <text x="99" y="168" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="21" font-weight="700" fill="#0d47a1">浏览器</text>
+  <rect x="84" y="210" width="108" height="58" rx="10" fill="#ffe082" stroke="#f9a825" stroke-width="2"/>
+  <text x="101" y="246" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="15" fill="#5d4500">新 sid</text>
+  <text x="77" y="299" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="14" fill="#555">登录后换新</text>
+
+  <path d="M246 220 H322" stroke="#1565c0" stroke-width="4" marker-end="url(#arrow-blue)"/>
+  <text x="250" y="198" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="14" fill="#555">带凭证</text>
+
+  <rect x="346" y="112" width="190" height="232" rx="16" fill="#f6fbff" stroke="#1565c0" stroke-width="2"/>
+  <text x="389" y="154" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="21" font-weight="700" fill="#1565c0">实例 A</text>
+  <rect x="378" y="198" width="126" height="70" rx="10" fill="#fff" stroke="#90caf9"/>
+  <text x="400" y="240" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#333">验证请求</text>
+  <text x="384" y="302" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="14" fill="#555">不再依赖本机内存</text>
+
+  <rect x="574" y="112" width="190" height="232" rx="16" fill="#f6fbff" stroke="#1565c0" stroke-width="2"/>
+  <text x="617" y="154" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="21" font-weight="700" fill="#1565c0">实例 B</text>
+  <rect x="606" y="198" width="126" height="70" rx="10" fill="#fff" stroke="#90caf9"/>
+  <text x="628" y="240" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#333">验证请求</text>
+  <text x="612" y="302" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="14" fill="#555">也能看同一记录</text>
+
+  <path d="M443 368 V420" stroke="#1565c0" stroke-width="4" marker-end="url(#arrow-blue)"/>
+  <path d="M669 368 V420" stroke="#1565c0" stroke-width="4" marker-end="url(#arrow-blue)"/>
+  <rect x="296" y="438" width="500" height="110" rx="16" fill="#e8f5e9" stroke="#43a047" stroke-width="3"/>
+  <text x="446" y="478" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="21" font-weight="700" fill="#1b5e20">共享会话存储</text>
+  <text x="365" y="514" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="15" fill="#555">sid → user / 权限 / 过期时间</text>
+
+  <rect x="48" y="584" width="1004" height="48" rx="12" fill="#fff3e0" stroke="#ffb74d"/>
+  <text x="78" y="615" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#8a4b08">本步相对上一张图新增：共享存储 + 多实例 + 登录时删除旧编号、生成新编号；解决扩容与会话固定风险的基础问题。</text>
+
+  <defs>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1565c0"/></marker>
+  </defs>
+</svg>

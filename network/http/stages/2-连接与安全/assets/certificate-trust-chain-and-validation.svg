@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620">
+  <title>证书与信任链：从服务器证件到客户端决定</title>
+  <desc>左侧是服务器递来的证件，中间是签名接力与客户端核对，右侧是通过或拒绝的结果。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1565C0"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="620" fill="#fff"/>
+
+  <rect x="35" y="45" width="295" height="435" rx="18" fill="#FFF8E1" stroke="#F9A825" stroke-width="2"/>
+  <rect x="452" y="45" width="295" height="435" rx="18" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
+  <rect x="870" y="45" width="295" height="435" rx="18" fill="#F1F8E9" stroke="#2E7D32" stroke-width="2"/>
+
+  <text x="182" y="92" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="26" font-weight="700" fill="#333">服务器递来的证件</text>
+  <text x="600" y="92" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="26" font-weight="700" fill="#333">客户端逐项核对</text>
+  <text x="1017" y="92" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="26" font-weight="700" fill="#333">最终决定</text>
+
+  <rect x="82" y="135" width="200" height="245" rx="12" fill="#fff" stroke="#F9A825" stroke-width="2"/>
+  <text x="182" y="174" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="23" font-weight="700" fill="#333">证书</text>
+  <line x1="108" y1="198" x2="256" y2="198" stroke="#D6A21D" stroke-width="2"/>
+  <text x="108" y="230" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="18" fill="#333">它是谁：example.com</text>
+  <text x="108" y="266" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="18" fill="#333">公开钥匙：一把公钥</text>
+  <text x="108" y="302" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="18" fill="#333">有效期：开始～结束</text>
+  <text x="108" y="338" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="18" fill="#333">谁背书：上级签名</text>
+
+  <line x1="330" y1="260" x2="442" y2="260" stroke="#1565C0" stroke-width="4" marker-end="url(#arrow)"/>
+  <line x1="747" y1="260" x2="860" y2="260" stroke="#1565C0" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <circle cx="504" cy="155" r="10" fill="#1565C0"/>
+  <text x="532" y="163" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="20" fill="#333">名字对不对？</text>
+  <circle cx="504" cy="225" r="10" fill="#1565C0"/>
+  <text x="532" y="233" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="20" fill="#333">现在有效吗？</text>
+  <circle cx="504" cy="295" r="10" fill="#1565C0"/>
+  <text x="532" y="303" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="20" fill="#333">签名链能接上吗？</text>
+  <circle cx="504" cy="365" r="10" fill="#1565C0"/>
+  <text x="532" y="373" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="20" fill="#333">用途允许吗？</text>
+
+  <rect x="912" y="140" width="210" height="105" rx="14" fill="#E8F5E9" stroke="#2E7D32" stroke-width="2"/>
+  <text x="1017" y="180" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="24" font-weight="700" fill="#1B5E20">全部通过</text>
+  <text x="1017" y="216" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="18" fill="#333">建立可信 HTTPS</text>
+  <rect x="912" y="285" width="210" height="105" rx="14" fill="#FFEBEE" stroke="#C62828" stroke-width="2"/>
+  <text x="1017" y="325" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="24" font-weight="700" fill="#B71C1C">任一失败</text>
+  <text x="1017" y="361" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="18" fill="#333">中止或明确报警</text>
+
+  <text x="600" y="545" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif" font-size="20" fill="#555">信任不是“看起来像”，而是：名字、时间、签名、用途与本机信任规则都对得上。</text>
+</svg>

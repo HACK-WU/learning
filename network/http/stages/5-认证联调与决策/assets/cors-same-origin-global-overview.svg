@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="560" viewBox="0 0 1000 560">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#1565C0"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="560" fill="#fff"/>
+  <text x="50" y="54" font-family="sans-serif" font-size="26" font-weight="700" fill="#333">页面从另一个地址取资料时，浏览器先守住“能不能读”</text>
+  <text x="50" y="88" font-family="sans-serif" font-size="16" fill="#666">先比较地址，再听服务端许可，最后把结果交给页面</text>
+
+  <rect x="50" y="140" width="270" height="280" rx="14" fill="#E8F5E9" stroke="#43A047" stroke-width="2"/>
+  <text x="185" y="180" text-anchor="middle" font-family="sans-serif" font-size="22" font-weight="700" fill="#2E7D32">同一地址</text>
+  <rect x="90" y="215" width="190" height="62" rx="10" fill="#fff" stroke="#81C784"/>
+  <text x="185" y="252" text-anchor="middle" font-family="sans-serif" font-size="19" fill="#333">页面</text>
+  <rect x="90" y="315" width="190" height="62" rx="10" fill="#fff" stroke="#81C784"/>
+  <text x="185" y="352" text-anchor="middle" font-family="sans-serif" font-size="19" fill="#333">资料</text>
+  <path d="M185 278 L185 312" stroke="#43A047" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <rect x="365" y="140" width="270" height="280" rx="14" fill="#FFF8E1" stroke="#F9A825" stroke-width="2"/>
+  <text x="500" y="180" text-anchor="middle" font-family="sans-serif" font-size="22" font-weight="700" fill="#8D6E00">不同地址</text>
+  <rect x="405" y="215" width="190" height="62" rx="10" fill="#fff" stroke="#FFCA28"/>
+  <text x="500" y="252" text-anchor="middle" font-family="sans-serif" font-size="19" fill="#333">页面</text>
+  <rect x="405" y="315" width="190" height="62" rx="10" fill="#fff" stroke="#FFCA28"/>
+  <text x="500" y="352" text-anchor="middle" font-family="sans-serif" font-size="19" fill="#333">另一个服务</text>
+  <path d="M500 278 L500 312" stroke="#F9A825" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <rect x="680" y="140" width="270" height="280" rx="14" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
+  <text x="815" y="180" text-anchor="middle" font-family="sans-serif" font-size="22" font-weight="700" fill="#0D47A1">浏览器读取闸门</text>
+  <rect x="720" y="215" width="190" height="62" rx="10" fill="#1565C0"/>
+  <text x="815" y="252" text-anchor="middle" font-family="sans-serif" font-size="19" font-weight="700" fill="#fff">服务端说可以</text>
+  <rect x="720" y="315" width="190" height="62" rx="10" fill="#fff" stroke="#64B5F6"/>
+  <text x="815" y="352" text-anchor="middle" font-family="sans-serif" font-size="19" fill="#333">页面拿到结果</text>
+  <path d="M815 278 L815 312" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <path d="M635 280 L675 280" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="650" y="257" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#1565C0">需要许可</text>
+  <text x="500" y="475" text-anchor="middle" font-family="sans-serif" font-size="17" fill="#555">同一地址：直接读　　不同地址：先问能否读　　许可不匹配：结果不交给页面</text>
+  <text x="500" y="520" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#777">本图只建立直觉，不代表所有跨地址资源都采用同一种浏览器规则</text>
+</svg>

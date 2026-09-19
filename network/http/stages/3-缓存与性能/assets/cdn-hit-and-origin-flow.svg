@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">边缘缓存命中与回源</title>
+  <desc id="desc">请求先到边缘缓存，命中时直接返回；未命中时边缘缓存向源站回源，获得响应后保存并返回。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#1565C0"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="700" fill="#ffffff"/>
+  <text x="600" y="42" text-anchor="middle" font-size="26" font-weight="700" fill="#222">边缘缓存的两条路</text>
+  <text x="600" y="72" text-anchor="middle" font-size="15" fill="#555">命中：不回源；未命中：回源一次，再把结果留在边缘</text>
+
+  <rect x="70" y="120" width="210" height="90" rx="14" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
+  <text x="175" y="158" text-anchor="middle" font-size="20" font-weight="700" fill="#0D47A1">客户端</text>
+  <text x="175" y="185" text-anchor="middle" font-size="14" fill="#333">请求同一个 URL</text>
+  <rect x="455" y="120" width="260" height="90" rx="14" fill="#E8F5E9" stroke="#2E7D32" stroke-width="2"/>
+  <text x="585" y="158" text-anchor="middle" font-size="20" font-weight="700" fill="#1B5E20">边缘缓存</text>
+  <text x="585" y="185" text-anchor="middle" font-size="14" fill="#333">按缓存键查找已有响应</text>
+  <rect x="920" y="120" width="210" height="90" rx="14" fill="#F3E5F5" stroke="#7B1FA2" stroke-width="2"/>
+  <text x="1025" y="158" text-anchor="middle" font-size="20" font-weight="700" fill="#4A148C">源站</text>
+  <text x="1025" y="185" text-anchor="middle" font-size="14" fill="#333">生成或验证响应</text>
+  <line x1="280" y1="165" x2="450" y2="165" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow)"/>
+  <line x1="715" y1="165" x2="915" y2="165" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <rect x="100" y="300" width="1000" height="125" rx="16" fill="#F1F8E9" stroke="#7CB342" stroke-width="2"/>
+  <text x="150" y="340" font-size="19" font-weight="700" fill="#33691E">A · 命中</text>
+  <text x="150" y="374" font-size="15" fill="#333">① 查到新鲜响应</text>
+  <text x="150" y="402" font-size="15" fill="#333">② 边缘直接返回，源站没有新增请求</text>
+  <path d="M585 220 C585 270 360 275 360 300" fill="none" stroke="#2E7D32" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M360 425 C360 475 585 480 585 220" fill="none" stroke="#2E7D32" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <rect x="100" y="490" width="1000" height="150" rx="16" fill="#FFF8E1" stroke="#F9A825" stroke-width="2"/>
+  <text x="150" y="532" font-size="19" font-weight="700" fill="#7A4F00">B · 未命中</text>
+  <text x="150" y="566" font-size="15" fill="#333">① 边缘向源站回源</text>
+  <text x="150" y="594" font-size="15" fill="#333">② 收到允许共享的响应并保存</text>
+  <text x="150" y="622" font-size="15" fill="#333">③ 把同一份响应返回给客户端</text>
+  <path d="M715 220 C715 405 790 450 790 490" fill="none" stroke="#F9A825" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M915 540 C850 540 815 540 715 540" fill="none" stroke="#F9A825" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <rect x="785" y="300" width="260" height="125" rx="12" fill="#ffffff" stroke="#2E7D32"/>
+  <text x="915" y="333" text-anchor="middle" font-size="16" font-weight="700" fill="#1B5E20">响应头决定能否共享</text>
+  <text x="915" y="363" text-anchor="middle" font-size="14" fill="#333">Cache-Control</text>
+  <text x="915" y="388" text-anchor="middle" font-size="14" fill="#333">public / private / s-maxage</text>
+  <text x="915" y="412" text-anchor="middle" font-size="14" fill="#333">Vary / 验证器</text>
+</svg>

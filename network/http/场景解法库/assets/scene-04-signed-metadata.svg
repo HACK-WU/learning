@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="420" viewBox="0 0 960 420">
+  <rect width="960" height="420" fill="#fff"/>
+  <style>.t{font:20px sans-serif;fill:#333}.s{font:16px sans-serif;fill:#333}.b{fill:#e8f5e9;stroke:#2e7d32;stroke-width:2}.g{fill:#f5f5f5;stroke:#777;stroke-width:2}.bad{fill:#ffebee;stroke:#c62828;stroke-width:2}.a{stroke:#2e7d32;stroke-width:3;fill:none}</style>
+  <text x="40" y="42" class="t">受保护元数据：内部链路先证明网关身份</text>
+  <rect x="35" y="105" width="175" height="90" rx="10" class="g"/><text x="82" y="145" class="t">入口网关</text><text x="66" y="174" class="s">生成元数据</text>
+  <rect x="310" y="105" width="215" height="90" rx="10" class="b"/><text x="354" y="145" class="t">mTLS 代理链</text><text x="354" y="174" class="s">验证 peer identity</text>
+  <rect x="625" y="105" width="180" height="90" rx="10" class="b"/><text x="680" y="145" class="t">应用</text><text x="651" y="174" class="s">消费可信字段</text>
+  <rect x="845" y="105" width="80" height="90" rx="10" class="g"/><text x="864" y="145" class="t">日志</text><text x="855" y="174" class="s">ID</text>
+  <path d="M210 150H310M525 150H625M805 150H845" class="a"/>
+  <rect x="235" y="300" width="490" height="72" rx="10" class="bad"/><text x="270" y="330" class="s">代价：证书轮换、元数据版本和失败回退</text><text x="396" y="354" class="s">配置错误仍会造成错误信任</text>
+</svg>

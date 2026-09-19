@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" width="1000" height="620" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="1000" height="620" fill="#ffffff"/>
+
+  <!-- 标题 -->
+  <text x="500" y="34" text-anchor="middle" font-size="22" font-weight="700" fill="#1a1a1a">HTTP 系统学习 · 五阶段路径（15 课 / 45 知识点）</text>
+
+  <!-- 故事主线带 -->
+  <rect x="24" y="52" width="952" height="54" rx="8" fill="#fafafa" stroke="#d0d7de"/>
+  <text x="40" y="72" font-size="12" font-weight="700" fill="#1565C0">故事主线</text>
+  <text x="40" y="94" font-size="13" fill="#333333">主角：小航（入职三个月的全栈新人，负责 Web 项目接口联调）</text>
+  <text x="452" y="72" font-size="12" font-weight="700" fill="#c62828">冲突</text>
+  <text x="452" y="94" font-size="12" fill="#333333">报错说不清谁的锅 · 页面慢不知慢在哪 · 证书报错没人会看</text>
+  <text x="742" y="72" font-size="12" font-weight="700" fill="#2e7d32">收束</text>
+  <text x="742" y="94" font-size="12" fill="#333333">能解剖任意一次请求 + 给出决策</text>
+
+  <!-- 阶段 1 -->
+  <g>
+    <rect x="24" y="124" width="180" height="300" rx="8" fill="#ffffff" stroke="#d0d7de"/>
+    <rect x="24" y="124" width="180" height="34" rx="8" fill="#1565C0"/>
+    <rect x="24" y="150" width="180" height="8" fill="#1565C0"/>
+    <text x="114" y="147" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">阶段 1 · 报文与语义</text>
+    <text x="114" y="186" text-anchor="middle" font-size="16" font-weight="700" fill="#1a1a1a">看得见请求</text>
+    <text x="114" y="208" text-anchor="middle" font-size="12" fill="#1565C0">报文是接口对话的语言</text>
+    <line x1="40" y1="222" x2="188" y2="222" stroke="#e0e0e0" stroke-width="1"/>
+    <text x="114" y="246" text-anchor="middle" font-size="13" fill="#333333">定位与请求-响应模型</text>
+    <text x="114" y="272" text-anchor="middle" font-size="13" fill="#333333">报文结构 · 高频头部</text>
+    <text x="114" y="298" text-anchor="middle" font-size="13" fill="#333333">方法 · 状态码 · 3xx</text>
+    <text x="114" y="324" text-anchor="middle" font-size="13" fill="#333333">URL 解剖</text>
+    <rect x="60" y="344" width="108" height="26" rx="13" fill="#e3f2fd" stroke="#1565C0"/>
+    <text x="114" y="361" text-anchor="middle" font-size="12" font-weight="700" fill="#1565C0">课 1 – 3 · 9 知识点</text>
+    <text x="114" y="396" text-anchor="middle" font-size="11" fill="#666666">感知层 → 概念层</text>
+  </g>
+
+  <!-- 阶段 2 -->
+  <g>
+    <rect x="219" y="124" width="180" height="300" rx="8" fill="#ffffff" stroke="#d0d7de"/>
+    <rect x="219" y="124" width="180" height="34" rx="8" fill="#c62828"/>
+    <rect x="219" y="150" width="180" height="8" fill="#c62828"/>
+    <text x="309" y="147" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">阶段 2 · 连接与安全</text>
+    <text x="309" y="186" text-anchor="middle" font-size="16" font-weight="700" fill="#1a1a1a">先确认对方是谁</text>
+    <text x="309" y="208" text-anchor="middle" font-size="12" fill="#c62828">连接要花钱，明文有威胁</text>
+    <line x1="235" y1="222" x2="383" y2="222" stroke="#e0e0e0" stroke-width="1"/>
+    <text x="309" y="246" text-anchor="middle" font-size="13" fill="#333333">握手 · 复用 · 队头阻塞</text>
+    <text x="309" y="272" text-anchor="middle" font-size="13" fill="#333333">三大威胁 · 混合加密</text>
+    <text x="309" y="298" text-anchor="middle" font-size="13" fill="#333333">TLS 握手 · 证书链</text>
+    <text x="309" y="324" text-anchor="middle" font-size="13" fill="#333333">mkcert 本地实操</text>
+    <rect x="255" y="344" width="108" height="26" rx="13" fill="#ffebee" stroke="#c62828"/>
+    <text x="309" y="361" text-anchor="middle" font-size="12" font-weight="700" fill="#c62828">课 4 – 6 · 9 知识点</text>
+    <text x="309" y="396" text-anchor="middle" font-size="11" fill="#666666">机制层（全课最陡）</text>
+  </g>
+
+  <!-- 阶段 3 -->
+  <g>
+    <rect x="414" y="124" width="180" height="300" rx="8" fill="#ffffff" stroke="#d0d7de"/>
+    <rect x="414" y="124" width="180" height="34" rx="8" fill="#2e7d32"/>
+    <rect x="414" y="150" width="180" height="8" fill="#2e7d32"/>
+    <text x="504" y="147" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">阶段 3 · 缓存与性能</text>
+    <text x="504" y="186" text-anchor="middle" font-size="16" font-weight="700" fill="#1a1a1a">让它快起来</text>
+    <text x="504" y="208" text-anchor="middle" font-size="12" fill="#2e7d32">"慢"要拆成可测量的段落</text>
+    <line x1="430" y1="222" x2="578" y2="222" stroke="#e0e0e0" stroke-width="1"/>
+    <text x="504" y="246" text-anchor="middle" font-size="13" fill="#333333">强缓存 · 协商缓存</text>
+    <text x="504" y="272" text-anchor="middle" font-size="13" fill="#333333">压缩 · TTFB · 瀑布图</text>
+    <text x="504" y="298" text-anchor="middle" font-size="13" fill="#333333">代理 · 网关 · 转发头</text>
+    <text x="504" y="324" text-anchor="middle" font-size="13" fill="#333333">CDN 与共享缓存</text>
+    <rect x="450" y="344" width="108" height="26" rx="13" fill="#e8f5e9" stroke="#2e7d32"/>
+    <text x="504" y="361" text-anchor="middle" font-size="12" font-weight="700" fill="#2e7d32">课 7 – 9 · 9 知识点</text>
+    <text x="504" y="396" text-anchor="middle" font-size="11" fill="#666666">实操层</text>
+  </g>
+
+  <!-- 阶段 4 -->
+  <g>
+    <rect x="609" y="124" width="180" height="300" rx="8" fill="#ffffff" stroke="#d0d7de"/>
+    <rect x="609" y="124" width="180" height="34" rx="8" fill="#6a1b9a"/>
+    <rect x="609" y="150" width="180" height="8" fill="#6a1b9a"/>
+    <text x="699" y="147" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">阶段 4 · 协议演进</text>
+    <text x="699" y="186" text-anchor="middle" font-size="16" font-weight="700" fill="#1a1a1a">从 1.1 到 3</text>
+    <text x="699" y="208" text-anchor="middle" font-size="12" fill="#6a1b9a">演进动因比结论更重要</text>
+    <line x1="625" y1="222" x2="773" y2="222" stroke="#e0e0e0" stroke-width="1"/>
+    <text x="699" y="246" text-anchor="middle" font-size="13" fill="#333333">0.9 → 1.0 → 1.1</text>
+    <text x="699" y="272" text-anchor="middle" font-size="13" fill="#333333">HTTP/2 分帧与多路复用</text>
+    <text x="699" y="298" text-anchor="middle" font-size="13" fill="#333333">HTTP/3 · QUIC · 0-RTT</text>
+    <text x="699" y="324" text-anchor="middle" font-size="13" fill="#333333">部署现状与升级决策</text>
+    <rect x="645" y="344" width="108" height="26" rx="13" fill="#f3e5f5" stroke="#6a1b9a"/>
+    <text x="699" y="361" text-anchor="middle" font-size="12" font-weight="700" fill="#6a1b9a">课 10 – 12 · 9 知识点</text>
+    <text x="699" y="396" text-anchor="middle" font-size="11" fill="#666666">纵深层</text>
+  </g>
+
+  <!-- 阶段 5 -->
+  <g>
+    <rect x="804" y="124" width="180" height="300" rx="8" fill="#ffffff" stroke="#d0d7de"/>
+    <rect x="804" y="124" width="180" height="34" rx="8" fill="#e65100"/>
+    <rect x="804" y="150" width="180" height="8" fill="#e65100"/>
+    <text x="894" y="147" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">阶段 5 · 认证联调与决策</text>
+    <text x="894" y="186" text-anchor="middle" font-size="16" font-weight="700" fill="#1a1a1a">回到日常</text>
+    <text x="894" y="208" text-anchor="middle" font-size="12" fill="#e65100">收束成决策，不是回退</text>
+    <line x1="820" y1="222" x2="968" y2="222" stroke="#e0e0e0" stroke-width="1"/>
+    <text x="894" y="246" text-anchor="middle" font-size="13" fill="#333333">Cookie · Session · Token</text>
+    <text x="894" y="272" text-anchor="middle" font-size="13" fill="#333333">同源策略与 CORS</text>
+    <text x="894" y="298" text-anchor="middle" font-size="13" fill="#333333">抓包排障推演</text>
+    <text x="894" y="324" text-anchor="middle" font-size="13" fill="#333333">三类决策清单</text>
+    <rect x="840" y="344" width="108" height="26" rx="13" fill="#fff3e0" stroke="#e65100"/>
+    <text x="894" y="361" text-anchor="middle" font-size="12" font-weight="700" fill="#e65100">课 13 – 15 · 9 知识点</text>
+    <text x="894" y="396" text-anchor="middle" font-size="11" fill="#666666">定位层 → 收束</text>
+  </g>
+
+  <!-- 阶段间箭头 -->
+  <g stroke="#90a4ae" stroke-width="2" fill="#90a4ae">
+    <line x1="204" y1="270" x2="216" y2="270"/>
+    <polygon points="219,270 211,266 211,274"/>
+    <line x1="399" y1="270" x2="411" y2="270"/>
+    <polygon points="414,270 406,266 406,274"/>
+    <line x1="594" y1="270" x2="606" y2="270"/>
+    <polygon points="609,270 601,266 601,274"/>
+    <line x1="789" y1="270" x2="801" y2="270"/>
+    <polygon points="804,270 796,266 796,274"/>
+  </g>
+
+  <!-- 起点终点条 -->
+  <rect x="24" y="452" width="952" height="64" rx="8" fill="#fafafa" stroke="#d0d7de"/>
+  <text x="46" y="478" font-size="12" font-weight="700" fill="#c62828">起点</text>
+  <text x="46" y="500" font-size="13" fill="#333333">看得见现象，看不见报文</text>
+  <line x1="300" y1="484" x2="660" y2="484" stroke="#90a4ae" stroke-width="2"/>
+  <polygon points="668,484 656,479 656,489" fill="#90a4ae"/>
+  <text x="690" y="478" font-size="12" font-weight="700" fill="#2e7d32">终点</text>
+  <text x="690" y="500" font-size="13" fill="#333333">看得懂报文 · 定位得了层 · 给得出决策</text>
+
+  <!-- 底注 -->
+  <text x="500" y="556" text-anchor="middle" font-size="12" fill="#666666">场景侧重：日常开发与调试 ｜ 性能与优化 ｜ 安全与 HTTPS ｜ 体系化与原理纵深（四项全选）</text>
+  <text x="500" y="584" text-anchor="middle" font-size="11" fill="#999999">网络专题 · HTTP 教程 ｜ 课程制 5 阶段 / 15 课 / 45 知识点 ｜ 骨架落盘 2026-09-10</text>
+</svg>

@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+  <rect width="1200" height="700" fill="#ffffff"/>
+  <text x="56" y="48" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#333">把“页面慢”拆成可测量的段落</text>
+  <text x="56" y="78" font-family="Arial, sans-serif" font-size="16" fill="#666">先定位最长的段，再选择对应药方；压缩、少请求、连接复用不能互相替代。</text>
+
+  <rect x="56" y="110" width="700" height="300" rx="14" fill="#FAFAFA" stroke="#BDBDBD" stroke-width="2"/>
+  <text x="80" y="145" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#333">一条请求的时间线（示意）</text>
+  <line x1="180" y1="178" x2="720" y2="178" stroke="#9E9E9E" stroke-width="1"/>
+  <text x="180" y="168" font-family="Arial, sans-serif" font-size="13" fill="#666">开始</text>
+  <text x="710" y="168" text-anchor="end" font-family="Arial, sans-serif" font-size="13" fill="#666">时间向右增加</text>
+
+  <text x="80" y="210" font-family="Arial, sans-serif" font-size="16" fill="#333">DNS 解析</text>
+  <rect x="180" y="191" width="48" height="27" rx="5" fill="#90CAF9"/>
+  <text x="240" y="211" font-family="Arial, sans-serif" font-size="14" fill="#555">name lookup</text>
+
+  <text x="80" y="256" font-family="Arial, sans-serif" font-size="16" fill="#333">TCP 连接</text>
+  <rect x="228" y="237" width="82" height="27" rx="5" fill="#64B5F6"/>
+  <text x="322" y="257" font-family="Arial, sans-serif" font-size="14" fill="#555">connect</text>
+
+  <text x="80" y="302" font-family="Arial, sans-serif" font-size="16" fill="#333">TLS 握手</text>
+  <rect x="310" y="283" width="86" height="27" rx="5" fill="#42A5F5"/>
+  <text x="408" y="303" font-family="Arial, sans-serif" font-size="14" fill="#555">appconnect</text>
+
+  <text x="80" y="348" font-family="Arial, sans-serif" font-size="16" fill="#333">等待首字节</text>
+  <rect x="396" y="329" width="190" height="27" rx="5" fill="#FFB74D"/>
+  <text x="600" y="349" font-family="Arial, sans-serif" font-size="14" fill="#555">server wait / TTFB</text>
+
+  <text x="80" y="394" font-family="Arial, sans-serif" font-size="16" fill="#333">下载正文</text>
+  <rect x="586" y="375" width="104" height="27" rx="5" fill="#81C784"/>
+  <text x="704" y="395" text-anchor="end" font-family="Arial, sans-serif" font-size="14" fill="#555">download</text>
+
+  <rect x="790" y="110" width="354" height="300" rx="14" fill="#F5F5F5" stroke="#BDBDBD" stroke-width="2"/>
+  <text x="814" y="145" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#333">看到什么，先做什么</text>
+  <rect x="814" y="166" width="306" height="62" rx="9" fill="#FFF3E0" stroke="#EF6C00"/>
+  <text x="830" y="191" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#E65100">TTFB 长</text>
+  <text x="830" y="215" font-family="Arial, sans-serif" font-size="14" fill="#333">查连接、TLS、服务端等待与缓存</text>
+  <rect x="814" y="241" width="306" height="62" rx="9" fill="#E3F2FD" stroke="#1565C0"/>
+  <text x="830" y="266" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#0D47A1">下载段长</text>
+  <text x="830" y="290" font-family="Arial, sans-serif" font-size="14" fill="#333">查正文大小、Content-Encoding、带宽</text>
+  <rect x="814" y="316" width="306" height="62" rx="9" fill="#E8F5E9" stroke="#2E7D32"/>
+  <text x="830" y="341" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#1B5E20">排队多</text>
+  <text x="830" y="365" font-family="Arial, sans-serif" font-size="14" fill="#333">查请求数量、优先级与连接复用</text>
+
+  <rect x="56" y="455" width="506" height="170" rx="14" fill="#FFEBEE" stroke="#C62828" stroke-width="2"/>
+  <text x="82" y="492" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#B71C1C">HTTP/1.1 时代的药方</text>
+  <text x="82" y="526" font-family="Arial, sans-serif" font-size="17" fill="#333">多个域名 / 域名分片</text>
+  <text x="82" y="556" font-family="Arial, sans-serif" font-size="15" fill="#555">绕开单域名并发连接上限，曾能减少排队</text>
+  <text x="82" y="586" font-family="Arial, sans-serif" font-size="15" fill="#C62828">代价：更多 DNS、TCP、TLS 和连接竞争</text>
+
+  <rect x="594" y="455" width="550" height="170" rx="14" fill="#E8F5E9" stroke="#2E7D32" stroke-width="2"/>
+  <text x="620" y="492" font-family="Arial, sans-serif" font-size="20" font-weight="700" fill="#1B5E20">HTTP/2 时代的默认方向</text>
+  <text x="620" y="526" font-family="Arial, sans-serif" font-size="17" fill="#333">少域名 + 一条可复用连接 + 多路复用</text>
+  <text x="620" y="556" font-family="Arial, sans-serif" font-size="15" fill="#555">同一连接承载多个流，先看测量再决定是否拆分</text>
+  <text x="620" y="586" font-family="Arial, sans-serif" font-size="15" fill="#2E7D32">药方：少请求、合适优先级、必要时 preload/prefetch</text>
+
+  <text x="56" y="668" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#333">原则：先测出最长段，再动对应开关；不要把“压缩”当成所有慢请求的万能药。</text>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="420" viewBox="0 0 960 420">
+  <rect width="960" height="420" fill="#fff"/>
+  <style>.t{font:20px sans-serif;fill:#333}.s{font:16px sans-serif;fill:#333}.b{fill:#e8f5e9;stroke:#2e7d32;stroke-width:2}.g{fill:#f5f5f5;stroke:#777;stroke-width:2}.bad{fill:#ffebee;stroke:#c62828;stroke-width:2}.a{stroke:#2e7d32;stroke-width:3;fill:none}</style>
+  <text x="40" y="42" class="t">版本化缓存：慢链路只在版本变化时下载</text>
+  <rect x="35" y="105" width="180" height="85" rx="10" class="b"/><text x="85" y="145" class="t">页面入口</text><text x="68" y="174" class="s">短缓存/验证</text>
+  <rect x="330" y="105" width="220" height="85" rx="10" class="b"/><text x="394" y="145" class="t">本地/边缘</text><text x="370" y="174" class="s">app.abc123.js</text>
+  <rect x="700" y="105" width="215" height="85" rx="10" class="g"/><text x="756" y="145" class="t">源站</text><text x="736" y="174" class="s">只取新版本</text>
+  <path d="M215 148H330M550 148H700" class="a"/><text x="230" y="133" class="s">引用指纹</text><text x="573" y="133" class="s">MISS 时</text>
+  <rect x="230" y="300" width="500" height="72" rx="10" class="bad"/><text x="267" y="330" class="s">代价：旧 HTML 仍在时不能过早清理旧版本</text><text x="392" y="354" class="s">否则回滚/离线会 404</text>
+</svg>

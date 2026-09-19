@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="420" viewBox="0 0 960 420">
+  <rect width="960" height="420" fill="#fff"/>
+  <style>.t{font:20px sans-serif;fill:#333}.s{font:16px sans-serif;fill:#333}.b{fill:#e8f5e9;stroke:#2e7d32;stroke-width:2}.g{fill:#f5f5f5;stroke:#777;stroke-width:2}.bad{fill:#ffebee;stroke:#c62828;stroke-width:2}.a{stroke:#2e7d32;stroke-width:3;fill:none}</style>
+  <text x="40" y="42" class="t">CDN 策略分层：公共资源与私有 API 分叉</text>
+  <rect x="45" y="125" width="170" height="70" rx="10" class="b"/><text x="95" y="166" class="t">客户端</text>
+  <rect x="330" y="85" width="230" height="70" rx="10" class="b"/><text x="400" y="126" class="t">公共 CDN</text>
+  <rect x="330" y="185" width="230" height="70" rx="10" class="g"/><text x="390" y="226" class="t">私有分支</text>
+  <rect x="700" y="85" width="205" height="70" rx="10" class="b"/><text x="756" y="126" class="t">公共源站</text>
+  <rect x="700" y="185" width="205" height="70" rx="10" class="g"/><text x="756" y="226" class="t">API 源站</text>
+  <path d="M215 145H330M215 175L330 220M560 120H700M560 220H700" class="a"/><text x="235" y="130" class="s">public GET</text><text x="238" y="207" class="s">private</text>
+  <rect x="245" y="315" width="480" height="60" rx="10" class="bad"/><text x="279" y="350" class="s">失败点：错误缓存键会跨用户复用；purge 不能替代契约</text>
+</svg>

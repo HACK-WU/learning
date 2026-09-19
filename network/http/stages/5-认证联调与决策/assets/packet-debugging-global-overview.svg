@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="520" viewBox="0 0 1000 520">
+  <title>把一次请求从感觉还原为证据</title>
+  <desc>用户动作经过浏览器、中转站和服务，最后沉淀为证据板与决策。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#1565c0"/>
+    </marker>
+    <style>
+      .title { font: 700 28px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; fill: #333; }
+      .label { font: 700 20px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; fill: #333; }
+      .small { font: 16px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; fill: #555; }
+      .box { fill: #fff; stroke: #90caf9; stroke-width: 2; rx: 14; }
+      .accent { fill: #1565c0; }
+      .accent-text { font: 700 18px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; fill: #fff; }
+      .arrow { stroke: #1565c0; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+    </style>
+  </defs>
+  <rect width="1000" height="520" fill="#fff"/>
+  <text x="500" y="48" text-anchor="middle" class="title">把“感觉很慢 / 登录失效”还原成证据</text>
+  <text x="500" y="80" text-anchor="middle" class="small">先沿着请求走过的地方观察，再决定下一步</text>
+
+  <rect x="45" y="160" width="155" height="110" class="box"/>
+  <text x="122" y="205" text-anchor="middle" class="label">用户动作</text>
+  <text x="122" y="237" text-anchor="middle" class="small">点击 / 刷新 / 登录</text>
+
+  <rect x="260" y="160" width="155" height="110" class="box"/>
+  <text x="337" y="205" text-anchor="middle" class="label">浏览器</text>
+  <text x="337" y="237" text-anchor="middle" class="small">发出请求并展示结果</text>
+
+  <rect x="475" y="160" width="155" height="110" class="box"/>
+  <text x="552" y="205" text-anchor="middle" class="label">中转站</text>
+  <text x="552" y="237" text-anchor="middle" class="small">可能转发 / 缓存 / 改写</text>
+
+  <rect x="690" y="160" width="155" height="110" class="box"/>
+  <text x="767" y="205" text-anchor="middle" class="label">服务</text>
+  <text x="767" y="237" text-anchor="middle" class="small">处理请求并返回结果</text>
+
+  <path d="M200 215 L260 215" class="arrow"/>
+  <path d="M415 215 L475 215" class="arrow"/>
+  <path d="M630 215 L690 215" class="arrow"/>
+
+  <rect x="180" y="370" width="640" height="76" class="accent" rx="14"/>
+  <text x="500" y="402" text-anchor="middle" class="accent-text">证据板：哪一步开始变慢？哪一个请求少了？哪一个许可不匹配？</text>
+  <text x="500" y="429" text-anchor="middle" class="accent-text">结论必须能回指到一次真实请求</text>
+  <path d="M337 270 C337 330 330 350 300 370" class="arrow"/>
+  <path d="M552 270 C552 330 552 350 500 370" class="arrow"/>
+  <path d="M767 270 C767 330 770 350 700 370" class="arrow"/>
+
+  <text x="500" y="490" text-anchor="middle" class="small">读图：请求从左到右经过多个位置，底部把沿途看到的现象整理成可复核的下一步。</text>
+</svg>

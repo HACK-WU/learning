@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="700" viewBox="0 0 1100 700">
+  <rect width="1100" height="700" fill="#fff"/>
+  <text x="44" y="48" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="700" fill="#333">HTTP/3 上线：协商、验证、回退、扩量</text>
+  <text x="44" y="80" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#666">它不是“开一个开关”，而是一条带保底路径的发布流程</text>
+
+  <rect x="48" y="120" width="190" height="72" rx="12" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/><text x="78" y="150" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="18" font-weight="700" fill="#1565c0">① 先做基线</text><text x="78" y="176" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="14" fill="#333">h2/h1 · TTFB · P95</text>
+  <rect x="282" y="120" width="210" height="72" rx="12" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/><text x="312" y="150" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="18" font-weight="700" fill="#1565c0">② 边缘开入口</text><text x="312" y="176" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="14" fill="#333">UDP/443 · 证书 · h3</text>
+  <rect x="536" y="120" width="220" height="72" rx="12" fill="#fff3e0" stroke="#f57c00" stroke-width="2"/><text x="566" y="150" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="18" font-weight="700" fill="#8a4b08">③ 告知可升级</text><text x="566" y="176" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="14" fill="#333">Alt-Svc: h3=":443"</text>
+  <path d="M238 156 H282 M492 156 H536 M756 156 H823" stroke="#777" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <path d="M888 204 L1012 270 L888 336 L764 270 Z" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+  <text x="846" y="264" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" font-weight="700" fill="#8a4b08">UDP/443 路径</text><text x="848" y="288" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" font-weight="700" fill="#8a4b08">真的可用？</text>
+  <path d="M888 192 V204" stroke="#777" stroke-width="4" marker-end="url(#arrow)"/>
+
+  <rect x="88" y="398" width="300" height="92" rx="14" fill="#e8f5e9" stroke="#43a047" stroke-width="2"/><text x="120" y="434" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="19" font-weight="700" fill="#2e7d32">是：协商到 h3</text><text x="120" y="463" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#333">ALPN h3 · 记录实际协议版本</text>
+  <rect x="636" y="398" width="300" height="92" rx="14" fill="#ffebee" stroke="#c62828" stroke-width="2"/><text x="668" y="434" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="19" font-weight="700" fill="#b71c1c">否：保留 h2/h1</text><text x="668" y="463" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#333">回退是可用性，不是失败</text>
+  <path d="M830 326 C760 354 500 365 388 398" fill="none" stroke="#43a047" stroke-width="4" marker-end="url(#arrow)"/><text x="560" y="365" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#2e7d32">可用</text>
+  <path d="M946 326 C952 354 952 370 936 398" fill="none" stroke="#c62828" stroke-width="4" marker-end="url(#arrow)"/><text x="964" y="365" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#b71c1c">不可用</text>
+
+  <rect x="48" y="552" width="904" height="82" rx="14" fill="#f6fbff" stroke="#1565c0" stroke-width="2"/>
+  <text x="78" y="586" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="19" font-weight="700" fill="#1565c0">④ 分协议看指标 → ⑤ 小流量扩量或撤回 Alt-Svc</text>
+  <text x="78" y="614" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#333">比较 TTFB、P95/P99、握手失败率、错误率与网络类型；指标变坏先止血，再定位 UDP/边缘/应用哪一层</text>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#777"/></marker></defs>
+</svg>

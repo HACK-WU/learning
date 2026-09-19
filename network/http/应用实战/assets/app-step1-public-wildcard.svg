@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#1565C0"/>
+    </marker>
+  </defs>
+  <rect width="960" height="540" fill="#fff"/>
+  <text x="48" y="48" font-family="sans-serif" font-size="26" font-weight="700" fill="#333">基础版：公共数据直接允许跨源读取</text>
+  <text x="48" y="80" font-family="sans-serif" font-size="16" fill="#666">适合无需登录、无需凭证的公开读取；先让联调跑起来</text>
+  <rect x="70" y="145" width="220" height="210" rx="14" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
+  <text x="180" y="190" text-anchor="middle" font-family="sans-serif" font-size="21" font-weight="700" fill="#0D47A1">前端页面</text>
+  <text x="180" y="235" text-anchor="middle" font-family="sans-serif" font-size="17" fill="#333">app.example.com</text>
+  <text x="180" y="280" text-anchor="middle" font-family="sans-serif" font-size="17" fill="#555">fetch 公共数据</text>
+  <path d="M290 250 L395 250" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="342" y="225" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#1565C0">跨源 GET</text>
+  <rect x="400" y="145" width="220" height="210" rx="14" fill="#E8F5E9" stroke="#43A047" stroke-width="2"/>
+  <text x="510" y="190" text-anchor="middle" font-family="sans-serif" font-size="21" font-weight="700" fill="#2E7D32">订单 API</text>
+  <text x="510" y="235" text-anchor="middle" font-family="sans-serif" font-size="17" fill="#333">api.example.com</text>
+  <text x="510" y="280" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="700" fill="#2E7D32">Allow-Origin: *</text>
+  <path d="M620 250 L725 250" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="672" y="225" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#1565C0">响应可读</text>
+  <rect x="730" y="145" width="160" height="210" rx="14" fill="#FFF8E1" stroke="#F9A825" stroke-width="2"/>
+  <text x="810" y="205" text-anchor="middle" font-family="sans-serif" font-size="21" font-weight="700" fill="#8D6E00">页面</text>
+  <text x="810" y="252" text-anchor="middle" font-family="sans-serif" font-size="17" fill="#333">拿到</text>
+  <text x="810" y="282" text-anchor="middle" font-family="sans-serif" font-size="17" fill="#333">公共数据</text>
+  <rect x="140" y="410" width="680" height="62" rx="12" fill="#FFF3E0" stroke="#EF6C00" stroke-width="2"/>
+  <text x="480" y="449" text-anchor="middle" font-family="sans-serif" font-size="19" font-weight="700" fill="#E65100">本步解决：无需凭证的公开读取　｜　未解决：登录态、精确来源、复杂请求</text>
+</svg>

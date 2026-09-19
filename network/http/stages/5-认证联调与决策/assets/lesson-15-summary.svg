@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="620" viewBox="0 0 1120 620">
+  <title>抓包排障与决策清单课程总结</title>
+  <defs>
+    <style>
+      .title { font: 700 28px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; fill: #333; }
+      .head { font: 700 19px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; fill: #fff; }
+      .label { font: 700 18px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; fill: #333; }
+      .small { font: 15px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; fill: #555; }
+      .box { fill: #fff; stroke: #90caf9; stroke-width: 2; rx: 14; }
+      .blue { fill: #1565c0; }
+      .green { fill: #e8f5e9; stroke: #66bb6a; stroke-width: 2; rx: 14; }
+      .yellow { fill: #fff8e1; stroke: #ffb300; stroke-width: 2; rx: 14; }
+      .line { stroke: #1565c0; stroke-width: 3; }
+    </style>
+  </defs>
+  <rect width="1120" height="620" fill="#fff"/>
+  <text x="560" y="45" text-anchor="middle" class="title">把 HTTP 学习收束成一条工作闭环</text>
+
+  <rect x="45" y="90" width="310" height="86" class="blue" rx="14"/>
+  <text x="200" y="126" text-anchor="middle" class="head">1 · 观察</text>
+  <text x="200" y="155" text-anchor="middle" class="head">DevTools / curl / 代理</text>
+
+  <rect x="405" y="90" width="310" height="86" class="blue" rx="14"/>
+  <text x="560" y="126" text-anchor="middle" class="head">2 · 还原</text>
+  <text x="560" y="155" text-anchor="middle" class="head">请求 / 响应 / 时间 / 链路</text>
+
+  <rect x="765" y="90" width="310" height="86" class="blue" rx="14"/>
+  <text x="920" y="126" text-anchor="middle" class="head">3 · 决策</text>
+  <text x="920" y="155" text-anchor="middle" class="head">修一层，验一次，留回滚</text>
+
+  <path d="M355 133 L405 133 M715 133 L765 133" class="line"/>
+
+  <rect x="75" y="260" width="280" height="150" class="box"/>
+  <text x="215" y="300" text-anchor="middle" class="label">慢</text>
+  <text x="215" y="335" text-anchor="middle" class="small">先问：连接、TTFB、下载</text>
+  <text x="215" y="365" text-anchor="middle" class="small">再问：重定向、缓存、正文</text>
+  <text x="215" y="395" text-anchor="middle" class="small">最后才谈 h2 / h3</text>
+
+  <rect x="420" y="260" width="280" height="150" class="box"/>
+  <text x="560" y="300" text-anchor="middle" class="label">登录失效</text>
+  <text x="560" y="335" text-anchor="middle" class="small">先问：凭证有没有发出</text>
+  <text x="560" y="365" text-anchor="middle" class="small">再问：401 / 403 / CORS</text>
+  <text x="560" y="395" text-anchor="middle" class="small">最后才谈 Session / JWT</text>
+
+  <rect x="765" y="260" width="280" height="150" class="green"/>
+  <text x="905" y="300" text-anchor="middle" class="label">证据卡</text>
+  <text x="905" y="335" text-anchor="middle" class="small">一次请求 + 一组响应头</text>
+  <text x="905" y="365" text-anchor="middle" class="small">一条时间线 + 一个假设</text>
+  <text x="905" y="395" text-anchor="middle" class="small">一个修复 + 一次复测</text>
+
+  <rect x="145" y="490" width="830" height="72" class="yellow"/>
+  <text x="560" y="522" text-anchor="middle" class="label">课程收束：不是记住更多工具，而是让每个结论都能回到报文证据</text>
+  <text x="560" y="548" text-anchor="middle" class="small">读图：上层是工作动作，中层是两类典型症状，底部是可以复制的证据卡格式。</text>
+</svg>

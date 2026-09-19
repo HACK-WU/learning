@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="680" viewBox="0 0 1000 680">
+  <rect width="1000" height="680" fill="#fff"/>
+  <text x="44" y="48" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="700" fill="#333">同一次丢包：HTTP/2 与 HTTP/3 的阻塞边界</text>
+  <text x="44" y="80" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#666">关键差异不在“有没有重传”，而在“重传时必须等待的范围有多大”</text>
+
+  <rect x="44" y="112" width="428" height="492" rx="18" fill="#fafafa" stroke="#9e9e9e" stroke-width="2"/>
+  <text x="74" y="150" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="22" font-weight="700" fill="#555">HTTP/2：共享一条 TCP 有序字节流</text>
+  <text x="74" y="179" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#666">HTTP 层已有多条流；底层仍要求字节按序交付</text>
+  <rect x="76" y="220" width="360" height="64" rx="10" fill="#90caf9"/><text x="100" y="259" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="18" fill="#123">stream 1：A1</text>
+  <rect x="76" y="294" width="360" height="64" rx="10" fill="#ffe082"/><text x="100" y="333" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="18" fill="#5d4500">stream 3：B1</text>
+  <rect x="76" y="368" width="360" height="64" rx="10" fill="#ef9a9a" stroke="#c62828" stroke-width="3"/><text x="100" y="407" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="18" fill="#6d1b1b">包丢失：A2</text>
+  <rect x="76" y="442" width="360" height="64" rx="10" fill="#ffe082" opacity="0.55" stroke="#9e9e9e" stroke-dasharray="7 5"/><text x="100" y="481" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="18" fill="#7b6500">B2 已到，但应用层收不到</text>
+  <text x="76" y="552" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#b04a3a">TCP 先补 A2，后面的字节才能交给 HTTP/2</text>
+
+  <rect x="528" y="112" width="428" height="492" rx="18" fill="#f6fbff" stroke="#1565c0" stroke-width="2"/>
+  <text x="558" y="150" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="22" font-weight="700" fill="#1565c0">HTTP/3：每条 QUIC stream 独立按序</text>
+  <text x="558" y="179" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#666">仍可靠、仍按序，但“按序”的范围缩到各自 stream</text>
+  <path d="M566 252 H916" stroke="#90a4ae" stroke-width="4"/>
+  <path d="M566 394 H916" stroke="#90a4ae" stroke-width="4"/>
+  <rect x="578" y="220" width="92" height="64" rx="10" fill="#90caf9"/><text x="605" y="259" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="18" fill="#123">A1</text>
+  <rect x="690" y="220" width="92" height="64" rx="10" fill="#ef9a9a" stroke="#c62828" stroke-width="3"/><text x="717" y="259" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="18" fill="#6d1b1b">A2 丢</text>
+  <rect x="802" y="220" width="92" height="64" rx="10" fill="#e0e0e0" stroke="#9e9e9e" stroke-dasharray="7 5"/><text x="824" y="259" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" fill="#777">待补</text>
+  <rect x="578" y="362" width="92" height="64" rx="10" fill="#ffe082"/><text x="605" y="401" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="18" fill="#5d4500">B1</text>
+  <rect x="690" y="362" width="92" height="64" rx="10" fill="#ffe082"/><text x="717" y="401" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="18" fill="#5d4500">B2</text>
+  <rect x="802" y="362" width="92" height="64" rx="10" fill="#ffe082"/><text x="829" y="401" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="18" fill="#5d4500">B3</text>
+  <text x="558" y="482" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#1565c0">B stream 可先交付，A stream 单独等 A2</text>
+  <rect x="558" y="515" width="350" height="55" rx="10" fill="#fff3e0" stroke="#f57c00"/>
+  <text x="578" y="549" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#8a4b08">注意：拥塞控制仍在整个连接范围共享</text>
+</svg>

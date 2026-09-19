@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="420" viewBox="0 0 960 420">
+  <rect width="960" height="420" fill="#fff"/>
+  <style>.t{font:20px sans-serif;fill:#333}.s{font:16px sans-serif;fill:#333}.b{fill:#e3f2fd;stroke:#1565c0;stroke-width:2}.g{fill:#f5f5f5;stroke:#777;stroke-width:2}.bad{fill:#ffebee;stroke:#c62828;stroke-width:2}.a{stroke:#1565c0;stroke-width:3;fill:none}</style>
+  <text x="40" y="42" class="t">Forwarded 契约：结构化表达多跳事实</text>
+  <rect x="40" y="110" width="180" height="80" rx="10" class="b"/><text x="91" y="147" class="t">边缘</text><text x="59" y="175" class="s">for / proto</text>
+  <rect x="305" y="110" width="180" height="80" rx="10" class="b"/><text x="356" y="147" class="t">网关</text><text x="326" y="175" class="s">host / for</text>
+  <rect x="570" y="110" width="180" height="80" rx="10" class="b"/><text x="622" y="147" class="t">应用</text><text x="597" y="175" class="s">按可信 hop 读</text>
+  <rect x="815" y="110" width="105" height="80" rx="10" class="g"/><text x="842" y="147" class="t">审计</text><text x="830" y="175" class="s">对齐</text>
+  <path d="M220 150H305M485 150H570M750 150H815" class="a"/>
+  <rect x="240" y="300" width="480" height="72" rx="10" class="bad"/><text x="276" y="330" class="s">代价：链解析、隐私脱敏、异常格式处理</text><text x="392" y="354" class="s">仍依赖可信连接对端</text>
+</svg>

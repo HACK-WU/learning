@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="620" viewBox="0 0 1100 620">
+  <rect width="1100" height="620" fill="#fff"/>
+  <text x="55" y="55" fill="#333" font-size="28" font-family="sans-serif" font-weight="700">HTTP 请求诊断实验场：从症状到决策</text>
+  <text x="55" y="86" fill="#666" font-size="16" font-family="sans-serif">同一个本地服务故意暴露四类现象，客户端把它们还原成可复核证据</text>
+
+  <rect x="55" y="140" width="190" height="120" rx="12" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
+  <text x="150" y="180" text-anchor="middle" fill="#0D47A1" font-size="20" font-family="sans-serif" font-weight="700">症状</text>
+  <text x="150" y="213" text-anchor="middle" fill="#333" font-size="16" font-family="sans-serif">慢 / 401 / CORS</text>
+  <text x="150" y="238" text-anchor="middle" fill="#333" font-size="16" font-family="sans-serif">重复下载</text>
+
+  <path d="M245 200 L320 200" stroke="#1565C0" stroke-width="3"/>
+  <path d="M310 191 L326 200 L310 209" fill="none" stroke="#1565C0" stroke-width="3"/>
+
+  <rect x="325" y="125" width="230" height="150" rx="12" fill="#F5F5F5" stroke="#616161" stroke-width="2"/>
+  <text x="440" y="164" text-anchor="middle" fill="#333" font-size="20" font-family="sans-serif" font-weight="700">观测工具</text>
+  <text x="440" y="198" text-anchor="middle" fill="#333" font-size="16" font-family="sans-serif">DevTools / curl</text>
+  <text x="440" y="224" text-anchor="middle" fill="#333" font-size="16" font-family="sans-serif">本地 Python 客户端</text>
+  <text x="440" y="250" text-anchor="middle" fill="#666" font-size="14" font-family="sans-serif">请求 · 响应 · 时间 · 协议</text>
+
+  <path d="M555 200 L630 200" stroke="#1565C0" stroke-width="3"/>
+  <path d="M620 191 L636 200 L620 209" fill="none" stroke="#1565C0" stroke-width="3"/>
+
+  <rect x="635" y="105" width="250" height="190" rx="12" fill="#FFF8E1" stroke="#F9A825" stroke-width="2"/>
+  <text x="760" y="145" text-anchor="middle" fill="#6D4C00" font-size="20" font-family="sans-serif" font-weight="700">证据卡</text>
+  <text x="760" y="178" text-anchor="middle" fill="#333" font-size="16" font-family="sans-serif">状态码 / 头部</text>
+  <text x="760" y="204" text-anchor="middle" fill="#333" font-size="16" font-family="sans-serif">TTFB / 正文读取</text>
+  <text x="760" y="230" text-anchor="middle" fill="#333" font-size="16" font-family="sans-serif">假设 / 复测结果</text>
+  <text x="760" y="264" text-anchor="middle" fill="#6D4C00" font-size="14" font-family="sans-serif">不把“感觉”当根因</text>
+
+  <path d="M885 200 L960 200" stroke="#1565C0" stroke-width="3"/>
+  <path d="M950 191 L966 200 L950 209" fill="none" stroke="#1565C0" stroke-width="3"/>
+
+  <rect x="965" y="140" width="90" height="120" rx="12" fill="#E8F5E9" stroke="#2E7D32" stroke-width="2"/>
+  <text x="1010" y="180" text-anchor="middle" fill="#1B5E20" font-size="19" font-family="sans-serif" font-weight="700">决策</text>
+  <text x="1010" y="213" text-anchor="middle" fill="#333" font-size="15" font-family="sans-serif">修复</text>
+  <text x="1010" y="237" text-anchor="middle" fill="#333" font-size="15" font-family="sans-serif">回滚</text>
+
+  <line x1="55" y1="350" x2="1055" y2="350" stroke="#BDBDBD" stroke-width="2"/>
+  <text x="55" y="390" fill="#333" font-size="20" font-family="sans-serif" font-weight="700">四个病例</text>
+  <rect x="55" y="420" width="220" height="92" rx="10" fill="#E3F2FD"/>
+  <text x="165" y="457" text-anchor="middle" fill="#0D47A1" font-size="18" font-family="sans-serif" font-weight="700">慢请求</text>
+  <text x="165" y="486" text-anchor="middle" fill="#333" font-size="14" font-family="sans-serif">重定向 / TTFB / 下载</text>
+  <rect x="300" y="420" width="220" height="92" rx="10" fill="#FCE4EC"/>
+  <text x="410" y="457" text-anchor="middle" fill="#880E4F" font-size="18" font-family="sans-serif" font-weight="700">认证</text>
+  <text x="410" y="486" text-anchor="middle" fill="#333" font-size="14" font-family="sans-serif">401 / 403 / 200</text>
+  <rect x="545" y="420" width="220" height="92" rx="10" fill="#FFF8E1"/>
+  <text x="655" y="457" text-anchor="middle" fill="#6D4C00" font-size="18" font-family="sans-serif" font-weight="700">跨源与缓存</text>
+  <text x="655" y="486" text-anchor="middle" fill="#333" font-size="14" font-family="sans-serif">预检 / ETag / 304</text>
+  <rect x="790" y="420" width="265" height="92" rx="10" fill="#E8F5E9"/>
+  <text x="922" y="457" text-anchor="middle" fill="#1B5E20" font-size="18" font-family="sans-serif" font-weight="700">协议决策</text>
+  <text x="922" y="486" text-anchor="middle" fill="#333" font-size="14" font-family="sans-serif">HTTP/1.1 基线 → 测量升级</text>
+
+  <text x="55" y="570" fill="#666" font-size="15" font-family="sans-serif">边界：教学实验只监听 127.0.0.1；不放入真实凭证；不把本地 HTTP/1.1 结果冒充生产基准。</text>
+</svg>

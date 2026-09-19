@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="560" viewBox="0 0 1000 560">
+  <rect width="1000" height="560" fill="#fff"/>
+  <text x="50" y="52" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="700" fill="#333">同一条路上，同时送多份东西</text>
+  <text x="50" y="82" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#666">先建立直觉：问题不在“东西太多”，而在“每份东西都必须整份排队”</text>
+  <rect x="50" y="115" width="420" height="360" rx="18" fill="#fafafa" stroke="#c7c7c7" stroke-width="2"/>
+  <text x="80" y="153" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="22" font-weight="700" fill="#555">原来：一份一份排</text>
+  <rect x="95" y="190" width="310" height="46" rx="9" fill="#90caf9"/>
+  <text x="120" y="219" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" fill="#123">大箱子 A（还没送完）</text>
+  <path d="M250 243 L250 290" stroke="#777" stroke-width="4" marker-end="url(#arrow)"/>
+  <rect x="95" y="306" width="310" height="46" rx="9" fill="#ffe082"/>
+  <text x="138" y="335" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" fill="#5d4500">小箱子 B（只能等）</text>
+  <path d="M250 359 L250 406" stroke="#777" stroke-width="4" marker-end="url(#arrow)"/>
+  <text x="105" y="445" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#b04a3a">一份卡住，后面全等着</text>
+  <rect x="530" y="115" width="420" height="360" rx="18" fill="#f6fbff" stroke="#1565c0" stroke-width="2"/>
+  <text x="560" y="153" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="22" font-weight="700" fill="#1565c0">后来：拆成小包轮流送</text>
+  <path d="M580 219 H900" stroke="#90a4ae" stroke-width="4" stroke-linecap="round"/>
+  <rect x="590" y="190" width="78" height="46" rx="9" fill="#90caf9"/><text x="616" y="219" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#123">A1</text>
+  <rect x="680" y="190" width="78" height="46" rx="9" fill="#ffe082"/><text x="706" y="219" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#5d4500">B1</text>
+  <rect x="770" y="190" width="78" height="46" rx="9" fill="#a5d6a7"/><text x="796" y="219" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#174a1b">C1</text>
+  <rect x="860" y="190" width="40" height="46" rx="9" fill="#90caf9"/><text x="872" y="219" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#123">A2</text>
+  <path d="M580 329 H900" stroke="#90a4ae" stroke-width="4" stroke-linecap="round"/>
+  <rect x="590" y="300" width="78" height="46" rx="9" fill="#ffe082"/><text x="616" y="329" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#5d4500">B2</text>
+  <rect x="680" y="300" width="78" height="46" rx="9" fill="#a5d6a7"/><text x="706" y="329" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#174a1b">C2</text>
+  <rect x="770" y="300" width="78" height="46" rx="9" fill="#90caf9"/><text x="796" y="329" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#123">A3</text>
+  <rect x="860" y="300" width="40" height="46" rx="9" fill="#ffe082"/><text x="872" y="329" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="15" fill="#5d4500">B3</text>
+  <text x="590" y="397" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" fill="#1565c0">某一份暂时卡住，其他小包仍可先走</text>
+  <text x="590" y="430" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#555">一条路 · 多份货物 · 交错前进</text>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#777"/></marker></defs>
+</svg>

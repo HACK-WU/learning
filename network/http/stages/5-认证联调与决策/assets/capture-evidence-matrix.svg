@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="650" viewBox="0 0 1120 650">
+  <title>三种观察工具的证据覆盖范围</title>
+  <defs>
+    <style>
+      .title { font: 700 28px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; fill: #333; }
+      .head { font: 700 19px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; fill: #fff; }
+      .cell { font: 16px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; fill: #333; }
+      .row { font: 700 16px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; fill: #333; }
+      .note { font: 15px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif; fill: #555; }
+      .line { stroke: #b0bec5; stroke-width: 1; }
+      .yes { fill: #e8f5e9; }
+      .partial { fill: #fff8e1; }
+      .no { fill: #ffebee; }
+    </style>
+  </defs>
+  <rect width="1120" height="650" fill="#fff"/>
+  <text x="560" y="46" text-anchor="middle" class="title">三把尺子，看到的是三种切片</text>
+  <rect x="40" y="78" width="1040" height="58" fill="#1565c0" rx="10"/>
+  <text x="180" y="114" text-anchor="middle" class="head">证据类型</text>
+  <text x="420" y="114" text-anchor="middle" class="head">DevTools Network</text>
+  <text x="680" y="114" text-anchor="middle" class="head">curl</text>
+  <text x="930" y="114" text-anchor="middle" class="head">mitmproxy</text>
+
+  <g transform="translate(40,136)">
+    <rect x="0" y="0" width="1040" height="70" class="yes"/>
+    <rect x="0" y="70" width="1040" height="70" class="partial"/>
+    <rect x="0" y="140" width="1040" height="70" class="yes"/>
+    <rect x="0" y="210" width="1040" height="70" class="partial"/>
+    <rect x="0" y="280" width="1040" height="70" class="partial"/>
+    <path d="M0 0 V350 M300 0 V350 M560 0 V350 M820 0 V350 M1040 0 V350" class="line"/>
+    <path d="M0 70 H1040 M0 140 H1040 M0 210 H1040 M0 280 H1040 M0 350 H1040" class="line"/>
+    <text x="150" y="42" text-anchor="middle" class="row">浏览器真实行为</text>
+    <text x="430" y="42" text-anchor="middle" class="cell">直接看到：请求、预检、Cookie、CORS、Waterfall</text>
+    <text x="690" y="42" text-anchor="middle" class="cell">看不到浏览器策略与页面发起链</text>
+    <text x="930" y="42" text-anchor="middle" class="cell">需把浏览器流量导入代理</text>
+
+    <text x="150" y="112" text-anchor="middle" class="row">可重复性</text>
+    <text x="430" y="112" text-anchor="middle" class="cell">受页面状态、缓存和扩展影响</text>
+    <text x="690" y="112" text-anchor="middle" class="cell">命令固定，适合对照服务端</text>
+    <text x="930" y="112" text-anchor="middle" class="cell">能看多段链路，但环境更重</text>
+
+    <text x="150" y="182" text-anchor="middle" class="row">时间分解</text>
+    <text x="430" y="182" text-anchor="middle" class="cell">Timing / TTFB / Content Download</text>
+    <text x="690" y="182" text-anchor="middle" class="cell">`-w` 输出分段计时</text>
+    <text x="930" y="182" text-anchor="middle" class="cell">可观察转发前后，但要先配置代理</text>
+
+    <text x="150" y="252" text-anchor="middle" class="row">中途改写</text>
+    <text x="430" y="252" text-anchor="middle" class="cell">可改请求但不适合当长期证据</text>
+    <text x="690" y="252" text-anchor="middle" class="cell">主要是发送固定请求</text>
+    <text x="930" y="252" text-anchor="middle" class="cell">可在代理层观察或改写</text>
+
+    <text x="150" y="322" text-anchor="middle" class="row">HTTPS 内容</text>
+    <text x="430" y="322" text-anchor="middle" class="cell">浏览器已完成信任与解密</text>
+    <text x="690" y="322" text-anchor="middle" class="cell">客户端自己解密并显示</text>
+    <text x="930" y="322" text-anchor="middle" class="cell">需要客户端信任代理 CA</text>
+  </g>
+  <text x="560" y="535" text-anchor="middle" class="note">选择顺序：先问“我要证明哪一段”，再选工具；不要把一把尺子的盲区当成另一把尺子的故障。</text>
+  <text x="560" y="575" text-anchor="middle" class="note">读图：左列是要找的证据，三列分别显示浏览器、直连客户端和中间代理能否直接提供它。</text>
+</svg>

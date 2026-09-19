@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="620" viewBox="0 0 960 620">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#1565C0"/>
+    </marker>
+  </defs>
+  <rect width="960" height="620" fill="#fff"/>
+  <text x="48" y="50" font-family="sans-serif" font-size="27" font-weight="700" fill="#333">浏览器怎样比较两个地址</text>
+  <text x="48" y="84" font-family="sans-serif" font-size="16" fill="#666">三格决定边界；路径只是同一服务里的位置</text>
+
+  <rect x="48" y="125" width="864" height="190" rx="14" fill="#E3F2FD" stroke="#1565C0" stroke-width="2"/>
+  <text x="480" y="158" text-anchor="middle" font-family="sans-serif" font-size="19" font-weight="700" fill="#0D47A1">地址的三个比较格</text>
+  <rect x="90" y="185" width="230" height="82" rx="10" fill="#fff" stroke="#64B5F6"/>
+  <text x="205" y="220" text-anchor="middle" font-family="sans-serif" font-size="22" font-weight="700" fill="#333">协议</text>
+  <text x="205" y="248" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#555">http / https</text>
+  <rect x="365" y="185" width="230" height="82" rx="10" fill="#fff" stroke="#64B5F6"/>
+  <text x="480" y="220" text-anchor="middle" font-family="sans-serif" font-size="22" font-weight="700" fill="#333">主机</text>
+  <text x="480" y="248" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#555">app / api</text>
+  <rect x="640" y="185" width="230" height="82" rx="10" fill="#fff" stroke="#64B5F6"/>
+  <text x="755" y="220" text-anchor="middle" font-family="sans-serif" font-size="22" font-weight="700" fill="#333">端口</text>
+  <text x="755" y="248" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#555">443 / 8000</text>
+
+  <path d="M205 315 L205 360" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M480 315 L480 360" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M755 315 L755 360" stroke="#1565C0" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <rect x="80" y="375" width="390" height="115" rx="14" fill="#E8F5E9" stroke="#43A047" stroke-width="2"/>
+  <text x="275" y="413" text-anchor="middle" font-family="sans-serif" font-size="21" font-weight="700" fill="#2E7D32">三格都一样</text>
+  <text x="275" y="450" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#333">同一个源</text>
+  <text x="275" y="477" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#555">路径可以不同</text>
+
+  <rect x="490" y="375" width="390" height="115" rx="14" fill="#FFF3E0" stroke="#EF6C00" stroke-width="2"/>
+  <text x="685" y="413" text-anchor="middle" font-family="sans-serif" font-size="21" font-weight="700" fill="#E65100">至少一格不同</text>
+  <text x="685" y="450" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#333">不同的源</text>
+  <text x="685" y="477" text-anchor="middle" font-family="sans-serif" font-size="15" fill="#555">需要额外跨地址规则</text>
+
+  <rect x="175" y="530" width="610" height="52" rx="10" fill="#FAFAFA" stroke="#BDBDBD"/>
+  <text x="480" y="563" text-anchor="middle" font-family="sans-serif" font-size="17" fill="#444">路径 / 查询参数 / 片段：不单独改变这个边界</text>
+</svg>

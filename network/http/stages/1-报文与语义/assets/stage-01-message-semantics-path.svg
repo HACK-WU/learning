@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" width="900" height="480" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="900" height="480" fill="#ffffff"/>
+
+  <!-- 标题 -->
+  <text x="450" y="36" text-anchor="middle" font-size="20" font-weight="700" fill="#1a1a1a">阶段 1 · 报文与语义：看得见请求</text>
+  <text x="450" y="60" text-anchor="middle" font-size="13" fill="#666666">课 1 → 课 2 → 课 3（9 个知识点，从左到右递进）</text>
+
+  <!-- ============ 课 1 ============ -->
+  <g>
+    <rect x="24" y="80" width="264" height="46" rx="8" fill="#1565C0"/>
+    <text x="156" y="109" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">课 1 · 全旅程</text>
+
+    <!-- 课 1 知识点卡 -->
+    <rect x="24" y="140" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="44" cy="160" r="9" fill="#1565C0"/>
+    <text x="44" y="164" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">1</text>
+    <text x="62" y="164" font-size="13" font-weight="700" fill="#1a1a1a">HTTP 的定位与请求-响应模型</text>
+    <text x="62" y="185" font-size="11" fill="#333333">应用层协议 · 建立在 TCP/TLS 之上</text>
+    <text x="62" y="201" font-size="11" fill="#333333">一问一答 · 每个资源一个请求</text>
+
+    <rect x="24" y="234" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="44" cy="254" r="9" fill="#1565C0"/>
+    <text x="44" y="258" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">2</text>
+    <text x="62" y="258" font-size="13" font-weight="700" fill="#1a1a1a">无状态与"状态"的由来</text>
+    <text x="62" y="279" font-size="11" fill="#333333">无状态的确切含义 · 简单可扩展</text>
+    <text x="62" y="295" font-size="11" fill="#333333">状态由 Cookie 等机制补回（课 13 伏笔）</text>
+
+    <rect x="24" y="328" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="44" cy="348" r="9" fill="#1565C0"/>
+    <text x="44" y="352" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">3</text>
+    <text x="62" y="352" font-size="13" font-weight="700" fill="#1a1a1a">URL 解剖</text>
+    <text x="62" y="373" font-size="11" fill="#333333">scheme / host / port</text>
+    <text x="62" y="389" font-size="11" fill="#333333">path · query · fragment · URL 编码</text>
+  </g>
+
+  <!-- 课 1 → 课 2 箭头 -->
+  <line x1="292" y1="290" x2="318" y2="290" stroke="#1565C0" stroke-width="2"/>
+  <polygon points="318,290 310,286 310,294" fill="#1565C0"/>
+
+  <!-- ============ 课 2 ============ -->
+  <g>
+    <rect x="318" y="80" width="264" height="46" rx="8" fill="#1565C0"/>
+    <text x="450" y="109" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">课 2 · 报文解剖</text>
+
+    <rect x="318" y="140" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="338" cy="160" r="9" fill="#1565C0"/>
+    <text x="338" y="164" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">1</text>
+    <text x="356" y="164" font-size="13" font-weight="700" fill="#1a1a1a">报文四段结构</text>
+    <text x="356" y="185" font-size="11" fill="#333333">起始行（方法+URL+版本 / 状态码）</text>
+    <text x="356" y="201" font-size="11" fill="#333333">头部区 · 空行分隔 · 正文区</text>
+
+    <rect x="318" y="234" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="338" cy="254" r="9" fill="#1565C0"/>
+    <text x="338" y="258" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">2</text>
+    <text x="356" y="258" font-size="13" font-weight="700" fill="#1a1a1a">高频头部速览</text>
+    <text x="356" y="279" font-size="11" fill="#333333">Host 与虚拟主机 · Accept 内容协商</text>
+    <text x="356" y="295" font-size="11" fill="#333333">User-Agent 与 Referer 的作用与隐私</text>
+
+    <rect x="318" y="328" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="338" cy="348" r="9" fill="#1565C0"/>
+    <text x="338" y="352" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">3</text>
+    <text x="356" y="352" font-size="13" font-weight="700" fill="#1a1a1a">正文的表达</text>
+    <text x="356" y="373" font-size="11" fill="#333333">Content-Type 决定解读方式</text>
+    <text x="356" y="389" font-size="11" fill="#333333">urlencoded · JSON · multipart 上传</text>
+  </g>
+
+  <!-- 课 2 → 课 3 箭头 -->
+  <line x1="586" y1="290" x2="612" y2="290" stroke="#1565C0" stroke-width="2"/>
+  <polygon points="612,290 604,286 604,294" fill="#1565C0"/>
+
+  <!-- ============ 课 3 ============ -->
+  <g>
+    <rect x="612" y="80" width="264" height="46" rx="8" fill="#1565C0"/>
+    <text x="744" y="109" text-anchor="middle" font-size="16" font-weight="700" fill="#ffffff">课 3 · 方法与状态码</text>
+
+    <rect x="612" y="140" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="632" cy="160" r="9" fill="#1565C0"/>
+    <text x="632" y="164" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">1</text>
+    <text x="650" y="164" font-size="13" font-weight="700" fill="#1a1a1a">方法语义</text>
+    <text x="650" y="185" font-size="11" fill="#333333">GET / POST / PUT / DELETE / PATCH</text>
+    <text x="650" y="201" font-size="11" fill="#333333">安全性 · 幂等性 · RESTful 资源设计</text>
+
+    <rect x="612" y="234" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="632" cy="254" r="9" fill="#1565C0"/>
+    <text x="632" y="258" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">2</text>
+    <text x="650" y="258" font-size="13" font-weight="700" fill="#1a1a1a">状态码五大类</text>
+    <text x="650" y="279" font-size="11" fill="#333333">1xx–5xx 分野 · 高频状态码速查</text>
+    <text x="650" y="295" font-size="11" fill="#333333">状态码是排查的第一现场</text>
+
+    <rect x="612" y="328" width="264" height="86" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+    <circle cx="632" cy="348" r="9" fill="#1565C0"/>
+    <text x="632" y="352" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">3</text>
+    <text x="650" y="352" font-size="13" font-weight="700" fill="#1a1a1a">重定向 3xx</text>
+    <text x="650" y="373" font-size="11" fill="#333333">301/302 与 307/308 方法保持差异</text>
+    <text x="650" y="389" font-size="11" fill="#333333">Location 头 · 重定向链影响性能</text>
+  </g>
+
+  <!-- 底部递进说明 -->
+  <rect x="24" y="434" width="852" height="34" rx="6" fill="#fafafa" stroke="#d0d7de"/>
+  <text x="450" y="456" text-anchor="middle" font-size="12" fill="#333333">前置：课 2 的报文结构建在课 1 的模型与 URL 之上；课 3 的方法与状态码就写在报文的起始行里</text>
+</svg>

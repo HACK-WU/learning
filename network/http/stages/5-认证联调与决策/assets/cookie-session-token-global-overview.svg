@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="600" viewBox="0 0 1000 600">
+  <rect width="1000" height="600" fill="#fff"/>
+  <text x="48" y="50" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="28" font-weight="700" fill="#333">让一次登录，能延续到下一次见面</text>
+  <text x="48" y="82" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#666">先不记术语，只看“连续性由谁保存”</text>
+
+  <rect x="48" y="122" width="280" height="360" rx="18" fill="#fafafa" stroke="#bdbdbd" stroke-width="2"/>
+  <text x="78" y="165" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="22" font-weight="700" fill="#555">每次都重新说明</text>
+  <circle cx="188" cy="250" r="48" fill="#e0e0e0" stroke="#9e9e9e" stroke-width="2"/>
+  <text x="157" y="258" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="17" fill="#555">我是谁？</text>
+  <path d="M128 337 H248" stroke="#9e9e9e" stroke-width="8" stroke-linecap="round"/>
+  <path d="M128 377 H248" stroke="#9e9e9e" stroke-width="8" stroke-linecap="round"/>
+  <text x="78" y="438" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#777">没有连续记忆</text>
+
+  <path d="M350 302 H390" stroke="#1565c0" stroke-width="4" marker-end="url(#arrow-blue)"/>
+
+  <rect x="410" y="122" width="542" height="360" rx="18" fill="#f6fbff" stroke="#1565c0" stroke-width="2"/>
+  <text x="440" y="165" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="22" font-weight="700" fill="#1565c0">三种“记住你”的方式</text>
+
+  <rect x="442" y="198" width="144" height="220" rx="14" fill="#e3f2fd" stroke="#90caf9" stroke-width="2"/>
+  <text x="466" y="236" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="18" font-weight="700" fill="#0d47a1">浏览器带小卡</text>
+  <rect x="475" y="270" width="78" height="54" rx="8" fill="#ffe082" stroke="#f9a825" stroke-width="2"/>
+  <text x="492" y="303" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#5d4500">编号</text>
+  <path d="M514 330 V367" stroke="#1565c0" stroke-width="3" marker-end="url(#arrow-blue)"/>
+  <text x="458" y="395" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="14" fill="#555">下次自动带上</text>
+
+  <rect x="608" y="198" width="144" height="220" rx="14" fill="#e8f5e9" stroke="#81c784" stroke-width="2"/>
+  <text x="632" y="236" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="18" font-weight="700" fill="#1b5e20">服务端留记录</text>
+  <rect x="641" y="270" width="78" height="54" rx="8" fill="#a5d6a7" stroke="#43a047" stroke-width="2"/>
+  <text x="658" y="303" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#174a1b">档案</text>
+  <path d="M680 330 V367" stroke="#2e7d32" stroke-width="3" marker-end="url(#arrow-green)"/>
+  <text x="624" y="395" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="14" fill="#555">拿编号查状态</text>
+
+  <rect x="774" y="198" width="144" height="220" rx="14" fill="#fff3e0" stroke="#ffb74d" stroke-width="2"/>
+  <text x="797" y="236" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="18" font-weight="700" fill="#e65100">小卡带信息</text>
+  <rect x="807" y="270" width="78" height="54" rx="8" fill="#ffcc80" stroke="#fb8c00" stroke-width="2"/>
+  <text x="821" y="303" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="16" fill="#7b3f00">声明</text>
+  <path d="M846 330 V367" stroke="#ef6c00" stroke-width="3" marker-end="url(#arrow-orange)"/>
+  <text x="790" y="395" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="14" fill="#555">现场验真伪</text>
+
+  <defs>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#1565c0"/></marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#2e7d32"/></marker>
+    <marker id="arrow-orange" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#ef6c00"/></marker>
+  </defs>
+</svg>
