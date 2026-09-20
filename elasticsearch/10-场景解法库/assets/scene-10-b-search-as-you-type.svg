@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="320" viewBox="0 0 720 320" font-family="Microsoft YaHei, Segoe UI, sans-serif">
+  <rect width="720" height="320" fill="#ffffff"/>
+  <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="bold" fill="#1f2937">search_as_you_type：自动生成 2/3-gram 子字段</text>
+
+  <rect x="24" y="64" width="150" height="56" rx="5" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="99" y="86" text-anchor="middle" font-size="12" fill="#0d47a1">用户输入</text>
+  <text x="99" y="106" text-anchor="middle" font-size="13" font-weight="bold" fill="#0d47a1">elas</text>
+
+  <polygon points="184,92 216,78 216,106" fill="#00695c"/>
+
+  <rect x="222" y="52" width="230" height="80" rx="5" fill="#e0f2f1" stroke="#00695c" stroke-width="1.5"/>
+  <text x="337" y="74" text-anchor="middle" font-size="11" fill="#004d40">索引期自动生成子字段</text>
+  <text x="337" y="92" text-anchor="middle" font-size="10" fill="#00695c">title._2gram: el la as</text>
+  <text x="337" y="110" text-anchor="middle" font-size="10" fill="#00695c">title._3gram: ela las</text>
+  <text x="337" y="126" text-anchor="middle" font-size="10" fill="#00695c">title._index_prefix</text>
+
+  <polygon points="462,92 494,78 494,106" fill="#2e7d32"/>
+
+  <rect x="500" y="64" width="196" height="56" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="598" y="86" text-anchor="middle" font-size="11" fill="#1b5e20">bool_prefix 查询</text>
+  <text x="598" y="104" text-anchor="middle" font-size="10" fill="#2e7d32">课 16 实测 hits = 2</text>
+
+  <rect x="60" y="152" width="600" height="150" rx="6" fill="#fdecea" stroke="#c62828" stroke-width="1.5"/>
+  <text x="76" y="174" font-size="12" font-weight="bold" fill="#b71c1c">失效点：返回的是完整文档，不是建议词</text>
+
+  <rect x="80" y="186" width="280" height="50" rx="4" fill="#ffffff" stroke="#ef9a9a" stroke-dasharray="4 3"/>
+  <text x="220" y="204" text-anchor="middle" font-size="11" fill="#b71c1c">粒度不同</text>
+  <text x="220" y="222" text-anchor="middle" font-size="10" fill="#7f0000">completion 返回"建议词"</text>
+  <text x="220" y="232" text-anchor="middle" font-size="9" fill="#7f0000">search_as_you_type 返回"文档"</text>
+
+  <rect x="376" y="186" width="284" height="50" rx="4" fill="#ffffff" stroke="#ef9a9a" stroke-dasharray="4 3"/>
+  <text x="518" y="204" text-anchor="middle" font-size="11" fill="#b71c1c">索引膨胀</text>
+  <text x="518" y="222" text-anchor="middle" font-size="10" fill="#7f0000">2gram + 3gram + prefix 三套子字段</text>
+  <text x="518" y="232" text-anchor="middle" font-size="9" fill="#7f0000">长文本尤其明显</text>
+
+  <rect x="80" y="246" width="580" height="44" rx="4" fill="#fff8e1" stroke="#f9a825" stroke-dasharray="4 3"/>
+  <text x="370" y="264" text-anchor="middle" font-size="11" font-weight="bold" fill="#795548">选型判据：要"建议词列表"用 completion；要"边打边出结果"用 search_as_you_type</text>
+  <text x="370" y="282" text-anchor="middle" font-size="10" fill="#8d6e63">两者可以并存：completion 做下拉建议，search_as_you_type 做即时结果</text>
+</svg>

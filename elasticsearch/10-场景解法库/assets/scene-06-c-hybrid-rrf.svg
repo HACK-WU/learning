@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="330" viewBox="0 0 720 330" font-family="Microsoft YaHei, Segoe UI, sans-serif">
+  <rect width="720" height="330" fill="#ffffff"/>
+  <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="bold" fill="#1f2937">混合检索：关键词与向量两路召回，RRF 融合</text>
+
+  <rect x="24" y="66" width="140" height="48" rx="5" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="94" y="86" text-anchor="middle" font-size="12" fill="#0d47a1">用户查询</text>
+  <text x="94" y="104" text-anchor="middle" font-size="11" font-weight="bold" fill="#0d47a1">怎么重置密码</text>
+
+  <line x1="164" y1="80" x2="220" y2="62" stroke="#1565c0" stroke-width="1.5"/>
+  <line x1="164" y1="100" x2="220" y2="184" stroke="#6a1b9a" stroke-width="1.5"/>
+
+  <rect x="226" y="42" width="230" height="46" rx="5" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="341" y="62" text-anchor="middle" font-size="11" fill="#0d47a1">第 1 路：BM25 关键词召回</text>
+  <text x="341" y="79" text-anchor="middle" font-size="10" fill="#1565c0">精确匹配强，语义盲区大</text>
+
+  <rect x="226" y="164" width="230" height="46" rx="5" fill="#ede7f6" stroke="#6a1b9a" stroke-width="1.5"/>
+  <text x="341" y="184" text-anchor="middle" font-size="11" fill="#4a148c">第 2 路：kNN 向量召回</text>
+  <text x="341" y="201" text-anchor="middle" font-size="10" fill="#6a1b9a">语义相近即可命中</text>
+
+  <rect x="470" y="164" width="226" height="46" rx="5" fill="#ffffff" stroke="#bdbdbd"/>
+  <text x="583" y="184" text-anchor="middle" font-size="10" fill="#616161">查询文本 → 外部模型</text>
+  <text x="583" y="201" text-anchor="middle" font-size="10" fill="#616161">生成 embedding</text>
+
+  <line x1="456" y1="65" x2="510" y2="112" stroke="#1565c0" stroke-width="1.5"/>
+  <line x1="456" y1="187" x2="510" y2="112" stroke="#6a1b9a" stroke-width="1.5"/>
+
+  <rect x="516" y="88" width="180" height="48" rx="5" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+  <text x="606" y="108" text-anchor="middle" font-size="11" fill="#795548">RRF 倒数排序融合</text>
+  <text x="606" y="126" text-anchor="middle" font-size="10" fill="#795548">按排名融合，不涉及分数</text>
+
+  <polygon points="606,136 606,160" fill="#2e7d32"/>
+  <polygon points="606,160 600,148 612,148" fill="#2e7d32"/>
+
+  <rect x="516" y="164" width="180" height="46" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="606" y="184" text-anchor="middle" font-size="11" fill="#1b5e20">融合后的最终排序</text>
+  <text x="606" y="201" text-anchor="middle" font-size="10" fill="#2e7d32">精确 + 语义 双覆盖</text>
+
+  <rect x="60" y="228" width="600" height="86" rx="6" fill="#fdecea" stroke="#c62828" stroke-width="1.5"/>
+  <text x="76" y="250" font-size="12" font-weight="bold" fill="#b71c1c">失效点：两路都依赖"字段名与维度对得上"</text>
+
+  <rect x="80" y="260" width="280" height="42" rx="4" fill="#ffffff" stroke="#ef9a9a" stroke-dasharray="4 3"/>
+  <text x="220" y="278" text-anchor="middle" font-size="10" fill="#b71c1c">kNN 字段名写错 → 静默返回 0 条，不报错</text>
+  <text x="220" y="294" text-anchor="middle" font-size="10" fill="#7f0000">课 14 实测：my_vector vs embedding</text>
+
+  <rect x="376" y="260" width="284" height="42" rx="4" fill="#ffffff" stroke="#ef9a9a" stroke-dasharray="4 3"/>
+  <text x="518" y="278" text-anchor="middle" font-size="10" fill="#b71c1c">维度不匹配 → different number of dimensions [2] than [3]</text>
+  <text x="518" y="294" text-anchor="middle" font-size="10" fill="#7f0000">写入与查询必须用同一模型</text>
+</svg>

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="330" viewBox="0 0 720 330" font-family="Microsoft YaHei, Segoe UI, sans-serif">
+  <rect width="720" height="330" fill="#ffffff"/>
+  <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="bold" fill="#1f2937">object 数组被扁平化：配对语义丢失</text>
+
+  <text x="180" y="56" text-anchor="middle" font-size="12" font-weight="bold" fill="#1565c0">你写进去的文档</text>
+  <text x="540" y="56" text-anchor="middle" font-size="12" font-weight="bold" fill="#c62828">ES 实际索引成的样子</text>
+
+  <rect x="40" y="72" width="280" height="112" rx="6" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.5"/>
+  <rect x="60" y="86" width="240" height="40" rx="4" fill="#ffffff" stroke="#90caf9"/>
+  <text x="180" y="102" text-anchor="middle" font-size="10" fill="#0d47a1">{"color": "red",  "size": "S"}</text>
+  <text x="180" y="118" text-anchor="middle" font-size="9" fill="#1565c0">↑ 第 1 个规格</text>
+  <rect x="60" y="132" width="240" height="40" rx="4" fill="#ffffff" stroke="#90caf9"/>
+  <text x="180" y="148" text-anchor="middle" font-size="10" fill="#0d47a1">{"color": "blue", "size": "M"}</text>
+  <text x="180" y="164" text-anchor="middle" font-size="9" fill="#1565c0">↑ 第 2 个规格</text>
+
+  <polygon points="340,128 372,112 372,144" fill="#c62828"/>
+
+  <rect x="400" y="72" width="280" height="112" rx="6" fill="#fdecea" stroke="#c62828" stroke-width="1.5"/>
+  <text x="540" y="92" text-anchor="middle" font-size="11" fill="#b71c1c">数组被打散成两个独立的多值字段</text>
+  <rect x="420" y="102" width="240" height="32" rx="4" fill="#ffffff" stroke="#ef9a9a"/>
+  <text x="540" y="123" text-anchor="middle" font-size="10" fill="#b71c1c">skus.color = ["red", "blue"]</text>
+  <rect x="420" y="140" width="240" height="32" rx="4" fill="#ffffff" stroke="#ef9a9a"/>
+  <text x="540" y="161" text-anchor="middle" font-size="10" fill="#b71c1c">skus.size  = ["S", "M"]</text>
+
+  <rect x="60" y="200" width="600" height="112" rx="6" fill="#fdecea" stroke="#c62828" stroke-width="1.5"/>
+  <text x="76" y="222" font-size="12" font-weight="bold" fill="#b71c1c">后果：查「红色 + S 码」会命中一个根本不存在的组合</text>
+
+  <rect x="80" y="234" width="280" height="66" rx="4" fill="#ffffff" stroke="#ef9a9a" stroke-dasharray="4 3"/>
+  <text x="220" y="254" text-anchor="middle" font-size="11" fill="#b71c1c">查询 color=red AND size=S</text>
+  <text x="220" y="272" text-anchor="middle" font-size="10" fill="#7f0000">red 在数组里 ✅，S 在数组里 ✅</text>
+  <text x="220" y="290" text-anchor="middle" font-size="10" font-weight="bold" fill="#b71c1c">→ hits = 1（误配！）</text>
+
+  <rect x="376" y="234" width="284" height="66" rx="4" fill="#ffffff" stroke="#ef9a9a" stroke-dasharray="4 3"/>
+  <text x="518" y="254" text-anchor="middle" font-size="11" fill="#b71c1c">真实情况</text>
+  <text x="518" y="272" text-anchor="middle" font-size="10" fill="#7f0000">红色只有 S？不 —— 红色是 S，蓝色才是 M</text>
+  <text x="518" y="290" text-anchor="middle" font-size="10" font-weight="bold" fill="#b71c1c">课 16 实测：应命中 0 条却命中 1 条</text>
+</svg>

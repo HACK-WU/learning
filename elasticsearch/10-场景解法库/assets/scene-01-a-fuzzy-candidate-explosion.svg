@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="300" viewBox="0 0 720 300" font-family="Microsoft YaHei, Segoe UI, sans-serif">
+  <rect width="720" height="300" fill="#ffffff"/>
+  <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="bold" fill="#1f2937">fuzzy 查询：编辑距离 2 的候选词膨胀</text>
+
+  <rect x="24" y="52" width="150" height="40" rx="5" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="99" y="70" text-anchor="middle" font-size="12" fill="#0d47a1">用户输入</text>
+  <text x="99" y="86" text-anchor="middle" font-size="11" fill="#0d47a1">iphon（错词）</text>
+
+  <polygon points="200,72 236,58 236,86" fill="#1565c0"/>
+  <text x="218" y="106" text-anchor="middle" font-size="10" fill="#1565c0">fuzziness</text>
+
+  <rect x="242" y="46" width="230" height="58" rx="5" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+  <text x="357" y="64" text-anchor="middle" font-size="11" fill="#795548">① 加载该字段全部词项</text>
+  <text x="357" y="80" text-anchor="middle" font-size="11" fill="#795548">② 逐个算编辑距离 ≤ 2</text>
+  <text x="357" y="96" text-anchor="middle" font-size="11" fill="#795548">③ 保留候选 → 改写为 OR 查询</text>
+
+  <polygon points="490,72 526,58 526,86" fill="#1565c0"/>
+
+  <rect x="532" y="52" width="164" height="40" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="614" y="70" text-anchor="middle" font-size="12" fill="#1b5e20">命中文档</text>
+  <text x="614" y="86" text-anchor="middle" font-size="11" fill="#1b5e20">iphone 相关商品</text>
+
+  <rect x="60" y="140" width="600" height="132" rx="6" fill="#fdecea" stroke="#c62828" stroke-width="1.5"/>
+  <text x="76" y="162" font-size="12" font-weight="bold" fill="#b71c1c">失效点：候选词随词表规模与词长爆炸</text>
+
+  <rect x="80" y="176" width="176" height="80" rx="4" fill="#ffffff" stroke="#ef9a9a" stroke-dasharray="4 3"/>
+  <text x="168" y="196" text-anchor="middle" font-size="11" fill="#b71c1c">短词（iphone → iphon）</text>
+  <text x="168" y="214" text-anchor="middle" font-size="10" fill="#7f0000">编辑距离 1 就够到</text>
+  <text x="168" y="230" text-anchor="middle" font-size="10" fill="#7f0000">大量无关短词同距离</text>
+  <text x="168" y="248" text-anchor="middle" font-size="10" font-weight="bold" fill="#b71c1c">→ 误召回</text>
+
+  <rect x="272" y="176" width="176" height="80" rx="4" fill="#ffffff" stroke="#ef9a9a" stroke-dasharray="4 3"/>
+  <text x="360" y="196" text-anchor="middle" font-size="11" fill="#b71c1c">大数据量字段</text>
+  <text x="360" y="214" text-anchor="middle" font-size="10" fill="#7f0000">词项数 × 每词比较</text>
+  <text x="360" y="230" text-anchor="middle" font-size="10" fill="#7f0000">无倒排索引加速</text>
+  <text x="360" y="248" text-anchor="middle" font-size="10" font-weight="bold" fill="#b71c1c">→ 延迟飙升</text>
+
+  <rect x="464" y="176" width="176" height="80" rx="4" fill="#ffffff" stroke="#ef9a9a" stroke-dasharray="4 3"/>
+  <text x="552" y="196" text-anchor="middle" font-size="11" fill="#b71c1c">中文错字</text>
+  <text x="552" y="214" text-anchor="middle" font-size="10" fill="#7f0000">耐客鞋 切分即破坏</text>
+  <text x="552" y="230" text-anchor="middle" font-size="10" fill="#7f0000">token 层面已不同</text>
+  <text x="552" y="248" text-anchor="middle" font-size="10" font-weight="bold" fill="#b71c1c">→ 基本无效</text>
+</svg>

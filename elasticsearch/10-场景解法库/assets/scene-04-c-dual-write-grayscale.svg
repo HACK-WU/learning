@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="320" viewBox="0 0 720 320" font-family="Microsoft YaHei, Segoe UI, sans-serif">
+  <rect width="720" height="320" fill="#ffffff"/>
+  <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="bold" fill="#1f2937">双写 + 灰度切读：切换风险极高时的保险打法</text>
+
+  <rect x="24" y="62" width="130" height="44" rx="5" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="89" y="82" text-anchor="middle" font-size="12" fill="#0d47a1">应用写入</text>
+  <text x="89" y="99" text-anchor="middle" font-size="11" fill="#0d47a1">（双写开启）</text>
+
+  <line x1="154" y1="78" x2="200" y2="66" stroke="#37474f" stroke-width="1.4"/>
+  <line x1="154" y1="90" x2="200" y2="112" stroke="#37474f" stroke-width="1.4"/>
+
+  <rect x="206" y="48" width="150" height="38" rx="5" fill="#eceff1" stroke="#78909c" stroke-width="1.5"/>
+  <text x="281" y="72" text-anchor="middle" font-size="11" fill="#455a64">shop_v1（旧索引）</text>
+
+  <rect x="206" y="94" width="150" height="38" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="281" y="118" text-anchor="middle" font-size="11" fill="#1b5e20">shop_v2（新索引）</text>
+
+  <line x1="356" y1="67" x2="440" y2="92" stroke="#37474f" stroke-width="1.4"/>
+  <line x1="356" y1="113" x2="440" y2="92" stroke="#37474f" stroke-width="1.4"/>
+
+  <rect x="446" y="70" width="150" height="44" rx="5" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+  <text x="521" y="88" text-anchor="middle" font-size="11" fill="#795548">读流量灰度</text>
+  <text x="521" y="105" text-anchor="middle" font-size="10" fill="#795548">5% → 50% → 100%</text>
+
+  <polygon points="602,92 636,79 636,105" fill="#37474f"/>
+
+  <rect x="642" y="70" width="54" height="44" rx="5" fill="#ede7f6" stroke="#4527a0" stroke-width="1.5"/>
+  <text x="669" y="88" text-anchor="middle" font-size="11" fill="#311b92">比对</text>
+  <text x="669" y="105" text-anchor="middle" font-size="10" fill="#311b92">结果</text>
+
+  <rect x="60" y="150" width="600" height="152" rx="6" fill="#fdecea" stroke="#c62828" stroke-width="1.5"/>
+  <text x="76" y="172" font-size="12" font-weight="bold" fill="#b71c1c">代价：复杂度最高，且"两边不一致"是常态而非异常</text>
+
+  <rect x="80" y="184" width="176" height="46" rx="4" fill="#ffffff" stroke="#ef9a9a" stroke-dasharray="4 3"/>
+  <text x="168" y="202" text-anchor="middle" font-size="11" fill="#b71c1c">写放大 100%</text>
+  <text x="168" y="220" text-anchor="middle" font-size="10" fill="#7f0000">每条数据写两遍</text>
+
+  <rect x="272" y="184" width="176" height="46" rx="4" fill="#ffffff" stroke="#ef9a9a" stroke-dasharray="4 3"/>
+  <text x="360" y="202" text-anchor="middle" font-size="11" fill="#b71c1c">一边成功一边失败</text>
+  <text x="360" y="220" text-anchor="middle" font-size="10" fill="#7f0000">需要对账与补偿</text>
+
+  <rect x="464" y="184" width="176" height="46" rx="4" fill="#ffffff" stroke="#ef9a9a" stroke-dasharray="4 3"/>
+  <text x="552" y="202" text-anchor="middle" font-size="11" fill="#b71c1c">灰度期双倍存储</text>
+  <text x="552" y="220" text-anchor="middle" font-size="10" fill="#7f0000">且要维护两套索引配置</text>
+
+  <rect x="80" y="242" width="560" height="46" rx="4" fill="#fff8e1" stroke="#f9a825" stroke-dasharray="4 3"/>
+  <text x="360" y="260" text-anchor="middle" font-size="11" fill="#795548">回退能力是它存在的唯一理由</text>
+  <text x="360" y="278" text-anchor="middle" font-size="10" fill="#795548">灰度到 50% 发现结果不对 → 把读流量切回 v1，零数据损失</text>
+</svg>

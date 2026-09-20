@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="330" viewBox="0 0 720 330" font-family="Microsoft YaHei, Segoe UI, sans-serif">
+  <rect width="720" height="330" fill="#ffffff"/>
+  <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="bold" fill="#1f2937">加分片数：为什么"分片越多越快"是错觉</text>
+
+  <text x="130" y="58" text-anchor="middle" font-size="12" font-weight="bold" fill="#2e7d32">1 主分片（实测 l10_shard_1）</text>
+  <text x="560" y="58" text-anchor="middle" font-size="12" font-weight="bold" fill="#c62828">50 主分片（实测 l10_shard_50）</text>
+  <text x="345" y="58" text-anchor="middle" font-size="11" fill="#616161">同样 3000 条数据，唯一变量 = 主分片数</text>
+
+  <rect x="40" y="74" width="180" height="230" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <rect x="60" y="90" width="140" height="52" rx="4" fill="#ffffff" stroke="#a5d6a7"/>
+  <text x="130" y="112" text-anchor="middle" font-size="11" fill="#1b5e20">主分片存储（合计）</text>
+  <text x="130" y="132" text-anchor="middle" font-size="14" font-weight="bold" fill="#1b5e20">77.3 kb</text>
+
+  <rect x="60" y="152" width="140" height="52" rx="4" fill="#ffffff" stroke="#a5d6a7"/>
+  <text x="130" y="174" text-anchor="middle" font-size="11" fill="#1b5e20">聚合误差上界</text>
+  <text x="130" y="194" text-anchor="middle" font-size="14" font-weight="bold" fill="#1b5e20">0（完全精确）</text>
+
+  <rect x="60" y="214" width="140" height="52" rx="4" fill="#ffffff" stroke="#a5d6a7"/>
+  <text x="130" y="236" text-anchor="middle" font-size="11" fill="#1b5e20">首桶计数</text>
+  <text x="130" y="256" text-anchor="middle" font-size="14" font-weight="bold" fill="#1b5e20">BRAND-0 : 100</text>
+
+  <rect x="60" y="274" width="140" height="16" rx="3" fill="#c8e6c9"/>
+  <text x="130" y="286" text-anchor="middle" font-size="10" fill="#1b5e20">单分片：无需跨片协调</text>
+
+  <rect x="470" y="74" width="210" height="230" rx="6" fill="#fdecea" stroke="#c62828" stroke-width="1.5"/>
+  <rect x="490" y="90" width="170" height="52" rx="4" fill="#ffffff" stroke="#ef9a9a"/>
+  <text x="575" y="112" text-anchor="middle" font-size="11" fill="#b71c1c">主分片存储（合计）</text>
+  <text x="575" y="132" text-anchor="middle" font-size="14" font-weight="bold" fill="#b71c1c">361.9 kb</text>
+
+  <rect x="490" y="152" width="170" height="52" rx="4" fill="#ffffff" stroke="#ef9a9a"/>
+  <text x="575" y="174" text-anchor="middle" font-size="11" fill="#b71c1c">聚合误差上界</text>
+  <text x="575" y="194" text-anchor="middle" font-size="14" font-weight="bold" fill="#b71c1c">82 ~ 103</text>
+
+  <rect x="490" y="214" width="170" height="52" rx="4" fill="#ffffff" stroke="#ef9a9a"/>
+  <text x="575" y="236" text-anchor="middle" font-size="11" fill="#b71c1c">首桶计数（已失真）</text>
+  <text x="575" y="256" text-anchor="middle" font-size="14" font-weight="bold" fill="#b71c1c">BRAND-1 : 87</text>
+
+  <rect x="490" y="274" width="170" height="16" rx="3" fill="#ffcdd2"/>
+  <text x="575" y="286" text-anchor="middle" font-size="10" fill="#b71c1c">每片只回 Top N，gather 阶段再截断</text>
+
+  <rect x="250" y="120" width="190" height="140" rx="6" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+  <text x="345" y="144" text-anchor="middle" font-size="11" font-weight="bold" fill="#795548">scatter-gather 的代价</text>
+  <text x="345" y="168" text-anchor="middle" font-size="10" fill="#795548">查询广播到 50 个分片</text>
+  <text x="345" y="188" text-anchor="middle" font-size="10" fill="#795548">每片各建一套段/缓存/句柄</text>
+  <text x="345" y="208" text-anchor="middle" font-size="10" fill="#795548">固定开销 × 50</text>
+  <text x="345" y="232" text-anchor="middle" font-size="11" font-weight="bold" fill="#b71c1c">p95 慢 2.2 倍</text>
+  <text x="345" y="250" text-anchor="middle" font-size="10" fill="#795548">存储多 4.7 倍</text>
+
+  <text x="345" y="322" text-anchor="middle" font-size="11" font-weight="bold" fill="#b71c1c">结论：分片是"拆数据"的手段，不是"提性能"的手段</text>
+</svg>

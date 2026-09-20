@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="330" viewBox="0 0 720 330" font-family="Microsoft YaHei, Segoe UI, sans-serif">
+  <rect width="720" height="330" fill="#ffffff"/>
+  <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="bold" fill="#1f2937">快照恢复：能做，但恢复的是"备份那一刻"</text>
+
+  <rect x="24" y="70" width="150" height="60" rx="5" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="99" y="92" text-anchor="middle" font-size="12" fill="#0d47a1">生产集群 A</text>
+  <text x="99" y="110" text-anchor="middle" font-size="10" fill="#0d47a1">持续写入中</text>
+  <text x="99" y="123" text-anchor="middle" font-size="9" fill="#1565c0">T0 时刻打快照</text>
+
+  <polygon points="184,100 216,86 216,114" fill="#6a1b9a"/>
+
+  <rect x="222" y="70" width="170" height="60" rx="5" fill="#ede7f6" stroke="#6a1b9a" stroke-width="1.5"/>
+  <text x="307" y="92" text-anchor="middle" font-size="12" fill="#311b92">共享仓库</text>
+  <text x="307" y="110" text-anchor="middle" font-size="10" fill="#4a148c">FS / S3 / HDFS</text>
+  <text x="307" y="124" text-anchor="middle" font-size="9" fill="#6a1b9a">增量存段文件</text>
+
+  <polygon points="402,100 434,86 434,114" fill="#2e7d32"/>
+
+  <rect x="440" y="70" width="256" height="60" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="568" y="92" text-anchor="middle" font-size="12" fill="#1b5e20">新集群 B 恢复</text>
+  <text x="568" y="110" text-anchor="middle" font-size="10" fill="#2e7d32">数据回到 T0</text>
+  <text x="568" y="124" text-anchor="middle" font-size="9" fill="#2e7d32">RPO = 快照间隔</text>
+
+  <rect x="60" y="156" width="600" height="158" rx="6" fill="#fdecea" stroke="#c62828" stroke-width="1.5"/>
+  <text x="76" y="178" font-size="12" font-weight="bold" fill="#b71c1c">失效点：RPO 不为零，且"从没演练过"是最常见的假备份</text>
+
+  <rect x="80" y="190" width="280" height="50" rx="4" fill="#ffffff" stroke="#ef9a9a" stroke-dasharray="4 3"/>
+  <text x="220" y="208" text-anchor="middle" font-size="11" fill="#b71c1c">T0 之后的写入全丢</text>
+  <text x="220" y="226" text-anchor="middle" font-size="10" fill="#7f0000">快照间隔 1h → 最多丢 1 小时</text>
+  <text x="220" y="236" text-anchor="middle" font-size="9" fill="#7f0000">RTO = 恢复耗时（TB 级可能数小时）</text>
+
+  <rect x="376" y="190" width="284" height="50" rx="4" fill="#ffffff" stroke="#ef9a9a" stroke-dasharray="4 3"/>
+  <text x="518" y="208" text-anchor="middle" font-size="11" fill="#b71c1c">没演练过 = 不能算备份</text>
+  <text x="518" y="226" text-anchor="middle" font-size="10" fill="#7f0000">仓库权限、版本兼容、磁盘空间</text>
+  <text x="518" y="236" text-anchor="middle" font-size="9" fill="#7f0000">都只在真正恢复时才暴露</text>
+
+  <rect x="80" y="250" width="580" height="50" rx="4" fill="#fff8e1" stroke="#f9a825" stroke-dasharray="4 3"/>
+  <text x="370" y="268" text-anchor="middle" font-size="11" font-weight="bold" fill="#795548">跨大版本恢复要看兼容矩阵（课 12 / 课 13 记录）</text>
+  <text x="370" y="286" text-anchor="middle" font-size="10" fill="#8d6e63">高版本集群的快照不能直接恢复到低版本集群；升级前先确认矩阵再规划回滚路径</text>
+</svg>

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="300" viewBox="0 0 720 300" font-family="Microsoft YaHei, Segoe UI, sans-serif">
+  <rect width="720" height="300" fill="#ffffff"/>
+  <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="bold" fill="#1f2937">应用层缓存：把热点查询挡在 ES 之外</text>
+
+  <rect x="24" y="70" width="120" height="44" rx="5" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="84" y="90" text-anchor="middle" font-size="12" fill="#0d47a1">查询请求</text>
+  <text x="84" y="107" text-anchor="middle" font-size="11" fill="#0d47a1">（热点集中）</text>
+
+  <polygon points="154,92 184,79 184,105" fill="#6a1b9a"/>
+
+  <rect x="192" y="64" width="200" height="56" rx="5" fill="#ede7f6" stroke="#6a1b9a" stroke-width="1.5"/>
+  <text x="292" y="86" text-anchor="middle" font-size="11" fill="#4a148c">Redis 缓存</text>
+  <text x="292" y="104" text-anchor="middle" font-size="10" fill="#4a148c">key = 查询条件哈希</text>
+
+  <line x1="292" y1="120" x2="292" y2="150" stroke="#2e7d32" stroke-width="2"/>
+  <text x="330" y="140" font-size="10" fill="#1b5e20">命中</text>
+  <polygon points="292,150 286,162 298,162" fill="#2e7d32"/>
+
+  <rect x="196" y="164" width="192" height="38" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="292" y="184" text-anchor="middle" font-size="11" fill="#1b5e20">直接返回（ES 零压力）</text>
+
+  <path d="M 392 92 L 470 92 L 470 232 L 500 232" fill="none" stroke="#ef6c00" stroke-width="1.6"/>
+  <polygon points="500,232 488,226 488,238" fill="#ef6c00"/>
+  <text x="420" y="84" font-size="10" fill="#ef6c00">未命中</text>
+
+  <rect x="508" y="212" width="188" height="40" rx="5" fill="#fff3e0" stroke="#ef6c00" stroke-width="1.5"/>
+  <text x="602" y="232" text-anchor="middle" font-size="11" fill="#e65100">回源查 ES → 回填缓存</text>
+  <text x="602" y="247" text-anchor="middle" font-size="10" fill="#e65100">并设置 TTL</text>
+
+  <rect x="60" y="266" width="600" height="22" rx="4" fill="#fdecea" stroke="#c62828" stroke-dasharray="4 3"/>
+  <text x="360" y="281" text-anchor="middle" font-size="10" fill="#b71c1c">失效点：ES 是近实时的，TTL 太长 → 用户看不到刚更新的数据（一致性换吞吐）</text>
+</svg>

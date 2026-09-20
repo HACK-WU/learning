@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="300" viewBox="0 0 720 300" font-family="Microsoft YaHei, Segoe UI, sans-serif">
+  <rect width="720" height="300" fill="#ffffff"/>
+  <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="bold" fill="#1f2937">ILM 五阶段：数据随年龄降冷，直到删除</text>
+
+  <rect x="30" y="70" width="118" height="90" rx="6" fill="#ffcdd2" stroke="#c62828" stroke-width="1.5"/>
+  <text x="89" y="94" text-anchor="middle" font-size="12" font-weight="bold" fill="#b71c1c">hot</text>
+  <text x="89" y="114" text-anchor="middle" font-size="10" fill="#7f0000">写入 + 高频查询</text>
+  <text x="89" y="132" text-anchor="middle" font-size="10" fill="#7f0000">SSD · 副本 1</text>
+  <text x="89" y="150" text-anchor="middle" font-size="10" fill="#7f0000">rollover 在此触发</text>
+
+  <polygon points="158,115 182,103 182,127" fill="#6a1b9a"/>
+
+  <rect x="188" y="70" width="118" height="90" rx="6" fill="#ffe0b2" stroke="#ef6c00" stroke-width="1.5"/>
+  <text x="247" y="94" text-anchor="middle" font-size="12" font-weight="bold" fill="#e65100">warm</text>
+  <text x="247" y="114" text-anchor="middle" font-size="10" fill="#bf360c">不再写入</text>
+  <text x="247" y="132" text-anchor="middle" font-size="10" fill="#bf360c">forcemerge 段 → 1/片</text>
+  <text x="247" y="150" text-anchor="middle" font-size="10" fill="#bf360c">shrink 缩分片</text>
+
+  <polygon points="316,115 340,103 340,127" fill="#6a1b9a"/>
+
+  <rect x="346" y="70" width="118" height="90" rx="6" fill="#e1f5fe" stroke="#0277bd" stroke-width="1.5"/>
+  <text x="405" y="94" text-anchor="middle" font-size="12" font-weight="bold" fill="#01579b">cold</text>
+  <text x="405" y="114" text-anchor="middle" font-size="10" fill="#01579b">低频查询</text>
+  <text x="405" y="132" text-anchor="middle" font-size="10" fill="#01579b">可搜索快照</text>
+  <text x="405" y="150" text-anchor="middle" font-size="10" fill="#01579b">（需 license）</text>
+
+  <polygon points="474,115 498,103 498,127" fill="#6a1b9a"/>
+
+  <rect x="504" y="70" width="118" height="90" rx="6" fill="#eceff1" stroke="#546e7a" stroke-width="1.5"/>
+  <text x="563" y="94" text-anchor="middle" font-size="12" font-weight="bold" fill="#263238">frozen</text>
+  <text x="563" y="114" text-anchor="middle" font-size="10" fill="#37474f">极少查询</text>
+  <text x="563" y="132" text-anchor="middle" font-size="10" fill="#37474f">按需加载</text>
+  <text x="563" y="150" text-anchor="middle" font-size="10" fill="#37474f">（需 license）</text>
+
+  <polygon points="632,115 656,103 656,127" fill="#6a1b9a"/>
+
+  <rect x="662" y="70" width="34" height="90" rx="6" fill="#fdecea" stroke="#c62828" stroke-width="1.5"/>
+  <text x="679" y="118" text-anchor="middle" font-size="11" font-weight="bold" fill="#b71c1c">删</text>
+
+  <rect x="60" y="186" width="600" height="94" rx="6" fill="#fdecea" stroke="#c62828" stroke-width="1.5"/>
+  <text x="76" y="208" font-size="12" font-weight="bold" fill="#b71c1c">失效点：delete 不打招呼，poll_interval 决定"多久才轮到"</text>
+
+  <rect x="80" y="220" width="280" height="48" rx="4" fill="#ffffff" stroke="#ef9a9a" stroke-dasharray="4 3"/>
+  <text x="220" y="240" text-anchor="middle" font-size="11" fill="#b71c1c">delete 阶段不可逆</text>
+  <text x="220" y="258" text-anchor="middle" font-size="10" fill="#7f0000">确认快照（SLM）在跑，再启用 delete</text>
+
+  <rect x="376" y="220" width="284" height="48" rx="4" fill="#ffffff" stroke="#ef9a9a" stroke-dasharray="4 3"/>
+  <text x="518" y="240" text-anchor="middle" font-size="11" fill="#b71c1c">poll_interval 是集群级设置</text>
+  <text x="518" y="258" text-anchor="middle" font-size="10" fill="#7f0000">写在索引模板里报 unknown setting</text>
+</svg>

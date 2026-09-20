@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="330" viewBox="0 0 720 330" font-family="Microsoft YaHei, Segoe UI, sans-serif">
+  <rect width="720" height="330" fill="#ffffff"/>
+  <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="bold" fill="#1f2937">过滤别名：看着像隔离，其实只是个视图</text>
+
+  <rect x="24" y="58" width="130" height="48" rx="5" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="89" y="78" text-anchor="middle" font-size="12" fill="#0d47a1">租户 A 用户</text>
+  <text x="89" y="96" text-anchor="middle" font-size="10" fill="#0d47a1">（有索引读权限）</text>
+
+  <polygon points="164,82 196,68 196,96" fill="#37474f"/>
+
+  <rect x="204" y="48" width="180" height="68" rx="5" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+  <text x="294" y="70" text-anchor="middle" font-size="11" fill="#795548">过滤别名</text>
+  <text x="294" y="88" text-anchor="middle" font-size="10" fill="#795548">tenant_a_view</text>
+  <text x="294" y="105" text-anchor="middle" font-size="10" fill="#795548">自动附加 filter: tenant=A</text>
+
+  <line x1="384" y1="82" x2="452" y2="70" stroke="#2e7d32" stroke-width="1.6"/>
+  <text x="400" y="64" font-size="9" fill="#1b5e20">走别名</text>
+  <line x1="294" y1="116" x2="294" y2="206" stroke="#c62828" stroke-width="1.8" stroke-dasharray="5 4"/>
+  <text x="306" y="170" font-size="10" fill="#b71c1c">绕过别名，直查索引</text>
+
+  <rect x="458" y="48" width="238" height="46" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="577" y="68" text-anchor="middle" font-size="11" fill="#1b5e20">只看到自己的 2 条</text>
+  <text x="577" y="85" text-anchor="middle" font-size="10" fill="#2e7d32">（课 15 实测：便宜商品 2 条）</text>
+
+  <rect x="180" y="210" width="516" height="46" rx="5" fill="#fdecea" stroke="#c62828" stroke-width="1.5"/>
+  <text x="438" y="230" text-anchor="middle" font-size="11" fill="#b71c1c">同一个用户直查索引 → 看到全部 3 条（含别人的数据）</text>
+  <text x="438" y="248" text-anchor="middle" font-size="10" fill="#7f0000">过滤别名不是安全机制 —— 用窗帘当防盗门</text>
+
+  <rect x="60" y="274" width="600" height="40" rx="6" fill="#f5f5f5" stroke="#9e9e9e" stroke-dasharray="4 3"/>
+  <text x="360" y="292" text-anchor="middle" font-size="11" font-weight="bold" fill="#424242">正确用法：过滤别名 = 便利视图；真隔离 = RBAC（解法 B）或 DLS（需 license）</text>
+  <text x="360" y="308" text-anchor="middle" font-size="10" fill="#616161">判定："看不到" vs "没有权限看" —— 前者是过滤，后者才是安全</text>
+</svg>

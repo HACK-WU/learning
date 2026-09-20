@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="300" viewBox="0 0 720 300" font-family="Microsoft YaHei, Segoe UI, sans-serif">
+  <rect width="720" height="300" fill="#ffffff"/>
+  <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="bold" fill="#1f2937">错词词典：查询期按词表改写，零性能代价</text>
+
+  <rect x="24" y="56" width="150" height="44" rx="5" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="99" y="76" text-anchor="middle" font-size="12" fill="#0d47a1">用户输入</text>
+  <text x="99" y="93" text-anchor="middle" font-size="12" font-weight="bold" fill="#0d47a1">耐客鞋</text>
+
+  <polygon points="184,78 214,65 214,91" fill="#00695c"/>
+
+  <rect x="222" y="50" width="220" height="56" rx="5" fill="#e0f2f1" stroke="#00695c" stroke-width="1.5"/>
+  <text x="332" y="70" text-anchor="middle" font-size="11" fill="#004d40">search_analyzer 同义词/错词表</text>
+  <text x="332" y="88" text-anchor="middle" font-size="11" fill="#004d40">耐客鞋, 耐克鞋, 奈克鞋 ⇒ 耐克鞋</text>
+  <text x="332" y="101" text-anchor="middle" font-size="10" fill="#004d40">（synonym_graph，仅查询期生效）</text>
+
+  <polygon points="452,78 482,65 482,91" fill="#00695c"/>
+
+  <rect x="490" y="56" width="206" height="44" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="593" y="76" text-anchor="middle" font-size="12" fill="#1b5e20">倒排表直接查标准词</text>
+  <text x="593" y="93" text-anchor="middle" font-size="11" fill="#1b5e20">与正常查询同等开销</text>
+
+  <rect x="60" y="140" width="600" height="134" rx="6" fill="#fdecea" stroke="#c62828" stroke-width="1.5"/>
+  <text x="76" y="162" font-size="12" font-weight="bold" fill="#b71c1c">失效点：词表覆盖不到的一律漏网，且维护是长期成本</text>
+
+  <rect x="80" y="176" width="176" height="82" rx="4" fill="#ffffff" stroke="#ef9a9a" stroke-dasharray="4 3"/>
+  <text x="168" y="196" text-anchor="middle" font-size="11" fill="#b71c1c">冷启动无数据</text>
+  <text x="168" y="215" text-anchor="middle" font-size="10" fill="#7f0000">上线第一天词表是空的</text>
+  <text x="168" y="232" text-anchor="middle" font-size="10" fill="#7f0000">必须靠日志先攒</text>
+  <text x="168" y="250" text-anchor="middle" font-size="10" font-weight="bold" fill="#b71c1c">→ 先埋点再建表</text>
+
+  <rect x="272" y="176" width="176" height="82" rx="4" fill="#ffffff" stroke="#ef9a9a" stroke-dasharray="4 3"/>
+  <text x="360" y="196" text-anchor="middle" font-size="11" fill="#b71c1c">长尾覆盖差</text>
+  <text x="360" y="215" text-anchor="middle" font-size="10" fill="#7f0000">Top 100 之外的错词</text>
+  <text x="360" y="232" text-anchor="middle" font-size="10" fill="#7f0000">永远无人认领</text>
+  <text x="360" y="250" text-anchor="middle" font-size="10" font-weight="bold" fill="#b71c1c">→ 需配合降级</text>
+
+  <rect x="464" y="176" width="176" height="82" rx="4" fill="#ffffff" stroke="#ef9a9a" stroke-dasharray="4 3"/>
+  <text x="552" y="196" text-anchor="middle" font-size="11" fill="#b71c1c">重载要 reopen</text>
+  <text x="552" y="215" text-anchor="middle" font-size="10" fill="#7f0000">改词表需 reload analyzer</text>
+  <text x="552" y="232" text-anchor="middle" font-size="10" fill="#7f0000">索引期词表改了要重建</text>
+  <text x="552" y="250" text-anchor="middle" font-size="10" font-weight="bold" fill="#b71c1c">→ 用查询期词表</text>
+</svg>

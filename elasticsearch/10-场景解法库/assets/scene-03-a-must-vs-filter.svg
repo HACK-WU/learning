@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="320" viewBox="0 0 720 320" font-family="Microsoft YaHei, Segoe UI, sans-serif">
+  <rect width="720" height="320" fill="#ffffff"/>
+  <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="bold" fill="#1f2937">must vs filter：打分与缓存的分水岭</text>
+
+  <text x="180" y="58" text-anchor="middle" font-size="12" font-weight="bold" fill="#c62828">must（query 上下文）</text>
+  <text x="540" y="58" text-anchor="middle" font-size="12" font-weight="bold" fill="#2e7d32">filter（filter 上下文）</text>
+
+  <rect x="40" y="76" width="280" height="222" rx="6" fill="#fdecea" stroke="#c62828" stroke-width="1.5"/>
+  <rect x="60" y="94" width="240" height="42" rx="4" fill="#ffffff" stroke="#ef9a9a"/>
+  <text x="180" y="114" text-anchor="middle" font-size="11" fill="#b71c1c">① 对每个命中文档算 BM25 得分</text>
+  <text x="180" y="131" text-anchor="middle" font-size="10" fill="#7f0000">词频 / 逆文档频率 / 字段长度归一</text>
+
+  <rect x="60" y="146" width="240" height="42" rx="4" fill="#ffffff" stroke="#ef9a9a"/>
+  <text x="180" y="166" text-anchor="middle" font-size="11" fill="#b71c1c">② 参与全局排序</text>
+  <text x="180" y="183" text-anchor="middle" font-size="10" fill="#7f0000">所有候选文档进堆排序</text>
+
+  <rect x="60" y="198" width="240" height="42" rx="4" fill="#ffffff" stroke="#ef9a9a"/>
+  <text x="180" y="218" text-anchor="middle" font-size="11" fill="#b71c1c">③ 结果不进 query cache</text>
+  <text x="180" y="235" text-anchor="middle" font-size="10" fill="#7f0000">下次同样条件要重算一遍</text>
+
+  <rect x="60" y="250" width="240" height="34" rx="4" fill="#ffcdd2"/>
+  <text x="180" y="272" text-anchor="middle" font-size="12" font-weight="bold" fill="#b71c1c">每次请求都付全价</text>
+
+  <rect x="400" y="76" width="280" height="222" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <rect x="420" y="94" width="240" height="42" rx="4" fill="#ffffff" stroke="#a5d6a7"/>
+  <text x="540" y="114" text-anchor="middle" font-size="11" fill="#1b5e20">① 只判"是 / 否"，不打分</text>
+  <text x="540" y="131" text-anchor="middle" font-size="10" fill="#2e7d32">跳过整个评分计算</text>
+
+  <rect x="420" y="146" width="240" height="42" rx="4" fill="#ffffff" stroke="#a5d6a7"/>
+  <text x="540" y="166" text-anchor="middle" font-size="11" fill="#1b5e20">② 结果存 bitset 进 query cache</text>
+  <text x="540" y="183" text-anchor="middle" font-size="10" fill="#2e7d32">同条件再来直接命中缓存</text>
+
+  <rect x="420" y="198" width="240" height="42" rx="4" fill="#ffffff" stroke="#a5d6a7"/>
+  <text x="540" y="218" text-anchor="middle" font-size="11" fill="#1b5e20">③ 缓存按段（segment）粒度失效</text>
+  <text x="540" y="235" text-anchor="middle" font-size="10" fill="#2e7d32">老段缓存长期有效</text>
+
+  <rect x="420" y="250" width="240" height="34" rx="4" fill="#c8e6c9"/>
+  <text x="540" y="272" text-anchor="middle" font-size="12" font-weight="bold" fill="#1b5e20">重复条件几乎免费</text>
+
+  <rect x="330" y="76" width="60" height="222" rx="6" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+  <text x="360" y="180" text-anchor="middle" font-size="13" font-weight="bold" fill="#795548">移</text>
+  <text x="360" y="200" text-anchor="middle" font-size="13" font-weight="bold" fill="#795548">过</text>
+  <text x="360" y="220" text-anchor="middle" font-size="13" font-weight="bold" fill="#795548">去</text>
+
+  <text x="360" y="316" text-anchor="middle" font-size="11" font-weight="bold" fill="#795548">缓存提醒：小数据量下 query_cache.hit_count 可能恒为 0，测不出收益（课 6 实测）</text>
+</svg>

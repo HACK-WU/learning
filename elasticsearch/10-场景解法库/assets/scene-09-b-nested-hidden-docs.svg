@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="330" viewBox="0 0 720 330" font-family="Microsoft YaHei, Segoe UI, sans-serif">
+  <rect width="720" height="330" fill="#ffffff"/>
+  <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="bold" fill="#1f2937">nested：每个数组成员索引成独立隐藏文档</text>
+
+  <rect x="40" y="62" width="280" height="130" rx="6" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="180" y="84" text-anchor="middle" font-size="11" fill="#0d47a1">顶层文档（_count 只算它）</text>
+  <rect x="60" y="94" width="240" height="34" rx="4" fill="#ffffff" stroke="#90caf9"/>
+  <text x="180" y="115" text-anchor="middle" font-size="10" fill="#0d47a1">商品：T 恤（doc 1）</text>
+  <text x="180" y="150" text-anchor="middle" font-size="10" fill="#1565c0">↓ nested 字段展开</text>
+
+  <rect x="40" y="204" width="600" height="46" rx="6" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+  <text x="360" y="224" text-anchor="middle" font-size="11" fill="#795548">课 16 实测：_cat/indices 显示 6 个文档，但 _count 只有 2 —— 隐藏文档不计入 _count</text>
+  <text x="360" y="242" text-anchor="middle" font-size="10" fill="#8d6e63">hidden doc 膨胀：nested 数组越大，隐藏文档越多</text>
+
+  <polygon points="340,140 372,124 372,156" fill="#6a1b9a"/>
+
+  <rect x="400" y="62" width="280" height="130" rx="6" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="1.5"/>
+  <text x="540" y="84" text-anchor="middle" font-size="11" fill="#4a148c">隐藏文档（各自独立检索）</text>
+  <rect x="420" y="94" width="240" height="34" rx="4" fill="#ffffff" stroke="#ce93d8"/>
+  <text x="540" y="115" text-anchor="middle" font-size="10" fill="#6a1b9a">hidden 1: red + S</text>
+  <rect x="420" y="134" width="240" height="34" rx="4" fill="#ffffff" stroke="#ce93d8"/>
+  <text x="540" y="155" text-anchor="middle" font-size="10" fill="#6a1b9a">hidden 2: blue + M</text>
+
+  <rect x="60" y="266" width="600" height="48" rx="6" fill="#fdecea" stroke="#c62828" stroke-width="1.5"/>
+  <text x="76" y="286" font-size="11" font-weight="bold" fill="#b71c1c">代价：存储膨胀 + 查询必须走 nested 查询（普通 bool 查 color=red 会返回 0 条）</text>
+  <text x="76" y="304" font-size="10" fill="#7f0000">另有嵌套深度限额 50、单文档 nested 字段限额 50；inner_hits 可返回命中的是哪一个数组成员（_nested.offset）</text>
+</svg>

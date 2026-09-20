@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="310" viewBox="0 0 720 310" font-family="Microsoft YaHei, Segoe UI, sans-serif">
+  <rect width="720" height="310" fill="#ffffff"/>
+  <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="bold" fill="#1f2937">段与分片是两回事：forcemerge 治段碎，shrink 治分片多</text>
+
+  <text x="180" y="58" text-anchor="middle" font-size="12" font-weight="bold" fill="#6a1b9a">分片内部（段）</text>
+  <text x="540" y="58" text-anchor="middle" font-size="12" font-weight="bold" fill="#1565c0">索引层面（分片）</text>
+
+  <rect x="40" y="76" width="280" height="200" rx="6" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="1.5"/>
+  <text x="180" y="98" text-anchor="middle" font-size="11" fill="#4a148c">一个分片 = 多个 Lucene 段</text>
+
+  <rect x="60" y="108" width="52" height="26" rx="3" fill="#ffffff" stroke="#ce93d8"/>
+  <text x="86" y="125" text-anchor="middle" font-size="9" fill="#6a1b9a">seg1</text>
+  <rect x="118" y="108" width="52" height="26" rx="3" fill="#ffffff" stroke="#ce93d8"/>
+  <text x="144" y="125" text-anchor="middle" font-size="9" fill="#6a1b9a">seg2</text>
+  <rect x="176" y="108" width="52" height="26" rx="3" fill="#ffffff" stroke="#ce93d8"/>
+  <text x="202" y="125" text-anchor="middle" font-size="9" fill="#6a1b9a">seg3</text>
+  <rect x="234" y="108" width="52" height="26" rx="3" fill="#ffffff" stroke="#ce93d8"/>
+  <text x="260" y="125" text-anchor="middle" font-size="9" fill="#6a1b9a">…8</text>
+
+  <line x1="180" y1="144" x2="180" y2="168" stroke="#6a1b9a" stroke-width="1.6"/>
+  <polygon points="180,168 174,156 186,156" fill="#6a1b9a"/>
+  <text x="196" y="162" font-size="9" fill="#6a1b9a">forcemerge</text>
+
+  <rect x="60" y="172" width="240" height="30" rx="3" fill="#ede7f6" stroke="#6a1b9a"/>
+  <text x="180" y="191" text-anchor="middle" font-size="10" fill="#4a148c">合并为 1 段/分片（课 15 实测 8→1）</text>
+
+  <rect x="60" y="212" width="240" height="52" rx="4" fill="#fff8e1" stroke="#f9a825" stroke-dasharray="4 3"/>
+  <text x="180" y="232" text-anchor="middle" font-size="10" fill="#795548">治"段碎"：查询要开的段少了</text>
+  <text x="180" y="248" text-anchor="middle" font-size="10" fill="#795548">只能在停止写入后做（耗 I/O）</text>
+  <text x="180" y="260" text-anchor="middle" font-size="10" font-weight="bold" fill="#b71c1c">分片数不变</text>
+
+  <rect x="400" y="76" width="280" height="200" rx="6" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="540" y="98" text-anchor="middle" font-size="11" fill="#0d47a1">一个索引 = 多个分片</text>
+
+  <rect x="420" y="108" width="52" height="26" rx="3" fill="#ffffff" stroke="#90caf9"/>
+  <text x="446" y="125" text-anchor="middle" font-size="9" fill="#1565c0">P0</text>
+  <rect x="478" y="108" width="52" height="26" rx="3" fill="#ffffff" stroke="#90caf9"/>
+  <text x="504" y="125" text-anchor="middle" font-size="9" fill="#1565c0">P1</text>
+  <rect x="536" y="108" width="52" height="26" rx="3" fill="#ffffff" stroke="#90caf9"/>
+  <text x="562" y="125" text-anchor="middle" font-size="9" fill="#1565c0">P2</text>
+  <rect x="594" y="108" width="52" height="26" rx="3" fill="#ffffff" stroke="#90caf9"/>
+  <text x="620" y="125" text-anchor="middle" font-size="9" fill="#1565c0">P3</text>
+
+  <line x1="540" y1="144" x2="540" y2="168" stroke="#1565c0" stroke-width="1.6"/>
+  <polygon points="540,168 534,156 546,156" fill="#1565c0"/>
+  <text x="556" y="162" font-size="9" fill="#1565c0">shrink</text>
+
+  <rect x="470" y="172" width="140" height="30" rx="3" fill="#e3f2fd" stroke="#1565c0"/>
+  <text x="540" y="191" text-anchor="middle" font-size="10" fill="#0d47a1">4 分片 → 1 分片</text>
+
+  <rect x="420" y="212" width="240" height="52" rx="4" fill="#fff8e1" stroke="#f9a825" stroke-dasharray="4 3"/>
+  <text x="540" y="232" text-anchor="middle" font-size="10" fill="#795548">治"分片多"：scatter 目标变少</text>
+  <text x="540" y="248" text-anchor="middle" font-size="10" fill="#795548">三条件：同节点 + 只读 + 因数</text>
+  <text x="540" y="260" text-anchor="middle" font-size="10" font-weight="bold" fill="#b71c1c">段数不变</text>
+
+  <text x="360" y="298" text-anchor="middle" font-size="11" font-weight="bold" fill="#b71c1c">别混：forcemerge 治一个分片内部，shrink 治分片数量</text>
+</svg>

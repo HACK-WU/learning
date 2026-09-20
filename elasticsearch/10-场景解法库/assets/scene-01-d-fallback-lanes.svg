@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="330" viewBox="0 0 720 330" font-family="Microsoft YaHei, Segoe UI, sans-serif">
+  <rect width="720" height="330" fill="#ffffff"/>
+  <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="bold" fill="#1f2937">多路召回 + 兜底：只对"搜不到"的请求付模糊代价</text>
+
+  <rect x="24" y="60" width="130" height="44" rx="5" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="89" y="80" text-anchor="middle" font-size="12" fill="#0d47a1">搜索请求</text>
+  <text x="89" y="97" text-anchor="middle" font-size="11" fill="#0d47a1">（全部流量）</text>
+
+  <polygon points="164,82 194,69 194,95" fill="#37474f"/>
+
+  <rect x="202" y="56" width="180" height="52" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="292" y="76" text-anchor="middle" font-size="12" fill="#1b5e20">第 1 路：精确查询</text>
+  <text x="292" y="94" text-anchor="middle" font-size="11" fill="#1b5e20">match + filter（快、可缓存）</text>
+
+  <line x1="292" y1="108" x2="292" y2="136" stroke="#37474f" stroke-width="1.5"/>
+  <text x="300" y="126" font-size="10" fill="#37474f">hits</text>
+
+  <rect x="212" y="138" width="160" height="42" rx="16" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+  <text x="292" y="156" text-anchor="middle" font-size="11" fill="#795548">hits &gt; 0 ？</text>
+  <text x="292" y="172" text-anchor="middle" font-size="10" fill="#795548">结果够不够</text>
+
+  <line x1="292" y1="180" x2="292" y2="206" stroke="#2e7d32" stroke-width="2"/>
+  <text x="360" y="198" font-size="11" fill="#1b5e20">够 → 直接返回（绝大多数请求止步于此）</text>
+
+  <polygon points="292,206 286,218 298,218" fill="#2e7d32"/>
+
+  <rect x="96" y="220" width="150" height="44" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="171" y="240" text-anchor="middle" font-size="12" fill="#1b5e20">正常路径返回</text>
+  <text x="171" y="257" text-anchor="middle" font-size="11" fill="#1b5e20">零额外开销</text>
+
+  <path d="M 212 159 L 140 159 L 140 282 L 470 282" fill="none" stroke="#ef6c00" stroke-width="1.8"/>
+  <polygon points="470,282 458,276 458,288" fill="#ef6c00"/>
+  <text x="150" y="152" font-size="10" fill="#ef6c00">0 条 / 太少</text>
+
+  <rect x="478" y="252" width="218" height="60" rx="5" fill="#fff3e0" stroke="#ef6c00" stroke-width="1.5"/>
+  <text x="587" y="272" text-anchor="middle" font-size="11" fill="#e65100">降级第 2 路：fuzzy / 同义词</text>
+  <text x="587" y="289" text-anchor="middle" font-size="10" fill="#e65100">只对这一小撮请求付代价</text>
+  <text x="587" y="304" text-anchor="middle" font-size="10" fill="#e65100">仍为空 → 给 did-you-mean 建议</text>
+
+  <rect x="60" y="60" width="0" height="0" fill="none"/>
+
+  <text x="612" y="118" text-anchor="middle" font-size="11" font-weight="bold" fill="#b71c1c">关键：降级路径必须设超时</text>
+  <rect x="512" y="128" width="200" height="26" rx="4" fill="#fdecea" stroke="#c62828" stroke-dasharray="4 3"/>
+  <text x="612" y="145" text-anchor="middle" font-size="10" fill="#b71c1c">否则慢查询把线程池拖垮（手册 E3）</text>
+</svg>

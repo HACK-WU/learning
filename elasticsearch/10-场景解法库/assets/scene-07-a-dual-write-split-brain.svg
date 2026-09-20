@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="310" viewBox="0 0 720 310" font-family="Microsoft YaHei, Segoe UI, sans-serif">
+  <rect width="720" height="310" fill="#ffffff"/>
+  <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="bold" fill="#1f2937">双写：一边成功一边失败，不一致就是默认结局</text>
+
+  <rect x="24" y="70" width="130" height="48" rx="5" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="89" y="90" text-anchor="middle" font-size="12" fill="#0d47a1">应用写入</text>
+  <text x="89" y="108" text-anchor="middle" font-size="10" fill="#0d47a1">（两个写操作）</text>
+
+  <line x1="154" y1="84" x2="212" y2="72" stroke="#2e7d32" stroke-width="1.8"/>
+  <line x1="154" y1="104" x2="212" y2="176" stroke="#c62828" stroke-width="1.8"/>
+
+  <rect x="218" y="52" width="200" height="42" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="318" y="70" text-anchor="middle" font-size="11" fill="#1b5e20">① 写 MySQL</text>
+  <text x="318" y="88" text-anchor="middle" font-size="10" fill="#2e7d32">成功（已提交）</text>
+
+  <rect x="218" y="156" width="200" height="42" rx="5" fill="#fdecea" stroke="#c62828" stroke-width="1.5"/>
+  <text x="318" y="174" text-anchor="middle" font-size="11" fill="#b71c1c">② 写 ES</text>
+  <text x="318" y="192" text-anchor="middle" font-size="10" fill="#7f0000">失败（超时 / 熔断 / 拒绝）</text>
+
+  <rect x="452" y="88" width="244" height="76" rx="6" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+  <text x="574" y="110" text-anchor="middle" font-size="11" font-weight="bold" fill="#795548">此时两边已不一致</text>
+  <text x="574" y="130" text-anchor="middle" font-size="10" fill="#795548">MySQL 有新数据，ES 没有</text>
+  <text x="574" y="148" text-anchor="middle" font-size="10" fill="#795548">用户搜不到刚下的单</text>
+
+  <line x1="452" y1="126" x2="424" y2="126" stroke="#f9a825" stroke-width="1.5"/>
+
+  <rect x="60" y="218" width="600" height="76" rx="6" fill="#fdecea" stroke="#c62828" stroke-width="1.5"/>
+  <text x="76" y="240" font-size="12" font-weight="bold" fill="#b71c1c">失效点：没有任何机制保证两步都成功</text>
+  <text x="76" y="262" font-size="10" fill="#7f0000">应用崩在中间 → 不一致；ES 超时但实为成功 → 重试又写一次；没有补偿队列 → 不一致永久化</text>
+  <text x="76" y="282" font-size="10" fill="#7f0000">⚠️ 双写不是"简单版 CDC"，它是"没有一致性保证的 CDC" —— 只在能接受少量不一致时才用</text>
+</svg>

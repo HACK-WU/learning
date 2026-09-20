@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="320" viewBox="0 0 720 320" font-family="Microsoft YaHei, Segoe UI, sans-serif">
+  <rect width="720" height="320" fill="#ffffff"/>
+  <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="bold" fill="#1f2937">completion：专用 FST 结构，前缀匹配 + 权重排序</text>
+
+  <rect x="24" y="64" width="150" height="56" rx="5" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="99" y="86" text-anchor="middle" font-size="12" fill="#0d47a1">用户输入前缀</text>
+  <text x="99" y="106" text-anchor="middle" font-size="13" font-weight="bold" fill="#0d47a1">el</text>
+
+  <polygon points="184,92 216,78 216,106" fill="#4527a0"/>
+
+  <rect x="222" y="58" width="216" height="68" rx="5" fill="#ede7f6" stroke="#4527a0" stroke-width="1.5"/>
+  <text x="330" y="80" text-anchor="middle" font-size="11" fill="#311b92">FST 结构前缀遍历</text>
+  <text x="330" y="98" text-anchor="middle" font-size="10" fill="#4a148c">内存中，不走倒排索引</text>
+  <text x="330" y="116" text-anchor="middle" font-size="10" fill="#4a148c">按 weight 排序返回</text>
+
+  <polygon points="448,92 480,78 480,106" fill="#2e7d32"/>
+
+  <rect x="486" y="58" width="210" height="68" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="591" y="80" text-anchor="middle" font-size="11" fill="#1b5e20">建议结果</text>
+  <text x="591" y="98" text-anchor="middle" font-size="10" fill="#2e7d32">Elasticsearch 教程（10.0）</text>
+  <text x="591" y="116" text-anchor="middle" font-size="10" fill="#2e7d32">Elasticsearch 入门（5.0）</text>
+
+  <rect x="60" y="146" width="600" height="156" rx="6" fill="#fdecea" stroke="#c62828" stroke-width="1.5"/>
+  <text x="76" y="168" font-size="12" font-weight="bold" fill="#b71c1c">失效点：只认"从头开始"的前缀，且不吃分析器</text>
+
+  <rect x="80" y="180" width="280" height="52" rx="4" fill="#ffffff" stroke="#ef9a9a" stroke-dasharray="4 3"/>
+  <text x="220" y="200" text-anchor="middle" font-size="11" fill="#b71c1c">中间匹配查不到</text>
+  <text x="220" y="218" text-anchor="middle" font-size="10" fill="#7f0000">输「astic」→ 0 条（课 16 实测）</text>
+  <text x="220" y="230" text-anchor="middle" font-size="9" fill="#7f0000">它只从头匹配，不做 substring</text>
+
+  <rect x="376" y="180" width="284" height="52" rx="4" fill="#ffffff" stroke="#ef9a9a" stroke-dasharray="4 3"/>
+  <text x="518" y="200" text-anchor="middle" font-size="11" fill="#b71c1c">中文要自己拆</text>
+  <text x="518" y="218" text-anchor="middle" font-size="10" fill="#7f0000">「教程」→ 0 条（课 16 实测）</text>
+  <text x="518" y="230" text-anchor="middle" font-size="9" fill="#7f0000">completion 不做分词，输入即整体</text>
+
+  <rect x="80" y="242" width="580" height="48" rx="4" fill="#fff8e1" stroke="#f9a825" stroke-dasharray="4 3"/>
+  <text x="370" y="262" text-anchor="middle" font-size="11" font-weight="bold" fill="#795548">FST 常驻内存 + input 数组要穷举写法</text>
+  <text x="370" y="280" text-anchor="middle" font-size="10" fill="#8d6e63">想让「ES」「elastic」「Elasticsearch」都能命中，就得把它们全写进 input 数组</text>
+</svg>

@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="330" viewBox="0 0 720 330" font-family="Microsoft YaHei, Segoe UI, sans-serif">
+  <rect width="720" height="330" fill="#ffffff"/>
+  <text x="360" y="26" text-anchor="middle" font-size="15" font-weight="bold" fill="#1f2937">CDC + MQ：binlog 订阅保序，消费侧幂等写入</text>
+
+  <rect x="24" y="66" width="120" height="50" rx="5" fill="#e3f2fd" stroke="#1565c0" stroke-width="1.5"/>
+  <text x="84" y="86" text-anchor="middle" font-size="12" fill="#0d47a1">MySQL</text>
+  <text x="84" y="104" text-anchor="middle" font-size="10" fill="#0d47a1">唯一真相源</text>
+
+  <polygon points="154,91 186,77 186,105" fill="#6a1b9a"/>
+
+  <rect x="192" y="66" width="150" height="50" rx="5" fill="#ede7f6" stroke="#6a1b9a" stroke-width="1.5"/>
+  <text x="267" y="86" text-anchor="middle" font-size="11" fill="#4a148c">CDC 订阅 binlog</text>
+  <text x="267" y="104" text-anchor="middle" font-size="10" fill="#6a1b9a">变更即捕获（含删除）</text>
+
+  <polygon points="352,91 384,77 384,105" fill="#6a1b9a"/>
+
+  <rect x="390" y="66" width="150" height="50" rx="5" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+  <text x="465" y="86" text-anchor="middle" font-size="11" fill="#795548">消息队列（保序）</text>
+  <text x="465" y="104" text-anchor="middle" font-size="10" fill="#795548">同一主键进同一分区</text>
+
+  <polygon points="550,91 582,77 582,105" fill="#2e7d32"/>
+
+  <rect x="588" y="66" width="108" height="50" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="642" y="86" text-anchor="middle" font-size="11" fill="#1b5e20">消费者</text>
+  <text x="642" y="104" text-anchor="middle" font-size="10" fill="#2e7d32">bulk 批量写 ES</text>
+
+  <line x1="642" y1="116" x2="642" y2="150" stroke="#2e7d32" stroke-width="1.5"/>
+  <polygon points="642,150 636,138 648,138" fill="#2e7d32"/>
+
+  <rect x="500" y="154" width="196" height="46" rx="5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="598" y="174" text-anchor="middle" font-size="11" fill="#1b5e20">_id = 业务主键</text>
+  <text x="598" y="191" text-anchor="middle" font-size="10" fill="#2e7d32">重复写 = 覆盖，不产生重复</text>
+
+  <rect x="60" y="216" width="600" height="98" rx="6" fill="#fdecea" stroke="#c62828" stroke-width="1.5"/>
+  <text x="76" y="238" font-size="12" font-weight="bold" fill="#b71c1c">失效点：顺序错了，新状态会被旧状态覆盖</text>
+
+  <rect x="80" y="250" width="280" height="52" rx="4" fill="#ffffff" stroke="#ef9a9a" stroke-dasharray="4 3"/>
+  <text x="220" y="268" text-anchor="middle" font-size="11" fill="#b71c1c">乱序 = 数据回退</text>
+  <text x="220" y="286" text-anchor="middle" font-size="10" fill="#7f0000">已发货 → 已完成，顺序反了</text>
+  <text x="220" y="298" text-anchor="middle" font-size="10" fill="#7f0000">ES 里会停在「已发货」</text>
+
+  <rect x="376" y="250" width="284" height="52" rx="4" fill="#ffffff" stroke="#ef9a9a" stroke-dasharray="4 3"/>
+  <text x="518" y="268" text-anchor="middle" font-size="11" fill="#b71c1c">ES 没有跨文档事务</text>
+  <text x="518" y="286" text-anchor="middle" font-size="10" fill="#7f0000">乐观锁只到单文档（课 14 实测 409）</text>
+  <text x="518" y="298" text-anchor="middle" font-size="10" fill="#7f0000">回滚要靠重放，不能靠事务</text>
+</svg>
