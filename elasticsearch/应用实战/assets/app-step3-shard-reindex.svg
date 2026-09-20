@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="390" viewBox="0 0 860 390" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="860" height="390" fill="#fbfcfd"/>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+    <marker id="greenarrow" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#16a34a"/>
+    </marker>
+  </defs>
+
+  <text x="24" y="30" font-size="15" fill="#334155" font-weight="600">③ 改进版：建新索引 → reindex → 别名切换（本机实测）</text>
+
+  <!-- 三步 -->
+  <rect x="24" y="48" width="230" height="82" rx="8" fill="#f1f5f9" stroke="#94a3b8" stroke-width="2"/>
+  <text x="139" y="70" text-anchor="middle" font-size="12" fill="#334155" font-weight="600">① 源索引 ap_sh1</text>
+  <text x="139" y="90" text-anchor="middle" font-size="12" fill="#475569">1 主分片 · 13 条文档</text>
+  <text x="139" y="112" text-anchor="middle" font-size="11" fill="#64748b">（分片数错了）</text>
+
+  <rect x="294" y="48" width="230" height="82" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="3"/>
+  <text x="409" y="70" text-anchor="middle" font-size="12" fill="#14532d" font-weight="600">② 建 ap_sh1b + reindex</text>
+  <text x="409" y="90" text-anchor="middle" font-size="12" fill="#166534">3 主分片 · 1 副本</text>
+  <text x="409" y="112" text-anchor="middle" font-size="11" fill="#166534">实测 total=13 created=13 failures=0</text>
+
+  <rect x="564" y="48" width="272" height="82" rx="8" fill="#e0e7ff" stroke="#6366f1" stroke-width="3"/>
+  <text x="700" y="70" text-anchor="middle" font-size="12" fill="#312e81" font-weight="600">③ 别名 sh_goods 切换</text>
+  <text x="700" y="90" text-anchor="middle" font-size="12" fill="#4338ca">应用只认别名，切换零停机</text>
+  <text x="700" y="112" text-anchor="middle" font-size="11" fill="#4338ca">实测经别名查询 hits=13</text>
+
+  <line x1="254" y1="89" x2="290" y2="89" stroke="#16a34a" stroke-width="2.5" marker-end="url(#greenarrow)"/>
+  <line x1="524" y1="89" x2="560" y2="89" stroke="#6366f1" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- 分布结果 -->
+  <text x="24" y="158" font-size="14" fill="#334155" font-weight="600">实测分片分布（_cat/shards）：3 主分片 + 3 副本，打散在 3 个节点</text>
+
+  <rect x="24" y="170" width="264" height="112" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="136" y="192" text-anchor="middle" font-size="12" fill="#14532d" font-weight="600">node-1</text>
+  <text x="44" y="214" font-size="11" fill="#166534">shard 0 r  docs=4</text>
+  <text x="44" y="234" font-size="11" fill="#166534">shard 2 p  docs=4</text>
+  <text x="44" y="258" font-size="11" fill="#14532d">承担读写 ✓</text>
+
+  <rect x="300" y="170" width="264" height="112" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="432" y="192" text-anchor="middle" font-size="12" fill="#14532d" font-weight="600">node-2</text>
+  <text x="320" y="214" font-size="11" fill="#166534">shard 0 p  docs=4</text>
+  <text x="320" y="234" font-size="11" fill="#166534">shard 1 r  docs=5</text>
+  <text x="320" y="258" font-size="11" fill="#14532d">承担读写 ✓</text>
+
+  <rect x="576" y="170" width="260" height="112" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="706" y="192" text-anchor="middle" font-size="12" fill="#14532d" font-weight="600">node-3</text>
+  <text x="596" y="214" font-size="11" fill="#166534">shard 1 p  docs=5</text>
+  <text x="596" y="234" font-size="11" fill="#166534">shard 2 r  docs=4</text>
+  <text x="596" y="258" font-size="11" fill="#14532d">承担读写 ✓（不再空闲）</text>
+
+  <!-- 要点 -->
+  <rect x="24" y="298" width="812" height="34" rx="6" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="40" y="320" font-size="12" fill="#1e40af">三个主分片 4 / 5 / 4 条，基本均匀；主副分片不在同一节点 —— 单节点故障不丢数据。</text>
+
+  <!-- 遗留 -->
+  <rect x="24" y="342" width="812" height="38" rx="6" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.5"/>
+  <text x="40" y="358" font-size="12" fill="#92400e" font-weight="600">⚠️ 仍是事后补救：reindex 期间新老索引并存要双倍存储；自定义 _routing 需在 source 显式带上。</text>
+  <text x="40" y="374" font-size="12" fill="#a16207">真正该做的是建索引时就定对，或用 rollover 自动滚动（课 15）—— 见下一张图。</text>
+</svg>

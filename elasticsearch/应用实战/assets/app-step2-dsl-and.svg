@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="840" height="340" viewBox="0 0 840 340" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="840" height="340" fill="#fbfcfd"/>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <text x="24" y="30" font-size="15" fill="#334155" font-weight="600">② 改进版：operator: and（高亮 = 本步改动，本机实测）</text>
+
+  <!-- 查询 -->
+  <rect x="24" y="52" width="240" height="90" rx="10" fill="#dcfce7" stroke="#16a34a" stroke-width="3"/>
+  <text x="144" y="78" text-anchor="middle" font-size="14" fill="#14532d" font-weight="600">match name「华为手机」</text>
+  <text x="144" y="100" text-anchor="middle" font-size="12" fill="#166534">IK 切成：华为 / 手机</text>
+  <rect x="44" y="110" width="200" height="24" rx="4" fill="#bbf7d0"/>
+  <text x="144" y="126" text-anchor="middle" font-size="12" fill="#14532d" font-weight="600">"operator": "and"  ← 本步改动</text>
+
+  <!-- 交集示意 -->
+  <rect x="300" y="52" width="230" height="90" rx="10" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="415" y="76" text-anchor="middle" font-size="13" fill="#14532d" font-weight="600">语义：两个词都要命中</text>
+  <circle cx="360" cy="114" r="26" fill="#bbf7d0" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="360" y="118" text-anchor="middle" font-size="11" fill="#14532d">含"华为"</text>
+  <circle cx="440" cy="114" r="26" fill="#bbf7d0" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="440" y="118" text-anchor="middle" font-size="11" fill="#14532d">含"手机"</text>
+  <text x="400" y="122" font-size="14" fill="#14532d" font-weight="600">∩</text>
+
+  <line x1="264" y1="97" x2="296" y2="97" stroke="#16a34a" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- 结果 -->
+  <rect x="566" y="52" width="250" height="90" rx="10" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="691" y="76" text-anchor="middle" font-size="13" fill="#14532d" font-weight="600">结果 hits=1（交集）</text>
+  <text x="580" y="100" font-size="12" fill="#166534">✓ 华为手机 Mate60</text>
+  <text x="580" y="120" font-size="12" fill="#166534">score=1.4637604</text>
+
+  <line x1="530" y1="97" x2="562" y2="97" stroke="#16a34a" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- 对比条 -->
+  <rect x="24" y="164" width="792" height="66" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="40" y="188" font-size="13" fill="#334155" font-weight="600">实测对照：</text>
+  <text x="40" y="210" font-size="13" fill="#dc2626">默认 OR          → hits=6 ｜ 华为手机 1.4638 / 华为平板 1.0406 / 华为耳机 1.0406 / 小米手机 0.6841 / 手机壳 0.6841 / 苹果手机 0.6196</text>
+  <text x="40" y="228" font-size="13" fill="#16a34a">operator: and   → hits=1 ｜ 华为手机 Mate60  score=1.4637604</text>
+
+  <!-- 底部遗留 -->
+  <rect x="24" y="248" width="792" height="76" rx="8" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.5"/>
+  <text x="40" y="270" font-size="13" fill="#92400e" font-weight="600">本步解决了：精度从 1/6 提升到 1/1 —— 加一个参数就改了查询语义。</text>
+  <text x="40" y="292" font-size="13" fill="#a16207">⚠️ 遗留 1：太严格 —— 用户多输一个词或中间加空格，and 容易导致零结果（从一个极端走到另一个极端）。</text>
+  <text x="40" y="314" font-size="13" fill="#a16207">⚠️ 遗留 2：管不了别的字段 —— 需求来了：「要手机分类的、价格 1000-6000 的」，match 的 operator 无能为力，需要 bool。</text>
+</svg>

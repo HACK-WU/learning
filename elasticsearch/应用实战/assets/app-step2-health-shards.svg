@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="350" viewBox="0 0 860 350" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="860" height="350" fill="#fbfcfd"/>
+
+  <text x="24" y="30" font-size="15" fill="#334155" font-weight="600">② 判断二：_cat/shards 定位是谁没分配上（本机实测 yellow 复现）</text>
+
+  <!-- 索引配置 -->
+  <rect x="24" y="48" width="270" height="80" rx="8" fill="#f1f5f9" stroke="#94a3b8" stroke-width="2"/>
+  <text x="159" y="70" text-anchor="middle" font-size="12" fill="#334155" font-weight="600">人为造 yellow：ap_red</text>
+  <text x="40" y="92" font-size="11" fill="#475569">number_of_shards   = 1</text>
+  <text x="40" y="110" font-size="11" fill="#dc2626">number_of_replicas = 3  ← 3 节点放不下 4 份</text>
+
+  <!-- 结果 -->
+  <rect x="326" y="48" width="510" height="80" rx="8" fill="#fef9c3" stroke="#ca8a04" stroke-width="2"/>
+  <text x="581" y="70" text-anchor="middle" font-size="12" fill="#854d0e" font-weight="600">实测结果</text>
+  <text x="342" y="92" font-size="11" fill="#a16207">集群 status = yellow，unassigned = 1</text>
+  <text x="342" y="112" font-size="11" fill="#a16207">_cat/shards/ap_red 输出见下方</text>
+
+  <!-- 分片表 -->
+  <text x="24" y="156" font-size="14" fill="#334155" font-weight="600">_cat/shards/ap_red 实测输出</text>
+  <rect x="24" y="168" width="812" height="112" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="44" y="190" font-size="12" fill="#334155" font-weight="600">shard</text>
+  <text x="180" y="190" font-size="12" fill="#334155" font-weight="600">prirep</text>
+  <text x="320" y="190" font-size="12" fill="#334155" font-weight="600">state</text>
+  <text x="500" y="190" font-size="12" fill="#334155" font-weight="600">docs</text>
+  <line x1="44" y1="198" x2="800" y2="198" stroke="#cbd5e1" stroke-width="1"/>
+
+  <text x="44" y="220" font-size="12" fill="#166534">0</text><text x="180" y="220" font-size="12" fill="#166534">r</text><text x="320" y="220" font-size="12" fill="#166534">STARTED</text><text x="500" y="220" font-size="12" fill="#166534">1</text>
+  <rect x="36" y="230" width="790" height="22" rx="4" fill="#dcfce7"/>
+  <text x="44" y="246" font-size="12" fill="#14532d" font-weight="600">0</text><text x="180" y="246" font-size="12" fill="#14532d" font-weight="600">p</text><text x="320" y="246" font-size="12" fill="#14532d" font-weight="600">STARTED</text><text x="500" y="246" font-size="12" fill="#14532d" font-weight="600">1</text>
+  <text x="44" y="268" font-size="12" fill="#166534">0</text><text x="180" y="268" font-size="12" fill="#166534">r</text><text x="320" y="268" font-size="12" fill="#166534">STARTED</text><text x="500" y="268" font-size="12" fill="#166534">1</text>
+  <rect x="36" y="276" width="790" height="22" rx="4" fill="#fee2e2"/>
+  <text x="44" y="292" font-size="12" fill="#7f1d1d" font-weight="600">0</text><text x="180" y="292" font-size="12" fill="#7f1d1d" font-weight="600">r</text><text x="320" y="292" font-size="12" fill="#7f1d1d" font-weight="600">UNASSIGNED</text><text x="500" y="292" font-size="12" fill="#7f1d1d" font-weight="600">（无）</text>
+
+  <!-- 结论 -->
+  <rect x="24" y="296" width="404" height="40" rx="6" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="40" y="321" font-size="12" fill="#1e3a8a" font-weight="600">关键：UNASSIGNED 的是 r（副本），p（主分片）稳稳 STARTED。</text>
+
+  <rect x="448" y="296" width="388" height="40" rx="6" fill="#dcfce7" stroke="#86efac" stroke-width="1.5"/>
+  <text x="464" y="321" font-size="12" fill="#14532d" font-weight="600">实测：yellow 下查询成功 hits=1 —— 数据没丢、可读。</text>
+</svg>

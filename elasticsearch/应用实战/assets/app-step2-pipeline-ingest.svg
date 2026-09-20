@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="400" viewBox="0 0 860 400" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="860" height="400" fill="#fbfcfd"/>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+    <marker id="greenarrow" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#16a34a"/>
+    </marker>
+  </defs>
+
+  <text x="24" y="30" font-size="15" fill="#334155" font-weight="600">② 改进版：Ingest Pipeline 六道 processor（本机实测，含 _simulate 干跑）</text>
+
+  <!-- simulate -->
+  <rect x="24" y="46" width="196" height="70" rx="8" fill="#e0e7ff" stroke="#6366f1" stroke-width="2.5"/>
+  <text x="122" y="68" text-anchor="middle" font-size="12" fill="#312e81" font-weight="600">_simulate?verbose=true</text>
+  <text x="122" y="90" text-anchor="middle" font-size="11" fill="#4338ca">不写数据，先干跑验证</text>
+  <text x="122" y="108" text-anchor="middle" font-size="10" fill="#4338ca">（排查 pipeline 第一步）</text>
+
+  <line x1="220" y1="81" x2="248" y2="81" stroke="#6366f1" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 六道 processor -->
+  <rect x="252" y="46" width="584" height="70" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="3"/>
+  <text x="544" y="66" text-anchor="middle" font-size="12" fill="#14532d" font-weight="600">六道 processor 依次加工（本步新增）</text>
+  <rect x="264" y="74" width="86" height="32" rx="4" fill="#bbf7d0"/>
+  <text x="307" y="94" text-anchor="middle" font-size="10" fill="#14532d">trim 去空格</text>
+  <rect x="356" y="74" width="86" height="32" rx="4" fill="#bbf7d0"/>
+  <text x="399" y="94" text-anchor="middle" font-size="10" fill="#14532d">gsub 剥单位</text>
+  <rect x="448" y="74" width="86" height="32" rx="4" fill="#bbf7d0"/>
+  <text x="491" y="94" text-anchor="middle" font-size="10" fill="#14532d">convert 转型</text>
+  <rect x="540" y="74" width="86" height="32" rx="4" fill="#bbf7d0"/>
+  <text x="583" y="94" text-anchor="middle" font-size="10" fill="#14532d">split 拆数组</text>
+  <rect x="632" y="74" width="86" height="32" rx="4" fill="#bbf7d0"/>
+  <text x="675" y="94" text-anchor="middle" font-size="10" fill="#14532d">date 统一</text>
+  <rect x="724" y="74" width="100" height="32" rx="4" fill="#bbf7d0"/>
+  <text x="774" y="94" text-anchor="middle" font-size="10" fill="#14532d">remove 删旧</text>
+
+  <!-- verbose 演进 -->
+  <text x="24" y="140" font-size="14" fill="#334155" font-weight="600">verbose 实测输出：逐个 processor 的演进</text>
+  <rect x="24" y="152" width="812" height="132" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="40" y="174" font-size="10" fill="#64748b">trim</text>
+  <text x="110" y="174" font-size="10" font-family="monospace" fill="#334155">{"name":"小米手机","price":"1999.9元","tag":"A,B","ts":"2026/08/15 10:30:00"}</text>
+  <rect x="36" y="182" width="784" height="20" rx="3" fill="#dcfce7"/>
+  <text x="40" y="196" font-size="10" fill="#14532d" font-weight="600">gsub</text>
+  <text x="110" y="196" font-size="10" font-family="monospace" fill="#14532d">{"name":"小米手机","price":"1999.9","tag":"A,B","ts":"2026/08/15 10:30:00"}  ← "元"被剥掉</text>
+  <text x="40" y="222" font-size="10" fill="#64748b">convert</text>
+  <text x="110" y="222" font-size="10" font-family="monospace" fill="#334155">{"name":"小米手机","price":1999.9,"tag":"A,B","ts":"2026/08/15 10:30:00"}</text>
+  <text x="40" y="246" font-size="10" fill="#64748b">split</text>
+  <text x="110" y="246" font-size="10" font-family="monospace" fill="#334155">{"name":"小米手机","price":1999.9,"tag":["A","B"],"ts":"2026/08/15 10:30:00"}</text>
+  <text x="40" y="270" font-size="10" fill="#64748b">date+remove</text>
+  <text x="110" y="270" font-size="10" font-family="monospace" fill="#334155">{"name":"小米手机","@timestamp":"2026-08-15T10:30:00.000Z","tag":["A","B"],"price":1999.9}</text>
+
+  <!-- 实测结果 -->
+  <text x="24" y="306" font-size="14" fill="#334155" font-weight="600">正式写入实测：三条脏数据全部洗净，聚合通过</text>
+  <rect x="24" y="318" width="812" height="68" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="40" y="338" font-size="10" font-family="monospace" fill="#166534">{"@timestamp":"2026-08-15T10:30:00.000Z","price":1999.9,"name":"小米手机","tag":["A","B"]}</text>
+  <text x="40" y="356" font-size="10" font-family="monospace" fill="#166534">{"@timestamp":"2026-08-17T00:00:00.000Z","price":29.9,"name":"手机壳","tag":["D","E"]}  ← "￥29.9" 也被剥净</text>
+  <text x="40" y="376" font-size="11" fill="#14532d" font-weight="600">avg=2676.266674677531  max=5999.0  min=29.899999618530273</text>
+</svg>

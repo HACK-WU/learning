@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="430" viewBox="0 0 780 430" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <rect width="780" height="430" fill="#fbfcfd"/>
+  <text x="20" y="30" font-size="16" font-weight="bold" fill="#1f2933">③ 边界：flattened 压的是「字段数」，不是「配对关系」</text>
+  <text x="20" y="52" font-size="12" fill="#7b8794">右半红色区是实测反证 —— 它不取代 nested</text>
+
+  <!-- 左：能做什么 -->
+  <rect x="20" y="76" width="352" height="170" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="3"/>
+  <text x="196" y="100" font-size="13" font-weight="bold" fill="#1b5e20" text-anchor="middle">✅ 扁平 KV 结构：点路径查询正常</text>
+  <text x="36" y="126" font-size="11" fill="#3e2723">写入：{"name":"夏季T恤","attrs":{"color":"red","size":"L"}}</text>
+  <text x="36" y="150" font-size="11" fill="#2e7d32">attrs.color=red&nbsp;&nbsp;→ hits=1</text>
+  <text x="36" y="170" font-size="11" fill="#2e7d32">attrs.color=blue → hits=1</text>
+  <text x="36" y="192" font-size="11" fill="#2e7d32">跨键 color=blue + size=L → hits=0&nbsp;&nbsp;← 不误配</text>
+  <text x="36" y="222" font-size="11" fill="#1b5e20" font-weight="bold">价值：整个 attrs 对象只占 1 个映射字段位</text>
+  <text x="36" y="240" font-size="11" fill="#2e7d32">键名再多也撑不爆 total_fields.limit（默认 1000）</text>
+
+  <!-- 右：不能做什么 -->
+  <rect x="408" y="76" width="352" height="170" rx="8" fill="#ffebee" stroke="#c62828" stroke-width="3"/>
+  <text x="584" y="100" font-size="13" font-weight="bold" fill="#b71c1c" text-anchor="middle">❌ 换成对象数组：退化成 object</text>
+  <text x="424" y="126" font-size="11" fill="#3e2723">写入：attrs:[{k:color,v:red},{k:size,v:L}]</text>
+  <text x="424" y="152" font-size="11" fill="#c62828">数组结构 + 跨对象查 → hits=1&nbsp;&nbsp;← 又误配了</text>
+  <text x="424" y="176" font-size="11" fill="#c62828">对 flattened 跑 nested 查询 →</text>
+  <text x="424" y="194" font-size="11" fill="#c62828">&nbsp;&nbsp;search_phase_execution_exception</text>
+  <text x="424" y="224" font-size="11" font-weight="bold" fill="#b71c1c">两条反证 → 不是替代关系</text>
+  <text x="424" y="242" font-size="11" fill="#3e2723">① 跑 nested 查询直接报错</text>
+
+  <!-- 结论 -->
+  <rect x="20" y="266" width="740" height="60" rx="8" fill="#f5f7fa" stroke="#90a4ae" stroke-width="2"/>
+  <text x="36" y="288" font-size="12" font-weight="bold" fill="#1f2933">② 对象数组场景下 flattened 一样会误配（命中 1），而 nested 返回 0</text>
+  <text x="36" y="310" font-size="11" fill="#3e2723">网上流传的「ES 7.0 之后 flattened 已取代 nested」是错的 —— 本课 ES 9.5.1 实测给出上述反证，官方 9.x 文档仍有 nested 专页且在维护。</text>
+
+  <rect x="20" y="340" width="740" height="76" rx="8" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+  <text x="36" y="362" font-size="12" font-weight="bold" fill="#e65100">选型：一句话区分</text>
+  <text x="36" y="384" font-size="11" fill="#3e2723">要「对象数组内跨对象误配」→ nested ／ 要「键名不确定、字段数会爆炸」→ flattened ／ 只是普通嵌套 → object（默认）</text>
+  <text x="36" y="406" font-size="11" font-weight="bold" fill="#795548">🔑 nested 买的是正确性，flattened 买的是字段数 —— 不存在谁取代谁。</text>
+
+  <defs/>
+</svg>

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="390" viewBox="0 0 860 390" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="860" height="390" fill="#fbfcfd"/>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <text x="24" y="30" font-size="15" fill="#334155" font-weight="600">④ 综合版：四条件筛选器 —— must 搜词 / filter 筛条件 / should 加权（本机实测）</text>
+
+  <!-- 输入 -->
+  <rect x="24" y="48" width="180" height="60" rx="8" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+  <text x="114" y="72" text-anchor="middle" font-size="13" fill="#0c4a6e" font-weight="600">用户输入</text>
+  <text x="114" y="92" text-anchor="middle" font-size="12" fill="#075985">关键词「手机」</text>
+
+  <!-- filter 链 -->
+  <rect x="240" y="48" width="248" height="60" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2.5"/>
+  <text x="364" y="72" text-anchor="middle" font-size="13" fill="#14532d" font-weight="600">filter（三者同时满足）</text>
+  <text x="364" y="92" text-anchor="middle" font-size="11" fill="#166534">category=手机 · price 1000-6000 · stock≥1</text>
+
+  <!-- should -->
+  <rect x="524" y="48" width="180" height="60" rx="8" fill="#e0e7ff" stroke="#6366f1" stroke-width="2.5"/>
+  <text x="614" y="72" text-anchor="middle" font-size="13" fill="#312e81" font-weight="600">should 加权</text>
+  <text x="614" y="92" text-anchor="middle" font-size="11" fill="#4338ca">brand=Xiaomi boost:2</text>
+
+  <!-- sort -->
+  <rect x="740" y="48" width="96" height="60" rx="8" fill="#f1f5f9" stroke="#94a3b8" stroke-width="2"/>
+  <text x="788" y="72" text-anchor="middle" font-size="13" fill="#334155" font-weight="600">sort</text>
+  <text x="788" y="92" text-anchor="middle" font-size="11" fill="#475569">price asc</text>
+
+  <line x1="204" y1="78" x2="236" y2="78" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="488" y1="78" x2="520" y2="78" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="704" y1="78" x2="736" y2="78" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 结果 1 -->
+  <rect x="24" y="132" width="398" height="90" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="40" y="154" font-size="12" fill="#14532d" font-weight="600">不带 should，按 price 升序（实测）：</text>
+  <text x="40" y="176" font-size="12" fill="#166534">hits=2</text>
+  <text x="40" y="196" font-size="12" fill="#166534">1. 小米手机 全网通  Xiaomi  price=1999.9</text>
+  <text x="40" y="214" font-size="12" fill="#166534">2. 华为手机 Mate60  Huawei  price=5999</text>
+
+  <!-- 结果 2 -->
+  <rect x="438" y="132" width="398" height="90" rx="8" fill="#eef2ff" stroke="#a5b4fc" stroke-width="1.5"/>
+  <text x="454" y="154" font-size="12" fill="#312e81" font-weight="600">加 should 后（命中不变，排序改变）：</text>
+  <text x="454" y="176" font-size="12" fill="#4338ca">小米手机 全网通   Xiaomi  score=2.5730424  ← 跃升</text>
+  <text x="454" y="196" font-size="12" fill="#4338ca">华为手机 Mate60   Huawei  score=0.61956275</text>
+  <text x="454" y="214" font-size="12" fill="#4338ca">苹果手机 iPhone15 Apple   score=0.61956275</text>
+
+  <!-- validate -->
+  <rect x="24" y="240" width="812" height="60" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="40" y="262" font-size="12" fill="#334155" font-weight="600">用 _validate/query?explain=true 一眼验结构（实测输出）：</text>
+  <text x="40" y="284" font-size="13" fill="#0f172a" font-family="monospace">+name:手机 #category:手机</text>
+
+  <!-- 底部 -->
+  <rect x="24" y="316" width="812" height="58" rx="8" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="40" y="338" font-size="13" fill="#1e3a8a" font-weight="600">小米从 0.684 涨到 2.573 —— boost:2 明确生效，且命中集合不变：should 是「加分项」不是「必选项」。</text>
+  <text x="40" y="360" font-size="13" fill="#1e40af">_validate 输出里 + = must（打分）、# = filter（不打分）—— 排查复杂 bool 时先看这两个符号的分布。</text>
+</svg>

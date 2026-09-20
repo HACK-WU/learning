@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="360" viewBox="0 0 800 360" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="800" height="360" fill="#fbfcfd"/>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <text x="24" y="30" font-size="15" fill="#334155" font-weight="600">② 改进版：换成 IK —— 索引侧细切、搜索侧粗切（高亮 = 本步改动，本机实测）</text>
+
+  <!-- 左：标题 -->
+  <rect x="24" y="52" width="152" height="116" rx="10" fill="#f1f5f9" stroke="#94a3b8" stroke-width="2"/>
+  <text x="100" y="78" text-anchor="middle" font-size="14" fill="#334155" font-weight="600">商品标题</text>
+  <text x="100" y="102" text-anchor="middle" font-size="12" fill="#475569">小米手机 全网通</text>
+  <text x="100" y="122" text-anchor="middle" font-size="12" fill="#475569">华为手机 旗舰</text>
+  <text x="100" y="142" text-anchor="middle" font-size="12" fill="#475569">手机壳 防摔</text>
+
+  <!-- 中：IK 双分析器 -->
+  <rect x="214" y="46" width="176" height="128" rx="10" fill="#dcfce7" stroke="#16a34a" stroke-width="3"/>
+  <text x="302" y="68" text-anchor="middle" font-size="14" fill="#14532d" font-weight="600">IK 分析器（本步新增）</text>
+  <rect x="228" y="80" width="148" height="40" rx="6" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="302" y="96" text-anchor="middle" font-size="12" fill="#15803d" font-weight="600">索引侧 ik_max_word</text>
+  <text x="302" y="112" text-anchor="middle" font-size="11" fill="#166534">细切，保召回</text>
+  <rect x="228" y="126" width="148" height="40" rx="6" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="302" y="142" text-anchor="middle" font-size="12" fill="#15803d" font-weight="600">搜索侧 ik_smart</text>
+  <text x="302" y="158" text-anchor="middle" font-size="11" fill="#166534">粗切，保精确</text>
+
+  <!-- 右：倒排索引 -->
+  <rect x="428" y="46" width="248" height="128" rx="10" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="552" y="68" text-anchor="middle" font-size="14" fill="#14532d" font-weight="600">倒排索引（出现双字词）</text>
+  <text x="446" y="92" font-size="12" fill="#166534">小米 → doc1</text>
+  <text x="446" y="110" font-size="12" fill="#166534">手机 → doc1, doc2, doc3</text>
+  <text x="446" y="128" font-size="12" fill="#166534">全网 / 网通 → doc1</text>
+  <rect x="442" y="138" width="228" height="20" rx="4" fill="#bbf7d0"/>
+  <text x="446" y="153" font-size="12" fill="#14532d" font-weight="600">机壳 → doc3   ← 只在目标文档出现</text>
+  <text x="446" y="170" font-size="12" fill="#166534">防 / 摔 → doc3</text>
+
+  <line x1="176" y1="110" x2="210" y2="110" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="390" y1="110" x2="424" y2="110" stroke="#16a34a" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- 查询 -->
+  <rect x="214" y="200" width="176" height="56" rx="8" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+  <text x="302" y="218" text-anchor="middle" font-size="13" fill="#0c4a6e" font-weight="600">查询「手机壳」</text>
+  <text x="302" y="238" text-anchor="middle" font-size="12" fill="#075985">ik_smart → 手 / 机壳</text>
+  <text x="302" y="252" text-anchor="middle" font-size="11" fill="#0369a1">（注意：不是整词！）</text>
+
+  <line x1="302" y1="174" x2="302" y2="196" stroke="#0284c7" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="428" y="200" width="372" height="56" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="444" y="222" font-size="13" fill="#14532d" font-weight="600">结果：hits 从 3 降到 1，命中的正是「手机壳 防摔」</text>
+  <text x="444" y="244" font-size="13" fill="#166534">收敛全靠「机壳」这个双字词——它只存在于 doc3</text>
+
+  <!-- 底部：反直觉 + 遗留 -->
+  <rect x="24" y="274" width="776" height="70" rx="8" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.5"/>
+  <text x="40" y="296" font-size="13" fill="#92400e" font-weight="600">⚠️ 反直觉实测：ik_smart 没把「手机壳」切成整词（切成 手 / 机壳）——该词不在 IK 默认词典里，但不影响收敛。</text>
+  <text x="40" y="316" font-size="13" fill="#a16207">⚠️ IK 不是万能药：搜「小米手机」IK 版依然 hits=3（「手机」是三条共有词），要靠课 6 的 operator / minimum_should_match。</text>
+  <text x="40" y="336" font-size="13" fill="#a16207">⚠️ 遗留：改 analyzer 不能就地生效（实测 Mapper conflict），已有数据的索引必须重建。</text>
+</svg>

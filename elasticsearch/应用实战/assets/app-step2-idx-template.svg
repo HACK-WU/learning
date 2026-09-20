@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="400" viewBox="0 0 780 400" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <rect width="780" height="400" fill="#fbfcfd"/>
+  <text x="20" y="30" font-size="16" font-weight="bold" fill="#1f2933">② 改进版：组件模板（积木）+ 索引模板（模具）</text>
+  <text x="20" y="52" font-size="12" fill="#7b8794">红色区是边界：改了模具，已经压出来的零件不会变</text>
+
+  <!-- 积木 -->
+  <rect x="20" y="76" width="222" height="80" rx="8" fill="#fff3e0" stroke="#ef6c00" stroke-width="2"/>
+  <text x="131" y="98" font-size="12" font-weight="bold" fill="#e65100" text-anchor="middle">组件模板 ap_shop_set</text>
+  <text x="131" y="118" font-size="11" fill="#3e2723" text-anchor="middle">number_of_shards = 2</text>
+  <text x="131" y="136" font-size="11" fill="#3e2723" text-anchor="middle">number_of_replicas = 0</text>
+  <text x="131" y="152" font-size="11" fill="#3e2723" text-anchor="middle">refresh_interval = 5s</text>
+
+  <rect x="20" y="168" width="222" height="80" rx="8" fill="#fff3e0" stroke="#ef6c00" stroke-width="2"/>
+  <text x="131" y="190" font-size="12" font-weight="bold" fill="#e65100" text-anchor="middle">组件模板 ap_shop_map</text>
+  <text x="131" y="210" font-size="11" fill="#3e2723" text-anchor="middle">price: scaled_float</text>
+  <text x="131" y="228" font-size="11" fill="#3e2723" text-anchor="middle">scaling_factor = 100</text>
+  <text x="131" y="244" font-size="11" fill="#3e2723" text-anchor="middle">brand: keyword / created: date</text>
+
+  <line x1="244" y1="116" x2="298" y2="116" stroke="#52606d" stroke-width="2" marker-end="url(#arw)"/>
+  <line x1="244" y1="208" x2="298" y2="208" stroke="#52606d" stroke-width="2" marker-end="url(#arw)"/>
+  <text x="272" y="166" font-size="10" fill="#52606d" text-anchor="middle">composed_of</text>
+
+  <!-- 模具 -->
+  <rect x="302" y="108" width="216" height="94" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="3"/>
+  <text x="410" y="132" font-size="12" font-weight="bold" fill="#0d47a1" text-anchor="middle">索引模板 ap_shop_tpl</text>
+  <text x="410" y="152" font-size="11" fill="#1565c0" text-anchor="middle">index_patterns: ap_shop-*</text>
+  <text x="410" y="170" font-size="11" fill="#1565c0" text-anchor="middle">priority: 200</text>
+  <text x="410" y="188" font-size="11" fill="#1565c0" text-anchor="middle">composed_of: 两块积木</text>
+
+  <line x1="520" y1="155" x2="574" y2="155" stroke="#52606d" stroke-width="2" marker-end="url(#arw)"/>
+  <text x="547" y="147" font-size="10" fill="#52606d" text-anchor="middle">自动套用</text>
+
+  <!-- 新索引 -->
+  <rect x="578" y="100" width="182" height="110" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="3"/>
+  <text x="669" y="124" font-size="12" font-weight="bold" fill="#1b5e20" text-anchor="middle">ap_shop-000001</text>
+  <text x="669" y="144" font-size="11" fill="#2e7d32" text-anchor="middle">一个配置都没手写</text>
+  <text x="669" y="164" font-size="11" fill="#2e7d32" text-anchor="middle">shards = 2 ✔</text>
+  <text x="669" y="182" font-size="11" fill="#2e7d32" text-anchor="middle">refresh = 5s ✔</text>
+  <text x="669" y="200" font-size="11" fill="#2e7d32" text-anchor="middle">price = scaled_float ✔</text>
+
+  <!-- 边界 -->
+  <rect x="20" y="270" width="740" height="114" rx="8" fill="#ffebee" stroke="#c62828" stroke-width="3"/>
+  <text x="36" y="294" font-size="13" font-weight="bold" fill="#b71c1c">⚠ 边界：改了模具，已有索引纹丝不动（本篇实测）</text>
+  <text x="36" y="318" font-size="11" fill="#3e2723">把组件模板 refresh_interval 从 5s 改成 77s 后：</text>
+  <text x="36" y="340" font-size="11" fill="#c62828">ap_shop-000001（改前建的）refresh_interval = 5s     ← 旧零件不变</text>
+  <text x="36" y="360" font-size="11" fill="#2e7d32">ap_shop-000002（改后建的）refresh_interval = 77s    ← 新零件用新值</text>
+  <text x="36" y="380" font-size="11" fill="#3e2723">发现线上索引没变别以为是 ES 出 bug —— 模板只对「之后创建的索引」生效，改已有索引只有 reindex 一条路。</text>
+
+  <defs>
+    <marker id="arw" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#52606d"/></marker>
+  </defs>
+</svg>

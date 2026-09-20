@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="400" viewBox="0 0 780 400" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <rect width="780" height="400" fill="#fbfcfd"/>
+  <text x="20" y="30" font-size="16" font-weight="bold" fill="#1f2933">③ 坑二：没有事务 —— 步骤 1 已落库，步骤 2 失败后不回滚</text>
+  <text x="20" y="52" font-size="12" fill="#7b8794">关系型数据库这里会画一条 ROLLBACK 虚线，ES 没有（高亮处）</text>
+
+  <rect x="20" y="76" width="150" height="60" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="95" y="100" font-size="13" font-weight="bold" fill="#0d47a1" text-anchor="middle">业务：扣库存</text>
+  <text x="95" y="122" font-size="11" fill="#1565c0" text-anchor="middle">+ 生成订单</text>
+
+  <line x1="172" y1="106" x2="222" y2="106" stroke="#52606d" stroke-width="2" marker-end="url(#arw)"/>
+
+  <!-- 步骤1 -->
+  <rect x="226" y="72" width="222" height="68" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="3"/>
+  <text x="337" y="94" font-size="12" font-weight="bold" fill="#1b5e20" text-anchor="middle">步骤 1：扣减 doc1</text>
+  <text x="337" y="114" font-size="11" fill="#2e7d32" text-anchor="middle">amount 800 → 750</text>
+  <text x="337" y="132" font-size="11" font-weight="bold" fill="#1b5e20" text-anchor="middle">result=updated ✅ 已落库</text>
+
+  <line x1="450" y1="106" x2="500" y2="106" stroke="#52606d" stroke-width="2" marker-end="url(#arw)"/>
+
+  <!-- 步骤2 -->
+  <rect x="504" y="72" width="256" height="68" rx="8" fill="#ffebee" stroke="#c62828" stroke-width="3"/>
+  <text x="632" y="94" font-size="12" font-weight="bold" fill="#b71c1c" text-anchor="middle">步骤 2：生成订单 doc2</text>
+  <text x="632" y="114" font-size="11" fill="#c62828" text-anchor="middle">传非法值 → document_parsing_exception</text>
+  <text x="632" y="132" font-size="11" font-weight="bold" fill="#b71c1c" text-anchor="middle">❌ 失败 HTTP 400</text>
+
+  <!-- 回滚缺失 -->
+  <rect x="226" y="168" width="534" height="58" rx="8" fill="#fff3e0" stroke="#ef6c00" stroke-width="3" stroke-dasharray="7 5"/>
+  <text x="493" y="190" font-size="13" font-weight="bold" fill="#e65100" text-anchor="middle">✘ 这里本该有一条 ROLLBACK：把 doc1 从 750 改回 800</text>
+  <text x="493" y="212" font-size="11" fill="#bf360c" text-anchor="middle">ES 没有跨文档事务，这条回滚线不存在 —— 步骤 1 的结果永久留下</text>
+
+  <!-- 终态 -->
+  <rect x="20" y="248" width="740" height="72" rx="8" fill="#f5f7fa" stroke="#90a4ae" stroke-width="2"/>
+  <text x="36" y="270" font-size="12" font-weight="bold" fill="#1f2933">实测终态（失败后回读）</text>
+  <text x="36" y="292" font-size="11" fill="#c62828">doc1.amount = 750   ← 没回滚！扣掉的库存回不来</text>
+  <text x="36" y="310" font-size="11" fill="#c62828">doc2.amount = 1200  ← 订单没建成，两边对不上账</text>
+
+  <rect x="20" y="334" width="740" height="52" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="36" y="354" font-size="12" font-weight="bold" fill="#1b5e20">ES 的事务保障只有「单文档乐观锁」（_seq_no + _primary_term）</text>
+  <text x="36" y="374" font-size="11" fill="#2e7d32">✅ 同文档并发更新不互相覆盖 ／ ❌ 多文档原子性 ／ ❌ 隔离级别、外键约束 —— 一律没有</text>
+
+  <defs>
+    <marker id="arw" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#52606d"/></marker>
+  </defs>
+</svg>

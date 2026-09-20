@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="420" viewBox="0 0 780 420" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <rect width="780" height="420" fill="#fbfcfd"/>
+  <text x="20" y="30" font-size="16" font-weight="bold" fill="#1f2933">④ 搜索框补全：要词用 completion，要文档用 search_as_you_type</text>
+  <text x="20" y="52" font-size="12" fill="#7b8794">同一个输入分两路 —— 上路给候选词，下路给真实文档</text>
+
+  <rect x="20" y="76" width="130" height="60" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="85" y="100" font-size="13" font-weight="bold" fill="#0d47a1" text-anchor="middle">用户输入</text>
+  <text x="85" y="122" font-size="11" fill="#1565c0" text-anchor="middle">elas / el</text>
+
+  <line x1="152" y1="94" x2="212" y2="94" stroke="#52606d" stroke-width="2" marker-end="url(#arw)"/>
+  <line x1="152" y1="122" x2="212" y2="122" stroke="#52606d" stroke-width="2" marker-end="url(#arw)"/>
+
+  <!-- 上路 -->
+  <rect x="216" y="66" width="230" height="56" rx="8" fill="#e8f0ff" stroke="#1565c0" stroke-width="3"/>
+  <text x="331" y="88" font-size="12" font-weight="bold" fill="#0d47a1" text-anchor="middle">completion（内存 FST）</text>
+  <text x="331" y="110" font-size="11" fill="#1565c0" text-anchor="middle">prefix → 从候选词库挑词</text>
+
+  <rect x="216" y="130" width="230" height="82" rx="8" fill="#f5f7fa" stroke="#90a4ae" stroke-width="2"/>
+  <text x="228" y="152" font-size="11" fill="#3e2723">返回「候选词」，不是文档</text>
+  <text x="228" y="172" font-size="11" fill="#1565c0">elasticsearch&nbsp;&nbsp;_score=10.0</text>
+  <text x="228" y="190" font-size="11" fill="#1565c0">elasticsearch 实战 _score=5.0</text>
+  <text x="228" y="208" font-size="11" fill="#e65100">_score = 写入时的 weight，不走 BM25</text>
+
+  <!-- 下路 -->
+  <rect x="486" y="66" width="274" height="56" rx="8" fill="#e8f0ff" stroke="#1565c0" stroke-width="3"/>
+  <text x="623" y="88" font-size="12" font-weight="bold" fill="#0d47a1" text-anchor="middle">search_as_you_type（n-gram）</text>
+  <text x="623" y="110" font-size="11" fill="#1565c0" text-anchor="middle">bool_prefix 查 _2gram / _3gram 子字段</text>
+
+  <rect x="486" y="130" width="274" height="82" rx="8" fill="#f5f7fa" stroke="#90a4ae" stroke-width="2"/>
+  <text x="498" y="152" font-size="11" fill="#3e2723">返回「真实文档」</text>
+  <text x="498" y="172" font-size="11" fill="#2e7d32">elasticsearch 教程</text>
+  <text x="498" y="190" font-size="11" fill="#2e7d32">elasticsearch 实战</text>
+  <text x="498" y="208" font-size="11" fill="#795548">支持中间词匹配，走常规 BM25 打分</text>
+
+  <rect x="20" y="230" width="740" height="60" rx="8" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="36" y="252" font-size="12" font-weight="bold" fill="#b71c1c">⚠ completion 只匹配前缀（实测）</text>
+  <text x="36" y="274" font-size="11" fill="#3e2723">前缀=教程（中间词）→ options=0 条 ／ 前缀=el → 返回 2 条候选词。要中间匹配请用 search_as_you_type。</text>
+
+  <rect x="20" y="304" width="740" height="100" rx="8" fill="#fff3e0" stroke="#ef6c00" stroke-width="2"/>
+  <text x="36" y="326" font-size="12" font-weight="bold" fill="#e65100">两个高频误用</text>
+  <text x="36" y="348" font-size="11" fill="#3e2723">① 把 completion 当搜索用 —— 它只返回候选词、不返回文档、不支持中间匹配。</text>
+  <text x="36" y="368" font-size="11" fill="#3e2723">② search_as_you_type 只 match 主字段 —— 必须在 fields 里显式列全 _2gram / _3gram，否则退化成普通全文匹配。</text>
+  <text x="36" y="388" font-size="11" fill="#bf360c">③ 补全排序不满意去调 BM25 —— completion 不吃 BM25，要调排序就改 weight。</text>
+
+  <defs>
+    <marker id="arw" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#52606d"/></marker>
+  </defs>
+</svg>

@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="840" height="380" viewBox="0 0 840 380" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="840" height="380" fill="#fbfcfd"/>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <text x="24" y="30" font-size="15" fill="#334155" font-weight="600">① 基础版：裸 match —— 只走 BM25，业务指标完全不参与（本机实测）</text>
+
+  <!-- 查询 -->
+  <rect x="24" y="50" width="170" height="60" rx="8" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+  <text x="109" y="74" text-anchor="middle" font-size="13" fill="#0c4a6e" font-weight="600">match name「手机」</text>
+  <text x="109" y="94" text-anchor="middle" font-size="11" fill="#075985">仅 BM25 打分</text>
+
+  <!-- sales 灰掉 -->
+  <rect x="24" y="126" width="170" height="54" rx="8" fill="#e5e7eb" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="109" y="150" text-anchor="middle" font-size="12" fill="#6b7280" font-weight="600">sales 字段</text>
+  <text x="109" y="170" text-anchor="middle" font-size="11" fill="#9ca3af">✗ 完全不参与排序</text>
+
+  <line x1="194" y1="80" x2="226" y2="80" stroke="#0284c7" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 结果 -->
+  <rect x="230" y="50" width="586" height="130" rx="8" fill="#fef2f2" stroke="#fca5a5" stroke-width="2"/>
+  <text x="523" y="72" text-anchor="middle" font-size="13" fill="#7f1d1d" font-weight="600">实测结果 hits=5</text>
+  <text x="246" y="94" font-size="11" fill="#dc2626">1. 手机支架 车载          sales=6000  score=0.98407036  ← 短标题占优</text>
+  <text x="246" y="112" font-size="11" fill="#166534">2. 小米手机 14 Ultra     sales=1500  score=0.88815</text>
+  <text x="246" y="130" font-size="11" fill="#dc2626">3. 苹果手机 iPhone 15 Pro sales=1200  score=0.80926836  ┐</text>
+  <text x="246" y="148" font-size="11" fill="#dc2626">4. 华为手机 Mate 60 Pro   sales=2000  score=0.80926836  ├ 完全撞分</text>
+  <text x="246" y="166" font-size="11" fill="#dc2626">5. 手机壳 磨砂防摔        sales=8000  score=0.80926836  ┘ ← 销量最高却垫底</text>
+
+  <!-- 三个问题 -->
+  <text x="24" y="210" font-size="14" fill="#334155" font-weight="600">三个问题一次暴露</text>
+
+  <rect x="24" y="222" width="264" height="88" rx="8" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.5"/>
+  <text x="40" y="244" font-size="12" fill="#92400e" font-weight="600">问题1 排序不合理</text>
+  <text x="40" y="264" font-size="11" fill="#a16207">"手机支架"标题最短（6字），BM25 的</text>
+  <text x="40" y="282" font-size="11" fill="#a16207">文档长度归一化让它占优，排到第一。</text>
+  <text x="40" y="300" font-size="11" fill="#a16207">三条 0.80926836 撞分，顺序不可控。</text>
+
+  <rect x="300" y="222" width="264" height="88" rx="8" fill="#fee2e2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="316" y="244" font-size="12" fill="#7f1d1d" font-weight="600">问题2 拼错零结果（最致命）</text>
+  <text x="316" y="264" font-size="11" fill="#991b1b" font-family="monospace">match「Iphane」→ hits=0</text>
+  <text x="316" y="284" font-size="11" fill="#991b1b">用户以为"没有商品"，直接离开。</text>
+  <text x="316" y="302" font-size="11" fill="#991b1b">零结果比排错更严重。</text>
+
+  <rect x="576" y="222" width="240" height="88" rx="8" fill="#fee2e2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="592" y="244" font-size="12" fill="#7f1d1d" font-weight="600">问题3 深分页报错</text>
+  <text x="592" y="264" font-size="11" fill="#991b1b" font-family="monospace">from=5    → 正常</text>
+  <text x="592" y="282" font-size="11" fill="#991b1b" font-family="monospace">from=10000 → 400 报错</text>
+  <text x="592" y="302" font-size="11" fill="#991b1b">默认上限 10000 条。</text>
+
+  <!-- 底部 -->
+  <rect x="24" y="326" width="792" height="40" rx="8" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="40" y="351" font-size="13" fill="#1e40af">根因一句话：BM25 只理解「词频与文档长度」，它不知道 sales 存在、不知道用户会拼错、也不关心你要翻多远。</text>
+</svg>

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="330" viewBox="0 0 760 330" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <rect width="760" height="330" fill="#fbfcfd"/>
+  <text x="20" y="30" font-size="16" font-weight="bold" fill="#1f2933">① 基础版：把原索引直接给外部方</text>
+  <text x="20" y="52" font-size="12" fill="#7b8794">没有任何过滤层 —— 谁能连上集群，谁就能看到全部</text>
+
+  <!-- 外部方 -->
+  <rect x="20" y="80" width="150" height="70" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="95" y="108" font-size="13" font-weight="bold" fill="#0d47a1" text-anchor="middle">外部合作方</text>
+  <text x="95" y="130" font-size="11" fill="#1565c0" text-anchor="middle">比价业务系统</text>
+
+  <line x1="172" y1="115" x2="228" y2="115" stroke="#52606d" stroke-width="2" marker-end="url(#arw)"/>
+  <text x="200" y="106" font-size="11" fill="#52606d" text-anchor="middle">_search</text>
+
+  <!-- 查询层：空 -->
+  <rect x="232" y="80" width="150" height="70" rx="8" fill="#ffebee" stroke="#c62828" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="307" y="106" font-size="13" font-weight="bold" fill="#b71c1c" text-anchor="middle">查询入口</text>
+  <text x="307" y="126" font-size="11" fill="#c62828" text-anchor="middle">无过滤 = 直连</text>
+
+  <line x1="384" y1="115" x2="440" y2="115" stroke="#52606d" stroke-width="2" marker-end="url(#arw)"/>
+
+  <!-- 索引 -->
+  <rect x="444" y="66" width="296" height="98" rx="8" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+  <text x="592" y="88" font-size="12" font-weight="bold" fill="#795548" text-anchor="middle">ap_partner（4 条）</text>
+  <text x="460" y="110" font-size="11" fill="#3e2723">1 手机A   1999 / cost 1200 / partner</text>
+  <text x="460" y="128" font-size="11" fill="#3e2723">2 手机B   2999 / cost 1800 / partner</text>
+  <text x="460" y="146" font-size="11" fill="#c62828" font-weight="bold">3 内部机C 3999 / cost 2000 / internal</text>
+
+  <!-- 返回 -->
+  <rect x="232" y="196" width="508" height="98" rx="8" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="248" y="218" font-size="12" font-weight="bold" fill="#b71c1c">返回 hits=4（一样没藏住）</text>
+  <text x="248" y="240" font-size="11" fill="#3e2723">{"name":"手机A","price":1999,"cost":1200,"channel":"partner"}</text>
+  <text x="248" y="258" font-size="11" fill="#3e2723">{"name":"手机B","price":2999,"cost":1800,"channel":"partner"}</text>
+  <text x="248" y="278" font-size="11" fill="#c62828" font-weight="bold">{"name":"内部机C","price":3999,"cost":2000,"channel":"internal"}</text>
+
+  <defs>
+    <marker id="arw" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#52606d"/>
+    </marker>
+  </defs>
+</svg>

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="370" viewBox="0 0 820 370" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="820" height="370" fill="#fbfcfd"/>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+    <marker id="greenarrow" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#16a34a"/>
+    </marker>
+  </defs>
+
+  <text x="24" y="30" font-size="15" fill="#334155" font-weight="600">③ 综合版：multi-fields + 索引模板（高亮 = 本步新增，本机实测）</text>
+
+  <!-- 左：一份数据 -->
+  <rect x="24" y="52" width="170" height="90" rx="10" fill="#f1f5f9" stroke="#94a3b8" stroke-width="2"/>
+  <text x="109" y="76" text-anchor="middle" font-size="14" fill="#334155" font-weight="600">一份 _source</text>
+  <text x="109" y="100" text-anchor="middle" font-size="12" fill="#475569">"name":"小米手机"</text>
+  <text x="109" y="122" text-anchor="middle" font-size="12" fill="#475569">（只存一次）</text>
+
+  <!-- 中上：multi-fields -->
+  <rect x="228" y="46" width="300" height="102" rx="10" fill="#dcfce7" stroke="#16a34a" stroke-width="3"/>
+  <text x="378" y="68" text-anchor="middle" font-size="14" fill="#14532d" font-weight="600">multi-fields（本步新增）</text>
+  <rect x="242" y="80" width="272" height="28" rx="6" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="252" y="99" font-size="12" fill="#15803d" font-weight="600">name → text + IK  （分词，供全文搜）</text>
+  <rect x="242" y="112" width="272" height="28" rx="6" fill="#ffffff" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="252" y="131" font-size="12" fill="#15803d" font-weight="600">name.keyword → keyword（不分词，供排序）</text>
+
+  <line x1="194" y1="88" x2="224" y2="88" stroke="#16a34a" stroke-width="2.5" marker-end="url(#greenarrow)"/>
+
+  <!-- 右：两种用法 -->
+  <rect x="562" y="46" width="232" height="102" rx="10" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="678" y="68" text-anchor="middle" font-size="14" fill="#14532d" font-weight="600">同一字段两种用法</text>
+  <text x="578" y="92" font-size="12" fill="#166534">match name「手机」→ hits=3</text>
+  <text x="578" y="112" font-size="12" fill="#166534">sort name.keyword → 华为/小米/手机壳</text>
+  <text x="578" y="136" font-size="12" fill="#166534">（text 排序做不到，实测报错）</text>
+
+  <line x1="528" y1="97" x2="558" y2="97" stroke="#16a34a" stroke-width="2.5" marker-end="url(#greenarrow)"/>
+
+  <!-- 模板 -->
+  <rect x="228" y="172" width="566" height="80" rx="10" fill="#e0e7ff" stroke="#6366f1" stroke-width="3"/>
+  <text x="511" y="196" text-anchor="middle" font-size="14" fill="#312e81" font-weight="600">索引模板 goods_tpl2（本步新增）</text>
+  <text x="248" y="218" font-size="12" fill="#4338ca">index_patterns: ["goods2-*"] —— 以后所有 goods2-* 索引自动继承这套 mapping</text>
+  <text x="248" y="238" font-size="12" fill="#4338ca">配置从「人记住要写」变成「平台自动下发」，新索引不会再漏配。</text>
+
+  <line x1="378" y1="148" x2="378" y2="168" stroke="#6366f1" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- 实测结果 -->
+  <rect x="24" y="272" width="770" height="82" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="40" y="294" font-size="13" fill="#14532d" font-weight="600">实测输出（goods2-v1）：</text>
+  <text x="40" y="316" font-size="13" fill="#166534">match「手机」hits=3 ｜ brand 分桶 3 个（Baseus/Huawei/Xiaomi 各 1）｜ avg_price = 2006.2666666666667</text>
+  <text x="40" y="338" font-size="13" fill="#166534">按 name.keyword 升序：华为手机 → 小米手机 → 手机壳</text>
+</svg>

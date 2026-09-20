@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="360" viewBox="0 0 860 360" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="860" height="360" fill="#fbfcfd"/>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <text x="24" y="30" font-size="15" fill="#334155" font-weight="600">③ 判断三：allocation/explain 让 ES 自己说原因（本机实测）</text>
+
+  <!-- 三步链 -->
+  <rect x="24" y="48" width="250" height="86" rx="8" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+  <text x="149" y="70" text-anchor="middle" font-size="12" fill="#0c4a6e" font-weight="600">① _cluster/health</text>
+  <text x="149" y="90" text-anchor="middle" font-size="11" fill="#075985">定级别：green / yellow / red</text>
+  <text x="149" y="110" text-anchor="middle" font-size="11" fill="#075985">+ unassigned 数量</text>
+  <text x="149" y="126" text-anchor="middle" font-size="10" fill="#0369a1">status=yellow, unassigned=1</text>
+
+  <rect x="306" y="48" width="250" height="86" rx="8" fill="#fef9c3" stroke="#ca8a04" stroke-width="2"/>
+  <text x="431" y="70" text-anchor="middle" font-size="12" fill="#854d0e" font-weight="600">② _cat/shards</text>
+  <text x="431" y="90" text-anchor="middle" font-size="11" fill="#a16207">定范围：哪个索引、主还是副</text>
+  <text x="431" y="110" text-anchor="middle" font-size="11" fill="#a16207">prirep = p 还是 r</text>
+  <text x="431" y="126" text-anchor="middle" font-size="10" fill="#a16207">未分配的是 r（副本）</text>
+
+  <rect x="588" y="48" width="248" height="86" rx="8" fill="#e0e7ff" stroke="#6366f1" stroke-width="3"/>
+  <text x="712" y="70" text-anchor="middle" font-size="12" fill="#312e81" font-weight="600">③ allocation/explain</text>
+  <text x="712" y="90" text-anchor="middle" font-size="11" fill="#4338ca">定原因：ES 自己说为什么</text>
+  <text x="712" y="110" text-anchor="middle" font-size="11" fill="#4338ca">逐节点拒绝理由</text>
+  <text x="712" y="126" text-anchor="middle" font-size="10" fill="#4338ca">（本步新增）</text>
+
+  <line x1="274" y1="91" x2="302" y2="91" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="556" y1="91" x2="584" y2="91" stroke="#6366f1" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- 实测输出 -->
+  <text x="24" y="162" font-size="14" fill="#334155" font-weight="600">实测输出（存在未分配分片时）</text>
+  <rect x="24" y="174" width="812" height="76" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="40" y="196" font-size="12" fill="#334155">index=ap_red shard=0 primary=False state=unassigned</text>
+  <text x="40" y="218" font-size="11" fill="#475569">allocate_explanation = Elasticsearch isn't allowed to allocate this shard to any of the</text>
+  <text x="40" y="236" font-size="11" fill="#475569">nodes in the cluster. ... find this node in the node-by-node explanation, and address</text>
+  <text x="40" y="248" font-size="11" fill="#475569">the reasons which prevent Elasticsearch from allocating this shard there.</text>
+
+  <!-- 注意 -->
+  <rect x="24" y="262" width="812" height="38" rx="6" fill="#fef9c3" stroke="#fcd34d" stroke-width="1.5"/>
+  <text x="40" y="284" font-size="12" fill="#854d0e" font-weight="600">⚠️ 集群健康（无未分配分片）时该接口会报错：illegal_argument_exception · There are no unassigned shards in this cluster.</text>
+  <text x="40" y="297" font-size="11" fill="#a16207">这个「报错」其实是好消息 —— 说明没有分片需要解释。别把它当常规监控接口用。</text>
+
+  <!-- 根因与修复 -->
+  <text x="24" y="322" font-size="14" fill="#334155" font-weight="600">本次根因与修复（实测）：3 节点放不下 1 主 + 3 副本共 4 份（副本不能与主分片同节点）</text>
+  <rect x="24" y="332" width="812" height="22" rx="6" fill="#dcfce7"/>
+  <text x="40" y="347" font-size="12" fill="#14532d" font-weight="600">number_of_replicas 3 → 1　实测 status 由 yellow 回到 green，unassigned=0 —— 全程没重启任何节点。</text>
+</svg>

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="430" viewBox="0 0 780 430" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <rect width="780" height="430" fill="#fbfcfd"/>
+  <text x="20" y="30" font-size="16" font-weight="bold" fill="#1f2933">③ 综合版：别名做零停机切换（模板 + reindex + 原子切换）</text>
+  <text x="20" y="52" font-size="12" fill="#7b8794">应用始终只认别名；下方红区是两个必须知道的边界</text>
+
+  <rect x="20" y="76" width="150" height="60" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="95" y="100" font-size="13" font-weight="bold" fill="#0d47a1" text-anchor="middle">应用代码</text>
+  <text x="95" y="122" font-size="11" fill="#2e7d32" text-anchor="middle">index: 'ap_shop_alias'</text>
+
+  <line x1="172" y1="106" x2="250" y2="106" stroke="#2e7d32" stroke-width="3" marker-end="url(#grn)"/>
+  <text x="211" y="98" font-size="11" fill="#2e7d32" text-anchor="middle">始终只认别名</text>
+
+  <rect x="254" y="74" width="200" height="64" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="3"/>
+  <text x="354" y="96" font-size="12" font-weight="bold" fill="#1b5e20" text-anchor="middle">别名 ap_shop_alias</text>
+  <text x="354" y="116" font-size="11" fill="#2e7d32" text-anchor="middle">可替换的门牌号，永不变更</text>
+  <text x="354" y="132" font-size="11" fill="#2e7d32" text-anchor="middle">应用代码一行都没改</text>
+
+  <!-- 切换动作 -->
+  <rect x="254" y="150" width="200" height="46" rx="6" fill="#fff3e0" stroke="#ef6c00" stroke-width="2"/>
+  <text x="354" y="170" font-size="11" font-weight="bold" fill="#e65100" text-anchor="middle">_aliases：remove + add</text>
+  <text x="354" y="188" font-size="11" fill="#bf360c" text-anchor="middle">一个请求内完成 = 原子</text>
+
+  <line x1="456" y1="106" x2="510" y2="106" stroke="#52606d" stroke-width="2" marker-end="url(#arw)"/>
+
+  <rect x="514" y="62" width="246" height="60" rx="8" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="637" y="84" font-size="12" font-weight="bold" fill="#b71c1c" text-anchor="middle">ap_shop（老索引）</text>
+  <text x="637" y="104" font-size="11" fill="#c62828" text-anchor="middle">price: integer  合计 96.0 ✘</text>
+
+  <rect x="514" y="134" width="246" height="60" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="3"/>
+  <text x="637" y="156" font-size="12" font-weight="bold" fill="#1b5e20" text-anchor="middle">ap_shop-000001（新索引）</text>
+  <text x="637" y="176" font-size="11" fill="#2e7d32" text-anchor="middle">price: scaled_float  合计 96.75 ✔</text>
+
+  <!-- reindex -->
+  <line x1="637" y1="124" x2="637" y2="132" stroke="#1565c0" stroke-width="3" marker-end="url(#blu)"/>
+  <text x="524" y="212" font-size="11" fill="#1565c0">reindex 搬家 created=3（这步不能省）</text>
+
+  <rect x="20" y="228" width="740" height="70" rx="8" fill="#f5f7fa" stroke="#90a4ae" stroke-width="2"/>
+  <text x="36" y="250" font-size="12" font-weight="bold" fill="#1f2933">实测：同样的别名、同样的请求，金额回来了</text>
+  <text x="36" y="272" font-size="11" fill="#c62828">切换前（integer）  金额合计 = 96.0</text>
+  <text x="36" y="290" font-size="11" fill="#2e7d32">切换后（scaled_float）金额合计 = 96.75   ← 小数回来了，全程没有一秒搜不到数据</text>
+
+  <rect x="20" y="312" width="740" height="102" rx="8" fill="#ffebee" stroke="#c62828" stroke-width="3"/>
+  <text x="36" y="336" font-size="13" font-weight="bold" fill="#b71c1c">⚠ 两个必须知道的边界</text>
+  <text x="36" y="358" font-size="11" fill="#3e2723">① _aliases 只改指针，不搬数据。少了 reindex，切完搜到的是空索引，且别名已指走，你连「数据还在老索引」都看不出来。</text>
+  <text x="36" y="378" font-size="11" fill="#3e2723">② DELETE /别名 会被拒绝：illegal_argument_exception — 「matches an alias, specify the corresponding concrete indices instead」。</text>
+  <text x="36" y="400" font-size="11" fill="#c62828">这是安全设计（防手滑删掉背后所有索引）。删别名请用 _aliases 的 remove 动作。</text>
+
+  <defs>
+    <marker id="arw" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#52606d"/></marker>
+    <marker id="grn" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#2e7d32"/></marker>
+    <marker id="blu" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#1565c0"/></marker>
+  </defs>
+</svg>

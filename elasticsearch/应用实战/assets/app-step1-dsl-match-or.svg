@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="840" height="370" viewBox="0 0 840 370" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="840" height="370" fill="#fbfcfd"/>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <text x="24" y="30" font-size="15" fill="#334155" font-weight="600">① 基础版：单个 match，默认 operator=OR（本机实测）</text>
+
+  <!-- 查询 -->
+  <rect x="24" y="52" width="220" height="80" rx="10" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+  <text x="134" y="78" text-anchor="middle" font-size="14" fill="#0c4a6e" font-weight="600">match name「华为手机」</text>
+  <text x="134" y="100" text-anchor="middle" font-size="12" fill="#075985">IK 切成：华为 / 手机</text>
+  <rect x="40" y="108" width="188" height="18" rx="4" fill="#bae6fd"/>
+  <text x="134" y="121" text-anchor="middle" font-size="11" fill="#0c4a6e" font-weight="600">默认 operator = or</text>
+
+  <!-- 8 条文档 -->
+  <rect x="280" y="46" width="250" height="176" rx="10" fill="#f1f5f9" stroke="#94a3b8" stroke-width="2"/>
+  <text x="405" y="68" text-anchor="middle" font-size="13" fill="#334155" font-weight="600">8 条商品文档</text>
+  <text x="294" y="90" font-size="11" fill="#dc2626">1 小米手机 全网通  [手机]  →含"手机"</text>
+  <text x="294" y="108" font-size="11" fill="#94a3b8">2 小米平板 5 Pro   [平板]</text>
+  <text x="294" y="126" font-size="11" fill="#dc2626">3 华为手机 Mate60  [手机]  →含"华为"+"手机"</text>
+  <text x="294" y="144" font-size="11" fill="#dc2626">4 华为平板 MatePad [平板]  →含"华为"</text>
+  <text x="294" y="162" font-size="11" fill="#dc2626">5 苹果手机 iPhone15[手机]  →含"手机"</text>
+  <text x="294" y="180" font-size="11" fill="#dc2626">6 手机壳 防摔      [配件]  →含"手机"</text>
+  <text x="294" y="198" font-size="11" fill="#94a3b8">7 小米手环 8       [配件]</text>
+  <text x="294" y="216" font-size="11" fill="#dc2626">8 华为耳机 FreeBuds[配件]  →含"华为"</text>
+
+  <line x1="244" y1="92" x2="276" y2="92" stroke="#0284c7" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 结果 -->
+  <rect x="566" y="46" width="250" height="176" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="2"/>
+  <text x="691" y="68" text-anchor="middle" font-size="13" fill="#7f1d1d" font-weight="600">结果 hits=6（并集）</text>
+  <text x="580" y="90" font-size="11" fill="#166534">✓ 华为手机 Mate60  1.4638 ← 唯一要的</text>
+  <text x="580" y="108" font-size="11" fill="#dc2626">✗ 华为平板 MatePad 1.0406</text>
+  <text x="580" y="126" font-size="11" fill="#dc2626">✗ 华为耳机 FreeBuds 1.0406</text>
+  <text x="580" y="144" font-size="11" fill="#dc2626">✗ 小米手机 全网通  0.6841</text>
+  <text x="580" y="162" font-size="11" fill="#dc2626">✗ 手机壳 防摔      0.6841</text>
+  <text x="580" y="180" font-size="11" fill="#dc2626">✗ 苹果手机 iPhone15 0.6196</text>
+  <text x="580" y="204" font-size="11" fill="#991b1b" font-weight="600">6 条里只有 1 条是用户要的</text>
+
+  <line x1="530" y1="134" x2="562" y2="134" stroke="#dc2626" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+  <!-- 底部问题 -->
+  <rect x="24" y="244" width="792" height="60" rx="8" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.5"/>
+  <text x="40" y="266" font-size="13" fill="#92400e" font-weight="600">问题 1：精度崩了 —— 6 条里 5 条是噪声。用户要「华为手机」这个整体，不是"华为"或"手机"。</text>
+  <text x="40" y="288" font-size="13" fill="#a16207">问题 2：分数不可信 —— 华为平板与华为耳机都是 1.0406、小米手机与手机壳都是 0.6841，完全相同（各只命中一个词，BM25 算不出区分度）。</text>
+
+  <rect x="24" y="316" width="792" height="40" rx="8" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="40" y="341" font-size="13" fill="#1e40af">根因：match 默认 operator=or，两个词做「并集」——命中任一词即返回。</text>
+</svg>

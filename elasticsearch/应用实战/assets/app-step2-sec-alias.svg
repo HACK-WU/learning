@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="360" viewBox="0 0 760 360" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <rect width="760" height="360" fill="#fbfcfd"/>
+  <text x="20" y="30" font-size="16" font-weight="bold" fill="#1f2933">② 改进版：filtered alias 按 channel 过滤</text>
+  <text x="20" y="52" font-size="12" fill="#7b8794">文档级过滤 —— 内部文档连查询都到不了，但字段仍全给</text>
+
+  <rect x="20" y="76" width="150" height="70" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="95" y="104" font-size="13" font-weight="bold" fill="#0d47a1" text-anchor="middle">外部合作方</text>
+  <text x="95" y="126" font-size="11" fill="#1565c0" text-anchor="middle">比价业务系统</text>
+
+  <line x1="172" y1="111" x2="228" y2="111" stroke="#52606d" stroke-width="2" marker-end="url(#arw)"/>
+  <text x="200" y="102" font-size="11" fill="#52606d" text-anchor="middle">_search</text>
+
+  <!-- 别名层：高亮 -->
+  <rect x="232" y="70" width="176" height="82" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="3"/>
+  <text x="320" y="93" font-size="13" font-weight="bold" fill="#1b5e20" text-anchor="middle">partner_view（别名）</text>
+  <text x="320" y="114" font-size="11" fill="#2e7d32" text-anchor="middle">filter: term channel</text>
+  <text x="320" y="133" font-size="11" fill="#2e7d32" text-anchor="middle">= "partner"  ← 写死</text>
+
+  <line x1="410" y1="111" x2="466" y2="111" stroke="#52606d" stroke-width="2" marker-end="url(#arw)"/>
+
+  <rect x="470" y="62" width="270" height="106" rx="8" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+  <text x="605" y="84" font-size="12" font-weight="bold" fill="#795548" text-anchor="middle">ap_partner（4 条）</text>
+  <text x="486" y="106" font-size="11" fill="#2e7d32">1 手机A   1999 / partner  ✔ 通过</text>
+  <text x="486" y="124" font-size="11" fill="#2e7d32">2 手机B   2999 / partner  ✔ 通过</text>
+  <text x="486" y="142" font-size="11" fill="#c62828">3 内部机C 3999 / internal  ✘ 拦截</text>
+  <text x="486" y="158" font-size="11" fill="#c62828">4 内部机D 4999 / internal  ✘ 拦截</text>
+
+  <rect x="232" y="192" width="508" height="76" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="248" y="214" font-size="12" font-weight="bold" fill="#1b5e20">返回 hits=2（内部机型被挡）</text>
+  <text x="248" y="236" font-size="11" fill="#3e2723">{"name":"手机A","price":1999,"cost":1200,"note":"公开"}   ← cost 仍可见</text>
+  <text x="248" y="256" font-size="11" fill="#3e2723">{"name":"手机B","price":2999,"cost":1800,"note":"公开"}   ← 仍是全字段</text>
+
+  <rect x="20" y="288" width="720" height="52" rx="8" fill="#fff3e0" stroke="#ef6c00" stroke-width="2"/>
+  <text x="36" y="308" font-size="12" font-weight="bold" fill="#e65100">主动验证（不能只看条数）：搜「内部机C」→ hits=0 ／ 搜「内部」note → hits=0</text>
+  <text x="36" y="328" font-size="11" fill="#bf360c">是「根本不在结果集里」，不是「排在后面」—— 但 cost / note 字段依旧返回，文档级 ≠ 字段级</text>
+
+  <defs>
+    <marker id="arw" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#52606d"/>
+    </marker>
+  </defs>
+</svg>

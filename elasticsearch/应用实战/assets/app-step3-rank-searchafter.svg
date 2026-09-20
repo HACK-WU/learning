@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="400" viewBox="0 0 860 400" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="860" height="400" fill="#fbfcfd"/>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <text x="24" y="30" font-size="15" fill="#334155" font-weight="600">③ 深分页：from+size 撞 10000 上限，search_after 用游标突破（本机实测）</text>
+
+  <!-- from+size 路径（灰） -->
+  <rect x="24" y="48" width="396" height="150" rx="10" fill="#f1f5f9" stroke="#9ca3af" stroke-width="2" stroke-dasharray="5 3"/>
+  <text x="222" y="70" text-anchor="middle" font-size="13" fill="#475569" font-weight="600">❌ from + size（被限制在 10000）</text>
+  <text x="222" y="92" text-anchor="middle" font-size="11" fill="#64748b">from=10000, size=10 → 需要在每个分片取 10010 条</text>
+
+  <rect x="44" y="104" width="110" height="34" rx="6" fill="#e5e7eb" stroke="#9ca3af" stroke-width="1.5"/>
+  <text x="99" y="125" text-anchor="middle" font-size="11" fill="#374151">分片 1 取 10010</text>
+  <rect x="164" y="104" width="110" height="34" rx="6" fill="#e5e7eb" stroke="#9ca3af" stroke-width="1.5"/>
+  <text x="219" y="125" text-anchor="middle" font-size="11" fill="#374151">分片 2 取 10010</text>
+  <rect x="284" y="104" width="110" height="34" rx="6" fill="#e5e7eb" stroke="#9ca3af" stroke-width="1.5"/>
+  <text x="339" y="125" text-anchor="middle" font-size="11" fill="#374151">分片 3 取 10010</text>
+
+  <text x="222" y="160" text-anchor="middle" font-size="11" fill="#dc2626">协调节点排序后丢弃前 10000 条，只留 10 条</text>
+  <rect x="44" y="168" width="356" height="22" rx="4" fill="#fee2e2"/>
+  <text x="222" y="183" text-anchor="middle" font-size="11" fill="#7f1d1d" font-weight="600">越往后翻，浪费越大 → 硬性上限 10000</text>
+
+  <!-- search_after 路径（高亮） -->
+  <rect x="440" y="48" width="396" height="150" rx="10" fill="#f0fdf4" stroke="#16a34a" stroke-width="3"/>
+  <text x="638" y="70" text-anchor="middle" font-size="13" fill="#14532d" font-weight="600">✅ search_after（无窗口上限）</text>
+  <text x="638" y="92" text-anchor="middle" font-size="11" fill="#166534">带上「上一页最后一条的排序值」做游标</text>
+
+  <rect x="460" y="104" width="356" height="34" rx="6" fill="#bbf7d0"/>
+  <text x="638" y="125" text-anchor="middle" font-size="11" fill="#14532d" font-weight="600">search_after: [249.0, "小米手环 8 NFC"]</text>
+
+  <text x="460" y="160" font-size="11" fill="#166534">各分片直接定位游标之后的数据 → 无需取前 N 条</text>
+  <rect x="460" y="168" width="356" height="22" rx="4" fill="#dcfce7"/>
+  <text x="638" y="183" text-anchor="middle" font-size="11" fill="#14532d" font-weight="600">实测：第1页 3 条 → 第2页 3 条 → 第3页 3 条</text>
+
+  <!-- 实测翻页 -->
+  <text x="24" y="224" font-size="14" fill="#334155" font-weight="600">实测翻页结果（size=3，sort: price asc + name.keyword asc）</text>
+
+  <rect x="24" y="238" width="264" height="96" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="40" y="260" font-size="12" fill="#14532d" font-weight="600">第 1 页</text>
+  <text x="40" y="280" font-size="11" fill="#166534">29.9   手机壳 磨砂防摔</text>
+  <text x="40" y="298" font-size="11" fill="#166534">39.9   手机支架 车载</text>
+  <text x="40" y="316" font-size="11" fill="#166534">249    小米手环 8 NFC</text>
+  <text x="40" y="332" font-size="11" fill="#14532d" font-weight="600">游标 = [249.0, "小米手环 8 NFC"]</text>
+
+  <rect x="298" y="238" width="264" height="96" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="314" y="260" font-size="12" fill="#14532d" font-weight="600">第 2 页</text>
+  <text x="314" y="280" font-size="11" fill="#166534">1499  华为耳机 FreeBuds Pro</text>
+  <text x="314" y="298" font-size="11" fill="#166534">1799  苹果耳机 AirPods Pro</text>
+  <text x="314" y="316" font-size="11" fill="#166534">2599  小米平板 6 Pro</text>
+
+  <rect x="572" y="238" width="264" height="96" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="588" y="260" font-size="12" fill="#14532d" font-weight="600">第 3 页</text>
+  <text x="588" y="280" font-size="11" fill="#166534">2999  苹果手表 Watch S9</text>
+  <text x="588" y="298" font-size="11" fill="#166534">4399  苹果平板 iPad Air</text>
+  <text x="588" y="316" font-size="11" fill="#166534">5199  华为平板 MatePad Pro</text>
+
+  <!-- 坑 -->
+  <rect x="24" y="348" width="812" height="42" rx="8" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.5"/>
+  <text x="40" y="366" font-size="12" fill="#92400e" font-weight="600">⚠️ 坑1：排序必须含唯一键（否则价格相同时顺序不定，翻页会漏/重）　⚠️ 坑2：用 ConvertTo-Json 构造 body，手拼含中文的 JSON 会失效（实测第2页退回全量10条）。</text>
+  <text x="40" y="383" font-size="12" fill="#a16207">一句话：价格严格递增、衔接无重复无遗漏 —— 这才算翻页翻对了。</text>
+</svg>

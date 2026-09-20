@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="840" height="330" viewBox="0 0 840 330" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="840" height="330" fill="#fbfcfd"/>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+    <marker id="redarrow" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+
+  <text x="24" y="30" font-size="15" fill="#334155" font-weight="600">① 基础版：全量拉回应用层，代码里 for 循环（本机实测）</text>
+
+  <!-- 索引 -->
+  <rect x="24" y="52" width="150" height="90" rx="10" fill="#f1f5f9" stroke="#94a3b8" stroke-width="2"/>
+  <text x="99" y="78" text-anchor="middle" font-size="14" fill="#334155" font-weight="600">ap_sale 索引</text>
+  <text x="99" y="100" text-anchor="middle" font-size="12" fill="#475569">20 条销售记录</text>
+  <text x="99" y="122" text-anchor="middle" font-size="12" fill="#475569">3 个分片</text>
+
+  <!-- size:20 -->
+  <rect x="210" y="66" width="150" height="62" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="2.5"/>
+  <text x="285" y="90" text-anchor="middle" font-size="13" fill="#7f1d1d" font-weight="600">size: 20</text>
+  <text x="285" y="110" text-anchor="middle" font-size="11" fill="#991b1b">← 死穴：要拉全量</text>
+
+  <line x1="174" y1="97" x2="206" y2="97" stroke="#dc2626" stroke-width="2.5" marker-end="url(#redarrow)"/>
+
+  <!-- 应用层 -->
+  <rect x="396" y="52" width="200" height="90" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="2"/>
+  <text x="496" y="78" text-anchor="middle" font-size="14" fill="#7f1d1d" font-weight="600">应用层内存</text>
+  <text x="496" y="100" text-anchor="middle" font-size="11" fill="#991b1b">20 条文档全部驻留</text>
+  <text x="496" y="120" text-anchor="middle" font-size="11" fill="#991b1b">for 循环逐条累加</text>
+
+  <line x1="360" y1="97" x2="392" y2="97" stroke="#dc2626" stroke-width="2.5" marker-end="url(#redarrow)"/>
+
+  <!-- 结果 -->
+  <rect x="632" y="52" width="184" height="90" rx="10" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="724" y="78" text-anchor="middle" font-size="13" fill="#14532d" font-weight="600">数值是对的</text>
+  <text x="644" y="100" font-size="11" fill="#166534">sum = 140346.5</text>
+  <text x="644" y="120" font-size="11" fill="#166534">Huawei 7 / Xiaomi 7</text>
+  <text x="644" y="136" font-size="11" fill="#166534">Apple 4 / Baseus 2</text>
+
+  <line x1="596" y1="97" x2="628" y2="97" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- 问题 -->
+  <text x="24" y="176" font-size="14" fill="#334155" font-weight="600">问题不在「算错」，而在「撑不住」</text>
+
+  <rect x="24" y="188" width="264" height="82" rx="8" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.5"/>
+  <text x="40" y="210" font-size="12" fill="#92400e" font-weight="600">1. size 必须覆盖全量</text>
+  <text x="40" y="230" font-size="11" fill="#a16207">20 条写 size:20 还行；200 万条时</text>
+  <text x="40" y="248" font-size="11" fill="#a16207">ES 单次上限 10000，被迫分页 →</text>
+  <text x="40" y="264" font-size="11" fill="#a16207">又撞上课 7 的深分页问题。</text>
+
+  <rect x="300" y="188" width="264" height="82" rx="8" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.5"/>
+  <text x="316" y="210" font-size="12" fill="#92400e" font-weight="600">2. 网络与内存双线性增长</text>
+  <text x="316" y="230" font-size="11" fill="#a16207">所有 amount 都要传回来、驻留内存，</text>
+  <text x="316" y="248" font-size="11" fill="#a16207">最终只为算出 4 个数字。</text>
+
+  <rect x="576" y="188" width="240" height="82" rx="8" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.5"/>
+  <text x="592" y="210" font-size="12" fill="#92400e" font-weight="600">3. 没用到分布式能力</text>
+  <text x="592" y="230" font-size="11" fill="#a16207">各分片本可各算各的，你却把原始</text>
+  <text x="592" y="248" font-size="11" fill="#a16207">数据全拉到一个节点串行累加。</text>
+
+  <rect x="24" y="286" width="792" height="30" rx="6" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="40" y="306" font-size="12" fill="#1e40af">实测：代码 for 循环 sum = 140346.5，与后面 ES 聚合结果差值 0.0 —— 算得对，但方式撑不住。</text>
+</svg>

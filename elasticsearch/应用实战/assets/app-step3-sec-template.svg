@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="470" viewBox="0 0 780 470" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <rect width="780" height="470" fill="#fbfcfd"/>
+  <text x="20" y="30" font-size="16" font-weight="bold" fill="#1f2933">③ 综合版：三层叠加 —— 文档 / 字段 / 查询结构</text>
+  <text x="20" y="52" font-size="12" fill="#7b8794">左上绿灯区是守住的三层；右下红区是真相：防不住能直连集群的人</text>
+
+  <rect x="20" y="76" width="140" height="62" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="90" y="102" font-size="13" font-weight="bold" fill="#0d47a1" text-anchor="middle">外部合作方</text>
+  <text x="90" y="122" font-size="11" fill="#1565c0" text-anchor="middle">只能传 q 参数</text>
+
+  <line x1="162" y1="107" x2="208" y2="107" stroke="#52606d" stroke-width="2" marker-end="url(#arw)"/>
+  <text x="185" y="98" font-size="11" fill="#52606d" text-anchor="middle">q=手机</text>
+
+  <!-- 三层 -->
+  <rect x="212" y="66" width="196" height="46" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="3"/>
+  <text x="310" y="85" font-size="12" font-weight="bold" fill="#1b5e20" text-anchor="middle">L1 search template</text>
+  <text x="310" y="103" font-size="10" fill="#2e7d32" text-anchor="middle">锁查询结构，只留 {{q}} 一个洞</text>
+
+  <rect x="212" y="122" width="196" height="46" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="3"/>
+  <text x="310" y="141" font-size="12" font-weight="bold" fill="#1b5e20" text-anchor="middle">L2 filtered alias</text>
+  <text x="310" y="159" font-size="10" fill="#2e7d32" text-anchor="middle">锁文档：channel = partner</text>
+
+  <rect x="212" y="178" width="196" height="46" rx="6" fill="#e8f5e9" stroke="#2e7d32" stroke-width="3"/>
+  <text x="310" y="197" font-size="12" font-weight="bold" fill="#1b5e20" text-anchor="middle">L3 _source 过滤</text>
+  <text x="310" y="215" font-size="10" fill="#2e7d32" text-anchor="middle">锁字段：只回 name / price</text>
+
+  <line x1="410" y1="150" x2="456" y2="150" stroke="#52606d" stroke-width="2" marker-end="url(#arw)"/>
+
+  <rect x="460" y="66" width="300" height="158" rx="8" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+  <text x="610" y="88" font-size="12" font-weight="bold" fill="#795548" text-anchor="middle">ap_partner（4 条）</text>
+  <text x="476" y="110" font-size="11" fill="#2e7d32">1 手机A   1999 / cost 1200 / partner ✔</text>
+  <text x="476" y="128" font-size="11" fill="#2e7d32">2 手机B   2999 / cost 1800 / partner ✔</text>
+  <text x="476" y="146" font-size="11" fill="#c62828">3 内部机C 3999 / cost 2000 / internal ✘</text>
+  <text x="476" y="164" font-size="11" fill="#c62828">4 内部机D 4999 / cost 2500 / internal ✘</text>
+  <text x="476" y="190" font-size="11" fill="#795548">cost / note 在 L3 被摘掉</text>
+  <text x="476" y="208" font-size="11" fill="#795548">note 在 L2 随文档一起消失</text>
+
+  <!-- 结果 -->
+  <rect x="20" y="248" width="740" height="72" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="36" y="270" font-size="12" font-weight="bold" fill="#1b5e20">按模板查询 hits=2 ／ 传 q=内部机 → hits=0（实测：模板内 filter 仍在，挡住了）</text>
+  <text x="36" y="290" font-size="11" fill="#3e2723">{"name":"手机A","price":1999}      ← 无 cost、无 note</text>
+  <text x="36" y="308" font-size="11" fill="#3e2723">{"name":"手机B","price":2999}</text>
+
+  <!-- 边界红区 -->
+  <rect x="20" y="336" width="740" height="118" rx="8" fill="#ffebee" stroke="#c62828" stroke-width="3"/>
+  <text x="36" y="358" font-size="13" font-weight="bold" fill="#b71c1c">⚠ 边界：这三招都是「约定式」防护，不是「强制式」防护</text>
+  <text x="36" y="380" font-size="11" fill="#3e2723">实测绕过：把 URL 里的别名换成原索引名 → 直查 ap_partner hits=4（过滤立刻失效）</text>
+  <text x="36" y="398" font-size="11" fill="#3e2723">实测绕过：通配符查 ap_* → hits=8（把另一个索引也带了出来）</text>
+  <text x="36" y="420" font-size="11" font-weight="bold" fill="#b71c1c">真正的强制防护只有一条：启用安全模块 + RBAC（role/user）—— 本机 security.enabled=false，无法实测</text>
+  <text x="36" y="440" font-size="11" fill="#c62828">没有权限的索引上，RBAC 能让对方连 index_not_found 都拿不到；别名做不到这一点</text>
+
+  <defs>
+    <marker id="arw" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#52606d"/>
+    </marker>
+  </defs>
+</svg>

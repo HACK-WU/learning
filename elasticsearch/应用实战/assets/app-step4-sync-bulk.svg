@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="380" viewBox="0 0 860 380" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="860" height="380" fill="#fbfcfd"/>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <text x="24" y="30" font-size="15" fill="#334155" font-weight="600">④ 综合：三种写入策略取舍 + _bulk 部分失败语义（本机实测）</text>
+
+  <!-- 三策略 -->
+  <rect x="24" y="46" width="264" height="106" rx="8" fill="#fef2f2" stroke="#fca5a5" stroke-width="2"/>
+  <text x="156" y="68" text-anchor="middle" font-size="12" fill="#7f1d1d" font-weight="600">① 覆盖写</text>
+  <text x="40" y="90" font-size="11" fill="#991b1b">最快，一次请求</text>
+  <text x="40" y="108" font-size="11" fill="#dc2626" font-weight="600">❌ 会丢更新（乱序即回滚）</text>
+  <text x="40" y="128" font-size="10" fill="#991b1b">适用：可全量重灌的离线索引</text>
+  <text x="40" y="144" font-size="10" fill="#991b1b">实测：price 2999 → 被 v1 盖回 1999</text>
+
+  <rect x="300" y="46" width="264" height="106" rx="8" fill="#fffbeb" stroke="#fcd34d" stroke-width="2"/>
+  <text x="432" y="68" text-anchor="middle" font-size="12" fill="#92400e" font-weight="600">② 乐观锁 if_seq_no</text>
+  <text x="316" y="90" font-size="11" fill="#a16207">安全，但要「先读后写」</text>
+  <text x="316" y="108" font-size="11" fill="#ca8a04" font-weight="600">△ 多一次往返，409 要自己处理</text>
+  <text x="316" y="128" font-size="10" fill="#a16207">适用：并发高、可接受重试</text>
+  <text x="316" y="144" font-size="10" fill="#a16207">实测：请求2 返回 409，数据保住</text>
+
+  <rect x="576" y="46" width="260" height="106" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="2.5"/>
+  <text x="706" y="68" text-anchor="middle" font-size="12" fill="#14532d" font-weight="600">③ 业务版本号 script</text>
+  <text x="592" y="90" font-size="11" fill="#166534">一次请求，无需先读</text>
+  <text x="592" y="108" font-size="11" fill="#14532d" font-weight="600">✅ 符合「版本号小的丢弃」语义</text>
+  <text x="592" y="128" font-size="10" fill="#166534">适用：DB 有版本号的同步场景</text>
+  <text x="592" y="144" font-size="10" fill="#166534">实测：旧版本 v3 更新 → result=noop</text>
+
+  <!-- bulk -->
+  <text x="24" y="176" font-size="14" fill="#334155" font-weight="600">_bulk 的「部分成功」语义（实测）</text>
+  <rect x="24" y="188" width="812" height="96" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="40" y="210" font-size="11" fill="#334155" font-family="monospace">bulk 耗时=0ms  errors=True</text>
+  <text x="40" y="232" font-size="11" font-family="monospace" fill="#dc2626">失败[5] id=bad1 : document_parsing_exception - failed to parse field [price] of type [scaled_float]</text>
+  <text x="40" y="252" font-size="11" font-family="monospace" fill="#166534">成功写入数 = 7   ← 另外 5 条全部写进去了</text>
+  <text x="40" y="274" font-size="11" fill="#1e3a8a" font-weight="600">每条独立成功或失败，不会因为一条坏数据回滚整批。</text>
+
+  <!-- 版本演进 -->
+  <text x="24" y="308" font-size="14" fill="#334155" font-weight="600">版本演进实测</text>
+  <rect x="24" y="320" width="404" height="46" rx="8" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="40" y="340" font-size="11" fill="#1e40af">第1次写 _version=1 seq_no=0 ｜ 第2次写 _version=2 seq_no=1 ｜ 第1次更新 _version=3 seq_no=2</text>
+  <text x="40" y="358" font-size="11" fill="#1e3a8a" font-weight="600">_seq_no 是集群级的，比 _version 更适合做并发控制。</text>
+
+  <rect x="440" y="320" width="396" height="46" rx="8" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.5"/>
+  <text x="456" y="340" font-size="11" fill="#92400e" font-weight="600">处理 bulk 结果必须遍历 items，不能只看顶层 errors 布尔值。</text>
+  <text x="456" y="358" font-size="11" fill="#a16207">errors=true 只是「这批里有失败的」，失败的 id 与原因在 items 里。</text>
+</svg>

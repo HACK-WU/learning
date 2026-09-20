@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="380" viewBox="0 0 780 380" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <rect width="780" height="380" fill="#fbfcfd"/>
+  <text x="20" y="30" font-size="16" font-weight="bold" fill="#1f2933">① 基础版：裸索引 + 索引名写死在代码里</text>
+  <text x="20" y="52" font-size="12" fill="#7b8794">两处隐患：price=integer 截断小数，索引名成了契约</text>
+
+  <rect x="20" y="80" width="160" height="76" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="100" y="106" font-size="13" font-weight="bold" fill="#0d47a1" text-anchor="middle">应用代码</text>
+  <text x="100" y="128" font-size="11" fill="#c62828" text-anchor="middle">index: 'ap_shop'</text>
+  <text x="100" y="146" font-size="11" fill="#c62828" text-anchor="middle">← 写死，成了契约</text>
+
+  <line x1="182" y1="118" x2="278" y2="118" stroke="#c62828" stroke-width="3" marker-end="url(#red)"/>
+  <text x="230" y="110" font-size="11" fill="#c62828" text-anchor="middle">直连</text>
+
+  <rect x="282" y="74" width="230" height="90" rx="8" fill="#ffebee" stroke="#c62828" stroke-width="3"/>
+  <text x="397" y="98" font-size="13" font-weight="bold" fill="#b71c1c" text-anchor="middle">ap_shop（裸索引）</text>
+  <text x="397" y="120" font-size="11" fill="#c62828" text-anchor="middle">price: integer ← 存不了小数</text>
+  <text x="397" y="140" font-size="11" fill="#3e2723" text-anchor="middle">无任何模板 / 别名 / ILM</text>
+  <text x="397" y="158" font-size="11" fill="#c62828" text-anchor="middle">改类型 = 改代码 + 发版</text>
+
+  <!-- 事故 -->
+  <rect x="532" y="74" width="228" height="90" rx="8" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+  <text x="646" y="98" font-size="12" font-weight="bold" fill="#e65100" text-anchor="middle">实测：3 条商品</text>
+  <text x="546" y="120" font-size="11" fill="#3e2723">车厘子 88    → 88</text>
+  <text x="546" y="138" font-size="11" fill="#c62828">香蕉   3.25 → 3（截断）</text>
+  <text x="546" y="156" font-size="11" fill="#c62828">苹果   5.5  → 5（截断）</text>
+
+  <rect x="20" y="190" width="740" height="76" rx="8" fill="#f5f7fa" stroke="#90a4ae" stroke-width="2"/>
+  <text x="36" y="212" font-size="12" font-weight="bold" fill="#1f2933">实测回读：_source 看着正常，聚合才露馅</text>
+  <text x="36" y="234" font-size="11" fill="#3e2723">{"name":"香蕉","price":3.25}   ← _source 存原始 JSON，肉眼看着「没问题」</text>
+  <text x="36" y="256" font-size="11" fill="#c62828" font-weight="bold">金额合计 = 96.0   真实应是 88 + 3.25 + 5.5 = 96.75   ← 一到聚合就露馅</text>
+
+  <rect x="20" y="284" width="740" height="80" rx="8" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="36" y="306" font-size="12" font-weight="bold" fill="#b71c1c">⚠ 这个坑的阴险之处</text>
+  <text x="36" y="328" font-size="11" fill="#3e2723">不报错、不告警，数据「看起来对」，等到财务对账才炸 —— 而且索引名写死在代码里，</text>
+  <text x="36" y="350" font-size="11" fill="#3e2723">要修就得：建 ap_shop_v2 → reindex → 改应用代码 → 发版 → 灰度 → 半夜叫醒前端同学。</text>
+
+  <defs>
+    <marker id="red" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#c62828"/></marker>
+  </defs>
+</svg>

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="380" viewBox="0 0 860 380" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="860" height="380" fill="#fbfcfd"/>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <text x="24" y="30" font-size="15" fill="#334155" font-weight="600">② 拼错容错：fuzziness 对英文精准、对中文实测失效（本机实测）</text>
+
+  <!-- 英文路径 -->
+  <rect x="24" y="48" width="404" height="130" rx="10" fill="#f0fdf4" stroke="#16a34a" stroke-width="2.5"/>
+  <text x="226" y="70" text-anchor="middle" font-size="13" fill="#14532d" font-weight="600">✅ 英文路径：精准容错</text>
+  <text x="40" y="94" font-size="12" fill="#166534">查询 Iphane（拼错）　索引词 iPhone</text>
+  <rect x="40" y="102" width="372" height="28" rx="6" fill="#bbf7d0"/>
+  <text x="226" y="121" text-anchor="middle" font-size="12" fill="#14532d" font-weight="600">编辑距离 = 1　→　fuzziness: AUTO 放行</text>
+  <text x="40" y="148" font-size="12" fill="#166534">实测：hits=0 → hits=1，命中「苹果手机 iPhone 15 Pro」</text>
+  <text x="40" y="166" font-size="12" fill="#166534">score=1.6930168 —— 精准，没有噪声。</text>
+
+  <!-- 中文路径 -->
+  <rect x="448" y="48" width="388" height="130" rx="10" fill="#f1f5f9" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 3"/>
+  <text x="642" y="70" text-anchor="middle" font-size="13" fill="#475569" font-weight="600">❌ 中文路径：基本失效</text>
+  <text x="464" y="94" font-size="12" fill="#64748b">查询「平果手机」　IK 切成 平/果/手机 等短词</text>
+  <rect x="464" y="102" width="356" height="28" rx="6" fill="#e5e7eb"/>
+  <text x="642" y="121" text-anchor="middle" font-size="12" fill="#374151" font-weight="600">词太短 → 编辑距离 1 就能匹配大量单字</text>
+  <text x="464" y="148" font-size="12" fill="#64748b">实测：fuzziness=1 → hits=12（全库 12 条全召回）</text>
+  <text x="464" y="166" font-size="12" fill="#64748b">等于没筛选，甚至出现 score=0.0 的文档。</text>
+
+  <!-- 边界表 -->
+  <text x="24" y="206" font-size="14" fill="#334155" font-weight="600">中文 fuzziness 边界实测（全库共 12 条）</text>
+  <rect x="24" y="218" width="812" height="96" rx="8" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="40" y="240" font-size="12" fill="#7f1d1d" font-weight="600">查询词</text>
+  <text x="200" y="240" font-size="12" fill="#7f1d1d" font-weight="600">fuzziness</text>
+  <text x="360" y="240" font-size="12" fill="#7f1d1d" font-weight="600">hits</text>
+  <text x="520" y="240" font-size="12" fill="#7f1d1d" font-weight="600">结论</text>
+  <line x1="40" y1="250" x2="800" y2="250" stroke="#fca5a5" stroke-width="1"/>
+  <text x="40" y="270" font-size="12" fill="#991b1b">平果手机</text><text x="200" y="270" font-size="12" fill="#991b1b">0（基线）</text><text x="360" y="270" font-size="12" fill="#166534">5</text><text x="520" y="270" font-size="12" fill="#166534">正常</text>
+  <text x="40" y="288" font-size="12" fill="#991b1b">平果手机</text><text x="200" y="288" font-size="12" fill="#991b1b">1</text><text x="360" y="288" font-size="12" fill="#dc2626">12</text><text x="520" y="288" font-size="12" fill="#dc2626">全库召回，等于没筛选</text>
+  <text x="40" y="306" font-size="12" fill="#991b1b">平果手机</text><text x="200" y="306" font-size="12" fill="#991b1b">2</text><text x="360" y="306" font-size="12" fill="#dc2626">12</text><text x="520" y="306" font-size="12" fill="#dc2626">同上</text>
+
+  <!-- 原因 + 正解 -->
+  <rect x="24" y="330" width="812" height="40" rx="8" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.5"/>
+  <text x="40" y="354" font-size="13" fill="#92400e" font-weight="600">原因：词越短，模糊匹配破坏力越大。中文正解是「同义词词典 / 自定义纠错词表」（课 4 的 IK 自定义词典），不是 fuzziness。</text>
+</svg>

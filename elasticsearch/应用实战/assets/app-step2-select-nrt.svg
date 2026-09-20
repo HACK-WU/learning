@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="390" viewBox="0 0 780 390" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <rect width="780" height="390" fill="#fbfcfd"/>
+  <text x="20" y="30" font-size="16" font-weight="bold" fill="#1f2933">② 坑一：写入之后立刻搜不到（近实时）</text>
+  <text x="20" y="52" font-size="12" fill="#7b8794">GET 走 translog 实时可读，_search 走段要等 refresh —— 你看到的「空白列表」来自右边那条路</text>
+
+  <rect x="20" y="76" width="150" height="60" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="95" y="100" font-size="13" font-weight="bold" fill="#0d47a1" text-anchor="middle">写入请求</text>
+  <text x="95" y="122" font-size="11" fill="#1565c0" text-anchor="middle">_doc/4  order_no=D</text>
+
+  <line x1="172" y1="106" x2="248" y2="106" stroke="#52606d" stroke-width="2" marker-end="url(#arw)"/>
+
+  <rect x="252" y="62" width="200" height="88" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="3"/>
+  <text x="352" y="86" font-size="12" font-weight="bold" fill="#1b5e20" text-anchor="middle">translog（事务日志）</text>
+  <text x="352" y="106" font-size="11" fill="#2e7d32" text-anchor="middle">写入先落这里 → 可靠</text>
+  <text x="352" y="126" font-size="11" font-weight="bold" fill="#1b5e20" text-anchor="middle">✅ 实时可读</text>
+  <text x="352" y="142" font-size="10" fill="#2e7d32" text-anchor="middle">GET /_doc/4 → found=True</text>
+
+  <line x1="454" y1="106" x2="510" y2="106" stroke="#52606d" stroke-width="2" marker-end="url(#arw)"/>
+  <text x="482" y="126" font-size="11" fill="#52606d" text-anchor="middle">refresh</text>
+  <text x="482" y="142" font-size="11" fill="#ef6c00" text-anchor="middle">默认 1 秒</text>
+
+  <rect x="514" y="62" width="246" height="88" rx="8" fill="#fff3e0" stroke="#ef6c00" stroke-width="3"/>
+  <text x="637" y="86" font-size="12" font-weight="bold" fill="#e65100" text-anchor="middle">segment（段）</text>
+  <text x="637" y="106" font-size="11" fill="#ef6c00" text-anchor="middle">要 refresh 才生成</text>
+  <text x="637" y="126" font-size="11" font-weight="bold" fill="#e65100" text-anchor="middle">⏱ 近实时，不是实时</text>
+  <text x="637" y="142" font-size="10" fill="#bf360c" text-anchor="middle">_search 查的是这里</text>
+
+  <!-- 实测结果 -->
+  <rect x="20" y="176" width="740" height="112" rx="8" fill="#f5f7fa" stroke="#90a4ae" stroke-width="2"/>
+  <text x="36" y="198" font-size="12" font-weight="bold" fill="#1f2933">实测四组对照（1 条新文档 order_no=D）</text>
+  <text x="36" y="220" font-size="11" fill="#c62828">① 写入后立刻 _search            → hits=0     ← 用户看到空白订单列表</text>
+  <text x="36" y="240" font-size="11" fill="#2e7d32">④ GET 单个文档（按 _id）        → found=True  ← 同一时刻，实时可读</text>
+  <text x="36" y="260" font-size="11" fill="#2e7d32">② 等 1.5 秒后 _search           → hits=1     ← 近实时，默认 1 秒</text>
+  <text x="36" y="280" font-size="11" fill="#ef6c00">③ refresh=true 写入后立刻搜     → hits=1     ← 能修，但有代价</text>
+
+  <rect x="20" y="302" width="740" height="72" rx="8" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="36" y="324" font-size="12" font-weight="bold" fill="#b71c1c">⚠ 别用 ?refresh=true 兜底</text>
+  <text x="36" y="344" font-size="11" fill="#3e2723">每写一次强制刷一次段，高频写入下会疯狂产生小段 —— 单元测试可以用，生产高频写入千万别开。</text>
+  <text x="36" y="364" font-size="11" fill="#3e2723">这不是 bug，是设计取舍：ES 用「延迟可见」换写入吞吐。要强一致读请用关系型数据库。</text>
+
+  <defs>
+    <marker id="arw" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#52606d"/></marker>
+  </defs>
+</svg>
