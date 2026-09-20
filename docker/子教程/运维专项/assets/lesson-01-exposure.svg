@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" width="900" height="480" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="900" height="480" fill="#fbfcfe"/>
+  <text x="450" y="34" text-anchor="middle" font-size="19" font-weight="700" fill="#1f2d3d">docker.sock 与 2375：看似两个入口，终点都是 root</text>
+  <text x="450" y="56" text-anchor="middle" font-size="12.5" fill="#7b8794">能访问其中任意一个 = 在这台机器上拿到 root</text>
+
+  <!-- 左侧：入口 -->
+  <text x="150" y="92" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2d3d">对外入口</text>
+
+  <rect x="40" y="108" width="220" height="94" rx="9" fill="#eaf2fd" stroke="#3d7ec4" stroke-width="1.6"/>
+  <text x="150" y="134" text-anchor="middle" font-size="14" font-weight="700" fill="#1f4e79">unix socket</text>
+  <text x="150" y="154" text-anchor="middle" font-size="12" fill="#34495e">/var/run/docker.sock</text>
+  <text x="150" y="174" text-anchor="middle" font-size="11.5" fill="#34495e">srw-rw---- root:docker</text>
+  <text x="150" y="192" text-anchor="middle" font-size="11" fill="#7f8c8d">靠文件权限把关（默认）</text>
+
+  <rect x="40" y="222" width="220" height="94" rx="9" fill="#fdecea" stroke="#c0392b" stroke-width="1.6"/>
+  <text x="150" y="248" text-anchor="middle" font-size="14" font-weight="700" fill="#922b21">TCP 2375</text>
+  <text x="150" y="268" text-anchor="middle" font-size="12" fill="#7b241c">tcp://0.0.0.0:2375</text>
+  <text x="150" y="288" text-anchor="middle" font-size="11.5" fill="#7b241c">无鉴权 · 无加密</text>
+  <text x="150" y="306" text-anchor="middle" font-size="11" fill="#922b21">＝把 root 挂到门外墙上</text>
+
+  <rect x="40" y="336" width="220" height="94" rx="9" fill="#eafaf1" stroke="#27ae60" stroke-width="1.6"/>
+  <text x="150" y="362" text-anchor="middle" font-size="14" font-weight="700" fill="#145a32">TCP 2376 + TLS</text>
+  <text x="150" y="382" text-anchor="middle" font-size="12" fill="#34495e">客户端证书双向鉴权</text>
+  <text x="150" y="402" text-anchor="middle" font-size="11" fill="#7f8c8d">远程管理的正确姿势</text>
+  <text x="150" y="420" text-anchor="middle" font-size="11" fill="#7f8c8d">（风险可控，非默认）</text>
+
+  <!-- 箭头汇聚 -->
+  <path d="M260 155 L340 250" stroke="#c0392b" stroke-width="2" marker-end="url(#ar)"/>
+  <path d="M260 269 L340 262" stroke="#c0392b" stroke-width="2" marker-end="url(#ar)"/>
+  <path d="M260 383 L340 275" stroke="#27ae60" stroke-width="2" marker-end="url(#ag)"/>
+
+  <!-- 中间：引擎 -->
+  <rect x="344" y="216" width="180" height="100" rx="10" fill="#f4f6f8" stroke="#5d6d7e" stroke-width="1.8"/>
+  <text x="434" y="250" text-anchor="middle" font-size="15" font-weight="700" fill="#1f2d3d">dockerd 引擎</text>
+  <text x="434" y="272" text-anchor="middle" font-size="11.5" fill="#34495e">必须以 root 运行</text>
+  <text x="434" y="292" text-anchor="middle" font-size="11" fill="#7f8c8d">（本机实测 user=root）</text>
+
+  <path d="M524 266 L596 266" stroke="#c0392b" stroke-width="2.4" marker-end="url(#ar)"/>
+
+  <!-- 右侧：提权 -->
+  <rect x="600" y="150" width="260" height="232" rx="10" fill="#fdf0e3" stroke="#d68910" stroke-width="1.8"/>
+  <text x="730" y="180" text-anchor="middle" font-size="15" font-weight="700" fill="#7d5108">一条命令拿到宿主机 root</text>
+  <rect x="618" y="196" width="224" height="76" rx="6" fill="#2c3e50"/>
+  <text x="630" y="218" font-size="11" fill="#ecf0f1" font-family="Consolas,Monaco,monospace">docker run -it --rm \</text>
+  <text x="630" y="236" font-size="11" fill="#ecf0f1" font-family="Consolas,Monaco,monospace">  -v /:/host alpine \</text>
+  <text x="630" y="254" font-size="11" fill="#ecf0f1" font-family="Consolas,Monaco,monospace">  chroot /host bash</text>
+  <text x="730" y="292" text-anchor="middle" font-size="12" fill="#7d5108">-v /:/host 挂载宿主机根目录</text>
+  <text x="730" y="312" text-anchor="middle" font-size="12" fill="#7d5108">chroot 切根 → 进入宿主机</text>
+  <text x="730" y="336" text-anchor="middle" font-size="11.5" font-weight="700" fill="#922b21">用的是 Docker 正常功能</text>
+  <text x="730" y="354" text-anchor="middle" font-size="11.5" font-weight="700" fill="#922b21">不是漏洞利用</text>
+  <text x="730" y="374" text-anchor="middle" font-size="11" fill="#7f8c8d">🚫 本课不执行此命令</text>
+
+  <!-- 底部盘点清单 -->
+  <rect x="40" y="440" width="820" height="30" rx="6" fill="#f4f6f8" stroke="#bdc3c7" stroke-width="1"/>
+  <text x="450" y="460" text-anchor="middle" font-size="12" fill="#34495e">巡检四查：socket 权限与属组 · docker 组成员 · 有无 -H tcp:// · 哪些容器挂载了 socket</text>
+
+  <defs>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#c0392b"/>
+    </marker>
+    <marker id="ag" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#27ae60"/>
+    </marker>
+  </defs>
+</svg>

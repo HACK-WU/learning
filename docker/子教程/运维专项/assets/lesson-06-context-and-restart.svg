@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" width="900" height="500" font-family="Segoe UI, Microsoft YaHei, sans-serif">
+  <rect width="900" height="500" fill="#ffffff"/>
+  <text x="450" y="30" text-anchor="middle" font-size="19" font-weight="bold" fill="#1a1a1a">多机运维：context 是遥控器，自启策略是电器的记忆</text>
+  <text x="450" y="52" text-anchor="middle" font-size="12" fill="#666">本机实测 2026-09-20 · 194 容器 / 仅 1 个 context</text>
+
+  <text x="40" y="86" font-size="15" font-weight="bold" fill="#1a1a1a">左：docker context —— 你的命令发给谁</text>
+
+  <rect x="40" y="100" width="200" height="66" rx="6" fill="#e3f2fd" stroke="#1976d2" stroke-width="2"/>
+  <text x="140" y="122" text-anchor="middle" font-size="13" font-weight="bold" fill="#0d47a1">docker CLI</text>
+  <text x="140" y="142" text-anchor="middle" font-size="11" fill="#1565c0">（你的笔记本 / 跳板机）</text>
+  <text x="140" y="159" text-anchor="middle" font-size="10" fill="#1976d2">一条命令，指向可变</text>
+
+  <line x1="240" y1="133" x2="285" y2="133" stroke="#555" stroke-width="1.5" marker-end="url(#b)"/>
+
+  <rect x="285" y="100" width="215" height="66" rx="6" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2"/>
+  <text x="392" y="122" text-anchor="middle" font-size="13" font-weight="bold" fill="#4a148c">context（遥控器）</text>
+  <text x="392" y="142" text-anchor="middle" font-size="11" fill="#7b1fa2">端点 + 凭据 + 元数据</text>
+  <text x="392" y="159" text-anchor="middle" font-size="10" fill="#8e24aa">持久化在 ~/.docker/contexts/</text>
+
+  <line x1="500" y1="118" x2="545" y2="100" stroke="#555" stroke-width="1.2" marker-end="url(#b)"/>
+  <line x1="500" y1="133" x2="545" y2="133" stroke="#555" stroke-width="1.2" marker-end="url(#b)"/>
+  <line x1="500" y1="148" x2="545" y2="166" stroke="#555" stroke-width="1.2" marker-end="url(#b)"/>
+
+  <rect x="545" y="82" width="315" height="30" rx="4" fill="#e8f5e9" stroke="#388e3c"/>
+  <text x="702" y="102" text-anchor="middle" font-size="11" fill="#1b5e20">default *　→ unix:///var/run/docker.sock（本机实测唯一一个）</text>
+
+  <rect x="545" y="118" width="315" height="30" rx="4" fill="#e1f5fe" stroke="#0288d1"/>
+  <text x="702" y="138" text-anchor="middle" font-size="11" fill="#01579b">staging　→ ssh://ops@staging.example.com</text>
+
+  <rect x="545" y="154" width="315" height="30" rx="4" fill="#fce4ec" stroke="#c2185b"/>
+  <text x="702" y="174" text-anchor="middle" font-size="11" fill="#880e4f">prod　→ ssh://ops@prod-01.example.com</text>
+
+  <rect x="40" y="192" width="820" height="34" rx="5" fill="#fff3e0" stroke="#f57c00" stroke-width="1.5"/>
+  <text x="450" y="214" text-anchor="middle" font-size="12" font-weight="bold" fill="#e65100">⚠️ 实测：DOCKER_HOST 环境变量会盖掉 context（export DOCKER_HOST=tcp://127.0.0.1:59999 后连错且报错）</text>
+
+  <text x="40" y="262" font-size="15" font-weight="bold" fill="#1a1a1a">右：机器重启后 —— context 管不到的另一半</text>
+
+  <rect x="40" y="278" width="180" height="50" rx="6" fill="#e8f5e9" stroke="#388e3c" stroke-width="1.5"/>
+  <text x="130" y="299" text-anchor="middle" font-size="12" font-weight="bold" fill="#1b5e20">systemd 拉起 docker</text>
+  <text x="130" y="318" text-anchor="middle" font-size="11" fill="#2e7d32">is-enabled = enabled ✅</text>
+
+  <line x1="220" y1="303" x2="262" y2="303" stroke="#555" stroke-width="1.5" marker-end="url(#b)"/>
+
+  <rect x="262" y="278" width="190" height="50" rx="6" fill="#e8f5e9" stroke="#388e3c" stroke-width="1.5"/>
+  <text x="357" y="299" text-anchor="middle" font-size="12" font-weight="bold" fill="#1b5e20">dockerd 启动</text>
+  <text x="357" y="318" text-anchor="middle" font-size="11" fill="#2e7d32">MainPID=266，已跑 2 周 5 天</text>
+
+  <line x1="452" y1="303" x2="494" y2="303" stroke="#555" stroke-width="1.5" marker-end="url(#b)"/>
+
+  <rect x="494" y="278" width="200" height="50" rx="6" fill="#fff8e1" stroke="#f9a825" stroke-width="1.5"/>
+  <text x="594" y="299" text-anchor="middle" font-size="12" font-weight="bold" fill="#f57f17">查每个容器的 RestartPolicy</text>
+  <text x="594" y="318" text-anchor="middle" font-size="11" fill="#f9a825">context 完全管不到这一层</text>
+
+  <line x1="694" y1="303" x2="736" y2="303" stroke="#555" stroke-width="1.5" marker-end="url(#b)"/>
+
+  <rect x="736" y="278" width="124" height="50" rx="6" fill="#ffebee" stroke="#d32f2f" stroke-width="2"/>
+  <text x="798" y="299" text-anchor="middle" font-size="12" font-weight="bold" fill="#b71c1c">结果分叉</text>
+  <text x="798" y="318" text-anchor="middle" font-size="11" fill="#d32f2f">见下方分布</text>
+
+  <text x="40" y="362" font-size="14" font-weight="bold" fill="#1a1a1a">本机 194 个容器的 RestartPolicy 实测分布</text>
+
+  <rect x="40" y="376" width="500" height="30" rx="4" fill="#ffebee" stroke="#d32f2f" stroke-width="1.5"/>
+  <text x="56" y="396" font-size="12" font-weight="bold" fill="#b71c1c">no　184 个（94.8%）</text>
+  <text x="300" y="396" font-size="11" fill="#d32f2f">❌ 重启后不会回来 —— 事故根因</text>
+
+  <rect x="40" y="412" width="500" height="26" rx="4" fill="#e8f5e9" stroke="#388e3c"/>
+  <text x="56" y="430" font-size="12" fill="#1b5e20">always　2 个 ✅　｜　unless-stopped　1 个 ✅</text>
+
+  <rect x="40" y="444" width="500" height="26" rx="4" fill="#fff8e1" stroke="#f9a825"/>
+  <text x="56" y="462" font-size="12" fill="#f57f17">on-failure　7 个 —— 仅退出码非 0 时拉起</text>
+
+  <rect x="560" y="376" width="300" height="94" rx="6" fill="#e8eaf6" stroke="#3949ab" stroke-width="1.5"/>
+  <text x="710" y="398" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a237e">这 10 个有策略的主要来源</text>
+  <text x="710" y="420" text-anchor="middle" font-size="11" fill="#3949ab">compose 项目（实测 2 个项目 / 7 个容器）</text>
+  <text x="710" y="442" text-anchor="middle" font-size="11" fill="#3949ab">裸 docker run 的 184 个几乎全军覆没</text>
+  <text x="710" y="462" text-anchor="middle" font-size="11" font-weight="bold" fill="#1a237e">用 compose 不只是写法优雅</text>
+
+  <defs>
+    <marker id="b" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#555"/>
+    </marker>
+  </defs>
+</svg>

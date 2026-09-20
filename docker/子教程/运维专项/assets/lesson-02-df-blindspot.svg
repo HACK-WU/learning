@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 500" width="920" height="500" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="920" height="500" fill="#fbfcfe"/>
+  <text x="460" y="32" text-anchor="middle" font-size="19" font-weight="700" fill="#1f2d3d">docker system df 四分法：账本上有的，和账本漏掉的</text>
+  <text x="460" y="54" text-anchor="middle" font-size="12.5" fill="#7b8794">它记「对象」不记「目录」—— 日志是最大的盲区</text>
+
+  <!-- 左：账本 -->
+  <text x="235" y="86" text-anchor="middle" font-size="14" font-weight="700" fill="#1f2d3d">账本上有的（docker system df）</text>
+
+  <rect x="40" y="98" width="390" height="52" rx="7" fill="#eaf2fd" stroke="#3d7ec4" stroke-width="1.4"/>
+  <text x="56" y="120" font-size="13" font-weight="700" fill="#1f4e79">Images</text>
+  <text x="56" y="139" font-size="11.5" fill="#34495e">97 个 / active 51 / 77.7GB / 可回收 12.25GB（15%）</text>
+  <text x="414" y="130" text-anchor="end" font-size="11" fill="#7f8c8d">SIZE 含共享层</text>
+
+  <rect x="40" y="158" width="390" height="52" rx="7" fill="#eaf2fd" stroke="#3d7ec4" stroke-width="1.4"/>
+  <text x="56" y="180" font-size="13" font-weight="700" fill="#1f4e79">Containers</text>
+  <text x="56" y="199" font-size="11.5" fill="#34495e">197 个 / active 121 / 20.32GB / 可回收 4.652GB（22%）</text>
+  <text x="414" y="190" text-anchor="end" font-size="11" fill="#7f8c8d">只算可写层</text>
+
+  <rect x="40" y="218" width="390" height="52" rx="7" fill="#eafaf1" stroke="#27ae60" stroke-width="1.4"/>
+  <text x="56" y="240" font-size="13" font-weight="700" fill="#145a32">Local Volumes</text>
+  <text x="56" y="259" font-size="11.5" fill="#34495e">218 个 / active 81 / 46.14GB / 可回收 673MB（1%）</text>
+  <text x="414" y="250" text-anchor="end" font-size="11" fill="#7f8c8d">在用＝业务数据</text>
+
+  <rect x="40" y="278" width="390" height="52" rx="7" fill="#eaf2fd" stroke="#3d7ec4" stroke-width="1.4"/>
+  <text x="56" y="300" font-size="13" font-weight="700" fill="#1f4e79">Build Cache</text>
+  <text x="56" y="319" font-size="11.5" fill="#34495e">173 项 / active 0 / 14.77GB / 可回收 11.07GB</text>
+  <text x="414" y="310" text-anchor="end" font-size="11" fill="#7f8c8d">全闲置，可清</text>
+
+  <!-- 账本合计 -->
+  <rect x="40" y="340" width="390" height="38" rx="6" fill="#f4f6f8" stroke="#bdc3c7" stroke-width="1.2"/>
+  <text x="235" y="357" text-anchor="middle" font-size="12.5" font-weight="700" fill="#34495e">照账本决策：12.25+4.652+0.673+11.07 ≈ 28.6GB</text>
+  <text x="235" y="372" text-anchor="middle" font-size="11" fill="#7f8c8d">← 这是你<b>以为</b>能回收的全部</text>
+
+  <!-- 右：盲区 -->
+  <text x="690" y="86" text-anchor="middle" font-size="14" font-weight="700" fill="#922b21">账本漏掉的（du 才看得到）</text>
+
+  <rect x="495" y="98" width="385" height="130" rx="9" fill="#fdecea" stroke="#c0392b" stroke-width="2"/>
+  <text x="687" y="126" text-anchor="middle" font-size="15" font-weight="700" fill="#922b21">容器日志　13795 MB（≈13.5GB）</text>
+  <text x="687" y="150" text-anchor="middle" font-size="12" fill="#7b241c">containers 目录 13797 MB 中占 <tspan font-weight="700">99.99%</tspan></text>
+  <text x="687" y="172" text-anchor="middle" font-size="12" fill="#7b241c">四类账本里<tspan font-weight="700">没有任何一行</tspan>统计它</text>
+  <rect x="515" y="184" width="335" height="32" rx="5" fill="#fff" stroke="#c0392b" stroke-width="1.2"/>
+  <text x="687" y="205" text-anchor="middle" font-size="11.5" fill="#922b21">最大单个：10660 MB（doris-learn，跑 18 天，未配轮转）</text>
+
+  <rect x="495" y="244" width="385" height="86" rx="9" fill="#fdf0e3" stroke="#d68910" stroke-width="1.6"/>
+  <text x="687" y="270" text-anchor="middle" font-size="14" font-weight="700" fill="#7d5108">卷里的内容不细分</text>
+  <text x="687" y="292" text-anchor="middle" font-size="11.5" fill="#7d5108">46GB 报「只能回收 673MB」—— 因为它<b>大部分在用</b></text>
+  <text x="687" y="312" text-anchor="middle" font-size="11.5" fill="#7d5108">11G 卷 → doris-mysql-demo　5.2G → k8s-c1-control-plane</text>
+
+  <rect x="495" y="340" width="385" height="38" rx="6" fill="#f4f6f8" stroke="#bdc3c7" stroke-width="1.2"/>
+  <text x="687" y="357" text-anchor="middle" font-size="12.5" font-weight="700" fill="#34495e">真实大头：日志 13.5GB 完全没进决策</text>
+  <text x="687" y="372" text-anchor="middle" font-size="11" fill="#7f8c8d">← RECLAIMABLE <b>系统性低估</b></text>
+
+  <!-- 中间分隔 -->
+  <line x1="462" y1="86" x2="462" y2="378" stroke="#bdc3c7" stroke-width="1.4" stroke-dasharray="5 4"/>
+
+  <!-- 底部结论 -->
+  <rect x="40" y="392" width="840" height="88" rx="9" fill="#2c3e50"/>
+  <text x="460" y="418" text-anchor="middle" font-size="14" font-weight="700" fill="#ecf0f1">两个数字一起看才完整</text>
+  <text x="240" y="441" text-anchor="middle" font-size="12" fill="#ecf0f1">du -sh /var/lib/docker → 117G</text>
+  <text x="240" y="461" text-anchor="middle" font-size="11.5" fill="#95a5a6">Docker 自己吃了多少（找大头）</text>
+  <text x="680" y="441" text-anchor="middle" font-size="12" fill="#ecf0f1">df -h /var/lib/docker → 24%</text>
+  <text x="680" y="461" text-anchor="middle" font-size="11.5" fill="#95a5a6">分区使用率（告警看这个）</text>
+</svg>

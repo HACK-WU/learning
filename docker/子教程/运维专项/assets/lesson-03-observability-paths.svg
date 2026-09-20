@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 500" width="920" height="500" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="920" height="500" fill="#fbfcfe"/>
+  <text x="460" y="30" text-anchor="middle" font-size="19" font-weight="700" fill="#1f2d3d">观测的两条路：它们读的是同一份数据</text>
+  <text x="460" y="52" text-anchor="middle" font-size="12.5" fill="#7b8794">docker stats 是体温计（瞬时），/metrics 是监护仪（趋势）——数据源都是 cgroup v2</text>
+
+  <!-- 上层：两个工具 -->
+  <rect x="50" y="76" width="380" height="118" rx="9" fill="#eaf2fd" stroke="#3d7ec4" stroke-width="1.8"/>
+  <text x="240" y="102" text-anchor="middle" font-size="15" font-weight="700" fill="#1f4e79">docker stats</text>
+  <text x="240" y="124" text-anchor="middle" font-size="12.5" fill="#34495e">瞬时快照 · 读完即弃 · 给人看</text>
+  <text x="240" y="144" text-anchor="middle" font-size="11.5" fill="#7f8c8d">开箱即用，不需要任何配置</text>
+  <text x="240" y="166" text-anchor="middle" font-size="12" fill="#1f4e79">能回答：「现在谁在吃 CPU」</text>
+  <text x="240" y="184" text-anchor="middle" font-size="11.5" fill="#922b21">不能回答：「昨晚 3 点烧到多少」</text>
+
+  <rect x="490" y="76" width="380" height="118" rx="9" fill="#f4ecf7" stroke="#8e44ad" stroke-width="1.8"/>
+  <text x="680" y="102" text-anchor="middle" font-size="15" font-weight="700" fill="#5b2c6f">daemon /metrics（9323）</text>
+  <text x="680" y="124" text-anchor="middle" font-size="12.5" fill="#34495e">时间序列 · 可回溯 · 给机器看</text>
+  <text x="680" y="144" text-anchor="middle" font-size="11.5" fill="#7f8c8d">需 metrics-addr + <tspan fill="#922b21">重启引擎</tspan></text>
+  <text x="680" y="166" text-anchor="middle" font-size="12" fill="#5b2c6f">能回答：「过去一周是不是变慢了」</text>
+  <text x="680" y="184" text-anchor="middle" font-size="11.5" fill="#922b21">⚠ 本机未开启（实测 HTTP 000）</text>
+
+  <!-- 箭头汇入 -->
+  <path d="M240 194 L240 226 L440 226 L440 246" fill="none" stroke="#5d6d7e" stroke-width="1.8"/>
+  <path d="M680 194 L680 226 L480 226 L480 246" fill="none" stroke="#5d6d7e" stroke-width="1.8"/>
+
+  <!-- 中层：cgroup -->
+  <rect x="180" y="248" width="560" height="92" rx="9" fill="#eafaf1" stroke="#27ae60" stroke-width="2"/>
+  <text x="460" y="276" text-anchor="middle" font-size="15" font-weight="700" fill="#145a32">cgroup v2　/sys/fs/cgroup（实测 cgroup2fs）</text>
+  <text x="460" y="300" text-anchor="middle" font-size="12" fill="#34495e">memory.current　cpu.stat　io.stat　（容器级）</text>
+  <text x="460" y="320" text-anchor="middle" font-size="12" fill="#34495e">cpu.pressure　memory.pressure　io.pressure　（PSI 主机/容器级）</text>
+
+  <!-- 实测对照 -->
+  <rect x="180" y="346" width="560" height="60" rx="8" fill="#fff" stroke="#bdc3c7" stroke-width="1.4" stroke-dasharray="5 3"/>
+  <text x="460" y="368" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1f2d3d">实测对照（l15-kafka-1）</text>
+  <text x="460" y="388" text-anchor="middle" font-size="11.5" fill="#34495e">cgroup memory.current = 1099018240 字节 = 1048 MiB　←→　docker stats = 1.01GiB　✅ 对上了</text>
+
+  <!-- 下层：语义分叉 -->
+  <text x="460" y="432" text-anchor="middle" font-size="13.5" font-weight="700" fill="#922b21">↓ 但同一个 stats 里，字段语义并不相同（必须三步核验）↓</text>
+
+  <rect x="60" y="444" width="250" height="40" rx="6" fill="#eafaf1" stroke="#27ae60" stroke-width="1.6"/>
+  <text x="185" y="462" text-anchor="middle" font-size="12" font-weight="700" fill="#145a32">CPUPerc / MemUsage / PIDs</text>
+  <text x="185" y="477" text-anchor="middle" font-size="11" fill="#145a32">瞬时值 → 可直接比阈值 ✅</text>
+
+  <rect x="335" y="444" width="250" height="40" rx="6" fill="#fdecea" stroke="#c0392b" stroke-width="1.6"/>
+  <text x="460" y="462" text-anchor="middle" font-size="12" font-weight="700" fill="#922b21">NetIO / BlockIO</text>
+  <text x="460" y="477" text-anchor="middle" font-size="11" fill="#7b241c">累积值 → 需算 rate/差值 ⛔</text>
+
+  <rect x="610" y="444" width="250" height="40" rx="6" fill="#fdf0e3" stroke="#d68910" stroke-width="1.6"/>
+  <text x="735" y="462" text-anchor="middle" font-size="12" font-weight="700" fill="#7d5108">PSI avg10 / avg60 / avg300</text>
+  <text x="735" y="477" text-anchor="middle" font-size="11" fill="#7d5108">窗口均值 → 可直接比阈值 ✅</text>
+</svg>

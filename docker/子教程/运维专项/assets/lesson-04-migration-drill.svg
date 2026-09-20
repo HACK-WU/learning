@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 580" width="900" height="580" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="900" height="580" fill="#fbfcfe"/>
+  <text x="450" y="28" text-anchor="middle" font-size="19" font-weight="700" fill="#1f2d3d">整机搬迁：四类资产 + 恢复演练闭环</text>
+  <text x="450" y="50" text-anchor="middle" font-size="12.5" fill="#7b8794">备份的终点不是「备份成功」，而是「恢复演练通过并记录了 RTO」</text>
+
+  <text x="450" y="76" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1f2d3d">第一步 · 要搬的四类资产（本机实测）</text>
+
+  <rect x="40" y="88" width="196" height="132" rx="9" fill="#eaf2fd" stroke="#3d7ec4" stroke-width="1.8"/>
+  <text x="138" y="111" text-anchor="middle" font-size="13" font-weight="700" fill="#1f4e79">① 镜像　97 个</text>
+  <text x="138" y="131" text-anchor="middle" font-size="11" fill="#34495e">77.77 GB</text>
+  <text x="138" y="152" text-anchor="middle" font-size="10.5" fill="#145a32">大部分可重新 pull</text>
+  <text x="138" y="170" text-anchor="middle" font-size="10.5" fill="#7b241c">⛔ RepoDigests=0 的</text>
+  <text x="138" y="187" text-anchor="middle" font-size="10.5" fill="#7b241c">本地构建镜像无法重取</text>
+  <text x="138" y="210" text-anchor="middle" font-size="10.5" fill="#34495e">save 实测：busybox</text>
+  <text x="138" y="225" text-anchor="middle" font-size="10.5" fill="#34495e">6.81MB → tar 2.15MB</text>
+
+  <rect x="252" y="88" width="196" height="132" rx="9" fill="#fdecea" stroke="#c0392b" stroke-width="1.8"/>
+  <text x="350" y="111" text-anchor="middle" font-size="13" font-weight="700" fill="#922b21">② 卷　218 个</text>
+  <text x="350" y="131" text-anchor="middle" font-size="11" fill="#34495e">46.6 GB</text>
+  <text x="350" y="152" text-anchor="middle" font-size="10.5" fill="#7b241c">⛔ 完全不可重建</text>
+  <text x="350" y="170" text-anchor="middle" font-size="10.5" fill="#7b241c">203 个是匿名卷</text>
+  <text x="350" y="187" text-anchor="middle" font-size="10.5" fill="#7b241c">6 个孤儿卷有数据</text>
+  <text x="350" y="210" text-anchor="middle" font-size="10.5" fill="#34495e">业务数据就在这里，</text>
+  <text x="350" y="225" text-anchor="middle" font-size="10.5" fill="#34495e">丢了就是真丢了</text>
+
+  <rect x="464" y="88" width="196" height="132" rx="9" fill="#f4ecf7" stroke="#8e44ad" stroke-width="1.8"/>
+  <text x="562" y="111" text-anchor="middle" font-size="13" font-weight="700" fill="#5b2c6f">③ 编排文件　4 个</text>
+  <text x="562" y="131" text-anchor="middle" font-size="11" fill="#34495e">compose.yaml</text>
+  <text x="562" y="152" text-anchor="middle" font-size="10.5" fill="#145a32">理论可重写但费时</text>
+  <text x="562" y="170" text-anchor="middle" font-size="10.5" fill="#34495e">决定端口 / 网络 /</text>
+  <text x="562" y="187" text-anchor="middle" font-size="10.5" fill="#34495e">依赖 / 环境变量</text>
+  <text x="562" y="210" text-anchor="middle" font-size="10.5" fill="#7b241c">⚠ inspect 能反推部分，</text>
+  <text x="562" y="225" text-anchor="middle" font-size="10.5" fill="#7b241c">network/policy 还原不了</text>
+
+  <rect x="676" y="88" width="184" height="132" rx="9" fill="#fdf0e3" stroke="#d68910" stroke-width="2.2"/>
+  <text x="768" y="111" text-anchor="middle" font-size="13" font-weight="700" fill="#7d5108">④ bind mount　57 个</text>
+  <text x="768" y="131" text-anchor="middle" font-size="11" fill="#34495e">宿主目录</text>
+  <text x="768" y="152" text-anchor="middle" font-size="10.5" fill="#7b241c">⛔ 最容易被漏掉</text>
+  <text x="768" y="170" text-anchor="middle" font-size="10.5" fill="#7b241c">不在 volume ls 里！</text>
+  <text x="768" y="187" text-anchor="middle" font-size="10.5" fill="#34495e">遍历卷的脚本</text>
+  <text x="768" y="210" text-anchor="middle" font-size="10.5" fill="#34495e">会完全忽略它们</text>
+  <text x="768" y="225" text-anchor="middle" font-size="10.5" fill="#34495e">dashboards · prometheus.yml</text>
+
+  <path d="M450 220 L450 248" stroke="#5d6d7e" stroke-width="1.8"/>
+
+  <text x="450" y="272" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1f2d3d">第二步 · 恢复演练四步（唯一能证明备份有效的手段）</text>
+
+  <rect x="60" y="286" width="180" height="98" rx="8" fill="#eafaf1" stroke="#27ae60" stroke-width="1.6"/>
+  <circle cx="90" cy="312" r="13" fill="#27ae60"/>
+  <text x="90" y="317" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">1</text>
+  <text x="118" y="317" font-size="12.5" font-weight="700" fill="#145a32">隔离环境</text>
+  <text x="76" y="340" font-size="10.5" fill="#34495e">另一台机器 / 临时目录</text>
+  <text x="76" y="357" font-size="10.5" fill="#7b241c">⛔ 绝不在生产上直接试</text>
+  <text x="76" y="374" font-size="10.5" fill="#34495e">Docker context 也行</text>
+
+  <rect x="256" y="286" width="180" height="98" rx="8" fill="#eafaf1" stroke="#27ae60" stroke-width="1.6"/>
+  <circle cx="286" cy="312" r="13" fill="#27ae60"/>
+  <text x="286" y="317" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">2</text>
+  <text x="314" y="317" font-size="12.5" font-weight="700" fill="#145a32">还原</text>
+  <text x="272" y="340" font-size="10.5" fill="#34495e">卷 → create + 解压</text>
+  <text x="272" y="357" font-size="10.5" fill="#34495e">镜像 → load / pull</text>
+  <text x="272" y="374" font-size="10.5" fill="#34495e">编排 → compose up</text>
+
+  <rect x="452" y="286" width="180" height="98" rx="8" fill="#fdf0e3" stroke="#d68910" stroke-width="2.2"/>
+  <circle cx="482" cy="312" r="13" fill="#d68910"/>
+  <text x="482" y="317" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">3</text>
+  <text x="510" y="317" font-size="12.5" font-weight="700" fill="#7d5108">校验</text>
+  <text x="468" y="340" font-size="10.5" fill="#7b241c">⚠ 最容易省略的一步</text>
+  <text x="468" y="357" font-size="10.5" fill="#34495e">行数对不对？最新记录</text>
+  <text x="468" y="374" font-size="10.5" fill="#34495e">是什么时候？能连上吗？</text>
+
+  <rect x="648" y="286" width="180" height="98" rx="8" fill="#eafaf1" stroke="#27ae60" stroke-width="1.6"/>
+  <circle cx="678" cy="312" r="13" fill="#27ae60"/>
+  <text x="678" y="317" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">4</text>
+  <text x="706" y="317" font-size="12.5" font-weight="700" fill="#145a32">记录 RTO</text>
+  <text x="664" y="340" font-size="10.5" fill="#34495e">开始恢复 → 服务可用</text>
+  <text x="664" y="357" font-size="10.5" fill="#34495e">花了多久？瓶颈在哪？</text>
+  <text x="664" y="374" font-size="10.5" fill="#34495e">下次能不能更快？</text>
+
+  <path d="M240 335 L256 335" stroke="#5d6d7e" stroke-width="1.6" marker-end="url(#ar)"/>
+  <path d="M436 335 L452 335" stroke="#5d6d7e" stroke-width="1.6" marker-end="url(#ar)"/>
+  <path d="M632 335 L648 335" stroke="#5d6d7e" stroke-width="1.6" marker-end="url(#ar)"/>
+  <defs><marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5d6d7e"/></marker></defs>
+
+  <path d="M450 384 L450 408" stroke="#5d6d7e" stroke-width="1.8"/>
+
+  <rect x="150" y="410" width="600" height="38" rx="7" fill="#2c3e50"/>
+  <text x="450" y="434" text-anchor="middle" font-size="13" font-weight="700" fill="#ecf0f1">备份成功退出 ≠ 数据能恢复　——　没演练过的备份等于没备份</text>
+
+  <rect x="40" y="462" width="820" height="98" rx="9" fill="#fdecea" stroke="#c0392b" stroke-width="1.8"/>
+  <text x="450" y="486" text-anchor="middle" font-size="13" font-weight="700" fill="#922b21">本机现状（2026-09-20 方案 A 演练后更新）</text>
+  <text x="66" y="508" font-size="11.5" fill="#34495e">RPO（最多丢多少数据）：<tspan fill="#7b241c" font-weight="700">∞ → 取决于备份频率</tspan>　——　已从「零备份」变为「1 份<tspan fill="#145a32" font-weight="700">已验证</tspan>备份（76KB）」，但<tspan fill="#7b241c">尚未定时化</tspan></text>
+  <text x="66" y="528" font-size="11.5" fill="#34495e">RTO（多久能恢复服务）：<tspan fill="#7b241c" font-weight="700">未知 → 实测 4 秒</tspan>　——　起容器到数据可查（启动 2 秒 + 导入 2 秒）；真实 RTO 还须加上编排恢复与切流时间</text>
+  <text x="66" y="548" font-size="11.5" fill="#34495e">校验结果：表数 94=94 ・ 逐表 count 全 ✅ ・ 真实数据可读 ・ 源库未受影响 ・ 演练环境残留 0</text>
+</svg>

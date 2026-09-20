@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="640" viewBox="0 0 920 640" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <defs>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5d6d7e"/>
+    </marker>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#c0392b"/>
+    </marker>
+    <marker id="arg" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#1e8449"/>
+    </marker>
+  </defs>
+
+  <rect width="920" height="640" fill="#fdfefe"/>
+  <text x="460" y="26" text-anchor="middle" font-size="19" font-weight="700" fill="#1b4f72">数据包从外网到容器：你的防火墙规则停在第几站？</text>
+  <text x="460" y="46" text-anchor="middle" font-size="11.5" fill="#7f8c8d">🟢 本机实测 2026-09-20 ｜ Docker 29.4.1 ｜ iptables-nft 后端</text>
+
+  <!-- 顶部：数据包路径 -->
+  <text x="30" y="76" font-size="13" font-weight="700" fill="#1b4f72">① 数据包必经之路（顺序不可颠倒）</text>
+
+  <rect x="30" y="88" width="130" height="46" rx="5" fill="#ebf5fb" stroke="#2874a6" stroke-width="1.6"/>
+  <text x="95" y="107" text-anchor="middle" font-size="12" font-weight="700" fill="#1b4f72">客户端</text>
+  <text x="95" y="124" text-anchor="middle" font-size="10" fill="#5d6d7e">访问 宿主机:19192</text>
+
+  <line x1="162" y1="111" x2="196" y2="111" stroke="#5d6d7e" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <rect x="198" y="88" width="150" height="46" rx="5" fill="#fdebd0" stroke="#b9770e" stroke-width="1.6"/>
+  <text x="273" y="107" text-anchor="middle" font-size="12" font-weight="700" fill="#7e5109">nat PREROUTING</text>
+  <text x="273" y="124" text-anchor="middle" font-size="10" fill="#5d6d7e">DNAT 改写目的地址</text>
+
+  <line x1="350" y1="111" x2="384" y2="111" stroke="#5d6d7e" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <rect x="386" y="88" width="150" height="46" rx="5" fill="#fadbd8" stroke="#c0392b" stroke-width="1.6"/>
+  <text x="461" y="107" text-anchor="middle" font-size="12" font-weight="700" fill="#922b21">⚠ 端口已被改写</text>
+  <text x="461" y="124" text-anchor="middle" font-size="10" fill="#5d6d7e">19192 → 172.20.0.3:9092</text>
+
+  <line x1="538" y1="111" x2="572" y2="111" stroke="#5d6d7e" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <rect x="574" y="88" width="150" height="46" rx="5" fill="#e8f8f5" stroke="#1e8449" stroke-width="1.6"/>
+  <text x="649" y="107" text-anchor="middle" font-size="12" font-weight="700" fill="#145a32">filter FORWARD</text>
+  <text x="649" y="124" text-anchor="middle" font-size="10" fill="#5d6d7e">默认策略 DROP</text>
+
+  <line x1="726" y1="111" x2="760" y2="111" stroke="#5d6d7e" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <rect x="762" y="88" width="128" height="46" rx="5" fill="#e8f8f5" stroke="#1e8449" stroke-width="1.6"/>
+  <text x="826" y="107" text-anchor="middle" font-size="12" font-weight="700" fill="#145a32">容器</text>
+  <text x="826" y="124" text-anchor="middle" font-size="10" fill="#5d6d7e">172.20.0.3:9092</text>
+
+  <!-- FORWARD 链展开 -->
+  <text x="30" y="168" font-size="13" font-weight="700" fill="#1b4f72">② FORWARD 链内部：只有两条跳转（🟢 实测）</text>
+
+  <rect x="30" y="180" width="330" height="44" rx="5" fill="#d5f5e3" stroke="#1e8449" stroke-width="2"/>
+  <text x="195" y="200" text-anchor="middle" font-size="12.5" font-weight="700" fill="#145a32">第 1 条 → DOCKER-USER</text>
+  <text x="195" y="217" text-anchor="middle" font-size="10.5" fill="#145a32">★ 唯一能写规则的位置（当前空链＝全放行）</text>
+
+  <line x1="362" y1="202" x2="392" y2="202" stroke="#1e8449" stroke-width="2" marker-end="url(#arg)"/>
+
+  <rect x="394" y="180" width="330" height="44" rx="5" fill="#fadbd8" stroke="#c0392b" stroke-width="2"/>
+  <text x="559" y="200" text-anchor="middle" font-size="12.5" font-weight="700" fill="#922b21">第 2 条 → DOCKER-FORWARD</text>
+  <text x="559" y="217" text-anchor="middle" font-size="10.5" fill="#922b21">Docker 自己的放行逻辑（你无法插队）</text>
+
+  <rect x="730" y="180" width="160" height="44" rx="5" fill="#f4f6f7" stroke="#95a5a6" stroke-width="1.4"/>
+  <text x="810" y="200" text-anchor="middle" font-size="12" font-weight="700" fill="#5d6d7e">你的规则（-A）</text>
+  <text x="810" y="217" text-anchor="middle" font-size="10.5" fill="#7f8c8d">排在 Docker 之后＝永远不被问到</text>
+
+  <!-- 三个致命误解 -->
+  <text x="30" y="256" font-size="13" font-weight="700" fill="#922b21">③ 三个"规则写了却没生效"的死法</text>
+
+  <rect x="30" y="268" width="278" height="82" rx="5" fill="#fdedec" stroke="#c0392b" stroke-width="1.5"/>
+  <text x="44" y="288" font-size="12" font-weight="700" fill="#922b21">死法 1：写错了链</text>
+  <text x="44" y="306" font-size="10.5" fill="#34495e">规则加在 INPUT 链（ufw/firewalld 默认）</text>
+  <text x="44" y="322" font-size="10.5" fill="#34495e">但容器包走的是 FORWARD 链</text>
+  <text x="44" y="340" font-size="10.5" fill="#922b21">→ 两条路，压根没碰面</text>
+
+  <rect x="321" y="268" width="278" height="82" rx="5" fill="#fdedec" stroke="#c0392b" stroke-width="1.5"/>
+  <text x="335" y="288" font-size="12" font-weight="700" fill="#922b21">死法 2：写在尾巴上</text>
+  <text x="335" y="306" font-size="10.5" fill="#34495e">用 -A 追加到 FORWARD 末端</text>
+  <text x="335" y="322" font-size="10.5" fill="#34495e">包在第 2 条就被 ACCEPT 走了</text>
+  <text x="335" y="340" font-size="10.5" fill="#922b21">→ 必须用 DOCKER-USER + -I</text>
+
+  <rect x="612" y="268" width="278" height="82" rx="5" fill="#fdebd0" stroke="#b9770e" stroke-width="1.5"/>
+  <text x="626" y="288" font-size="12" font-weight="700" fill="#7e5109">死法 3：端口写错了（最隐蔽）</text>
+  <text x="626" y="306" font-size="10.5" fill="#34495e">--dport 19192 想封 -p 19192:9092</text>
+  <text x="626" y="322" font-size="10.5" fill="#34495e">但 DNAT 已把端口改成 9092</text>
+  <text x="626" y="340" font-size="10.5" fill="#7e5109">→ 规则存在、计数器永远 0（静默）</text>
+
+  <!-- 正确写法 -->
+  <text x="30" y="384" font-size="13" font-weight="700" fill="#1e8449">④ 正确写法（⛔ 本课不执行）</text>
+
+  <rect x="30" y="396" width="430" height="72" rx="5" fill="#e8f8f5" stroke="#1e8449" stroke-width="1.5"/>
+  <text x="44" y="416" font-size="11.5" font-weight="700" fill="#145a32">A. 匹配容器端口（需先查 DNAT）</text>
+  <text x="44" y="436" font-size="10" font-family="monospace" fill="#1b4f72">-I DOCKER-USER -p tcp -d 172.20.0.3 \</text>
+  <text x="44" y="452" font-size="10" font-family="monospace" fill="#1b4f72">  --dport 9092 -j DROP</text>
+
+  <rect x="475" y="396" width="415" height="72" rx="5" fill="#e8f8f5" stroke="#1e8449" stroke-width="2"/>
+  <text x="489" y="416" font-size="11.5" font-weight="700" fill="#145a32">B. 官方推荐：conntrack 匹配原始端口</text>
+  <text x="489" y="436" font-size="10" font-family="monospace" fill="#1b4f72">-I DOCKER-USER -i eth0 -p tcp -m conntrack \</text>
+  <text x="489" y="452" font-size="10" font-family="monospace" fill="#1b4f72">  --ctorigdstport 19192 --ctdir ORIGINAL ! -s 10.0.0.0/8 -j DROP</text>
+
+  <!-- 版本差异 -->
+  <text x="30" y="502" font-size="13" font-weight="700" fill="#7e5109">⑤ 版本差异：旧教程会直接报错</text>
+
+  <rect x="30" y="514" width="415" height="60" rx="5" fill="#f4f6f7" stroke="#95a5a6" stroke-width="1.3"/>
+  <text x="44" y="534" font-size="11" font-weight="700" fill="#5d6d7e">旧结构（Docker &lt; 28）</text>
+  <text x="44" y="553" font-size="10.5" fill="#34495e">DOCKER-ISOLATION-STAGE-1 / -2 用于网络隔离</text>
+  <text x="44" y="568" font-size="10.5" fill="#922b21">本机实测：iptables: No chain/target/match by that name.</text>
+
+  <rect x="475" y="514" width="415" height="60" rx="5" fill="#ebf5fb" stroke="#2874a6" stroke-width="1.5"/>
+  <text x="489" y="534" font-size="11" font-weight="700" fill="#1b4f72">新结构（🟢 本机 29.4.1 实测 6 条链）</text>
+  <text x="489" y="553" font-size="10.5" fill="#34495e">DOCKER-USER · DOCKER-FORWARD · DOCKER</text>
+  <text x="489" y="568" font-size="10.5" fill="#34495e">DOCKER-BRIDGE · DOCKER-CT · DOCKER-INTERNAL</text>
+
+  <text x="460" y="600" text-anchor="middle" font-size="11.5" fill="#1b4f72">🟢 计数器佐证：DOCKER-USER 与 DOCKER-FORWARD 均为 1375917709 包 / 794002241861 字节 —— 完全相同，证明无一包绕过 DOCKER-USER</text>
+  <text x="460" y="620" text-anchor="middle" font-size="11" fill="#7f8c8d">IPv6 侧另有完整的 ip6tables 六条链（Docker 27+ 默认管理）——只封 IPv4 等于留一半后门（本机 :: 绑定 85 条）</text>
+  <text x="460" y="636" text-anchor="middle" font-size="10" fill="#95a5a6">来源：docs.docker.com/engine/network/firewall-iptables/ ｜ packet-filtering-firewalls/（核查于 2026-09）</text>
+</svg>

@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 520" width="920" height="520" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="920" height="520" fill="#fbfcfe"/>
+  <text x="460" y="32" text-anchor="middle" font-size="19" font-weight="700" fill="#1f2d3d">/var/lib/docker 目录结构（实测 117G）</text>
+  <text x="460" y="54" text-anchor="middle" font-size="12.5" fill="#7b8794">三个目录吃掉 95% 以上空间；删文件用 docker 命令，不要 rm</text>
+
+  <!-- 数据根 -->
+  <rect x="40" y="76" width="840" height="410" rx="10" fill="none" stroke="#5d6d7e" stroke-width="1.8" stroke-dasharray="6 4"/>
+  <text x="58" y="98" font-size="14" font-weight="700" fill="#1f2d3d">/var/lib/docker</text>
+  <text x="862" y="98" text-anchor="end" font-size="12" fill="#7f8c8d">总计 117G（所在分区 1007G，使用率 24%）</text>
+
+  <!-- rootfs -->
+  <rect x="62" y="112" width="796" height="86" rx="8" fill="#eaf2fd" stroke="#3d7ec4" stroke-width="1.6"/>
+  <rect x="62" y="112" width="470" height="86" rx="8" fill="#3d7ec4" opacity="0.16"/>
+  <text x="82" y="140" font-size="15" font-weight="700" fill="#1f4e79">rootfs/　60G</text>
+  <text x="82" y="162" font-size="12.5" fill="#34495e">镜像层（只读·共享）+ 容器层快照 —— overlayfs snapshotter</text>
+  <text x="82" y="182" font-size="12" fill="#7f8c8d">路径：rootfs/overlayfs（⚠ 不是教程常写的 overlay2/）</text>
+  <rect x="672" y="132" width="166" height="46" rx="6" fill="#fff" stroke="#c0392b" stroke-width="1.4"/>
+  <text x="755" y="152" text-anchor="middle" font-size="12.5" font-weight="700" fill="#922b21">⛔ 绝对不要手删</text>
+  <text x="755" y="169" text-anchor="middle" font-size="11" fill="#7b241c">删了镜像与容器直接废</text>
+
+  <!-- volumes -->
+  <rect x="62" y="208" width="796" height="86" rx="8" fill="#eafaf1" stroke="#27ae60" stroke-width="1.6"/>
+  <rect x="62" y="208" width="345" height="86" rx="8" fill="#27ae60" opacity="0.16"/>
+  <text x="82" y="236" font-size="15" font-weight="700" fill="#145a32">volumes/　44G</text>
+  <text x="82" y="258" font-size="12.5" fill="#34495e">具名卷与匿名卷的<b>实际数据</b>（数据库、上传文件…）</text>
+  <text x="82" y="278" font-size="12" fill="#7f8c8d">独立于容器生命周期 —— 删容器<b>不会</b>删卷</text>
+  <rect x="672" y="228" width="166" height="46" rx="6" fill="#fff" stroke="#c0392b" stroke-width="1.4"/>
+  <text x="755" y="248" text-anchor="middle" font-size="12.5" font-weight="700" fill="#922b21">⚠ 删了＝删库</text>
+  <text x="755" y="265" text-anchor="middle" font-size="11" fill="#7b241c">11G 卷被 doris-mysql-demo 用</text>
+
+  <!-- containers -->
+  <rect x="62" y="304" width="796" height="110" rx="8" fill="#fdf0e3" stroke="#d68910" stroke-width="1.6"/>
+  <text x="82" y="332" font-size="15" font-weight="700" fill="#7d5108">containers/　14G　<span font-size="12" fill="#922b21">← 本课主角</span></text>
+
+  <rect x="82" y="344" width="250" height="56" rx="6" fill="#fff" stroke="#bdc3c7" stroke-width="1.2"/>
+  <text x="207" y="366" text-anchor="middle" font-size="12.5" font-weight="700" fill="#34495e">可写层 + 元数据</text>
+  <text x="207" y="386" text-anchor="middle" font-size="11.5" fill="#7f8c8d">约 1 MB　✅ 计入 df 账本</text>
+
+  <rect x="346" y="344" width="330" height="56" rx="6" fill="#fdecea" stroke="#c0392b" stroke-width="1.6"/>
+  <text x="511" y="366" text-anchor="middle" font-size="12.5" font-weight="700" fill="#922b21">*-json.log 日志　13795 MB</text>
+  <text x="511" y="386" text-anchor="middle" font-size="11.5" fill="#7b241c">占该目录 99.99%　⛔ df 账本看不见</text>
+
+  <rect x="690" y="344" width="148" height="56" rx="6" fill="#fff" stroke="#d68910" stroke-width="1.2"/>
+  <text x="764" y="366" text-anchor="middle" font-size="12" font-weight="700" fill="#7d5108">最大单个日志</text>
+  <text x="764" y="386" text-anchor="middle" font-size="11.5" fill="#7d5108">10660 MB ／ 18 天</text>
+
+  <!-- 其余小目录 -->
+  <rect x="62" y="424" width="796" height="46" rx="8" fill="#f4f6f8" stroke="#bdc3c7" stroke-width="1.2"/>
+  <text x="82" y="444" font-size="12.5" fill="#34495e">buildkit/ 155M（构建缓存，可清）　network/ 1.1M　image/ 76K（元数据索引）</text>
+  <text x="82" y="462" font-size="11.5" fill="#7f8c8d">其余合计不足 200 MB —— 治理时不必关注</text>
+
+  <!-- 底部纪律 -->
+  <rect x="40" y="484" width="840" height="26" rx="6" fill="#2c3e50"/>
+  <text x="460" y="502" text-anchor="middle" font-size="12" fill="#ecf0f1">铁律：永远用 docker 命令清理，绝不 rm -rf —— 元数据账本与实际文件是两套，rm 只删文件会导致引擎状态错乱</text>
+</svg>

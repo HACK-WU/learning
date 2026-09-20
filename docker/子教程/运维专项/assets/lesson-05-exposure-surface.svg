@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="660" viewBox="0 0 920 660" font-family="'Microsoft YaHei','PingFang SC',sans-serif">
+  <rect width="920" height="660" fill="#fdfefe"/>
+  <text x="460" y="26" text-anchor="middle" font-size="19" font-weight="700" fill="#1b4f72">真实暴露面：你以为开了一扇窗，其实开了 27 扇</text>
+  <text x="460" y="46" text-anchor="middle" font-size="11.5" fill="#7f8c8d">🟢 本机实测 2026-09-20 ｜ 27 个非回环 IPv4 × 87 个 0.0.0.0 端口 = 2349 个可达组合</text>
+
+  <!-- 左：0.0.0.0 -->
+  <text x="30" y="78" font-size="13.5" font-weight="700" fill="#922b21">写法 A：-p 19192:9092（不写 IP = 0.0.0.0）</text>
+
+  <rect x="30" y="90" width="410" height="180" rx="6" fill="#fdedec" stroke="#c0392b" stroke-width="1.8"/>
+  <text x="46" y="112" font-size="12" font-weight="700" fill="#922b21">宿主机上的 27 个 IP，每一个都能进</text>
+
+  <rect x="46" y="124" width="88" height="30" rx="3" fill="#fff" stroke="#c0392b" stroke-width="1"/>
+  <text x="90" y="143" text-anchor="middle" font-size="10" font-family="monospace" fill="#922b21">172.26.238.136</text>
+  <rect x="140" y="124" width="88" height="30" rx="3" fill="#fff" stroke="#c0392b" stroke-width="1"/>
+  <text x="184" y="143" text-anchor="middle" font-size="10" font-family="monospace" fill="#922b21">172.17.0.1</text>
+  <rect x="234" y="124" width="88" height="30" rx="3" fill="#fff" stroke="#c0392b" stroke-width="1"/>
+  <text x="278" y="143" text-anchor="middle" font-size="10" font-family="monospace" fill="#922b21">172.20.0.1</text>
+  <rect x="328" y="124" width="88" height="30" rx="3" fill="#fff" stroke="#c0392b" stroke-width="1"/>
+  <text x="372" y="143" text-anchor="middle" font-size="10" font-family="monospace" fill="#922b21">192.168.16.1</text>
+
+  <text x="46" y="172" font-size="10.5" fill="#5d6d7e">… 以及其余 23 个（含 25 个 docker 网桥网关 IP）</text>
+
+  <line x1="46" y1="186" x2="420" y2="186" stroke="#c0392b" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="46" y="206" font-size="11.5" font-weight="700" fill="#922b21">🟢 实测验证（端口 19990）：</text>
+  <text x="46" y="224" font-size="10.5" font-family="monospace" fill="#34495e">/dev/tcp/172.26.238.136/19990  → ✅ 可连</text>
+  <text x="46" y="240" font-size="10.5" font-family="monospace" fill="#34495e">/dev/tcp/172.17.0.1/19990      → ✅ 可连</text>
+  <text x="46" y="258" font-size="11.5" font-weight="700" fill="#922b21">暴露面 = 27 × 1 = 27 个入口</text>
+
+  <!-- 右：127.0.0.1 -->
+  <text x="480" y="78" font-size="13.5" font-weight="700" fill="#1e8449">写法 B：-p 127.0.0.1:40271:6443（加前缀）</text>
+
+  <rect x="480" y="90" width="410" height="180" rx="6" fill="#e8f8f5" stroke="#1e8449" stroke-width="1.8"/>
+  <text x="496" y="112" font-size="12" font-weight="700" fill="#145a32">只有回环能进，其余 26 个 IP 全部拒绝</text>
+
+  <rect x="496" y="124" width="88" height="30" rx="3" fill="#d5f5e3" stroke="#1e8449" stroke-width="1.5"/>
+  <text x="540" y="143" text-anchor="middle" font-size="10" font-family="monospace" fill="#145a32">127.0.0.1 ✅</text>
+  <rect x="590" y="124" width="88" height="30" rx="3" fill="#f4f6f7" stroke="#bdc3c7" stroke-width="1"/>
+  <text x="634" y="143" text-anchor="middle" font-size="10" font-family="monospace" fill="#95a5a6">172.26.238.136 ⛔</text>
+  <rect x="684" y="124" width="88" height="30" rx="3" fill="#f4f6f7" stroke="#bdc3c7" stroke-width="1"/>
+  <text x="728" y="143" text-anchor="middle" font-size="10" font-family="monospace" fill="#95a5a6">172.17.0.1 ⛔</text>
+  <rect x="778" y="124" width="88" height="30" rx="3" fill="#f4f6f7" stroke="#bdc3c7" stroke-width="1"/>
+  <text x="822" y="143" text-anchor="middle" font-size="10" font-family="monospace" fill="#95a5a6">其余 23 个 ⛔</text>
+
+  <text x="496" y="172" font-size="10.5" fill="#5d6d7e">根本没监听 → 无需任何防火墙规则</text>
+
+  <line x1="496" y1="186" x2="870" y2="186" stroke="#1e8449" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="496" y="206" font-size="11.5" font-weight="700" fill="#145a32">🟢 实测验证（端口 40271）：</text>
+  <text x="496" y="224" font-size="10.5" font-family="monospace" fill="#34495e">/dev/tcp/127.0.0.1/40271       → ✅ 可连</text>
+  <text x="496" y="240" font-size="10.5" font-family="monospace" fill="#34495e">/dev/tcp/172.26.238.136/40271  → Connection refused</text>
+  <text x="496" y="258" font-size="11.5" font-weight="700" fill="#145a32">暴露面 = 1 × 1 = 1 个入口（缩小 27 倍）</text>
+
+  <!-- HostIp 空的真相 -->
+  <text x="30" y="306" font-size="13.5" font-weight="700" fill="#7e5109">🐞 inspect 里 HostIp 为空 ≠ 没绑定（双栈展开）</text>
+
+  <rect x="30" y="318" width="860" height="88" rx="6" fill="#fef9e7" stroke="#b9770e" stroke-width="1.5"/>
+  <text x="46" y="340" font-size="11.5" font-weight="700" fill="#7e5109">HostConfig.PortBindings（你的意图）</text>
+  <text x="46" y="358" font-size="10" font-family="monospace" fill="#34495e">{"9092/tcp":[{"HostIp":"","HostPort":"19192"}]}</text>
+  <text x="46" y="376" font-size="10.5" fill="#7e5109">↑ 空 = 未指定 IP，不是"不暴露"</text>
+
+  <text x="470" y="340" font-size="11.5" font-weight="700" fill="#7e5109">NetworkSettings.Ports（Docker 实际展开）</text>
+  <text x="470" y="358" font-size="10" font-family="monospace" fill="#34495e">{"HostIp":"0.0.0.0"} + {"HostIp":"::"}  ← 两条！</text>
+  <text x="470" y="376" font-size="10.5" fill="#7e5109">IPv4 全放行 + IPv6 全放行（本机 87 / 85 条）</text>
+
+  <!-- 三类资产 -->
+  <text x="30" y="436" font-size="13.5" font-weight="700" fill="#1b4f72">盘点必须覆盖三类资产，漏一类等于没盘</text>
+
+  <rect x="30" y="448" width="278" height="86" rx="5" fill="#ebf5fb" stroke="#2874a6" stroke-width="1.5"/>
+  <text x="44" y="468" font-size="11.5" font-weight="700" fill="#1b4f72">① 容器发布端口（-p）</text>
+  <text x="44" y="486" font-size="10.5" fill="#34495e">🟢 本机：175 条绑定 / 87 个唯一端口</text>
+  <text x="44" y="502" font-size="10.5" fill="#34495e">docker-proxy 进程 175 个</text>
+  <text x="44" y="522" font-size="10.5" font-weight="700" fill="#1e8449">✅ 受 DOCKER-USER 管（走 FORWARD）</text>
+
+  <rect x="321" y="448" width="278" height="86" rx="5" fill="#fdedec" stroke="#c0392b" stroke-width="1.5"/>
+  <text x="335" y="468" font-size="11.5" font-weight="700" fill="#922b21">② host 网络容器</text>
+  <text x="335" y="486" font-size="10.5" fill="#34495e">🟢 本机 1 个：prom-learn (prometheus)</text>
+  <text x="335" y="502" font-size="10.5" fill="#34495e">docker ps --filter network=host</text>
+  <text x="335" y="522" font-size="10.5" font-weight="700" fill="#922b21">⛔ 不受管！它就是宿主进程</text>
+
+  <rect x="612" y="448" width="278" height="86" rx="5" fill="#fef9e7" stroke="#b9770e" stroke-width="1.5"/>
+  <text x="626" y="468" font-size="11.5" font-weight="700" fill="#7e5109">③ 宿主机自身进程</text>
+  <text x="626" y="486" font-size="10.5" fill="#34495e">🟢 本机：22 53 323 5060 6379 8301 8501 …</text>
+  <text x="626" y="502" font-size="10.5" fill="#34495e">ss -lntup | grep -v docker-proxy</text>
+  <text x="626" y="522" font-size="10.5" font-weight="700" fill="#7e5109">⛔ 不受管（走 INPUT 链）</text>
+
+  <!-- MTU -->
+  <text x="30" y="566" font-size="13.5" font-weight="700" fill="#1b4f72">跨主机：MTU 黑洞 = 小包通、大包不通</text>
+
+  <rect x="30" y="578" width="430" height="66" rx="5" fill="#f4f6f7" stroke="#95a5a6" stroke-width="1.3"/>
+  <text x="44" y="598" font-size="11" font-weight="700" fill="#5d6d7e">症状（最难查的地方）</text>
+  <text x="44" y="616" font-size="10.5" fill="#34495e">ping ✅ 通（小包） · curl 小响应 ✅ 通</text>
+  <text x="44" y="634" font-size="10.5" fill="#922b21">但打开网页卡住 / 传文件失败 / 大查询超时</text>
+
+  <rect x="475" y="578" width="415" height="66" rx="5" fill="#ebf5fb" stroke="#2874a6" stroke-width="1.5"/>
+  <text x="489" y="598" font-size="11" font-weight="700" fill="#1b4f72">解法：逐层核 MTU，跨主机封装留 50 字节</text>
+  <text x="489" y="616" font-size="10.5" fill="#34495e">🟢 本机全部 1500（eth0/docker0/24 网桥/容器内）→ 无黑洞</text>
+  <text x="489" y="634" font-size="10.5" fill="#1b4f72">VXLAN 开销 50B → 容器 MTU 应设 1450</text>
+</svg>
