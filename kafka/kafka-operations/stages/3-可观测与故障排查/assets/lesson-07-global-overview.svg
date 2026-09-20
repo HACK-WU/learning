@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 430" font-family="sans-serif">
+  <rect width="900" height="430" fill="#fbfcfd"/>
+  <text x="450" y="34" text-anchor="middle" font-size="19" font-weight="bold" fill="#1f2933">事故响应：先止血，再证明</text>
+  <text x="450" y="56" text-anchor="middle" font-size="12" fill="#6b7785">一张图看懂值班第一分钟该做什么（不含术语）</text>
+
+  <rect x="40" y="86" width="180" height="90" rx="10" fill="#ffe8e8" stroke="#d9534f"/>
+  <text x="130" y="118" text-anchor="middle" font-size="15" font-weight="bold" fill="#8b2c2c">1 有人报障</text>
+  <text x="130" y="142" text-anchor="middle" font-size="12" fill="#6b3a3a">"消息没了/卡住了"</text>
+  <text x="130" y="162" text-anchor="middle" font-size="12" fill="#6b3a3a">说法模糊，先别猜</text>
+
+  <rect x="290" y="86" width="180" height="90" rx="10" fill="#fff4e0" stroke="#e0a800"/>
+  <text x="380" y="118" text-anchor="middle" font-size="15" font-weight="bold" fill="#8a6100">2 先止损</text>
+  <text x="380" y="142" text-anchor="middle" font-size="12" fill="#6b4f14">停止扩大影响</text>
+  <text x="380" y="162" text-anchor="middle" font-size="12" fill="#6b4f14">不做不可逆操作</text>
+
+  <rect x="540" y="86" width="180" height="90" rx="10" fill="#e8f2ff" stroke="#3f7fd4"/>
+  <text x="630" y="118" text-anchor="middle" font-size="15" font-weight="bold" fill="#1c4f8a">3 留证据</text>
+  <text x="630" y="142" text-anchor="middle" font-size="12" fill="#2a4a6b">时间线/快照/日志</text>
+  <text x="630" y="162" text-anchor="middle" font-size="12" fill="#2a4a6b">先存再查</text>
+
+  <rect x="290" y="216" width="180" height="90" rx="10" fill="#eaf7ec" stroke="#3fa35a"/>
+  <text x="380" y="248" text-anchor="middle" font-size="15" font-weight="bold" fill="#1f6b33">4 做分诊</text>
+  <text x="380" y="272" text-anchor="middle" font-size="12" fill="#2a5a3a">症状 → 假设 → 验证</text>
+  <text x="380" y="292" text-anchor="middle" font-size="12" fill="#2a5a3a">一次只验一个</text>
+
+  <rect x="540" y="216" width="180" height="90" rx="10" fill="#f0e8f7" stroke="#7d5ba6"/>
+  <text x="630" y="248" text-anchor="middle" font-size="15" font-weight="bold" fill="#4a2f6b">5 处置恢复</text>
+  <text x="630" y="272" text-anchor="middle" font-size="12" fill="#4a3a5a">按验证结论动手</text>
+  <text x="630" y="292" text-anchor="middle" font-size="12" fill="#4a3a5a">留回滚路径</text>
+
+  <rect x="40" y="216" width="180" height="90" rx="10" fill="#f2f4f6" stroke="#8a949e"/>
+  <text x="130" y="248" text-anchor="middle" font-size="15" font-weight="bold" fill="#3d4752">6 复盘留档</text>
+  <text x="130" y="272" text-anchor="middle" font-size="12" fill="#5a636b">原因/影响/改进</text>
+  <text x="130" y="292" text-anchor="middle" font-size="12" fill="#5a636b">变成下次的 runbook</text>
+
+  <line x1="220" y1="131" x2="290" y2="131" stroke="#8a949e" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="470" y1="131" x2="540" y2="131" stroke="#8a949e" stroke-width="2"/>
+  <line x1="630" y1="176" x2="630" y2="216" stroke="#8a949e" stroke-width="2"/>
+  <line x1="540" y1="261" x2="470" y2="261" stroke="#8a949e" stroke-width="2"/>
+  <line x1="290" y1="261" x2="220" y2="261" stroke="#8a949e" stroke-width="2"/>
+
+  <text x="450" y="352" text-anchor="middle" font-size="13" font-weight="bold" fill="#8b2c2c">红线：不要为了"查清楚"先做不可逆操作</text>
+  <text x="450" y="376" text-anchor="middle" font-size="12" fill="#6b7785">不清数据、不擅自放宽可靠性、不跳过证据采集</text>
+  <text x="450" y="400" text-anchor="middle" font-size="12" fill="#6b7785">改不了就升级，升级不丢人，丢数据才丢人</text>
+
+  <defs>
+    <marker id="a" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#8a949e"/>
+    </marker>
+  </defs>
+</svg>

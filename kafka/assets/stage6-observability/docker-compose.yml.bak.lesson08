@@ -1,18 +1,14 @@
-# 课 8《安全运营与滚动变更》实验环境
-# 在阶段 6 集群基础上就地改造：双监听器 + SASL/SCRAM + ACL
+# 阶段 6《运维与可观测》实操环境
+# 3 节点 KRaft 集群（每节点挂 JMX Exporter javaagent）+ Prometheus + Grafana
 #
-# 改造策略（本课核心方法论）："先加门，不锁门"
-#   阶段一：只加 SASL_PLAINTEXT 监听器，PLAINTEXT 保留 → 老客户端零中断
-#   阶段二：客户端分批迁移到 9095
-#   阶段三：开 authorizer 做最小权限
-#   阶段四：下线 PLAINTEXT（可选，本课演示到阶段三）
+# 端口规划（避开本机已占用端口）：
+#   19192-19194 : broker 客户端端口 kafka-1/2/3
+#   17071-17073 : JMX Exporter HTTP 端口（Prometheus 从此拉取）
+#   19990       : Prometheus UI
+#   13000       : Grafana UI
 #
-# 端口规划（在阶段 6 基础上新增）：
-#   9092 / 19192-19194 : PLAINTEXT（老客户端，容器网内 / 宿主机映射）
-#   9095 / 19195-19197 : SASL_PLAINTEXT（新客户端，SCRAM-SHA-512）
-#   29093             : CONTROLLER（控制面，保持 PLAINTEXT）
-#   17071-17073       : JMX Exporter
-#   19990 / 13000     : Prometheus / Grafana
+# 说明：JMX Exporter 以 -javaagent 方式挂进 broker JVM（生产最常用做法），
+#       通过 KAFKA_JMX_OPTS 注入；agent 在 1707x 暴露 Prometheus 格式指标。
 
 networks:
   kafka-net:
@@ -25,22 +21,16 @@ services:
     networks: [kafka-net]
     ports:
       - "19192:9092"
-      - "19195:9095"
       - "17071:17071"
     environment:
       KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: "broker,controller"
       KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka-1:29093,2@kafka-2:29093,3@kafka-3:29093"
-      KAFKA_LISTENERS: "PLAINTEXT://0.0.0.0:9092,SASL_PLAINTEXT://0.0.0.0:9095,CONTROLLER://0.0.0.0:29093"
-      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka-1:9092,SASL_PLAINTEXT://kafka-1:9095"
+      KAFKA_LISTENERS: "PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:29093"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka-1:9092"
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,SASL_PLAINTEXT:SASL_PLAINTEXT"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT"
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_SASL_ENABLED_MECHANISMS: "SCRAM-SHA-512,PLAIN"
-      KAFKA_AUTHORIZER_CLASS_NAME: org.apache.kafka.metadata.authorizer.StandardAuthorizer
-      KAFKA_SUPER_USERS: "User:admin;User:ANONYMOUS"
-      KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "false"
-      KAFKA_OPTS: "-Djava.security.auth.login.config=/etc/kafka/jaas/kafka_server_jaas.conf"
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
@@ -52,7 +42,6 @@ services:
     volumes:
       - ./jmx-exporter/jmx_prometheus_javaagent.jar:/opt/jmx-exporter/jmx_prometheus_javaagent.jar:ro
       - ./jmx-exporter/kafka-broker.yml:/opt/jmx-exporter/kafka-broker.yml:ro
-      - ./jaas:/etc/kafka/jaas:ro
 
   kafka-2:
     image: apache/kafka:4.0.0
@@ -60,22 +49,16 @@ services:
     networks: [kafka-net]
     ports:
       - "19193:9092"
-      - "19196:9095"
       - "17072:17072"
     environment:
       KAFKA_NODE_ID: 2
       KAFKA_PROCESS_ROLES: "broker,controller"
       KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka-1:29093,2@kafka-2:29093,3@kafka-3:29093"
-      KAFKA_LISTENERS: "PLAINTEXT://0.0.0.0:9092,SASL_PLAINTEXT://0.0.0.0:9095,CONTROLLER://0.0.0.0:29093"
-      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka-2:9092,SASL_PLAINTEXT://kafka-2:9095"
+      KAFKA_LISTENERS: "PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:29093"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka-2:9092"
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,SASL_PLAINTEXT:SASL_PLAINTEXT"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT"
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_SASL_ENABLED_MECHANISMS: "SCRAM-SHA-512,PLAIN"
-      KAFKA_AUTHORIZER_CLASS_NAME: org.apache.kafka.metadata.authorizer.StandardAuthorizer
-      KAFKA_SUPER_USERS: "User:admin;User:ANONYMOUS"
-      KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "false"
-      KAFKA_OPTS: "-Djava.security.auth.login.config=/etc/kafka/jaas/kafka_server_jaas.conf"
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
@@ -87,7 +70,6 @@ services:
     volumes:
       - ./jmx-exporter/jmx_prometheus_javaagent.jar:/opt/jmx-exporter/jmx_prometheus_javaagent.jar:ro
       - ./jmx-exporter/kafka-broker.yml:/opt/jmx-exporter/kafka-broker.yml:ro
-      - ./jaas:/etc/kafka/jaas:ro
 
   kafka-3:
     image: apache/kafka:4.0.0
@@ -95,22 +77,16 @@ services:
     networks: [kafka-net]
     ports:
       - "19194:9092"
-      - "19197:9095"
       - "17073:17073"
     environment:
       KAFKA_NODE_ID: 3
       KAFKA_PROCESS_ROLES: "broker,controller"
       KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka-1:29093,2@kafka-2:29093,3@kafka-3:29093"
-      KAFKA_LISTENERS: "PLAINTEXT://0.0.0.0:9092,SASL_PLAINTEXT://0.0.0.0:9095,CONTROLLER://0.0.0.0:29093"
-      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka-3:9092,SASL_PLAINTEXT://kafka-3:9095"
+      KAFKA_LISTENERS: "PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:29093"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka-3:9092"
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,SASL_PLAINTEXT:SASL_PLAINTEXT"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT"
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_SASL_ENABLED_MECHANISMS: "SCRAM-SHA-512,PLAIN"
-      KAFKA_AUTHORIZER_CLASS_NAME: org.apache.kafka.metadata.authorizer.StandardAuthorizer
-      KAFKA_SUPER_USERS: "User:admin;User:ANONYMOUS"
-      KAFKA_ALLOW_EVERYONE_IF_NO_ACL_FOUND: "false"
-      KAFKA_OPTS: "-Djava.security.auth.login.config=/etc/kafka/jaas/kafka_server_jaas.conf"
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
@@ -122,7 +98,6 @@ services:
     volumes:
       - ./jmx-exporter/jmx_prometheus_javaagent.jar:/opt/jmx-exporter/jmx_prometheus_javaagent.jar:ro
       - ./jmx-exporter/kafka-broker.yml:/opt/jmx-exporter/kafka-broker.yml:ro
-      - ./jaas:/etc/kafka/jaas:ro
 
   prometheus:
     image: prom/prometheus:v3.14.0

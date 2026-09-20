@@ -34,4 +34,21 @@
 ## 本阶段产出
 
 - [x] [lessons/lesson-06-可观测性基线与告警.md](lessons/lesson-06-可观测性基线与告警.md)
-- [ ] `lessons/lesson-07-Kafka事故响应与故障排查.md`
+- [x] [lessons/lesson-07-Kafka事故响应与故障排查.md](lessons/lesson-07-Kafka事故响应与故障排查.md)
+
+## 📌 阶段 3 收官说明（2026-09-20）
+
+本阶段两课已全部完成，课 6 建立「看得到」的基线，课 7 完成「处理得了」的闭环。
+
+课 7 的核心实测结论（可在后续课程直接复用）：
+
+| 结论 | 实测证据 |
+|------|----------|
+| URP 非 0 ≠ 写入失败 | 停 1 台后 URP=39、UnderMinIsr=0，`acks=all` 写入成功 |
+| ISR 不足时才拒绝写入 | `min.insync.replicas=3` + 停 1 台 → `NOT_ENOUGH_REPLICAS`；同条件 `acks=1` 仍成功 |
+| 恢复后 Leader 不自动让回 | 故障前 Leader=3，恢复后仍为 1，需优先副本均衡 |
+| 有 lag ≠ 有活着的消费者 | LAG 合计 801，但 `STATE=Empty`、`#MEMBERS=0`、`CONSUMER-ID=-` |
+| 指标名不等于语义 | `errorspersec_request_brokerheartbeat` 的 `attribute=Count`，5 次采样 769026→769044 单调递增 |
+| 删除命令返回 ≠ 已删除 | 首次删除后 topic 仍在列表（RF=1/1 分区中间态），需复查 `--list` |
+
+> 阶段 3 与阶段 2 的衔接：课 7 的「恢复后 leader 倾斜」处置动作，正是阶段 2 课 4 的优先副本均衡——这是跨阶段知识在真实事故中的兑现。

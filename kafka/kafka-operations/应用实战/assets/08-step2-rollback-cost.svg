@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 360" width="840" height="360" font-family="sans-serif">
+  <rect width="840" height="360" fill="#fbfcfe"/>
+  <text x="420" y="26" text-anchor="middle" font-size="17" font-weight="bold" fill="#1a2b4c">回滚代价决定执行顺序：不可逆的动作必须放最后</text>
+
+  <!-- 坐标轴 -->
+  <line x1="90" y1="300" x2="800" y2="300" stroke="#333" stroke-width="2"/>
+  <line x1="90" y1="70" x2="90" y2="300" stroke="#333" stroke-width="2"/>
+  <text x="60" y="185" font-size="12" font-weight="bold" fill="#333" transform="rotate(-90 60 185)">回滚代价</text>
+
+  <!-- 刻度 -->
+  <text x="80" y="305" text-anchor="end" font-size="10" fill="#666">低</text>
+  <text x="80" y="180" text-anchor="end" font-size="10" fill="#666">中</text>
+  <text x="80" y="80" text-anchor="end" font-size="10" fill="#666">无上限</text>
+
+  <!-- 阶段 1 -->
+  <rect x="130" y="255" width="140" height="45" rx="4" fill="#d4edda" stroke="#3d8a5a" stroke-width="1.5"/>
+  <text x="200" y="275" text-anchor="middle" font-size="11" font-weight="bold" fill="#1d5c37">阶段一 加门</text>
+  <text x="200" y="291" text-anchor="middle" font-size="10" fill="#1d5c37">改回配置重启</text>
+
+  <!-- 阶段 2 -->
+  <rect x="300" y="255" width="140" height="45" rx="4" fill="#d4edda" stroke="#3d8a5a" stroke-width="1.5"/>
+  <text x="370" y="275" text-anchor="middle" font-size="11" font-weight="bold" fill="#1d5c37">阶段二 迁客户端</text>
+  <text x="370" y="291" text-anchor="middle" font-size="10" fill="#1d5c37">改回 9092</text>
+
+  <!-- 阶段 3 -->
+  <rect x="470" y="200" width="140" height="100" rx="4" fill="#fff3cd" stroke="#c98a2e" stroke-width="1.5"/>
+  <text x="540" y="222" text-anchor="middle" font-size="11" font-weight="bold" fill="#8a5a12">阶段三 上权限</text>
+  <text x="540" y="240" text-anchor="middle" font-size="10" fill="#8a5a12">移除 authorizer</text>
+  <text x="540" y="256" text-anchor="middle" font-size="10" fill="#8a5a12">重启</text>
+  <text x="540" y="280" text-anchor="middle" font-size="10" fill="#a06820">代价 中</text>
+
+  <!-- 阶段 4 -->
+  <rect x="640" y="70" width="140" height="230" rx="4" fill="#f8d7da" stroke="#b5453f" stroke-width="2"/>
+  <text x="710" y="100" text-anchor="middle" font-size="11" font-weight="bold" fill="#8b2020">阶段四</text>
+  <text x="710" y="118" text-anchor="middle" font-size="11" font-weight="bold" fill="#8b2020">finalize</text>
+  <text x="710" y="136" text-anchor="middle" font-size="11" font-weight="bold" fill="#8b2020">metadata.version</text>
+  <line x1="655" y1="150" x2="765" y2="150" stroke="#b5453f" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="710" y="170" text-anchor="middle" font-size="10" font-weight="bold" fill="#8b2020">不可回滚</text>
+  <text x="710" y="190" text-anchor="middle" font-size="10" fill="#8b2020">实测降级被拒</text>
+  <text x="710" y="206" text-anchor="middle" font-size="9" fill="#8b2020">Refusing to perform</text>
+  <text x="710" y="220" text-anchor="middle" font-size="9" fill="#8b2020">the requested</text>
+  <text x="710" y="234" text-anchor="middle" font-size="9" fill="#8b2020">downgrade</text>
+  <text x="710" y="262" text-anchor="middle" font-size="10" fill="#8b2020">唯一回滚：</text>
+  <text x="710" y="278" text-anchor="middle" font-size="10" fill="#8b2020">升级前备份 + 重建</text>
+
+  <!-- 阶段标签 -->
+  <text x="200" y="325" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">可逆</text>
+  <text x="370" y="325" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">可逆</text>
+  <text x="540" y="325" text-anchor="middle" font-size="11" font-weight="bold" fill="#a06820">需重启</text>
+  <text x="710" y="325" text-anchor="middle" font-size="11" font-weight="bold" fill="#8b2020">不可逆</text>
+
+  <!-- 顺序箭头 -->
+  <text x="420" y="345" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a2b4c">执行顺序：一 → 二 → 三 → 四　　每一阶段完成后验证通过，才进入下一阶段</text>
+
+  <!-- 顶部提示 -->
+  <rect x="130" y="40" width="650" height="24" rx="4" fill="#e8f4fd" stroke="#3d7ea6" stroke-width="1"/>
+  <text x="455" y="57" text-anchor="middle" font-size="11" fill="#1a4d6d">本课实测：阶段一至三全部真跑通过；阶段四的 finalize 未执行，降级尝试被明确拒绝</text>
+</svg>

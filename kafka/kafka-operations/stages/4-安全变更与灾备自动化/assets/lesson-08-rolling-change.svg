@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 380" width="860" height="380" font-family="sans-serif">
+  <rect width="860" height="380" fill="#fbfcfe"/>
+
+  <text x="430" y="28" text-anchor="middle" font-size="18" font-weight="bold" fill="#1a2b4c">滚动变更：每批之后的健康判据，才是胆量的来源</text>
+  <text x="430" y="48" text-anchor="middle" font-size="11" fill="#5a6b85">本课实测：3 批次滚动重启，每批停节点 → 体检 → 恢复 → 再体检</text>
+
+  <!-- 三批次 -->
+  <rect x="30" y="70" width="250" height="150" rx="6" fill="#e8f4fd" stroke="#3d7ea6" stroke-width="1.5"/>
+  <text x="155" y="92" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a4d6d">批次 1/3　kafka-1</text>
+  <text x="50" y="115" font-size="10" fill="#334">停节点后：在线=0（探针误报）</text>
+  <text x="50" y="132" font-size="10" fill="#8b2020">原因：探针连的正是被重启的 kafka-1</text>
+  <text x="50" y="152" font-size="10" fill="#334">恢复：第 3 次检查（约 15s）回归</text>
+  <text x="50" y="172" font-size="10" fill="#334">体检：URP=0.0　Leader=3</text>
+  <text x="50" y="196" font-size="11" font-weight="bold" fill="#2d7a4f">✅ 通过，进入下一批</text>
+
+  <rect x="305" y="70" width="250" height="150" rx="6" fill="#e8f4fd" stroke="#3d7ea6" stroke-width="1.5"/>
+  <text x="430" y="92" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a4d6d">批次 2/3　kafka-2</text>
+  <text x="325" y="115" font-size="10" fill="#334">停节点后：在线=2　URP=1.0</text>
+  <text x="325" y="132" font-size="10" fill="#a06820">URP 非 0 = 副本在追赶，非故障</text>
+  <text x="325" y="152" font-size="10" fill="#334">恢复：第 2 次检查（约 10s）回归</text>
+  <text x="325" y="172" font-size="10" fill="#334">体检：URP=0.0　Leader=3</text>
+  <text x="325" y="196" font-size="11" font-weight="bold" fill="#2d7a4f">✅ 通过，进入下一批</text>
+
+  <rect x="580" y="70" width="250" height="150" rx="6" fill="#e8f4fd" stroke="#3d7ea6" stroke-width="1.5"/>
+  <text x="705" y="92" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a4d6d">批次 3/3　kafka-3</text>
+  <text x="600" y="115" font-size="10" fill="#334">停节点后：在线=2　URP=3.0</text>
+  <text x="600" y="132" font-size="10" fill="#a06820">Controller Leader 3 → 1</text>
+  <text x="600" y="152" font-size="10" fill="#8b2020">恢复后未自动让回（与课 7 一致）</text>
+  <text x="600" y="172" font-size="10" fill="#334">体检：URP=0.0　Leader=1</text>
+  <text x="600" y="196" font-size="11" font-weight="bold" fill="#2d7a4f">✅ 通过，变更完成</text>
+
+  <path d="M 282 145 L 303 145" stroke="#666" stroke-width="2" marker-end="url(#arr)"/>
+  <path d="M 557 145 L 578 145" stroke="#666" stroke-width="2" marker-end="url(#arr)"/>
+  <defs>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#666"/>
+    </marker>
+  </defs>
+
+  <!-- 健康判据 -->
+  <rect x="30" y="240" width="390" height="120" rx="6" fill="#eaf7ee" stroke="#3d8a5a" stroke-width="1.5"/>
+  <text x="50" y="263" font-size="13" font-weight="bold" fill="#1d5c37">健康判据（三条全过才推进）</text>
+  <text x="50" y="285" font-size="11" fill="#334">① 在线节点数 == 3</text>
+  <text x="50" y="305" font-size="11" fill="#334">② URP == 0</text>
+  <text x="50" y="325" font-size="11" fill="#334">③ Controller leader 存在</text>
+  <text x="50" y="348" font-size="10" font-weight="bold" fill="#8b2020">任一不过 → 中止后续批次</text>
+
+  <!-- 变更单六要素 -->
+  <rect x="440" y="240" width="390" height="120" rx="6" fill="#fff4e5" stroke="#c98a2e" stroke-width="1.5"/>
+  <text x="460" y="263" font-size="13" font-weight="bold" fill="#8a5a12">变更单六要素（缺一不算变更单）</text>
+  <text x="460" y="285" font-size="11" fill="#334">影响面 · 批次划分 · 健康检查判据</text>
+  <text x="460" y="305" font-size="11" fill="#334">暂停条件 · 回滚动作 · 验证动作</text>
+  <text x="460" y="330" font-size="10" fill="#8b2020">最终验证：写入 + 读 offset（实测 0:3 / 1:1 / 2:1）</text>
+  <text x="460" y="348" font-size="10" fill="#8b2020">不要只看"命令没报错"</text>
+</svg>

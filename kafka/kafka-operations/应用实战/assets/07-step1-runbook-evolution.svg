@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" font-family="sans-serif">
+  <rect width="900" height="500" fill="#fbfcfd"/>
+  <text x="450" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#1f2933">runbook 演化：从一句话到可执行清单</text>
+  <text x="450" y="52" text-anchor="middle" font-size="12" fill="#6b7785">基础版 → 分诊版 → 综合版（事故响应 runbook 三跳）</text>
+
+  <rect x="30" y="84" width="250" height="150" rx="10" fill="#e8f2ff" stroke="#3f7fd4" stroke-width="2"/>
+  <text x="155" y="112" text-anchor="middle" font-size="15" font-weight="bold" fill="#1c4f8a">① 基础版</text>
+  <text x="155" y="134" text-anchor="middle" font-size="12" fill="#2a4a6b">"Broker 挂了就重启"</text>
+  <text x="50" y="162" font-size="12" fill="#2a4a6b">• 一句话，好记</text>
+  <text x="50" y="184" font-size="12" fill="#2a4a6b">• 不区分故障类型</text>
+  <text x="50" y="206" font-size="12" fill="#2a4a6b">• 可能销毁现场</text>
+  <text x="50" y="226" font-size="12" font-weight="bold" fill="#8b2c2c">问题：重启后 leader 倾斜没人管</text>
+
+  <rect x="325" y="84" width="250" height="150" rx="10" fill="#fff4e0" stroke="#e0a800" stroke-width="2"/>
+  <text x="450" y="112" text-anchor="middle" font-size="15" font-weight="bold" fill="#8a6100">② 分诊版</text>
+  <text x="450" y="134" text-anchor="middle" font-size="12" fill="#6b4f14">先判断，再动手</text>
+  <text x="345" y="162" font-size="12" fill="#6b4f14">• 四层分流：写/读/节点/控制面</text>
+  <text x="345" y="184" font-size="12" fill="#6b4f14">• 每步配只读验证命令</text>
+  <text x="345" y="206" font-size="12" fill="#6b4f14">• 区分 URP 与 UnderMinIsr</text>
+  <text x="345" y="226" font-size="12" font-weight="bold" fill="#8a6100">改进：不再盲目重启</text>
+
+  <rect x="620" y="84" width="250" height="150" rx="10" fill="#eaf7ec" stroke="#3fa35a" stroke-width="2"/>
+  <text x="745" y="112" text-anchor="middle" font-size="15" font-weight="bold" fill="#1f6b33">③ 综合版</text>
+  <text x="745" y="134" text-anchor="middle" font-size="12" fill="#2a5a3a">可交接、可复盘、可演练</text>
+  <text x="640" y="162" font-size="12" fill="#2a5a3a">• 证据清单 + 时间线模板</text>
+  <text x="640" y="184" font-size="12" fill="#2a5a3a">• 红线清单 + 升级出口</text>
+  <text x="640" y="206" font-size="12" fill="#2a5a3a">• 恢复后校验（数据+均衡）</text>
+  <text x="640" y="226" font-size="12" font-weight="bold" fill="#1f6b33">产出：值班可照做的一份文档</text>
+
+  <line x1="280" y1="159" x2="325" y2="159" stroke="#8a949e" stroke-width="2"/>
+  <line x1="575" y1="159" x2="620" y2="159" stroke="#8a949e" stroke-width="2"/>
+
+  <rect x="30" y="266" width="840" height="200" rx="10" fill="#f2f4f6" stroke="#8a949e"/>
+  <text x="450" y="292" text-anchor="middle" font-size="14" font-weight="bold" fill="#3d4752">综合版 runbook 必须包含的六个区块</text>
+
+  <rect x="50" y="308" width="250" height="46" rx="6" fill="#ffffff" stroke="#c4cbd2"/>
+  <text x="175" y="330" text-anchor="middle" font-size="12" font-weight="bold" fill="#3d4752">1. 触发条件</text>
+  <text x="175" y="347" text-anchor="middle" font-size="11" fill="#6b7785">什么信号算事故，谁有权宣布</text>
+
+  <rect x="320" y="308" width="250" height="46" rx="6" fill="#ffffff" stroke="#c4cbd2"/>
+  <text x="445" y="330" text-anchor="middle" font-size="12" font-weight="bold" fill="#3d4752">2. 第一分钟动作</text>
+  <text x="445" y="347" text-anchor="middle" font-size="11" fill="#6b7785">止损 + 取证，只读优先</text>
+
+  <rect x="590" y="308" width="250" height="46" rx="6" fill="#ffffff" stroke="#c4cbd2"/>
+  <text x="715" y="330" text-anchor="middle" font-size="12" font-weight="bold" fill="#3d4752">3. 分诊决策树</text>
+  <text x="715" y="347" text-anchor="middle" font-size="11" fill="#6b7785">四层分流 + 每步验证命令</text>
+
+  <rect x="50" y="368" width="250" height="46" rx="6" fill="#ffffff" stroke="#c4cbd2"/>
+  <text x="175" y="390" text-anchor="middle" font-size="12" font-weight="bold" fill="#3d4752">4. 红线清单</text>
+  <text x="175" y="407" text-anchor="middle" font-size="11" fill="#8b2c2c">删数据/unclean/降 acks 需审批</text>
+
+  <rect x="320" y="368" width="250" height="46" rx="6" fill="#ffffff" stroke="#c4cbd2"/>
+  <text x="445" y="390" text-anchor="middle" font-size="12" font-weight="bold" fill="#3d4752">5. 恢复校验</text>
+  <text x="445" y="407" text-anchor="middle" font-size="11" fill="#6b7785">数据条数 + leader 均衡 + 指标归零</text>
+
+  <rect x="590" y="368" width="250" height="46" rx="6" fill="#ffffff" stroke="#c4cbd2"/>
+  <text x="715" y="390" text-anchor="middle" font-size="12" font-weight="bold" fill="#3d4752">6. 升级与复盘</text>
+  <text x="715" y="407" text-anchor="middle" font-size="11" fill="#6b7785">找谁、带什么、留什么档</text>
+
+  <text x="450" y="444" text-anchor="middle" font-size="12" font-weight="bold" fill="#8b2c2c">检验标准：交给一个没经历过这次事故的人，他能在 5 分钟内照着做到"判断出该不该叫人"</text>
+</svg>

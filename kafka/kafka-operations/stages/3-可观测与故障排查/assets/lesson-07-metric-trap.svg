@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" font-family="sans-serif">
+  <rect width="900" height="420" fill="#fbfcfd"/>
+  <text x="450" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#1f2933">告警失效陷阱：同一个名字，两种语义</text>
+  <text x="450" y="52" text-anchor="middle" font-size="12" fill="#6b7785">实测于本机 3 节点 KRaft 集群 · JMX Exporter 输出</text>
+
+  <rect x="40" y="80" width="380" height="150" rx="10" fill="#eaf7ec" stroke="#3fa35a" stroke-width="2"/>
+  <text x="230" y="108" text-anchor="middle" font-size="14" font-weight="bold" fill="#1f6b33">✅ 瞬时值（Value）—可以直接比阈值</text>
+  <text x="58" y="136" font-size="12" fill="#2a5a3a">kafka_server_replicamanager_underreplicatedpartitions</text>
+  <text x="58" y="158" font-size="12" fill="#2a5a3a">HELP 行：attribute=Value</text>
+  <text x="58" y="182" font-size="12" font-weight="bold" fill="#1f6b33">实测：健康 0.0 → 停一台 39.0 → 恢复 0.0</text>
+  <text x="58" y="206" font-size="11" fill="#5a636b">有升有降，能直接写「&gt; 0 持续 5 分钟」</text>
+  <text x="58" y="222" font-size="11" fill="#5a636b">验证方式：连续采样看是否回落</text>
+
+  <rect x="480" y="80" width="380" height="150" rx="10" fill="#ffe8e8" stroke="#d9534f" stroke-width="2"/>
+  <text x="670" y="108" text-anchor="middle" font-size="14" font-weight="bold" fill="#8b2c2c">❌ 累积计数（Count）—直接比阈值会失效</text>
+  <text x="498" y="136" font-size="12" fill="#6b3a3a">...errorspersec_request_brokerheartbeat</text>
+  <text x="498" y="158" font-size="12" fill="#6b3a3a">HELP 行：attribute=Count</text>
+  <text x="498" y="182" font-size="12" font-weight="bold" fill="#8b2c2c">实测 5 次：769026 → 769044 单调递增</text>
+  <text x="498" y="206" font-size="11" fill="#6b3a3a">名字带 errorspersec，实际是"开机至今总次数"</text>
+  <text x="498" y="222" font-size="11" fill="#6b3a3a">写「&gt; 100 告警」= 永久触发，等于没告警</text>
+
+  <rect x="40" y="262" width="820" height="130" rx="10" fill="#f2f4f6" stroke="#8a949e"/>
+  <text x="450" y="288" text-anchor="middle" font-size="14" font-weight="bold" fill="#3d4752">写告警前必须做的三步核验（缺一不可）</text>
+  <text x="60" y="316" font-size="12" fill="#5a636b">① curl 抓实际值，看它落在你预期的语义区间里吗（比率应在 0~1，计数会是个不断变大的整数）</text>
+  <text x="60" y="338" font-size="12" fill="#5a636b">② 读同一行上方的 # HELP，确认 attribute= 是 Value（瞬时）还是 Count（累积）</text>
+  <text x="60" y="360" font-size="12" fill="#5a636b">③ 连续采样 3~5 次：单调递增 = 计数，有升有降 = 瞬时值</text>
+  <text x="60" y="382" font-size="12" font-weight="bold" fill="#8b2c2c">计数型要用 rate()/increase() 转成速率后再告警，不能用原始值直接比</text>
+</svg>

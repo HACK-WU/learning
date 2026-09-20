@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 470" font-family="sans-serif">
+  <rect width="900" height="470" fill="#fbfcfd"/>
+  <text x="450" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#1f2933">值班时间线：一次真实掉线事故的执行顺序</text>
+  <text x="450" y="52" text-anchor="middle" font-size="12" fill="#6b7785">实测于 3 节点 KRaft 实验集群 · 每一步都标注了"做了什么 / 看到什么 / 下一步"</text>
+
+  <line x1="70" y1="90" x2="70" y2="430" stroke="#c4cbd2" stroke-width="2"/>
+
+  <circle cx="70" cy="110" r="7" fill="#3fa35a"/>
+  <text x="92" y="108" font-size="13" font-weight="bold" fill="#1f6b33">T+0 分钟 · 报障</text>
+  <text x="92" y="128" font-size="12" fill="#5a636b">"消息没了" → 不确定是丢、慢还是消费端停了</text>
+  <text x="92" y="146" font-size="12" fill="#6b7785">动作：不猜，先确认范围和对象（哪个 Topic / Group）</text>
+
+  <circle cx="70" cy="176" r="7" fill="#e0a800"/>
+  <text x="92" y="174" font-size="13" font-weight="bold" fill="#8a6100">T+1 分钟 · 止损 + 取证（只读）</text>
+  <text x="92" y="192" font-size="12" fill="#5a636b">暂停高风险变更；抓 broker 列表、--describe、仲裁状态、指标快照</text>
+  <text x="92" y="210" font-size="12" font-weight="bold" fill="#1c4f8a">实测产出：3 节点在线 → 只剩 2 个；URP=39；UnderMinIsr=0</text>
+
+  <circle cx="70" cy="242" r="7" fill="#3f7fd4"/>
+  <text x="92" y="240" font-size="13" font-weight="bold" fill="#1c4f8a">T+2 分钟 · 分诊</text>
+  <text x="92" y="258" font-size="12" fill="#5a636b">归到"节点/副本"层：ISR 从 3,1,2 收缩到 1,2，Leader 3→1</text>
+  <text x="92" y="276" font-size="12" font-weight="bold" fill="#1f6b33">关键判断：URP 非 0 但 UnderMinIsr=0 → 写入未受影响，不用立刻叫人</text>
+
+  <circle cx="70" cy="308" r="7" fill="#7d5ba6"/>
+  <text x="92" y="306" font-size="13" font-weight="bold" fill="#4a2f6b">T+3 分钟 · 处置</text>
+  <text x="92" y="324" font-size="12" fill="#5a636b">恢复节点 → 观测 URP 收敛（5s 采样一次）</text>
+  <text x="92" y="342" font-size="12" font-weight="bold" fill="#1c4f8a">实测：t=5s URP=39 → t=10s URP=0 → 持续稳定</text>
+
+  <circle cx="70" cy="374" r="7" fill="#3fa35a"/>
+  <text x="92" y="372" font-size="13" font-weight="bold" fill="#1f6b33">T+5 分钟 · 恢复校验</text>
+  <text x="92" y="390" font-size="12" fill="#5a636b">消费总数 = 210 条（预期值），零丢失</text>
+  <text x="92" y="408" font-size="12" font-weight="bold" fill="#8b2c2c">发现遗留：Leader 仍是 1，未让回 broker 3 → 需做优先副本均衡</text>
+
+  <text x="92" y="440" font-size="12" font-weight="bold" fill="#8b2c2c">教训：URP 归零 ≠ 收工。少做"恢复校验"这一步，倾斜会留到下一次事故一起爆发。</text>
+</svg>

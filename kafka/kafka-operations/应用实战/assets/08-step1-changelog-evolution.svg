@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 330" width="880" height="330" font-family="sans-serif">
+  <rect width="880" height="330" fill="#fbfcfe"/>
+  <text x="440" y="26" text-anchor="middle" font-size="17" font-weight="bold" fill="#1a2b4c">变更单三跳演进：从"要做的事"到"敢签字的文档"</text>
+
+  <!-- 第一跳 -->
+  <rect x="25" y="50" width="265" height="230" rx="7" fill="#fdeaea" stroke="#b5453f" stroke-width="1.5"/>
+  <text x="157" y="74" text-anchor="middle" font-size="14" font-weight="bold" fill="#8b2020">第一跳 基础版</text>
+  <text x="157" y="93" text-anchor="middle" font-size="10" fill="#666">只是"要做的事清单"</text>
+  <line x1="40" y1="103" x2="275" y2="103" stroke="#b5453f" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="42" y="124" font-size="11" fill="#334">1. 改配置开 SASL</text>
+  <text x="42" y="143" font-size="11" fill="#334">2. 重启集群</text>
+  <text x="42" y="162" font-size="11" fill="#334">3. 通知客户端改密码</text>
+  <line x1="40" y1="178" x2="275" y2="178" stroke="#b5453f" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="42" y="197" font-size="11" font-weight="bold" fill="#8b2020">❌ 一把梭，全量中断</text>
+  <text x="42" y="215" font-size="10" fill="#8b2020">❌ 没说保留旧端口</text>
+  <text x="42" y="231" font-size="10" fill="#8b2020">❌ 没提 super.users</text>
+  <text x="42" y="247" font-size="10" fill="#8b2020">❌ 无回滚动作</text>
+  <text x="42" y="268" font-size="10" fill="#666">判定：不敢签字</text>
+
+  <!-- 第二跳 -->
+  <rect x="307" y="50" width="265" height="230" rx="7" fill="#fff4e5" stroke="#c98a2e" stroke-width="1.5"/>
+  <text x="439" y="74" text-anchor="middle" font-size="14" font-weight="bold" fill="#8a5a12">第二跳 分批版</text>
+  <text x="439" y="93" text-anchor="middle" font-size="10" fill="#666">加批次与体检判据</text>
+  <line x1="322" y1="103" x2="557" y2="103" stroke="#c98a2e" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="324" y="124" font-size="11" fill="#334">阶段一 加监听器（保留 9092）</text>
+  <text x="324" y="143" font-size="11" fill="#334">阶段二 客户端分批迁移</text>
+  <text x="324" y="162" font-size="11" fill="#334">阶段三 开启 ACL</text>
+  <line x1="322" y1="178" x2="557" y2="178" stroke="#c98a2e" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="324" y="197" font-size="11" font-weight="bold" fill="#2d7a4f">✅ 每批体检 + 每批回滚</text>
+  <text x="324" y="215" font-size="10" fill="#a06820">⚠ 暂停条件不明确</text>
+  <text x="324" y="231" font-size="10" fill="#a06820">⚠ 无最终业务验证</text>
+  <text x="324" y="247" font-size="10" fill="#a06820">⚠ 未隔离不可逆动作</text>
+  <text x="324" y="268" font-size="10" fill="#666">判定：可讨论，还不能批</text>
+
+  <!-- 第三跳 -->
+  <rect x="589" y="50" width="266" height="230" rx="7" fill="#eaf7ee" stroke="#3d8a5a" stroke-width="2"/>
+  <text x="722" y="74" text-anchor="middle" font-size="14" font-weight="bold" fill="#1d5c37">第三跳 综合版</text>
+  <text x="722" y="93" text-anchor="middle" font-size="10" fill="#666">可审批 · 可执行 · 可回退</text>
+  <line x1="604" y1="103" x2="840" y2="103" stroke="#3d8a5a" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="606" y="124" font-size="11" fill="#334">一 影响面　二 批次划分</text>
+  <text x="606" y="143" font-size="11" fill="#334">三 体检判据　四 暂停条件</text>
+  <text x="606" y="162" font-size="11" fill="#334">五 回滚动作　六 验证动作</text>
+  <line x1="604" y1="178" x2="840" y2="178" stroke="#3d8a5a" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="606" y="197" font-size="11" font-weight="bold" fill="#1d5c37">✅ 红线区隔离不可逆动作</text>
+  <text x="606" y="215" font-size="10" fill="#1d5c37">✅ 验证 = 写入 + 独立读取</text>
+  <text x="606" y="231" font-size="10" fill="#1d5c37">✅ 回滚包含配置 + 快照</text>
+  <text x="606" y="247" font-size="10" fill="#1d5c37">✅ 暂停后"保持现状不盲退"</text>
+  <text x="606" y="268" font-size="10" font-weight="bold" fill="#1d5c37">判定：可以签字执行</text>
+
+  <path d="M 292 165 L 305 165" stroke="#666" stroke-width="2" marker-end="url(#ar1)"/>
+  <path d="M 574 165 L 587 165" stroke="#666" stroke-width="2" marker-end="url(#ar1)"/>
+  <defs>
+    <marker id="ar1" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#666"/>
+    </marker>
+  </defs>
+
+  <rect x="25" y="292" width="830" height="28" rx="4" fill="#fff8e1" stroke="#d4a03c" stroke-width="1"/>
+  <text x="440" y="311" text-anchor="middle" font-size="11" fill="#8a5a12">检验标准：把变更单交给一个没参与讨论的人，他敢不敢照着执行并在异常时知道该停在哪一步</text>
+</svg>

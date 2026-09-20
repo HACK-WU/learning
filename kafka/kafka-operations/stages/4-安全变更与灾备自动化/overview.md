@@ -33,5 +33,19 @@
 
 ## 本阶段产出
 
-- [ ] `lessons/lesson-08-安全运营与滚动变更.md`
+- [x] `lessons/lesson-08-安全运营与滚动变更.md` — 2026-09-20 完成（实测课）
 - [ ] `lessons/lesson-09-跨集群灾备与运维自动化.md`
+
+## 课 8 核心结论（实测，2026-09-20）
+
+基于 3 节点 KRaft 集群（`apache/kafka:4.0.0`）就地改造，从零安全基线做到双监听器 + SASL/SCRAM + ACL：
+
+1. **加门不锁门**：新增 `SASL_PLAINTEXT://0.0.0.0:9095` 并保留 `PLAINTEXT://0.0.0.0:9092`，老客户端零中断（实测仍连上 3 节点且可读写）。
+2. **认证 ≠ 授权**：`SaslAuthenticationException`（认证层）与 `TopicAuthorizationException`（授权层）必须先看异常类名再决定动哪层。
+3. **开 ACL 前必须配 `super.users`**，否则管理员自己被锁在门外，只能重建集群。
+4. **SCRAM 轮换无需重启但立即生效**：实测改密码后旧密码立即 `Authentication failed`；生产若需零中断应采用双用户切换（本课未实测）。
+5. **凭据存在 `__cluster_metadata`**：容器重建且 `log.dirs` 未持久化时三个用户全部失效——备份必须覆盖元数据主题。
+6. **metadata.version 是单向阀**：实测降级到 `3.9-IV0` / `4.0-IV0` 均被拒（`Refusing to perform the requested downgrade`），回滚只能是备份重建。
+7. **滚动重启三批次**：每批体检（节点数=3 且 URP=0 且 Leader 存在），实测 URP 在重启期间为 1.0/3.0、恢复后归 0；**Leader 不自动让回**（与课 7 一致）。
+
+> ⚠️ 集群保持改造后状态（双监听器 + ACL），作为课 9 灾备实验的起点，不再回退到零安全基线。

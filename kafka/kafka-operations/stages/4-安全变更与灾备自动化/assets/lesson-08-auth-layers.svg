@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 420" width="880" height="420" font-family="sans-serif">
+  <rect width="880" height="420" fill="#fbfcfe"/>
+
+  <text x="440" y="28" text-anchor="middle" font-size="18" font-weight="bold" fill="#1a2b4c">一条连接要走过的四层：先分清是认证问题还是授权问题</text>
+
+  <!-- 客户端 -->
+  <rect x="40" y="60" width="130" height="60" rx="6" fill="#e3ecf7" stroke="#3d7ea6" stroke-width="2"/>
+  <text x="105" y="85" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a4d6d">客户端</text>
+  <text x="105" y="103" text-anchor="middle" font-size="10" fill="#334">producer / consumer</text>
+
+  <path d="M 172 90 L 200 90" stroke="#666" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- 层 1 -->
+  <rect x="202" y="50" width="150" height="80" rx="6" fill="#f0f7ff" stroke="#5b8db8" stroke-width="1.5"/>
+  <text x="277" y="72" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a4d6d">① Listener</text>
+  <text x="277" y="90" text-anchor="middle" font-size="10" fill="#334">listeners</text>
+  <text x="277" y="105" text-anchor="middle" font-size="10" fill="#334">从哪个端口进来</text>
+  <text x="277" y="120" text-anchor="middle" font-size="9" fill="#666">9092 / 9095</text>
+
+  <path d="M 354 90 L 382 90" stroke="#666" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- 层 2 -->
+  <rect x="384" y="50" width="150" height="80" rx="6" fill="#f0f7ff" stroke="#5b8db8" stroke-width="1.5"/>
+  <text x="459" y="72" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a4d6d">② 协议映射</text>
+  <text x="459" y="90" text-anchor="middle" font-size="10" fill="#334">security.protocol.map</text>
+  <text x="459" y="105" text-anchor="middle" font-size="10" fill="#334">端口 → 安全协议</text>
+  <text x="459" y="120" text-anchor="middle" font-size="9" fill="#666">SASL_PLAINTEXT</text>
+
+  <path d="M 536 90 L 564 90" stroke="#666" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- 层 3 -->
+  <rect x="566" y="50" width="140" height="80" rx="6" fill="#fff4e5" stroke="#c98a2e" stroke-width="1.5"/>
+  <text x="636" y="72" text-anchor="middle" font-size="12" font-weight="bold" fill="#8a5a12">③ 认证 你是谁</text>
+  <text x="636" y="90" text-anchor="middle" font-size="10" fill="#334">sasl.enabled</text>
+  <text x="636" y="105" text-anchor="middle" font-size="10" fill="#334">SCRAM / PLAIN</text>
+  <text x="636" y="120" text-anchor="middle" font-size="9" fill="#8b2020">失败 → SaslAuth...</text>
+
+  <path d="M 708 90 L 736 90" stroke="#666" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- 层 4 -->
+  <rect x="738" y="50" width="110" height="80" rx="6" fill="#fdeaea" stroke="#b5453f" stroke-width="1.5"/>
+  <text x="793" y="72" text-anchor="middle" font-size="12" font-weight="bold" fill="#8b2020">④ 授权</text>
+  <text x="793" y="90" text-anchor="middle" font-size="10" fill="#334">authorizer</text>
+  <text x="793" y="105" text-anchor="middle" font-size="10" fill="#334">ACL 判定</text>
+  <text x="793" y="120" text-anchor="middle" font-size="9" fill="#8b2020">失败 → TopicAuthz...</text>
+
+  <defs>
+    <marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#666"/>
+    </marker>
+  </defs>
+
+  <!-- 异常对照区 -->
+  <text x="440" y="165" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a2b4c">实测：两个异常长得很像，但解法完全不同</text>
+
+  <rect x="40" y="185" width="390" height="105" rx="6" fill="#fff4e5" stroke="#c98a2e" stroke-width="1.5"/>
+  <text x="60" y="208" font-size="13" font-weight="bold" fill="#8a5a12">SaslAuthenticationException</text>
+  <text x="60" y="228" font-size="11" fill="#334">Authentication failed ... invalid credentials</text>
+  <text x="60" y="248" font-size="11" font-weight="bold" fill="#8b2020">层：认证（③）</text>
+  <text x="60" y="268" font-size="11" fill="#334">排查：用户名密码对不对？凭据是否存在？</text>
+  <text x="60" y="284" font-size="10" fill="#8b2020">加 ACL 无效 —— 门都没进</text>
+
+  <rect x="450" y="185" width="390" height="105" rx="6" fill="#fdeaea" stroke="#b5453f" stroke-width="1.5"/>
+  <text x="470" y="208" font-size="13" font-weight="bold" fill="#8b2020">TopicAuthorizationException</text>
+  <text x="470" y="228" font-size="11" fill="#334">Not authorized to access topics: [acl-deny-demo]</text>
+  <text x="470" y="248" font-size="11" font-weight="bold" fill="#8b2020">层：授权（④）</text>
+  <text x="470" y="268" font-size="11" fill="#334">排查：该 principal 有没有对应 operation 的 ACL？</text>
+  <text x="470" y="284" font-size="10" fill="#2d7a4f">授予 Write/Read 后即放行 —— 实测通过</text>
+
+  <!-- 底部：super user 旁路 -->
+  <rect x="40" y="305" width="800" height="60" rx="6" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1"/>
+  <text x="60" y="328" font-size="12" font-weight="bold" fill="#334155">旁路：super.users</text>
+  <text x="60" y="348" font-size="11" fill="#475569">super user 绕过所有 ACL 检查 —— 实测 admin 无任何显式 ACL 仍能写入。既是逃生通道，也是后门，必须最小化。</text>
+
+  <!-- 底部提示 -->
+  <rect x="40" y="378" width="800" height="30" rx="4" fill="#fff8e1" stroke="#d4a03c" stroke-width="1"/>
+  <text x="440" y="398" text-anchor="middle" font-size="11" fill="#8a5a12">开 ACL 前必须先配 super.users —— 否则把自己锁在门外，只能重建集群</text>
+</svg>

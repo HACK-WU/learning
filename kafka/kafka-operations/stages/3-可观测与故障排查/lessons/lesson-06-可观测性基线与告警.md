@@ -182,6 +182,10 @@ Kafka 4.3 Monitoring 文档给出了一组可作为起点的正常方向：
 | IsrShrinksPerSec / IsrExpandsPerSec | 非故障或非操作期间通常为 0 | 维护窗口内的短暂变化要与变更关联 |
 | RequestHandlerAvgIdlePercent | 官方示例给出理想上大于 0.3 的方向 | 这是官方起点，不是所有集群的 SLO 阈值 |
 
+> ⚠️ **上表最后一行的 `RequestHandlerAvgIdlePercent` 在本实验环境已被实测证伪**：教程常用的 `< 0.3` 告警**永不触发**——实测 5 次采样 `2.36e11 → 2.62e11` 严格单调递增，HELP 行是 `attribute=Count`（累积计数），不是 0~1 比率。完整实测与替代指标（`RequestQueueSize` + `TotalTimeMs`）见 [课 17：网络层与请求处理模型](../../../../stages/7-实现原理/lessons/lesson-17-网络层与请求处理模型.md)。
+>
+> 配这条告警前先做三步核验：curl 看实际值域、读 HELP 行的 `attribute=`、连续采样 3~5 次确认单调性。
+
 这些“正常方向”不是生产阈值。真正的告警还要加入持续时间、业务影响和维护抑制条件。
 
 #### 告警分级：信号、影响和动作

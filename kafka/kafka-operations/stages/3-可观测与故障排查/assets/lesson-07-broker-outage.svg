@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 400" font-family="sans-serif">
+  <rect width="940" height="400" fill="#fbfcfd"/>
+  <text x="470" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#1f2933">Broker 掉线时，集群里到底发生了什么</text>
+  <text x="470" y="52" text-anchor="middle" font-size="12" fill="#6b7785">实测环境：3 节点 KRaft（kafka-1/2/3），topic RF=3，min.insync.replicas=2</text>
+
+  <rect x="30" y="80" width="200" height="120" rx="10" fill="#eaf7ec" stroke="#3fa35a" stroke-width="2"/>
+  <text x="130" y="106" text-anchor="middle" font-size="14" font-weight="bold" fill="#1f6b33">故障前 · 健康</text>
+  <text x="130" y="132" text-anchor="middle" font-size="12" fill="#2a5a3a">分区0 Leader=3</text>
+  <text x="130" y="152" text-anchor="middle" font-size="12" fill="#2a5a3a">副本 3,1,2 ／ ISR 3,1,2</text>
+  <text x="130" y="176" text-anchor="middle" font-size="12" font-weight="bold" fill="#1f6b33">URP = 0</text>
+  <text x="130" y="194" text-anchor="middle" font-size="11" fill="#5a636b">三副本齐全</text>
+
+  <rect x="290" y="80" width="200" height="120" rx="10" fill="#ffe8e8" stroke="#d9534f" stroke-width="2"/>
+  <text x="390" y="106" text-anchor="middle" font-size="14" font-weight="bold" fill="#8b2c2c">故障中 · ISR 收缩</text>
+  <text x="390" y="132" text-anchor="middle" font-size="12" fill="#6b3a3a">分区0 Leader=1（切换）</text>
+  <text x="390" y="152" text-anchor="middle" font-size="12" fill="#6b3a3a">副本 3,1,2 ／ ISR 1,2</text>
+  <text x="390" y="176" text-anchor="middle" font-size="12" font-weight="bold" fill="#8b2c2c">URP = 39</text>
+  <text x="390" y="194" text-anchor="middle" font-size="11" fill="#6b3a3a">写入仍成功（min ISR=2 满足）</text>
+
+  <rect x="550" y="80" width="200" height="120" rx="10" fill="#fff4e0" stroke="#e0a800" stroke-width="2"/>
+  <text x="650" y="106" text-anchor="middle" font-size="14" font-weight="bold" fill="#8a6100">恢复中 · 追赶</text>
+  <text x="650" y="132" text-anchor="middle" font-size="12" fill="#6b4f14">broker 3 启动</text>
+  <text x="650" y="152" text-anchor="middle" font-size="12" fill="#6b4f14">先当 follower 追数据</text>
+  <text x="650" y="176" text-anchor="middle" font-size="12" font-weight="bold" fill="#8a6100">URP 39 → 0（约 10s）</text>
+  <text x="650" y="194" text-anchor="middle" font-size="11" fill="#6b4f14">追不上就一直留在 URP</text>
+
+  <rect x="760" y="80" width="150" height="120" rx="10" fill="#eaf7ec" stroke="#3fa35a" stroke-width="2"/>
+  <text x="835" y="106" text-anchor="middle" font-size="14" font-weight="bold" fill="#1f6b33">恢复后</text>
+  <text x="835" y="132" text-anchor="middle" font-size="12" fill="#2a5a3a">ISR 1,2,3</text>
+  <text x="835" y="152" text-anchor="middle" font-size="12" fill="#2a5a3a">URP = 0</text>
+  <text x="835" y="176" text-anchor="middle" font-size="12" font-weight="bold" fill="#1f6b33">数据 210 条</text>
+  <text x="835" y="194" text-anchor="middle" font-size="11" fill="#5a636b">零丢失</text>
+
+  <line x1="230" y1="140" x2="290" y2="140" stroke="#8a949e" stroke-width="2"/>
+  <line x1="490" y1="140" x2="550" y2="140" stroke="#8a949e" stroke-width="2"/>
+  <line x1="750" y1="140" x2="760" y2="140" stroke="#8a949e" stroke-width="2"/>
+
+  <rect x="30" y="230" width="420" height="140" rx="10" fill="#f2f4f6" stroke="#8a949e"/>
+  <text x="240" y="256" text-anchor="middle" font-size="14" font-weight="bold" fill="#3d4752">关键区别：URP 非 0 ≠ 写入失败</text>
+  <text x="46" y="284" font-size="12" fill="#5a636b">• URP 非 0：有副本没跟上，可靠性余量变薄</text>
+  <text x="46" y="306" font-size="12" fill="#5a636b">• UnderMinIsr 非 0：低于最小同步副本，写入大概率被拒</text>
+  <text x="46" y="328" font-size="12" fill="#5a636b">• 实测：停 1 台后 URP=39 但 UnderMinIsr=0，写入照样成功</text>
+  <text x="46" y="352" font-size="12" font-weight="bold" fill="#8b2c2c">• 把 min.insync.replicas 提到 3 再停 1 台 → NotEnoughReplicas</text>
+
+  <rect x="480" y="230" width="430" height="140" rx="10" fill="#f2f4f6" stroke="#8a949e"/>
+  <text x="695" y="256" text-anchor="middle" font-size="14" font-weight="bold" fill="#3d4752">实测踩坑：Leader 不会自动让回</text>
+  <text x="496" y="284" font-size="12" fill="#5a636b">• 故障前分区0 Leader=3，故障后切到 1</text>
+  <text x="496" y="306" font-size="12" fill="#5a636b">• broker 3 恢复后，Leader 仍是 1（不自动回切）</text>
+  <text x="496" y="328" font-size="12" fill="#5a636b">• 结果：负载逐渐倾斜，需手动做优先副本均衡</text>
+  <text x="496" y="352" font-size="12" font-weight="bold" fill="#1c4f8a">• 这是阶段 2 课 4 学到的知识在事故里的兑现</text>
+</svg>
