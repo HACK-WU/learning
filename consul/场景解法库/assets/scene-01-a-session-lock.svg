@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" width="900" height="420" font-family="Microsoft YaHei, SimHei, sans-serif">
+  <rect width="900" height="420" fill="#ffffff"/>
+  <text x="450" y="30" font-size="18" font-weight="bold" text-anchor="middle" fill="#1f2937">解法 A · Consul session 锁：持有靠心跳，释放靠 session 失效</text>
+
+  <rect x="40" y="60" width="170" height="46" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="125" y="82" font-size="14" text-anchor="middle" fill="#1e3a8a">instance-1（抢到）</text>
+  <text x="125" y="99" font-size="11" text-anchor="middle" fill="#1e40af">leader</text>
+
+  <rect x="40" y="130" width="170" height="46" rx="6" fill="#f3f4f6" stroke="#9ca3af" stroke-width="2"/>
+  <text x="125" y="152" font-size="14" text-anchor="middle" fill="#4b5563">instance-2（未抢到）</text>
+  <text x="125" y="169" font-size="11" text-anchor="middle" fill="#6b7280">跳过本轮</text>
+
+  <rect x="40" y="200" width="170" height="46" rx="6" fill="#f3f4f6" stroke="#9ca3af" stroke-width="2"/>
+  <text x="125" y="222" font-size="14" text-anchor="middle" fill="#4b5563">instance-3（未抢到）</text>
+  <text x="125" y="239" font-size="11" text-anchor="middle" fill="#6b7280">跳过本轮</text>
+
+  <line x1="210" y1="83" x2="300" y2="83" stroke="#2563eb" stroke-width="3"/>
+  <polygon points="300,83 290,78 290,88" fill="#2563eb"/>
+  <text x="255" y="74" font-size="11" text-anchor="middle" fill="#1d4ed8">acquire</text>
+
+  <line x1="210" y1="153" x2="300" y2="120" stroke="#9ca3af" stroke-width="2" stroke-dasharray="5,4"/>
+  <line x1="210" y1="223" x2="300" y2="140" stroke="#9ca3af" stroke-width="2" stroke-dasharray="5,4"/>
+  <text x="258" y="150" font-size="11" fill="#6b7280">抢锁失败</text>
+
+  <rect x="300" y="95" width="200" height="70" rx="6" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="400" y="118" font-size="14" text-anchor="middle" font-weight="bold" fill="#1e40af">KV 键 service/…/leader</text>
+  <text x="400" y="138" font-size="12" text-anchor="middle" fill="#1e3a8a">持有者 = instance-1</text>
+  <text x="400" y="154" font-size="11" text-anchor="middle" fill="#3b82f6">acquire = session-1</text>
+
+  <line x1="500" y1="130" x2="600" y2="130" stroke="#2563eb" stroke-width="2"/>
+  <text x="550" y="120" font-size="11" text-anchor="middle" fill="#1d4ed8">绑定</text>
+
+  <rect x="600" y="95" width="180" height="70" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="690" y="118" font-size="14" text-anchor="middle" font-weight="bold" fill="#14532d">session（TTL 15s）</text>
+  <text x="690" y="138" font-size="12" text-anchor="middle" fill="#15803d">心跳续约 renew</text>
+  <text x="690" y="154" font-size="11" text-anchor="middle" fill="#166534">停跳则判死 → 释放</text>
+
+  <rect x="300" y="230" width="480" height="60" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="3"/>
+  <text x="540" y="253" font-size="14" text-anchor="middle" font-weight="bold" fill="#991b1b">失效点：holder 崩溃 → LockDelay 冷静期约 15 秒</text>
+  <text x="540" y="275" font-size="12" text-anchor="middle" fill="#b91c1c">此处新候选抢锁全部失败（实测 17 秒才成功）——交接不可能是亚秒级</text>
+
+  <line x1="500" y1="165" x2="500" y2="230" stroke="#dc2626" stroke-width="2" stroke-dasharray="5,4"/>
+  <polygon points="500,230 495,220 505,220" fill="#dc2626"/>
+
+  <rect x="40" y="330" width="740" height="60" rx="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+  <text x="410" y="353" font-size="13" text-anchor="middle" font-weight="bold" fill="#92400e">它是建议性锁：任何能访问 Consul 的代码都能直接改这个 KV 键绕过它</text>
+  <text x="410" y="375" font-size="12" text-anchor="middle" fill="#b45309">必须叠 ACL 限制写权限，把「守规矩」变成「没权限」（见场景 4）</text>
+</svg>

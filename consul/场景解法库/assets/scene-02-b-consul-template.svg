@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" width="900" height="400" font-family="Microsoft YaHei, SimHei, sans-serif">
+  <rect width="900" height="400" fill="#ffffff"/>
+  <text x="450" y="28" font-size="18" font-weight="bold" text-anchor="middle" fill="#1f2937">解法 B · consul-template：渲染成文件再 reload，应用零改造</text>
+
+  <rect x="50" y="80" width="140" height="60" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="120" y="105" font-size="14" text-anchor="middle" font-weight="bold" fill="#14532d">KV / 服务目录</text>
+  <text x="120" y="124" font-size="11" text-anchor="middle" fill="#15803d">变更源</text>
+
+  <line x1="190" y1="110" x2="270" y2="110" stroke="#16a34a" stroke-width="2"/>
+  <polygon points="270,110 262,105 262,115" fill="#16a34a"/>
+
+  <rect x="270" y="80" width="180" height="60" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="360" y="103" font-size="14" text-anchor="middle" font-weight="bold" fill="#1e3a8a">consul-template</text>
+  <text x="360" y="124" font-size="11" text-anchor="middle" fill="#1e40af">守护进程 · 实测 63ms</text>
+
+  <line x1="450" y1="110" x2="530" y2="110" stroke="#2563eb" stroke-width="2"/>
+  <polygon points="530,110 522,105 522,115" fill="#2563eb"/>
+
+  <rect x="530" y="72" width="170" height="76" rx="6" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="615" y="96" font-size="13" text-anchor="middle" font-weight="bold" fill="#1e40af">渲染配置文件</text>
+  <text x="615" y="115" font-size="11" text-anchor="middle" fill="#1e3a8a">先写 .tmp</text>
+  <text x="615" y="133" font-size="11" text-anchor="middle" fill="#1e3a8a">再原子替换</text>
+
+  <line x1="700" y1="110" x2="770" y2="110" stroke="#2563eb" stroke-width="2"/>
+  <polygon points="770,110 762,105 762,115" fill="#2563eb"/>
+
+  <rect x="770" y="80" width="100" height="60" rx="6" fill="#f3f4f6" stroke="#6b7280" stroke-width="2"/>
+  <text x="820" y="105" font-size="13" text-anchor="middle" font-weight="bold" fill="#374151">command</text>
+  <text x="820" y="124" font-size="11" text-anchor="middle" fill="#4b5563">nginx -s reload</text>
+
+  <rect x="50" y="190" width="820" height="105" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="3"/>
+  <text x="460" y="215" font-size="14" text-anchor="middle" font-weight="bold" fill="#991b1b">失效点：模板里 key 缺失会「阻塞等待」，不是返回空</text>
+  <text x="460" y="238" font-size="12" text-anchor="middle" fill="#b91c1c">{{ key "app/log_level" }} —— 键不存在时模板长期不渲染，且没有任何报错</text>
+  <text x="460" y="260" font-size="12" text-anchor="middle" fill="#b91c1c">command 依赖 sh 执行：Windows / 极简容器（distroless）里可能没有 sh，reload 静默不执行</text>
+  <text x="460" y="283" font-size="12" text-anchor="middle" fill="#b91c1c">KV 无版本历史：改了查不回旧值，版本管理必须外置到 Git</text>
+
+  <rect x="50" y="315" width="820" height="65" rx="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+  <text x="460" y="337" font-size="13" text-anchor="middle" font-weight="bold" fill="#92400e">正确写法：所有可能缺失的 key 一律用 keyOrDefault 给默认值兜底</text>
+  <text x="460" y="358" font-size="12" text-anchor="middle" fill="#b45309">{{ keyOrDefault "app/log_level" "info" }} —— 键缺失时用 info，不阻塞渲染</text>
+  <text x="460" y="375" font-size="12" text-anchor="middle" fill="#b45309">适用：nginx / 传统应用等「只会读文件」的程序，是唯一低改造路径</text>
+</svg>

@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 800" width="1100" height="800" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1100" height="800" fill="#f8fafc"/>
+  <text x="550" y="40" text-anchor="middle" font-size="24" font-weight="bold" fill="#0f172a">课 3 一眼全局：性能、容量与调优</text>
+  <text x="550" y="66" text-anchor="middle" font-size="15" fill="#64748b">能装多少 → 读得快不快 → 慢了往哪查</text>
+
+  <!-- 模块 1：规模边界 -->
+  <rect x="40" y="92" width="330" height="290" rx="12" fill="#ffffff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="205" y="120" text-anchor="middle" font-size="18" font-weight="bold" fill="#1d4ed8">① 规模边界</text>
+  <text x="205" y="142" text-anchor="middle" font-size="13" fill="#64748b">两条硬边界 + 写放大</text>
+
+  <rect x="62" y="158" width="286" height="70" rx="6" fill="#fef2f2" stroke="#f87171"/>
+  <text x="76" y="178" font-size="13" font-weight="bold" fill="#991b1b">硬边界 1：单条 value</text>
+  <text x="76" y="198" font-size="12" fill="#dc2626">512KB → 200 通过</text>
+  <text x="76" y="216" font-size="12" fill="#dc2626">513KB → 413 拒绝</text>
+
+  <rect x="62" y="234" width="286" height="70" rx="6" fill="#fef2f2" stroke="#f87171"/>
+  <text x="76" y="254" font-size="13" font-weight="bold" fill="#991b1b">硬边界 2：事务总大小</text>
+  <text x="76" y="274" font-size="12" fill="#dc2626">320KB → 200 ／ 384KB → 413</text>
+  <text x="76" y="292" font-size="12" fill="#dc2626">与条数无关，只看总字节</text>
+
+  <rect x="62" y="310" width="286" height="56" rx="6" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="76" y="330" font-size="13" font-weight="bold" fill="#1e40af">写放大：1 条写 → 3 份落盘</text>
+  <text x="76" y="350" font-size="12" fill="#1d4ed8">三节点各存一份，Raft 日志另算</text>
+
+  <!-- 模块 2：读模式 -->
+  <rect x="385" y="92" width="330" height="290" rx="12" fill="#ffffff" stroke="#8b5cf6" stroke-width="2"/>
+  <text x="550" y="120" text-anchor="middle" font-size="18" font-weight="bold" fill="#6d28d9">② 读模式</text>
+  <text x="550" y="142" text-anchor="middle" font-size="13" fill="#64748b">延迟几乎一样，差别在新鲜度</text>
+
+  <rect x="407" y="158" width="286" height="52" rx="6" fill="#f5f3ff" stroke="#c4b5fd"/>
+  <text x="421" y="178" font-size="13" font-weight="bold" fill="#4c1d95">default 默认读</text>
+  <text x="421" y="197" font-size="12" fill="#6d28d9">6.04 ms／次（本机实测）</text>
+
+  <rect x="407" y="216" width="286" height="52" rx="6" fill="#f5f3ff" stroke="#c4b5fd"/>
+  <text x="421" y="236" font-size="13" font-weight="bold" fill="#4c1d95">consistent 强一致</text>
+  <text x="421" y="255" font-size="12" fill="#6d28d9">6.41 ms／次，任何节点都是新值</text>
+
+  <rect x="407" y="274" width="286" height="52" rx="6" fill="#f5f3ff" stroke="#c4b5fd"/>
+  <text x="421" y="294" font-size="13" font-weight="bold" fill="#4c1d95">stale 允许陈旧</text>
+  <text x="421" y="313" font-size="12" fill="#6d28d9">5.44~6.20 ms／次，可能落后 0.07s</text>
+
+  <rect x="407" y="332" width="286" height="36" rx="6" fill="#fef2f2" stroke="#f87171"/>
+  <text x="421" y="355" font-size="12" fill="#dc2626">延迟差在噪声内，别为它牺牲一致性</text>
+
+  <!-- 模块 3：瓶颈 -->
+  <rect x="730" y="92" width="330" height="290" rx="12" fill="#ffffff" stroke="#059669" stroke-width="2"/>
+  <text x="895" y="120" text-anchor="middle" font-size="18" font-weight="bold" fill="#047857">③ 瓶颈定位</text>
+  <text x="895" y="142" text-anchor="middle" font-size="13" fill="#64748b">先量化，再调参</text>
+
+  <rect x="752" y="158" width="286" height="52" rx="6" fill="#ecfdf5" stroke="#6ee7b7"/>
+  <text x="766" y="178" font-size="13" font-weight="bold" fill="#065f46">串行 vs 并发：差 6.8 倍</text>
+  <text x="766" y="197" font-size="12" fill="#059669">111 条/秒 → 757 条/秒</text>
+
+  <rect x="752" y="216" width="286" height="52" rx="6" fill="#ecfdf5" stroke="#6ee7b7"/>
+  <text x="766" y="236" font-size="13" font-weight="bold" fill="#065f46">批量事务：差 40 倍</text>
+  <text x="766" y="255" font-size="12" fill="#059669">1 个 txn 写 100 条 = 4684 条/秒</text>
+
+  <rect x="752" y="274" width="286" height="52" rx="6" fill="#ecfdf5" stroke="#6ee7b7"/>
+  <text x="766" y="294" font-size="13" font-weight="bold" fill="#065f46">磁盘：fsync 是主要成本</text>
+  <text x="766" y="313" font-size="12" fill="#059669">本机实测单次 fsync ≈ 0.11 ms</text>
+
+  <rect x="752" y="332" width="286" height="36" rx="6" fill="#fef2f2" stroke="#f87171"/>
+  <text x="766" y="355" font-size="12" fill="#dc2626">照抄网上"并发写"数字前先看磁盘</text>
+
+  <!-- 底部：调优决策 -->
+  <rect x="40" y="410" width="1020" height="180" rx="12" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+  <text x="550" y="438" text-anchor="middle" font-size="18" font-weight="bold" fill="#92400e">慢了先问一句：是写入方式的问题，还是资源的问题？</text>
+
+  <rect x="70" y="458" width="230" height="112" rx="8" fill="#ffffff" stroke="#fbbf24"/>
+  <text x="185" y="482" text-anchor="middle" font-size="14" font-weight="bold" fill="#b45309">写入慢？</text>
+  <text x="185" y="506" text-anchor="middle" font-size="12" fill="#334155">先改用法，别先加机器</text>
+  <text x="185" y="528" text-anchor="middle" font-size="12" fill="#334155">串行 111 → 并发 757</text>
+  <text x="185" y="548" text-anchor="middle" font-size="12" fill="#334155">批量事务 4684</text>
+
+  <path d="M304,514 L370,514" stroke="#475569" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="337" y="505" text-anchor="middle" font-size="12" fill="#64748b">还不够</text>
+
+  <rect x="374" y="458" width="310" height="112" rx="8" fill="#ecfdf5" stroke="#34d399"/>
+  <text x="529" y="482" text-anchor="middle" font-size="14" font-weight="bold" fill="#065f46">再看资源：磁盘 / 网络 / 内存</text>
+  <text x="529" y="506" text-anchor="middle" font-size="12" fill="#334155">Raft 每次写要 fsync，磁盘慢就全慢</text>
+  <text x="529" y="528" text-anchor="middle" font-size="12" fill="#334155">看 last_index 与 applied_index 差值</text>
+  <text x="529" y="548" text-anchor="middle" font-size="12" fill="#334155">差值持续增大 = FSM 应用跟不上</text>
+
+  <path d="M688,514 L754,514" stroke="#475569" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="721" y="505" text-anchor="middle" font-size="12" fill="#64748b">仍慢</text>
+
+  <rect x="758" y="458" width="270" height="112" rx="8" fill="#f5f3ff" stroke="#c4b5fd"/>
+  <text x="893" y="482" text-anchor="middle" font-size="14" font-weight="bold" fill="#4c1d95">最后才调参</text>
+  <text x="893" y="506" text-anchor="middle" font-size="12" fill="#334155">性能参数大多有副作用</text>
+  <text x="893" y="528" text-anchor="middle" font-size="12" fill="#334155">调之前先有基线数字</text>
+  <text x="893" y="548" text-anchor="middle" font-size="12" fill="#334155">每次只改一个，改完复测</text>
+
+  <!-- 底部提示 -->
+  <rect x="40" y="612" width="1020" height="160" rx="12" fill="#ffffff" stroke="#94a3b8" stroke-width="2"/>
+  <text x="550" y="640" text-anchor="middle" font-size="17" font-weight="bold" fill="#0f172a">本机实测：调优的收益排序（先做收益最大的）</text>
+  <text x="70" y="670" font-size="13" fill="#334155">① 串行改批量事务：111 → 4684 条/秒（约 42 倍）—— 改用法，零成本</text>
+  <text x="70" y="694" font-size="13" fill="#334155">② 串行改并发：111 → 757 条/秒（约 6.8 倍）—— 改用法，零成本</text>
+  <text x="70" y="718" font-size="13" fill="#334155">③ 换更快的磁盘（降低 fsync 耗时）—— 要花钱，且收益取决于当前磁盘多差</text>
+  <text x="70" y="748" font-size="13" font-weight="bold" fill="#dc2626">④ 调性能参数 —— 收益最小且有副作用，放到最后</text>
+</svg>

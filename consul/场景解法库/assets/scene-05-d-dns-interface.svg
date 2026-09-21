@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 380" width="900" height="380" font-family="Microsoft YaHei, SimHei, sans-serif">
+  <rect width="900" height="380" fill="#ffffff"/>
+  <text x="450" y="28" font-size="18" font-weight="bold" text-anchor="middle" fill="#1f2937">解法 D · DNS 接口：应用零改造，代价是缓存延迟摘除</text>
+
+  <rect x="60" y="90" width="180" height="70" rx="6" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="150" y="116" font-size="14" text-anchor="middle" font-weight="bold" fill="#92400e">闭源应用</text>
+  <text x="150" y="136" font-size="12" text-anchor="middle" fill="#b45309">配置里只能写域名</text>
+  <text x="150" y="152" font-size="11" text-anchor="middle" fill="#b45309">代码不可改</text>
+
+  <line x1="240" y1="125" x2="360" y2="125" stroke="#2563eb" stroke-width="2"/>
+  <polygon points="360,125 352,119 352,131" fill="#2563eb"/>
+  <text x="300" y="115" font-size="11" text-anchor="middle" fill="#1d4ed8">解析</text>
+
+  <rect x="360" y="88" width="240" height="74" rx="6" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="480" y="112" font-size="13" text-anchor="middle" font-weight="bold" fill="#1e40af">inventory.service.consul</text>
+  <text x="480" y="133" font-size="11" text-anchor="middle" fill="#1e3a8a">Consul DNS :8600</text>
+  <text x="480" y="152" font-size="11" text-anchor="middle" fill="#1e3a8a">默认只返回健康实例</text>
+
+  <line x1="600" y1="125" x2="700" y2="125" stroke="#16a34a" stroke-width="2"/>
+  <polygon points="700,125 692,119 692,131" fill="#16a34a"/>
+
+  <rect x="700" y="88" width="150" height="74" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="775" y="112" font-size="13" text-anchor="middle" font-weight="bold" fill="#14532d">A 记录</text>
+  <text x="775" y="133" font-size="11" text-anchor="middle" fill="#15803d">只有 IP</text>
+  <text x="775" y="152" font-size="11" text-anchor="middle" fill="#15803d">端口要查 SRV</text>
+
+  <rect x="50" y="190" width="820" height="80" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="3"/>
+  <text x="460" y="214" font-size="14" text-anchor="middle" font-weight="bold" fill="#991b1b">失效点：DNS 缓存让「实例已摘除」延迟生效</text>
+  <text x="460" y="237" font-size="12" text-anchor="middle" fill="#b91c1c">Consul 侧已标记不健康，客户端 / 中间 resolver 缓存里还是旧 IP → 继续往死实例发请求</text>
+  <text x="460" y="258" font-size="12" text-anchor="middle" fill="#b91c1c">A 记录不含端口：必须查 SRV 记录才能拿到端口，只查 A 会拿不到完整地址</text>
+
+  <rect x="50" y="285" width="820" height="75" rx="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+  <text x="460" y="309" font-size="13" text-anchor="middle" font-weight="bold" fill="#92400e">课程实测的授权边界：DNS 与 HTTP 权限口径不完全一致</text>
+  <text x="460" y="331" font-size="12" text-anchor="middle" fill="#b45309">给了 service:read + node:read 后 HTTP 已能查到服务，但 nslookup 仍可能失败</text>
+  <text x="460" y="350" font-size="12" text-anchor="middle" fill="#b45309">排查时两边都要验，别只验一边就下结论</text>
+</svg>

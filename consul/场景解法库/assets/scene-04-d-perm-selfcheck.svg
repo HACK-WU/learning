@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 380" width="900" height="380" font-family="Microsoft YaHei, SimHei, sans-serif">
+  <rect width="900" height="380" fill="#ffffff"/>
+  <text x="450" y="28" font-size="18" font-weight="bold" text-anchor="middle" fill="#1f2937">解法 D · 权限自检：静默失败不会留痕，只能主动探测</text>
+
+  <rect x="60" y="80" width="170" height="70" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="145" y="106" font-size="14" text-anchor="middle" font-weight="bold" fill="#1e3a8a">自检脚本</text>
+  <text x="145" y="127" font-size="11" text-anchor="middle" fill="#1e40af">带目标 token</text>
+  <text x="145" y="142" font-size="11" text-anchor="middle" fill="#1e40af">逐条探测</text>
+
+  <line x1="230" y1="115" x2="320" y2="115" stroke="#2563eb" stroke-width="2"/>
+  <polygon points="320,115 312,109 312,121" fill="#2563eb"/>
+
+  <rect x="320" y="80" width="200" height="70" rx="6" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="420" y="106" font-size="14" text-anchor="middle" font-weight="bold" fill="#1e40af">关键接口</text>
+  <text x="420" y="127" font-size="11" text-anchor="middle" fill="#1e3a8a">读 key / 列 keys</text>
+  <text x="420" y="143" font-size="11" text-anchor="middle" fill="#1e3a8a">列服务 / 注册服务</text>
+
+  <line x1="520" y1="115" x2="600" y2="115" stroke="#2563eb" stroke-width="2"/>
+  <polygon points="600,115 592,109 592,121" fill="#2563eb"/>
+
+  <rect x="600" y="70" width="240" height="90" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="3"/>
+  <text x="720" y="96" font-size="14" text-anchor="middle" font-weight="bold" fill="#991b1b">判定：不只看状态码</text>
+  <text x="720" y="118" font-size="12" text-anchor="middle" fill="#b91c1c">200 但 body ∈ { {}, [], "" }</text>
+  <text x="720" y="138" font-size="12" text-anchor="middle" fill="#b91c1c">→ 判为「空(静默失败)」FAIL</text>
+  <text x="720" y="154" font-size="11" text-anchor="middle" fill="#dc2626">只看 200 会 100% 漏掉它</text>
+
+  <rect x="60" y="185" width="820" height="95" rx="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+  <text x="460" y="210" font-size="14" text-anchor="middle" font-weight="bold" fill="#92400e">为什么必须写这段：200 [] 是一个「成功的请求」，日志里不会有任何痕迹</text>
+  <text x="460" y="234" font-size="12" text-anchor="middle" fill="#b45309">唯一可靠的外化手段是主动探测：用目标 token 真的调一遍，看返回是「有数据」还是「空」</text>
+  <text x="460" y="256" font-size="12" text-anchor="middle" fill="#b45309">实战 C 的 setup_and_verify.py 是同一思路——21 项权限矩阵逐条验证（课 8 实测）</text>
+  <text x="460" y="272" font-size="12" text-anchor="middle" fill="#b45309">另需专门识别：operator 类资源写成 _prefix 结尾会静默失效（不报错也不生效）</text>
+
+  <rect x="60" y="298" width="390" height="60" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="255" y="322" font-size="13" text-anchor="middle" font-weight="bold" fill="#14532d">接进部署流水线</text>
+  <text x="255" y="344" font-size="12" text-anchor="middle" fill="#15803d">新服务上线前跑一次，拆 token 时同步跑</text>
+
+  <rect x="470" y="298" width="410" height="60" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="675" y="322" font-size="13" text-anchor="middle" font-weight="bold" fill="#14532d">接进定时巡检</text>
+  <text x="675" y="344" font-size="12" text-anchor="middle" fill="#15803d">生产环境定期跑，策略变更后可立刻发现越界</text>
+</svg>

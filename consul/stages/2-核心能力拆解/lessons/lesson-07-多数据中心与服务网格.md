@@ -164,6 +164,101 @@ mesh gateway 在两种方案里都是流量中继节点：传统 WAN 联邦要�
 
 ---
 
+### 插播：同一个"流量"问题的另一半——灰度发布怎么发
+
+前面讲的 failover 解决的是"**这个 DC 挂了往哪走**"。还有一个更高频的问题：
+
+> "新版本要上线，怎么先放 10% 流量进去试？"
+
+**这不属于 failover**，而属于**流量切分（traffic splitting）**。Consul 的答案是 **discovery chain（解析链）**——它不转发流量，只计算并下发"这一跳该往哪走"的路由表。
+
+#### 直觉建立：路由表 ≠ 路由器
+
+这是理解本节的关键，也是最容易误解的地方：
+
+| | 谁做 | 做什么 | 没它会怎样 |
+|---|------|--------|-----------|
+| **控制面（Consul）** | discovery chain | **算出**切分比例，下发给 sidecar | 没有路由决策，流量不知道往哪走 |
+| **数据面（Envoy）** | sidecar | **执行**转发，真正把 90/10 走出来 | 路由表算得再对，也没人执行 |
+
+**Consul 只负责前半段。** 所以"配好了灰度"和"流量真的按 90/10 走"是两件事——后者必须有数据面。
+
+#### 核心原理：三个配置条目的组合
+
+灰度不是一条配置，是**三个条目**叠加出来的：
+
+```hcl
+# ① 声明协议（前提！默认是 tcp，四层无法按比例切分）
+Kind = "service-defaults"
+Name = "web"
+Protocol = "http"
+
+# ② 按 Meta.version 切出子集
+Kind = "service-resolver"
+Name = "web"
+Subsets = {
+  "v1" = { Filter = "Service.Meta.version == 1" }
+  "v2" = { Filter = "Service.Meta.version == 2" }
+}
+
+# ③ 按权重切分（权重和必须 = 100）
+Kind = "service-splitter"
+Name = "web"
+Splits = [
+  { Weight = 90, ServiceSubset = "v1" },
+  { Weight = 10, ServiceSubset = "v2" },
+]
+```
+
+生效后解析链立刻改变，**无需重启任何进程**：
+
+```powershell
+PS> Invoke-RestMethod "http://127.0.0.1:8500/v1/discovery-chain/web"
+# StartNode: splitter:web.default.default
+#   90 % -> resolver:v1.web.default.default.dc1
+#   10 % -> resolver:v2.web.default.default.dc1
+```
+
+放大灰度只改一次权重即可，实测 100/0 → 90/10 → 50/50 → 10/90 → 0/100 **全部即时生效**。
+
+#### 三条实测踩出来的硬约束
+
+这三条官方文档不会重点标红，但每条都能卡住你十分钟：
+
+| 约束 | 报错原文 | 后果 |
+|------|---------|------|
+| **协议必须是 http** | `protocol "tcp" that does not permit advanced routing or splitting behavior` | 不声明 `service-defaults` 就写 splitter，**直接 500**，配置根本进不去 |
+| **权重和必须 = 100** | `the sum of all split weights must be 100, not 90.000000` | 写 90 单独一条会被拒，必须凑满 100 |
+| **split 目标协议要一致** | `service "other" has "tcp" which is not "http"` | 切分链路里混进一个 tcp 服务，整条链拒绝 |
+
+> ⚠️ **反直觉细节**：权重设为 **0** 时，Consul 返回的是 `None` 而不是 `0`（Go `float32` 零值序列化为 `null`）。按 `weight == 0` 判断"该子集已摘除"会**永远判断不到**，要写 `weight is None or weight == 0`。
+
+#### 顺带回答"北向网关"
+
+课 12 的 CRD 表里列过 `IngressGateway` / `TerminatingGateway`，这里补上它们**最该知道的一条**：
+
+> **网关配置写入成功 ≠ 网关在运行。**
+
+实测：写 `ingress-gateway` 返回 `Config entry written`，但 `ss -tln | grep :8080` **没有任何进程监听**。因为该配置描述的是"**应当**有一个这样的网关"，真正让它活起来需要一个跑 Envoy 的网关进程。
+
+所以本节只讲控制面能验证的部分——网关的**数据面行为（真实转发、TLS 终止、超时重试）本课未实测**，全部依赖 Envoy，需结合官方文档与真实环境评估。
+
+#### 常见误区
+
+- **"Consul 没有灰度能力"**——有，就是 `ServiceSplitter`。误以为没有，多半是因为只看了服务发现的 API，没碰 config entries。
+- **"配好 splitter 就等于灰度生效了"**——不等于。控制面算得对，还得有 Envoy 执行。没有数据面时，**配置会安静地躺在那里不产生任何效果**。
+- **"切到不存在的子集会被拦住"**——不会。实测切 50% 到不存在的 `v9` 子集，**写入成功**，chain 里出现 `v9.web...` Target。Consul 不校验子集是否非空——**这类错误不会在写入时暴露，只会表现为流量黑洞**。
+
+#### 适用边界
+
+- 需要**按比例切流**（金丝雀、灰度、A/B）：`ServiceSplitter` + `ServiceResolver` 是标准答案，但**必须有数据面**。
+- 需要**按内容路由**（路径、Header）：`ServiceRouter`，可与 splitter 共存（实测 `StartNode` 变为 `router:...`）。
+- 纯四层服务（tcp）：**用不了**。要么接受只能做 failover，要么升级到七层协议声明。
+
+> 🎯 **练一练**：[实战篇 D：灰度发布与流量切分](../../../practices/实战D-灰度发布与流量切分/README.md)（无需 Envoy 跑通控制面全链路，实测三条硬约束 + 权重即时生效 + 网关"配置存在但进程不存在"的边界）
+
+---
+
 ### 知识点 2：Connect 服务网格（mTLS / intentions）
 
 #### 一句话定义
@@ -477,7 +572,7 @@ Invoke-RestMethod "http://127.0.0.1:8500/v1/query/<id>/execute"            # 自
 
 ## 🧭 课程导航
 
-- 🎯 **练一练**：[实战篇 B：Connect 最小闭环](../../../practices/实战B-Connect最小闭环/README.md)（无需 Envoy 跑通 mTLS，intention 82ms 生效）｜[全部应用实战](../../../应用实战/INDEX.md)
+- 🎯 **练一练**：[实战篇 B：Connect 最小闭环](../../../practices/实战B-Connect最小闭环/README.md)（无需 Envoy 跑通 mTLS，intention 82ms 生效）｜[实战篇 D：灰度发布与流量切分](../../../practices/实战D-灰度发布与流量切分/README.md)（控制面全链路实测，三条硬约束 + 网关"配置存在但进程不存在"）｜[全部应用实战](../../../应用实战/INDEX.md)
 - [下一课：课 8 ACL 与安全模型](./lesson-08-ACL与安全模型.md)（同属阶段 2，2026-09-17 增补课：Consul 默认不设防，谁有权改它）
 - [下下课：课 9 四大竞品逐个看](../../3-横向对比/lessons/lesson-09-四大竞品逐个看.md)（阶段 3 开篇：ZooKeeper / etcd / Nacos / Eureka 逐个登台）
 - 返回 [课程目录](../../../02-课程目录.md)

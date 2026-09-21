@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 380" width="900" height="380" font-family="Microsoft YaHei, SimHei, sans-serif">
+  <rect width="900" height="380" fill="#ffffff"/>
+  <text x="450" y="28" font-size="18" font-weight="bold" text-anchor="middle" fill="#1f2937">解法 A · 只开 Connect：流量确实加密了，但谁都能调谁</text>
+
+  <rect x="90" y="90" width="150" height="70" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="165" y="115" font-size="14" text-anchor="middle" font-weight="bold" fill="#1e3a8a">web（sidecar）</text>
+  <text x="165" y="136" font-size="11" text-anchor="middle" fill="#1e40af">证书由内置 CA 签发</text>
+  <text x="165" y="152" font-size="11" text-anchor="middle" fill="#1e40af">有效期 10 年</text>
+
+  <line x1="240" y1="125" x2="380" y2="125" stroke="#16a34a" stroke-width="4"/>
+  <polygon points="380,125 370,119 370,131" fill="#16a34a"/>
+  <text x="310" y="115" font-size="12" text-anchor="middle" font-weight="bold" fill="#15803d">mTLS 加密通道</text>
+
+  <rect x="380" y="90" width="150" height="70" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="455" y="115" font-size="14" text-anchor="middle" font-weight="bold" fill="#1e3a8a">payment</text>
+  <text x="455" y="136" font-size="11" text-anchor="middle" fill="#1e40af">身份可信</text>
+
+  <rect x="620" y="90" width="200" height="70" rx="6" fill="#f3f4f6" stroke="#9ca3af" stroke-width="2"/>
+  <text x="720" y="115" font-size="14" text-anchor="middle" font-weight="bold" fill="#4b5563">任意容器</text>
+  <text x="720" y="136" font-size="11" text-anchor="middle" fill="#6b7280">注册成任意服务名</text>
+  <text x="720" y="152" font-size="11" text-anchor="middle" fill="#6b7280">即可领合法证书</text>
+
+  <line x1="620" y1="140" x2="530" y2="140" stroke="#dc2626" stroke-width="3" stroke-dasharray="5,4"/>
+  <polygon points="530,140 538,134 538,146" fill="#dc2626"/>
+  <text x="580" y="176" font-size="11" text-anchor="middle" font-weight="bold" fill="#b91c1c">也能调</text>
+
+  <rect x="50" y="215" width="800" height="85" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="3"/>
+  <text x="450" y="240" font-size="15" text-anchor="middle" font-weight="bold" fill="#991b1b">致命点：默认 intention 策略是 allow</text>
+  <text x="450" y="264" font-size="12" text-anchor="middle" fill="#b91c1c">没有显式规则时，任何服务都能调任何服务——渗透测试正是靠这个默认值打通支付服务</text>
+  <text x="450" y="287" font-size="12" text-anchor="middle" fill="#b91c1c">mTLS 认证了「你是谁」，却没有回答「你能干什么」——加密 ≠ 授权</text>
+
+  <rect x="50" y="318" width="800" height="46" rx="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+  <text x="450" y="339" font-size="13" text-anchor="middle" font-weight="bold" fill="#92400e">「开了 Connect 就当零信任」是错的——它会在安全评审上给出虚假的安全承诺</text>
+  <text x="450" y="357" font-size="12" text-anchor="middle" fill="#b45309">解法 A 只满足「通信加密」这一条合规条款，授权强度实际为零</text>
+</svg>

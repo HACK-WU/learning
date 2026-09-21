@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 370" width="900" height="370" font-family="Microsoft YaHei, SimHei, sans-serif">
+  <rect width="900" height="370" fill="#ffffff"/>
+  <text x="450" y="28" font-size="18" font-weight="bold" text-anchor="middle" fill="#1f2937">解法 C · consul-k8s 全量集成：深度使用网格时才值得</text>
+
+  <rect x="50" y="80" width="800" height="110" rx="6" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="450" y="106" font-size="15" font-weight="bold" text-anchor="middle" fill="#1e40af">Helm 部署 consul-k8s：connectInject + controller + CRD</text>
+  <rect x="90" y="122" width="150" height="40" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="165" y="147" font-size="12" text-anchor="middle" fill="#1e3a8a">自动注入 sidecar</text>
+  <rect x="265" y="122" width="150" height="40" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="340" y="147" font-size="12" text-anchor="middle" fill="#1e3a8a">CRD 管理配置</text>
+  <rect x="440" y="122" width="150" height="40" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="515" y="147" font-size="12" text-anchor="middle" fill="#1e3a8a">集群内流量走网格</text>
+  <rect x="615" y="122" width="200" height="40" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="715" y="147" font-size="12" text-anchor="middle" fill="#1e3a8a">intention 授权生效</text>
+
+  <rect x="50" y="205" width="820" height="95" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="3"/>
+  <text x="460" y="230" font-size="14" text-anchor="middle" font-weight="bold" fill="#991b1b">代价：多一套控制面，且升级路径受限</text>
+  <text x="460" y="253" font-size="12" text-anchor="middle" fill="#b91c1c">① consul-k8s 组件自身要高可用，多一层故障域要运维</text>
+  <text x="460" y="275" font-size="12" text-anchor="middle" fill="#b91c1c">② 不支持跨多版本跳跃升级，须按官方支持路径逐级走（1.15 直接跳 2.0 不行）</text>
+  <text x="460" y="294" font-size="12" text-anchor="middle" fill="#b91c1c">③ 与 K8s 版本、chart 版本存在兼容矩阵，升级前须核对</text>
+
+  <rect x="50" y="315" width="820" height="40" rx="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+  <text x="460" y="333" font-size="13" text-anchor="middle" font-weight="bold" fill="#92400e">什么时候值得：需要 Connect 的 mTLS 与 intention 授权覆盖集群内流量（见场景 3）</text>
+  <text x="460" y="350" font-size="12" text-anchor="middle" fill="#b45309">只为服务发现而全量集成 = 明显过度——转解法 B</text>
+</svg>

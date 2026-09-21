@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 380" width="900" height="380" font-family="Microsoft YaHei, SimHei, sans-serif">
+  <rect width="900" height="380" fill="#ffffff"/>
+  <text x="450" y="28" font-size="18" font-weight="bold" text-anchor="middle" fill="#1f2937">解法 B · 应用层双写：没有原子性，必须留补偿线索</text>
+
+  <rect x="60" y="85" width="150" height="60" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="135" y="110" font-size="14" text-anchor="middle" font-weight="bold" fill="#1e3a8a">写入方</text>
+  <text x="135" y="130" font-size="11" text-anchor="middle" fill="#1e40af">配置变更</text>
+
+  <line x1="210" y1="105" x2="330" y2="88" stroke="#2563eb" stroke-width="2"/>
+  <polygon points="330,88 322,83 322,93" fill="#2563eb"/>
+  <line x1="210" y1="125" x2="330" y2="150" stroke="#2563eb" stroke-width="2"/>
+  <polygon points="330,150 322,145 322,155" fill="#2563eb"/>
+
+  <rect x="330" y="68" width="180" height="46" rx="6" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="420" y="96" font-size="13" text-anchor="middle" fill="#1e40af">dc1 KV 写入</text>
+
+  <rect x="330" y="128" width="180" height="46" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="420" y="156" font-size="13" text-anchor="middle" fill="#14532d">dc2 KV 写入</text>
+
+  <rect x="560" y="68" width="200" height="46" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
+  <text x="660" y="90" font-size="12" text-anchor="middle" fill="#991b1b">成功 / 失败</text>
+  <text x="660" y="106" font-size="11" text-anchor="middle" fill="#b91c1c">无分布式事务兜底</text>
+
+  <rect x="560" y="128" width="200" height="46" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
+  <text x="660" y="150" font-size="12" text-anchor="middle" fill="#991b1b">成功 / 失败</text>
+  <text x="660" y="166" font-size="11" text-anchor="middle" fill="#b91c1c">一边失败 = 不一致</text>
+
+  <line x1="510" y1="91" x2="560" y2="91" stroke="#9ca3af" stroke-width="2"/>
+  <line x1="510" y1="151" x2="560" y2="151" stroke="#9ca3af" stroke-width="2"/>
+
+  <rect x="60" y="205" width="820" height="85" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="3"/>
+  <text x="460" y="229" font-size="14" text-anchor="middle" font-weight="bold" fill="#991b1b">失效点：没有原子性，一边成功一边失败就是不一致</text>
+  <text x="460" y="252" font-size="12" text-anchor="middle" fill="#b91c1c">最常见翻车方式是静默吞掉异常：表现为「华东的配置是旧的，没人知道为什么」</text>
+  <text x="460" y="274" font-size="12" text-anchor="middle" fill="#b91c1c">两边阻塞查询各自独立，生效时间可能差几秒——不一致窗口会被观测到</text>
+
+  <rect x="60" y="302" width="820" height="60" rx="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+  <text x="460" y="325" font-size="13" text-anchor="middle" font-weight="bold" fill="#92400e">必须配：重试队列 + 对账任务；显式列出可预期异常，别用裸 except 吞掉</text>
+  <text x="460" y="347" font-size="12" text-anchor="middle" fill="#b45309">适用：变更不频繁、能接受秒级不一致；变更频繁时不建议——不一致窗口会累积</text>
+</svg>

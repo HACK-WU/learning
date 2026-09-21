@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" width="900" height="400" font-family="Microsoft YaHei, SimHei, sans-serif">
+  <rect width="900" height="400" fill="#ffffff"/>
+  <text x="450" y="28" font-size="18" font-weight="bold" text-anchor="middle" fill="#1f2937">解法 A · 全环境部署 agent：应用只问本机 agent，拓扑变化对应用透明</text>
+
+  <rect x="50" y="70" width="340" height="130" rx="6" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="220" y="94" font-size="14" font-weight="bold" text-anchor="middle" fill="#1e40af">VM 环境</text>
+  <rect x="75" y="108" width="130" height="36" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="140" y="131" font-size="12" text-anchor="middle" fill="#1e3a8a">订单服务</text>
+  <rect x="225" y="108" width="140" height="36" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="295" y="131" font-size="12" text-anchor="middle" fill="#1e3a8a">Consul agent</text>
+  <text x="220" y="170" font-size="11" text-anchor="middle" fill="#1e3a8a">服务 → 本机 agent:8500 注册</text>
+  <text x="220" y="188" font-size="11" text-anchor="middle" fill="#1e3a8a">消费方 → 本机 agent:8500 查询</text>
+
+  <rect x="510" y="70" width="340" height="130" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="680" y="94" font-size="14" font-weight="bold" text-anchor="middle" fill="#14532d">K8s 环境</text>
+  <rect x="535" y="108" width="130" height="36" rx="5" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="600" y="131" font-size="12" text-anchor="middle" fill="#14532d">库存服务(Pod)</text>
+  <rect x="685" y="108" width="140" height="36" rx="5" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="755" y="131" font-size="12" text-anchor="middle" fill="#14532d">Consul agent</text>
+  <text x="680" y="170" font-size="11" text-anchor="middle" fill="#15803d">同一个二进制，语义完全一致</text>
+  <text x="680" y="188" font-size="11" text-anchor="middle" fill="#15803d">Pod IP 会变，服务名不变</text>
+
+  <line x1="390" y1="135" x2="510" y2="135" stroke="#6b7280" stroke-width="2" stroke-dasharray="5,4"/>
+  <text x="450" y="126" font-size="11" text-anchor="middle" fill="#4b5563">同一套名字</text>
+
+  <rect x="50" y="225" width="820" height="95" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="3"/>
+  <text x="460" y="250" font-size="15" text-anchor="middle" font-weight="bold" fill="#991b1b">生死线：必须查 /v1/health/service，不是 /v1/catalog/service</text>
+  <text x="460" y="274" font-size="12" text-anchor="middle" fill="#b91c1c">health/service?passing=true → 返回「当前可用实例」（带健康过滤）</text>
+  <text x="460" y="294" font-size="12" text-anchor="middle" fill="#b91c1c">catalog/service → 返回「注册表」，凡登记过的都在，可能包含已挂掉的实例</text>
+  <text x="460" y="313" font-size="12" text-anchor="middle" fill="#b91c1c">异构环境实例来源杂、摘除不及时，用 catalog 等于把请求发给死掉的实例</text>
+
+  <rect x="50" y="335" width="820" height="46" rx="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+  <text x="460" y="356" font-size="13" text-anchor="middle" font-weight="bold" fill="#92400e">生产最小拓扑：3 或 5 个 server（奇数，满足 quorum）+ 每节点 client agent</text>
+  <text x="460" y="374" font-size="12" text-anchor="middle" fill="#b45309">禁用 consul agent -dev 上生产：内存存储、无 Raft 持久化，重启即全丢</text>
+</svg>

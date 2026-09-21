@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 380" width="900" height="380" font-family="Microsoft YaHei, SimHei, sans-serif">
+  <rect width="900" height="380" fill="#ffffff"/>
+  <text x="450" y="28" font-size="18" font-weight="bold" text-anchor="middle" fill="#1f2937">解法 D · 单 DC 跨机房：一份数据省掉一整类问题，但延迟直接压在 Raft 上</text>
+
+  <rect x="60" y="80" width="340" height="140" rx="6" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="230" y="106" font-size="15" font-weight="bold" text-anchor="middle" fill="#1e40af">机房 A（节点 1、2）</text>
+  <rect x="95" y="120" width="120" height="34" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="155" y="142" font-size="12" text-anchor="middle" fill="#1e3a8a">server-1</text>
+  <rect x="240" y="120" width="120" height="34" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="300" y="142" font-size="12" text-anchor="middle" fill="#1e3a8a">server-2</text>
+  <text x="230" y="182" font-size="12" text-anchor="middle" fill="#1e3a8a">同属 datacenter = "dc1"</text>
+  <text x="230" y="204" font-size="11" text-anchor="middle" fill="#3b82f6">只有一份数据 → 天然一致</text>
+
+  <rect x="520" y="80" width="340" height="140" rx="6" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="690" y="106" font-size="15" font-weight="bold" text-anchor="middle" fill="#1e40af">机房 B（节点 3）</text>
+  <rect x="625" y="120" width="120" height="34" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="685" y="142" font-size="12" text-anchor="middle" fill="#1e3a8a">server-3</text>
+  <text x="690" y="182" font-size="12" text-anchor="middle" fill="#1e3a8a">retry_join 汇聚到同一 DC</text>
+  <text x="690" y="204" font-size="11" text-anchor="middle" fill="#3b82f6">无 DC 边界 → 无同步问题</text>
+
+  <line x1="400" y1="150" x2="520" y2="150" stroke="#dc2626" stroke-width="4"/>
+  <text x="460" y="140" font-size="12" text-anchor="middle" font-weight="bold" fill="#b91c1c">跨机房</text>
+  <text x="460" y="176" font-size="11" text-anchor="middle" fill="#b91c1c">Raft 写需多数派确认</text>
+
+  <rect x="50" y="245" width="820" height="80" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="3"/>
+  <text x="460" y="269" font-size="14" text-anchor="middle" font-weight="bold" fill="#991b1b">代价：跨机房延迟直接作用于每次 Raft 写入</text>
+  <text x="460" y="292" font-size="12" text-anchor="middle" fill="#b91c1c">写请求需多数派确认，机房间延迟高会拖慢所有写入；机房故障时 quorum 可能不足 → 直接不可写</text>
+  <text x="460" y="313" font-size="12" text-anchor="middle" fill="#b91c1c">硬边界：跨机房网络抖动会引发 leader 频繁切换（选举震荡）——故障模式 6 实测</text>
+
+  <rect x="50" y="337" width="820" height="30" rx="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+  <text x="460" y="357" font-size="12" text-anchor="middle" fill="#92400e">适用：同城双活、延迟 &lt;5ms，且能接受一次跨机房往返——上线前必须压测 Raft 写入延迟</text>
+</svg>

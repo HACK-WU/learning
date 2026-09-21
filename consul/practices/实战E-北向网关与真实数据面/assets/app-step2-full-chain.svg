@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="430" viewBox="0 0 940 430" font-family="Segoe UI, Microsoft YaHei, sans-serif">
+  <rect width="940" height="430" fill="#fbfcfd"/>
+  <text x="470" y="30" text-anchor="middle" font-size="17" font-weight="bold" fill="#1f2933">场景2 完整链路：网关(Envoy) → sidecar → 后端，三段缺一不可</text>
+
+  <rect x="40" y="70" width="150" height="70" rx="8" fill="#e8eaf6" stroke="#283593" stroke-width="2"/>
+  <text x="115" y="98" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a237e">客户端</text>
+  <text x="115" y="120" text-anchor="middle" font-size="11.5" fill="#283593">Host: web.ingress.*</text>
+
+  <line x1="195" y1="105" x2="255" y2="105" stroke="#5c6bc0" stroke-width="2.5" marker-end="url(#a2)"/>
+  <text x="225" y="95" text-anchor="middle" font-size="10.5" fill="#3949ab">HTTP</text>
+
+  <rect x="260" y="62" width="200" height="86" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="2.5"/>
+  <text x="360" y="88" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#0d47a1">① 网关 Envoy 进程</text>
+  <text x="360" y="108" text-anchor="middle" font-size="11.5" fill="#1565c0">容器 envoyproxy/envoy:1.37.6</text>
+  <text x="360" y="127" text-anchor="middle" font-size="11.5" fill="#1565c0">监听 19180，xDS 拉路由</text>
+
+  <line x1="465" y1="88" x2="525" y2="78" stroke="#00897b" stroke-width="2.5" marker-end="url(#a3)"/>
+  <line x1="465" y1="122" x2="525" y2="132" stroke="#00897b" stroke-width="2.5" marker-end="url(#a3)"/>
+  <text x="495" y="70" text-anchor="middle" font-size="10.5" fill="#00695c">mTLS</text>
+
+  <rect x="530" y="52" width="205" height="52" rx="8" fill="#e0f2f1" stroke="#00695c" stroke-width="2"/>
+  <text x="632" y="74" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#004d40">② sidecar（web-v1）</text>
+  <text x="632" y="93" text-anchor="middle" font-size="11" fill="#00695c">consul connect proxy :21000</text>
+
+  <rect x="530" y="112" width="205" height="52" rx="8" fill="#e0f2f1" stroke="#00695c" stroke-width="2"/>
+  <text x="632" y="134" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#004d40">② sidecar（web-v2）</text>
+  <text x="632" y="153" text-anchor="middle" font-size="11" fill="#00695c">consul connect proxy :21001</text>
+
+  <line x1="740" y1="78" x2="800" y2="78" stroke="#5c6bc0" stroke-width="2.5" marker-end="url(#a2)"/>
+  <line x1="740" y1="138" x2="800" y2="138" stroke="#5c6bc0" stroke-width="2.5" marker-end="url(#a2)"/>
+  <text x="770" y="68" text-anchor="middle" font-size="10.5" fill="#283593">明文</text>
+
+  <rect x="805" y="52" width="105" height="52" rx="8" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="2"/>
+  <text x="857" y="74" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#4a148c">③ 后端 v1</text>
+  <text x="857" y="93" text-anchor="middle" font-size="11" fill="#6a1b9a">:19101 → V1</text>
+
+  <rect x="805" y="112" width="105" height="52" rx="8" fill="#f3e5f5" stroke="#6a1b9a" stroke-width="2"/>
+  <text x="857" y="134" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#4a148c">③ 后端 v2</text>
+  <text x="857" y="153" text-anchor="middle" font-size="11" fill="#6a1b9a">:19108 → V2</text>
+
+  <rect x="40" y="200" width="870" height="95" rx="10" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+  <text x="60" y="226" font-size="13.5" font-weight="bold" fill="#e65100">实测踩到的三个"差一点就通了"</text>
+  <text x="60" y="250" font-size="12.5" fill="#4e342e">1. bootstrap 生成要带 -grpc-ca-file：缺 CA 时报 "TLS is enabled for xDS... no CA certificates"，不是网络问题</text>
+  <text x="60" y="270" font-size="12.5" fill="#4e342e">2. 网关注册必须带 Kind:"ingress-gateway"：否则报 "No ingress-gateway services registered"，Consul 认不出它是网关</text>
+  <text x="60" y="288" font-size="12.5" fill="#4e342e">3. 请求必须带正确的 Host 头：路由 vh domains 是 web.ingress.*，不带 Host 直接 404</text>
+
+  <rect x="40" y="310" width="870" height="95" rx="10" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="60" y="336" font-size="13.5" font-weight="bold" fill="#1b5e20">打通后的实测结果（30 次请求）</text>
+  <text x="60" y="360" font-size="12.5" fill="#2e7d32">50/50 配置 → 实测 V1=16 / V2=14；90/10 配置 → 实测 V1=22 / V2=8；异常 0 次</text>
+  <text x="60" y="380" font-size="12.5" fill="#2e7d32">直连 sidecar 端口返回 000（裸 HTTP 连不通 mTLS），经网关却通 —— 这正说明网格加密在生效</text>
+  <text x="60" y="398" font-size="12.5" fill="#1b5e20" font-weight="bold">结论：控制面算出比例，数据面真正执行，两段都对才算灰度落地</text>
+
+  <defs>
+    <marker id="a2" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#5c6bc0"/></marker>
+    <marker id="a3" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#00897b"/></marker>
+  </defs>
+</svg>

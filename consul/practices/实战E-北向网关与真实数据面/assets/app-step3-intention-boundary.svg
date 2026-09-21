@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="930" height="400" viewBox="0 0 930 400" font-family="Segoe UI, Microsoft YaHei, sans-serif">
+  <rect width="930" height="400" fill="#fbfcfd"/>
+  <text x="465" y="30" text-anchor="middle" font-size="17" font-weight="bold" fill="#1f2933">场景3 边界：intention deny 写入成功，但流量没被拦住</text>
+
+  <rect x="50" y="60" width="250" height="80" rx="8" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="175" y="88" text-anchor="middle" font-size="13" font-weight="bold" fill="#0d47a1">① 写 service-intentions</text>
+  <text x="175" y="110" text-anchor="middle" font-size="11.5" fill="#1565c0">ingress-gw → web-v2 : deny</text>
+  <text x="175" y="128" text-anchor="middle" font-size="11.5" fill="#1565c0">返回 HTTP 200，ID 已生成</text>
+
+  <line x1="305" y1="100" x2="365" y2="100" stroke="#90a4ae" stroke-width="2" marker-end="url(#b1)"/>
+
+  <rect x="370" y="60" width="250" height="80" rx="8" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="495" y="88" text-anchor="middle" font-size="13" font-weight="bold" fill="#1b5e20">② 查 intentions 清单</text>
+  <text x="495" y="110" text-anchor="middle" font-size="11.5" fill="#2e7d32">条目确实存在</text>
+  <text x="495" y="128" text-anchor="middle" font-size="11.5" fill="#2e7d32">Source=ingress-gw Action=deny</text>
+
+  <line x1="625" y1="100" x2="685" y2="100" stroke="#90a4ae" stroke-width="2" marker-end="url(#b1)"/>
+
+  <rect x="690" y="60" width="190" height="80" rx="8" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="785" y="88" text-anchor="middle" font-size="13" font-weight="bold" fill="#b71c1c">③ 但流量照走</text>
+  <text x="785" y="110" text-anchor="middle" font-size="11.5" fill="#c62828">24 次请求 V2 命中 11</text>
+  <text x="785" y="128" text-anchor="middle" font-size="11.5" fill="#c62828">一次都没被拒</text>
+
+  <rect x="50" y="170" width="830" height="90" rx="10" fill="#fff8e1" stroke="#f9a825" stroke-width="2"/>
+  <text x="70" y="196" font-size="13.5" font-weight="bold" fill="#e65100">证据：Envoy 配置里根本没有 DENY 策略</text>
+  <text x="70" y="220" font-size="12.5" fill="#4e342e">curl :19000/config_dump 检查：RBAC 过滤器存在（envoy.filters.network.rbac），但 "含 DENY 策略: False"</text>
+  <text x="70" y="242" font-size="12.5" fill="#4e342e">即 intention 写进了 Consul，却没有被翻译成 Envoy 的 RBAC 拒绝规则 —— 写入成功 ≠ 下发生效</text>
+
+  <rect x="50" y="275" width="830" height="100" rx="10" fill="#e8eaf6" stroke="#283593" stroke-width="2"/>
+  <text x="70" y="301" font-size="13.5" font-weight="bold" fill="#1a237e">本篇的诚实处理：不编结论</text>
+  <text x="70" y="325" font-size="12.5" fill="#283593">疑点：网关转发时使用的身份可能不是 ingress-gw，导致 source 匹配不上，deny 规则无从生成</text>
+  <text x="70" y="345" font-size="12.5" fill="#283593">本轮未能确认根因（服务端证书 SAN 是目标服务自身，无法据此判定网关客户端身份）</text>
+  <text x="70" y="365" font-size="12.5" fill="#1a237e" font-weight="bold">因此本篇只陈述「写入成功但未拦截」这一实测事实，不断言 deny 是否可用</text>
+
+  <defs>
+    <marker id="b1" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#90a4ae"/></marker>
+  </defs>
+</svg>

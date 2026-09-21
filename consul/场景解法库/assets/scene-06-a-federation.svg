@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" width="900" height="400" font-family="Microsoft YaHei, SimHei, sans-serif">
+  <rect width="900" height="400" fill="#ffffff"/>
+  <text x="450" y="28" font-size="18" font-weight="bold" text-anchor="middle" fill="#1f2937">解法 A · 多 DC 联邦：打通的是查询通道，不是数据副本</text>
+
+  <rect x="50" y="80" width="330" height="150" rx="6" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="215" y="106" font-size="15" font-weight="bold" text-anchor="middle" fill="#1e40af">dc1（华北）</text>
+  <rect x="80" y="120" width="130" height="34" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="145" y="142" font-size="12" text-anchor="middle" fill="#1e3a8a">server 集群</text>
+  <rect x="225" y="120" width="130" height="34" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="290" y="142" font-size="12" text-anchor="middle" fill="#1e3a8a">KV: app/port</text>
+  <text x="215" y="180" font-size="12" text-anchor="middle" fill="#1e3a8a">值 = 8080</text>
+  <text x="215" y="204" font-size="11" text-anchor="middle" fill="#3b82f6">本地数据独立存储</text>
+  <text x="215" y="220" font-size="11" text-anchor="middle" fill="#3b82f6">Raft 只在 DC 内</text>
+
+  <rect x="520" y="80" width="330" height="150" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="685" y="106" font-size="15" font-weight="bold" text-anchor="middle" fill="#14532d">dc2（华东）</text>
+  <rect x="550" y="120" width="130" height="34" rx="5" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="615" y="142" font-size="12" text-anchor="middle" fill="#14532d">server 集群</text>
+  <rect x="695" y="120" width="130" height="34" rx="5" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="760" y="142" font-size="12" text-anchor="middle" fill="#92400e">KV: 无此键</text>
+  <text x="685" y="180" font-size="12" text-anchor="middle" fill="#15803d">同名 key 可读到不同值</text>
+  <text x="685" y="204" font-size="11" text-anchor="middle" fill="#166534">或本地读返回 404</text>
+  <text x="685" y="220" font-size="11" text-anchor="middle" fill="#166534">（课 7 实测）</text>
+
+  <line x1="380" y1="135" x2="520" y2="135" stroke="#7c3aed" stroke-width="4"/>
+  <polygon points="520,135 510,129 510,141" fill="#7c3aed"/>
+  <text x="450" y="126" font-size="12" text-anchor="middle" font-weight="bold" fill="#6d28d9">联邦</text>
+  <text x="450" y="160" font-size="11" text-anchor="middle" fill="#6d28d9">查询通道</text>
+  <text x="450" y="176" font-size="11" text-anchor="middle" fill="#6d28d9">?dc=dc2</text>
+
+  <line x1="380" y1="200" x2="520" y2="200" stroke="#dc2626" stroke-width="3" stroke-dasharray="6,4"/>
+  <text x="450" y="222" font-size="12" text-anchor="middle" font-weight="bold" fill="#b91c1c">✗ 数据不复制</text>
+
+  <rect x="50" y="265" width="820" height="75" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="3"/>
+  <text x="460" y="289" font-size="14" text-anchor="middle" font-weight="bold" fill="#991b1b">最容易被搞错的一点：联邦 ≠ 数据同步</text>
+  <text x="460" y="312" font-size="12" text-anchor="middle" fill="#b91c1c">服务目录可跨域查（?dc=dc2），但 KV 与目录都不跨 DC 复制——配置两地一致这个需求，联邦解决不了</text>
+  <text x="460" y="331" font-size="12" text-anchor="middle" fill="#b91c1c">不指定 dc 参数就是查本 DC：华东读华北的 key 一直 404，常被误判为「配置没写进去」</text>
+
+  <rect x="50" y="352" width="820" height="34" rx="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+  <text x="460" y="373" font-size="12" text-anchor="middle" fill="#92400e">各 DC 数据独立，一致性要由应用层保证——Consul 不会帮你对齐（这是设计取舍，不是配置问题）</text>
+</svg>

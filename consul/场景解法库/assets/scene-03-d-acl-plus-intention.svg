@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" width="900" height="400" font-family="Microsoft YaHei, SimHei, sans-serif">
+  <rect width="900" height="400" fill="#ffffff"/>
+  <text x="450" y="28" font-size="18" font-weight="bold" text-anchor="middle" fill="#1f2937">解法 D · ACL + intention 双层收口：让「服务名」成为受控资源</text>
+
+  <rect x="60" y="70" width="780" height="70" rx="6" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="450" y="96" font-size="15" text-anchor="middle" font-weight="bold" fill="#1e40af">上层：intention —— 谁能调谁（默认 deny + 显式 allow）</text>
+  <text x="450" y="120" font-size="12" text-anchor="middle" fill="#1e3a8a">web → payment 可通；ops-tool → payment 被拒</text>
+  <text x="450" y="134" font-size="11" text-anchor="middle" fill="#3b82f6">它假设「服务名」本身是可信的</text>
+
+  <line x1="450" y1="140" x2="450" y2="172" stroke="#6b7280" stroke-width="2" stroke-dasharray="5,4"/>
+  <text x="470" y="160" font-size="11" fill="#4b5563">这个假设需要下层来保证</text>
+
+  <rect x="60" y="172" width="780" height="80" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="450" y="198" font-size="15" text-anchor="middle" font-weight="bold" fill="#14532d">下层：ACL —— 谁能注册服务、谁能改 intention</text>
+  <text x="450" y="222" font-size="12" text-anchor="middle" fill="#15803d">service_prefix "web" { policy = "write" } —— 只能注册自己</text>
+  <text x="450" y="243" font-size="11" text-anchor="middle" fill="#166534">没有这一层，任何进程都能注册成 web，直接走进上层白名单</text>
+
+  <rect x="60" y="272" width="820" height="60" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="3"/>
+  <text x="460" y="295" font-size="14" text-anchor="middle" font-weight="bold" fill="#991b1b">代价：两套策略同时维护，心智负担大</text>
+  <text x="460" y="317" font-size="12" text-anchor="middle" fill="#b91c1c">且 ACL / gossip 加密 / TLS 是三件独立的事——开了 ACL 不等于通信加密，容易误以为「都做了」</text>
+
+  <rect x="60" y="346" width="390" height="40" rx="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+  <text x="255" y="371" font-size="12" text-anchor="middle" fill="#92400e">适用：等保 / 金融等合规硬要求场景</text>
+
+  <rect x="470" y="346" width="410" height="40" rx="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+  <text x="675" y="371" font-size="12" text-anchor="middle" fill="#92400e">ACL 三条静默失败详见场景 4（列服务 200 {} / 列 keys 200 []）</text>
+</svg>

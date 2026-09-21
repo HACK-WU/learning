@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" width="900" height="360" font-family="Microsoft YaHei, SimHei, sans-serif">
+  <rect width="900" height="360" fill="#ffffff"/>
+  <text x="450" y="28" font-size="18" font-weight="bold" text-anchor="middle" fill="#1f2937">解法 A · 纯 K8s 单集群：不引入 Consul 才是正确答案</text>
+
+  <rect x="70" y="90" width="330" height="150" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="235" y="116" font-size="15" font-weight="bold" text-anchor="middle" fill="#14532d">单集群内部（原生能力足够）</text>
+  <rect x="100" y="132" width="120" height="34" rx="5" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="160" y="154" font-size="12" text-anchor="middle" fill="#14532d">Service</text>
+  <rect x="235" y="132" width="130" height="34" rx="5" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="300" y="154" font-size="12" text-anchor="middle" fill="#14532d">CoreDNS</text>
+  <text x="235" y="192" font-size="12" text-anchor="middle" fill="#15803d">稳定 DNS 名 + 负载均衡</text>
+  <text x="235" y="214" font-size="12" font-weight="bold" text-anchor="middle" fill="#14532d">零新增组件、延迟最低</text>
+
+  <line x1="400" y1="165" x2="520" y2="165" stroke="#dc2626" stroke-width="3" stroke-dasharray="5,4"/>
+  <text x="460" y="155" font-size="11" text-anchor="middle" fill="#b91c1c">管不到</text>
+
+  <rect x="520" y="90" width="330" height="150" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="3"/>
+  <text x="685" y="116" font-size="15" font-weight="bold" text-anchor="middle" fill="#991b1b">它的边界（红框区）</text>
+  <rect x="550" y="132" width="130" height="34" rx="5" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+  <text x="615" y="154" font-size="12" text-anchor="middle" fill="#991b1b">跨集群调用</text>
+  <rect x="700" y="132" width="120" height="34" rx="5" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+  <text x="760" y="154" font-size="12" text-anchor="middle" fill="#991b1b">VM 遗留服务</text>
+  <text x="685" y="192" font-size="12" text-anchor="middle" fill="#b91c1c">原生能力只在集群内有效</text>
+  <text x="685" y="214" font-size="12" text-anchor="middle" fill="#b91c1c">这两类需求它都覆盖不了</text>
+
+  <rect x="50" y="260" width="820" height="75" rx="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+  <text x="460" y="284" font-size="14" text-anchor="middle" font-weight="bold" fill="#92400e">架构师的质疑在单集群场景下是对的：引入 Consul 是纯增重</text>
+  <text x="460" y="307" font-size="12" text-anchor="middle" fill="#b45309">多一套控制面要运维、多一层故障域，而 Service 已经提供了稳定 DNS 名与负载均衡</text>
+  <text x="460" y="326" font-size="12" text-anchor="middle" fill="#b45309">分界线：集群数 &gt; 1 或存在 VM 侧服务要互调 → 转解法 B / C；否则停在这里</text>
+</svg>

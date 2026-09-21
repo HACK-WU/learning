@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 370" width="900" height="370" font-family="Microsoft YaHei, SimHei, sans-serif">
+  <rect width="900" height="370" fill="#ffffff"/>
+  <text x="450" y="28" font-size="18" font-weight="bold" text-anchor="middle" fill="#1f2937">解法 D · 加 server 节点：提升的是容错，不是读吞吐</text>
+
+  <rect x="60" y="90" width="340" height="160" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
+  <text x="230" y="116" font-size="15" font-weight="bold" text-anchor="middle" fill="#991b1b">加节点后（默认读）</text>
+  <text x="230" y="142" font-size="12" text-anchor="middle" fill="#b91c1c">5 个 server 节点</text>
+  <text x="230" y="164" font-size="12" text-anchor="middle" fill="#b91c1c">但读仍全部汇聚 leader</text>
+  <text x="230" y="190" font-size="12" text-anchor="middle" fill="#b91c1c">Raft 心跳/复制开销反而变大</text>
+  <text x="230" y="220" font-size="13" font-weight="bold" text-anchor="middle" fill="#dc2626">读延迟：无改善</text>
+
+  <rect x="500" y="90" width="340" height="160" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="670" y="116" font-size="15" font-weight="bold" text-anchor="middle" fill="#14532d">加节点 + stale 读</text>
+  <text x="670" y="142" font-size="12" text-anchor="middle" fill="#15803d">5 个 server 都能应答</text>
+  <text x="670" y="164" font-size="12" text-anchor="middle" fill="#15803d">读吞吐随节点数扩展</text>
+  <text x="670" y="190" font-size="12" text-anchor="middle" fill="#15803d">容错同步提升（容忍 2 故障）</text>
+  <text x="670" y="220" font-size="13" font-weight="bold" text-anchor="middle" fill="#16a34a">读延迟：显著下降</text>
+
+  <line x1="400" y1="170" x2="500" y2="170" stroke="#6b7280" stroke-width="3"/>
+  <polygon points="500,170 492,164 492,176" fill="#6b7280"/>
+  <text x="450" y="160" font-size="11" text-anchor="middle" fill="#4b5563">差别在读模式</text>
+
+  <rect x="50" y="275" width="820" height="70" rx="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+  <text x="460" y="299" font-size="14" text-anchor="middle" font-weight="bold" fill="#92400e">什么时候加 server 才有用</text>
+  <text x="460" y="321" font-size="12" text-anchor="middle" fill="#b45309">① 提升容错：3 节点容忍 1 故障，5 节点容忍 2 故障　② 配合 stale 读让吞吐随节点扩展</text>
+  <text x="460" y="338" font-size="12" text-anchor="middle" fill="#b45309">只加节点不改读模式 = 白加——这是本场景运维的第一反应，也是最贵的误解</text>
+</svg>

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 380" width="900" height="380" font-family="Microsoft YaHei, SimHei, sans-serif">
+  <rect width="900" height="380" fill="#ffffff"/>
+  <text x="450" y="28" font-size="18" font-weight="bold" text-anchor="middle" fill="#1f2937">解法 C · 不用 Consul：etcd 租约 / K8s Lease（亚秒级交接）</text>
+
+  <rect x="40" y="55" width="380" height="190" rx="6" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="230" y="80" font-size="15" font-weight="bold" text-anchor="middle" fill="#1e40af">etcd：lease 租约 + 有序键</text>
+
+  <rect x="70" y="100" width="150" height="40" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="145" y="124" font-size="13" text-anchor="middle" fill="#1e3a8a">grant 5s 租约</text>
+
+  <line x1="220" y1="120" x2="290" y2="120" stroke="#2563eb" stroke-width="2"/>
+  <polygon points="290,120 282,115 282,125" fill="#2563eb"/>
+
+  <rect x="290" y="98" width="110" height="44" rx="5" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="345" y="118" font-size="12" text-anchor="middle" fill="#1e3a8a">put 有序键</text>
+  <text x="345" y="134" font-size="11" text-anchor="middle" fill="#1e40af">绑定 lease</text>
+
+  <text x="230" y="170" font-size="12" text-anchor="middle" fill="#1e3a8a">租约到期即释放，无冷静期</text>
+  <text x="230" y="192" font-size="12" text-anchor="middle" fill="#1e3a8a">最小序号者即 leader</text>
+  <text x="230" y="220" font-size="12" font-weight="bold" text-anchor="middle" fill="#1d4ed8">交接：亚秒 ~ 秒级</text>
+
+  <rect x="480" y="55" width="380" height="190" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="670" y="80" font-size="15" font-weight="bold" text-anchor="middle" fill="#14532d">K8s：Lease 对象 + controller</text>
+
+  <rect x="510" y="100" width="150" height="40" rx="5" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="585" y="124" font-size="13" text-anchor="middle" fill="#14532d">Lease API 对象</text>
+
+  <line x1="660" y1="120" x2="730" y2="120" stroke="#16a34a" stroke-width="2"/>
+  <polygon points="730,120 722,115 722,125" fill="#16a34a"/>
+
+  <rect x="730" y="98" width="110" height="44" rx="5" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="785" y="118" font-size="12" text-anchor="middle" fill="#14532d">holderIdentity</text>
+  <text x="785" y="134" font-size="11" text-anchor="middle" fill="#15803d">+ renewTime</text>
+
+  <text x="670" y="170" font-size="12" text-anchor="middle" fill="#14532d">把「谁持有、何时续约」写进集群状态</text>
+  <text x="670" y="192" font-size="12" text-anchor="middle" fill="#14532d">controller 协同，调度器可感知</text>
+  <text x="670" y="220" font-size="12" font-weight="bold" text-anchor="middle" fill="#15803d">零新增组件（若已在 K8s）</text>
+
+  <rect x="40" y="270" width="820" height="55" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="3"/>
+  <text x="450" y="292" font-size="14" text-anchor="middle" font-weight="bold" fill="#991b1b">代价：引入新组件 / 绑死环境，且与 Consul 的服务发现数据不互通</text>
+  <text x="450" y="313" font-size="12" text-anchor="middle" fill="#b91c1c">etcd 要自建集群；K8s Lease 只覆盖集群内，VM 上的 worker 用不上——选型看运行环境约束（课 12）</text>
+
+  <text x="450" y="352" font-size="12" text-anchor="middle" fill="#6b7280">适用：交接延迟是硬指标（金融对账、主备切换 SLA 秒级）</text>
+</svg>

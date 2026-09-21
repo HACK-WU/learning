@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" width="900" height="400" font-family="Microsoft YaHei, SimHei, sans-serif">
+  <rect width="900" height="400" fill="#ffffff"/>
+  <text x="450" y="28" font-size="18" font-weight="bold" text-anchor="middle" fill="#1f2937">解法 C · 默认拒绝 + 显式 allow：让「漏配」表现为故障而非漏洞</text>
+
+  <rect x="60" y="90" width="150" height="56" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="135" y="112" font-size="14" text-anchor="middle" font-weight="bold" fill="#1e3a8a">web</text>
+  <text x="135" y="131" font-size="11" text-anchor="middle" fill="#1e40af">已建 allow</text>
+
+  <rect x="60" y="196" width="150" height="56" rx="6" fill="#f3f4f6" stroke="#9ca3af" stroke-width="2"/>
+  <text x="135" y="218" font-size="14" text-anchor="middle" font-weight="bold" fill="#4b5563">ops-tool</text>
+  <text x="135" y="237" font-size="11" text-anchor="middle" fill="#6b7280">漏配 / 未授权</text>
+
+  <line x1="210" y1="118" x2="370" y2="118" stroke="#16a34a" stroke-width="4"/>
+  <polygon points="370,118 362,112 362,124" fill="#16a34a"/>
+  <text x="290" y="108" font-size="12" text-anchor="middle" font-weight="bold" fill="#15803d">allow → 通过</text>
+
+  <line x1="210" y1="224" x2="350" y2="150" stroke="#dc2626" stroke-width="3"/>
+  <line x1="352" y1="150" x2="336" y2="146" stroke="#dc2626" stroke-width="3"/>
+  <line x1="352" y1="150" x2="336" y2="156" stroke="#dc2626" stroke-width="3"/>
+  <text x="300" y="196" font-size="12" text-anchor="middle" font-weight="bold" fill="#b91c1c">deny → 拒绝</text>
+
+  <rect x="370" y="105" width="180" height="100" rx="6" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="460" y="132" font-size="14" text-anchor="middle" font-weight="bold" fill="#1e40af">payment</text>
+  <text x="460" y="155" font-size="12" text-anchor="middle" fill="#1e3a8a">默认策略 = deny</text>
+  <text x="460" y="178" font-size="11" text-anchor="middle" fill="#1e3a8a">没建 allow 的一律挡</text>
+  <text x="460" y="197" font-size="11" text-anchor="middle" fill="#3b82f6">漏配 = 调不通（可发现）</text>
+
+  <rect x="600" y="90" width="250" height="130" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="725" y="116" font-size="14" text-anchor="middle" font-weight="bold" fill="#14532d">正确上线顺序（硬要求）</text>
+  <text x="725" y="142" font-size="12" text-anchor="middle" fill="#15803d">① 先建全 allow 清单</text>
+  <text x="725" y="162" font-size="12" text-anchor="middle" fill="#15803d">② 再翻默认 deny</text>
+  <text x="725" y="188" font-size="12" text-anchor="middle" fill="#15803d">顺序反了 = 全站瞬间断流</text>
+  <text x="725" y="210" font-size="11" text-anchor="middle" fill="#166534">生效约 82ms，可灰度逐条验证</text>
+
+  <rect x="50" y="250" width="820" height="70" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="3"/>
+  <text x="450" y="274" font-size="14" text-anchor="middle" font-weight="bold" fill="#991b1b">落地代价：上线初期一定会有未覆盖的调用被挡住，表现为「调不通」</text>
+  <text x="450" y="297" font-size="12" text-anchor="middle" fill="#b91c1c">这是必须付的代价——但方向对了：默认 allow 时漏配 = 留漏洞（静默、无人发现）</text>
+  <text x="450" y="313" font-size="12" text-anchor="middle" fill="#b91c1c">默认 deny 时漏配 = 立刻暴露、立刻修</text>
+
+  <rect x="50" y="336" width="820" height="46" rx="6" fill="#fffbeb" stroke="#f59e0b" stroke-width="2"/>
+  <text x="450" y="357" font-size="13" text-anchor="middle" font-weight="bold" fill="#92400e">安全控制的正确姿势：让「忘了做」表现为失败，而不是表现为通过</text>
+  <text x="450" y="374" font-size="12" text-anchor="middle" fill="#b45309">还需补 ACL——否则白名单守的是一道谁都能改写的门（见解法 D）</text>
+</svg>

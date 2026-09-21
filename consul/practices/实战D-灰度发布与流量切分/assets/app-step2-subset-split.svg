@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 380" width="880" height="380" font-family="sans-serif">
+  <rect width="880" height="380" fill="#fdfdfd"/>
+  <text x="440" y="28" text-anchor="middle" font-size="17" font-weight="bold">② 综合实现：声明协议 + 定义子集 + 按权重切分</text>
+
+  <rect x="30" y="55" width="180" height="55" rx="6" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="120" y="78" text-anchor="middle" font-size="12" font-weight="bold">1. service-defaults</text>
+  <text x="120" y="97" text-anchor="middle" font-size="11" font-family="monospace">Protocol = "http"</text>
+
+  <rect x="30" y="125" width="180" height="55" rx="6" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="120" y="148" text-anchor="middle" font-size="12" font-weight="bold">2. service-resolver</text>
+  <text x="120" y="167" text-anchor="middle" font-size="11">v1 / v2 子集（按 Meta）</text>
+
+  <rect x="30" y="195" width="180" height="55" rx="6" fill="#e8f5e9" stroke="#2e7d32"/>
+  <text x="120" y="218" text-anchor="middle" font-size="12" font-weight="bold">3. service-splitter</text>
+  <text x="120" y="237" text-anchor="middle" font-size="11">权重和必须 = 100</text>
+
+  <line x1="210" y1="222" x2="290" y2="222" stroke="#2e7d32" stroke-width="2"/>
+  <polygon points="290,222 282,217 282,227" fill="#2e7d32"/>
+
+  <rect x="300" y="150" width="130" height="50" rx="6" fill="#e3f2fd" stroke="#1565c0"/>
+  <text x="365" y="172" text-anchor="middle" font-size="12" font-weight="bold">splitter 节点</text>
+  <text x="365" y="190" text-anchor="middle" font-size="11">StartNode</text>
+
+  <line x1="430" y1="168" x2="495" y2="130" stroke="#1565c0" stroke-width="2"/>
+  <polygon points="495,130 487,126 487,134" fill="#1565c0"/>
+  <text x="462" y="122" text-anchor="middle" font-size="11" fill="#1565c0">90%</text>
+
+  <line x1="430" y1="182" x2="495" y2="220" stroke="#1565c0" stroke-width="2"/>
+  <polygon points="495,220 487,216 487,224" fill="#1565c0"/>
+  <text x="462" y="240" text-anchor="middle" font-size="11" fill="#1565c0">10%</text>
+
+  <rect x="505" y="105" width="155" height="50" rx="6" fill="#fff3e0" stroke="#e65100"/>
+  <text x="582" y="127" text-anchor="middle" font-size="12" font-weight="bold">resolver: v1</text>
+  <text x="582" y="145" text-anchor="middle" font-size="10" font-family="monospace">version == 1</text>
+
+  <rect x="505" y="195" width="155" height="50" rx="6" fill="#fff3e0" stroke="#e65100"/>
+  <text x="582" y="217" text-anchor="middle" font-size="12" font-weight="bold">resolver: v2</text>
+  <text x="582" y="235" text-anchor="middle" font-size="10" font-family="monospace">version == 2</text>
+
+  <rect x="680" y="105" width="170" height="140" rx="6" fill="#fce4ec" stroke="#ad1457"/>
+  <text x="765" y="130" text-anchor="middle" font-size="12" font-weight="bold" fill="#ad1457">权重调整即时生效</text>
+  <text x="765" y="152" text-anchor="middle" font-size="10" font-family="monospace">100 / 0</text>
+  <text x="765" y="170" text-anchor="middle" font-size="10" font-family="monospace">90 / 10</text>
+  <text x="765" y="188" text-anchor="middle" font-size="10" font-family="monospace">50 / 50</text>
+  <text x="765" y="206" text-anchor="middle" font-size="10" font-family="monospace">10 / 90</text>
+  <text x="765" y="224" text-anchor="middle" font-size="10" font-family="monospace">0 / 100</text>
+  <text x="765" y="242" text-anchor="middle" font-size="9">无需重启任何进程</text>
+
+  <rect x="30" y="280" width="820" height="75" rx="6" fill="#fffde7" stroke="#f9a825"/>
+  <text x="50" y="302" font-size="12" font-weight="bold">⚠ 反直觉细节：权重设为 0 时，Consul 返回 None 而不是 0</text>
+  <text x="50" y="324" font-size="11">Go 的 float32 零值被序列化为 null。按 "weight == 0" 判断子集已摘除会永远判断不到</text>
+  <text x="50" y="344" font-size="11" font-family="monospace">应写：weight is None or weight == 0　　实测：0/100 时两个 Target 仍都在链上</text>
+</svg>
