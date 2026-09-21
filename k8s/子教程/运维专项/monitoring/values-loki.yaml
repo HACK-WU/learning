@@ -1,0 +1,102 @@
+# Loki values —— kind 单节点学习环境（单实例 + 文件系统存储）
+# 环境：kind k8s-c1-calico (3节点) · k8s v1.34.0
+# 配套：promtail 采集 /var/log/pods（课5 知识点2：Pod 日志留存）
+#
+# ⚠️ 踩坑记录（2026-09-20）：
+#   1. 同一个 YAML key 不能出现两次 —— 后出现的会整体覆盖先出现的。
+#      本文件最初写了两个 `loki:` 块，第二个覆盖第一个，导致 storage.bucketNames 丢失。
+#   2. chart 7.x 用 filesystem 存储时必须显式给 storage.bucketNames.chunks（否则校验报错）
+#   3. schemaConfig 的键在 7.x 是 `configs:`（不是 6.x 的顶层 schemaConfig）
+#   4. chart 6.x 系列对应 app 3.6.x，7.x 对应 3.6.12；本机镜像 3.5.6 与两者都不匹配，
+#      学习环境直接让节点自拉 3.6.12 更简单（节点出网已验证）
+
+deploymentMode: SingleBinary
+
+loki:
+  image:
+    registry: docker.io
+    repository: grafana/loki
+    tag: 3.6.12
+  commonConfig:
+    replication_factor: 1
+  auth_enabled: false
+  storage:
+    type: filesystem
+    bucketNames:
+      chunks: loki-chunks
+      ruler: loki-ruler
+      admin: loki-admin
+  schemaConfig:
+    configs:
+      - from: "2024-01-01"
+        store: tsdb
+        object_store: filesystem
+        schema: v13
+        index:
+          prefix: index_
+          period: 24h
+  # 关闭持久化（学习环境）
+  commonStorage:
+    persistence:
+      enabled: false
+
+# 单实例不需要 canary / 网关
+monitoring:
+  selfMonitoring:
+    enabled: false
+    grafanaAgent:
+      installOperator: false
+  lokiCanary:
+    enabled: false
+
+test:
+  enabled: false
+
+gateway:
+  enabled: false
+
+singleBinary:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      memory: 512Mi
+
+# 7.x：单二进制模式下必须把其他模式的 replicas 显式清零，否则校验失败
+ingester:
+  replicas: 0
+querier:
+  replicas: 0
+queryFrontend:
+  replicas: 0
+distributor:
+  replicas: 0
+compactor:
+  replicas: 0
+indexGateway:
+  replicas: 0
+bloomCompactor:
+  replicas: 0
+bloomGateway:
+  replicas: 0
+patternIngester:
+  replicas: 0
+ruler:
+  replicas: 0
+backend:
+  replicas: 0
+read:
+  replicas: 0
+write:
+  replicas: 0
+
+memberlist:
+  service:
+    enabled: false
+
+chunksCache:
+  enabled: false
+resultsCache:
+  enabled: false

@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" font-family="sans-serif">
+  <rect width="900" height="500" fill="#fbfcfe"/>
+  <text x="450" y="28" text-anchor="middle" font-size="19" font-weight="bold" fill="#1a3d5c">解法 A：优雅终止的真实时序与 502 窗口</text>
+  <text x="450" y="50" text-anchor="middle" font-size="12" fill="#666">两条线并发启动，没有先后保证　红框=失效窗口</text>
+
+  <text x="40" y="90" font-size="13" font-weight="bold" fill="#1a3d5c">kubelet 侧</text>
+  <text x="40" y="112" font-size="11" fill="#3a7ca5">（容器停止）</text>
+
+  <rect x="150" y="78" width="70" height="30" rx="5" fill="#dceefb" stroke="#3a7ca5" stroke-width="1.5"/>
+  <text x="185" y="97" text-anchor="middle" font-size="10" fill="#1a3d5c">收到删除</text>
+  <rect x="235" y="78" width="90" height="30" rx="5" fill="#dceefb" stroke="#3a7ca5" stroke-width="1.5"/>
+  <text x="280" y="97" text-anchor="middle" font-size="10" fill="#1a3d5c">preStop sleep5</text>
+  <rect x="340" y="78" width="80" height="30" rx="5" fill="#dceefb" stroke="#3a7ca5" stroke-width="1.5"/>
+  <text x="380" y="97" text-anchor="middle" font-size="10" fill="#1a3d5c">SIGTERM</text>
+  <rect x="435" y="78" width="80" height="30" rx="5" fill="#dceefb" stroke="#3a7ca5" stroke-width="1.5"/>
+  <text x="475" y="97" text-anchor="middle" font-size="10" fill="#1a3d5c">应用收尾</text>
+  <rect x="530" y="78" width="80" height="30" rx="5" fill="#fde7e7" stroke="#b8332f" stroke-width="2"/>
+  <text x="570" y="97" text-anchor="middle" font-size="10" font-weight="bold" fill="#8f1f1c">SIGKILL</text>
+
+  <text x="40" y="160" font-size="13" font-weight="bold" fill="#1a3d5c">控制面侧</text>
+  <text x="40" y="182" font-size="11" fill="#3a7ca5">（摘流量）</text>
+
+  <rect x="150" y="150" width="70" height="30" rx="5" fill="#e3f6e6" stroke="#3d8b4a" stroke-width="1.5"/>
+  <text x="185" y="169" text-anchor="middle" font-size="10" fill="#265c2e">标记终止</text>
+  <rect x="235" y="150" width="120" height="30" rx="5" fill="#fff6d9" stroke="#c99a1e" stroke-width="2"/>
+  <text x="295" y="169" text-anchor="middle" font-size="10" fill="#7a5d0a">EndpointSlice 更新</text>
+  <rect x="370" y="150" width="130" height="30" rx="5" fill="#fff6d9" stroke="#c99a1e" stroke-width="2"/>
+  <text x="435" y="169" text-anchor="middle" font-size="10" fill="#7a5d0a">kube-proxy 同步规则</text>
+  <rect x="515" y="150" width="95" height="30" rx="5" fill="#e3f6e6" stroke="#3d8b4a" stroke-width="1.5"/>
+  <text x="562" y="169" text-anchor="middle" font-size="10" fill="#265c2e">不再有新流量</text>
+
+  <rect x="355" y="200" width="150" height="38" rx="6" fill="#fde7e7" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="430" y="217" text-anchor="middle" font-size="12" font-weight="bold" fill="#8f1f1c">502 窗口期</text>
+  <text x="430" y="232" text-anchor="middle" font-size="10" fill="#8f1f1c">容器已停 / 流量还在来</text>
+  <line x1="430" y1="200" x2="430" y2="188" stroke="#b8332f" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <rect x="650" y="78" width="200" height="140" rx="10" fill="#f0f0f0" stroke="#888" stroke-width="2"/>
+  <text x="750" y="102" text-anchor="middle" font-size="12" font-weight="bold" fill="#555">为什么会有窗口</text>
+  <text x="750" y="124" text-anchor="middle" font-size="10.5" fill="#777">两条线是并发的，</text>
+  <text x="750" y="141" text-anchor="middle" font-size="10.5" fill="#777">k8s 不保证"先摘干净</text>
+  <text x="750" y="158" text-anchor="middle" font-size="10.5" fill="#777">再停容器"。</text>
+  <text x="750" y="181" text-anchor="middle" font-size="10.5" fill="#8f1f1c" font-weight="bold">preStop 的作用是</text>
+  <text x="750" y="198" text-anchor="middle" font-size="10.5" fill="#8f1f1c" font-weight="bold">用"等待"把窗口错位开</text>
+
+  <rect x="30" y="275" width="840" height="205" rx="10" fill="#fff5f5" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="48" y="299" font-size="14" font-weight="bold" fill="#8f1f1c">失效点</text>
+
+  <text x="48" y="324" font-size="12.5" font-weight="bold" fill="#8f1f1c">① sleep 是经验值，集群越大越不够</text>
+  <text x="66" y="343" font-size="12" fill="#5a1a18">节点数 × kube-proxy 同步周期决定真实传播时延。5 秒在小集群够，在数百节点集群可能不够——且不够时不会报错。</text>
+
+  <text x="48" y="369" font-size="12.5" font-weight="bold" fill="#8f1f1c">② preStop 时间算在 grace period 内</text>
+  <text x="66" y="388" font-size="12" fill="#5a1a18">sleep 5 + 应用收尾 = 总耗时要 ≤ terminationGracePeriodSeconds，否则直接 SIGKILL，收尾同样失败。</text>
+
+  <text x="48" y="414" font-size="12.5" font-weight="bold" fill="#8f1f1c">③ 线性拖慢发布</text>
+  <text x="66" y="433" font-size="12" fill="#5a1a18">100 个 Pod 依次滚动，每个多 5 秒 ≈ 发布多花 8 分钟。需要在"零 502"与"发布速度"间权衡。</text>
+
+  <text x="48" y="459" font-size="12.5" font-weight="bold" fill="#8f1f1c">④ preStop 无法解决长连接</text>
+  <text x="66" y="478" font-size="12" fill="#5a1a18">gRPC / WebSocket 的存量连接不会因 sleep 结束，需要解法 C 的连接排空。</text>
+</svg>

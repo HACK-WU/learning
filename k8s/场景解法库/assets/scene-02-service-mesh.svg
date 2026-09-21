@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" font-family="sans-serif">
+  <rect width="900" height="400" fill="#fbfcfe"/>
+  <text x="450" y="28" text-anchor="middle" font-size="19" font-weight="bold" fill="#1a3d5c">解法 C：服务网格按维度灰度（sidecar 分流）</text>
+  <text x="450" y="50" text-anchor="middle" font-size="12" fill="#666">分流决策下沉到每个 Pod　红框=代价</text>
+
+  <rect x="50" y="100" width="120" height="50" rx="8" fill="#dceefb" stroke="#3a7ca5" stroke-width="2"/>
+  <text x="110" y="123" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a3d5c">客户端</text>
+  <text x="110" y="142" text-anchor="middle" font-size="10" fill="#3a7ca5">带 header</text>
+
+  <rect x="230" y="90" width="170" height="70" rx="10" fill="#e3f6e6" stroke="#3d8b4a" stroke-width="2.5"/>
+  <text x="315" y="114" text-anchor="middle" font-size="13" font-weight="bold" fill="#265c2e">v1 Pod</text>
+  <text x="315" y="134" text-anchor="middle" font-size="10" fill="#3d8b4a">sidecar proxy</text>
+  <text x="315" y="152" text-anchor="middle" font-size="10" fill="#3d8b4a">执行授权策略</text>
+
+  <rect x="230" y="180" width="170" height="70" rx="10" fill="#e3f6e6" stroke="#3d8b4a" stroke-width="2.5"/>
+  <text x="315" y="204" text-anchor="middle" font-size="13" font-weight="bold" fill="#265c2e">v2 Pod</text>
+  <text x="315" y="224" text-anchor="middle" font-size="10" fill="#3d8b4a">sidecar proxy</text>
+  <text x="315" y="242" text-anchor="middle" font-size="10" fill="#3d8b4a">执行授权策略</text>
+
+  <rect x="470" y="120" width="180" height="100" rx="10" fill="#fff6d9" stroke="#c99a1e" stroke-width="2.5"/>
+  <text x="560" y="146" text-anchor="middle" font-size="13" font-weight="bold" fill="#7a5d0a">控制面（Istiod）</text>
+  <text x="560" y="170" text-anchor="middle" font-size="10.5" fill="#7a5d0a">下发 VirtualService</text>
+  <text x="560" y="189" text-anchor="middle" font-size="10.5" fill="#7a5d0a">/ DestinationRule</text>
+  <text x="560" y="208" text-anchor="middle" font-size="10.5" fill="#7a5d0a">证书轮换 / mTLS</text>
+
+  <line x1="170" y1="125" x2="228" y2="125" stroke="#3a7ca5" stroke-width="2" marker-end="url(#t1)"/>
+  <line x1="400" y1="170" x2="468" y2="170" stroke="#c99a1e" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#t2)"/>
+  <line x1="400" y1="142" x2="468" y2="160" stroke="#c99a1e" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#t2)"/>
+
+  <rect x="700" y="100" width="170" height="140" rx="10" fill="#fde7e7" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="785" y="124" text-anchor="middle" font-size="13" font-weight="bold" fill="#8f1f1c">引入的运维责任</text>
+  <text x="785" y="148" text-anchor="middle" font-size="10.5" fill="#5a1a18">· sidecar 注入</text>
+  <text x="785" y="167" text-anchor="middle" font-size="10.5" fill="#5a1a18">· 证书轮换</text>
+  <text x="785" y="186" text-anchor="middle" font-size="10.5" fill="#5a1a18">· 控制面高可用</text>
+  <text x="785" y="205" text-anchor="middle" font-size="10.5" fill="#5a1a18">· 网格自身升级</text>
+  <text x="785" y="226" text-anchor="middle" font-size="10" font-weight="bold" fill="#8f1f1c">为单服务引入 = 过度设计</text>
+
+  <rect x="30" y="290" width="840" height="90" rx="10" fill="#fff5f5" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="48" y="314" font-size="14" font-weight="bold" fill="#8f1f1c">失效点 / 代价</text>
+  <text x="48" y="339" font-size="12.5" font-weight="bold" fill="#8f1f1c">① 能力最强，但引入了完整的服务网格</text>
+  <text x="66" y="357" font-size="12" fill="#5a1a18">一个服务的灰度用它是过度设计；20 个服务都要按用户维度灰度时，它反而最省事。</text>
+  <text x="48" y="376" font-size="12.5" font-weight="bold" fill="#8f1f1c">② 只对网格内流量生效</text>
+
+  <defs>
+    <marker id="t1" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3a7ca5"/></marker>
+    <marker id="t2" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#c99a1e"/></marker>
+  </defs>
+</svg>

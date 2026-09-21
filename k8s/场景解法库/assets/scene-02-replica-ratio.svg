@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" font-family="sans-serif">
+  <rect width="900" height="480" fill="#fbfcfe"/>
+  <text x="450" y="30" text-anchor="middle" font-size="19" font-weight="bold" fill="#1a3d5c">解法 B：副本数比例（同一个 Service 后端）</text>
+  <text x="450" y="52" text-anchor="middle" font-size="12" fill="#666">比例被副本数整除关系锁死　红框=失效点</text>
+
+  <rect x="40" y="110" width="120" height="50" rx="8" fill="#dceefb" stroke="#3a7ca5" stroke-width="2"/>
+  <text x="100" y="133" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a3d5c">Service</text>
+  <text x="100" y="152" text-anchor="middle" font-size="11" fill="#3a7ca5">selector: app=web</text>
+
+  <rect x="230" y="85" width="150" height="44" rx="8" fill="#e3f6e6" stroke="#3d8b4a" stroke-width="2"/>
+  <text x="305" y="112" text-anchor="middle" font-size="12" font-weight="bold" fill="#265c2e">v1 Pod × 9</text>
+
+  <rect x="230" y="145" width="150" height="44" rx="8" fill="#e3f6e6" stroke="#3d8b4a" stroke-width="2"/>
+  <text x="305" y="172" text-anchor="middle" font-size="12" font-weight="bold" fill="#265c2e">v2 Pod × 1</text>
+
+  <rect x="440" y="95" width="190" height="90" rx="10" fill="#fff6d9" stroke="#c99a1e" stroke-width="2.5"/>
+  <text x="535" y="120" text-anchor="middle" font-size="13" font-weight="bold" fill="#7a5d0a">Endpoint 扁平列表</text>
+  <text x="535" y="143" text-anchor="middle" font-size="11" fill="#7a5d0a">10 个后端，不区分版本</text>
+  <text x="535" y="163" text-anchor="middle" font-size="11" fill="#7a5d0a">kube-proxy 轮询</text>
+  <text x="535" y="180" text-anchor="middle" font-size="11" fill="#7a5d0a">→ 约 1/10 落到 v2</text>
+
+  <line x1="160" y1="135" x2="228" y2="120" stroke="#3a7ca5" stroke-width="2" marker-end="url(#d1)"/>
+  <line x1="160" y1="135" x2="228" y2="160" stroke="#3a7ca5" stroke-width="2" marker-end="url(#d1)"/>
+  <line x1="380" y1="107" x2="438" y2="130" stroke="#3d8b4a" stroke-width="2" marker-end="url(#d2)"/>
+  <line x1="380" y1="167" x2="438" y2="150" stroke="#3d8b4a" stroke-width="2" marker-end="url(#d2)"/>
+
+  <rect x="680" y="95" width="180" height="90" rx="10" fill="#fde7e7" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="770" y="120" text-anchor="middle" font-size="13" font-weight="bold" fill="#8f1f1c">HPA 扩容后</text>
+  <text x="770" y="143" text-anchor="middle" font-size="11" fill="#8f1f1c">v1: 9→18　v2: 1→2</text>
+  <text x="770" y="163" text-anchor="middle" font-size="11" fill="#8f1f1c">比例从 10% 变成 10%</text>
+  <text x="770" y="180" text-anchor="middle" font-size="11" fill="#8f1f1c">但绝对值已翻倍</text>
+
+  <line x1="630" y1="140" x2="678" y2="140" stroke="#b8332f" stroke-width="2" marker-end="url(#d3)"/>
+
+  <rect x="30" y="230" width="840" height="230" rx="10" fill="#fff5f5" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="48" y="254" font-size="14" font-weight="bold" fill="#8f1f1c">失效点：比例是副本数的副产品，不可精确控制</text>
+
+  <text x="48" y="280" font-size="12.5" font-weight="bold" fill="#8f1f1c">① 只能取 1/N 的离散值</text>
+  <text x="66" y="300" font-size="12" fill="#5a1a18">总副本 3 时只能灰度 1/3 或 2/3；想要 5% 得起 20 个副本。想微调 1% → 需要 100 副本，成本不可接受。</text>
+
+  <text x="48" y="326" font-size="12.5" font-weight="bold" fill="#8f1f1c">② 与 HPA 直接冲突</text>
+  <text x="66" y="346" font-size="12" fill="#5a1a18">两个 Deployment 各自扩，比例随之漂移。v1 扩到 18、v2 扩到 2 看似还是 10%，</text>
+  <text x="66" y="364" font-size="12" fill="#5a1a18">但如果二者扩容触发时机不同（负载阈值不同），中间态比例完全不可控。</text>
+
+  <text x="48" y="390" font-size="12.5" font-weight="bold" fill="#8f1f1c">③ 回滚慢</text>
+  <text x="66" y="410" font-size="12" fill="#5a1a18">回滚要把 v2 副本数调到 0 并等 Pod 真正终止，是**分钟级**；而权重路由改一个数字是**秒级**。</text>
+
+  <text x="48" y="436" font-size="12.5" font-weight="bold" fill="#8f1f1c">④ 无法按用户维度灰度</text>
+  <text x="66" y="456" font-size="12" fill="#5a1a18">轮询不认 header / cookie，做不到"只让内部员工看到 v2"。需要维度灰度就必须换方案。</text>
+
+  <defs>
+    <marker id="d1" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3a7ca5"/></marker>
+    <marker id="d2" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3d8b4a"/></marker>
+    <marker id="d3" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#b8332f"/></marker>
+  </defs>
+</svg>

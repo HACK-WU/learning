@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" font-family="sans-serif">
+  <rect width="900" height="500" fill="#fbfcfe"/>
+  <text x="450" y="28" text-anchor="middle" font-size="19" font-weight="bold" fill="#1a3d5c">解法 A：逐次版本滚动升级路径</text>
+  <text x="450" y="50" text-anchor="middle" font-size="12" fill="#666">1.32 → 1.33 → 1.34　红框=失效点</text>
+
+  <rect x="50" y="95" width="150" height="60" rx="10" fill="#dceefb" stroke="#3a7ca5" stroke-width="2.5"/>
+  <text x="125" y="120" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a3d5c">v1.32</text>
+  <text x="125" y="142" text-anchor="middle" font-size="11" fill="#3a7ca5">当前版本</text>
+
+  <rect x="270" y="95" width="150" height="60" rx="10" fill="#fff6d9" stroke="#c99a1e" stroke-width="2.5"/>
+  <text x="345" y="120" text-anchor="middle" font-size="15" font-weight="bold" fill="#7a5d0a">v1.33</text>
+  <text x="345" y="142" text-anchor="middle" font-size="11" fill="#7a5d0a">中间站（不可跳过）</text>
+
+  <rect x="490" y="95" width="150" height="60" rx="10" fill="#e3f6e6" stroke="#3d8b4a" stroke-width="2.5"/>
+  <text x="565" y="120" text-anchor="middle" font-size="15" font-weight="bold" fill="#265c2e">v1.34</text>
+  <text x="565" y="142" text-anchor="middle" font-size="11" fill="#3d8b4a">目标版本</text>
+
+  <line x1="200" y1="125" x2="268" y2="125" stroke="#3a7ca5" stroke-width="2.5" marker-end="url(#m1)"/>
+  <line x1="420" y1="125" x2="488" y2="125" stroke="#3d8b4a" stroke-width="2.5" marker-end="url(#m2)"/>
+
+  <rect x="680" y="95" width="190" height="60" rx="10" fill="#fde7e7" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="775" y="118" text-anchor="middle" font-size="12" font-weight="bold" fill="#8f1f1c">✗ 不能直接跳</text>
+  <text x="775" y="138" text-anchor="middle" font-size="11" fill="#8f1f1c">次版本偏差 = fatal</text>
+  <text x="775" y="152" text-anchor="middle" font-size="10" fill="#8f1f1c">无 --force 选项</text>
+
+  <rect x="50" y="185" width="790" height="60" rx="10" fill="#f7f9fb" stroke="#3a7ca5" stroke-width="2"/>
+  <text x="70" y="208" font-size="12.5" font-weight="bold" fill="#1a3d5c">每一轮的三步：　① 备份 etcd + 验证可恢复　② 升控制面　③ 逐节点 drain → 升 → uncordon（每次一台）</text>
+  <text x="70" y="231" font-size="11.5" fill="#3a7ca5">绝不一次升所有节点——滚动是 HA 的前提；任何时刻都必须有可用副本</text>
+
+  <rect x="50" y="265" width="380" height="70" rx="10" fill="#fde7e7" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="240" y="288" text-anchor="middle" font-size="12" font-weight="bold" fill="#8f1f1c">失效点 ① plan 不校验，apply 才拦</text>
+  <text x="240" y="309" text-anchor="middle" font-size="11" fill="#5a1a18">kubeadm upgrade plan 对版本偏差不报错，</text>
+  <text x="240" y="327" text-anchor="middle" font-size="11" fill="#5a1a18">让人误以为路径合法，apply 时才 fatal。</text>
+
+  <rect x="460" y="265" width="380" height="70" rx="10" fill="#fde7e7" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="650" y="288" text-anchor="middle" font-size="12" font-weight="bold" fill="#8f1f1c">失效点 ② 手工 patch 被静默删除</text>
+  <text x="650" y="309" text-anchor="middle" font-size="11" fill="#5a1a18">实测 12 处安全加固在升级后消失，</text>
+  <text x="650" y="327" text-anchor="middle" font-size="11" fill="#5a1a18">且没有任何提示 → 升级前必须建台账逐条核对。</text>
+
+  <rect x="50" y="352" width="790" height="60" rx="10" fill="#fde7e7" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="240" y="376" text-anchor="middle" font-size="12" font-weight="bold" fill="#8f1f1c">失效点 ③ k8s 升级没有 undo —— 退路只有 etcd 快照</text>
+  <text x="240" y="398" text-anchor="middle" font-size="11" fill="#5a1a18">没有回滚命令，也没有版本回退机制。备份且验证过可恢复，是唯一的保险。</text>
+
+  <rect x="50" y="428" width="790" height="52" rx="10" fill="#fff6d9" stroke="#c99a1e" stroke-width="2"/>
+  <text x="70" y="450" font-size="12" font-weight="bold" fill="#7a5d0a">升级前「三个 0」：备份 etcd + 验证可恢复　｜　建证书台账（组件 361 天 / CA 9 年，实测）　｜　扫弃用 API</text>
+  <text x="70" y="470" font-size="11" fill="#5a1a18">证书若在升级期间到期 = 双重故障，先看 check-expiration，剩余不足 30 天就先续期再升。</text>
+
+  <defs>
+    <marker id="m1" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3a7ca5"/></marker>
+    <marker id="m2" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3d8b4a"/></marker>
+  </defs>
+</svg>

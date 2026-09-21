@@ -1,0 +1,21 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: verify-alert-fires
+  namespace: monitoring
+  labels:
+    role: alert-rules
+    release: kps
+spec:
+  groups:
+  - name: verify.alert.fires
+    interval: 30s
+    rules:
+    - alert: VerifyAlertFiresAlways
+      expr: vector(1)
+      for: 0s
+      labels:
+        severity: warning
+        purpose: verification
+      annotations:
+        summary: verification alert that must always fire

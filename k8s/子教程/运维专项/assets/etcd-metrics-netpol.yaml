@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: etcd-metrics-restrict
+  namespace: kube-system
+spec:
+  podSelector:
+    matchLabels:
+      component: etcd
+  policyTypes:
+    - Ingress
+  ingress:
+    # 1) 数据端口 2379：必须保持全通，否则集群会挂（有客户端证书兜底）
+    - ports:
+        - protocol: TCP
+          port: 2379
+    # 2) metrics 2381（无认证）：只允许 monitoring 命名空间
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: monitoring
+      ports:
+        - protocol: TCP
+          port: 2381

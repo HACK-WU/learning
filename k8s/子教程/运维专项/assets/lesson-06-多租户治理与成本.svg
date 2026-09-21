@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 900" font-family="Microsoft YaHei, sans-serif">
+  <rect width="1180" height="900" fill="#fbfcfd"/>
+  <text x="590" y="42" text-anchor="middle" font-size="26" font-weight="bold" fill="#1a3a5c">课 6 · 多租户治理与成本</text>
+  <text x="590" y="70" text-anchor="middle" font-size="14" fill="#5a7a94">隔离四层 · 资源治理 · 装箱率与成本归因（本机 kind + Calico 实测）</text>
+
+  <rect x="28" y="92" width="350" height="300" rx="10" fill="#eef5fb" stroke="#4a8fc0"/>
+  <text x="203" y="120" text-anchor="middle" font-size="17" font-weight="bold" fill="#1a3a5c">① 隔离四层（缺一层即漏）</text>
+  <rect x="48" y="136" width="310" height="44" rx="6" fill="#fff" stroke="#9dc3dd"/>
+  <text x="203" y="156" text-anchor="middle" font-size="13" fill="#1a3a5c">namespace — 命名与作用域</text>
+  <text x="203" y="173" text-anchor="middle" font-size="11" fill="#7a8a94">只是「文件夹」，不挡网络</text>
+  <rect x="48" y="188" width="310" height="44" rx="6" fill="#fff" stroke="#9dc3dd"/>
+  <text x="203" y="208" text-anchor="middle" font-size="13" fill="#1a3a5c">RBAC — API 权限</text>
+  <text x="203" y="225" text-anchor="middle" font-size="11" fill="#7a8a94">拦 API 调用，不拦 Pod 流量</text>
+  <rect x="48" y="240" width="310" height="44" rx="6" fill="#fff" stroke="#9dc3dd"/>
+  <text x="203" y="260" text-anchor="middle" font-size="13" fill="#1a3a5c">NetworkPolicy — 网络流量</text>
+  <text x="203" y="277" text-anchor="middle" font-size="11" fill="#c0392b">默认全通！需显式建默认拒绝</text>
+  <rect x="48" y="292" width="310" height="44" rx="6" fill="#fff" stroke="#9dc3dd"/>
+  <text x="203" y="312" text-anchor="middle" font-size="13" fill="#1a3a5c">ResourceQuota — 总量上限</text>
+  <text x="203" y="329" text-anchor="middle" font-size="11" fill="#7a8a94">按「剩余额度」精确判定</text>
+  <rect x="48" y="344" width="310" height="34" rx="6" fill="#e8f4ea" stroke="#7bb87b"/>
+  <text x="203" y="364" text-anchor="middle" font-size="12" font-weight="bold" fill="#2d6a2d">实测：加策略前 ping 0% 丢包 → 加后 100%</text>
+
+  <rect x="414" y="92" width="350" height="300" rx="10" fill="#fdf6ec" stroke="#c99a4a"/>
+  <text x="589" y="120" text-anchor="middle" font-size="17" font-weight="bold" fill="#6b4a10">② 资源治理（Quota + LimitRange）</text>
+  <rect x="434" y="136" width="310" height="62" rx="6" fill="#fff" stroke="#ddbb88"/>
+  <text x="589" y="156" text-anchor="middle" font-size="13" font-weight="bold" fill="#6b4a10">ResourceQuota — 管总量</text>
+  <text x="589" y="175" text-anchor="middle" font-size="11" fill="#7a6a4a">不声明资源 → must specify（绕不过）</text>
+  <text x="589" y="191" text-anchor="middle" font-size="11" fill="#7a6a4a">超额度 → exceeded quota（含三段数字）</text>
+  <rect x="434" y="206" width="310" height="62" rx="6" fill="#fff" stroke="#ddbb88"/>
+  <text x="589" y="226" text-anchor="middle" font-size="13" font-weight="bold" fill="#6b4a10">LimitRange — 管个体 + 注入</text>
+  <text x="589" y="245" text-anchor="middle" font-size="11" fill="#7a6a4a">空 Pod → 自动注入 100m/128Mi</text>
+  <text x="589" y="261" text-anchor="middle" font-size="11" fill="#c0392b">不回溯已有 Pod（仅创建时生效）</text>
+  <rect x="434" y="276" width="310" height="58" rx="6" fill="#fdeaea" stroke="#d98888"/>
+  <text x="589" y="296" text-anchor="middle" font-size="13" font-weight="bold" fill="#a02c2c">⚠ 反直觉：只写 limits</text>
+  <text x="589" y="314" text-anchor="middle" font-size="11" fill="#a02c2c">requests 自动补齐 = limits → Guaranteed</text>
+  <text x="589" y="329" text-anchor="middle" font-size="11" fill="#a02c2c">随手写的配置拿到最高保护</text>
+  <rect x="434" y="344" width="310" height="34" rx="6" fill="#e8f4ea" stroke="#7bb87b"/>
+  <text x="589" y="364" text-anchor="middle" font-size="12" font-weight="bold" fill="#2d6a2d">实测：3 次拒绝文案各不相同</text>
+
+  <rect x="800" y="92" width="352" height="300" rx="10" fill="#f0f7f0" stroke="#5aa05a"/>
+  <text x="976" y="120" text-anchor="middle" font-size="17" font-weight="bold" fill="#1e4a1e">③ 装箱率 ≠ 利用率</text>
+  <rect x="820" y="136" width="312" height="120" rx="6" fill="#fff" stroke="#aaccaa"/>
+  <text x="976" y="158" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e4a1e">同集群，两种算法（演练期快照）</text>
+  <text x="836" y="180" font-size="11" fill="#333">A 装箱率 requests/Alloc</text>
+  <text x="1116" y="180" text-anchor="end" font-size="12" font-weight="bold" fill="#c0392b">CPU 2.93% / MEM 2.72%</text>
+  <text x="836" y="202" font-size="11" fill="#333">B 利用率 实际/Alloc</text>
+  <text x="1116" y="202" text-anchor="end" font-size="12" font-weight="bold" fill="#2d6a2d">CPU 0.68% / MEM 5.38%</text>
+  <text x="836" y="228" font-size="11" font-weight="bold" fill="#a02c2c">CPU：申请是实际的 4.3 倍 → 虚高</text>
+  <text x="836" y="246" font-size="11" font-weight="bold" fill="#a02c2c">MEM：实际 &gt; 申请 → OOMKill 风险</text>
+  <rect x="820" y="264" width="312" height="72" rx="6" fill="#fff" stroke="#aaccaa"/>
+  <text x="976" y="284" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e4a1e">判 断 口 诀</text>
+  <text x="836" y="303" font-size="11" fill="#333">装箱 &gt;&gt; 利用 → requests 虚高，下调</text>
+  <text x="836" y="321" font-size="11" fill="#333">利用 ≈/&gt; 装箱 → 危险，上调 requests</text>
+  <rect x="820" y="344" width="312" height="34" rx="6" fill="#e8f4ea" stroke="#7bb87b"/>
+  <text x="976" y="364" text-anchor="middle" font-size="12" font-weight="bold" fill="#2d6a2d">实测：清理后回到基线 2.77%</text>
+
+  <rect x="28" y="412" width="1124" height="228" rx="10" fill="#f7f4fb" stroke="#8a7ab0"/>
+  <text x="590" y="440" text-anchor="middle" font-size="17" font-weight="bold" fill="#3a2a5c">成本归因：隐形的 Pod（按 namespace 统计 requests，演练期快照 · 共 45 Pod）</text>
+  <text x="60" y="466" font-size="12" font-weight="bold" fill="#5a4a7a">NAMESPACE</text>
+  <text x="330" y="466" text-anchor="end" font-size="12" font-weight="bold" fill="#5a4a7a">CPU(m)</text>
+  <text x="470" y="466" text-anchor="end" font-size="12" font-weight="bold" fill="#5a4a7a">MEM(MiB)</text>
+  <text x="600" y="466" text-anchor="end" font-size="12" font-weight="bold" fill="#5a4a7a">PODS</text>
+  <line x1="48" y1="474" x2="1132" y2="474" stroke="#c0b0d8"/>
+  <text x="60" y="496" font-size="12" fill="#333">kube-system</text><text x="330" y="496" text-anchor="end" font-size="12" fill="#333">950</text><text x="470" y="496" text-anchor="end" font-size="12" fill="#333">440</text><text x="600" y="496" text-anchor="end" font-size="12" fill="#333">10</text>
+  <text x="60" y="518" font-size="12" fill="#333">monitoring</text><text x="330" y="518" text-anchor="end" font-size="12" fill="#333">510</text><text x="470" y="518" text-anchor="end" font-size="12" fill="#333">1680</text><text x="600" y="518" text-anchor="end" font-size="12" fill="#333">15</text>
+  <text x="60" y="540" font-size="12" fill="#333">envoy-gateway-system</text><text x="330" y="540" text-anchor="end" font-size="12" fill="#333">100</text><text x="470" y="540" text-anchor="end" font-size="12" fill="#333">256</text><text x="600" y="540" text-anchor="end" font-size="12" fill="#333">1</text>
+  <text x="60" y="562" font-size="12" fill="#333">ingress-nginx</text><text x="330" y="562" text-anchor="end" font-size="12" fill="#333">100</text><text x="470" y="562" text-anchor="end" font-size="12" fill="#333">90</text><text x="600" y="562" text-anchor="end" font-size="12" fill="#333">1</text>
+  <text x="60" y="584" font-size="12" fill="#333">tenant-a</text><text x="330" y="584" text-anchor="end" font-size="12" fill="#333">100</text><text x="470" y="584" text-anchor="end" font-size="12" fill="#333">128</text><text x="600" y="584" text-anchor="end" font-size="12" fill="#333">2</text>
+  <text x="60" y="610" font-size="12" font-weight="bold" fill="#a02c2c">calico-system</text><text x="330" y="610" text-anchor="end" font-size="12" font-weight="bold" fill="#a02c2c">0</text><text x="470" y="610" text-anchor="end" font-size="12" font-weight="bold" fill="#a02c2c">0</text><text x="600" y="610" text-anchor="end" font-size="12" font-weight="bold" fill="#a02c2c">11</text>
+  <text x="60" y="628" font-size="12" fill="#a02c2c">local-path-storage / tenant-b / tigera-operator</text><text x="330" y="628" text-anchor="end" font-size="12" fill="#a02c2c">0</text><text x="470" y="628" text-anchor="end" font-size="12" fill="#a02c2c">0</text><text x="600" y="628" text-anchor="end" font-size="12" fill="#a02c2c">5</text>
+
+  <rect x="640" y="486" width="492" height="140" rx="8" fill="#fdeaea" stroke="#d98888"/>
+  <text x="886" y="510" text-anchor="middle" font-size="13" font-weight="bold" fill="#a02c2c">11 个 Pod，成本表里是 0</text>
+  <text x="660" y="532" font-size="11" fill="#5a2a2a">它们实际在跑、在耗资源，只是没声明 requests</text>
+  <text x="660" y="552" font-size="11" fill="#5a2a2a">→ 成本算不清：无法归因到任何团队</text>
+  <text x="660" y="572" font-size="11" fill="#5a2a2a">→ 驱逐时最先死：BestEffort 第一个被 OOMKill</text>
+  <text x="660" y="596" font-size="11" font-weight="bold" fill="#a02c2c">Calico 挂了 = 整个集群网络断</text>
+  <text x="660" y="616" font-size="11" font-weight="bold" fill="#2d6a2d">解：LimitRange 让隐形 Pod 现形</text>
+
+  <rect x="28" y="660" width="1124" height="212" rx="10" fill="#f4f8fb" stroke="#7aa8c8"/>
+  <text x="590" y="688" text-anchor="middle" font-size="17" font-weight="bold" fill="#1a3a5c">实测证据链（演练 1-5 · 全部可照抄）</text>
+  <text x="56" y="716" font-size="12" font-weight="bold" fill="#2a5a8a">演练 1 · RBAC 越权</text>
+  <text x="56" y="736" font-size="11" fill="#333">5 项 can-i：自己 ns=yes，跨 ns / 集群级 / 未授权动作 = no</text>
+  <text x="56" y="754" font-size="11" fill="#a02c2c">坑：Role 无法授权 nodes（集群级资源需 ClusterRole）</text>
+  <text x="56" y="776" font-size="12" font-weight="bold" fill="#2a5a8a">演练 2 · NetworkPolicy</text>
+  <text x="56" y="796" font-size="11" fill="#333">加前 wget 取到 nginx HTML → 加后 100% 丢包 / 超时</text>
+  <text x="56" y="814" font-size="11" fill="#333">同 ns 也被拒 → 补 allow-same-namespace 后同 ns 通、跨 ns 仍不通</text>
+  <text x="56" y="836" font-size="11" fill="#a02c2c">前提：CNI=Calico（kindnetd 不支持策略，实测 installation CR 确认）</text>
+  <text x="56" y="858" font-size="11" fill="#333">DNS 不受影响：只限 Ingress，出站 DNS 正常解析</text>
+  <text x="600" y="716" font-size="12" font-weight="bold" fill="#2a5a8a">演练 3 · ResourceQuota</text>
+  <text x="600" y="736" font-size="11" fill="#333">must specify（不声明）vs exceeded quota（超额度）两种文案</text>
+  <text x="600" y="754" font-size="11" fill="#333">边界精确：剩 800m 时申请 800m 成功，满后再申 1m 被拒</text>
+  <text x="600" y="776" font-size="12" font-weight="bold" fill="#2a5a8a">演练 4 · LimitRange</text>
+  <text x="600" y="796" font-size="11" fill="#333">空 Pod → 注入 100m/128Mi，配额账本立刻反映</text>
+  <text x="600" y="814" font-size="11" fill="#a02c2c">只写 limits → requests 补齐 = Guaranteed（反直觉）</text>
+  <text x="600" y="836" font-size="11" fill="#333">max/min 校验：超 2 核拒、低 10m 拒</text>
+  <text x="600" y="858" font-size="11" fill="#333">不回溯：LimitRange 前建的 probe-a 查 resources 仍为 {}</text>
+
+  <text x="590" y="884" text-anchor="middle" font-size="11" fill="#7a8a94">环境：kind k8s-c1-calico · 3 节点 × 20 核 / 93.2 GiB 可分配 · Calico CNI · kubectl v1.34.0 · 2026-09-20 实测 · 演练资源已清理，装箱率回到基线 2.77%</text>
+</svg>

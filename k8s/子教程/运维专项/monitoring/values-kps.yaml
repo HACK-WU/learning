@@ -1,0 +1,122 @@
+# kube-prometheus-stack values —— kind k8s-c1-calico (3节点) · k8s v1.34.0
+#
+# ⚠️ 踩坑记录（2026-09-20 首装失败根因，全是"镜像名凭印象写"）：
+#   1. repository 不要带 registry 前缀：写 "quay.io/prometheus-operator/x"
+#      → chart 拼成 "quay.io/quay.io/prometheus-operator/x"（NotFound）
+#   2. chart 真实仓库是 quay.io/prometheus/*（官方项目仓库），不是 quay.io/prom/*
+#   3. node-exporter / prometheus 默认要 -distroless 变体
+#   4. chart 91.4.1 默认版本：prometheus v3.14.0-distroless、node-exporter v1.12.1-distroless、
+#      alertmanager v0.34.0、ksm v2.20.0、grafana 13.2.2-distroless、operator v0.94.0
+#   → 教训：镜像名必须 helm template 渲染出来看，不能凭印象写（呼应"先核验再下结论"）
+#
+# 本机可达性实测（2026-09-20）：
+#   可拉：node-exporter v1.12.1-distroless / alertmanager v0.34.0 / ksm v2.20.0 / certgen 1.8.8
+#   拉不动：prometheus v3.14.0-distroless(401) / grafana 13.2.2-distroless
+#   → 这两个改用本机已有的等效镜像（prometheus v3.14.0 非distroless、grafana 13.2.1）
+
+prometheus:
+  prometheusSpec:
+    image:
+      registry: quay.io
+      repository: prometheus/prometheus
+      tag: v3.14.0          # 本机已有；chart 默认 v3.14.0-distroless 拉不动
+    scrapeInterval: 15s
+    evaluationInterval: 15s
+    retention: 3d
+    resources:
+      requests:
+        cpu: 100m
+        memory: 512Mi
+      limits:
+        memory: 1Gi
+    storageSpec: {}
+
+alertmanager:
+  alertmanagerSpec:
+    image:
+      registry: quay.io
+      repository: prometheus/alertmanager
+      tag: v0.34.0
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128Mi
+    storage: {}
+
+grafana:
+  enabled: true
+  image:
+    registry: docker.io
+    repository: grafana/grafana
+    tag: 13.2.1            # 本机已有；chart 默认 13.2.2-distroless 拉不动
+  adminPassword: admin
+  service:
+    type: NodePort
+    nodePort: 30400
+  persistence:
+    enabled: false
+  resources:
+    requests:
+      cpu: 50m
+      memory: 256Mi
+
+prometheus-node-exporter:
+  enabled: true
+  image:
+    registry: quay.io
+    repository: prometheus/node-exporter
+    # ⚠️ 不要写 -distroless 后缀！chart 的 image.distroless: true 会自动拼，
+    #    写成 v1.12.1-distroless 会变成 v1.12.1-distroless-distroless（NotFound）
+    tag: v1.12.1
+  hostRootfs: false
+  resources:
+    requests:
+      cpu: 20m
+      memory: 32Mi
+
+kube-state-metrics:
+  image:
+    registry: registry.k8s.io
+    repository: kube-state-metrics/kube-state-metrics
+    tag: v2.20.0
+  resources:
+    requests:
+      cpu: 20m
+      memory: 64Mi
+
+prometheusOperator:
+  enabled: true
+  image:
+    registry: quay.io
+    repository: prometheus-operator/prometheus-operator
+    tag: v0.94.0
+  configmapReloadImage:
+    registry: quay.io
+    repository: prometheus-operator/prometheus-config-reloader
+    tag: v0.94.0
+  prometheusConfigReloaderImage:
+    registry: quay.io
+    repository: prometheus-operator/prometheus-config-reloader
+    tag: v0.94.0
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+
+# Thanos sidecar：拉不动且学习环境不需要
+thanosRuler:
+  enabled: false
+
+kubeEtcd:
+  enabled: true
+kubeControllerManager:
+  enabled: true
+kubeScheduler:
+  enabled: true
+kubeProxy:
+  enabled: false
+coreDns:
+  enabled: true
+
+defaultRules:
+  create: true

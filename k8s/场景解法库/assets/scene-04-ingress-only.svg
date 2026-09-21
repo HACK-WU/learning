@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 430" font-family="sans-serif">
+  <rect width="900" height="430" fill="#fbfcfe"/>
+  <text x="450" y="28" text-anchor="middle" font-size="19" font-weight="bold" fill="#1a3d5c">解法 B：只做入站（Egress 完全不设防）</text>
+  <text x="450" y="50" text-anchor="middle" font-size="12" fill="#666">红框=被忽略的攻击面</text>
+
+  <rect x="330" y="105" width="180" height="70" rx="10" fill="#e3f6e6" stroke="#3d8b4a" stroke-width="2.5"/>
+  <text x="420" y="131" text-anchor="middle" font-size="14" font-weight="bold" fill="#265c2e">db</text>
+  <text x="420" y="153" text-anchor="middle" font-size="11" fill="#3d8b4a">policyTypes: [Ingress]</text>
+  <text x="420" y="170" text-anchor="middle" font-size="10" fill="#3d8b4a">入站已收紧</text>
+
+  <rect x="70" y="105" width="150" height="60" rx="8" fill="#dceefb" stroke="#3a7ca5" stroke-width="2"/>
+  <text x="145" y="128" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a3d5c">api</text>
+  <text x="145" y="148" text-anchor="middle" font-size="10" fill="#3a7ca5">放行 5432</text>
+
+  <line x1="220" y1="135" x2="328" y2="133" stroke="#3d8b4a" stroke-width="3" marker-end="url(#p1)"/>
+
+  <rect x="620" y="95" width="210" height="90" rx="10" fill="#fde7e7" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="725" y="119" text-anchor="middle" font-size="13" font-weight="bold" fill="#8f1f1c">攻击者 C2 服务器</text>
+  <text x="725" y="141" text-anchor="middle" font-size="11" fill="#8f1f1c">反向 shell 外连</text>
+  <text x="725" y="161" text-anchor="middle" font-size="11" fill="#8f1f1c">数据外传通道</text>
+  <text x="725" y="180" text-anchor="middle" font-size="10" fill="#5a1a18">出站未声明 Egress 策略</text>
+
+  <line x1="510" y1="140" x2="618" y2="140" stroke="#b8332f" stroke-width="3" marker-end="url(#p2)"/>
+  <text x="564" y="130" text-anchor="middle" font-size="11" font-weight="bold" fill="#8f1f1c">畅通</text>
+
+  <rect x="70" y="215" width="150" height="60" rx="8" fill="#f0f0f0" stroke="#888" stroke-width="2"/>
+  <text x="145" y="238" text-anchor="middle" font-size="12" font-weight="bold" fill="#555">other Pod</text>
+  <text x="145" y="258" text-anchor="middle" font-size="10" fill="#777">入站被拒</text>
+  <line x1="220" y1="250" x2="328" y2="172" stroke="#b8332f" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#p2)"/>
+
+  <rect x="30" y="300" width="840" height="112" rx="10" fill="#fff5f5" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="48" y="324" font-size="14" font-weight="bold" fill="#8f1f1c">失效点</text>
+
+  <text x="48" y="349" font-size="12.5" font-weight="bold" fill="#8f1f1c">① 出站方向完全不设防——db 被 RCE 后可主动外连</text>
+  <text x="66" y="368" font-size="12" fill="#5a1a18">入站策略只回答"谁能碰我"，不回答"我能碰谁"。反向 shell、数据外传走的都是出站方向。</text>
+
+  <text x="48" y="394" font-size="12.5" font-weight="bold" fill="#8f1f1c">② 「有/无 Egress 策略」是二元语义，极易搞混</text>
+  <text x="66" y="413" font-size="12" fill="#5a1a18">命名空间里没有任何选中该 Pod 的 Egress 策略 → 出站全通；一旦存在任意一条 → 只放行声明的。没有"部分限制"。</text>
+
+  <defs>
+    <marker id="p1" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3d8b4a"/></marker>
+    <marker id="p2" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#b8332f"/></marker>
+  </defs>
+</svg>

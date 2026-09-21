@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 440" font-family="sans-serif">
+  <rect width="900" height="440" fill="#fbfcfe"/>
+  <text x="450" y="28" text-anchor="middle" font-size="19" font-weight="bold" fill="#1a3d5c">解法 C：外部调度器 + Job 的职责划分</text>
+  <text x="450" y="50" text-anchor="middle" font-size="12" fill="#666">k8s 只管执行，调度能力全部外移　红框=失效点</text>
+
+  <rect x="50" y="95" width="220" height="120" rx="10" fill="#dceefb" stroke="#3a7ca5" stroke-width="2.5"/>
+  <text x="160" y="120" text-anchor="middle" font-size="14" font-weight="bold" fill="#1a3d5c">外部调度器</text>
+  <text x="160" y="144" text-anchor="middle" font-size="11" fill="#3a7ca5">Airflow / XXL-JOB</text>
+  <text x="160" y="166" text-anchor="middle" font-size="11" fill="#3a7ca5">· 依赖编排</text>
+  <text x="160" y="186" text-anchor="middle" font-size="11" fill="#3a7ca5">· 补跑 / 重试策略</text>
+  <text x="160" y="206" text-anchor="middle" font-size="11" fill="#3a7ca5">· 告警 / 可视化</text>
+
+  <rect x="340" y="95" width="190" height="120" rx="10" fill="#fff6d9" stroke="#c99a1e" stroke-width="2.5"/>
+  <text x="435" y="120" text-anchor="middle" font-size="14" font-weight="bold" fill="#7a5d0a">k8s API</text>
+  <text x="435" y="145" text-anchor="middle" font-size="11" fill="#7a5d0a">创建 Job（无调度语义）</text>
+  <text x="435" y="168" text-anchor="middle" font-size="11" fill="#7a5d0a">· backoffLimit: 3</text>
+  <text x="435" y="188" text-anchor="middle" font-size="11" fill="#7a5d0a">· ttlSecondsAfterFinished</text>
+  <text x="435" y="208" text-anchor="middle" font-size="11" fill="#7a5d0a">· restartPolicy: OnFailure</text>
+
+  <rect x="600" y="95" width="230" height="120" rx="10" fill="#e3f6e6" stroke="#3d8b4a" stroke-width="2.5"/>
+  <text x="715" y="120" text-anchor="middle" font-size="14" font-weight="bold" fill="#265c2e">Job → Pod</text>
+  <text x="715" y="145" text-anchor="middle" font-size="11" fill="#3d8b4a">只负责执行这一次</text>
+  <text x="715" y="168" text-anchor="middle" font-size="11" fill="#3d8b4a">执行完由 TTL 清理</text>
+  <text x="715" y="192" text-anchor="middle" font-size="11" fill="#3d8b4a">结果不主动回传调度器</text>
+
+  <line x1="270" y1="155" x2="338" y2="155" stroke="#3a7ca5" stroke-width="2.5" marker-end="url(#n1)"/>
+  <line x1="530" y1="155" x2="598" y2="155" stroke="#3d8b4a" stroke-width="2.5" marker-end="url(#n2)"/>
+
+  <rect x="600" y="232" width="230" height="44" rx="8" fill="#fde7e7" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="715" y="250" text-anchor="middle" font-size="11" font-weight="bold" fill="#8f1f1c">结果感知是断的</text>
+  <text x="715" y="267" text-anchor="middle" font-size="10" fill="#8f1f1c">需回调或轮询</text>
+  <line x1="715" y1="232" x2="715" y2="220" stroke="#b8332f" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <rect x="30" y="300" width="840" height="122" rx="10" fill="#fff5f5" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="48" y="324" font-size="14" font-weight="bold" fill="#8f1f1c">失效点</text>
+
+  <text x="48" y="349" font-size="12.5" font-weight="bold" fill="#8f1f1c">① 调度器在集群外，Pod 的启动结果需要「回调」才能感知</text>
+  <text x="66" y="368" font-size="12" fill="#5a1a18">链路比 CronJob 长：创建成功 ≠ 执行成功。Pod OOM / 镜像拉取失败，调度器若不轮询 Job 状态就完全不知道。</text>
+
+  <text x="48" y="394" font-size="12.5" font-weight="bold" fill="#8f1f1c">② CronJob 的原生能力全部要自研</text>
+  <text x="66" y="413" font-size="12" fill="#5a1a18">并发策略、TTL 清理、错过窗口补跑——原本几个字段的事，现在都要调度器侧实现。</text>
+
+  <defs>
+    <marker id="n1" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3a7ca5"/></marker>
+    <marker id="n2" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3d8b4a"/></marker>
+  </defs>
+</svg>

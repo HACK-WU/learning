@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 860" width="1180" height="860" font-family="Microsoft YaHei, PingFang SC, Segoe UI, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#eef2f7"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#64748b"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#dc2626"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#16a34a"/>
+    </marker>
+  </defs>
+
+  <rect width="1180" height="860" fill="url(#bg)"/>
+  <text x="590" y="42" text-anchor="middle" font-size="26" font-weight="bold" fill="#0f172a">Kubernetes 运维专项 · 课 7：备份 · 灾备 · 变更体系</text>
+  <text x="590" y="70" text-anchor="middle" font-size="14" fill="#64748b">实测环境：kind k8s-c1-calico · v1.34.0 · etcd 3.6.4 · 2026-09-20</text>
+
+  <!-- ============ 左：备份三层 ============ -->
+  <rect x="40" y="100" width="330" height="330" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="60" y="128" font-size="17" font-weight="bold" fill="#0f172a">备份三层：各管什么</text>
+
+  <rect x="58" y="144" width="294" height="80" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="72" y="166" font-size="14" font-weight="bold" fill="#1d4ed8">L1 集群状态 · etcd 快照</text>
+  <text x="72" y="186" font-size="12" fill="#334155">整库字节级 · 32MB · 0.67s</text>
+  <text x="72" y="205" font-size="12" fill="#334155">uid/PVC绑定原样保留</text>
+  <text x="72" y="221" font-size="11" font-weight="bold" fill="#dc2626">代价：必须停机 · 只能全集群</text>
+
+  <rect x="58" y="234" width="294" height="80" rx="8" fill="#f0fdf4" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="72" y="256" font-size="14" font-weight="bold" fill="#15803d">L2 应用定义 · YAML/Git</text>
+  <text x="72" y="276" font-size="12" fill="#334155">7.7MB(10ns) · 4.4s · 不停机</text>
+  <text x="72" y="295" font-size="12" fill="#334155">粒度到单个对象</text>
+  <text x="72" y="311" font-size="11" font-weight="bold" fill="#dc2626">代价：uid 必变 · 救不回数据</text>
+
+  <rect x="58" y="324" width="294" height="88" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="72" y="346" font-size="14" font-weight="bold" fill="#b45309">L3 应用数据 · VolumeSnapshot</text>
+  <text x="72" y="366" font-size="12" fill="#334155">卷数据 / 数据库 dump</text>
+  <text x="72" y="385" font-size="12" font-weight="bold" fill="#15803d">唯一能救「数据本身」的一层</text>
+  <text x="72" y="402" font-size="11" fill="#78350f">被 90% 的人漏掉</text>
+
+  <!-- ============ 中上：RTO/RPO ============ -->
+  <rect x="395" y="100" width="360" height="330" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="415" y="128" font-size="17" font-weight="bold" fill="#0f172a">RTO / RPO：怎么测出来的</text>
+
+  <text x="415" y="158" font-size="13" font-weight="bold" fill="#1d4ed8">RPO = 备份间隔 × 写入速率</text>
+  <rect x="415" y="170" width="320" height="76" rx="8" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
+  <text x="429" y="192" font-size="12" fill="#334155">etcd revision 实测（空闲集群）</text>
+  <text x="429" y="212" font-size="12" fill="#334155">T0=802825 → T+30s=802909</text>
+  <text x="429" y="232" font-size="12" font-weight="bold" fill="#b45309">30s 写入 84 次 → 1h 备份 ≈ 丢 10080 次</text>
+
+  <text x="415" y="272" font-size="13" font-weight="bold" fill="#15803d">RTO = 从故障到真正可用的耗时</text>
+  <rect x="415" y="284" width="320" height="96" rx="8" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
+  <text x="429" y="306" font-size="12" fill="#334155">删 ns → 恢复（应用级）：实测</text>
+  <text x="429" y="330" font-size="19" font-weight="bold" fill="#15803d">12.73 秒</text>
+  <text x="429" y="354" font-size="12" fill="#334155">坏镜像 → rollout undo：实测</text>
+  <text x="429" y="374" font-size="19" font-weight="bold" fill="#15803d">1.99 秒</text>
+
+  <rect x="415" y="390" width="320" height="28" rx="6" fill="#fef2f2" stroke="#fca5a5" stroke-width="1"/>
+  <text x="429" y="409" font-size="11.5" font-weight="bold" fill="#b91c1c">本机 CronJob = 0 → 无自动备份 → RPO = ∞</text>
+
+  <!-- ============ 右：恢复失真 ============ -->
+  <rect x="780" y="100" width="360" height="330" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="800" y="128" font-size="17" font-weight="bold" fill="#0f172a">恢复失真：活状态救不回</text>
+
+  <text x="800" y="156" font-size="13" font-weight="bold" fill="#0f172a">① uid 必变</text>
+  <rect x="800" y="166" width="320" height="54" rx="8" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
+  <text x="814" y="188" font-size="12" fill="#334155">恢复前 518414f1-... → 恢复后 2a688fc2-...</text>
+  <text x="814" y="210" font-size="11" fill="#64748b">内容一致，但是「新对象」</text>
+
+  <text x="800" y="246" font-size="13" font-weight="bold" fill="#0f172a">② PVC 挂不上（最致命）</text>
+  <rect x="800" y="256" width="320" height="76" rx="8" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="814" y="278" font-size="12" fill="#334155">PV.spec.claimRef.uid 绑死 PVC.uid</text>
+  <text x="814" y="297" font-size="12" fill="#334155">两者实测同为 7d03de96-d003-...</text>
+  <text x="814" y="320" font-size="12" font-weight="bold" fill="#b91c1c">新 uid → PV 认不出 → 数据挂不上</text>
+
+  <text x="800" y="358" font-size="13" font-weight="bold" fill="#0f172a">③ 备份里混了系统注入资源</text>
+  <rect x="800" y="368" width="320" height="50" rx="8" fill="#f8fafc" stroke="#94a3b8" stroke-width="1"/>
+  <text x="814" y="390" font-size="12" fill="#334155">kube-root-ca.crt / default SA 自动重建</text>
+  <text x="814" y="410" font-size="12" font-weight="bold" fill="#b45309">脏备份 2 个 Conflict → 干净备份 0</text>
+
+  <!-- ============ 下方：变更与准入闭环 ============ -->
+  <rect x="40" y="455" width="1100" height="170" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="60" y="483" font-size="17" font-weight="bold" fill="#0f172a">变更闭环：三道闸门，缺一就有缝</text>
+
+  <rect x="60" y="500" width="230" height="100" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="76" y="524" font-size="14" font-weight="bold" fill="#1d4ed8">① RBAC（课 6）</text>
+  <text x="76" y="546" font-size="12" fill="#334155">拦「没有权限的人」</text>
+  <text x="76" y="566" font-size="12" fill="#334155">认证授权阶段</text>
+  <text x="76" y="588" font-size="11" fill="#64748b">不管请求内容是否合规</text>
+
+  <line x1="296" y1="550" x2="336" y2="550" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="342" y="500" width="250" height="100" rx="8" fill="#f0fdf4" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="358" y="524" font-size="14" font-weight="bold" fill="#15803d">② VAP 准入（本课）</text>
+  <text x="358" y="546" font-size="12" fill="#334155">拦「不合规的写入」</text>
+  <text x="358" y="566" font-size="12" fill="#334155">入库前 · CEL 表达式</text>
+  <text x="358" y="588" font-size="11" font-weight="bold" fill="#b45309">先 Warn 后 Deny（sleep 5 才生效）</text>
+
+  <line x1="598" y1="550" x2="638" y2="550" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="644" y="500" width="250" height="100" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="660" y="524" font-size="14" font-weight="bold" fill="#b45309">③ GitOps 纠偏</text>
+  <text x="660" y="546" font-size="12" fill="#334155">拦「不合规的状态」</text>
+  <text x="660" y="566" font-size="12" fill="#334155">持续比对 + 自动拉回</text>
+  <text x="660" y="588" font-size="11" fill="#64748b">含手工改动（本机未安装）</text>
+
+  <line x1="900" y1="550" x2="940" y2="550" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="946" y="500" width="174" height="100" rx="8" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="1.5"/>
+  <text x="962" y="524" font-size="14" font-weight="bold" fill="#6d28d9">回滚退路</text>
+  <text x="962" y="546" font-size="12" fill="#334155">rollout undo</text>
+  <text x="962" y="566" font-size="12" fill="#334155">git revert</text>
+  <text x="962" y="588" font-size="11" font-weight="bold" fill="#15803d">实测 RTO 1.99 秒</text>
+
+  <text x="600" y="645" text-anchor="middle" font-size="12" fill="#b91c1c">本机实测：准入只开 NodeRestriction · VAP = 0 · GitOps = 0 → 三道闸门只有第一道</text>
+
+  <!-- ============ 底部：VAP 实测对照 ============ -->
+  <rect x="40" y="662" width="1100" height="176" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="60" y="690" font-size="17" font-weight="bold" fill="#0f172a">VAP 实测三组对照（策略锁在 dr-demo 命名空间）</text>
+
+  <rect x="60" y="706" width="330" height="112" rx="8" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="76" y="730" font-size="13" font-weight="bold" fill="#b91c1c">无 app 标签 Pod（dr-demo）</text>
+  <text x="76" y="754" font-size="12" fill="#334155">ValidatingAdmissionPolicy denied</text>
+  <text x="76" y="774" font-size="12" fill="#334155">request: Pod 必须有 app 标签</text>
+  <text x="76" y="798" font-size="13" font-weight="bold" fill="#b91c1c">❌ 拒绝（退出码 1）</text>
+
+  <rect x="410" y="706" width="330" height="112" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="426" y="730" font-size="13" font-weight="bold" fill="#15803d">带 app 标签 Pod（dr-demo）</text>
+  <text x="426" y="754" font-size="12" fill="#334155">kubectl run ok-pod --labels=app=demo</text>
+  <text x="426" y="774" font-size="12" fill="#334155">通过 CEL 校验，正常入库</text>
+  <text x="426" y="798" font-size="13" font-weight="bold" fill="#15803d">✅ pod/ok-pod created</text>
+
+  <rect x="760" y="706" width="360" height="112" rx="8" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="776" y="730" font-size="13" font-weight="bold" fill="#1d4ed8">无标签 Pod（default 命名空间）</text>
+  <text x="776" y="754" font-size="12" fill="#334155">namespaceSelector 只匹配 dr-demo</text>
+  <text x="776" y="774" font-size="12" fill="#334155">其他命名空间完全无感</text>
+  <text x="776" y="798" font-size="13" font-weight="bold" fill="#1d4ed8">✅ pod/no-label-default created</text>
+
+  <line x1="390" y1="762" x2="404" y2="762" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="740" y1="762" x2="754" y2="762" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+</svg>

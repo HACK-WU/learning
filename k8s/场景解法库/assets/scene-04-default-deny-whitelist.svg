@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" font-family="sans-serif">
+  <rect width="900" height="500" fill="#fbfcfe"/>
+  <text x="450" y="28" text-anchor="middle" font-size="19" font-weight="bold" fill="#1a3d5c">解法 A：默认全拒 + 白名单放行</text>
+  <text x="450" y="50" text-anchor="middle" font-size="12" fill="#666">红框=失效点</text>
+
+  <rect x="60" y="80" width="780" height="230" rx="12" fill="#f7f9fb" stroke="#3a7ca5" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="90" y="104" font-size="13" font-weight="bold" fill="#1a3d5c">namespace: prod（基线策略 default-deny-all 全封闭）</text>
+
+  <rect x="100" y="130" width="130" height="56" rx="8" fill="#dceefb" stroke="#3a7ca5" stroke-width="2"/>
+  <text x="165" y="152" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a3d5c">api</text>
+  <text x="165" y="172" text-anchor="middle" font-size="11" fill="#3a7ca5">app: api</text>
+
+  <rect x="330" y="130" width="130" height="56" rx="8" fill="#e3f6e6" stroke="#3d8b4a" stroke-width="2"/>
+  <text x="395" y="152" text-anchor="middle" font-size="13" font-weight="bold" fill="#265c2e">db</text>
+  <text x="395" y="172" text-anchor="middle" font-size="11" fill="#3d8b4a">app: db</text>
+
+  <rect x="560" y="130" width="130" height="56" rx="8" fill="#f0f0f0" stroke="#888" stroke-width="2"/>
+  <text x="625" y="152" text-anchor="middle" font-size="13" font-weight="bold" fill="#555">other</text>
+  <text x="625" y="172" text-anchor="middle" font-size="11" fill="#777">app: other</text>
+
+  <rect x="100" y="225" width="130" height="52" rx="8" fill="#fff6d9" stroke="#c99a1e" stroke-width="2"/>
+  <text x="165" y="246" text-anchor="middle" font-size="12" font-weight="bold" fill="#7a5d0a">kube-dns</text>
+  <text x="165" y="266" text-anchor="middle" font-size="11" fill="#7a5d0a">:53 UDP/TCP</text>
+
+  <line x1="230" y1="158" x2="328" y2="158" stroke="#3d8b4a" stroke-width="3" marker-end="url(#f1)"/>
+  <text x="279" y="148" text-anchor="middle" font-size="11" font-weight="bold" fill="#3d8b4a">放行 5432</text>
+
+  <line x1="560" y1="172" x2="462" y2="172" stroke="#b8332f" stroke-width="2.5" stroke-dasharray="5,3" marker-end="url(#f2)"/>
+  <text x="511" y="196" text-anchor="middle" font-size="11" font-weight="bold" fill="#8f1f1c">默认拒绝</text>
+
+  <line x1="165" y1="186" x2="165" y2="223" stroke="#c99a1e" stroke-width="2.5" marker-end="url(#f3)"/>
+  <line x1="395" y1="186" x2="250" y2="240" stroke="#c99a1e" stroke-width="2.5" marker-end="url(#f3)"/>
+  <text x="330" y="212" text-anchor="middle" font-size="11" font-weight="bold" fill="#7a5d0a">② 必须显式放行 DNS</text>
+
+  <rect x="700" y="130" width="120" height="56" rx="8" fill="#fde7e7" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="760" y="152" text-anchor="middle" font-size="12" font-weight="bold" fill="#8f1f1c">CNI 不支持</text>
+  <text x="760" y="172" text-anchor="middle" font-size="11" fill="#8f1f1c">策略静默忽略</text>
+
+  <rect x="30" y="335" width="840" height="145" rx="10" fill="#fff5f5" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="48" y="359" font-size="14" font-weight="bold" fill="#8f1f1c">失效点</text>
+
+  <text x="48" y="384" font-size="12.5" font-weight="bold" fill="#8f1f1c">① 忘记放行 DNS → 整个应用不可用（不只是"访问不了 db"）</text>
+  <text x="66" y="403" font-size="12" fill="#5a1a18">所有服务名解析失败，包括 api 自己找 db。表现为 connection refused / name not resolved，而不是 timeout，容易误判。</text>
+
+  <text x="48" y="429" font-size="12.5" font-weight="bold" fill="#8f1f1c">② 用 ipBlock 指向 ClusterIP 实测无效</text>
+  <text x="66" y="448" font-size="12" fill="#5a1a18">DNS 请求经 Service 转发后目的 IP 已被 DNAT 成 Pod IP，不在你写的 CIDR 内 → 策略不匹配。</text>
+
+  <text x="48" y="473" font-size="12.5" font-weight="bold" fill="#8f1f1c">③ CNI 不支持时 API 返回 200，策略被静默忽略</text>
+  <text x="66" y="492" font-size="12" fill="#5a1a18">没有任何报错、没有任何日志。必须用"从其他 Pod 访问应失败"的反向测试来确认。</text>
+
+  <defs>
+    <marker id="f1" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3d8b4a"/></marker>
+    <marker id="f2" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#b8332f"/></marker>
+    <marker id="f3" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#c99a1e"/></marker>
+  </defs>
+</svg>

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" font-family="sans-serif">
+  <rect width="900" height="500" fill="#fbfcfe"/>
+  <text x="450" y="28" text-anchor="middle" font-size="19" font-weight="bold" fill="#1a3d5c">解法 B：四层隔离各拦什么</text>
+  <text x="450" y="50" text-anchor="middle" font-size="12" fill="#666">红框=两处实测反直觉失效点</text>
+
+  <rect x="50" y="85" width="180" height="80" rx="10" fill="#dceefb" stroke="#3a7ca5" stroke-width="2"/>
+  <text x="140" y="110" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a3d5c">① namespace</text>
+  <text x="140" y="131" text-anchor="middle" font-size="11" fill="#3a7ca5">拦：名字作用域</text>
+  <text x="140" y="150" text-anchor="middle" font-size="11" fill="#b8332f">不拦：流量 / 资源</text>
+
+  <rect x="260" y="85" width="180" height="80" rx="10" fill="#dceefb" stroke="#3a7ca5" stroke-width="2"/>
+  <text x="350" y="110" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a3d5c">② RBAC</text>
+  <text x="350" y="131" text-anchor="middle" font-size="11" fill="#3a7ca5">拦：API 调用权限</text>
+  <text x="350" y="150" text-anchor="middle" font-size="11" fill="#b8332f">不拦：Pod 间连接</text>
+
+  <rect x="470" y="85" width="180" height="80" rx="10" fill="#dceefb" stroke="#3a7ca5" stroke-width="2"/>
+  <text x="560" y="110" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a3d5c">③ NetworkPolicy</text>
+  <text x="560" y="131" text-anchor="middle" font-size="11" fill="#3a7ca5">拦：Pod 间流量</text>
+  <text x="560" y="150" text-anchor="middle" font-size="11" fill="#b8332f">需 CNI 支持</text>
+
+  <rect x="680" y="85" width="180" height="80" rx="10" fill="#dceefb" stroke="#3a7ca5" stroke-width="2"/>
+  <text x="770" y="110" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a3d5c">④ ResourceQuota</text>
+  <text x="770" y="131" text-anchor="middle" font-size="11" fill="#3a7ca5">拦：资源总量抢占</text>
+  <text x="770" y="150" text-anchor="middle" font-size="11" fill="#b8332f">需 Pod 声明 resources</text>
+
+  <rect x="140" y="215" width="620" height="44" rx="8" fill="#e3f6e6" stroke="#3d8b4a" stroke-width="2"/>
+  <text x="450" y="242" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#265c2e">四层齐全 = 名字 / API / 流量 / 资源 四个方向都堵住</text>
+
+  <rect x="120" y="288" width="320" height="80" rx="10" fill="#fde7e7" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="280" y="311" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#8f1f1c">失效点 ① 不声明 resources → 直接被拒</text>
+  <text x="280" y="332" text-anchor="middle" font-size="11" fill="#8f1f1c">failed quota: must specify requests.cpu</text>
+  <text x="280" y="352" text-anchor="middle" font-size="11" fill="#5a1a18">不是"绕过去"，是创建失败</text>
+
+  <rect x="460" y="288" width="320" height="80" rx="10" fill="#fde7e7" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="620" y="311" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#8f1f1c">失效点 ② LimitRange 不回溯</text>
+  <text x="620" y="332" text-anchor="middle" font-size="11" fill="#5a1a18">先建的 Pod 不会被补默认值</text>
+  <text x="620" y="352" text-anchor="middle" font-size="11" fill="#8f1f1c" font-weight="bold">顺序不能反：先 Quota 后 LimitRange</text>
+
+  <rect x="30" y="395" width="840" height="85" rx="10" fill="#fff6d9" stroke="#c99a1e" stroke-width="2"/>
+  <text x="48" y="418" font-size="13" font-weight="bold" fill="#7a5d0a">成本分摊的坑（实测）</text>
+  <text x="48" y="440" font-size="12" fill="#5a1a18">按 requests 口径装箱率 2.93%，实际用量仅 0.68% → <tspan font-weight="bold" fill="#8f1f1c">虚高 4.3 倍</tspan>，团队为不存在的资源付费。</text>
+  <text x="48" y="462" font-size="12" fill="#5a1a18">系统命名空间（如 calico-system）的成本在团队成本表里<tspan font-weight="bold" fill="#8f1f1c">隐形</tspan>，但真在花钱。</text>
+</svg>

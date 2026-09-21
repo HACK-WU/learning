@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 450" font-family="sans-serif">
+  <rect width="900" height="450" fill="#fbfcfe"/>
+  <text x="450" y="28" text-anchor="middle" font-size="19" font-weight="bold" fill="#1a3d5c">解法 B：日志两条链路的留存差异</text>
+  <text x="450" y="50" text-anchor="middle" font-size="12" fill="#666">上：跟 Pod 走　下：落盘持续增长　红框=失效点</text>
+
+  <rect x="50" y="80" width="140" height="56" rx="8" fill="#dceefb" stroke="#3a7ca5" stroke-width="2"/>
+  <text x="120" y="102" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a3d5c">应用 stdout</text>
+  <text x="120" y="122" text-anchor="middle" font-size="10" fill="#3a7ca5">容器日志</text>
+
+  <rect x="230" y="80" width="150" height="56" rx="8" fill="#e3f6e6" stroke="#3d8b4a" stroke-width="2"/>
+  <text x="305" y="102" text-anchor="middle" font-size="12" font-weight="bold" fill="#265c2e">节点 /var/log/pods</text>
+  <text x="305" y="122" text-anchor="middle" font-size="10" fill="#3d8b4a">随 Pod 删除而清除</text>
+
+  <rect x="430" y="80" width="150" height="56" rx="8" fill="#fff6d9" stroke="#c99a1e" stroke-width="2.5"/>
+  <text x="505" y="102" text-anchor="middle" font-size="12" font-weight="bold" fill="#7a5d0a">采集 Agent</text>
+  <text x="505" y="122" text-anchor="middle" font-size="10" fill="#7a5d0a">Fluent Bit / Filebeat</text>
+
+  <rect x="630" y="80" width="200" height="56" rx="8" fill="#e3f6e6" stroke="#3d8b4a" stroke-width="2"/>
+  <text x="730" y="102" text-anchor="middle" font-size="12" font-weight="bold" fill="#265c2e">集群外日志系统</text>
+  <text x="730" y="122" text-anchor="middle" font-size="10" fill="#3d8b4a">Pod 没了日志还在</text>
+
+  <line x1="190" y1="108" x2="228" y2="108" stroke="#3a7ca5" stroke-width="2" marker-end="url(#k1)"/>
+  <line x1="380" y1="108" x2="428" y2="108" stroke="#c99a1e" stroke-width="2" marker-end="url(#k2)"/>
+  <line x1="580" y1="108" x2="628" y2="108" stroke="#3d8b4a" stroke-width="2" marker-end="url(#k3)"/>
+
+  <rect x="230" y="152" width="150" height="30" rx="6" fill="#fde7e7" stroke="#b8332f" stroke-width="2"/>
+  <text x="305" y="172" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#8f1f1c">不采集 → 出事后无据可查</text>
+
+  <line x1="830" y1="108" x2="830" y2="200" stroke="#3a7ca5" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <line x1="50" y1="210" x2="870" y2="210" stroke="#bbb" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+  <rect x="50" y="240" width="140" height="56" rx="8" fill="#dceefb" stroke="#3a7ca5" stroke-width="2"/>
+  <text x="120" y="262" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a3d5c">API 请求</text>
+  <text x="120" y="282" text-anchor="middle" font-size="10" fill="#3a7ca5">谁在什么时候做了什么</text>
+
+  <rect x="230" y="240" width="150" height="56" rx="8" fill="#fff6d9" stroke="#c99a1e" stroke-width="2.5"/>
+  <text x="305" y="262" text-anchor="middle" font-size="12" font-weight="bold" fill="#7a5d0a">审计日志落盘</text>
+  <text x="305" y="282" text-anchor="middle" font-size="10" fill="#7a5d0a">实测已占 332M</text>
+
+  <rect x="430" y="240" width="150" height="56" rx="8" fill="#e3f6e6" stroke="#3d8b4a" stroke-width="2"/>
+  <text x="505" y="262" text-anchor="middle" font-size="12" font-weight="bold" fill="#265c2e">轮转配置</text>
+  <text x="505" y="282" text-anchor="middle" font-size="10" fill="#3d8b4a">maxage/maxsize/maxbackup</text>
+
+  <rect x="630" y="240" width="200" height="56" rx="8" fill="#f0f0f0" stroke="#888" stroke-width="2"/>
+  <text x="730" y="262" text-anchor="middle" font-size="12" font-weight="bold" fill="#555">持续增长</text>
+  <text x="730" y="282" text-anchor="middle" font-size="10" fill="#777">不轮转 → 写满磁盘</text>
+
+  <line x1="190" y1="268" x2="228" y2="268" stroke="#3a7ca5" stroke-width="2" marker-end="url(#k1)"/>
+  <line x1="380" y1="268" x2="428" y2="268" stroke="#3d8b4a" stroke-width="2" marker-end="url(#k3)"/>
+  <line x1="580" y1="268" x2="628" y2="268" stroke="#888" stroke-width="2" marker-end="url(#k4)"/>
+
+  <rect x="630" y="312" width="200" height="30" rx="6" fill="#fde7e7" stroke="#b8332f" stroke-width="2"/>
+  <text x="730" y="332" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#8f1f1c">写满后 apiserver 拒绝写入</text>
+
+  <rect x="30" y="365" width="840" height="70" rx="10" fill="#fff5f5" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="48" y="388" font-size="13" font-weight="bold" fill="#8f1f1c">两条链路必须分别处理，不能一套方案通吃</text>
+  <text x="48" y="410" font-size="11.5" fill="#5a1a18">Pod 日志的敌人是「Pod 被删」→ 必须外采；审计日志的敌人是「自己写满盘」→ 必须轮转。二者风险方向相反。</text>
+  <text x="48" y="429" font-size="11.5" fill="#5a1a18">另外审计级别建议大部分用 Metadata，只对 Secret 等敏感资源用 RequestResponse，全量审计会淹没系统。</text>
+
+  <defs>
+    <marker id="k1" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3a7ca5"/></marker>
+    <marker id="k2" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#c99a1e"/></marker>
+    <marker id="k3" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3d8b4a"/></marker>
+    <marker id="k4" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#888"/></marker>
+  </defs>
+</svg>

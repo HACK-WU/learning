@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" font-family="sans-serif">
+  <rect width="900" height="400" fill="#fbfcfe"/>
+  <text x="450" y="28" text-anchor="middle" font-size="19" font-weight="bold" fill="#1a3d5c">解法 C：连接池耗尽（drain）与长连接难题</text>
+  <text x="450" y="50" text-anchor="middle" font-size="12" fill="#666">红框=失效点</text>
+
+  <rect x="50" y="100" width="130" height="46" rx="8" fill="#dceefb" stroke="#3a7ca5" stroke-width="2"/>
+  <text x="115" y="122" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a3d5c">收到 SIGTERM</text>
+  <text x="115" y="139" text-anchor="middle" font-size="10" fill="#3a7ca5">kubelet 发出</text>
+
+  <rect x="220" y="100" width="150" height="46" rx="8" fill="#fff6d9" stroke="#c99a1e" stroke-width="2.5"/>
+  <text x="295" y="122" text-anchor="middle" font-size="12" font-weight="bold" fill="#7a5d0a">① 标记 not ready</text>
+  <text x="295" y="139" text-anchor="middle" font-size="10" fill="#7a5d0a">/ready 返回失败</text>
+
+  <rect x="410" y="100" width="150" height="46" rx="8" fill="#fff6d9" stroke="#c99a1e" stroke-width="2.5"/>
+  <text x="485" y="122" text-anchor="middle" font-size="12" font-weight="bold" fill="#7a5d0a">② 等待传播 5s</text>
+  <text x="485" y="139" text-anchor="middle" font-size="10" fill="#7a5d0a">上游感知摘除</text>
+
+  <rect x="600" y="100" width="150" height="46" rx="8" fill="#e3f6e6" stroke="#3d8b4a" stroke-width="2.5"/>
+  <text x="675" y="122" text-anchor="middle" font-size="12" font-weight="bold" fill="#265c2e">③ Shutdown(ctx)</text>
+  <text x="675" y="139" text-anchor="middle" font-size="10" fill="#3d8b4a">存量请求跑完</text>
+
+  <line x1="180" y1="123" x2="218" y2="123" stroke="#3a7ca5" stroke-width="2" marker-end="url(#u1)"/>
+  <line x1="370" y1="123" x2="408" y2="123" stroke="#c99a1e" stroke-width="2" marker-end="url(#u2)"/>
+  <line x1="560" y1="123" x2="598" y2="123" stroke="#3d8b4a" stroke-width="2" marker-end="url(#u3)"/>
+
+  <rect x="50" y="185" width="400" height="90" rx="10" fill="#e3f6e6" stroke="#3d8b4a" stroke-width="2"/>
+  <text x="250" y="210" text-anchor="middle" font-size="13" font-weight="bold" fill="#265c2e">短连接（HTTP/1.1 普通请求）</text>
+  <text x="250" y="233" text-anchor="middle" font-size="11" fill="#3d8b4a">Shutdown 等待存量返回 → 干净退出</text>
+  <text x="250" y="256" text-anchor="middle" font-size="11" fill="#3d8b4a">客户端无感知，零 502</text>
+
+  <rect x="490" y="185" width="380" height="90" rx="10" fill="#fde7e7" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="680" y="210" text-anchor="middle" font-size="13" font-weight="bold" fill="#8f1f1c">长连接（gRPC / WebSocket）</text>
+  <text x="680" y="233" text-anchor="middle" font-size="11" fill="#8f1f1c">Shutdown 会一直等到 ctx 超时才强关</text>
+  <text x="680" y="256" text-anchor="middle" font-size="11" fill="#8f1f1c">客户端感知为「卡住后断开」，不是干净 502</text>
+
+  <rect x="30" y="300" width="840" height="80" rx="10" fill="#fff5f5" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="48" y="324" font-size="14" font-weight="bold" fill="#8f1f1c">失效点</text>
+  <text x="48" y="349" font-size="12.5" font-weight="bold" fill="#8f1f1c">① 长连接不会因为是"存量"就自动结束</text>
+  <text x="66" y="368" font-size="12" fill="#5a1a18">应对：HTTP/2 显式发 GOAWAY 让客户端主动重连到其他实例；否则只能等 ctx 超时硬关。</text>
+
+  <defs>
+    <marker id="u1" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3a7ca5"/></marker>
+    <marker id="u2" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#c99a1e"/></marker>
+    <marker id="u3" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3d8b4a"/></marker>
+  </defs>
+</svg>

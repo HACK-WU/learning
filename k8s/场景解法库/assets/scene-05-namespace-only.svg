@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 470" font-family="sans-serif">
+  <rect width="900" height="470" fill="#fbfcfe"/>
+  <text x="450" y="28" text-anchor="middle" font-size="19" font-weight="bold" fill="#1a3d5c">解法 A：namespace 只切名字，不切流量</text>
+  <text x="450" y="50" text-anchor="middle" font-size="12" fill="#666">纵向边界有效，横向流量畅通　红框=失效点</text>
+
+  <line x1="300" y1="80" x2="300" y2="300" stroke="#3a7ca5" stroke-width="3" stroke-dasharray="7,5"/>
+  <line x1="600" y1="80" x2="600" y2="300" stroke="#3a7ca5" stroke-width="3" stroke-dasharray="7,5"/>
+  <text x="150" y="76" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a3d5c">namespace: team-a</text>
+  <text x="450" y="76" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a3d5c">namespace: team-b</text>
+  <text x="750" y="76" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a3d5c">namespace: team-c</text>
+
+  <rect x="80" y="110" width="140" height="50" rx="8" fill="#dceefb" stroke="#3a7ca5" stroke-width="2"/>
+  <text x="150" y="132" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a3d5c">A 的 Pod</text>
+  <text x="150" y="152" text-anchor="middle" font-size="10" fill="#3a7ca5">app: a-web</text>
+
+  <rect x="380" y="110" width="140" height="50" rx="8" fill="#dceefb" stroke="#3a7ca5" stroke-width="2"/>
+  <text x="450" y="132" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a3d5c">B 的 Pod</text>
+  <text x="450" y="152" text-anchor="middle" font-size="10" fill="#3a7ca5">app: b-api</text>
+
+  <rect x="680" y="110" width="140" height="50" rx="8" fill="#dceefb" stroke="#3a7ca5" stroke-width="2"/>
+  <text x="750" y="132" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a3d5c">C 的 Pod</text>
+  <text x="750" y="152" text-anchor="middle" font-size="10" fill="#3a7ca5">app: c-worker</text>
+
+  <rect x="380" y="215" width="140" height="50" rx="8" fill="#e3f6e6" stroke="#3d8b4a" stroke-width="2"/>
+  <text x="450" y="237" text-anchor="middle" font-size="12" font-weight="bold" fill="#265c2e">B 的数据库</text>
+  <text x="450" y="257" text-anchor="middle" font-size="10" fill="#3d8b4a">app: b-db</text>
+
+  <rect x="220" y="215" width="10" height="10" fill="none"/>
+
+  <line x1="220" y1="135" x2="378" y2="230" stroke="#b8332f" stroke-width="3" marker-end="url(#i1)"/>
+  <rect x="232" y="168" width="150" height="34" rx="6" fill="#fde7e7" stroke="#b8332f" stroke-width="2"/>
+  <text x="307" y="189" text-anchor="middle" font-size="11" font-weight="bold" fill="#8f1f1c">跨 namespace 直连成功</text>
+
+  <line x1="600" y1="135" x2="522" y2="228" stroke="#b8332f" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#i1)"/>
+
+  <rect x="80" y="300" width="740" height="26" rx="5" fill="#fff6d9" stroke="#c99a1e" stroke-width="1.5"/>
+  <text x="450" y="318" text-anchor="middle" font-size="11" fill="#7a5d0a">纵向：名字作用域被 namespace 切开（同名资源互不冲突）　｜　RBAC 拦 API 调用</text>
+
+  <rect x="30" y="345" width="840" height="105" rx="10" fill="#fff5f5" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="48" y="369" font-size="14" font-weight="bold" fill="#8f1f1c">失效点</text>
+  <text x="48" y="394" font-size="12.5" font-weight="bold" fill="#8f1f1c">① 网络默认全通——namespace 对流量零约束</text>
+  <text x="66" y="413" font-size="12" fill="#5a1a18">A 的 Pod 可以直接连 B 的 Pod IP，也可以用全名 svc.team-b.svc.cluster.local 解析到 B 的 Service。</text>
+  <text x="48" y="438" font-size="12.5" font-weight="bold" fill="#8f1f1c">② RBAC 管 API 调用，不管 Pod 之间的连接</text>
+
+  <defs>
+    <marker id="i1" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#b8332f"/></marker>
+  </defs>
+</svg>

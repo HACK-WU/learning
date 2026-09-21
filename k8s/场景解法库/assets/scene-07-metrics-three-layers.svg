@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 470" font-family="sans-serif">
+  <rect width="900" height="470" fill="#fbfcfe"/>
+  <text x="450" y="28" text-anchor="middle" font-size="19" font-weight="bold" fill="#1a3d5c">解法 A：指标三层的取数通路</text>
+  <text x="450" y="50" text-anchor="middle" font-size="12" fill="#666">红框=失效点　✅ 本机实测</text>
+
+  <rect x="50" y="90" width="180" height="70" rx="10" fill="#dceefb" stroke="#3a7ca5" stroke-width="2"/>
+  <text x="140" y="114" text-anchor="middle" font-size="13" font-weight="bold" fill="#1a3d5c">① 节点层</text>
+  <text x="140" y="135" text-anchor="middle" font-size="11" fill="#3a7ca5">kubelet / cAdvisor</text>
+  <text x="140" y="152" text-anchor="middle" font-size="10" fill="#3a7ca5">CPU/内存/磁盘/网络</text>
+
+  <rect x="50" y="185" width="180" height="70" rx="10" fill="#fff6d9" stroke="#c99a1e" stroke-width="2.5"/>
+  <text x="140" y="209" text-anchor="middle" font-size="13" font-weight="bold" fill="#7a5d0a">② 组件层</text>
+  <text x="140" y="230" text-anchor="middle" font-size="11" fill="#7a5d0a">apiserver/etcd/scheduler</text>
+  <text x="140" y="247" text-anchor="middle" font-size="10" fill="#7a5d0a">has_leader / 延迟 / DB SIZE</text>
+
+  <rect x="50" y="280" width="180" height="70" rx="10" fill="#e3f6e6" stroke="#3d8b4a" stroke-width="2"/>
+  <text x="140" y="304" text-anchor="middle" font-size="13" font-weight="bold" fill="#265c2e">③ 应用层</text>
+  <text x="140" y="325" text-anchor="middle" font-size="11" fill="#3d8b4a">应用自曝 /metrics</text>
+  <text x="140" y="342" text-anchor="middle" font-size="10" fill="#3d8b4a">RED 三率</text>
+
+  <rect x="290" y="90" width="250" height="50" rx="8" fill="#f0f0f0" stroke="#888" stroke-width="2"/>
+  <text x="415" y="112" text-anchor="middle" font-size="11" fill="#555">nodes/&lt;n&gt;/proxy/metrics/cadvisor</text>
+  <text x="415" y="130" text-anchor="middle" font-size="10" fill="#777">kubectl get --raw（代理）</text>
+
+  <rect x="290" y="185" width="250" height="50" rx="8" fill="#e3f6e6" stroke="#3d8b4a" stroke-width="2.5"/>
+  <text x="415" y="207" text-anchor="middle" font-size="11" font-weight="bold" fill="#265c2e">kubectl get --raw /metrics</text>
+  <text x="415" y="226" text-anchor="middle" font-size="10" fill="#3d8b4a">✅ 实测 31659 行</text>
+
+  <rect x="290" y="255" width="250" height="40" rx="8" fill="#fde7e7" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="415" y="272" text-anchor="middle" font-size="11" font-weight="bold" fill="#8f1f1c">curl -sk $APISERVER/metrics</text>
+  <text x="415" y="288" text-anchor="middle" font-size="10" fill="#8f1f1c">❌ Forbidden（身份不对）</text>
+
+  <rect x="290" y="315" width="250" height="40" rx="8" fill="#f0f0f0" stroke="#888" stroke-width="2"/>
+  <text x="415" y="332" text-anchor="middle" font-size="11" fill="#555">ServiceMonitor / PodMonitor</text>
+  <text x="415" y="348" text-anchor="middle" font-size="10" fill="#777">Prometheus 主动抓取</text>
+
+  <line x1="230" y1="125" x2="288" y2="115" stroke="#3a7ca5" stroke-width="2" marker-end="url(#j1)"/>
+  <line x1="230" y1="220" x2="288" y2="210" stroke="#3d8b4a" stroke-width="2" marker-end="url(#j2)"/>
+  <line x1="230" y1="245" x2="288" y2="275" stroke="#b8332f" stroke-width="2" marker-end="url(#j3)"/>
+  <line x1="230" y1="315" x2="288" y2="330" stroke="#3d8b4a" stroke-width="2" marker-end="url(#j2)"/>
+
+  <rect x="600" y="90" width="270" height="265" rx="10" fill="#fff5f5" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="618" y="114" font-size="13" font-weight="bold" fill="#8f1f1c">失效点</text>
+
+  <text x="618" y="140" font-size="11.5" font-weight="bold" fill="#8f1f1c">① curl 直连 → Forbidden</text>
+  <text x="618" y="158" font-size="10.5" fill="#5a1a18">本质是没凭证。很容易被误判为</text>
+  <text x="618" y="174" font-size="10.5" fill="#5a1a18">"组件没暴露指标"，其实取数方式错了。</text>
+
+  <text x="618" y="202" font-size="11.5" font-weight="bold" fill="#8f1f1c">② 只监控节点 = 控制面盲区</text>
+  <text x="618" y="220" font-size="10.5" fill="#5a1a18">节点 CPU/内存全绿，但 etcd 已经</text>
+  <text x="618" y="236" font-size="10.5" fill="#5a1a18">没有 leader —— 你一个字都看不到。</text>
+
+  <text x="618" y="264" font-size="11.5" font-weight="bold" fill="#8f1f1c">③ 应用层没暴露 /metrics 就是空白</text>
+  <text x="618" y="282" font-size="10.5" fill="#5a1a18">Prometheus 不会凭空造指标，应用</text>
+  <text x="618" y="298" font-size="10.5" fill="#5a1a18">侧不埋点，RED 三率永远没有。</text>
+
+  <text x="618" y="326" font-size="11.5" font-weight="bold" fill="#8f1f1c">④ 三层缺一层 = 故障定位断链</text>
+  <text x="618" y="344" font-size="10.5" fill="#5a1a18">只知道"应用慢"，不知道是节点、</text>
+
+  <defs>
+    <marker id="j1" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3a7ca5"/></marker>
+    <marker id="j2" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3d8b4a"/></marker>
+    <marker id="j3" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#b8332f"/></marker>
+  </defs>
+</svg>

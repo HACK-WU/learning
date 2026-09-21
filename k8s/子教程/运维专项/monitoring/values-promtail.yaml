@@ -1,0 +1,127 @@
+# Promtail values —— 采集 /var/log/pods（课5 知识点2 落地）
+# 环境：kind k8s-c1-calico (3节点) · k8s v1.34.0 · containerd 2.1.3
+#
+# ⚠️ 根因记录（2026-09-20 实测确认，非推测）：
+#   静态 Pod（etcd/apiserver/scheduler/controller-manager）的日志采不到，
+#   是因为 kubelet 为静态 Pod 生成的「镜像 Pod」在 API 里的 UID，
+#   与本地 /var/log/pods 目录名里的 UID 是两个独立生成的值：
+#     API  UID : 75831d14-524d-4619-aae1-4fd9dd7c0eb3
+#     目录 UID : 73677477ce5a6ba3e51b92c1d385aae8   ← 完全不同
+#   而默认 __path__ 用 __meta_kubernetes_pod_uid 拼路径：
+#     /var/log/pods/*75831d14-524d-4619-aae1-4fd9dd7c0eb3/etcd/*.log
+#   → glob 永远匹配不到真实目录（Promtail 日志里 "Adding target" 可见该路径）
+#
+#   ✅ 解法：对静态 Pod 用独立的 static_configs job，用 ** 通配绕过 UID
+#
+# ⚠️ 第二个坑：日志格式
+#   本环境是 containerd → CRI 格式（"2026-09-20T06:26:31Z stderr F {...}"）
+#   不是 docker JSON。用 - docker: {} 会解析失败 → 改用 - cri: {}
+
+image:
+  registry: docker.io
+  repository: grafana/promtail
+  tag: 3.5.1
+
+daemonset:
+  enabled: true
+  extraVolumes:
+    - name: containers
+      hostPath:
+        path: /var/lib/docker/containers
+    - name: pods
+      hostPath:
+        path: /var/log/pods
+  extraVolumeMounts:
+    - name: containers
+      mountPath: /var/lib/docker/containers
+      readOnly: true
+    - name: pods
+      mountPath: /var/log/pods
+      readOnly: true
+
+config:
+  clients:
+    - url: http://loki.monitoring.svc.cluster.local:3100/loki/api/v1/push
+  snippets:
+    # Job 1：普通 Pod（原有逻辑，保留）
+    # 注意：改 cri 解析器（本环境是 containerd，不是 docker）
+    common:
+      - action: replace
+        source_labels: [__meta_kubernetes_pod_node_name]
+        target_label: __host__
+      - action: labelmap
+        regex: __meta_kubernetes_pod_label_(.+)
+
+    scrapeConfigs: |
+      - job_name: kubernetes-pods
+        kubernetes_sd_configs:
+          - role: pod
+        pipeline_stages:
+          - cri: {}
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_node_name]
+            target_label: __host__
+          - action: labelmap
+            regex: __meta_kubernetes_pod_label_(.+)
+          - source_labels: [__meta_kubernetes_namespace]
+            target_label: namespace
+          - source_labels: [__meta_kubernetes_pod_name]
+            target_label: pod
+          - source_labels: [__meta_kubernetes_pod_container_name]
+            target_label: container
+          - replacement: /var/log/pods/*$1/*.log
+            separator: /
+            source_labels:
+              - __meta_kubernetes_pod_uid
+              - __meta_kubernetes_pod_container_name
+            target_label: __path__
+
+      # Job 2：静态 Pod（控制面组件）—— 本次新增
+      # 关键：不用 __meta_kubernetes_pod_uid，改用 ** 双星通配绕过 UID
+      - job_name: kubernetes-static-pods
+        static_configs:
+          - targets: [localhost]
+            labels:
+              __path__: /var/log/pods/kube-system_etcd-*/**/*.log
+              namespace: kube-system
+              component: etcd
+          - targets: [localhost]
+            labels:
+              __path__: /var/log/pods/kube-system_kube-apiserver-*/**/*.log
+              namespace: kube-system
+              component: kube-apiserver
+          - targets: [localhost]
+            labels:
+              __path__: /var/log/pods/kube-system_kube-scheduler-*/**/*.log
+              namespace: kube-system
+              component: kube-scheduler
+          - targets: [localhost]
+            labels:
+              __path__: /var/log/pods/kube-system_kube-controller-manager-*/**/*.log
+              namespace: kube-system
+              component: kube-controller-manager
+        pipeline_stages:
+          - cri: {}
+          # 从路径里提取 pod 名（目录名第二段去掉末尾 UID）
+          - regex:
+              expression: '.*/kube-system_(?P<pod_name>[^_/]+(?:-[^_/]+)*)_[a-f0-9]+/.*'
+              source: filename
+          - labels:
+              pod_name:
+          - regex:
+              expression: '.*/(?P<container_name>[^/]+)/[^/]+\.log$'
+              source: filename
+          - labels:
+              container_name:
+          - static_labels:
+              pod_type: static
+
+resources:
+  requests:
+    cpu: 20m
+    memory: 64Mi
+  limits:
+    memory: 256Mi
+
+serviceMonitor:
+  enabled: false

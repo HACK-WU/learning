@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" font-family="sans-serif">
+  <rect width="900" height="480" fill="#fbfcfe"/>
+  <text x="450" y="28" text-anchor="middle" font-size="19" font-weight="bold" fill="#1a3d5c">解法 C：双向限制的四个通路与自锁风险</text>
+  <text x="450" y="50" text-anchor="middle" font-size="12" fill="#666">红框=自锁风险</text>
+
+  <rect x="330" y="110" width="170" height="70" rx="10" fill="#e3f6e6" stroke="#3d8b4a" stroke-width="2.5"/>
+  <text x="415" y="136" text-anchor="middle" font-size="14" font-weight="bold" fill="#265c2e">db（受保护）</text>
+  <text x="415" y="158" text-anchor="middle" font-size="11" fill="#3d8b4a">policyTypes: Ingress+Egress</text>
+
+  <rect x="60" y="105" width="150" height="52" rx="8" fill="#dceefb" stroke="#3a7ca5" stroke-width="2"/>
+  <text x="135" y="127" text-anchor="middle" font-size="12" font-weight="bold" fill="#1a3d5c">api</text>
+  <text x="135" y="147" text-anchor="middle" font-size="10" fill="#3a7ca5">① Ingress 放行</text>
+
+  <rect x="640" y="105" width="170" height="52" rx="8" fill="#fff6d9" stroke="#c99a1e" stroke-width="2"/>
+  <text x="725" y="127" text-anchor="middle" font-size="12" font-weight="bold" fill="#7a5d0a">kube-dns :53</text>
+  <text x="725" y="147" text-anchor="middle" font-size="10" fill="#7a5d0a">② Egress 放行</text>
+
+  <rect x="640" y="185" width="170" height="52" rx="8" fill="#fff6d9" stroke="#c99a1e" stroke-width="2"/>
+  <text x="725" y="207" text-anchor="middle" font-size="12" font-weight="bold" fill="#7a5d0a">备份网段</text>
+  <text x="725" y="227" text-anchor="middle" font-size="10" fill="#7a5d0a">③ Egress: ipBlock</text>
+
+  <rect x="60" y="185" width="150" height="52" rx="8" fill="#fde7e7" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="135" y="207" text-anchor="middle" font-size="12" font-weight="bold" fill="#8f1f1c">外部 API</text>
+  <text x="135" y="227" text-anchor="middle" font-size="10" fill="#8f1f1c">④ 未声明 → 丢弃</text>
+
+  <line x1="210" y1="131" x2="328" y2="135" stroke="#3a7ca5" stroke-width="2.5" marker-end="url(#h1)"/>
+  <line x1="500" y1="130" x2="638" y2="128" stroke="#c99a1e" stroke-width="2" marker-end="url(#h2)"/>
+  <line x1="500" y1="158" x2="638" y2="205" stroke="#c99a1e" stroke-width="2" marker-end="url(#h2)"/>
+  <line x1="330" y1="158" x2="212" y2="200" stroke="#b8332f" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#h3)"/>
+
+  <rect x="330" y="265" width="170" height="52" rx="8" fill="#fde7e7" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="415" y="287" text-anchor="middle" font-size="12" font-weight="bold" fill="#8f1f1c">表现为「超时」</text>
+  <text x="415" y="307" text-anchor="middle" font-size="10" fill="#8f1f1c">包被丢，无 RST 返回</text>
+  <line x1="415" y1="265" x2="415" y2="253" stroke="#b8332f" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <rect x="30" y="340" width="840" height="122" rx="10" fill="#fff5f5" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="48" y="364" font-size="14" font-weight="bold" fill="#8f1f1c">自锁风险</text>
+
+  <text x="48" y="389" font-size="12.5" font-weight="bold" fill="#8f1f1c">① 出站被拒表现为「连接超时」而非「拒绝」，极难排查</text>
+  <text x="66" y="408" font-size="12" fill="#5a1a18">包被静默丢弃（没有 RST），应用层只看到 timeout → 常被误判为"网络抖动"或"下游挂了"。</text>
+
+  <text x="48" y="434" font-size="12.5" font-weight="bold" fill="#8f1f1c">② 任何未声明的出站依赖都会断：云 SDK / 许可证服务器 / 外部 API / NTP</text>
+  <text x="66" y="453" font-size="12" fill="#5a1a18">收紧前必须先列全出站依赖。注意：镜像拉取通常走节点网络，不受 Pod 级 Egress 策略影响。</text>
+
+  <defs>
+    <marker id="h1" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3a7ca5"/></marker>
+    <marker id="h2" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#c99a1e"/></marker>
+    <marker id="h3" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#b8332f"/></marker>
+  </defs>
+</svg>

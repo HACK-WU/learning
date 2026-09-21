@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 380" font-family="sans-serif">
+  <rect width="900" height="380" fill="#fbfcfe"/>
+  <text x="450" y="28" text-anchor="middle" font-size="19" font-weight="bold" fill="#1a3d5c">解法 C（反例）：跳版本 与 一次全升</text>
+  <text x="450" y="50" text-anchor="middle" font-size="12" fill="#666">这两条在做之前就该被否掉</text>
+
+  <rect x="50" y="85" width="380" height="150" rx="12" fill="#fde7e7" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="240" y="110" text-anchor="middle" font-size="14" font-weight="bold" fill="#8f1f1c">❌ 反例 1：跳次版本</text>
+  <text x="240" y="135" text-anchor="middle" font-size="11" fill="#5a1a18">kubeadm upgrade apply v1.34（从 1.32）</text>
+  <text x="240" y="160" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#8f1f1c">→ fatal：不支持跨次版本升级</text>
+  <text x="240" y="185" text-anchor="middle" font-size="11" fill="#5a1a18">次版本偏差：fatal，无 --force 选项</text>
+  <text x="240" y="208" text-anchor="middle" font-size="11" fill="#5a1a18">补丁版偏差：errors，可用 --force</text>
+
+  <rect x="480" y="85" width="370" height="150" rx="12" fill="#fde7e7" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="665" y="110" text-anchor="middle" font-size="14" font-weight="bold" fill="#8f1f1c">❌ 反例 2：一次 drain 所有节点</text>
+  <text x="665" y="133" text-anchor="middle" font-size="11" fill="#5a1a18">for n in $(kubectl get nodes -o name);</text>
+  <text x="665" y="152" text-anchor="middle" font-size="11" fill="#5a1a18">  do kubectl drain $n ...; done</text>
+  <text x="665" y="180" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#8f1f1c">→ 所有副本同时腾空</text>
+  <text x="665" y="202" text-anchor="middle" font-size="11" fill="#5a1a18">业务直接中断，PDB 也救不回来</text>
+  <text x="665" y="222" text-anchor="middle" font-size="11" fill="#5a1a18">（PDB 只管自愿驱逐的并发度）</text>
+
+  <rect x="30" y="260" width="840" height="100" rx="10" fill="#fff6d9" stroke="#c99a1e" stroke-width="2.5"/>
+  <text x="48" y="284" font-size="14" font-weight="bold" fill="#7a5d0a">为什么它是反例而不是解法</text>
+  <text x="48" y="308" font-size="12" fill="#5a1a18">跳版本<b>不受支持</b>——不是"也许能成"，是明确 fatal；</text>
+  <text x="48" y="329" font-size="12" fill="#5a1a18">一次全升则<b>直接违背 HA 前提</b>——滚动的意义就是保证任何时刻都有可用副本。</text>
+  <text x="48" y="350" font-size="12" font-weight="bold" fill="#8f1f1c">附带坑：kubeadm upgrade plan 不校验版本偏差，apply 才拦 —— 别把 plan 的沉默当成许可。</text>
+
+  <defs/>
+</svg>

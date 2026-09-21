@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 780" width="1000" height="780" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="1000" height="780" fill="#fbfcfd"/>
+  <text x="500" y="32" text-anchor="middle" font-size="21" font-weight="bold" fill="#1a2b3c">课 5：可观测性底座 —— 大盘是绿的，系统是坏的</text>
+
+  <!-- 左：指标三层 -->
+  <rect x="22" y="52" width="308" height="420" rx="9" fill="#e8f4ff" stroke="#2d7dd2" stroke-width="2"/>
+  <text x="176" y="78" text-anchor="middle" font-size="16" font-weight="bold" fill="#14497a">① 指标三层（全部实测取到）</text>
+
+  <rect x="38" y="90" width="276" height="66" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="50" y="109" font-size="12" font-weight="bold" fill="#14532d">节点层 · 集群自带</text>
+  <text x="50" y="127" font-size="10" fill="#444">kubelet 10250/metrics</text>
+  <text x="50" y="143" font-size="10" fill="#444">cAdvisor /metrics/cadvisor</text>
+  <text x="50" y="158" font-size="10" fill="#16a34a">kubelet_active_pods / memory_working_set</text>
+
+  <rect x="38" y="164" width="276" height="66" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="50" y="183" font-size="12" font-weight="bold" fill="#14532d">组件层 · 集群自带</text>
+  <text x="50" y="201" font-size="10" fill="#444">apiserver :6443/metrics</text>
+  <text x="50" y="217" font-size="10" fill="#444">etcd / scheduler / controller-manager</text>
+  <text x="50" y="232" font-size="10" fill="#16a34a">apiserver 36173 条指标</text>
+
+  <rect x="38" y="238" width="276" height="60" rx="6" fill="#fff7e6" stroke="#e8a33d"/>
+  <text x="50" y="257" font-size="12" font-weight="bold" fill="#8a5a00">应用层 · 需装栈</text>
+  <text x="50" y="275" font-size="10" fill="#444">业务 Pod 自己暴露 :8080/metrics</text>
+  <text x="50" y="291" font-size="10" fill="#c2410c">k8s 不自带 → Prometheus</text>
+
+  <text x="38" y="322" font-size="11" font-weight="bold" fill="#1a2b3c">三种取数方式 ↓</text>
+
+  <rect x="38" y="328" width="276" height="46" rx="6" fill="#fef2f2" stroke="#dc2626"/>
+  <text x="50" y="346" font-size="11" font-weight="bold" fill="#991b1b">A curl 直连 → Forbidden</text>
+  <text x="50" y="364" font-size="10" fill="#444">身份是 system:node（不是权限不足）</text>
+
+  <rect x="38" y="382" width="276" height="54" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="50" y="400" font-size="11" font-weight="bold" fill="#14532d">B kubectl get --raw ✅ 推荐</text>
+  <text x="50" y="417" font-size="10" fill="#444">走 apiserver 代理，用 admin 身份</text>
+  <text x="50" y="432" font-size="10" fill="#16a34a">/api/v1/nodes/&lt;n&gt;/proxy/metrics</text>
+
+  <rect x="38" y="444" width="276" height="20" rx="4" fill="#f8fafc" stroke="#94a3b8"/>
+  <text x="50" y="458" font-size="10" fill="#444">C kubectl proxy + 本地 curl（实测可行）</text>
+
+  <!-- 中：日志两套体系 -->
+  <rect x="346" y="52" width="308" height="462" rx="9" fill="#fff7e6" stroke="#e8a33d" stroke-width="2"/>
+  <text x="500" y="78" text-anchor="middle" font-size="16" font-weight="bold" fill="#8a5a00">② 日志两套体系（留存差异）</text>
+
+  <rect x="362" y="90" width="276" height="126" rx="6" fill="#fff" stroke="#2d7dd2" stroke-width="2"/>
+  <text x="374" y="109" font-size="12" font-weight="bold" fill="#14497a">Pod 日志（便利贴）</text>
+  <text x="374" y="127" font-size="10" fill="#444">写入：容器运行时 → kubelet</text>
+  <text x="374" y="143" font-size="10" fill="#444">路径：/var/log/pods/&lt;ns&gt;_&lt;pod&gt;/&lt;c&gt;/0.log</text>
+  <text x="374" y="159" font-size="10" fill="#444">轮转：kubelet（默认 10Mi × 5）</text>
+  <text x="374" y="175" font-size="10" fill="#dc2626">留存：跟随 Pod → 删了就没！</text>
+  <text x="374" y="191" font-size="10" fill="#666">实测 etcd 0.log = 873KB（未轮转）</text>
+  <text x="374" y="207" font-size="10" fill="#16a34a">实测总占用：5.6M</text>
+
+  <rect x="362" y="224" width="276" height="126" rx="6" fill="#fff" stroke="#dc2626" stroke-width="2"/>
+  <text x="374" y="243" font-size="12" font-weight="bold" fill="#991b1b">审计日志（档案柜）</text>
+  <text x="374" y="261" font-size="10" fill="#444">写入：apiserver 自己</text>
+  <text x="374" y="277" font-size="10" fill="#444">路径：/var/log/kubernetes/audit.log</text>
+  <text x="374" y="293" font-size="10" fill="#444">轮转：--audit-log-maxsize=100</text>
+  <text x="374" y="309" font-size="10" fill="#444">      --audit-log-maxage=7 / maxbackup=3</text>
+  <text x="374" y="325" font-size="10" fill="#16a34a">留存：按天，Pod 删了也在</text>
+  <text x="374" y="341" font-size="10" fill="#dc2626">实测总占用：332M（单文件 100MB+）</text>
+
+  <rect x="362" y="358" width="276" height="56" rx="6" fill="#f0fdf4" stroke="#16a34a"/>
+  <text x="374" y="377" font-size="11" font-weight="bold" fill="#14532d">磁盘对比：332M vs 5.6M</text>
+  <text x="374" y="394" font-size="10" fill="#444">差约 60 倍 → 磁盘满先查审计日志</text>
+  <text x="374" y="408" font-size="10" fill="#c2410c">改 kubelet 参数对审计日志无效</text>
+
+  <rect x="362" y="422" width="276" height="44" rx="6" fill="#fef2f2" stroke="#dc2626"/>
+  <text x="374" y="440" font-size="11" font-weight="bold" fill="#991b1b">events：TTL 默认 1 小时</text>
+  <text x="374" y="456" font-size="10" fill="#444">未配 --event-ttl → 排障只有 1h 窗口</text>
+
+  <rect x="362" y="472" width="276" height="36" rx="6" fill="#f0fdf4" stroke="#16a34a"/>
+  <text x="374" y="489" font-size="10" fill="#14532d">✅ 静态 Pod 已修复（static_configs 绕过 UID）</text>
+  <text x="374" y="503" font-size="10" fill="#14532d">四组件全齐：sched .412 / etcd .100 / apis .098 / CM .043</text>
+  <text x="374" y="521" font-size="10" fill="#14532d">✅ 路由已配：2组→9组，warning 被 critical 抑制</text>
+
+  <!-- 右：告警验证 -->
+  <rect x="670" y="52" width="308" height="420" rx="9" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
+  <text x="824" y="78" text-anchor="middle" font-size="16" font-weight="bold" fill="#991b1b">③ 告警：写规则前先核验</text>
+
+  <rect x="686" y="90" width="276" height="52" rx="6" fill="#fff" stroke="#dc2626"/>
+  <text x="698" y="109" font-size="11" font-weight="bold" fill="#991b1b">长期铁律（Kafka 课 09-14 固化）</text>
+  <text x="698" y="127" font-size="10" fill="#444">照抄阈值告警 → 静默失效</text>
+  <text x="698" y="141" font-size="10" fill="#666">比配错阈值更危险：你以为健康</text>
+
+  <text x="686" y="166" font-size="11" font-weight="bold" fill="#1a2b3c">三步核验法</text>
+
+  <rect x="686" y="172" width="276" height="40" rx="6" fill="#fff" stroke="#94a3b8"/>
+  <text x="698" y="190" font-size="10" fill="#444">① 看实际值域 → 是否落在预期语义区间</text>
+  <text x="698" y="205" font-size="10" fill="#666">（量级 1e11 必是累积，不是比率）</text>
+
+  <rect x="686" y="218" width="276" height="40" rx="6" fill="#fff" stroke="#94a3b8"/>
+  <text x="698" y="236" font-size="10" fill="#444">② 读 # TYPE / # HELP → counter vs gauge</text>
+  <text x="698" y="251" font-size="10" fill="#666">（权威依据）</text>
+
+  <rect x="686" y="264" width="276" height="40" rx="6" fill="#fff" stroke="#94a3b8"/>
+  <text x="698" y="282" font-size="10" fill="#444">③ 连续采样 3~5 次 → 递增 vs 有升有降</text>
+  <text x="698" y="297" font-size="10" fill="#c2410c">⚠ 低负载可能无结论 → 以 # TYPE 为准</text>
+
+  <rect x="686" y="312" width="276" height="82" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="698" y="331" font-size="11" font-weight="bold" fill="#14532d">本课实测（Counter 确认）</text>
+  <text x="698" y="349" font-size="10" fill="#444">apiserver_request_total 采样三次：</text>
+  <text x="698" y="365" font-size="10" fill="#16a34a">159085 → 159088 → 159090 ↑</text>
+  <text x="698" y="381" font-size="10" fill="#dc2626">counter：必须 rate() / increase()</text>
+  <text x="698" y="395" font-size="10" fill="#666">gauge：apiserver_current_inflight_requests</text>
+
+  <rect x="686" y="402" width="276" height="56" rx="6" fill="#fff7e6" stroke="#e8a33d"/>
+  <text x="698" y="421" font-size="11" font-weight="bold" fill="#8a5a00">症状型 &gt; 原因型</text>
+  <text x="698" y="438" font-size="10" fill="#444">✗ CPU &gt; 80%（易误报）</text>
+  <text x="698" y="453" font-size="10" fill="#16a34a">✓ 5xx 错误率 &gt; 1%（直指影响）</text>
+
+  <!-- 底部：跨课呼应 -->
+  <rect x="22" y="486" width="956" height="70" rx="9" fill="#e8f4ff" stroke="#2d7dd2" stroke-width="2"/>
+  <text x="500" y="510" text-anchor="middle" font-size="14" font-weight="bold" fill="#14497a">跨课呼应：证书到期从「突发故障」变成「可告警指标」</text>
+  <text x="500" y="532" text-anchor="middle" font-size="12" fill="#444">kubelet_certificate_manager_client_ttl_seconds = 3.1271948e+07 秒</text>
+  <text x="500" y="552" text-anchor="middle" font-size="12" fill="#c2410c">→ 31271948 / 86400 = 361.9 天　（与课 4 实测「证书剩余 361 天」精确吻合）</text>
+
+  <!-- 底部：一句话 -->
+  <rect x="22" y="570" width="956" height="58" rx="9" fill="#1a2b3c"/>
+  <text x="500" y="594" text-anchor="middle" font-size="15" font-weight="bold" fill="#ffffff">先确认数是什么语义、存多久、会不会丢，再谈告警与大盘</text>
+  <text x="500" y="616" text-anchor="middle" font-size="12" fill="#cbd5e1">否则大盘是绿的，系统是坏的</text>
+
+  <!-- 边界声明 -->
+  <rect x="22" y="644" width="956" height="118" rx="9" fill="#f0fdf4" stroke="#16a34a" stroke-dasharray="5,4"/>
+  <text x="42" y="666" font-size="12" font-weight="bold" fill="#14532d">✅ 2026-09-20 晚：监控栈已实际安装并跑通（用户授权后补做）</text>
+  <text x="42" y="685" font-size="11" fill="#475569">Prometheus v3.14.0（247规则/34组）· Grafana 13.2.1(NodePort 30400) · Alertmanager v0.34.0 · node-exporter v1.12.1 · kube-state-metrics v2.20.0 · Loki 3.6.12 · Promtail 3.0.0</text>
+  <text x="42" y="703" font-size="11" fill="#475569">指标入库：node_cpu 480 / kube_pod_info 33 / apiserver_request_total 601 / container_memory 106 series　|　targets UP=22 DOWN=3</text>
+  <text x="42" y="721" font-size="11" fill="#c2410c">⚠️ 新发现① 控制面只听 127.0.0.1 → etcd/CM/scheduler 三个 target DOWN，etcd_server_has_leader=0系列（大盘静默空白）</text>
+  <text x="42" y="739" font-size="11" fill="#16a34a">✅ 已修复② 静态 Pod 日志：新增 static_configs job 绕过 UID（API UID ≠ 目录 UID），解析器改 cri → apiserver 0.119 / etcd 0.077 / CM 0.047 行/秒入库</text>
+  <text x="42" y="757" font-size="11" fill="#16a34a">✅ scheduler 已修复：授权加 -v=2 → kubelet 自动重建 → 0.412 行/秒（含调度决策 evaluatedNodes）</text>
+  <text x="42" y="775" font-size="11" fill="#16a34a">✅ 告警路由已补：receiver null → 三 receiver；分组 2→9 组；inhibit equal 改 job 后生效</text>
+  <text x="42" y="793" font-size="11" fill="#c2410c">⚠ 两个实测坑：AlertmanagerConfig 是 namespace 作用域 / inhibit 的 equal 决定作用域</text>
+  <text x="42" y="811" font-size="11" fill="#475569">❌ 仍未做：改 kubelet 轮转参数 / 改 event-ttl / 长周期留存验证 / 接真实 Slack 或企微</text>
+</svg>

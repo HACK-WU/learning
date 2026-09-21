@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 760" width="1000" height="760" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="1000" height="760" fill="#fbfcfd"/>
+  <text x="500" y="32" text-anchor="middle" font-size="21" font-weight="bold" fill="#1a2b3c">课 4：升级 · 证书 · 生命周期 —— 升级会静默吃掉你的安全加固</text>
+
+  <!-- 左：证书三层级 -->
+  <rect x="22" y="52" width="308" height="392" rx="9" fill="#e8f4ff" stroke="#2d7dd2" stroke-width="2"/>
+  <text x="176" y="78" text-anchor="middle" font-size="16" font-weight="bold" fill="#14497a">① 证书三层级（实测）</text>
+
+  <rect x="38" y="90" width="276" height="62" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="50" y="109" font-size="12" font-weight="bold" fill="#14532d">CA 证书 · 10 年（3 个）</text>
+  <text x="50" y="127" font-size="10" fill="#444">ca / etcd-ca / front-proxy-ca</text>
+  <text x="50" y="143" font-size="10" fill="#16a34a">Sep 14, 2036 · 剩 9y · 不用管</text>
+
+  <rect x="38" y="160" width="276" height="80" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
+  <text x="50" y="179" font-size="12" font-weight="bold" fill="#991b1b">组件证书 · 1 年（11 个）← 要管</text>
+  <text x="50" y="197" font-size="10" fill="#444">admin.conf / apiserver / etcd-server ...</text>
+  <text x="50" y="213" font-size="10" fill="#dc2626">全部 Sep 17, 2027 到期（同时！）</text>
+  <text x="50" y="229" font-size="10" fill="#991b1b">剩 361 天 → 到期是「突然全挂」</text>
+  <text x="50" y="244" font-size="10" fill="#666">不会自动续，需 certs renew</text>
+
+  <rect x="38" y="248" width="276" height="62" rx="6" fill="#f0fdf4" stroke="#16a34a"/>
+  <text x="50" y="267" font-size="12" font-weight="bold" fill="#14532d">kubelet 证书 · 自动轮换</text>
+  <text x="50" y="285" font-size="10" fill="#444">rotateCertificates: true（另一套）</text>
+  <text x="50" y="301" font-size="10" fill="#16a34a">不在 check-expiration 列表里</text>
+
+  <rect x="38" y="318" width="276" height="52" rx="6" fill="#fff7e6" stroke="#e8a33d"/>
+  <text x="50" y="337" font-size="11" font-weight="bold" fill="#8a5a00">双源验证（不迷信工具）</text>
+  <text x="50" y="355" font-size="10" fill="#444">kubeadm 读 ConfigMap + 文件</text>
+  <text x="50" y="370" font-size="10" fill="#16a34a">openssl 读证书本身 → 独立信源</text>
+
+  <rect x="38" y="378" width="276" height="58" rx="6" fill="#fff" stroke="#94a3b8"/>
+  <text x="50" y="397" font-size="11" font-weight="bold" fill="#1a2b3c">renew 后还要做什么</text>
+  <text x="50" y="415" font-size="10" fill="#444">① 重启控制面 Pod</text>
+  <text x="50" y="430" font-size="10" fill="#444">② 更新 5 个 *.conf kubeconfig</text>
+
+  <!-- 中：版本偏差 -->
+  <rect x="346" y="52" width="308" height="392" rx="9" fill="#fff7e6" stroke="#e8a33d" stroke-width="2"/>
+  <text x="500" y="78" text-anchor="middle" font-size="16" font-weight="bold" fill="#8a5a00">② 版本偏差两类拒绝</text>
+
+  <rect x="362" y="90" width="276" height="50" rx="6" fill="#fff" stroke="#16a34a"/>
+  <text x="374" y="109" font-size="11" font-weight="bold" fill="#14532d">plan 不校验（给啥都出表）</text>
+  <text x="374" y="127" font-size="10" fill="#444">plan v1.37.0 → 正常输出升级表</text>
+  <text x="374" y="139" font-size="10" fill="#c2410c">「Latest in the v1.34 series: v1.37.0」</text>
+
+  <rect x="362" y="148" width="276" height="42" rx="6" fill="#fff" stroke="#2d7dd2"/>
+  <text x="374" y="166" font-size="11" font-weight="bold" fill="#14497a">默认 plan 会自己回落</text>
+  <text x="374" y="184" font-size="10" fill="#444">remote v1.37.0 → falling back stable-1.34</text>
+
+  <text x="362" y="212" font-size="11" font-weight="bold" fill="#1a2b3c">apply 才真校验 ↓</text>
+
+  <rect x="362" y="220" width="276" height="84" rx="6" fill="#fff7e6" stroke="#e8a33d" stroke-width="2"/>
+  <text x="374" y="239" font-size="11" font-weight="bold" fill="#8a5a00">A 补丁版 1.34.0 → 1.34.11</text>
+  <text x="374" y="257" font-size="10" fill="#444">「is higher than the kubeadm version」</text>
+  <text x="374" y="273" font-size="10" fill="#c2410c">级别：errors</text>
+  <text x="374" y="289" font-size="10" fill="#16a34a">Can be bypassed with --force</text>
+  <text x="374" y="303" font-size="10" fill="#666">正确做法：先升 kubeadm 二进制</text>
+
+  <rect x="362" y="312" width="276" height="88" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
+  <text x="374" y="331" font-size="11" font-weight="bold" fill="#991b1b">B 次版本 1.34 → 1.36 / 1.37</text>
+  <text x="374" y="349" font-size="10" fill="#444">「can upgrade only 1 minor version」</text>
+  <text x="374" y="365" font-size="10" fill="#dc2626">级别：fatal errors</text>
+  <text x="374" y="381" font-size="10" fill="#dc2626">无 --force 提示 → 绕不过</text>
+  <text x="374" y="396" font-size="10" fill="#666">必须逐级：1.34→1.35→1.36</text>
+
+  <rect x="362" y="408" width="276" height="30" rx="6" fill="#f8fafc" stroke="#94a3b8"/>
+  <text x="374" y="426" font-size="10" fill="#444">kubelet kubeadm 不碰 → 每节点手动升</text>
+
+  <!-- 右：升级丢参数 + 回滚 -->
+  <rect x="670" y="52" width="308" height="392" rx="9" fill="#fef2f2" stroke="#dc2626" stroke-width="2"/>
+  <text x="824" y="78" text-anchor="middle" font-size="16" font-weight="bold" fill="#991b1b">③ 升级丢参数 + 回滚边界</text>
+
+  <rect x="686" y="90" width="276" height="98" rx="6" fill="#fff" stroke="#dc2626" stroke-width="2"/>
+  <text x="698" y="109" font-size="11" font-weight="bold" fill="#991b1b">upgrade diff 实测删了 12 处</text>
+  <text x="698" y="127" font-size="10" fill="#444">- --encryption-provider-config</text>
+  <text x="698" y="143" font-size="10" fill="#444">- --audit-policy-file / -path</text>
+  <text x="698" y="159" font-size="10" fill="#444">- -maxage / -maxsize / -maxbackup</text>
+  <text x="698" y="175" font-size="10" fill="#dc2626">+ 3 mountPath + 3 hostPath 卷</text>
+
+  <rect x="686" y="196" width="276" height="72" rx="6" fill="#f0fdf4" stroke="#16a34a"/>
+  <text x="698" y="215" font-size="11" font-weight="bold" fill="#14532d">这些配置真实在生效（已核实）</text>
+  <text x="698" y="233" font-size="10" fill="#444">enc.yaml 存在（239B，aescbc）</text>
+  <text x="698" y="249" font-size="10" fill="#444">审计日志 /var/log/kubernetes 332MB</text>
+  <text x="698" y="263" font-size="10" fill="#666">来源：主线课 17（2026-09-18 授权真跑）</text>
+
+  <rect x="686" y="276" width="276" height="66" rx="6" fill="#fff7e6" stroke="#e8a33d"/>
+  <text x="698" y="295" font-size="11" font-weight="bold" fill="#8a5a00">根因（不是 bug）</text>
+  <text x="698" y="313" font-size="10" fill="#444">升级按 ClusterConfiguration 重生成</text>
+  <text x="698" y="329" font-size="10" fill="#c2410c">手工 patch 只在磁盘文件，不在 ConfigMap</text>
+
+  <text x="686" y="366" font-size="11" font-weight="bold" fill="#1a2b3c">回滚边界</text>
+  <rect x="686" y="374" width="276" height="62" rx="6" fill="#fff" stroke="#94a3b8"/>
+  <text x="698" y="392" font-size="10" fill="#dc2626">✗ 升级本身：无 undo，不能一键撤销</text>
+  <text x="698" y="408" font-size="10" fill="#16a34a">✓ 数据：靠升级前 etcd 快照</text>
+  <text x="698" y="424" font-size="10" fill="#16a34a">✓ 参数：手工重新 patch</text>
+
+  <!-- 底部：升级前正确顺序 -->
+  <rect x="22" y="458" width="956" height="80" rx="9" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="500" y="482" text-anchor="middle" font-size="14" font-weight="bold" fill="#14532d">升级前的正确顺序（本课核心动作）</text>
+  <text x="500" y="504" text-anchor="middle" font-size="12" fill="#444">① upgrade plan（看可行版本 + MANUAL UPGRADE REQUIRED）→ ② upgrade diff（看会丢什么）→ ③ apply --dry-run（预演）</text>
+  <text x="500" y="526" text-anchor="middle" font-size="12" fill="#c2410c">→ ④ etcd 快照备份（唯一退路）→ ⑤ 才 apply 真升级</text>
+
+  <!-- 底部：一句话 -->
+  <rect x="22" y="552" width="956" height="60" rx="9" fill="#1a2b3c"/>
+  <text x="500" y="576" text-anchor="middle" font-size="15" font-weight="bold" fill="#ffffff">先 diff（看丢什么），再备份，最后 apply</text>
+  <text x="500" y="598" text-anchor="middle" font-size="12" fill="#cbd5e1">因为升级既会静默吃掉安全加固，又没有撤销键</text>
+
+  <!-- 边界声明 -->
+  <rect x="22" y="628" width="956" height="108" rx="9" fill="#fff" stroke="#94a3b8" stroke-dasharray="5,4"/>
+  <text x="42" y="652" font-size="12" font-weight="bold" fill="#475569">⚠️ 本课边界（诚实声明）</text>
+  <text x="42" y="672" font-size="11" fill="#475569">✅ 已实测：certs check-expiration（11+3 项）/ openssl 双源验证 / 剩余天数 361 / rotateCertificates / SAN / upgrade plan（含回落）/ upgrade diff</text>
+  <text x="42" y="691" font-size="11" fill="#475569">✅ 已实测：upgrade apply --dry-run 三种目标版本（v1.34.11 / v1.36.0 / v1.37.0）的两类拒绝 —— 均为预演，未改集群</text>
+  <text x="42" y="710" font-size="11" fill="#475569">❌ 未执行：certs renew（改证书）、upgrade apply 真升级、kubelet 升级、改 ClusterConfiguration / 静态清单（均属改环境，按规矩需你点头）</text>
+  <text x="42" y="728" font-size="11" fill="#475569">🧹 卫生：本课全部为只读查询与 dry-run 预演，未产生任何产渣；集群 3 节点仍 Ready</text>
+</svg>

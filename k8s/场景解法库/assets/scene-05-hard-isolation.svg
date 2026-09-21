@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" font-family="sans-serif">
+  <rect width="900" height="420" fill="#fbfcfe"/>
+  <text x="450" y="28" text-anchor="middle" font-size="19" font-weight="bold" fill="#1a3d5c">解法 C：硬隔离的三个层次</text>
+  <text x="450" y="50" text-anchor="middle" font-size="12" fill="#666">红框=资源并未真正物理隔离</text>
+
+  <rect x="50" y="90" width="240" height="130" rx="12" fill="#f0f0f0" stroke="#888" stroke-width="2"/>
+  <text x="170" y="115" text-anchor="middle" font-size="13" font-weight="bold" fill="#555">① namespace（软）</text>
+  <text x="170" y="139" text-anchor="middle" font-size="11" fill="#777">共用控制面</text>
+  <text x="170" y="160" text-anchor="middle" font-size="11" fill="#777">共用 etcd / 节点</text>
+  <text x="170" y="181" text-anchor="middle" font-size="11" fill="#8f1f1c" font-weight="bold">不是安全边界</text>
+  <text x="170" y="204" text-anchor="middle" font-size="10" fill="#777">成本：低</text>
+
+  <rect x="330" y="90" width="240" height="130" rx="12" fill="#fff6d9" stroke="#c99a1e" stroke-width="2.5"/>
+  <text x="450" y="115" text-anchor="middle" font-size="13" font-weight="bold" fill="#7a5d0a">② vCluster（中）</text>
+  <text x="450" y="139" text-anchor="middle" font-size="11" fill="#7a5d0a">独立 API server + etcd</text>
+  <text x="450" y="160" text-anchor="middle" font-size="11" fill="#7a5d0a">团队有"完整集群"体验</text>
+  <text x="450" y="181" text-anchor="middle" font-size="11" fill="#8f1f1c" font-weight="bold">Pod 仍落在宿主节点</text>
+  <text x="450" y="204" text-anchor="middle" font-size="10" fill="#7a5d0a">成本：中</text>
+
+  <rect x="610" y="90" width="240" height="130" rx="12" fill="#e3f6e6" stroke="#3d8b4a" stroke-width="2.5"/>
+  <text x="730" y="115" text-anchor="middle" font-size="13" font-weight="bold" fill="#265c2e">③ 独立集群（硬）</text>
+  <text x="730" y="139" text-anchor="middle" font-size="11" fill="#3d8b4a">物理隔离控制面与节点</text>
+  <text x="730" y="160" text-anchor="middle" font-size="11" fill="#3d8b4a">真正的安全边界</text>
+  <text x="730" y="181" text-anchor="middle" font-size="11" fill="#8f1f1c" font-weight="bold">运维成本 ×N</text>
+  <text x="730" y="204" text-anchor="middle" font-size="10" fill="#3d8b4a">成本：高</text>
+
+  <rect x="330" y="240" width="240" height="50" rx="8" fill="#fde7e7" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="450" y="262" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#8f1f1c">隔离的是 API 面与网络面</text>
+  <text x="450" y="281" text-anchor="middle" font-size="11" fill="#8f1f1c">不是 CPU / 内存的物理隔离</text>
+
+  <line x1="290" y1="155" x2="328" y2="155" stroke="#c99a1e" stroke-width="2" marker-end="url(#v1)"/>
+  <line x1="570" y1="155" x2="608" y2="155" stroke="#3d8b4a" stroke-width="2" marker-end="url(#v2)"/>
+
+  <rect x="30" y="310" width="840" height="92" rx="10" fill="#fff5f5" stroke="#b8332f" stroke-width="2.5"/>
+  <text x="48" y="334" font-size="14" font-weight="bold" fill="#8f1f1c">失效点 / 代价</text>
+  <text x="48" y="359" font-size="12.5" font-weight="bold" fill="#8f1f1c">① vCluster 的 Pod 最终仍落在宿主节点上</text>
+  <text x="66" y="378" font-size="12" fill="#5a1a18">隔离的是 API 面与网络面，CPU / 内存仍是共享的；真正的物理隔离必须独立集群。</text>
+  <text x="48" y="398" font-size="12.5" font-weight="bold" fill="#8f1f1c">② 运维成本 ×N：每套控制面都要升级、备份、监控，且资源碎片化严重</text>
+
+  <defs>
+    <marker id="v1" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#c99a1e"/></marker>
+    <marker id="v2" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#3d8b4a"/></marker>
+  </defs>
+</svg>

@@ -1,0 +1,76 @@
+# 告警路由实测配置
+# 设计目标（针对本机实测发现的三个真问题）：
+#   问题1：receiver="null" → 8 条告警在响但没人接
+#   问题2：etcdInsufficientMembers(critical) 与 etcdMembersDown(warning)
+#           因 alertname 不同，被 equal:[namespace,alertname] 挡住，抑制未生效 → 重复轰炸
+#   问题3：7 条告警挤在 {namespace:kube-system} 一组 → 一次通知 7 条 = 告警疲劳
+---
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: ops-routing
+  namespace: monitoring
+spec:
+  route:
+    receiver: echo-default
+    groupBy: ["alertname", "severity"]
+    groupWait: 10s
+    groupInterval: 2m
+    repeatInterval: 30m
+    routes:
+    # ① Watchdog 单独走，且不与业务告警混
+    - matchers:
+      - name: alertname
+        value: Watchdog
+      receiver: echo-default
+      groupBy: ["alertname"]
+      continue: false
+
+    # ② critical 立即走，分组更细（按 alertname），组间隔最短
+    - matchers:
+      - name: severity
+        value: critical
+      receiver: echo-critical
+      groupBy: ["alertname"]
+      groupWait: 5s
+      groupInterval: 1m
+      repeatInterval: 15m
+      continue: false
+
+    # ③ warning 按 job 分组（同类聚合，避免一次 7 条）
+    - matchers:
+      - name: severity
+        value: warning
+      receiver: echo-warning
+      groupBy: ["alertname", "job"]
+      groupWait: 30s
+      groupInterval: 5m
+      repeatInterval: 2h
+      continue: false
+
+  # 抑制：节点级故障抑制其上 Pod 级告警（针对问题2的根因改造）
+  inhibitRules:
+  # 关键改造：equal 去掉 alertname，改用 namespace + job
+  # 理由：etcd 的 critical 与 warning 两条 alertname 不同，
+  #       带 alertname 的 equal 会让抑制永远不生效（实测证据）
+  - sourceMatch:
+    - name: severity
+      value: critical
+    targetMatch:
+    - name: severity
+      value: warning
+    equal: ["namespace", "job"]
+
+  receivers:
+  - name: echo-default
+    webhookConfigs:
+    - url: http://am-echo.monitoring.svc
+      sendResolved: true
+  - name: echo-critical
+    webhookConfigs:
+    - url: http://am-echo.monitoring.svc
+      sendResolved: true
+  - name: echo-warning
+    webhookConfigs:
+    - url: http://am-echo.monitoring.svc
+      sendResolved: true

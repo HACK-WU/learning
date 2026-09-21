@@ -1,0 +1,107 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: am-echo
+  namespace: monitoring
+data:
+  app.py: |
+    import json, threading, collections
+    from http.server import BaseHTTPRequestHandler, HTTPServer
+    from datetime import datetime, timezone
+
+    lock = threading.Lock()
+    received = []          # 每条记录：时间 / 告警名 / severity / 状态
+    by_group = collections.Counter()
+
+    class H(BaseHTTPRequestHandler):
+        def do_POST(self):
+            n = int(self.headers.get('Content-Length', 0))
+            body = self.rfile.read(n)
+            try:
+                d = json.loads(body)
+            except Exception:
+                d = {}
+            now = datetime.now(timezone.utc).strftime('%H:%M:%S')
+            with lock:
+                for a in d.get('alerts', []):
+                    received.append({
+                        't': now,
+                        'name': a['labels'].get('alertname'),
+                        'sev': a['labels'].get('severity'),
+                        'status': a.get('status'),
+                    })
+                by_group[d.get('groupLabels', {}) and json.dumps(d.get('groupLabels'), sort_keys=True) or '(空)'] += 1
+                print('[%s] 收到通知: %d 条告警, groupLabels=%s' % (
+                    now, len(d.get('alerts', [])), json.dumps(d.get('groupLabels', {}), ensure_ascii=False)), flush=True)
+                for a in d.get('alerts', []):
+                    print('      - %s | sev=%s | %s' % (
+                        a['labels'].get('alertname'), a['labels'].get('severity'), a.get('status')), flush=True)
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(b'ok')
+
+        def do_GET(self):
+            with lock:
+                out = {
+                    'total_notifications': sum(by_group.values()),
+                    'total_alerts': len(received),
+                    'notifications_by_group': dict(by_group),
+                    'last_20_alerts': received[-20:],
+                }
+            b = json.dumps(out, ensure_ascii=False, indent=2).encode()
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.send_header('Content-Length', str(len(b)))
+            self.end_headers()
+            self.wfile.write(b)
+
+        def log_message(self, *a):
+            pass
+
+    HTTPServer(('0.0.0.0', 8080), H).serve_forever()
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: am-echo
+  namespace: monitoring
+  labels:
+    app: am-echo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: am-echo
+  template:
+    metadata:
+      labels:
+        app: am-echo
+    spec:
+      containers:
+      - name: echo
+        image: python:3.11-alpine
+        command: ["python", "-u", "/app/app.py"]
+        volumeMounts:
+        - name: src
+          mountPath: /app
+        ports:
+        - containerPort: 8080
+        resources:
+          requests: {cpu: 20m, memory: 48Mi}
+          limits: {cpu: 200m, memory: 128Mi}
+      volumes:
+      - name: src
+        configMap:
+          name: am-echo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: am-echo
+  namespace: monitoring
+spec:
+  selector:
+    app: am-echo
+  ports:
+  - port: 80
+    targetPort: 8080
