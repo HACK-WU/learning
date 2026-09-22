@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="620" height="250" viewBox="0 0 620 250" font-family="system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="620" height="250" fill="#ffffff"/>
+  <text x="310" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#1f2937">阶段 3 · 怎么改与收束</text>
+  <text x="310" y="52" text-anchor="middle" font-size="12" fill="#6b7280">章节定位：故事的收束——缺陷看清了，LangChain 的每个组件都是解药</text>
+
+  <defs>
+    <marker id="a3" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#4b5563"/>
+    </marker>
+  </defs>
+
+  <rect x="70" y="86" width="200" height="72" rx="8" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+  <text x="170" y="112" text-anchor="middle" font-size="13" font-weight="700" fill="#047857">课 8</text>
+  <text x="170" y="134" text-anchor="middle" font-size="12" fill="#047857">Prompt / RAG / 微调</text>
+
+  <rect x="330" y="86" width="200" height="72" rx="8" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+  <text x="430" y="112" text-anchor="middle" font-size="13" font-weight="700" fill="#047857">课 9</text>
+  <text x="430" y="134" text-anchor="middle" font-size="12" fill="#047857">缺陷 ↔ 组件映射总表</text>
+
+  <line x1="270" y1="122" x2="326" y2="122" stroke="#4b5563" stroke-width="2" marker-end="url(#a3)"/>
+
+  <rect x="70" y="186" width="460" height="46" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="300" y="206" text-anchor="middle" font-size="12" fill="#1e40af">学完能回答：这个需求该 Prompt、RAG 还是微调？为什么不该用微调注入知识？</text>
+  <text x="300" y="224" text-anchor="middle" font-size="12" fill="#1e40af">看到任一 LangChain 组件，能说出它在补哪个缺陷。</text>
+</svg>

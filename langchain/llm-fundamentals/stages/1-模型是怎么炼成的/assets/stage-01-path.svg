@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="250" viewBox="0 0 760 250" font-family="system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="760" height="250" fill="#ffffff"/>
+  <text x="380" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#1f2937">阶段 1 · 模型是怎么炼成的</text>
+  <text x="380" y="52" text-anchor="middle" font-size="12" fill="#6b7280">章节定位：故事的开场——一个"只会猜词"的机器是怎么被造出来的</text>
+
+  <defs>
+    <marker id="a1" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#4b5563"/>
+    </marker>
+  </defs>
+
+  <rect x="30" y="86" width="150" height="72" rx="8" fill="#f3f4f6" stroke="#9ca3af" stroke-width="2"/>
+  <text x="105" y="112" text-anchor="middle" font-size="13" font-weight="700" fill="#374151">课 1</text>
+  <text x="105" y="134" text-anchor="middle" font-size="12" fill="#4b5563">环境准备</text>
+
+  <rect x="215" y="86" width="150" height="72" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="290" y="112" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">课 2</text>
+  <text x="290" y="134" text-anchor="middle" font-size="12" fill="#1e3a8a">猜下一个词的机器</text>
+
+  <rect x="400" y="86" width="150" height="72" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="475" y="112" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">课 3</text>
+  <text x="475" y="134" text-anchor="middle" font-size="12" fill="#1e3a8a">预训练给了它什么</text>
+
+  <rect x="585" y="86" width="150" height="72" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="660" y="112" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">课 4</text>
+  <text x="660" y="134" text-anchor="middle" font-size="12" fill="#1e3a8a">从续写机到助手</text>
+
+  <line x1="180" y1="122" x2="211" y2="122" stroke="#4b5563" stroke-width="2" marker-end="url(#a1)"/>
+  <line x1="365" y1="122" x2="396" y2="122" stroke="#4b5563" stroke-width="2" marker-end="url(#a1)"/>
+  <line x1="550" y1="122" x2="581" y2="122" stroke="#4b5563" stroke-width="2" marker-end="url(#a1)"/>
+
+  <rect x="30" y="186" width="705" height="46" rx="8" fill="#fffbeb" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="383" y="206" text-anchor="middle" font-size="12" fill="#78350f">学完能回答：模型为什么算不清 strawberry 有几个 r？预训练一个目标为何逼出多种能力？</text>
+  <text x="383" y="224" text-anchor="middle" font-size="12" fill="#78350f">后训练到底改了什么、没改什么？</text>
+</svg>

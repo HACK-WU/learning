@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="440" viewBox="0 0 900 440" font-family="system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="900" height="440" fill="#ffffff"/>
+  <text x="450" y="26" text-anchor="middle" font-size="17" font-weight="700" fill="#1f2937">六条缺陷不是 bug，是机制的必然结果</text>
+  <text x="450" y="48" text-anchor="middle" font-size="12" fill="#6b7280">每一条都能沿箭头追到根——所以换更强的模型也解决不了</text>
+
+  <defs>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#9ca3af"/>
+    </marker>
+  </defs>
+
+  <!-- 左：机制 -->
+  <text x="150" y="76" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">机制（前六课讲的）</text>
+  <rect x="40" y="88" width="220" height="40" rx="7" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="150" y="113" text-anchor="middle" font-size="11" fill="#1e40af">输出是抽样（课 5）</text>
+  <rect x="40" y="136" width="220" height="40" rx="7" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="150" y="161" text-anchor="middle" font-size="11" fill="#1e40af">记忆是有损压缩（课 3）</text>
+  <rect x="40" y="184" width="220" height="40" rx="7" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="150" y="209" text-anchor="middle" font-size="11" fill="#1e40af">只奖励"接得通顺"（课 3/4）</text>
+  <rect x="40" y="232" width="220" height="40" rx="7" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="150" y="257" text-anchor="middle" font-size="11" fill="#1e40af">上下文是工作区（课 6）</text>
+  <rect x="40" y="280" width="220" height="40" rx="7" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="150" y="305" text-anchor="middle" font-size="11" fill="#1e40af">参数是权重非计算器（课 2）</text>
+  <rect x="40" y="328" width="220" height="40" rx="7" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="150" y="353" text-anchor="middle" font-size="11" fill="#1e40af">语料有截点不含私域（课 3）</text>
+
+  <line x1="270" y1="108" x2="330" y2="108" stroke="#9ca3af" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="270" y1="156" x2="330" y2="156" stroke="#9ca3af" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="270" y1="204" x2="330" y2="204" stroke="#9ca3af" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="270" y1="252" x2="330" y2="252" stroke="#9ca3af" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="270" y1="300" x2="330" y2="300" stroke="#9ca3af" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="270" y1="348" x2="330" y2="348" stroke="#9ca3af" stroke-width="1.5" marker-end="url(#ar)"/>
+
+  <!-- 中：缺陷 -->
+  <text x="450" y="76" text-anchor="middle" font-size="13" font-weight="700" fill="#991b1b">→ 缺陷（本课）</text>
+  <rect x="340" y="88" width="200" height="40" rx="7" fill="#fef2f2" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="440" y="106" text-anchor="middle" font-size="11" font-weight="700" fill="#991b1b">6 不可靠</text>
+  <text x="440" y="121" text-anchor="middle" font-size="10" fill="#b91c1c">同样输入不同输出</text>
+  <rect x="340" y="136" width="200" height="40" rx="7" fill="#fef2f2" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="440" y="154" text-anchor="middle" font-size="11" font-weight="700" fill="#991b1b">1 幻觉</text>
+  <text x="440" y="169" text-anchor="middle" font-size="10" fill="#b91c1c">流畅但是假的</text>
+  <rect x="340" y="184" width="200" height="40" rx="7" fill="#fef2f2" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="440" y="202" text-anchor="middle" font-size="11" font-weight="700" fill="#991b1b">1 幻觉</text>
+  <text x="440" y="217" text-anchor="middle" font-size="10" fill="#b91c1c">不奖励"说不知道"</text>
+  <rect x="340" y="232" width="200" height="40" rx="7" fill="#fef2f2" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="440" y="250" text-anchor="middle" font-size="11" font-weight="700" fill="#991b1b">2 无状态</text>
+  <text x="440" y="265" text-anchor="middle" font-size="10" fill="#b91c1c">不记得上次对话</text>
+  <rect x="340" y="280" width="200" height="40" rx="7" fill="#fef2f2" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="440" y="298" text-anchor="middle" font-size="11" font-weight="700" fill="#991b1b">3 无工具</text>
+  <text x="440" y="313" text-anchor="middle" font-size="10" fill="#b91c1c">不会算数/查库/联网</text>
+  <rect x="340" y="328" width="200" height="40" rx="7" fill="#fef2f2" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="440" y="346" text-anchor="middle" font-size="11" font-weight="700" fill="#991b1b">4 知识截止 + 5 无 grounding</text>
+  <text x="440" y="361" text-anchor="middle" font-size="10" fill="#b91c1c">不知"现在"、不知"你的"</text>
+
+  <line x1="550" y1="108" x2="605" y2="108" stroke="#10b981" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="550" y1="156" x2="605" y2="156" stroke="#10b981" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="550" y1="204" x2="605" y2="204" stroke="#10b981" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="550" y1="252" x2="605" y2="252" stroke="#10b981" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="550" y1="300" x2="605" y2="300" stroke="#10b981" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="550" y1="348" x2="605" y2="348" stroke="#10b981" stroke-width="1.5" marker-end="url(#ar)"/>
+
+  <!-- 右：谁来补 -->
+  <text x="760" y="76" text-anchor="middle" font-size="13" font-weight="700" fill="#047857">→ 谁来补（全在模型之外）</text>
+  <rect x="615" y="88" width="245" height="40" rx="7" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+  <text x="737" y="106" text-anchor="middle" font-size="11" font-weight="700" fill="#047857">多次采样 + 结构化断言</text>
+  <text x="737" y="121" text-anchor="middle" font-size="10" fill="#059669">不用字面断言</text>
+  <rect x="615" y="136" width="245" height="40" rx="7" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+  <text x="737" y="154" text-anchor="middle" font-size="11" font-weight="700" fill="#047857">检索给事实来源（RAG）</text>
+  <text x="737" y="169" text-anchor="middle" font-size="10" fill="#059669">让"编"变得不必要</text>
+  <rect x="615" y="184" width="245" height="40" rx="7" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+  <text x="737" y="202" text-anchor="middle" font-size="11" font-weight="700" fill="#047857">引用溯源 + 人工审核</text>
+  <text x="737" y="217" text-anchor="middle" font-size="10" fill="#059669">免责声明不是安全信号</text>
+  <rect x="615" y="232" width="245" height="40" rx="7" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+  <text x="737" y="250" text-anchor="middle" font-size="11" font-weight="700" fill="#047857">Memory 记忆组件</text>
+  <text x="737" y="265" text-anchor="middle" font-size="10" fill="#059669">历史由应用拼进请求</text>
+  <rect x="615" y="280" width="245" height="40" rx="7" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+  <text x="737" y="298" text-anchor="middle" font-size="11" font-weight="700" fill="#047857">Tools / Function Calling</text>
+  <text x="737" y="313" text-anchor="middle" font-size="10" fill="#059669">算数查库交给真工具</text>
+  <rect x="615" y="328" width="245" height="40" rx="7" fill="#ecfdf5" stroke="#10b981" stroke-width="1.5"/>
+  <text x="737" y="346" text-anchor="middle" font-size="11" font-weight="700" fill="#047857">检索 / 联网</text>
+  <text x="737" y="361" text-anchor="middle" font-size="10" fill="#059669">继续训练永远追不上</text>
+
+  <rect x="40" y="388" width="820" height="38" rx="8" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="2"/>
+  <text x="450" y="412" text-anchor="middle" font-size="12" font-weight="700" fill="#6d28d9">六条没有一条能靠模型自己解决 —— 这就是 LangChain 存在的全部理由</text>
+</svg>
