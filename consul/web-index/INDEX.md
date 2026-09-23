@@ -5,3 +5,4 @@
 | 站点 | slug | 起始 URL | 范围 | 条数 | 生成日期 |
 |------|------|----------|------|------|----------|
 | Consul Docs（HashiCorp Developer） | hashicorp-consul | https://developer.hashicorp.com/consul/docs | /consul/docs | 562 | 2026-09-10 |
+| py-consul（Python 客户端） | py-consul | https://criteo.github.io/py-consul/ | 文档站 + GitHub 仓库 | 40 | 2026-09-22 |
