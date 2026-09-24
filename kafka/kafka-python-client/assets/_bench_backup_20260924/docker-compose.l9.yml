@@ -1,0 +1,109 @@
+# 课 9《序列化与 Schema Registry》实验环境
+#
+# 与课 15 的 compose 区别：本课只关心序列化与 schema 演进，
+# 不需要 SASL/ACL（那是课 15 的主题），故用纯 PLAINTEXT 三节点 KRaft。
+#
+# 组件：
+#   kafka-1/2/3   : KRaft 三节点（broker+controller 混合角色）
+#   schema-registry : Confluent Schema Registry 7.6.1，HTTP 8081
+#   bench         : Python 客户端容器（kafka-pybench:3.12）
+#
+# 端口：
+#   19192-19194 : broker PLAINTEXT（宿主机映射，容器内用 kafka-1:9092）
+#   18081       : Schema Registry
+#
+# 关键：bench 必须在 kafka-net 内，因为 advertised.listeners 是容器名
+
+networks:
+  kafka-net:
+    driver: bridge
+
+services:
+  kafka-1:
+    image: apache/kafka:4.0.0
+    container_name: l9-kafka-1
+    networks: [kafka-net]
+    ports: ["19192:9092"]
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: "broker,controller"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka-1:29093,2@kafka-2:29093,3@kafka-3:29093"
+      KAFKA_LISTENERS: "PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:29093"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka-1:9092"
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT"
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_LOG_DIRS: /tmp/kraft-logs
+
+  kafka-2:
+    image: apache/kafka:4.0.0
+    container_name: l9-kafka-2
+    networks: [kafka-net]
+    ports: ["19193:9092"]
+    environment:
+      KAFKA_NODE_ID: 2
+      KAFKA_PROCESS_ROLES: "broker,controller"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka-1:29093,2@kafka-2:29093,3@kafka-3:29093"
+      KAFKA_LISTENERS: "PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:29093"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka-2:9092"
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT"
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_LOG_DIRS: /tmp/kraft-logs
+
+  kafka-3:
+    image: apache/kafka:4.0.0
+    container_name: l9-kafka-3
+    networks: [kafka-net]
+    ports: ["19194:9092"]
+    environment:
+      KAFKA_NODE_ID: 3
+      KAFKA_PROCESS_ROLES: "broker,controller"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka-1:29093,2@kafka-2:29093,3@kafka-3:29093"
+      KAFKA_LISTENERS: "PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:29093"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://kafka-3:9092"
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT"
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_LOG_DIRS: /tmp/kraft-logs
+
+  schema-registry:
+    image: confluentinc/cp-schema-registry:7.6.1
+    container_name: l9-schema-registry
+    networks: [kafka-net]
+    ports: ["18081:8081"]
+    depends_on: [kafka-1, kafka-2, kafka-3]
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_LISTENERS: "http://0.0.0.0:8081"
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: "PLAINTEXT://kafka-1:9092,kafka-2:9092,kafka-3:9092"
+      SCHEMA_REGISTRY_KAFKASTORE_TOPIC: "_schemas"
+      SCHEMA_REGISTRY_KAFKASTORE_REPLICATION_FACTOR: 3
+      SCHEMA_REGISTRY_SCHEMA_COMPATIBILITY_LEVEL: "backward"
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8081/subjects"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+  bench:
+    image: kafka-pybench:3.12
+    container_name: l9-bench
+    networks: [kafka-net]
+    depends_on: [kafka-1, kafka-2, kafka-3, schema-registry]
+    entrypoint: ["sleep", "infinity"]

@@ -1,0 +1,15 @@
+# 课 13 · 结课综合实战 —— 依赖声明
+# 设计约束：**零新增依赖**。
+#   l11 镜像已装：confluent-kafka 2.15.1 / fastapi 0.141.1 / uvicorn 0.53.0 / pydantic 2.13.5
+#   未装且本工程【故意不用】：prometheus_client（手写文本格式）/ pytest（用标准库 unittest）
+# 理由：让 docker compose up 无需联网装包即可跑通，且手撕协议本身就是本课要讲的内容之一。
+[project]
+name = "kafka-capstone"
+version = "1.0.0"
+requires-python = ">=3.12"
+dependencies = [
+    "confluent-kafka>=2.13",
+    "fastapi>=0.140",
+    "uvicorn>=0.53",
+    "pydantic>=2.13",
+]

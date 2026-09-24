@@ -2,7 +2,7 @@
 
 > 对应课程：[第 5 课：生产者 Producer](../stages/2-核心架构/lessons/lesson-05-生产者Producer.md) ｜ 覆盖知识点：生产者发送流程 / 分区策略 / acks 与发送可靠性
 > 定位：**会用，不上生产**——课里学完，在这里动手（结构与边界见 SKILL.md「教学叙事骨架 · 应用实战」）。
-> 环境前提：第 3 课起的本机 Kafka（`localhost:9092`，topic `orders` 3 分区）；客户端示例用 Python（`kafka-python-ng`），思路同样适用于 Java。
+> 环境前提：第 3 课起的本机 Kafka（`localhost:9092`，topic `orders` 3 分区）；客户端示例用 Python（`kafka-python`），思路同样适用于 Java。
 > 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：Apache Kafka 4.x 文档 · producer configs / `acks`、`linger.ms`、`batch.size` 条目）
 
 ## 场景：下单服务每秒要发 1000 条，怎么发才既不乱序又不丢
@@ -143,7 +143,7 @@ Partition:2	u3	{"order_id": 4, "user_id": "u3", "status": "已下单"}
 Partition:1	u1	{"order_id": 5, "user_id": "u1", "status": "已发货"}   ← 还是同一格
 ```
 
-> ✅ **本机实测**（WSL Ubuntu · Python 3 + `kafka-python-ng`，连本机 `apache/kafka:4.0.0`，2026-09-16 跑通）：`u1` 的 3 条全部落在同一个分区（Partition:1），且按发送顺序排列。这就是 `key` 的作用——**同 key 同分区，分区内有序**。
+> ✅ **本机实测**（WSL Ubuntu · Python 3 + `kafka-python`，连本机 `apache/kafka:4.0.0`，2026-09-16 跑通）：`u1` 的 3 条全部落在同一个分区（Partition:1），且按发送顺序排列。这就是 `key` 的作用——**同 key 同分区，分区内有序**。
 
 **这段代码把基础版的三个问题逐个解决掉了**：
 

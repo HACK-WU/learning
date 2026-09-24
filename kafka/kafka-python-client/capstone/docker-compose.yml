@@ -1,0 +1,41 @@
+# 课 13 结课实战 —— 完整可运行工程
+#
+# 设计约束：
+#   1. 零新增依赖：只用 l11 镜像已装的包（fastapi / uvicorn / confluent-kafka）
+#      刻意不用 prometheus_client（手写文本格式）与 pytest（标准库 unittest）
+#   2. 复用现有集群：接入 kafka-1/2/3，不另起 broker
+#   3. 网络：必须与 broker 同网络，否则 advertised.listeners 解析不到
+#
+# 用法：
+#   docker compose -f docker-compose.yml up -d --build
+#   curl localhost:8000/ready
+#   curl localhost:8000/metrics
+
+services:
+  capstone:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: capstone-svc
+    environment:
+      KAFKA_BROKERS: kafka-1:9092,kafka-2:9092,kafka-3:9092
+      GROUP_ID: capstone-svc
+      LOG_LEVEL: INFO
+    ports:
+      - "8000:8000"
+    networks:
+      - kafka-net
+    # 优雅退出：给足时间让 SIGTERM 处理完在途消息（本课核心能力 #3）
+    stop_grace_period: 30s
+    healthcheck:
+      # 用 /ready 而非 /health：就绪才收流量
+      test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://localhost:8000/ready')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+networks:
+  kafka-net:
+    external: true
+    name: bench_kafka-net

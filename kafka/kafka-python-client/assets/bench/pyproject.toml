@@ -1,0 +1,42 @@
+[project]
+name = "kafka-python-client-bench"
+version = "0.2.0"
+description = "Kafka Python 客户端子教程：吞吐基准实测环境"
+requires-python = ">=3.12"
+dependencies = [
+    # 主线：与课 1~6 完全同源（3.0.11 有 KIP-679 默认幂等，课 6 结论可贯穿）
+    # 注：kafka-python-ng 2.2.3 是另一个包，预研期用过，自 0.2.0 起移出主线
+    "kafka-python==3.0.11",
+    "confluent-kafka>=2.15.0",
+    # 压缩 codec 依赖：kafka-python 的 snappy/lz4/zstd 需要额外装，
+    # 不装则只支持 gzip，压缩对照会退化成"单 codec 对照"
+    "lz4",
+    "zstandard",
+    "python-snappy",
+    # 课 9 新增：Schema Registry 客户端依赖
+    # confluent-kafka 的 schema_registry 子包存在，但它的 HTTP 层依赖
+    # certifi / httpx / authlib 三个包，wheel 不自带（课 9 探路实测）
+    "certifi",
+    "httpx",
+    "authlib",
+    # 补漏：探路脚本 mock 循环只剥了 4 层就停下，漏了 cachetools
+    # （schema_registry 用它做 schema 缓存，实测 ModuleNotFoundError 才暴露）
+    "cachetools",
+    # 课 9 新增：序列化格式库
+    "fastavro",          # Avro（纯 Python，无编译依赖）
+    "jsonschema",        # JSON Schema 校验
+    "protobuf",          # Protobuf 编解码
+    # 补漏：confluent 的 ProtobufSerializer 需要 google.type 等 well-known types，
+    # 光装 protobuf 不够（实测 ModuleNotFoundError: No module named 'google.type'）
+    "googleapis-common-protos",
+    # 课 11 新增：asyncio 三方对照（aiokafka / AIOConsumer / FastAPI 场景层）
+    # 注意：AIOConsumer 属 confluent-kafka 自带（confluent_kafka.aio 子模块），无需单独装
+    # 已固化为镜像 kafka-pybench:3.12-l11（原 3.12 不含这三项）
+    "aiokafka",          # 0.14.0 实测
+    "fastapi",           # 0.141.1 实测
+    "uvicorn",           # 0.53.0 实测（FastAPI 场景层 ASGI 服务器）
+]
+
+[tool.uv]
+# 实测环境固定用 CPython 3.12（GIL 版），与课程主环境一致
+python-preference = "only-system"

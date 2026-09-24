@@ -37,7 +37,7 @@
 
   <rect x="536" y="174" width="298" height="46" rx="5" fill="#ffffff" stroke="#a5d6a7" stroke-width="1.4"/>
   <text x="685" y="194" text-anchor="middle" font-size="11" fill="#1b5e20">② 退出信号 → finally 收尾</text>
-  <text x="685" y="212" text-anchor="middle" font-size="10" fill="#2e7d32">flush 冲刷缓冲区 + commitSync + close</text>
+  <text x="685" y="212" text-anchor="middle" font-size="10" fill="#2e7d32">flush 冲刷缓冲区 + commit + close</text>
 
   <rect x="536" y="228" width="298" height="46" rx="5" fill="#ffffff" stroke="#a5d6a7" stroke-width="1.4"/>
   <text x="685" y="248" text-anchor="middle" font-size="11" fill="#1b5e20">③ 单条异常 → try/except 跳过</text>
@@ -55,7 +55,7 @@
   <rect x="30" y="286" width="404" height="86" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
   <text x="50" y="310" font-size="12" font-weight="700" fill="#795548">新增③：多了一条退出通道</text>
   <text x="50" y="332" font-size="11" fill="#5d4037">SIGTERM / SIGINT → 置位 running=False</text>
-  <text x="50" y="352" font-size="11" fill="#5d4037">→ finally：commitSync（提交位移）</text>
+  <text x="50" y="352" font-size="11" fill="#5d4037">→ finally：commit（提交位移）</text>
   <text x="50" y="372" font-size="11" fill="#5d4037">→ flush（冲刷缓冲区）→ close（释放连接）</text>
 
   <!-- 三条必须记住 -->

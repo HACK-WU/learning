@@ -50,7 +50,7 @@
 
   <rect x="546" y="282" width="304" height="34" rx="8" fill="#fff176" stroke="#f9a825" stroke-width="1.6"/>
   <text x="698" y="298" text-anchor="middle" font-size="11" font-weight="700" fill="#795548">新增③：换届前先交接进度</text>
-  <text x="698" y="314" text-anchor="middle" font-size="10" fill="#5d4037">分区被收回前 commitSync，别盲目重做</text>
+  <text x="698" y="314" text-anchor="middle" font-size="10" fill="#5d4037">分区被收回前先标记，回主循环 commit，别盲目重做</text>
 
   <!-- 底部：三个必须记住 -->
   <rect x="30" y="248" width="500" height="166" rx="8" fill="#e8eaf6" stroke="#3f51b5" stroke-width="1.6"/>
