@@ -1,0 +1,126 @@
+﻿===== 方案 A 验证：重建 migrate Job，看 403 是否消失 =====
+
+--- 1. 找 migrate job ---
+  bk-apigateway-bk-esb-migrate-1                      Complete   1/1   147m   25h
+  bk-apigateway-bk-esb-post-migrate-1                 Complete   1/1   165m   25h
+  bk-apigateway-dashboard-migrate-1                   Complete   1/1   138m   25h
+  bk-apigateway-dashboard-post-migrate-1              Complete   1/1   165m   25h
+  bk-console-migrate-2                                Complete   1/1   7s     7h20m
+
+--- 2. 找监控的 migrate（04-bkmonitor 相关）---
+  bk-apigateway-bk-esb-migrate-1                      Complete   1/1   147m   25h
+  bk-apigateway-bk-esb-post-migrate-1                 Complete   1/1   165m   25h
+  bk-apigateway-dashboard-migrate-1                   Complete   1/1   138m   25h
+  bk-apigateway-dashboard-post-migrate-1              Complete   1/1   165m   25h
+  bk-apigateway-sync-builtin-gateway-1                Complete   1/1   165m   25h
+  bk-apigateway-wait-migrations-1                     Complete   1/1   138m   25h
+  bk-apigateway-wait-storages                         Complete   1/1   17m    25h
+  bk-console-migrate-2                                Complete   1/1   7s     7h20m
+  bk-login-migrate-db-1                               Complete   1/1   18s    6h53m
+  bk-monitor-migrate-2                                Failed     0/1   105m   105m
+  bk-monitor-unify-query-apigw-sync-2                 Complete   1/1   26s    105m
+  bk-nodeman-migrate-db-1                             Complete   1/1   65s    113m
+  bk-nodeman-migrate-file-sync-1                      Complete   1/1   85s    113m
+  bk-repo-bkrepo-init-mongodb                         Complete   1/1   4s     4h28m
+  bk-user-api-migrate-db-1                            Complete   1/1   41s    6h53m
+  bk-user-api-migrate-iam-1                           Complete   1/1   47s    6h53m
+  bk-user-saas-migrate-db-1                           Complete   1/1   20s    6h53m
+  bkauth-access-key-init-1                            Complete   1/1   121m   25h
+  bkauth-access-key-sync-1-29836010                   Complete   1/1   5s     23m
+  bkauth-access-key-sync-1-29836020                   Complete   1/1   5s     13m
+
+--- 3. 删掉旧 job 让 helm/init 重建，或找其 owner ---
+  job=bk-apigateway-bk-esb-migrate-1  completions=1/
+    labels={"app.kubernetes.io/instance":"bk-apigateway","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bk-apigateway","app.kubernetes.io/version":"1.13.28","helm.sh/chart":"bk-apigateway-1.13.28"}
+  job=bk-apigateway-bk-esb-post-migrate-1  completions=1/
+    labels={"app.kubernetes.io/instance":"bk-apigateway","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bk-apigateway","app.kubernetes.io/version":"1.13.28","helm.sh/chart":"bk-apigateway-1.13.28"}
+  job=bk-apigateway-dashboard-migrate-1  completions=1/
+    labels={"app.kubernetes.io/instance":"bk-apigateway","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bk-apigateway","app.kubernetes.io/version":"1.13.28","helm.sh/chart":"bk-apigateway-1.13.28"}
+  job=bk-apigateway-dashboard-post-migrate-1  completions=1/
+    labels={"app.kubernetes.io/instance":"bk-apigateway","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bk-apigateway","app.kubernetes.io/version":"1.13.28","helm.sh/chart":"bk-apigateway-1.13.28"}
+  job=bk-apigateway-sync-builtin-gateway-1  completions=1/
+    labels={"app.kubernetes.io/instance":"bk-apigateway","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bk-apigateway","app.kubernetes.io/version":"1.13.28","helm.sh/chart":"bk-apigateway-1.13.28"}
+  job=bk-apigateway-wait-migrations-1  completions=1/
+    labels={"app.kubernetes.io/instance":"bk-apigateway","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bk-apigateway","app.kubernetes.io/version":"1.13.28","helm.sh/chart":"bk-apigateway-1.13.28"}
+  job=bk-apigateway-wait-storages  completions=1/
+    labels={"app.kubernetes.io/instance":"bk-apigateway","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bk-apigateway","app.kubernetes.io/version":"1.13.28","helm.sh/chart":"bk-apigateway-1.13.28"}
+  job=bk-console-migrate-2  completions=1/1
+    labels={"app.kubernetes.io/component":"migration","app.kubernetes.io/instance":"bk-console","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bk-console","helm.sh/chart":"bk-console-0.1.5-beta.8"}
+  job=bk-login-migrate-db-1  completions=1/1
+    labels={"app.kubernetes.io/instance":"bk-user","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"login","app.kubernetes.io/version":"v2.5.4-beta.36","helm.sh/chart":"login-1.0.1"}
+  job=bk-monitor-migrate-2  completions=/1
+    labels={"app.kubernetes.io/instance":"bk-monitor","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"monitor","helm.sh/chart":"monitor-0.1.0"}
+  job=bk-nodeman-migrate-db-1  completions=1/1
+    labels={"app.kubernetes.io/instance":"bk-nodeman","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bk-nodeman","app.kubernetes.io/version":"2.4.11","helm.sh/chart":"bk-nodeman-2.4.11"}
+  job=bk-nodeman-migrate-file-sync-1  completions=1/1
+    labels={"app.kubernetes.io/instance":"bk-nodeman","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bk-nodeman","app.kubernetes.io/version":"2.4.11","helm.sh/chart":"bk-nodeman-2.4.11"}
+  job=bk-repo-bkrepo-init-mongodb  completions=1/1
+    labels={"batch.kubernetes.io/controller-uid":"4ada51b3-8e41-450d-8354-5d945f88ea18","batch.kubernetes.io/job-name":"bk-repo-bkrepo-init-mongodb","controller-uid":"4ada51b3-8e41-450d-8354-5d945f88ea18","job-name":"bk-repo-bkrepo-init-mongodb"}
+  job=bk-user-api-migrate-db-1  completions=1/1
+    labels={"app.kubernetes.io/instance":"bk-user","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"api","app.kubernetes.io/version":"v2.5.4-beta.36","helm.sh/chart":"api-1.0.1"}
+  job=bk-user-api-migrate-iam-1  completions=1/1
+    labels={"app.kubernetes.io/instance":"bk-user","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"api","app.kubernetes.io/version":"v2.5.4-beta.36","helm.sh/chart":"api-1.0.1"}
+  job=bk-user-saas-migrate-db-1  completions=1/1
+    labels={"app.kubernetes.io/instance":"bk-user","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"saas","app.kubernetes.io/version":"v2.5.4-beta.36","helm.sh/chart":"saas-1.0.1"}
+  job=bkauth-access-key-init-1  completions=1/1
+    labels={"app.kubernetes.io/instance":"bk-auth","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bkauth","helm.sh/chart":"bkauth-1.0.2"}
+  job=bkauth-access-key-sync-1-29836010  completions=1/1
+    labels={"app.kubernetes.io/instance":"bk-auth","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bkauth","helm.sh/chart":"bkauth-1.0.2"}
+  job=bkauth-access-key-sync-1-29836020  completions=1/1
+    labels={"app.kubernetes.io/instance":"bk-auth","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bkauth","helm.sh/chart":"bkauth-1.0.2"}
+  job=bkauth-access-key-sync-1-29836030  completions=1/1
+    labels={"app.kubernetes.io/instance":"bk-auth","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bkauth","helm.sh/chart":"bkauth-1.0.2"}
+  job=bkauth-migrate-1  completions=1/1
+    labels={"app.kubernetes.io/component":"migration","app.kubernetes.io/instance":"bk-auth","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bkauth","helm.sh/chart":"bkauth-1.0.2"}
+  job=bkiam-migrate-2  completions=1/1
+    labels={"app.kubernetes.io/component":"migration","app.kubernetes.io/instance":"bk-iam","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bkiam","helm.sh/chart":"bkiam-0.2.21"}
+  job=bkiam-saas-apigateway-sync-1  completions=1/1
+    labels={"app.kubernetes.io/instance":"bk-iam-saas","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bkiam-saas","helm.sh/chart":"bkiam-saas-0.2.61"}
+  job=bkiam-saas-migrate-1  completions=1/1
+    labels={"app.kubernetes.io/component":"migration","app.kubernetes.io/instance":"bk-iam-saas","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bkiam-saas","helm.sh/chart":"bkiam-saas-0.2.61"}
+  job=bkiam-saas-synchronization-1  completions=1/1
+    labels={"app.kubernetes.io/instance":"bk-iam-saas","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bkiam-saas","helm.sh/chart":"bkiam-saas-0.2.61"}
+  job=bkpaas3-apiserver-clean-timeout-slug-pod-29835900  completions=1/1
+    labels={"app":"bk-paas","app.kubernetes.io/instance":"bk-paas","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bkpaas3-apiserver","app.kubernetes.io/version":"v1.6.0-beta.32","batch.kubernetes.io/controller-uid":"02c2ef37-9306-48bf-be06-004ce4fbea57","batch.kubernetes.io/job-name":"bkpaas3-apiserver-clean-timeout-slug-pod-29835900","controller-uid":"02c2ef37-9306-48bf-be06-004ce4fbea57","cron":"clean-timeout-slug-pod","helm.sh/chart":"apiserver-0.0.1","job-name":"bkpaas3-apiserver-clean-timeout-slug-pod-29835900"}
+  job=bkpaas3-apiserver-clean-timeout-slug-pod-29835960  completions=1/1
+    labels={"app":"bk-paas","app.kubernetes.io/instance":"bk-paas","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bkpaas3-apiserver","app.kubernetes.io/version":"v1.6.0-beta.32","batch.kubernetes.io/controller-uid":"6a452f19-918c-46c1-b07c-a7a806a8c2dd","batch.kubernetes.io/job-name":"bkpaas3-apiserver-clean-timeout-slug-pod-29835960","controller-uid":"6a452f19-918c-46c1-b07c-a7a806a8c2dd","cron":"clean-timeout-slug-pod","helm.sh/chart":"apiserver-0.0.1","job-name":"bkpaas3-apiserver-clean-timeout-slug-pod-29835960"}
+  job=bkpaas3-apiserver-clean-timeout-slug-pod-29836020  completions=1/1
+    labels={"app":"bk-paas","app.kubernetes.io/instance":"bk-paas","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bkpaas3-apiserver","app.kubernetes.io/version":"v1.6.0-beta.32","batch.kubernetes.io/controller-uid":"1e23b73d-a751-41a3-99f8-759584bd5494","batch.kubernetes.io/job-name":"bkpaas3-apiserver-clean-timeout-slug-pod-29836020","controller-uid":"1e23b73d-a751-41a3-99f8-759584bd5494","cron":"clean-timeout-slug-pod","helm.sh/chart":"apiserver-0.0.1","job-name":"bkpaas3-apiserver-clean-timeout-slug-pod-29836020"}
+  job=bkpaas3-apiserver-deleting-instances-29835660  completions=/1
+    labels={"app":"bk-paas","app.kubernetes.io/instance":"bk-paas","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bkpaas3-apiserver","app.kubernetes.io/version":"v1.6.0-beta.32","batch.kubernetes.io/controller-uid":"58edc02b-b119-4b70-bad1-048ba0b311c3","batch.kubernetes.io/job-name":"bkpaas3-apiserver-deleting-instances-29835660","controller-uid":"58edc02b-b119-4b70-bad1-048ba0b311c3","cron":"deleting-instances","helm.sh/chart":"apiserver-0.0.1","job-name":"bkpaas3-apiserver-deleting-instances-29835660"}
+  job=bkpaas3-apiserver-deleting-instances-29835960  completions=1/1
+    labels={"app":"bk-paas","app.kubernetes.io/instance":"bk-paas","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bkpaas3-apiserver","app.kubernetes.io/version":"v1.6.0-beta.32","batch.kubernetes.io/controller-uid":"562ac74f-7791-4454-901a-91003374df2a","batch.kubernetes.io/job-name":"bkpaas3-apiserver-deleting-instances-29835960","controller-uid":"562ac74f-7791-4454-901a-91003374df2a","cron":"deleting-instances","helm.sh/chart":"apiserver-0.0.1","job-name":"bkpaas3-apiserver-deleting-instances-29835960"}
+  job=bkpaas3-apiserver-deleting-instances-29835990  completions=1/1
+    labels={"app":"bk-paas","app.kubernetes.io/instance":"bk-paas","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bkpaas3-apiserver","app.kubernetes.io/version":"v1.6.0-beta.32","batch.kubernetes.io/controller-uid":"e40d824c-4e8c-4cff-88ce-9600c590fdc6","batch.kubernetes.io/job-name":"bkpaas3-apiserver-deleting-instances-29835990","controller-uid":"e40d824c-4e8c-4cff-88ce-9600c590fdc6","cron":"deleting-instances","helm.sh/chart":"apiserver-0.0.1","job-name":"bkpaas3-apiserver-deleting-instances-29835990"}
+  job=bkpaas3-apiserver-deleting-instances-29836020  completions=1/1
+    labels={"app":"bk-paas","app.kubernetes.io/instance":"bk-paas","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bkpaas3-apiserver","app.kubernetes.io/version":"v1.6.0-beta.32","batch.kubernetes.io/controller-uid":"c044a513-ab95-4828-8c64-7cd690e1076b","batch.kubernetes.io/job-name":"bkpaas3-apiserver-deleting-instances-29836020","controller-uid":"c044a513-ab95-4828-8c64-7cd690e1076b","cron":"deleting-instances","helm.sh/chart":"apiserver-0.0.1","job-name":"bkpaas3-apiserver-deleting-instances-29836020"}
+  job=bkpaas3-apiserver-init-data-1  completions=1/1
+    labels={"app.kubernetes.io/instance":"bk-paas","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bkpaas3-apiserver","app.kubernetes.io/version":"v1.6.0-beta.32","helm.sh/chart":"apiserver-0.0.1"}
+  job=bkpaas3-apiserver-init-devops-1  completions=1/1
+    labels={"app.kubernetes.io/instance":"bk-paas","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bkpaas3-apiserver","app.kubernetes.io/version":"v1.6.0-beta.32","helm.sh/chart":"apiserver-0.0.1"}
+  job=bkpaas3-apiserver-migrate-db-1  completions=1/1
+    labels={"app.kubernetes.io/instance":"bk-paas","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bkpaas3-apiserver","app.kubernetes.io/version":"v1.6.0-beta.32","helm.sh/chart":"apiserver-0.0.1"}
+  job=bkpaas3-apiserver-update-pending-status-29835660  completions=/1
+    labels={"app":"bk-paas","app.kubernetes.io/instance":"bk-paas","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bkpaas3-apiserver","app.kubernetes.io/version":"v1.6.0-beta.32","batch.kubernetes.io/controller-uid":"22390461-e2fd-4926-8f09-60cca4491e03","batch.kubernetes.io/job-name":"bkpaas3-apiserver-update-pending-status-29835660","controller-uid":"22390461-e2fd-4926-8f09-60cca4491e03","cron":"update-pending-status","helm.sh/chart":"apiserver-0.0.1","job-name":"bkpaas3-apiserver-update-pending-status-29835660"}
+  job=bkpaas3-apiserver-update-pending-status-29835960  completions=1/1
+    labels={"app":"bk-paas","app.kubernetes.io/instance":"bk-paas","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bkpaas3-apiserver","app.kubernetes.io/version":"v1.6.0-beta.32","batch.kubernetes.io/controller-uid":"3337fdf3-d869-47e5-bed2-60ee566a68fb","batch.kubernetes.io/job-name":"bkpaas3-apiserver-update-pending-status-29835960","controller-uid":"3337fdf3-d869-47e5-bed2-60ee566a68fb","cron":"update-pending-status","helm.sh/chart":"apiserver-0.0.1","job-name":"bkpaas3-apiserver-update-pending-status-29835960"}
+  job=bkpaas3-apiserver-update-pending-status-29835990  completions=1/1
+    labels={"app":"bk-paas","app.kubernetes.io/instance":"bk-paas","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bkpaas3-apiserver","app.kubernetes.io/version":"v1.6.0-beta.32","batch.kubernetes.io/controller-uid":"66c375c5-ee78-4e1c-b8a7-373ebc722adc","batch.kubernetes.io/job-name":"bkpaas3-apiserver-update-pending-status-29835990","controller-uid":"66c375c5-ee78-4e1c-b8a7-373ebc722adc","cron":"update-pending-status","helm.sh/chart":"apiserver-0.0.1","job-name":"bkpaas3-apiserver-update-pending-status-29835990"}
+  job=bkpaas3-apiserver-update-pending-status-29836020  completions=1/1
+    labels={"app":"bk-paas","app.kubernetes.io/instance":"bk-paas","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bkpaas3-apiserver","app.kubernetes.io/version":"v1.6.0-beta.32","batch.kubernetes.io/controller-uid":"7898a5b8-aaac-4636-86db-95dd194af6ea","batch.kubernetes.io/job-name":"bkpaas3-apiserver-update-pending-status-29836020","controller-uid":"7898a5b8-aaac-4636-86db-95dd194af6ea","cron":"update-pending-status","helm.sh/chart":"apiserver-0.0.1","job-name":"bkpaas3-apiserver-update-pending-status-29836020"}
+  job=bkpaas3-svc-bkrepo-initial-fixtures-1  completions=1/1
+    labels={"app.kubernetes.io/instance":"bk-paas","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"svc-bkrepo","app.kubernetes.io/version":"1.6.0-beta.3","helm.sh/chart":"svc-bkrepo-0.0.1"}
+  job=bkpaas3-svc-bkrepo-migrate-db-1  completions=1/1
+    labels={"app.kubernetes.io/instance":"bk-paas","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"svc-bkrepo","app.kubernetes.io/version":"1.6.0-beta.3","helm.sh/chart":"svc-bkrepo-0.0.1"}
+  job=bkpaas3-svc-mysql-initial-fixtures-1  completions=1/1
+    labels={"app.kubernetes.io/instance":"bk-paas","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"svc-mysql","app.kubernetes.io/version":"v1.6.0-beta.32","helm.sh/chart":"svc-mysql-0.0.1"}
+  job=bkpaas3-svc-mysql-migrate-db-1  completions=1/1
+    labels={"app.kubernetes.io/instance":"bk-paas","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"svc-mysql","app.kubernetes.io/version":"v1.6.0-beta.32","helm.sh/chart":"svc-mysql-0.0.1"}
+  job=bkpaas3-svc-otel-migrate-db-1  completions=1/1
+    labels={"app.kubernetes.io/instance":"bk-paas","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"svc-otel","app.kubernetes.io/version":"v1.6.0-beta.32","helm.sh/chart":"svc-otel-0.0.2"}
+  job=bkpaas3-svc-rabbitmq-initial-fixtures-1  completions=1/1
+    labels={"app.kubernetes.io/instance":"bk-paas","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"svc-rabbitmq","app.kubernetes.io/version":"v1.6.0-beta.32","helm.sh/chart":"svc-rabbitmq-0.0.1"}
+  job=bkpaas3-svc-rabbitmq-migrate-db-1  completions=1/1
+    labels={"app.kubernetes.io/instance":"bk-paas","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"svc-rabbitmq","app.kubernetes.io/version":"v1.6.0-beta.32","helm.sh/chart":"svc-rabbitmq-0.0.1"}
+  job=bkssm-migrate-2  completions=1/1
+    labels={"app.kubernetes.io/component":"migration","app.kubernetes.io/instance":"bk-ssm","app.kubernetes.io/managed-by":"Helm","app.kubernetes.io/name":"bkssm","helm.sh/chart":"bkssm-1.0.9"}

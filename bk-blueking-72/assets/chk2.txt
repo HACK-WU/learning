@@ -1,0 +1,12 @@
+﻿===== 遗留 2 个 CrashLoopBackOff 排查 =====
+
+=== bk-monitor-web-6699f4d79c-tnw4t ===
+--- init 容器状态 ---
+   init: check-migrate-job  ready= False  reason= CrashLoopBackOff  exit= None
+--- init 日志（前30行）---
+
+=== bk-monitor-web-query-api-699f99c694-x4pr5 ===
+--- init 容器状态 ---
+   init: check-migrate-job  ready= False  reason= CrashLoopBackOff  exit= None
+--- init 日志（前30行）---
+

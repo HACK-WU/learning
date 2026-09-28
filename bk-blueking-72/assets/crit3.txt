@@ -1,0 +1,7 @@
+﻿===== 决定性：apigateway 的 bk-gse 私钥能不能签出 GSE 认可的 token =====
+  Defaulted container "bk-apigateway-dashboard" out of: bk-apigateway-dashboard, wait-migrations (init)
+    bk-gse public_key md5 = 0e18be8a0f385db7ba21c81b58fcc265
+    encrypted_private_key 长度 = 3430
+    KeyGenerator 可用
+    JWT 模型有方法/属性: private_key
+    ⚠️ 取不到私钥，无法完成签名验证

@@ -1,0 +1,14 @@
+﻿===== 修正清洗：去掉 controller-uid 与 selector，让 k8s 自动生成 =====
+    clean yaml 重新生成 OK
+
+--- 应用 ---
+  job.batch/bk-monitor-migrate-2 created
+
+--- 等 60s 看结果 ---
+  bk-monitor-migrate-2                                Running    0/1   60s    60s
+
+  新 pod = bk-monitor-migrate-2-rnfmv
+  状态: Pending
+  403 次数: 5
+
+  --- 最后 20 行日志 ---

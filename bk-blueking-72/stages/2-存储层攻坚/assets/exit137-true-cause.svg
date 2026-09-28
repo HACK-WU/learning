@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" width="900" height="400" font-family="Microsoft YaHei, sans-serif">
+  <rect width="900" height="400" fill="#ffffff"/>
+
+  <text x="450" y="28" text-anchor="middle" font-size="17" font-weight="bold" fill="#1a1a1a">退出码 137 的两个嫌疑人：谁杀了这个容器</text>
+
+  <!-- 左侧：嫌疑人 A - OOM -->
+  <rect x="40" y="60" width="380" height="290" fill="#f8f9fa" stroke="#dadce0" stroke-width="2" rx="6"/>
+  <text x="230" y="88" text-anchor="middle" font-size="15" font-weight="bold" fill="#5f6368">嫌疑人 A：内存不足（OOM）</text>
+
+  <rect x="66" y="106" width="328" height="34" fill="#fce8e6" stroke="#d93025" stroke-width="1"/>
+  <text x="230" y="128" text-anchor="middle" font-size="13" fill="#c5221f">教科书说法：137 = 128+9 = SIGKILL</text>
+
+  <text x="66" y="168" font-size="13" fill="#333">按这个思路去查，四条证据全部否定：</text>
+
+  <g font-size="12.5" fill="#333">
+    <text x="76" y="196">容器 limits 上限</text>
+    <text x="330" y="196" text-anchor="end" fill="#c5221f" font-weight="bold">无限制 ✗</text>
+
+    <text x="76" y="222">节点可用内存</text>
+    <text x="330" y="222" text-anchor="end" fill="#c5221f" font-weight="bold">39G 充足 ✗</text>
+
+    <text x="76" y="248">K8s OOM 事件</text>
+    <text x="330" y="248" text-anchor="end" fill="#c5221f" font-weight="bold">无记录 ✗</text>
+
+    <text x="76" y="274">内核 dmesg OOM</text>
+    <text x="330" y="274" text-anchor="end" fill="#c5221f" font-weight="bold">无记录 ✗</text>
+  </g>
+
+  <rect x="66" y="292" width="328" height="42" fill="#e8eaed" stroke="#9aa0a6" stroke-width="1"/>
+  <text x="230" y="310" text-anchor="middle" font-size="13" font-weight="bold" fill="#5f6368">结论：排除</text>
+  <text x="230" y="328" text-anchor="middle" font-size="12" fill="#5f6368">没有内存压力，不可能是 OOM</text>
+
+  <!-- 右侧：嫌疑人 B - 探针 -->
+  <rect x="480" y="60" width="380" height="290" fill="#f8f9fa" stroke="#188038" stroke-width="2" rx="6"/>
+  <text x="670" y="88" text-anchor="middle" font-size="15" font-weight="bold" fill="#188038">嫌疑人 B：探针杀死（真凶）</text>
+
+  <rect x="506" y="106" width="328" height="34" fill="#e6f4ea" stroke="#188038" stroke-width="1"/>
+  <text x="670" y="128" text-anchor="middle" font-size="13" fill="#137333">事件原文才是权威证据</text>
+
+  <rect x="506" y="150" width="328" height="52" fill="#ffffff" stroke="#188038" stroke-width="1"/>
+  <text x="516" y="168" font-size="11.5" fill="#333">Container bk-redis-cluster failed</text>
+  <text x="516" y="184" font-size="11.5" fill="#333">liveness probe, will be restarted</text>
+  <text x="516" y="196" font-size="11.5" fill="#137333">← kubectl 事件，不是推测</text>
+
+  <g font-size="12.5" fill="#333">
+    <text x="516" y="226">启动 5 秒后开始探活</text>
+    <text x="516" y="248">连续失败 5 次即杀掉</text>
+    <text x="516" y="270">实测存活 55 秒后被 kill</text>
+  </g>
+
+  <rect x="506" y="292" width="328" height="42" fill="#e6f4ea" stroke="#188038" stroke-width="1"/>
+  <text x="670" y="310" text-anchor="middle" font-size="13" font-weight="bold" fill="#137333">结论：真凶</text>
+  <text x="670" y="328" text-anchor="middle" font-size="12" fill="#137333">redis 还没起完，探针先判死</text>
+
+  <!-- 底部教训 -->
+  <rect x="40" y="366" width="820" height="26" fill="#fef7e0" stroke="#f9ab00" stroke-width="1"/>
+  <text x="450" y="384" text-anchor="middle" font-size="13" fill="#ea8600">教训：退出码是「结果」不是「原因」——137 至少两个来源，靠事件原文区分，不能靠退出码猜</text>
+</svg>

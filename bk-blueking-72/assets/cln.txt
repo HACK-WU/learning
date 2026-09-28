@@ -1,0 +1,34 @@
+﻿===== 清理残留旧 Pod 并确认 =====
+
+--- 1. 确认有新旧两个 ReplicaSet ---
+  bk-monitor-web-6699f4d79c                          1    1    0
+  bk-monitor-web-7b8d4bf87b                          1    1    0
+  bk-monitor-web-beat-5bdf8fc5dc                     1    1    1
+  bk-monitor-web-beat-944b4945d                      0    0    0
+  bk-monitor-web-query-api-5495956489                1    1    0
+  bk-monitor-web-query-api-699f99c694                1    1    0
+  bk-monitor-web-worker-5cf9c47ccc                   0    0    0
+  bk-monitor-web-worker-7d4c97f8f8                   1    1    1
+  bk-monitor-web-worker-resource-7db44cf445          0    0    0
+  bk-monitor-web-worker-resource-c579b9c4b           1    1    1
+
+--- 2. 删除 CrashLoopBackOff 的残留 Pod ---
+  pod "bk-monitor-web-6699f4d79c-tnw4t" deleted from blueking namespace
+  pod "bk-monitor-web-query-api-699f99c694-x4pr5" deleted from blueking namespace
+
+--- 3. 等 60s 复查 ---
+  总 Pod: 192
+  未就绪:
+    bk-monitor-web-6699f4d79c-tnw4t               0/1          Terminating
+    bk-monitor-web-query-api-699f99c694-x4pr5     0/1          Terminating
+  (空 = 全部就绪)
+
+--- 4. 监控 web 与 query-api 最终状态 ---
+  bk-monitor-grafana-779d6b858-zz9vn               1/1          Running
+  bk-monitor-web-6699f4d79c-tnw4t                  0/1          Terminating
+  bk-monitor-web-7b8d4bf87b-zzz7x                  0/1          Running
+  bk-monitor-web-beat-5bdf8fc5dc-q898k             1/1          Running
+  bk-monitor-web-query-api-5495956489-6vqg6        0/1          Running
+  bk-monitor-web-query-api-699f99c694-x4pr5        0/1          Terminating
+  bk-monitor-web-worker-7d4c97f8f8-c2btt           1/1          Running
+  bk-monitor-web-worker-resource-c579b9c4b-9nnt8   1/1          Running

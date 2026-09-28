@@ -1,0 +1,16 @@
+﻿===== 1. 路径1 是否真有流量（apigateway -> bk-gse gateway）=====
+  --- apigateway 里 bk-gse 的访问记录 ---
+  dashboard=bk-apigateway-dashboard-68489b9444-k62f7  api=
+  Defaulted container "bk-apigateway-dashboard" out of: bk-apigateway-dashboard, wait-migrations (init)
+    bk-gse gateway id: 9  is_public: True  status: 1
+
+  --- apigateway-api 日志里有没有 bk-gse 的请求 ---
+
+===== 2. GSE 当前是否仍是 403（基线）=====
+    HTTP=404
+
+===== 3. 准备合并公钥（bk-gse + ESB 并存）=====
+  当前 GSE 证书 (bk-gse 公钥) md5 = 0e18be8a0f385db7ba21c81b58fcc265
+  ESB 公钥 md5 = 0e82d670218b3380bcbc15d87625a81e
+  合并后 PEM 块数 = 2
+  合并后 base64 长度 = 1204

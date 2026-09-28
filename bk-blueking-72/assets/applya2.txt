@@ -1,0 +1,38 @@
+﻿===== 方案 A 第2步：ESB 公钥放到块1（原方案A的真意）=====
+  块1 = ESB 公钥 (0e82d670)   <- 修复路径2
+  块2 = bk-gse 公钥 (0e18be8a) <- 尽量保留路径1
+
+--- 1. 构造新证书（ESB 在前）---
+  新块1(ESB)   md5 = 0e82d670218b3380bcbc15d87625a81e
+  新块2(bk-gse) md5 = 0e18be8a0f385db7ba21c81b58fcc265
+  PEM 块数 = 2
+
+--- 2. 应用到 ConfigMap ---
+    patch2.json 已生成
+  configmap/bk-gse-certs patched
+
+--- 3. 重启 GSE ---
+    deployment.apps/bk-gse-admin restarted
+    deployment.apps/bk-gse-cluster restarted
+    deployment.apps/bk-gse-data restarted
+    deployment.apps/bk-gse-file restarted
+    deployment.apps/bk-gse-proc restarted
+    deployment.apps/bk-gse-task restarted
+    deployment "bk-gse-admin" successfully rolled out
+    deployment "bk-gse-cluster" successfully rolled out
+    deployment "bk-gse-data" successfully rolled out
+    deployment "bk-gse-file" successfully rolled out
+    deployment "bk-gse-proc" successfully rolled out
+    deployment "bk-gse-task" successfully rolled out
+
+--- 4. 验证证书顺序 ---
+    n1.pem md5 = 0e82d670218b3380bcbc15d87625a81e
+    n2.pem md5 = 0e18be8a0f385db7ba21c81b58fcc265
+
+--- 5. 重跑 migrate 验证 ---
+  job.batch "bk-monitor-migrate-2" deleted from blueking namespace
+  job.batch/bk-monitor-migrate-2 created
+  新 pod = bk-monitor-migrate-2-hjvtv  状态=Pending
+  403 次数 = 0
+
+  --- 最后 12 行 ---

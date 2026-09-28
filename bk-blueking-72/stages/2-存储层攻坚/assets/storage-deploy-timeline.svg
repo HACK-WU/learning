@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 460" width="980" height="460" font-family="Microsoft YaHei, sans-serif">
+  <rect width="980" height="460" fill="#ffffff"/>
+
+  <text x="490" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#1a1a1a">下发命令之后，时间都花在哪了</text>
+
+  <!-- 时间轴 -->
+  <line x1="80" y1="330" x2="920" y2="330" stroke="#333" stroke-width="2"/>
+  <text x="930" y="335" font-size="13" fill="#333">时间</text>
+
+  <!-- 刻度：0 / 2 / 4 / 6 / 8 / 10 分钟 -->
+  <g font-size="12" fill="#666">
+    <line x1="80" y1="325" x2="80" y2="335" stroke="#333"/><text x="80" y="352" text-anchor="middle">0分</text>
+    <line x1="248" y1="325" x2="248" y2="335" stroke="#333"/><text x="248" y="352" text-anchor="middle">2分</text>
+    <line x1="416" y1="325" x2="416" y2="335" stroke="#333"/><text x="416" y="352" text-anchor="middle">4分</text>
+    <line x1="584" y1="325" x2="584" y2="335" stroke="#333"/><text x="584" y="352" text-anchor="middle">6分</text>
+    <line x1="752" y1="325" x2="752" y2="335" stroke="#333"/><text x="752" y="352" text-anchor="middle">8分</text>
+    <line x1="920" y1="325" x2="920" y2="335" stroke="#333"/><text x="920" y="352" text-anchor="middle">10分</text>
+  </g>
+
+  <!-- 泳道标签 -->
+  <g font-size="13" fill="#333">
+    <text x="72" y="105" text-anchor="end">helm</text>
+    <text x="72" y="165" text-anchor="end">拉镜像</text>
+    <text x="72" y="225" text-anchor="end">Pod启动</text>
+    <text x="72" y="285" text-anchor="end">就绪</text>
+  </g>
+
+  <!-- helm 等待窗口 0-10分钟(600s) -->
+  <rect x="80" y="88" width="840" height="26" fill="#e8f0fe" stroke="#4285f4" stroke-width="2"/>
+  <text x="500" y="106" text-anchor="middle" font-size="13" fill="#1967d2">helm --wait 只等 600 秒（10 分钟）</text>
+
+  <!-- 镜像拉取：11个Pod串行，每个约2分钟 -->
+  <rect x="80" y="148" width="500" height="26" fill="#fce8e6" stroke="#d93025" stroke-width="2"/>
+  <text x="330" y="166" text-anchor="middle" font-size="13" fill="#c5221f">11 个 Pod 竞争拉取，每个约 2 分钟</text>
+
+  <!-- Pod 启动 -->
+  <rect x="248" y="208" width="420" height="26" fill="#fef7e0" stroke="#f9ab00" stroke-width="2"/>
+  <text x="458" y="226" text-anchor="middle" font-size="13" fill="#ea8600">Pod 陆续进入 ContainerCreating / Running</text>
+
+  <!-- 就绪 -->
+  <rect x="668" y="268" width="252" height="26" fill="#e6f4ea" stroke="#188038" stroke-width="2"/>
+  <text x="794" y="286" text-anchor="middle" font-size="13" fill="#137333">Pod 陆续 1/1 就绪</text>
+
+  <!-- 超时分界线 -->
+  <line x1="920" y1="80" x2="920" y2="315" stroke="#d93025" stroke-width="2" stroke-dasharray="6,4"/>
+  <text x="912" y="72" text-anchor="end" font-size="13" font-weight="bold" fill="#d93025">600s 超时</text>
+
+  <!-- 说明块 -->
+  <rect x="80" y="375" width="840" height="62" fill="#f8f9fa" stroke="#dadce0" stroke-width="1"/>
+  <text x="96" y="397" font-size="13" fill="#333">关键：helm 在 600 秒超时后标记 release 为 failed，但它只是「不再等待」，</text>
+  <text x="96" y="419" font-size="13" fill="#333">K8s 仍在继续拉镜像、起 Pod。所以 failed 不等于部署失败——要看 Pod 实际状态。</text>
+</svg>

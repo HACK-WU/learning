@@ -1,0 +1,12 @@
+﻿===== 核验：路径1（apigateway->GSE）现在是否已经坏掉 =====
+
+--- 1. 先确认 GSE 只认块1 这个结论（回顾证据）---
+  事实：块1=bk-gse,块2=ESB 时 -> migrate 403 x5
+  事实：块1=ESB,  块2=bk-gse 时 -> migrate 403 x0
+  推论：GSE 只读块1。那么用 bk-gse 私钥签的请求(路径1)现在应该失败
+
+--- 2. 找 values 源文件位置 ---
+  备份存在: /root/bk-gse-values.backup.yaml (16827 字节)
+  备份存在: /root/bk-gse-certs.backup.yaml (9035 字节)
+
+  搜索 bkapigateway_builtin_keypair.yaml:

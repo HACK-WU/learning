@@ -1,0 +1,28 @@
+﻿===== 最后确认：apigateway 侧 bk-gse 密钥是否可用（决定方案A风险）=====
+  Defaulted container "bk-apigateway-dashboard" out of: bk-apigateway-dashboard, wait-migrations (init)
+    encrypted_private_key len = 3430
+    crypto 模块可用函数:
+      - CertificateChecker
+      - ExtensionOID
+      - InvalidSignature
+      - KeyGenerator
+      - KeyValidator
+      - NameOID
+      - RSAKeyValidationError
+      - calculate_fingerprint
+      - dataclass
+      - force_bytes
+      - get_public_key_from_private_key
+      - timestamp
+
+===== 结论性判断依据 =====
+  已确凿事实：
+  1. apigateway bk-gse gateway 有 6 个 backend 直连 GSE + 41 个 resource
+  2. 该 gateway 的公钥 = GSE 证书公钥 = 0e18be8a
+  3. ESB 用自己密钥 0e82d670 签，与 GSE 证书不符
+  4. bk-gse 的 private_key 字段为空，私钥加密存在 encrypted_private_key(len=3430)
+
+  => 若把 GSE 证书换成 ESB 公钥(0e82d670)：
+     路径1 (apigateway->GSE, 41个resource) 会立刻失效
+     路径2 (ESB->GSE) 才修好
+     => 方案A 是「拆东墙补西墙」，不是净收益，除非路径1本就无用

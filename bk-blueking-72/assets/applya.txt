@@ -1,0 +1,41 @@
+﻿===== 方案 A 执行（第1步）：更新 GSE 证书，合并 bk-gse + ESB 两个公钥 =====
+
+  GSE pod = bk-gse-data-7b67577686-fbvmf
+
+--- 1. 生成合并证书（原 bk-gse 公钥 + ESB 公钥）---
+  PEM 块数 = 2
+  块1(bk-gse) md5 = 0e18be8a0f385db7ba21c81b58fcc265
+  块2(ESB)   md5 = 0e82d670218b3380bcbc15d87625a81e
+
+--- 2. 生成 patch JSON ---
+  patch.json 已生成, PEM 字节数 = 901
+
+--- 3. 应用 patch 到 ConfigMap ---
+  configmap/bk-gse-certs patched
+
+--- 4. 重启 GSE 相关 deployment（让进程重读证书）---
+  重启 bk-gse-admin
+    deployment.apps/bk-gse-admin restarted
+  重启 bk-gse-cluster
+    deployment.apps/bk-gse-cluster restarted
+  重启 bk-gse-data
+    deployment.apps/bk-gse-data restarted
+  重启 bk-gse-file
+    deployment.apps/bk-gse-file restarted
+  重启 bk-gse-proc
+    deployment.apps/bk-gse-proc restarted
+  重启 bk-gse-task
+    deployment.apps/bk-gse-task restarted
+
+--- 5. 等待 GSE 就绪 ---
+    deployment "bk-gse-admin" successfully rolled out
+    deployment "bk-gse-cluster" successfully rolled out
+    deployment "bk-gse-data" successfully rolled out
+    deployment "bk-gse-file" successfully rolled out
+    deployment "bk-gse-proc" successfully rolled out
+    deployment "bk-gse-task" successfully rolled out
+
+--- 6. 验证：新 pod 里证书是否已更新 ---
+    PEM 块数: 2
+    /tmp/blk1.pem md5 = 0e18be8a0f385db7ba21c81b58fcc265
+    /tmp/blk2.pem md5 = 0e82d670218b3380bcbc15d87625a81e

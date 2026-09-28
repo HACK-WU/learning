@@ -1,0 +1,32 @@
+﻿===== 403 仍在，排查合并公钥为何未生效 =====
+
+--- 1. migrate 新日志里的 403 明细 ---
+  2026-09-23 19:17:32 ERROR    23      core.drf_resource.contrib.api               api.py[252] 【Module: gse】【Action: config_query_streamto/】(24c8e640510344619d6ad25bd26594ed) get error：Component request third-party system [GSE] interface [config_query_
+  2026-09-23 19:17:32 WARNING  23      metadata           sync_zk_config.py[153] default zk gse data cluster id:500 not exists, error:请求系统'gse'错误，返回错误码: 1306201，返回消息: {'result': False, 'code': 1306201, 'data': None, 'message': '
+  2026-09-23 19:17:32 ERROR    23      core.drf_resource.contrib.api               api.py[252] 【Module: gse】【Action: config_add_streamto/】(56b3b5535474455480a3206fbee317c7) get error：Component request third-party system [GSE] interface [config_add_stre
+  core.errors.api.BKAPIError: 请求系统'gse'错误，返回错误码: 1306201，返回消息: {'result': False, 'code': 1306201, 'data': None, 'message': 'Component request third-party system [GSE] interface [config_add_streamto] error: Status Code: 403, Erro
+  core.errors.api.BKAPIError: 请求系统'gse'错误，返回错误码: 1306201，返回消息: {'result': False, 'code': 1306201, 'data': None, 'message': 'Component request third-party system [GSE] interface [config_add_streamto] error: Status Code: 403, Erro
+
+--- 2. GSE 侧日志（是否仍 invalid signature）---
+
+--- 3. GSE 证书当前内容（确认 2 块都在）---
+  PEM块数: 2
+
+--- 4. 关键推断：GSE 可能只读第一个 PEM 块 ---
+  若只读块1(bk-gse=0e18be8a)，则 ESB 签的仍失败 -> 需改成块1=ESB
+  但那样会打坏路径1的41个resource
+
+--- 5. 验证：GSE 是否支持多公钥（看它日志里是否报 cert 加载数量）---
+
+--- 6. 备选：证书除了 apigw_jwt.crt，还有别的文件吗 ---
+  total 36
+  drwxrwxrwx 2 root root 4096 Sep 23 11:12 .
+  drwxr-xr-x 1 root root 4096 Nov  6  2025 ..
+  -rw-r--r-- 1 root root  901 Sep 23 11:12 apigw_jwt.crt
+  -rw-r--r-- 1 root root    0 Sep 23 11:12 cert_encrypt.key
+  -rw-r--r-- 1 root root 1367 Sep 23 11:12 gse_api_client.crt
+  -rw-r--r-- 1 root root 1766 Sep 23 11:12 gse_api_client.key
+  -rw-r--r-- 1 root root 1359 Sep 23 11:12 gse_server.crt
+  -rw-r--r-- 1 root root 1766 Sep 23 11:12 gse_server.key
+  -rw-r--r-- 1 root root 1171 Sep 23 11:12 gseca.crt
+cat: /root/why-still.txt: input file is output file

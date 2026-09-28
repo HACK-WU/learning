@@ -1,0 +1,20 @@
+﻿===== 决定性：apigateway 的 bk-gse 私钥 vs GSE 证书，是否一对 =====
+--- 1. 先看 JWT 表有哪些字段 ---
+  Defaulted container "bk-apigateway-dashboard" out of: bk-apigateway-dashboard, wait-migrations (init)
+    JWT 模型字段:
+     - created_time
+     - updated_time
+     - created_by
+     - updated_by
+     - gateway
+     - private_key
+     - public_key
+     - encrypted_private_key
+
+--- 2. 用 bk-gse 的密钥自签自验（确认密钥可用）---
+  GSE 证书已取, md5=0e18be8a0f385db7ba21c81b58fcc265
+  Defaulted container "bk-apigateway-dashboard" out of: bk-apigateway-dashboard, wait-migrations (init)
+  Defaulted container "bk-apigateway-dashboard" out of: bk-apigateway-dashboard, wait-migrations (init)
+    JWT 记录存在: True
+      public_key len = 450
+      private_key len = 0

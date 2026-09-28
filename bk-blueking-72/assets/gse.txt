@@ -1,0 +1,8 @@
+﻿wsl.exe : awk: cmd. line:1: {print
+At line:1 char:1
++ & wsl.exe bash -c 'kubectl get pods -n blueking --no-headers 2>/dev/n ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (awk: cmd. line:1: {print:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+awk: cmd. line:1:       ^ unexpected newline or end of string

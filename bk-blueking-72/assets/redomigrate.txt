@@ -1,0 +1,22 @@
+﻿===== 重建 bk-monitor-migrate，验证 403 是否消失（安全方式）=====
+
+--- 1. 先保存 job 定义（删除前）---
+  已保存 /root/bk-monitor-migrate-2.job.yaml (15327 字节)
+
+--- 2. 清洗 job yaml（去掉 status/uid 等，便于重建）---
+    已生成 clean yaml
+
+--- 3. 保留旧 pod 日志（存证）---
+
+--- 4. 删除旧 job ---
+  job.batch "bk-monitor-migrate-2" deleted from blueking namespace
+
+--- 5. 从 clean yaml 重建 ---
+  The Job "bk-monitor-migrate-2" is invalid: 
+  * spec.template.metadata.labels[controller-uid]: Invalid value: {"batch.kubernetes.io/controller-uid":"036eeb07-ec14-4c89-8e87-b339d2b85aa7","batch.kubernetes.io/job-name":"bk-monitor-migrate-2","controller-uid":"036eeb07-ec14-4c89-8e87-b339d2b85aa7","job-name":"bk-monitor-migrate-2"}: must be '466e1f29-e1c7-4964-8d9e-bcc94ac9decc'
+  * spec.template.metadata.labels[batch.kubernetes.io/controller-uid]: Invalid value: {"batch.kubernetes.io/controller-uid":"036eeb07-ec14-4c89-8e87-b339d2b85aa7","batch.kubernetes.io/job-name":"bk-monitor-migrate-2","controller-uid":"036eeb07-ec14-4c89-8e87-b339d2b85aa7","job-name":"bk-monitor-migrate-2"}: must be '466e1f29-e1c7-4964-8d9e-bcc94ac9decc'
+  * spec.selector: Invalid value: {"matchLabels":{"batch.kubernetes.io/controller-uid":"036eeb07-ec14-4c89-8e87-b339d2b85aa7"}}: `selector` not auto-generated
+
+--- 6. 等 45s 看结果 ---
+
+  新 pod = 

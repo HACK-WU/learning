@@ -1,0 +1,34 @@
+﻿===== 方案 A 完整验证 =====
+
+--- 1. migrate Job 与 Pod 状态 ---
+  bk-monitor-migrate-2                                Complete   1/1   73s     2m26s
+  pod = bk-monitor-migrate-2-hjvtv  状态=Succeeded
+  403 次数 = 0
+
+--- 2. migrate 日志尾部 ---
+
+--- 3. 监控 Pod 状态 ---
+  bk-monitor-alarm-access-data-8679db5b-gf5m5  1/1  Running
+  bk-monitor-alarm-access-event-848b859d45-b2p4s  1/1  Running
+  bk-monitor-alarm-access-event-worker-754ff6984-jbdlt  1/1  Running
+  bk-monitor-alarm-access-real-time-data-8d95c7577-7j2bx  1/1  Running
+  bk-monitor-alarm-action-cron-worker-5d6f6f9fb8-nnd68  1/1  Running
+  bk-monitor-alarm-action-worker-7bf9bc489c-dg6cj  1/1  Running
+  bk-monitor-alarm-alert-fdf4f4b8-t7rkh  1/1  Running
+  bk-monitor-alarm-alert-worker-79d6f6d4b9-t7ckn  1/1  Running
+  bk-monitor-alarm-api-cron-worker-5f9d5c99c7-mltnp  1/1  Running
+  bk-monitor-alarm-beat-78f97fd8f-tqmvx  1/1  Running
+  bk-monitor-alarm-composite-58659ddfcf-zvrr2  1/1  Running
+  bk-monitor-alarm-converge-worker-56b968bf68-vxkth  1/1  Running
+  bk-monitor-alarm-cron-worker-5b5dcd5db6-l48t9  1/1  Running
+  bk-monitor-alarm-detect-864cc658-f7fkh  1/1  Running
+  bk-monitor-alarm-fta-action-worker-64f64db6f8-gt7lp  1/1  Running
+  bk-monitor-alarm-image-worker-66847b7b4b-7tjpc  1/1  Running
+  bk-monitor-alarm-long-task-cron-worker-767c8bbdc4-79klp  1/1  Running
+  bk-monitor-alarm-metadata-task-worker-7b87f68d4c-kvkkt  1/1  Running
+  bk-monitor-alarm-nodata-554468fd75-xgwh2  1/1  Running
+  bk-monitor-alarm-report-cron-worker-7c5f7dbc4f-6jvxn  1/1  Running
+
+--- 4. 等 90s 再看 ---
+  bk-monitor-migrate-2                                Complete   1/1   73s     7m15s
+  403 次数 = 0

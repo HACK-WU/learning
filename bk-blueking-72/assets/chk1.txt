@@ -1,0 +1,45 @@
+﻿===== 收尾核查 =====
+
+--- 1. GSE 组件状态 ---
+  bk-gse-admin-b6789799c-zkgm5               1/1          Running
+  bk-gse-cluster-856d7d7db-sqhjx             1/1          Running
+  bk-gse-data-7794859c6f-k8xfl               1/1          Running
+  bk-gse-file-88f4fc4b9-dp4vl                1/1          Running
+  bk-gse-proc-67c77ddc46-gk5j6               1/1          Running
+  bk-gse-task-6474f9b866-dksxn               1/1          Running
+
+--- 2. 节点管理（另一个 GSE 调用方）---
+  bk-nodeman-backend-api-65bdc699b4-wf8p9    1/1          Running
+  bk-nodeman-backend-celery-beat-6c449974fc-npkfx 1/1          Running
+  bk-nodeman-backend-common-pworker-7b9d768f6f-wlnf2 1/1          Running
+  bk-nodeman-backend-common-worker-5d84fd58d8-n6ntl 1/1          Running
+  bk-nodeman-backend-sync-host-85c6557c67-q9847 1/1          Running
+  bk-nodeman-backend-sync-host-re-757f66f596-cgrxz 1/1          Running
+  bk-nodeman-backend-sync-process-98c77c96c-9xn4z 1/1          Running
+  bk-nodeman-backend-sync-watch-665dd4847f-x5x4x 1/1          Running
+
+--- 3. 监控页面 Pod（之前卡 Init 的）---
+  bk-monitor-alarm-webhook-action-worker-59955fcf47-hrcx2 1/1          Running
+  bk-monitor-grafana-779d6b858-zz9vn         1/1          Running
+  bk-monitor-web-6699f4d79c-tnw4t            0/1          Init:CrashLoopBackOff
+  bk-monitor-web-7b8d4bf87b-zzz7x            0/1          Running
+  bk-monitor-web-beat-5bdf8fc5dc-q898k       1/1          Running
+  bk-monitor-web-query-api-5495956489-6vqg6  0/1          Running
+  bk-monitor-web-query-api-699f99c694-x4pr5  0/1          Init:CrashLoopBackOff
+  bk-monitor-web-worker-7d4c97f8f8-c2btt     1/1          Running
+  bk-monitor-web-worker-resource-c579b9c4b-9nnt8 1/1          Running
+
+--- 4. 集群整体 ---
+  总 Pod: 192
+  未就绪明细:
+    bk-monitor-web-6699f4d79c-tnw4t          0/1          Init:CrashLoopBackOff
+    bk-monitor-web-query-api-699f99c694-x4pr5 0/1          Init:CrashLoopBackOff
+
+--- 5. 证书最终状态 ---
+wsl.exe : error: error stream protocol error: unknown error
+At line:1 char:1
++ & wsl.exe bash /mnt/d/projects/learning/bk-lite/assets/check1.sh 2>&1 ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (error: error st...: unknown error:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
