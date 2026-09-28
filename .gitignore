@@ -259,6 +259,48 @@ elasticsearch/playground/l13-client/18-phase5-probe.js
 elasticsearch/playground/l13-client/19-consistency.js
 elasticsearch/playground/l13-client/21-cleanup-l15.js
 
+# l16：课 16 的一次性实测 / 验收 / 清理脚本（2026-09-20 交付时卫生处理确认）
+# 背景：课 16《复杂结构与搜索建议》交付过程中在 playground 下产生了 5 个脚本：
+#   l16-verify.sh    —— 初版 bash 复验脚本（后被 PowerShell 版取代，讲义已改写）
+#   l16-verify.ps1   —— 讲义第四幕「完整可复现脚本」的照抄实测版
+#   l16-check.ps1    —— 交付验收脚本（链接可达性 / 悬空引用 / 计数一致性 / 集群卫生）
+#   l16-cleanup.ps1  —— lx_* 临时索引幂等清理
+#   l16-netcheck.sh  —— WSL↔Windows 连通性探测（定位 WSL2 NAT 隔离用）
+# 判定：讲义第四幕的脚本已完整内联在 lesson-16 正文里，读者照抄正文即可复现，
+#       这 5 个文件属过程产物，按「lXX-* 通配忽略」惯例处理。
+# 同样不写 elasticsearch/playground/* 一刀切 —— 否则会连带吞掉上面那批教学产物。
+elasticsearch/playground/l16-*
+
+# ---- 应用实战册补齐（课 4–16）临时实测脚本（2026-09-20）----
+# 背景：为 13 篇应用实战篇做「先实测再写文档」，在 playground 下产生 16 个一次性脚本
+# 与 12 个输出快照：
+#   l17-app-t1..t13*.ps1  —— 各课实测 / 补测脚本（t2b/t4b/t5b/t8b/t8c/t10b/t12b/t12c/t13b）
+#   l17-t*-out.txt        —— 对应实测输出留档
+#   l17-check-docs.ps1 / l17-check-out.txt —— 图片引用 + 课内入口核验
+#   l17-check-links.ps1 / l17-links-out.txt —— 全量链接可达性检查
+#   l17-inject-entries.ps1 / l17-inject-out.txt —— 13 课双位置入口回填
+#   l17-cleanup-alias.json —— 临时别名清理载荷
+# 同样不写 elasticsearch/playground/* 一刀切 —— 会连带吞掉上面那 48 个教学产物。
+elasticsearch/playground/l17-*
+
+# ---- 场景解法库升级为目录形态（2026-09-20）临时脚本 ----
+# 背景：把原单文件 `10-场景解法库.md` 升级为 `10-场景解法库/` 目录（11 场景 / 47 解法 /
+#   28 张机制图），过程中在 playground 下产生 9 个脚本与 7 个输出快照：
+#   l18-scene-stat.ps1        —— 解法数与 SVG 数实测统计（得出 47 / 28 两个口径数字）
+#   l18-check-scene-links.ps1 —— 场景库内图片与文档链接可达性（113 条 dead=0）
+#   l18-check-orphan.ps1      —— 孤立图检查（28 图零孤立）
+#   l18-compare-old.ps1       —— 旧单文件 8 个场景标题逐个比对（[OK] 8/8，证明零丢失）
+#   l18-fix-refs.ps1 / l18-fix2.ps1 / l18-fix3.ps1 —— 删旧文件后 27+2 处引用切换与路径层级修正
+#   l18-verify-all-links.ps1  —— 全课程 110 个 md / 971 条链接核验
+#   l18-archive.ps1           —— 评审清单回写
+#   *-out.txt（7 个）         —— 上述脚本的输出留档
+# 判定：均为一次性核验 / 修复脚本，实测结论已固化进目录内文档与 00-评审清单.md，
+#       未被任何讲义正文引用，丢了课程依然完整 —— 过程残留，不是教学产物。
+# ⚠️ 同样不写 `elasticsearch/playground/*` 一刀切 —— 会连带吞掉上面那批教学产物
+#    （已跟踪文件短期不受影响，但将来删了重建就会被忽略，属于埋雷）。
+elasticsearch/playground/l18-*
+
+
 # ---- 教学实操环境：SurrealDB 运行时数据与一次性验证脚本（surrealdb 课程）----
 # 背景：2026-09-03 卫生检查（Phase 5 收尾）发现三类过程残留：
 #   1. playground/data/mydb —— RocksDB 存储目录，63 MB（其中 000004.log 62 MB）。
@@ -974,3 +1016,52 @@ elasticsearch/elk/playground/07-reliability/backups/
 # ---- PostgreSQL 结课实战运行期产物 ----
 # 备份与隔离恢复实例由项目脚本生成；教学源码和 Markdown 不忽略。
 postgresql/projects/订单系统的 PG 生产化手册/实现/runtime/
+
+# ---- 蓝鲸 7.2 CE 部署课程（bk-blueking-72）：PKI 私钥与密钥库（2026-09-24）----
+# 背景：assets/config-backup/blueking/environments/default/cert/ 下 24 个文件中，
+#   13 个是私钥或密钥库 —— 经 git check-ignore 实测实为 14 个：
+#   8 个 *.key（含 cert_encrypt.key 对称密钥）+ 2 个 *.p12 + 2 个 *.keystore + 2 个 *.truststore。
+#   openssl 实测：CA 根证书（GSEROOTCA / JOBROOTCA）2019 年签发、有效期 100 年，
+#   随安装包分发；叶子证书由部署时用预置 CA 签发（notBefore=2026-09-22）。
+#   故换环境重部署会重新生成整套叶子私钥，本备份不入库不影响复现。
+# 判定：私钥不进 git —— 删除文件去不掉历史，且养成"私钥入库"习惯的风险
+#       远大于本地测试环境本身的价值。
+# ⚠️ 两个例外，属"丢了真会出事"，已在 28-证书与密钥清单.md 中标注需单独另存：
+#   1. cert_encrypt.key —— 45 字节对称密钥，用它加密的密文丢了它永久解不开
+#   2. p12/keystore 密码 —— 由 openssl rand 随机生成、只写进 values.yaml、不落盘
+# 结构、用途、复现步骤已全部落盘为 28-证书与密钥清单.md（纯知识资产，入库）。
+# md5.txt（仅校验和，非敏感）保留在库内，用于校验备份完整性。
+bk-blueking-72/assets/config-backup/blueking/environments/default/cert/*.key
+bk-blueking-72/assets/config-backup/blueking/environments/default/cert/*.p12
+bk-blueking-72/assets/config-backup/blueking/environments/default/cert/*.keystore
+bk-blueking-72/assets/config-backup/blueking/environments/default/cert/*.truststore
+
+# ---- 同上：整份部署配置备份含大量明文凭据，整体不入库（2026-09-28 补）----
+# 背景：2026-09-28 打包核查时实测发现，config-backup 下 environments/default/values.yaml
+#   第 160 / 183 行含两个 keytool 明文口令（gse.cert.password / job.cert.password），
+#   另有各组件 password 字段（mongodb/rabbitmq/cmdb 等，虽多为弱口令如 gse/job）。
+#   实测 git ls-files 确认：config-backup 目前 0 个文件入库，风险尚未发生；
+#   但一次 `git add .` 即会把全部明文口令推上 GitHub（origin 为 github.com）。
+# 判定：整目录忽略。该目录是"运行时配置快照"，非教学资产 ——
+#   教学价值已由 13-配置备份与离线复现档案.md + 28-证书与密钥清单.md 两篇承载，
+#   读者看文档即可理解结构与复现方法，无需拿到含密原件。
+# 例外：cert/ 下的公钥证书（*.crt/*.cert）与 md5.txt 已在本节上方规则之外，
+#   此前已被纳入跟踪计划；若需保留，可用 `git add -f` 单独强制添加。
+bk-blueking-72/assets/config-backup/
+
+# ---- Kafka Python 客户端子教程：卫生处理备份目录与临时核验脚本 ----
+# 背景：2026-09-24 对 assets/bench 做孤儿脚本清理（206 → 113）前，
+#   先全量备份到 _bench_backup_20260924/，该备份随后被误纳入提交 ac21183（206 个文件）。
+#   备份内 94 个文件即当时判定删除的孤儿脚本，其余 112 个在 assets/bench/ 均有留存，
+#   即删除备份不丢任何教学资产。2026-09-28 已从索引移除（工作区文件保留）。
+# 判定：整目录忽略 —— 它是"清理前的保险副本"，不是教学资产。
+kafka/kafka-python-client/assets/_bench_backup_*/
+
+# 同上：capstone 下 `_` 前缀的临时核验脚本。命名前缀 `_` 即"一次性、不入档"的约定，
+#   2026-09-28 实测 26 个无引用（讲义 md 语料词边界检索零命中）并从索引移除；
+#   例外 `tests/_count.py` 被课 13 讲义两处链接（吞吐测法陷阱的复现脚本），须保留。
+#   注意：`app/__init__.py` 与 `tests/__init__.py` 同为 `_` 前缀但是包必需文件，不能按前缀删。
+kafka/kafka-python-client/capstone/_*
+kafka/kafka-python-client/capstone/tests/_*
+!kafka/kafka-python-client/capstone/tests/_count.py
+!kafka/kafka-python-client/capstone/**/__init__.py

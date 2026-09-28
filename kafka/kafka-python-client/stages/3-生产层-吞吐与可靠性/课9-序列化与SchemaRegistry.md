@@ -491,3 +491,10 @@ bash assets/bench/l9_pb_verify.sh          # Protobuf 吞吐测法核验
 - 兼容性策略只实测了 4 种（BACKWARD/FORWARD/FULL/NONE），SR 另有 3 种 transitive 变体未实测
 - SR 单节点部署，**未测多节点 HA 与故障切换**
 - Protobuf 未接 `ProtobufSerializer` 跑完整 Kafka 端到端，只做到 SR 注册与本地编解码
+
+## 导航
+
+- ⬆️ 返回：[阶段 3 概览](overview.md)
+- ⬅️ 上一课：[课 8 · 事务与恰好一次](课8-事务与恰好一次.md)
+- ➡️ 下一课：[课 10 · 消费者工程与并发模型](课10-消费者工程与并发模型.md)
+- 📖 进度：[00-学习档案](../../00-学习档案.md)
