@@ -94,7 +94,7 @@ flowchart TD
 
 **核心结论**：同步调用是锁链，任一环节超时会拖死整条链路（雪崩）。消息队列把锁链拆成"投递 + 排队 + 处理"，换来三大价值——**异步**（投完即走）、**解耦**（互不相识）、**削峰**（堆积不垮，洪峰过后慢慢追）。
 
-> 📖 [课 1 全文](stages/1-为什么需要Kafka/lessons/lesson-01-为什么需要消息队列.md)
+> 📖 [课 1 全文](stages/1-为什么需要Kafka/lessons/01-为什么需要消息队列.md)
 
 ### 课 2：Kafka 是什么 & 起源与定位
 
@@ -117,7 +117,7 @@ flowchart TD
 
 **核心结论**：Kafka 的本质是**分布式提交日志**——消息读后不删（受 retention 控制），每个消费者各自维护 offset，因此可重放、多订阅。四大角色：Producer / Topic / Broker / Consumer。**选型直觉**：Kafka 强在海量事件流与可重放；RabbitMQ 强在复杂路由的业务解耦；需要按规则分发且吞吐中等时，别硬上 Kafka。
 
-> 📖 [课 2 全文](stages/1-为什么需要Kafka/lessons/lesson-02-Kafka是什么与起源定位.md)
+> 📖 [课 2 全文](stages/1-为什么需要Kafka/lessons/02-Kafka是什么与起源定位.md)
 
 ## 阶段 2：Kafka 核心架构
 
@@ -138,7 +138,7 @@ flowchart LR
 
 **核心结论**：Kafka 4.0 已**彻底移除 ZooKeeper**，默认 KRaft 模式，单节点用 `KAFKA_PROCESS_ROLES='broker,controller'` 一个节点兼两职。看历史消息必须加 `--from-beginning`（默认只消费启动后的新消息）。本地单节点 Docker 还要把容器放进用户自定义网络，并设置 `KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1`；`orders` 存业务消息，`__consumer_offsets` 存消费者组位移，消费者先开、生产者后开是合法顺序。消费端空白时先用 `kafka-get-offsets.sh --topic orders` 判断业务数据，再检查内部 Topic，不要把两个 Topic 混为一谈。
 
-> 📖 [课 3 全文](stages/2-核心架构/lessons/lesson-03-本地起Kafka与CLI快速上手.md)
+> 📖 [课 3 全文](stages/2-核心架构/lessons/03-本地起Kafka与CLI快速上手.md)
 
 ### 课 4：Topic、Partition 与 Broker
 
@@ -162,7 +162,7 @@ flowchart TD
 
 **核心结论**：Topic 是逻辑通道，**Partition 才是真家伙**——分片带来并行，分区数 = 并行度上限。Kafka 快的两根支柱：**顺序写磁盘**（避免随机寻道）+ **零拷贝**（数据不经过用户态，直接从页缓存发到网卡）。有序性是**分区级**的：分区内严格有序，跨分区不保证。
 
-> 📖 [课 4 全文](stages/2-核心架构/lessons/lesson-04-Topic、Partition与Broker.md)
+> 📖 [课 4 全文](stages/2-核心架构/lessons/04-Topic、Partition与Broker.md)
 
 ### 课 5：生产者 Producer
 
@@ -186,7 +186,7 @@ flowchart TD
 
 **核心结论**：发送链路是 **序列化 → 分区器 → 攒批 → Sender 异步发送**。指定 key 时用 murmur2 哈希取模固定分区（**同 key 必同分区，这是保序的手段**），无 key 则轮询。`acks=1` 只等 leader 写本地日志就返回，那段「未同步窗口」正是 leader 宕机丢消息的根源——**真正不丢要 `acks=all`**。
 
-> 📖 [课 5 全文](stages/2-核心架构/lessons/lesson-05-生产者Producer.md)
+> 📖 [课 5 全文](stages/2-核心架构/lessons/05-生产者Producer.md)
 
 ### 课 6：消费者与消费者组
 
@@ -215,7 +215,7 @@ flowchart TD
 
 **核心结论**：口诀是**组内分工、组间广播**——竞争只发生在组内（一个分区同一时刻只能被组内一个消费者消费，所以并行上限 = 分区数），不同组各自拿到全量、各自记账。位移存在 `__consumer_offsets` 里当"书签"。**位移提交时机决定语义**：先处理后提交 = 不丢但可能重复；先提交后处理 = 可能丢。
 
-> 📖 [课 6 全文](stages/2-核心架构/lessons/lesson-06-消费者与消费者组.md)
+> 📖 [课 6 全文](stages/2-核心架构/lessons/06-消费者与消费者组.md)
 
 ## 阶段 3：可靠性与高可用
 
@@ -245,7 +245,7 @@ flowchart TD
 
 **核心结论**：**单 leader 模型**——读写都走 leader（保证 offset 由唯一权威编号），follower 是"特殊的消费者"，持续 fetch 同步待命。ISR 是在岗名单，接班只从 ISR 选；掉队的进 OSR，追上可回归。**最反直觉的一点**：`min.insync.replicas=1`（默认）时 ISR 只剩 leader 也能写入，`acks=all` 照常成功——但保障已**静默退化**（"all"实际只等到 1 份确认）。生产推荐 `min.insync.replicas=2`，让退化为**显式拒绝**而非带病运行。
 
-> 📖 [课 7 全文](stages/3-可靠性与高可用/lessons/lesson-07-副本机制与故障转移.md)
+> 📖 [课 7 全文](stages/3-可靠性与高可用/lessons/07-副本机制与故障转移.md)
 
 ### 课 8：交付语义与幂等
 
@@ -265,7 +265,7 @@ flowchart LR
 **核心结论**：Kafka 3.x 默认配置（acks=all + 无限重试 + 先处理后自动提交位移）的端到端语义是 **at-least-once**，不是 exactly-once——两处都可能重复。**每一跳的保障加起来才是不丢不重，任何一环掉链子就退化到那一环的水平**。
 **幂等最容易误解的边界**：去重键是「PID + 分区 + 序列号」，它只挡**客户端内部对同一次发送的自动重试**；应用代码手动再调一次 `send()` 会拿到新序列号，broker 当成新消息正常写入。exactly-once 要显式拼装幂等 + 事务，且**事务只覆盖 Kafka 内部**（topic + `__consumer_offsets`），一旦要写数据库就失效，仍需业务幂等兜底。
 
-> 📖 [课 8 全文](stages/3-可靠性与高可用/lessons/lesson-08-交付语义与幂等.md)
+> 📖 [课 8 全文](stages/3-可靠性与高可用/lessons/08-交付语义与幂等.md)
 
 ## 阶段 4：实战与架构落地
 
@@ -296,7 +296,7 @@ flowchart LR
 **核心结论**：**每一处关键代码都对应前几课的一个机制**——发送侧管"进"（分区 + 可靠性），消费侧管"出"（进度 + 语义）。客户端选型：学习/中小吞吐用 **kafka-python**（纯 pip 零编译），Python 高吞吐用 **confluent-kafka**（librdkafka C 内核），企业核心链路用 **Java**（新特性第一时间落地）。
 **"Kafka 丢消息"的头号原因**：`send()` 是异步的，消息还在本地缓冲区；进程退出时没有 `flush()`/`close()`，缓冲区里的消息根本没发出。修复：退出前 `flush()` + `close()`，关键消息用 `future.get(timeout=10)` 逐条确认。
 
-> 📖 [课 9 全文](stages/4-实战与架构落地/lessons/lesson-09-代码开发实战.md)
+> 📖 [课 9 全文](stages/4-实战与架构落地/lessons/09-代码开发实战.md)
 
 ### 课 10：项目架构设计落地
 
@@ -327,7 +327,7 @@ flowchart TB
 **核心结论**：**事件是过去式的事实陈述，命令是祈使句**。`UserRegistered` 是事件（发布者不关心谁处理），`SendWelcomeEmail` / `UpdatePoints` / `CallRiskEngine` 都是命令——把它们发进事件主干，等于**把同步调用的耦合包了个异步的皮**。正确姿势：积分服务订阅 `UserRegistered` 自己决定加多少分。
 **技术选型的答案永远是"看清单"，不是"看热度"**：日均 2000 万事件多下游、大促削峰、需要重放历史——适合 Kafka；每天 500 条、按部门路由、处理完流转下一环节的审批流——不该用 Kafka（那是工作流引擎的活）。
 
-> 📖 [课 10 全文](stages/4-实战与架构落地/lessons/lesson-10-项目架构设计落地.md)
+> 📖 [课 10 全文](stages/4-实战与架构落地/lessons/10-项目架构设计落地.md)
 
 ---
 
@@ -365,7 +365,7 @@ flowchart TD
 
 **核心结论**：**认证 = 你是谁，授权 = 你能干什么，加密 = 路上防偷看**——三者独立、可渐进开启、可混用。最容易踩的坑是「开了认证没配 ACL」：Kafka 默认授权器在无 ACL 时**允许所有操作**，等于刷了工牌就全楼通行。四件套必须成套配：`listeners` 开端口、`listener.security.protocol.map` 定规则、`inter.broker.listener.name` 选内部通道、`advertised.listeners` 告诉客户端真地址（容器/NAT 环境下漏它是排障头号高频问题）。开 ACL 前**务必先设 `super.users`**，否则会把自己锁在门外。
 
-> 📖 [课 11 全文](stages/5-生产落地延伸/lessons/lesson-11-Kafka安全体系.md)
+> 📖 [课 11 全文](stages/5-生产落地延伸/lessons/11-Kafka安全体系.md)
 
 ---
 
@@ -397,7 +397,7 @@ flowchart TD
 
 **核心结论**：**多租户 = 用命名规范划地盘 + 用配额限量**。共享集群的诉求是降本，隔离只是手段，一个团队一套集群的运维成本不现实。配额优先该限的是**请求速率**而非带宽——官方明确指出，请求速率配额的隔离效果往往比带宽配额更显著，因为瓶颈是 broker CPU，带宽只是表象。最关键的一条：**配额超限是限流（throttling），客户端表现为「变慢」而不是「报错」**，所以不配监控根本发现不了自己被限流了。
 
-> 📖 [课 12 全文](stages/5-生产落地延伸/lessons/lesson-12-多租户与配额.md)
+> 📖 [课 12 全文](stages/5-生产落地延伸/lessons/12-多租户与配额.md)
 
 ---
 
@@ -428,7 +428,7 @@ flowchart TD
 
 **核心结论**：**消息永远按批写入——批量是格式的基本假设，不是优化**。这解释了压缩为什么有效（作用于整批，能利用批内重复的 schema）。Record 里**不存绝对 offset**，只存相对批次的 `offsetDelta`（varint 变长编码），批内差值都是 0/1/2 这种小数字，一个字节就够，单条消息的元数据开销因此被压到极低。三个易错细节：整批大小 = `batchLength` + 12 字节；CRC 覆盖 attributes 到批次末尾、**不含 partitionLeaderEpoch**（该字段 broker 收到后才赋值，纳入校验就得每批重算）；`magic` 是版本锚点，必须先解析它才能解释后续字节——这正是新老客户端能共存的技术基础。
 
-> 📖 [课 13 全文](stages/5-生产落地延伸/lessons/lesson-13-协议与消息格式.md)
+> 📖 [课 13 全文](stages/5-生产落地延伸/lessons/13-协议与消息格式.md)
 
 ---
 
@@ -460,7 +460,7 @@ flowchart TD
 
 **核心结论**：**分层存储把存储与计算解耦**——热数据留本地 SSD，冷数据挪远端对象存储，不必按副本倍数加 broker。两级保留务必分清：`local.retention.*` 管本地段、`retention.*` 管远端总保留，且**本地段必须上传成功后才具备删除资格**（保证数据不会两边都没有）。四条限制里最要命的两条：**不支持 compacted topic**；**关集群级开关前必须先删光所有分层 topic**，否则 broker 启动抛异常。另外 Apache Kafka **不提供开箱即用的 RemoteStorageManager**，需自建或选第三方实现。配置提供器则解决「密码进 Git」——把敏感值外置为引用，文件里只留别名。
 
-> 📖 [课 14 全文](stages/5-生产落地延伸/lessons/lesson-14-分层存储与配置进阶.md)
+> 📖 [课 14 全文](stages/5-生产落地延伸/lessons/14-分层存储与配置进阶.md)
 
 ---
 
@@ -508,7 +508,7 @@ flowchart TB
 
 **核心结论**：**指标不缺，缺的是优先级**——单个 broker 实测暴露 **1511** 个指标（初创无 topic 时约 834，随 topic 数增长），而官方已明确标注哪些「正常值应为 0」：UnderReplicatedPartitions、UnderMinIsrPartitionCount、OfflineLogDirectoryCount、OfflinePartitionsCount。两个最容易写错的判据：**`ActiveControllerCount` 的正常值是「恰好一个 broker 为 1」，不是 0**——写成 `> 0` 会一直告警；**消费延迟 lag 不在 broker 指标里**，broker 不维护消费者的实时读进度，需用 CLI 或客户端 `records-lag` 算。安全上：**远程 JMX 默认禁用且默认无认证**，开了等于给未授权者一个**能控制 broker** 的后门，生产必须配认证 + SSL。
 
-> 📖 [课 15 全文](stages/6-运维与可观测/lessons/lesson-15-监控与可观测.md)
+> 📖 [课 15 全文](stages/6-运维与可观测/lessons/15-监控与可观测.md)
 
 ---
 
@@ -547,7 +547,7 @@ flowchart TB
 
 **核心结论**：**加机器 ≠ 扩容**——新 broker **不会自动分到任何分区**，必须显式跑重分配（`--generate` → `--execute` → `--verify`，三模式互斥）。限流有两个必须知道的坑：①**不跑 `--verify`，限流会永久残留**，集群长期半速运行（本课实测捕获官方警告原文 "You must run --verify periodically... to ensure the throttle is removed."）；②**限流值低于写入速率**（`max(BytesInPerSec) > throttle`）**复制永不推进**，判据是 `FetcherLagMetrics` 的 lag 应持续下降。另外：重分配工具**不会自动均衡数据分布**，该搬哪些要管理员自己判断；**目标 broker 数必须 ≥ 副本因子**（RF=3 迁到 2 个 broker 实测报 `InvalidReplicationFactorException`）。选型上官方给了硬数据：**XFS 160ms vs EXT4 250ms+ 且 XFS 免调优**（EXT4 的性能选项在故障场景下可能损坏文件系统）；文件描述符至少 10 万；**官方推荐禁用应用级 fsync**——持久性靠副本而非本地刷盘。
 
-> 📖 [课 16 全文](stages/6-运维与可观测/lessons/lesson-16-集群运维操作.md)
+> 📖 [课 16 全文](stages/6-运维与可观测/lessons/16-集群运维操作.md)
 
 ---
 
@@ -593,7 +593,7 @@ flowchart TD
 
 **核心结论**：网络层是标准 Reactor NIO——1 个 acceptor + N 个 processor（**默认 3**）+ M 个 IO 线程（**默认 8**），用请求队列解耦。**排查性能问题先看队列积压，再调线程数**：实测 processor 空闲比 1.0、队列 0 积压，说明 33 MB/s 是单客户端压测上限而非集群上限。⚠️ **`RequestHandlerAvgIdlePercent` 实测是单调累积计数**（5 次采样 2.36e11→2.62e11），不是 0~1 比率，照抄教程配 `< 0.3` 告警将**永不触发**；改用 `RequestQueueSize` + `TotalTimeMs`。零拷贝只在消费拉取路径生效，靠 `TransferableRecords.writeTo` → `transferTo` 把 4 次拷贝（含 2 次 CPU）降到 2 次 DMA。
 
-> 📖 [课 17 全文](stages/7-实现原理/lessons/lesson-17-网络层与请求处理模型.md)
+> 📖 [课 17 全文](stages/7-实现原理/lessons/17-网络层与请求处理模型.md)
 
 ---
 
@@ -629,7 +629,7 @@ flowchart TD
 
 **核心结论**：**每个消费组有专属协调者 broker**，按 `hash(group.id) % 50` 决定归属分区，该分区的 leader 即协调者；消费者通过 `FindCoordinator` 发现（**可向任意 broker 发起**，自举设计）。**提交成功要求所有副本都收到**才返回，不是 leader 单独确认。**`CoordinatorLoadInProgressException` 是正常自愈过程**——协调者变更后新协调者加载缓存期间拒绝查询，客户端自动退避重试（实测：停 broker 2 → 协调者变为 broker 3）。`__consumer_offsets` 是 compact topic，且 **`segment.bytes` 被特意调小到 100MB**（默认 1GB）以加快压实。
 
-> 📖 [课 18 全文](stages/7-实现原理/lessons/lesson-18-消费者位移与协调者.md)
+> 📖 [课 18 全文](stages/7-实现原理/lessons/18-消费者位移与协调者.md)
 
 > ⚠️ **主题偏差**：本课原定「分区分配算法」，抓取官方 4.3 原文后发现 `implementation/distribution` 页面已改为只讲 Consumer Offset Tracking（**无副本分配算法原文**），机架感知已在课 16 覆盖，故改题。详见[阶段 7 概览](stages/7-实现原理/overview.md)。
 
@@ -673,7 +673,7 @@ flowchart TD
 
 **核心结论**：**Kafka 承诺双向兼容**——新客户端能连老 broker、老客户端能连新 broker，因此**可先升一边、全程不停服**。版本在建连时协商，取双方都支持的最高版本：**实测 Fetch 支持 `4 to 17` 且客户端用 17、Metadata `0 to 13` 用 13、ApiVersions `0 to 4` 用 4，均等于 broker usable 上界**。`ApiVersions` 用最低版本 v0 发送且**无需认证**（KIP-35，自 0.10.0.0 起），**结果只对当前连接有效**，断线必须重问。broker 会**按请求声明的版本格式构造响应**——不同版本客户端连同一 broker 拿到的字节格式不同，各自都能解析。演进有两条路：结构性变更升版本号；可选稀疏字段用 **Tagged Fields**（不升版、未设置时不占空间）。本环境 API 共 **183** 个，其中 **UNSUPPORTED 33** 个。
 
-> 📖 [课 19 全文](stages/7-实现原理/lessons/lesson-19-协议版本与兼容性.md)
+> 📖 [课 19 全文](stages/7-实现原理/lessons/19-协议版本与兼容性.md)
 
 ---
 

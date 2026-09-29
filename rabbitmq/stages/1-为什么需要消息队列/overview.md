@@ -33,5 +33,5 @@
 
 ## 本阶段产出
 
-- [ ] `lessons/lesson-01-为什么需要消息队列.md`
-- [ ] `lessons/lesson-02-RabbitMQ是什么与起源定位.md`
+- [ ] `lessons/01-为什么需要消息队列.md`
+- [ ] `lessons/02-RabbitMQ是什么与起源定位.md`

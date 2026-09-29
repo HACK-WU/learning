@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 R=/mnt/d/projects/learning/consul
 B="$R/子教程/运维专项/lessons"
-L8="$B/lesson-08-多机房与K8s运维视角.md"
+L8="$B/08-多机房与K8s运维视角.md"
 
 echo "===== 1. 真实断链检查（以 lessons 目录为基准）====="
 BAD=0; TOT=0

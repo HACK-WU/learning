@@ -1,6 +1,6 @@
 # 应用实战 · 三种命运的工作负载
 
-> 对应课程：[第 6 课：StatefulSet / DaemonSet / Job：三种不同命运的工作负载](../stages/2-工作负载与控制器/lessons/lesson-06-StatefulSet与DaemonSet与Job.md) ｜ 覆盖知识点：StatefulSet、DaemonSet、Job 与 CronJob、TTL 清理
+> 对应课程：[第 6 课：StatefulSet / DaemonSet / Job：三种不同命运的工作负载](../stages/2-工作负载与控制器/lessons/06-StatefulSet与DaemonSet与Job.md) ｜ 覆盖知识点：StatefulSet、DaemonSet、Job 与 CronJob、TTL 清理
 > 定位：**会用，不上生产**——课里学完，在这里动手。课内第四幕做的是「三种控制器各自是什么」的机制验证，这里做的是**一个接手新系统的完整过程：先犯错，再分类安排，最后收尾**。
 > 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：[StatefulSet](https://kubernetes.io/zh-cn/docs/concepts/workloads/controllers/statefulset/)、[DaemonSet](https://kubernetes.io/zh-cn/docs/concepts/workloads/controllers/daemonset/)、[Job](https://kubernetes.io/zh-cn/docs/concepts/workloads/controllers/job/)、[TTL 控制器](https://kubernetes.io/zh-cn/docs/concepts/workloads/controllers/ttlafterfinished/)）
 > 🧪 **本篇全部输出为本机 kind 集群（v1.34.0）实测**，非推演；实测脚本见 `.plans/2026-09-16-k8s-应用实战补齐/t6-workloads.sh`、`t6-redo.sh`、`t6-redo2.sh`
@@ -404,7 +404,7 @@ kubectl -n app-l6 patch cronjob tick --type=merge -p \
 
 ## 🧭 导航
 
-- ⬅️ 回到课程：[第 6 课：StatefulSet / DaemonSet / Job](../stages/2-工作负载与控制器/lessons/lesson-06-StatefulSet与DaemonSet与Job.md)
+- ⬅️ 回到课程：[第 6 课：StatefulSet / DaemonSet / Job](../stages/2-工作负载与控制器/lessons/06-StatefulSet与DaemonSet与Job.md)
 - 📚 全部实战：[应用实战索引](INDEX.md)
 - ⬅️ 上一课实战：[05 · 上线不中断与一键回退](05-Deployment无状态应用.md)
 

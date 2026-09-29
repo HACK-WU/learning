@@ -1,6 +1,6 @@
 # 应用实战 · Topic、Partition 与 Broker
 
-> 对应课程：[第 4 课：Topic、Partition 与 Broker](../stages/2-核心架构/lessons/lesson-04-Topic、Partition与Broker.md) ｜ 覆盖知识点：Topic 与 Partition / 顺序写磁盘 / 零拷贝 / Broker 与集群
+> 对应课程：[第 4 课：Topic、Partition 与 Broker](../stages/2-核心架构/lessons/04-Topic、Partition与Broker.md) ｜ 覆盖知识点：Topic 与 Partition / 顺序写磁盘 / 零拷贝 / Broker 与集群
 > 定位：**会用，不上生产**——课里学完，在这里动手（结构与边界见 SKILL.md「教学叙事骨架 · 应用实战」）。
 > 环境：本课**不需要 Kafka 也能跑**（①~③ 是纯 Python）；④ 需要你在第 3 课起的本地集群上验证（本机已有一个 3 节点集群在跑）。
 > 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：Apache Kafka 4.3 文档 · [核心概念](https://kafka.apache.org/43/getting-started/introduction/) · [日志存储实现](https://kafka.apache.org/43/implementation/log/)；本机集群实测版本 4.0.0）
@@ -348,6 +348,6 @@ docker exec -it l15-kafka-1 /opt/kafka/bin/kafka-topics.sh --describe \
 
 ## 🧭 导航
 
-- ⬅️ 回到课程：[第 4 课：Topic、Partition 与 Broker](../stages/2-核心架构/lessons/lesson-04-Topic、Partition与Broker.md)
+- ⬅️ 回到课程：[第 4 课：Topic、Partition 与 Broker](../stages/2-核心架构/lessons/04-Topic、Partition与Broker.md)
 - 📚 全部实战：[应用实战索引](INDEX.md)
 - ⬅️ 上一篇：[01 · 为什么需要消息队列](01-为什么需要消息队列.md) ｜ ➡️ 下一篇：03 · 本地起 Kafka 与 CLI 快速上手（未编写）

@@ -1,6 +1,6 @@
 #!/bin/bash
 # 课 7 交付校验：链接可达性 + SVG 完整性 + 必备章节 + 四处档案回写
-LESSON=/mnt/d/projects/learning/doris/stages/3-数据导入与查询/lessons/lesson-07-查询引擎与执行计划.md
+LESSON=/mnt/d/projects/learning/doris/stages/3-数据导入与查询/lessons/07-查询引擎与执行计划.md
 ASSETS=/mnt/d/projects/learning/doris/stages/3-数据导入与查询/assets
 ROOT=/mnt/d/projects/learning/doris
 FAIL=0
@@ -40,7 +40,7 @@ done
 
 echo ""
 echo "########## 4. SVG 资产检查 ##########"
-for svg in lesson-07-summary.svg lesson-07-columnar.svg; do
+for svg in 07-summary.svg 07-columnar.svg; do
   if [ -f "$ASSETS/$svg" ]; then
     SIZE=$(wc -c < "$ASSETS/$svg")
     # 检查 SVG 首尾标签完整
@@ -107,14 +107,14 @@ else
   FAIL=1
 fi
 echo "--- 8.3 overview.md 课 7 产出是否勾选 ---"
-if grep -q '\[x\] `lessons/lesson-07-查询引擎与执行计划.md`' "$ROOT/stages/3-数据导入与查询/overview.md"; then
+if grep -q '\[x\] `lessons/07-查询引擎与执行计划.md`' "$ROOT/stages/3-数据导入与查询/overview.md"; then
   echo "  [OK] overview 已勾选"
 else
   echo "  [FAIL] overview 未勾选"
   FAIL=1
 fi
 echo "--- 8.4 02-课程目录.md 是否含课 7 链接 ---"
-if grep -q 'lesson-07-查询引擎与执行计划.md' "$ROOT/02-课程目录.md"; then
+if grep -q '07-查询引擎与执行计划.md' "$ROOT/02-课程目录.md"; then
   echo "  [OK] 课程目录已更新"
 else
   echo "  [FAIL] 课程目录未更新"

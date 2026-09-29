@@ -4,7 +4,7 @@
 import re, os, io
 
 ROOT = "/mnt/d/projects/learning/grafana"
-LESSON = "lesson-09-日志与链路：指标之外的另外两只眼.md"
+LESSON = "09-日志与链路：指标之外的另外两只眼.md"
 LNAME = "第 9 课：日志与链路：指标之外的另外两只眼"
 TODAY = "2026-09-07"
 
@@ -84,8 +84,8 @@ else:
 
 # ------------------------------------------------ 3. 阶段 overview
 def f_ov(t):
-    t = t.replace("- [ ] `lessons/lesson-09-日志与链路：指标之外的另外两只眼.md`",
-                  "- [x] `lessons/lesson-09-日志与链路：指标之外的另外两只眼.md`")
+    t = t.replace("- [ ] `lessons/09-日志与链路：指标之外的另外两只眼.md`",
+                  "- [x] `lessons/09-日志与链路：指标之外的另外两只眼.md`")
     # 学习重点补课 9 结论
     add = ("- **时间窗对齐已实测**（课 9）：同一 LogQL 在 now-5m/now-1h/now-24h 分别命中 0/4/4 行——"
            "**查不到日志的三大原因**：时间窗不一致（最常见）、采集延迟、标签不匹配（Loki 返回 200+0 行，静默）。\n"

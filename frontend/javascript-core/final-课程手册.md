@@ -43,7 +43,7 @@ flowchart LR
 
 ![typeof null 类型标签](./stages/1-值与作用域/assets/typeof-null-type-tag.svg)
 
-📖 [课 1 正文](stages/1-值与作用域/lessons/lesson-01-变量与类型.md)
+📖 [课 1 正文](stages/1-值与作用域/lessons/01-变量与类型.md)
 
 ### 课 2《值的复制与比较》
 
@@ -55,7 +55,7 @@ flowchart LR
 
 ![引用值共享同一份对象](./stages/1-值与作用域/assets/reference-vs-copy.svg)
 
-📖 [课 2 正文](stages/1-值与作用域/lessons/lesson-02-值的复制与比较.md)
+📖 [课 2 正文](stages/1-值与作用域/lessons/02-值的复制与比较.md)
 
 ### 课 3《作用域与闭包》
 
@@ -67,7 +67,7 @@ flowchart LR
 
 ![循环内 var vs let 的绑定差异](./stages/1-值与作用域/assets/for-loop-binding-var-vs-let.svg)
 
-📖 [课 3 正文](stages/1-值与作用域/lessons/lesson-03-作用域与闭包.md)
+📖 [课 3 正文](stages/1-值与作用域/lessons/03-作用域与闭包.md)
 
 ---
 
@@ -83,7 +83,7 @@ flowchart LR
 
 ![函数对象的解剖](./stages/2-函数与对象/assets/fn-object-anatomy.svg)
 
-📖 [课 4 正文](stages/2-函数与对象/lessons/lesson-04-函数是一等公民.md)
+📖 [课 4 正文](stages/2-函数与对象/lessons/04-函数是一等公民.md)
 
 ### 课 5《this 到底指向谁》
 
@@ -95,7 +95,7 @@ flowchart LR
 
 ![箭头函数 this 的词法查找](./stages/2-函数与对象/assets/arrow-this-lexical-lookup.svg)
 
-📖 [课 5 正文](stages/2-函数与对象/lessons/lesson-05-this到底指向谁.md)
+📖 [课 5 正文](stages/2-函数与对象/lessons/05-this到底指向谁.md)
 
 ### 课 6《原型与类》
 
@@ -107,7 +107,7 @@ flowchart LR
 
 ![原型链三角关系](./stages/2-函数与对象/assets/prototype-chain-triangle.svg)
 
-📖 [课 6 正文](stages/2-函数与对象/lessons/lesson-06-原型与类.md)
+📖 [课 6 正文](stages/2-函数与对象/lessons/06-原型与类.md)
 
 ---
 
@@ -123,7 +123,7 @@ flowchart LR
 
 ![一个 tick 的完整走位](./stages/3-异步与现代语法/assets/event-loop-tick-walkthrough.svg)
 
-📖 [课 7 正文](stages/3-异步与现代语法/lessons/lesson-07-事件循环.md)
+📖 [课 7 正文](stages/3-异步与现代语法/lessons/07-事件循环.md)
 
 ### 课 8《Promise 与 async/await》
 
@@ -135,7 +135,7 @@ flowchart LR
 
 ![串行 vs 并发的时序](./stages/3-异步与现代语法/assets/async-serial-vs-parallel.svg)
 
-📖 [课 8 正文](stages/3-异步与现代语法/lessons/lesson-08-Promise与async-await.md)
+📖 [课 8 正文](stages/3-异步与现代语法/lessons/08-Promise与async-await.md)
 
 ### 课 9《现代语法与内置数据结构》
 
@@ -147,7 +147,7 @@ flowchart LR
 
 ![对象展开是浅拷贝](./stages/3-异步与现代语法/assets/spread-shallow-copy.svg)
 
-📖 [课 9 正文](stages/3-异步与现代语法/lessons/lesson-09-现代语法与内置数据结构.md)
+📖 [课 9 正文](stages/3-异步与现代语法/lessons/09-现代语法与内置数据结构.md)
 
 ---
 
@@ -163,7 +163,7 @@ flowchart LR
 
 ![加载时机：CJS 一步 vs ESM 三步](./stages/4-工程化与运行时/assets/module-loading-cjs-vs-esm.svg)
 
-📖 [课 10 正文](stages/4-工程化与运行时/lessons/lesson-10-模块化.md)
+📖 [课 10 正文](stages/4-工程化与运行时/lessons/10-模块化.md)
 
 ### 课 11《错误处理与调试》
 
@@ -175,7 +175,7 @@ flowchart LR
 
 ![为什么 try 抓不到异步错误](./stages/4-工程化与运行时/assets/try-catch-async-boundary.svg)
 
-📖 [课 11 正文](stages/4-工程化与运行时/lessons/lesson-11-错误处理与调试.md)
+📖 [课 11 正文](stages/4-工程化与运行时/lessons/11-错误处理与调试.md)
 
 ### 课 12《内存·性能与选型收束》
 
@@ -187,7 +187,7 @@ flowchart LR
 
 ![可达性 vs 引用计数](./stages/4-工程化与运行时/assets/gc-reachability-vs-refcount.svg)
 
-📖 [课 12 正文](stages/4-工程化与运行时/lessons/lesson-12-内存性能与选型收束.md)
+📖 [课 12 正文](stages/4-工程化与运行时/lessons/12-内存性能与选型收束.md)
 
 ---
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # 课 9 交付前结构校验（沿用课 4/课 8 的判据）
 set -u
-F="/mnt/d/projects/learning/grafana/stages/3-叫得醒/lessons/lesson-09-日志与链路：指标之外的另外两只眼.md"
+F="/mnt/d/projects/learning/grafana/stages/3-叫得醒/lessons/09-日志与链路：指标之外的另外两只眼.md"
 cd /mnt/d/projects/learning/grafana
 
 echo "=== A. 基本统计 ==="

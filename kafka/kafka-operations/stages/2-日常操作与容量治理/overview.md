@@ -36,6 +36,6 @@
 
 ## 本阶段产出
 
-- [x] [lessons/lesson-03-Topic生命周期与配置治理.md](lessons/lesson-03-Topic生命周期与配置治理.md)
-- [x] [lessons/lesson-04-Broker成员与数据搬迁.md](lessons/lesson-04-Broker成员与数据搬迁.md)
-- [x] [lessons/lesson-05-日常维护与KRaft运维.md](lessons/lesson-05-日常维护与KRaft运维.md)
+- [x] [lessons/03-Topic生命周期与配置治理.md](lessons/03-Topic生命周期与配置治理.md)
+- [x] [lessons/04-Broker成员与数据搬迁.md](lessons/04-Broker成员与数据搬迁.md)
+- [x] [lessons/05-日常维护与KRaft运维.md](lessons/05-日常维护与KRaft运维.md)

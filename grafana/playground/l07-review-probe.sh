@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # 课 7 评审核查：逐条回读原文核验
 set -u
-F="/mnt/d/projects/learning/grafana/stages/3-叫得醒/lessons/lesson-07-告警架构：规则在哪求值、状态怎么迁移.md"
+F="/mnt/d/projects/learning/grafana/stages/3-叫得醒/lessons/07-告警架构：规则在哪求值、状态怎么迁移.md"
 
 echo "=========================================================="
 echo " 课 7 评审核查：逐条回读原文核验"

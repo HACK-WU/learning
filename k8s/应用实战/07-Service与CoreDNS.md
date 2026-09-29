@@ -1,6 +1,6 @@
 # 应用实战 · 让前端稳定找到后端
 
-> 对应课程：[第 7 课：Service 与 CoreDNS：集群内寻址](../stages/3-网络与服务暴露/lessons/lesson-07-Service与CoreDNS.md) ｜ 覆盖知识点：Service 类型选型、EndpointSlice、CoreDNS 服务发现
+> 对应课程：[第 7 课：Service 与 CoreDNS：集群内寻址](../stages/3-网络与服务暴露/lessons/07-Service与CoreDNS.md) ｜ 覆盖知识点：Service 类型选型、EndpointSlice、CoreDNS 服务发现
 > 定位：**会用，不上生产**——课里学完，在这里动手。课内第四幕做的是「四种 Service 长什么样、kube-proxy 怎么转发」的机制验证，这里做的是**一个真实故障的完整演进：先按直觉写，出问题，再一步步补对**。
 > 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：[Service](https://kubernetes.io/zh-cn/docs/concepts/services-networking/service/)、[EndpointSlice](https://kubernetes.io/zh-cn/docs/concepts/services-networking/endpoint-slices/)、[配置存活/就绪探针](https://kubernetes.io/zh-cn/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)）
 > 🧪 **本篇全部输出为本机 kind 集群 `k8s-c1-calico`（k8s v1.34.0 + Calico v3.31.0，3 节点）实测**，非推演；实测脚本见 `.plans/2026-09-16-k8s-应用实战补齐/t7-step1.sh` ~ `t7-step6.sh`
@@ -460,7 +460,7 @@ ext-example.app-l7.svc.cluster.local	canonical name = example.com
 
 ## 🧭 导航
 
-- ⬅️ 回到课程：[第 7 课：Service 与 CoreDNS](../stages/3-网络与服务暴露/lessons/lesson-07-Service与CoreDNS.md)
+- ⬅️ 回到课程：[第 7 课：Service 与 CoreDNS](../stages/3-网络与服务暴露/lessons/07-Service与CoreDNS.md)
 - 📚 全部实战：[应用实战索引](INDEX.md)
 - ⬅️ 上一课实战：[06 · 三种命运的工作负载](06-StatefulSet与DaemonSet与Job.md)
 

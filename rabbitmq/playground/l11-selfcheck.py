@@ -8,7 +8,7 @@ import subprocess
 BASE = os.path.dirname(os.path.abspath(__file__))
 LESSON = os.path.join(
     BASE, '..', 'stages', '4-进阶与工程落地', 'lessons',
-    'lesson-11-集群与高可用.md')
+    '11-集群与高可用.md')
 
 print("=" * 70)
 print("课 11 交付前自检")

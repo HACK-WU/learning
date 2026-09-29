@@ -35,9 +35,9 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-04-查询编辑器与数据源协议：一次查询的完整旅程.md`
-- [x] `lessons/lesson-05-Transformations：把查出来的数据捏成想要的形状.md`
-- [x] `lessons/lesson-06-变量进阶与动态仪表盘.md`
+- [x] `lessons/04-查询编辑器与数据源协议：一次查询的完整旅程.md`
+- [x] `lessons/05-Transformations：把查出来的数据捏成想要的形状.md`
+- [x] `lessons/06-变量进阶与动态仪表盘.md`
 
 ## 本阶段依赖的环境
 

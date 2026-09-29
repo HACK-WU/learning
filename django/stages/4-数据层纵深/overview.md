@@ -91,7 +91,7 @@ graph LR
 
 ---
 
-🚀 进入 [课 11《查询表达式进阶》](./lessons/lesson-11-查询表达式进阶.md) ｜ [课 12《索引、约束与连接池》](./lessons/lesson-12-索引约束与连接池.md) ｜ [课 13《多数据库与 DB 路由》](./lessons/lesson-13-多数据库与DB路由.md) ｜ [课 14《迁移工程》](./lessons/lesson-14-迁移工程.md)
+🚀 进入 [课 11《查询表达式进阶》](./lessons/11-查询表达式进阶.md) ｜ [课 12《索引、约束与连接池》](./lessons/12-索引约束与连接池.md) ｜ [课 13《多数据库与 DB 路由》](./lessons/13-多数据库与DB路由.md) ｜ [课 14《迁移工程》](./lessons/14-迁移工程.md)
 
 > 📌 **课 13 已交付**（2026-09-02）。三个知识点：DATABASE_ROUTERS 四个钩子与调用时机（TraceRouter 实测抓取）、主从写后读不一致（三方案 + 失效边界）、多库硬约束与迁移（跨库外键 / 事务 / `migrate --database` / 连接数）。
 > 进入课 14 前建议自查四项：`db_for_read` 与 `db_for_write` 是否**成对实现**（缺后者会把写操作送进只读库）、`allow_migrate` 管完目标 app 后是否**显式返回**（`None` 等于一律放行）、按 app 分库的 `allow_relation` 是否**放行了 `auth`/`contenttypes`**（否则业务表外键指向 User 会在运行时抛 `ValueError`）、总连接数是否按 **Σ(max_size) × 进程数** 重算过。

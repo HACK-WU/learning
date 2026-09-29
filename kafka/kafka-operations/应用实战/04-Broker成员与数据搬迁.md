@@ -1,6 +1,6 @@
 # 应用实战 · Broker 成员与数据搬迁
 
-> 对应课程：[第 4 课：Broker 成员与数据搬迁](../stages/2-日常操作与容量治理/lessons/lesson-04-Broker成员与数据搬迁.md) ｜ 覆盖知识点：Broker 加入/下线与数据不会自动搬家、分区重分配/机架感知与限流、验证/回滚与优先副本均衡
+> 对应课程：[第 4 课：Broker 成员与数据搬迁](../stages/2-日常操作与容量治理/lessons/04-Broker成员与数据搬迁.md) ｜ 覆盖知识点：Broker 加入/下线与数据不会自动搬家、分区重分配/机架感知与限流、验证/回滚与优先副本均衡
 > 定位：**会用，不上生产**——把“新增 Broker 后撤空旧节点”演进成小批次、有节奏、有暂停出口的搬迁计划。
 > 📖 结论已按官方文档核对（核查于 2026-09 ｜ 来源：[Basic Kafka Operations](https://kafka.apache.org/43/operations/basic-kafka-operations/)、[Operations](https://kafka.apache.org/43/operations/)、[Monitoring](https://kafka.apache.org/43/operations/monitoring/)）。
 
@@ -82,6 +82,6 @@ kafka-topics.sh --bootstrap-server "<BROKER_ENDPOINT>" --describe
 
 ## 🧭 导航
 
-- ⬅️ 回到课程：[第 4 课：Broker 成员与数据搬迁](../stages/2-日常操作与容量治理/lessons/lesson-04-Broker成员与数据搬迁.md)
+- ⬅️ 回到课程：[第 4 课：Broker 成员与数据搬迁](../stages/2-日常操作与容量治理/lessons/04-Broker成员与数据搬迁.md)
 - 📚 全部实战：[应用实战索引](INDEX.md)
 - ➡️ 下一课实战：[05 · 一小时维护窗口编排](05-日常维护与KRaft运维.md)

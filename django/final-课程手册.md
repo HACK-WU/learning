@@ -94,8 +94,8 @@
 
 📁 [overview](./stages/1-为什么要前后端分离/overview.md)
 
-- 课 1　[从模板渲染到 API 契约](./stages/1-为什么要前后端分离/lessons/lesson-01-从模板渲染到API契约.md) — 渲染权的演变、三种渲染模式取舍、契约先行
-- 课 2　[工程骨架与跨域](./stages/1-为什么要前后端分离/lessons/lesson-02-工程骨架与跨域.md) — settings 拆分、CORS 落地、**自定义用户模型必须前置**
+- 课 1　[从模板渲染到 API 契约](./stages/1-为什么要前后端分离/lessons/01-从模板渲染到API契约.md) — 渲染权的演变、三种渲染模式取舍、契约先行
+- 课 2　[工程骨架与跨域](./stages/1-为什么要前后端分离/lessons/02-工程骨架与跨域.md) — settings 拆分、CORS 落地、**自定义用户模型必须前置**
 
 > 🎯 收束标志：能说清退场清单，并搭出分层骨架跑通第一个跨域请求。
 > 自查三项：`auth_user` 表不存在、不带斜杠 URL 的 301 上有 `Access-Control-Allow-Origin`、白名单来源 POST 拿到 `201` 而非 `403`。
@@ -104,11 +104,11 @@
 
 📁 [overview](./stages/2-DRF核心三件套/overview.md)
 
-- 课 3　[序列化器：API 的边界守门人](./stages/2-DRF核心三件套/lessons/lesson-03-序列化器API的边界守门人.md) — 校验的三层防线
-- 课 4　[序列化器进阶：可写嵌套与动态字段](./stages/2-DRF核心三件套/lessons/lesson-04-序列化器进阶可写嵌套与动态字段.md) — `SerializerMethodField` 的 N+1 陷阱
-- 课 5　[视图层：从 APIView 到 ViewSet](./stages/2-DRF核心三件套/lessons/lesson-05-视图层从APIView到ViewSet.md) — 抽象层级取舍与 router
-- 课 6　[API 版本控制](./stages/2-DRF核心三件套/lessons/lesson-06-API版本控制.md) — 三种策略取舍、弃用与下线
-- 课 7　[业务逻辑该放哪](./stages/2-DRF核心三件套/lessons/lesson-07-业务逻辑该放哪.md) — 四种方案对比、统一响应
+- 课 3　[序列化器：API 的边界守门人](./stages/2-DRF核心三件套/lessons/03-序列化器API的边界守门人.md) — 校验的三层防线
+- 课 4　[序列化器进阶：可写嵌套与动态字段](./stages/2-DRF核心三件套/lessons/04-序列化器进阶可写嵌套与动态字段.md) — `SerializerMethodField` 的 N+1 陷阱
+- 课 5　[视图层：从 APIView 到 ViewSet](./stages/2-DRF核心三件套/lessons/05-视图层从APIView到ViewSet.md) — 抽象层级取舍与 router
+- 课 6　[API 版本控制](./stages/2-DRF核心三件套/lessons/06-API版本控制.md) — 三种策略取舍、弃用与下线
+- 课 7　[业务逻辑该放哪](./stages/2-DRF核心三件套/lessons/07-业务逻辑该放哪.md) — 四种方案对比、统一响应
 
 > 🎯 收束标志：能用 Serializer + ViewSet + router 写出规范 CRUD，**业务逻辑不在 view 里**，API 有版本控制。
 > 自查：每个接口能说清是"资源"还是"动作"。
@@ -117,9 +117,9 @@
 
 📁 [overview](./stages/3-认证权限与鉴权/overview.md)
 
-- 课 8　[认证：你是谁](./stages/3-认证权限与鉴权/lessons/lesson-08-认证你是谁.md) — Session / Token / JWT、登出困境
-- 课 9　[权限：你能干什么](./stages/3-认证权限与鉴权/lessons/lesson-09-权限你能干什么.md) — 对象级权限、**限流 scope 静默失效**
-- 课 10　[分离架构下的安全实践](./stages/3-认证权限与鉴权/lessons/lesson-10-分离架构下的安全实践.md) — CSRF 重新理解、cookie 取舍、批量分配防线
+- 课 8　[认证：你是谁](./stages/3-认证权限与鉴权/lessons/08-认证你是谁.md) — Session / Token / JWT、登出困境
+- 课 9　[权限：你能干什么](./stages/3-认证权限与鉴权/lessons/09-权限你能干什么.md) — 对象级权限、**限流 scope 静默失效**
+- 课 10　[分离架构下的安全实践](./stages/3-认证权限与鉴权/lessons/10-分离架构下的安全实践.md) — CSRF 重新理解、cookie 取舍、批量分配防线
 
 > 🎯 收束标志：能配好认证 + 对象级权限 + 限流，说清 token 存放的取舍。
 > 自查四项：有没有 `fields = "__all__"`、敏感字段是否可写、归属字段是否由 `request.user` 注入、`SESSION_COOKIE_SECURE` 是否已改 True。
@@ -128,10 +128,10 @@
 
 📁 [overview](./stages/4-数据层纵深/overview.md)
 
-- 课 11　[查询表达式进阶](./stages/4-数据层纵深/lessons/lesson-11-查询表达式进阶.md) — `F()` 原子更新、Q() 组合、子查询与聚合
-- 课 12　[索引、约束与连接池](./stages/4-数据层纵深/lessons/lesson-12-索引约束与连接池.md) — 三种索引、约束下沉、**`pool={}` 静默失效**
-- 课 13　[多数据库与 DB 路由](./stages/4-数据层纵深/lessons/lesson-13-多数据库与DB路由.md) — 四个钩子、主从写后读、多库硬约束
-- 课 14　[迁移工程：不依赖 model 的迁移](./stages/4-数据层纵深/lessons/lesson-14-迁移工程.md) — 历史模型、RunSQL 与状态解耦、零停机变更
+- 课 11　[查询表达式进阶](./stages/4-数据层纵深/lessons/11-查询表达式进阶.md) — `F()` 原子更新、Q() 组合、子查询与聚合
+- 课 12　[索引、约束与连接池](./stages/4-数据层纵深/lessons/12-索引约束与连接池.md) — 三种索引、约束下沉、**`pool={}` 静默失效**
+- 课 13　[多数据库与 DB 路由](./stages/4-数据层纵深/lessons/13-多数据库与DB路由.md) — 四个钩子、主从写后读、多库硬约束
+- 课 14　[迁移工程：不依赖 model 的迁移](./stages/4-数据层纵深/lessons/14-迁移工程.md) — 历史模型、RunSQL 与状态解耦、零停机变更
 
 > 🎯 收束标志：能用表达式替代循环，索引与连接池配置正确，多库与迁移变更有章法。
 > ⚠️ **阶段 4 是「不报错的错误」最密集的阶段**——连接池失效、跨库 FK 静默指向另一份数据、`allow_migrate` 返回 `None` 等于一律放行。
@@ -140,9 +140,9 @@
 
 📁 [overview](./stages/5-性能与异步/overview.md)
 
-- 课 15　[ORM 进阶与 N+1 治理](./stages/5-性能与异步/lessons/lesson-15-ORM进阶与N+1治理.md) — `select_related` / `prefetch_related`、行锁与并发
-- 课 16　[性能：缓存与异步](./stages/5-性能与异步/lessons/lesson-16-性能缓存与异步.md) — 缓存键陷阱、ASGI 边界、内置 Tasks vs Celery
-- 课 17　[信号：隐式耦合的代价](./stages/5-性能与异步/lessons/lesson-17-信号隐式耦合的代价.md) — 信号真实代价、改显式调用
+- 课 15　[ORM 进阶与 N+1 治理](./stages/5-性能与异步/lessons/15-ORM进阶与N+1治理.md) — `select_related` / `prefetch_related`、行锁与并发
+- 课 16　[性能：缓存与异步](./stages/5-性能与异步/lessons/16-性能缓存与异步.md) — 缓存键陷阱、ASGI 边界、内置 Tasks vs Celery
+- 课 17　[信号：隐式耦合的代价](./stages/5-性能与异步/lessons/17-信号隐式耦合的代价.md) — 信号真实代价、改显式调用
 
 > 🎯 收束标志：能根治 N+1、加缓存、判断内置 Tasks vs Celery、知道信号的真实代价。
 > 阶段 5 三课回答的是同一个问题：**「让它快」和「让它对」之间，哪些捷径不能走**。
@@ -151,11 +151,11 @@
 
 📁 [overview](./stages/6-工程化与生产/overview.md)
 
-- 课 18　[中间件与请求链路](./stages/6-工程化与生产/lessons/lesson-18-中间件与请求链路.md) — 执行顺序、**trace_id 贯穿**、结构化日志
-- 课 19　[文件、存储与 Admin](./stages/6-工程化与生产/lessons/lesson-19-文件存储与Admin.md) — STORAGES、Admin 安全、**staticfiles 的真实归属**
-- 课 20　[测试提速与文档](./stages/6-工程化与生产/lessons/lesson-20-测试提速与文档.md) — **先量后改**、OpenAPI 自动生成
-- 课 21　[自定义管理命令与 System checks](./stages/6-工程化与生产/lessons/lesson-21-自定义管理命令与System checks.md) — 命令化、**团队约定可检查**
-- 课 22　[部署与运维](./stages/6-工程化与生产/lessons/lesson-22-部署与运维.md) — 密钥管理、静态资源、上线清单
+- 课 18　[中间件与请求链路](./stages/6-工程化与生产/lessons/18-中间件与请求链路.md) — 执行顺序、**trace_id 贯穿**、结构化日志
+- 课 19　[文件、存储与 Admin](./stages/6-工程化与生产/lessons/19-文件存储与Admin.md) — STORAGES、Admin 安全、**staticfiles 的真实归属**
+- 课 20　[测试提速与文档](./stages/6-工程化与生产/lessons/20-测试提速与文档.md) — **先量后改**、OpenAPI 自动生成
+- 课 21　[自定义管理命令与 System checks](./stages/6-工程化与生产/lessons/21-自定义管理命令与System checks.md) — 命令化、**团队约定可检查**
+- 课 22　[部署与运维](./stages/6-工程化与生产/lessons/22-部署与运维.md) — 密钥管理、静态资源、上线清单
 
 > 🎯 收束标志：有 trace_id 链路，测试套件跑得动，约定进 CI，有可执行的上线清单。
 > 💡 **课 21 与课 22 是上下半句**：课 21 说"让每一条团队约定都有一个 check"，课 22 补上"**check 查不到的东西（密钥、环境变量解析、静态文件托管），要用 settings 里的 `raise` 让进程起不来**"。

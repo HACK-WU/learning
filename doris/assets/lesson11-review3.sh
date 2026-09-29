@@ -1,6 +1,6 @@
 #!/bin/bash
 # 课 11 评审 3（pedagogy 视角）：正文内部数据自洽性 + 与脚本产出是否对得上
-L=/mnt/d/projects/learning/doris/stages/4-分布式运维与生产落地/lessons/lesson-11-日常运维SchemaChange备份与升级.md
+L=/mnt/d/projects/learning/doris/stages/4-分布式运维与生产落地/lessons/11-日常运维SchemaChange备份与升级.md
 
 echo "########## pedagogy 视角评审：数据与表述自洽性 ##########"
 

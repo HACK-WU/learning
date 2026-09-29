@@ -10,10 +10,10 @@
 
 | 课 | 讲义 | 知识点 | 状态 |
 |----|------|--------|------|
-| L9 | [横向对比：ZooKeeper vs etcd vs Consul vs Redis](lessons/lesson-09-横向对比ZooKeeper-vs-etcd-vs-Consul-vs-Redis.md) | 四候选速览 / 关键维度对比 / ZAB 与 Raft 差异 | ✅ 已交付 |
-| L10 | [生态趋势：Kafka 为什么抛弃 ZooKeeper](lessons/lesson-10-生态趋势Kafka为什么抛弃ZooKeeper.md) | Kafka 去 ZK 时间线 / 云原生时代的定位 / 社区现状 | ✅ 已交付 |
-| L11 | [决策框架：一棵选型决策树](lessons/lesson-11-决策框架一棵选型决策树.md) | 选型决策树 / 成本收益清单 / 向团队汇报要点 | ✅ 已交付 |
-| L12 | [场景演练：三个真实项目的选型决策](lessons/lesson-12-场景演练三个真实项目的选型决策.md) | 注册中心选型 / 配置管理选型 / 分布式锁方案 | ✅ 已交付 |
+| L9 | [横向对比：ZooKeeper vs etcd vs Consul vs Redis](lessons/09-横向对比ZooKeeper-vs-etcd-vs-Consul-vs-Redis.md) | 四候选速览 / 关键维度对比 / ZAB 与 Raft 差异 | ✅ 已交付 |
+| L10 | [生态趋势：Kafka 为什么抛弃 ZooKeeper](lessons/10-生态趋势Kafka为什么抛弃ZooKeeper.md) | Kafka 去 ZK 时间线 / 云原生时代的定位 / 社区现状 | ✅ 已交付 |
+| L11 | [决策框架：一棵选型决策树](lessons/11-决策框架一棵选型决策树.md) | 选型决策树 / 成本收益清单 / 向团队汇报要点 | ✅ 已交付 |
+| L12 | [场景演练：三个真实项目的选型决策](lessons/12-场景演练三个真实项目的选型决策.md) | 注册中心选型 / 配置管理选型 / 分布式锁方案 | ✅ 已交付 |
 
 ## 阶段主线
 

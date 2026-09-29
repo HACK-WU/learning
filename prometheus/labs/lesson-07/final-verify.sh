@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ROOT=/mnt/d/projects/learning/prometheus
-F7="$ROOT/stages/3-规模化与生态/lessons/lesson-07-远程读写与Agent模式.md"
+F7="$ROOT/stages/3-规模化与生态/lessons/07-远程读写与Agent模式.md"
 echo "=== 1. 讲义文件 ==="
 echo "  大小 = $(wc -c < "$F7") 字节，$(wc -l < "$F7") 行"
 echo

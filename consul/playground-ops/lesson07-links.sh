@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 B=/mnt/d/projects/learning/consul/子教程/运维专项/lessons
-L7="$B/lesson-07-版本升级与迁移.md"
+L7="$B/07-版本升级与迁移.md"
 echo "===== 基于 lessons 目录核实真实断链 ====="
 BAD=0; TOT=0
 while IFS= read -r link; do

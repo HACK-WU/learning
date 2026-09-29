@@ -2,7 +2,7 @@
 # 课 8 双视角评审：逐条回读原文核验
 set -u
 cd /mnt/d/projects/learning/grafana
-F="stages/3-叫得醒/lessons/lesson-08-告警规则与通知策略实战.md"
+F="stages/3-叫得醒/lessons/08-告警规则与通知策略实战.md"
 
 echo "=========================================================="
 echo " 课 8 双视角评审（pedagogy + learner）"
@@ -53,7 +53,7 @@ echo ""
 echo "--- B1. 所有 bash 代码块是否单行可执行 ---"
 python3 - <<'PY'
 import re
-p="stages/3-叫得醒/lessons/lesson-08-告警规则与通知策略实战.md"
+p="stages/3-叫得醒/lessons/08-告警规则与通知策略实战.md"
 txt=open(p,encoding="utf-8").read()
 blocks=re.findall(r'```bash\n(.*?)```', txt, re.S)
 print("  bash 代码块数：%d"%len(blocks))
@@ -80,7 +80,7 @@ echo ""
 echo "--- B3. 每个知识点是否都有可执行的示例 ---"
 python3 - <<'PY'
 import re
-p="stages/3-叫得醒/lessons/lesson-08-告警规则与通知策略实战.md"
+p="stages/3-叫得醒/lessons/08-告警规则与通知策略实战.md"
 txt=open(p,encoding="utf-8").read()
 for k in ["8.1","8.2","8.3"]:
     # 取该知识点到下一个知识点/章节之间的内容

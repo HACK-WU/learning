@@ -75,27 +75,27 @@ curl -i 'http://127.0.0.1:8765/api/orders'
 
 | 知识点 | 所属课 | 项目证据 |
 |---|---|---|
-| 2.1 报文四段结构 | [课 2](../../stages/1-报文与语义/lessons/lesson-02-报文解剖.md) | `server.py` 统一生成状态行、头部、正文和长度 |
-| 2.2 高频头部速览 | [课 2](../../stages/1-报文与语义/lessons/lesson-02-报文解剖.md) | `Location`、`ETag`、`Authorization`、`Origin`、`Content-Length` |
-| 3.2 状态码五大类 | [课 3](../../stages/1-报文与语义/lessons/lesson-03-方法与状态码.md) | 200、201、204、302、304、401、403、404 分支 |
-| 3.3 重定向 3xx | [课 3](../../stages/1-报文与语义/lessons/lesson-03-方法与状态码.md) | `/api/redirect` 的 302 与 `Location` |
-| 4.1 TCP 连接建立成本 | [课 4](../../stages/2-连接与安全/lessons/lesson-04-连接管理与队头阻塞.md) | `client.py` 记录 connect 与总耗时 |
-| 4.2 Keep-Alive 与连接复用 | [课 4](../../stages/2-连接与安全/lessons/lesson-04-连接管理与队头阻塞.md) | `Content-Length` 保证响应边界；设计决策说明本项目客户端为何每次独立连接 |
-| 5.1 明文传输威胁 | [课 5](../../stages/2-连接与安全/lessons/lesson-05-HTTPS加密原理.md) | 设计决策记录“诊断数据不出本机、真实凭证不入仓库” |
-| 6.2 证书校验失败 | [课 6](../../stages/2-连接与安全/lessons/lesson-06-证书与信任.md) | 协议决策保留 HTTPS 证书校验/代理信任检查清单 |
-| 7.2 协商缓存 | [课 7](../../stages/3-缓存与性能/lessons/lesson-07-HTTP缓存.md) | `ETag` + `If-None-Match` → 304 |
-| 7.3 缓存决策实战 | [课 7](../../stages/3-缓存与性能/lessons/lesson-07-HTTP缓存.md) | HTML/API `no-cache` 与 fingerprinted asset `immutable` 对照 |
-| 8.2 性能测量 | [课 8](../../stages/3-缓存与性能/lessons/lesson-08-性能测量与优化.md) | connect、TTFB、body drain、total 四段测量 |
-| 9.2 真实 IP 与转发头 | [课 9](../../stages/3-缓存与性能/lessons/lesson-09-代理网关与CDN.md) | 设计决策中的代理边界与“谁添加转发头”检查项 |
-| 10.2 HTTP/1.1 关键特性 | [课 10](../../stages/4-协议演进/lessons/lesson-10-HTTP1.1与协议奠基.md) | 本地基线使用 HTTP/1.1、明确 `Host` 与响应长度 |
-| 11.2 HTTP/2 多路复用 | [课 11](../../stages/4-协议演进/lessons/lesson-11-HTTP2与多路复用.md) | 协议决策要求测实际协商版本和瓶颈，不把升级当万能药 |
-| 12.3 HTTP/3 部署决策 | [课 12](../../stages/4-协议演进/lessons/lesson-12-HTTP3与QUIC.md) | 记录 UDP/443、客户端、代理、回退条件 |
-| 13.3 HTTP 认证头 | [课 13](../../stages/5-认证联调与决策/lessons/lesson-13-Cookie会话与Token.md) | `Authorization: Bearer` 与 `WWW-Authenticate` |
-| 14.2 CORS 机制 | [课 14](../../stages/5-认证联调与决策/lessons/lesson-14-CORS与同源策略.md) | OPTIONS 预检、允许来源、允许方法/头部、`Vary: Origin` |
-| 14.3 CORS 报错排查 | [课 14](../../stages/5-认证联调与决策/lessons/lesson-14-CORS与同源策略.md) | allowed/denied 两条预检分支与状态证据 |
-| 15.1 抓包方法论 | [课 15](../../stages/5-认证联调与决策/lessons/lesson-15-抓包排障与决策清单.md) | DevTools、curl、标准库客户端三种观测镜头 |
-| 15.2 综合排障推演 | [课 15](../../stages/5-认证联调与决策/lessons/lesson-15-抓包排障与决策清单.md) | 四个病例从症状到证据的可重复脚本 |
-| 15.3 决策清单 | [课 15](../../stages/5-认证联调与决策/lessons/lesson-15-抓包排障与决策清单.md) | `验收清单.md` 与本 README 的证据卡字段 |
+| 2.1 报文四段结构 | [课 2](../../stages/1-报文与语义/lessons/02-报文解剖.md) | `server.py` 统一生成状态行、头部、正文和长度 |
+| 2.2 高频头部速览 | [课 2](../../stages/1-报文与语义/lessons/02-报文解剖.md) | `Location`、`ETag`、`Authorization`、`Origin`、`Content-Length` |
+| 3.2 状态码五大类 | [课 3](../../stages/1-报文与语义/lessons/03-方法与状态码.md) | 200、201、204、302、304、401、403、404 分支 |
+| 3.3 重定向 3xx | [课 3](../../stages/1-报文与语义/lessons/03-方法与状态码.md) | `/api/redirect` 的 302 与 `Location` |
+| 4.1 TCP 连接建立成本 | [课 4](../../stages/2-连接与安全/lessons/04-连接管理与队头阻塞.md) | `client.py` 记录 connect 与总耗时 |
+| 4.2 Keep-Alive 与连接复用 | [课 4](../../stages/2-连接与安全/lessons/04-连接管理与队头阻塞.md) | `Content-Length` 保证响应边界；设计决策说明本项目客户端为何每次独立连接 |
+| 5.1 明文传输威胁 | [课 5](../../stages/2-连接与安全/lessons/05-HTTPS加密原理.md) | 设计决策记录“诊断数据不出本机、真实凭证不入仓库” |
+| 6.2 证书校验失败 | [课 6](../../stages/2-连接与安全/lessons/06-证书与信任.md) | 协议决策保留 HTTPS 证书校验/代理信任检查清单 |
+| 7.2 协商缓存 | [课 7](../../stages/3-缓存与性能/lessons/07-HTTP缓存.md) | `ETag` + `If-None-Match` → 304 |
+| 7.3 缓存决策实战 | [课 7](../../stages/3-缓存与性能/lessons/07-HTTP缓存.md) | HTML/API `no-cache` 与 fingerprinted asset `immutable` 对照 |
+| 8.2 性能测量 | [课 8](../../stages/3-缓存与性能/lessons/08-性能测量与优化.md) | connect、TTFB、body drain、total 四段测量 |
+| 9.2 真实 IP 与转发头 | [课 9](../../stages/3-缓存与性能/lessons/09-代理网关与CDN.md) | 设计决策中的代理边界与“谁添加转发头”检查项 |
+| 10.2 HTTP/1.1 关键特性 | [课 10](../../stages/4-协议演进/lessons/10-HTTP1.1与协议奠基.md) | 本地基线使用 HTTP/1.1、明确 `Host` 与响应长度 |
+| 11.2 HTTP/2 多路复用 | [课 11](../../stages/4-协议演进/lessons/11-HTTP2与多路复用.md) | 协议决策要求测实际协商版本和瓶颈，不把升级当万能药 |
+| 12.3 HTTP/3 部署决策 | [课 12](../../stages/4-协议演进/lessons/12-HTTP3与QUIC.md) | 记录 UDP/443、客户端、代理、回退条件 |
+| 13.3 HTTP 认证头 | [课 13](../../stages/5-认证联调与决策/lessons/13-Cookie会话与Token.md) | `Authorization: Bearer` 与 `WWW-Authenticate` |
+| 14.2 CORS 机制 | [课 14](../../stages/5-认证联调与决策/lessons/14-CORS与同源策略.md) | OPTIONS 预检、允许来源、允许方法/头部、`Vary: Origin` |
+| 14.3 CORS 报错排查 | [课 14](../../stages/5-认证联调与决策/lessons/14-CORS与同源策略.md) | allowed/denied 两条预检分支与状态证据 |
+| 15.1 抓包方法论 | [课 15](../../stages/5-认证联调与决策/lessons/15-抓包排障与决策清单.md) | DevTools、curl、标准库客户端三种观测镜头 |
+| 15.2 综合排障推演 | [课 15](../../stages/5-认证联调与决策/lessons/15-抓包排障与决策清单.md) | 四个病例从症状到证据的可重复脚本 |
+| 15.3 决策清单 | [课 15](../../stages/5-认证联调与决策/lessons/15-抓包排障与决策清单.md) | `验收清单.md` 与本 README 的证据卡字段 |
 
 ## 工程约束
 

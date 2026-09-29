@@ -6,7 +6,7 @@
 import re
 
 PATH = ("/mnt/d/projects/learning/prometheus/stages/2-规则与告警/"
-        "lessons/lesson-06-查询引擎与查询成本.md")
+        "lessons/06-查询引擎与查询成本.md")
 
 with open(PATH, encoding="utf-8") as f:
     text = f.read()

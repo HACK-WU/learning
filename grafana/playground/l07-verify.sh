@@ -2,7 +2,7 @@
 # 课 7 交付前结构校验（沿用 l06-verify.sh，适配课 7）
 set -u
 
-F="/mnt/d/projects/learning/grafana/stages/3-叫得醒/lessons/lesson-07-告警架构：规则在哪求值、状态怎么迁移.md"
+F="/mnt/d/projects/learning/grafana/stages/3-叫得醒/lessons/07-告警架构：规则在哪求值、状态怎么迁移.md"
 BLOCK=0
 
 echo "=========================================================="

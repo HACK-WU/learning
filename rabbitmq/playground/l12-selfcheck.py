@@ -16,7 +16,7 @@ import sys
 
 BASE = '/mnt/d/projects/learning/rabbitmq'
 DOC = (BASE + '/stages/4-进阶与工程落地/lessons/'
-       'lesson-12-架构落地与选型决策.md')
+       '12-架构落地与选型决策.md')
 PLAYGROUND = BASE + '/playground'
 
 PASS = []

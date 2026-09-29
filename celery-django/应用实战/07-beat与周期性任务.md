@@ -1,6 +1,6 @@
 # 应用实战 · beat 与周期性任务
 
-> 对应课程：[课 7：beat 与周期性任务](../stages/4-定时编排与生产运维/lessons/lesson-07-beat与周期性任务.md) ｜ 覆盖知识点：beat 调度器与 crontab 表达式、定时任务的可靠性（单点 / 时区 / 重叠）
+> 对应课程：[课 7：beat 与周期性任务](../stages/4-定时编排与生产运维/lessons/07-beat与周期性任务.md) ｜ 覆盖知识点：beat 调度器与 crontab 表达式、定时任务的可靠性（单点 / 时区 / 重叠）
 > 定位：**会用，不上生产**——课里学完，在这里动手。课内第四幕做的是「beat 调度与重叠」的机制验证，这里做的是**把"今天到底跑没跑"这件事变成可查、可告警的事实**。
 > 🧪 **本篇重叠与防重数据为本机实测**（Celery 5.6.3 / Redis / Python 3.12.3），实测脚本见 `.plans/2026-09-17-应用实战与场景库升级/a7-beat.sh`
 
@@ -187,7 +187,7 @@ python manage.py shell -c "from finance.tasks import daily_reconcile; print(dail
 
 ## 🧭 导航
 
-- ⬅️ 回到课程：[课 7：beat 与周期性任务](../stages/4-定时编排与生产运维/lessons/lesson-07-beat与周期性任务.md)
+- ⬅️ 回到课程：[课 7：beat 与周期性任务](../stages/4-定时编排与生产运维/lessons/07-beat与周期性任务.md)
 - 📚 全部实战：[应用实战索引](INDEX.md)
 - ⬅️ 上一篇：[06 · 事务没提交就发任务](06-Django事务与ORM的坑.md)
 - ➡️ 下一篇：[08 · chord 挂死](08-canvas任务编排.md)

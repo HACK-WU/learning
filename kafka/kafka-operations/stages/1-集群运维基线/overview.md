@@ -33,5 +33,5 @@
 
 ## 本阶段产出
 
-- [x] [lessons/lesson-01-运维全景与集群基线.md](lessons/lesson-01-运维全景与集群基线.md)
-- [x] [lessons/lesson-02-存储、容量与分区规划.md](lessons/lesson-02-存储、容量与分区规划.md)
+- [x] [lessons/01-运维全景与集群基线.md](lessons/01-运维全景与集群基线.md)
+- [x] [lessons/02-存储、容量与分区规划.md](lessons/02-存储、容量与分区规划.md)

@@ -35,6 +35,6 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-10-io与context.md`（✅ 2026-09-10 · 本机实测 go1.27.1 darwin/arm64）
-- [x] `lessons/lesson-11-nethttp服务端.md`（✅ 2026-09-10 · 本机实测 go1.27.1 darwin/arm64）
-- [x] `lessons/lesson-12-数据访问与客户端.md`（✅ 2026-09-13 · 本机实测 go1.27.1 darwin/arm64）
+- [x] `lessons/10-io与context.md`（✅ 2026-09-10 · 本机实测 go1.27.1 darwin/arm64）
+- [x] `lessons/11-nethttp服务端.md`（✅ 2026-09-10 · 本机实测 go1.27.1 darwin/arm64）
+- [x] `lessons/12-数据访问与客户端.md`（✅ 2026-09-13 · 本机实测 go1.27.1 darwin/arm64）

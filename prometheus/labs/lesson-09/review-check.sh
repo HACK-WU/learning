@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # 课 9 双视角评审校验：结构完整性 + 知识点六要素 + 速览/小测 + 链接可达
 set -uo pipefail
-DOC=/mnt/d/projects/learning/prometheus/stages/3-规模化与生态/lessons/lesson-09-长期存储选型.md
+DOC=/mnt/d/projects/learning/prometheus/stages/3-规模化与生态/lessons/09-长期存储选型.md
 ROOT=/mnt/d/projects/learning/prometheus
 PASS=0; FAIL=0
 ok(){ PASS=$((PASS+1)); echo "  [PASS] $1"; }

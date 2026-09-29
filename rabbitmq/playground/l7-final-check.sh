@@ -8,7 +8,7 @@ echo "产物根目录: $BASE"
 echo ""
 
 echo "=== 1. 讲义文件 ==="
-L7="$BASE/stages/3-可靠性与投递语义/lessons/lesson-07-持久化与死信.md"
+L7="$BASE/stages/3-可靠性与投递语义/lessons/07-持久化与死信.md"
 if [ -f "$L7" ]; then
   echo "  ✅ 存在，$(wc -l < "$L7") 行，$(stat -c%s "$L7") 字节"
 else
@@ -36,7 +36,7 @@ done
 
 echo ""
 echo "=== 4. SVG 资源 ==="
-SVG="$BASE/stages/3-可靠性与投递语义/assets/lesson-07-persistence-deadletter.svg"
+SVG="$BASE/stages/3-可靠性与投递语义/assets/07-persistence-deadletter.svg"
 if [ -f "$SVG" ]; then
   echo "  ✅ 存在，$(stat -c%s "$SVG") 字节"
   grep -q "课 7" "$SVG" && echo "  ✅ 内容含本课标识"

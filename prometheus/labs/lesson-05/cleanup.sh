@@ -1,10 +1,10 @@
 #!/bin/bash
 echo "=== 讲义 ==="
-wc -l /mnt/d/projects/learning/prometheus/stages/2-规则与告警/lessons/lesson-05-Alertmanager深入.md
+wc -l /mnt/d/projects/learning/prometheus/stages/2-规则与告警/lessons/05-Alertmanager深入.md
 
 echo ""
 echo "=== 章节 ==="
-grep -n '^## ' /mnt/d/projects/learning/prometheus/stages/2-规则与告警/lessons/lesson-05-Alertmanager深入.md
+grep -n '^## ' /mnt/d/projects/learning/prometheus/stages/2-规则与告警/lessons/05-Alertmanager深入.md
 
 echo ""
 echo "=== 实验目录 ==="

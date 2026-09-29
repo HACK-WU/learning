@@ -14,7 +14,7 @@
 import re
 
 LESSON = ("/mnt/d/projects/learning/prometheus/stages/2-规则与告警/"
-          "lessons/lesson-05-Alertmanager深入.md")
+          "lessons/05-Alertmanager深入.md")
 with open(LESSON, encoding="utf-8") as f:
     text = f.read()
 # 评审结论块（末尾）里的引用文字不是可执行命令，需排除后再判定

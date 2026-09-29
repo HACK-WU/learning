@@ -34,9 +34,9 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-10-基数治理.md`
-- [x] `lessons/lesson-11-容量规划与调优.md`
-- [x] `lessons/lesson-12-运维工具链与排障.md`
+- [x] `lessons/10-基数治理.md`
+- [x] `lessons/11-容量规划与调优.md`
+- [x] `lessons/12-运维工具链与排障.md`
 
 ## 课 10 完成情况（2026-09-07）
 

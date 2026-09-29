@@ -86,7 +86,7 @@ flowchart TD
 
 ⚠️ **高频坑**：以为「加个 FULLTEXT 索引就行了」——中文场景下它既不准也不可扩展。
 
-> 📖 [课 1 全文](stages/1-为什么需要ES/lessons/lesson-01-为什么数据库搞不定搜索.md)
+> 📖 [课 1 全文](stages/1-为什么需要ES/lessons/01-为什么数据库搞不定搜索.md)
 
 ### 课 2：ES 是谁、凭什么
 
@@ -117,7 +117,7 @@ flowchart TD
 
 ⚠️ **高频坑**：把 ES 当唯一数据源——数据丢了很难重建。
 
-> 📖 [课 2 全文](stages/1-为什么需要ES/lessons/lesson-02-ES是谁凭什么.md)
+> 📖 [课 2 全文](stages/1-为什么需要ES/lessons/02-ES是谁凭什么.md)
 
 ## 阶段 2：核心原理与上手（课 3-5 · 9 知识点）
 
@@ -162,7 +162,7 @@ graph TD
 
 ⚠️ **高频坑**：单节点学习环境建索引忘了显式指定 `"number_of_replicas": 0`——默认 1 副本，集群必然 yellow。
 
-> 📖 [课 3 全文](stages/2-核心原理与上手/lessons/lesson-03-把ES跑起来.md)
+> 📖 [课 3 全文](stages/2-核心原理与上手/lessons/03-把ES跑起来.md)
 
 ### 课 4：倒排索引——快到离谱的秘密
 
@@ -203,7 +203,7 @@ graph TD
 
 ⚠️ **高频坑**：IK 插件**版本号必须与 ES 严格一致**，且**装完必须重启**才生效；最佳实践是索引 `ik_max_word`、搜索 `ik_smart`。
 
-> 📖 [课 4 全文](stages/2-核心原理与上手/lessons/lesson-04-倒排索引的秘密.md)
+> 📖 [课 4 全文](stages/2-核心原理与上手/lessons/04-倒排索引的秘密.md)
 
 ### 课 5：映射：给数据定规矩
 
@@ -247,7 +247,7 @@ graph TD
 
 > 💡 **贯穿全课的原理句**：**`_source` 是原件，倒排索引 / doc_values 是按映射重抄的副本。** 搜索、聚合、排序用的全是副本。
 
-> 📖 [课 5 全文](stages/2-核心原理与上手/lessons/lesson-05-映射给数据定规矩.md)
+> 📖 [课 5 全文](stages/2-核心原理与上手/lessons/05-映射给数据定规矩.md)
 
 ## 阶段 3：查询与聚合（课 6-8 · 9 知识点）
 
@@ -292,7 +292,7 @@ graph TD
 
 ⚠️ **高频坑**：把所有条件都塞进 `must`，筛选条件会污染相关性分数；另外别迷信「filter 更快」——本课 8 条文档的实测中 `query_cache.hit_count` 始终为 0，**用 `filter` 的首要理由是语义清晰 + 分数干净，不是性能**。
 
-> 📖 [课 6 全文](stages/3-查询与聚合/lessons/lesson-06-QueryDSL问问题的语言.md)
+> 📖 [课 6 全文](stages/3-查询与聚合/lessons/06-QueryDSL问问题的语言.md)
 
 ### 课 7：为什么这条排在前面
 
@@ -333,7 +333,7 @@ graph TD
 
 ⚠️ **高频坑**：以为 explain 里的 `boost = 2.2` 是自己设的权重——那是 `k1 + 1` 常量，真正的字段权重乘在它上面（`title^3` → 6.6）。堆关键词也提不了分：TF 会饱和，堆词还会撑大 `dl` 稀释权重。
 
-> 📖 [课 7 全文](stages/3-查询与聚合/lessons/lesson-07-为什么这条排在前面.md)
+> 📖 [课 7 全文](stages/3-查询与聚合/lessons/07-为什么这条排在前面.md)
 
 ### 课 8：聚合：不做搜索，做统计
 
@@ -359,7 +359,7 @@ graph TD
 | 4 | `bucket_script` 放顶层 | `No aggregation found for path` | 必须挂桶内，与指标同级 |
 | 5 | ES\|QL 中文列名 | `token recognition error at: '订'` | 别名用英文，值用中文 |
 
-> 📖 [课 8 全文](stages/3-查询与聚合/lessons/lesson-08-聚合不做搜索做统计.md)
+> 📖 [课 8 全文](stages/3-查询与聚合/lessons/08-聚合不做搜索做统计.md)
 
 ## 阶段 4：分布式与工程实践（课 9-12、15 · 16 知识点）
 
@@ -382,7 +382,7 @@ graph TD
 
 ⚠️ **高频坑（两条要一起看）**：**单节点集群**设 0 副本是合理的（副本注定无处安放，yellow 是物理必然）；**多节点集群**为消掉 yellow 把副本设成 0 是危险的——本课实测停掉 node-3 后，7 个 0 副本索引全部转 red、数据真读不到，而有副本的 `l9_orders` 只是 yellow、22 条一条没丢。
 
-> 📖 [课 9 全文](stages/4-分布式与工程实践/lessons/lesson-09-分片分布式的基石.md)
+> 📖 [课 9 全文](stages/4-分布式与工程实践/lessons/09-分片分布式的基石.md)
 
 ### 课 10：集群健康与排障
 
@@ -429,7 +429,7 @@ graph TD
 
 ⚠️ **高频坑**：只看颜色会漏——反复故障转移会让分片「静默消失」，**每次故障转移后必须核对 `docs.count`**。
 
-> 📖 [课 10 全文](stages/4-分布式与工程实践/lessons/lesson-10-集群健康与排障.md)
+> 📖 [课 10 全文](stages/4-分布式与工程实践/lessons/10-集群健康与排障.md)
 
 ### 课 11：数据管道与备份
 
@@ -459,7 +459,7 @@ graph TD
 
 ⚠️ **高频坑**：`_update_by_query` 默认重跑索引的 `default_pipeline` → 报 `field [xxx] not present` 且 `updated: 0`，**加 `?pipeline=_none`** 才对；`path.repo` 改完必须重启**所有**节点。
 
-> 📖 [课 11 全文](stages/4-分布式与工程实践/lessons/lesson-11-数据管道与备份.md)
+> 📖 [课 11 全文](stages/4-分布式与工程实践/lessons/11-数据管道与备份.md)
 
 ### 课 12：接入真实项目
 
@@ -502,7 +502,7 @@ flowchart TD
 
 ⚠️ **高频坑**：bulk 报 `errors=true` 时**成功项已经落库了**，不能整批重来；深分页报错外层只有 `all shards failed`，**真因藏在 `root_cause`** 里。
 
-> 📖 [课 12 全文](stages/4-分布式与工程实践/lessons/lesson-12-接入真实项目.md)
+> 📖 [课 12 全文](stages/4-分布式与工程实践/lessons/12-接入真实项目.md)
 
 ### 课 15：索引管理与生命周期策略（2026-09-01 增补）
 
@@ -546,7 +546,7 @@ mindmap
 
 ⚠️ **高频坑**：shrink 的目标分片数**必须是因数**（4 → 3 直接报 `must be a multiple of [3]`）；`indices.lifecycle.poll_interval` 是**集群级**设置，写在索引模板里会报 `unknown setting`。
 
-> 📖 [课 15 全文](stages/4-分布式与工程实践/lessons/lesson-15-索引管理与生命周期策略.md)
+> 📖 [课 15 全文](stages/4-分布式与工程实践/lessons/15-索引管理与生命周期策略.md)
 
 ## 阶段 5：生产与选型（课 13-14 · 6 知识点）
 
@@ -602,7 +602,7 @@ flowchart TD
 
 ⚠️ **高频坑**：basic license 下 `semantic_text` **能建索引、能建映射，但一写入就报 `non-compliant for [inference]`**——建时不响、写时才炸；kNN 字段名写错会**静默返回 0 条、不报错**。
 
-> 📖 [课 13 全文](stages/5-生产与选型/lessons/lesson-13-三大主战场.md)
+> 📖 [课 13 全文](stages/5-生产与选型/lessons/13-三大主战场.md)
 
 ### 课 14：该不该用 ES
 
@@ -640,7 +640,7 @@ flowchart TD
 
 ⚠️ **时效性**：Elastic 认证考纲 **2026-09-01 起从 8.15 升级到 9.3**——新增 Architecture 大类、`semantic search`、ES|QL、Streams；移除 runtime fields、跨集群搜索/复制、searchable snapshot。**旧攻略的重点别再套用。**
 
-> 📖 [课 14 全文](stages/5-生产与选型/lessons/lesson-14-该不该用ES.md)
+> 📖 [课 14 全文](stages/5-生产与选型/lessons/14-该不该用ES.md)
 
 ---
 
@@ -789,21 +789,21 @@ flowchart TD
 
 | 阶段 | 课 | 知识点 | 认证映射 |
 |------|-----|--------|---------|
-| 1 | [课 1](stages/1-为什么需要ES/lessons/lesson-01-为什么数据库搞不定搜索.md) | 数据库模糊查询的痛点 · 搜索引擎是什么 · ES 能干什么（四大场景） | — |
-| 1 | [课 2](stages/1-为什么需要ES/lessons/lesson-02-ES是谁凭什么.md) | ES 起源与定位 · 核心概念全景 · ES vs 数据库与其他方案对比 | — |
-| 2 | [课 3](stages/2-核心原理与上手/lessons/lesson-03-把ES跑起来.md) | 本机安装与首次启动 · 索引/文档 CRUD · 用 `_cat` API 观察集群 | Installation / Indexing Data / Cluster Admin |
-| 2 | [课 4](stages/2-核心原理与上手/lessons/lesson-04-倒排索引的秘密.md) | 倒排索引原理 · 分词与分析器 · 中文分词与 IK | Mapping & Analysis |
-| 2 | [课 5](stages/2-核心原理与上手/lessons/lesson-05-映射给数据定规矩.md) | 映射 Mapping 设计 · 动态映射与模板 · 多字段 multi-fields | Data Management / Mapping & Analysis |
-| 3 | [课 6](stages/3-查询与聚合/lessons/lesson-06-QueryDSL问问题的语言.md) | Query DSL 结构 · 全文查询 vs 词项查询 · 布尔组合与过滤 | Queries |
-| 3 | [课 7](stages/3-查询与聚合/lessons/lesson-07-为什么这条排在前面.md) | 相关性打分 BM25 · 排序 · 分页 · 高亮 · 相关性调优 | Queries |
-| 3 | [课 8](stages/3-查询与聚合/lessons/lesson-08-聚合不做搜索做统计.md) | 桶聚合与指标聚合 · 子聚合与管道聚合 · ES\|QL 入门 | Aggregations / Queries |
-| 4 | [课 9](stages/4-分布式与工程实践/lessons/lesson-09-分片分布式的基石.md) | 分片与副本机制 · 分布式写流程 · 分布式读流程 | Cluster Admin |
-| 4 | [课 10](stages/4-分布式与工程实践/lessons/lesson-10-集群健康与排障.md) | 集群健康与故障转移 · 分片设计与容量规划 · 诊断与修片 | Cluster Admin |
-| 4 | [课 11](stages/4-分布式与工程实践/lessons/lesson-11-数据管道与备份.md) | Ingest Pipeline · Reindex 与 Update By Query · 快照与恢复 | Data Processing / Cluster Admin |
-| 4 | [课 12](stages/4-分布式与工程实践/lessons/lesson-12-接入真实项目.md) | 客户端选型与集成 · 数据同步模式 · 搜索应用架构 | — |
-| 4 | [课 15](stages/4-分布式与工程实践/lessons/lesson-15-索引管理与生命周期策略.md) | 索引模板体系 · 别名 · ILM 生命周期 · 索引运维 | Index Management |
-| 5 | [课 13](stages/5-生产与选型/lessons/lesson-13-三大主战场.md) | 日志与可观测 · 向量检索与 RAG · 安全与权限 | Cluster Security |
-| 5 | [课 14](stages/5-生产与选型/lessons/lesson-14-该不该用ES.md) | 该不该用 ES（选型清单） · 认证备考指南 · 知识体系收束 | 全部 |
+| 1 | [课 1](stages/1-为什么需要ES/lessons/01-为什么数据库搞不定搜索.md) | 数据库模糊查询的痛点 · 搜索引擎是什么 · ES 能干什么（四大场景） | — |
+| 1 | [课 2](stages/1-为什么需要ES/lessons/02-ES是谁凭什么.md) | ES 起源与定位 · 核心概念全景 · ES vs 数据库与其他方案对比 | — |
+| 2 | [课 3](stages/2-核心原理与上手/lessons/03-把ES跑起来.md) | 本机安装与首次启动 · 索引/文档 CRUD · 用 `_cat` API 观察集群 | Installation / Indexing Data / Cluster Admin |
+| 2 | [课 4](stages/2-核心原理与上手/lessons/04-倒排索引的秘密.md) | 倒排索引原理 · 分词与分析器 · 中文分词与 IK | Mapping & Analysis |
+| 2 | [课 5](stages/2-核心原理与上手/lessons/05-映射给数据定规矩.md) | 映射 Mapping 设计 · 动态映射与模板 · 多字段 multi-fields | Data Management / Mapping & Analysis |
+| 3 | [课 6](stages/3-查询与聚合/lessons/06-QueryDSL问问题的语言.md) | Query DSL 结构 · 全文查询 vs 词项查询 · 布尔组合与过滤 | Queries |
+| 3 | [课 7](stages/3-查询与聚合/lessons/07-为什么这条排在前面.md) | 相关性打分 BM25 · 排序 · 分页 · 高亮 · 相关性调优 | Queries |
+| 3 | [课 8](stages/3-查询与聚合/lessons/08-聚合不做搜索做统计.md) | 桶聚合与指标聚合 · 子聚合与管道聚合 · ES\|QL 入门 | Aggregations / Queries |
+| 4 | [课 9](stages/4-分布式与工程实践/lessons/09-分片分布式的基石.md) | 分片与副本机制 · 分布式写流程 · 分布式读流程 | Cluster Admin |
+| 4 | [课 10](stages/4-分布式与工程实践/lessons/10-集群健康与排障.md) | 集群健康与故障转移 · 分片设计与容量规划 · 诊断与修片 | Cluster Admin |
+| 4 | [课 11](stages/4-分布式与工程实践/lessons/11-数据管道与备份.md) | Ingest Pipeline · Reindex 与 Update By Query · 快照与恢复 | Data Processing / Cluster Admin |
+| 4 | [课 12](stages/4-分布式与工程实践/lessons/12-接入真实项目.md) | 客户端选型与集成 · 数据同步模式 · 搜索应用架构 | — |
+| 4 | [课 15](stages/4-分布式与工程实践/lessons/15-索引管理与生命周期策略.md) | 索引模板体系 · 别名 · ILM 生命周期 · 索引运维 | Index Management |
+| 5 | [课 13](stages/5-生产与选型/lessons/13-三大主战场.md) | 日志与可观测 · 向量检索与 RAG · 安全与权限 | Cluster Security |
+| 5 | [课 14](stages/5-生产与选型/lessons/14-该不该用ES.md) | 该不该用 ES（选型清单） · 认证备考指南 · 知识体系收束 | 全部 |
 
 **合计**：5 阶段 / 15 课 / 46 知识点，全部 ✅ 已完成。
 

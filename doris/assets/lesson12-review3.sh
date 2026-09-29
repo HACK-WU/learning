@@ -2,7 +2,7 @@
 # 课 12 评审 3（pedagogy 视角）：教学自洽性检查
 # 重点查：故事线是否连贯、概念是否前后一致、是否有自相矛盾、是否有未兑现的承诺
 
-LESSON="stages/4-分布式运维与生产落地/lessons/lesson-12-选型存算分离与场景落地.md"
+LESSON="stages/4-分布式运维与生产落地/lessons/12-选型存算分离与场景落地.md"
 BODY=$(awk '/^## 🚀 下一批接力提示词/{skip=1;next} /^## 🧭 课程导航/{skip=0} skip==0{print}' "$LESSON")
 
 echo "############ A. 故事主线一致性 ############"

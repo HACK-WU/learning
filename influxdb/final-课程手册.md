@@ -104,7 +104,7 @@
 
 ### L01 · 为什么需要时序数据库
 
-📖 [完整讲义](stages/1-问题与定位/lessons/lesson-01-为什么需要时序数据库.md)（478 行）
+📖 [完整讲义](stages/1-问题与定位/lessons/01-为什么需要时序数据库.md)（478 行）
 
 **本课目标**
 
@@ -164,7 +164,7 @@ flowchart TD
 
 ### L02 · InfluxDB 是什么：三代演进与生态位
 
-📖 [完整讲义](stages/1-问题与定位/lessons/lesson-02-InfluxDB是什么.md)（522 行）
+📖 [完整讲义](stages/1-问题与定位/lessons/02-InfluxDB是什么.md)（522 行）
 
 **本课目标**
 
@@ -233,7 +233,7 @@ flowchart TD
 
 ### L03 · 环境搭建与第一次写入
 
-📖 [完整讲义](stages/2-上手篇/lessons/lesson-03-环境搭建与第一次写入.md)（651 行）
+📖 [完整讲义](stages/2-上手篇/lessons/03-环境搭建与第一次写入.md)（651 行）
 
 **本课目标**
 
@@ -292,7 +292,7 @@ flowchart TD
 
 ### L04 · Line Protocol 与写入基本功
 
-📖 [完整讲义](stages/2-上手篇/lessons/lesson-04-Line-Protocol与写入基本功.md)（726 行）
+📖 [完整讲义](stages/2-上手篇/lessons/04-Line-Protocol与写入基本功.md)（726 行）
 
 **本课目标**
 
@@ -354,7 +354,7 @@ flowchart TD
 
 ### L05 · Python 客户端与 CLI 工具
 
-📖 [完整讲义](stages/2-上手篇/lessons/lesson-05-Python客户端与CLI工具.md)（1047 行）
+📖 [完整讲义](stages/2-上手篇/lessons/05-Python客户端与CLI工具.md)（1047 行）
 
 **本课目标**
 
@@ -440,7 +440,7 @@ flowchart TD
 
 ### L06 · 数据模型：table、tag、field、timestamp
 
-📖 [完整讲义](stages/3-数据模型与查询/lessons/lesson-06-数据模型-table-tag-field-timestamp.md)（819 行）
+📖 [完整讲义](stages/3-数据模型与查询/lessons/06-数据模型-table-tag-field-timestamp.md)（819 行）
 
 **本课目标**
 
@@ -505,7 +505,7 @@ flowchart TD
 
 ### L07 · Schema 设计与基数陷阱
 
-📖 [完整讲义](stages/3-数据模型与查询/lessons/lesson-07-Schema设计与基数陷阱.md)（873 行）
+📖 [完整讲义](stages/3-数据模型与查询/lessons/07-Schema设计与基数陷阱.md)（873 行）
 
 **本课目标**
 
@@ -578,7 +578,7 @@ flowchart TD
 
 ### L08 · SQL 查询：从 SELECT 到窗口函数
 
-📖 [完整讲义](stages/3-数据模型与查询/lessons/lesson-08-SQL查询-从SELECT到窗口函数.md)（1069 行）
+📖 [完整讲义](stages/3-数据模型与查询/lessons/08-SQL查询-从SELECT到窗口函数.md)（1069 行）
 
 **本课目标**
 
@@ -658,7 +658,7 @@ flowchart TD
 
 ### L09 · InfluxQL 与 Flux：遗产与迁移
 
-📖 [完整讲义](stages/3-数据模型与查询/lessons/lesson-09-InfluxQL与Flux-遗产与迁移.md)（878 行）
+📖 [完整讲义](stages/3-数据模型与查询/lessons/09-InfluxQL与Flux-遗产与迁移.md)（878 行）
 
 **本课目标**
 
@@ -751,7 +751,7 @@ flowchart TD
 
 ### L10 · 存储引擎：WAL、Parquet 与压实
 
-📖 [完整讲义](stages/4-存储引擎与性能/lessons/lesson-10-存储引擎-WAL-Parquet与压实.md)（929 行）
+📖 [完整讲义](stages/4-存储引擎与性能/lessons/10-存储引擎-WAL-Parquet与压实.md)（929 行）
 
 **本课目标**
 
@@ -818,7 +818,7 @@ flowchart TD
 
 ### L11 · 向量化执行：列存为什么快
 
-📖 [完整讲义](stages/4-存储引擎与性能/lessons/lesson-11-向量化执行-列存为什么快.md)（869 行）
+📖 [完整讲义](stages/4-存储引擎与性能/lessons/11-向量化执行-列存为什么快.md)（869 行）
 
 **本课目标**
 
@@ -870,7 +870,7 @@ graph TD
 
 ### L12 · 写入与查询性能调优
 
-📖 [完整讲义](stages/4-存储引擎与性能/lessons/lesson-12-写入与查询性能调优.md)（1292 行）
+📖 [完整讲义](stages/4-存储引擎与性能/lessons/12-写入与查询性能调优.md)（1292 行）
 
 **本课目标**
 
@@ -968,7 +968,7 @@ graph TD
 
 ### L13 · 部署形态与容量规划
 
-📖 [完整讲义](stages/5-生产落地/lessons/lesson-13-部署形态与容量规划.md)（1305 行）
+📖 [完整讲义](stages/5-生产落地/lessons/13-部署形态与容量规划.md)（1305 行）
 
 **本课目标**
 
@@ -1042,7 +1042,7 @@ graph TD
 
 ### L14 · 降采样、保留策略与成本
 
-📖 [完整讲义](stages/5-生产落地/lessons/lesson-14-降采样保留策略与成本.md)（1763 行）
+📖 [完整讲义](stages/5-生产落地/lessons/14-降采样保留策略与成本.md)（1763 行）
 
 **本课目标**
 
@@ -1114,7 +1114,7 @@ graph TD
 
 ### L15 · 处理引擎：Python 插件与触发器
 
-📖 [完整讲义](stages/5-生产落地/lessons/lesson-15-处理引擎Python插件与触发器.md)（2588 行）
+📖 [完整讲义](stages/5-生产落地/lessons/15-处理引擎Python插件与触发器.md)（2588 行）
 
 **本课目标**
 
@@ -1194,7 +1194,7 @@ flowchart TD
 
 ### L16 · · 生态集成：Telegraf、Grafana 与自监控
 
-📖 [完整讲义](stages/5-生产落地/lessons/lesson-16-生态集成与自监控.md)（2200 行）
+📖 [完整讲义](stages/5-生产落地/lessons/16-生态集成与自监控.md)（2200 行）
 
 **本课目标**
 
@@ -1282,7 +1282,7 @@ flowchart TD
 
 ### L17 · · 横向对比：五款候选
 
-📖 [完整讲义](stages/6-对比与决策/lessons/lesson-17-横向对比-五款候选.md)（2272 行）
+📖 [完整讲义](stages/6-对比与决策/lessons/17-横向对比-五款候选.md)（2272 行）
 
 **本课目标**
 
@@ -1365,7 +1365,7 @@ graph TB
 
 ### L18 · 迁移指南：从 1.x/2.x 到 3.x
 
-📖 [完整讲义](stages/6-对比与决策/lessons/lesson-18-迁移指南-从1x2x到3x.md)（2588 行）
+📖 [完整讲义](stages/6-对比与决策/lessons/18-迁移指南-从1x2x到3x.md)（2588 行）
 
 **本课目标**
 
@@ -1426,7 +1426,7 @@ graph TB
 
 ### L19 · 场景演练与选型决策
 
-📖 [完整讲义](stages/6-对比与决策/lessons/lesson-19-场景演练与选型决策.md)（2545 行）
+📖 [完整讲义](stages/6-对比与决策/lessons/19-场景演练与选型决策.md)（2545 行）
 
 **本课目标**
 

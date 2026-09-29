@@ -38,8 +38,8 @@
 
 ## 课清单
 
-1. [课 1 · Skill 到底是什么](./lessons/lesson-01-Skill到底是什么.md) —— ✅ 已完成（2026-09-08）
-2. [课 2 · 为什么需要 Skill](./lessons/lesson-02-为什么需要Skill.md) —— ✅ 已完成（2026-09-08）
+1. [课 1 · Skill 到底是什么](./lessons/01-Skill到底是什么.md) —— ✅ 已完成（2026-09-08）
+2. [课 2 · 为什么需要 Skill](./lessons/02-为什么需要Skill.md) —— ✅ 已完成（2026-09-08）
 
 ---
 

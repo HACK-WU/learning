@@ -73,7 +73,7 @@ flowchart LR
 
 ### 第 1 课《HTTP 是什么：从一次请求开始》
 
-[阅读原课](stages/1-报文与语义/lessons/lesson-01-一次网页加载的全旅程.md)
+[阅读原课](stages/1-报文与语义/lessons/01-一次网页加载的全旅程.md)
 
 #### 一句话本质
 
@@ -128,7 +128,7 @@ curl -s -o /dev/null -w 'code=%{http_code} total=%{time_total}\n' http://127.0.0
 
 - [MDN：HTTP overview](https://developer.mozilla.org/en-US/docs/Web/HTTP/Overview)
 - [RFC 9110：HTTP Semantics](https://www.rfc-editor.org/rfc/rfc9110)
-- 原课中的 `📖 文档核对` 与 `📚 官方文档` 保留完整入口，请回到[第 1 课](stages/1-报文与语义/lessons/lesson-01-一次网页加载的全旅程.md)查看。
+- 原课中的 `📖 文档核对` 与 `📚 官方文档` 保留完整入口，请回到[第 1 课](stages/1-报文与语义/lessons/01-一次网页加载的全旅程.md)查看。
 
 #### 三句话收束
 
@@ -138,7 +138,7 @@ curl -s -o /dev/null -w 'code=%{http_code} total=%{time_total}\n' http://127.0.0
 
 ### 第 2 课《HTTP 报文：请求和响应的共同语言》
 
-[阅读原课](stages/1-报文与语义/lessons/lesson-02-报文解剖.md)
+[阅读原课](stages/1-报文与语义/lessons/02-报文解剖.md)
 
 #### 一句话本质
 
@@ -206,7 +206,7 @@ curl -sS -H 'Host: example.test' http://127.0.0.1:8000/
 
 ### 第 3 课《方法与状态码：语义才是契约》
 
-[阅读原课](stages/1-报文与语义/lessons/lesson-03-方法与状态码.md)
+[阅读原课](stages/1-报文与语义/lessons/03-方法与状态码.md)
 
 #### 一句话本质
 
@@ -273,7 +273,7 @@ curl -sS --post301 --post302 --post307 -X POST -d 'x=1' -i URL
 
 ### 第 4 课《连接管理：握手、复用与队头阻塞》
 
-[阅读原课](stages/2-连接与安全/lessons/lesson-04-连接管理与队头阻塞.md)
+[阅读原课](stages/2-连接与安全/lessons/04-连接管理与队头阻塞.md)
 
 #### 一句话本质
 
@@ -335,7 +335,7 @@ curl -sv URL
 
 ### 第 5 课《HTTPS：明文的三大威胁与加密原理》
 
-[阅读原课](stages/2-连接与安全/lessons/lesson-05-HTTPS加密原理.md)
+[阅读原课](stages/2-连接与安全/lessons/05-HTTPS加密原理.md)
 
 #### 一句话本质
 
@@ -400,7 +400,7 @@ openssl s_client -connect example.com:443 -servername example.com
 
 ### 第 6 课《证书与信任链：浏览器为什么相信它》
 
-[阅读原课](stages/2-连接与安全/lessons/lesson-06-证书与信任.md)
+[阅读原课](stages/2-连接与安全/lessons/06-证书与信任.md)
 
 #### 一句话本质
 
@@ -472,7 +472,7 @@ curl --cacert ./ca.pem -vI https://internal.example/
 
 ### 第 7 课《HTTP 缓存：为什么浏览器会返回旧数据》
 
-[阅读原课](stages/3-缓存与性能/lessons/lesson-07-HTTP缓存.md)
+[阅读原课](stages/3-缓存与性能/lessons/07-HTTP缓存.md)
 
 #### 一句话本质
 
@@ -530,7 +530,7 @@ curl -sS -H 'If-None-Match: "etag-value"' -D - -o /dev/null URL
 
 ### 第 8 课《性能测量与优化：把“慢”拆成段落》
 
-[阅读原课](stages/3-缓存与性能/lessons/lesson-08-性能测量与优化.md)
+[阅读原课](stages/3-缓存与性能/lessons/08-性能测量与优化.md)
 
 #### 一句话本质
 
@@ -589,7 +589,7 @@ curl -sS -I URL
 
 ### 第 9 课《代理、网关与 CDN：请求的中间人》
 
-[阅读原课](stages/3-缓存与性能/lessons/lesson-09-代理网关与CDN.md)
+[阅读原课](stages/3-缓存与性能/lessons/09-代理网关与CDN.md)
 
 #### 一句话本质
 
@@ -603,7 +603,7 @@ curl -sS -I URL
 
 ![请求经过代理、网关与 CDN](stages/3-缓存与性能/assets/request-path-overview.svg)
 
-![第 9 课一图总结](stages/3-缓存与性能/assets/lesson-09-summary.svg)
+![第 9 课一图总结](stages/3-缓存与性能/assets/09-summary.svg)
 
 #### 本课地图
 
@@ -654,7 +654,7 @@ curl -sS -D - -o /dev/null URL | rg -i 'age|via|cache|vary|forwarded'
 
 ### 第 10 课《HTTP/1.1 与协议奠基》
 
-[阅读原课](stages/4-协议演进/lessons/lesson-10-HTTP1.1与协议奠基.md)
+[阅读原课](stages/4-协议演进/lessons/10-HTTP1.1与协议奠基.md)
 
 #### 一句话本质
 
@@ -668,7 +668,7 @@ HTTP/1.1 把持久连接、Host、多种消息长度表达和更成熟的缓存/
 
 ![HTTP/1.1 协议全局](stages/4-协议演进/assets/http11-global-overview.svg)
 
-![第 10 课一图总结](stages/4-协议演进/assets/lesson-10-summary.svg)
+![第 10 课一图总结](stages/4-协议演进/assets/10-summary.svg)
 
 #### 本课地图
 
@@ -695,7 +695,7 @@ HTTP/1.1 把持久连接、Host、多种消息长度表达和更成熟的缓存/
 ```bash
 curl --http1.1 -v https://example.com/ -o /dev/null
 curl --http1.1 --no-keepalive -v https://example.com/ -o /dev/null
-python3 stages/4-协议演进/labs/lesson-10-http11-foundations-lab.py
+python3 stages/4-协议演进/labs/10-http11-foundations-lab.py
 ```
 
 #### 📖 文档核对与 📚 官方文档
@@ -713,7 +713,7 @@ python3 stages/4-协议演进/labs/lesson-10-http11-foundations-lab.py
 
 ### 第 11 课《HTTP/2 与多路复用》
 
-[阅读原课](stages/4-协议演进/lessons/lesson-11-HTTP2与多路复用.md)
+[阅读原课](stages/4-协议演进/lessons/11-HTTP2与多路复用.md)
 
 #### 一句话本质
 
@@ -727,7 +727,7 @@ HTTP/2 保留 HTTP 语义，却把报文编码为二进制帧，并用流在一�
 
 ![HTTP/2 帧、流与多路复用](stages/4-协议演进/assets/http2-global-overview.svg)
 
-![第 11 课一图总结](stages/4-协议演进/assets/lesson-11-summary.svg)
+![第 11 课一图总结](stages/4-协议演进/assets/11-summary.svg)
 
 #### 本课地图
 
@@ -752,7 +752,7 @@ HTTP/2 保留 HTTP 语义，却把报文编码为二进制帧，并用流在一�
 #### 命令速查卡
 
 ```bash
-python3 stages/4-协议演进/labs/lesson-11-http2-framing-lab.py
+python3 stages/4-协议演进/labs/11-http2-framing-lab.py
 curl --http2 -v https://example.com/ -o /dev/null
 curl --http1.1 -v https://example.com/ -o /dev/null
 curl --http2 --parallel URL1 URL2
@@ -773,7 +773,7 @@ curl --http2 --parallel URL1 URL2
 
 ### 第 12 课《HTTP/3 与 QUIC》
 
-[阅读原课](stages/4-协议演进/lessons/lesson-12-HTTP3与QUIC.md)
+[阅读原课](stages/4-协议演进/lessons/12-HTTP3与QUIC.md)
 
 #### 一句话本质
 
@@ -787,7 +787,7 @@ HTTP/2 已经多路复用，移动网络切换或单个丢包时仍可能整体�
 
 ![HTTP/3 与 QUIC 全局](stages/4-协议演进/assets/http3-global-overview.svg)
 
-![第 12 课一图总结](stages/4-协议演进/assets/lesson-12-summary.svg)
+![第 12 课一图总结](stages/4-协议演进/assets/12-summary.svg)
 
 #### 本课地图
 
@@ -812,7 +812,7 @@ HTTP/2 已经多路复用，移动网络切换或单个丢包时仍可能整体�
 #### 命令速查卡
 
 ```bash
-python3 stages/4-协议演进/labs/lesson-12-quic-concepts-lab.py
+python3 stages/4-协议演进/labs/12-quic-concepts-lab.py
 curl --http3-only -v https://example.com/ -o /dev/null
 curl --http3 -v https://example.com/ -o /dev/null
 curl --alt-svc /tmp/http3-alt-svc.txt -v https://example.com/ -o /dev/null
@@ -839,7 +839,7 @@ curl --alt-svc /tmp/http3-alt-svc.txt -v https://example.com/ -o /dev/null
 
 ### 第 13 课《Cookie、会话与 Token：登录状态放在哪里》
 
-[阅读原课](stages/5-认证联调与决策/lessons/lesson-13-Cookie会话与Token.md)
+[阅读原课](stages/5-认证联调与决策/lessons/13-Cookie会话与Token.md)
 
 #### 一句话本质
 
@@ -853,7 +853,7 @@ curl --alt-svc /tmp/http3-alt-svc.txt -v https://example.com/ -o /dev/null
 
 ![Cookie、Session 与 Token 的状态归属](stages/5-认证联调与决策/assets/cookie-session-token-global-overview.svg)
 
-![第 13 课一图总结](stages/5-认证联调与决策/assets/lesson-13-summary.svg)
+![第 13 课一图总结](stages/5-认证联调与决策/assets/13-summary.svg)
 
 #### 本课地图
 
@@ -898,7 +898,7 @@ curl -sS -D - -o /dev/null https://example.com/me
 
 ### 第 14 课《CORS 与同源策略：浏览器为什么拦你》
 
-[阅读原课](stages/5-认证联调与决策/lessons/lesson-14-CORS与同源策略.md)
+[阅读原课](stages/5-认证联调与决策/lessons/14-CORS与同源策略.md)
 
 #### 一句话本质
 
@@ -912,7 +912,7 @@ curl -sS -D - -o /dev/null https://example.com/me
 
 ![同源策略与 CORS 排障](stages/5-认证联调与决策/assets/cors-same-origin-global-overview.svg)
 
-![第 14 课一图总结](stages/5-认证联调与决策/assets/lesson-14-summary.svg)
+![第 14 课一图总结](stages/5-认证联调与决策/assets/14-summary.svg)
 
 #### 本课地图
 
@@ -960,7 +960,7 @@ curl -i -X POST https://api.example.com/data \
 
 ### 第 15 课《抓包排障与决策清单：课程收束》
 
-[阅读原课](stages/5-认证联调与决策/lessons/lesson-15-抓包排障与决策清单.md)
+[阅读原课](stages/5-认证联调与决策/lessons/15-抓包排障与决策清单.md)
 
 #### 一句话本质
 
@@ -974,7 +974,7 @@ curl -i -X POST https://api.example.com/data \
 
 ![抓包排障全局](stages/5-认证联调与决策/assets/packet-debugging-global-overview.svg)
 
-![第 15 课一图总结](stages/5-认证联调与决策/assets/lesson-15-summary.svg)
+![第 15 课一图总结](stages/5-认证联调与决策/assets/15-summary.svg)
 
 #### 本课地图
 
@@ -997,7 +997,7 @@ curl -v URL
 curl -sS -o /dev/null -w \
   'dns=%{time_namelookup} connect=%{time_connect} tls=%{time_appconnect} ttfb=%{time_starttransfer} total=%{time_total}\n' URL
 curl --trace-time --trace-ascii /tmp/http-trace.txt URL
-python3 stages/5-认证联调与决策/labs/lesson-15-capture-debugging-lab.py
+python3 stages/5-认证联调与决策/labs/15-capture-debugging-lab.py
 ```
 
 #### 📖 文档核对与 📚 官方文档

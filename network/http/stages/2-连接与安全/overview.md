@@ -38,9 +38,9 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-04-连接管理与队头阻塞.md`
-- [x] `lessons/lesson-05-HTTPS加密原理.md`
-- [x] `lessons/lesson-06-证书与信任.md`
+- [x] `lessons/04-连接管理与队头阻塞.md`
+- [x] `lessons/05-HTTPS加密原理.md`
+- [x] `lessons/06-证书与信任.md`
 
 > ✅ 阶段 2 已闭环（9 / 9，2026-09-15）：连接成本与复用 → HTTPS 加密与握手 → 证书信任与本地 HTTPS。
 

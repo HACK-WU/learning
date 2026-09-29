@@ -1,6 +1,6 @@
 # 应用实战 · 多容器 Pod 与优雅终止
 
-> 对应课程：[第 4 课：多容器 Pod：init、sidecar 与优雅终止](../stages/1-心智模型与架构/lessons/lesson-04-多容器Pod与优雅终止.md) ｜ 覆盖知识点：init 容器、优雅终止与生命周期钩子（sidecar 见课内第四幕）
+> 对应课程：[第 4 课：多容器 Pod：init、sidecar 与优雅终止](../stages/1-心智模型与架构/lessons/04-多容器Pod与优雅终止.md) ｜ 覆盖知识点：init 容器、优雅终止与生命周期钩子（sidecar 见课内第四幕）
 > 定位：**会用，不上生产**——课里学完，在这里动手。课内验证的是「init / preStop 各自是什么」，这里做的是**一次「更新上线不丢请求」的完整改造**。
 > 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：[Kubernetes 官方文档 · Pod 的终止](https://kubernetes.io/zh-cn/docs/concepts/workloads/pods/pod-lifecycle/#pod-termination)、[容器生命周期回调](https://kubernetes.io/zh-cn/docs/concepts/containers/container-lifecycle-hooks/)）
 > 🧪 **本篇全部输出为本机 kind 集群（v1.34.0）实测**，非推演；脚本见 `.plans/2026-09-16-k8s-应用实战补齐/t4-lifecycle*.sh`
@@ -351,7 +351,7 @@ kubectl -n app-l4 get pod s-stuck --no-headers
 
 ## 🧭 导航
 
-- ⬅️ 回到课程：[第 4 课：多容器 Pod 与优雅终止](../stages/1-心智模型与架构/lessons/lesson-04-多容器Pod与优雅终止.md)
+- ⬅️ 回到课程：[第 4 课：多容器 Pod 与优雅终止](../stages/1-心智模型与架构/lessons/04-多容器Pod与优雅终止.md)
 - 📚 全部实战：[应用实战索引](INDEX.md)
 - ⬅️ 上一课实战：[03 · 探针三件套](03-Pod最小调度单元.md)
 - ➡️ 下一课实战：[05 · 上线不中断与回滚](05-Deployment无状态应用.md)（未编写）

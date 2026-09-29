@@ -59,6 +59,6 @@ docker run hello-world  # 预期：拉取镜像 → 打印 "Hello from Docker!" 
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-01-为什么需要Docker.md`
-- [x] `lessons/lesson-02-跑起来第一个容器.md`
-- [x] `lessons/lesson-03-镜像的里子：分层与仓库.md`
+- [x] `lessons/01-为什么需要Docker.md`
+- [x] `lessons/02-跑起来第一个容器.md`
+- [x] `lessons/03-镜像的里子：分层与仓库.md`

@@ -15,7 +15,7 @@ echo "  总计 $TOT 条 md 链接，断链 $BAD 条"
 echo
 echo "===== 课4/课5 讲义自检 ====="
 B="$R/子教程/运维专项/lessons"
-for f in lesson-04-证书与密钥生命周期.md lesson-05-备份、恢复与灾备演练.md; do
+for f in 04-证书与密钥生命周期.md 05-备份、恢复与灾备演练.md; do
   echo "  --- $f ---"
   echo "    行数: $(wc -l < "$B/$f")"
   echo "    含⚠️实测边界标注: $(grep -c '实测边界' "$B/$f")"

@@ -1,6 +1,6 @@
 # 应用实战 · 本地起 Kafka 与 CLI 快速上手
 
-> 对应课程：[第 3 课：本地起 Kafka + CLI 快速上手](../stages/2-核心架构/lessons/lesson-03-本地起Kafka与CLI快速上手.md) ｜ 覆盖知识点：KRaft 一键起（Docker） / 创建 Topic + 生产消费 / CLI 观察 Partition
+> 对应课程：[第 3 课：本地起 Kafka + CLI 快速上手](../stages/2-核心架构/lessons/03-本地起Kafka与CLI快速上手.md) ｜ 覆盖知识点：KRaft 一键起（Docker） / 创建 Topic + 生产消费 / CLI 观察 Partition
 > 定位：**会用，不上生产**——课里学完，在这里动手（结构与边界见 SKILL.md「教学叙事骨架 · 应用实战」）。
 > 环境前提：本机装好 Docker；示例基于官方镜像 `apache/kafka:4.0.0`（KRaft 单节点）。
 > 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：Apache Kafka 4.x 文档 · quickstart / Docker image 页）
@@ -181,6 +181,6 @@ docker exec -it kafka /opt/kafka/bin/kafka-console-consumer.sh \
 
 ## 🧭 导航
 
-- ⬅️ 回到课程：[第 3 课：本地起 Kafka + CLI 快速上手](../stages/2-核心架构/lessons/lesson-03-本地起Kafka与CLI快速上手.md)
+- ⬅️ 回到课程：[第 3 课：本地起 Kafka + CLI 快速上手](../stages/2-核心架构/lessons/03-本地起Kafka与CLI快速上手.md)
 - 📚 全部实战：[应用实战索引](INDEX.md)
 - ➡️ 下一课实战：[04 · 一本总账 vs 几本分册](04-Topic、Partition与Broker.md)

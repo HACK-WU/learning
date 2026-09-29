@@ -7,7 +7,7 @@ import re
 BASE = os.path.dirname(os.path.abspath(__file__))
 LESSON = os.path.join(
     BASE, '..', 'stages', '4-进阶与工程落地', 'lessons',
-    'lesson-09-Python客户端工程实践.md')
+    '09-Python客户端工程实践.md')
 PLAYGROUND = BASE
 
 print("=" * 70)

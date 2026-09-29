@@ -31,8 +31,8 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-07-副本机制与故障转移.md`
-- [x] `lessons/lesson-08-交付语义与幂等.md`
+- [x] `lessons/07-副本机制与故障转移.md`
+- [x] `lessons/08-交付语义与幂等.md`
 
 ## 📐 讲义规范升级（2026-09-14）
 

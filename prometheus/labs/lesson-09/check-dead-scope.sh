@@ -18,7 +18,7 @@ done < /tmp/deadlinks.txt
 
 echo
 echo "=== 3. 课 9 正式讲义单独校验 ==="
-L=$ROOT/stages/3-规模化与生态/lessons/lesson-09-长期存储选型.md
+L=$ROOT/stages/3-规模化与生态/lessons/09-长期存储选型.md
 d=$(dirname "$L")
 cnt=0; dead=0
 grep -oE '\]\(\.\.?[^)#]+\.md\)' "$L" | sed 's/^](//; s/)$//' | sort -u | while read -r rel; do

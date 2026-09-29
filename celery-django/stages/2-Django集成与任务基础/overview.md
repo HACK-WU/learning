@@ -36,8 +36,8 @@
 
 ## 本阶段产出
 
-- [x] [`lessons/lesson-03-第一个Celery+Django项目.md`](lessons/lesson-03-第一个Celery+Django项目.md)
-- [x] [`lessons/lesson-04-调用任务与取回结果.md`](lessons/lesson-04-调用任务与取回结果.md)
+- [x] [`lessons/03-第一个Celery+Django项目.md`](lessons/03-第一个Celery+Django项目.md)
+- [x] [`lessons/04-调用任务与取回结果.md`](lessons/04-调用任务与取回结果.md)
 
 ---
 

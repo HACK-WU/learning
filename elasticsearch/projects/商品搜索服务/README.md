@@ -22,28 +22,28 @@
 
 | 阶段 | 知识点 | 本项目用在哪 | 回指课时 |
 |------|--------|-------------|---------|
-| **1 动机** | 数据库为什么搞不定搜索 | 需求起点：`LIKE '%手机%'` 全表扫 + 中文分词弱 | [课 1](../../stages/1-为什么需要ES/lessons/lesson-01-为什么数据库搞不定搜索.md) |
-| **1 动机** | ES 是索引副本不是原始账本 | `sync/products.js` 定位为可重建的数据源 | [课 2](../../stages/1-为什么需要ES/lessons/lesson-02-ES是谁凭什么.md) / [课 14](../../stages/5-生产与选型/lessons/lesson-14-该不该用ES.md) |
-| **2 原理** | 分词与分析器（IK） | 索引 `ik_max_word` + 搜索 `ik_smart` | [课 4](../../stages/2-核心原理与上手/lessons/lesson-04-倒排索引的秘密.md) |
-| **2 原理** | 映射设计（`scaled_float` / `keyword` / `date`） | `es/schema.js` 的 mappings | [课 5](../../stages/2-核心原理与上手/lessons/lesson-05-映射给数据定规矩.md) |
-| **2 原理** | multi-fields | `title.std`（兜底召回）+ `title.raw`（整句精确） | [课 5](../../stages/2-核心原理与上手/lessons/lesson-05-映射给数据定规矩.md) |
-| **2 原理** | `dynamic: strict` | 生产不让 ES 猜类型 | [课 5](../../stages/2-核心原理与上手/lessons/lesson-05-映射给数据定规矩.md) |
-| **3 检索** | Query DSL 结构与 `filter` 不打分 | 打分条件进 `must`，筛选条件进 `filter` | [课 6](../../stages/3-查询与聚合/lessons/lesson-06-QueryDSL问问题的语言.md) |
-| **3 检索** | BM25 + `function_score` 调优 | `--boost-sales` 按销量加权（`multiply` 只放大不颠覆） | [课 7](../../stages/3-查询与聚合/lessons/lesson-07-为什么这条排在前面.md) |
-| **3 检索** | 高亮与 XSS 防护 | 用默认 `encoder`，不改成 `html` | [课 7](../../stages/3-查询与聚合/lessons/lesson-07-为什么这条排在前面.md) |
-| **3 检索** | 聚合分面 + `post_filter` | 选了品牌后，品牌分面仍显示其他品牌的件数 | [课 8](../../stages/3-查询与聚合/lessons/lesson-08-聚合不做搜索做统计.md) |
-| **3 检索** | 深分页 `search_after` | 导出全部商品，不受 10000 限制 | [课 7](../../stages/3-查询与聚合/lessons/lesson-07-为什么这条排在前面.md) / [课 12](../../stages/4-分布式与工程实践/lessons/lesson-12-接入真实项目.md) |
-| **4 分布式** | 分片与副本设计 | 1 主 1 副（数据量小，单分片避免聚合误差与长尾） | [课 9](../../stages/4-分布式与工程实践/lessons/lesson-09-分片分布式的基石.md) / [课 10](../../stages/4-分布式与工程实践/lessons/lesson-10-集群健康与排障.md) |
-| **4 分布式** | 主副本绝不同节点 | `ops/health.js` 逐片校验 | [课 9](../../stages/4-分布式与工程实践/lessons/lesson-09-分片分布式的基石.md) |
-| **4 分布式** | bulk 幂等 + 部分失败分类处置 | 业务主键当 `_id`；`errors=true` 时遍历 `items` | [课 12](../../stages/4-分布式与工程实践/lessons/lesson-12-接入真实项目.md) |
-| **4 分布式** | 索引模板 / 组件模板 / `priority` | `es/schema.js` 三层模板体系 | [课 15](../../stages/4-分布式与工程实践/lessons/lesson-15-索引管理与生命周期策略.md) |
-| **4 分布式** | 别名原子切换 + `is_write_index` | 切换在一个 `_aliases` 请求里完成 | [课 15](../../stages/4-分布式与工程实践/lessons/lesson-15-索引管理与生命周期策略.md) |
-| **4 分布式** | ILM + Data Stream | 搜索日志自动滚动 / 合段 / 90 天删除 | [课 13](../../stages/5-生产与选型/lessons/lesson-13-三大主战场.md) / [课 15](../../stages/4-分布式与工程实践/lessons/lesson-15-索引管理与生命周期策略.md) |
-| **4 分布式** | reindex 是改结构的唯一途径 | v1 → v2 全链路 | [课 11](../../stages/4-分布式与工程实践/lessons/lesson-11-数据管道与备份.md) |
-| **4 分布式** | 客户端连接池与版本协商 | 显式列三节点，请求均摊 | [课 12](../../stages/4-分布式与工程实践/lessons/lesson-12-接入真实项目.md) |
-| **4 分布式** | 报错看 `root_cause` | 所有异常统一走 `es/client.js` 的 `rootCause()` | [课 12](../../stages/4-分布式与工程实践/lessons/lesson-12-接入真实项目.md) |
-| **5 选型** | RBAC 最小权限 | 只读角色 + 应用账号，验证 401 / 403 边界 | [课 13](../../stages/5-生产与选型/lessons/lesson-13-三大主战场.md) |
-| **5 选型** | 该不该用 ES | 本项目是"该用"的典型；`README` 末尾给了不该用的信号 | [课 14](../../stages/5-生产与选型/lessons/lesson-14-该不该用ES.md) |
+| **1 动机** | 数据库为什么搞不定搜索 | 需求起点：`LIKE '%手机%'` 全表扫 + 中文分词弱 | [课 1](../../stages/1-为什么需要ES/lessons/01-为什么数据库搞不定搜索.md) |
+| **1 动机** | ES 是索引副本不是原始账本 | `sync/products.js` 定位为可重建的数据源 | [课 2](../../stages/1-为什么需要ES/lessons/02-ES是谁凭什么.md) / [课 14](../../stages/5-生产与选型/lessons/14-该不该用ES.md) |
+| **2 原理** | 分词与分析器（IK） | 索引 `ik_max_word` + 搜索 `ik_smart` | [课 4](../../stages/2-核心原理与上手/lessons/04-倒排索引的秘密.md) |
+| **2 原理** | 映射设计（`scaled_float` / `keyword` / `date`） | `es/schema.js` 的 mappings | [课 5](../../stages/2-核心原理与上手/lessons/05-映射给数据定规矩.md) |
+| **2 原理** | multi-fields | `title.std`（兜底召回）+ `title.raw`（整句精确） | [课 5](../../stages/2-核心原理与上手/lessons/05-映射给数据定规矩.md) |
+| **2 原理** | `dynamic: strict` | 生产不让 ES 猜类型 | [课 5](../../stages/2-核心原理与上手/lessons/05-映射给数据定规矩.md) |
+| **3 检索** | Query DSL 结构与 `filter` 不打分 | 打分条件进 `must`，筛选条件进 `filter` | [课 6](../../stages/3-查询与聚合/lessons/06-QueryDSL问问题的语言.md) |
+| **3 检索** | BM25 + `function_score` 调优 | `--boost-sales` 按销量加权（`multiply` 只放大不颠覆） | [课 7](../../stages/3-查询与聚合/lessons/07-为什么这条排在前面.md) |
+| **3 检索** | 高亮与 XSS 防护 | 用默认 `encoder`，不改成 `html` | [课 7](../../stages/3-查询与聚合/lessons/07-为什么这条排在前面.md) |
+| **3 检索** | 聚合分面 + `post_filter` | 选了品牌后，品牌分面仍显示其他品牌的件数 | [课 8](../../stages/3-查询与聚合/lessons/08-聚合不做搜索做统计.md) |
+| **3 检索** | 深分页 `search_after` | 导出全部商品，不受 10000 限制 | [课 7](../../stages/3-查询与聚合/lessons/07-为什么这条排在前面.md) / [课 12](../../stages/4-分布式与工程实践/lessons/12-接入真实项目.md) |
+| **4 分布式** | 分片与副本设计 | 1 主 1 副（数据量小，单分片避免聚合误差与长尾） | [课 9](../../stages/4-分布式与工程实践/lessons/09-分片分布式的基石.md) / [课 10](../../stages/4-分布式与工程实践/lessons/10-集群健康与排障.md) |
+| **4 分布式** | 主副本绝不同节点 | `ops/health.js` 逐片校验 | [课 9](../../stages/4-分布式与工程实践/lessons/09-分片分布式的基石.md) |
+| **4 分布式** | bulk 幂等 + 部分失败分类处置 | 业务主键当 `_id`；`errors=true` 时遍历 `items` | [课 12](../../stages/4-分布式与工程实践/lessons/12-接入真实项目.md) |
+| **4 分布式** | 索引模板 / 组件模板 / `priority` | `es/schema.js` 三层模板体系 | [课 15](../../stages/4-分布式与工程实践/lessons/15-索引管理与生命周期策略.md) |
+| **4 分布式** | 别名原子切换 + `is_write_index` | 切换在一个 `_aliases` 请求里完成 | [课 15](../../stages/4-分布式与工程实践/lessons/15-索引管理与生命周期策略.md) |
+| **4 分布式** | ILM + Data Stream | 搜索日志自动滚动 / 合段 / 90 天删除 | [课 13](../../stages/5-生产与选型/lessons/13-三大主战场.md) / [课 15](../../stages/4-分布式与工程实践/lessons/15-索引管理与生命周期策略.md) |
+| **4 分布式** | reindex 是改结构的唯一途径 | v1 → v2 全链路 | [课 11](../../stages/4-分布式与工程实践/lessons/11-数据管道与备份.md) |
+| **4 分布式** | 客户端连接池与版本协商 | 显式列三节点，请求均摊 | [课 12](../../stages/4-分布式与工程实践/lessons/12-接入真实项目.md) |
+| **4 分布式** | 报错看 `root_cause` | 所有异常统一走 `es/client.js` 的 `rootCause()` | [课 12](../../stages/4-分布式与工程实践/lessons/12-接入真实项目.md) |
+| **5 选型** | RBAC 最小权限 | 只读角色 + 应用账号，验证 401 / 403 边界 | [课 13](../../stages/5-生产与选型/lessons/13-三大主战场.md) |
+| **5 选型** | 该不该用 ES | 本项目是"该用"的典型；`README` 末尾给了不该用的信号 | [课 14](../../stages/5-生产与选型/lessons/14-该不该用ES.md) |
 
 **覆盖 5 / 5 个阶段、22 个知识点**，每个都能在上面的课时里找到出处。
 

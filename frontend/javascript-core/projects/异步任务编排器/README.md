@@ -33,45 +33,45 @@
 
 | 课 | 知识点 | 用在哪 |
 |---|---|---|
-| [课 1 变量与类型](../../stages/1-值与作用域/lessons/lesson-01-变量与类型.md) | var·let·const 与 TDZ | 全部源码只用 `const`/`let`；`retry.js` 的 `for (let attempt...)` 每轮独立绑定 |
-| [课 1 变量与类型](../../stages/1-值与作用域/lessons/lesson-01-变量与类型.md) | 类型检测 | `Number.isInteger(concurrency)`、`Number.isFinite(ms)` 做参数校验（`semaphore.js`/`timeout.js`/`retry.js`/`cache.js`） |
-| [课 2 值的复制与比较](../../stages/1-值与作用域/lessons/lesson-02-值的复制与比较.md) | 原始值 vs 引用值 | `Semaphore` 的 `#active` 是原始值（改的是值）；`#waiting` 数组是引用值（操作的是同一个数组） |
-| [课 3 作用域与闭包](../../stages/1-值与作用域/lessons/lesson-03-作用域与闭包.md) | **闭包** | ★ `semaphore.js` 的 `#makeRelease()` —— `released` 这个变量活在函数返回之后，用来防重复释放；`index.js` 的 `attempts` 计数同理 |
-| [课 3 作用域与闭包](../../stages/1-值与作用域/lessons/lesson-03-作用域与闭包.md) | 词法作用域 | 私有字段 `#xxx` 的作用域边界（`semaphore.js`、`index.js`） |
+| [课 1 变量与类型](../../stages/1-值与作用域/lessons/01-变量与类型.md) | var·let·const 与 TDZ | 全部源码只用 `const`/`let`；`retry.js` 的 `for (let attempt...)` 每轮独立绑定 |
+| [课 1 变量与类型](../../stages/1-值与作用域/lessons/01-变量与类型.md) | 类型检测 | `Number.isInteger(concurrency)`、`Number.isFinite(ms)` 做参数校验（`semaphore.js`/`timeout.js`/`retry.js`/`cache.js`） |
+| [课 2 值的复制与比较](../../stages/1-值与作用域/lessons/02-值的复制与比较.md) | 原始值 vs 引用值 | `Semaphore` 的 `#active` 是原始值（改的是值）；`#waiting` 数组是引用值（操作的是同一个数组） |
+| [课 3 作用域与闭包](../../stages/1-值与作用域/lessons/03-作用域与闭包.md) | **闭包** | ★ `semaphore.js` 的 `#makeRelease()` —— `released` 这个变量活在函数返回之后，用来防重复释放；`index.js` 的 `attempts` 计数同理 |
+| [课 3 作用域与闭包](../../stages/1-值与作用域/lessons/03-作用域与闭包.md) | 词法作用域 | 私有字段 `#xxx` 的作用域边界（`semaphore.js`、`index.js`） |
 
 ### 阶段 2《函数与对象》
 
 | 课 | 知识点 | 用在哪 |
 |---|---|---|
-| [课 4 函数是一等公民](../../stages/2-函数与对象/lessons/lesson-04-函数是一等公民.md) | 高阶函数 | ★ `run(task)` 把函数当参数传来传去；`#makeRelease()` 返回一个函数 |
-| [课 4 函数是一等公民](../../stages/2-函数与对象/lessons/lesson-04-函数是一等公民.md) | 参数机制 | 全部 API 用「解构 + 默认值」：`{ concurrency = 4, timeout = null } = {}` |
-| [课 5 this 到底指向谁](../../stages/2-函数与对象/lessons/lesson-05-this到底指向谁.md) | **this 的绑定规则** | ★ `semaphore.js` 用**箭头函数**返回释放回调，保证被谁拿着调用 `this` 都不丢；`demo.js` 场景 7 演示「把 `queue.run` 提取出来就炸」 |
-| [课 6 原型与类](../../stages/2-函数与对象/lessons/lesson-06-原型与类.md) | class 与私有字段 | `#limit` / `#active` / `#waiting` / `#cache`；`class X extends Error` 继承链（`errors.js`） |
+| [课 4 函数是一等公民](../../stages/2-函数与对象/lessons/04-函数是一等公民.md) | 高阶函数 | ★ `run(task)` 把函数当参数传来传去；`#makeRelease()` 返回一个函数 |
+| [课 4 函数是一等公民](../../stages/2-函数与对象/lessons/04-函数是一等公民.md) | 参数机制 | 全部 API 用「解构 + 默认值」：`{ concurrency = 4, timeout = null } = {}` |
+| [课 5 this 到底指向谁](../../stages/2-函数与对象/lessons/05-this到底指向谁.md) | **this 的绑定规则** | ★ `semaphore.js` 用**箭头函数**返回释放回调，保证被谁拿着调用 `this` 都不丢；`demo.js` 场景 7 演示「把 `queue.run` 提取出来就炸」 |
+| [课 6 原型与类](../../stages/2-函数与对象/lessons/06-原型与类.md) | class 与私有字段 | `#limit` / `#active` / `#waiting` / `#cache`；`class X extends Error` 继承链（`errors.js`） |
 
 ### 阶段 3《异步与现代语法》
 
 | 课 | 知识点 | 用在哪 |
 |---|---|---|
-| [课 7 事件循环](../../stages/3-异步与现代语法/lessons/lesson-07-事件循环.md) | **事件循环** | ★ `timeout.js` 用 `Promise.resolve().then()` 包一层让任务在**微任务**里启动；并发调度的整个节奏都建立在事件循环上 |
-| [课 8 Promise 与 async/await](../../stages/3-异步与现代语法/lessons/lesson-08-Promise与async-await.md) | Promise 组合方法 | ★ `Promise.race`（超时判定 / `stream` 的完成序）、`Promise.allSettled`（`runAll`） |
-| [课 8 Promise 与 async/await](../../stages/3-异步与现代语法/lessons/lesson-08-Promise与async-await.md) | async/await | 全部异步代码；`async *stream()` 异步生成器 |
-| [课 9 现代语法与内置数据结构](../../stages/3-异步与现代语法/lessons/lesson-09-现代语法与内置数据结构.md) | **Map 与保序** | ★ `cache.js` 用 Map 的**插入顺序**实现 LRU（先删再插 = 挪到队尾） |
-| [课 9 现代语法与内置数据结构](../../stages/3-异步与现代语法/lessons/lesson-09-现代语法与内置数据结构.md) | Symbol.iterator | `cache.js` 的 `*[Symbol.iterator]()`，让缓存可被 `for...of` |
-| [课 9 现代语法与内置数据结构](../../stages/3-异步与现代语法/lessons/lesson-09-现代语法与内置数据结构.md) | 生成器 | `index.js` 的 `async *stream(entries)` |
-| [课 9 现代语法与内置数据结构](../../stages/3-异步与现代语法/lessons/lesson-09-现代语法与内置数据结构.md) | 可选链 / 空值合并 | `signal?.aborted`、`this.#cache?.has(key)`、`options.taskId ?? null` |
-| [课 9 现代语法与内置数据结构](../../stages/3-异步与现代语法/lessons/lesson-09-现代语法与内置数据结构.md) | 解构 | 所有 API 的 options 解构 |
+| [课 7 事件循环](../../stages/3-异步与现代语法/lessons/07-事件循环.md) | **事件循环** | ★ `timeout.js` 用 `Promise.resolve().then()` 包一层让任务在**微任务**里启动；并发调度的整个节奏都建立在事件循环上 |
+| [课 8 Promise 与 async/await](../../stages/3-异步与现代语法/lessons/08-Promise与async-await.md) | Promise 组合方法 | ★ `Promise.race`（超时判定 / `stream` 的完成序）、`Promise.allSettled`（`runAll`） |
+| [课 8 Promise 与 async/await](../../stages/3-异步与现代语法/lessons/08-Promise与async-await.md) | async/await | 全部异步代码；`async *stream()` 异步生成器 |
+| [课 9 现代语法与内置数据结构](../../stages/3-异步与现代语法/lessons/09-现代语法与内置数据结构.md) | **Map 与保序** | ★ `cache.js` 用 Map 的**插入顺序**实现 LRU（先删再插 = 挪到队尾） |
+| [课 9 现代语法与内置数据结构](../../stages/3-异步与现代语法/lessons/09-现代语法与内置数据结构.md) | Symbol.iterator | `cache.js` 的 `*[Symbol.iterator]()`，让缓存可被 `for...of` |
+| [课 9 现代语法与内置数据结构](../../stages/3-异步与现代语法/lessons/09-现代语法与内置数据结构.md) | 生成器 | `index.js` 的 `async *stream(entries)` |
+| [课 9 现代语法与内置数据结构](../../stages/3-异步与现代语法/lessons/09-现代语法与内置数据结构.md) | 可选链 / 空值合并 | `signal?.aborted`、`this.#cache?.has(key)`、`options.taskId ?? null` |
+| [课 9 现代语法与内置数据结构](../../stages/3-异步与现代语法/lessons/09-现代语法与内置数据结构.md) | 解构 | 所有 API 的 options 解构 |
 
 ### 阶段 4《工程化与运行时》
 
 | 课 | 知识点 | 用在哪 |
 |---|---|---|
-| [课 10 模块化](../../stages/4-工程化与运行时/lessons/lesson-10-模块化.md) | **ESM 模块化** | ★ 6 个模块各自 `export`，`index.js` 统一再导出；`package.json` 的 `"type": "module"` |
-| [课 11 错误处理与调试](../../stages/4-工程化与运行时/lessons/lesson-11-错误处理与调试.md) | Error 体系与 throw | ★ `errors.js`：`TaskError` 基类 + 3 个子类，全部写 `this.name`（不写栈首行就显示成 `Error:`） |
-| [课 11 错误处理与调试](../../stages/4-工程化与运行时/lessons/lesson-11-错误处理与调试.md) | **Error.cause 错误链** | ★ `retry.js`：重试耗尽时把最后一次的真实错误挂在 `cause` 上 |
-| [课 11 错误处理与调试](../../stages/4-工程化与运行时/lessons/lesson-11-错误处理与调试.md) | try·catch·finally | ★ `semaphore.js` 的 `run()` 用 `finally` 保证名额一定归还（且 `finally` 里只做清理，不写 return/throw） |
-| [课 11 错误处理与调试](../../stages/4-工程化与运行时/lessons/lesson-11-错误处理与调试.md) | **错误边界** | ★ `retry.js`：不可重试的错误**原样上抛**不包装；重试耗尽才加上下文再抛 |
-| [课 12 内存·性能与选型收束](../../stages/4-工程化与运行时/lessons/lesson-12-内存性能与选型收束.md) | **内存泄漏 ②**（定时器/监听器） | ★ `timeout.js` 的 `finally { clearTimeout }`；`abortableSleep` 里 `removeEventListener` 解绑监听器 |
-| [课 12 内存·性能与选型收束](../../stages/4-工程化与运行时/lessons/lesson-12-内存性能与选型收束.md) | **内存泄漏 ④**（无界容器） | ★ `cache.js` 强制有上限；`index.js` 里 `cacheMax=0` 表示"明确不缓存"而不是"无限缓存" |
+| [课 10 模块化](../../stages/4-工程化与运行时/lessons/10-模块化.md) | **ESM 模块化** | ★ 6 个模块各自 `export`，`index.js` 统一再导出；`package.json` 的 `"type": "module"` |
+| [课 11 错误处理与调试](../../stages/4-工程化与运行时/lessons/11-错误处理与调试.md) | Error 体系与 throw | ★ `errors.js`：`TaskError` 基类 + 3 个子类，全部写 `this.name`（不写栈首行就显示成 `Error:`） |
+| [课 11 错误处理与调试](../../stages/4-工程化与运行时/lessons/11-错误处理与调试.md) | **Error.cause 错误链** | ★ `retry.js`：重试耗尽时把最后一次的真实错误挂在 `cause` 上 |
+| [课 11 错误处理与调试](../../stages/4-工程化与运行时/lessons/11-错误处理与调试.md) | try·catch·finally | ★ `semaphore.js` 的 `run()` 用 `finally` 保证名额一定归还（且 `finally` 里只做清理，不写 return/throw） |
+| [课 11 错误处理与调试](../../stages/4-工程化与运行时/lessons/11-错误处理与调试.md) | **错误边界** | ★ `retry.js`：不可重试的错误**原样上抛**不包装；重试耗尽才加上下文再抛 |
+| [课 12 内存·性能与选型收束](../../stages/4-工程化与运行时/lessons/12-内存性能与选型收束.md) | **内存泄漏 ②**（定时器/监听器） | ★ `timeout.js` 的 `finally { clearTimeout }`；`abortableSleep` 里 `removeEventListener` 解绑监听器 |
+| [课 12 内存·性能与选型收束](../../stages/4-工程化与运行时/lessons/12-内存性能与选型收束.md) | **内存泄漏 ④**（无界容器） | ★ `cache.js` 强制有上限；`index.js` 里 `cacheMax=0` 表示"明确不缓存"而不是"无限缓存" |
 
 **覆盖统计**：**4 个阶段 / 12 课全部涉及**。其中 ★ 标记的 8 处是**核心落点**（闭包、`this`、事件循环、Promise 组合、Map 保序、ESM、错误体系与边界、内存泄漏），其余为辅助印证。
 **关联最弱的是课 2** —— 只用到了「原始值 vs 引用值」的区分，深浅拷贝在本项目里没有自然落点，不硬凑。

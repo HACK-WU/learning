@@ -1,6 +1,6 @@
 # 应用实战 · canvas 任务编排
 
-> 对应课程：[课 8：canvas 任务编排](../stages/4-定时编排与生产运维/lessons/lesson-08-canvas任务编排.md) ｜ 覆盖知识点：group / chain / chord、编排的可靠性边界
+> 对应课程：[课 8：canvas 任务编排](../stages/4-定时编排与生产运维/lessons/08-canvas任务编排.md) ｜ 覆盖知识点：group / chain / chord、编排的可靠性边界
 > 定位：**会用，不上生产**——课里学完，在这里动手。课内第四幕做的是「chord 编排」的机制验证，这里做的是**chord 挂死时怎么定位真因**（而不是用错误方法掩盖它）。
 > 🧪 **本篇含课程 Phase 3 的一次重要纠错**：原结论"chord_unlock 走 default 队列"已被实测推翻，本篇按修正后的结论写。
 
@@ -176,7 +176,7 @@ for t in ['orders.tasks.fulfill_order','orders.tasks.issue_coupon']:
 
 ## 🧭 导航
 
-- ⬅️ 回到课程：[课 8：canvas 任务编排](../stages/4-定时编排与生产运维/lessons/lesson-08-canvas任务编排.md)
+- ⬅️ 回到课程：[课 8：canvas 任务编排](../stages/4-定时编排与生产运维/lessons/08-canvas任务编排.md)
 - 📚 全部实战：[应用实战索引](INDEX.md)
 - ⬅️ 上一篇：[07 · 定时任务漏跑没人知道](07-beat与周期性任务.md)
 - ➡️ 下一篇：[09 · 发版丢任务](09-生产部署与并发模型.md)

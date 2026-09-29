@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # 逐条校验相对链接是否存在
-M="/mnt/d/projects/learning/consul/子教程/运维专项/lessons/lesson-01-生产部署与集群搭建.md"
+M="/mnt/d/projects/learning/consul/子教程/运维专项/lessons/01-生产部署与集群搭建.md"
 D=$(dirname "$M")
 echo "base dir: $D"
 echo

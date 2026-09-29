@@ -59,8 +59,8 @@
 ## 四、阶段目录
 
 - [stages/2-存储层攻坚](stages/2-存储层攻坚/overview.md) —— 仅阶段二有实体目录
-  - [lesson-01 base-storage 部署实战与超时陷阱](stages/2-存储层攻坚/lessons/lesson-01-base-storage部署实战与超时陷阱.md)
-  - [lesson-02 部署踩坑与解法归档](stages/2-存储层攻坚/lessons/lesson-02-部署踩坑与解法归档.md)
+  - [01 base-storage 部署实战与超时陷阱](stages/2-存储层攻坚/lessons/01-base-storage部署实战与超时陷阱.md)
+  - [02 部署踩坑与解法归档](stages/2-存储层攻坚/lessons/02-部署踩坑与解法归档.md)
 
 > 阶段一/三/四在 [02-课程目录.md](02-课程目录.md) 中有条目但无实体目录，
 > 其内容已并入根目录主线文档（排障手册、总报告等）。

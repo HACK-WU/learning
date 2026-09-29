@@ -38,6 +38,6 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-01-一次网页加载的全旅程.md`
-- [x] `lessons/lesson-02-报文解剖.md`
-- [x] `lessons/lesson-03-方法与状态码.md`
+- [x] `lessons/01-一次网页加载的全旅程.md`
+- [x] `lessons/02-报文解剖.md`
+- [x] `lessons/03-方法与状态码.md`

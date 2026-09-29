@@ -33,8 +33,8 @@
 
 ## 本阶段产出
 
-- [x] [`lessons/lesson-01-为什么需要异步任务.md`](lessons/lesson-01-为什么需要异步任务.md)
-- [x] [`lessons/lesson-02-Celery架构全景与消息流转.md`](lessons/lesson-02-Celery架构全景与消息流转.md)
+- [x] [`lessons/01-为什么需要异步任务.md`](lessons/01-为什么需要异步任务.md)
+- [x] [`lessons/02-Celery架构全景与消息流转.md`](lessons/02-Celery架构全景与消息流转.md)
 
 ---
 

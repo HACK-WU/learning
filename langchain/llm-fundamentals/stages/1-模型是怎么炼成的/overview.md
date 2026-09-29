@@ -41,9 +41,9 @@
 
 | 本课知识 | 回扣到 |
 |---------|--------|
-| token / 自回归 | [课 2 Models 模型层](../../../langchain/stages/1-入门与模型层/lessons/lesson-02-Models模型层.md)（为什么按 token 计费、为什么有流式） |
-| 知识截止 | [课 11 Retrieval 与 RAG](../../../langchain/stages/3-可控性与可靠性/lessons/lesson-11-Retrieval检索与RAG.md)（检索的根源） |
-| SFT / RLHF / 推理模型 | [课 2 模型参数](../../../langchain/stages/1-入门与模型层/lessons/lesson-02-Models模型层.md)、[课 10 护栏](../../../langchain/stages/3-可控性与可靠性/lessons/lesson-10-人机协同与护栏.md)（对齐的由来） |
+| token / 自回归 | [课 2 Models 模型层](../../../langchain/stages/1-入门与模型层/lessons/02-Models模型层.md)（为什么按 token 计费、为什么有流式） |
+| 知识截止 | [课 11 Retrieval 与 RAG](../../../langchain/stages/3-可控性与可靠性/lessons/11-Retrieval检索与RAG.md)（检索的根源） |
+| SFT / RLHF / 推理模型 | [课 2 模型参数](../../../langchain/stages/1-入门与模型层/lessons/02-Models模型层.md)、[课 10 护栏](../../../langchain/stages/3-可控性与可靠性/lessons/10-人机协同与护栏.md)（对齐的由来） |
 
 ## 阶段状态
 

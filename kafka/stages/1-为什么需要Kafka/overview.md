@@ -31,8 +31,8 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-01-为什么需要消息队列.md`
-- [x] `lessons/lesson-02-Kafka是什么与起源定位.md`
+- [x] `lessons/01-为什么需要消息队列.md`
+- [x] `lessons/02-Kafka是什么与起源定位.md`
 
 ## 📐 讲义规范升级（2026-09-14）
 

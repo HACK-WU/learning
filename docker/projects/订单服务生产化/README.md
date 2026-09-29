@@ -79,7 +79,7 @@ docker buildx imagetools inspect registry.example.com/order-service:<YOUR_RELEAS
 - [ ] 测试构建可以 `load`，最终多架构成品使用 `push`，不把两种输出方式混为一谈
 - [ ] 发布失败时保留 registry、目标架构和 digest 信息，按 [排障条目 12](../../09-排障速查手册.md#-条目-12--registry-受限或架构不匹配) 分流
 
-Compose 的开发侧补丁见[课 9](../../stages/3-数据与网络/lessons/lesson-09-Compose编排多容器.md)（Profiles / Watch / Secrets）；daemon 与目标机器确认见[课 15](../../stages/5-定位与决策/lessons/lesson-15-决策清单与学习地图.md)。
+Compose 的开发侧补丁见[课 9](../../stages/3-数据与网络/lessons/09-Compose编排多容器.md)（Profiles / Watch / Secrets）；daemon 与目标机器确认见[课 15](../../stages/5-定位与决策/lessons/15-决策清单与学习地图.md)。
 
 ### 非功能约束表（门槛②）
 

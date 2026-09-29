@@ -13,7 +13,7 @@ import sys
 ROOT = "/mnt/d/projects/learning/prometheus"
 
 TARGETS = [
-    f"{ROOT}/stages/2-规则与告警/lessons/lesson-06-查询引擎与查询成本.md",
+    f"{ROOT}/stages/2-规则与告警/lessons/06-查询引擎与查询成本.md",
     f"{ROOT}/00-学习档案.md",
     f"{ROOT}/00-评审清单.md",
     f"{ROOT}/01-学习路径总览.md",

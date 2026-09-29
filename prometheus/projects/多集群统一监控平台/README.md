@@ -132,20 +132,20 @@ graph LR
 
 | 知识点 | 阶段 / 课 | 在本项目哪里体现 | 讲义链接 |
 |--------|-----------|------------------|----------|
-| 服务发现与 relabel | 阶段 1 · 课 2 | 三环境用 static_configs + labels 打环境标 | [lesson-02](../../stages/1-单机内核/lessons/lesson-02-目标从哪来.md) |
-| external_labels 语义 | 阶段 1 · 课 2 | 三采集端各自打 `env`/`cluster`/`region`；**全局层刻意不写**（见决策点 2） | [lesson-02](../../stages/1-单机内核/lessons/lesson-02-目标从哪来.md) |
-| TSDB 与 WAL | 阶段 1 · 课 3 | remote write 复用 TSDB WAL，截断与发送确认解耦 | [lesson-03](../../stages/1-单机内核/lessons/lesson-03-TSDB存储引擎.md) |
-| 规则求值与 for | 阶段 2 · 课 4 | `for: 30s/1m/2m` 消除抖动 | [lesson-04](../../stages/2-规则与告警/lessons/lesson-04-规则引擎.md) |
-| Alertmanager 路由树 | 阶段 2 · 课 5 | 按 `env` 分流到 pager/chat/silent 三个通道 | [lesson-05](../../stages/2-规则与告警/lessons/lesson-05-Alertmanager深入.md) |
-| 查询成本 | 阶段 2 · 课 6 | 告警规则每 5 秒求值一次，规则本身也是负载 | [lesson-06](../../stages/2-规则与告警/lessons/lesson-06-查询引擎与查询成本.md) |
-| remote write 队列 | 阶段 3 · 课 7 | `queue_config` 容量/shard 配置；监控 `samples_pending` | [lesson-07](../../stages/3-规模化与生态/lessons/lesson-07-远程读写与Agent模式.md) |
-| remote read 静默失败 | 阶段 3 · 课 7 | 全局层 remote read 查不到数据时**不报错**，只能靠日志排查 | [lesson-07](../../stages/3-规模化与生态/lessons/lesson-07-远程读写与Agent模式.md) |
-| 联邦 vs 远端读 | 阶段 3 · 课 8 | 全局视图选远端读（决策点 2） | [lesson-08](../../stages/3-规模化与生态/lessons/lesson-08-联邦与全局视图.md) |
-| 长期存储选型 | 阶段 3 · 课 9 | Thanos / Mimir / VM 三选一，选 Mimir（决策点 1） | [lesson-09](../../stages/3-规模化与生态/lessons/lesson-09-长期存储选型.md) |
-| 多租户隔离 | 阶段 3 · 课 9 | `X-Scope-OrgID` 头，无头返回 401（存储级隔离） | [lesson-09](../../stages/3-规模化与生态/lessons/lesson-09-长期存储选型.md) |
-| 基数治理 | 阶段 4 · 课 10 | Mimir 侧 `max_global_series_per_user` 限流 | [lesson-10](../../stages/4-生产运维/lessons/lesson-10-基数治理.md) |
-| 容量规划 | 阶段 4 · 课 11 | 三采集端资源分配与队列容量估算 | [lesson-11](../../stages/4-生产运维/lessons/lesson-11-容量规划与调优.md) |
-| promtool 验证 | 阶段 4 · 课 12 | `promtool check config` 验证全部配置文件 | [lesson-12](../../stages/4-生产运维/lessons/lesson-12-运维工具链与排障.md) |
+| 服务发现与 relabel | 阶段 1 · 课 2 | 三环境用 static_configs + labels 打环境标 | [02](../../stages/1-单机内核/lessons/02-目标从哪来.md) |
+| external_labels 语义 | 阶段 1 · 课 2 | 三采集端各自打 `env`/`cluster`/`region`；**全局层刻意不写**（见决策点 2） | [02](../../stages/1-单机内核/lessons/02-目标从哪来.md) |
+| TSDB 与 WAL | 阶段 1 · 课 3 | remote write 复用 TSDB WAL，截断与发送确认解耦 | [03](../../stages/1-单机内核/lessons/03-TSDB存储引擎.md) |
+| 规则求值与 for | 阶段 2 · 课 4 | `for: 30s/1m/2m` 消除抖动 | [04](../../stages/2-规则与告警/lessons/04-规则引擎.md) |
+| Alertmanager 路由树 | 阶段 2 · 课 5 | 按 `env` 分流到 pager/chat/silent 三个通道 | [05](../../stages/2-规则与告警/lessons/05-Alertmanager深入.md) |
+| 查询成本 | 阶段 2 · 课 6 | 告警规则每 5 秒求值一次，规则本身也是负载 | [06](../../stages/2-规则与告警/lessons/06-查询引擎与查询成本.md) |
+| remote write 队列 | 阶段 3 · 课 7 | `queue_config` 容量/shard 配置；监控 `samples_pending` | [07](../../stages/3-规模化与生态/lessons/07-远程读写与Agent模式.md) |
+| remote read 静默失败 | 阶段 3 · 课 7 | 全局层 remote read 查不到数据时**不报错**，只能靠日志排查 | [07](../../stages/3-规模化与生态/lessons/07-远程读写与Agent模式.md) |
+| 联邦 vs 远端读 | 阶段 3 · 课 8 | 全局视图选远端读（决策点 2） | [08](../../stages/3-规模化与生态/lessons/08-联邦与全局视图.md) |
+| 长期存储选型 | 阶段 3 · 课 9 | Thanos / Mimir / VM 三选一，选 Mimir（决策点 1） | [09](../../stages/3-规模化与生态/lessons/09-长期存储选型.md) |
+| 多租户隔离 | 阶段 3 · 课 9 | `X-Scope-OrgID` 头，无头返回 401（存储级隔离） | [09](../../stages/3-规模化与生态/lessons/09-长期存储选型.md) |
+| 基数治理 | 阶段 4 · 课 10 | Mimir 侧 `max_global_series_per_user` 限流 | [10](../../stages/4-生产运维/lessons/10-基数治理.md) |
+| 容量规划 | 阶段 4 · 课 11 | 三采集端资源分配与队列容量估算 | [11](../../stages/4-生产运维/lessons/11-容量规划与调优.md) |
+| promtool 验证 | 阶段 4 · 课 12 | `promtool check config` 验证全部配置文件 | [12](../../stages/4-生产运维/lessons/12-运维工具链与排障.md) |
 
 **跨阶段统计**：阶段 1（3 个知识点）、阶段 2（3 个）、阶段 3（4 个）、阶段 4（3 个）——**四个阶段全覆盖**，满足复杂度门槛 1（要求 ≥3）。
 

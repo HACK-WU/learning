@@ -79,4 +79,4 @@ graph LR
 
 ---
 
-🚀 进入 [课 1《从模板渲染到 API 契约》](./lessons/lesson-01-从模板渲染到API契约.md)
+🚀 进入 [课 1《从模板渲染到 API 契约》](./lessons/01-从模板渲染到API契约.md)

@@ -35,9 +35,9 @@
 
 ## 本阶段产出
 
-- [x] [`lessons/lesson-04-函数与错误处理.md`](lessons/lesson-04-函数与错误处理.md)（2026-09-06）
-- [x] [`lessons/lesson-05-结构体与方法.md`](lessons/lesson-05-结构体与方法.md)（2026-09-07）
-- [x] [`lessons/lesson-06-接口与泛型.md`](lessons/lesson-06-接口与泛型.md)（2026-09-07）
+- [x] [`lessons/04-函数与错误处理.md`](lessons/04-函数与错误处理.md)（2026-09-06）
+- [x] [`lessons/05-结构体与方法.md`](lessons/05-结构体与方法.md)（2026-09-07）
+- [x] [`lessons/06-接口与泛型.md`](lessons/06-接口与泛型.md)（2026-09-07）
 
 > ✅ **阶段 2 已闭环（9 / 45 知识点 → 累计 18 / 45）**，2026-09-07。
 > 下一阶段：阶段 3《并发模型》，第一课就会起 goroutine。

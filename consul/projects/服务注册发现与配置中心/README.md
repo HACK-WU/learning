@@ -54,21 +54,21 @@
 
 | 知识点 | 所属阶段 / 课 | 本项目用在何处 | 回指 |
 |--------|--------------|---------------|------|
-| 服务寻址难题（硬编码 IP → 注册中心） | 阶段 1 · 课 1 | 消费方不再硬编码 `127.0.0.1:18081`，改为按 `demo-svc` 名字发现 | [lesson-01](../../stages/1-认识Consul/lessons/lesson-01-为什么需要服务注册与发现.md) |
-| 客户端发现模式 | 阶段 1 · 课 1 | `service_registry.discover_and_call`：消费方自己拿列表、自己选实例直连，Consul 不转发 | [lesson-01](../../stages/1-认识Consul/lessons/lesson-01-为什么需要服务注册与发现.md) |
-| 架构角色（Server/Client/DC） | 阶段 1 · 课 2 | 应用只与本机 Client agent（`:8500`）通信，代码里不出现任何 Server 地址 | [lesson-02](../../stages/1-认识Consul/lessons/lesson-02-Consul是什么与能力全景.md) |
-| 服务注册与健康检查 | 阶段 1 · 课 3 / 阶段 2 · 课 4 | `ServiceRegistry.register` 带 TTL 检查 + DCSA；心跳线程按 TTL/2 上报 | [lesson-03](../../stages/1-认识Consul/lessons/lesson-03-五分钟跑起来看一眼.md)、[lesson-04](../../stages/2-核心能力拆解/lessons/lesson-04-服务发现与健康检查机制.md) |
-| 健康检查的两种模型（push/pull） | 阶段 2 · 课 4 | TTL 是 push（应用上报），HTTP/TCP 是 pull（agent 探测）——本项目用 TTL 并说明取舍 | [lesson-04](../../stages/2-核心能力拆解/lessons/lesson-04-服务发现与健康检查机制.md) |
-| catalog 视图 vs health 视图 | 阶段 2 · 课 4 | `discover()` 刻意用 `/v1/health/service`（带健康过滤）而非 `/v1/catalog/service` | [lesson-04](../../stages/2-核心能力拆解/lessons/lesson-04-服务发现与健康检查机制.md) |
-| Raft 与 leader | 阶段 2 · 课 5 | `main.py` 第 6 步观测 `leader` / `peers`，并说明无 leader 时写入会失败 | [lesson-05](../../stages/2-核心能力拆解/lessons/lesson-05-Raft与Gossip一致性成色.md) |
-| KV 存储与前缀查询 | 阶段 2 · 课 6 | 配置按 `demo/` 前缀组织，`recurse=true` 一次拉全量 | [lesson-06](../../stages/2-核心能力拆解/lessons/lesson-06-KV存储与配置管理.md) |
-| 阻塞查询（长轮询） | 阶段 2 · 课 6 | `ConfigCenter.wait_update` 用 `X-Consul-Index` + `wait` 实现秒级热更新 | [lesson-06](../../stages/2-核心能力拆解/lessons/lesson-06-KV存储与配置管理.md) |
-| 会话（session）与分布式锁 | 阶段 2 · 课 6 | `lock.py` 用 session + KV acquire 做领导者选举 | [lesson-06](../../stages/2-核心能力拆解/lessons/lesson-06-KV存储与配置管理.md) |
-| KV 当配置中心的局限 | 阶段 2 · 课 6 | 无版本历史 → `export()` 外部留档；无审计 → 落盘快照留痕 | [lesson-06](../../stages/2-核心能力拆解/lessons/lesson-06-KV存储与配置管理.md) |
-| 成品 vs 零件的赛道分层 | 阶段 3 · 课 10 | `DiscoveryBackend` 抽象只暴露服务发现语义；etcd/ZK 作为零件型后端缺失健康检查等能力时抛 `CapabilityGap` | [lesson-10](../../stages/3-横向对比/lessons/lesson-10-多维对比矩阵.md) |
-| 能力矩阵的可执行化 | 阶段 3 · 课 9/10 | `CAPABILITIES` 表把「谁有什么」写成数据，`compare()` 直接打印对比矩阵，避免口头选型 | [lesson-09](../../stages/3-横向对比/lessons/lesson-09-四大竞品逐个看.md)、[lesson-10](../../stages/3-横向对比/lessons/lesson-10-多维对比矩阵.md) |
-| 许可证风险（BUSL 1.1） | 阶段 4 · 课 11 | 能力对比表输出各后端许可证；自检项提示生产使用前须过一遍许可证自查 | [lesson-11](../../stages/4-决策落地/lessons/lesson-11-许可证成本与风险.md) |
-| 上线前自检 / POC 验收点 | 阶段 4 · 课 11/12 | `run_preflight_checks()` 八项检查：leader、quorum、KV 可用性、ACL 默认拒绝、指标三步核验、快照演练、网格绕过、ACL 规则语法 | [lesson-11](../../stages/4-决策落地/lessons/lesson-11-许可证成本与风险.md)、[lesson-12](../../stages/4-决策落地/lessons/lesson-12-选型决策框架与场景结论.md) |
+| 服务寻址难题（硬编码 IP → 注册中心） | 阶段 1 · 课 1 | 消费方不再硬编码 `127.0.0.1:18081`，改为按 `demo-svc` 名字发现 | [01](../../stages/1-认识Consul/lessons/01-为什么需要服务注册与发现.md) |
+| 客户端发现模式 | 阶段 1 · 课 1 | `service_registry.discover_and_call`：消费方自己拿列表、自己选实例直连，Consul 不转发 | [01](../../stages/1-认识Consul/lessons/01-为什么需要服务注册与发现.md) |
+| 架构角色（Server/Client/DC） | 阶段 1 · 课 2 | 应用只与本机 Client agent（`:8500`）通信，代码里不出现任何 Server 地址 | [02](../../stages/1-认识Consul/lessons/02-Consul是什么与能力全景.md) |
+| 服务注册与健康检查 | 阶段 1 · 课 3 / 阶段 2 · 课 4 | `ServiceRegistry.register` 带 TTL 检查 + DCSA；心跳线程按 TTL/2 上报 | [03](../../stages/1-认识Consul/lessons/03-五分钟跑起来看一眼.md)、[04](../../stages/2-核心能力拆解/lessons/04-服务发现与健康检查机制.md) |
+| 健康检查的两种模型（push/pull） | 阶段 2 · 课 4 | TTL 是 push（应用上报），HTTP/TCP 是 pull（agent 探测）——本项目用 TTL 并说明取舍 | [04](../../stages/2-核心能力拆解/lessons/04-服务发现与健康检查机制.md) |
+| catalog 视图 vs health 视图 | 阶段 2 · 课 4 | `discover()` 刻意用 `/v1/health/service`（带健康过滤）而非 `/v1/catalog/service` | [04](../../stages/2-核心能力拆解/lessons/04-服务发现与健康检查机制.md) |
+| Raft 与 leader | 阶段 2 · 课 5 | `main.py` 第 6 步观测 `leader` / `peers`，并说明无 leader 时写入会失败 | [05](../../stages/2-核心能力拆解/lessons/05-Raft与Gossip一致性成色.md) |
+| KV 存储与前缀查询 | 阶段 2 · 课 6 | 配置按 `demo/` 前缀组织，`recurse=true` 一次拉全量 | [06](../../stages/2-核心能力拆解/lessons/06-KV存储与配置管理.md) |
+| 阻塞查询（长轮询） | 阶段 2 · 课 6 | `ConfigCenter.wait_update` 用 `X-Consul-Index` + `wait` 实现秒级热更新 | [06](../../stages/2-核心能力拆解/lessons/06-KV存储与配置管理.md) |
+| 会话（session）与分布式锁 | 阶段 2 · 课 6 | `lock.py` 用 session + KV acquire 做领导者选举 | [06](../../stages/2-核心能力拆解/lessons/06-KV存储与配置管理.md) |
+| KV 当配置中心的局限 | 阶段 2 · 课 6 | 无版本历史 → `export()` 外部留档；无审计 → 落盘快照留痕 | [06](../../stages/2-核心能力拆解/lessons/06-KV存储与配置管理.md) |
+| 成品 vs 零件的赛道分层 | 阶段 3 · 课 10 | `DiscoveryBackend` 抽象只暴露服务发现语义；etcd/ZK 作为零件型后端缺失健康检查等能力时抛 `CapabilityGap` | [10](../../stages/3-横向对比/lessons/10-多维对比矩阵.md) |
+| 能力矩阵的可执行化 | 阶段 3 · 课 9/10 | `CAPABILITIES` 表把「谁有什么」写成数据，`compare()` 直接打印对比矩阵，避免口头选型 | [09](../../stages/3-横向对比/lessons/09-四大竞品逐个看.md)、[10](../../stages/3-横向对比/lessons/10-多维对比矩阵.md) |
+| 许可证风险（BUSL 1.1） | 阶段 4 · 课 11 | 能力对比表输出各后端许可证；自检项提示生产使用前须过一遍许可证自查 | [11](../../stages/4-决策落地/lessons/11-许可证成本与风险.md) |
+| 上线前自检 / POC 验收点 | 阶段 4 · 课 11/12 | `run_preflight_checks()` 八项检查：leader、quorum、KV 可用性、ACL 默认拒绝、指标三步核验、快照演练、网格绕过、ACL 规则语法 | [11](../../stages/4-决策落地/lessons/11-许可证成本与风险.md)、[12](../../stages/4-决策落地/lessons/12-选型决策框架与场景结论.md) |
 | 服务发现用 stale 读 | 实战篇 A（三节点实测） | `discover()` 默认 `consistency='stale'`，换取 leader 选举期间的可用性 | [实战篇 A](../../practices/实战A-读模式实测/README.md) |
 | 递归读越权的 404 伪装 | 实战篇 C（21 项矩阵实测） | `load_all()` 遇 404 用裸路径单键读复核，403 即抛 `PermissionError` | [实战篇 C](../../practices/实战C-ACL生产权限模型/README.md) |
 | ACL 规则 label 写法 | 实战篇 C（实测 + 官方核实） | `validate_acl_rules()` 扫描 `operator`/`acl` 等被误写成 `_prefix` 的情况 | [实战篇 C](../../practices/实战C-ACL生产权限模型/README.md) |

@@ -1,6 +1,6 @@
 #!/bin/bash
 # 课 8 交付校验：章节完整性 + 链接可达性 + SVG + 脚本存在性 + 四处档案回写
-LESSON=/mnt/d/projects/learning/doris/stages/3-数据导入与查询/lessons/lesson-08-多表关联与高级SQL.md
+LESSON=/mnt/d/projects/learning/doris/stages/3-数据导入与查询/lessons/08-多表关联与高级SQL.md
 ASSETS=/mnt/d/projects/learning/doris/stages/3-数据导入与查询/assets
 ROOT=/mnt/d/projects/learning/doris
 FAIL=0
@@ -39,7 +39,7 @@ done < /tmp/l8_links.txt
 
 echo ""
 echo "########## 5. SVG 资产检查 ##########"
-for svg in lesson-08-summary.svg lesson-08-join.svg; do
+for svg in 08-summary.svg 08-join.svg; do
   if [ -f "$ASSETS/$svg" ]; then
     SIZE=$(wc -c < "$ASSETS/$svg")
     if head -1 "$ASSETS/$svg" | grep -q '<?xml\|<svg' && grep -q '</svg>' "$ASSETS/$svg"; then
@@ -113,13 +113,13 @@ else
   say "  [FAIL] 课 8 未勾选"; FAIL=1
 fi
 echo "--- 10.3 overview.md 课 8 产出是否勾选 ---"
-if grep -q '\[x\] `lessons/lesson-08-多表关联与高级SQL.md`' "$ROOT/stages/3-数据导入与查询/overview.md"; then
+if grep -q '\[x\] `lessons/08-多表关联与高级SQL.md`' "$ROOT/stages/3-数据导入与查询/overview.md"; then
   say "  [OK] overview 已勾选"
 else
   say "  [FAIL] overview 未勾选"; FAIL=1
 fi
 echo "--- 10.4 02-课程目录.md 是否含课 8 链接 ---"
-if grep -q 'lesson-08-多表关联与高级SQL.md' "$ROOT/02-课程目录.md"; then
+if grep -q '08-多表关联与高级SQL.md' "$ROOT/02-课程目录.md"; then
   say "  [OK] 课程目录已更新"
 else
   say "  [FAIL] 课程目录未更新"; FAIL=1

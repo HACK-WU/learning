@@ -83,9 +83,9 @@
 
 | 知识点 | 记住什么 | 原课入口 |
 |---|---|---|
-| Go 的起源、定位与兼容性 | 为服务端、多核和团队协作而生；Go 1 兼容性让学习投入可持续 | [课 1 正文](stages/1-语言地基/lessons/lesson-01-Go是什么、环境怎么跑起来.md) |
-| 工作区、模块与 go 命令 | 一个目录加 go.mod 就能形成模块；go 命令统一常见工程动作 | [课 1 正文](stages/1-语言地基/lessons/lesson-01-Go是什么、环境怎么跑起来.md) |
-| 编译模型、runtime 与跨平台 | 提前编译机器码，但二进制包含 runtime；GOOS/GOARCH 可交叉构建 | [课 1 正文](stages/1-语言地基/lessons/lesson-01-Go是什么、环境怎么跑起来.md) |
+| Go 的起源、定位与兼容性 | 为服务端、多核和团队协作而生；Go 1 兼容性让学习投入可持续 | [课 1 正文](stages/1-语言地基/lessons/01-Go是什么、环境怎么跑起来.md) |
+| 工作区、模块与 go 命令 | 一个目录加 go.mod 就能形成模块；go 命令统一常见工程动作 | [课 1 正文](stages/1-语言地基/lessons/01-Go是什么、环境怎么跑起来.md) |
+| 编译模型、runtime 与跨平台 | 提前编译机器码，但二进制包含 runtime；GOOS/GOARCH 可交叉构建 | [课 1 正文](stages/1-语言地基/lessons/01-Go是什么、环境怎么跑起来.md) |
 
 实操回看：[编译模型与工作区图](stages/1-语言地基/assets/compile-model-and-workspace.svg)；原课含版本检查、最小模块、跨平台构建和二进制体积对照。
 
@@ -105,9 +105,9 @@
 
 | 知识点 | 记住什么 | 原课入口 |
 |---|---|---|
-| 变量、零值、常量与 iota | var / := 的作用域不同；零值是类型的一部分；iota 是常量块行计数器 | [课 2 正文](stages/1-语言地基/lessons/lesson-02-变量、类型与控制流.md) |
-| 基础类型与转换 | int 宽度随平台；byte 是 uint8 别名、rune 是 int32 别名；跨数值类型要显式转换 | [课 2 正文](stages/1-语言地基/lessons/lesson-02-变量、类型与控制流.md) |
-| if、for、switch 与 range | if 可带 init；for 覆盖多种循环；switch 默认 break；range 的下标和元素要看类型 | [课 2 正文](stages/1-语言地基/lessons/lesson-02-变量、类型与控制流.md) |
+| 变量、零值、常量与 iota | var / := 的作用域不同；零值是类型的一部分；iota 是常量块行计数器 | [课 2 正文](stages/1-语言地基/lessons/02-变量、类型与控制流.md) |
+| 基础类型与转换 | int 宽度随平台；byte 是 uint8 别名、rune 是 int32 别名；跨数值类型要显式转换 | [课 2 正文](stages/1-语言地基/lessons/02-变量、类型与控制流.md) |
+| if、for、switch 与 range | if 可带 init；for 覆盖多种循环；switch 默认 break；range 的下标和元素要看类型 | [课 2 正文](stages/1-语言地基/lessons/02-变量、类型与控制流.md) |
 
 实操回看：变量零值、枚举、UTF-8 字节与 rune、三种 for、switch fallthrough 和 range 的对照示例。
 
@@ -127,9 +127,9 @@
 
 | 知识点 | 记住什么 | 原课入口 |
 |---|---|---|
-| array 与 slice | slice 复制便宜但共享底层；append 可能覆盖邻居；必要时用三下标或 copy 隔离 | [课 3 正文](stages/1-语言地基/lessons/lesson-03-数组、切片与map.md) |
-| map | 查找用 v, ok 区分不存在；nil map 能读不能写；遍历顺序不应依赖；并发写会直接崩 | [课 3 正文](stages/1-语言地基/lessons/lesson-03-数组、切片与map.md) |
-| strings、rune 与 strconv | len 是字节数；range 的 i 是字节下标；按字符截断先转 []rune；转换要检查 error | [课 3 正文](stages/1-语言地基/lessons/lesson-03-数组、切片与map.md) |
+| array 与 slice | slice 复制便宜但共享底层；append 可能覆盖邻居；必要时用三下标或 copy 隔离 | [课 3 正文](stages/1-语言地基/lessons/03-数组、切片与map.md) |
+| map | 查找用 v, ok 区分不存在；nil map 能读不能写；遍历顺序不应依赖；并发写会直接崩 | [课 3 正文](stages/1-语言地基/lessons/03-数组、切片与map.md) |
+| strings、rune 与 strconv | len 是字节数；range 的 i 是字节下标；按字符截断先转 []rune；转换要检查 error | [课 3 正文](stages/1-语言地基/lessons/03-数组、切片与map.md) |
 
 原课实测重点：大规模预分配在 N ≥ 10 万时明显受益，小切片不必为“理论优化”增加复杂度。
 
@@ -157,9 +157,9 @@
 
 | 知识点 | 记住什么 | 原课入口 |
 |---|---|---|
-| 函数、变参、闭包与传参 | 多返回值承载结果和错误；参数值传递；slice/map 副本仍可能共享底层 | [课 4 正文](stages/2-组合与抽象/lessons/lesson-04-函数与错误处理.md) |
-| error、包装与 panic | error 是接口；%w 保留链；用 Is / As 分类；panic 只用于无法继续的程序状态 | [课 4 正文](stages/2-组合与抽象/lessons/lesson-04-函数与错误处理.md) |
-| defer | LIFO；参数在 defer 行求值；循环里会累积；os.Exit 不执行 defer | [课 4 正文](stages/2-组合与抽象/lessons/lesson-04-函数与错误处理.md) |
+| 函数、变参、闭包与传参 | 多返回值承载结果和错误；参数值传递；slice/map 副本仍可能共享底层 | [课 4 正文](stages/2-组合与抽象/lessons/04-函数与错误处理.md) |
+| error、包装与 panic | error 是接口；%w 保留链；用 Is / As 分类；panic 只用于无法继续的程序状态 | [课 4 正文](stages/2-组合与抽象/lessons/04-函数与错误处理.md) |
+| defer | LIFO；参数在 defer 行求值；循环里会累积；os.Exit 不执行 defer | [课 4 正文](stages/2-组合与抽象/lessons/04-函数与错误处理.md) |
 
 常见误区：用 error 文本比较代替 errors.Is；为了省一行把错误吞掉；在循环里 defer 打开大量文件；把 recover 当作常规异常处理。
 
@@ -177,9 +177,9 @@
 
 | 知识点 | 记住什么 | 原课入口 |
 |---|---|---|
-| struct、嵌入与 tag | struct 是值类型；嵌入是组合；tag 是元数据；不导出的字段不会被 JSON 导出 | [课 5 正文](stages/2-组合与抽象/lessons/lesson-05-结构体与方法.md) |
-| 方法与接收者 | 值接收者改副本；指针接收者改原值；*T 方法集包含 T 的，反向不成立 | [课 5 正文](stages/2-组合与抽象/lessons/lesson-05-结构体与方法.md) |
-| 导出、包、初始化与 internal | 大写导出；初始化按依赖包、包变量、init、main；internal 由编译器限制导入范围 | [课 5 正文](stages/2-组合与抽象/lessons/lesson-05-结构体与方法.md) |
+| struct、嵌入与 tag | struct 是值类型；嵌入是组合；tag 是元数据；不导出的字段不会被 JSON 导出 | [课 5 正文](stages/2-组合与抽象/lessons/05-结构体与方法.md) |
+| 方法与接收者 | 值接收者改副本；指针接收者改原值；*T 方法集包含 T 的，反向不成立 | [课 5 正文](stages/2-组合与抽象/lessons/05-结构体与方法.md) |
+| 导出、包、初始化与 internal | 大写导出；初始化按依赖包、包变量、init、main；internal 由编译器限制导入范围 | [课 5 正文](stages/2-组合与抽象/lessons/05-结构体与方法.md) |
 
 版本提示：Go 1.27 起提升字段可直接作为复合字面量 key；写新代码时仍应优先保持结构清晰、避免借嵌入制造隐式 API。
 
@@ -199,9 +199,9 @@
 
 | 知识点 | 记住什么 | 原课入口 |
 |---|---|---|
-| 接口与接口值 | 方法签名自动实现；接口值是动态类型和动态值；具体 nil 指针装进接口后接口本身不一定 nil | [课 6 正文](stages/2-组合与抽象/lessons/lesson-06-接口与泛型.md) |
-| 类型断言与 type switch | 优先 comma-ok；无 ok 失败会 panic；type switch 适合多分支类型处理 | [课 6 正文](stages/2-组合与抽象/lessons/lesson-06-接口与泛型.md) |
-| 泛型与约束 | 类型也能做参数；any、comparable、cmp.Ordered 和自定义约束收紧可用操作 | [课 6 正文](stages/2-组合与抽象/lessons/lesson-06-接口与泛型.md) |
+| 接口与接口值 | 方法签名自动实现；接口值是动态类型和动态值；具体 nil 指针装进接口后接口本身不一定 nil | [课 6 正文](stages/2-组合与抽象/lessons/06-接口与泛型.md) |
+| 类型断言与 type switch | 优先 comma-ok；无 ok 失败会 panic；type switch 适合多分支类型处理 | [课 6 正文](stages/2-组合与抽象/lessons/06-接口与泛型.md) |
+| 泛型与约束 | 类型也能做参数；any、comparable、cmp.Ordered 和自定义约束收紧可用操作 | [课 6 正文](stages/2-组合与抽象/lessons/06-接口与泛型.md) |
 
 常见误区：为了“未来可能复用”提前泛型化；只是调用方法却做类型断言；把接口 nil 与动态值 nil 混为一谈；用空接口逃避设计契约。
 
@@ -227,9 +227,9 @@
 
 | 知识点 | 记住什么 | 原课入口 |
 |---|---|---|
-| goroutine 与 runtime | 栈很小、可复用到少量 OS 线程；轻量不等于无需管理 | [课 7 正文](stages/3-并发模型/lessons/lesson-07-goroutine廉价的并发单位.md) |
-| WaitGroup 与生命周期 | go 出去没有句柄；用 wg.Go / Add-Done-Wait 或 channel 组织收尾；main 一走全剧终 | [课 7 正文](stages/3-并发模型/lessons/lesson-07-goroutine廉价的并发单位.md) |
-| 并发与并行 | 并发是拆活的结构，并行是多核同时执行的结果；还受 GOMAXPROCS 与等待影响 | [课 7 正文](stages/3-并发模型/lessons/lesson-07-goroutine廉价的并发单位.md) |
+| goroutine 与 runtime | 栈很小、可复用到少量 OS 线程；轻量不等于无需管理 | [课 7 正文](stages/3-并发模型/lessons/07-goroutine廉价的并发单位.md) |
+| WaitGroup 与生命周期 | go 出去没有句柄；用 wg.Go / Add-Done-Wait 或 channel 组织收尾；main 一走全剧终 | [课 7 正文](stages/3-并发模型/lessons/07-goroutine廉价的并发单位.md) |
+| 并发与并行 | 并发是拆活的结构，并行是多核同时执行的结果；还受 GOMAXPROCS 与等待影响 | [课 7 正文](stages/3-并发模型/lessons/07-goroutine廉价的并发单位.md) |
 
 常见误区：用 sleep 等待 goroutine；复制 WaitGroup；把 goroutine 数量当吞吐量；期待获得 goroutine ID 进行业务管理。
 
@@ -247,9 +247,9 @@
 
 | 知识点 | 记住什么 | 原课入口 |
 |---|---|---|
-| 无缓冲、有缓冲与 close | 无缓冲是当面交接；有缓冲是传送带；close 表示不再新增，不是清空 | [课 8 正文](stages/3-并发模型/lessons/lesson-08-channel用通信共享内存.md) |
-| select、超时与定时器 | select 同时等待事件；default 不等待；定时器超时要可取消，循环里不要反复 time.After | [课 8 正文](stages/3-并发模型/lessons/lesson-08-channel用通信共享内存.md) |
-| 单向 channel 与关闭责任 | chan<- 只发、<-chan 只收；发送方关闭；多发送方要等齐再关 | [课 8 正文](stages/3-并发模型/lessons/lesson-08-channel用通信共享内存.md) |
+| 无缓冲、有缓冲与 close | 无缓冲是当面交接；有缓冲是传送带；close 表示不再新增，不是清空 | [课 8 正文](stages/3-并发模型/lessons/08-channel用通信共享内存.md) |
+| select、超时与定时器 | select 同时等待事件；default 不等待；定时器超时要可取消，循环里不要反复 time.After | [课 8 正文](stages/3-并发模型/lessons/08-channel用通信共享内存.md) |
+| 单向 channel 与关闭责任 | chan<- 只发、<-chan 只收；发送方关闭；多发送方要等齐再关 | [课 8 正文](stages/3-并发模型/lessons/08-channel用通信共享内存.md) |
 
 常见误区：接收方关闭 channel；多个发送方直接抢着 close；用无缓冲 channel 假设“异步”；只监听结果不监听 ctx.Done。
 
@@ -267,9 +267,9 @@
 
 | 知识点 | 记住什么 | 原课入口 |
 |---|---|---|
-| Mutex、RWMutex 与临界区 | 锁不能复制、不可重入；defer 解锁；先缩小临界区、降低争用，再谈 RWMutex | [课 9 正文](stages/3-并发模型/lessons/lesson-09-同步、竞争与泄漏.md) |
-| 竞态与 race detector | 两个 goroutine 访问同一内存、至少一个写、没有 happens-before；测试应开 -race，生产通常不开 | [课 9 正文](stages/3-并发模型/lessons/lesson-09-同步、竞争与泄漏.md) |
-| context 与 goroutine 泄漏 | 取消靠 context 传播；每个 cancel 都要调用；goroutineleak 负责识别真实泄漏，不替代生命周期设计 | [课 9 正文](stages/3-并发模型/lessons/lesson-09-同步、竞争与泄漏.md) |
+| Mutex、RWMutex 与临界区 | 锁不能复制、不可重入；defer 解锁；先缩小临界区、降低争用，再谈 RWMutex | [课 9 正文](stages/3-并发模型/lessons/09-同步、竞争与泄漏.md) |
+| 竞态与 race detector | 两个 goroutine 访问同一内存、至少一个写、没有 happens-before；测试应开 -race，生产通常不开 | [课 9 正文](stages/3-并发模型/lessons/09-同步、竞争与泄漏.md) |
+| context 与 goroutine 泄漏 | 取消靠 context 传播；每个 cancel 都要调用；goroutineleak 负责识别真实泄漏，不替代生命周期设计 | [课 9 正文](stages/3-并发模型/lessons/09-同步、竞争与泄漏.md) |
 
 常见误区：给单个变量上锁却没保护读改写逻辑；用 RWMutex 解决所有性能问题；把 race detector 当生产监控；用 Count 为 0 证明没有泄漏。
 
@@ -295,9 +295,9 @@
 
 | 知识点 | 记住什么 | 原课入口 |
 |---|---|---|
-| io.Reader、Writer 与 Copy | n > 0 时先处理数据再看 err；io.Copy 不负责关闭两端；目标出错会停止 | [课 10 正文](stages/4-标准库与网络编程/lessons/lesson-10-io与context.md) |
-| context 取消、deadline 与 value | 取消沿树向下；子 deadline 取更早者；Done 关闭是广播；WithValue 是链表，key 用私有类型 | [课 10 正文](stages/4-标准库与网络编程/lessons/lesson-10-io与context.md) |
-| 文件、临时资源与 embed | 创建者负责关闭和清理；embed 把静态文件编进二进制；ioutil 已由 io/os 等 API 替代 | [课 10 正文](stages/4-标准库与网络编程/lessons/lesson-10-io与context.md) |
+| io.Reader、Writer 与 Copy | n > 0 时先处理数据再看 err；io.Copy 不负责关闭两端；目标出错会停止 | [课 10 正文](stages/4-标准库与网络编程/lessons/10-io与context.md) |
+| context 取消、deadline 与 value | 取消沿树向下；子 deadline 取更早者；Done 关闭是广播；WithValue 是链表，key 用私有类型 | [课 10 正文](stages/4-标准库与网络编程/lessons/10-io与context.md) |
+| 文件、临时资源与 embed | 创建者负责关闭和清理；embed 把静态文件编进二进制；ioutil 已由 io/os 等 API 替代 | [课 10 正文](stages/4-标准库与网络编程/lessons/10-io与context.md) |
 
 常见误区：只看 err 不处理 n；把 context 放进 struct 长期保存；忘记 defer cancel；把 ioutil 当成新 API；把 Close 错误完全忽略在关键写入路径。
 
@@ -315,9 +315,9 @@
 
 | 知识点 | 记住什么 | 原课入口 |
 |---|---|---|
-| Handler、HandlerFunc、ServeMux 与中间件 | 一个方法定契约，一个函数做适配，一个 mux 管分发，一串 handler 排顺序 | [课 11 正文](stages/4-标准库与网络编程/lessons/lesson-11-nethttp服务端.md) |
-| Request、Response、JSON 与 context | Body 只能读一遍；请求 context 可取消；响应先头、再码、后体 | [课 11 正文](stages/4-标准库与网络编程/lessons/lesson-11-nethttp服务端.md) |
-| Server 超时与优雅退出 | ReadHeaderTimeout、ReadTimeout、WriteTimeout、IdleTimeout 与 Shutdown 共同形成上线边界；永远显式使用自己的 mux | [课 11 正文](stages/4-标准库与网络编程/lessons/lesson-11-nethttp服务端.md) |
+| Handler、HandlerFunc、ServeMux 与中间件 | 一个方法定契约，一个函数做适配，一个 mux 管分发，一串 handler 排顺序 | [课 11 正文](stages/4-标准库与网络编程/lessons/11-nethttp服务端.md) |
+| Request、Response、JSON 与 context | Body 只能读一遍；请求 context 可取消；响应先头、再码、后体 | [课 11 正文](stages/4-标准库与网络编程/lessons/11-nethttp服务端.md) |
+| Server 超时与优雅退出 | ReadHeaderTimeout、ReadTimeout、WriteTimeout、IdleTimeout 与 Shutdown 共同形成上线边界；永远显式使用自己的 mux | [课 11 正文](stages/4-标准库与网络编程/lessons/11-nethttp服务端.md) |
 
 常见误区：把 http.DefaultServeMux 当自己的路由表；写过 body 后再改状态码；不限制 JSON body；用 log.Fatal 让 defer 和 Shutdown 路径失效；把 Shutdown timeout 设成无限。
 
@@ -335,9 +335,9 @@
 
 | 知识点 | 记住什么 | 原课入口 |
 |---|---|---|
-| database/sql | DB 是进程级连接池；Open 不代表已连接；rows 必须关闭；查询带 ctx；事务每条路径都 Commit 或 Rollback；SQL 用占位符 | [课 12 正文](stages/4-标准库与网络编程/lessons/lesson-12-数据访问与客户端.md) |
-| http.Client、Transport 与重试 | Client 要复用且显式超时；resp.Body 必关，必要时读完；只对幂等请求重试，并同时具备上限、退避抖动和 ctx 检查 | [课 12 正文](stages/4-标准库与网络编程/lessons/lesson-12-数据访问与客户端.md) |
-| time.Time、Timer、Ticker 与布局 | time.Time 同时含墙钟和单调读；格式化、序列化等会丢单调读；Timer/Ticker 按生命周期选择；布局用参考时刻常量 | [课 12 正文](stages/4-标准库与网络编程/lessons/lesson-12-数据访问与客户端.md) |
+| database/sql | DB 是进程级连接池；Open 不代表已连接；rows 必须关闭；查询带 ctx；事务每条路径都 Commit 或 Rollback；SQL 用占位符 | [课 12 正文](stages/4-标准库与网络编程/lessons/12-数据访问与客户端.md) |
+| http.Client、Transport 与重试 | Client 要复用且显式超时；resp.Body 必关，必要时读完；只对幂等请求重试，并同时具备上限、退避抖动和 ctx 检查 | [课 12 正文](stages/4-标准库与网络编程/lessons/12-数据访问与客户端.md) |
+| time.Time、Timer、Ticker 与布局 | time.Time 同时含墙钟和单调读；格式化、序列化等会丢单调读；Timer/Ticker 按生命周期选择；布局用参考时刻常量 | [课 12 正文](stages/4-标准库与网络编程/lessons/12-数据访问与客户端.md) |
 
 常见误区：每次请求都 sql.Open 或 new http.Client；把 rows.Close 和 resp.Body.Close 忘在成功路径；无脑重试 POST；循环里 time.After；把字符串时区布局当成常识拼写。
 
@@ -357,15 +357,15 @@
 
 **处境对照**：本机能编译不代表别人能复现；测试通过不代表边界完整；格式整齐也不代表逻辑正确。工程规范的价值是把不同人的隐性习惯变成自动化门槛。
 
-![课 13 工程化流程图](stages/5-工程化与生产落地/assets/lesson-13-engineering-flow.svg)
+![课 13 工程化流程图](stages/5-工程化与生产落地/assets/13-engineering-flow.svg)
 
 **知识点地图**
 
 | 知识点 | 记住什么 | 原课入口 |
 |---|---|---|
-| 模块与依赖 | go.mod 负责身份和要求；go.sum 提供校验；vendor 是复制；go.work 适合本地多模块联调，不是生产依赖方案 | [课 13 正文](stages/5-工程化与生产落地/lessons/lesson-13-模块、测试与规范.md) |
-| 测试 | 测行为、边界和失败路径；table-driven 与 subtests 提升覆盖和定位；-race、coverage 服务于证据而非数字竞赛 | [课 13 正文](stages/5-工程化与生产落地/lessons/lesson-13-模块、测试与规范.md) |
-| 静态检查与规范 | gofmt 管形状，go vet 抓可疑构造，golangci-lint 统一多项检查；它们不能替代业务测试 | [课 13 正文](stages/5-工程化与生产落地/lessons/lesson-13-模块、测试与规范.md) |
+| 模块与依赖 | go.mod 负责身份和要求；go.sum 提供校验；vendor 是复制；go.work 适合本地多模块联调，不是生产依赖方案 | [课 13 正文](stages/5-工程化与生产落地/lessons/13-模块、测试与规范.md) |
+| 测试 | 测行为、边界和失败路径；table-driven 与 subtests 提升覆盖和定位；-race、coverage 服务于证据而非数字竞赛 | [课 13 正文](stages/5-工程化与生产落地/lessons/13-模块、测试与规范.md) |
+| 静态检查与规范 | gofmt 管形状，go vet 抓可疑构造，golangci-lint 统一多项检查；它们不能替代业务测试 | [课 13 正文](stages/5-工程化与生产落地/lessons/13-模块、测试与规范.md) |
 
 常见误区：把 go.work 提交成生产依赖真相；只测 happy path；只看 coverage 百分比；把 lint 全绿当作业务正确；手工格式化代替 gofmt。
 
@@ -377,15 +377,15 @@
 
 **处境对照**：“感觉这个写法更快”无法解释回归；CPU 热点不一定是分配热点；堆里留下的对象不等于所有曾经分配过的对象；goroutine 数量增长也不自动等于泄漏。
 
-![课 14 性能诊断图](stages/5-工程化与生产落地/assets/lesson-14-performance-diagnostics.svg)
+![课 14 性能诊断图](stages/5-工程化与生产落地/assets/14-performance-diagnostics.svg)
 
 **知识点地图**
 
 | 知识点 | 记住什么 | 原课入口 |
 |---|---|---|
-| Benchmark 与基准比较 | b.N 是 testing 调整的实验规模；用 sink 防止结果被优化掉；-benchmem 观察分配；重复样本后再比较 | [课 14 正文](stages/5-工程化与生产落地/lessons/lesson-14-性能与诊断.md) |
-| pprof 与诊断证据 | CPU、heap、goroutine、block 看不同问题；top 找集中点，list 回到源码，web 看调用关系；诊断必须和场景绑定 | [课 14 正文](stages/5-工程化与生产落地/lessons/lesson-14-性能与诊断.md) |
-| escape、堆与 GC | escape 说明对象可能离开栈；heap profile 主要看仍存活对象；GC 回收不可达对象；优化前先 profile | [课 14 正文](stages/5-工程化与生产落地/lessons/lesson-14-性能与诊断.md) |
+| Benchmark 与基准比较 | b.N 是 testing 调整的实验规模；用 sink 防止结果被优化掉；-benchmem 观察分配；重复样本后再比较 | [课 14 正文](stages/5-工程化与生产落地/lessons/14-性能与诊断.md) |
+| pprof 与诊断证据 | CPU、heap、goroutine、block 看不同问题；top 找集中点，list 回到源码，web 看调用关系；诊断必须和场景绑定 | [课 14 正文](stages/5-工程化与生产落地/lessons/14-性能与诊断.md) |
+| escape、堆与 GC | escape 说明对象可能离开栈；heap profile 主要看仍存活对象；GC 回收不可达对象；优化前先 profile | [课 14 正文](stages/5-工程化与生产落地/lessons/14-性能与诊断.md) |
 
 常见误区：只跑一次 benchmark；拿不同机器的 ns/op 直接比较；见到 alloc 就盲目复用；把 pprof top 第一项当根因；线上为了诊断永久公开 pprof。
 
@@ -397,15 +397,15 @@
 
 **处境对照**：开发机上的二进制、生产机上的权限与架构、容器里的信号和探针，可能完全不同。构建、部署、运维和选型必须放在同一张决策表里。
 
-![课 15 交付与选型决策图](stages/5-工程化与生产落地/assets/lesson-15-delivery-decision.svg)
+![课 15 交付与选型决策图](stages/5-工程化与生产落地/assets/15-delivery-decision.svg)
 
 **知识点地图**
 
 | 知识点 | 记住什么 | 原课入口 |
 |---|---|---|
-| 构建、交叉编译与产物 | 先明确 GOOS/GOARCH、配置注入、符号信息和校验方式；产物应可验证并能回滚 | [课 15 正文](stages/5-工程化与生产落地/lessons/lesson-15-构建部署与选型决策.md) |
-| 部署、信号与运维边界 | 状态可观察、失败可见、进程能清理退出；HTTP 服务要配 Shutdown、探针、日志和诊断边界 | [课 15 正文](stages/5-工程化与生产落地/lessons/lesson-15-构建部署与选型决策.md) |
-| Go 与替代方案的决策 | 评价总价值：性能、并发、交付、生态、团队、运行边界和长期维护，不把“能做”当“该选” | [课 15 正文](stages/5-工程化与生产落地/lessons/lesson-15-构建部署与选型决策.md) |
+| 构建、交叉编译与产物 | 先明确 GOOS/GOARCH、配置注入、符号信息和校验方式；产物应可验证并能回滚 | [课 15 正文](stages/5-工程化与生产落地/lessons/15-构建部署与选型决策.md) |
+| 部署、信号与运维边界 | 状态可观察、失败可见、进程能清理退出；HTTP 服务要配 Shutdown、探针、日志和诊断边界 | [课 15 正文](stages/5-工程化与生产落地/lessons/15-构建部署与选型决策.md) |
+| Go 与替代方案的决策 | 评价总价值：性能、并发、交付、生态、团队、运行边界和长期维护，不把“能做”当“该选” | [课 15 正文](stages/5-工程化与生产落地/lessons/15-构建部署与选型决策.md) |
 
 常见误区：只在本机编译不测目标平台；容器里 PID 1 不处理信号；把 pprof 暴露在公网；为了语言偏好牺牲团队与生态；把“单二进制”误解成不需要配置、迁移、监控和回滚。
 

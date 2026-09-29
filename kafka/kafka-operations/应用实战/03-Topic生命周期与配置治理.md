@@ -1,6 +1,6 @@
 # 应用实战 · Topic 生命周期与配置治理
 
-> 对应课程：[第 3 课：Topic 生命周期与配置治理](../stages/2-日常操作与容量治理/lessons/lesson-03-Topic生命周期与配置治理.md) ｜ 覆盖知识点：Topic 创建基线、配置层级与在线变更、分区扩容/删除与保留策略
+> 对应课程：[第 3 课：Topic 生命周期与配置治理](../stages/2-日常操作与容量治理/lessons/03-Topic生命周期与配置治理.md) ｜ 覆盖知识点：Topic 创建基线、配置层级与在线变更、分区扩容/删除与保留策略
 > 定位：**会用，不上生产**——把一个 Topic 申请从“直接敲命令”演进成可验证、可解释、可回退的变更单。
 > 📖 结论已按官方文档核对（核查于 2026-09 ｜ 来源：[Topic Configs](https://kafka.apache.org/43/configuration/topic-configs/)、[Broker Configs](https://kafka.apache.org/43/configuration/broker-configs/)、[Basic Kafka Operations](https://kafka.apache.org/43/operations/basic-kafka-operations/)）。
 
@@ -81,6 +81,6 @@ kafka-configs.sh --bootstrap-server "<BROKER_ENDPOINT>" --entity-type topics --e
 
 ## 🧭 导航
 
-- ⬅️ 回到课程：[第 3 课：Topic 生命周期与配置治理](../stages/2-日常操作与容量治理/lessons/lesson-03-Topic生命周期与配置治理.md)
+- ⬅️ 回到课程：[第 3 课：Topic 生命周期与配置治理](../stages/2-日常操作与容量治理/lessons/03-Topic生命周期与配置治理.md)
 - 📚 全部实战：[应用实战索引](INDEX.md)
 - ➡️ 下一课实战：[04 · Broker 下线与分阶段搬迁](04-Broker成员与数据搬迁.md)

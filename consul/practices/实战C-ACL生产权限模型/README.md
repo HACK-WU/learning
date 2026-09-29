@@ -1,6 +1,6 @@
 # 应用实战 · ACL 与安全模型
 
-> 对应课程：[第 8 课：ACL 与安全模型](../../stages/2-核心能力拆解/lessons/lesson-08-ACL与安全模型.md) ｜ 覆盖知识点：ACL 三层模型（token / policy / rule）、默认策略与匿名 token、权限矩阵验证、静默失效的两种形态
+> 对应课程：[第 8 课：ACL 与安全模型](../../stages/2-核心能力拆解/lessons/08-ACL与安全模型.md) ｜ 覆盖知识点：ACL 三层模型（token / policy / rule）、默认策略与匿名 token、权限矩阵验证、静默失效的两种形态
 > 定位：**会用，不上生产**——课里学完，在这里动手（结构与边界见 SKILL.md「教学叙事骨架 · 应用实战」）。
 > 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：[Consul ACL Rules](https://developer.hashicorp.com/consul/docs/reference/acl/rule)）
 
@@ -180,6 +180,6 @@ except ConsulError as e:
 
 ## 🧭 导航
 
-- ⬅️ 回到课程：[第 8 课：ACL 与安全模型](../../stages/2-核心能力拆解/lessons/lesson-08-ACL与安全模型.md)
+- ⬅️ 回到课程：[第 8 课：ACL 与安全模型](../../stages/2-核心能力拆解/lessons/08-ACL与安全模型.md)
 - 📚 全部实战：[应用实战索引](../../应用实战/INDEX.md)
 - ➡️ 相关排障：[09-排障速查手册](../../09-排障速查手册.md) 症状 10「ACL 静默失败」

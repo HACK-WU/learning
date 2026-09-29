@@ -3,7 +3,7 @@
 # 纪律：每条「缺失/错误/遗漏」判定，必须先回读原文或用脚本核验
 set -u
 
-F="/mnt/d/projects/learning/grafana/stages/2-查得到/lessons/lesson-04-查询编辑器与数据源协议：一次查询的完整旅程.md"
+F="/mnt/d/projects/learning/grafana/stages/2-查得到/lessons/04-查询编辑器与数据源协议：一次查询的完整旅程.md"
 
 echo "=========================================================="
 echo " 课 4 评审核查：逐条回读原文核验"

@@ -33,8 +33,8 @@
 
 ## 本阶段产出
 
-- [x] [lessons/lesson-06-可观测性基线与告警.md](lessons/lesson-06-可观测性基线与告警.md)
-- [x] [lessons/lesson-07-Kafka事故响应与故障排查.md](lessons/lesson-07-Kafka事故响应与故障排查.md)
+- [x] [lessons/06-可观测性基线与告警.md](lessons/06-可观测性基线与告警.md)
+- [x] [lessons/07-Kafka事故响应与故障排查.md](lessons/07-Kafka事故响应与故障排查.md)
 
 ## 📌 阶段 3 收官说明（2026-09-20）
 

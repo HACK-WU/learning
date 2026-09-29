@@ -1,7 +1,7 @@
 #!/bin/bash
 # 课 10 评审辅助 1：learner 视角 —— 正文里所有 SQL / 命令能否照抄跑通
 # 检查项：① 省略写法 ② 属性名是否废弃 ③ 引用了不存在的脚本 ④ 表名/列名是否真实存在
-LESSON="/mnt/d/projects/learning/doris/stages/4-分布式运维与生产落地/lessons/lesson-10-资源隔离与负载管理.md"
+LESSON="/mnt/d/projects/learning/doris/stages/4-分布式运维与生产落地/lessons/10-资源隔离与负载管理.md"
 SCRIPTS="/mnt/d/projects/learning/doris/assets"
 FE='docker exec -i doris-learn mysql -h 127.0.0.1 -P 9030 -uroot shop'
 q() { $FE -e "$1" 2>&1 | grep -vE "^Warning|Using a password"; }

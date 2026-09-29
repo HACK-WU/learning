@@ -122,7 +122,7 @@ flowchart TD
 2. "Celery 让任务变快" → 单任务耗时不变甚至略增，优化的是**吞吐与响应**。
 3. "用了 Celery 就不用管幂等" → 它是**至少一次**投递，幂等必须业务侧实现。
 
-→ [原课讲义](stages/1-异步化的动因与Celery全景/lessons/lesson-01-为什么需要异步任务.md)
+→ [原课讲义](stages/1-异步化的动因与Celery全景/lessons/01-为什么需要异步任务.md)
 
 ### 课 2 · Celery 架构全景与消息流转
 
@@ -147,7 +147,7 @@ flowchart LR
 2. "状态 PENDING = 没执行" → 三种可能：没配 backend（最常见）/ worker 没起 / 任务名不对。**先看 worker 日志**。
 3. "消息里存的是函数对象" → 存的是**函数名字符串 + 参数**，名字对不上就 `NotRegistered`。
 
-→ [原课讲义](stages/1-异步化的动因与Celery全景/lessons/lesson-02-Celery架构全景与消息流转.md)
+→ [原课讲义](stages/1-异步化的动因与Celery全景/lessons/02-Celery架构全景与消息流转.md)
 
 ---
 
@@ -194,7 +194,7 @@ flowchart TB
   不确定就 `celery -A proj inspect conf` 查实际生效值。
 - 课 3 正文的对照表由 celery 内置 `_TO_OLD_KEY`（194 项）导出，非人工整理。
 
-→ [原课讲义](stages/2-Django集成与任务基础/lessons/lesson-03-第一个Celery+Django项目.md)
+→ [原课讲义](stages/2-Django集成与任务基础/lessons/03-第一个Celery+Django项目.md)
 
 ### 课 4 · 调用任务与取回结果
 
@@ -247,7 +247,7 @@ flowchart TB
 - ⚠️ eager 测不了三样：**重试节奏、countdown/eta、路由**（投递选项在 eager 下全部被忽略）。
 - ⚠️ eager 是"同步执行"不是"空跑" —— 任务里的**写库会真的发生**，要 mock 或套在 `TestCase` 事务里。
 
-→ [原课讲义](stages/2-Django集成与任务基础/lessons/lesson-04-调用任务与取回结果.md)
+→ [原课讲义](stages/2-Django集成与任务基础/lessons/04-调用任务与取回结果.md)
 
 ---
 
@@ -328,7 +328,7 @@ flowchart TB
 > 端到端投 2 个必失败任务 → 死信 **2 条**（而非 8 条），证明"只在耗尽时落一条"。
 > 项目落地见 `projects/电商订单履约系统/实现/proj/dlq.py`（含 `list_dead_letters()` / `replay()`）。
 
-→ [原课讲义](stages/3-可靠性与幂等/lessons/lesson-05-确认机制与重试策略.md)
+→ [原课讲义](stages/3-可靠性与幂等/lessons/05-确认机制与重试策略.md)
 
 ### 课 6 · Django 事务与 ORM 的坑
 
@@ -374,7 +374,7 @@ flowchart TB
 - 5.6.1（#10020）收紧为**只在 prefork 关池**：gevent/eventlet/threads 不 fork，池本就安全。
 - 没开 Django 连接池的话，这段逻辑对你**完全不生效**。
 
-→ [原课讲义](stages/3-可靠性与幂等/lessons/lesson-06-Django事务与ORM的坑.md)
+→ [原课讲义](stages/3-可靠性与幂等/lessons/06-Django事务与ORM的坑.md)
 
 ---
 
@@ -416,7 +416,7 @@ flowchart TB
 2. `beat_cron_starting_deadline=None` 理解为"不补跑" → 实际是"**总是立即补跑一次**"。
 3. 用 `cache.add()` 加锁保证单点 → `LocMemCache` 是**进程内**缓存，锁不共享。
 
-→ [原课讲义](stages/4-定时编排与生产运维/lessons/lesson-07-beat与周期性任务.md)
+→ [原课讲义](stages/4-定时编排与生产运维/lessons/07-beat与周期性任务.md)
 
 ### 课 8 · canvas 任务编排
 
@@ -437,7 +437,7 @@ flowchart TB
 > （漏配路由），**不是** `chord_unlock`。Redis backend 有原生 chord 协调，**不产生中间任务**。
 > 详见 [设计决策 · 决策 4](projects/电商订单履约系统/设计决策.md)。
 
-→ [原课讲义](stages/4-定时编排与生产运维/lessons/lesson-08-canvas任务编排.md)
+→ [原课讲义](stages/4-定时编排与生产运维/lessons/08-canvas任务编排.md)
 
 ### 课 9 · 生产部署与并发模型
 
@@ -457,7 +457,7 @@ flowchart TB
 2. `TimeoutStopSec` 小于 soft shutdown 超时 → 宽限期没走完就被强杀。
 3. Redis 上配 `priority` 以为能插队 → 不配 `queue_order_strategy` + `prefetch=1` 就**静默失效**。
 
-→ [原课讲义](stages/4-定时编排与生产运维/lessons/lesson-09-生产部署与并发模型.md)
+→ [原课讲义](stages/4-定时编排与生产运维/lessons/09-生产部署与并发模型.md)
 
 ### 课 10 · 监控、排查与上线清单
 
@@ -481,7 +481,7 @@ flowchart TB
 3. `from celery import SoftTimeLimitExceeded` → Celery 5.6.3 会 `ImportError`（本课实跑踩到），
    正确是 `from celery.exceptions import SoftTimeLimitExceeded`。
 
-→ [原课讲义](stages/4-定时编排与生产运维/lessons/lesson-10-监控、排查与上线清单.md)
+→ [原课讲义](stages/4-定时编排与生产运维/lessons/10-监控、排查与上线清单.md)
 
 ---
 

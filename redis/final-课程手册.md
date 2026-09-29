@@ -86,7 +86,7 @@
 
 ## 课 1：Redis 是什么
 
-📖 原文：[lesson-01-Redis是什么.md](stages/1-为什么需要Redis/lessons/lesson-01-Redis是什么.md) ｜ 完成于 2026-08-31，评审 P0=0
+📖 原文：[01-Redis是什么.md](stages/1-为什么需要Redis/lessons/01-Redis是什么.md) ｜ 完成于 2026-08-31，评审 P0=0
 
 ### 核心结论
 
@@ -122,7 +122,7 @@ graph TD
 
 ## 课 2：跑起来第一个 Redis
 
-📖 原文：[lesson-02-跑起来第一个Redis.md](stages/1-为什么需要Redis/lessons/lesson-02-跑起来第一个Redis.md) ｜ 完成于 2026-08-31，评审 P0=0
+📖 原文：[02-跑起来第一个Redis.md](stages/1-为什么需要Redis/lessons/02-跑起来第一个Redis.md) ｜ 完成于 2026-08-31，评审 P0=0
 
 ### 核心结论
 
@@ -198,7 +198,7 @@ graph TD
 
 ## 课 3：List 与 Hash
 
-📖 原文：[lesson-03-List与Hash.md](stages/2-数据结构与命令/lessons/lesson-03-List与Hash.md) ｜ 完成于 2026-08-31，评审 P0=0
+📖 原文：[03-List与Hash.md](stages/2-数据结构与命令/lessons/03-List与Hash.md) ｜ 完成于 2026-08-31，评审 P0=0
 
 ### 核心结论
 
@@ -246,7 +246,7 @@ graph TD
 
 ## 课 4：Set、ZSet 与特殊类型
 
-📖 原文：[lesson-04-Set、ZSet与特殊类型.md](stages/2-数据结构与命令/lessons/lesson-04-Set、ZSet与特殊类型.md) ｜ 完成于 2026-09-01，评审 P0=0
+📖 原文：[04-Set、ZSet与特殊类型.md](stages/2-数据结构与命令/lessons/04-Set、ZSet与特殊类型.md) ｜ 完成于 2026-09-01，评审 P0=0
 
 ### 核心结论
 
@@ -343,7 +343,7 @@ graph TD
 
 ## 课 5：RDB 与 AOF 持久化
 
-📖 原文：[lesson-05-RDB与AOF持久化.md](stages/3-持久化与高可用/lessons/lesson-05-RDB与AOF持久化.md) ｜ 完成于 2026-09-01，评审 P0=0
+📖 原文：[05-RDB与AOF持久化.md](stages/3-持久化与高可用/lessons/05-RDB与AOF持久化.md) ｜ 完成于 2026-09-01，评审 P0=0
 
 ### 核心结论
 
@@ -428,7 +428,7 @@ graph TD
 
 ## 课 6：主从复制与哨兵
 
-📖 原文：[lesson-06-主从复制与哨兵.md](stages/3-持久化与高可用/lessons/lesson-06-主从复制与哨兵.md) ｜ 完成于 2026-09-01，评审 P0=0
+📖 原文：[06-主从复制与哨兵.md](stages/3-持久化与高可用/lessons/06-主从复制与哨兵.md) ｜ 完成于 2026-09-01，评审 P0=0
 
 ### 核心结论
 
@@ -528,7 +528,7 @@ graph TD
 
 ## 课 7：分片与集群
 
-📖 原文：[lesson-07-分片与集群.md](stages/4-分布式与生产实践/lessons/lesson-07-分片与集群.md) ｜ 完成于 2026-09-01，评审 P0=0
+📖 原文：[07-分片与集群.md](stages/4-分布式与生产实践/lessons/07-分片与集群.md) ｜ 完成于 2026-09-01，评审 P0=0
 
 ### 核心结论
 
@@ -582,7 +582,7 @@ graph TD
 
 ## 课 8：缓存设计
 
-📖 原文：[lesson-08-缓存设计.md](stages/4-分布式与生产实践/lessons/lesson-08-缓存设计.md) ｜ 完成于 2026-09-01，评审 P0=0
+📖 原文：[08-缓存设计.md](stages/4-分布式与生产实践/lessons/08-缓存设计.md) ｜ 完成于 2026-09-01，评审 P0=0
 
 ### 核心结论
 
@@ -638,7 +638,7 @@ graph TD
 
 ## 课 9：生产实践与选型
 
-📖 原文：[lesson-09-生产实践与选型.md](stages/4-分布式与生产实践/lessons/lesson-09-生产实践与选型.md) ｜ 完成于 2026-09-01，评审 P0=0
+📖 原文：[09-生产实践与选型.md](stages/4-分布式与生产实践/lessons/09-生产实践与选型.md) ｜ 完成于 2026-09-01，评审 P0=0
 
 ### 核心结论
 

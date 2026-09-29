@@ -1,6 +1,6 @@
 # 课 21 评审报告 · learner 视角（学习者）
 
-> 评审对象：[lesson-21-自定义管理命令与System checks.md](../../stages/6-工程化与生产/lessons/lesson-21-自定义管理命令与System checks.md)
+> 评审对象：[21-自定义管理命令与System checks.md](../../stages/6-工程化与生产/lessons/21-自定义管理命令与System checks.md)
 > 评审方式：主 agent 内联（learner 视角）
 > 评审日期：2026-09-04
 

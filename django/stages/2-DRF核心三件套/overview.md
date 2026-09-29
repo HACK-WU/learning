@@ -76,4 +76,4 @@ graph LR
 
 ---
 
-🚀 进入 [课 3《序列化器：API 的边界守门人》](./lessons/lesson-03-序列化器API的边界守门人.md)
+🚀 进入 [课 3《序列化器：API 的边界守门人》](./lessons/03-序列化器API的边界守门人.md)

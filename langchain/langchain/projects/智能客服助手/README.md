@@ -24,19 +24,19 @@
 
 | 知识点 | 所属阶段 / 课 | 本项目用在何处 | 回指 |
 |--------|--------------|---------------|------|
-| Agent = Model + Harness 心智模型 | 阶段 1 · 课 1 | 整个工程的组装观：`agent.py` 管 harness，`config.py` 管 model | [lesson-01](../../stages/1-入门与模型层/lessons/lesson-01-LangChain是什么.md) |
-| 模型初始化 / 自定义 endpoint | 阶段 1 · 课 2 | `app/config.py` `build_chat_model()`（OpenAI 兼容端点接入） | [lesson-02](../../stages/1-入门与模型层/lessons/lesson-02-Models模型层.md) |
-| 消息体系（Human/AI/Tool） | 阶段 1 · 课 3 | 审批流消息序列：AI 工具调用冻结 → Tool 执行结果回填（`demo.py` 场景 3） | [lesson-03](../../stages/1-入门与模型层/lessons/lesson-03-Messages消息体系.md) |
-| @tool 工具与错误处理 | 阶段 2 · 课 4 | `app/tools/`（6 个工具；金额校验不通过时返回说明而非抛异常） | [lesson-04](../../stages/2-Agent核心/lessons/lesson-04-Tools工具.md) |
-| create_agent 组装 | 阶段 2 · 课 5 | `app/agent.py`（模型 + 工具 + 中间件 + 检查点） | [lesson-05](../../stages/2-Agent核心/lessons/lesson-05-Agents智能体核心.md) |
-| 流式输出 | 阶段 2 · 课 6 | `app/cli.py` 打字机输出（`stream_mode="messages"` 混合模式） | [lesson-06](../../stages/2-Agent核心/lessons/lesson-06-Streaming流式输出.md) |
-| 短期记忆（checkpointer） | 阶段 2 · 课 7 | `InMemorySaver` + thread_id：多轮对话记住上文（`demo.py` 场景 6） | [lesson-07](../../stages/2-Agent核心/lessons/lesson-07-Memory记忆.md) |
-| 内置与自定义中间件 | 阶段 3 · 课 8 | `app/middleware/safety.py`：PII 脱敏 + 限额 + 自定义审计中间件 | [lesson-08](../../stages/3-可控性与可靠性/lessons/lesson-08-Middleware中间件.md) |
-| 上下文工程（动态提示词） | 阶段 3 · 课 9 | `customer_prompt`：按运行时用户档案注入系统消息（会员等级影响回答） | [lesson-09](../../stages/3-可控性与可靠性/lessons/lesson-09-ContextEngineering上下文工程.md) |
-| HITL 中断 / 条件中断 / 护栏 | 阶段 3 · 课 10 | 退款分级审批（`when` 谓词）；金额一致性校验护栏 | [lesson-10](../../stages/3-可控性与可靠性/lessons/lesson-10-人机协同与护栏.md) |
-| RAG 知识库构建与检索 | 阶段 3 · 课 11 | `app/kb/loader.py` + `search_policies` 工具（Agentic RAG，k=3） | [lesson-11](../../stages/3-可控性与可靠性/lessons/lesson-11-Retrieval检索与RAG.md) |
-| 多智能体（架构决策 / handoff） | 阶段 4 · 课 12 | 设计决策 1（单 agent vs router 论证）；`escalate_to_human` 转人工 | [lesson-12](../../stages/4-组合与工程化/lessons/lesson-12-Multi-Agent多智能体.md) |
-| 三层测试与可观测性 | 阶段 4 · 课 13 | `tests/`（单元 / 集成 / Evals）；审计中间件记录工具轨迹 | [lesson-13](../../stages/4-组合与工程化/lessons/lesson-13-Testing与Observability.md) |
+| Agent = Model + Harness 心智模型 | 阶段 1 · 课 1 | 整个工程的组装观：`agent.py` 管 harness，`config.py` 管 model | [01](../../stages/1-入门与模型层/lessons/01-LangChain是什么.md) |
+| 模型初始化 / 自定义 endpoint | 阶段 1 · 课 2 | `app/config.py` `build_chat_model()`（OpenAI 兼容端点接入） | [02](../../stages/1-入门与模型层/lessons/02-Models模型层.md) |
+| 消息体系（Human/AI/Tool） | 阶段 1 · 课 3 | 审批流消息序列：AI 工具调用冻结 → Tool 执行结果回填（`demo.py` 场景 3） | [03](../../stages/1-入门与模型层/lessons/03-Messages消息体系.md) |
+| @tool 工具与错误处理 | 阶段 2 · 课 4 | `app/tools/`（6 个工具；金额校验不通过时返回说明而非抛异常） | [04](../../stages/2-Agent核心/lessons/04-Tools工具.md) |
+| create_agent 组装 | 阶段 2 · 课 5 | `app/agent.py`（模型 + 工具 + 中间件 + 检查点） | [05](../../stages/2-Agent核心/lessons/05-Agents智能体核心.md) |
+| 流式输出 | 阶段 2 · 课 6 | `app/cli.py` 打字机输出（`stream_mode="messages"` 混合模式） | [06](../../stages/2-Agent核心/lessons/06-Streaming流式输出.md) |
+| 短期记忆（checkpointer） | 阶段 2 · 课 7 | `InMemorySaver` + thread_id：多轮对话记住上文（`demo.py` 场景 6） | [07](../../stages/2-Agent核心/lessons/07-Memory记忆.md) |
+| 内置与自定义中间件 | 阶段 3 · 课 8 | `app/middleware/safety.py`：PII 脱敏 + 限额 + 自定义审计中间件 | [08](../../stages/3-可控性与可靠性/lessons/08-Middleware中间件.md) |
+| 上下文工程（动态提示词） | 阶段 3 · 课 9 | `customer_prompt`：按运行时用户档案注入系统消息（会员等级影响回答） | [09](../../stages/3-可控性与可靠性/lessons/09-ContextEngineering上下文工程.md) |
+| HITL 中断 / 条件中断 / 护栏 | 阶段 3 · 课 10 | 退款分级审批（`when` 谓词）；金额一致性校验护栏 | [10](../../stages/3-可控性与可靠性/lessons/10-人机协同与护栏.md) |
+| RAG 知识库构建与检索 | 阶段 3 · 课 11 | `app/kb/loader.py` + `search_policies` 工具（Agentic RAG，k=3） | [11](../../stages/3-可控性与可靠性/lessons/11-Retrieval检索与RAG.md) |
+| 多智能体（架构决策 / handoff） | 阶段 4 · 课 12 | 设计决策 1（单 agent vs router 论证）；`escalate_to_human` 转人工 | [12](../../stages/4-组合与工程化/lessons/12-Multi-Agent多智能体.md) |
+| 三层测试与可观测性 | 阶段 4 · 课 13 | `tests/`（单元 / 集成 / Evals）；审计中间件记录工具轨迹 | [13](../../stages/4-组合与工程化/lessons/13-Testing与Observability.md) |
 
 **跨阶段校验**：覆盖 4 个阶段（门槛 ≥3）✅
 

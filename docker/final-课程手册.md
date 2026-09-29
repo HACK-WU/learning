@@ -57,21 +57,21 @@
 
 | 阶段 | 课 | 知识点 |
 |---|---|---|
-| **1** | [课 1·为什么需要Docker](stages/1-容器与镜像基础/lessons/lesson-01-为什么需要Docker.md) | 环境不一致的代价 · 容器与虚拟机的区别 · Docker 的起源与生态位 |
-|  | [课 2·跑起来第一个容器](stages/1-容器与镜像基础/lessons/lesson-02-跑起来第一个容器.md) | 镜像与容器的关系 · docker run 背后发生了什么 · 容器生命周期命令 |
-|  | [课 3·镜像的里子：分层与仓库](stages/1-容器与镜像基础/lessons/lesson-03-镜像的里子：分层与仓库.md) | 联合文件系统与分层 · 仓库、标签与摘要 · 镜像体积从哪来 |
-| **2** | [课 4·Dockerfile入门](stages/2-镜像工程/lessons/lesson-04-Dockerfile入门.md) | Dockerfile 语法骨架 · 构建上下文与 .dockerignore · 构建缓存与指令顺序 |
-|  | [课 5·启动命令与配置注入](stages/2-镜像工程/lessons/lesson-05-启动命令与配置注入.md) | CMD 与 ENTRYPOINT · ENV 与 ARG · 运行时配置覆盖与密钥 |
-|  | [课 6·多阶段构建与镜像瘦身](stages/2-镜像工程/lessons/lesson-06-多阶段构建与镜像瘦身.md) | 多阶段构建 · 基础镜像选型 · 瘦身实操与体积核算 |
-| **3** | [课 7·数据持久化](stages/3-数据与网络/lessons/lesson-07-数据持久化.md) | 容器文件系统的临时性 · 三种挂载方式 · 卷的生命周期与清理 |
-|  | [课 8·容器网络](stages/3-数据与网络/lessons/lesson-08-容器网络.md) | 网络驱动全景 · bridge 网络与端口映射 · 自定义网络与 DNS 服务发现 |
-|  | [课 9·Compose 编排多容器](stages/3-数据与网络/lessons/lesson-09-Compose编排多容器.md) | compose 文件结构 · 一键本地开发环境 · 多文件拆分与复用（2.5）· 健康检查与启动顺序 |
-| **4** | [课 10·资源限制与进程管理](stages/4-生产落地/lessons/lesson-10-资源限制与进程管理.md) | cgroups 资源限制 · 重启策略与自愈 · 优雅停止与 PID 1 |
-|  | [课 11·日志与可观测性](stages/4-生产落地/lessons/lesson-11-日志与可观测性.md) | 日志驱动与日志膨胀 · 健康检查与状态观测 · 容器指标与资源观测 |
-|  | [课 12·容器安全边界](stages/4-生产落地/lessons/lesson-12-容器安全边界.md) | 容器里的 root 是谁 · 能力与系统调用收敛 · 镜像供应链与漏洞 |
-|  | [课 13·CI/CD与交付流水线](stages/4-生产落地/lessons/lesson-13-CI-CD与交付流水线.md) | 镜像仓库与推送流程 · CI 中的构建与缓存 · 部署与回滚 |
-| **5** | [课 14·Docker在容器生态中的位置](stages/5-定位与决策/lessons/lesson-14-Docker在容器生态中的位置.md) | OCI 与运行时栈 · 编排与替代方案 · 容器 vs 虚拟机的选型 |
-|  | [课 15·决策清单与学习地图](stages/5-定位与决策/lessons/lesson-15-决策清单与学习地图.md) | 引入决策树 · 成本与风险清单 · 下一步学习地图 |
+| **1** | [课 1·为什么需要Docker](stages/1-容器与镜像基础/lessons/01-为什么需要Docker.md) | 环境不一致的代价 · 容器与虚拟机的区别 · Docker 的起源与生态位 |
+|  | [课 2·跑起来第一个容器](stages/1-容器与镜像基础/lessons/02-跑起来第一个容器.md) | 镜像与容器的关系 · docker run 背后发生了什么 · 容器生命周期命令 |
+|  | [课 3·镜像的里子：分层与仓库](stages/1-容器与镜像基础/lessons/03-镜像的里子：分层与仓库.md) | 联合文件系统与分层 · 仓库、标签与摘要 · 镜像体积从哪来 |
+| **2** | [课 4·Dockerfile入门](stages/2-镜像工程/lessons/04-Dockerfile入门.md) | Dockerfile 语法骨架 · 构建上下文与 .dockerignore · 构建缓存与指令顺序 |
+|  | [课 5·启动命令与配置注入](stages/2-镜像工程/lessons/05-启动命令与配置注入.md) | CMD 与 ENTRYPOINT · ENV 与 ARG · 运行时配置覆盖与密钥 |
+|  | [课 6·多阶段构建与镜像瘦身](stages/2-镜像工程/lessons/06-多阶段构建与镜像瘦身.md) | 多阶段构建 · 基础镜像选型 · 瘦身实操与体积核算 |
+| **3** | [课 7·数据持久化](stages/3-数据与网络/lessons/07-数据持久化.md) | 容器文件系统的临时性 · 三种挂载方式 · 卷的生命周期与清理 |
+|  | [课 8·容器网络](stages/3-数据与网络/lessons/08-容器网络.md) | 网络驱动全景 · bridge 网络与端口映射 · 自定义网络与 DNS 服务发现 |
+|  | [课 9·Compose 编排多容器](stages/3-数据与网络/lessons/09-Compose编排多容器.md) | compose 文件结构 · 一键本地开发环境 · 多文件拆分与复用（2.5）· 健康检查与启动顺序 |
+| **4** | [课 10·资源限制与进程管理](stages/4-生产落地/lessons/10-资源限制与进程管理.md) | cgroups 资源限制 · 重启策略与自愈 · 优雅停止与 PID 1 |
+|  | [课 11·日志与可观测性](stages/4-生产落地/lessons/11-日志与可观测性.md) | 日志驱动与日志膨胀 · 健康检查与状态观测 · 容器指标与资源观测 |
+|  | [课 12·容器安全边界](stages/4-生产落地/lessons/12-容器安全边界.md) | 容器里的 root 是谁 · 能力与系统调用收敛 · 镜像供应链与漏洞 |
+|  | [课 13·CI/CD与交付流水线](stages/4-生产落地/lessons/13-CI-CD与交付流水线.md) | 镜像仓库与推送流程 · CI 中的构建与缓存 · 部署与回滚 |
+| **5** | [课 14·Docker在容器生态中的位置](stages/5-定位与决策/lessons/14-Docker在容器生态中的位置.md) | OCI 与运行时栈 · 编排与替代方案 · 容器 vs 虚拟机的选型 |
+|  | [课 15·决策清单与学习地图](stages/5-定位与决策/lessons/15-决策清单与学习地图.md) | 引入决策树 · 成本与风险清单 · 下一步学习地图 |
 
 > 合计 **46** 个知识点，分布在 5 个阶段 15 课。
 
@@ -81,11 +81,11 @@
 
 | 场景 | 进入哪一课 | 解决什么遗漏 |
 |---|---|---|
-| Apple 芯片开发机向 amd64 生产交付 | [课 6](stages/2-镜像工程/lessons/lesson-06-多阶段构建与镜像瘦身.md) | 多平台镜像、QEMU / 原生节点 / 交叉编译、manifest 检查 |
-| Compose 开发、调试与安全配置 | [课 9](stages/3-数据与网络/lessons/lesson-09-Compose编排多容器.md) | Profiles、Watch、Secrets 的使用边界 |
-| 镜像成分与构建过程可验证 | [课 12](stages/4-生产落地/lessons/lesson-12-容器安全边界.md) | digest、签名、SBOM、provenance 的分工 |
-| CI 先检查、再测试、最后证明并发布 | [课 13](stages/4-生产落地/lessons/lesson-13-CI-CD与交付流水线.md) | Build checks、目标架构、SBOM / provenance、registry 症状 |
-| 命令打错 daemon 或 context | [课 15](stages/5-定位与决策/lessons/lesson-15-决策清单与学习地图.md) | `docker info`、context、`DOCKER_HOST` 的确认顺序 |
+| Apple 芯片开发机向 amd64 生产交付 | [课 6](stages/2-镜像工程/lessons/06-多阶段构建与镜像瘦身.md) | 多平台镜像、QEMU / 原生节点 / 交叉编译、manifest 检查 |
+| Compose 开发、调试与安全配置 | [课 9](stages/3-数据与网络/lessons/09-Compose编排多容器.md) | Profiles、Watch、Secrets 的使用边界 |
+| 镜像成分与构建过程可验证 | [课 12](stages/4-生产落地/lessons/12-容器安全边界.md) | digest、签名、SBOM、provenance 的分工 |
+| CI 先检查、再测试、最后证明并发布 | [课 13](stages/4-生产落地/lessons/13-CI-CD与交付流水线.md) | Build checks、目标架构、SBOM / provenance、registry 症状 |
+| 命令打错 daemon 或 context | [课 15](stages/5-定位与决策/lessons/15-决策清单与学习地图.md) | `docker info`、context、`DOCKER_HOST` 的确认顺序 |
 
 > 课程入口规则也已统一回补：15 课均有“一句话本质 / 处境对照”、白话“一眼全局图”、本课地图、课首官方核对标记，以及每个知识点的“承接 → 本步”导航。
 
@@ -120,7 +120,7 @@
 
 **关键命令**：`docker version` · `docker run hello-world` · `docker run --rm <镜像> <命令>` · `docker images` · `docker pull <镜像>`
 
-→ [完整讲义](stages/1-容器与镜像基础/lessons/lesson-01-为什么需要Docker.md)
+→ [完整讲义](stages/1-容器与镜像基础/lessons/01-为什么需要Docker.md)
 
 ### 课 2《跑起来第一个容器》
 
@@ -135,7 +135,7 @@
 
 **关键命令**：`docker run -d --name` · `docker run --rm` · `docker run -it` · `docker ps` · `docker logs` · `docker exec` · `docker stop/start/rm` · `docker inspect --format`
 
-→ [完整讲义](stages/1-容器与镜像基础/lessons/lesson-02-跑起来第一个容器.md)
+→ [完整讲义](stages/1-容器与镜像基础/lessons/02-跑起来第一个容器.md)
 
 ### 课 3《镜像的里子：分层与仓库》
 
@@ -150,7 +150,7 @@
 
 **关键命令**：`docker image history` · `docker ps -s` · `docker pull <镜像>@sha256:<digest>` · `docker tag` · `docker system df` · `docker image prune` · `docker system prune [--volumes]`
 
-→ [完整讲义](stages/1-容器与镜像基础/lessons/lesson-03-镜像的里子：分层与仓库.md)
+→ [完整讲义](stages/1-容器与镜像基础/lessons/03-镜像的里子：分层与仓库.md)
 
 ---
 
@@ -171,7 +171,7 @@
 
 **关键命令**：`docker build -t` · `docker build -f` · `docker build --build-arg` · `docker build --target` · `docker build --no-cache` · `docker history` · `docker builder prune`
 
-→ [完整讲义](stages/2-镜像工程/lessons/lesson-04-Dockerfile入门.md)
+→ [完整讲义](stages/2-镜像工程/lessons/04-Dockerfile入门.md)
 
 ### 课 5《启动命令与配置注入》
 
@@ -186,7 +186,7 @@
 
 **关键命令**：`docker stop [-t]` · `docker run -e K=V` · `docker run --env-file` · `docker run --entrypoint` · `docker build --secret` · `docker history`
 
-→ [完整讲义](stages/2-镜像工程/lessons/lesson-05-启动命令与配置注入.md)
+→ [完整讲义](stages/2-镜像工程/lessons/05-启动命令与配置注入.md)
 
 ### 课 6《多阶段构建与镜像瘦身》
 
@@ -203,7 +203,7 @@
 
 **关键命令**：`docker build --target` · `COPY --from=<阶段>` · `docker history --format` · `apt-get install --no-install-recommends` · `apk add --no-cache` · `pip install --no-cache-dir`
 
-→ [完整讲义](stages/2-镜像工程/lessons/lesson-06-多阶段构建与镜像瘦身.md)
+→ [完整讲义](stages/2-镜像工程/lessons/06-多阶段构建与镜像瘦身.md)
 
 ---
 
@@ -227,7 +227,7 @@
 
 **关键命令**：`docker volume create/ls/inspect/rm/prune` · `--mount type=volume|bind|tmpfs` · `-v` · `--volumes-from`
 
-→ [完整讲义](stages/3-数据与网络/lessons/lesson-07-数据持久化.md)
+→ [完整讲义](stages/3-数据与网络/lessons/07-数据持久化.md)
 
 ### 课 8《容器网络》
 
@@ -243,7 +243,7 @@
 
 **关键命令**：`docker network ls/create/inspect/connect/disconnect/rm` · `--network` · `-p` · `-P` · `docker port` · `cat /etc/resolv.conf`
 
-→ [完整讲义](stages/3-数据与网络/lessons/lesson-08-容器网络.md)
+→ [完整讲义](stages/3-数据与网络/lessons/08-容器网络.md)
 
 ### 课 9《Compose 编排多容器》
 
@@ -259,7 +259,7 @@
 
 **关键命令**：`docker compose up -d` · `ps` · `logs -f` · `exec` · `stop/restart` · `down` · `down -v` · `config` · `-p <项目名>`
 
-→ [完整讲义](stages/3-数据与网络/lessons/lesson-09-Compose编排多容器.md)
+→ [完整讲义](stages/3-数据与网络/lessons/09-Compose编排多容器.md)
 
 ---
 
@@ -282,7 +282,7 @@
 
 **关键命令**：`docker run -m/--cpus/--cpu-shares` · `docker stats` · `docker inspect -f '{{.State.OOMKilled}}'` · `--restart=` · `docker stop -t` · `--stop-signal` · `--init`
 
-→ [完整讲义](stages/4-生产落地/lessons/lesson-10-资源限制与进程管理.md)
+→ [完整讲义](stages/4-生产落地/lessons/10-资源限制与进程管理.md)
 
 ### 课 11《日志与可观测性》
 
@@ -298,7 +298,7 @@
 
 **关键命令**：`docker logs -f/--tail/--since` · `--log-driver local` · `--log-opt max-size/max-file` · `--health-cmd` · `docker inspect -f '{{.State.Health.Status}}'` · `docker events` · `docker stats`
 
-→ [完整讲义](stages/4-生产落地/lessons/lesson-11-日志与可观测性.md)
+→ [完整讲义](stages/4-生产落地/lessons/11-日志与可观测性.md)
 
 ### 课 12《容器安全边界》
 
@@ -315,7 +315,7 @@
 
 **关键命令**：`docker run -u` · `USER` · `--cap-drop/--cap-add` · `--security-opt no-new-privileges:true` · `--read-only` · `docker history --no-trunc | grep -iE 'password|secret|token'` · `--mount=type=secret`
 
-→ [完整讲义](stages/4-生产落地/lessons/lesson-12-容器安全边界.md)
+→ [完整讲义](stages/4-生产落地/lessons/12-容器安全边界.md)
 
 ### 课 13《CI/CD 与交付流水线》
 
@@ -331,7 +331,7 @@
 
 **关键命令**：`docker tag` · `docker push` · `docker login --password-stdin` · `--cache-to/--cache-from` · `docker buildx build --platform` · `docker compose up --abort-on-container-exit --exit-code-from`
 
-→ [完整讲义](stages/4-生产落地/lessons/lesson-13-CI-CD与交付流水线.md)
+→ [完整讲义](stages/4-生产落地/lessons/13-CI-CD与交付流水线.md)
 
 ---
 
@@ -353,7 +353,7 @@
 
 **关键命令**：`docker version` · `docker info` · `which dockerd containerd runc` · `docker manifest inspect` · `docker swarm init`
 
-→ [完整讲义](stages/5-定位与决策/lessons/lesson-14-Docker在容器生态中的位置.md)
+→ [完整讲义](stages/5-定位与决策/lessons/14-Docker在容器生态中的位置.md)
 
 ### 课 15《决策清单与学习地图》· 全课程收官
 
@@ -369,7 +369,7 @@
 
 **关键命令**：`docker system df [-v]` · `docker inspect` 的 Privileged / User 字段 · `docker images | grep ':latest'` · `docker compose config`
 
-→ [完整讲义](stages/5-定位与决策/lessons/lesson-15-决策清单与学习地图.md)
+→ [完整讲义](stages/5-定位与决策/lessons/15-决策清单与学习地图.md)
 
 ---
 
@@ -544,7 +544,7 @@
 | 课程目录（含命令速查索引） | [02-课程目录.md](02-课程目录.md) |
 | 学习路径总览 | [01-学习路径总览.md](01-学习路径总览.md) |
 | 学习档案（断点续传） | [00-学习档案.md](00-学习档案.md) |
-| 为什么要学（课 1） | [lesson-01](stages/1-容器与镜像基础/lessons/lesson-01-为什么需要Docker.md) |
+| 为什么要学（课 1） | [01](stages/1-容器与镜像基础/lessons/01-为什么需要Docker.md) |
 | 动手做项目 | [订单服务生产化](projects/订单服务生产化/README.md) |
 | 出事了怎么办 | [09-排障速查手册.md](09-排障速查手册.md) |
 | 新需求怎么设计 | [10-场景解法库.md](10-场景解法库.md) |

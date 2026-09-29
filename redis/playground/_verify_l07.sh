@@ -19,7 +19,7 @@ done
 
 echo ""
 echo "=== 4. 讲义必查项 ==="
-DOC=/mnt/d/projects/learning/redis/stages/4-分布式与生产实践/lessons/lesson-07-分片与集群.md
+DOC=/mnt/d/projects/learning/redis/stages/4-分布式与生产实践/lessons/07-分片与集群.md
 echo "  文件大小: $(wc -c < "$DOC") bytes, $(wc -l < "$DOC") 行"
 grep -q '🚀 下一批接力提示词' "$DOC" && echo "  [OK] 含下一批接力提示词" || echo "  [MISS] 缺下一批接力提示词"
 grep -q '🧭 课程导航' "$DOC" && echo "  [OK] 含课程导航" || echo "  [MISS] 缺课程导航"

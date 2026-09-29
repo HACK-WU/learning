@@ -1,6 +1,6 @@
 # 应用实战 · Raft 与 Gossip 一致性成色
 
-> 对应课程：[第 5 课：Raft 与 Gossip 一致性成色](../../stages/2-核心能力拆解/lessons/lesson-05-Raft与Gossip一致性成色.md) ｜ 覆盖知识点：三种读模式、Raft quorum 与选举窗口、stale 作为降级通道的边界
+> 对应课程：[第 5 课：Raft 与 Gossip 一致性成色](../../stages/2-核心能力拆解/lessons/05-Raft与Gossip一致性成色.md) ｜ 覆盖知识点：三种读模式、Raft quorum 与选举窗口、stale 作为降级通道的边界
 > 定位：**会用，不上生产**——课里学完，在这里动手。
 > 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：[Consul Consistency Modes](https://developer.hashicorp.com/consul/docs/v1.20.x/api-docs/features)）
 
@@ -83,5 +83,5 @@ db_host,   _ = kv_get('config/db_host', 'default') # 必须准，且读频率低
 
 ## 🧭 导航
 
-- ⬅️ 回到课程：[第 5 课：Raft 与 Gossip 一致性成色](../../stages/2-核心能力拆解/lessons/lesson-05-Raft与Gossip一致性成色.md) ｜ 📚 [应用实战索引](../../应用实战/INDEX.md)
+- ⬅️ 回到课程：[第 5 课：Raft 与 Gossip 一致性成色](../../stages/2-核心能力拆解/lessons/05-Raft与Gossip一致性成色.md) ｜ 📚 [应用实战索引](../../应用实战/INDEX.md)
 - ➡️ 下一课实战：[07 · 多数据中心与服务网格](../实战B-Connect最小闭环/README.md)

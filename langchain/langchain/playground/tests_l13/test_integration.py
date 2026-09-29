@@ -4,7 +4,7 @@
 运行：uv run pytest tests_l13/test_integration.py -m integration -v
 
 注意：这一层的断言对象是「结构」而非「内容」——模型每次措辞都不同，
-断言具体文本必然失败（见 lesson-13-flaky-demo.py 的实测对照）。
+断言具体文本必然失败（见 13-flaky-demo.py 的实测对照）。
 """
 import os
 

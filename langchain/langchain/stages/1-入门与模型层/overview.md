@@ -39,6 +39,6 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-01-LangChain是什么.md`
-- [x] `lessons/lesson-02-Models模型层.md`
-- [x] `lessons/lesson-03-Messages消息体系.md`
+- [x] `lessons/01-LangChain是什么.md`
+- [x] `lessons/02-Models模型层.md`
+- [x] `lessons/03-Messages消息体系.md`

@@ -87,9 +87,9 @@ Cache-Control: public, max-age=0, must-revalidate
 
 ### 知识点挂钩
 
-- 强缓存、协商缓存与 `Vary` → [课 7《HTTP 缓存》](../stages/3-缓存与性能/lessons/lesson-07-HTTP缓存.md)。
-- CDN 公共/私有边界 → [课 9《代理、网关与 CDN》](../stages/3-缓存与性能/lessons/lesson-09-代理网关与CDN.md)。
-- 缓存命中与 304 证据 → [课 15《抓包排障与决策清单》](../stages/5-认证联调与决策/lessons/lesson-15-抓包排障与决策清单.md)。
+- 强缓存、协商缓存与 `Vary` → [课 7《HTTP 缓存》](../stages/3-缓存与性能/lessons/07-HTTP缓存.md)。
+- CDN 公共/私有边界 → [课 9《代理、网关与 CDN》](../stages/3-缓存与性能/lessons/09-代理网关与CDN.md)。
+- 缓存命中与 304 证据 → [课 15《抓包排障与决策清单》](../stages/5-认证联调与决策/lessons/15-抓包排障与决策清单.md)。
 
 ### 什么情况下不要用这些方案
 

@@ -33,9 +33,9 @@ echo "===== 人工复核：被报断链的目标文件是否真的存在 ====="
 for p in \
   "/mnt/d/projects/learning/redis/02-课程目录.md" \
   "/mnt/d/projects/learning/redis/stages/02-课程目录.md" \
-  "/mnt/d/projects/learning/redis/stages/1-为什么需要Redis/lessons/lesson-02-跑起来第一个Redis.md" \
-  "/mnt/d/projects/learning/redis/stages/2-数据结构与命令/1-为什么需要Redis/lessons/lesson-02-跑起来第一个Redis.md" \
-  "/mnt/d/projects/learning/redis/stages/3-持久化与高可用/lessons/lesson-06-主从复制与哨兵.md" \
-  "/mnt/d/projects/learning/redis/stages/4-分布式与生产实践/3-持久化与高可用/lessons/lesson-06-主从复制与哨兵.md" ; do
+  "/mnt/d/projects/learning/redis/stages/1-为什么需要Redis/lessons/02-跑起来第一个Redis.md" \
+  "/mnt/d/projects/learning/redis/stages/2-数据结构与命令/1-为什么需要Redis/lessons/02-跑起来第一个Redis.md" \
+  "/mnt/d/projects/learning/redis/stages/3-持久化与高可用/lessons/06-主从复制与哨兵.md" \
+  "/mnt/d/projects/learning/redis/stages/4-分布式与生产实践/3-持久化与高可用/lessons/06-主从复制与哨兵.md" ; do
   if [ -e "$p" ]; then echo "EXISTS   $p"; else echo "MISSING  $p"; fi
 done

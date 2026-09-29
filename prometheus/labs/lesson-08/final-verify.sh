@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ROOT=/mnt/d/projects/learning/prometheus
-F8="$ROOT/stages/3-规模化与生态/lessons/lesson-08-联邦与全局视图.md"
+F8="$ROOT/stages/3-规模化与生态/lessons/08-联邦与全局视图.md"
 echo "=== 1. 讲义文件 ==="
 echo "  大小 = $(wc -c < "$F8") 字节，$(wc -l < "$F8") 行"
 echo

@@ -71,9 +71,9 @@
 
 | 课 | 原文 | 知识点 |
 |---|---|---|
-| 课 1 | [认识 PostgreSQL](stages/1-SQL与关系基础/lessons/lesson-01-认识PostgreSQL.md) | 1.1 PG 是什么 · 1.2 安装与工具链 · 1.3 数据库与模式层级 |
-| 课 2 | [表与数据类型](stages/1-SQL与关系基础/lessons/lesson-02-表与数据类型.md) | 2.1 常用数据类型 · 2.2 建表语法与约束 · 2.3 CRUD 基础 |
-| 课 3 | [查询基础](stages/1-SQL与关系基础/lessons/lesson-03-查询基础.md) | 3.1 WHERE/ORDER BY/LIMIT · 3.2 JOIN 家族 · 3.3 聚合与 GROUP BY |
+| 课 1 | [认识 PostgreSQL](stages/1-SQL与关系基础/lessons/01-认识PostgreSQL.md) | 1.1 PG 是什么 · 1.2 安装与工具链 · 1.3 数据库与模式层级 |
+| 课 2 | [表与数据类型](stages/1-SQL与关系基础/lessons/02-表与数据类型.md) | 2.1 常用数据类型 · 2.2 建表语法与约束 · 2.3 CRUD 基础 |
+| 课 3 | [查询基础](stages/1-SQL与关系基础/lessons/03-查询基础.md) | 3.1 WHERE/ORDER BY/LIMIT · 3.2 JOIN 家族 · 3.3 聚合与 GROUP BY |
 
 ## 课 1：认识 PostgreSQL
 
@@ -164,10 +164,10 @@ LIMIT 50;
 
 | 课 | 原文 | 知识点 |
 |---|---|---|
-| 课 4 | [关系建模](stages/2-数据建模与SQL进阶/lessons/lesson-04-关系建模.md) | 4.1 主键/外键/唯一约束 · 4.2 一对多/多对多/自引用 · 4.3 范式与反范式 |
-| 课 5 | [视图与函数](stages/2-数据建模与SQL进阶/lessons/lesson-05-视图与函数.md) | 5.1 普通/可更新/物化视图 · 5.2 函数与存储过程 · 5.3 触发器 |
-| 课 6 | [CTE 与子查询](stages/2-数据建模与SQL进阶/lessons/lesson-06-CTE与子查询.md) | 6.1 WITH · 6.2 递归 CTE · 6.3 相关子查询 vs JOIN |
-| 课 7 | [窗口函数](stages/2-数据建模与SQL进阶/lessons/lesson-07-窗口函数.md) | 7.1 OVER/PARTITION BY/ORDER BY · 7.2 排名 · 7.3 聚合窗口与滑动 |
+| 课 4 | [关系建模](stages/2-数据建模与SQL进阶/lessons/04-关系建模.md) | 4.1 主键/外键/唯一约束 · 4.2 一对多/多对多/自引用 · 4.3 范式与反范式 |
+| 课 5 | [视图与函数](stages/2-数据建模与SQL进阶/lessons/05-视图与函数.md) | 5.1 普通/可更新/物化视图 · 5.2 函数与存储过程 · 5.3 触发器 |
+| 课 6 | [CTE 与子查询](stages/2-数据建模与SQL进阶/lessons/06-CTE与子查询.md) | 6.1 WITH · 6.2 递归 CTE · 6.3 相关子查询 vs JOIN |
+| 课 7 | [窗口函数](stages/2-数据建模与SQL进阶/lessons/07-窗口函数.md) | 7.1 OVER/PARTITION BY/ORDER BY · 7.2 排名 · 7.3 聚合窗口与滑动 |
 
 ## 课 4：关系建模
 
@@ -255,9 +255,9 @@ LIMIT 50;
 
 | 课 | 原文 | 知识点 |
 |---|---|---|
-| 课 8 | [索引原理](stages/3-索引与查询优化/lessons/lesson-08-索引原理.md) | 8.1 B-Tree · 8.2 Hash/GiST/GIN/BRIN · 8.3 组合索引 |
-| 课 9 | [执行计划](stages/3-索引与查询优化/lessons/lesson-09-执行计划.md) | 9.1 EXPLAIN · 9.2 常见算子 · 9.3 统计信息与 ANALYZE |
-| 课 10 | [慢查询优化实战](stages/3-索引与查询优化/lessons/lesson-10-慢查询优化实战.md) | 10.1 慢查询日志 · 10.2 索引陷阱 · 10.3 SQL 重写 |
+| 课 8 | [索引原理](stages/3-索引与查询优化/lessons/08-索引原理.md) | 8.1 B-Tree · 8.2 Hash/GiST/GIN/BRIN · 8.3 组合索引 |
+| 课 9 | [执行计划](stages/3-索引与查询优化/lessons/09-执行计划.md) | 9.1 EXPLAIN · 9.2 常见算子 · 9.3 统计信息与 ANALYZE |
+| 课 10 | [慢查询优化实战](stages/3-索引与查询优化/lessons/10-慢查询优化实战.md) | 10.1 慢查询日志 · 10.2 索引陷阱 · 10.3 SQL 重写 |
 
 ## 课 8：索引原理
 
@@ -337,9 +337,9 @@ LIMIT 50;
 
 | 课 | 原文 | 知识点 |
 |---|---|---|
-| 课 11 | [事务与隔离级别](stages/4-事务锁与并发/lessons/lesson-11-事务与隔离级别.md) | 11.1 ACID · 11.2 四种隔离级别 · 11.3 脏读/不可重复读/幻读 |
-| 课 12 | [MVCC 与并发控制](stages/4-事务锁与并发/lessons/lesson-12-MVCC与并发控制.md) | 12.1 MVCC · 12.2 可见性与死元组 · 12.3 autovacuum |
-| 课 13 | [锁机制与死锁](stages/4-事务锁与并发/lessons/lesson-13-锁机制与死锁.md) | 13.1 表锁/行锁 · 13.2 显式锁/咨询锁 · 13.3 死锁排查 · 13.4 事务陷阱 |
+| 课 11 | [事务与隔离级别](stages/4-事务锁与并发/lessons/11-事务与隔离级别.md) | 11.1 ACID · 11.2 四种隔离级别 · 11.3 脏读/不可重复读/幻读 |
+| 课 12 | [MVCC 与并发控制](stages/4-事务锁与并发/lessons/12-MVCC与并发控制.md) | 12.1 MVCC · 12.2 可见性与死元组 · 12.3 autovacuum |
+| 课 13 | [锁机制与死锁](stages/4-事务锁与并发/lessons/13-锁机制与死锁.md) | 13.1 表锁/行锁 · 13.2 显式锁/咨询锁 · 13.3 死锁排查 · 13.4 事务陷阱 |
 
 ## 课 11：事务与隔离级别
 
@@ -408,10 +408,10 @@ LIMIT 50;
 
 | 课 | 原文 | 知识点 |
 |---|---|---|
-| 课 14 | [备份与恢复](stages/5-运维与生产化/lessons/lesson-14-备份与恢复.md) | 14.1 逻辑备份 · 14.2 物理备份 · 14.3 PITR |
-| 课 15 | [复制与高可用](stages/5-运维与生产化/lessons/lesson-15-复制与高可用.md) | 15.1 流复制 · 15.2 切换与复制槽 · 15.3 HA 方案 |
-| 课 16 | [监控与性能](stages/5-运维与生产化/lessons/lesson-16-监控与性能.md) | 16.1 指标 · 16.2 pg_stat_* · 16.3 监控工具 |
-| 课 17 | [扩展与安全](stages/5-运维与生产化/lessons/lesson-17-扩展与安全.md) | 17.1 扩展 · 17.2 权限/RLS · 17.3 连接池 · 17.4 升级迁移 |
+| 课 14 | [备份与恢复](stages/5-运维与生产化/lessons/14-备份与恢复.md) | 14.1 逻辑备份 · 14.2 物理备份 · 14.3 PITR |
+| 课 15 | [复制与高可用](stages/5-运维与生产化/lessons/15-复制与高可用.md) | 15.1 流复制 · 15.2 切换与复制槽 · 15.3 HA 方案 |
+| 课 16 | [监控与性能](stages/5-运维与生产化/lessons/16-监控与性能.md) | 16.1 指标 · 16.2 pg_stat_* · 16.3 监控工具 |
+| 课 17 | [扩展与安全](stages/5-运维与生产化/lessons/17-扩展与安全.md) | 17.1 扩展 · 17.2 权限/RLS · 17.3 连接池 · 17.4 升级迁移 |
 
 ## 课 14：备份与恢复
 

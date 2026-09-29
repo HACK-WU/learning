@@ -1,6 +1,6 @@
 #!/bin/bash
 # 课 10 评审辅助 3：pedagogy 视角 —— 正文数据自洽性与前后一致性
-LESSON="/mnt/d/projects/learning/doris/stages/4-分布式运维与生产落地/lessons/lesson-10-资源隔离与负载管理.md"
+LESSON="/mnt/d/projects/learning/doris/stages/4-分布式运维与生产落地/lessons/10-资源隔离与负载管理.md"
 echo "===== 1. 五幕结构 ====="
 for sec in "第一幕" "第二幕" "第三幕" "第四幕" "第五幕"; do
   if grep -q "## $sec" "$LESSON"; then echo "  [OK] 含 $sec"; else echo "  [FAIL] 缺 $sec"; fi
@@ -65,7 +65,7 @@ echo "  <details> 答案块: $(grep -c '<details>' "$LESSON")"
 
 echo ""
 echo "===== 10. 导航链接 ====="
-for l in "lesson-09-副本高可用与扩缩容.md" "lesson-11-日常运维SchemaChange备份与升级.md" "../../../02-课程目录.md" "../overview.md"; do
+for l in "09-副本高可用与扩缩容.md" "11-日常运维SchemaChange备份与升级.md" "../../../02-课程目录.md" "../overview.md"; do
   if grep -q "$l" "$LESSON"; then echo "  [OK] $l"; else echo "  [FAIL] $l"; fi
 done
 

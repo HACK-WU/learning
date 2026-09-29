@@ -33,7 +33,7 @@ echo "=== 汇总: 可达=$OK  死链=$BAD ==="
 
 echo
 echo "=== 重点复核：课 7 的所有出链 ==="
-F7="$ROOT/stages/3-规模化与生态/lessons/lesson-07-远程读写与Agent模式.md"
+F7="$ROOT/stages/3-规模化与生态/lessons/07-远程读写与Agent模式.md"
 D7=$(dirname "$F7")
 grep -oE '\]\([^)]+\)' "$F7" | sed 's/^](//; s/)$//' | grep -v '^http' | sort -u | while read -r lk; do
   p="$D7/$lk"

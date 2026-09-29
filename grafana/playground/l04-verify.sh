@@ -2,7 +2,7 @@
 # 课 4 交付前结构校验（借鉴课 1/2/3 的 l0X-verify.sh，并修正 B3 的判空缺陷）
 set -u
 
-F="/mnt/d/projects/learning/grafana/stages/2-查得到/lessons/lesson-04-查询编辑器与数据源协议：一次查询的完整旅程.md"
+F="/mnt/d/projects/learning/grafana/stages/2-查得到/lessons/04-查询编辑器与数据源协议：一次查询的完整旅程.md"
 ROOT="/mnt/d/projects/learning/grafana"
 BLOCK=0
 

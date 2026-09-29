@@ -114,9 +114,9 @@ awk 的 `BEGIN / 模式{动作} / END` 三段模型是"一次遍历完成筛选+
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-08-子shell与执行上下文.md`
-- [x] `lessons/lesson-09-信号trap与清理.md`
-- [x] `lessons/lesson-10-与文本工具的协作.md`
+- [x] `lessons/08-子shell与执行上下文.md`
+- [x] `lessons/09-信号trap与清理.md`
+- [x] `lessons/10-与文本工具的协作.md`
 
 ## 💡 与阶段 4 的分工
 

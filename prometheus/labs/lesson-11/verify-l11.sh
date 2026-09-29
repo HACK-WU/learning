@@ -3,14 +3,14 @@ D=/mnt/d/projects/learning/prometheus
 PASS=0; FAIL=0
 ck(){ if [ "$2" = "$3" ]; then echo "PASS  $1"; PASS=$((PASS+1)); else echo "FAIL  $1 (expect=$3 actual=$2)"; FAIL=$((FAIL+1)); fi; }
 gc(){ grep -c -- "$2" "$1" 2>/dev/null || echo 0; }
-G=$D/stages/4-生产运维/lessons/lesson-11-容量规划与调优.md
+G=$D/stages/4-生产运维/lessons/11-容量规划与调优.md
 AR=$D/00-学习档案.md; RV=$D/00-评审清单.md; OV=$D/stages/4-生产运维/overview.md
 CD=$D/02-课程目录.md; LP=$D/01-学习路径总览.md
 
 echo "===== A. 四处档案同步 ====="
 ck "学习档案：课11 三知识点已完成" "$(gc $AR '| 4 | 课 11 |.*✅ 已完成')" "3"
 ck "评审清单：含课11评审记录"      "$(gc $RV '课 11《容量规划与调优》')" "2"
-ck "阶段overview：课11 已勾选"     "$(gc $OV '\- \[x\] `lessons/lesson-11-容量规划与调优.md`')" "1"
+ck "阶段overview：课11 已勾选"     "$(gc $OV '\- \[x\] `lessons/11-容量规划与调优.md`')" "1"
 ck "课程目录：课11 标 ✅"          "$(gc $CD '| 11 | 容量规划与调优 |.*✅')" "1"
 ck "路径总览：阶段4 进行中"        "$(gc $LP '阶段 4：生产运维（🔄 进行中')" "1"
 ck "路径总览：总进度 33/36"        "$(gc $LP '33/36')" "1"

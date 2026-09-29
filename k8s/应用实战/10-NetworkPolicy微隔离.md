@@ -1,6 +1,6 @@
 # 应用实战 · 只让该连的连上，数据库不再裸奔
 
-> 对应课程：[第 10 课：NetworkPolicy：集群内防火墙](../stages/3-网络与服务暴露/lessons/lesson-10-NetworkPolicy集群内防火墙.md) ｜ 覆盖知识点：NetworkPolicy 白名单模型、selector 与 ipBlock
+> 对应课程：[第 10 课：NetworkPolicy：集群内防火墙](../stages/3-网络与服务暴露/lessons/10-NetworkPolicy集群内防火墙.md) ｜ 覆盖知识点：NetworkPolicy 白名单模型、selector 与 ipBlock
 > 定位：**会用，不上生产**——课里学完，在这里动手。课内第四幕做的是「default-deny、策略叠加、DNS 陷阱」的机制验证（单节点 kindnet）；这里做的是**一个真实的防护场景：三层应用里数据库只允许应用访问**，并在**三节点 + Calico** 环境下补上课内无法验证的部分：跨节点、按命名空间放行、按网段放行。
 > 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：[NetworkPolicy 官方文档](https://kubernetes.io/docs/concepts/services-networking/network-policies/)、[Calico NetworkPolicy](https://docs.tigera.io/calico/latest/network-policy/get-started/kubernetes-policy)）
 > 🧪 **本篇全部输出为本机 kind 集群 `k8s-c1-calico`（k8s v1.34.0 + Calico v3.31.0，1 control-plane + 2 worker）实测**，非推演；实测脚本见 `.plans/2026-09-16-k8s-应用实战补齐/t10-step1.sh` ~ `t10-ipblock.sh`
@@ -486,7 +486,7 @@ EOF
 
 ## 🧭 导航
 
-- ⬅️ 回到课程：[第 10 课：NetworkPolicy：集群内防火墙](../stages/3-网络与服务暴露/lessons/lesson-10-NetworkPolicy集群内防火墙.md)
+- ⬅️ 回到课程：[第 10 课：NetworkPolicy：集群内防火墙](../stages/3-网络与服务暴露/lessons/10-NetworkPolicy集群内防火墙.md)
 - 📚 全部实战：[应用实战索引](INDEX.md)
 - ⬅️ 上一篇：[09 · 多团队共用入口与标准灰度](09-GatewayAPI与流量治理.md)
 

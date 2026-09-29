@@ -1,6 +1,6 @@
 # 应用实战 · 日常维护与 KRaft 运维
 
-> 对应课程：[第 5 课：日常维护与 KRaft 运维](../stages/2-日常操作与容量治理/lessons/lesson-05-日常维护与KRaft运维.md) ｜ 覆盖知识点：优雅关停与维护窗口、KRaft 控制器仲裁运维、磁盘/日志目录与 JVM/OS 维护
+> 对应课程：[第 5 课：日常维护与 KRaft 运维](../stages/2-日常操作与容量治理/lessons/05-日常维护与KRaft运维.md) ｜ 覆盖知识点：优雅关停与维护窗口、KRaft 控制器仲裁运维、磁盘/日志目录与 JVM/OS 维护
 > 定位：**会用，不上生产**——把一张“重启清单”演进成能区分 Broker、Controller、数据目录和元数据目录的维护窗口编排。
 > 📖 结论已按官方文档核对（核查于 2026-09 ｜ 来源：[Basic Kafka Operations](https://kafka.apache.org/43/operations/basic-kafka-operations/)、[KRaft](https://kafka.apache.org/43/operations/kraft/)、[Hardware and OS](https://kafka.apache.org/43/operations/hardware-and-os/)、[Monitoring](https://kafka.apache.org/43/operations/monitoring/)）。
 
@@ -87,5 +87,5 @@ sysctl vm.max_map_count
 
 ## 🧭 导航
 
-- ⬅️ 回到课程：[第 5 课：日常维护与 KRaft 运维](../stages/2-日常操作与容量治理/lessons/lesson-05-日常维护与KRaft运维.md)
+- ⬅️ 回到课程：[第 5 课：日常维护与 KRaft 运维](../stages/2-日常操作与容量治理/lessons/05-日常维护与KRaft运维.md)
 - 📚 全部实战：[应用实战索引](INDEX.md)

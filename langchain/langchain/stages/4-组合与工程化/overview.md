@@ -36,8 +36,8 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-12-Multi-Agent多智能体.md`
-- [x] `lessons/lesson-13-Testing与Observability.md`
+- [x] `lessons/12-Multi-Agent多智能体.md`
+- [x] `lessons/13-Testing与Observability.md`
 - [x] `应用实战/13-Testing与Observability.md`（课 13 配套实战篇；应用实战机制自课 13 起启用）
 - [x] `projects/智能客服助手/`（结课综合实战，2026-09-16 交付）
 

@@ -63,7 +63,7 @@
 
 - **上一阶段**：[阶段 3 处理层 Logstash](../3-处理层Logstash/overview.md)
 - **下一阶段**：无（**全课收官阶段**，含课 10 / 11 / 12 与全课收束）
-- **阶段内课程**：[课 10](lessons/lesson-10-日志的存储策略.md) ｜ [课 11](lessons/lesson-11-Kibana从Discover到Dashboard.md) ｜ [课 12](lessons/lesson-12-告警与生产落地.md)
+- **阶段内课程**：[课 10](lessons/10-日志的存储策略.md) ｜ [课 11](lessons/11-Kibana从Discover到Dashboard.md) ｜ [课 12](lessons/12-告警与生产落地.md)
 - **返回**：ELK 子教程阶段 1 起点 [全景与起步](../1-全景与起步/overview.md)
 
 ## 🔧 实操环境速记

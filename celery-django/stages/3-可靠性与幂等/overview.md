@@ -36,8 +36,8 @@
 
 ## 本阶段产出
 
-- [x] [`lessons/lesson-05-确认机制与重试策略.md`](lessons/lesson-05-确认机制与重试策略.md)
-- [x] [`lessons/lesson-06-Django事务与ORM的坑.md`](lessons/lesson-06-Django事务与ORM的坑.md)
+- [x] [`lessons/05-确认机制与重试策略.md`](lessons/05-确认机制与重试策略.md)
+- [x] [`lessons/06-Django事务与ORM的坑.md`](lessons/06-Django事务与ORM的坑.md)
 
 ---
 

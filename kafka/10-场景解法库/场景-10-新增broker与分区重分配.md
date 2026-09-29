@@ -205,11 +205,11 @@ kafka-topics.sh --bootstrap-server localhost:9092 \
 
 ### 知识点挂钩
 
-- 分区、副本、leader 与 rack → 阶段 2 · [课 4 Topic、Partition 与 Broker](../stages/2-核心架构/lessons/lesson-04-Topic、Partition与Broker.md)；阶段 3 · [课 7 副本机制与故障转移](../stages/3-可靠性与高可用/lessons/lesson-07-副本机制与故障转移.md)
-- 指标、URP、请求队列与 LAG → 阶段 6 · [课 15 监控与可观测](../stages/6-运维与可观测/lessons/lesson-15-监控与可观测.md)
-- 重分配、限流、优雅运维 → 阶段 6 · [课 16 集群运维操作](../stages/6-运维与可观测/lessons/lesson-16-集群运维操作.md)
-- 请求处理咽喉与“为什么搬迁影响延迟” → 阶段 7 · [课 17 网络层与请求处理模型](../stages/7-实现原理/lessons/lesson-17-网络层与请求处理模型.md)
-- **解法映射**：A → [课 4](../stages/2-核心架构/lessons/lesson-04-Topic、Partition与Broker.md) + [课 16](../stages/6-运维与可观测/lessons/lesson-16-集群运维操作.md)；B → [课 4](../stages/2-核心架构/lessons/lesson-04-Topic、Partition与Broker.md)；C → [课 7](../stages/3-可靠性与高可用/lessons/lesson-07-副本机制与故障转移.md) + [课 15](../stages/6-运维与可观测/lessons/lesson-15-监控与可观测.md)；D → [课 16](../stages/6-运维与可观测/lessons/lesson-16-集群运维操作.md) + [课 15](../stages/6-运维与可观测/lessons/lesson-15-监控与可观测.md)；E → [课 7](../stages/3-可靠性与高可用/lessons/lesson-07-副本机制与故障转移.md) + [课 4](../stages/2-核心架构/lessons/lesson-04-Topic、Partition与Broker.md)
+- 分区、副本、leader 与 rack → 阶段 2 · [课 4 Topic、Partition 与 Broker](../stages/2-核心架构/lessons/04-Topic、Partition与Broker.md)；阶段 3 · [课 7 副本机制与故障转移](../stages/3-可靠性与高可用/lessons/07-副本机制与故障转移.md)
+- 指标、URP、请求队列与 LAG → 阶段 6 · [课 15 监控与可观测](../stages/6-运维与可观测/lessons/15-监控与可观测.md)
+- 重分配、限流、优雅运维 → 阶段 6 · [课 16 集群运维操作](../stages/6-运维与可观测/lessons/16-集群运维操作.md)
+- 请求处理咽喉与“为什么搬迁影响延迟” → 阶段 7 · [课 17 网络层与请求处理模型](../stages/7-实现原理/lessons/17-网络层与请求处理模型.md)
+- **解法映射**：A → [课 4](../stages/2-核心架构/lessons/04-Topic、Partition与Broker.md) + [课 16](../stages/6-运维与可观测/lessons/16-集群运维操作.md)；B → [课 4](../stages/2-核心架构/lessons/04-Topic、Partition与Broker.md)；C → [课 7](../stages/3-可靠性与高可用/lessons/07-副本机制与故障转移.md) + [课 15](../stages/6-运维与可观测/lessons/15-监控与可观测.md)；D → [课 16](../stages/6-运维与可观测/lessons/16-集群运维操作.md) + [课 15](../stages/6-运维与可观测/lessons/15-监控与可观测.md)；E → [课 7](../stages/3-可靠性与高可用/lessons/07-副本机制与故障转移.md) + [课 4](../stages/2-核心架构/lessons/04-Topic、Partition与Broker.md)
 
 ### 什么情况下此方案不适用
 

@@ -4,7 +4,7 @@
 # 输出：每项 [OK] / [FAIL]，末尾 VERIFY_OK 或 VERIFY_FAIL
 
 BASE="/mnt/d/projects/learning/doris"
-LESSON="$BASE/stages/4-分布式运维与生产落地/lessons/lesson-09-副本高可用与扩缩容.md"
+LESSON="$BASE/stages/4-分布式运维与生产落地/lessons/09-副本高可用与扩缩容.md"
 ASSETS="$BASE/stages/4-分布式运维与生产落地/assets"
 SCRIPTS="$BASE/assets"
 PASS=0
@@ -59,12 +59,12 @@ grep -q "same host" "$LESSON"; chk $? "含反亲和报错原文"
 
 echo ""
 echo "===== 6. SVG 资源 ====="
-[ -f "$ASSETS/lesson-09-replica.svg" ]; chk $? "replica.svg 存在"
-[ -f "$ASSETS/lesson-09-summary.svg" ]; chk $? "summary.svg 存在"
-[ -s "$ASSETS/lesson-09-replica.svg" ]; chk $? "replica.svg 非空"
-[ -s "$ASSETS/lesson-09-summary.svg" ]; chk $? "summary.svg 非空"
-grep -q "lesson-09-replica.svg" "$LESSON"; chk $? "正文引用 replica.svg"
-grep -q "lesson-09-summary.svg" "$LESSON"; chk $? "正文引用 summary.svg"
+[ -f "$ASSETS/09-replica.svg" ]; chk $? "replica.svg 存在"
+[ -f "$ASSETS/09-summary.svg" ]; chk $? "summary.svg 存在"
+[ -s "$ASSETS/09-replica.svg" ]; chk $? "replica.svg 非空"
+[ -s "$ASSETS/09-summary.svg" ]; chk $? "summary.svg 非空"
+grep -q "09-replica.svg" "$LESSON"; chk $? "正文引用 replica.svg"
+grep -q "09-summary.svg" "$LESSON"; chk $? "正文引用 summary.svg"
 
 echo ""
 echo "===== 7. 交付脚本 ====="
@@ -114,13 +114,13 @@ grep -q "课 9 | FE 高可用 | ✅" "$BASE/00-学习档案.md"; chk $? "学习�
 grep -q "课 9 | 扩缩容与数据均衡 | ✅" "$BASE/00-学习档案.md"; chk $? "学习档案：扩缩容与数据均衡 已勾"
 grep -qE "阶段 3·课 9|阶段 4·课 9" "$BASE/00-评审清单.md"; chk $? "评审清单：课 9 已记录"
 grep -qE "课 9《副本[、]?高可用与扩缩容》核心结论" "$BASE/stages/4-分布式运维与生产落地/overview.md"; chk $? "阶段 overview：课 9 核心结论"
-grep -q "lesson-09-副本高可用与扩缩容.md" "$BASE/02-课程目录.md"; chk $? "课程目录：课 9 已链接"
+grep -q "09-副本高可用与扩缩容.md" "$BASE/02-课程目录.md"; chk $? "课程目录：课 9 已链接"
 grep -qE "27 */ *36" "$BASE/01-学习路径总览.md"; chk $? "学习路径：进度 27/36"
 
 echo ""
 echo "===== 12. 导航链接 ====="
-grep -q "../../3-数据导入与查询/lessons/lesson-08-多表关联与高级SQL.md" "$LESSON"; chk $? "上一课链接正确（../../3-...）"
-grep -q "lesson-10-资源隔离与负载管理.md" "$LESSON"; chk $? "下一课链接存在"
+grep -q "../../3-数据导入与查询/lessons/08-多表关联与高级SQL.md" "$LESSON"; chk $? "上一课链接正确（../../3-...）"
+grep -q "10-资源隔离与负载管理.md" "$LESSON"; chk $? "下一课链接存在"
 grep -q "../../../02-课程目录.md" "$LESSON"; chk $? "返回目录链接正确（../../../）"
 grep -q "../overview.md" "$LESSON"; chk $? "返回阶段链接正确（../overview.md）"
 

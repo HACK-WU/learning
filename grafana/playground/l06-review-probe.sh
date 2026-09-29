@@ -2,7 +2,7 @@
 # 课 6 双视角评审核查：逐条回读原文核验
 set -u
 
-F="/mnt/d/projects/learning/grafana/stages/2-查得到/lessons/lesson-06-变量进阶与动态仪表盘.md"
+F="/mnt/d/projects/learning/grafana/stages/2-查得到/lessons/06-变量进阶与动态仪表盘.md"
 
 echo "=========================================================="
 echo " 课 6 评审核查：逐条回读原文核验"

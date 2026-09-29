@@ -37,7 +37,7 @@ done
 
 echo ""
 echo "--- [C] 讲义与档案（须未被忽略）---"
-DOC="grafana/stages/2-查得到/lessons/lesson-05-Transformations：把查出来的数据捏成想要的形状.md"
+DOC="grafana/stages/2-查得到/lessons/05-Transformations：把查出来的数据捏成想要的形状.md"
 for f in "$DOC" "grafana/00-学习档案.md" "grafana/00-评审清单.md" \
          "grafana/02-课程目录.md" "grafana/01-学习路径总览.md" \
          "grafana/stages/2-查得到/overview.md"; do

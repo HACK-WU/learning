@@ -25,8 +25,8 @@ for f in \
   00-学习档案.md 00-评审清单.md 01-学习路径总览.md 02-课程目录.md \
   assets/learning-path-overview.svg \
   stages/1-看得见/overview.md \
-  stages/1-看得见/lessons/lesson-01-Grafana是谁：一个不存数据的看图工具.md \
-  stages/1-看得见/lessons/lesson-02-第一个面板：从零到看得见.md \
+  stages/1-看得见/lessons/01-Grafana是谁：一个不存数据的看图工具.md \
+  stages/1-看得见/lessons/02-第一个面板：从零到看得见.md \
   stages/1-看得见/assets/stage-01-kan-de-jian-path.svg \
   playground/l00-env-up.sh \
   playground/l01-forms.py \

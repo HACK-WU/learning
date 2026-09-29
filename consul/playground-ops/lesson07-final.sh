@@ -14,7 +14,7 @@ echo "  共 $TOT 条，断链 $BAD 条"
 
 echo
 echo "===== 2. 课7 文件与结构 ====="
-L7="$R/子教程/运维专项/lessons/lesson-07-版本升级与迁移.md"
+L7="$R/子教程/运维专项/lessons/07-版本升级与迁移.md"
 echo "  大小: $(wc -c < "$L7") 字节, 行数: $(wc -l < "$L7")"
 echo "  实测边界标注: $(grep -c '实测边界' "$L7")"
 echo "  官方引用: $(grep -c 'docs.hashicorp.com\|consul.io/docs' "$L7")"

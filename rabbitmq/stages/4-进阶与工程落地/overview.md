@@ -39,7 +39,7 @@
 
 ## 本阶段产出
 
-- [ ] `lessons/lesson-09-Python客户端工程实践.md`
-- [ ] `lessons/lesson-10-高级特性.md`
-- [ ] `lessons/lesson-11-集群与高可用.md`
-- [ ] `lessons/lesson-12-架构落地与选型决策.md`
+- [ ] `lessons/09-Python客户端工程实践.md`
+- [ ] `lessons/10-高级特性.md`
+- [ ] `lessons/11-集群与高可用.md`
+- [ ] `lessons/12-架构落地与选型决策.md`

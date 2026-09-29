@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # 课 7 讲义双视角评审辅助校验
-F=/mnt/d/projects/learning/prometheus/stages/3-规模化与生态/lessons/lesson-07-远程读写与Agent模式.md
+F=/mnt/d/projects/learning/prometheus/stages/3-规模化与生态/lessons/07-远程读写与Agent模式.md
 V=0   # 违规计数
 
 echo "=== pedagogy 视角：结构完整性 ==="

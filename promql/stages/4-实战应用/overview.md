@@ -19,8 +19,8 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-11-实战一-从查询到告警规则.md`
-- [x] `lessons/lesson-12-实战二-Grafana面板套路与查询优化.md`
+- [x] `lessons/11-实战一-从查询到告警规则.md`
+- [x] `lessons/12-实战二-Grafana面板套路与查询优化.md`
 - [x] `final-课程手册.md`（全书汇总，2026-09-02 汇总评审通过）
 
 ## 阶段通关标准

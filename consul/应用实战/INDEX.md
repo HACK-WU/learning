@@ -13,11 +13,11 @@
 
 | 篇 | 配套课 | 场景（一句话） | 覆盖知识点 | 实战链接 |
 |----|--------|---------------|-----------|----------|
-| **A** | [课 5 Raft 与 Gossip 一致性成色](../stages/2-核心能力拆解/lessons/lesson-05-Raft与Gossip一致性成色.md) | 读多写少，怎么把读压力从 leader 身上卸下来 | 三种读模式（default / consistent / stale）、Raft quorum 与选举窗口、stale 作为降级通道的边界 | [实战A-读模式实测](../practices/实战A-读模式实测/README.md) |
-| **B** | [课 7 多数据中心与服务网格](../stages/2-核心能力拆解/lessons/lesson-07-多数据中心与服务网格.md) | 服务间流量要加密 + 身份认证，但应用不想改代码 | Connect sidecar 注册、mTLS 数据面、intention 授权、SPIFFE 身份、网格可被绕过的真实边界 | [实战B-Connect最小闭环](../practices/实战B-Connect最小闭环/README.md) |
-| **C** | [课 8 ACL 与安全模型](../stages/2-核心能力拆解/lessons/lesson-08-ACL与安全模型.md) | 三个团队共用一套 Consul，怎么做到"我的东西只有我能改" | ACL 三层模型（token / policy / rule）、默认策略与匿名 token、权限矩阵验证、静默失效的两种形态 | [实战C-ACL生产权限模型](../practices/实战C-ACL生产权限模型/README.md) |
-| **D** | [课 7 多数据中心与服务网格](../stages/2-核心能力拆解/lessons/lesson-07-多数据中心与服务网格.md) | 新版服务要上线，怎么先放 10% 流量进去试 | discovery chain 解析链、协议前提（http vs tcp）、子集与权重切分、控制面与数据面的分工边界 | [实战D-灰度发布与流量切分](../practices/实战D-灰度发布与流量切分/README.md) |
-| **E** | [课 7 多数据中心与服务网格](../stages/2-核心能力拆解/lessons/lesson-07-多数据中心与服务网格.md) | 网关配好了却没人转发，怎么让它真的按规则分流 | Envoy 网关容器化启动、xDS bootstrap 与 CA、Host 头路由匹配、sidecar 承接、权重热更新、intention 未拦截的边界 | [实战E-北向网关与真实数据面](../practices/实战E-北向网关与真实数据面/README.md) |
+| **A** | [课 5 Raft 与 Gossip 一致性成色](../stages/2-核心能力拆解/lessons/05-Raft与Gossip一致性成色.md) | 读多写少，怎么把读压力从 leader 身上卸下来 | 三种读模式（default / consistent / stale）、Raft quorum 与选举窗口、stale 作为降级通道的边界 | [实战A-读模式实测](../practices/实战A-读模式实测/README.md) |
+| **B** | [课 7 多数据中心与服务网格](../stages/2-核心能力拆解/lessons/07-多数据中心与服务网格.md) | 服务间流量要加密 + 身份认证，但应用不想改代码 | Connect sidecar 注册、mTLS 数据面、intention 授权、SPIFFE 身份、网格可被绕过的真实边界 | [实战B-Connect最小闭环](../practices/实战B-Connect最小闭环/README.md) |
+| **C** | [课 8 ACL 与安全模型](../stages/2-核心能力拆解/lessons/08-ACL与安全模型.md) | 三个团队共用一套 Consul，怎么做到"我的东西只有我能改" | ACL 三层模型（token / policy / rule）、默认策略与匿名 token、权限矩阵验证、静默失效的两种形态 | [实战C-ACL生产权限模型](../practices/实战C-ACL生产权限模型/README.md) |
+| **D** | [课 7 多数据中心与服务网格](../stages/2-核心能力拆解/lessons/07-多数据中心与服务网格.md) | 新版服务要上线，怎么先放 10% 流量进去试 | discovery chain 解析链、协议前提（http vs tcp）、子集与权重切分、控制面与数据面的分工边界 | [实战D-灰度发布与流量切分](../practices/实战D-灰度发布与流量切分/README.md) |
+| **E** | [课 7 多数据中心与服务网格](../stages/2-核心能力拆解/lessons/07-多数据中心与服务网格.md) | 网关配好了却没人转发，怎么让它真的按规则分流 | Envoy 网关容器化启动、xDS bootstrap 与 CA、Host 头路由匹配、sidecar 承接、权重热更新、intention 未拦截的边界 | [实战E-北向网关与真实数据面](../practices/实战E-北向网关与真实数据面/README.md) |
 
 > 五篇均为**渐进演进**结构（基础实现 → 它的问题 → 综合实现 → 边界），每篇配 **3 张分步设计图**（共 15 张，入各篇 `assets/`，命名 `app-step{N}-{主题}.svg`）。
 

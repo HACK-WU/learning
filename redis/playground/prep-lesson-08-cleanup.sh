@@ -35,7 +35,7 @@ echo "--- 期望：只剩 6379 ---"
 echo
 echo "===== 5. 交付物校验 ====="
 cd /mnt/d/projects/learning/redis
-L8="stages/4-分布式与生产实践/lessons/lesson-08-缓存设计.md"
+L8="stages/4-分布式与生产实践/lessons/08-缓存设计.md"
 echo "课 8 讲义: $(wc -c < "$L8") 字节, $(wc -l < "$L8") 行"
 echo "--- 必查项 ---"
 grep -c "🚀 下一批接力提示词" "$L8" | xargs echo "接力提示词段:"
@@ -58,7 +58,7 @@ grep -c "\[x\] 阶段 4·课 8" 00-评审清单.md
 echo "--- 评审清单 记录 ---"
 grep -c "阶段4·课8《缓存设计》" 00-评审清单.md
 echo "--- 课程目录 课8 链接 ---"
-grep -c "lesson-08-缓存设计.md" 02-课程目录.md
+grep -c "08-缓存设计.md" 02-课程目录.md
 echo "--- overview 课8 产出 ---"
 grep -c "\[x\] \`lessons/lesson-08" stages/4-分布式与生产实践/overview.md
 

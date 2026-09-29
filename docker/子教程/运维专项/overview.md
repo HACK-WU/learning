@@ -28,7 +28,7 @@
 | **课 1：守护进程与主机视角** | ① 引擎的三层配置（systemd drop-in / `daemon.json` / 启动参数）与谁覆盖谁 ② 守护进程日志与"起不来"的三板斧 ③ `docker.sock` 与 2375 的暴露面 | 课 1 `docker info`、课 10 live restore、课 12 socket 风险 | ✅ 已完成（2026-09-20，897 行，全 🟢 实测） |
 | **课 2：磁盘与空间治理** | ① 数据根目录与存储驱动（`rootfs`/`volumes`/`containers` 职责） ② `docker system df` 四分法**与它的盲区**（日志不入账） ③ 日志碎纸机（未轮转）与 `prune` 的安全边界 | 课 3 清理命令（入门级，未讲容量治理） | ✅ 已完成（2026-09-20，969 行，全 🟢 实测） |
 | **课 3：监控指标与告警** | ① daemon Prometheus 指标与 `docker stats` 的分工（快照 vs 趋势，同源 cgroup v2） ② **指标语义三步核验**（值域 / 语义出处 / 连续采样） ③ 从指标到告警规则与阈值（本机基线 + PSI + OOMKilled 陷阱） | 课 11 `docker stats`、课 10 资源限制 | ✅ 已完成（2026-09-20，960 行，全 🟢 实测） |
-| **课 4：备份恢复与迁移** | ① 卷备份与数据库一致性（物理 vs 逻辑 / 活跃写入 / 具名·匿名·孤儿卷） ② 镜像与 registry 迁移（`save`/`load` vs 仓库对拷 / `RepoDigests` 判本地构建） ③ 整机搬迁与恢复演练（四类资产 / bind mount 易漏 / RPO·RTO） | 课 7 volume tar 套路、课 13 `save`/`load`（速查卡） | ✅ 已完成（2026-09-20，**1077 行**，全 🟢 实测）＋ 配套[《备份演练实录》](lessons/lesson-04-备份演练实录.md)（方案 A 真实跑通，**RTO 4 秒**） |
+| **课 4：备份恢复与迁移** | ① 卷备份与数据库一致性（物理 vs 逻辑 / 活跃写入 / 具名·匿名·孤儿卷） ② 镜像与 registry 迁移（`save`/`load` vs 仓库对拷 / `RepoDigests` 判本地构建） ③ 整机搬迁与恢复演练（四类资产 / bind mount 易漏 / RPO·RTO） | 课 7 volume tar 套路、课 13 `save`/`load`（速查卡） | ✅ 已完成（2026-09-20，**1077 行**，全 🟢 实测）＋ 配套[《备份演练实录》](lessons/04-备份演练实录.md)（方案 A 真实跑通，**RTO 4 秒**） |
 | **课 5：网络与主机防火墙** | ① Docker 与 iptables / nftables 的分工与 **DOCKER-USER 链**（DNAT 先于过滤的坑） ② 端口暴露面盘点（**27 IP × 87 端口 = 2349**）与冲突定位 ③ 跨主机网络与 **MTU 黑洞**（VXLAN 50 字节开销） | 课 8 容器网络、课 9 compose 网络 | ✅ 已完成（2026-09-20，**948 行**，全 🟢 实测） |
 | **课 6：变更升级与多机运维** | ① 引擎版本升级与回滚（含 live restore 的作用边界） ② `docker context` 批量操作与 systemd 自启托管 ③ 例行安全运维与巡检清单 | 课 15 `docker context`、课 10 live restore | ✅ 已完成（2026-09-20，**1070 行**，全 🟢 实测）＋ 沉淀 `docker-inspect-audit.sh` 只读巡检清单 |
 

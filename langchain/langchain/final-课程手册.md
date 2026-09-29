@@ -77,7 +77,7 @@
 
 ---
 
-### [课 1：LangChain 是什么（起源与定位）](stages/1-入门与模型层/lessons/lesson-01-LangChain是什么.md)
+### [课 1：LangChain 是什么（起源与定位）](stages/1-入门与模型层/lessons/01-LangChain是什么.md)
 
 > 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：docs.langchain.com 的 overview / philosophy / install / component-architecture / quickstart；起源史已另行联网交叉核实）
 
@@ -87,7 +87,7 @@
 
 **🧭 一眼全局图**
 
-![从"只会聊天"到"能干活"](stages/1-入门与模型层/assets/lesson-01-overview.svg)
+![从"只会聊天"到"能干活"](stages/1-入门与模型层/assets/01-overview.svg)
 
 > 看图：左边是现在的模型——问它要动手的事，它只能干瞪眼；右边是本课的目标——同一句问话，它自己"先想一步、动手去查、给出答复"；中间的差别，就是在模型外面加的那一圈配套（规矩、帮手、反复尝试）。
 
@@ -123,7 +123,7 @@ flowchart TD
 
 ---
 
-### [课 2：Models 模型层（接入任意大模型）](stages/1-入门与模型层/lessons/lesson-02-Models模型层.md)
+### [课 2：Models 模型层（接入任意大模型）](stages/1-入门与模型层/lessons/02-Models模型层.md)
 
 > 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：docs.langchain.com 的 models 页；报错类型、token 预算、profile 空值等结论为本机实测）
 
@@ -133,7 +133,7 @@ flowchart TD
 
 **🧭 一眼全局图**
 
-![模型层的四个问题](stages/1-入门与模型层/assets/lesson-02-overview.svg)
+![模型层的四个问题](stages/1-入门与模型层/assets/02-overview.svg)
 
 > 看图：上半部分是核心思想——同一份代码，换配置就能接上不同平台；下半部分是本课要交代清楚的四件事：一个口子接所有（接入）、三种对话姿势（调用）、先看说明书（能力）、账单看得见（用量）。
 
@@ -174,7 +174,7 @@ flowchart TD
 
 ---
 
-### [课 3：Messages 消息体系（模型的标准语言）](stages/1-入门与模型层/lessons/lesson-03-Messages消息体系.md)
+### [课 3：Messages 消息体系（模型的标准语言）](stages/1-入门与模型层/lessons/03-Messages消息体系.md)
 
 > 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：docs.langchain.com 的 messages 页；角色名单、无状态对照、懒解析、序列化警告等结论为本机实测）
 
@@ -184,7 +184,7 @@ flowchart TD
 
 **🧭 一眼全局图**
 
-![从一人一句到一本对话流水账](stages/1-入门与模型层/assets/lesson-03-overview.svg)
+![从一人一句到一本对话流水账](stages/1-入门与模型层/assets/03-overview.svg)
 
 > 看图：左边是现状——"每家平台一套写法"、"聊完就失忆"；右边是本课的两条解法——"一本账谁都看得懂"（统一写法）与"账本多长就记得多少"（历史随请求携带）；底部是总思路。
 
@@ -199,7 +199,7 @@ flowchart TD
 
 **🖼️ 一图总结**
 
-![消息体系四件事](stages/1-入门与模型层/assets/lesson-03-summary.svg)
+![消息体系四件事](stages/1-入门与模型层/assets/03-summary.svg)
 
 > 看图：四张卡片对应本课四件事（为什么统一 / 四类发言人与 id 配对 / 内容块与懒解析 / 两种写法与存档）；底部是那条贯穿全课的链路——下一课"Tools"就站在链路的第三、四环上。
 
@@ -224,7 +224,7 @@ flowchart TD
 
 ---
 
-### [课 4：Tools 工具（让模型能干活）](stages/2-Agent核心/lessons/lesson-04-Tools工具.md)
+### [课 4：Tools 工具（让模型能干活）](stages/2-Agent核心/lessons/04-Tools工具.md)
 
 > 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：docs.langchain.com 的 tools / runtime / mcp 页；schema 自动生成、并行申请、错误兜底、自修正循环、动态工具集、MCP 直连与适配器接入等结论为本机实测）
 
@@ -234,7 +234,7 @@ flowchart TD
 
 **🧭 一眼全局图**
 
-![从只会动嘴到会干活](stages/2-Agent核心/assets/lesson-04-overview.svg)
+![从只会动嘴到会干活](stages/2-Agent核心/assets/04-overview.svg)
 
 > 看图：左边是现状——"它只会说话"、"数据靠人肉搬运"；右边是本课的两条主线——"申请 + 跑腿"流程（它申请、你执行、回执递回）与安全底线（执行永远在你这边、工具集就是权限）；底部是总思路。
 
@@ -249,7 +249,7 @@ flowchart TD
 
 **🖼️ 一图总结**
 
-![工具四件事](stages/2-Agent核心/assets/lesson-04-summary.svg)
+![工具四件事](stages/2-Agent核心/assets/04-summary.svg)
 
 > 看图：四张卡片对应本课四件事（机制原理 / 写好工具 / 进阶四件套 / 生态接入）；底部是贯穿全课的链路——定义 → 绑定 → 申请 → 执行 → 回执 → 总结；下一课让这条链路自动转起来。
 
@@ -265,7 +265,7 @@ flowchart TD
 
 ---
 
-### [课 5：Agents 智能体核心（让循环自己转起来）](stages/2-Agent核心/lessons/lesson-05-Agents智能体核心.md)
+### [课 5：Agents 智能体核心（让循环自己转起来）](stages/2-Agent核心/lessons/05-Agents智能体核心.md)
 
 > 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：docs.langchain.com 的 agents / structured-output / runtime / models / middleware 页；loop 内部结构、账本、终止与预算保护、结构化输出实况（含 thinking 适配与重试）、动态路由等结论为本机实测）
 
@@ -275,7 +275,7 @@ flowchart TD
 
 **🧭 一眼全局图**
 
-![从「你手写循环」到「框架自动转」](stages/2-Agent核心/assets/lesson-05-overview.svg)
+![从「你手写循环」到「框架自动转」](stages/2-Agent核心/assets/05-overview.svg)
 
 > 看图：左边是上一课的状态——循环是你手写的、判断是你人肉的、刹车根本没有；右边是本课——引擎自动转，你负责配边界；底部是总思路：本课三站（引擎怎么转 → 结果怎么读 → harness 怎么配）。
 
@@ -289,7 +289,7 @@ flowchart TD
 
 **🖼️ 一图总结**
 
-![Agent 核心三件事](stages/2-Agent核心/assets/lesson-05-summary.svg)
+![Agent 核心三件事](stages/2-Agent核心/assets/05-summary.svg)
 
 > 看图：三张卡片对应本课三站（引擎怎么转 / 结果怎么读 / harness 怎么配），第四张是"后面在哪加深"的衔接地图；底部是贯穿全课的链路——输入消息 → 循环（模型 ↔ 工具自动转）→ 结果（messages / 结构化）→ 带记忆进入下一轮。
 
@@ -304,7 +304,7 @@ flowchart TD
 
 ---
 
-### [课 6：Streaming 流式输出（让循环的过程实时可见）](stages/2-Agent核心/lessons/lesson-06-Streaming流式输出.md)
+### [课 6：Streaming 流式输出（让循环的过程实时可见）](stages/2-Agent核心/lessons/06-Streaming流式输出.md)
 
 > 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：docs.langchain.com 的 streaming / event-streaming 页；三种流模式、v2/v3 协议、custom 信号、reasoning tokens 等结论为本机实测）
 
@@ -314,7 +314,7 @@ flowchart TD
 
 **🧭 一眼全局图**
 
-![从「等它转完」到「看它转」](stages/2-Agent核心/assets/lesson-06-overview.svg)
+![从「等它转完」到「看它转」](stages/2-Agent核心/assets/06-overview.svg)
 
 > 看图：左边是上一课的状态——invoke 一次性返回，用户盯空屏；右边是本课——stream 逐步输出，每步可见；底部是三站卡片（为什么需要流式 → 三种模式怎么用 → 实战怎么接）。
 
@@ -328,7 +328,7 @@ flowchart TD
 
 **🖼️ 一图总结**
 
-![流式三模式 + v3 事件流](stages/2-Agent核心/assets/lesson-06-summary.svg)
+![流式三模式 + v3 事件流](stages/2-Agent核心/assets/06-summary.svg)
 
 > 看图：三张卡片对应本课三站（流式的价值与机制 / 流模式全解 / 实战流式模式），第四张是"流式之后去哪"的衔接地图；底部是贯穿全课的链路——invoke（一次性）→ stream（逐步输出）→ 三种模式 + v3 事件流 → 前端 / 记忆 / 护栏。
 
@@ -343,9 +343,9 @@ flowchart TD
 
 ---
 
-### [课 7：Memory 记忆（从"转头就忘"到"记住你"）](stages/2-Agent核心/lessons/lesson-07-Memory记忆.md)
+### [课 7：Memory 记忆（从"转头就忘"到"记住你"）](stages/2-Agent核心/lessons/07-Memory记忆.md)
 
-> 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：docs.langchain.com 的 short-term-memory / long-term-memory / 概念篇 memory / middleware built-in 摘要段；关键行为均经本机实测——脚本 `playground/lesson-07-memory-lab.py`）
+> 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：docs.langchain.com 的 short-term-memory / long-term-memory / 概念篇 memory / middleware built-in 摘要段；关键行为均经本机实测——脚本 `playground/07-memory-lab.py`）
 
 **📌 一句话本质**：记忆不是"把聊天记录都塞回去"——它是 harness 层的**"状态 + 持久化"工程**：短期记忆 = 线程内的状态（checkpointer 持久化），长期记忆 = 跨会话的 store（命名空间 + 键）。模型本身始终是无状态的（核对于 2026-09）。
 
@@ -353,7 +353,7 @@ flowchart TD
 
 **🧭 一眼全局图**
 
-![从「转头就忘」到「记住你」](stages/2-Agent核心/assets/lesson-07-overview.svg)
+![从「转头就忘」到「记住你」](stages/2-Agent核心/assets/07-overview.svg)
 
 > 看图：左边是问题——用户第二次来又要重新自我介绍；右边是本课方案——短期（checkpointer）+ 长期（store）+ 压缩策略 + 工程实践；底部四张卡片对应本课四站。
 
@@ -368,7 +368,7 @@ flowchart TD
 
 **🖼️ 一图总结**
 
-![记忆三层与四站](stages/2-Agent核心/assets/lesson-07-summary.svg)
+![记忆三层与四站](stages/2-Agent核心/assets/07-summary.svg)
 
 > 看图：四张卡片对应本课四站（机制总览 / 短期 / 长期 / 工程实践），底部链路——模型无状态 → 短期（checkpointer）→ 长期（store）→ 工程权衡，以及通往课 8 中间件的下一站。
 
@@ -394,9 +394,9 @@ flowchart TD
 
 ---
 
-### [课 8：Middleware 中间件（掌控 agent loop）](stages/3-可控性与可靠性/lessons/lesson-08-Middleware中间件.md)
+### [课 8：Middleware 中间件（掌控 agent loop）](stages/3-可控性与可靠性/lessons/08-Middleware中间件.md)
 
-> 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：docs.langchain.com 的 middleware/overview、middleware/custom、middleware/built-in 三页；关键行为均经本机实测——脚本 `playground/lesson-08-middleware-lab.py`）
+> 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：docs.langchain.com 的 middleware/overview、middleware/custom、middleware/built-in 三页；关键行为均经本机实测——脚本 `playground/08-middleware-lab.py`）
 
 **📌 一句话本质**：中间件 = **agent 循环上的可编程钩子**。六个钩子挂在循环的各个步骤上（4 个"时刻式" + 2 个"包裹式"），通过 `create_agent(middleware=[...])` 声明；不改引擎源码，就能插入重试、限流、脱敏、审批、动态提示词等控制逻辑（核对于 2026-09）。
 
@@ -404,7 +404,7 @@ flowchart TD
 
 **🧭 一眼全局图**
 
-![从「改源码」到「插插槽」](stages/3-可控性与可靠性/assets/lesson-08-overview.svg)
+![从「改源码」到「插插槽」](stages/3-可控性与可靠性/assets/08-overview.svg)
 
 > 看图：左边是问题——加行为只能改源码？右边是本课方案——六个钩子的插槽体系 + 五组内置件 + 自定义 + 组合顺序；底部四张卡片对应本课四站。
 
@@ -419,7 +419,7 @@ flowchart TD
 
 **🖼️ 一图总结**
 
-![六个钩子与四站](stages/3-可控性与可靠性/assets/lesson-08-summary.svg)
+![六个钩子与四站](stages/3-可控性与可靠性/assets/08-summary.svg)
 
 > 看图：四张卡片对应本课四站（机制 / 内置 / 自定义 / 组合顺序），底部链路——agent loop → 六个插槽 → 内置+自定义 → 组合规则，以及通往课 9（上下文工程）与课 10（HITL）的下一站。
 
@@ -436,9 +436,9 @@ flowchart TD
 
 ---
 
-### [课 9：Context Engineering 上下文工程](stages/3-可控性与可靠性/lessons/lesson-09-ContextEngineering上下文工程.md)
+### [课 9：Context Engineering 上下文工程](stages/3-可控性与可靠性/lessons/09-ContextEngineering上下文工程.md)
 
-> 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：docs.langchain.com 的 context-engineering 与 concepts/context 两页；关键行为均经本机实测——脚本 `playground/lesson-09-context-lab.py`；另含 3 组补充证据，见文内标注）
+> 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：docs.langchain.com 的 context-engineering 与 concepts/context 两页；关键行为均经本机实测——脚本 `playground/09-context-lab.py`；另含 3 组补充证据，见文内标注）
 
 **📌 一句话本质**：上下文工程 = **在合适的时机，把合适的信息和工具、以合适的形式提供给模型**（官方定义：*providing the right information and tools in the right format so the LLM can accomplish a task*）。它的操作对象是"每次模型调用看到的全部信息"（五件套：提示词/消息/工具/模型/格式），信息来源有三个数据源（runtime context / state / store），改动方式分两条路：**瞬时（transient，改视图）与持久（persistent，改账本）**（核对于 2026-09）。
 
@@ -446,7 +446,7 @@ flowchart TD
 
 **🧭 一眼全局图**
 
-![从"塞得越多越好"到"给得刚刚好"](stages/3-可控性与可靠性/assets/lesson-09-overview.svg)
+![从"塞得越多越好"到"给得刚刚好"](stages/3-可控性与可靠性/assets/09-overview.svg)
 
 > 看图：左边是问题（agent 不靠谱多半是上下文问题 + 三个现实挑战）；右边是方案（三类上下文 + 三个数据源）；底部三张卡片对应本课三站，底栏交代本课与课 7/课 8 的关系。
 
@@ -460,7 +460,7 @@ flowchart TD
 
 **🖼️ 一图总结**
 
-![三类上下文与瞬时持久](stages/3-可控性与可靠性/assets/lesson-09-summary.svg)
+![三类上下文与瞬时持久](stages/3-可控性与可靠性/assets/09-summary.svg)
 
 > 看图：四张卡片对应本课全部要点（是什么 / 模型上下文 / 工具上下文 / 生命周期），底部一句话收束与下一课预告。
 
@@ -475,9 +475,9 @@ flowchart TD
 
 ---
 
-### [课 10：人机协同与护栏（HITL & Guardrails）](stages/3-可控性与可靠性/lessons/lesson-10-人机协同与护栏.md)
+### [课 10：人机协同与护栏（HITL & Guardrails）](stages/3-可控性与可靠性/lessons/10-人机协同与护栏.md)
 
-> 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：docs.langchain.com 的 human-in-the-loop / guardrails / middleware/built-in 三页；关键行为均经本机实测——脚本 `playground/lesson-10-hitl-lab.py` 与 `playground/lesson-10-hitl-lab-fix.py`，另含回显验证；证据合并文件 `lc-l10-lab-output.txt`）
+> 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：docs.langchain.com 的 human-in-the-loop / guardrails / middleware/built-in 三页；关键行为均经本机实测——脚本 `playground/10-hitl-lab.py` 与 `playground/10-hitl-lab-fix.py`，另含回显验证；证据合并文件 `lc-l10-lab-output.txt`）
 
 **📌 一句话本质**：人机协同 = **把高风险操作的执行权从模型的默认行为里收回来**——工具在执行前被冻结，等人给出决定（approve / edit / reject / respond）后才放行；护栏 = **在输入、输出、工具结果三个点位验证与过滤内容**（PII 脱敏、违规拦截、输出审查）——两者都通过中间件体系挂载（核对于 2026-09）。
 
@@ -485,7 +485,7 @@ flowchart TD
 
 **🧭 一眼全局图**
 
-![模型有手有脚之后，谁说了算](stages/3-可控性与可靠性/assets/lesson-10-overview.svg)
+![模型有手有脚之后，谁说了算](stages/3-可控性与可靠性/assets/10-overview.svg)
 
 > 看图：左边是三类事故（不可逆动作裸奔 / 不该说的说了 / 该停的没停）；右边是三道防线（人机协同 / 中断机制 / 护栏体系）；底部三张卡片对应本课三站，底栏交代本课与课 8/课 9/课 7 的衔接关系。
 
@@ -499,7 +499,7 @@ flowchart TD
 
 **🖼️ 一图总结**
 
-![人在环中 + 护栏体系](stages/3-可控性与可靠性/assets/lesson-10-summary.svg)
+![人在环中 + 护栏体系](stages/3-可控性与可靠性/assets/10-summary.svg)
 
 > 看图：四张卡片对应本课全部要点（人在环中 / 中断机制 / PII / 自定义护栏），底部一句话收束与下一课预告。
 
@@ -515,9 +515,9 @@ flowchart TD
 
 ---
 
-### [课 11：Retrieval 检索与 RAG（给模型接上「外部书架」）](stages/3-可控性与可靠性/lessons/lesson-11-Retrieval检索与RAG.md)
+### [课 11：Retrieval 检索与 RAG（给模型接上「外部书架」）](stages/3-可控性与可靠性/lessons/11-Retrieval检索与RAG.md)
 
-> 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：docs.langchain.com 的 retrieval / knowledge-base 两页；关键行为均经本机实测——脚本 `playground/lesson-11-retrieval-lab.py` 与两个补跑脚本，证据合并文件 `lc-l11-lab-output.txt`；知识库语料为 `playground/kb/` 下 5 份虚构公司文档）
+> 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：docs.langchain.com 的 retrieval / knowledge-base 两页；关键行为均经本机实测——脚本 `playground/11-retrieval-lab.py` 与两个补跑脚本，证据合并文件 `lc-l11-lab-output.txt`；知识库语料为 `playground/kb/` 下 5 份虚构公司文档）
 
 **📌 一句话本质**：检索与 RAG = **把外部知识做成「可检索的书架」，让模型先查资料、再回答**。技术上拆成一个流水线：**加载 → 切分 → 嵌入 → 入库**（把文档变成可被相似度搜索的索引），**检索 → 拼接 → 生成**（提问时取回最相关的几块，拼进提示词交给模型）。官方定义：检索缓解了「上下文有限」与「知识冻结」两大限制，是 RAG 的基础（核对于 2026-09）。
 
@@ -525,7 +525,7 @@ flowchart TD
 
 **🧭 一眼全局图**
 
-![检索与 RAG：给模型接上外部书架](stages/3-可控性与可靠性/assets/lesson-11-overview.svg)
+![检索与 RAG：给模型接上外部书架](stages/3-可控性与可靠性/assets/11-overview.svg)
 
 > 看图：左边是模型的三个知识困境（截止时间 / 私有数据 / 不可靠表现）；右边是解药——检索增强的思路与流水线；底部三张卡片对应本课三站，底栏交代本课与课 4/5/9/10 的衔接关系。
 
@@ -539,7 +539,7 @@ flowchart TD
 
 **🖼️ 一图总结**
 
-![检索与 RAG 全链路](stages/3-可控性与可靠性/assets/lesson-11-summary.svg)
+![检索与 RAG 全链路](stages/3-可控性与可靠性/assets/11-summary.svg)
 
 > 看图：四张卡片对应本课全部要点（为什么检索 / 构建链路 / 检索器 / RAG 架构），底部一句话收束与下一课预告。
 
@@ -568,9 +568,9 @@ flowchart TD
 
 ---
 
-### [课 12：Multi-Agent 多智能体（从单兵到团队）](stages/4-组合与工程化/lessons/lesson-12-Multi-Agent多智能体.md)
+### [课 12：Multi-Agent 多智能体（从单兵到团队）](stages/4-组合与工程化/lessons/12-Multi-Agent多智能体.md)
 
-> 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：docs.langchain.com 的 multi-agent 系列页面（总览 + 五个模式页），链接见各知识点「官方文档」；关键行为均经本机实测——脚本 `playground/lesson-12-multi-agent-lab.py` 与两个补跑脚本，证据合并文件 `lc-l12-lab-output.txt`）
+> 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：docs.langchain.com 的 multi-agent 系列页面（总览 + 五个模式页），链接见各知识点「官方文档」；关键行为均经本机实测——脚本 `playground/12-multi-agent-lab.py` 与两个补跑脚本，证据合并文件 `lc-l12-lab-output.txt`）
 
 **📌 一句话本质**：多智能体 = **把任务拆给专门的 agent，并设计好它们之间的协作方式**。拆分的三个官方理由：**上下文管理**（让每个 agent 只带自己领域的信息）、**分布式开发**（不同团队独立维护各自的 agent）、**并行化**（多个专项任务同时执行）。而协作方式被官方归纳为五大模式：subagents / handoffs / skills / router / custom workflow（核对于 2026-09）。
 
@@ -578,7 +578,7 @@ flowchart TD
 
 **🧭 一眼全局图**
 
-![多智能体：从单兵到团队](stages/4-组合与工程化/assets/lesson-12-overview.svg)
+![多智能体：从单兵到团队](stages/4-组合与工程化/assets/12-overview.svg)
 
 > 看图：左边是单 agent 的三重极限；中间是五模式全景（subagents / handoffs / skills / router / custom workflow）；底部三张卡片对应本课三站，底栏交代与课 5/8/11 的承接关系。
 
@@ -592,7 +592,7 @@ flowchart TD
 
 **🖼️ 一图总结**
 
-![多智能体全链路](stages/4-组合与工程化/assets/lesson-12-summary.svg)
+![多智能体全链路](stages/4-组合与工程化/assets/12-summary.svg)
 
 > 看图：四张卡片（拆分的三个动机 / 三种核心模式 / 两种进阶模式 / 四模式选择），底部一句话收束与下一课预告。
 
@@ -610,7 +610,7 @@ flowchart TD
 
 ---
 
-### [课 13：Testing 与 Observability（让 agent 可测可观测）](stages/4-组合与工程化/lessons/lesson-13-Testing与Observability.md)
+### [课 13：Testing 与 Observability（让 agent 可测可观测）](stages/4-组合与工程化/lessons/13-Testing与Observability.md)
 
 > 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：docs.langchain.com 的 test 系列（总览 / 单元测试 / 集成测试 / Agent Evals）+ observability + studio + ui 页面，链接见各知识点「官方文档」；关键行为均经本机实测——实验脚本位于 `playground/lesson-13-*-lab.py`、测试套件位于 `playground/tests_l13/`；测试工具链：pytest 9.1.1 + agentevals 0.0.9 + vcrpy 8.3.0 + pytest-recording 0.13.4）
 
@@ -620,7 +620,7 @@ flowchart TD
 
 **🧭 一眼全局图**
 
-![让 agent 从「能跑」到「敢用」](stages/4-组合与工程化/assets/lesson-13-overview.svg)
+![让 agent 从「能跑」到「敢用」](stages/4-组合与工程化/assets/13-overview.svg)
 
 > 看图：上方是交付时会遇到的三个问题；左框「交付前：分层检查」把验证拆成快 / 真 / 全三层；右框「运行中：全程留痕」把每一步记录在案。底部一句话收束：从「我跑过，看着还行」到「我能证明，随时可查」。
 
@@ -634,7 +634,7 @@ flowchart TD
 
 **🖼️ 一图总结**
 
-![Testing 与 Observability 全链路](stages/4-组合与工程化/assets/lesson-13-summary.svg)
+![Testing 与 Observability 全链路](stages/4-组合与工程化/assets/13-summary.svg)
 
 > 看图：三张卡片（非确定性的三种表现 / 三层测试 / 可观测性）+ 工程纪律四条 + 底栏收束与下一站。
 

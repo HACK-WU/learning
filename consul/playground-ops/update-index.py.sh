@@ -7,8 +7,8 @@ old="**进度：课 2 / 8 已交付**"
 new="**进度：课 3 / 8 已交付**"
 assert old in s, "未找到旧进度标记"
 s=s.replace(old,new)
-old2="[课 2 集群健康与 day-2 运维](子教程/运维专项/lessons/lesson-02-集群健康与day-2运维.md)）"
-new2="[课 2 集群健康与 day-2 运维](子教程/运维专项/lessons/lesson-02-集群健康与day-2运维.md)、[课 3 性能、容量与调优](子教程/运维专项/lessons/lesson-03-性能、容量与调优.md)）"
+old2="[课 2 集群健康与 day-2 运维](子教程/运维专项/lessons/02-集群健康与day-2运维.md)）"
+new2="[课 2 集群健康与 day-2 运维](子教程/运维专项/lessons/02-集群健康与day-2运维.md)、[课 3 性能、容量与调优](子教程/运维专项/lessons/03-性能、容量与调优.md)）"
 assert old2 in s, "未找到课2链接结尾"
 s=s.replace(old2,new2)
 io.open(p,'w',encoding='utf-8').write(s)

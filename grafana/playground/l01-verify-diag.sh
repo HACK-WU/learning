@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # 真伪判定：课 1 的六要素到底存不存在？
 set -u
-L="/mnt/d/projects/learning/grafana/stages/1-看得见/lessons/lesson-01-Grafana是谁：一个不存数据的看图工具.md"
+L="/mnt/d/projects/learning/grafana/stages/1-看得见/lessons/01-Grafana是谁：一个不存数据的看图工具.md"
 
 echo "=== 1. 文件是否存在、多大 ==="
 ls -lh "$L" | awk '{print "  "$5"  "$9}'

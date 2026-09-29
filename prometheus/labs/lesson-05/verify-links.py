@@ -75,14 +75,14 @@ ov = os.path.join(ROOT, "stages/2-规则与告警/overview.md")
 with open(ov, encoding="utf-8") as f:
     ovc = f.read()
 checks.append(("③ 阶段2 overview 课5已勾选",
-               "- [x] `lessons/lesson-05-Alertmanager深入.md`" in ovc))
+               "- [x] `lessons/05-Alertmanager深入.md`" in ovc))
 checks.append(("③ 含课5交付纪要", "课 5 交付纪要" in ovc))
 
 # (4) 课程目录 + 路径总览
 with open(os.path.join(ROOT, "02-课程目录.md"), encoding="utf-8") as f:
     cat = f.read()
 checks.append(("④ 02-课程目录.md 课5=✅",
-               "lesson-05-Alertmanager深入.md) | ✅" in cat))
+               "05-Alertmanager深入.md) | ✅" in cat))
 with open(os.path.join(ROOT, "01-学习路径总览.md"), encoding="utf-8") as f:
     tot = f.read()
 checks.append(("④ 01-学习路径总览.md 进度已更新", "15/36" in tot))

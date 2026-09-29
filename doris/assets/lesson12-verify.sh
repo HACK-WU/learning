@@ -3,10 +3,10 @@
 # 用法：bash lesson12-verify.sh
 # 任一 FAIL 都必须修掉才能交付
 
-LESSON="stages/4-分布式运维与生产落地/lessons/lesson-12-选型存算分离与场景落地.md"
+LESSON="stages/4-分布式运维与生产落地/lessons/12-选型存算分离与场景落地.md"
 ASSETS="assets"
-SVG1="stages/4-分布式运维与生产落地/assets/lesson-12-boundary.svg"
-SVG2="stages/4-分布式运维与生产落地/assets/lesson-12-storage.svg"
+SVG1="stages/4-分布式运维与生产落地/assets/12-boundary.svg"
+SVG2="stages/4-分布式运维与生产落地/assets/12-storage.svg"
 
 PASS=0; FAIL=0
 ok()   { echo "  [OK]   $1"; PASS=$((PASS+1)); }
@@ -111,8 +111,8 @@ echo ""
 echo "=============================================="
 echo " G. 图与引用（6 项）"
 echo "=============================================="
-grep -q "lesson-12-boundary.svg" "$LESSON" && ok "正文引用边界图" || bad "正文未引用边界图"
-grep -q "lesson-12-storage.svg" "$LESSON" && ok "正文引用存算分离图" || bad "正文未引用存算分离图"
+grep -q "12-boundary.svg" "$LESSON" && ok "正文引用边界图" || bad "正文未引用边界图"
+grep -q "12-storage.svg" "$LESSON" && ok "正文引用存算分离图" || bad "正文未引用存算分离图"
 head -1 "$SVG1" | grep -q "<svg" && ok "SVG1 是合法 SVG" || bad "SVG1 格式错误"
 head -1 "$SVG2" | grep -q "<svg" && ok "SVG2 是合法 SVG" || bad "SVG2 格式错误"
 grep -q "lesson-11" "$LESSON" && ok "有上一课导航链接" || bad "缺上一课导航"

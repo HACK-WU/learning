@@ -36,9 +36,9 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-06-数据导入全家桶.md`
-- [x] `lessons/lesson-07-查询引擎与执行计划.md`
-- [x] `lessons/lesson-08-多表关联与高级SQL.md`
+- [x] `lessons/06-数据导入全家桶.md`
+- [x] `lessons/07-查询引擎与执行计划.md`
+- [x] `lessons/08-多表关联与高级SQL.md`
 
 ## 阶段状态
 

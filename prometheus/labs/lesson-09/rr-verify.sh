@@ -6,8 +6,8 @@ ck(){ if [ "$2" = "$3" ]; then echo "PASS  $1"; PASS=$((PASS+1)); else echo "FAI
 
 echo "===== A. 数据底稿 vs 讲义 一致性 ====="
 R=$D/labs/lesson-09/RR-DATA.md
-G=$L/lesson-09-长期存储选型.md
-G7=$L/lesson-07-远程读写与Agent模式.md
+G=$L/09-长期存储选型.md
+G7=$L/07-远程读写与Agent模式.md
 
 for n in "18 032" "5 608" "57 417" "31 791" "116 642" "124 071" "359 572" "384 243"; do
   c=$(grep -c "$n" $G); ck "讲义含体积数 [$n]" "$([ $c -ge 1 ] && echo yes || echo no)" "yes"

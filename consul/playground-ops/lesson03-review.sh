@@ -11,7 +11,7 @@ for s in svgs:
         bad+=1; print(f"  FAIL {os.path.basename(s)} {e}")
 print(f"SVG 非法数: {bad}")
 
-M=root+"/子教程/运维专项/lessons/lesson-03-性能、容量与调优.md"
+M=root+"/子教程/运维专项/lessons/03-性能、容量与调优.md"
 txt=open(M,encoding='utf-8').read()
 print(f"\n讲义: {len(txt.splitlines())} 行")
 for s in ['## 第一幕','## 第二幕','## 第三幕','## 第四幕','## 第五幕','## 📇 概念速查卡','## 🚀 下一批接力提示词','## 🧭 课程导航']:

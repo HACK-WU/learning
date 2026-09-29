@@ -34,8 +34,8 @@ done
 
 echo
 echo "===== 4. 08/09/10 中引用的课时文件是否存在 ====="
-for l in stages/1-为什么需要Redis/lessons/lesson-01-Redis是什么.md \
-         stages/4-分布式与生产实践/lessons/lesson-08-缓存设计.md \
-         stages/4-分布式与生产实践/lessons/lesson-09-生产实践与选型.md; do
+for l in stages/1-为什么需要Redis/lessons/01-Redis是什么.md \
+         stages/4-分布式与生产实践/lessons/08-缓存设计.md \
+         stages/4-分布式与生产实践/lessons/09-生产实践与选型.md; do
   if [ -f "$l" ]; then echo "  OK   $l"; else echo "  MISS $l"; fi
 done

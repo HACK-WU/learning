@@ -31,8 +31,8 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-01-数据分析的困境与Doris的诞生.md`（2026-09-02 完成）
-- [x] `lessons/lesson-02-跑起来第一个Doris.md`（2026-09-02 完成）
+- [x] `lessons/01-数据分析的困境与Doris的诞生.md`（2026-09-02 完成）
+- [x] `lessons/02-跑起来第一个Doris.md`（2026-09-02 完成）
 
 ## 阶段状态
 

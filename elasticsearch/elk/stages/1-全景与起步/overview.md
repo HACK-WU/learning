@@ -60,12 +60,12 @@
 
 - 前置：本教程要求已学完 [ES 主课](../../../stages/1-为什么需要ES/overview.md) 全 5 阶段（含索引/文档、倒排索引、映射、数据管道、索引生命周期等概念）。
 - 本阶段直接复用 ES 主课的"索引/文档""动态映射与模板""索引生命周期"知识，把它们放进"一条日志"的真实链路里看。
-- 阶段选型部分将衔接 [ES 主课课 14《该不该用 ES》](../../../stages/5-生产与选型/lessons/lesson-14-该不该用ES.md) 的决策清单。
+- 阶段选型部分将衔接 [ES 主课课 14《该不该用 ES》](../../../stages/5-生产与选型/lessons/14-该不该用ES.md) 的决策清单。
 
 ## 🧭 课程导航
 
 | 课 | 标题 | 文件 |
 |----|------|------|
-| 课 1 | 一条日志的旅程 | [lessons/lesson-01-一条日志的旅程.md](lessons/lesson-01-一条日志的旅程.md) |
-| 课 2 | 把 ELK 跑起来 | [lessons/lesson-02-把ELK跑起来.md](lessons/lesson-02-把ELK跑起来.md) |
-| 课 3 | 端到端走一遍 | [lessons/lesson-03-端到端走一遍.md](lessons/lesson-03-端到端走一遍.md) |
+| 课 1 | 一条日志的旅程 | [lessons/01-一条日志的旅程.md](lessons/01-一条日志的旅程.md) |
+| 课 2 | 把 ELK 跑起来 | [lessons/02-把ELK跑起来.md](lessons/02-把ELK跑起来.md) |
+| 课 3 | 端到端走一遍 | [lessons/03-端到端走一遍.md](lessons/03-端到端走一遍.md) |

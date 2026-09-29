@@ -4,14 +4,14 @@ set -u
 cd /mnt/d/projects/learning/redis/projects/电商大促数据层
 
 LINKS=(
-"../../stages/1-为什么需要Redis/lessons/lesson-02-跑起来第一个Redis.md"
-"../../stages/2-数据结构与命令/lessons/lesson-03-List与Hash.md"
-"../../stages/2-数据结构与命令/lessons/lesson-04-Set、ZSet与特殊类型.md"
-"../../stages/3-持久化与高可用/lessons/lesson-05-RDB与AOF持久化.md"
-"../../stages/3-持久化与高可用/lessons/lesson-06-主从复制与哨兵.md"
-"../../stages/4-分布式与生产实践/lessons/lesson-07-分片与集群.md"
-"../../stages/4-分布式与生产实践/lessons/lesson-08-缓存设计.md"
-"../../stages/4-分布式与生产实践/lessons/lesson-09-生产实践与选型.md"
+"../../stages/1-为什么需要Redis/lessons/02-跑起来第一个Redis.md"
+"../../stages/2-数据结构与命令/lessons/03-List与Hash.md"
+"../../stages/2-数据结构与命令/lessons/04-Set、ZSet与特殊类型.md"
+"../../stages/3-持久化与高可用/lessons/05-RDB与AOF持久化.md"
+"../../stages/3-持久化与高可用/lessons/06-主从复制与哨兵.md"
+"../../stages/4-分布式与生产实践/lessons/07-分片与集群.md"
+"../../stages/4-分布式与生产实践/lessons/08-缓存设计.md"
+"../../stages/4-分布式与生产实践/lessons/09-生产实践与选型.md"
 )
 
 echo "===== 回指链接存在性校验 ====="

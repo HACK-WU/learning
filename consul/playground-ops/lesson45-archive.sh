@@ -10,11 +10,11 @@ p = "$O/overview.md"
 s = open(p, encoding='utf-8').read()
 s = s.replace(
   "| **课 4：证书与密钥生命周期** |",
-  "| **课 4：证书与密钥生命周期**（✅ [讲义](lessons/lesson-04-证书与密钥生命周期.md)） |"
+  "| **课 4：证书与密钥生命周期**（✅ [讲义](lessons/04-证书与密钥生命周期.md)） |"
 )
 s = s.replace(
   "| **课 5：备份、恢复与灾备演练** |",
-  "| **课 5：备份、恢复与灾备演练**（✅ [讲义](lessons/lesson-05-备份、恢复与灾备演练.md)） |"
+  "| **课 5：备份、恢复与灾备演练**（✅ [讲义](lessons/05-备份、恢复与灾备演练.md)） |"
 )
 open(p, 'w', encoding='utf-8').write(s)
 print("  已更新课清单链接")

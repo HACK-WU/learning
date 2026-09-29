@@ -9,7 +9,7 @@ p = "/mnt/d/projects/learning/consul/子教程/运维专项/overview.md"
 s = open(p, encoding='utf-8').read()
 s = s.replace(
   "| **课 7：版本升级与迁移** |",
-  "| **课 7：版本升级与迁移**（✅ [讲义](lessons/lesson-07-版本升级与迁移.md)） |"
+  "| **课 7：版本升级与迁移**（✅ [讲义](lessons/07-版本升级与迁移.md)） |"
 )
 s = s.replace(
   "- [ ] 课 7：版本升级与迁移",
@@ -24,8 +24,8 @@ echo "===== 2. 02-课程目录.md：加课7 ====="
 python3 - <<'PYEOF'
 p = "/mnt/d/projects/learning/consul/02-课程目录.md"
 s = open(p, encoding='utf-8').read()
-anchor = "  - [课 6 监控指标与告警](./子教程/运维专项/lessons/lesson-06-监控指标与告警.md)（✅ 2026-09-20｜实测：双重命名空壳恒 0 / 静默失效 vs 永久误报 / 三步核验 / 9 组断言）"
-add = anchor + "\n  - [课 7 版本升级与迁移](./子教程/运维专项/lessons/lesson-07-版本升级与迁移.md)（✅ 2026-09-20｜实测：gossip 与 Raft 两种 protocol / 停2台写失败 HTTP 000 / 回滚=全量回退，升级窗口内新数据全丢）"
+anchor = "  - [课 6 监控指标与告警](./子教程/运维专项/lessons/06-监控指标与告警.md)（✅ 2026-09-20｜实测：双重命名空壳恒 0 / 静默失效 vs 永久误报 / 三步核验 / 9 组断言）"
+add = anchor + "\n  - [课 7 版本升级与迁移](./子教程/运维专项/lessons/07-版本升级与迁移.md)（✅ 2026-09-20｜实测：gossip 与 Raft 两种 protocol / 停2台写失败 HTTP 000 / 回滚=全量回退，升级窗口内新数据全丢）"
 if anchor in s and "课 7 版本升级与迁移" not in s:
     s = s.replace(anchor, add)
     open(p, 'w', encoding='utf-8').write(s)
@@ -41,8 +41,8 @@ p = "/mnt/d/projects/learning/consul/01-学习路径总览.md"
 s = open(p, encoding='utf-8').read()
 s = s.replace("｜**进度：课 6 / 8 已交付（课 1、2、3、4、5、6）**",
               "｜**进度：课 7 / 8 已交付（课 1、2、3、4、5、6、7）**")
-a = "[课 6 监控指标与告警](子教程/运维专项/lessons/lesson-06-监控指标与告警.md)"
-b = a + "、[课 7 版本升级与迁移](子教程/运维专项/lessons/lesson-07-版本升级与迁移.md)"
+a = "[课 6 监控指标与告警](子教程/运维专项/lessons/06-监控指标与告警.md)"
+b = a + "、[课 7 版本升级与迁移](子教程/运维专项/lessons/07-版本升级与迁移.md)"
 if a in s and "课 7 版本升级与迁移" not in s:
     s = s.replace(a, b)
 open(p, 'w', encoding='utf-8').write(s)

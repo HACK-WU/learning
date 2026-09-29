@@ -36,22 +36,22 @@
 
 | 知识点 | 所属阶段 / 课 | 本项目用在何处 | 回指 |
 |--------|--------------|---------------|------|
-| 基数与点密度 | 阶段 3 · L7 | `schema_design.py` · `check_cardinality` | [lesson-07](../../stages/3-数据模型与查询/lessons/lesson-07-Schema设计与基数陷阱.md) |
-| tag vs field 抉择 | 阶段 3 · L7 | `schema_design.py` · `check_tag_field_choice` | [lesson-07](../../stages/3-数据模型与查询/lessons/lesson-07-Schema设计与基数陷阱.md) |
-| Core 硬限制（库 5 / 表 2000 / 列 500） | 阶段 3 · L6 | `schema_design.py` · `check_hard_limits` | [lesson-06](../../stages/3-数据模型与查询/lessons/lesson-06-数据模型-table-tag-field-timestamp.md) |
-| 保留键三类后果 | 阶段 3 · L6 | `schema_design.py` · `check_naming` | [lesson-06](../../stages/3-数据模型与查询/lessons/lesson-06-数据模型-table-tag-field-timestamp.md) |
-| 432 文件上限与可查窗口 | 阶段 4 · L11 | `engine.py` · `check_query_window` | [lesson-11](../../stages/4-存储引擎与性能/lessons/lesson-11-向量化执行-列存为什么快.md) |
-| 批量写入双阈值 | 阶段 4 · L12 | `engine.py` · `check_write_path` | [lesson-12](../../stages/4-存储引擎与性能/lessons/lesson-12-写入与查询性能调优.md) |
-| 内存三默认相加 90% | 阶段 5 · L13 | `engine.py` · `check_capacity` | [lesson-13](../../stages/5-生产落地/lessons/lesson-13-部署形态与容量规划.md) |
-| 降采样调度周期决定可查性 | 阶段 5 · L14 | `ops.py` · `check_downsample` | [lesson-14](../../stages/5-生产落地/lessons/lesson-14-降采样保留策略与成本.md) |
-| 保留期 `0d` 语义反转 / `mo` 非日历（命中检测） | 阶段 5 · L14 / 阶段 6 · L18 | `ops.py` · `check_retention` · `parse_retention` | [lesson-14](../../stages/5-生产落地/lessons/lesson-14-降采样保留策略与成本.md) |
-| Telegraf 四条硬约束 | 阶段 5 · L16 | `ops.py` · `check_telegraf` | [lesson-16](../../stages/5-生产落地/lessons/lesson-16-生态集成与自监控.md) |
-| Grafana 面板刷新决定账单 | 阶段 5 · L16 / 阶段 6 · L19 | `ops.py` · `check_grafana` | [lesson-16](../../stages/5-生产落地/lessons/lesson-16-生态集成与自监控.md) |
-| 层次差（存储引擎 vs 完整方案） | 阶段 6 · L17 | `decision.py` · `check_layering` | [lesson-17](../../stages/6-对比与决策/lessons/lesson-17-横向对比-五款候选.md) |
-| 迁移静默项 `reverse` / `drift` | 阶段 6 · L18 | `decision.py` · `check_migration` | [lesson-18](../../stages/6-对比与决策/lessons/lesson-18-迁移指南-从1x2x到3x.md) |
-| 约束冲突检测 | 阶段 6 · L19 | `decision.py` · `find_conflicts` | [lesson-19](../../stages/6-对比与决策/lessons/lesson-19-场景演练与选型决策.md) |
-| SKU 排雷与约束归属 | 阶段 6 · L19 | `decision.py` · `check_skus` / `surviving_skus` | [lesson-19](../../stages/6-对比与决策/lessons/lesson-19-场景演练与选型决策.md) |
-| TCO 与授权费盲区 | 阶段 6 · L19 | `tco.py` | [lesson-19](../../stages/6-对比与决策/lessons/lesson-19-场景演练与选型决策.md) |
+| 基数与点密度 | 阶段 3 · L7 | `schema_design.py` · `check_cardinality` | [07](../../stages/3-数据模型与查询/lessons/07-Schema设计与基数陷阱.md) |
+| tag vs field 抉择 | 阶段 3 · L7 | `schema_design.py` · `check_tag_field_choice` | [07](../../stages/3-数据模型与查询/lessons/07-Schema设计与基数陷阱.md) |
+| Core 硬限制（库 5 / 表 2000 / 列 500） | 阶段 3 · L6 | `schema_design.py` · `check_hard_limits` | [06](../../stages/3-数据模型与查询/lessons/06-数据模型-table-tag-field-timestamp.md) |
+| 保留键三类后果 | 阶段 3 · L6 | `schema_design.py` · `check_naming` | [06](../../stages/3-数据模型与查询/lessons/06-数据模型-table-tag-field-timestamp.md) |
+| 432 文件上限与可查窗口 | 阶段 4 · L11 | `engine.py` · `check_query_window` | [11](../../stages/4-存储引擎与性能/lessons/11-向量化执行-列存为什么快.md) |
+| 批量写入双阈值 | 阶段 4 · L12 | `engine.py` · `check_write_path` | [12](../../stages/4-存储引擎与性能/lessons/12-写入与查询性能调优.md) |
+| 内存三默认相加 90% | 阶段 5 · L13 | `engine.py` · `check_capacity` | [13](../../stages/5-生产落地/lessons/13-部署形态与容量规划.md) |
+| 降采样调度周期决定可查性 | 阶段 5 · L14 | `ops.py` · `check_downsample` | [14](../../stages/5-生产落地/lessons/14-降采样保留策略与成本.md) |
+| 保留期 `0d` 语义反转 / `mo` 非日历（命中检测） | 阶段 5 · L14 / 阶段 6 · L18 | `ops.py` · `check_retention` · `parse_retention` | [14](../../stages/5-生产落地/lessons/14-降采样保留策略与成本.md) |
+| Telegraf 四条硬约束 | 阶段 5 · L16 | `ops.py` · `check_telegraf` | [16](../../stages/5-生产落地/lessons/16-生态集成与自监控.md) |
+| Grafana 面板刷新决定账单 | 阶段 5 · L16 / 阶段 6 · L19 | `ops.py` · `check_grafana` | [16](../../stages/5-生产落地/lessons/16-生态集成与自监控.md) |
+| 层次差（存储引擎 vs 完整方案） | 阶段 6 · L17 | `decision.py` · `check_layering` | [17](../../stages/6-对比与决策/lessons/17-横向对比-五款候选.md) |
+| 迁移静默项 `reverse` / `drift` | 阶段 6 · L18 | `decision.py` · `check_migration` | [18](../../stages/6-对比与决策/lessons/18-迁移指南-从1x2x到3x.md) |
+| 约束冲突检测 | 阶段 6 · L19 | `decision.py` · `find_conflicts` | [19](../../stages/6-对比与决策/lessons/19-场景演练与选型决策.md) |
+| SKU 排雷与约束归属 | 阶段 6 · L19 | `decision.py` · `check_skus` / `surviving_skus` | [19](../../stages/6-对比与决策/lessons/19-场景演练与选型决策.md) |
+| TCO 与授权费盲区 | 阶段 6 · L19 | `tco.py` | [19](../../stages/6-对比与决策/lessons/19-场景演练与选型决策.md) |
 
 **跨阶段校验**：覆盖 **阶段 3 / 4 / 5 / 6 共 4 个阶段**（门槛 ≥3）✅
 

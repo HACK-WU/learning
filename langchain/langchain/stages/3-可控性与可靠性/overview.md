@@ -42,7 +42,7 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-08-Middleware中间件.md`
-- [x] `lessons/lesson-09-ContextEngineering上下文工程.md`
-- [x] `lessons/lesson-10-人机协同与护栏.md`
-- [x] `lessons/lesson-11-Retrieval检索与RAG.md`
+- [x] `lessons/08-Middleware中间件.md`
+- [x] `lessons/09-ContextEngineering上下文工程.md`
+- [x] `lessons/10-人机协同与护栏.md`
+- [x] `lessons/11-Retrieval检索与RAG.md`

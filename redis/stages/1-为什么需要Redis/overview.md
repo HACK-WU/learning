@@ -32,8 +32,8 @@
 
 ## 本阶段产出
 
-- [x] [课 1《Redis 是什么》](lessons/lesson-01-Redis是什么.md)（2026-08-31，评审 P0=0）
-- [x] [课 2《跑起来第一个 Redis》](lessons/lesson-02-跑起来第一个Redis.md)（2026-08-31，评审 P0=0）
+- [x] [课 1《Redis 是什么》](lessons/01-Redis是什么.md)（2026-08-31，评审 P0=0）
+- [x] [课 2《跑起来第一个 Redis》](lessons/02-跑起来第一个Redis.md)（2026-08-31，评审 P0=0）
 
 ---
 

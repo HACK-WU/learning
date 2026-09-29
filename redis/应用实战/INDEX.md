@@ -17,9 +17,9 @@
 
 | 序号 | 对应课 | 场景 | 覆盖知识点 | 实战篇 |
 |------|--------|------|-----------|--------|
-| 03 | [课 3：List 与 Hash](../stages/2-数据结构与命令/lessons/lesson-03-List与Hash.md) | 下单后的异步任务队列 + 对象存储选型 | List 阻塞弹出、List 当队列的硬伤、Hash vs String | [03-异步任务与对象存储.md](./03-异步任务与对象存储.md) |
-| 04 | [课 4：Set、ZSet 与特殊类型](../stages/2-数据结构与命令/lessons/lesson-04-Set、ZSet与特殊类型.md) | 实时排行榜 + 日活统计 | Set 去重与交并差、ZSet 双结构、Bitmap / HLL / Geo | [04-排行榜与日活统计.md](./04-排行榜与日活统计.md) |
-| 05 | [课 5：Stream 与 Pub/Sub](../stages/2-数据结构与命令/lessons/lesson-05-Stream与PubSub.md) | 订单消息的可靠投递 + 配置广播 | Stream 读写、消费者组与 PEL、Pub/Sub 边界 | [05-可靠消息与广播.md](./05-可靠消息与广播.md) |
-| 08 | [课 8：缓存设计](../stages/4-分布式与生产实践/lessons/lesson-08-缓存设计.md) | 商品详情缓存的三道防线 | 穿透 / 击穿 / 雪崩、Cache Aside、过期与淘汰 | [08-商品详情缓存.md](./08-商品详情缓存.md) |
+| 03 | [课 3：List 与 Hash](../stages/2-数据结构与命令/lessons/03-List与Hash.md) | 下单后的异步任务队列 + 对象存储选型 | List 阻塞弹出、List 当队列的硬伤、Hash vs String | [03-异步任务与对象存储.md](./03-异步任务与对象存储.md) |
+| 04 | [课 4：Set、ZSet 与特殊类型](../stages/2-数据结构与命令/lessons/04-Set、ZSet与特殊类型.md) | 实时排行榜 + 日活统计 | Set 去重与交并差、ZSet 双结构、Bitmap / HLL / Geo | [04-排行榜与日活统计.md](./04-排行榜与日活统计.md) |
+| 05 | [课 5：Stream 与 Pub/Sub](../stages/2-数据结构与命令/lessons/05-Stream与PubSub.md) | 订单消息的可靠投递 + 配置广播 | Stream 读写、消费者组与 PEL、Pub/Sub 边界 | [05-可靠消息与广播.md](./05-可靠消息与广播.md) |
+| 08 | [课 8：缓存设计](../stages/4-分布式与生产实践/lessons/08-缓存设计.md) | 商品详情缓存的三道防线 | 穿透 / 击穿 / 雪崩、Cache Aside、过期与淘汰 | [08-商品详情缓存.md](./08-商品详情缓存.md) |
 
 > 分步设计图见 `./assets/`，命名 `app-step{N}-{主题}.svg`。

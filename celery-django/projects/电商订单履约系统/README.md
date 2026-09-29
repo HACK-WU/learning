@@ -30,29 +30,29 @@
 
 | # | 知识点 | 所属阶段 / 课 | 本项目用在何处 | 回指 |
 |---|--------|--------------|---------------|------|
-| 1 | 同步请求里的慢活儿 | 阶段 1 · 课 1 | 下单/支付接口不直接发短信、不直接对账 | [lesson-01](../../stages/1-异步化的动因与Celery全景/lessons/lesson-01-为什么需要异步任务.md) |
-| 2 | 三大件 Producer / Broker / Worker | 阶段 1 · 课 2 | 整体架构：Django = Producer，Redis = Broker | [lesson-02](../../stages/1-异步化的动因与Celery全景/lessons/lesson-02-Celery架构全景与消息流转.md) |
-| 3 | Result Backend 与任务状态机 | 阶段 1 · 课 2 | 前端轮询订单履约进度 | [lesson-02](../../stages/1-异步化的动因与Celery全景/lessons/lesson-02-Celery架构全景与消息流转.md) |
-| 4 | Django 标准集成姿势 | 阶段 2 · 课 3 | `proj/celery.py` + `autodiscover_tasks` | [lesson-03](../../stages/2-Django集成与任务基础/lessons/lesson-03-第一个Celery+Django项目.md) |
-| 5 | `@shared_task` 与常用任务参数 | 阶段 2 · 课 3 | 各任务的参数配置（`bind`、`ignore_result`） | [lesson-03](../../stages/2-Django集成与任务基础/lessons/lesson-03-第一个Celery+Django项目.md) |
-| 6 | `delay` 与 `apply_async` | 阶段 2 · 课 4 | 关单用 `apply_async(countdown=)`，编排用 `delay` | [lesson-04](../../stages/2-Django集成与任务基础/lessons/lesson-04-调用任务与取回结果.md) |
-| 7 | `AsyncResult` 跨进程重建 | 阶段 2 · 课 4 | 订单查询接口用 `task_id` 查进度 | [lesson-04](../../stages/2-Django集成与任务基础/lessons/lesson-04-调用任务与取回结果.md) |
-| 8 | 确认机制（acks_late） | 阶段 3 · 课 5 | 全局 `task_acks_late=True` 保不丢 | [lesson-05](../../stages/3-可靠性与幂等/lessons/lesson-05-确认机制与重试策略.md) |
-| 9 | 至少一次投递 → 幂等 | 阶段 3 · 课 5 | ⭐ **决策 3 的核心**：CAS 状态机幂等关单 | [lesson-05](../../stages/3-可靠性与幂等/lessons/lesson-05-确认机制与重试策略.md) |
-| 10 | 重试策略（autoretry_for / 退避） | 阶段 3 · 课 5 | 短信/优惠券任务的指数退避重试 | [lesson-05](../../stages/3-可靠性与幂等/lessons/lesson-05-确认机制与重试策略.md) |
-| 11 | Django 事务与 `on_commit` | 阶段 3 · 课 6 | ⭐ 订单落库提交后才发任务（否则任务查不到订单） | [lesson-06](../../stages/3-可靠性与幂等/lessons/lesson-06-Django事务与ORM的坑.md) |
-| 12 | 传 id 而非 ORM 对象 | 阶段 3 · 课 6 | 所有任务参数只传 `order_id` | [lesson-06](../../stages/3-可靠性与幂等/lessons/lesson-06-Django事务与ORM的坑.md) |
-| 13 | 连接清理钩子 | 阶段 3 · 课 6 | `task_postrun` 关闭 DB 连接，防泄漏 | [lesson-06](../../stages/3-可靠性与幂等/lessons/lesson-06-Django事务与ORM的坑.md) |
-| 14 | beat 与周期性任务 | 阶段 4 · 课 7 | ⭐ **决策 2 方案 B**：兜底轮询扫描超时订单 + 心跳监控 | [lesson-07](../../stages/4-定时编排与生产运维/lessons/lesson-07-beat与周期性任务.md) |
-| 15 | canvas 编排（chain / chord / group） | 阶段 4 · 课 8 | 履约链路：`chord`（并行发券+通知 → 汇总对账） | [lesson-08](../../stages/4-定时编排与生产运维/lessons/lesson-08-canvas任务编排.md) |
-| 16 | 队列隔离与路由 | 阶段 4 · 课 9 | ⭐ **决策 1**：快/慢任务拆队列 + 专属 worker | [lesson-09](../../stages/4-定时编排与生产运维/lessons/lesson-09-生产部署与并发模型.md) |
-| 17 | 并发模型与资源 | 阶段 4 · 课 9 | 通知用 gevent，对账用 prefork | [lesson-09](../../stages/4-定时编排与生产运维/lessons/lesson-09-生产部署与并发模型.md) |
-| 18 | 优雅停机 | 阶段 4 · 课 9 | 发版不丢任务（soft shutdown + `TimeoutStopSec`） | [lesson-09](../../stages/4-定时编排与生产运维/lessons/lesson-09-生产部署与并发模型.md) |
-| 19 | 可观测性（events / task_id 日志） | 阶段 4 · 课 10 | 信号钩子打 `task_id` + Flower 排障 | [lesson-10](../../stages/4-定时编排与生产运维/lessons/lesson-10-监控、排查与上线清单.md) |
-| 20 | 超时保护（僵尸任务） | 阶段 4 · 课 10 | 所有任务配 `soft_time_limit` / `time_limit` | [lesson-10](../../stages/4-定时编排与生产运维/lessons/lesson-10-监控、排查与上线清单.md) |
-| 21 | 序列化安全（禁 pickle） | 阶段 4 · 课 10 | `accept_content = ['json']` | [lesson-10](../../stages/4-定时编排与生产运维/lessons/lesson-10-监控、排查与上线清单.md) |
-| 22 | result backend 清理 | 阶段 4 · 课 10 | 关单任务 `ignore_result=True` | [lesson-10](../../stages/4-定时编排与生产运维/lessons/lesson-10-监控、排查与上线清单.md) |
-| 23 | 死信队列（DLQ）兜底 | 阶段 3 · 课 5 · 知识点 2.5 | ⭐ 重试耗尽 → `proj/dlq.py` 落 Redis → 可查可重放 | [lesson-05](../../stages/3-可靠性与幂等/lessons/lesson-05-确认机制与重试策略.md) |
+| 1 | 同步请求里的慢活儿 | 阶段 1 · 课 1 | 下单/支付接口不直接发短信、不直接对账 | [01](../../stages/1-异步化的动因与Celery全景/lessons/01-为什么需要异步任务.md) |
+| 2 | 三大件 Producer / Broker / Worker | 阶段 1 · 课 2 | 整体架构：Django = Producer，Redis = Broker | [02](../../stages/1-异步化的动因与Celery全景/lessons/02-Celery架构全景与消息流转.md) |
+| 3 | Result Backend 与任务状态机 | 阶段 1 · 课 2 | 前端轮询订单履约进度 | [02](../../stages/1-异步化的动因与Celery全景/lessons/02-Celery架构全景与消息流转.md) |
+| 4 | Django 标准集成姿势 | 阶段 2 · 课 3 | `proj/celery.py` + `autodiscover_tasks` | [03](../../stages/2-Django集成与任务基础/lessons/03-第一个Celery+Django项目.md) |
+| 5 | `@shared_task` 与常用任务参数 | 阶段 2 · 课 3 | 各任务的参数配置（`bind`、`ignore_result`） | [03](../../stages/2-Django集成与任务基础/lessons/03-第一个Celery+Django项目.md) |
+| 6 | `delay` 与 `apply_async` | 阶段 2 · 课 4 | 关单用 `apply_async(countdown=)`，编排用 `delay` | [04](../../stages/2-Django集成与任务基础/lessons/04-调用任务与取回结果.md) |
+| 7 | `AsyncResult` 跨进程重建 | 阶段 2 · 课 4 | 订单查询接口用 `task_id` 查进度 | [04](../../stages/2-Django集成与任务基础/lessons/04-调用任务与取回结果.md) |
+| 8 | 确认机制（acks_late） | 阶段 3 · 课 5 | 全局 `task_acks_late=True` 保不丢 | [05](../../stages/3-可靠性与幂等/lessons/05-确认机制与重试策略.md) |
+| 9 | 至少一次投递 → 幂等 | 阶段 3 · 课 5 | ⭐ **决策 3 的核心**：CAS 状态机幂等关单 | [05](../../stages/3-可靠性与幂等/lessons/05-确认机制与重试策略.md) |
+| 10 | 重试策略（autoretry_for / 退避） | 阶段 3 · 课 5 | 短信/优惠券任务的指数退避重试 | [05](../../stages/3-可靠性与幂等/lessons/05-确认机制与重试策略.md) |
+| 11 | Django 事务与 `on_commit` | 阶段 3 · 课 6 | ⭐ 订单落库提交后才发任务（否则任务查不到订单） | [06](../../stages/3-可靠性与幂等/lessons/06-Django事务与ORM的坑.md) |
+| 12 | 传 id 而非 ORM 对象 | 阶段 3 · 课 6 | 所有任务参数只传 `order_id` | [06](../../stages/3-可靠性与幂等/lessons/06-Django事务与ORM的坑.md) |
+| 13 | 连接清理钩子 | 阶段 3 · 课 6 | `task_postrun` 关闭 DB 连接，防泄漏 | [06](../../stages/3-可靠性与幂等/lessons/06-Django事务与ORM的坑.md) |
+| 14 | beat 与周期性任务 | 阶段 4 · 课 7 | ⭐ **决策 2 方案 B**：兜底轮询扫描超时订单 + 心跳监控 | [07](../../stages/4-定时编排与生产运维/lessons/07-beat与周期性任务.md) |
+| 15 | canvas 编排（chain / chord / group） | 阶段 4 · 课 8 | 履约链路：`chord`（并行发券+通知 → 汇总对账） | [08](../../stages/4-定时编排与生产运维/lessons/08-canvas任务编排.md) |
+| 16 | 队列隔离与路由 | 阶段 4 · 课 9 | ⭐ **决策 1**：快/慢任务拆队列 + 专属 worker | [09](../../stages/4-定时编排与生产运维/lessons/09-生产部署与并发模型.md) |
+| 17 | 并发模型与资源 | 阶段 4 · 课 9 | 通知用 gevent，对账用 prefork | [09](../../stages/4-定时编排与生产运维/lessons/09-生产部署与并发模型.md) |
+| 18 | 优雅停机 | 阶段 4 · 课 9 | 发版不丢任务（soft shutdown + `TimeoutStopSec`） | [09](../../stages/4-定时编排与生产运维/lessons/09-生产部署与并发模型.md) |
+| 19 | 可观测性（events / task_id 日志） | 阶段 4 · 课 10 | 信号钩子打 `task_id` + Flower 排障 | [10](../../stages/4-定时编排与生产运维/lessons/10-监控、排查与上线清单.md) |
+| 20 | 超时保护（僵尸任务） | 阶段 4 · 课 10 | 所有任务配 `soft_time_limit` / `time_limit` | [10](../../stages/4-定时编排与生产运维/lessons/10-监控、排查与上线清单.md) |
+| 21 | 序列化安全（禁 pickle） | 阶段 4 · 课 10 | `accept_content = ['json']` | [10](../../stages/4-定时编排与生产运维/lessons/10-监控、排查与上线清单.md) |
+| 22 | result backend 清理 | 阶段 4 · 课 10 | 关单任务 `ignore_result=True` | [10](../../stages/4-定时编排与生产运维/lessons/10-监控、排查与上线清单.md) |
+| 23 | 死信队列（DLQ）兜底 | 阶段 3 · 课 5 · 知识点 2.5 | ⭐ 重试耗尽 → `proj/dlq.py` 落 Redis → 可查可重放 | [05](../../stages/3-可靠性与幂等/lessons/05-确认机制与重试策略.md) |
 
 **跨阶段校验**：覆盖 **4 个阶段**（阶段 1 / 2 / 3 / 4），门槛 ≥3 ✅
 

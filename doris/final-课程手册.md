@@ -84,13 +84,13 @@ MySQL 里 3 亿行订单，运营要跑「按省份按月的销售额 Top10」�
 
 ### 课 1《数据分析的困境与 Doris 的诞生》
 
-📖 [打开完整讲义](stages/1-为什么需要Doris/lessons/lesson-01-数据分析的困境与Doris的诞生.md)
+📖 [打开完整讲义](stages/1-为什么需要Doris/lessons/01-数据分析的困境与Doris的诞生.md)
 
 **一句话串起来**：行存让聚合查询白读 8 倍数据（实测 165 字节 vs 20 字节）→ 索引只能救特定维度，
 换维度就失效且拖慢写入（2.75 秒 → 80 秒）→ Doris 用列存 + MPP + 向量化从根上解决，且兼容 MySQL 协议让迁移无痛 →
 但它只管分析场景，事务和缓存请留给 MySQL 和 Redis。
 
-![课 1 一图总结](./stages/1-为什么需要Doris/assets/lesson-01-summary.svg)
+![课 1 一图总结](./stages/1-为什么需要Doris/assets/01-summary.svg)
 
 **关键数字**（2000 万行 MySQL 实测）：
 
@@ -108,14 +108,14 @@ MySQL 里 3 亿行订单，运营要跑「按省份按月的销售额 Top10」�
 
 ### 课 2《跑起来第一个 Doris》
 
-📖 [打开完整讲义](stages/1-为什么需要Doris/lessons/lesson-02-跑起来第一个Doris.md)
+📖 [打开完整讲义](stages/1-为什么需要Doris/lessons/02-跑起来第一个Doris.md)
 
 **一句话串起来**：Doris 只有 FE（想）和 BE（干）两类进程、不依赖任何外部服务，所以一条 `docker run` 就能起集群 →
 9030 查询（MySQL 协议，报告自己是 5.7.99）、8030 看状态、8040 导数据 → 建表比 MySQL 多三样
 （`DUPLICATE KEY` / `DISTRIBUTED BY HASH` / `PROPERTIES`，单机必须 `replication_num=1`）→
 实测 2050 万行：查询快 24–75 倍、存储压缩 16 倍、21 秒灌完 → 但也踩到分桶倾斜的坑，8 个桶空了一半。
 
-![课 2 一图总结](./stages/1-为什么需要Doris/assets/lesson-02-summary.svg)
+![课 2 一图总结](./stages/1-为什么需要Doris/assets/02-summary.svg)
 
 **关键数字**（2050 万行，MySQL vs Doris）：
 
@@ -144,14 +144,14 @@ MySQL 里 3 亿行订单，运营要跑「按省份按月的销售额 Top10」�
 
 ### 课 3《三种数据模型》
 
-📖 [打开完整讲义](stages/2-数据建模/lessons/lesson-03-三种数据模型.md)
+📖 [打开完整讲义](stages/2-数据建模/lessons/03-三种数据模型.md)
 
 **一句话串起来**：三种模型是三种「存数据的态度」——Duplicate 原样留（安全牌、可回溯）、
 Aggregate 边存边算（存储省 141 倍、并发快 4.8 倍，但明细烧掉）、
 Unique 后写覆盖前写（等价于全 REPLACE 的 Aggregate，4.x 默认 MOW 导入即合并）；
 选型的三个问题：要按主键更新吗？维度固定吗？都不是就选 Duplicate。
 
-![课 3 一图总结](./stages/2-数据建模/assets/lesson-03-summary.svg)
+![课 3 一图总结](./stages/2-数据建模/assets/03-summary.svg)
 
 **关键数字**（2050 万行）：
 
@@ -174,7 +174,7 @@ Unique 后写覆盖前写（等价于全 REPLACE 的 Aggregate，4.x 默认 MOW 
 
 ### 课 4《分区与分桶》
 
-📖 [打开完整讲义](stages/2-数据建模/lessons/lesson-04-分区与分桶.md)
+📖 [打开完整讲义](stages/2-数据建模/lessons/04-分区与分桶.md)
 
 **一句话串起来**：分区是按时间切大块（价值在整块跳过和管理，粒度要匹配查询模式——
 实测按天查一月要扫 240 个 tablet 而按月只要 8 个）、分桶是按哈希切小块（价值在打散并行，键要选高基数常用的列——
@@ -182,7 +182,7 @@ Unique 后写覆盖前写（等价于全 REPLACE 的 Aggregate，4.x 默认 MOW 
 （实测 `partitions=1/45`，扫描量从 2050 万降到 84 万、减少 24.3 倍）；
 ⚠️ 记住动态分区会以「今天」为基准建范围，历史数据可能静默丢失。
 
-![课 4 一图总结](./stages/2-数据建模/assets/lesson-04-summary.svg)
+![课 4 一图总结](./stages/2-数据建模/assets/04-summary.svg)
 
 **关键数字**：
 
@@ -203,7 +203,7 @@ Unique 后写覆盖前写（等价于全 REPLACE 的 Aggregate，4.x 默认 MOW 
 
 ### 课 5《键列、索引与同步物化视图》
 
-📖 [打开完整讲义](stages/2-数据建模/lessons/lesson-05-键列索引与同步物化视图.md)
+📖 [打开完整讲义](stages/2-数据建模/lessons/05-键列索引与同步物化视图.md)
 
 **一句话串起来**：Key 列顺序决定数据怎么排序、也就决定哪些查询能命中前缀索引
 （**注意硬约束：Key 必须是建表语句前几列**），ZoneMap 和前缀索引是自动免费的要先吃透，
@@ -211,7 +211,7 @@ BloomFilter / 倒排索引 / NGram BF 按需添加（**实测 2 个索引让存�
 Rollup 是最后手段（实测命中时 `avgRowSize` 从 33.57 降到 14.43，但存储 +43%）；
 优化判断靠 EXPLAIN 的确定性字段，不要靠秒表。
 
-![课 5 一图总结](./stages/2-数据建模/assets/lesson-05-summary.svg)
+![课 5 一图总结](./stages/2-数据建模/assets/05-summary.svg)
 
 **优化的判断顺序（从免费到昂贵）**：
 
@@ -248,12 +248,12 @@ Rollup 是最后手段（实测命中时 `avgRowSize` 从 33.57 降到 14.43，�
 
 ### 课 6《数据导入全家桶》
 
-📖 [打开完整讲义](stages/3-数据导入与查询/lessons/lesson-06-数据导入全家桶.md)
+📖 [打开完整讲义](stages/3-数据导入与查询/lessons/06-数据导入全家桶.md)
 
 **第一原则：攒批。** 导入事务是「按次付费」而非「按行付费」——每次事务都要走一遍
 开启事务 → 规划分发 → 写盘 → 提交发布的固定开销。把 N 次小事务合并成 1 次大事务，省下的是 N-1 次固定开销。
 
-![课 6 一图总结](./stages/3-数据导入与查询/assets/lesson-06-summary.svg)
+![课 6 一图总结](./stages/3-数据导入与查询/assets/06-summary.svg)
 
 **四种方式的定位**：
 
@@ -288,14 +288,14 @@ Rollup 是最后手段（实测命中时 `avgRowSize` 从 33.57 降到 14.43，�
 
 ### 课 7《查询引擎与执行计划》
 
-📖 [打开完整讲义](stages/3-数据导入与查询/lessons/lesson-07-查询引擎与执行计划.md)
+📖 [打开完整讲义](stages/3-数据导入与查询/lessons/07-查询引擎与执行计划.md)
 
 **第一原则：看账单，不看计划。** EXPLAIN 是计划（打算怎么花钱），Profile 是账单（钱花在哪了）。
 优化查询永远要看账单。判据只有一条：**`ExecTime` 大 = 它自己慢，`WaitForDependency` 大 = 它的上游慢**。
 读反了就会去优化一个 `ExecTime` 只有 18 微秒、却等了 196 毫秒的聚合算子——那是南辕北辙。
 
-![课 7 总结图](./stages/3-数据导入与查询/assets/lesson-07-summary.svg)
-![列存与向量化](./stages/3-数据导入与查询/assets/lesson-07-columnar.svg)
+![课 7 总结图](./stages/3-数据导入与查询/assets/07-summary.svg)
+![列存与向量化](./stages/3-数据导入与查询/assets/07-columnar.svg)
 
 **关键数字**（同一张表、同样 200 万行、同样 `COUNT+SUM`，只改 SELECT 的列）：
 
@@ -330,7 +330,7 @@ Rollup 是最后手段（实测命中时 `avgRowSize` 从 33.57 降到 14.43，�
 
 ### 课 8《多表关联与高级 SQL》
 
-📖 [打开完整讲义](stages/3-数据导入与查询/lessons/lesson-08-多表关联与高级SQL.md)
+📖 [打开完整讲义](stages/3-数据导入与查询/lessons/08-多表关联与高级SQL.md)
 
 **第一原则：Join 慢，慢在中间结果，不慢在策略。**
 `orders`（2150 万）自关联，按 `user_id`（高基数，几乎一对一）Join 产出 **24.5 万行**，耗时 **53/57/70 ms**；
@@ -338,8 +338,8 @@ Rollup 是最后手段（实测命中时 `avgRowSize` 从 33.57 降到 14.43，�
 **相差约 4000 倍，但两次用的都是同一种 Join 策略。** 策略决定「怎么搬数据」，中间结果规模决定「搬完要做多少次比较」。
 **先问中间结果有多少行，再问用哪个策略。**
 
-![四种分布式 Join 策略](./stages/3-数据导入与查询/assets/lesson-08-join.svg)
-![半结构化数据与异步物化视图](./stages/3-数据导入与查询/assets/lesson-08-summary.svg)
+![四种分布式 Join 策略](./stages/3-数据导入与查询/assets/08-join.svg)
+![半结构化数据与异步物化视图](./stages/3-数据导入与查询/assets/08-summary.svg)
 
 **四种策略的代价排序**（`join op` 是唯一确定性证据）：
 
@@ -389,13 +389,13 @@ VARIANT 磁盘 3.49 MB 已接近结构化存储（3.46 MB）——**用 0.03 MB 
 
 ### 课 9《副本、高可用与扩缩容》
 
-📖 [打开完整讲义](stages/4-分布式运维与生产落地/lessons/lesson-09-副本高可用与扩缩容.md)
+📖 [打开完整讲义](stages/4-分布式运维与生产落地/lessons/09-副本高可用与扩缩容.md)
 
 **第一原则：副本数是「请求」不是「保证」。** 声明 3 副本在只有 2 台 BE 时照样建表成功，
 但只落地 6 个副本（= 分桶数）。判定集群有没有冗余不能看建表语句，
 要看 `SHOW PROC '/statistic'` 的 `TabletNum` vs `ReplicaNum`——本机 shop 库 643/643，**零冗余**。
 
-![课 9 一图总结](./stages/4-分布式运维与生产落地/assets/lesson-09-summary.svg)
+![课 9 一图总结](./stages/4-分布式运维与生产落地/assets/09-summary.svg)
 
 **关键数字**：
 
@@ -420,11 +420,11 @@ VARIANT 磁盘 3.49 MB 已接近结构化存储（3.46 MB）——**用 0.03 MB 
 
 ### 课 10《资源隔离与负载管理》
 
-📖 [打开完整讲义](stages/4-分布式运维与生产落地/lessons/lesson-10-资源隔离与负载管理.md)
+📖 [打开完整讲义](stages/4-分布式运维与生产落地/lessons/10-资源隔离与负载管理.md)
 
 **一句话总结：Workload Group 给查询划地盘，Spill 给内存兜底，排队让超额请求等着而不是把所有人拖死。**
 
-![课 10 一图总结](./stages/4-分布式运维与生产落地/assets/lesson-10-summary.svg)
+![课 10 一图总结](./stages/4-分布式运维与生产落地/assets/10-summary.svg)
 
 **关键数字 — 隔离效果**（5 轮取范围，跑过两次）：
 
@@ -458,7 +458,7 @@ VARIANT 磁盘 3.49 MB 已接近结构化存储（3.46 MB）——**用 0.03 MB 
 
 ### 课 11《日常运维：Schema Change、备份与升级》
 
-📖 [打开完整讲义](stages/4-分布式运维与生产落地/lessons/lesson-11-日常运维SchemaChange备份与升级.md)
+📖 [打开完整讲义](stages/4-分布式运维与生产落地/lessons/11-日常运维SchemaChange备份与升级.md)
 
 **三件事，一句话记住**：
 
@@ -468,7 +468,7 @@ VARIANT 磁盘 3.49 MB 已接近结构化存储（3.46 MB）——**用 0.03 MB 
 | 备份与恢复 | 仓库是门、快照是货；`replication_num` 必须写；验证用 `SUM` 不用 `COUNT(*)` |
 | 监控与升级 | 优先级：副本健康 > 磁盘水位 > 错误率；升级顺序 BE → Observer → Follower → Master |
 
-![课 11 一图总结](./stages/4-分布式运维与生产落地/assets/lesson-11-summary.svg)
+![课 11 一图总结](./stages/4-分布式运维与生产落地/assets/11-summary.svg)
 
 **关键数字**：
 
@@ -493,14 +493,14 @@ VARIANT 磁盘 3.49 MB 已接近结构化存储（3.46 MB）——**用 0.03 MB 
 
 ### 课 12《选型、存算分离与场景落地》· 全课程收官
 
-📖 [打开完整讲义](stages/4-分布式运维与生产落地/lessons/lesson-12-选型存算分离与场景落地.md)
+📖 [打开完整讲义](stages/4-分布式运维与生产落地/lessons/12-选型存算分离与场景落地.md)
 
 **一句话收束**：
 
 > **Doris 是吞吐型、聚合型、批量型的分析引擎。用对了，2150 万行的聚合查询 0.14 秒；
 > 用错了，一次拿一行的点查 6 毫秒还嫌慢。选型不是问「它快不快」，而是问「我的查询模式是不是它擅长的那种」。**
 
-![Doris 的能力边界](./stages/4-分布式运维与生产落地/assets/lesson-12-boundary.svg)
+![Doris 的能力边界](./stages/4-分布式运维与生产落地/assets/12-boundary.svg)
 
 **关键数字**：
 

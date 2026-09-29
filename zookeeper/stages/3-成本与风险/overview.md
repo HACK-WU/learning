@@ -15,8 +15,8 @@
 
 | 课 | 讲义 | 一句话 |
 |----|------|--------|
-| L7 | [部署与运维成本：3 节点起步的小集群](lessons/lesson-07-部署与运维成本3节点起步的小集群.md) | 机器/磁盘/值守三张账单：2F+1 与专用日志盘、WAL+快照+autopurge、4lw 白名单与 Prometheus |
-| L8 | [经典的坑：Watch 风暴、羊群效应与 Session](lessons/lesson-08-经典的坑Watch风暴羊群效应与Session.md) | 客户端账单：Watch 风暴（扇出是乘法，含风暴→掉线→重注册浪正反馈）、Session 超时故障树（GC 停顿头号元凶）、反模式清单 | ✅ 已交付 |
+| L7 | [部署与运维成本：3 节点起步的小集群](lessons/07-部署与运维成本3节点起步的小集群.md) | 机器/磁盘/值守三张账单：2F+1 与专用日志盘、WAL+快照+autopurge、4lw 白名单与 Prometheus |
+| L8 | [经典的坑：Watch 风暴、羊群效应与 Session](lessons/08-经典的坑Watch风暴羊群效应与Session.md) | 客户端账单：Watch 风暴（扇出是乘法，含风暴→掉线→重注册浪正反馈）、Session 超时故障树（GC 停顿头号元凶）、反模式清单 | ✅ 已交付 |
 
 ## 故事位置
 

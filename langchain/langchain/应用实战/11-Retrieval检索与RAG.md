@@ -1,6 +1,6 @@
 # 实战 11：让 agent 回答公司内部政策，别让它编
 
-> 配套课程：[第 11 课：Retrieval 检索与 RAG](../stages/3-可控性与可靠性/lessons/lesson-11-Retrieval检索与RAG.md) ｜ 把知识点组装成可落地工作流：每步配设计图与代码（示例级，保证正确、可直接改用）
+> 配套课程：[第 11 课：Retrieval 检索与 RAG](../stages/3-可控性与可靠性/lessons/11-Retrieval检索与RAG.md) ｜ 把知识点组装成可落地工作流：每步配设计图与代码（示例级，保证正确、可直接改用）
 
 ## 场景
 

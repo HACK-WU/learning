@@ -1,6 +1,6 @@
 # 应用实战 · 一个域名挂多个服务，还能灰度放量
 
-> 对应课程：[第 8 课：Ingress：七层路由与灰度发布](../stages/3-网络与服务暴露/lessons/lesson-08-Ingress七层路由与灰度发布.md) ｜ 覆盖知识点：Ingress 规则与路径匹配、灰度发布与流量切分
+> 对应课程：[第 8 课：Ingress：七层路由与灰度发布](../stages/3-网络与服务暴露/lessons/08-Ingress七层路由与灰度发布.md) ｜ 覆盖知识点：Ingress 规则与路径匹配、灰度发布与流量切分
 > 定位：**会用，不上生产**——课里学完，在这里动手。课内第四幕做的是「Controller 装不装的区别、路径怎么匹配、ingress-nginx 为什么退役」的机制验证，这里做的是**一个真实的演进：对外端口越开越多怎么办 → 收敛成一个入口 → 新版本怎么安全地放出去**。
 > 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：[Ingress](https://kubernetes.io/zh-cn/docs/concepts/services-networking/ingress/)、[ingress-nginx 注解](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/)）
 > 🧪 **本篇全部输出为本机 kind 集群 `k8s-c1-calico`（k8s v1.34.0 + Calico v3.31.0，3 节点 + ingress-nginx）实测**，非推演；实测脚本见 `.plans/2026-09-16-k8s-应用实战补齐/t8-step1.sh` ~ `t8-step5.sh`
@@ -496,7 +496,7 @@ no-controller   does-not-exist   nc.example.com             80      5s
 
 ## 🧭 导航
 
-- ⬅️ 回到课程：[第 8 课：Ingress：七层路由与灰度发布](../stages/3-网络与服务暴露/lessons/lesson-08-Ingress七层路由与灰度发布.md)
+- ⬅️ 回到课程：[第 8 课：Ingress：七层路由与灰度发布](../stages/3-网络与服务暴露/lessons/08-Ingress七层路由与灰度发布.md)
 - 📚 全部实战：[应用实战索引](INDEX.md)
 - ⬅️ 上一课实战：[07 · 让前端稳定找到后端](07-Service与CoreDNS.md)
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # 双视角评审的事实核验：逐条回读讲义 + 对照实测
-M="/mnt/d/projects/learning/consul/子教程/运维专项/lessons/lesson-01-生产部署与集群搭建.md"
+M="/mnt/d/projects/learning/consul/子教程/运维专项/lessons/01-生产部署与集群搭建.md"
 
 echo "===== 1. 结构完整性（五幕 + 速查卡 + 导航）====="
 for s in '## 第一幕' '## 第二幕' '## 第三幕' '## 第四幕' '## 第五幕' '## 📇 概念速查卡' '## 🚀 下一批接力提示词' '## 🧭 课程导航'; do

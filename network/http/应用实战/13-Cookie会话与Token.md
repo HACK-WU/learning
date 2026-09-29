@@ -1,6 +1,6 @@
 # 应用实战 · Cookie、Session 与 Token
 
-> 对应课程：[第 13 课：Cookie、Session 与 Token：让无状态记住你](../stages/5-认证联调与决策/lessons/lesson-13-Cookie会话与Token.md) ｜ 覆盖知识点：13.1 Cookie 机制与安全属性、13.2 Session 与 Token 两条路线、13.3 HTTP 认证头
+> 对应课程：[第 13 课：Cookie、Session 与 Token：让无状态记住你](../stages/5-认证联调与决策/lessons/13-Cookie会话与Token.md) ｜ 覆盖知识点：13.1 Cookie 机制与安全属性、13.2 Session 与 Token 两条路线、13.3 HTTP 认证头
 > 定位：**会用，不上生产**——跟着一个登录接口从“先跑起来”演进到“能治理”。这里不展开数据库、OAuth 授权服务器、密钥托管和完整前端框架。
 > 📖 结论已按官方文档核对（核查于 2026-09｜来源：[MDN Cookies](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies)、[MDN Session management](https://developer.mozilla.org/en-US/docs/Web/Security/Authentication/Session_management)、[RFC 9110](https://www.rfc-editor.org/rfc/rfc9110.html)）
 
@@ -136,6 +136,6 @@ def logout(request, response, shared_store):
 
 ## 🧭 导航
 
-- ⬅️ 回到课程：[第 13 课：Cookie、Session 与 Token：让无状态记住你](../stages/5-认证联调与决策/lessons/lesson-13-Cookie会话与Token.md)
+- ⬅️ 回到课程：[第 13 课：Cookie、Session 与 Token：让无状态记住你](../stages/5-认证联调与决策/lessons/13-Cookie会话与Token.md)
 - 📚 全部实战：[应用实战索引](INDEX.md)
-- ➡️ 下一课：[第 14 课：CORS 与同源策略：浏览器的一票否决](../stages/5-认证联调与决策/lessons/lesson-14-CORS与同源策略.md)
+- ➡️ 下一课：[第 14 课：CORS 与同源策略：浏览器的一票否决](../stages/5-认证联调与决策/lessons/14-CORS与同源策略.md)

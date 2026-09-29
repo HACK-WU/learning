@@ -40,8 +40,8 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-10-HTTP1.1与协议奠基.md`
-- [x] `lessons/lesson-11-HTTP2与多路复用.md`
-- [x] `lessons/lesson-12-HTTP3与QUIC.md`
+- [x] `lessons/10-HTTP1.1与协议奠基.md`
+- [x] `lessons/11-HTTP2与多路复用.md`
+- [x] `lessons/12-HTTP3与QUIC.md`
 
 > ✅ 课 12 已完成：RFC 9000/9001/9114/9204、RFC 7838、MDN 与 curl 官方文档均按 2026-09 核查；正文把浏览器能力、客户端构建、服务端/CDN、UDP/443 路径和回退拆开，不用单一百分比代替实际协商证据。

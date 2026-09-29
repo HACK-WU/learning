@@ -165,9 +165,9 @@ dispatcher 的领取必须使用 `select_for_update(skip_locked=True)` 或等价
 
 | 解法 | 回指课程 |
 |------|---------|
-| A/B/C · Broker 选型与 HA | [课 3《第一个 Celery + Django 项目》](../stages/2-Django集成与任务基础/lessons/lesson-03-第一个Celery+Django项目.md) |
-| D · 事务与幂等 | [课 5《确认机制与重试策略》](../stages/3-可靠性与幂等/lessons/lesson-05-确认机制与重试策略.md)；[课 6《Django 事务与 ORM 的坑》](../stages/3-可靠性与幂等/lessons/lesson-06-Django事务与ORM的坑.md) |
-| 故障演练与观测 | [课 10《监控、排查与上线清单》](../stages/4-定时编排与生产运维/lessons/lesson-10-监控、排查与上线清单.md) |
+| A/B/C · Broker 选型与 HA | [课 3《第一个 Celery + Django 项目》](../stages/2-Django集成与任务基础/lessons/03-第一个Celery+Django项目.md) |
+| D · 事务与幂等 | [课 5《确认机制与重试策略》](../stages/3-可靠性与幂等/lessons/05-确认机制与重试策略.md)；[课 6《Django 事务与 ORM 的坑》](../stages/3-可靠性与幂等/lessons/06-Django事务与ORM的坑.md) |
+| 故障演练与观测 | [课 10《监控、排查与上线清单》](../stages/4-定时编排与生产运维/lessons/10-监控、排查与上线清单.md) |
 
 ### 什么情况下此方案不适用
 

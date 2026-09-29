@@ -87,7 +87,7 @@ checks.append(("评审清单 记录表含课4摘要", c2, "出现 %d 次" % rl.c
 p = os.path.join(ROOT, "stages/2-规则与告警/overview.md")
 with open(p, encoding="utf-8") as f:
     ov = f.read()
-c3 = "- [x] `lessons/lesson-04-规则引擎.md`" in ov
+c3 = "- [x] `lessons/04-规则引擎.md`" in ov
 checks.append(("阶段2 overview 课4 已勾选", c3, ""))
 
 # (4) 02-课程目录.md + 01-学习路径总览.md
@@ -109,7 +109,7 @@ for name, ok, extra in checks:
 # ---- 3) 讲义完整性 ----
 print()
 print("### 3) 讲义结构完整性 ###")
-p = os.path.join(ROOT, "stages/2-规则与告警/lessons/lesson-04-规则引擎.md")
+p = os.path.join(ROOT, "stages/2-规则与告警/lessons/04-规则引擎.md")
 with open(p, encoding="utf-8") as f:
     les = f.read()
 

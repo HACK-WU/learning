@@ -87,7 +87,7 @@ def get_config(name, redis_client):
 |---|---|
 | 代价 | 需要失效、回源、预热、内存预算和故障降级；数据会出现短暂不一致 |
 | 边界 | 不能把唯一订单、支付结果或不可重建数据只放缓存；需定义 Redis 清空后的恢复时间 |
-| 课程挂钩 | [课 1《Redis 是什么》](../stages/1-为什么需要Redis/lessons/lesson-01-Redis是什么.md)：Redis 定位；[课 8《缓存设计》](../stages/4-分布式与生产实践/lessons/lesson-08-缓存设计.md)：缓存旁路与一致性 |
+| 课程挂钩 | [课 1《Redis 是什么》](../stages/1-为什么需要Redis/lessons/01-Redis是什么.md)：Redis 定位；[课 8《缓存设计》](../stages/4-分布式与生产实践/lessons/08-缓存设计.md)：缓存旁路与一致性 |
 | 来源 | [Redis Cache-Aside pattern](https://redis.io/docs/latest/develop/use-cases/cache-aside/)、[Redis persistence](https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/) |
 
 ### 解法 B：数据库直接承担
@@ -119,7 +119,7 @@ LIMIT 100;
 |---|---|
 | 代价 | 热点查询可能竞争 CPU、锁和连接池；高峰扩容与降级手段较少 |
 | 边界 | 数据库已经达到延迟或连接上限时不要硬撑；复杂排序、计数和限流可能需要专门模型 |
-| 课程挂钩 | [课 1《Redis 是什么》](../stages/1-为什么需要Redis/lessons/lesson-01-Redis是什么.md)：什么时候不需要 Redis；[课 9《生产实践与选型》](../stages/4-分布式与生产实践/lessons/lesson-09-生产实践与选型.md)：容量与选型证据 |
+| 课程挂钩 | [课 1《Redis 是什么》](../stages/1-为什么需要Redis/lessons/01-Redis是什么.md)：什么时候不需要 Redis；[课 9《生产实践与选型》](../stages/4-分布式与生产实践/lessons/09-生产实践与选型.md)：容量与选型证据 |
 | 来源 | [PostgreSQL explicit locking](https://www.postgresql.org/docs/current/explicit-locking.html)（若使用 PostgreSQL）；查询计划、索引和容量仍以实际数据库版本文档与压测为准 |
 
 ### 解法 C：Redis 做关键数据层
@@ -151,7 +151,7 @@ redis-cli CONFIG GET appendonly
 |---|---|
 | 代价 | 恢复、备份、复制延迟、容量和升级都成为业务责任；持久化会带来 I/O 与重写成本 |
 | 边界 | 不能只开启 AOF 就宣称零丢失；要定义同步点、故障切换和恢复验收 |
-| 课程挂钩 | [课 5《RDB 与 AOF 持久化》](../stages/3-持久化与高可用/lessons/lesson-05-RDB与AOF持久化.md)：持久化；[课 6《主从复制与哨兵》](../stages/3-持久化与高可用/lessons/lesson-06-主从复制与哨兵.md)：复制与故障转移 |
+| 课程挂钩 | [课 5《RDB 与 AOF 持久化》](../stages/3-持久化与高可用/lessons/05-RDB与AOF持久化.md)：持久化；[课 6《主从复制与哨兵》](../stages/3-持久化与高可用/lessons/06-主从复制与哨兵.md)：复制与故障转移 |
 | 来源 | [Redis persistence](https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/)、[Redis replication](https://redis.io/docs/latest/operate/oss_and_stack/management/replication/) |
 
 ### 解法 D：专用系统或托管 Redis
@@ -180,7 +180,7 @@ flowchart TD
 |---|---|
 | 代价 | 专用系统增加技术栈；托管服务增加账单、网络和供应商锁定；迁移出口要提前设计 |
 | 边界 | 不要为了“合规”选择一个没有所需数据结构或延迟能力的系统；也不要把托管 SLA 当成业务 SLA |
-| 课程挂钩 | [课 5《Stream 与 Pub/Sub》](../stages/2-数据结构与命令/lessons/lesson-05-Stream与PubSub.md)：消息能力边界；[课 9《生产实践与选型》](../stages/4-分布式与生产实践/lessons/lesson-09-生产实践与选型.md)：Redis 选型与许可证 |
+| 课程挂钩 | [课 5《Stream 与 Pub/Sub》](../stages/2-数据结构与命令/lessons/05-Stream与PubSub.md)：消息能力边界；[课 9《生产实践与选型》](../stages/4-分布式与生产实践/lessons/09-生产实践与选型.md)：Redis 选型与许可证 |
 | 来源 | [Apache Kafka documentation](https://kafka.apache.org/documentation/)、[Redis licensing](https://redis.io/legal/licenses/)；托管服务以具体供应商合同与服务条款为准 |
 
 ## 发行版与许可证：单独做一次核对

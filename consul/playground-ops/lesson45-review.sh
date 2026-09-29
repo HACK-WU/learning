@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # 课4/课5 讲义评审：每条判定先核验再写入
-L4="/mnt/d/projects/learning/consul/子教程/运维专项/lessons/lesson-04-证书与密钥生命周期.md"
-L5="/mnt/d/projects/learning/consul/子教程/运维专项/lessons/lesson-05-备份、恢复与灾备演练.md"
+L4="/mnt/d/projects/learning/consul/子教程/运维专项/lessons/04-证书与密钥生命周期.md"
+L5="/mnt/d/projects/learning/consul/子教程/运维专项/lessons/05-备份、恢复与灾备演练.md"
 D=/tmp/consul-ops
 
 echo "===== 核验 1：课4 引用的 gossip keygen 44 字符 ====="
@@ -50,12 +50,12 @@ echo "  marker = '$(curl -s http://127.0.0.1:8501/v1/kv/lesson5/marker?raw 2>/de
 echo
 echo "===== 核验 8：两课引用的链接是否存在 ====="
 B="/mnt/d/projects/learning/consul/子教程/运维专项/lessons"
-for f in lesson-03-性能、容量与调优.md lesson-06-监控指标与告警.md; do
+for f in 03-性能、容量与调优.md 06-监控指标与告警.md; do
   [ -f "$B/$f" ] && echo "  ✅ $f" || echo "  ❌ $f 不存在"
 done
 for f in "/mnt/d/projects/learning/consul/09-排障速查手册.md" \
-         "/mnt/d/projects/learning/consul/stages/4-决策落地/lessons/lesson-11-许可证成本与风险.md" \
-         "/mnt/d/projects/learning/consul/stages/3-安全与多机房/lessons/lesson-08-ACL与安全模型.md" \
+         "/mnt/d/projects/learning/consul/stages/4-决策落地/lessons/11-许可证成本与风险.md" \
+         "/mnt/d/projects/learning/consul/stages/3-安全与多机房/lessons/08-ACL与安全模型.md" \
          "/mnt/d/projects/learning/consul/子教程/运维专项/overview.md"; do
   [ -f "$f" ] && echo "  ✅ $(basename $f)" || echo "  ❌ $(basename $f) 不存在"
 done

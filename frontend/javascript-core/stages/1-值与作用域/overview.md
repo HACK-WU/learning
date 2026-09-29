@@ -40,8 +40,8 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-01-变量与类型.md`
-- [x] `lessons/lesson-02-值的复制与比较.md`
-- [x] `lessons/lesson-03-作用域与闭包.md`
+- [x] `lessons/01-变量与类型.md`
+- [x] `lessons/02-值的复制与比较.md`
+- [x] `lessons/03-作用域与闭包.md`
 
 > 实操环境：Node.js v22.14.0（Windows PowerShell）。所有示例以 `node xxx.js` 直接运行为准。

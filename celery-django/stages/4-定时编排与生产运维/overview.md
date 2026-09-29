@@ -40,10 +40,10 @@
 
 ## 本阶段产出
 
-- [x] [`lessons/lesson-07-beat与周期性任务.md`](lessons/lesson-07-beat与周期性任务.md)
-- [x] [`lessons/lesson-08-canvas任务编排.md`](lessons/lesson-08-canvas任务编排.md)
-- [x] [`lessons/lesson-09-生产部署与并发模型.md`](lessons/lesson-09-生产部署与并发模型.md)
-- [x] [`lessons/lesson-10-监控、排查与上线清单.md`](lessons/lesson-10-监控、排查与上线清单.md)
+- [x] [`lessons/07-beat与周期性任务.md`](lessons/07-beat与周期性任务.md)
+- [x] [`lessons/08-canvas任务编排.md`](lessons/08-canvas任务编排.md)
+- [x] [`lessons/09-生产部署与并发模型.md`](lessons/09-生产部署与并发模型.md)
+- [x] [`lessons/10-监控、排查与上线清单.md`](lessons/10-监控、排查与上线清单.md)
 
 ---
 

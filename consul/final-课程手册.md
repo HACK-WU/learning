@@ -45,46 +45,46 @@ flowchart LR
 
 ### 阶段 1：认识 Consul（候选人登场）
 
-**课 1 为什么需要服务注册与发现** —— [讲义](./stages/1-认识Consul/lessons/lesson-01-为什么需要服务注册与发现.md)
+**课 1 为什么需要服务注册与发现** —— [讲义](./stages/1-认识Consul/lessons/01-为什么需要服务注册与发现.md)
 服务发现不是"查 IP"，是**把"地址"从代码里搬到运行时的一个可失效、可替换的间接层**。客户端发现 vs 服务端发现的差别，本质是"谁承担寻址逻辑"。
 
-**课 2 Consul 是什么与能力全景** —— [讲义](./stages/1-认识Consul/lessons/lesson-02-Consul是什么与能力全景.md)
+**课 2 Consul 是什么与能力全景** —— [讲义](./stages/1-认识Consul/lessons/02-Consul是什么与能力全景.md)
 **Consul 是能力集合，不是单一产品**（服务发现 / 健康检查 / KV / 多 DC / 网格 / DNS+HTTP 双接口）。这一条决定了后面所有结论都必须是"用它的哪部分"，而不是"用不用它"。
 
-**课 3 五分钟跑起来看一眼** —— [讲义](./stages/1-认识Consul/lessons/lesson-03-五分钟跑起来看一眼.md)（轻量体验课，可选跳过）
+**课 3 五分钟跑起来看一眼** —— [讲义](./stages/1-认识Consul/lessons/03-五分钟跑起来看一眼.md)（轻量体验课，可选跳过）
 本机实测踩到一个环境坑：Windows 的 `nslookup` **不支持自定义端口**，验证 DNS 接口要 `-dns-port=53` 适配。（课内已如实记录排查过程）
 
 ### 阶段 2：核心能力拆解（拆开引擎看成色）
 
-**课 4 服务发现与健康检查机制** —— [讲义](./stages/2-核心能力拆解/lessons/lesson-04-服务发现与健康检查机制.md)
+**课 4 服务发现与健康检查机制** —— [讲义](./stages/2-核心能力拆解/lessons/04-服务发现与健康检查机制.md)
 健康检查的语义比"探活"丰富得多——六种类型覆盖没有 HTTP 端口的后台任务（TTL / 脚本）。TTL 实测：心跳停止后约 **1 分 15 秒**自动注销。
 
-**课 5 Raft 与 Gossip 一致性成色** —— [讲义](./stages/2-核心能力拆解/lessons/lesson-05-Raft与Gossip一致性成色.md)
+**课 5 Raft 与 Gossip 一致性成色** —— [讲义](./stages/2-核心能力拆解/lessons/05-Raft与Gossip一致性成色.md)
 杀掉 leader 的三层节奏实测：**+3.6s suspect → +7.2s failed → +11s 选出新 leader → +19.7s autopilot 移除**。这三个数是"Consul 的 CP 成色"真正的量化答案。
 
-**课 6 KV 存储与配置管理** —— [讲义](./stages/2-核心能力拆解/lessons/lesson-06-KV存储与配置管理.md)
+**课 6 KV 存储与配置管理** —— [讲义](./stages/2-核心能力拆解/lessons/06-KV存储与配置管理.md)
 **KV 能当配置源，当不了配置中心**——无版本历史、无审计、无灰度。单值有硬上限，超限回 413（被动失败，重试无效）。
 
-**课 7 多数据中心与服务网格** —— [讲义](./stages/2-核心能力拆解/lessons/lesson-07-多数据中心与服务网格.md)
+**课 7 多数据中心与服务网格** —— [讲义](./stages/2-核心能力拆解/lessons/07-多数据中心与服务网格.md)
 两条都反常识：① 多 DC **联邦是查询通道，不是数据副本**（dc2 读 dc1 的 key 返回 404）；② Connect **默认 intention 是 allow**——不配 ACL 默认拒绝，网格形同虚设。另有实测的"幽灵意图"：意图删除后约 **11 分钟**内授权端点仍返回已删意图。
 
-**课 8 ACL 与安全模型** —— [讲义](./stages/2-核心能力拆解/lessons/lesson-08-ACL与安全模型.md)
+**课 8 ACL 与安全模型** —— [讲义](./stages/2-核心能力拆解/lessons/08-ACL与安全模型.md)
 **ACL 的失败是静默的**：无权限读单键返 403，但列服务返 `200 {}`、列 keys 返 `200 []`、递归读越权返 **404 伪装成"配置不存在"**。匿名 token 的 SecretID 就是字面量 `anonymous`——它不是"没权限"，它有默认策略。
 
 ### 阶段 3：横向对比（候选人同台竞技）
 
-**课 9 四大竞品逐个看** —— [讲义](./stages/3-横向对比/lessons/lesson-09-四大竞品逐个看.md)
+**课 9 四大竞品逐个看** —— [讲义](./stages/3-横向对比/lessons/09-四大竞品逐个看.md)
 四位对手各有出身决定牌面：ZK（Hadoop 生态 / ZAB）、etcd（k8s 基石 / 纯 KV）、Nacos（注册+配置二合一 / AP-CP 可切换）、Eureka（AP 自我保护 / 2.x 已停滞）。本课含两项事实纠错（Nacos 归属、Eureka 现状）。
 
-**课 10 多维对比矩阵** —— [讲义](./stages/3-横向对比/lessons/lesson-10-多维对比矩阵.md)
+**课 10 多维对比矩阵** —— [讲义](./stages/3-横向对比/lessons/10-多维对比矩阵.md)
 产出**四维矩阵 + 决策卡片 A–G**。性能维度**诚实做定性处理**——按大纲评审约定，无出处不写数字。
 
 ### 阶段 4：决策落地（签字画押）
 
-**课 11 许可证成本与风险** —— [讲义](./stages/4-决策落地/lessons/lesson-11-许可证成本与风险.md)
+**课 11 许可证成本与风险** —— [讲义](./stages/4-决策落地/lessons/11-许可证成本与风险.md)
 三本账：① 对绝大多数团队 **BUSL 1.1 不生效**（限制的是"卖与 HashiCorp 竞争的托管服务"），但它**确实不是开源许可证**（OSI 不认证），有合规政策的组织里这是硬成本；② 运维账里最贵的不是机器，是**"必须懂它"的人**；③ 退出账最反直觉：Consul **没有** OpenTofu 那样的成熟社区 fork 可退，退出路径是**控制耦合面**。
 
-**课 12 选型决策框架与场景结论** —— [讲义](./stages/4-决策落地/lessons/lesson-12-选型决策框架与场景结论.md)
+**课 12 选型决策框架与场景结论** —— [讲义](./stages/4-决策落地/lessons/12-选型决策框架与场景结论.md)
 全课程收束课，产出决策框架（**4 条一票否决项** + 5 种团队类型的权重表 + 四维打分卡）、四类场景结论（A–D）、三页纸决策材料。
 
 ---
@@ -105,14 +105,14 @@ flowchart LR
 
 | 课 | 最硬的一条实测结论 |
 |----|------------------|
-| **课 1 生产部署与集群搭建**（[讲义](./子教程/运维专项/lessons/lesson-01-生产部署与集群搭建.md)） | 坏 1 台可写（含停 leader，会重选）；坏 2 台不可用且**剩余进程仍存活**。无 quorum 的失败形态**不唯一**（空响应 000 / `No cluster leader` / `Raft leader not found` / `connection refused`），**空响应最常见**——故验收脚本必须校验 HTTP 状态码而非 body |
-| **课 2 集群健康与 day-2 运维**（[讲义](./子教程/运维专项/lessons/lesson-02-集群健康与day-2运维.md)） | **指标恒 0 陷阱**：API `Healthy=true` 而 `consul_autopilot_healthy` 恒 0，连 leader 自己的 `isLeader` 也 0。另：4 台时 FailureTolerance **仍 = 1**（4 台 ≠ 比 3 台多容错），5 台才是 2 |
-| **课 3 性能、容量与调优**（[讲义](./子教程/运维专项/lessons/lesson-03-性能、容量与调优.md)） | **吞吐差 42~48 倍**：串行 94~111 / 并发 675~757 / 批量事务 4559~4684 条每秒（两轮独立复现）。根因是每条串行写都要等一次 fsync + 复制确认 |
-| **课 4 证书与密钥生命周期**（[讲义](./子教程/运维专项/lessons/lesson-04-证书与密钥生命周期.md)） | **三类凭证互相独立**：gossip key / TLS / Connect CA，`keyring` 返回 empty 即未加密。**改 CA 配置 ≠ 立即轮换**——这是最常漏的一项 |
-| **课 5 备份、恢复与灾备演练**（[讲义](./子教程/运维专项/lessons/lesson-05-备份、恢复与灾备演练.md)） | **恢复是全量覆盖，不是合并**——快照之后写的数据恢复后全丢。快照**含真实 CA 私钥**（全毁重建后 CA 完整复活），此前"不含 CA 私钥"的说法经实测不成立 |
-| **课 6 监控指标与告警**（[讲义](./子教程/运维专项/lessons/lesson-06-监控指标与告警.md)） | **双重命名陷阱**：无前缀的 `consul_autopilot_healthy` 恒为 0（空壳），真实值在**带主机名前缀**的同名指标里。恒 0 指标配告警是**两种相反的错误**：写 `== 0` 永久误报，写 `> 0` **静默失效**（真故障也不响，最危险） |
-| **课 7 版本升级与迁移**（[讲义](./子教程/运维专项/lessons/lesson-07-版本升级与迁移.md)） | **回滚不是撤销，是回到过去**：回滚后老数据回来了，但升级窗口内新增的数据**全部丢失**。滚动升级受 quorum 约束——3 节点一次只能停 1 台，停 2 台写直接失败 |
-| **课 8 多机房与 K8s 运维视角**（[讲义](./子教程/运维专项/lessons/lesson-08-多机房与K8s运维视角.md)） | 联邦的价值是**故障域隔离**（dc2 全挂后 dc1 读写正常），不是数据冗余。WAN 故障检测 **40 秒**（`probe_interval=5s` × `suspicion_mult=6`）。`consul leave` 后进程活着、HTTP 200，但跨 DC 已断——且**清 data_dir 无效**，恢复必须 `consul join -wan` |
+| **课 1 生产部署与集群搭建**（[讲义](./子教程/运维专项/lessons/01-生产部署与集群搭建.md)） | 坏 1 台可写（含停 leader，会重选）；坏 2 台不可用且**剩余进程仍存活**。无 quorum 的失败形态**不唯一**（空响应 000 / `No cluster leader` / `Raft leader not found` / `connection refused`），**空响应最常见**——故验收脚本必须校验 HTTP 状态码而非 body |
+| **课 2 集群健康与 day-2 运维**（[讲义](./子教程/运维专项/lessons/02-集群健康与day-2运维.md)） | **指标恒 0 陷阱**：API `Healthy=true` 而 `consul_autopilot_healthy` 恒 0，连 leader 自己的 `isLeader` 也 0。另：4 台时 FailureTolerance **仍 = 1**（4 台 ≠ 比 3 台多容错），5 台才是 2 |
+| **课 3 性能、容量与调优**（[讲义](./子教程/运维专项/lessons/03-性能、容量与调优.md)） | **吞吐差 42~48 倍**：串行 94~111 / 并发 675~757 / 批量事务 4559~4684 条每秒（两轮独立复现）。根因是每条串行写都要等一次 fsync + 复制确认 |
+| **课 4 证书与密钥生命周期**（[讲义](./子教程/运维专项/lessons/04-证书与密钥生命周期.md)） | **三类凭证互相独立**：gossip key / TLS / Connect CA，`keyring` 返回 empty 即未加密。**改 CA 配置 ≠ 立即轮换**——这是最常漏的一项 |
+| **课 5 备份、恢复与灾备演练**（[讲义](./子教程/运维专项/lessons/05-备份、恢复与灾备演练.md)） | **恢复是全量覆盖，不是合并**——快照之后写的数据恢复后全丢。快照**含真实 CA 私钥**（全毁重建后 CA 完整复活），此前"不含 CA 私钥"的说法经实测不成立 |
+| **课 6 监控指标与告警**（[讲义](./子教程/运维专项/lessons/06-监控指标与告警.md)） | **双重命名陷阱**：无前缀的 `consul_autopilot_healthy` 恒为 0（空壳），真实值在**带主机名前缀**的同名指标里。恒 0 指标配告警是**两种相反的错误**：写 `== 0` 永久误报，写 `> 0` **静默失效**（真故障也不响，最危险） |
+| **课 7 版本升级与迁移**（[讲义](./子教程/运维专项/lessons/07-版本升级与迁移.md)） | **回滚不是撤销，是回到过去**：回滚后老数据回来了，但升级窗口内新增的数据**全部丢失**。滚动升级受 quorum 约束——3 节点一次只能停 1 台，停 2 台写直接失败 |
+| **课 8 多机房与 K8s 运维视角**（[讲义](./子教程/运维专项/lessons/08-多机房与K8s运维视角.md)） | 联邦的价值是**故障域隔离**（dc2 全挂后 dc1 读写正常），不是数据冗余。WAN 故障检测 **40 秒**（`probe_interval=5s` × `suspicion_mult=6`）。`consul leave` 后进程活着、HTTP 200，但跨 DC 已断——且**清 data_dir 无效**，恢复必须 `consul join -wan` |
 
 > **保命线优先级**：课 2（健康） > 课 6（监控） > 课 5（备份）。
 
@@ -124,11 +124,11 @@ flowchart LR
 
 | 篇 | 配套课 | 最硬的一条结论 |
 |----|--------|--------------|
-| **A 读模式实测**（[实战篇](./practices/实战A-读模式实测/README.md)） | [课 5](./stages/2-核心能力拆解/lessons/lesson-05-Raft与Gossip一致性成色.md) | 强杀 leader 后约 **9.5 秒**窗口内 `default`/`consistent` 全返 500，只有 `stale` 还返旧值——但 **quorum 丢失时 stale 也挂**。stale 换的是"选举期间可用"，不是"选举失败可用" |
-| **B Connect 最小闭环**（[实战篇](./practices/实战B-Connect最小闭环/README.md)） | [课 7](./stages/2-核心能力拆解/lessons/lesson-07-多数据中心与服务网格.md) | Consul 2.0.2 自带 `consul connect proxy`，**无需 Envoy 即可跑通 mTLS 数据面**；同时实测**绕过 sidecar 直连应用端口是明文 200**——网格不是"开了就安全" |
-| **C ACL 生产权限模型**（[实战篇](./practices/实战C-ACL生产权限模型/README.md)） | [课 8](./stages/2-核心能力拆解/lessons/lesson-08-ACL与安全模型.md) | 21 项权限矩阵验证出两个静默坑：递归读越权返 **404 伪装空配置**；`operator` 类资源**不带 label**，写成 `operator_prefix ""` 不报错但权限静默不生效 |
-| **D 灰度发布与流量切分**（[实战篇](./practices/实战D-灰度发布与流量切分/README.md)） | [课 7](./stages/2-核心能力拆解/lessons/lesson-07-多数据中心与服务网格.md) | Consul **有**灰度能力（`ServiceSplitter`），但**必须先把协议从默认 `tcp` 声明为 `http`**，否则写入直接 500；且**网关配置写入成功 ≠ 网关在运行**——`ingress-gateway` 写入后 8080 无任何进程监听。**控制面算得对，不等于流量真的按规则走**（需 Envoy） |
-| **E 北向网关与真实数据面**（[实战篇](./practices/实战E-北向网关与真实数据面/README.md)） | [课 7](./stages/2-核心能力拆解/lessons/lesson-07-多数据中心与服务网格.md) | 用 Docker 跑 Envoy 1.37.6 兑现 D 篇边界：网关→sidecar→后端**真实数据面打通**，实测 50/50 = V1:16/V2:14、权重热更新 90/10 免重启。三条硬约束：注册网关**必须带 `Kind:"ingress-gateway"`**、bootstrap **必须传 `-grpc-ca-file`**、请求**必须带 `web.ingress.*` Host 头否则 404。⚠️ 反面发现：**intention deny 写入 HTTP 200 但未拦截**（Envoy 无 DENY 策略），根因未确认 |
+| **A 读模式实测**（[实战篇](./practices/实战A-读模式实测/README.md)） | [课 5](./stages/2-核心能力拆解/lessons/05-Raft与Gossip一致性成色.md) | 强杀 leader 后约 **9.5 秒**窗口内 `default`/`consistent` 全返 500，只有 `stale` 还返旧值——但 **quorum 丢失时 stale 也挂**。stale 换的是"选举期间可用"，不是"选举失败可用" |
+| **B Connect 最小闭环**（[实战篇](./practices/实战B-Connect最小闭环/README.md)） | [课 7](./stages/2-核心能力拆解/lessons/07-多数据中心与服务网格.md) | Consul 2.0.2 自带 `consul connect proxy`，**无需 Envoy 即可跑通 mTLS 数据面**；同时实测**绕过 sidecar 直连应用端口是明文 200**——网格不是"开了就安全" |
+| **C ACL 生产权限模型**（[实战篇](./practices/实战C-ACL生产权限模型/README.md)） | [课 8](./stages/2-核心能力拆解/lessons/08-ACL与安全模型.md) | 21 项权限矩阵验证出两个静默坑：递归读越权返 **404 伪装空配置**；`operator` 类资源**不带 label**，写成 `operator_prefix ""` 不报错但权限静默不生效 |
+| **D 灰度发布与流量切分**（[实战篇](./practices/实战D-灰度发布与流量切分/README.md)） | [课 7](./stages/2-核心能力拆解/lessons/07-多数据中心与服务网格.md) | Consul **有**灰度能力（`ServiceSplitter`），但**必须先把协议从默认 `tcp` 声明为 `http`**，否则写入直接 500；且**网关配置写入成功 ≠ 网关在运行**——`ingress-gateway` 写入后 8080 无任何进程监听。**控制面算得对，不等于流量真的按规则走**（需 Envoy） |
+| **E 北向网关与真实数据面**（[实战篇](./practices/实战E-北向网关与真实数据面/README.md)） | [课 7](./stages/2-核心能力拆解/lessons/07-多数据中心与服务网格.md) | 用 Docker 跑 Envoy 1.37.6 兑现 D 篇边界：网关→sidecar→后端**真实数据面打通**，实测 50/50 = V1:16/V2:14、权重热更新 90/10 免重启。三条硬约束：注册网关**必须带 `Kind:"ingress-gateway"`**、bootstrap **必须传 `-grpc-ca-file`**、请求**必须带 `web.ingress.*` Host 头否则 404。⚠️ 反面发现：**intention deny 写入 HTTP 200 但未拦截**（Envoy 无 DENY 策略），根因未确认 |
 
 ---
 
@@ -258,13 +258,13 @@ flowchart LR
 
 | 你写的结论 | 应能回指 |
 |-----------|---------|
-| 关于注册发现 / 健康检查 | [课 4](./stages/2-核心能力拆解/lessons/lesson-04-服务发现与健康检查机制.md) |
-| 关于一致性 / 读模式 | [课 5](./stages/2-核心能力拆解/lessons/lesson-05-Raft与Gossip一致性成色.md) |
-| 关于 KV / 配置 | [课 6](./stages/2-核心能力拆解/lessons/lesson-06-KV存储与配置管理.md) |
-| 关于多 DC / 网格 | [课 7](./stages/2-核心能力拆解/lessons/lesson-07-多数据中心与服务网格.md) |
-| 关于权限 | [课 8](./stages/2-核心能力拆解/lessons/lesson-08-ACL与安全模型.md) |
-| 关于竞品对比 | [课 9](./stages/3-横向对比/lessons/lesson-09-四大竞品逐个看.md) / [课 10](./stages/3-横向对比/lessons/lesson-10-多维对比矩阵.md) |
-| 关于许可证 / 运维 / 退出 | [课 11](./stages/4-决策落地/lessons/lesson-11-许可证成本与风险.md) |
+| 关于注册发现 / 健康检查 | [课 4](./stages/2-核心能力拆解/lessons/04-服务发现与健康检查机制.md) |
+| 关于一致性 / 读模式 | [课 5](./stages/2-核心能力拆解/lessons/05-Raft与Gossip一致性成色.md) |
+| 关于 KV / 配置 | [课 6](./stages/2-核心能力拆解/lessons/06-KV存储与配置管理.md) |
+| 关于多 DC / 网格 | [课 7](./stages/2-核心能力拆解/lessons/07-多数据中心与服务网格.md) |
+| 关于权限 | [课 8](./stages/2-核心能力拆解/lessons/08-ACL与安全模型.md) |
+| 关于竞品对比 | [课 9](./stages/3-横向对比/lessons/09-四大竞品逐个看.md) / [课 10](./stages/3-横向对比/lessons/10-多维对比矩阵.md) |
+| 关于许可证 / 运维 / 退出 | [课 11](./stages/4-决策落地/lessons/11-许可证成本与风险.md) |
 
 > ⚠️ **某条结论回指不到具体课时，说明它是"感觉"而非"依据"**——评审会上被追问一句就会露馅。
 

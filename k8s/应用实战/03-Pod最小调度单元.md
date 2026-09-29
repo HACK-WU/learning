@@ -1,6 +1,6 @@
 # 应用实战 · Pod：最小调度单元
 
-> 对应课程：[第 3 课：Pod：k8s 的最小调度单元](../stages/1-心智模型与架构/lessons/lesson-03-Pod最小调度单元.md) ｜ 覆盖知识点：Pod 生命周期与状态机、探针三兄弟
+> 对应课程：[第 3 课：Pod：k8s 的最小调度单元](../stages/1-心智模型与架构/lessons/03-Pod最小调度单元.md) ｜ 覆盖知识点：Pod 生命周期与状态机、探针三兄弟
 > 定位：**会用，不上生产**——课里学完，在这里动手。课内第四幕做的是「探针是什么」的机制验证，这里做的是**一个真实故障从发生到修好的完整过程**。
 > 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：[Kubernetes 官方文档 · 配置存活、就绪和启动探针](https://kubernetes.io/zh-cn/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)）
 > 🧪 **本篇全部输出为本机 kind 集群（v1.34.0）实测**，非推演；实测脚本见 `.plans/2026-09-16-k8s-应用实战补齐/t3-probe.sh`
@@ -271,7 +271,7 @@ kubectl -n app-l3 get pod s3 --no-headers
 
 ## 🧭 导航
 
-- ⬅️ 回到课程：[第 3 课：Pod：k8s 的最小调度单元](../stages/1-心智模型与架构/lessons/lesson-03-Pod最小调度单元.md)
+- ⬅️ 回到课程：[第 3 课：Pod：k8s 的最小调度单元](../stages/1-心智模型与架构/lessons/03-Pod最小调度单元.md)
 - 📚 全部实战：[应用实战索引](INDEX.md)
 - ➡️ 下一课实战：[04 · 多容器协作与优雅退场](04-多容器Pod与优雅终止.md)
 

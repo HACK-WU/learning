@@ -39,8 +39,8 @@
 
 ### 场景补丁（不新增知识点）
 
-- [课 12](lessons/lesson-12-容器安全边界.md) 已补充 digest、签名、SBOM、provenance 的分工；DCT 是**正在退役**的旧路线，Notary v1 计划于 2026-12-08 关停。
-- [课 13](lessons/lesson-13-CI-CD与交付流水线.md) 已补充 `docker build --check .`、多架构发布、CI attestations 与 registry 症状分流。
+- [课 12](lessons/12-容器安全边界.md) 已补充 digest、签名、SBOM、provenance 的分工；DCT 是**正在退役**的旧路线，Notary v1 计划于 2026-12-08 关停。
+- [课 13](lessons/13-CI-CD与交付流水线.md) 已补充 `docker build --check .`、多架构发布、CI attestations 与 registry 症状分流。
 
 ## 🗺️ 本阶段路径图
 
@@ -48,7 +48,7 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-10-资源限制与进程管理.md`
-- [x] `lessons/lesson-11-日志与可观测性.md`
-- [x] `lessons/lesson-12-容器安全边界.md`
-- [x] `lessons/lesson-13-CI-CD与交付流水线.md`
+- [x] `lessons/10-资源限制与进程管理.md`
+- [x] `lessons/11-日志与可观测性.md`
+- [x] `lessons/12-容器安全边界.md`
+- [x] `lessons/13-CI-CD与交付流水线.md`

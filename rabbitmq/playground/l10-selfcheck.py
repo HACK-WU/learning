@@ -7,7 +7,7 @@ import re
 BASE = os.path.dirname(os.path.abspath(__file__))
 LESSON = os.path.join(
     BASE, '..', 'stages', '4-进阶与工程落地', 'lessons',
-    'lesson-10-高级特性.md')
+    '10-高级特性.md')
 
 print("=" * 70)
 print("课 10 交付前自检")

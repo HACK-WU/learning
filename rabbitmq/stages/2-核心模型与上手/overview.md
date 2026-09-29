@@ -38,8 +38,8 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-03-起RabbitMQ与发第一条消息.md`
-- [x] `lessons/lesson-04-交换机与路由.md`
-- [x] `lessons/lesson-05-队列与消息的属性.md`
+- [x] `lessons/03-起RabbitMQ与发第一条消息.md`
+- [x] `lessons/04-交换机与路由.md`
+- [x] `lessons/05-队列与消息的属性.md`
 
 > ✅ **阶段 2 已完成**（2026-08-31）。下一阶段：[阶段 3《可靠性与投递语义》](../3-可靠性与投递语义/overview.md)

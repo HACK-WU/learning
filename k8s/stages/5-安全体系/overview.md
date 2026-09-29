@@ -43,7 +43,7 @@
 
 ## ✅ 课 15 完成情况（2026-09-11）
 
-**讲义**：[lesson-15-RBAC与ServiceAccount.md](lessons/lesson-15-RBAC与ServiceAccount.md)
+**讲义**：[15-RBAC与ServiceAccount.md](lessons/15-RBAC与ServiceAccount.md)
 
 **阶段状态**：课 15 已完成，下一课为课 16《Pod 安全：PSA 与 securityContext》。
 
@@ -65,7 +65,7 @@
 
 ## ✅ 课 16 完成情况（2026-09-11）
 
-**讲义**：[lesson-16-Pod安全PSA与securityContext.md](lessons/lesson-16-Pod安全PSA与securityContext.md)
+**讲义**：[16-Pod安全PSA与securityContext.md](lessons/16-Pod安全PSA与securityContext.md)
 
 **阶段状态**：课 15、16 已完成，下一课为课 17《Secret 加固 · etcd 加密 · 审计》。
 
@@ -90,7 +90,7 @@
 
 ## ✅ 课 17 完成情况（2026-09-11，阶段收官）
 
-**讲义**：[lesson-17-Secret加固与etcd加密与审计.md](lessons/lesson-17-Secret加固与etcd加密与审计.md)
+**讲义**：[17-Secret加固与etcd加密与审计.md](lessons/17-Secret加固与etcd加密与审计.md)
 
 **阶段状态**：✅ **阶段 5《安全体系》三课全部完成**（课 15、16、17）。下一阶段为阶段 6《排障 · 运维 · 扩展》课 18《系统化排障：分层定位法》。
 
@@ -128,10 +128,10 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-15-RBAC与ServiceAccount.md`（2026-09-11 完成；双视角评审 P0 清零）
-- [x] `lessons/lesson-16-Pod安全PSA与securityContext.md`（2026-09-11 完成；双视角评审 P0 清零）
-- [x] `lessons/lesson-17-Secret加固与etcd加密与审计.md`（2026-09-11 完成；双视角评审 P0 清零）
-- [x] `lessons/lesson-17-Secret加固与etcd加密与审计.md`（2026-09-11 完成；双视角评审 P0 清零）
+- [x] `lessons/15-RBAC与ServiceAccount.md`（2026-09-11 完成；双视角评审 P0 清零）
+- [x] `lessons/16-Pod安全PSA与securityContext.md`（2026-09-11 完成；双视角评审 P0 清零）
+- [x] `lessons/17-Secret加固与etcd加密与审计.md`（2026-09-11 完成；双视角评审 P0 清零）
+- [x] `lessons/17-Secret加固与etcd加密与审计.md`（2026-09-11 完成；双视角评审 P0 清零）
 
 ### 课级入口要素补齐（2026-09-15）
 

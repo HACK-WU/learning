@@ -38,8 +38,8 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-07-HTTP缓存.md`
-- [x] `lessons/lesson-08-性能测量与优化.md`
-- [x] `lessons/lesson-09-代理网关与CDN.md`
+- [x] `lessons/07-HTTP缓存.md`
+- [x] `lessons/08-性能测量与优化.md`
+- [x] `lessons/09-代理网关与CDN.md`
 
 > ⚠️ 本阶段的动手环节都围绕"能测量"展开：Phase 2 写课时优先给可复现的测量命令与真实数据，先测量再谈优化。

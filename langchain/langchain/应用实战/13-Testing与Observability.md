@@ -1,6 +1,6 @@
 # 实战 13：给客服 agent 建一道「交付门禁」
 
-> 配套课程：[第 13 课：Testing 与 Observability](../stages/4-组合与工程化/lessons/lesson-13-Testing与Observability.md) ｜ 把知识点组装成可落地工作流：每步配设计图与代码（示例级，保证正确、可直接改用）
+> 配套课程：[第 13 课：Testing 与 Observability](../stages/4-组合与工程化/lessons/13-Testing与Observability.md) ｜ 把知识点组装成可落地工作流：每步配设计图与代码（示例级，保证正确、可直接改用）
 
 ## 场景
 

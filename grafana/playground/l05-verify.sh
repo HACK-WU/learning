@@ -2,7 +2,7 @@
 # 课 5 交付前结构校验（沿用课 4 的 l04-verify.sh 并适配）
 set -u
 
-F="/mnt/d/projects/learning/grafana/stages/2-查得到/lessons/lesson-05-Transformations：把查出来的数据捏成想要的形状.md"
+F="/mnt/d/projects/learning/grafana/stages/2-查得到/lessons/05-Transformations：把查出来的数据捏成想要的形状.md"
 BLOCK=0
 
 echo "=========================================================="

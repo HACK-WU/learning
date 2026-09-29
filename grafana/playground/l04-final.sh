@@ -13,7 +13,7 @@ bash playground/l04-verify.sh 2>&1 | tail -8
 
 echo ""
 echo "--- [2] 命令写法：必须全是单行（0 处反斜杠续行）---"
-DOC="stages/2-查得到/lessons/lesson-04-查询编辑器与数据源协议：一次查询的完整旅程.md"
+DOC="stages/2-查得到/lessons/04-查询编辑器与数据源协议：一次查询的完整旅程.md"
 # 用 awk 排除 ``` 围栏内的代码块（那里可能有展示缺陷用的错误示范）
 BAD=$(awk '/^```/{inblk=!inblk; next} !inblk && /wsl -d Ubuntu -- bash -lc +\\$/{c++} END{print c+0}' "$DOC")
 GOOD=$(grep -c 'wsl -d Ubuntu -- bash -lc "' "$DOC")

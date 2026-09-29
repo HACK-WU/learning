@@ -39,10 +39,10 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-03-本地起Kafka与CLI快速上手.md`
-- [x] `lessons/lesson-04-Topic、Partition与Broker.md`
-- [x] `lessons/lesson-05-生产者Producer.md`
-- [x] `lessons/lesson-06-消费者与消费者组.md`
+- [x] `lessons/03-本地起Kafka与CLI快速上手.md`
+- [x] `lessons/04-Topic、Partition与Broker.md`
+- [x] `lessons/05-生产者Producer.md`
+- [x] `lessons/06-消费者与消费者组.md`
 
 ## 📐 讲义规范升级（2026-09-14）
 

@@ -5,7 +5,7 @@
 # C 组：课尾三段式
 # D 组：正文引用的本地文件是否真实存在
 set -u
-DOC="/mnt/d/projects/learning/grafana/stages/1-看得见/lessons/lesson-02-第一个面板：从零到看得见.md"
+DOC="/mnt/d/projects/learning/grafana/stages/1-看得见/lessons/02-第一个面板：从零到看得见.md"
 BASE="/mnt/d/projects/learning/grafana"
 FAIL=0
 
@@ -75,8 +75,8 @@ for rel in \
   if [ -f "${BASE}/${rel}" ]; then echo "  ✅ ${rel}"; else echo "  ❌ ${rel} 不存在"; FAIL=$((FAIL+1)); fi
 done
 for rel in \
-  "stages/1-看得见/lessons/lesson-01-Grafana是谁：一个不存数据的看图工具.md" \
-  "stages/1-看得见/lessons/lesson-03-变量与Dashboard组织：一张图服务N台机器.md" \
+  "stages/1-看得见/lessons/01-Grafana是谁：一个不存数据的看图工具.md" \
+  "stages/1-看得见/lessons/03-变量与Dashboard组织：一张图服务N台机器.md" \
   "stages/1-看得见/overview.md" \
   "02-课程目录.md" \
   "00-学习档案.md"; do

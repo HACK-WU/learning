@@ -61,7 +61,7 @@ grafana/playground/l08_probe_rule3.py
 grafana/playground/l08_probe_policy2.py
 grafana/playground/l08_probe_group.py
 grafana/playground/l08_probe_timing.py
-grafana/stages/3-叫得醒/lessons/lesson-08-告警规则与通知策略实战.md"
+grafana/stages/3-叫得醒/lessons/08-告警规则与通知策略实战.md"
 KEEP_OK=0
 KEEP_BAD=0
 for f in $SHOULD_KEEP; do
@@ -78,7 +78,7 @@ echo "  教学产物保护: $KEEP_OK 条, 误伤: $KEEP_BAD 条"
 
 echo ""
 echo "--- [3] 回归：课 7 及之前的教学产物不应被新增规则影响 ---"
-OLD_KEEP="grafana/stages/3-叫得醒/lessons/lesson-07-告警架构：规则在哪求值、状态怎么迁移.md
+OLD_KEEP="grafana/stages/3-叫得醒/lessons/07-告警架构：规则在哪求值、状态怎么迁移.md
 grafana/playground/l07-mkfolder.sh
 grafana/playground/l00-env-up.sh
 grafana/playground/l01-forms.py

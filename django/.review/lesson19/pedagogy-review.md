@@ -1,6 +1,6 @@
 # 课 19《文件、存储与 Admin》pedagogy 视角评审
 
-评审对象：`stages/6-工程化与生产/lessons/lesson-19-文件存储与Admin.md`
+评审对象：`stages/6-工程化与生产/lessons/19-文件存储与Admin.md`
 评审日期：2026-09-03
 
 ---

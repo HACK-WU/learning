@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 R=/mnt/d/projects/learning/consul
 B="$R/子教程/运维专项/lessons"
-L7="$B/lesson-07-版本升级与迁移.md"
+L7="$B/07-版本升级与迁移.md"
 export CONSUL_HTTP_ADDR=http://127.0.0.1:8501
 
 echo "===== 1. 讲义引用的实测数字复测 ====="

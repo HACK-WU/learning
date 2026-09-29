@@ -1,6 +1,6 @@
 # 应用实战 · Celery 架构全景与消息流转
 
-> 对应课程：[课 2：Celery 架构全景与消息流转](../stages/1-异步化的动因与Celery全景/lessons/lesson-02-Celery架构全景与消息流转.md) ｜ 覆盖知识点：三大件 Producer / Broker / Worker、一次 delay() 的完整旅程
+> 对应课程：[课 2：Celery 架构全景与消息流转](../stages/1-异步化的动因与Celery全景/lessons/02-Celery架构全景与消息流转.md) ｜ 覆盖知识点：三大件 Producer / Broker / Worker、一次 delay() 的完整旅程
 > 定位：**会用，不上生产**——课里学完，在这里动手。课内第四幕做的是「用 redis-cli 直视队列」的机制验证，这里做的是**队列堵了之后怎么定位、怎么拆**。
 > 🧪 **本篇队头阻塞数据为本机实测**（Celery 5.6.3 / Redis 7.0.15 / Python 3.12.3），实测脚本见 `.plans/2026-09-17-应用实战与场景库升级/a2-headblock.sh`
 
@@ -186,7 +186,7 @@ redis-cli -n 0 -p 6380 llen slow      # → 0       ← 慢任务在跑，但没
 
 ## 🧭 导航
 
-- ⬅️ 回到课程：[课 2：Celery 架构全景与消息流转](../stages/1-异步化的动因与Celery全景/lessons/lesson-02-Celery架构全景与消息流转.md)
+- ⬅️ 回到课程：[课 2：Celery 架构全景与消息流转](../stages/1-异步化的动因与Celery全景/lessons/02-Celery架构全景与消息流转.md)
 - 📚 全部实战：[应用实战索引](INDEX.md)
 - ➡️ 下一篇：[04 · 前端要进度条：task_id 轮询闭环](04-调用任务与取回结果.md)
-- 🔗 延伸：[课 9《生产部署与并发模型》](../stages/4-定时编排与生产运维/lessons/lesson-09-生产部署与并发模型.md) 会讲并发模型选型与路由验证三步法
+- 🔗 延伸：[课 9《生产部署与并发模型》](../stages/4-定时编排与生产运维/lessons/09-生产部署与并发模型.md) 会讲并发模型选型与路由验证三步法

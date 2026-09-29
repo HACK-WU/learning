@@ -2,7 +2,7 @@
 # 课 8 结构校验
 set -u
 cd /mnt/d/projects/learning/grafana
-F="stages/3-叫得醒/lessons/lesson-08-告警规则与通知策略实战.md"
+F="stages/3-叫得醒/lessons/08-告警规则与通知策略实战.md"
 
 echo "=========================================================="
 echo " 课 8 结构校验"
@@ -51,7 +51,7 @@ echo ""
 echo "--- [4] 硬约束：命令单行（代码块外不得有反斜杠续行）---"
 python3 - <<'PY'
 import re
-p="stages/3-叫得醒/lessons/lesson-08-告警规则与通知策略实战.md"
+p="stages/3-叫得醒/lessons/08-告警规则与通知策略实战.md"
 lines=open(p,encoding="utf-8").read().split("\n")
 in_block=False
 bad=0

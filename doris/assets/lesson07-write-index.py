@@ -1,15 +1,15 @@
 import io
 
 base = '/mnt/d/projects/learning/doris/'
-L7 = 'stages/3-数据导入与查询/lessons/lesson-07-查询引擎与执行计划.md'
+L7 = 'stages/3-数据导入与查询/lessons/07-查询引擎与执行计划.md'
 
 # ---------- 1. 02-课程目录.md ----------
 p = base + '02-课程目录.md'
 s = io.open(p, encoding='utf-8').read()
 
 # 补修课 6：此前只加了链接，忘了标 ✅（课 6 交付时的索引遗漏）
-old6 = '### [课 6：数据导入全家桶](stages/3-数据导入与查询/lessons/lesson-06-数据导入全家桶.md)（未编写）'
-new6 = '### [课 6：数据导入全家桶](stages/3-数据导入与查询/lessons/lesson-06-数据导入全家桶.md) ✅'
+old6 = '### [课 6：数据导入全家桶](stages/3-数据导入与查询/lessons/06-数据导入全家桶.md)（未编写）'
+new6 = '### [课 6：数据导入全家桶](stages/3-数据导入与查询/lessons/06-数据导入全家桶.md) ✅'
 assert old6 in s, 'lesson6 row not found'
 s = s.replace(old6, new6)
 

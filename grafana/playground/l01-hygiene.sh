@@ -34,7 +34,7 @@ echo "=== 5. 关键教学产物是否被 .gitignore 误伤（check-ignore 应无
 for f in 00-学习档案.md 00-评审清单.md 01-学习路径总览.md 02-课程目录.md \
          assets/learning-path-overview.svg \
          "stages/1-看得见/overview.md" \
-         "stages/1-看得见/lessons/lesson-01-Grafana是谁：一个不存数据的看图工具.md" \
+         "stages/1-看得见/lessons/01-Grafana是谁：一个不存数据的看图工具.md" \
          playground/l01-forms.py playground/prometheus.yml; do
   R=$(git -C /mnt/d/projects/learning check-ignore -v "grafana/$f" 2>/dev/null)
   if [ -n "$R" ]; then echo "  ❌ 被忽略: $f  <- $R"; else echo "  ✅ 未被忽略: $f"; fi

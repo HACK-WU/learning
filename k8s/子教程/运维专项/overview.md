@@ -30,13 +30,13 @@
 
 | 课 | 知识点（关键点） | 对应主线提及 |
 |----|-----------------|-------------|
-| [课 1：集群交付：从裸机到可交付](lessons/lesson-01-集群交付：从裸机到可交付.md)（✅ 已完成 · 2026-09-20） | kubeadm 究竟交付了什么（控制面组件 / 静态 Pod / 证书体系 / 节点接入）；生产清单还缺什么（CNI / 存储 / 入口 / 监控 / 备份 / 高可用）；环境一致性（运行时、内核参数、时间同步、镜像预拉取） | 主线课 19（原理课落地） |
-| [课 2：节点运维与容量管理](lessons/lesson-02-节点运维与容量管理.md)（✅ 已完成 · 2026-09-20） | 节点资源账本（Capacity / Allocatable / Allocated）与装箱率；资源预留（`kube-reserved` / `system-reserved`）与驱逐阈值（nodefs / imagefs / inodesFree）；节点上下线标准流程（cordon / drain / uncordon 与三个卡点） | 主线课 13（Pod 侧→节点侧） |
-| [课 3：etcd 与控制面运维](lessons/lesson-03-etcd与控制面运维.md)（✅ 已完成 · 2026-09-20） | etcd 备份**真跑与取出**（hostPath / distroless 无 tar / 3.6 无 etcdutl）；etcd 健康与空间（DB SIZE vs WAL、碎片率、配额）；控制面组件连接关系与故障域（谁直连 etcd、静态清单重启机制、证书有效期） | 主线课 19（原理课→真跑） |
-| [课 4：升级 · 证书 · 生命周期](lessons/lesson-04-升级与证书生命周期.md)（✅ 已完成 · 2026-09-20） | 证书三层级**双源验证**（CA 10 年 / 组件 1 年 / kubelet 自动轮换，openssl 独立核）；版本偏差**两类拒绝实测**（plan 不校验、apply 才拦；补丁版 errors+force vs 次版本 fatal 无 force）；升级**静默删手工 patch 的安全加固**（实测 12 处）与回滚边界（无 undo，退路只有 etcd 快照） | 主线课 19（原理→预演）、课 17（加密审计来源） |
-| [课 5：可观测性底座：监控 · 日志 · 告警](lessons/lesson-05-可观测性底座：监控·日志·告警.md)（✅ 已完成 · 2026-09-20） | 指标**三层实测取数**（节点 kubelet/cAdvisor、组件 apiserver/etcd 自带；取数用 `kubectl get --raw`，curl 直连因"身份不对"被 Forbidden）；日志**两套体系留存差异**（Pod 日志跟 Pod 走会丢、审计日志占 332M）；告警**三步语义核验**（Counter 必须 `rate()`） | 主线课 14（三支柱概念）、课 20（聚合层） |
-| [课 6：多租户治理与成本](lessons/lesson-06-多租户治理与成本.md)（✅ 已完成 · 2026-09-20） | 隔离**四层**（namespace 只是文件夹 / RBAC 拦 API 不拦流量 / NetworkPolicy 默认全通 / Quota 按剩余判定）；**不声明资源绕不过配额**（must specify），LimitRange 自动注入但**不回溯**；**只写 limits 反得 Guaranteed**（requests 自动补齐）；装箱率 2.93% vs 实际 0.68%（CPU 虚高 4.3 倍 / MEM 实际反超），`calico-system` 11 Pod 在成本表里隐形 | 主线课 13、课 15 |
-| [课 7：备份 · 灾备 · 变更体系](lessons/lesson-07-备份·灾备·变更体系.md)（✅ 已完成 · 2026-09-20） | 备份**三层**（etcd 32M vs 导出 7.7M，差 4.2 倍）；恢复**失真**（uid 必变、PV `claimRef.uid` 绑死 PVC → 数据挂不上）；**备份污染**（含 `kube-root-ca.crt` → 2 个 Conflict，剔除后 0）；RPO 用 etcd revision 实测外推（本机 CronJob=0 → RPO=∞）；**VAP 准入真验**（Deny 拒绝 / Warn 放行，`namespaceSelector` 锁单 ns）；回滚实测 RTO 1.99 秒 | 主线课 14、课 20 |
+| [课 1：集群交付：从裸机到可交付](lessons/01-集群交付：从裸机到可交付.md)（✅ 已完成 · 2026-09-20） | kubeadm 究竟交付了什么（控制面组件 / 静态 Pod / 证书体系 / 节点接入）；生产清单还缺什么（CNI / 存储 / 入口 / 监控 / 备份 / 高可用）；环境一致性（运行时、内核参数、时间同步、镜像预拉取） | 主线课 19（原理课落地） |
+| [课 2：节点运维与容量管理](lessons/02-节点运维与容量管理.md)（✅ 已完成 · 2026-09-20） | 节点资源账本（Capacity / Allocatable / Allocated）与装箱率；资源预留（`kube-reserved` / `system-reserved`）与驱逐阈值（nodefs / imagefs / inodesFree）；节点上下线标准流程（cordon / drain / uncordon 与三个卡点） | 主线课 13（Pod 侧→节点侧） |
+| [课 3：etcd 与控制面运维](lessons/03-etcd与控制面运维.md)（✅ 已完成 · 2026-09-20） | etcd 备份**真跑与取出**（hostPath / distroless 无 tar / 3.6 无 etcdutl）；etcd 健康与空间（DB SIZE vs WAL、碎片率、配额）；控制面组件连接关系与故障域（谁直连 etcd、静态清单重启机制、证书有效期） | 主线课 19（原理课→真跑） |
+| [课 4：升级 · 证书 · 生命周期](lessons/04-升级与证书生命周期.md)（✅ 已完成 · 2026-09-20） | 证书三层级**双源验证**（CA 10 年 / 组件 1 年 / kubelet 自动轮换，openssl 独立核）；版本偏差**两类拒绝实测**（plan 不校验、apply 才拦；补丁版 errors+force vs 次版本 fatal 无 force）；升级**静默删手工 patch 的安全加固**（实测 12 处）与回滚边界（无 undo，退路只有 etcd 快照） | 主线课 19（原理→预演）、课 17（加密审计来源） |
+| [课 5：可观测性底座：监控 · 日志 · 告警](lessons/05-可观测性底座：监控·日志·告警.md)（✅ 已完成 · 2026-09-20） | 指标**三层实测取数**（节点 kubelet/cAdvisor、组件 apiserver/etcd 自带；取数用 `kubectl get --raw`，curl 直连因"身份不对"被 Forbidden）；日志**两套体系留存差异**（Pod 日志跟 Pod 走会丢、审计日志占 332M）；告警**三步语义核验**（Counter 必须 `rate()`） | 主线课 14（三支柱概念）、课 20（聚合层） |
+| [课 6：多租户治理与成本](lessons/06-多租户治理与成本.md)（✅ 已完成 · 2026-09-20） | 隔离**四层**（namespace 只是文件夹 / RBAC 拦 API 不拦流量 / NetworkPolicy 默认全通 / Quota 按剩余判定）；**不声明资源绕不过配额**（must specify），LimitRange 自动注入但**不回溯**；**只写 limits 反得 Guaranteed**（requests 自动补齐）；装箱率 2.93% vs 实际 0.68%（CPU 虚高 4.3 倍 / MEM 实际反超），`calico-system` 11 Pod 在成本表里隐形 | 主线课 13、课 15 |
+| [课 7：备份 · 灾备 · 变更体系](lessons/07-备份·灾备·变更体系.md)（✅ 已完成 · 2026-09-20） | 备份**三层**（etcd 32M vs 导出 7.7M，差 4.2 倍）；恢复**失真**（uid 必变、PV `claimRef.uid` 绑死 PVC → 数据挂不上）；**备份污染**（含 `kube-root-ca.crt` → 2 个 Conflict，剔除后 0）；RPO 用 etcd revision 实测外推（本机 CronJob=0 → RPO=∞）；**VAP 准入真验**（Deny 拒绝 / Warn 放行，`namespaceSelector` 锁单 ns）；回滚实测 RTO 1.99 秒 | 主线课 14、课 20 |
 
 ## 学习路径
 

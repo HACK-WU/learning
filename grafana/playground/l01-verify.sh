@@ -2,7 +2,7 @@
 # 课 1 交付校验：结构合规 + 链接可达 + 引用文件存在
 set -u
 ROOT=/mnt/d/projects/learning/grafana
-L="$ROOT/stages/1-看得见/lessons/lesson-01-Grafana是谁：一个不存数据的看图工具.md"
+L="$ROOT/stages/1-看得见/lessons/01-Grafana是谁：一个不存数据的看图工具.md"
 FAIL=0
 
 echo "===== A 组：结构合规 ====="

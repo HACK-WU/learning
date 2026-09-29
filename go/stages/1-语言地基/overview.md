@@ -73,6 +73,6 @@ go run main.go               # 应输出：hello, 小谷！
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-01-Go是什么、环境怎么跑起来.md`
-- [ ] `lessons/lesson-02-变量、类型与控制流.md`
-- [ ] `lessons/lesson-03-数组、切片与map.md`
+- [x] `lessons/01-Go是什么、环境怎么跑起来.md`
+- [ ] `lessons/02-变量、类型与控制流.md`
+- [ ] `lessons/03-数组、切片与map.md`

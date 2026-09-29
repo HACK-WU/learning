@@ -1,6 +1,6 @@
 # 实战 9：把长对话的上下文瘦下来
 
-> 配套课程：[第 9 课：Context Engineering 上下文工程](../stages/3-可控性与可靠性/lessons/lesson-09-ContextEngineering上下文工程.md) ｜ 把知识点组装成可落地工作流：每步配设计图与代码（示例级，保证正确、可直接改用）
+> 配套课程：[第 9 课：Context Engineering 上下文工程](../stages/3-可控性与可靠性/lessons/09-ContextEngineering上下文工程.md) ｜ 把知识点组装成可落地工作流：每步配设计图与代码（示例级，保证正确、可直接改用）
 
 ## 场景
 

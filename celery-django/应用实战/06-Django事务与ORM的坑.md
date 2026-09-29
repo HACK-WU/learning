@@ -1,6 +1,6 @@
 # 应用实战 · Django 事务与 ORM 的坑
 
-> 对应课程：[课 6：Django 事务与 ORM 的坑](../stages/3-可靠性与幂等/lessons/lesson-06-Django事务与ORM的坑.md) ｜ 覆盖知识点：事务提交后再发任务（on_commit）、任务参数序列化、worker 里的数据库连接管理
+> 对应课程：[课 6：Django 事务与 ORM 的坑](../stages/3-可靠性与幂等/lessons/06-Django事务与ORM的坑.md) ｜ 覆盖知识点：事务提交后再发任务（on_commit）、任务参数序列化、worker 里的数据库连接管理
 > 定位：**会用，不上生产**——课里学完，在这里动手。课内第四幕做的是「on_commit 机制」的验证，这里做的是**那个随机复现的 `DoesNotExist` 到底怎么来的、怎么系统性地消灭它**。
 > 🧪 **本篇竞态复现与修复对照为本机实测**（Celery 5.6.3 / Django 6.1 / SQLite / Python 3.12.3），实测脚本见 `.plans/2026-09-17-应用实战与场景库升级/a6-oncommit.sh`
 
@@ -168,7 +168,7 @@ def create_order(request):
 
 ## 🧭 导航
 
-- ⬅️ 回到课程：[课 6：Django 事务与 ORM 的坑](../stages/3-可靠性与幂等/lessons/lesson-06-Django事务与ORM的坑.md)
+- ⬅️ 回到课程：[课 6：Django 事务与 ORM 的坑](../stages/3-可靠性与幂等/lessons/06-Django事务与ORM的坑.md)
 - 📚 全部实战：[应用实战索引](INDEX.md)
 - ⬅️ 上一篇：[05 · 任务总失败：DLQ 兜底](05-确认机制与重试策略.md)
 - ➡️ 下一篇：[07 · 定时任务漏跑没人知道](07-beat与周期性任务.md)

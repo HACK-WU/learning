@@ -2,7 +2,7 @@
 set -uo pipefail
 cd /mnt/d/projects/learning/prometheus/stages/3-规模化与生态/lessons
 echo "=== 手工核验 4 条被报死链的链接 ==="
-for f in ../../../../labs/lesson-09/DATA.md ../../00-学习档案.md ../../02-课程目录.md ../lesson-08-联邦与全局视图.md; do
+for f in ../../../../labs/lesson-09/DATA.md ../../00-学习档案.md ../../02-课程目录.md ../08-联邦与全局视图.md; do
   if [ -f "$f" ]; then
     echo "  OK    $f  ->  $(basename "$(realpath "$f")")"
   else

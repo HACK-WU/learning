@@ -34,9 +34,9 @@
 
 ## 本阶段产出
 
-- [x] [课 3《List 与 Hash》](lessons/lesson-03-List与Hash.md)（2026-08-31，评审 P0=0）
-- [x] [课 4《Set、ZSet 与特殊类型》](lessons/lesson-04-Set、ZSet与特殊类型.md)（2026-09-01，评审 P0=0）
-- [x] [补充课《Stream 与 Pub/Sub》](lessons/lesson-05-Stream与PubSub.md)（2026-09-17，评审 P0=0）
+- [x] [课 3《List 与 Hash》](lessons/03-List与Hash.md)（2026-08-31，评审 P0=0）
+- [x] [课 4《Set、ZSet 与特殊类型》](lessons/04-Set、ZSet与特殊类型.md)（2026-09-01，评审 P0=0）
+- [x] [补充课《Stream 与 Pub/Sub》](lessons/05-Stream与PubSub.md)（2026-09-17，评审 P0=0）
 
 **配套应用实战**（2026-09-17 新增，待评审）：[03 异步任务与对象存储](../../应用实战/03-异步任务与对象存储.md)（课 3）｜ [04 排行榜与日活统计](../../应用实战/04-排行榜与日活统计.md)（课 4）｜ [05 可靠消息与广播](../../应用实战/05-可靠消息与广播.md)（补充课）——索引见 [应用实战](../../应用实战/INDEX.md)
 

@@ -30,7 +30,7 @@
 
 ### 场景补丁（不新增知识点）
 
-- [课 15](lessons/lesson-15-决策清单与学习地图.md) 已补充 daemon 未运行、context 指错和环境变量覆盖的排查顺序，并明确不以开放未加密远程 daemon 作为应急方案。
+- [课 15](lessons/15-决策清单与学习地图.md) 已补充 daemon 未运行、context 指错和环境变量覆盖的排查顺序，并明确不以开放未加密远程 daemon 作为应急方案。
 
 ## 🗺️ 本阶段路径图
 
@@ -38,5 +38,5 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-14-Docker在容器生态中的位置.md`
-- [x] `lessons/lesson-15-决策清单与学习地图.md`
+- [x] `lessons/14-Docker在容器生态中的位置.md`
+- [x] `lessons/15-决策清单与学习地图.md`

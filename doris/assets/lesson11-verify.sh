@@ -1,7 +1,7 @@
 #!/bin/bash
 # 课 11 交付校验：检查正文与脚本的一致性、必备段落、实测数据是否齐全
 PASS=0; FAIL=0
-L=/mnt/d/projects/learning/doris/stages/4-分布式运维与生产落地/lessons/lesson-11-日常运维SchemaChange备份与升级.md
+L=/mnt/d/projects/learning/doris/stages/4-分布式运维与生产落地/lessons/11-日常运维SchemaChange备份与升级.md
 A=/mnt/d/projects/learning/doris/assets
 S=/mnt/d/projects/learning/doris/stages/4-分布式运维与生产落地/assets
 
@@ -12,8 +12,8 @@ ck() { # ck "描述" "条件命令(返回0为通过)"
 
 echo "===== A. 文件存在性 ====="
 ck "正文文件存在"               "test -f '$L'"
-ck "SVG schemachange 存在"      "test -f '$S/lesson-11-schemachange.svg'"
-ck "SVG summary 存在"           "test -f '$S/lesson-11-summary.svg'"
+ck "SVG schemachange 存在"      "test -f '$S/11-schemachange.svg'"
+ck "SVG summary 存在"           "test -f '$S/11-summary.svg'"
 ck "setup 脚本存在"             "test -f '$A/lesson11-setup.sh'"
 ck "step1 脚本存在"             "test -f '$A/lesson11-step1.sh'"
 ck "step2 脚本存在"             "test -f '$A/lesson11-step2.sh'"
@@ -80,10 +80,10 @@ ck "正文无占位省略号 DDL"      "! grep -qE '\\.\\.\\. [0-9]+ 列 \\.\\.\
 
 echo ""
 echo "===== G. 图与引用 ====="
-ck "正文引用 schemachange SVG"  "grep -q 'lesson-11-schemachange.svg' '$L'"
-ck "正文引用 summary SVG"       "grep -q 'lesson-11-summary.svg' '$L'"
-ck "SVG schemachange 合法"      "head -1 '$S/lesson-11-schemachange.svg' | grep -q '<svg'"
-ck "SVG summary 合法"           "head -1 '$S/lesson-11-summary.svg' | grep -q '<svg'"
+ck "正文引用 schemachange SVG"  "grep -q '11-schemachange.svg' '$L'"
+ck "正文引用 summary SVG"       "grep -q '11-summary.svg' '$L'"
+ck "SVG schemachange 合法"      "head -1 '$S/11-schemachange.svg' | grep -q '<svg'"
+ck "SVG summary 合法"           "head -1 '$S/11-summary.svg' | grep -q '<svg'"
 
 echo ""
 echo "===== H. 正文质量 ====="

@@ -31,26 +31,26 @@
 
 | # | 知识点 | 所属阶段 / 课 | 本项目用在何处 | 回指 |
 |---|--------|--------------|---------------|------|
-| 1 | key 设计与过期 | 阶段 1 · 课 2 | `cache_layer.py` 统一 `cache:good:{id}` 命名 | [lesson-02](../../stages/1-为什么需要Redis/lessons/lesson-02-跑起来第一个Redis.md) |
-| 2 | Hash 存对象 vs String 存 JSON | 阶段 2 · 课 3 | 商品对象用 Hash 存，支持只改 price 字段 | [lesson-03](../../stages/2-数据结构与命令/lessons/lesson-03-List与Hash.md) |
-| 3 | Hash 原子字段增减 | 阶段 2 · 课 3 | `inventory.py` 的 `DailyStats` 用 HINCRBY | [lesson-03](../../stages/2-数据结构与命令/lessons/lesson-03-List与Hash.md) |
-| 4 | ZSet 跳表 + 哈希表双结构 | 阶段 2 · 课 4 | 销量排行榜 `rank:sales`，TopN 用 ZREVRANGE | [lesson-04](../../stages/2-数据结构与命令/lessons/lesson-04-Set、ZSet与特殊类型.md) |
-| 5 | Set 去重 | 阶段 2 · 课 4 | 秒杀一人一单，用 `inventory:buyers:{gid}` Set | [lesson-04](../../stages/2-数据结构与命令/lessons/lesson-04-Set、ZSet与特殊类型.md) |
-| 6 | 持久化选型 | 阶段 3 · 课 5 | 主库开 AOF everysec + RDB 快照 | [lesson-05](../../stages/3-持久化与高可用/lessons/lesson-05-RDB与AOF持久化.md) |
-| 7 | 全量与增量复制 | 阶段 3 · 课 6 | 7201 主 + 7202 从，实测复制握手 | [lesson-06](../../stages/3-持久化与高可用/lessons/lesson-06-主从复制与哨兵.md) |
-| 8 | 从库只读 | 阶段 3 · 课 6 | `main.py` 第七幕验证从库写入被拒 | [lesson-06](../../stages/3-持久化与高可用/lessons/lesson-06-主从复制与哨兵.md) |
-| 9 | 集群下 Lua 的 key 限制 | 阶段 4 · 课 7 | 两个 Lua 脚本都只用 1-2 个 key，天然同槽 | [lesson-07](../../stages/4-分布式与生产实践/lessons/lesson-07-分片与集群.md) |
-| 10 | Lua 原子性 | 阶段 4 · 课 7 | 扣库存「判断+扣减」一步完成，杜绝超卖 | [lesson-07](../../stages/4-分布式与生产实践/lessons/lesson-07-分片与集群.md) |
-| 11 | 缓存穿透 | 阶段 4 · 课 8 | 空值标记 `cache:empty:{gid}` | [lesson-08](../../stages/4-分布式与生产实践/lessons/lesson-08-缓存设计.md) |
-| 12 | 缓存击穿 | 阶段 4 · 课 8 | 互斥锁 `cache:lock:{gid}`，30 并发只回源 1 次 | [lesson-08](../../stages/4-分布式与生产实践/lessons/lesson-08-缓存设计.md) |
-| 13 | 缓存雪崩 | 阶段 4 · 课 8 | TTL 加 0~120 秒随机抖动 | [lesson-08](../../stages/4-分布式与生产实践/lessons/lesson-08-缓存设计.md) |
-| 14 | 缓存与数据库一致性 | 阶段 4 · 课 8 | Cache Aside：先更库再删缓存，并演示脏数据反面 | [lesson-08](../../stages/4-分布式与生产实践/lessons/lesson-08-缓存设计.md) |
-| 15 | 内存淘汰策略 | 阶段 4 · 课 8 | 主库 `allkeys-lru` | [lesson-08](../../stages/4-分布式与生产实践/lessons/lesson-08-缓存设计.md) |
-| 16 | 性能诊断四层模型 | 阶段 4 · 课 9 | `diagnostics.py` 整体→命令→慢查询→具体 key | [lesson-09](../../stages/4-分布式与生产实践/lessons/lesson-09-生产实践与选型.md) |
-| 17 | 慢查询日志 | 阶段 4 · 课 9 | 5.3 节，并说明「慢查询为空 ≠ 用户不慢」 | [lesson-09](../../stages/4-分布式与生产实践/lessons/lesson-09-生产实践与选型.md) |
-| 18 | 大 key / 热 key | 阶段 4 · 课 9 | 5.4 / 5.5 节，含 LFU 未启用时的正确应对 | [lesson-09](../../stages/4-分布式与生产实践/lessons/lesson-09-生产实践与选型.md) |
-| 19 | 安全与运维基线（ACL） | 阶段 4 · 课 9 | 三个角色账号 + default off，第六幕逐条验证 | [lesson-09](../../stages/4-分布式与生产实践/lessons/lesson-09-生产实践与选型.md) |
-| 20 | 生态与选型（含许可证变迁） | 阶段 4 · 课 9 | 本项目选型 Redis 8.10.1 的理由与替代方案权衡，见 [设计决策.md](设计决策.md) 决策 6 | [lesson-09](../../stages/4-分布式与生产实践/lessons/lesson-09-生产实践与选型.md) |
+| 1 | key 设计与过期 | 阶段 1 · 课 2 | `cache_layer.py` 统一 `cache:good:{id}` 命名 | [02](../../stages/1-为什么需要Redis/lessons/02-跑起来第一个Redis.md) |
+| 2 | Hash 存对象 vs String 存 JSON | 阶段 2 · 课 3 | 商品对象用 Hash 存，支持只改 price 字段 | [03](../../stages/2-数据结构与命令/lessons/03-List与Hash.md) |
+| 3 | Hash 原子字段增减 | 阶段 2 · 课 3 | `inventory.py` 的 `DailyStats` 用 HINCRBY | [03](../../stages/2-数据结构与命令/lessons/03-List与Hash.md) |
+| 4 | ZSet 跳表 + 哈希表双结构 | 阶段 2 · 课 4 | 销量排行榜 `rank:sales`，TopN 用 ZREVRANGE | [04](../../stages/2-数据结构与命令/lessons/04-Set、ZSet与特殊类型.md) |
+| 5 | Set 去重 | 阶段 2 · 课 4 | 秒杀一人一单，用 `inventory:buyers:{gid}` Set | [04](../../stages/2-数据结构与命令/lessons/04-Set、ZSet与特殊类型.md) |
+| 6 | 持久化选型 | 阶段 3 · 课 5 | 主库开 AOF everysec + RDB 快照 | [05](../../stages/3-持久化与高可用/lessons/05-RDB与AOF持久化.md) |
+| 7 | 全量与增量复制 | 阶段 3 · 课 6 | 7201 主 + 7202 从，实测复制握手 | [06](../../stages/3-持久化与高可用/lessons/06-主从复制与哨兵.md) |
+| 8 | 从库只读 | 阶段 3 · 课 6 | `main.py` 第七幕验证从库写入被拒 | [06](../../stages/3-持久化与高可用/lessons/06-主从复制与哨兵.md) |
+| 9 | 集群下 Lua 的 key 限制 | 阶段 4 · 课 7 | 两个 Lua 脚本都只用 1-2 个 key，天然同槽 | [07](../../stages/4-分布式与生产实践/lessons/07-分片与集群.md) |
+| 10 | Lua 原子性 | 阶段 4 · 课 7 | 扣库存「判断+扣减」一步完成，杜绝超卖 | [07](../../stages/4-分布式与生产实践/lessons/07-分片与集群.md) |
+| 11 | 缓存穿透 | 阶段 4 · 课 8 | 空值标记 `cache:empty:{gid}` | [08](../../stages/4-分布式与生产实践/lessons/08-缓存设计.md) |
+| 12 | 缓存击穿 | 阶段 4 · 课 8 | 互斥锁 `cache:lock:{gid}`，30 并发只回源 1 次 | [08](../../stages/4-分布式与生产实践/lessons/08-缓存设计.md) |
+| 13 | 缓存雪崩 | 阶段 4 · 课 8 | TTL 加 0~120 秒随机抖动 | [08](../../stages/4-分布式与生产实践/lessons/08-缓存设计.md) |
+| 14 | 缓存与数据库一致性 | 阶段 4 · 课 8 | Cache Aside：先更库再删缓存，并演示脏数据反面 | [08](../../stages/4-分布式与生产实践/lessons/08-缓存设计.md) |
+| 15 | 内存淘汰策略 | 阶段 4 · 课 8 | 主库 `allkeys-lru` | [08](../../stages/4-分布式与生产实践/lessons/08-缓存设计.md) |
+| 16 | 性能诊断四层模型 | 阶段 4 · 课 9 | `diagnostics.py` 整体→命令→慢查询→具体 key | [09](../../stages/4-分布式与生产实践/lessons/09-生产实践与选型.md) |
+| 17 | 慢查询日志 | 阶段 4 · 课 9 | 5.3 节，并说明「慢查询为空 ≠ 用户不慢」 | [09](../../stages/4-分布式与生产实践/lessons/09-生产实践与选型.md) |
+| 18 | 大 key / 热 key | 阶段 4 · 课 9 | 5.4 / 5.5 节，含 LFU 未启用时的正确应对 | [09](../../stages/4-分布式与生产实践/lessons/09-生产实践与选型.md) |
+| 19 | 安全与运维基线（ACL） | 阶段 4 · 课 9 | 三个角色账号 + default off，第六幕逐条验证 | [09](../../stages/4-分布式与生产实践/lessons/09-生产实践与选型.md) |
+| 20 | 生态与选型（含许可证变迁） | 阶段 4 · 课 9 | 本项目选型 Redis 8.10.1 的理由与替代方案权衡，见 [设计决策.md](设计决策.md) 决策 6 | [09](../../stages/4-分布式与生产实践/lessons/09-生产实践与选型.md) |
 
 **跨阶段校验**：覆盖 4 个阶段（门槛 ≥3）✅
 

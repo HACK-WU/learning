@@ -9,7 +9,7 @@ BASE = '/mnt/d/projects/learning/rabbitmq'
 ARCHIVE = os.path.join(BASE, '00-学习档案.md')
 LESSON = os.path.join(
     BASE, 'stages', '4-进阶与工程落地', 'lessons',
-    'lesson-11-集群与高可用.md')
+    '11-集群与高可用.md')
 
 
 def sh(cmd, timeout=180):
@@ -87,7 +87,7 @@ def main():
     with open(os.path.join(BASE, '02-课程目录.md'), encoding='utf-8') as f:
         ct = f.read()
     print("  课 11 链接：%s" % ("✅ 已链接" if
-                              'lesson-11-集群与高可用.md)' in ct else "❌ 未链接"))
+                              '11-集群与高可用.md)' in ct else "❌ 未链接"))
 
     print("\n" + "=" * 70)
     print("终检完成")

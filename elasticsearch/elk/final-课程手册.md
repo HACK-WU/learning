@@ -90,7 +90,7 @@ graph LR
 
 ## 课 1：一条日志的旅程
 
-> 📄 [原文](stages/1-全景与起步/lessons/lesson-01-一条日志的旅程.md) ｜ 本课**不起容器**，用本机真实日志做实测
+> 📄 [原文](stages/1-全景与起步/lessons/01-一条日志的旅程.md) ｜ 本课**不起容器**，用本机真实日志做实测
 
 **一图收束：四条硬伤 → 四个工位**
 
@@ -137,7 +137,7 @@ graph LR
 
 ## 课 2：把 ELK 跑起来
 
-> 📄 [原文](stages/1-全景与起步/lessons/lesson-02-把ELK跑起来.md) ｜ 配套工程：[`playground/01-minimal-stack/`](playground/01-minimal-stack/)
+> 📄 [原文](stages/1-全景与起步/lessons/02-把ELK跑起来.md) ｜ 配套工程：[`playground/01-minimal-stack/`](playground/01-minimal-stack/)
 
 **一图收束：从一条命令到一个能用的栈**
 
@@ -180,7 +180,7 @@ flowchart TD
 
 ## 课 3：端到端走一遍（阶段 1 收官）
 
-> 📄 [原文](stages/1-全景与起步/lessons/lesson-03-端到端走一遍.md) ｜ 配套工程：[`playground/02-end-to-end/`](playground/02-end-to-end/)
+> 📄 [原文](stages/1-全景与起步/lessons/03-端到端走一遍.md) ｜ 配套工程：[`playground/02-end-to-end/`](playground/02-end-to-end/)
 
 **一图收束：阶段 1 全景**
 
@@ -252,7 +252,7 @@ graph LR
 
 ## 课 4：Filebeat 把文件读进来
 
-> 📄 [原文](stages/2-采集层Beats/lessons/lesson-04-Filebeat把文件读进来.md) ｜ 配套工程：[`playground/03-filebeat-internals/`](playground/03-filebeat-internals/)
+> 📄 [原文](stages/2-采集层Beats/lessons/04-Filebeat把文件读进来.md) ｜ 配套工程：[`playground/03-filebeat-internals/`](playground/03-filebeat-internals/)
 
 **一图收束：Filebeat 读文件的完整机制**
 
@@ -293,7 +293,7 @@ flowchart TD
 
 ## 课 5：模块与处理器
 
-> 📄 [原文](stages/2-采集层Beats/lessons/lesson-05-模块与处理器.md) ｜ 配套工程：[`playground/04-modules-processors/`](playground/04-modules-processors/)
+> 📄 [原文](stages/2-采集层Beats/lessons/05-模块与处理器.md) ｜ 配套工程：[`playground/04-modules-processors/`](playground/04-modules-processors/)
 
 **一图收束：采集端的三个抓手**
 
@@ -340,7 +340,7 @@ graph LR
 
 ## 课 6：Beats 家族与采集选型（阶段 2 收官）
 
-> 📄 [原文](stages/2-采集层Beats/lessons/lesson-06-Beats家族与采集选型.md) ｜ 配套工程：[`playground/05-beats-family/`](playground/05-beats-family/)
+> 📄 [原文](stages/2-采集层Beats/lessons/06-Beats家族与采集选型.md) ｜ 配套工程：[`playground/05-beats-family/`](playground/05-beats-family/)
 
 **一图收束：阶段 2 全貌**
 
@@ -421,7 +421,7 @@ graph LR
 
 ## 课 7：Logstash 管道三件套
 
-> 📄 [原文](stages/3-处理层Logstash/lessons/lesson-07-Logstash管道三件套.md) ｜ 配套工程：[`playground/06-logstash-pipeline/`](playground/06-logstash-pipeline/)
+> 📄 [原文](stages/3-处理层Logstash/lessons/07-Logstash管道三件套.md) ｜ 配套工程：[`playground/06-logstash-pipeline/`](playground/06-logstash-pipeline/)
 
 **一图收束：完整管道**
 
@@ -473,7 +473,7 @@ flowchart LR
 
 ## 课 8：可靠性与吞吐
 
-> 📄 [原文](stages/3-处理层Logstash/lessons/lesson-08-可靠性与吞吐.md) ｜ 配套工程：[`playground/07-reliability/`](playground/07-reliability/)
+> 📄 [原文](stages/3-处理层Logstash/lessons/08-可靠性与吞吐.md) ｜ 配套工程：[`playground/07-reliability/`](playground/07-reliability/)
 
 **一图收束：一条"可靠的管道"**
 
@@ -526,7 +526,7 @@ flowchart LR
 
 ## 课 9：该在哪处理（阶段 3 收官）
 
-> 📄 [原文](stages/3-处理层Logstash/lessons/lesson-09-该在哪处理.md) ｜ 配套工程：[`playground/08-where-to-process/`](playground/08-where-to-process/)
+> 📄 [原文](stages/3-处理层Logstash/lessons/09-该在哪处理.md) ｜ 配套工程：[`playground/08-where-to-process/`](playground/08-where-to-process/)
 > ⚠️ 本课含**脱敏实操**（银行卡号 / 密码 / IP 的掩码与指纹），故手册不复制其「常见误区」与「命令速查卡」全文——**请直接查原课**（该两节位于原文末尾）。
 
 **阶段 3 在整条链路中的位置**
@@ -580,7 +580,7 @@ graph LR
 
 ## 课 10：日志的存储策略
 
-> 📄 [原文](stages/4-存储可视化与落地/lessons/lesson-10-日志的存储策略.md) ｜ 配套工程：[`playground/09-storage-strategy/`](playground/09-storage-strategy/)
+> 📄 [原文](stages/4-存储可视化与落地/lessons/10-日志的存储策略.md) ｜ 配套工程：[`playground/09-storage-strategy/`](playground/09-storage-strategy/)
 
 **一图收束：一条日志的"住房一生"**
 
@@ -643,7 +643,7 @@ graph LR
 
 ## 课 11：Kibana —— 从 Discover 到 Dashboard
 
-> 📄 [原文](stages/4-存储可视化与落地/lessons/lesson-11-Kibana从Discover到Dashboard.md) ｜ 配套工程：[`playground/10-kibana-visual/`](playground/10-kibana-visual/)（含 12 张实拍截图）
+> 📄 [原文](stages/4-存储可视化与落地/lessons/11-Kibana从Discover到Dashboard.md) ｜ 配套工程：[`playground/10-kibana-visual/`](playground/10-kibana-visual/)（含 12 张实拍截图）
 > 本课「体系收束」为**文字版**（未配独立收束图，因其主线是 UI 操作路径而非机制链路）。
 
 **体系收束**：Kibana 是可观测闭环的"**眼睛**"，告警是"**神经**"。
@@ -677,7 +677,7 @@ graph LR
 
 ## 课 12：告警与生产落地（全课收官）
 
-> 📄 [原文](stages/4-存储可视化与落地/lessons/lesson-12-告警与生产落地.md) ｜ 配套工程：[`playground/11-alerting/`](playground/11-alerting/)（含 6 张实拍截图）
+> 📄 [原文](stages/4-存储可视化与落地/lessons/12-告警与生产落地.md) ｜ 配套工程：[`playground/11-alerting/`](playground/11-alerting/)（含 6 张实拍截图）
 
 **一图收束：一条日志的一生（全课合龙）**
 
@@ -789,7 +789,7 @@ flowchart TD
 ```
 
 > 一句话记住（课 12）：**查询形状决定方案，量级决定成本，团队能力决定上下限——清单逐条打钩，别按"最热门"抄作业。**
-> 📄 完整决策清单与替代方案对比：见 [课 12 知识点 3](stages/4-存储可视化与落地/lessons/lesson-12-告警与生产落地.md) ｜ 选型方法论回指 ES 主课 14《该不该用 ES》
+> 📄 完整决策清单与替代方案对比：见 [课 12 知识点 3](stages/4-存储可视化与落地/lessons/12-告警与生产落地.md) ｜ 选型方法论回指 ES 主课 14《该不该用 ES》
 
 ## 9.2 采集端选谁（Beats / Logstash / Fluentd / OTel Collector）
 
@@ -804,7 +804,7 @@ flowchart TD
 | **一次性搬运历史日志** | 别上常驻采集器，用批量导入 |
 | ⚠️ **禁忌** | **同一份数据被两套工具重复采集** |
 
-> 📄 完整四条路线对比：见 [课 6 知识点 2](stages/2-采集层Beats/lessons/lesson-06-Beats家族与采集选型.md)
+> 📄 完整四条路线对比：见 [课 6 知识点 2](stages/2-采集层Beats/lessons/06-Beats家族与采集选型.md)
 
 ## 9.3 解析放在哪一层（Beats processors / Logstash / ES Ingest）
 
@@ -813,7 +813,7 @@ flowchart TD
 | CPU 花在谁头上 | 业务机（源头） | 专用 Logstash 机（JVM） | **ES 数据节点（挤占检索资源）** |
 | 能力上限 | 弱（只做轻加工） | **强**（grok/多管道/多输出/缓冲） | 中（贴数据，但无缓冲） |
 | 适合 | 打标记、丢字段、加条件 | 重解析、要缓冲、多输出 | 轻解析、省事、已有模块 pipeline |
-| 决策表 | 见 [课 9 知识点 2](stages/3-处理层Logstash/lessons/lesson-09-该在哪处理.md) | 同左 | 同左 |
+| 决策表 | 见 [课 9 知识点 2](stages/3-处理层Logstash/lessons/09-该在哪处理.md) | 同左 | 同左 |
 
 > ⚠️ 实测提醒：ES Ingest **没有 `hash` 处理器**（用 `fingerprint`）、**没有 `comment` 处理器**；Ingest 的 CPU 归属可以直接从 `GET _nodes/stats/ingest` 查出来（实测 4 条日志 98ms）。
 
@@ -827,7 +827,7 @@ flowchart TD
 | 分片/副本 | 日志可重采，通常 **1 主 1 副**足够 |
 | ⚠️ 最大陷阱 | **模板必须声明 `composed_of`**，否则会顶掉内置 `logs` 模板、ECS 映射全失效（见第十章坑 3） |
 
-> 📄 见 [课 10 知识点 2/3](stages/4-存储可视化与落地/lessons/lesson-10-日志的存储策略.md)
+> 📄 见 [课 10 知识点 2/3](stages/4-存储可视化与落地/lessons/10-日志的存储策略.md)
 
 ## 9.5 告警往哪落、怎么不扰民
 
@@ -840,7 +840,7 @@ flowchart TD
 | 计划维护 | **维护窗口**：照常检测、不打扰人（实测零投递） |
 | 风暴治理 | 阈值 + 防抖 + 维护窗口 + 静默，四道闸门 |
 
-> 📄 见 [课 12 知识点 1](stages/4-存储可视化与落地/lessons/lesson-12-告警与生产落地.md)
+> 📄 见 [课 12 知识点 1](stages/4-存储可视化与落地/lessons/12-告警与生产落地.md)
 
 ---
 

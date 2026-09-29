@@ -38,7 +38,7 @@ done
 
 echo ""
 echo "--- [C] 讲义正文（须未被忽略）---"
-for f in "grafana/stages/2-查得到/lessons/lesson-04-查询编辑器与数据源协议：一次查询的完整旅程.md" \
+for f in "grafana/stages/2-查得到/lessons/04-查询编辑器与数据源协议：一次查询的完整旅程.md" \
          "grafana/00-学习档案.md" "grafana/00-评审清单.md" \
          "grafana/02-课程目录.md" "grafana/01-学习路径总览.md" \
          "grafana/stages/2-查得到/overview.md"; do

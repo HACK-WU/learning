@@ -39,9 +39,9 @@
 
 | 本课知识 | 回扣到 |
 |---------|--------|
-| 采样与 temperature | [课 2 模型参数](../../../langchain/stages/1-入门与模型层/lessons/lesson-02-Models模型层.md)、[课 13 非确定性测试](../../../langchain/stages/4-组合与工程化/lessons/lesson-13-Testing与Observability.md) |
-| 上下文窗口 / lost in the middle | [课 9 上下文工程](../../../langchain/stages/3-可控性与可靠性/lessons/lesson-09-ContextEngineering上下文工程.md) |
-| 六条固有缺陷 | [课 4 工具](../../../langchain/stages/2-Agent核心/lessons/lesson-04-Tools工具.md)、[课 7 记忆](../../../langchain/stages/2-Agent核心/lessons/lesson-07-Memory记忆.md)、[课 10 护栏](../../../langchain/stages/3-可控性与可靠性/lessons/lesson-10-人机协同与护栏.md) |
+| 采样与 temperature | [课 2 模型参数](../../../langchain/stages/1-入门与模型层/lessons/02-Models模型层.md)、[课 13 非确定性测试](../../../langchain/stages/4-组合与工程化/lessons/13-Testing与Observability.md) |
+| 上下文窗口 / lost in the middle | [课 9 上下文工程](../../../langchain/stages/3-可控性与可靠性/lessons/09-ContextEngineering上下文工程.md) |
+| 六条固有缺陷 | [课 4 工具](../../../langchain/stages/2-Agent核心/lessons/04-Tools工具.md)、[课 7 记忆](../../../langchain/stages/2-Agent核心/lessons/07-Memory记忆.md)、[课 10 护栏](../../../langchain/stages/3-可控性与可靠性/lessons/10-人机协同与护栏.md) |
 
 ## 阶段状态
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 D=/mnt/d/projects/learning/grafana
 echo "=== 1. 课 12 行数与大小 ==="
-wc -l -c "$D/stages/4-管得住/lessons/lesson-12-性能、高可用与升级运维.md"
+wc -l -c "$D/stages/4-管得住/lessons/12-性能、高可用与升级运维.md"
 echo
 
 echo "=== 2. 02-课程目录.md 中课 12 当前写法 ==="

@@ -38,7 +38,7 @@
 >
 > 🚫 **保留键后果分三类**：`time` → 写入**被拒绝**（可作表名）；`_field` / `_measurement` → **整个点被静默丢弃**；`_` 开头 / `iox_` 前缀 → 系统保留，可能冲突。
 >
-> 💡 **本课的实操补充**：含一个**本机实跑验证过的命名自检脚本**（不依赖 Docker 即可运行，可接 CI），见[课件实验 E](lessons/lesson-06-数据模型-table-tag-field-timestamp.md)。
+> 💡 **本课的实操补充**：含一个**本机实跑验证过的命名自检脚本**（不依赖 Docker 即可运行，可接 CI），见[课件实验 E](lessons/06-数据模型-table-tag-field-timestamp.md)。
 
 ### L7 · Schema 设计与基数陷阱 ✅
 
@@ -58,7 +58,7 @@
 >
 > 🚫 **基数类元查询很可能不被 3.x 支持**（官方原文）→ 用 SQL `COUNT(DISTINCT ...)` 自己数，别指望 `SHOW SERIES CARDINALITY`。
 >
-> 💡 **本课的实操补充**：含一个**本机实跑验证的基数估算器**（4 场景真实输出，不依赖 Docker，可接 CI），见[课件实验 A](lessons/lesson-07-Schema设计与基数陷阱.md)。
+> 💡 **本课的实操补充**：含一个**本机实跑验证的基数估算器**（4 场景真实输出，不依赖 Docker，可接 CI），见[课件实验 A](lessons/07-Schema设计与基数陷阱.md)。
 
 ### L8 · SQL 查询：从 SELECT 到窗口函数 ✅
 
@@ -76,7 +76,7 @@
 >
 > 🚫 **3.x 没有 `increase()` / `NON_NEGATIVE_DIFFERENCE()`**（官方明文）。迁移时用 `GREATEST` + `LAG` + CTE 三段式——这正是 L9 迁移最常撞的墙。
 >
-> 💡 **本课的实操补充**：含一个**本机实跑验证的 `DATE_BIN` 分桶模拟器**（4 场景真实输出，不依赖 Docker，可接 CI），见[课件实验 A](lessons/lesson-08-SQL查询-从SELECT到窗口函数.md)。
+> 💡 **本课的实操补充**：含一个**本机实跑验证的 `DATE_BIN` 分桶模拟器**（4 场景真实输出，不依赖 Docker，可接 CI），见[课件实验 A](lessons/08-SQL查询-从SELECT到窗口函数.md)。
 
 ### L9 · InfluxQL 与 Flux：遗产与迁移 ✅
 
@@ -96,7 +96,7 @@
 >
 > 🔌 **两个端点仅路径不同**：SQL → `/api/v3/query_sql`；InfluxQL → `/query`。三者参数（`db=`、`q=`、`Authorization: Token`）**完全一致** → **灰度迁移成本极低**。
 >
-> 💡 **本课的实操补充**：含一个**本机实跑验证的 InfluxQL↔SQL 语义对照模拟器**（4 场景真实输出），见[课件实验 A](lessons/lesson-09-InfluxQL与Flux-遗产与迁移.md)。
+> 💡 **本课的实操补充**：含一个**本机实跑验证的 InfluxQL↔SQL 语义对照模拟器**（4 场景真实输出），见[课件实验 A](lessons/09-InfluxQL与Flux-遗产与迁移.md)。
 
 ## 🧭 导航
 

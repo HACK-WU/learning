@@ -7,7 +7,7 @@ OUT=/tmp/consul-ops/final45.out
 say(){ echo "$1" | tee -a $OUT; }
 
 say "===== 1. 文件存在 ====="
-for f in "lesson-04-证书与密钥生命周期.md" "lesson-05-备份、恢复与灾备演练.md"; do
+for f in "04-证书与密钥生命周期.md" "05-备份、恢复与灾备演练.md"; do
   [ -f "$B/$f" ] && say "  ✅ $f ($(wc -c < "$B/$f") 字节)" || say "  ❌ $f"
 done
 
@@ -48,7 +48,7 @@ AFTER=$(curl -s $CONSUL_HTTP_ADDR/v1/kv/lesson5/after?raw 2>/dev/null)
 say ""
 say "===== 4. 链接可达性（两课所有 md 链接）====="
 cd "$B"
-for f in "lesson-04-证书与密钥生命周期.md" "lesson-05-备份、恢复与灾备演练.md"; do
+for f in "04-证书与密钥生命周期.md" "05-备份、恢复与灾备演练.md"; do
   BAD=0; TOT=0
   while IFS= read -r link; do
     TOT=$((TOT+1))

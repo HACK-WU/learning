@@ -8,7 +8,7 @@
 """
 import io, re, os, sys
 
-P = '/mnt/d/projects/learning/grafana/stages/1-看得见/lessons/lesson-02-第一个面板：从零到看得见.md'
+P = '/mnt/d/projects/learning/grafana/stages/1-看得见/lessons/02-第一个面板：从零到看得见.md'
 ROOT = '/mnt/d/projects/learning/grafana'
 
 with io.open(P, encoding='utf-8') as f:

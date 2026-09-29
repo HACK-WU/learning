@@ -1,6 +1,6 @@
 # 第 7 课实战 · 事故响应 runbook
 
-> 所属课程：[课 7：Kafka 事故响应与故障排查](../stages/3-可观测与故障排查/lessons/lesson-07-Kafka事故响应与故障排查.md) ｜ 索引：[应用实战 INDEX](./INDEX.md)
+> 所属课程：[课 7：Kafka 事故响应与故障排查](../stages/3-可观测与故障排查/lessons/07-Kafka事故响应与故障排查.md) ｜ 索引：[应用实战 INDEX](./INDEX.md)
 > 实战目标：把课 7 学到的止血、取证、分诊和症状倒查，组装成一份**别人能照着执行**的值班 runbook。
 > 🧪 **本实战基于本机真跑**（2026-09-20，3 节点 KRaft 实验集群），文中实测数字均为真实输出。
 
@@ -205,6 +205,6 @@ kafka-topics.sh --bootstrap-server "<BROKER_ENDPOINT>" --describe --topic "<TOPI
 ## 🔗 相关
 
 - 上一课实战：[06 · 可行动告警看板](./06-可观测性基线与告警.md)
-- 本课正文：[课 7：Kafka 事故响应与故障排查](../stages/3-可观测与故障排查/lessons/lesson-07-Kafka事故响应与故障排查.md)
+- 本课正文：[课 7：Kafka 事故响应与故障排查](../stages/3-可观测与故障排查/lessons/07-Kafka事故响应与故障排查.md)
 - 阶段主页：[阶段 3：可观测与故障排查](../stages/3-可观测与故障排查/overview.md)
 - 返回：[应用实战索引](./INDEX.md)

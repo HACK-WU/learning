@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # 课 12 交付终验：讲义自洽 + 档案回写 + 链接可达
 B=/mnt/d/projects/learning/prometheus
-L=$B/stages/4-生产运维/lessons/lesson-12-运维工具链与排障.md
+L=$B/stages/4-生产运维/lessons/12-运维工具链与排障.md
 D=$B/labs/lesson-12/TOOLING-DATA.md
 PASS=0; FAIL=0
 ck() { if eval "$2" >/dev/null 2>&1; then echo "PASS  $1"; PASS=$((PASS+1));
@@ -40,7 +40,7 @@ ck "评审-课12勾选"        "grep -q '课 12《运维工具链与排障》 �
 ck "评审-记录表已追加"    "grep -q '| 2026-09-07 | 课 12《运维工具链与排障》' $B/00-评审清单.md"
 ck "overview-产出勾选"    "grep -q '\- \[x\] \`lessons/lesson-12' $B/stages/4-生产运维/overview.md"
 ck "overview-完成情况"    "grep -q '## 课 12 完成情况' $B/stages/4-生产运维/overview.md"
-ck "目录-课12标✅"        "grep -q 'lesson-12-运维工具链与排障.md) | ✅' $B/02-课程目录.md"
+ck "目录-课12标✅"        "grep -q '12-运维工具链与排障.md) | ✅' $B/02-课程目录.md"
 ck "总览-阶段4完成"       "grep -q '阶段 4：生产运维（✅ 已完成' $B/01-学习路径总览.md"
 
 echo

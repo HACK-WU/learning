@@ -68,7 +68,7 @@ echo ""
 echo "=========================================="
 echo "3. 课 6 必备章节检查"
 echo "=========================================="
-L6="$BASE/stages/3-数据导入与查询/lessons/lesson-06-数据导入全家桶.md"
+L6="$BASE/stages/3-数据导入与查询/lessons/06-数据导入全家桶.md"
 for sec in "第一幕：起源与场景引入" "第二幕：认知冲突" "第三幕：层层揭示" "第四幕：实操验证" "第五幕：体系收束" "常见误区" "一图总结" "课后小测" "下一批接力提示词" "课程导航"; do
   if grep -q "$sec" "$L6"; then echo "  OK: $sec"; else echo "  MISSING: $sec"; fi
 done
@@ -81,4 +81,4 @@ if grep -q "| 3 | 课 6 | Stream Load | ✅ 已完成 |" "$BASE/00-学习档案.
 if grep -q "\[x\] 阶段 3·课 6" "$BASE/00-评审清单.md"; then echo "  OK: 评审清单已勾选"; else echo "  MISS: 评审清单"; fi
 if grep -q "\[x\] \`lessons/lesson-06" "$BASE/stages/3-数据导入与查询/overview.md"; then echo "  OK: 阶段 overview"; else echo "  MISS: overview"; fi
 if grep -q "18 / 36" "$BASE/01-学习路径总览.md"; then echo "  OK: 学习路径总览 18/36"; else echo "  MISS: 总览进度"; fi
-if grep -q "lesson-06-数据导入全家桶.md)" "$BASE/02-课程目录.md"; then echo "  OK: 课程目录链接"; else echo "  MISS: 课程目录"; fi
+if grep -q "06-数据导入全家桶.md)" "$BASE/02-课程目录.md"; then echo "  OK: 课程目录链接"; else echo "  MISS: 课程目录"; fi

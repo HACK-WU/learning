@@ -37,6 +37,6 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-06-确认机制与预取.md`
-- [x] `lessons/lesson-07-持久化与死信.md`
-- [x] `lessons/lesson-08-交付语义与幂等.md`
+- [x] `lessons/06-确认机制与预取.md`
+- [x] `lessons/07-持久化与死信.md`
+- [x] `lessons/08-交付语义与幂等.md`

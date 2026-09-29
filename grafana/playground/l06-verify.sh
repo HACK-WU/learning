@@ -2,7 +2,7 @@
 # 课 6 交付前结构校验（沿用 l05-verify.sh，适配课 6）
 set -u
 
-F="/mnt/d/projects/learning/grafana/stages/2-查得到/lessons/lesson-06-变量进阶与动态仪表盘.md"
+F="/mnt/d/projects/learning/grafana/stages/2-查得到/lessons/06-变量进阶与动态仪表盘.md"
 BLOCK=0
 
 echo "=========================================================="

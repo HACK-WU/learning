@@ -2,7 +2,7 @@
 # 课 11 评审 1（learner 视角）：正文里出现的每条 SQL 语句，逐条实跑看能不能跑通
 FE='docker exec -i doris-learn mysql -h 127.0.0.1 -P 9030 -uroot shop'
 q() { $FE -e "$1" 2>&1 | grep -vE "^Warning|Using a password"; }
-L=/mnt/d/projects/learning/doris/stages/4-分布式运维与生产落地/lessons/lesson-11-日常运维SchemaChange备份与升级.md
+L=/mnt/d/projects/learning/doris/stages/4-分布式运维与生产落地/lessons/11-日常运维SchemaChange备份与升级.md
 
 echo "########## learner 视角评审：正文 SQL 语句逐条实跑 ##########"
 

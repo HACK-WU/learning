@@ -7,8 +7,8 @@ import xml.dom.minidom
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 targets = [
-    "stages/3-可靠性与投递语义/assets/lesson-07-persistence-deadletter.svg",
-    "stages/3-可靠性与投递语义/assets/lesson-06-ack-confirm-prefetch.svg",
+    "stages/3-可靠性与投递语义/assets/07-persistence-deadletter.svg",
+    "stages/3-可靠性与投递语义/assets/06-ack-confirm-prefetch.svg",
 ]
 
 ok = True

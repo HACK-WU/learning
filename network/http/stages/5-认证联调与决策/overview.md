@@ -40,8 +40,8 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-13-Cookie会话与Token.md`
-- [x] `lessons/lesson-14-CORS与同源策略.md`
-- [x] `lessons/lesson-15-抓包排障与决策清单.md`
+- [x] `lessons/13-Cookie会话与Token.md`
+- [x] `lessons/14-CORS与同源策略.md`
+- [x] `lessons/15-抓包排障与决策清单.md`
 
 > 🏁 本阶段是全课程收官段：课 15 的决策清单直接回扣课程收束目标——"对任意一次 HTTP 请求做解剖，并给出有依据的决策"。阶段知识点与 Phase 3 综合实战均已闭环；下一步可进入 Phase 4 课程手册汇总。

@@ -1,6 +1,6 @@
 # 应用实战 · 生产者 Producer
 
-> 对应课程：[第 5 课：生产者 Producer](../stages/2-核心架构/lessons/lesson-05-生产者Producer.md) ｜ 覆盖知识点：生产者发送流程 / 分区策略 / acks 与发送可靠性
+> 对应课程：[第 5 课：生产者 Producer](../stages/2-核心架构/lessons/05-生产者Producer.md) ｜ 覆盖知识点：生产者发送流程 / 分区策略 / acks 与发送可靠性
 > 定位：**会用，不上生产**——课里学完，在这里动手（结构与边界见 SKILL.md「教学叙事骨架 · 应用实战」）。
 > 环境前提：第 3 课起的本机 Kafka（`localhost:9092`，topic `orders` 3 分区）；客户端示例用 Python（`kafka-python`），思路同样适用于 Java。
 > 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：Apache Kafka 4.x 文档 · producer configs / `acks`、`linger.ms`、`batch.size` 条目）
@@ -165,6 +165,6 @@ Partition:1	u1	{"order_id": 5, "user_id": "u1", "status": "已发货"}   ← 还
 
 ## 🧭 导航
 
-- ⬅️ 回到课程：[第 5 课：生产者 Producer](../stages/2-核心架构/lessons/lesson-05-生产者Producer.md)
+- ⬅️ 回到课程：[第 5 课：生产者 Producer](../stages/2-核心架构/lessons/05-生产者Producer.md)
 - 📚 全部实战：[应用实战索引](INDEX.md)
 - ➡️ 下一课实战：[06 · 从自动提交到处理完再打卡](06-消费者与消费者组.md)

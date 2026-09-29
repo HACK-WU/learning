@@ -15,7 +15,7 @@ for s in svgs:
 print(f"SVG 非法数: {bad}")
 
 # 2. 结构
-M=root+"/子教程/运维专项/lessons/lesson-02-集群健康与day-2运维.md"
+M=root+"/子教程/运维专项/lessons/02-集群健康与day-2运维.md"
 txt=open(M,encoding='utf-8').read()
 print(f"\n讲义: {len(txt.splitlines())} 行")
 for s in ['## 第一幕','## 第二幕','## 第三幕','## 第四幕','## 第五幕','## 📇 概念速查卡','## 🚀 下一批接力提示词','## 🧭 课程导航']:

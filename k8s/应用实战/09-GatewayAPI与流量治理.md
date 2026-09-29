@@ -1,6 +1,6 @@
 # 应用实战 · 多团队共用一个入口，还能各管各的
 
-> 对应课程：[第 9 课：Gateway API：下一代入口标准](../stages/3-网络与服务暴露/lessons/lesson-09-GatewayAPI下一代入口标准.md) ｜ 覆盖知识点：Gateway API 三层模型、HTTPRoute 与流量治理
+> 对应课程：[第 9 课：Gateway API：下一代入口标准](../stages/3-网络与服务暴露/lessons/09-GatewayAPI下一代入口标准.md) ｜ 覆盖知识点：Gateway API 三层模型、HTTPRoute 与流量治理
 > 定位：**会用，不上生产**——课里学完，在这里动手。课内第四幕做的是「三层模型的状态传播、跨命名空间与 ReferenceGrant」的机制验证，这里做的是**一个真实的协作场景：多个团队共用一个入口，怎么做到互不干扰**，以及**灰度从"各家的注解"变成"标准字段"意味着什么**。
 > 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：[Gateway API 流量分割](https://gateway.envoyproxy.io/v0.5/user/http-traffic-splitting)、[Envoy WeightedCluster](https://www.envoyproxy.io/docs/envoy/latest/api-v3/config/route/v3/route_components.proto)）
 > 🧪 **本篇全部输出为本机 kind 集群 `k8s-c1-calico`（k8s v1.34.0 + Calico v3.31.0，3 节点 + Envoy Gateway）实测**，非推演；实测脚本见 `.plans/2026-09-16-k8s-应用实战补齐/t9-step1.sh` ~ `t9-order.sh`
@@ -421,7 +421,7 @@ EOF
 
 ## 🧭 导航
 
-- ⬅️ 回到课程：[第 9 课：Gateway API：下一代入口标准](../stages/3-网络与服务暴露/lessons/lesson-09-GatewayAPI下一代入口标准.md)
+- ⬅️ 回到课程：[第 9 课：Gateway API：下一代入口标准](../stages/3-网络与服务暴露/lessons/09-GatewayAPI下一代入口标准.md)
 - 📚 全部实战：[应用实战索引](INDEX.md)
 - ⬅️ 上一篇：[08 · 一个入口收敛多服务与灰度放量](08-Ingress七层路由与灰度发布.md)
 - ➡️ 下一篇：[10 · 只让该连的连上，数据库不再裸奔](10-NetworkPolicy微隔离.md)

@@ -42,7 +42,7 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-04-Tools工具.md`
-- [x] `lessons/lesson-05-Agents智能体核心.md`
-- [x] `lessons/lesson-06-Streaming流式输出.md`
-- [x] `lessons/lesson-07-Memory记忆.md`
+- [x] `lessons/04-Tools工具.md`
+- [x] `lessons/05-Agents智能体核心.md`
+- [x] `lessons/06-Streaming流式输出.md`
+- [x] `lessons/07-Memory记忆.md`

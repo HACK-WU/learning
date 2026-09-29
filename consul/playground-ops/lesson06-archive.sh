@@ -10,7 +10,7 @@ assert anchor in s, "锚点20未找到"
 row21 = (
 "| 21 | **子教程课 6 监控指标与告警（双重命名 → 告警静默失效）** | deploy | "
 "课 2 只发现\"指标恒 0\"未给根因；主线课 11 缺口 #4「谁核验过告警指标的语义」未兑现 | "
-"✅ **2026-09-20 已交付**：[lesson-06-监控指标与告警](./子教程/运维专项/lessons/lesson-06-监控指标与告警.md)"
+"✅ **2026-09-20 已交付**：[lesson-06-监控指标与告警](./子教程/运维专项/lessons/06-监控指标与告警.md)"
 "（含一眼全局图 1 张）。**根因实测**：Consul 2.x 的 Prometheus 端点里**同时存在两套命名**——"
 "无前缀的 `consul_autopilot_healthy` / `consul_server_isLeader` / `consul_raft_last_index` **恒为 0（空壳）**，"
 "真实值在**带主机名前缀**的同名指标里（`consul_VWYPGWU_PC5_autopilot_healthy = 1`，前缀 = hostname 横杠换下划线）。"
@@ -44,9 +44,9 @@ print("2) 评审清单已追加")
 # 3) 02-课程目录.md 加课6
 p3="/mnt/d/projects/learning/consul/02-课程目录.md"
 s3=io.open(p3,encoding='utf-8').read()
-a3="  - [课 3 性能、容量与调优](./子教程/运维专项/lessons/lesson-03-性能、容量与调优.md)"
+a3="  - [课 3 性能、容量与调优](./子教程/运维专项/lessons/03-性能、容量与调优.md)"
 assert a3 in s3
-s3=s3.replace(a3, a3+"\n  - [课 6 监控指标与告警](./子教程/运维专项/lessons/lesson-06-监控指标与告警.md)（✅ 2026-09-20｜实测：双重命名空壳恒 0 / 静默失效 vs 永久误报 / 三步核验 / 9 组断言）",1)
+s3=s3.replace(a3, a3+"\n  - [课 6 监控指标与告警](./子教程/运维专项/lessons/06-监控指标与告警.md)（✅ 2026-09-20｜实测：双重命名空壳恒 0 / 静默失效 vs 永久误报 / 三步核验 / 9 组断言）",1)
 s3=s3.replace("课 3 ✅（2026-09-20 交付）｜课 4~8 待生成","课 3 ✅｜课 6 ✅（2026-09-20 交付）｜课 4、5、7、8 待生成",1)
 io.open(p3,'w',encoding='utf-8').write(s3)
 print("3) 课程目录已更新")
@@ -55,9 +55,9 @@ print("3) 课程目录已更新")
 p4="/mnt/d/projects/learning/consul/01-学习路径总览.md"
 s4=io.open(p4,encoding='utf-8').read()
 s4=s4.replace("**进度：课 3 / 8 已交付**","**进度：课 4 / 8 已交付（课 1、2、3、6）**",1)
-old3="[课 3 性能、容量与调优](子教程/运维专项/lessons/lesson-03-性能、容量与调优.md)）"
+old3="[课 3 性能、容量与调优](子教程/运维专项/lessons/03-性能、容量与调优.md)）"
 assert old3 in s4
-s4=s4.replace(old3,"[课 3 性能、容量与调优](子教程/运维专项/lessons/lesson-03-性能、容量与调优.md)、[课 6 监控指标与告警](子教程/运维专项/lessons/lesson-06-监控指标与告警.md)）",1)
+s4=s4.replace(old3,"[课 3 性能、容量与调优](子教程/运维专项/lessons/03-性能、容量与调优.md)、[课 6 监控指标与告警](子教程/运维专项/lessons/06-监控指标与告警.md)）",1)
 io.open(p4,'w',encoding='utf-8').write(s4)
 print("4) 路径总览已更新")
 PYEOF

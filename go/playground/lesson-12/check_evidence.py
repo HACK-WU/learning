@@ -13,7 +13,7 @@ import re
 import sys
 from collections import OrderedDict
 
-LESSON = "/Users/wuyongping/Desktop/learning/go/stages/4-标准库与网络编程/lessons/lesson-12-数据访问与客户端.md"
+LESSON = "/Users/wuyongping/Desktop/learning/go/stages/4-标准库与网络编程/lessons/12-数据访问与客户端.md"
 
 # 证据文件位置：优先用**脚本自己所在目录**下的 ALL_OUTPUT.txt
 # （仓库里的只读归档 go/playground/lesson-12/ 靠这一条才能脱离 /tmp 独立复核），

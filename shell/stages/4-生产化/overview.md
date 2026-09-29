@@ -126,9 +126,9 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-11-严格模式与错误处理.md`
-- [x] `lessons/lesson-12-可观测与测试.md`
-- [x] `lessons/lesson-13-安全性能与选型.md`
+- [x] `lessons/11-严格模式与错误处理.md`
+- [x] `lessons/12-可观测与测试.md`
+- [x] `lessons/13-安全性能与选型.md`
 
 ## 💡 收束
 

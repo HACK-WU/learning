@@ -37,4 +37,4 @@ grep -n "总进度\|阶段 4：管得住" "$D/01-学习路径总览.md" | head -
 echo
 
 echo "=== 课 12 文件最终大小 ==="
-wc -l -c "$D/stages/4-管得住/lessons/lesson-12-性能、高可用与升级运维.md"
+wc -l -c "$D/stages/4-管得住/lessons/12-性能、高可用与升级运维.md"

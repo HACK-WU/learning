@@ -1,6 +1,6 @@
 # 应用实战 · Query DSL：从一个搜索框到能用的筛选器
 
-> 对应课程：[课 6：Query DSL：问问题的语言](../stages/3-查询与聚合/lessons/lesson-06-QueryDSL问问题的语言.md) ｜ 覆盖知识点：Query DSL 结构、全文 vs 词项查询、布尔组合与过滤
+> 对应课程：[课 6：Query DSL：问问题的语言](../stages/3-查询与聚合/lessons/06-QueryDSL问问题的语言.md) ｜ 覆盖知识点：Query DSL 结构、全文 vs 词项查询、布尔组合与过滤
 > 定位：**会用，不上生产**——课里学完，在这里动手。课内验证的是"每种查询长什么样"，这里做的是**一个搜索框从"能搜"到"搜得对、筛得准、排得合理"的完整演进**。
 > 🧪 **本篇全部输出为本机 `l9-cluster`（ES 9.5.1，3 节点，`http://localhost:9201`）2026-09-20 实测**；脚本见 `playground/l17-app-t3.ps1`
 
@@ -213,7 +213,7 @@ Invoke-RestMethod "$ES/ap_g1/_search" -Method Post -Headers $h -Body @'
 
 ## 🧭 导航
 
-- ⬅️ 回到课程：[课 6：Query DSL：问问题的语言](../stages/3-查询与聚合/lessons/lesson-06-QueryDSL问问题的语言.md)
+- ⬅️ 回到课程：[课 6：Query DSL：问问题的语言](../stages/3-查询与聚合/lessons/06-QueryDSL问问题的语言.md)
 - 📚 全部实战：[应用实战索引](INDEX.md)
 - ⬅️ 上一课实战：[05 · 一个字段类型选错，返工重建索引](05-映射给数据定规矩.md)
 - ➡️ 下一课实战：[07 · 让它排对、翻得动、拼错也有结果](07-为什么这条排在前面.md)

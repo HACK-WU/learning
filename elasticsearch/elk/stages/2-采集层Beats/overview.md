@@ -23,13 +23,13 @@
 
 | 课 | 知识点 | 一句话 | 状态 |
 |----|--------|--------|------|
-| [课4 把文件读进来](lessons/lesson-04-Filebeat把文件读进来.md) | harvester 与 input 机制 | 一个文件一个读取器，新版用 `filestream` 替代老 `log` | ⬜ |
+| [课4 把文件读进来](lessons/04-Filebeat把文件读进来.md) | harvester 与 input 机制 | 一个文件一个读取器，新版用 `filestream` 替代老 `log` | ⬜ |
 | | registry 与 at-least-once | 记下读到哪，重启续读，可能重复、极少漏 | ⬜ |
 | | 多行合并 | 用 `pattern`/`negate`/`match` 把异常堆栈拼回一条 | ⬜ |
-| [课5 模块与处理器](lessons/lesson-05-模块与处理器.md) | modules 开箱即用 | nginx/mysql/system 一键采集，自带解析与看板 | ⬜ |
+| [课5 模块与处理器](lessons/05-模块与处理器.md) | modules 开箱即用 | nginx/mysql/system 一键采集，自带解析与看板 | ⬜ |
 | | processors 轻量加工 | 就地增删字段、dissect 拆分、rename，带 `when` 条件 | ⬜ |
 | | 输出与背压 | 直连 ES 还是走 Logstash，bulk 批量与失败重试、背压传导 | ⬜ |
-| [课6 家族与采集选型](lessons/lesson-06-Beats家族与采集选型.md) | 家族成员各管什么 | Metricbeat/Packetbeat/Heartbeat/Auditbeat/Winlogbeat | ⬜ |
+| [课6 家族与采集选型](lessons/06-Beats家族与采集选型.md) | 家族成员各管什么 | Metricbeat/Packetbeat/Heartbeat/Auditbeat/Winlogbeat | ⬜ |
 | | 采集端选型对比 | Beats vs Logstash vs Fluentd vs OTel Collector | ⬜ |
 | | 什么时候不该用 Beats | 容器/K8s、应用直连 SDK、海量日志的取舍 | ⬜ |
 
@@ -54,7 +54,7 @@
 
 - **上一阶段**：阶段 1 · 全景与起步（待交付，位于 `stages/1-…/overview.md`）
 - **下一阶段**：阶段 3 · 处理层 Logstash（待交付，位于 `stages/3-…/overview.md`）
-- **阶段内课程**：[课 4](lessons/lesson-04-Filebeat把文件读进来.md) ｜ [课 5](lessons/lesson-05-模块与处理器.md) ｜ [课 6](lessons/lesson-06-Beats家族与采集选型.md)
+- **阶段内课程**：[课 4](lessons/04-Filebeat把文件读进来.md) ｜ [课 5](lessons/05-模块与处理器.md) ｜ [课 6](lessons/06-Beats家族与采集选型.md)
 
 ## 🔧 实操环境速记
 

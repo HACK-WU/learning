@@ -40,8 +40,8 @@ print('archive env/todo done')
 p = base + 'stages/3-数据导入与查询/overview.md'
 s = io.open(p, encoding='utf-8').read()
 
-old = '- [ ] `lessons/lesson-07-查询引擎与执行计划.md`'
-new = '- [x] `lessons/lesson-07-查询引擎与执行计划.md`'
+old = '- [ ] `lessons/07-查询引擎与执行计划.md`'
+new = '- [x] `lessons/07-查询引擎与执行计划.md`'
 assert old in s, 'overview checkbox not found'
 s = s.replace(old, new)
 

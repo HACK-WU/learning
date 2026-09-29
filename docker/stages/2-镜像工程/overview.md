@@ -33,7 +33,7 @@
 
 ### 场景补丁（不新增知识点）
 
-- [课 6](lessons/lesson-06-多阶段构建与镜像瘦身.md) 已补充 arm64 开发机向 amd64 生产交付：QEMU、原生构建节点、交叉编译、多平台 manifest 与验证命令。
+- [课 6](lessons/06-多阶段构建与镜像瘦身.md) 已补充 arm64 开发机向 amd64 生产交付：QEMU、原生构建节点、交叉编译、多平台 manifest 与验证命令。
 
 ## 🗺️ 本阶段路径图
 
@@ -41,6 +41,6 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-04-Dockerfile入门.md`
-- [x] `lessons/lesson-05-启动命令与配置注入.md`
-- [x] `lessons/lesson-06-多阶段构建与镜像瘦身.md`
+- [x] `lessons/04-Dockerfile入门.md`
+- [x] `lessons/05-启动命令与配置注入.md`
+- [x] `lessons/06-多阶段构建与镜像瘦身.md`

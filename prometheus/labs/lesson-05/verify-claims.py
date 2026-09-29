@@ -11,7 +11,7 @@ import os
 import re
 
 BASE = "/mnt/d/projects/learning/prometheus/labs/lesson-05"
-LESSON = "/mnt/d/projects/learning/prometheus/stages/2-规则与告警/lessons/lesson-05-Alertmanager深入.md"
+LESSON = "/mnt/d/projects/learning/prometheus/stages/2-规则与告警/lessons/05-Alertmanager深入.md"
 
 with open(LESSON, encoding="utf-8") as f:
     text = f.read()

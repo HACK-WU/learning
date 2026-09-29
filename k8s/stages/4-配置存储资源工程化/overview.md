@@ -51,7 +51,7 @@
 
 ## ✅ 课 11 完成情况（2026-09-11）
 
-**讲义**：[lesson-11-ConfigMap与Secret.md](lessons/lesson-11-ConfigMap与Secret.md)（1600 行）
+**讲义**：[11-ConfigMap与Secret.md](lessons/11-ConfigMap与Secret.md)（1600 行）
 
 **阶段状态**：课 11 已完成，课 12（存储）待开始。
 
@@ -70,7 +70,7 @@
 
 ## ✅ 课 12 完成情况（2026-09-11）
 
-**讲义**：[lesson-12-Volume与PVPVC.md](lessons/lesson-12-Volume与PVPVC.md)（约 900 行）
+**讲义**：[12-Volume与PVPVC.md](lessons/12-Volume与PVPVC.md)（约 900 行）
 
 **阶段状态**：课 11 ~ 课 14 全部完成（阶段 4 已收官）。
 
@@ -91,7 +91,7 @@
 
 ## ✅ 课 13 完成情况（2026-09-11）
 
-**讲义**：[lesson-13-资源调度扩缩容.md](lessons/lesson-13-资源调度扩缩容.md)
+**讲义**：[13-资源调度扩缩容.md](lessons/13-资源调度扩缩容.md)
 
 **阶段状态**：课 11、12、13 已完成，课 14（Helm · Kustomize · 可观测性）待开始。
 
@@ -118,7 +118,7 @@
 
 ## ✅ 课 14 完成情况（2026-09-11 · 阶段收官）
 
-**讲义**：[lesson-14-Helm与Kustomize与可观测性.md](lessons/lesson-14-Helm与Kustomize与可观测性.md)
+**讲义**：[14-Helm与Kustomize与可观测性.md](lessons/14-Helm与Kustomize与可观测性.md)
 
 **阶段状态**：**阶段 4 全部完成（课 11、12、13、14）**，下一阶段为《安全体系》。
 
@@ -146,10 +146,10 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-11-ConfigMap与Secret.md`（1600 行，2026-09-11 完成）
-- [x] `lessons/lesson-12-Volume与PVPVC.md`（约 900 行，2026-09-11 完成；第四幕 22 项断言实测通过）
-- [x] `lessons/lesson-13-资源调度扩缩容.md`（2026-09-11 完成；双视角评审 P0 清零）
-- [x] `lessons/lesson-14-Helm与Kustomize与可观测性.md`（2026-09-11 完成；双视角评审 P0 清零）
+- [x] `lessons/11-ConfigMap与Secret.md`（1600 行，2026-09-11 完成）
+- [x] `lessons/12-Volume与PVPVC.md`（约 900 行，2026-09-11 完成；第四幕 22 项断言实测通过）
+- [x] `lessons/13-资源调度扩缩容.md`（2026-09-11 完成；双视角评审 P0 清零）
+- [x] `lessons/14-Helm与Kustomize与可观测性.md`（2026-09-11 完成；双视角评审 P0 清零）
 
 ## 🎉 阶段 4 总结
 
@@ -168,6 +168,6 @@
 
 按 topic-teach 最新 skill 的「课级入口要素」硬约束，本阶段课 11-12（课 13-14 已有全局图，本轮补处境对照 + 地图 + 衔接句）已全部补齐六项要素（一句话本质 / 处境对照 / 一眼全局图 + 读图指引 / 本课地图 / 📖 文档核对 / 🧭 知识点衔接句），经 `verify.sh` 全量核验 P0=0。
 
-**本阶段新增全局图**：lesson-11-设置从成品里拿出来.svg、lesson-12-写的东西能活多久.svg
+**本阶段新增全局图**：11-设置从成品里拿出来.svg、12-写的东西能活多久.svg
 
 **真实性纪律**：处境对照一律不给编造数字，全部为机制层面对照，无把握处标 ⏳；📖 留痕仅在确认真实引用官方文档后补写。

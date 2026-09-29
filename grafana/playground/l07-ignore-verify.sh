@@ -48,7 +48,7 @@ done
 
 echo ""
 echo "--- [C] 讲义与档案（须未被忽略）---"
-DOC="grafana/stages/3-叫得醒/lessons/lesson-07-告警架构：规则在哪求值、状态怎么迁移.md"
+DOC="grafana/stages/3-叫得醒/lessons/07-告警架构：规则在哪求值、状态怎么迁移.md"
 for f in "$DOC" "grafana/00-学习档案.md" "grafana/00-评审清单.md" \
          "grafana/02-课程目录.md" "grafana/01-学习路径总览.md" \
          "grafana/stages/3-叫得醒/overview.md"; do

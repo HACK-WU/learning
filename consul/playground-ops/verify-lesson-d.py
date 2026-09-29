@@ -71,8 +71,8 @@ print("=" * 60)
 targets = [
     'practices/实战D-灰度发布与流量切分/README.md',
     '应用实战/INDEX.md',
-    'stages/2-核心能力拆解/lessons/lesson-07-多数据中心与服务网格.md',
-    'stages/3-横向对比/lessons/lesson-09-四大竞品逐个看.md',
+    'stages/2-核心能力拆解/lessons/07-多数据中心与服务网格.md',
+    'stages/3-横向对比/lessons/09-四大竞品逐个看.md',
     'final-课程手册.md',
     '00-评审清单.md',
     '应用实战篇-逐课判定.md',
@@ -119,8 +119,8 @@ print()
 print("=" * 60)
 print("3. 内容断言")
 print("=" * 60)
-l7 = os.path.join(ROOT, 'stages/2-核心能力拆解/lessons/lesson-07-多数据中心与服务网格.md')
-l9 = os.path.join(ROOT, 'stages/3-横向对比/lessons/lesson-09-四大竞品逐个看.md')
+l7 = os.path.join(ROOT, 'stages/2-核心能力拆解/lessons/07-多数据中心与服务网格.md')
+l9 = os.path.join(ROOT, 'stages/3-横向对比/lessons/09-四大竞品逐个看.md')
 idx = os.path.join(ROOT, '应用实战/INDEX.md')
 
 # 课 7：新增章节存在

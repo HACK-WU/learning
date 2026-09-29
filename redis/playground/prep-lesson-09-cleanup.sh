@@ -22,7 +22,7 @@ ps aux | grep -E "[r]edis-server" | awk '{print $NF}' | head
 
 echo ""
 echo "=== 课 9 讲义校验 ==="
-F=/mnt/d/projects/learning/redis/stages/4-分布式与生产实践/lessons/lesson-09-生产实践与选型.md
+F=/mnt/d/projects/learning/redis/stages/4-分布式与生产实践/lessons/09-生产实践与选型.md
 echo "  大小: $(du -h $F | cut -f1)"
 echo "  行数: $(wc -l < $F)"
 echo "--- 必备段落 ---"
@@ -41,8 +41,8 @@ echo "=== 文档同步校验 ==="
 echo -n "  学习档案课9完成数: "
 grep -c "课 9 生产实践与选型 | .* | ✅ 已完成" /mnt/d/projects/learning/redis/00-学习档案.md
 echo -n "  课目录课9链接: "
-grep -c "lesson-09-生产实践与选型.md" /mnt/d/projects/learning/redis/02-课程目录.md
+grep -c "09-生产实践与选型.md" /mnt/d/projects/learning/redis/02-课程目录.md
 echo -n "  评审清单课9勾选: "
 grep -c "^- \[x\] 阶段 4·课 9" /mnt/d/projects/learning/redis/00-评审清单.md
 echo -n "  overview课9产出: "
-grep -c "lesson-09-生产实践与选型.md.*完成" /mnt/d/projects/learning/redis/stages/4-分布式与生产实践/overview.md
+grep -c "09-生产实践与选型.md.*完成" /mnt/d/projects/learning/redis/stages/4-分布式与生产实践/overview.md

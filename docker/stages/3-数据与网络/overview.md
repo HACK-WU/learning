@@ -35,7 +35,7 @@
 
 ### 场景补丁（不新增知识点）
 
-- [课 9](lessons/lesson-09-Compose编排多容器.md) 已补充 Profiles / Watch / Secrets：开发、调试和敏感配置不再被迫使用同一种启动形态。
+- [课 9](lessons/09-Compose编排多容器.md) 已补充 Profiles / Watch / Secrets：开发、调试和敏感配置不再被迫使用同一种启动形态。
 
 ## 🗺️ 本阶段路径图
 
@@ -43,6 +43,6 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-07-数据持久化.md`
-- [x] `lessons/lesson-08-容器网络.md`
-- [x] `lessons/lesson-09-Compose编排多容器.md`
+- [x] `lessons/07-数据持久化.md`
+- [x] `lessons/08-容器网络.md`
+- [x] `lessons/09-Compose编排多容器.md`

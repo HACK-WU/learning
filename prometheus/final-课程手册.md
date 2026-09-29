@@ -114,43 +114,43 @@ flowchart LR
 
 | 我想搞清楚… | 知识点 | 课 |
 |-----------|-------|-----|
-| Prometheus 内部有哪些部件、各自管什么 | 整体架构与组件边界 | [课 1](stages/1-单机内核/lessons/lesson-01-架构总览与第一条数据.md) |
-| "拉取"到底拉了什么，失败时会怎样 | 拉取模型的完整语义 | [课 1](stages/1-单机内核/lessons/lesson-01-架构总览与第一条数据.md) |
-| 我自己的程序怎么暴露指标 | Exporter 生态与指标暴露 | [课 1](stages/1-单机内核/lessons/lesson-01-架构总览与第一条数据.md) |
-| 目标列表从哪来、怎么动态发现 | 服务发现机制 | [课 2](stages/1-单机内核/lessons/lesson-02-目标从哪来.md) |
-| 标签怎么改写，三段 relabel 有什么区别 | relabel_configs 三段改写 | [课 2](stages/1-单机内核/lessons/lesson-02-目标从哪来.md) |
-| 标签冲突了听谁的 | honor_labels 与标签冲突 | [课 2](stages/1-单机内核/lessons/lesson-02-目标从哪来.md) |
-| 一条序列在磁盘上是什么 | 物理视角的数据模型 | [课 3](stages/1-单机内核/lessons/lesson-03-TSDB存储引擎.md) |
-| 进程崩了数据为什么还在 | WAL 与 checkpoint | [课 3](stages/1-单机内核/lessons/lesson-03-TSDB存储引擎.md) |
-| 数据多久归档一次、什么时候被删 | block、compaction 与保留 | [课 3](stages/1-单机内核/lessons/lesson-03-TSDB存储引擎.md) |
-| 规则什么时候求值、为什么新规则查不到 | 规则组与评估机制 | [课 4](stages/2-规则与告警/lessons/lesson-04-规则引擎.md) |
-| 怎么把贵查询固化下来 | recording rules | [课 4](stages/2-规则与告警/lessons/lesson-04-规则引擎.md) |
-| 告警从产生到 firing 经历了什么 | 告警规则与状态机 | [课 4](stages/2-规则与告警/lessons/lesson-04-规则引擎.md) |
-| 1000 条告警怎么压成 1 条通知 | 告警的到达与去重（分组） | [课 5](stages/2-规则与告警/lessons/lesson-05-Alertmanager深入.md) |
-| 告警该发给谁 | 路由树与匹配 | [课 5](stages/2-规则与告警/lessons/lesson-05-Alertmanager深入.md) |
-| 怎么让告警临时闭嘴 | 抑制、静默与时间窗口 | [课 5](stages/2-规则与告警/lessons/lesson-05-Alertmanager深入.md) |
-| 一条 PromQL 是怎么被执行的 | PromQL 执行流程 | [课 6](stages/2-规则与告警/lessons/lesson-06-查询引擎与查询成本.md) |
-| 消失的目标为什么返回空而不是 0 | staleness marker 与 lookback delta | [课 6](stages/2-规则与告警/lessons/lesson-06-查询引擎与查询成本.md) |
-| 查询太慢怎么改便宜 | 查询成本控制 | [课 6](stages/2-规则与告警/lessons/lesson-06-查询引擎与查询成本.md) |
-| 数据怎么发到远端、会不会丢 | remote write 协议与队列 | [课 7](stages/3-规模化与生态/lessons/lesson-07-远程读写与Agent模式.md) |
-| 怎么查远端的历史数据 | remote read | [课 7](stages/3-规模化与生态/lessons/lesson-07-远程读写与Agent模式.md) |
-| 只要采集不要存储和告警的模式 | Agent 模式 | [课 7](stages/3-规模化与生态/lessons/lesson-07-远程读写与Agent模式.md) |
-| 多台 Prometheus 怎么汇总（联邦） | federation | [课 8](stages/3-规模化与生态/lessons/lesson-08-联邦与全局视图.md) |
-| 双副本下的数据一致性 | HA 与数据一致性 | [课 8](stages/3-规模化与生态/lessons/lesson-08-联邦与全局视图.md) |
-| external labels 到底该怎么配 | external labels 的正确用法 | [课 8](stages/3-规模化与生态/lessons/lesson-08-联邦与全局视图.md) |
-| Thanos / Mimir / VM 架构差在哪 | 三种架构路线的组件与数据流 | [课 9](stages/3-规模化与生态/lessons/lesson-09-长期存储选型.md) |
-| 我该选哪个长期存储 | 选型决策框架 | [课 9](stages/3-规模化与生态/lessons/lesson-09-长期存储选型.md) |
-| Prometheus 和 OTel 什么关系 | 与 OpenTelemetry 的关系边界 | [课 9](stages/3-规模化与生态/lessons/lesson-09-长期存储选型.md) |
-| remote read 两种模式的区别 | remote read 两种模式 | [课 9](stages/3-规模化与生态/lessons/lesson-09-长期存储选型.md) |
-| 序列数暴涨的原因 | 基数的来源与量级 | [课 10](stages/4-生产运维/lessons/lesson-10-基数治理.md) |
-| 怎么找出是谁在涨 | 诊断高基数 | [课 10](stages/4-生产运维/lessons/lesson-10-基数治理.md) |
-| 怎么控制基数、副作用是什么 | 控制手段 | [课 10](stages/4-生产运维/lessons/lesson-10-基数治理.md) |
-| 要多少内存和磁盘 | 内存与磁盘估算 | [课 11](stages/4-生产运维/lessons/lesson-11-容量规划与调优.md) |
-| 有哪些关键调优参数 | 关键调优参数 | [课 11](stages/4-生产运维/lessons/lesson-11-容量规划与调优.md) |
-| 怎么监控 Prometheus 自己 | 监控 Prometheus 自身 | [课 11](stages/4-生产运维/lessons/lesson-11-容量规划与调优.md) |
-| 变更前怎么验证配置 | promtool 工具链 | [课 12](stages/4-生产运维/lessons/lesson-12-运维工具链与排障.md) |
-| 怎么管理 TSDB、删数据 | TSDB 管理与 admin API | [课 12](stages/4-生产运维/lessons/lesson-12-运维工具链与排障.md) |
-| 出事了从哪下手 | 排障方法论 | [课 12](stages/4-生产运维/lessons/lesson-12-运维工具链与排障.md) |
+| Prometheus 内部有哪些部件、各自管什么 | 整体架构与组件边界 | [课 1](stages/1-单机内核/lessons/01-架构总览与第一条数据.md) |
+| "拉取"到底拉了什么，失败时会怎样 | 拉取模型的完整语义 | [课 1](stages/1-单机内核/lessons/01-架构总览与第一条数据.md) |
+| 我自己的程序怎么暴露指标 | Exporter 生态与指标暴露 | [课 1](stages/1-单机内核/lessons/01-架构总览与第一条数据.md) |
+| 目标列表从哪来、怎么动态发现 | 服务发现机制 | [课 2](stages/1-单机内核/lessons/02-目标从哪来.md) |
+| 标签怎么改写，三段 relabel 有什么区别 | relabel_configs 三段改写 | [课 2](stages/1-单机内核/lessons/02-目标从哪来.md) |
+| 标签冲突了听谁的 | honor_labels 与标签冲突 | [课 2](stages/1-单机内核/lessons/02-目标从哪来.md) |
+| 一条序列在磁盘上是什么 | 物理视角的数据模型 | [课 3](stages/1-单机内核/lessons/03-TSDB存储引擎.md) |
+| 进程崩了数据为什么还在 | WAL 与 checkpoint | [课 3](stages/1-单机内核/lessons/03-TSDB存储引擎.md) |
+| 数据多久归档一次、什么时候被删 | block、compaction 与保留 | [课 3](stages/1-单机内核/lessons/03-TSDB存储引擎.md) |
+| 规则什么时候求值、为什么新规则查不到 | 规则组与评估机制 | [课 4](stages/2-规则与告警/lessons/04-规则引擎.md) |
+| 怎么把贵查询固化下来 | recording rules | [课 4](stages/2-规则与告警/lessons/04-规则引擎.md) |
+| 告警从产生到 firing 经历了什么 | 告警规则与状态机 | [课 4](stages/2-规则与告警/lessons/04-规则引擎.md) |
+| 1000 条告警怎么压成 1 条通知 | 告警的到达与去重（分组） | [课 5](stages/2-规则与告警/lessons/05-Alertmanager深入.md) |
+| 告警该发给谁 | 路由树与匹配 | [课 5](stages/2-规则与告警/lessons/05-Alertmanager深入.md) |
+| 怎么让告警临时闭嘴 | 抑制、静默与时间窗口 | [课 5](stages/2-规则与告警/lessons/05-Alertmanager深入.md) |
+| 一条 PromQL 是怎么被执行的 | PromQL 执行流程 | [课 6](stages/2-规则与告警/lessons/06-查询引擎与查询成本.md) |
+| 消失的目标为什么返回空而不是 0 | staleness marker 与 lookback delta | [课 6](stages/2-规则与告警/lessons/06-查询引擎与查询成本.md) |
+| 查询太慢怎么改便宜 | 查询成本控制 | [课 6](stages/2-规则与告警/lessons/06-查询引擎与查询成本.md) |
+| 数据怎么发到远端、会不会丢 | remote write 协议与队列 | [课 7](stages/3-规模化与生态/lessons/07-远程读写与Agent模式.md) |
+| 怎么查远端的历史数据 | remote read | [课 7](stages/3-规模化与生态/lessons/07-远程读写与Agent模式.md) |
+| 只要采集不要存储和告警的模式 | Agent 模式 | [课 7](stages/3-规模化与生态/lessons/07-远程读写与Agent模式.md) |
+| 多台 Prometheus 怎么汇总（联邦） | federation | [课 8](stages/3-规模化与生态/lessons/08-联邦与全局视图.md) |
+| 双副本下的数据一致性 | HA 与数据一致性 | [课 8](stages/3-规模化与生态/lessons/08-联邦与全局视图.md) |
+| external labels 到底该怎么配 | external labels 的正确用法 | [课 8](stages/3-规模化与生态/lessons/08-联邦与全局视图.md) |
+| Thanos / Mimir / VM 架构差在哪 | 三种架构路线的组件与数据流 | [课 9](stages/3-规模化与生态/lessons/09-长期存储选型.md) |
+| 我该选哪个长期存储 | 选型决策框架 | [课 9](stages/3-规模化与生态/lessons/09-长期存储选型.md) |
+| Prometheus 和 OTel 什么关系 | 与 OpenTelemetry 的关系边界 | [课 9](stages/3-规模化与生态/lessons/09-长期存储选型.md) |
+| remote read 两种模式的区别 | remote read 两种模式 | [课 9](stages/3-规模化与生态/lessons/09-长期存储选型.md) |
+| 序列数暴涨的原因 | 基数的来源与量级 | [课 10](stages/4-生产运维/lessons/10-基数治理.md) |
+| 怎么找出是谁在涨 | 诊断高基数 | [课 10](stages/4-生产运维/lessons/10-基数治理.md) |
+| 怎么控制基数、副作用是什么 | 控制手段 | [课 10](stages/4-生产运维/lessons/10-基数治理.md) |
+| 要多少内存和磁盘 | 内存与磁盘估算 | [课 11](stages/4-生产运维/lessons/11-容量规划与调优.md) |
+| 有哪些关键调优参数 | 关键调优参数 | [课 11](stages/4-生产运维/lessons/11-容量规划与调优.md) |
+| 怎么监控 Prometheus 自己 | 监控 Prometheus 自身 | [课 11](stages/4-生产运维/lessons/11-容量规划与调优.md) |
+| 变更前怎么验证配置 | promtool 工具链 | [课 12](stages/4-生产运维/lessons/12-运维工具链与排障.md) |
+| 怎么管理 TSDB、删数据 | TSDB 管理与 admin API | [课 12](stages/4-生产运维/lessons/12-运维工具链与排障.md) |
+| 出事了从哪下手 | 排障方法论 | [课 12](stages/4-生产运维/lessons/12-运维工具链与排障.md) |
 
 ---
 
@@ -179,7 +179,7 @@ flowchart TD
 
 ## 课 1 · 架构总览与第一条数据
 
-> 完整课文：[lesson-01-架构总览与第一条数据.md](stages/1-单机内核/lessons/lesson-01-架构总览与第一条数据.md)
+> 完整课文：[01-架构总览与第一条数据.md](stages/1-单机内核/lessons/01-架构总览与第一条数据.md)
 
 ### 三个知识点
 
@@ -217,7 +217,7 @@ flowchart LR
 
 ## 课 2 · 目标从哪来
 
-> 完整课文：[lesson-02-目标从哪来.md](stages/1-单机内核/lessons/lesson-02-目标从哪来.md)
+> 完整课文：[02-目标从哪来.md](stages/1-单机内核/lessons/02-目标从哪来.md)
 
 ### 三个知识点
 
@@ -255,7 +255,7 @@ flowchart TD
 
 ## 课 3 · TSDB 存储引擎
 
-> 完整课文：[lesson-03-TSDB存储引擎.md](stages/1-单机内核/lessons/lesson-03-TSDB存储引擎.md)
+> 完整课文：[03-TSDB存储引擎.md](stages/1-单机内核/lessons/03-TSDB存储引擎.md)
 
 ### 三个知识点
 
@@ -320,7 +320,7 @@ sequenceDiagram
 
 ## 课 4 · 规则引擎
 
-> 完整课文：[lesson-04-规则引擎.md](stages/2-规则与告警/lessons/lesson-04-规则引擎.md)
+> 完整课文：[04-规则引擎.md](stages/2-规则与告警/lessons/04-规则引擎.md)
 
 ### 三个知识点
 
@@ -355,7 +355,7 @@ stateDiagram-v2
 
 ## 课 5 · Alertmanager 深入
 
-> 完整课文：[lesson-05-Alertmanager深入.md](stages/2-规则与告警/lessons/lesson-05-Alertmanager深入.md)
+> 完整课文：[05-Alertmanager深入.md](stages/2-规则与告警/lessons/05-Alertmanager深入.md)
 
 ### 三个知识点
 
@@ -400,7 +400,7 @@ flowchart TD
 
 ## 课 6 · 查询引擎与查询成本
 
-> 完整课文：[lesson-06-查询引擎与查询成本.md](stages/2-规则与告警/lessons/lesson-06-查询引擎与查询成本.md)
+> 完整课文：[06-查询引擎与查询成本.md](stages/2-规则与告警/lessons/06-查询引擎与查询成本.md)
 
 ### 三个知识点
 
@@ -458,7 +458,7 @@ flowchart TD
 
 ## 课 7 · 远程读写与 Agent 模式
 
-> 完整课文：[lesson-07-远程读写与Agent模式.md](stages/3-规模化与生态/lessons/lesson-07-远程读写与Agent模式.md)
+> 完整课文：[07-远程读写与Agent模式.md](stages/3-规模化与生态/lessons/07-远程读写与Agent模式.md)
 
 ### 三个知识点
 
@@ -504,7 +504,7 @@ flowchart TD
 
 ## 课 8 · 联邦与全局视图
 
-> 完整课文：[lesson-08-联邦与全局视图.md](stages/3-规模化与生态/lessons/lesson-08-联邦与全局视图.md)
+> 完整课文：[08-联邦与全局视图.md](stages/3-规模化与生态/lessons/08-联邦与全局视图.md)
 
 ### 三个知识点
 
@@ -539,7 +539,7 @@ flowchart TD
 
 ## 课 9 · 长期存储选型
 
-> 完整课文：[lesson-09-长期存储选型.md](stages/3-规模化与生态/lessons/lesson-09-长期存储选型.md)
+> 完整课文：[09-长期存储选型.md](stages/3-规模化与生态/lessons/09-长期存储选型.md)
 
 ### 四个知识点
 
@@ -601,7 +601,7 @@ flowchart TD
 
 ## 课 10 · 基数治理
 
-> 完整课文：[lesson-10-基数治理.md](stages/4-生产运维/lessons/lesson-10-基数治理.md)
+> 完整课文：[10-基数治理.md](stages/4-生产运维/lessons/10-基数治理.md)
 
 ### 三个知识点
 
@@ -636,7 +636,7 @@ flowchart TD
 
 ## 课 11 · 容量规划与调优
 
-> 完整课文：[lesson-11-容量规划与调优.md](stages/4-生产运维/lessons/lesson-11-容量规划与调优.md)
+> 完整课文：[11-容量规划与调优.md](stages/4-生产运维/lessons/11-容量规划与调优.md)
 
 ### 三个知识点
 
@@ -671,7 +671,7 @@ flowchart TD
 
 ## 课 12 · 运维工具链与排障
 
-> 完整课文：[lesson-12-运维工具链与排障.md](stages/4-生产运维/lessons/lesson-12-运维工具链与排障.md)
+> 完整课文：[12-运维工具链与排障.md](stages/4-生产运维/lessons/12-运维工具链与排障.md)
 
 ### 三个知识点
 

@@ -29,8 +29,8 @@ PY
 
 echo ""
 echo "===== B. 关键事实一致性 ====="
-G7=$D/stages/3-规模化与生态/lessons/lesson-07-远程读写与Agent模式.md
-G9=$D/stages/3-规模化与生态/lessons/lesson-09-长期存储选型.md
+G7=$D/stages/3-规模化与生态/lessons/07-远程读写与Agent模式.md
+G9=$D/stages/3-规模化与生态/lessons/09-长期存储选型.md
 OV=$D/stages/3-规模化与生态/overview.md
 AR=$D/00-学习档案.md
 RV=$D/00-评审清单.md

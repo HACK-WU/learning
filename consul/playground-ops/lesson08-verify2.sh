@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 python3 - <<'PYEOF'
 import re
-L8 = "/mnt/d/projects/learning/consul/子教程/运维专项/lessons/lesson-08-多机房与K8s运维视角.md"
+L8 = "/mnt/d/projects/learning/consul/子教程/运维专项/lessons/08-多机房与K8s运维视角.md"
 s = open(L8, encoding='utf-8').read()
 q_sec = s[s.find('### 小测'):s.find('<details>')]
 a_sec = s[s.find('<details>'):]

@@ -1,6 +1,6 @@
 # 应用实战 · CORS 与同源策略
 
-> 对应课程：[第 14 课：CORS 与同源策略：浏览器的一票否决](../stages/5-认证联调与决策/lessons/lesson-14-CORS与同源策略.md) ｜ 覆盖知识点：14.1 同源策略、14.2 CORS 机制、14.3 高频 CORS 报错排查
+> 对应课程：[第 14 课：CORS 与同源策略：浏览器的一票否决](../stages/5-认证联调与决策/lessons/14-CORS与同源策略.md) ｜ 覆盖知识点：14.1 同源策略、14.2 CORS 机制、14.3 高频 CORS 报错排查
 > 定位：**会用，不上生产**——跟着一个订单 API 从“先让公开数据能读”演进到“精确来源、凭证和预检都能对账”。不展开完整认证服务、CSRF 防护、密钥托管和生产网关部署。
 > 📖 结论已按官方文档核对（核查于 2026-09｜来源：[MDN CORS 指南](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS)、[WHATWG Fetch Standard](https://fetch.spec.whatwg.org/#http-cors-protocol)）
 
@@ -130,6 +130,6 @@ fetch("https://api.example.com/orders", {
 
 ## 🧭 导航
 
-- ⬅️ 回到课程：[第 14 课：CORS 与同源策略：浏览器的一票否决](../stages/5-认证联调与决策/lessons/lesson-14-CORS与同源策略.md)
+- ⬅️ 回到课程：[第 14 课：CORS 与同源策略：浏览器的一票否决](../stages/5-认证联调与决策/lessons/14-CORS与同源策略.md)
 - 📚 全部实战：[应用实战索引](INDEX.md)
-- ➡️ 下一课：[15 · 抓包排障与决策清单：课程收束](../stages/5-认证联调与决策/lessons/lesson-15-抓包排障与决策清单.md)；结课综合项目：[HTTP 请求诊断实验场](../projects/HTTP请求诊断实验场/README.md)
+- ➡️ 下一课：[15 · 抓包排障与决策清单：课程收束](../stages/5-认证联调与决策/lessons/15-抓包排障与决策清单.md)；结课综合项目：[HTTP 请求诊断实验场](../projects/HTTP请求诊断实验场/README.md)

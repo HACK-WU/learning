@@ -2,7 +2,7 @@
 # 课 9 交付终验：全仓链接 + 讲义引用文件存在性 + 档案回写核验
 set -uo pipefail
 ROOT=/mnt/d/projects/learning/prometheus
-LESSON=$ROOT/stages/3-规模化与生态/lessons/lesson-09-长期存储选型.md
+LESSON=$ROOT/stages/3-规模化与生态/lessons/09-长期存储选型.md
 PASS=0; FAIL=0
 ok(){ PASS=$((PASS+1)); echo "  [PASS] $1"; }
 bad(){ FAIL=$((FAIL+1)); echo "  [FAIL] $1 ($2)"; }

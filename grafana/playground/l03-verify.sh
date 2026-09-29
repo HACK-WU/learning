@@ -3,7 +3,7 @@
 # 每条判定回读原文，避免凭记忆断言
 set -u
 cd /mnt/d/projects/learning/grafana
-F="stages/1-看得见/lessons/lesson-03-变量与Dashboard组织：一张图服务N台机器.md"
+F="stages/1-看得见/lessons/03-变量与Dashboard组织：一张图服务N台机器.md"
 FAIL=0
 chk(){ if eval "$2" >/dev/null 2>&1; then echo "  ✅ $1"; else echo "  ❌ $1"; FAIL=$((FAIL+1)); fi; }
 
@@ -42,7 +42,7 @@ echo
 echo "=========== B2 · 课尾导航链接可达性 ==========="
 python3 - <<'PYEOF'
 import re,os,sys
-F="stages/1-看得见/lessons/lesson-03-变量与Dashboard组织：一张图服务N台机器.md"
+F="stages/1-看得见/lessons/03-变量与Dashboard组织：一张图服务N台机器.md"
 base=os.path.dirname(F)
 txt=open(F,encoding='utf-8').read()
 bad=0

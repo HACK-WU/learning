@@ -2,7 +2,7 @@
 
 > ELK 子教程阶段 3 ｜ 课 7-9 ｜ 9 个知识点 ｜ 状态：⬜ 骨架已建，正文待填充
 >
-> 前置：[ES 主课 11《数据管道与备份》](../../../../stages/4-分布式与工程实践/lessons/lesson-11-数据管道与备份.md)（Ingest Pipeline / grok 基础）｜ [ELK 阶段 2《采集层 Beats》](../2-采集层Beats/overview.md)
+> 前置：[ES 主课 11《数据管道与备份》](../../../../stages/4-分布式与工程实践/lessons/11-数据管道与备份.md)（Ingest Pipeline / grok 基础）｜ [ELK 阶段 2《采集层 Beats》](../2-采集层Beats/overview.md)
 
 ## 🎯 阶段目标
 
@@ -16,9 +16,9 @@
 
 | 课 | 标题 | 知识点 | 状态 |
 |----|------|--------|------|
-| [课7](lessons/lesson-07-Logstash管道三件套.md) | Logstash 管道三件套 | 管道结构与事件模型 / grok 解析 / date 与 mutate | ⬜ 骨架 |
-| [课8](lessons/lesson-08-可靠性与吞吐.md) | 可靠性与吞吐 | 持久化队列与 at-least-once / 背压与吞吐调优 / 多管道与隔离 | ⬜ 骨架 |
-| [课9](lessons/lesson-09-该在哪处理.md) | 该在哪处理 | Ingest Pipeline 日志场景配法 / 位置之争决策表 / ECS 字段规范与脱敏 | ⬜ 骨架 |
+| [课7](lessons/07-Logstash管道三件套.md) | Logstash 管道三件套 | 管道结构与事件模型 / grok 解析 / date 与 mutate | ⬜ 骨架 |
+| [课8](lessons/08-可靠性与吞吐.md) | 可靠性与吞吐 | 持久化队列与 at-least-once / 背压与吞吐调优 / 多管道与隔离 | ⬜ 骨架 |
+| [课9](lessons/09-该在哪处理.md) | 该在哪处理 | Ingest Pipeline 日志场景配法 / 位置之争决策表 / ECS 字段规范与脱敏 | ⬜ 骨架 |
 
 ## 📌 必须掌握的知识点清单（9/9）
 

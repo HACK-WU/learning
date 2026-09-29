@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # 课 8 讲义双视角评审校验
-F=/mnt/d/projects/learning/prometheus/stages/3-规模化与生态/lessons/lesson-08-联邦与全局视图.md
+F=/mnt/d/projects/learning/prometheus/stages/3-规模化与生态/lessons/08-联邦与全局视图.md
 V=0
 
 echo "=== pedagogy：五幕结构 ==="

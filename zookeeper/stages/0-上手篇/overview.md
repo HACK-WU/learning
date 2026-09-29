@@ -18,15 +18,15 @@
 
 本阶段就是把这个前提补齐：**先让手熟，再让脑通。** 三课只教"怎么做"和"看到什么"，把"为什么是这样"留给后面各课——带着亲手撞过的报错去学原理，记忆会牢得多。
 
-> 📌 **已有基础？可以跳过。** 如果你已经装过 ZK、用过 zkCli 或任一客户端库，直接从 [L1](../1-问题与定位/lessons/lesson-01-为什么需要ZooKeeper.md) 开始即可，遇到想亲手验证的地方再回来查 [L0.3 的实验地图](lessons/lesson-0-3-Python客户端kazoo入门.md)。
+> 📌 **已有基础？可以跳过。** 如果你已经装过 ZK、用过 zkCli 或任一客户端库，直接从 [L1](../1-问题与定位/lessons/01-为什么需要ZooKeeper.md) 开始即可，遇到想亲手验证的地方再回来查 [L0.3 的实验地图](lessons/0-3-Python客户端kazoo入门.md)。
 
 ## 课程列表
 
 | 课 | 讲义 | 一句话 |
 |----|------|--------|
-| L0.1 | [环境搭建：从零跑起一个 ZooKeeper](lessons/lesson-0-1-环境搭建与第一次连接.md) | JDK + 一个 `-bin` 包 + `zoo.cfg` 三行，十分钟跑起来；三种方式确认活着，起不来怎么排 |
-| L0.2 | [zkCli 增删改查基本功](lessons/lesson-0-2-zkCli增删改查基本功.md) | 四种节点亲手建、版本 CAS 亲手撞、Watch 与临时节点亲手验；七条报错对照表 |
-| L0.3 | [Python 客户端 kazoo 入门](lessons/lesson-0-3-Python客户端kazoo入门.md) | bytes 陷阱、连接状态监听（LOST/SUSPENDED）、DataWatch 配置中心、retry；附全课程实验地图 |
+| L0.1 | [环境搭建：从零跑起一个 ZooKeeper](lessons/0-1-环境搭建与第一次连接.md) | JDK + 一个 `-bin` 包 + `zoo.cfg` 三行，十分钟跑起来；三种方式确认活着，起不来怎么排 |
+| L0.2 | [zkCli 增删改查基本功](lessons/0-2-zkCli增删改查基本功.md) | 四种节点亲手建、版本 CAS 亲手撞、Watch 与临时节点亲手验；七条报错对照表 |
+| L0.3 | [Python 客户端 kazoo 入门](lessons/0-3-Python客户端kazoo入门.md) | bytes 陷阱、连接状态监听（LOST/SUSPENDED）、DataWatch 配置中心、retry；附全课程实验地图 |
 
 ## 故事位置
 

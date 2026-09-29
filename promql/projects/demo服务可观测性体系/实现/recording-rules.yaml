@@ -115,6 +115,6 @@ curl -s 'http://localhost:9090/api/v1/query?stats=all' \
 
 ## 📚 知识点回指
 
-- **recording rule 语法**：与告警规则同构（`groups → rules`），`record` 替代 `alert`，无 `for`/`labels`/`annotations` — [L12](../stages/4-实战应用/lessons/lesson-12-实战二-Grafana面板套路与查询优化.md)
-- **成本第一定律**：账单按读取样本数算，不按输出行数算 — [L12](../stages/4-实战应用/lessons/lesson-12-实战二-Grafana面板套路与查询优化.md)
-- **`ALERTS` 是内置合成序列的活例**：告警状态本身就是被预聚合出来的指标 — [L11](../stages/4-实战应用/lessons/lesson-11-实战一-从查询到告警规则.md)
+- **recording rule 语法**：与告警规则同构（`groups → rules`），`record` 替代 `alert`，无 `for`/`labels`/`annotations` — [L12](../stages/4-实战应用/lessons/12-实战二-Grafana面板套路与查询优化.md)
+- **成本第一定律**：账单按读取样本数算，不按输出行数算 — [L12](../stages/4-实战应用/lessons/12-实战二-Grafana面板套路与查询优化.md)
+- **`ALERTS` 是内置合成序列的活例**：告警状态本身就是被预聚合出来的指标 — [L11](../stages/4-实战应用/lessons/11-实战一-从查询到告警规则.md)

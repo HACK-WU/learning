@@ -1,5 +1,5 @@
 #!/bin/bash
-D=/mnt/d/projects/learning/grafana/stages/4-管得住/lessons/lesson-12-性能、高可用与升级运维.md
+D=/mnt/d/projects/learning/grafana/stages/4-管得住/lessons/12-性能、高可用与升级运维.md
 echo "=== A组 结构合规 ==="
 
 echo "--- A1 五幕结构 ---"

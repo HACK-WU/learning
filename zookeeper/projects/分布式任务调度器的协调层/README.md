@@ -27,19 +27,19 @@
 
 | 知识点 | 所属阶段 / 课 | 本项目用在何处 | 回指 |
 |--------|--------------|---------------|------|
-| 协调的本质 / 双主故障 | 阶段 1 · L1 | 需求起点：为什么调度器会"两个节点都以为自己是主" | [lesson-01](../../stages/1-问题与定位/lessons/lesson-01-为什么需要ZooKeeper.md) |
-| 能力地图 / CP 定位 | 阶段 1 · L2 | 判断 ZK 该不该进场（对比"用 MySQL+Redis 凑"） | [lesson-02](../../stages/1-问题与定位/lessons/lesson-02-ZooKeeper是什么.md) |
-| ZNode 四种节点 / 临时节点 | 阶段 2 · L3 | Worker 注册用临时节点（会话断即消失）、配置用持久节点 | [lesson-03](../../stages/2-核心机制/lessons/lesson-03-数据模型ZNode树与四种节点.md) |
-| 会话 / Watch / 一次性通知 | 阶段 2 · L5 | 成员感知：watch 子节点变化 + 重注册；断连期收不到通知的边界 | [lesson-05](../../stages/2-核心机制/lessons/lesson-05-会话与Watch临时节点和一次性通知.md) |
-| ZAB / 过半派 / 2F+1 | 阶段 2 · L4 | 3 节点集群的部署形态与容灾边界（挂 1 个仍可用） | [lesson-04](../../stages/2-核心机制/lessons/lesson-04-集群与ZAB过半派的生存智慧.md) |
-| 四大用法（选主/锁/配置） | 阶段 2 · L6 | 选主配方、锁配方（只 watch 前驱避免羊群）、配置 watch 配方 | [lesson-06](../../stages/2-核心机制/lessons/lesson-06-四大经典用法从配置中心到分布式锁.md) |
-| kazoo 客户端 / 连接状态 | 阶段 0 · L0.3 | 本项目用 kazoo 实现（课 0.3 已教连接骨架与状态监听） | [lesson-0-3](../../stages/0-上手篇/lessons/lesson-0-3-Python客户端kazoo入门.md) |
-| 部署三张账单 / 事务日志专用盘 | 阶段 3 · L7 | 落地的硬件与运维成本——决策文档里"看不见的成本"来源 | [lesson-07](../../stages/3-成本与风险/lessons/lesson-07-部署与运维成本3节点起步的小集群.md) |
-| 坑：Watch 风暴 / 羊群 / Session | 阶段 3 · L8 | 反例对照的核心素材：错误的锁实现会惊醒全群 | [lesson-08](../../stages/3-成本与风险/lessons/lesson-08-经典的坑Watch风暴羊群效应与Session.md) |
-| 四候选对比 / 能力边界 | 阶段 4 · L9 | 候选池：ZK vs etcd vs Consul vs Redis 的硬边界（1MB / 512KB 等） | [lesson-09](../../stages/4-对比与决策/lessons/lesson-09-横向对比ZooKeeper-vs-etcd-vs-Consul-vs-Redis.md) |
-| Kafka 去 ZK / 结论不可外推 | 阶段 4 · L10 | 决策纪律：不因为"Kafka 弃用了"就排除 ZK | [lesson-10](../../stages/4-对比与决策/lessons/lesson-10-生态趋势Kafka为什么抛弃ZooKeeper.md) |
-| 选型决策树 / 成本账 / 五段式汇报 | 阶段 4 · L11 | 本项目的**产出方法**：决策文档按五段式写 | [lesson-11](../../stages/4-对比与决策/lessons/lesson-11-决策框架一棵选型决策树.md) |
-| 三场景演练 / fencing 在资源层 | 阶段 4 · L12 | 直接套用：锁分两类 + fencing token 必须落资源层 | [lesson-12](../../stages/4-对比与决策/lessons/lesson-12-场景演练三个真实项目的选型决策.md) |
+| 协调的本质 / 双主故障 | 阶段 1 · L1 | 需求起点：为什么调度器会"两个节点都以为自己是主" | [01](../../stages/1-问题与定位/lessons/01-为什么需要ZooKeeper.md) |
+| 能力地图 / CP 定位 | 阶段 1 · L2 | 判断 ZK 该不该进场（对比"用 MySQL+Redis 凑"） | [02](../../stages/1-问题与定位/lessons/02-ZooKeeper是什么.md) |
+| ZNode 四种节点 / 临时节点 | 阶段 2 · L3 | Worker 注册用临时节点（会话断即消失）、配置用持久节点 | [03](../../stages/2-核心机制/lessons/03-数据模型ZNode树与四种节点.md) |
+| 会话 / Watch / 一次性通知 | 阶段 2 · L5 | 成员感知：watch 子节点变化 + 重注册；断连期收不到通知的边界 | [05](../../stages/2-核心机制/lessons/05-会话与Watch临时节点和一次性通知.md) |
+| ZAB / 过半派 / 2F+1 | 阶段 2 · L4 | 3 节点集群的部署形态与容灾边界（挂 1 个仍可用） | [04](../../stages/2-核心机制/lessons/04-集群与ZAB过半派的生存智慧.md) |
+| 四大用法（选主/锁/配置） | 阶段 2 · L6 | 选主配方、锁配方（只 watch 前驱避免羊群）、配置 watch 配方 | [06](../../stages/2-核心机制/lessons/06-四大经典用法从配置中心到分布式锁.md) |
+| kazoo 客户端 / 连接状态 | 阶段 0 · L0.3 | 本项目用 kazoo 实现（课 0.3 已教连接骨架与状态监听） | [0-3](../../stages/0-上手篇/lessons/0-3-Python客户端kazoo入门.md) |
+| 部署三张账单 / 事务日志专用盘 | 阶段 3 · L7 | 落地的硬件与运维成本——决策文档里"看不见的成本"来源 | [07](../../stages/3-成本与风险/lessons/07-部署与运维成本3节点起步的小集群.md) |
+| 坑：Watch 风暴 / 羊群 / Session | 阶段 3 · L8 | 反例对照的核心素材：错误的锁实现会惊醒全群 | [08](../../stages/3-成本与风险/lessons/08-经典的坑Watch风暴羊群效应与Session.md) |
+| 四候选对比 / 能力边界 | 阶段 4 · L9 | 候选池：ZK vs etcd vs Consul vs Redis 的硬边界（1MB / 512KB 等） | [09](../../stages/4-对比与决策/lessons/09-横向对比ZooKeeper-vs-etcd-vs-Consul-vs-Redis.md) |
+| Kafka 去 ZK / 结论不可外推 | 阶段 4 · L10 | 决策纪律：不因为"Kafka 弃用了"就排除 ZK | [10](../../stages/4-对比与决策/lessons/10-生态趋势Kafka为什么抛弃ZooKeeper.md) |
+| 选型决策树 / 成本账 / 五段式汇报 | 阶段 4 · L11 | 本项目的**产出方法**：决策文档按五段式写 | [11](../../stages/4-对比与决策/lessons/11-决策框架一棵选型决策树.md) |
+| 三场景演练 / fencing 在资源层 | 阶段 4 · L12 | 直接套用：锁分两类 + fencing token 必须落资源层 | [12](../../stages/4-对比与决策/lessons/12-场景演练三个真实项目的选型决策.md) |
 
 **跨阶段校验**：覆盖 **4 个阶段**（阶段 1 / 2 / 3 / 4，另复用阶段 0 的 kazoo 客户端），门槛 ≥3 ✅
 

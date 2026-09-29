@@ -1,6 +1,6 @@
 # 应用实战 · Deployment：无状态应用的自愈与更新
 
-> 对应课程：[第 5 课：Deployment：无状态应用的自愈与更新](../stages/2-工作负载与控制器/lessons/lesson-05-Deployment无状态应用.md) ｜ 覆盖知识点：滚动更新、回滚与版本历史、垃圾回收
+> 对应课程：[第 5 课：Deployment：无状态应用的自愈与更新](../stages/2-工作负载与控制器/lessons/05-Deployment无状态应用.md) ｜ 覆盖知识点：滚动更新、回滚与版本历史、垃圾回收
 > 定位：**会用，不上生产**——课里学完，在这里动手。课内第四幕做的是「滚动更新和回滚是什么」的机制验证，这里做的是**一次真实的发布事故：从用户投诉、到定位、到修复、到能退回去**。
 > 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：[Kubernetes 官方文档 · Deployment](https://kubernetes.io/zh-cn/docs/concepts/workloads/controllers/deployment/)）
 > 🧪 **本篇全部输出为本机 kind 集群（v1.34.0）实测**，非推演；实测脚本见 `.plans/2026-09-16-k8s-应用实战补齐/t5-rollout{,2,3}.sh`
@@ -432,7 +432,7 @@ kubectl -n app-l5 get pod -l app=shop --no-headers
 
 ## 🧭 导航
 
-- ⬅️ 回到课程：[第 5 课：Deployment：无状态应用的自愈与更新](../stages/2-工作负载与控制器/lessons/lesson-05-Deployment无状态应用.md)
+- ⬅️ 回到课程：[第 5 课：Deployment：无状态应用的自愈与更新](../stages/2-工作负载与控制器/lessons/05-Deployment无状态应用.md)
 - 📚 全部实战：[应用实战索引](INDEX.md)
 - ➡️ 下一课实战：[06 · 三种命运的工作负载](06-StatefulSet与DaemonSet与Job.md)
 

@@ -36,9 +36,9 @@
 
 ## 本阶段产出
 
-- [x] `lessons/lesson-10-Provisioning：把点击变成配置文件.md`
-- [x] `lessons/lesson-11-权限与服务账号：谁能看、谁能改、程序怎么访问.md`
-- [x] `lessons/lesson-12-性能、高可用与升级运维.md`
+- [x] `lessons/10-Provisioning：把点击变成配置文件.md`
+- [x] `lessons/11-权限与服务账号：谁能看、谁能改、程序怎么访问.md`
+- [x] `lessons/12-性能、高可用与升级运维.md`
 
 ## 本阶段依赖的环境
 

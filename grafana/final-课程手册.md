@@ -70,18 +70,18 @@
 
 | 阶段 | 课 | 知识点 |
 |---|---|---|
-| **1** | [课 1·Grafana 是谁](stages/1-看得见/lessons/lesson-01-Grafana是谁：一个不存数据的看图工具.md) | 定位边界 · 数据源插件模型 · 三种数据形态 |
-|  | [课 2·第一个面板](stages/1-看得见/lessons/lesson-02-第一个面板：从零到看得见.md) | 安装与初始化 · 加数据源 · 第一个 Panel |
-|  | [课 3·变量与 Dashboard 组织](stages/1-看得见/lessons/lesson-03-变量与Dashboard组织：一张图服务N台机器.md) | Dashboard 与 Panel · 变量入门 · Row 与 JSON Model |
-| **2** | [课 4·查询编辑器与数据源协议](stages/2-查得到/lessons/lesson-04-查询编辑器与数据源协议：一次查询的完整旅程.md) | 三态编辑器 · 查询旅程 · 状态码与错误分离 |
-|  | [课 5·Transformations](stages/2-查得到/lessons/lesson-05-Transformations：把查出来的数据捏成想要的形状.md) | Transform 定位 · 常用 Transform · 与查询的分工 |
-|  | [课 6·变量进阶与动态仪表盘](stages/2-查得到/lessons/lesson-06-变量进阶与动态仪表盘.md) | 变量类型 · 多值与 All · 重复面板 |
-| **3** | [课 7·告警架构](stages/3-叫得醒/lessons/lesson-07-告警架构：规则在哪求值、状态怎么迁移.md) | 统一告警架构 · 状态机 · No Data 与 Error |
-|  | [课 8·告警规则与通知策略实战](stages/3-叫得醒/lessons/lesson-08-告警规则与通知策略实战.md) | 规则三要素 · 通知策略树与静默 · 分组与抑制 |
-|  | [课 9·日志与链路](stages/3-叫得醒/lessons/lesson-09-日志与链路：指标之外的另外两只眼.md) | Loki 与 LogQL · 指标到日志下钻 · 链路与 exemplar |
-| **4** | [课 10·Provisioning](stages/4-管得住/lessons/lesson-10-Provisioning：把点击变成配置文件.md) | 三类 provisioning 文件 · UI 冲突处理 · JSON Model |
-|  | [课 11·权限与服务账号](stages/4-管得住/lessons/lesson-11-权限与服务账号：谁能看、谁能改、程序怎么访问.md) | Org-User-Team · RBAC 与文件夹权限 · 服务账号与 API Key |
-|  | [课 12·性能、高可用与升级运维](stages/4-管得住/lessons/lesson-12-性能、高可用与升级运维.md) | 性能瓶颈 · 数据库与 HA · 升级与备份 |
+| **1** | [课 1·Grafana 是谁](stages/1-看得见/lessons/01-Grafana是谁：一个不存数据的看图工具.md) | 定位边界 · 数据源插件模型 · 三种数据形态 |
+|  | [课 2·第一个面板](stages/1-看得见/lessons/02-第一个面板：从零到看得见.md) | 安装与初始化 · 加数据源 · 第一个 Panel |
+|  | [课 3·变量与 Dashboard 组织](stages/1-看得见/lessons/03-变量与Dashboard组织：一张图服务N台机器.md) | Dashboard 与 Panel · 变量入门 · Row 与 JSON Model |
+| **2** | [课 4·查询编辑器与数据源协议](stages/2-查得到/lessons/04-查询编辑器与数据源协议：一次查询的完整旅程.md) | 三态编辑器 · 查询旅程 · 状态码与错误分离 |
+|  | [课 5·Transformations](stages/2-查得到/lessons/05-Transformations：把查出来的数据捏成想要的形状.md) | Transform 定位 · 常用 Transform · 与查询的分工 |
+|  | [课 6·变量进阶与动态仪表盘](stages/2-查得到/lessons/06-变量进阶与动态仪表盘.md) | 变量类型 · 多值与 All · 重复面板 |
+| **3** | [课 7·告警架构](stages/3-叫得醒/lessons/07-告警架构：规则在哪求值、状态怎么迁移.md) | 统一告警架构 · 状态机 · No Data 与 Error |
+|  | [课 8·告警规则与通知策略实战](stages/3-叫得醒/lessons/08-告警规则与通知策略实战.md) | 规则三要素 · 通知策略树与静默 · 分组与抑制 |
+|  | [课 9·日志与链路](stages/3-叫得醒/lessons/09-日志与链路：指标之外的另外两只眼.md) | Loki 与 LogQL · 指标到日志下钻 · 链路与 exemplar |
+| **4** | [课 10·Provisioning](stages/4-管得住/lessons/10-Provisioning：把点击变成配置文件.md) | 三类 provisioning 文件 · UI 冲突处理 · JSON Model |
+|  | [课 11·权限与服务账号](stages/4-管得住/lessons/11-权限与服务账号：谁能看、谁能改、程序怎么访问.md) | Org-User-Team · RBAC 与文件夹权限 · 服务账号与 API Key |
+|  | [课 12·性能、高可用与升级运维](stages/4-管得住/lessons/12-性能、高可用与升级运维.md) | 性能瓶颈 · 数据库与 HA · 升级与备份 |
 
 > 合计 **36** 个知识点，分布在 4 个阶段 12 课。
 
@@ -115,7 +115,7 @@
 
 **关键命令**：`docker run grafana/grafana:13.2.1` · `/api/health` · 数数据库表
 
-→ [完整讲义](stages/1-看得见/lessons/lesson-01-Grafana是谁：一个不存数据的看图工具.md)
+→ [完整讲义](stages/1-看得见/lessons/01-Grafana是谁：一个不存数据的看图工具.md)
 
 ### 课 2《第一个面板：从零到看得见》
 
@@ -128,7 +128,7 @@
 
 **关键命令**：`docker run -d --name grafana-lab -p 3001:3000 ...` · `curl /api/health` · `curl -d '{"user":"admin","password":"admin"}' /login`
 
-→ [完整讲义](stages/1-看得见/lessons/lesson-02-第一个面板：从零到看得见.md)
+→ [完整讲义](stages/1-看得见/lessons/02-第一个面板：从零到看得见.md)
 
 ### 课 3《变量与 Dashboard 组织：一张图服务 N 台机器》
 
@@ -146,7 +146,7 @@ up{instance="$host"}      # ❌ 多值时恒不匹配
 
 **关键命令**：查 dashboard JSON 看 `templating.list` · 抓包看 `executedQueryString`
 
-→ [完整讲义](stages/1-看得见/lessons/lesson-03-变量与Dashboard组织：一张图服务N台机器.md)
+→ [完整讲义](stages/1-看得见/lessons/03-变量与Dashboard组织：一张图服务N台机器.md)
 
 ---
 
@@ -169,7 +169,7 @@ up{instance="$host"}      # ❌ 多值时恒不匹配
 | 空白无报错 | L3 通但没数据 | 内层 200，去 `{} JSON` 看 `executedQueryString` |
 | `parse error` | L3 通但被拒 | 内层 400，改表达式 |
 
-→ [完整讲义](stages/2-查得到/lessons/lesson-04-查询编辑器与数据源协议：一次查询的完整旅程.md)
+→ [完整讲义](stages/2-查得到/lessons/04-查询编辑器与数据源协议：一次查询的完整旅程.md)
 
 ### 课 5《Transformations：把查出来的数据捏成想要的形状》
 
@@ -182,7 +182,7 @@ up{instance="$host"}      # ❌ 多值时恒不匹配
 
 **关键 Transform**：merge（并帧）· reduce（归约）· groupBy（按字段分组）· rename（改名）
 
-→ [完整讲义](stages/2-查得到/lessons/lesson-05-Transformations：把查出来的数据捏成想要的形状.md)
+→ [完整讲义](stages/2-查得到/lessons/05-Transformations：把查出来的数据捏成想要的形状.md)
 
 ### 课 6《变量进阶与动态仪表盘》
 
@@ -200,7 +200,7 @@ up{instance="$host"}      # ❌ 多值时恒不匹配
 | Interval | 预置间隔 |
 | 链式 | 引用另一个变量 `$A` |
 
-→ [完整讲义](stages/2-查得到/lessons/lesson-06-变量进阶与动态仪表盘.md)
+→ [完整讲义](stages/2-查得到/lessons/06-变量进阶与动态仪表盘.md)
 
 ---
 
@@ -219,7 +219,7 @@ up{instance="$host"}      # ❌ 多值时恒不匹配
 
 > ⚠️ 这个不对称有个副作用：指标在阈值附近抖动时，告警会**反复快速恢复、缓慢触发**，导致通知稀少但状态频繁跳变——课 8 的分组与抑制给出解法。
 
-→ [完整讲义](stages/3-叫得醒/lessons/lesson-07-告警架构：规则在哪求值、状态怎么迁移.md)
+→ [完整讲义](stages/3-叫得醒/lessons/07-告警架构：规则在哪求值、状态怎么迁移.md)
 
 ### 课 8《告警规则与通知策略实战》
 
@@ -233,7 +233,7 @@ up{instance="$host"}      # ❌ 多值时恒不匹配
 
 > 改了告警配置没立刻看到效果，**先算 `repeat_interval`，别急着改第二遍**。
 
-→ [完整讲义](stages/3-叫得醒/lessons/lesson-08-告警规则与通知策略实战.md)
+→ [完整讲义](stages/3-叫得醒/lessons/08-告警规则与通知策略实战.md)
 
 ### 课 9《日志与链路：指标之外的另外两只眼》
 
@@ -252,7 +252,7 @@ up{instance="$host"}      # ❌ 多值时恒不匹配
 
 > 这三个条件分布在**应用 / Prometheus / Grafana** 三处，失败时**全部静默**——指标照常显示，只是圆点不存在。
 
-→ [完整讲义](stages/3-叫得醒/lessons/lesson-09-日志与链路：指标之外的另外两只眼.md)
+→ [完整讲义](stages/3-叫得醒/lessons/09-日志与链路：指标之外的另外两只眼.md)
 
 ---
 
@@ -275,7 +275,7 @@ up{instance="$host"}      # ❌ 多值时恒不匹配
 | `dashboards/` | 面板 JSON + provider |
 | `alerting/` | 告警规则 + 通知策略 + 联系人 |
 
-→ [完整讲义](stages/4-管得住/lessons/lesson-10-Provisioning：把点击变成配置文件.md)
+→ [完整讲义](stages/4-管得住/lessons/10-Provisioning：把点击变成配置文件.md)
 
 ### 课 11《权限与服务账号：谁能看、谁能改、程序怎么访问》
 
@@ -288,7 +288,7 @@ up{instance="$host"}      # ❌ 多值时恒不匹配
 
 > 本课沉淀的纪律第二次生效：**状态被污染时，先起干净对照**（新建 `dave` 从零验证，才拿到可信结论）。
 
-→ [完整讲义](stages/4-管得住/lessons/lesson-11-权限与服务账号：谁能看、谁能改、程序怎么访问.md)
+→ [完整讲义](stages/4-管得住/lessons/11-权限与服务账号：谁能看、谁能改、程序怎么访问.md)
 
 ### 课 12《性能、高可用与升级运维》
 
@@ -306,7 +306,7 @@ up{instance="$host"}      # ❌ 多值时恒不匹配
 | 3 · 面板数 | 影响最小 |
 | 4 · 时间窗 | `maxDataPoints` 已封顶，通常不是它 |
 
-→ [完整讲义](stages/4-管得住/lessons/lesson-12-性能、高可用与升级运维.md)
+→ [完整讲义](stages/4-管得住/lessons/12-性能、高可用与升级运维.md)
 
 ---
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 python3 - <<'PYEOF'
 import re, os
-L8 = "/mnt/d/projects/learning/consul/子教程/运维专项/lessons/lesson-08-多机房与K8s运维视角.md"
+L8 = "/mnt/d/projects/learning/consul/子教程/运维专项/lessons/08-多机房与K8s运维视角.md"
 R  = "/mnt/d/projects/learning/consul"
 B  = os.path.dirname(L8)
 s  = open(L8, encoding='utf-8').read()

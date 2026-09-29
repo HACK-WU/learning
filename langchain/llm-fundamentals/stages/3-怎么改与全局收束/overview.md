@@ -35,7 +35,7 @@
 
 | 本课知识 | 回扣到 |
 |---------|--------|
-| 三条路选型 | [课 11 Retrieval 与 RAG](../../../langchain/stages/3-可控性与可靠性/lessons/lesson-11-Retrieval检索与RAG.md)、[课 4 工具](../../../langchain/stages/2-Agent核心/lessons/lesson-04-Tools工具.md) |
+| 三条路选型 | [课 11 Retrieval 与 RAG](../../../langchain/stages/3-可控性与可靠性/lessons/11-Retrieval检索与RAG.md)、[课 4 工具](../../../langchain/stages/2-Agent核心/lessons/04-Tools工具.md) |
 | 缺陷 ↔ 组件映射 | [全课程目录](../../../langchain/02-课程目录.md) |
 
 ## 阶段状态
