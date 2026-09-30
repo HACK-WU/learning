@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" width="900" height="420" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <rect width="900" height="420" fill="#ffffff"/>
+
+  <text x="450" y="34" text-anchor="middle" font-size="20" font-weight="bold" fill="#1a1a2e">你的程序 ↔ 集群：三条通道，三个开关</text>
+
+  <!-- 左侧：你的程序 -->
+  <rect x="30" y="80" width="170" height="280" rx="12" fill="#e8f0fe" stroke="#4285f4" stroke-width="2"/>
+  <text x="115" y="112" text-anchor="middle" font-size="16" font-weight="bold" fill="#1a1a2e">你的程序</text>
+  <text x="115" y="140" text-anchor="middle" font-size="13" fill="#5a6472">在 Pod 里跑</text>
+  <text x="115" y="162" text-anchor="middle" font-size="13" fill="#5a6472">要长期不挂</text>
+
+  <rect x="48" y="190" width="134" height="42" rx="8" fill="#ffffff" stroke="#4285f4" stroke-width="1.5"/>
+  <text x="115" y="216" text-anchor="middle" font-size="13" fill="#1a1a2e">读日志</text>
+
+  <rect x="48" y="248" width="134" height="42" rx="8" fill="#ffffff" stroke="#4285f4" stroke-width="1.5"/>
+  <text x="115" y="274" text-anchor="middle" font-size="13" fill="#1a1a2e">执行命令</text>
+
+  <rect x="48" y="306" width="134" height="42" rx="8" fill="#ffffff" stroke="#4285f4" stroke-width="1.5"/>
+  <text x="115" y="332" text-anchor="middle" font-size="13" fill="#1a1a2e">查用量</text>
+
+  <!-- 右侧：集群 -->
+  <rect x="700" y="80" width="170" height="280" rx="12" fill="#e6f4ea" stroke="#34a853" stroke-width="2"/>
+  <text x="785" y="112" text-anchor="middle" font-size="16" font-weight="bold" fill="#1a1a2e">集群</text>
+  <text x="785" y="140" text-anchor="middle" font-size="13" fill="#5a6472">一堆容器</text>
+  <text x="785" y="162" text-anchor="middle" font-size="13" fill="#5a6472">在里面干活</text>
+
+  <rect x="718" y="190" width="134" height="42" rx="8" fill="#ffffff" stroke="#34a853" stroke-width="1.5"/>
+  <text x="785" y="216" text-anchor="middle" font-size="13" fill="#1a1a2e">日志流</text>
+
+  <rect x="718" y="248" width="134" height="42" rx="8" fill="#ffffff" stroke="#34a853" stroke-width="1.5"/>
+  <text x="785" y="274" text-anchor="middle" font-size="13" fill="#1a1a2e">容器内命令</text>
+
+  <rect x="718" y="306" width="134" height="42" rx="8" fill="#ffffff" stroke="#34a853" stroke-width="1.5"/>
+  <text x="785" y="332" text-anchor="middle" font-size="13" fill="#1a1a2e">用量数字</text>
+
+  <!-- 通道1：日志 -->
+  <line x1="200" y1="211" x2="700" y2="211" stroke="#ea4335" stroke-width="2.5"/>
+  <polygon points="700,211 688,205 688,217" fill="#ea4335"/>
+  <rect x="300" y="186" width="300" height="50" rx="8" fill="#fce8e6" stroke="#ea4335" stroke-width="1.5"/>
+  <text x="450" y="206" text-anchor="middle" font-size="13" font-weight="bold" fill="#c5221f">陷阱：会黏住你不放</text>
+  <text x="450" y="226" text-anchor="middle" font-size="12" fill="#5a6472">实测挂起 95.55 秒，超时也救不了</text>
+
+  <!-- 通道2：exec -->
+  <line x1="200" y1="269" x2="700" y2="269" stroke="#f9ab00" stroke-width="2.5"/>
+  <polygon points="700,269 688,263 688,275" fill="#f9ab00"/>
+  <rect x="300" y="244" width="300" height="50" rx="8" fill="#fef7e0" stroke="#f9ab00" stroke-width="1.5"/>
+  <text x="450" y="264" text-anchor="middle" font-size="13" font-weight="bold" fill="#e37400">陷阱：会骗你说成功了</text>
+  <text x="450" y="284" text-anchor="middle" font-size="12" fill="#5a6472">命令失败也不报错，退出码被吞</text>
+
+  <!-- 通道3：metrics -->
+  <line x1="200" y1="327" x2="700" y2="327" stroke="#4285f4" stroke-width="2.5"/>
+  <polygon points="700,327 688,321 688,333" fill="#4285f4"/>
+  <rect x="300" y="302" width="300" height="50" rx="8" fill="#e8f0fe" stroke="#4285f4" stroke-width="1.5"/>
+  <text x="450" y="322" text-anchor="middle" font-size="13" font-weight="bold" fill="#1967d2">注意：是窗口平均，不是累计</text>
+  <text x="450" y="342" text-anchor="middle" font-size="12" fill="#5a6472">实测 window = 12.792 秒</text>
+
+  <!-- 底部：权限门 -->
+  <rect x="240" y="368" width="420" height="40" rx="10" fill="#f3e8fd" stroke="#a142f4" stroke-width="2"/>
+  <text x="450" y="393" text-anchor="middle" font-size="14" font-weight="bold" fill="#7627bb">底下一道门：只给它该有的权限（越权即 403）</text>
+
+  <line x1="450" y1="80" x2="450" y2="368" stroke="#a142f4" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.35"/>
+</svg>

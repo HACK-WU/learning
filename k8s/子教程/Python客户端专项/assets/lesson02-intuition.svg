@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 430" width="900" height="430" font-family="Microsoft YaHei, SimHei, sans-serif">
+  <rect width="900" height="430" fill="#ffffff"/>
+
+  <text x="450" y="28" text-anchor="middle" font-size="19" font-weight="bold" fill="#1a1a1a">敲命令时你从不说"哪个部门"，写代码时必须自己说</text>
+
+  <!-- 左：kubectl 视角 -->
+  <rect x="35" y="60" width="270" height="180" rx="10" fill="#e8f5e9" stroke="#4caf50" stroke-width="2"/>
+  <text x="170" y="88" text-anchor="middle" font-size="15" font-weight="bold" fill="#2e7d32">敲命令时</text>
+  <rect x="60" y="105" width="220" height="34" rx="6" fill="#ffffff" stroke="#4caf50"/>
+  <text x="170" y="127" text-anchor="middle" font-size="13" fill="#333333">kubectl get pods</text>
+  <text x="170" y="163" text-anchor="middle" font-size="12" fill="#555555">你 只 说 了 "pods"</text>
+  <text x="170" y="182" text-anchor="middle" font-size="12" fill="#555555">它 自己 去 查：这 归 哪个 部门、</text>
+  <text x="170" y="201" text-anchor="middle" font-size="12" fill="#555555">用 哪 一 版、对应 什么 类名</text>
+  <rect x="60" y="213" width="220" height="22" rx="5" fill="#c8e6c9"/>
+  <text x="170" y="228" text-anchor="middle" font-size="12" font-weight="bold" fill="#1b5e20">这些 都 是 白 送 的</text>
+
+  <!-- 箭头 -->
+  <path d="M 315 150 L 365 150" stroke="#666666" stroke-width="3" marker-end="url(#a1)"/>
+  <defs>
+    <marker id="a1" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#666666"/>
+    </marker>
+  </defs>
+
+  <!-- 右：代码视角 -->
+  <rect x="380" y="50" width="485" height="330" rx="10" fill="#e3f2fd" stroke="#1976d2" stroke-width="2"/>
+  <text x="622" y="78" text-anchor="middle" font-size="15" font-weight="bold" fill="#0d47a1">写代码时：这三件事你得自己说清楚</text>
+
+  <!-- 三要素 -->
+  <rect x="400" y="95" width="145" height="62" rx="6" fill="#ffffff" stroke="#1976d2"/>
+  <text x="472" y="116" text-anchor="middle" font-size="13" font-weight="bold" fill="#0d47a1">① 哪个 部门</text>
+  <text x="472" y="135" text-anchor="middle" font-size="11" fill="#333333">Group</text>
+  <text x="472" y="150" text-anchor="middle" font-size="11" fill="#555555">apps / 无 / batch</text>
+
+  <rect x="558" y="95" width="145" height="62" rx="6" fill="#ffffff" stroke="#1976d2"/>
+  <text x="630" y="116" text-anchor="middle" font-size="13" font-weight="bold" fill="#0d47a1">② 哪 一 版</text>
+  <text x="630" y="135" text-anchor="middle" font-size="11" fill="#333333">Version</text>
+  <text x="630" y="150" text-anchor="middle" font-size="11" fill="#555555">v1 / v2 / v1beta1</text>
+
+  <rect x="716" y="95" width="135" height="62" rx="6" fill="#ffffff" stroke="#1976d2"/>
+  <text x="783" y="116" text-anchor="middle" font-size="13" font-weight="bold" fill="#0d47a1">③ 什么 东西</text>
+  <text x="783" y="135" text-anchor="middle" font-size="11" fill="#333333">Kind</text>
+  <text x="783" y="150" text-anchor="middle" font-size="11" fill="#555555">Pod / Deployment</text>
+
+  <!-- 合成 -->
+  <path d="M 472 160 L 472 182 L 783 182 L 783 162" stroke="#1976d2" stroke-width="2" fill="none" marker-end="url(#a2)"/>
+  <defs>
+    <marker id="a2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#1976d2"/>
+    </marker>
+  </defs>
+
+  <rect x="400" y="192" width="450" height="34" rx="6" fill="#fff3e0" stroke="#f57c00"/>
+  <text x="625" y="214" text-anchor="middle" font-size="12" fill="#7f4f00">三 样 拼 起 来 = 一 个 完 整 的 "要 找 什么"（简称 G V K）</text>
+
+  <!-- 映射到类 -->
+  <text x="625" y="252" text-anchor="middle" font-size="13" font-weight="bold" fill="#0d47a1">▼ 按 规律 换成 程序 里 的 名字</text>
+
+  <rect x="400" y="262" width="215" height="48" rx="6" fill="#ffffff" stroke="#7b1fa2"/>
+  <text x="507" y="282" text-anchor="middle" font-size="12" font-weight="bold" fill="#6a1b9a">办 事 窗 口</text>
+  <text x="507" y="299" text-anchor="middle" font-size="11" fill="#333333">AppsV1Api ← apps + v1</text>
+
+  <rect x="635" y="262" width="215" height="48" rx="6" fill="#ffffff" stroke="#7b1fa2"/>
+  <text x="742" y="282" text-anchor="middle" font-size="12" font-weight="bold" fill="#6a1b9a">表 单 格 式</text>
+  <text x="742" y="299" text-anchor="middle" font-size="11" fill="#333333">V1Deployment ← v1 + Deployment</text>
+
+  <rect x="400" y="324" width="450" height="44" rx="6" fill="#f3e5f5" stroke="#7b1fa2" stroke-dasharray="4 3"/>
+  <text x="625" y="344" text-anchor="middle" font-size="12" fill="#4a148c">程序 里 有 65 个 窗口、697 种 表单</text>
+  <text x="625" y="360" text-anchor="middle" font-size="12" fill="#4a148c">不用 背，本课 教 你 "推" 和 "查"</text>
+
+  <!-- 底部 -->
+  <rect x="35" y="260" width="270" height="120" rx="8" fill="#fff8e1" stroke="#e0a800" stroke-width="2"/>
+  <text x="170" y="285" text-anchor="middle" font-size="13" font-weight="bold" fill="#8a6100">还有一件白送的事</text>
+  <text x="170" y="308" text-anchor="middle" font-size="12" fill="#555555">敲命令时，你 不用 知道</text>
+  <text x="170" y="326" text-anchor="middle" font-size="12" fill="#555555">集群 里 到底 有 哪 些 东西 可 查</text>
+  <text x="170" y="350" text-anchor="middle" font-size="12" fill="#8a6100">写代码 要 自己 先 去"问 一 下"</text>
+  <text x="170" y="368" text-anchor="middle" font-size="12" fill="#8a6100">（这 叫 发现）</text>
+
+  <text x="450" y="415" text-anchor="middle" font-size="12" fill="#777777">图：本课 就 讲 两 件 事 —— 怎么 问 集群 有 什么（发现），以及 怎么 把 名字 换 成 程序 里 的 类</text>
+</svg>

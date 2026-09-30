@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 470" width="920" height="470" font-family="Microsoft YaHei, SimHei, sans-serif">
+  <rect width="920" height="470" fill="#ffffff"/>
+
+  <text x="460" y="26" text-anchor="middle" font-size="19" font-weight="bold" fill="#1a1a1a">改一个东西，有四种"改法"——选错就出事</text>
+
+  <!-- 左：整份替换 -->
+  <rect x="30" y="52" width="200" height="170" rx="10" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="130" y="78" text-anchor="middle" font-size="15" font-weight="bold" fill="#b71c1c">① 整份 换掉</text>
+  <text x="130" y="98" text-anchor="middle" font-size="11" fill="#555555">r e p l a c e</text>
+  <text x="130" y="122" text-anchor="middle" font-size="12" fill="#333333">把 新 的 整 份 表 交 上去</text>
+  <text x="130" y="142" text-anchor="middle" font-size="12" fill="#333333">旧 的 全 部 作 废</text>
+  <rect x="48" y="156" width="164" height="52" rx="6" fill="#ffffff" stroke="#c62828"/>
+  <text x="130" y="176" text-anchor="middle" font-size="12" fill="#b71c1c">漏 写 的 字段 就 没 了</text>
+  <text x="130" y="194" text-anchor="middle" font-size="12" fill="#b71c1c">（实测：3 个 键 → 剩 1 个）</text>
+
+  <!-- 中左：补丁 -->
+  <rect x="248" y="52" width="200" height="170" rx="10" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="348" y="78" text-anchor="middle" font-size="15" font-weight="bold" fill="#1b5e20">② 打 补 丁</text>
+  <text x="348" y="98" text-anchor="middle" font-size="11" fill="#555555">p a t c h</text>
+  <text x="348" y="122" text-anchor="middle" font-size="12" fill="#333333">只 说 要 改 哪 一 处</text>
+  <text x="348" y="142" text-anchor="middle" font-size="12" fill="#333333">其 他 原 样 保 留</text>
+  <rect x="266" y="156" width="164" height="52" rx="6" fill="#ffffff" stroke="#2e7d32"/>
+  <text x="348" y="176" text-anchor="middle" font-size="12" fill="#1b5e20">最 常 用、最 不 易 出 事</text>
+  <text x="348" y="194" text-anchor="middle" font-size="12" fill="#1b5e20">（改 1 个 键，另 1 个 还在）</text>
+
+  <!-- 中右：带名字的补丁 -->
+  <rect x="466" y="52" width="200" height="170" rx="10" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="566" y="78" text-anchor="middle" font-size="15" font-weight="bold" fill="#0d47a1">③ 带 名字 的 补丁</text>
+  <text x="566" y="98" text-anchor="middle" font-size="11" fill="#555555">server - side  apply</text>
+  <text x="566" y="122" text-anchor="middle" font-size="12" fill="#333333">改 的 时 候 报 上 自 己 名字</text>
+  <text x="566" y="142" text-anchor="middle" font-size="12" fill="#333333">集群 记 下"这 格 归 谁"</text>
+  <rect x="484" y="156" width="164" height="52" rx="6" fill="#ffffff" stroke="#1565c0"/>
+  <text x="566" y="176" text-anchor="middle" font-size="12" fill="#0d47a1">两 人 抢 同 一格 → 报 冲突</text>
+  <text x="566" y="194" text-anchor="middle" font-size="12" fill="#0d47a1">（实测：真 报 409）</text>
+
+  <!-- 右：创建 -->
+  <rect x="684" y="52" width="206" height="170" rx="10" fill="#fff8e1" stroke="#e0a800" stroke-width="2"/>
+  <text x="787" y="78" text-anchor="middle" font-size="15" font-weight="bold" fill="#8a6100">④ 新 建</text>
+  <text x="787" y="98" text-anchor="middle" font-size="11" fill="#555555">c r e a t e</text>
+  <text x="787" y="122" text-anchor="middle" font-size="12" fill="#333333">从 无 到 有</text>
+  <text x="787" y="142" text-anchor="middle" font-size="12" fill="#333333">有 了 就 报"已 存在"</text>
+  <rect x="702" y="156" width="170" height="52" rx="6" fill="#ffffff" stroke="#e0a800"/>
+  <text x="787" y="176" text-anchor="middle" font-size="12" fill="#8a6100">可 先"演 一 遍"再 真 做</text>
+  <text x="787" y="194" text-anchor="middle" font-size="12" fill="#8a6100">d r y _ r u n（实测 有效）</text>
+
+  <!-- 补丁的三种说法 -->
+  <rect x="248" y="240" width="418" height="150" rx="10" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2"/>
+  <text x="457" y="266" text-anchor="middle" font-size="15" font-weight="bold" fill="#4a148c">补丁 还有 三种"写法"</text>
+
+  <rect x="264" y="280" width="126" height="96" rx="6" fill="#ffffff" stroke="#7b1fa2"/>
+  <text x="327" y="302" text-anchor="middle" font-size="12" font-weight="bold" fill="#6a1b9a">会说人话的</text>
+  <text x="327" y="322" text-anchor="middle" font-size="11" fill="#333333">按 名字 认 容器</text>
+  <text x="327" y="340" text-anchor="middle" font-size="11" fill="#333333">列 表 会 合 并</text>
+  <text x="327" y="362" text-anchor="middle" font-size="11" fill="#888888">默认 就 是 它</text>
+
+  <rect x="400" y="280" width="126" height="96" rx="6" fill="#ffffff" stroke="#7b1fa2"/>
+  <text x="463" y="302" text-anchor="middle" font-size="12" font-weight="bold" fill="#6a1b9a">简单覆盖</text>
+  <text x="463" y="322" text-anchor="middle" font-size="11" fill="#333333">整 段 换 掉</text>
+  <text x="463" y="340" text-anchor="middle" font-size="11" fill="#333333">列 表 会 被 顶 掉</text>
+  <text x="463" y="362" text-anchor="middle" font-size="11" fill="#888888">merge-patch</text>
+
+  <rect x="536" y="280" width="118" height="96" rx="6" fill="#ffffff" stroke="#7b1fa2"/>
+  <text x="595" y="302" text-anchor="middle" font-size="12" font-weight="bold" fill="#6a1b9a">下指令式</text>
+  <text x="595" y="322" text-anchor="middle" font-size="11" fill="#333333">第 3 项 删 掉</text>
+  <text x="595" y="340" text-anchor="middle" font-size="11" fill="#333333">第 2 项 换成 X</text>
+  <text x="595" y="362" text-anchor="middle" font-size="11" fill="#888888">json-patch</text>
+
+  <!-- 底部坑 -->
+  <rect x="30" y="240" width="200" height="150" rx="10" fill="#fce4ec" stroke="#ad1457" stroke-width="2"/>
+  <text x="130" y="266" text-anchor="middle" font-size="14" font-weight="bold" fill="#880e4f">本课 最 大 的 坑</text>
+  <text x="130" y="292" text-anchor="middle" font-size="12" fill="#333333">网 上 教 的 写法：</text>
+  <text x="130" y="312" text-anchor="middle" font-size="11" fill="#555555">patch(...,  content_type=  ...)</text>
+  <text x="130" y="334" text-anchor="middle" font-size="12" font-weight="bold" fill="#ad1457">34.1.0 里 会 直 接 报错</text>
+  <text x="130" y="356" text-anchor="middle" font-size="11" fill="#555555">参 数 名 不 存 在</text>
+  <text x="130" y="378" text-anchor="middle" font-size="12" fill="#880e4f">本 课 给 出 两 条 真 能 跑 的 路</text>
+
+  <!-- 右侧：删除 -->
+  <rect x="684" y="240" width="206" height="150" rx="10" fill="#eceff1" stroke="#455a64" stroke-width="2"/>
+  <text x="787" y="266" text-anchor="middle" font-size="14" font-weight="bold" fill="#263238">删 也 有 讲 究</text>
+  <text x="787" y="292" text-anchor="middle" font-size="12" fill="#333333">删 部 门，手 下 人 怎么办？</text>
+  <text x="800" y="316" text-anchor="start" font-size="11" fill="#555555">•  一起 走（默认）</text>
+  <text x="800" y="336" text-anchor="start" font-size="11" fill="#555555">•  留 下 来（Orphan，实测 生效）</text>
+  <text x="800" y="356" text-anchor="start" font-size="11" fill="#555555">•  等 人 走 完 再 回（Foreground）</text>
+  <text x="787" y="378" text-anchor="middle" font-size="11" fill="#777777">propagation_policy</text>
+
+  <text x="460" y="428" text-anchor="middle" font-size="12" fill="#777777">图：本课 讲 四 种 改 法 的 区 别、补丁 的 三 种 写法，以及 删除 时"手下人"怎么 处理</text>
+  <text x="460" y="450" text-anchor="middle" font-size="12" fill="#777777">标注：所有 结论 均在 本机 kubernetes 34.1.0 / k8s v1.34.0 实测</text>
+</svg>

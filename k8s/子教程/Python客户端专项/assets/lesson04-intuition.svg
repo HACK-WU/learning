@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 490" width="940" height="490" font-family="Microsoft YaHei, SimHei, sans-serif">
+  <rect width="940" height="490" fill="#ffffff"/>
+
+  <text x="470" y="26" text-anchor="middle" font-size="19" font-weight="bold" fill="#1a1a1a">程序要连集群，先得回答"你是谁"——三条路，取决于你在哪</text>
+
+  <!-- 分支判断 -->
+  <rect x="330" y="46" width="280" height="46" rx="8" fill="#fff3e0" stroke="#e65100" stroke-width="2"/>
+  <text x="470" y="66" text-anchor="middle" font-size="14" font-weight="bold" fill="#bf360c">先问一句：你的程序跑在哪？</text>
+  <text x="470" y="84" text-anchor="middle" font-size="11" fill="#555555">在 集群 外（你 电脑） 还是 集群 里（Pod 内）</text>
+
+  <!-- 左：集群外 -->
+  <rect x="30" y="112" width="290" height="200" rx="10" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"/>
+  <text x="175" y="138" text-anchor="middle" font-size="15" font-weight="bold" fill="#1b5e20">路 ①：在 外面</text>
+  <text x="175" y="158" text-anchor="middle" font-size="11" fill="#555555">你 的 电脑 / 跳板机</text>
+  <text x="175" y="184" text-anchor="middle" font-size="12" fill="#333333">读 一张"介绍信"（kubeconfig）</text>
+  <text x="175" y="204" text-anchor="middle" font-size="12" fill="#333333">里 面 写 着 地址 + 证书 + 谁</text>
+  <rect x="48" y="216" width="254" height="82" rx="6" fill="#ffffff" stroke="#2e7d32"/>
+  <text x="175" y="236" text-anchor="middle" font-size="12" fill="#1b5e20">一 张 信 里 可以 装 好 几 个 集群</text>
+  <text x="175" y="256" text-anchor="middle" font-size="11" fill="#555555">切换 = 选 其中 一段（context）</text>
+  <text x="175" y="276" text-anchor="middle" font-size="11" fill="#555555">实测：本机 3 个 集群，可同时 连</text>
+  <text x="175" y="292" text-anchor="middle" font-size="11" fill="#1b5e20">（A 集群 7 个 ns，B 集群 8 个）</text>
+
+  <!-- 中：集群内 -->
+  <rect x="336" y="112" width="290" height="200" rx="10" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"/>
+  <text x="481" y="138" text-anchor="middle" font-size="15" font-weight="bold" fill="#0d47a1">路 ②：在 里面</text>
+  <text x="481" y="158" text-anchor="middle" font-size="11" fill="#555555">程 序 自己 也是 一个 Pod</text>
+  <text x="481" y="184" text-anchor="middle" font-size="12" fill="#333333">没有 介绍信 可 读</text>
+  <text x="481" y="204" text-anchor="middle" font-size="12" fill="#333333">集群 自动 塞 了 证件 进 来</text>
+  <rect x="354" y="216" width="254" height="82" rx="6" fill="#ffffff" stroke="#1565c0"/>
+  <text x="481" y="236" text-anchor="middle" font-size="12" fill="#0d47a1">塞 在 一个 固定 目录 里</text>
+  <text x="481" y="256" text-anchor="middle" font-size="10" fill="#555555">/var/run/secrets/kubernetes.io/</text>
+  <text x="481" y="274" text-anchor="middle" font-size="10" fill="#555555">serviceaccount/  token + ca.crt</text>
+  <text x="481" y="292" text-anchor="middle" font-size="11" fill="#0d47a1">默认 啥也 不 能 干（要 授权）</text>
+
+  <!-- 右：云厂商 -->
+  <rect x="642" y="112" width="268" height="200" rx="10" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2"/>
+  <text x="776" y="138" text-anchor="middle" font-size="15" font-weight="bold" fill="#4a148c">路 ③：云 上 的 集群</text>
+  <text x="776" y="158" text-anchor="middle" font-size="11" fill="#555555">证 件 是 临时 的，会 过期</text>
+  <text x="776" y="184" text-anchor="middle" font-size="12" fill="#333333">不 存 证 件，存 一个</text>
+  <text x="776" y="204" text-anchor="middle" font-size="12" fill="#333333">"去 哪 换 证"的 办法</text>
+  <rect x="660" y="216" width="232" height="82" rx="6" fill="#ffffff" stroke="#7b1fa2"/>
+  <text x="776" y="236" text-anchor="middle" font-size="12" fill="#4a148c">用 时 现 换（exec provider）</text>
+  <text x="776" y="256" text-anchor="middle" font-size="11" fill="#555555">库 会 去 调 一个 外部 程序</text>
+  <text x="776" y="274" text-anchor="middle" font-size="11" fill="#555555">拿 回 一个 临时 证</text>
+  <text x="776" y="292" text-anchor="middle" font-size="11" fill="#888888">⚠ 本机 无 真 环境，仅 讲 原理</text>
+
+  <!-- 下半：三个坑 -->
+  <text x="470" y="336" text-anchor="middle" font-size="15" font-weight="bold" fill="#b71c1c">三条路 都有 坑（本课 实测）</text>
+
+  <rect x="30" y="352" width="290" height="112" rx="8" fill="#ffebee" stroke="#c62828" stroke-width="2"/>
+  <text x="175" y="376" text-anchor="middle" font-size="13" font-weight="bold" fill="#b71c1c">坑 1：切换 会 串台</text>
+  <text x="175" y="398" text-anchor="middle" font-size="11" fill="#333333">反复 调 load_kube_config 会 覆盖</text>
+  <text x="175" y="416" text-anchor="middle" font-size="11" fill="#333333">全局 配置，后 建 的 对象 全 跟着 变</text>
+  <text x="175" y="438" text-anchor="middle" font-size="11" font-weight="bold" fill="#1b5e20">正解：一个 集群 一个 对象</text>
+  <text x="175" y="456" text-anchor="middle" font-size="11" fill="#1b5e20">（实测 两个 配置 互 不 相干）</text>
+
+  <rect x="336" y="352" width="290" height="112" rx="8" fill="#fff8e1" stroke="#e0a800" stroke-width="2"/>
+  <text x="481" y="376" text-anchor="middle" font-size="13" font-weight="bold" fill="#8a6100">坑 2：超时 设 了 没 用</text>
+  <text x="481" y="398" text-anchor="middle" font-size="11" fill="#333333">配置 里 压根 没有 超时 这一 项</text>
+  <text x="481" y="416" text-anchor="middle" font-size="11" fill="#333333">（实测：属性 列表 里 找 不 到）</text>
+  <text x="481" y="438" text-anchor="middle" font-size="11" font-weight="bold" fill="#1b5e20">正解：每次 调用 时 单独 传</text>
+  <text x="481" y="456" text-anchor="middle" font-size="11" fill="#1b5e20">总 耗时 = 超时 × (重 试 +1)</text>
+
+  <rect x="642" y="352" width="268" height="112" rx="8" fill="#eceff1" stroke="#455a64" stroke-width="2"/>
+  <text x="776" y="376" text-anchor="middle" font-size="13" font-weight="bold" fill="#263238">坑 3：证书 不 对 会 绕 远</text>
+  <text x="776" y="398" text-anchor="middle" font-size="11" fill="#333333">报 的 是"连 不 上"，其实 是</text>
+  <text x="776" y="416" text-anchor="middle" font-size="11" fill="#333333">证书 没 校验 过（报 错 骗 人）</text>
+  <text x="776" y="438" text-anchor="middle" font-size="11" font-weight="bold" fill="#1b5e20">正解：看 报错 最 里 层</text>
+  <text x="776" y="456" text-anchor="middle" font-size="11" fill="#1b5e20">MaxRetryError 里 藏 着 真 原因</text>
+
+  <text x="470" y="484" text-anchor="middle" font-size="11" fill="#777777">图：连集群 的 三条路 与 各自 的 坑。标注：本机 kubernetes 34.1.0 / Python 3.12.3 实测</text>
+</svg>

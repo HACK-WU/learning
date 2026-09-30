@@ -7,6 +7,7 @@
 | 站点 | slug | 起始 URL | 范围 | 条数 | 生成日期 |
 |------|------|----------|------|------|----------|
 | Kubernetes Docs | k8s | https://kubernetes.io/zh-cn/docs/ | `/zh-cn/docs/`（排除 blog / case-studies / releases / contribute） | 329（分区表加总）／ **333（2026-09-15 复核实际条目行）** | 2026-09-10 |
+| Kubernetes Python Client | k8s-python-client | https://github.com/kubernetes-client/python | GitHub 仓库（README / devel / examples）+ 官方 client-libraries 页 + PyPI | 78 | 2026-09-21 |
 
 > ⚠️ **条目数差异说明**（2026-09-15 复核发现，非本次搬迁引入）：
 > 原登记 329 条，实际统计表格条目行为 **333** 条（concepts 178 / tasks 109 / setup 22 / reference 24，
@@ -21,6 +22,14 @@
 - [k8s/topics/tasks.md](./k8s/topics/tasks.md) —— 任务（108 条）
 - [k8s/topics/setup.md](./k8s/topics/setup.md) —— 部署（21 条）
 - [k8s/topics/reference.md](./k8s/topics/reference.md) —— 参考（23 条）
+
+**Kubernetes Python Client**（slug `k8s-python-client`，2026-09-21 新增，服务「Python 客户端专项」子教程）：
+
+- [k8s-python-client/index.md](./k8s-python-client/index.md) —— 元信息 + 版本对应速查 + 分区索引
+- [k8s-python-client/topics/start.md](./k8s-python-client/topics/start.md) —— 入门与发行（8 条）
+- [k8s-python-client/topics/examples.md](./k8s-python-client/topics/examples.md) —— 官方可运行示例（42 条）
+- [k8s-python-client/topics/devel.md](./k8s-python-client/topics/devel.md) —— 专题说明：patch 类型 / 调试日志（9 条）
+- [k8s-python-client/topics/reference.md](./k8s-python-client/topics/reference.md) —— 生成的 API 参考与常用类（19 条）
 
 ## 使用约定
 
