@@ -186,7 +186,7 @@ requires_python: >=3.10
 
 `a1` / `b1` 是**预发布版**（alpha / beta），生产不要碰。所以 **34.1.0 是 34.x 唯一的稳定版**——这也是本教程锁定的版本。
 
-> 💡 **CHANGELOG 是升级前的必查项**：官方在矩阵下面直接写了 "See the [CHANGELOG](./CHANGELOG.md) for a detailed description of changes"。**跨大版本升级前（比如 34 → 35），先翻 CHANGELOG 看 breaking change**，别直接 `pip install -U`。
+> 💡 **CHANGELOG 是升级前的必查项**：官方在矩阵下面直接写了 "See the [CHANGELOG](https://github.com/kubernetes-client/python/blob/master/CHANGELOG.md) for a detailed description of changes"。**跨大版本升级前（比如 34 → 35），先翻 CHANGELOG 看 breaking change**，别直接 `pip install -U`。
 
 ##### 隔离安装：别污染系统 Python
 

@@ -1,0 +1,199 @@
+# Docker 容器清单备份（container prune 前）
+# 时间: 2026-10-09 16:34:45
+# 格式: 名称 | 镜像 | 状态 | 退出码 | 创建时间 | 挂载类型
+# ============================================
+/k8s-c2-control-plane | kindest/node:v1.34.0@sha256:7416a61b42b1662ca6ca89f02028ac133a309a2a30ba309614e8ec94d976dc5a | running | 0 | 2026-10-09T08:01:44.302331403Z | volume bind 
+/kind-lab2-worker | kindest/node:v1.34.0@sha256:7416a61b42b1662ca6ca89f02028ac133a309a2a30ba309614e8ec94d976dc5a | running | 0 | 2026-10-09T07:52:55.613212851Z | bind volume 
+/kind-lab2-control-plane | kindest/node:v1.34.0@sha256:7416a61b42b1662ca6ca89f02028ac133a309a2a30ba309614e8ec94d976dc5a | running | 0 | 2026-10-09T07:52:55.610905169Z | bind volume 
+/k8s-c1-control-plane | kindest/node:v1.34.0@sha256:7416a61b42b1662ca6ca89f02028ac133a309a2a30ba309614e8ec94d976dc5a | running | 0 | 2026-09-28T09:17:14.073432912Z | bind volume 
+/kafka | apache/kafka:4.0.0 | exited | 143 | 2026-09-28T03:42:49.120517273Z | volume volume volume 
+/capstone-svc | kafka-pybench:3.12-l11 | exited | 255 | 2026-09-23T10:00:50.17382003Z | bind 
+/l11 | kafka-pybench:3.12-l11 | exited | 255 | 2026-09-23T04:41:41.557151742Z | 
+/l9-sr | confluentinc/cp-schema-registry:7.6.1 | exited | 255 | 2026-09-22T09:45:14.751529405Z | volume 
+/l9-minisr | kafka-pybench:3.12 | exited | 255 | 2026-09-22T09:43:40.852850794Z | bind 
+/l9-kafka-2 | apache/kafka:4.0.0 | exited | 255 | 2026-09-22T08:58:47.810287666Z | volume volume volume 
+/l9-kafka-1 | apache/kafka:4.0.0 | exited | 255 | 2026-09-22T08:58:47.81024817Z | volume volume volume 
+/l9-kafka-3 | apache/kafka:4.0.0 | exited | 255 | 2026-09-22T08:58:47.809581925Z | volume volume volume 
+/l15-kafka-1 | apache/kafka:4.0.0 | exited | 255 | 2026-09-20T04:48:07.846889678Z | bind volume volume bind bind volume 
+/l15-kafka-3 | apache/kafka:4.0.0 | exited | 255 | 2026-09-20T04:48:07.846729674Z | volume bind volume volume bind bind 
+/l15-kafka-2 | apache/kafka:4.0.0 | exited | 255 | 2026-09-20T04:48:07.845795157Z | bind bind volume bind volume volume 
+/l15-prom | prom/prometheus:v3.14.0 | exited | 255 | 2026-09-20T04:48:07.840936113Z | bind volume 
+/l15-grafana | grafana/grafana:12.0.0 | exited | 0 | 2026-09-20T04:48:07.840899132Z | 
+/l11-prom | prom/prometheus:v3.14.0 | exited | 2 | 2026-09-07T06:07:39.646612419Z | bind bind 
+/l11-app | l11-app | exited | 1 | 2026-09-07T06:07:37.332107883Z | 
+/p3-shop | p3-shop:1.1 | exited | 255 | 2026-09-07T05:09:03.363273751Z | bind 
+/l10-prom | prom/prometheus:v3.14.0 | exited | 255 | 2026-09-07T04:51:00.823311048Z | bind volume 
+/l10-app | l10-app | exited | 255 | 2026-09-07T04:44:41.152889571Z | 
+/p3-grafana | grafana/grafana:13.2.1 | exited | 255 | 2026-09-07T04:42:03.494541982Z | bind bind 
+/p3-webhook | python:3.12-slim | exited | 255 | 2026-09-07T04:42:03.056170458Z | bind bind 
+/p3-prom | prom/prometheus:v3.14.0 | exited | 255 | 2026-09-07T04:42:02.617655023Z | bind volume 
+/l9-app | l9-app | exited | 255 | 2026-09-07T04:00:41.849082619Z | 
+/l9-rrclient | l9-rrclient | exited | 255 | 2026-09-07T03:54:48.791814341Z | 
+/gf-restore | grafana/grafana:13.2.1 | exited | 0 | 2026-09-07T03:38:18.021828Z | 
+/gf-old | grafana/grafana:12.0.0 | exited | 0 | 2026-09-07T03:36:58.832154475Z | 
+/gf-render | grafana/grafana:13.2.1 | exited | 255 | 2026-09-07T03:35:19.601843798Z | 
+/l12-renderer | grafana/grafana-image-renderer:latest | exited | 255 | 2026-09-07T03:35:03.409799631Z | 
+/gf-pg2 | grafana/grafana:13.2.1 | exited | 255 | 2026-09-07T03:26:41.751384295Z | 
+/gf-pg1 | grafana/grafana:13.2.1 | exited | 255 | 2026-09-07T03:26:01.569988615Z | 
+/l12-pg | postgres:16-alpine | exited | 255 | 2026-09-07T03:25:35.225917446Z | volume 
+/l9-prom-vmc | prom/prometheus:v3.14.0 | exited | 255 | 2026-09-07T03:21:49.813453168Z | bind volume 
+/l9-otelcol | otel/opentelemetry-collector-contrib:0.133.0 | exited | 255 | 2026-09-07T03:19:06.280217284Z | bind 
+/l9-prom-otlp | prom/prometheus:v3.14.0 | exited | 255 | 2026-09-07T03:19:04.711787525Z | bind volume 
+/l9-prom-wr | prom/prometheus:v3.14.0 | exited | 255 | 2026-09-07T02:46:15.748662538Z | bind volume 
+/l9-prom-rr | prom/prometheus:v3.14.0 | exited | 0 | 2026-09-07T02:46:15.386504999Z | bind bind volume 
+/l9-vmselect | victoriametrics/vmselect:v1.151.0-cluster | exited | 0 | 2026-09-07T02:45:38.61988295Z | 
+/l9-vminsert | victoriametrics/vminsert:v1.151.0-cluster | exited | 0 | 2026-09-07T02:45:38.307695777Z | 
+/l9-vmstorage | victoriametrics/vmstorage:v1.151.0-cluster | exited | 0 | 2026-09-07T02:45:38.021928041Z | 
+/l9-vm-single | victoriametrics/victoria-metrics:v1.151.0 | exited | 0 | 2026-09-07T02:45:37.67215961Z | 
+/l9-prom-mimir-b | prom/prometheus:v3.14.0 | exited | 0 | 2026-09-07T02:44:19.731716006Z | bind volume 
+/l9-prom-mimir-a | prom/prometheus:v3.14.0 | exited | 0 | 2026-09-07T02:44:19.3018386Z | bind volume 
+/l9-mimir | grafana/mimir:3.2.0 | exited | 0 | 2026-09-07T02:43:25.236542483Z | bind 
+/l9-thanos-query-nodedup | quay.io/thanos/thanos:v0.42.4 | exited | 0 | 2026-09-07T02:33:40.496988842Z | bind 
+/l9-thanos-query | quay.io/thanos/thanos:v0.42.4 | exited | 0 | 2026-09-07T02:30:42.367229781Z | bind 
+/l9-thanos-store | quay.io/thanos/thanos:v0.42.4 | exited | 0 | 2026-09-07T02:30:42.053521337Z | bind 
+/l9-thanos-sc-2 | quay.io/thanos/thanos:v0.42.4 | exited | 0 | 2026-09-07T02:30:41.772148786Z | bind volume 
+/l9-thanos-sc-1 | quay.io/thanos/thanos:v0.42.4 | exited | 255 | 2026-09-07T02:30:41.491335781Z | bind volume 
+/l9-prom-2 | prom/prometheus:v3.14.0 | exited | 0 | 2026-09-07T02:30:41.17845556Z | bind volume 
+/l9-prom-1 | prom/prometheus:v3.14.0 | exited | 255 | 2026-09-07T02:30:40.779778875Z | bind volume 
+/grafana-prov2 | grafana/grafana:13.2.1 | exited | 0 | 2026-09-07T02:28:47.840307061Z | bind bind bind bind 
+/grafana-prov | grafana/grafana:13.2.1 | exited | 255 | 2026-09-07T02:25:03.66189534Z | bind bind bind bind 
+/l9-minio | minio/minio:RELEASE.2023-03-20T20-16-18Z | exited | 255 | 2026-09-07T02:24:58.377483033Z | volume 
+/grafana-prom-ex | prom/prometheus:v3.14.0 | exited | 0 | 2026-09-07T02:06:54.03723296Z | bind volume 
+/gf-om | python:3.11-slim | exited | 255 | 2026-09-07T02:06:49.276954574Z | bind 
+/gf-mini2 | python:3.11-slim | exited | 255 | 2026-09-07T02:06:11.898651062Z | bind 
+/gf-mini | python:3.11-slim | exited | 1 | 2026-09-07T02:06:07.497392807Z | bind 
+/l8-am-2 | prom/alertmanager:v0.30.0 | exited | 0 | 2026-09-07T02:04:17.688124394Z | volume bind 
+/l8-am-1 | prom/alertmanager:v0.30.0 | exited | 255 | 2026-09-07T02:04:17.368747372Z | volume bind 
+/l8-webhook | l8-webhook:latest | exited | 255 | 2026-09-07T02:04:17.092063174Z | 
+/grafana-exemplar | python:3.11-slim | exited | 255 | 2026-09-07T02:03:05.197888956Z | bind 
+/grafana-jaeger | jaegertracing/jaeger:latest | exited | 0 | 2026-09-07T01:59:57.398147919Z | volume 
+/l8-norep-2 | prom/prometheus:v3.14.0 | exited | 255 | 2026-09-07T01:58:13.70689152Z | bind volume 
+/l8-norep-1 | prom/prometheus:v3.14.0 | exited | 255 | 2026-09-07T01:58:13.390105547Z | bind volume 
+/l8-vm-norep | victoriametrics/victoria-metrics:v1.151.0 | exited | 0 | 2026-09-07T01:58:12.990190845Z | 
+/l8-global-nh | prom/prometheus:v3.14.0 | exited | 0 | 2026-09-07T01:54:48.051277933Z | bind volume 
+/grafana-loki | grafana/loki:3.5.6 | exited | 255 | 2026-09-07T01:52:10.204926386Z | 
+/l8-vm | victoriametrics/victoria-metrics:v1.151.0 | exited | 0 | 2026-09-07T01:51:35.960093192Z | 
+/l8-global | prom/prometheus:v3.14.0 | exited | 0 | 2026-09-07T01:51:35.577333601Z | volume bind 
+/l8-replica-2 | prom/prometheus:v3.14.0 | exited | 255 | 2026-09-07T01:51:35.176434871Z | bind volume 
+/l8-replica-1 | prom/prometheus:v3.14.0 | exited | 255 | 2026-09-07T01:51:34.867397417Z | volume bind 
+/l8-leaf-b | prom/prometheus:v3.14.0 | exited | 0 | 2026-09-07T01:51:34.525663403Z | bind volume 
+/l8-leaf-a | prom/prometheus:v3.14.0 | exited | 255 | 2026-09-07T01:51:34.149416673Z | bind volume 
+/l8-app | l8-app:latest | exited | 255 | 2026-09-07T01:51:33.839532452Z | 
+/l7-agent | prom/prometheus:v3.14.0 | exited | 0 | 2026-09-04T12:42:47.876466904Z | bind bind volume 
+/l7-prom | prom/prometheus:v3.14.0 | exited | 255 | 2026-09-04T12:42:47.539012998Z | bind volume 
+/l7-backend | prom/prometheus:v3.14.0 | exited | 255 | 2026-09-04T12:04:18.495376914Z | bind volume 
+/l7-reader | prom/prometheus:v3.14.0 | exited | 255 | 2026-09-04T12:03:28.107507527Z | bind volume 
+/l7-prom-nf | prom/prometheus:v3.14.0 | exited | 0 | 2026-09-04T12:01:42.542648003Z | volume bind 
+/l7-prom-ro | prom/prometheus:v3.14.0 | exited | 255 | 2026-09-04T11:58:28.138223157Z | bind volume 
+/l7-prom-rr | prom/prometheus:v3.14.0 | exited | 255 | 2026-09-04T11:58:27.570171757Z | bind volume 
+/l08-webhook | python:3.11-slim | exited | 255 | 2026-09-04T11:42:05.499992199Z | bind 
+/l7-vm | victoriametrics/victoria-metrics:v1.151.0 | exited | 0 | 2026-09-04T11:34:46.929236766Z | 
+/l7-receiver | l7-receiver:latest | exited | 255 | 2026-09-04T11:34:46.314230376Z | 
+/l7-app | l7-app:latest | exited | 255 | 2026-09-04T11:34:46.040330376Z | 
+/l6-prom | prom/prometheus:v3.14.0 | exited | 255 | 2026-09-04T11:10:25.170586855Z | bind volume 
+/l6-app | l6-app:latest | exited | 255 | 2026-09-04T11:10:24.909619589Z | 
+/l5-prom | prom/prometheus:v3.14.0 | exited | 255 | 2026-09-04T08:55:27.470585324Z | bind bind volume 
+/l5-am | prom/alertmanager:v0.30.0 | exited | 0 | 2026-09-04T08:55:27.021940258Z | bind volume 
+/l5-receiver | python:3.12-slim | exited | 255 | 2026-09-04T08:55:26.242349174Z | bind bind 
+/l5-app-3 | python:3.12-slim | exited | 255 | 2026-09-04T08:55:25.804023782Z | bind 
+/l5-app-2 | python:3.12-slim | exited | 255 | 2026-09-04T08:55:25.369636303Z | bind 
+/l5-app-1 | python:3.12-slim | exited | 255 | 2026-09-04T08:55:24.922664416Z | bind 
+/grafana-node3 | prom/node-exporter:v1.10.2 | exited | 2 | 2026-09-04T08:42:21.758465065Z | 
+/grafana-node2 | prom/node-exporter:v1.10.2 | exited | 255 | 2026-09-04T08:42:21.396090696Z | 
+/gf-l02d | grafana/grafana:13.2.1 | exited | 0 | 2026-09-04T08:19:23.774232112Z | volume 
+/gf-l02c | grafana/grafana:13.2.1 | exited | 0 | 2026-09-04T08:19:11.408764934Z | 
+/gf-l02b | grafana/grafana:13.2.1 | exited | 0 | 2026-09-04T08:17:44.149762119Z | 
+/gf-l02 | grafana/grafana:13.2.1 | exited | 0 | 2026-09-04T08:13:24.37266652Z | 
+/grafana-lab | grafana/grafana:13.2.1 | exited | 255 | 2026-09-04T07:55:34.124003179Z | 
+/grafana-prom | prom/prometheus:v3.14.0 | exited | 0 | 2026-09-04T07:55:33.405651192Z | bind volume 
+/grafana-node | prom/node-exporter:v1.10.2 | exited | 2 | 2026-09-04T07:55:32.977836909Z | 
+/l4-prom | prom/prometheus:v3.14.0 | exited | 255 | 2026-09-04T06:26:34.174253303Z | bind bind bind 
+/l4-app | python:3.12-slim | exited | 255 | 2026-09-04T06:26:33.856185202Z | bind 
+/l3-ret | prom/prometheus:v3.14.0 | exited | 255 | 2026-09-04T06:14:43.45033414Z | bind bind 
+/l3-prom | prom/prometheus:v3.14.0 | exited | 255 | 2026-09-04T06:09:07.897321655Z | bind bind 
+/l3-app | python:3.12-slim | exited | 255 | 2026-09-04T06:08:33.624927055Z | bind 
+/prometheus-l2 | prom/prometheus:v3.14.0 | exited | 255 | 2026-09-04T04:09:31.178451175Z | bind bind volume 
+/app-conflict | python:3.12-slim | exited | 255 | 2026-09-04T04:09:30.867993741Z | bind 
+/app-user-1 | python:3.12-slim | exited | 255 | 2026-09-04T04:09:30.532782261Z | bind 
+/app-payment-1 | python:3.12-slim | exited | 255 | 2026-09-04T04:09:30.23050181Z | bind 
+/app-order-2 | python:3.12-slim | exited | 255 | 2026-09-04T04:09:29.934879291Z | bind 
+/app-order-1 | python:3.12-slim | exited | 255 | 2026-09-04T04:09:29.644108853Z | bind 
+/capstone-prom | prom/prometheus:v2.53.0 | exited | 0 | 2026-09-04T03:08:02.781209817Z | bind volume 
+/prometheus | prom/prometheus:v3.14.0 | exited | 0 | 2026-09-04T03:07:59.71691946Z | volume bind 
+/capstone-agent | otel/opentelemetry-collector-contrib:latest | exited | 0 | 2026-09-04T03:07:59.447738742Z | bind 
+/pushgateway | prom/pushgateway:v1.11.1 | exited | 0 | 2026-09-04T03:07:59.375207096Z | 
+/node-exporter | prom/node-exporter:v1.10.2 | exited | 255 | 2026-09-04T03:07:59.066580911Z | 
+/demo-app | python:3.12-slim | exited | 255 | 2026-09-04T03:07:58.73371162Z | bind 
+/capstone-gateway | otel/opentelemetry-collector-contrib:latest | exited | 0 | 2026-09-04T03:07:55.954265068Z | bind bind 
+/l12-final | otel/opentelemetry-collector-contrib:0.133.0 | exited | 255 | 2026-09-04T01:59:30.34870052Z | bind 
+/otel-l11-control-plane | kindest/node:v1.34.0@sha256:7416a61b42b1662ca6ca89f02028ac133a309a2a30ba309614e8ec94d976dc5a | running | 0 | 2026-09-03T12:38:18.278858819Z | bind volume 
+/l11-e3-high | otel/opentelemetry-collector-contrib:latest | exited | 0 | 2026-09-03T12:36:41.968627931Z | bind 
+/l11-e3-low | otel/opentelemetry-collector-contrib:latest | exited | 0 | 2026-09-03T12:36:19.301487923Z | bind 
+/l11-e3-probe | otel/opentelemetry-collector-contrib:latest | exited | 0 | 2026-09-03T12:32:43.327798037Z | bind 
+/l11-e2 | otel/opentelemetry-collector-contrib:latest | exited | 0 | 2026-09-03T12:27:13.95110494Z | bind bind 
+/l11-agent-c | otel/opentelemetry-collector-contrib:latest | exited | 0 | 2026-09-03T12:25:38.659219831Z | bind 
+/l11-gw-c | otel/opentelemetry-collector-contrib:latest | exited | 0 | 2026-09-03T12:25:35.385343885Z | bind 
+/l11-gw-b | otel/opentelemetry-collector-contrib:latest | exited | 0 | 2026-09-03T12:25:35.084352411Z | bind 
+/l11-agent-a | otel/opentelemetry-collector-contrib:latest | exited | 0 | 2026-09-03T12:25:34.785978802Z | bind 
+/otelcol-lab10-e7 | otel/opentelemetry-collector-contrib:latest | exited | 0 | 2026-09-03T11:40:55.013634864Z | bind 
+/otelcol-lab10-e6 | otel/opentelemetry-collector-contrib:latest | exited | 0 | 2026-09-03T11:38:02.207053885Z | bind 
+/otelcol-lab10-e5-file | otel/opentelemetry-collector-contrib:latest | exited | 0 | 2026-09-03T11:37:09.948396457Z | bind bind 
+/otelcol-lab10-e5-jaeger | otel/opentelemetry-collector-contrib:latest | exited | 0 | 2026-09-03T11:35:05.339952785Z | bind 
+/otelcol-lab10-e4b | otel/opentelemetry-collector-contrib:latest | exited | 0 | 2026-09-03T11:33:22.332450059Z | bind 
+/otelcol-lab10-e4a | otel/opentelemetry-collector-contrib:latest | exited | 0 | 2026-09-03T11:33:14.703903339Z | bind 
+/otelcol-lab10-e3 | otel/opentelemetry-collector-contrib:latest | exited | 0 | 2026-09-03T11:32:24.10048775Z | bind 
+/otelcol-lab10-e2 | otel/opentelemetry-collector-contrib:latest | exited | 0 | 2026-09-03T11:30:19.217365178Z | bind 
+/otelcol-lab10 | otel/opentelemetry-collector-contrib:latest | exited | 0 | 2026-09-03T11:28:06.492331375Z | bind 
+/otelcol-lab08dbg | otel/opentelemetry-collector-contrib:latest | exited | 0 | 2026-09-03T07:41:49.195722292Z | bind 
+/otelcol-lab08 | otel/opentelemetry-collector-contrib:latest | exited | 0 | 2026-09-03T07:40:08.845727806Z | bind 
+/prom-lab07 | prom/prometheus:v2.53.0 | exited | 0 | 2026-09-03T04:17:44.568900589Z | bind volume 
+/otelcol-lab06b | otel/opentelemetry-collector-contrib:latest | exited | 0 | 2026-09-03T03:19:47.395950745Z | bind 
+/otelcol-lab06 | otel/opentelemetry-collector-contrib:latest | exited | 0 | 2026-09-03T03:13:35.651678936Z | bind 
+/vm-dr-restored | victoriametrics/victoria-metrics:v1.151.0 | exited | 0 | 2026-09-02T13:19:58.103107817Z | volume 
+/vm-stale-test | victoriametrics/victoria-metrics:v1.151.0 | exited | 0 | 2026-09-02T13:18:11.577817123Z | volume 
+/vm-clean-test | victoriametrics/victoria-metrics:v1.151.0 | exited | 0 | 2026-09-02T13:16:46.55602334Z | volume 
+/vm-delrecover-test | victoriametrics/victoria-metrics:v1.151.0 | exited | 0 | 2026-09-02T13:11:47.992384079Z | volume 
+/vm-s3restore-test | victoriametrics/victoria-metrics:v1.151.0 | exited | 0 | 2026-09-02T12:19:34.391906619Z | volume 
+/vm-restore-test | victoriametrics/victoria-metrics:v1.151.0 | exited | 0 | 2026-09-02T12:16:52.153108939Z | volume 
+/jaeger-lab03 | jaegertracing/jaeger:latest | exited | 255 | 2026-09-02T11:51:38.34781234Z | volume 
+/vmagent-aggr | victoriametrics/vmagent:v1.151.0 | exited | 0 | 2026-09-02T11:46:08.644866286Z | bind bind bind 
+/vmalert-learn | victoriametrics/vmalert:v1.151.0 | exited | 0 | 2026-09-02T11:31:30.326865863Z | bind 
+/alertmanager-learn | prom/alertmanager:v0.27.0 | exited | 0 | 2026-09-02T10:53:08.482024156Z | volume bind 
+/vmagent-learn | victoriametrics/vmagent:v1.151.0 | exited | 0 | 2026-09-02T10:43:22.461566377Z | bind bind 
+/doris-minio | minio/minio:RELEASE.2023-03-20T20-16-18Z | exited | 0 | 2026-09-02T10:14:52.371608282Z | volume 
+/vmauth-e4 | victoriametrics/vmauth:v1.151.0 | exited | 0 | 2026-09-02T10:14:05.518106538Z | bind 
+/vmsel-slow2 | victoriametrics/vmselect:v1.151.0-cluster | exited | 0 | 2026-09-02T10:14:04.364769128Z | 
+/vmauth-t | victoriametrics/vmauth:v1.151.0 | exited | 0 | 2026-09-02T10:13:28.432185684Z | bind 
+/vmauth-slowtest | victoriametrics/vmauth:v1.151.0 | exited | 0 | 2026-09-02T10:12:37.04363387Z | bind 
+/vmsel-slow | victoriametrics/vmselect:v1.151.0-cluster | exited | 0 | 2026-09-02T10:12:36.675520728Z | 
+/vmauth-strict | victoriametrics/vmauth:v1.151.0 | exited | 0 | 2026-09-02T10:12:00.98875358Z | bind 
+/doris-kafka | apache/kafka:3.9.1 | exited | 255 | 2026-09-02T10:11:16.155206507Z | volume volume volume 
+/vmauth-2 | victoriametrics/vmauth:v1.151.0 | exited | 0 | 2026-09-02T10:11:14.809653864Z | bind 
+/vmauth-limit | victoriametrics/vmauth:v1.151.0 | exited | 0 | 2026-09-02T10:10:54.661983865Z | bind 
+/vmauth-learn | victoriametrics/vmauth:v1.151.0 | exited | 0 | 2026-09-02T10:08:57.658626136Z | bind 
+/vmsel-d5 | victoriametrics/vmselect:v1.151.0-cluster | exited | 0 | 2026-09-02T09:53:00.50009784Z | 
+/vminsert-learn2 | victoriametrics/vminsert:v1.151.0-cluster | exited | 0 | 2026-09-02T09:51:53.338686637Z | 
+/vmsel-dedup | victoriametrics/vmselect:v1.151.0-cluster | exited | 0 | 2026-09-02T09:49:50.105430297Z | 
+/vmsel-n2 | victoriametrics/vmselect:v1.151.0-cluster | exited | 0 | 2026-09-02T09:48:19.174911122Z | 
+/vmsel-n1 | victoriametrics/vmselect:v1.151.0-cluster | exited | 0 | 2026-09-02T09:48:18.942311612Z | 
+/vminsert-learn | victoriametrics/vminsert:v1.151.0-cluster | exited | 0 | 2026-09-02T09:45:39.351811029Z | 
+/vmselect-learn | victoriametrics/vmselect:v1.151.0-cluster | exited | 0 | 2026-09-02T09:30:49.776739588Z | 
+/vmstorage-learn2 | victoriametrics/vmstorage:v1.151.0-cluster | exited | 0 | 2026-09-02T09:30:46.710385283Z | bind 
+/vmstorage-learn | victoriametrics/vmstorage:v1.151.0-cluster | exited | 0 | 2026-09-02T09:26:13.229077479Z | bind 
+/doris-learn | apache/doris:all-in-one-4.1.3 | exited | 255 | 2026-09-02T08:02:35.123259332Z | 
+/doris-mysql-demo | mysql:8.0 | exited | 0 | 2026-09-02T07:36:32.298129431Z | volume 
+/vm-learn | victoriametrics/victoria-metrics:latest | exited | 0 | 2026-09-02T07:31:38.036471637Z | bind bind bind 
+/prom-learn | prom/prometheus:v2.53.0 | exited | 255 | 2026-09-02T07:21:27.990771626Z | volume bind 
+/rmq3 | rabbitmq:4.3-management | exited | 0 | 2026-09-01T03:11:14.934001186Z | volume 
+/rmq2 | rabbitmq:4.3-management | exited | 0 | 2026-09-01T03:11:14.54687736Z | volume 
+/rmq1 | rabbitmq:4.3-management | exited | 0 | 2026-09-01T03:11:14.143110091Z | volume 
+/rabbitmq-learn | rabbitmq:4.3-management | exited | 0 | 2026-08-31T05:35:15.690587639Z | volume 
+/docker-crawl4ai-1 | unclecode/crawl4ai:0.6.0rc1-r2 | exited | 255 | 2026-05-15T06:28:02.237315922Z | 
+/docker-webapp-1 | ghcr.io/xpert-ai/xpert-webapp:latest | exited | 0 | 2026-05-15T06:18:08.058703489Z | bind bind 
+/docker-api-1 | ghcr.io/xpert-ai/xpert-api:latest | exited | 0 | 2026-05-15T06:18:08.012778906Z | bind bind bind bind bind bind 
+/docker-pgweb-1 | sosedoff/pgweb | running | 0 | 2026-05-15T06:18:08.00355639Z | 
+/docker-db-1 | pgvector/pgvector:pg15 | running | 0 | 2026-05-15T06:18:07.951209444Z | bind bind 
+/docker-redis-1 | redis/redis-stack:latest | exited | 143 | 2026-05-15T06:18:07.949140464Z | 
+/milvus-standalone | milvusdb/milvus:v2.5.0-beta | exited | 255 | 2026-04-30T10:15:53.948515565Z | bind 
+/milvus-etcd | quay.io/coreos/etcd:v3.5.5 | exited | 255 | 2026-04-30T10:15:53.722475268Z | bind 
+/milvus-minio | minio/minio:RELEASE.2023-03-20T20-16-18Z | exited | 255 | 2026-04-30T10:15:53.722060543Z | volume bind 
