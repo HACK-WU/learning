@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 500" width="940" height="500">
+  <rect x="0" y="0" width="940" height="500" fill="#ffffff"/>
+
+  <text x="470" y="30" font-family="sans-serif" font-size="19" font-weight="bold" fill="#1f2937" text-anchor="middle">
+    有爹的对象是一棵树，还有两类自己冒出来的
+  </text>
+
+  <!-- 中间：有爹的树（课3） -->
+  <rect x="330" y="52" width="280" height="230" rx="8" fill="#dbeafe" stroke="#1e40af" stroke-width="2"/>
+  <text x="470" y="76" font-family="sans-serif" font-size="13" font-weight="bold" fill="#1e3a8a" text-anchor="middle">
+    有爹的对象（课 3）
+  </text>
+
+  <rect x="370" y="90" width="200" height="34" rx="4" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="470" y="112" font-family="sans-serif" font-size="12" fill="#1f2937" text-anchor="middle">Deployment</text>
+  <line x1="470" y1="124" x2="470" y2="140" stroke="#4b5563" stroke-width="2" marker-end="url(#g)"/>
+  <rect x="370" y="144" width="200" height="34" rx="4" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="470" y="166" font-family="sans-serif" font-size="12" fill="#1f2937" text-anchor="middle">ReplicaSet</text>
+  <line x1="470" y1="178" x2="470" y2="194" stroke="#4b5563" stroke-width="2" marker-end="url(#g)"/>
+  <rect x="370" y="198" width="200" height="34" rx="4" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="470" y="220" font-family="sans-serif" font-size="12" fill="#1f2937" text-anchor="middle">Pod</text>
+  <rect x="370" y="242" width="200" height="28" rx="4" fill="#eff6ff" stroke="#3b82f6" stroke-dasharray="4,3"/>
+  <text x="470" y="261" font-family="sans-serif" font-size="11" fill="#1e40af" text-anchor="middle">删爹 → 孩子跟着走（级联）</text>
+
+  <!-- 左：Event（记录型，无爹） -->
+  <rect x="30" y="52" width="280" height="230" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="170" y="76" font-family="sans-serif" font-size="13" font-weight="bold" fill="#92400e" text-anchor="middle">
+    Event · 日记（没有爹）
+  </text>
+
+  <rect x="52" y="90" width="236" height="48" rx="4" fill="#ffffff" stroke="#fcd34d"/>
+  <text x="170" y="110" font-family="sans-serif" font-size="11" fill="#1f2937" text-anchor="middle">记录：谁身上发生了什么</text>
+  <text x="170" y="130" font-family="sans-serif" font-size="11" fill="#92400e" text-anchor="middle">involvedObject → Pod（只是提到）</text>
+
+  <rect x="52" y="150" width="236" height="36" rx="4" fill="#fffbeb" stroke="#fcd34d"/>
+  <text x="170" y="172" font-family="sans-serif" font-size="11" fill="#92400e" text-anchor="middle">❌ 没有 ownerReference</text>
+
+  <!-- 虚线：只是提到 -->
+  <line x1="310" y1="180" x2="332" y2="200" stroke="#d97706" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#o)"/>
+  <text x="300" y="168" font-family="sans-serif" font-size="10" fill="#d97706">提到</text>
+
+  <rect x="52" y="198" width="236" height="36" rx="4" fill="#fde68a" stroke="#d97706"/>
+  <text x="170" y="220" font-family="sans-serif" font-size="11" fill="#92400e" text-anchor="middle">⏱ 清理靠 TTL：1 小时自动过期</text>
+  <rect x="52" y="242" width="236" height="28" rx="4" fill="#fffbeb" stroke="#d97706" stroke-dasharray="4,3"/>
+  <text x="170" y="261" font-family="sans-serif" font-size="11" fill="#92400e" text-anchor="middle">删 Pod 不带走它（历史要留着）</text>
+
+  <!-- 右：Lease（协调型） -->
+  <rect x="630" y="52" width="280" height="230" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+  <text x="770" y="76" font-family="sans-serif" font-size="13" font-weight="bold" fill="#5b21b6" text-anchor="middle">
+    Lease · 值班签到表
+  </text>
+
+  <rect x="652" y="90" width="236" height="48" rx="4" fill="#ffffff" stroke="#c4b5fd"/>
+  <text x="770" y="110" font-family="sans-serif" font-size="11" fill="#1f2937" text-anchor="middle">证明：谁还活着、谁在当班</text>
+  <text x="770" y="130" font-family="sans-serif" font-size="11" fill="#5b21b6" text-anchor="middle">renewTime 每 10 秒续一次</text>
+
+  <rect x="652" y="150" width="236" height="36" rx="4" fill="#faf5ff" stroke="#c4b5fd"/>
+  <text x="770" y="172" font-family="sans-serif" font-size="11" fill="#5b21b6" text-anchor="middle">⚠ 节点 Lease 反而「有爹」→ Node</text>
+
+  <rect x="652" y="198" width="236" height="36" rx="4" fill="#ddd6fe" stroke="#7c3aed"/>
+  <text x="770" y="220" font-family="sans-serif" font-size="11" fill="#5b21b6" text-anchor="middle">⏱ 清理靠过期：40 秒没续期</text>
+  <rect x="652" y="242" width="236" height="28" rx="4" fill="#faf5ff" stroke="#7c3aed" stroke-dasharray="4,3"/>
+  <text x="770" y="261" font-family="sans-serif" font-size="11" fill="#5b21b6" text-anchor="middle">极小 → 为高频更新专门造的</text>
+
+  <!-- 底部：三种清理机制 -->
+  <rect x="30" y="304" width="880" height="120" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text x="470" y="330" font-family="sans-serif" font-size="13" font-weight="bold" fill="#1f2937" text-anchor="middle">
+    三种清理机制，别混为一谈
+  </text>
+
+  <rect x="60" y="344" width="250" height="62" rx="6" fill="#dbeafe" stroke="#1e40af" stroke-width="1.5"/>
+  <text x="185" y="366" font-family="sans-serif" font-size="12" font-weight="bold" fill="#1e3a8a" text-anchor="middle">级联删除</text>
+  <text x="185" y="386" font-family="sans-serif" font-size="11" fill="#1f2937" text-anchor="middle">ownerReference · 实现型</text>
+  <text x="185" y="402" font-family="sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">Pod / RS / EndpointSlice</text>
+
+  <rect x="345" y="344" width="250" height="62" rx="6" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text x="470" y="366" font-family="sans-serif" font-size="12" font-weight="bold" fill="#92400e" text-anchor="middle">TTL 过期</text>
+  <text x="470" y="386" font-family="sans-serif" font-size="11" fill="#1f2937" text-anchor="middle">1 小时 · 记录型</text>
+  <text x="470" y="402" font-family="sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">Event</text>
+
+  <rect x="630" y="344" width="250" height="62" rx="6" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="755" y="366" font-family="sans-serif" font-size="12" font-weight="bold" fill="#5b21b6" text-anchor="middle">租约过期</text>
+  <text x="755" y="386" font-family="sans-serif" font-size="11" fill="#1f2937" text-anchor="middle">40 秒 · 协调型</text>
+  <text x="755" y="402" font-family="sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">Lease</text>
+
+  <text x="470" y="436" font-family="sans-serif" font-size="11" fill="#6b7280" text-anchor="middle">
+    判断口诀：实现型跟着爹走 · 记录型靠 TTL · 协调型靠过期
+  </text>
+
+  <defs>
+    <marker id="g" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L7,4 L0,8 z" fill="#4b5563"/>
+    </marker>
+    <marker id="o" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L7,4 L0,8 z" fill="#d97706"/>
+    </marker>
+  </defs>
+</svg>

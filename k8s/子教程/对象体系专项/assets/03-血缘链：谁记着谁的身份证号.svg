@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" width="900" height="480">
+  <rect x="0" y="0" width="900" height="480" fill="#ffffff"/>
+
+  <text x="450" y="32" font-family="sans-serif" font-size="19" font-weight="bold" fill="#1f2937" text-anchor="middle">
+    谁记着谁的身份证号：孩子身上存着爹的 uid
+  </text>
+
+  <!-- 左：三层的链 -->
+  <text x="220" y="62" font-family="sans-serif" font-size="14" font-weight="bold" fill="#1e40af" text-anchor="middle">
+    三个对象竖着排（箭头从上往下 = 谁生谁）
+  </text>
+
+  <rect x="90" y="80" width="260" height="56" rx="6" fill="#dbeafe" stroke="#1e40af" stroke-width="2"/>
+  <text x="220" y="104" font-family="sans-serif" font-size="14" font-weight="bold" fill="#1e3a8a" text-anchor="middle">Deployment</text>
+  <text x="220" y="124" font-family="sans-serif" font-size="11" fill="#1e40af" text-anchor="middle">uid: 7aefd5b2…（管版本）</text>
+
+  <line x1="220" y1="136" x2="220" y2="172" stroke="#4b5563" stroke-width="2.5" marker-end="url(#a)"/>
+  <text x="262" y="158" font-family="sans-serif" font-size="11" fill="#4b5563">生</text>
+
+  <rect x="90" y="176" width="260" height="56" rx="6" fill="#e0f2fe" stroke="#0369a1" stroke-width="2"/>
+  <text x="220" y="200" font-family="sans-serif" font-size="14" font-weight="bold" fill="#075985" text-anchor="middle">ReplicaSet</text>
+  <text x="220" y="220" font-family="sans-serif" font-size="11" fill="#0369a1" text-anchor="middle">uid: 1efdec77…（管副本）</text>
+
+  <line x1="220" y1="232" x2="220" y2="268" stroke="#4b5563" stroke-width="2.5" marker-end="url(#a)"/>
+  <text x="262" y="254" font-family="sans-serif" font-size="11" fill="#4b5563">生</text>
+
+  <rect x="90" y="272" width="260" height="56" rx="6" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="220" y="296" font-family="sans-serif" font-size="14" font-weight="bold" fill="#15803d" text-anchor="middle">Pod</text>
+  <text x="220" y="316" font-family="sans-serif" font-size="11" fill="#16a34a" text-anchor="middle">真正在跑容器的那个</text>
+
+  <!-- 右：记录卡片 -->
+  <text x="650" y="62" font-family="sans-serif" font-size="14" font-weight="bold" fill="#9d174d" text-anchor="middle">
+    但「谁是我爹」记在孩子自己身上
+  </text>
+
+  <rect x="440" y="80" width="420" height="100" rx="8" fill="#fdf2f8" stroke="#be185d" stroke-width="2"/>
+  <text x="458" y="104" font-family="sans-serif" font-size="12" font-weight="bold" fill="#9d174d">ReplicaSet 身上写着：</text>
+  <text x="458" y="126" font-family="sans-serif" font-size="11" fill="#1f2937">ownerReferences: kind=Deployment</text>
+  <text x="458" y="146" font-family="sans-serif" font-size="11" fill="#1f2937">  name=obj3-web</text>
+  <text x="458" y="166" font-family="sans-serif" font-size="11" fill="#9d174d">  uid=7aefd5b2-2b2a-459a-b700-0818a9e7a8f0</text>
+
+  <rect x="440" y="196" width="420" height="100" rx="8" fill="#fdf2f8" stroke="#be185d" stroke-width="2"/>
+  <text x="458" y="220" font-family="sans-serif" font-size="12" font-weight="bold" fill="#9d174d">Pod 身上写着：</text>
+  <text x="458" y="242" font-family="sans-serif" font-size="11" fill="#1f2937">ownerReferences: kind=ReplicaSet  ← 不是 Deployment</text>
+  <text x="458" y="262" font-family="sans-serif" font-size="11" fill="#1f2937">  name=obj3-web-dffcc85f7</text>
+  <text x="458" y="282" font-family="sans-serif" font-size="11" fill="#9d174d">  uid=1efdec77-0ab3-4f2b-ab77-5cfe54565c83</text>
+
+  <!-- 连线：链上的对象指向自己的卡片 -->
+  <line x1="350" y1="204" x2="438" y2="130" stroke="#be185d" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#b)"/>
+  <line x1="350" y1="300" x2="438" y2="246" stroke="#be185d" stroke-width="1.5" stroke-dasharray="5,4" marker-end="url(#b)"/>
+  <text x="400" y="176" font-family="sans-serif" font-size="10" fill="#be185d">记在这</text>
+  <text x="400" y="286" font-family="sans-serif" font-size="10" fill="#be185d">记在这</text>
+
+  <!-- 底部要点 -->
+  <rect x="90" y="352" width="770" height="106" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text x="475" y="378" font-family="sans-serif" font-size="13" font-weight="bold" fill="#1f2937" text-anchor="middle">
+    三条要记住的
+  </text>
+  <text x="475" y="402" font-family="sans-serif" font-size="12" fill="#374151" text-anchor="middle">
+    ① 记录写在「孩子」身上 —— 父对象不知道自己有几个孩子
+  </text>
+  <text x="475" y="424" font-family="sans-serif" font-size="12" fill="#374151" text-anchor="middle">
+    ② 靠 uid（身份证号）认爹，不靠 name —— 名字会重复，uid 永不复用
+  </text>
+  <text x="475" y="446" font-family="sans-serif" font-size="12" fill="#374151" text-anchor="middle">
+    ③ 删爹时，垃圾回收器顺着这些卡片往下找 —— 这就是「级联删除」
+  </text>
+
+  <defs>
+    <marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#4b5563"/>
+    </marker>
+    <marker id="b" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L7,4 L0,8 z" fill="#be185d"/>
+    </marker>
+  </defs>
+</svg>

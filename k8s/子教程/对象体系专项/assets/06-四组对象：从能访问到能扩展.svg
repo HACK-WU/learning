@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 470" width="900" height="470">
+  <rect x="0" y="0" width="900" height="470" fill="#ffffff"/>
+
+  <text x="450" y="30" font-family="sans-serif" font-size="18" font-weight="bold" fill="#1f2937" text-anchor="middle">
+    四组对象：在你的应用之上，一层层往外叠
+  </text>
+
+  <!-- 底层：应用 -->
+  <rect x="60" y="56" width="780" height="52" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="450" y="80" font-family="sans-serif" font-size="13" font-weight="bold" fill="#15803d" text-anchor="middle">
+    你的应用（课 5）：Pod · Deployment · StatefulSet · Job
+  </text>
+  <text x="450" y="98" font-family="sans-serif" font-size="11" fill="#16a34a" text-anchor="middle">
+    已经跑起来了 —— 但还不能被稳定访问、没有隔离、没有约束
+  </text>
+
+  <!-- 第 1 层：网络 -->
+  <rect x="60" y="126" width="780" height="66" rx="8" fill="#dbeafe" stroke="#1e40af" stroke-width="2"/>
+  <text x="450" y="150" font-family="sans-serif" font-size="13" font-weight="bold" fill="#1e3a8a" text-anchor="middle">
+    ① 网络组：让人能找到它
+  </text>
+  <text x="450" y="170" font-family="sans-serif" font-size="11" fill="#1f2937" text-anchor="middle">
+    Service（固定入口）→ EndpointSlice（控制器自动生成的后端列表）
+  </text>
+  <text x="450" y="186" font-family="sans-serif" font-size="11" fill="#1f2937" text-anchor="middle">
+    Ingress / Gateway（域名与七层路由）· NetworkPolicy（集群内防火墙，默认全通）
+  </text>
+
+  <!-- 第 2 层：安全 -->
+  <rect x="60" y="208" width="780" height="60" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="450" y="232" font-family="sans-serif" font-size="13" font-weight="bold" fill="#92400e" text-anchor="middle">
+    ② 安全组：让对的人能访问
+  </text>
+  <text x="450" y="252" font-family="sans-serif" font-size="11" fill="#1f2937" text-anchor="middle">
+    ServiceAccount（身份）· Role / ClusterRole（权限）· RoleBinding / ClusterRoleBinding（授予）
+  </text>
+
+  <!-- 第 3 层：策略 -->
+  <rect x="60" y="284" width="780" height="60" rx="8" fill="#fce7f3" stroke="#be185d" stroke-width="2"/>
+  <text x="450" y="308" font-family="sans-serif" font-size="13" font-weight="bold" fill="#9d174d" text-anchor="middle">
+    ③ 策略组：让用量可控、中断可挡
+  </text>
+  <text x="450" y="328" font-family="sans-serif" font-size="11" fill="#1f2937" text-anchor="middle">
+    ResourceQuota（租户总量）· LimitRange（容器默认值）· HPA（自动扩缩）· PDB（最少保几个）
+  </text>
+
+  <!-- 顶层：扩展 -->
+  <rect x="60" y="360" width="780" height="66" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="2.5"/>
+  <text x="450" y="384" font-family="sans-serif" font-size="13" font-weight="bold" fill="#5b21b6" text-anchor="middle">
+    ④ 扩展组：让集群长出新的对象种类 ← 本专项收束点
+  </text>
+  <text x="450" y="404" font-family="sans-serif" font-size="11" fill="#1f2937" text-anchor="middle">
+    CRD（用对象定义新对象）· APIService（API 聚合）· Webhook 配置（准入控制）
+  </text>
+  <text x="450" y="420" font-family="sans-serif" font-size="10" fill="#5b21b6" text-anchor="middle">
+    Node / Namespace / IngressClass 也在这一层（集群级）
+  </text>
+
+  <!-- 层间箭头 -->
+  <line x1="450" y1="108" x2="450" y2="124" stroke="#9ca3af" stroke-width="2" marker-end="url(#g6)"/>
+  <line x1="450" y1="192" x2="450" y2="206" stroke="#9ca3af" stroke-width="2" marker-end="url(#g6)"/>
+  <line x1="450" y1="268" x2="450" y2="282" stroke="#9ca3af" stroke-width="2" marker-end="url(#g6)"/>
+  <line x1="450" y1="344" x2="450" y2="358" stroke="#9ca3af" stroke-width="2" marker-end="url(#g6)"/>
+
+  <text x="470" y="120" font-family="sans-serif" font-size="10" fill="#6b7280">叠一层</text>
+  <text x="470" y="204" font-family="sans-serif" font-size="10" fill="#6b7280">叠一层</text>
+  <text x="470" y="280" font-family="sans-serif" font-size="10" fill="#6b7280">叠一层</text>
+  <text x="470" y="356" font-family="sans-serif" font-size="10" fill="#6b7280">叠一层</text>
+
+  <text x="450" y="455" font-family="sans-serif" font-size="11" fill="#6b7280" text-anchor="middle">
+    每一层都不改下一层，只是套在外面 —— 这就是 k8s 的叠加式设计
+  </text>
+
+  <defs>
+    <marker id="g6" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L7,4 L0,8 z" fill="#9ca3af"/>
+    </marker>
+  </defs>
+</svg>

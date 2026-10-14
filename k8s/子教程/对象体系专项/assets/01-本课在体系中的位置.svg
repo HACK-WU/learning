@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 420" width="940" height="420">
+  <rect x="0" y="0" width="940" height="420" fill="#ffffff"/>
+
+  <text x="470" y="32" font-family="sans-serif" font-size="18" font-weight="bold" fill="#1f2937" text-anchor="middle">
+    本课是地基：后面五课都在四段式上加东西
+  </text>
+
+  <!-- 地基：课1 四段式 -->
+  <rect x="40" y="60" width="860" height="66" rx="8" fill="#dbeafe" stroke="#1e40af" stroke-width="2.5"/>
+  <text x="470" y="86" font-family="sans-serif" font-size="15" font-weight="bold" fill="#1e3a8a" text-anchor="middle">
+    课 1（本课）· 四段式：apiVersion / kind / metadata / spec
+  </text>
+  <text x="470" y="110" font-family="sans-serif" font-size="12" fill="#1e40af" text-anchor="middle">
+    所有对象共有的结构 —— 后面五课都不改变它，只是往上加东西
+  </text>
+
+  <!-- 四个加层 -->
+  <rect x="40" y="160" width="200" height="96" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="140" y="186" font-family="sans-serif" font-size="14" font-weight="bold" fill="#92400e" text-anchor="middle">课 2 · 住址</text>
+  <text x="140" y="210" font-family="sans-serif" font-size="12" fill="#1f2937" text-anchor="middle">给 metadata 加上</text>
+  <text x="140" y="228" font-family="sans-serif" font-size="12" fill="#1f2937" text-anchor="middle">「住不住在命名空间里」</text>
+  <text x="140" y="246" font-family="sans-serif" font-size="11" fill="#92400e" text-anchor="middle">Node / PV / ClusterRole</text>
+
+  <rect x="255" y="160" width="200" height="96" rx="8" fill="#fce7f3" stroke="#be185d" stroke-width="2"/>
+  <text x="355" y="186" font-family="sans-serif" font-size="14" font-weight="bold" fill="#9d174d" text-anchor="middle">课 3 · 血缘</text>
+  <text x="355" y="210" font-family="sans-serif" font-size="12" fill="#1f2937" text-anchor="middle">用 metadata.uid 串起</text>
+  <text x="355" y="228" font-family="sans-serif" font-size="12" fill="#1f2937" text-anchor="middle">「谁创建了谁」</text>
+  <text x="355" y="246" font-family="sans-serif" font-size="11" fill="#9d174d" text-anchor="middle">ownerReference</text>
+
+  <rect x="470" y="160" width="200" height="96" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+  <text x="570" y="186" font-family="sans-serif" font-size="14" font-weight="bold" fill="#5b21b6" text-anchor="middle">课 4 · 特例</text>
+  <text x="570" y="210" font-family="sans-serif" font-size="12" fill="#1f2937" text-anchor="middle">没爹、自己冒出来的</text>
+  <text x="570" y="228" font-family="sans-serif" font-size="12" fill="#1f2937" text-anchor="middle">对象也有讲究</text>
+  <text x="570" y="246" font-family="sans-serif" font-size="11" fill="#5b21b6" text-anchor="middle">Event / Lease</text>
+
+  <rect x="685" y="160" width="215" height="96" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="792" y="186" font-family="sans-serif" font-size="14" font-weight="bold" fill="#15803d" text-anchor="middle">课 5+6 · 总表</text>
+  <text x="792" y="210" font-family="sans-serif" font-size="12" fill="#1f2937" text-anchor="middle">把四段式套到</text>
+  <text x="792" y="228" font-family="sans-serif" font-size="12" fill="#1f2937" text-anchor="middle">30+ 个具体对象上</text>
+  <text x="792" y="246" font-family="sans-serif" font-size="11" fill="#15803d" text-anchor="middle">每个都给可运行 YAML</text>
+
+  <!-- 箭头：地基到各课 -->
+  <line x1="140" y1="126" x2="140" y2="158" stroke="#9ca3af" stroke-width="2" marker-end="url(#arw)"/>
+  <line x1="355" y1="126" x2="355" y2="158" stroke="#9ca3af" stroke-width="2" marker-end="url(#arw)"/>
+  <line x1="570" y1="126" x2="570" y2="158" stroke="#9ca3af" stroke-width="2" marker-end="url(#arw)"/>
+  <line x1="792" y1="126" x2="792" y2="158" stroke="#9ca3af" stroke-width="2" marker-end="url(#arw)"/>
+
+  <!-- 底部收束 -->
+  <rect x="40" y="286" width="860" height="90" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text x="470" y="312" font-family="sans-serif" font-size="14" font-weight="bold" fill="#1f2937" text-anchor="middle">
+    学完这个专项，你能回答
+  </text>
+  <text x="470" y="336" font-family="sans-serif" font-size="12" fill="#374151" text-anchor="middle">
+    k8s 的对象分几类 · 每一类长什么样 · 谁创建了谁 · 我写的 YAML 最终由谁去落实
+  </text>
+  <text x="470" y="360" font-family="sans-serif" font-size="12" fill="#6b7280" text-anchor="middle">
+    而这一切的起点，就是本课的四段式
+  </text>
+
+  <defs>
+    <marker id="arw" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#9ca3af"/>
+    </marker>
+  </defs>
+</svg>

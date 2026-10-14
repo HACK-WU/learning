@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 470" width="920" height="470">
+  <rect x="0" y="0" width="920" height="470" fill="#ffffff"/>
+
+  <text x="460" y="32" font-family="sans-serif" font-size="19" font-weight="bold" fill="#1f2937" text-anchor="middle">
+    两级住址：楼里的房间 vs 楼本身
+  </text>
+
+  <!-- 左：命名空间级 -->
+  <text x="270" y="62" font-family="sans-serif" font-size="14" font-weight="bold" fill="#1e40af" text-anchor="middle">
+    命名空间级 · 有租户归属
+  </text>
+
+  <!-- 楼 A -->
+  <rect x="40" y="78" width="220" height="250" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="150" y="102" font-family="sans-serif" font-size="13" font-weight="bold" fill="#1e40af" text-anchor="middle">
+    楼 A（命名空间 prod）
+  </text>
+  <rect x="58" y="116" width="184" height="34" rx="4" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="150" y="138" font-family="sans-serif" font-size="12" fill="#1f2937" text-anchor="middle">305 · Pod web-1</text>
+  <rect x="58" y="158" width="184" height="34" rx="4" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="150" y="180" font-family="sans-serif" font-size="12" fill="#1f2937" text-anchor="middle">306 · ConfigMap app-cfg</text>
+  <rect x="58" y="200" width="184" height="34" rx="4" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="150" y="222" font-family="sans-serif" font-size="12" fill="#1f2937" text-anchor="middle">307 · Service web</text>
+  <rect x="58" y="242" width="184" height="34" rx="4" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="150" y="264" font-family="sans-serif" font-size="12" fill="#1f2937" text-anchor="middle">308 · Secret db-pw</text>
+  <rect x="58" y="284" width="184" height="30" rx="4" fill="#dbeafe" stroke="#3b82f6" stroke-dasharray="4,3"/>
+  <text x="150" y="304" font-family="sans-serif" font-size="11" fill="#1e40af" text-anchor="middle">房间号只在楼内唯一</text>
+
+  <!-- 楼 B -->
+  <rect x="280" y="78" width="220" height="250" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <text x="390" y="102" font-family="sans-serif" font-size="13" font-weight="bold" fill="#1e40af" text-anchor="middle">
+    楼 B（命名空间 dev）
+  </text>
+  <rect x="298" y="116" width="184" height="34" rx="4" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="390" y="138" font-family="sans-serif" font-size="12" fill="#1f2937" text-anchor="middle">305 · Pod web-1</text>
+  <rect x="298" y="158" width="184" height="34" rx="4" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="390" y="180" font-family="sans-serif" font-size="12" fill="#1f2937" text-anchor="middle">306 · ConfigMap app-cfg</text>
+  <rect x="298" y="200" width="184" height="34" rx="4" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="390" y="222" font-family="sans-serif" font-size="12" fill="#1f2937" text-anchor="middle">307 · Service web</text>
+  <rect x="298" y="242" width="184" height="34" rx="4" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="390" y="264" font-family="sans-serif" font-size="12" fill="#1f2937" text-anchor="middle">（空）</text>
+  <rect x="298" y="284" width="184" height="30" rx="4" fill="#fef3c7" stroke="#d97706" stroke-dasharray="4,3"/>
+  <text x="390" y="304" font-family="sans-serif" font-size="11" fill="#92400e" text-anchor="middle">同名 305 是另一间房</text>
+
+  <!-- 右：集群级 -->
+  <text x="720" y="62" font-family="sans-serif" font-size="14" font-weight="bold" fill="#15803d" text-anchor="middle">
+    集群级 · 无租户归属
+  </text>
+  <rect x="560" y="78" width="320" height="250" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="720" y="102" font-family="sans-serif" font-size="13" font-weight="bold" fill="#15803d" text-anchor="middle">
+    整片园区共用（不属于任何楼）
+  </text>
+  <rect x="580" y="116" width="280" height="34" rx="4" fill="#ffffff" stroke="#86efac"/>
+  <text x="720" y="138" font-family="sans-serif" font-size="12" fill="#1f2937" text-anchor="middle">地基 · Node（3 台机器）</text>
+  <rect x="580" y="158" width="280" height="34" rx="4" fill="#ffffff" stroke="#86efac"/>
+  <text x="720" y="180" font-family="sans-serif" font-size="12" fill="#1f2937" text-anchor="middle">变电站 · PersistentVolume</text>
+  <rect x="580" y="200" width="280" height="34" rx="4" fill="#ffffff" stroke="#86efac"/>
+  <text x="720" y="222" font-family="sans-serif" font-size="12" fill="#1f2937" text-anchor="middle">物业规约 · StorageClass</text>
+  <rect x="580" y="242" width="280" height="34" rx="4" fill="#ffffff" stroke="#86efac"/>
+  <text x="720" y="264" font-family="sans-serif" font-size="12" fill="#1f2937" text-anchor="middle">通行证模板 · ClusterRole</text>
+  <rect x="580" y="284" width="280" height="30" rx="4" fill="#dcfce7" stroke="#16a34a" stroke-dasharray="4,3"/>
+  <text x="720" y="304" font-family="sans-serif" font-size="11" fill="#15803d" text-anchor="middle">问「它属于哪个房间」没有意义</text>
+
+  <!-- 连接：楼依赖共用设施 -->
+  <line x1="500" y1="150" x2="558" y2="150" stroke="#9ca3af" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="500" y1="230" x2="558" y2="230" stroke="#9ca3af" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="529" y="142" font-family="sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">用</text>
+  <text x="529" y="222" font-family="sans-serif" font-size="10" fill="#6b7280" text-anchor="middle">用</text>
+
+  <!-- 底部判断句 -->
+  <rect x="40" y="352" width="840" height="82" rx="8" fill="#f3f4f6" stroke="#6b7280" stroke-width="1.5"/>
+  <text x="460" y="380" font-family="sans-serif" font-size="14" font-weight="bold" fill="#1f2937" text-anchor="middle">
+    怎么判断：问一句「它属于哪个团队？」
+  </text>
+  <text x="300" y="404" font-family="sans-serif" font-size="12" fill="#1e40af" text-anchor="middle">
+    答得出来 → 命名空间级（要写 namespace）
+  </text>
+  <text x="620" y="404" font-family="sans-serif" font-size="12" fill="#15803d" text-anchor="middle">
+    答不出来 → 集群级（不写 namespace）
+  </text>
+  <text x="460" y="424" font-family="sans-serif" font-size="11" fill="#6b7280" text-anchor="middle">
+    依据是「生命周期是否独立于租户」，不是对象大小
+  </text>
+
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#9ca3af"/>
+    </marker>
+  </defs>
+</svg>
