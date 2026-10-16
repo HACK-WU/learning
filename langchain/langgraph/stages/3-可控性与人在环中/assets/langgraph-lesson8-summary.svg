@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" width="900" height="480" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif">
+  <rect width="900" height="480" fill="#ffffff"/>
+  <text x="450" y="32" text-anchor="middle" font-size="19" font-weight="700" fill="#1f2937">课 8 知识全景：Interrupts 人在环中</text>
+  <text x="450" y="54" text-anchor="middle" font-size="12" fill="#6b7280">给刚学完的你复习：怎么停 / 停在哪 / 怎么接 / 怎么落地 → 往下接什么</text>
+
+  <!-- 第一列 -->
+  <rect x="30" y="76" width="200" height="308" rx="10" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="130" y="102" text-anchor="middle" font-size="14" font-weight="700" fill="#1e40af">① 怎么停</text>
+
+  <rect x="48" y="116" width="164" height="66" rx="7" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.2"/>
+  <text x="130" y="136" text-anchor="middle" font-size="12" font-weight="600" fill="#1e3a8a">动态中断</text>
+  <text x="130" y="154" text-anchor="middle" font-size="10" fill="#475569">interrupt() 在节点里</text>
+  <text x="130" y="170" text-anchor="middle" font-size="10" fill="#475569">跑到那行才停</text>
+
+  <rect x="48" y="190" width="164" height="66" rx="7" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.2"/>
+  <text x="130" y="210" text-anchor="middle" font-size="12" font-weight="600" fill="#1e3a8a">静态中断</text>
+  <text x="130" y="228" text-anchor="middle" font-size="10" fill="#475569">interrupt_before=[...]</text>
+  <text x="130" y="244" text-anchor="middle" font-size="10" fill="#475569">节点还没跑就停</text>
+
+  <rect x="48" y="264" width="164" height="52" rx="7" fill="#fef3c7" stroke="#fbbf24" stroke-width="1.2"/>
+  <text x="130" y="284" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">区别</text>
+  <text x="130" y="302" text-anchor="middle" font-size="10" fill="#78350f">静态的 interrupts 是 ()</text>
+
+  <rect x="48" y="324" width="164" height="44" rx="7" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.2"/>
+  <text x="130" y="344" text-anchor="middle" font-size="10" fill="#7f1d1d">静态的 resume 值</text>
+  <text x="130" y="360" text-anchor="middle" font-size="10" fill="#7f1d1d">被丢弃</text>
+
+  <!-- 第二列 -->
+  <rect x="248" y="76" width="200" height="308" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="348" y="102" text-anchor="middle" font-size="14" font-weight="700" fill="#166534">② 停在哪了</text>
+
+  <rect x="266" y="116" width="164" height="66" rx="7" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="348" y="136" text-anchor="middle" font-size="12" font-weight="600" fill="#166534">快照去哪</text>
+  <text x="348" y="154" text-anchor="middle" font-size="10" fill="#475569">next=('pay',)</text>
+  <text x="348" y="170" text-anchor="middle" font-size="10" fill="#475569">values 是原样</text>
+
+  <rect x="266" y="190" width="164" height="66" rx="7" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="348" y="210" text-anchor="middle" font-size="12" font-weight="600" fill="#166534">存档点</text>
+  <text x="348" y="228" text-anchor="middle" font-size="10" fill="#475569">中断后 2 个</text>
+  <text x="348" y="244" text-anchor="middle" font-size="10" fill="#475569">恢复后 3 个</text>
+
+  <rect x="266" y="264" width="164" height="104" rx="7" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.2"/>
+  <text x="348" y="284" text-anchor="middle" font-size="11" font-weight="600" fill="#b91c1c">必须有存档器？</text>
+  <text x="348" y="304" text-anchor="middle" font-size="10" fill="#7f1d1d">实测：不挂不报错</text>
+  <text x="348" y="320" text-anchor="middle" font-size="10" fill="#7f1d1d">会返回 __interrupt__</text>
+  <text x="348" y="338" text-anchor="middle" font-size="10" fill="#7f1d1d">但 get_state 抛错</text>
+  <text x="348" y="356" text-anchor="middle" font-size="10" fill="#7f1d1d">resume 也抛错</text>
+
+  <!-- 第三列 -->
+  <rect x="466" y="76" width="200" height="308" rx="10" fill="#faf5ff" stroke="#d8b4fe" stroke-width="1.5"/>
+  <text x="566" y="102" text-anchor="middle" font-size="14" font-weight="700" fill="#6b21a8">③ 怎么接回去</text>
+
+  <rect x="484" y="116" width="164" height="66" rx="7" fill="#ffffff" stroke="#e9d5ff" stroke-width="1.2"/>
+  <text x="566" y="136" text-anchor="middle" font-size="12" font-weight="600" fill="#6b21a8">Command(resume=)</text>
+  <text x="566" y="154" text-anchor="middle" font-size="10" fill="#475569">值 → interrupt() 的</text>
+  <text x="566" y="170" text-anchor="middle" font-size="10" fill="#475569">返回值</text>
+
+  <rect x="484" y="190" width="164" height="66" rx="7" fill="#ffffff" stroke="#e9d5ff" stroke-width="1.2"/>
+  <text x="566" y="210" text-anchor="middle" font-size="12" font-weight="600" fill="#6b21a8">类型透传</text>
+  <text x="566" y="228" text-anchor="middle" font-size="10" fill="#475569">str/int/dict/list/bool</text>
+  <text x="566" y="244" text-anchor="middle" font-size="10" fill="#475569">都原样拿到</text>
+
+  <rect x="484" y="264" width="164" height="104" rx="7" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.2"/>
+  <text x="566" y="284" text-anchor="middle" font-size="11" font-weight="600" fill="#b91c1c">两个真坑</text>
+  <text x="566" y="304" text-anchor="middle" font-size="10" fill="#7f1d1d">resume=None</text>
+  <text x="566" y="320" text-anchor="middle" font-size="10" fill="#7f1d1d">→ UnboundLocalError</text>
+  <text x="566" y="338" text-anchor="middle" font-size="10" fill="#7f1d1d">update_state 不消中断</text>
+  <text x="566" y="356" text-anchor="middle" font-size="10" fill="#7f1d1d">→ 会反复中断</text>
+
+  <!-- 第四列 -->
+  <rect x="684" y="76" width="186" height="308" rx="10" fill="#fff7ed" stroke="#fdba74" stroke-width="1.5"/>
+  <text x="777" y="102" text-anchor="middle" font-size="14" font-weight="700" fill="#9a3412">④ 落地形态</text>
+
+  <rect x="702" y="116" width="150" height="66" rx="7" fill="#ffffff" stroke="#fed7aa" stroke-width="1.2"/>
+  <text x="777" y="136" text-anchor="middle" font-size="12" font-weight="600" fill="#9a3412">循环审批</text>
+  <text x="777" y="154" text-anchor="middle" font-size="10" fill="#475569">每次 resume</text>
+  <text x="777" y="170" text-anchor="middle" font-size="10" fill="#475569">只推进一个</text>
+
+  <rect x="702" y="190" width="150" height="66" rx="7" fill="#ffffff" stroke="#fed7aa" stroke-width="1.2"/>
+  <text x="777" y="210" text-anchor="middle" font-size="12" font-weight="600" fill="#9a3412">多节点审批</text>
+  <text x="777" y="228" text-anchor="middle" font-size="10" fill="#475569">一个节点一个</text>
+  <text x="777" y="244" text-anchor="middle" font-size="10" fill="#475569">依次 resume</text>
+
+  <rect x="702" y="264" width="150" height="66" rx="7" fill="#ffffff" stroke="#fed7aa" stroke-width="1.2"/>
+  <text x="777" y="284" text-anchor="middle" font-size="12" font-weight="600" fill="#9a3412">前端怎么拿</text>
+  <text x="777" y="302" text-anchor="middle" font-size="10" fill="#475569">st.interrupts</text>
+  <text x="777" y="318" text-anchor="middle" font-size="10" fill="#475569">.value 是问题</text>
+
+  <rect x="702" y="338" width="150" height="30" rx="7" fill="#fef3c7" stroke="#fbbf24" stroke-width="1.2"/>
+  <text x="777" y="357" text-anchor="middle" font-size="10" fill="#92400e">副作用放 interrupt 后</text>
+
+  <!-- 底部 -->
+  <rect x="30" y="398" width="840" height="62" rx="9" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="450" y="420" text-anchor="middle" font-size="13" font-weight="600" fill="#334155">往下接：课 9 时光旅行（就靠中断留下的存档点）｜课 10 子图中断 ｜ 课 13 前端渲染审批卡片</text>
+  <text x="450" y="440" text-anchor="middle" font-size="11" fill="#475569">抉择：动态中断能在节点内问问题、值直接回传（但要防副作用重跑）；静态中断零侵入、适合「跑之前先看一眼」（但 resume 值会被丢弃）</text>
+</svg>

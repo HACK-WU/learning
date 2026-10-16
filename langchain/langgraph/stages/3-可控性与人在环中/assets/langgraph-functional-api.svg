@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" width="900" height="500" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif">
+  <rect width="900" height="500" fill="#ffffff"/>
+  <text x="450" y="34" text-anchor="middle" font-size="19" font-weight="700" fill="#1f2937">画一张流程图再照着连，还是直接写成一串步骤</text>
+  <text x="450" y="56" text-anchor="middle" font-size="13" fill="#6b7280">左边：先把每个环节和连线画出来 ｜ 右边：像写普通脚本一样顺着写下来</text>
+
+  <!-- 左：先画图 -->
+  <rect x="36" y="76" width="400" height="330" rx="10" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="236" y="102" text-anchor="middle" font-size="15" font-weight="600" fill="#1e40af">先把环节和连线画出来</text>
+  <text x="236" y="122" text-anchor="middle" font-size="12" fill="#1e3a8a">（画板写法：先有结构，再填内容）</text>
+
+  <rect x="64" y="138" width="120" height="46" rx="7" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.2"/>
+  <text x="124" y="158" text-anchor="middle" font-size="11" fill="#1e40af">第一步</text>
+  <text x="124" y="176" text-anchor="middle" font-size="9" fill="#475569">填一张共用表</text>
+
+  <path d="M184 161 L212 161" stroke="#60a5fa" stroke-width="2" marker-end="url(#a1)"/>
+
+  <rect x="212" y="138" width="120" height="46" rx="7" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.2"/>
+  <text x="272" y="158" text-anchor="middle" font-size="11" fill="#1e40af">第二步</text>
+  <text x="272" y="176" text-anchor="middle" font-size="9" fill="#475569">读共用表 + 写回</text>
+
+  <path d="M332 161 L360 161" stroke="#60a5fa" stroke-width="2" marker-end="url(#a1)"/>
+
+  <rect x="360" y="138" width="56" height="46" rx="7" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.3"/>
+  <text x="388" y="158" text-anchor="middle" font-size="11" fill="#1e40af">收尾</text>
+  <text x="388" y="176" text-anchor="middle" font-size="9" fill="#1e3a8a">结束</text>
+
+  <path d="M124 184 L124 214 M124 214 L272 214 L272 184" stroke="#93c5fd" stroke-width="1.8" stroke-dasharray="5 3" marker-end="url(#a1)"/>
+  <text x="198" y="232" text-anchor="middle" font-size="9" fill="#1e40af">不满意就退回第一步重来</text>
+
+  <rect x="64" y="248" width="352" height="60" rx="7" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.1"/>
+  <text x="240" y="268" text-anchor="middle" font-size="10" font-weight="600" fill="#1e3a8a">中间那张共用表随时能翻、能改一格</text>
+  <text x="240" y="286" text-anchor="middle" font-size="10" fill="#475569">隔天接着干：知道干到第几步、表上有什么</text>
+  <text x="240" y="300" text-anchor="middle" font-size="10" fill="#059669">回头复盘：每一步都留了档（实测 4 条）</text>
+
+  <rect x="64" y="318" width="352" height="72" rx="7" fill="#fefce8" stroke="#fde047" stroke-width="1.2"/>
+  <text x="240" y="338" text-anchor="middle" font-size="10" font-weight="600" fill="#854d0e">代价：想加一步得先动结构</text>
+  <text x="240" y="356" text-anchor="middle" font-size="10" fill="#78350f">每个环节都得说清"读什么、写什么"</text>
+  <text x="240" y="374" text-anchor="middle" font-size="10" fill="#78350f">步骤一多，图就看不过来了</text>
+
+  <!-- 右：顺着写 -->
+  <rect x="464" y="76" width="400" height="330" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="664" y="102" text-anchor="middle" font-size="15" font-weight="600" fill="#166534">像写普通脚本一样顺着写</text>
+  <text x="664" y="122" text-anchor="middle" font-size="12" fill="#065f46">（脚本写法：代码怎么写，流程就怎么走）</text>
+
+  <rect x="492" y="138" width="344" height="26" rx="6" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="664" y="156" text-anchor="middle" font-size="10" font-family="ui-monospace,monospace" fill="#065f46">a = 做一件事(输入)</text>
+
+  <rect x="492" y="168" width="344" height="26" rx="6" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="664" y="186" text-anchor="middle" font-size="10" font-family="ui-monospace,monospace" fill="#065f46">b = 再做一件事(a)</text>
+
+  <rect x="492" y="198" width="344" height="26" rx="6" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="664" y="216" text-anchor="middle" font-size="10" font-family="ui-monospace,monospace" fill="#065f46">if b 不理想: 重来     ← 就是 if / while</text>
+
+  <rect x="492" y="228" width="344" height="26" rx="6" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="664" y="246" text-anchor="middle" font-size="10" font-family="ui-monospace,monospace" fill="#065f46">return 结果</text>
+
+  <rect x="492" y="264" width="344" height="44" rx="7" fill="#dcfce7" stroke="#22c55e" stroke-width="1.3"/>
+  <text x="664" y="284" text-anchor="middle" font-size="10" font-weight="600" fill="#166534">标注了的小步骤：做完就记一笔</text>
+  <text x="664" y="300" text-anchor="middle" font-size="10" fill="#047857">中途被打断再接着跑，已做的不用重做</text>
+
+  <rect x="492" y="318" width="344" height="72" rx="7" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.2"/>
+  <text x="664" y="338" text-anchor="middle" font-size="10" font-weight="600" fill="#b91c1c">代价：没有那张共用表</text>
+  <text x="664" y="356" text-anchor="middle" font-size="10" fill="#7f1d1d">只知道"上一次交出来什么"（实测 2 条历史）</text>
+  <text x="664" y="374" text-anchor="middle" font-size="10" fill="#7f1d1d">想改中间某一步的结果，做不到逐格改</text>
+
+  <text x="236" y="428" text-anchor="middle" font-size="11" font-weight="600" fill="#1e40af">适合：步骤多、要回头改、要多人接手</text>
+  <text x="664" y="428" text-anchor="middle" font-size="11" font-weight="600" fill="#166534">适合：步骤直、已有脚本、想快点改完</text>
+
+  <rect x="36" y="446" width="828" height="40" rx="8" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="450" y="464" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">两件事是一样的：都能暂停等人、都能接回去跑、都能重试</text>
+  <text x="450" y="480" text-anchor="middle" font-size="11" fill="#475569">区别只在"中间过程放哪"——放共用表上（画板）还是放在代码里（脚本）</text>
+
+  <defs>
+    <marker id="a1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#60a5fa"/></marker>
+  </defs>
+</svg>

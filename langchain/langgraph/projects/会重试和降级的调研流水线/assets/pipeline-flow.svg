@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 480" width="920" height="480" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+  <rect width="920" height="480" fill="#fbfcfe"/>
+  <text x="460" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#1a2b45">会重试和降级的调研流水线</text>
+  <text x="460" y="48" text-anchor="middle" font-size="11.5" fill="#6b7d94">Send 扇出并行 · 子图状态隔离 · 重试只给值得重试的 · 降级不炸图</text>
+
+  <!-- 父图开始 -->
+  <circle cx="60" cy="150" r="5" fill="#4a7fb5"/>
+  <text x="72" y="154" font-size="10.5" fill="#5b6b80">START</text>
+
+  <rect x="30" y="176" width="130" height="50" rx="8" fill="#f3f8fd" stroke="#4a7fb5" stroke-width="1.5"/>
+  <text x="95" y="198" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1a2b45">fanout</text>
+  <text x="95" y="215" text-anchor="middle" font-size="10" fill="#5b6b80">Send × N 扇出</text>
+
+  <path d="M95 168 L95 176" stroke="#8aa4bf" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+
+  <!-- 三个子图 -->
+  <rect x="200" y="94" width="180" height="112" rx="9" fill="#fdf6f0" stroke="#d9a13b" stroke-width="1.4"/>
+  <text x="290" y="114" text-anchor="middle" font-size="11.5" font-weight="700" fill="#8a5d0c">子图 · 官方文档</text>
+  <rect x="214" y="124" width="152" height="30" rx="6" fill="#fff" stroke="#e0c090" stroke-width="1.1"/>
+  <text x="290" y="143" text-anchor="middle" font-size="10.5" fill="#7a6a50">fetch + RetryPolicy</text>
+  <rect x="214" y="158" width="152" height="34" rx="6" fill="#fff" stroke="#e0c090" stroke-width="1.1"/>
+  <text x="290" y="172" text-anchor="middle" font-size="10" fill="#7a6a50">scratch（子图私有）</text>
+  <text x="290" y="184" text-anchor="middle" font-size="9" fill="#a09070">父图看不见</text>
+
+  <rect x="200" y="216" width="180" height="112" rx="9" fill="#fdeeee" stroke="#d98a8a" stroke-width="1.4"/>
+  <text x="290" y="236" text-anchor="middle" font-size="11.5" font-weight="700" fill="#8a2020">子图 · 内部Wiki</text>
+  <rect x="214" y="246" width="152" height="30" rx="6" fill="#fff" stroke="#e8b0b0" stroke-width="1.1"/>
+  <text x="290" y="265" text-anchor="middle" font-size="10.5" fill="#7a5050">fetch 抛 PermanentError</text>
+  <rect x="214" y="280" width="152" height="34" rx="6" fill="#fff5f5" stroke="#d98a8a" stroke-width="1.1"/>
+  <text x="290" y="294" text-anchor="middle" font-size="10" fill="#8a2020">degrade 兜底降级</text>
+  <text x="290" y="306" text-anchor="middle" font-size="9" fill="#a07070">ok=False 不炸图</text>
+
+  <rect x="200" y="338" width="180" height="112" rx="9" fill="#fdf6f0" stroke="#d9a13b" stroke-width="1.4"/>
+  <text x="290" y="358" text-anchor="middle" font-size="11.5" font-weight="700" fill="#8a5d0c">子图 · 博客</text>
+  <rect x="214" y="368" width="152" height="30" rx="6" fill="#fff" stroke="#e0c090" stroke-width="1.1"/>
+  <text x="290" y="387" text-anchor="middle" font-size="10.5" fill="#7a6a50">fetch + RetryPolicy</text>
+  <rect x="214" y="402" width="152" height="34" rx="6" fill="#fff" stroke="#e0c090" stroke-width="1.1"/>
+  <text x="290" y="416" text-anchor="middle" font-size="10" fill="#7a6a50">scratch（子图私有）</text>
+  <text x="290" y="428" text-anchor="middle" font-size="9" fill="#a09070">父图看不见</text>
+
+  <!-- 扇出箭头 -->
+  <path d="M162 194 L198 150" stroke="#8aa4bf" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+  <path d="M162 201 L198 272" stroke="#8aa4bf" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+  <path d="M162 208 L198 394" stroke="#8aa4bf" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+  <text x="166" y="168" font-size="9.5" fill="#5b6b80">并行</text>
+
+  <!-- 只传共有字段 -->
+  <text x="440" y="130" font-size="10" fill="#8a5d0c">只交 result ↑</text>
+  <text x="440" y="290" font-size="10" fill="#8a2020">只交 result ↑</text>
+  <text x="440" y="410" font-size="10" fill="#8a5d0c">只交 result ↑</text>
+  <text x="440" y="150" font-size="9" fill="#a09070">scratch 留下</text>
+  <text x="440" y="310" font-size="9" fill="#a07070">scratch 留下</text>
+
+  <!-- 汇总 -->
+  <rect x="470" y="176" width="140" height="50" rx="8" fill="#eef8f0" stroke="#4f9d69" stroke-width="1.5"/>
+  <text x="540" y="198" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1f5c33">aggregate</text>
+  <text x="540" y="215" text-anchor="middle" font-size="10" fill="#2f7a48">分开成功 / 失败</text>
+
+  <path d="M382 150 L432 150 L432 196 L468 196" stroke="#8aa4bf" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+  <path d="M382 272 L432 272 L432 208 L468 208" stroke="#8aa4bf" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+  <path d="M382 394 L432 394 L432 214 L468 214" stroke="#8aa4bf" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+
+  <!-- 报告 -->
+  <rect x="650" y="176" width="140" height="50" rx="8" fill="#eef8f0" stroke="#4f9d69" stroke-width="1.5"/>
+  <text x="720" y="198" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1f5c33">report</text>
+  <text x="720" y="215" text-anchor="middle" font-size="10" fill="#2f7a48">有成功就出报告</text>
+
+  <path d="M612 201 L648 201" stroke="#8aa4bf" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+  <circle cx="822" cy="201" r="5" fill="#2f5c33" stroke="#1f5c33"/>
+  <path d="M792 201 L817 201" stroke="#8aa4bf" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+  <text x="812" y="224" font-size="10" fill="#2f7a48">END</text>
+
+  <!-- 重试循环 -->
+  <path d="M290 124 Q290 88 320 88 Q344 88 344 110" stroke="#d9a13b" stroke-width="1.4" fill="none" marker-end="url(#o)"/>
+  <text x="350" y="106" font-size="9.5" fill="#8a5d0c">TransientError → 重试</text>
+
+  <!-- 底部实测注记 -->
+  <rect x="30" y="392" width="140" height="58" rx="8" fill="#fff8e8" stroke="#e0c090" stroke-width="1.2"/>
+  <text x="100" y="410" text-anchor="middle" font-size="10" font-weight="600" fill="#8a5d0c">实测</text>
+  <text x="100" y="425" text-anchor="middle" font-size="9" fill="#8a6a3a">RetryPolicy 在 langgraph.types</text>
+  <text x="100" y="438" text-anchor="middle" font-size="9" fill="#8a6a3a">默认 retry_on 不重试 ValueError</text>
+
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#8aa4bf"/></marker>
+    <marker id="o" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#d9a13b"/></marker>
+  </defs>
+</svg>

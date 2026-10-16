@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="470" viewBox="0 0 900 470" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="900" height="470" fill="#ffffff"/>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5b6b7f"/>
+    </marker>
+    <marker id="arrowDash" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#9aa7b6"/>
+    </marker>
+  </defs>
+
+  <text x="450" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="#16324f">同样一件事，两种交付方式</text>
+
+  <rect x="20" y="44" width="390" height="400" rx="12" fill="#f7f9fc" stroke="#c9d4e2" stroke-width="1.5"/>
+  <text x="215" y="74" text-anchor="middle" font-size="16" font-weight="700" fill="#16324f">现在的做法：整件事交给它</text>
+
+  <rect x="145" y="100" width="140" height="42" rx="8" fill="#e5f4ff" stroke="#006ddd" stroke-width="1.5"/>
+  <text x="215" y="126" text-anchor="middle" font-size="14" fill="#16324f">你的要求</text>
+
+  <line x1="215" y1="142" x2="215" y2="178" stroke="#5b6b7f" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <rect x="70" y="182" width="290" height="96" rx="10" fill="#33415c"/>
+  <text x="215" y="212" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">它自己想、自己决定、自己循环</text>
+  <text x="215" y="236" text-anchor="middle" font-size="13" fill="#d6dee8">中间走了哪几步、卡在哪一步、</text>
+  <text x="215" y="256" text-anchor="middle" font-size="13" fill="#d6dee8">为什么停 —— 你全程看不见</text>
+
+  <line x1="215" y1="278" x2="215" y2="308" stroke="#5b6b7f" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <rect x="125" y="312" width="180" height="42" rx="8" fill="#fde8e8" stroke="#c0392b" stroke-width="1.5"/>
+  <text x="215" y="338" text-anchor="middle" font-size="14" fill="#8f2318">结果，好坏只能看运气</text>
+
+  <text x="215" y="392" text-anchor="middle" font-size="13" fill="#7b8798">想改一步、想中途拦一下，都无从下手</text>
+  <text x="215" y="412" text-anchor="middle" font-size="13" fill="#7b8798">因为它根本不是"几步"，而是一整坨</text>
+
+  <rect x="450" y="44" width="430" height="400" rx="12" fill="#f7f9fc" stroke="#c9d4e2" stroke-width="1.5"/>
+  <text x="665" y="74" text-anchor="middle" font-size="16" font-weight="700" fill="#16324f">本课的做法：地图你来画</text>
+
+  <rect x="690" y="150" width="172" height="126" rx="10" fill="#eaf7ee" stroke="#2e8540" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="776" y="176" text-anchor="middle" font-size="14" font-weight="700" fill="#1d5c2b">共用记录</text>
+  <text x="776" y="202" text-anchor="middle" font-size="12" fill="#33513a">每步写进去的东西，</text>
+  <text x="776" y="222" text-anchor="middle" font-size="12" fill="#33513a">后面每一步都读得到</text>
+  <text x="776" y="250" text-anchor="middle" font-size="12" fill="#33513a">（停下来也不丢）</text>
+
+  <rect x="470" y="95" width="110" height="38" rx="8" fill="#e5f4ff" stroke="#006ddd" stroke-width="1.5"/>
+  <text x="525" y="119" text-anchor="middle" font-size="13" fill="#16324f">你的要求</text>
+
+  <line x1="525" y1="133" x2="525" y2="155" stroke="#5b6b7f" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <rect x="468" y="158" width="114" height="38" rx="8" fill="#e5f4ff" stroke="#006ddd" stroke-width="1.5"/>
+  <text x="525" y="182" text-anchor="middle" font-size="13" fill="#16324f">第 1 步（你定的）</text>
+
+  <line x1="525" y1="196" x2="525" y2="217" stroke="#5b6b7f" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <rect x="468" y="220" width="114" height="38" rx="8" fill="#fff4e0" stroke="#d98200" stroke-width="1.5"/>
+  <text x="525" y="244" text-anchor="middle" font-size="13" fill="#8a5200">岔路口（规则你写）</text>
+
+  <path d="M 525 258 L 525 274 L 495 274 L 495 292" fill="none" stroke="#5b6b7f" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M 525 258 L 525 274 L 665 274 L 665 292" fill="none" stroke="#5b6b7f" stroke-width="1.8" marker-end="url(#arrow)"/>
+
+  <rect x="432" y="295" width="126" height="40" rx="8" fill="#e5f4ff" stroke="#006ddd" stroke-width="1.5"/>
+  <text x="495" y="320" text-anchor="middle" font-size="13" fill="#16324f">分支一：照规矩办</text>
+
+  <rect x="602" y="295" width="126" height="40" rx="8" fill="#e5f4ff" stroke="#006ddd" stroke-width="1.5"/>
+  <text x="665" y="320" text-anchor="middle" font-size="13" fill="#16324f">分支二：让它判断</text>
+
+  <path d="M 495 335 L 495 354 L 575 354 L 575 368" fill="none" stroke="#5b6b7f" stroke-width="1.8" marker-end="url(#arrow)"/>
+  <path d="M 665 335 L 665 354 L 575 354" fill="none" stroke="#5b6b7f" stroke-width="1.8"/>
+
+  <rect x="512" y="371" width="126" height="40" rx="8" fill="#e5f4ff" stroke="#006ddd" stroke-width="1.5"/>
+  <text x="575" y="395" text-anchor="middle" font-size="13" fill="#16324f">汇合：继续往下</text>
+
+  <path d="M 582 177 L 690 196" fill="none" stroke="#9aa7b6" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowDash)"/>
+  <path d="M 728 300 L 786 276" fill="none" stroke="#9aa7b6" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowDash)"/>
+
+  <text x="665" y="432" text-anchor="middle" font-size="13" fill="#7b8798">每一步都能单独看、单独改、单独拦一下</text>
+</svg>

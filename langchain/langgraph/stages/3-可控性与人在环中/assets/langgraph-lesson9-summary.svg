@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" width="900" height="480" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif">
+  <rect width="900" height="480" fill="#ffffff"/>
+  <text x="450" y="32" text-anchor="middle" font-size="19" font-weight="700" fill="#1f2937">课 9 知识全景：Time-travel 回放与分叉</text>
+  <text x="450" y="54" text-anchor="middle" font-size="12" fill="#6b7280">给刚学完的你复习：怎么翻 / 翻到哪 / 怎么改 / 怎么选 → 往下接什么</text>
+
+  <!-- 第一列 -->
+  <rect x="30" y="76" width="200" height="308" rx="10" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="130" y="102" text-anchor="middle" font-size="14" font-weight="700" fill="#1e40af">① 怎么翻历史</text>
+
+  <rect x="48" y="116" width="164" height="66" rx="7" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.2"/>
+  <text x="130" y="136" text-anchor="middle" font-size="12" font-weight="600" fill="#1e3a8a">get_state_history</text>
+  <text x="130" y="154" text-anchor="middle" font-size="10" fill="#475569">返回 StateSnapshot</text>
+  <text x="130" y="170" text-anchor="middle" font-size="10" fill="#475569">迭代器，新 → 旧</text>
+
+  <rect x="48" y="190" width="164" height="66" rx="7" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.2"/>
+  <text x="130" y="210" text-anchor="middle" font-size="12" font-weight="600" fill="#1e3a8a">每步一张</text>
+  <text x="130" y="228" text-anchor="middle" font-size="10" fill="#475569">3 节点 = 5 条</text>
+  <text x="130" y="244" text-anchor="middle" font-size="10" fill="#475569">含 __start__ 那张</text>
+
+  <rect x="48" y="264" width="164" height="104" rx="7" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="130" y="284" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">翻页参数</text>
+  <text x="130" y="304" text-anchor="middle" font-size="10" fill="#475569">limit=2 → 只 2 条</text>
+  <text x="130" y="322" text-anchor="middle" font-size="10" fill="#475569">before=某条 →</text>
+  <text x="130" y="338" text-anchor="middle" font-size="10" fill="#475569">取它更早的</text>
+  <text x="130" y="356" text-anchor="middle" font-size="10" fill="#475569">filter 按元数据筛</text>
+
+  <!-- 第二列 -->
+  <rect x="248" y="76" width="200" height="308" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="348" y="102" text-anchor="middle" font-size="14" font-weight="700" fill="#166534">② 快照里有什么</text>
+
+  <rect x="266" y="116" width="164" height="66" rx="7" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="348" y="136" text-anchor="middle" font-size="12" font-weight="600" fill="#166534">next / values</text>
+  <text x="348" y="154" text-anchor="middle" font-size="10" fill="#475569">卡在哪 + 状态</text>
+  <text x="348" y="170" text-anchor="middle" font-size="10" fill="#475569">读它不动图</text>
+
+  <rect x="266" y="190" width="164" height="66" rx="7" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="348" y="210" text-anchor="middle" font-size="12" font-weight="600" fill="#166534">config</text>
+  <text x="348" y="228" text-anchor="middle" font-size="10" fill="#475569">含 checkpoint_id</text>
+  <text x="348" y="244" text-anchor="middle" font-size="10" fill="#475569">直接当坐标用</text>
+
+  <rect x="266" y="264" width="164" height="104" rx="7" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="348" y="284" text-anchor="middle" font-size="11" font-weight="600" fill="#166534">parent_config</text>
+  <text x="348" y="304" text-anchor="middle" font-size="10" fill="#475569">串成一条链</text>
+  <text x="348" y="322" text-anchor="middle" font-size="10" fill="#475569">课 5 埋的伏笔</text>
+  <text x="348" y="340" text-anchor="middle" font-size="10" fill="#475569">metadata: step</text>
+  <text x="348" y="356" text-anchor="middle" font-size="10" fill="#475569">source=loop/input</text>
+
+  <!-- 第三列 -->
+  <rect x="466" y="76" width="200" height="308" rx="10" fill="#faf5ff" stroke="#d8b4fe" stroke-width="1.5"/>
+  <text x="566" y="102" text-anchor="middle" font-size="14" font-weight="700" fill="#6b21a8">③ 怎么改（分叉）</text>
+
+  <rect x="484" y="116" width="164" height="66" rx="7" fill="#ffffff" stroke="#e9d5ff" stroke-width="1.2"/>
+  <text x="566" y="136" text-anchor="middle" font-size="12" font-weight="600" fill="#6b21a8">update_state</text>
+  <text x="566" y="154" text-anchor="middle" font-size="10" fill="#475569">传历史点的 config</text>
+  <text x="566" y="170" text-anchor="middle" font-size="10" fill="#475569">= 从那里分叉</text>
+
+  <rect x="484" y="190" width="164" height="66" rx="7" fill="#ffffff" stroke="#e9d5ff" stroke-width="1.2"/>
+  <text x="566" y="210" text-anchor="middle" font-size="12" font-weight="600" fill="#6b21a8">invoke(None)</text>
+  <text x="566" y="228" text-anchor="middle" font-size="10" fill="#475569">从分叉点继续</text>
+  <text x="566" y="244" text-anchor="middle" font-size="10" fill="#475569">只重跑后面的</text>
+
+  <rect x="484" y="264" width="164" height="104" rx="7" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.2"/>
+  <text x="566" y="284" text-anchor="middle" font-size="11" font-weight="600" fill="#b91c1c">as_node 参数</text>
+  <text x="566" y="304" text-anchor="middle" font-size="10" fill="#7f1d1d">不传：沿用上一个</text>
+  <text x="566" y="322" text-anchor="middle" font-size="10" fill="#7f1d1d">传错名字 → 直接抛</text>
+  <text x="566" y="340" text-anchor="middle" font-size="10" fill="#7f1d1d">update_state 第三参</text>
+  <text x="566" y="356" text-anchor="middle" font-size="10" fill="#7f1d1d">不是 thread_id！</text>
+
+  <!-- 第四列 -->
+  <rect x="684" y="76" width="186" height="308" rx="10" fill="#fff7ed" stroke="#fdba74" stroke-width="1.5"/>
+  <text x="777" y="102" text-anchor="middle" font-size="14" font-weight="700" fill="#9a3412">④ 同 thread 还是新</text>
+
+  <rect x="702" y="116" width="150" height="80" rx="7" fill="#ffffff" stroke="#fed7aa" stroke-width="1.2"/>
+  <text x="777" y="136" text-anchor="middle" font-size="12" font-weight="600" fill="#9a3412">同 thread</text>
+  <text x="777" y="154" text-anchor="middle" font-size="10" fill="#475569">状态 ✅ 进度 ✅</text>
+  <text x="777" y="170" text-anchor="middle" font-size="10" fill="#475569">但改写原历史</text>
+  <text x="777" y="188" text-anchor="middle" font-size="10" fill="#475569">5 条 → 8 条</text>
+
+  <rect x="702" y="204" width="150" height="80" rx="7" fill="#ffffff" stroke="#fed7aa" stroke-width="1.2"/>
+  <text x="777" y="224" text-anchor="middle" font-size="12" font-weight="600" fill="#9a3412">跨 thread</text>
+  <text x="777" y="242" text-anchor="middle" font-size="10" fill="#475569">原历史 ✅ 不动</text>
+  <text x="777" y="258" text-anchor="middle" font-size="10" fill="#475569">但状态 ❌ 进度 ❌</text>
+  <text x="777" y="276" text-anchor="middle" font-size="10" fill="#475569">会从头重跑</text>
+
+  <rect x="702" y="292" width="150" height="76" rx="7" fill="#fef3c7" stroke="#fbbf24" stroke-width="1.2"/>
+  <text x="777" y="312" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">怎么选</text>
+  <text x="777" y="330" text-anchor="middle" font-size="10" fill="#78350f">要留证据 → 新</text>
+  <text x="777" y="348" text-anchor="middle" font-size="10" fill="#78350f">要省事 → 同</text>
+
+  <!-- 底部 -->
+  <rect x="30" y="398" width="840" height="62" rx="9" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="450" y="420" text-anchor="middle" font-size="13" font-weight="600" fill="#334155">往下接：课 10 容错与子图（子图有自己的 checkpoint_ns，历史更深一层）｜课 12 测试（回放即回归测试）</text>
+  <text x="450" y="440" text-anchor="middle" font-size="11" fill="#475569">抉择：同 thread 分叉省事但改写原历史（审计场景不能接受）；跨 thread 分叉保留证据但要重跑（进度会丢，Graph API 层面无解）</text>
+</svg>

@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" width="900" height="500" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif">
+  <rect width="900" height="500" fill="#ffffff"/>
+  <text x="450" y="30" text-anchor="middle" font-size="19" font-weight="700" fill="#1f2937">课 13 知识全景：Deployment 与 Observability</text>
+  <text x="450" y="52" text-anchor="middle" font-size="12" fill="#6b7280">给刚学完的你复习：放哪 / 怎么边跑边看 / 跑坏怎么查 → 全课收官</text>
+
+  <!-- 列1 部署 -->
+  <rect x="28" y="72" width="202" height="330" rx="10" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="129" y="98" text-anchor="middle" font-size="14" font-weight="700" fill="#1e40af">① 放哪</text>
+
+  <rect x="46" y="112" width="166" height="62" rx="7" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.2"/>
+  <text x="129" y="132" text-anchor="middle" font-size="12" font-weight="600" fill="#1e3a8a">langgraph dev</text>
+  <text x="129" y="150" text-anchor="middle" font-size="9" fill="#475569">内存存档，随开随关</text>
+  <text x="129" y="166" text-anchor="middle" font-size="9" fill="#475569">实测 /ok /info 通</text>
+
+  <rect x="46" y="182" width="166" height="76" rx="7" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.4"/>
+  <text x="129" y="202" text-anchor="middle" font-size="11" font-weight="600" fill="#b91c1c">自托管三道门 ★</text>
+  <text x="129" y="220" text-anchor="middle" font-size="9" fill="#7f1d1d">① REDIS_URI</text>
+  <text x="129" y="236" text-anchor="middle" font-size="9" fill="#7f1d1d">② POSTGRES_URI</text>
+  <text x="129" y="252" text-anchor="middle" font-size="9" font-weight="700" fill="#dc2626">③ LICENSE_KEY</text>
+
+  <rect x="46" y="266" width="166" height="62" rx="7" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.2"/>
+  <text x="129" y="286" text-anchor="middle" font-size="11" font-weight="600" fill="#1e3a8a">托管平台</text>
+  <text x="129" y="304" text-anchor="middle" font-size="9" fill="#475569">三样平台备好</text>
+  <text x="129" y="320" text-anchor="middle" font-size="9" fill="#475569">数据出机房，按量付费</text>
+
+  <rect x="46" y="336" width="166" height="50" rx="7" fill="#fefce8" stroke="#fde047" stroke-width="1.2"/>
+  <text x="129" y="356" text-anchor="middle" font-size="10" font-weight="600" fill="#854d0e">python_version</text>
+  <text x="129" y="372" text-anchor="middle" font-size="9" fill="#78350f">默认 3.11（非本机）</text>
+
+  <!-- 列2 调试界面 -->
+  <rect x="248" y="72" width="202" height="330" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="349" y="98" text-anchor="middle" font-size="14" font-weight="700" fill="#166534">② 边跑边看</text>
+
+  <rect x="266" y="112" width="166" height="62" rx="7" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="349" y="132" text-anchor="middle" font-size="11" font-weight="600" fill="#166534">Studio</text>
+  <text x="349" y="150" text-anchor="middle" font-size="9" fill="#475569">网页里一步步看</text>
+  <text x="349" y="166" text-anchor="middle" font-size="9" fill="#475569">本地 URL 实测给出</text>
+
+  <rect x="266" y="182" width="166" height="76" rx="7" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="349" y="202" text-anchor="middle" font-size="11" font-weight="600" fill="#166534">Agent Chat UI</text>
+  <text x="349" y="220" text-anchor="middle" font-size="9" fill="#475569">现成聊天界面</text>
+  <text x="349" y="236" text-anchor="middle" font-size="9" fill="#475569">npm 起，指到本服务</text>
+  <text x="349" y="252" text-anchor="middle" font-size="9" fill="#059669">不用自己写前端</text>
+
+  <rect x="266" y="266" width="166" height="62" rx="7" fill="#fefce8" stroke="#fde047" stroke-width="1.2"/>
+  <text x="349" y="286" text-anchor="middle" font-size="11" font-weight="600" fill="#854d0e">SSE 是接线口 ★</text>
+  <text x="349" y="304" text-anchor="middle" font-size="9" fill="#78350f">实测 event: metadata</text>
+  <text x="349" y="320" text-anchor="middle" font-size="9" fill="#78350f">event: updates</text>
+
+  <rect x="266" y="336" width="166" height="50" rx="7" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="349" y="356" text-anchor="middle" font-size="10" fill="#166534">前端方向（延伸）</text>
+  <text x="349" y="372" text-anchor="middle" font-size="9" fill="#475569">useStream / 自定义流</text>
+
+  <!-- 列3 可观测 -->
+  <rect x="468" y="72" width="202" height="330" rx="10" fill="#fff7ed" stroke="#fdba74" stroke-width="1.5"/>
+  <text x="569" y="98" text-anchor="middle" font-size="14" font-weight="700" fill="#9a3412">③ 跑坏怎么查</text>
+
+  <rect x="486" y="112" width="166" height="76" rx="7" fill="#d1fae5" stroke="#059669" stroke-width="1.4"/>
+  <text x="569" y="132" text-anchor="middle" font-size="11" font-weight="600" fill="#065f46">接入点就是一个开关</text>
+  <text x="569" y="150" text-anchor="middle" font-size="9" font-family="ui-monospace,monospace" fill="#047857">LANGSMITH_API_KEY</text>
+  <text x="569" y="168" text-anchor="middle" font-size="9" fill="#047857">实测 flag:</text>
+  <text x="569" y="184" text-anchor="middle" font-size="9" font-weight="700" fill="#059669">false → true</text>
+
+  <rect x="486" y="196" width="166" height="62" rx="7" fill="#ffffff" stroke="#fed7aa" stroke-width="1.2"/>
+  <text x="569" y="216" text-anchor="middle" font-size="11" font-weight="600" fill="#9a3412">没有 key 不阻断 ★</text>
+  <text x="569" y="234" text-anchor="middle" font-size="9" fill="#475569">只 warning + 401</text>
+  <text x="569" y="250" text-anchor="middle" font-size="9" fill="#059669">业务照跑（实测）</text>
+
+  <rect x="486" y="266" width="166" height="62" rx="7" fill="#ffffff" stroke="#fed7aa" stroke-width="1.2"/>
+  <text x="569" y="286" text-anchor="middle" font-size="11" font-weight="600" fill="#9a3412">trace 能看什么</text>
+  <text x="569" y="304" text-anchor="middle" font-size="9" fill="#475569">每一步输入输出</text>
+  <text x="569" y="320" text-anchor="middle" font-size="9" fill="#475569">耗时 / token / 报错</text>
+
+  <rect x="486" y="336" width="166" height="50" rx="7" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.2"/>
+  <text x="569" y="356" text-anchor="middle" font-size="10" font-weight="600" fill="#1e40af">还有一条免费路</text>
+  <text x="569" y="372" text-anchor="middle" font-size="9" fill="#1e3a8a">/metrics（实测 200）</text>
+
+  <!-- 列4 撞出来的 -->
+  <rect x="688" y="72" width="184" height="330" rx="10" fill="#faf5ff" stroke="#d8b4fe" stroke-width="1.5"/>
+  <text x="780" y="98" text-anchor="middle" font-size="14" font-weight="700" fill="#6b21a8">④ 撞出来的</text>
+
+  <rect x="704" y="112" width="152" height="56" rx="7" fill="#ffffff" stroke="#e9d5ff" stroke-width="1.2"/>
+  <text x="780" y="132" text-anchor="middle" font-size="10" fill="#6b21a8">镜像默认 3.11</text>
+  <text x="780" y="148" text-anchor="middle" font-size="9" fill="#7e22ce">不是你本机版本</text>
+  <text x="780" y="162" text-anchor="middle" font-size="9" fill="#7e22ce">实测 :3.11 基础镜像</text>
+
+  <rect x="704" y="176" width="152" height="56" rx="7" fill="#ffffff" stroke="#e9d5ff" stroke-width="1.2"/>
+  <text x="780" y="196" text-anchor="middle" font-size="10" fill="#6b21a8">build 成功 ≠ 能跑</text>
+  <text x="780" y="212" text-anchor="middle" font-size="9" fill="#7e22ce">打包只看依赖</text>
+  <text x="780" y="226" text-anchor="middle" font-size="9" fill="#7e22ce">不看运行时配置</text>
+
+  <rect x="704" y="240" width="152" height="56" rx="7" fill="#ffffff" stroke="#e9d5ff" stroke-width="1.2"/>
+  <text x="780" y="260" text-anchor="middle" font-size="10" fill="#6b21a8">fake key 也不行</text>
+  <text x="780" y="276" text-anchor="middle" font-size="9" fill="#7e22ce">密钥是 JWT</text>
+  <text x="780" y="290" text-anchor="middle" font-size="9" fill="#7e22ce">Not enough segments</text>
+
+  <rect x="704" y="304" width="152" height="56" rx="7" fill="#ffffff" stroke="#e9d5ff" stroke-width="1.2"/>
+  <text x="780" y="324" text-anchor="middle" font-size="10" fill="#6b21a8">dockerfile_lines</text>
+  <text x="780" y="340" text-anchor="middle" font-size="9" fill="#7e22ce">实测能进镜像</text>
+  <text x="780" y="354" text-anchor="middle" font-size="9" fill="#7e22ce">补装系统依赖用</text>
+
+  <rect x="704" y="368" width="152" height="14" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="780" y="379" text-anchor="middle" font-size="8" fill="#475569">/info 是自证入口</text>
+
+  <!-- 底部 -->
+  <rect x="28" y="412" width="844" height="70" rx="9" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="450" y="434" text-anchor="middle" font-size="13" font-weight="600" fill="#334155">🎉 全课 13 课知识点到此讲完 —— 往下是结课综合实战项目（跨阶段整合，计入阶段 4 收束）</text>
+  <text x="450" y="454" text-anchor="middle" font-size="11" fill="#475569">抉择：部署是"谁替你备那三样"（自托管自己备 / 平台备）；调试界面靠 SSE，Studio 与 Chat UI 都是它的消费者；</text>
+  <text x="450" y="472" text-anchor="middle" font-size="11" fill="#475569">可观测的接入点就一个环境变量，且没有它也不影响业务——所以它应该是默认开的，不是出事后才接</text>
+</svg>

@@ -1,0 +1,7 @@
+{
+  "dependencies": ["."],
+  "graphs": {
+    "cleanup_pipeline": "./pipeline/flow.py:pipeline"
+  },
+  "python_version": "3.12"
+}

@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" width="900" height="500" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif">
+  <rect width="900" height="500" fill="#ffffff"/>
+  <text x="450" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#1f2937">第 3 跳：三道审批 + 副作用归位</text>
+  <text x="450" y="52" text-anchor="middle" font-size="12" fill="#6b7280">高亮为本跳新增：副作用移到 interrupt 之后、审批点依次 resume、前端渲染审批卡片</text>
+
+  <!-- 流程 -->
+  <rect x="30" y="70" width="840" height="120" rx="9" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3"/>
+
+  <rect x="48" y="88" width="120" height="84" rx="7" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.2"/>
+  <text x="108" y="112" text-anchor="middle" font-size="11" font-weight="600" fill="#1e40af">查订单</text>
+  <text x="108" y="132" text-anchor="middle" font-size="9" fill="#475569">无副作用</text>
+  <text x="108" y="152" text-anchor="middle" font-size="9" fill="#475569">随便跑</text>
+
+  <path d="M168 130 L196 130" stroke="#6366f1" stroke-width="2" marker-end="url(#a1)"/>
+
+  <rect x="196" y="88" width="150" height="84" rx="7" fill="#faf5ff" stroke="#c084fc" stroke-width="1.4"/>
+  <text x="271" y="110" text-anchor="middle" font-size="11" font-weight="600" fill="#6b21a8">客服审批</text>
+  <text x="271" y="128" text-anchor="middle" font-size="9" fill="#475569">interrupt() 在</text>
+  <text x="271" y="144" text-anchor="middle" font-size="9" fill="#475569">副作用之前</text>
+  <text x="271" y="162" text-anchor="middle" font-size="9" font-weight="600" fill="#6b21a8">① 第一道</text>
+
+  <path d="M346 130 L374 130" stroke="#6366f1" stroke-width="2" marker-end="url(#a1)"/>
+
+  <rect x="374" y="88" width="150" height="84" rx="7" fill="#faf5ff" stroke="#c084fc" stroke-width="1.4"/>
+  <text x="449" y="110" text-anchor="middle" font-size="11" font-weight="600" fill="#6b21a8">主管审批</text>
+  <text x="449" y="128" text-anchor="middle" font-size="9" fill="#475569">金额 &gt; 1000</text>
+  <text x="449" y="144" text-anchor="middle" font-size="9" fill="#475569">才问</text>
+  <text x="449" y="162" text-anchor="middle" font-size="9" font-weight="600" fill="#6b21a8">② 第二道</text>
+
+  <path d="M524 130 L552 130" stroke="#6366f1" stroke-width="2" marker-end="url(#a1)"/>
+
+  <rect x="552" y="88" width="140" height="84" rx="7" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.8"/>
+  <text x="622" y="110" text-anchor="middle" font-size="11" font-weight="700" fill="#92400e">执行退款</text>
+  <text x="622" y="128" text-anchor="middle" font-size="9" font-weight="600" fill="#78350f">副作用在这里</text>
+  <text x="622" y="144" text-anchor="middle" font-size="9" fill="#78350f">所有审批之后</text>
+  <text x="622" y="162" text-anchor="middle" font-size="9" font-weight="600" fill="#92400e">✅ 只跑一次</text>
+
+  <path d="M692 130 L720 130" stroke="#6366f1" stroke-width="2" marker-end="url(#a1)"/>
+
+  <rect x="720" y="88" width="132" height="84" rx="7" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.2"/>
+  <text x="786" y="112" text-anchor="middle" font-size="11" font-weight="600" fill="#1e40af">发通知</text>
+  <text x="786" y="132" text-anchor="middle" font-size="9" fill="#475569">副作用</text>
+  <text x="786" y="152" text-anchor="middle" font-size="9" fill="#475569">也在之后</text>
+
+  <defs>
+    <marker id="a1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#6366f1"/></marker>
+  </defs>
+
+  <!-- 副作用铁律 -->
+  <rect x="30" y="206" width="410" height="130" rx="9" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="235" y="228" text-anchor="middle" font-size="13" font-weight="700" fill="#b91c1c">⚠ 铁律：副作用必须在 interrupt 之后</text>
+  <rect x="48" y="240" width="374" height="82" rx="6" fill="#ffffff" stroke="#fecaca" stroke-width="1.1"/>
+  <text x="235" y="260" text-anchor="middle" font-size="10" fill="#7f1d1d">❌ 放在之前（实测）</text>
+  <text x="66" y="278" font-size="9" font-family="ui-monospace,monospace" fill="#0f172a">[第1次] 扣款</text>
+  <text x="66" y="294" font-size="9" font-family="ui-monospace,monospace" fill="#0f172a">[第2次] 扣款   ← 恢复又来一遍</text>
+  <text x="235" y="312" text-anchor="middle" font-size="10" font-weight="600" fill="#059669">✅ 放在之后 → 只执行一次</text>
+
+  <!-- resume 次数 -->
+  <rect x="460" y="206" width="410" height="130" rx="9" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="665" y="228" text-anchor="middle" font-size="13" font-weight="700" fill="#166534">resume 次数 = interrupt 个数</text>
+  <rect x="478" y="240" width="374" height="82" rx="6" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.1"/>
+  <text x="665" y="260" text-anchor="middle" font-size="10" fill="#065f46">实测（两道审批）</text>
+  <text x="490" y="278" font-size="9" font-family="ui-monospace,monospace" fill="#0f172a">第1次: ['客服审批?']  log=[]</text>
+  <text x="490" y="294" font-size="9" font-family="ui-monospace,monospace" fill="#0f172a">第2次: ['主管审批?']  log=['客服:ok']</text>
+  <text x="490" y="312" font-size="9" font-family="ui-monospace,monospace" fill="#0f172a">第3次: []            → 结束</text>
+
+  <!-- 前端循环 -->
+  <rect x="30" y="352" width="410" height="128" rx="9" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.3"/>
+  <text x="235" y="374" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">前端交互循环（本跳新增）</text>
+  <rect x="48" y="386" width="374" height="80" rx="6" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.1"/>
+  <text x="66" y="404" font-size="9" font-family="ui-monospace,monospace" fill="#0f172a">while result.get("__interrupt__"):</text>
+  <text x="66" y="420" font-size="9" font-family="ui-monospace,monospace" fill="#0f172a">  q = result["__interrupt__"][0].value</text>
+  <text x="66" y="436" font-size="9" font-family="ui-monospace,monospace" fill="#0f172a">  ans = ask_human(q)</text>
+  <text x="66" y="452" font-size="9" font-family="ui-monospace,monospace" fill="#0f172a">  result = g.invoke(Command(resume=ans), cfg)</text>
+
+  <!-- 三条铁律 -->
+  <rect x="460" y="352" width="410" height="128" rx="9" fill="#fefce8" stroke="#fde047" stroke-width="1.4"/>
+  <text x="665" y="374" text-anchor="middle" font-size="12" font-weight="700" fill="#854d0e">三条必须记住（全是实测）</text>
+  <text x="665" y="396" text-anchor="middle" font-size="10" fill="#78350f">① resume 用 Command，别用 update_state（会反复中断）</text>
+  <text x="665" y="414" text-anchor="middle" font-size="10" fill="#78350f">② thread_id 必须一致，否则找不到存档</text>
+  <text x="665" y="432" text-anchor="middle" font-size="10" fill="#78350f">③ resume 别传 None（1.2.11 会 UnboundLocalError）</text>
+  <text x="665" y="452" text-anchor="middle" font-size="10" fill="#78350f">④ 不挂 checkpointer：能停，但恢复不了</text>
+</svg>

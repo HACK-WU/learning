@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="320" viewBox="0 0 900 320" font-family="system-ui,-apple-system,Segoe UI,sans-serif">
+  <rect width="900" height="320" fill="#fbfaf7"/>
+  <text x="24" y="30" font-size="15" font-weight="700" fill="#1a1a1a">解法 A：传连接池而非单连接（并显式给 max_size）</text>
+
+  <g>
+    <rect x="30" y="62" width="200" height="76" rx="9" fill="#fdecec" stroke="#c0392b" stroke-width="1.8"/>
+    <text x="130" y="86" font-size="12" text-anchor="middle" fill="#1a1a1a">❌ 单连接（常见写法）</text>
+    <text x="130" y="106" font-size="10" text-anchor="middle" fill="#555">PostgresSaver(one_conn)</text>
+    <text x="130" y="122" font-size="10" text-anchor="middle" fill="#555">所有 checkpoint 操作</text>
+    <text x="130" y="134" font-size="10" text-anchor="middle" fill="#c0392b">在 1 条连接上排队串行</text>
+  </g>
+
+  <g>
+    <rect x="270" y="50" width="180" height="46" rx="8" fill="#dceefb" stroke="#2b7cba" stroke-width="1.5"/>
+    <text x="360" y="72" font-size="11" text-anchor="middle" fill="#1a1a1a">并发 N 个 agent run</text>
+    <text x="360" y="87" font-size="10" text-anchor="middle" fill="#555">各自要写 checkpoint</text>
+  </g>
+  <path d="M450 73 L500 73" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <g>
+    <rect x="500" y="42" width="200" height="108" rx="9" fill="#eaf5ea" stroke="#3d8b3d" stroke-width="1.8"/>
+    <text x="600" y="64" font-size="12" text-anchor="middle" fill="#1a1a1a">✅ AsyncConnectionPool</text>
+    <text x="600" y="84" font-size="10" text-anchor="middle" fill="#555">max_size=20（显式）</text>
+    <text x="600" y="102" font-size="10" text-anchor="middle" fill="#555">默认 min_size=4,</text>
+    <text x="600" y="117" font-size="10" text-anchor="middle" fill="#555">max_size=None → 封顶 4 条</text>
+    <text x="600" y="134" font-size="10" text-anchor="middle" fill="#555">（不显式给 = 没扩容）</text>
+  </g>
+  <path d="M700 96 L750 96" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <g>
+    <rect x="750" y="56" width="120" height="80" rx="9" fill="#f2ecf9" stroke="#7a5ea8" stroke-width="1.5"/>
+    <text x="810" y="78" font-size="11" text-anchor="middle" fill="#1a1a1a">PG</text>
+    <text x="810" y="96" font-size="10" text-anchor="middle" fill="#555">max_connections</text>
+    <text x="810" y="111" font-size="10" text-anchor="middle" fill="#555">默认 100</text>
+    <text x="810" y="126" font-size="10" text-anchor="middle" fill="#555">（硬上限）</text>
+  </g>
+
+  <g>
+    <rect x="30" y="170" width="830" height="58" rx="9" fill="#fdecec" stroke="#c0392b" stroke-width="2"/>
+    <text x="46" y="190" font-size="12" font-weight="700" fill="#c0392b">✗ 失效点</text>
+    <text x="46" y="208" font-size="11.5" fill="#1a1a1a">1. 副本数 × max_size 必须 &lt; max_connections——10 副本 × 20 = 200 &gt; 100，照样 FATAL: too many clients</text>
+    <text x="46" y="224" font-size="11.5" fill="#1a1a1a">2. 某些版本 _cursor 带实例级 asyncio.Lock，加连接也没用（所有 checkpoint IO 仍串行）</text>
+  </g>
+
+  <g>
+    <rect x="30" y="240" width="830" height="66" rx="9" fill="#fff8e6" stroke="#c99a1e" stroke-width="1.5"/>
+    <text x="46" y="260" font-size="11.5" fill="#1a1a1a">📐 容量公式：总连接 = 副本数 × max_size（+ 其他服务占用）必须 &lt; max_connections 且留 superuser 余量</text>
+    <text x="46" y="278" font-size="11.5" fill="#1a1a1a">平台部署默认 LANGGRAPH_POSTGRES_POOL_MAX_SIZE=150/副本 —— 10 副本就是 1500 条，必炸</text>
+    <text x="46" y="296" font-size="11.5" fill="#1a1a1a">监控：pool.get_stats() 里 requests_waiting &gt; 0 且持续上涨 = 池是瓶颈</text>
+  </g>
+
+  <defs><marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#333"/></marker></defs>
+</svg>

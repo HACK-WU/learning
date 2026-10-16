@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 460" width="940" height="460" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif">
+  <rect width="940" height="460" fill="#ffffff"/>
+  <text x="470" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="#1f2937">退款工单系统：一笔退款要过几道关</text>
+  <text x="470" y="50" text-anchor="middle" font-size="12" fill="#6b7280">每个框是一个节点；实线是正常走法，虚线是"没过"时的分支</text>
+
+  <rect x="26" y="76" width="116" height="52" rx="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="84" y="98" text-anchor="middle" font-size="12" font-weight="600" fill="#1e40af">1 校验</text>
+  <text x="84" y="118" text-anchor="middle" font-size="9" fill="#1e3a8a">金额/订单号</text>
+
+  <rect x="176" y="76" width="126" height="52" rx="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="239" y="98" text-anchor="middle" font-size="12" font-weight="600" fill="#1e40af">2 风控评分</text>
+  <text x="239" y="118" text-anchor="middle" font-size="9" fill="#1e3a8a">会抖 → 重试 3 次</text>
+
+  <rect x="336" y="76" width="116" height="52" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="394" y="98" text-anchor="middle" font-size="12" font-weight="600" fill="#92400e">3 判定</text>
+  <text x="394" y="118" text-anchor="middle" font-size="9" fill="#78350f">风险 + 金额</text>
+
+  <rect x="486" y="76" width="126" height="52" rx="8" fill="#fce7f3" stroke="#ec4899" stroke-width="1.5"/>
+  <text x="549" y="98" text-anchor="middle" font-size="12" font-weight="600" fill="#9d174d">4 人工审批</text>
+  <text x="549" y="118" text-anchor="middle" font-size="9" fill="#831843">interrupt 卡住</text>
+
+  <rect x="646" y="76" width="126" height="52" rx="8" fill="#dcfce7" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="709" y="98" text-anchor="middle" font-size="12" font-weight="600" fill="#166534">5 执行退款</text>
+  <text x="709" y="118" text-anchor="middle" font-size="9" fill="#14532d">幂等 + 重试 2 次</text>
+
+  <rect x="806" y="76" width="108" height="52" rx="8" fill="#dcfce7" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="860" y="98" text-anchor="middle" font-size="12" font-weight="600" fill="#166534">6 通知</text>
+  <text x="860" y="118" text-anchor="middle" font-size="9" fill="#14532d">失败不影响</text>
+
+  <path d="M142 102 L176 102" stroke="#64748b" stroke-width="1.8" marker-end="url(#ar)"/>
+  <path d="M302 102 L336 102" stroke="#64748b" stroke-width="1.8" marker-end="url(#ar)"/>
+  <path d="M452 102 L486 102" stroke="#64748b" stroke-width="1.8" marker-end="url(#ar)"/>
+  <path d="M612 102 L646 102" stroke="#64748b" stroke-width="1.8" marker-end="url(#ar)"/>
+  <path d="M772 102 L806 102" stroke="#64748b" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <path d="M84 128 L84 168 L470 168 L470 200" stroke="#dc2626" stroke-width="1.5" fill="none" stroke-dasharray="5,4" marker-end="url(#ar2)"/>
+  <text x="250" y="160" text-anchor="middle" font-size="9" fill="#b91c1c">校验不过：直接拒绝（不浪费风控调用）</text>
+
+  <rect x="392" y="200" width="150" height="46" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="467" y="220" text-anchor="middle" font-size="11" font-weight="600" fill="#b91c1c">拒绝 · 结束</text>
+  <text x="467" y="238" text-anchor="middle" font-size="9" fill="#7f1d1d">高风险自动拒 / 人工驳回</text>
+
+  <path d="M394 128 L394 200" stroke="#dc2626" stroke-width="1.5" fill="none" stroke-dasharray="5,4" marker-end="url(#ar2)"/>
+  <path d="M549 128 L549 152 L467 152 L467 200" stroke="#dc2626" stroke-width="1.5" fill="none" stroke-dasharray="5,4" marker-end="url(#ar2)"/>
+
+  <rect x="26" y="270" width="440" height="164" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.4"/>
+  <text x="246" y="292" text-anchor="middle" font-size="13" font-weight="700" fill="#334155">三条判定规则（写死的 if，不是让模型自己想）</text>
+  <text x="46" y="316" font-size="10" fill="#475569">风险 ≥ 0.8　→　自动拒绝</text>
+  <text x="46" y="336" font-size="10" fill="#475569">风险 ≥ 0.5 或 金额 ≥ 1000　→　转人工</text>
+  <text x="46" y="356" font-size="10" fill="#475569">其余（低风险小额）　→　自动通过</text>
+  <text x="46" y="386" font-size="9" fill="#64748b">为什么是 if 不是 LLM：合规判定要可解释、可审计、</text>
+  <text x="46" y="402" font-size="9" fill="#64748b">每次同样输入必须同样输出——这正是 workflow 而非 agent。</text>
+  <text x="46" y="422" font-size="9" fill="#64748b">回指：阶段 1 · 课 2「workflow 与 agent 的分界」</text>
+
+  <rect x="486" y="270" width="428" height="164" rx="10" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.4"/>
+  <text x="700" y="292" text-anchor="middle" font-size="13" font-weight="700" fill="#92400e">每道关背后的知识点</text>
+  <text x="506" y="316" font-size="10" fill="#78350f">① 校验/风控 → 阶段 1 图与条件边</text>
+  <text x="506" y="336" font-size="10" fill="#78350f">② 抖动重试 → 阶段 3 RetryPolicy（异常类型决定成败）</text>
+  <text x="506" y="356" font-size="10" fill="#78350f">③ 人工审批 → 阶段 3 interrupt + resume（要 checkpointer）</text>
+  <text x="506" y="376" font-size="10" fill="#78350f">④ 幂等键 → 阶段 3 重试不能重复打款</text>
+  <text x="506" y="396" font-size="10" fill="#78350f">⑤ 存档点 → 阶段 2 checkpoint（8 个存档点可回放）</text>
+  <text x="506" y="416" font-size="10" fill="#78350f">⑥ 流式 → 阶段 2 streaming（SSE 的数据源）</text>
+  <text x="506" y="434" font-size="9" fill="#a16207">测试替身 → 阶段 4 课 12（假服务走 config，不塞 State）</text>
+
+  <defs>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#64748b"/></marker>
+    <marker id="ar2" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#dc2626"/></marker>
+  </defs>
+</svg>

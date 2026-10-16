@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 510" width="900" height="510" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif">
+  <rect width="900" height="510" fill="#ffffff"/>
+  <text x="450" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#1f2937">第 3 跳：改判 + 留住事故现场</text>
+  <text x="450" y="52" text-anchor="middle" font-size="12" fill="#6b7280">高亮为本跳新增：原 thread 只读归档、新 thread 手工搬 values、只重跑判定之后</text>
+
+  <!-- 主链 -->
+  <rect x="30" y="70" width="840" height="106" rx="9" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3"/>
+  <text x="450" y="90" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">原始执行（thread = 投诉单 A）· 只读归档，不再改动</text>
+
+  <rect x="48" y="100" width="128" height="58" rx="7" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.2"/>
+  <text x="112" y="122" text-anchor="middle" font-size="11" font-weight="600" fill="#1e40af">查订单</text>
+  <text x="112" y="140" text-anchor="middle" font-size="9" fill="#475569">amount=5000</text>
+
+  <path d="M176 129 L204 129" stroke="#6366f1" stroke-width="2" marker-end="url(#b1)"/>
+
+  <rect x="204" y="100" width="128" height="58" rx="7" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.2"/>
+  <text x="268" y="122" text-anchor="middle" font-size="11" font-weight="600" fill="#1e40af">算风险</text>
+  <text x="268" y="140" text-anchor="middle" font-size="9" fill="#475569">risk=0.9</text>
+
+  <path d="M332 129 L360 129" stroke="#6366f1" stroke-width="2" marker-end="url(#b1)"/>
+
+  <rect x="360" y="100" width="128" height="58" rx="7" fill="#fee2e2" stroke="#dc2626" stroke-width="1.6"/>
+  <text x="424" y="122" text-anchor="middle" font-size="11" font-weight="700" fill="#b91c1c">判定驳回</text>
+  <text x="424" y="140" text-anchor="middle" font-size="9" fill="#7f1d1d">客户投诉了</text>
+
+  <path d="M488 129 L516 129" stroke="#6366f1" stroke-width="2" marker-end="url(#b1)"/>
+
+  <rect x="516" y="100" width="128" height="58" rx="7" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.2"/>
+  <text x="580" y="122" text-anchor="middle" font-size="11" font-weight="600" fill="#475569">通知客户</text>
+  <text x="580" y="140" text-anchor="middle" font-size="9" fill="#64748b">未执行</text>
+
+  <rect x="664" y="100" width="188" height="58" rx="7" fill="#fefce8" stroke="#fde047" stroke-width="1.4"/>
+  <text x="758" y="122" text-anchor="middle" font-size="11" font-weight="600" fill="#854d0e">原历史：5 条快照</text>
+  <text x="758" y="140" text-anchor="middle" font-size="9" fill="#78350f">归档留证，永不改写</text>
+
+  <defs>
+    <marker id="b1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#6366f1"/></marker>
+  </defs>
+
+  <!-- 分叉箭头 -->
+  <path d="M424 158 L424 190" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#b2)"/>
+  <defs>
+    <marker id="b2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#f59e0b"/></marker>
+  </defs>
+
+  <!-- 新 thread -->
+  <rect x="30" y="196" width="410" height="140" rx="9" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="235" y="218" text-anchor="middle" font-size="12" font-weight="700" fill="#166534">新 thread（投诉单 A-改判）：两步走</text>
+  <rect x="48" y="230" width="374" height="94" rx="6" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.1"/>
+  <text x="235" y="248" text-anchor="middle" font-size="10" font-weight="600" fill="#059669">① 先整体搬 values（状态才带得过去）</text>
+  <text x="66" y="266" font-size="9" font-family="ui-monospace,monospace" fill="#0f172a">g.update_state(new, old.values)</text>
+  <text x="66" y="284" font-size="9" font-family="ui-monospace,monospace" fill="#059669">-> log/amount/risk 全在</text>
+  <text x="66" y="302" font-size="9" font-family="ui-monospace,monospace" fill="#0f172a">② 再改要改的：decision='批准'</text>
+  <text x="66" y="318" font-size="9" font-family="ui-monospace,monospace" fill="#b91c1c">⚠ next 仍是起点 -> 会从头重跑</text>
+
+  <!-- 代价 -->
+  <rect x="460" y="196" width="410" height="140" rx="9" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="665" y="218" text-anchor="middle" font-size="12" font-weight="700" fill="#b91c1c">跨 thread 的代价（实测）</text>
+  <rect x="478" y="230" width="374" height="94" rx="6" fill="#ffffff" stroke="#fecaca" stroke-width="1.1"/>
+  <text x="665" y="248" text-anchor="middle" font-size="10" fill="#7f1d1d">只 update 不搬 values → 状态整个丢</text>
+  <text x="490" y="266" font-size="9" font-family="ui-monospace,monospace" fill="#0f172a">next=('s1',) values={'decision':'批准'}</text>
+  <text x="490" y="284" font-size="9" font-family="ui-monospace,monospace" fill="#dc2626">log 不见了！只剩 update 进去的</text>
+  <text x="490" y="302" font-size="9" font-family="ui-monospace,monospace" fill="#0f172a">搬了 values 也可能出现重复项：</text>
+  <text x="490" y="318" font-size="9" font-family="ui-monospace,monospace" fill="#b91c1c">['s1','s1','s2','s3:批准']</text>
+
+  <!-- 决策 -->
+  <rect x="30" y="352" width="410" height="132" rx="9" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.3"/>
+  <text x="235" y="374" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">怎么选：看要不要留证据</text>
+  <text x="235" y="396" text-anchor="middle" font-size="10" fill="#1e3a8a">要留证据 → 跨 thread（原历史不动）</text>
+  <text x="235" y="414" text-anchor="middle" font-size="10" fill="#1e3a8a">代价：状态要手工搬、进度一定丢</text>
+  <text x="235" y="436" text-anchor="middle" font-size="10" fill="#1e3a8a">只在本地试 → 同 thread（状态进度都带）</text>
+  <text x="235" y="454" text-anchor="middle" font-size="10" fill="#1e3a8a">代价：原历史被改写（5 → 8 条）</text>
+  <text x="235" y="474" text-anchor="middle" font-size="10" font-weight="600" fill="#b91c1c">两者不可兼得</text>
+
+  <!-- 四条铁律 -->
+  <rect x="460" y="352" width="410" height="132" rx="9" fill="#fefce8" stroke="#fde047" stroke-width="1.4"/>
+  <text x="665" y="374" text-anchor="middle" font-size="12" font-weight="700" fill="#854d0e">四条必须记住（全是实测）</text>
+  <text x="665" y="396" text-anchor="middle" font-size="10" fill="#78350f">① 3 节点会有 5 条历史（多"跑完"+"输入"）</text>
+  <text x="665" y="414" text-anchor="middle" font-size="10" fill="#78350f">② get_state(历史点) 只读，不改图</text>
+  <text x="665" y="432" text-anchor="middle" font-size="10" fill="#78350f">③ update_state 第三参是 as_node，不是 thread_id</text>
+  <text x="665" y="450" text-anchor="middle" font-size="10" fill="#78350f">④ 手工拼 checkpoint_id 不报错，返回 {}</text>
+  <text x="665" y="470" text-anchor="middle" font-size="10" fill="#78350f">⑤ 不挂 checkpointer → 直接 ValueError</text>
+</svg>

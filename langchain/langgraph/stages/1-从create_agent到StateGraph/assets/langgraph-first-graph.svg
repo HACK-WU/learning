@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="470" viewBox="0 0 900 470" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="900" height="470" fill="#ffffff"/>
+
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5b6b7f"/>
+    </marker>
+    <marker id="ard" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#9aa7b6"/>
+    </marker>
+  </defs>
+
+  <text x="450" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="#16324f">画一张图，其实就是填四样东西</text>
+
+  <rect x="20" y="44" width="860" height="60" rx="10" fill="#f7f9fc" stroke="#c9d4e2" stroke-width="1.5"/>
+  <text x="450" y="72" text-anchor="middle" font-size="14" fill="#33415c">手绘一张流程图要什么？</text>
+  <text x="450" y="94" text-anchor="middle" font-size="14" fill="#16324f" font-weight="700">① 一本记录本　② 几个方框　③ 箭头怎么连　④ 岔路口谁说了算</text>
+
+  <line x1="450" y1="104" x2="450" y2="126" stroke="#5b6b7f" stroke-width="1.8" marker-end="url(#ar)"/>
+
+  <rect x="20" y="130" width="200" height="150" rx="12" fill="#eaf7ee" stroke="#2e8540" stroke-width="1.5"/>
+  <text x="120" y="156" text-anchor="middle" font-size="15" font-weight="700" fill="#1d5c2b">① 记录本</text>
+  <line x1="46" y1="168" x2="194" y2="168" stroke="#a9c9b3" stroke-width="1"/>
+  <text x="120" y="194" text-anchor="middle" font-size="12" fill="#33513a">本子上有哪些栏位</text>
+  <text x="120" y="216" text-anchor="middle" font-size="12" fill="#33513a">两个人同时往同一栏写</text>
+  <text x="120" y="236" text-anchor="middle" font-size="12" font-weight="700" fill="#1d5c2b">字怎么办：替掉还是叠上</text>
+  <text x="120" y="262" text-anchor="middle" font-size="11" fill="#5b7a63">（不写清楚就会丢东西）</text>
+
+  <rect x="236" y="130" width="200" height="150" rx="12" fill="#e5f4ff" stroke="#006ddd" stroke-width="1.5"/>
+  <text x="336" y="156" text-anchor="middle" font-size="15" font-weight="700" fill="#16324f">② 方框</text>
+  <line x1="262" y1="168" x2="410" y2="168" stroke="#b3cfe6" stroke-width="1"/>
+  <text x="336" y="194" text-anchor="middle" font-size="12" fill="#16324f">每个方框就是一小段</text>
+  <text x="336" y="216" text-anchor="middle" font-size="12" fill="#16324f">你写的普通代码</text>
+  <text x="336" y="246" text-anchor="middle" font-size="12" fill="#16324f">它拿到整本记录本，</text>
+  <text x="336" y="266" text-anchor="middle" font-size="12" fill="#16324f">只交回"我改了哪几栏"</text>
+
+  <rect x="452" y="130" width="200" height="150" rx="12" fill="#fff4e0" stroke="#d98200" stroke-width="1.5"/>
+  <text x="552" y="156" text-anchor="middle" font-size="15" font-weight="700" fill="#8a5200">③ 箭头</text>
+  <line x1="478" y1="168" x2="626" y2="168" stroke="#e8cfa0" stroke-width="1"/>
+  <text x="552" y="194" text-anchor="middle" font-size="12" fill="#8a5200">谁接在谁后面</text>
+  <text x="552" y="216" text-anchor="middle" font-size="12" fill="#8a5200">首尾各有一个</text>
+  <text x="552" y="236" text-anchor="middle" font-size="12" font-weight="700" fill="#8a5200">看不见的假方框</text>
+  <text x="552" y="262" text-anchor="middle" font-size="11" fill="#a08050">（代表"开始"和"收工"）</text>
+
+  <rect x="668" y="130" width="212" height="150" rx="12" fill="#f3eafc" stroke="#7c4dbd" stroke-width="1.5"/>
+  <text x="774" y="156" text-anchor="middle" font-size="15" font-weight="700" fill="#5b2f8f">④ 岔路口</text>
+  <line x1="694" y1="168" x2="854" y2="168" stroke="#d5c0e8" stroke-width="1"/>
+  <text x="774" y="194" text-anchor="middle" font-size="12" fill="#5b2f8f">岔路口后面挂一个小裁判</text>
+  <text x="774" y="216" text-anchor="middle" font-size="12" fill="#5b2f8f">它看一眼记录本，说走哪边</text>
+  <text x="774" y="242" text-anchor="middle" font-size="12" fill="#5b2f8f">裁判也能说"回去重做"</text>
+  <text x="774" y="262" text-anchor="middle" font-size="11" fill="#7a5f98">（这就要有"到头为止"）</text>
+
+  <path d="M 220 205 L 236 205" fill="none" stroke="#9aa7b6" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#ard)"/>
+  <path d="M 436 205 L 452 205" fill="none" stroke="#9aa7b6" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#ard)"/>
+  <path d="M 652 205 L 668 205" fill="none" stroke="#9aa7b6" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#ard)"/>
+
+  <rect x="20" y="300" width="860" height="150" rx="12" fill="#fbfcfe" stroke="#c9d4e2" stroke-width="1.5"/>
+  <text x="450" y="326" text-anchor="middle" font-size="15" font-weight="700" fill="#16324f">对照昨天那张手绘图，四样一填，图就成了</text>
+
+  <rect x="52" y="344" width="96" height="34" rx="7" fill="#e5f4ff" stroke="#006ddd" stroke-width="1.4"/>
+  <text x="100" y="366" text-anchor="middle" font-size="12" fill="#16324f">开始</text>
+
+  <line x1="148" y1="361" x2="184" y2="361" stroke="#5b6b7f" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <rect x="188" y="344" width="112" height="34" rx="7" fill="#e5f4ff" stroke="#006ddd" stroke-width="1.4"/>
+  <text x="244" y="366" text-anchor="middle" font-size="12" fill="#16324f">生成回复</text>
+
+  <line x1="300" y1="361" x2="336" y2="361" stroke="#5b6b7f" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <rect x="340" y="344" width="112" height="34" rx="7" fill="#fff4e0" stroke="#d98200" stroke-width="1.4"/>
+  <text x="396" y="366" text-anchor="middle" font-size="12" fill="#8a5200">质检（裁判）</text>
+
+  <path d="M 452 361 L 486 361" fill="none" stroke="#5b6b7f" stroke-width="1.6" marker-end="url(#ar)"/>
+  <text x="469" y="352" text-anchor="middle" font-size="11" fill="#2e8540">合格</text>
+
+  <rect x="490" y="344" width="96" height="34" rx="7" fill="#e5f4ff" stroke="#006ddd" stroke-width="1.4"/>
+  <text x="538" y="366" text-anchor="middle" font-size="12" fill="#16324f">收工</text>
+
+  <path d="M 396 378 L 396 404 L 244 404 L 244 378" fill="none" stroke="#c0392b" stroke-width="1.6" marker-end="url(#ar)"/>
+  <text x="320" y="398" text-anchor="middle" font-size="11" fill="#c0392b">不合格 → 回去重做</text>
+
+  <rect x="612" y="338" width="236" height="96" rx="10" fill="#fde8e8" stroke="#c0392b" stroke-width="1.4"/>
+  <text x="730" y="362" text-anchor="middle" font-size="13" font-weight="700" fill="#8f2318">最容易踩的坑</text>
+  <text x="730" y="384" text-anchor="middle" font-size="12" fill="#7a2f26">"回去重做"这条路如果没有</text>
+  <text x="730" y="404" text-anchor="middle" font-size="12" fill="#7a2f26">"到头为止"，就会一直转下去</text>
+  <text x="730" y="424" text-anchor="middle" font-size="11" fill="#a05242">所以要设一个兜底上限</text>
+</svg>

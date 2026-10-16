@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="930" height="520" viewBox="0 0 930 520" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="930" height="520" fill="#ffffff"/>
+
+  <defs>
+    <marker id="c5s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5b6b7f"/>
+    </marker>
+  </defs>
+
+  <text x="465" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="#16324f">课 5 全景：存了什么、存到哪、崩了怎么接</text>
+
+  <rect x="16" y="44" width="286" height="360" rx="12" fill="#f7f9fc" stroke="#c9d4e2" stroke-width="1.5"/>
+  <text x="159" y="70" text-anchor="middle" font-size="15" font-weight="700" fill="#16324f">存了什么 / 按什么区分</text>
+  <line x1="42" y1="86" x2="276" y2="86" stroke="#dde4ec" stroke-width="1.2"/>
+
+  <rect x="38" y="98" width="242" height="60" rx="9" fill="#e5f4ff" stroke="#006ddd" stroke-width="1.4"/>
+  <text x="159" y="120" text-anchor="middle" font-size="12" font-weight="700" fill="#16324f">快照 = 状态 + 下一批</text>
+  <text x="159" y="142" text-anchor="middle" font-size="11" fill="#16324f">实测一次跑完留 4 张</text>
+
+  <rect x="38" y="168" width="242" height="60" rx="9" fill="#e5f4ff" stroke="#006ddd" stroke-width="1.4"/>
+  <text x="159" y="190" text-anchor="middle" font-size="12" font-weight="700" fill="#16324f">编号相同 = 接着跑</text>
+  <text x="159" y="212" text-anchor="middle" font-size="11" fill="#16324f">编号不同 = 全新开始</text>
+
+  <rect x="38" y="238" width="242" height="72" rx="9" fill="#fde8e8" stroke="#c0392b" stroke-width="1.4"/>
+  <text x="159" y="262" text-anchor="middle" font-size="12" font-weight="700" fill="#8f2318">接着跑 ≠ 覆盖</text>
+  <text x="159" y="282" text-anchor="middle" font-size="11" fill="#8f2318">带累加规则的字段会叠上去</text>
+  <text x="159" y="298" text-anchor="middle" font-size="11" fill="#7a2f26">（实测 1 项 → 3 项）</text>
+
+  <rect x="38" y="320" width="242" height="66" rx="9" fill="#fff8ea" stroke="#e0b060" stroke-width="1.3"/>
+  <text x="159" y="342" text-anchor="middle" font-size="12" font-weight="700" fill="#8a5200">忘了带编号</text>
+  <text x="159" y="362" text-anchor="middle" font-size="11" fill="#8a5200">直接报错，跑不起来</text>
+  <text x="159" y="378" text-anchor="middle" font-size="11" fill="#a08050">它是主键，不是标签</text>
+
+  <rect x="318" y="44" width="286" height="360" rx="12" fill="#fbfcfe" stroke="#c9d4e2" stroke-width="1.5"/>
+  <text x="461" y="70" text-anchor="middle" font-size="15" font-weight="700" fill="#16324f">存到哪：三档</text>
+  <line x1="344" y1="86" x2="578" y2="86" stroke="#dde4ec" stroke-width="1.2"/>
+
+  <rect x="344" y="98" width="234" height="74" rx="9" fill="#eceff4" stroke="#8a97a8" stroke-width="1.4"/>
+  <text x="461" y="120" text-anchor="middle" font-size="13" font-weight="700" fill="#33415c">只在内存里</text>
+  <text x="461" y="142" text-anchor="middle" font-size="11" fill="#5b6b7f">练手 / 写单测</text>
+  <text x="461" y="162" text-anchor="middle" font-size="11" fill="#8f2318">实测：换实例读到空</text>
+
+  <rect x="344" y="182" width="234" height="74" rx="9" fill="#e5f4ff" stroke="#006ddd" stroke-width="1.4"/>
+  <text x="461" y="204" text-anchor="middle" font-size="13" font-weight="700" fill="#16324f">一个本地文件</text>
+  <text x="461" y="226" text-anchor="middle" font-size="11" fill="#5b6b7f">本地开发 / 单机</text>
+  <text x="461" y="246" text-anchor="middle" font-size="11" fill="#1d5c2b">实测：跨进程还在</text>
+
+  <rect x="344" y="266" width="234" height="74" rx="9" fill="#eaf7ee" stroke="#2e8540" stroke-width="1.4"/>
+  <text x="461" y="288" text-anchor="middle" font-size="13" font-weight="700" fill="#1d5c2b">正经数据库</text>
+  <text x="461" y="310" text-anchor="middle" font-size="11" fill="#5b6b7f">线上 / 多实例</text>
+  <text x="461" y="330" text-anchor="middle" font-size="11" fill="#5b7a63">要运维，注意编号长度</text>
+
+  <rect x="344" y="350" width="234" height="46" rx="9" fill="#fff8ea" stroke="#e0b060" stroke-width="1.3"/>
+  <text x="461" y="370" text-anchor="middle" font-size="11" font-weight="700" fill="#8a5200">文件版实测建了两张表</text>
+  <text x="461" y="388" text-anchor="middle" font-size="11" fill="#8a5200">整批快照 + 每格记账</text>
+
+  <rect x="620" y="44" width="294" height="360" rx="12" fill="#fbfcfe" stroke="#c9d4e2" stroke-width="1.5"/>
+  <text x="767" y="70" text-anchor="middle" font-size="15" font-weight="700" fill="#16324f">崩了怎么接</text>
+  <line x1="646" y1="86" x2="888" y2="86" stroke="#dde4ec" stroke-width="1.2"/>
+
+  <rect x="646" y="98" width="244" height="70" rx="9" fill="#eaf7ee" stroke="#2e8540" stroke-width="1.4"/>
+  <text x="768" y="120" text-anchor="middle" font-size="12" font-weight="700" fill="#1d5c2b">崩掉那一刻，</text>
+  <text x="768" y="140" text-anchor="middle" font-size="12" font-weight="700" fill="#1d5c2b">跑完的已经存下了</text>
+  <text x="768" y="160" text-anchor="middle" font-size="11" fill="#33513a">实测：next 指向崩掉那格</text>
+
+  <rect x="646" y="178" width="244" height="70" rx="9" fill="#eaf7ee" stroke="#2e8540" stroke-width="1.4"/>
+  <text x="768" y="200" text-anchor="middle" font-size="12" font-weight="700" fill="#1d5c2b">修好再跑 → 只补崩掉那格</text>
+  <text x="768" y="222" text-anchor="middle" font-size="11" fill="#33513a">实测：前两格一格没重跑</text>
+
+  <rect x="646" y="258" width="244" height="70" rx="9" fill="#fff8ea" stroke="#e0b060" stroke-width="1.3"/>
+  <text x="768" y="280" text-anchor="middle" font-size="12" font-weight="700" fill="#8a5200">状态不对先查三件事</text>
+  <text x="768" y="300" text-anchor="middle" font-size="11" fill="#8a5200">① 是不是指望重开了</text>
+  <text x="768" y="318" text-anchor="middle" font-size="11" fill="#8a5200">② 字段有没有累加规则</text>
+
+  <rect x="646" y="338" width="244" height="56" rx="9" fill="#f3eafc" stroke="#7c4dbd" stroke-width="1.4"/>
+  <text x="768" y="360" text-anchor="middle" font-size="12" font-weight="700" fill="#5b2f8f">往下接：跨会话</text>
+  <text x="768" y="380" text-anchor="middle" font-size="11" fill="#5b2f8f">快照只跟着一次对话走</text>
+
+  <line x1="302" y1="224" x2="318" y2="224" stroke="#5b6b7f" stroke-width="1.8" marker-end="url(#c5s)"/>
+  <line x1="604" y1="224" x2="620" y2="224" stroke="#5b6b7f" stroke-width="1.8" marker-end="url(#c5s)"/>
+
+  <rect x="16" y="418" width="898" height="84" rx="12" fill="#f7f9fc" stroke="#c9d4e2" stroke-width="1.5"/>
+  <text x="465" y="444" text-anchor="middle" font-size="15" font-weight="700" fill="#16324f">一句话串起来</text>
+  <text x="465" y="470" text-anchor="middle" font-size="13" fill="#33415c">每批结束存一张快照，编号相同就接着跑（会叠加）；崩了只补崩掉那格，想重开请换编号</text>
+  <text x="465" y="492" text-anchor="middle" font-size="13" font-weight="700" fill="#8a5200">但快照只跟一次对话走——跨会话的记忆，是课 6 的事。</text>
+</svg>

@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 420" width="860" height="420" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+  <rect width="860" height="420" fill="#fdfbfb"/>
+  <text x="430" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#8a2020">反例：把所有来源塞进一个大节点，串行查</text>
+  <text x="430" y="50" text-anchor="middle" font-size="11.5" fill="#7a6a6a">能跑通，但一个来源挂了全盘皆输，而且慢、还拿不到错误信息</text>
+
+  <!-- 反例：一个大节点 -->
+  <rect x="40" y="80" width="300" height="180" rx="9" fill="#fdeeee" stroke="#d98a8a" stroke-width="1.4"/>
+  <text x="190" y="102" text-anchor="middle" font-size="12.5" font-weight="700" fill="#8a2020">反例 · 一个大节点干完</text>
+
+  <rect x="60" y="116" width="260" height="30" rx="6" fill="#fff" stroke="#e8b0b0" stroke-width="1.1"/>
+  <text x="190" y="135" text-anchor="middle" font-size="10.5" fill="#7a5050">for src in sources: 逐个查（串行）</text>
+
+  <rect x="60" y="152" width="260" height="30" rx="6" fill="#fff" stroke="#e8b0b0" stroke-width="1.1"/>
+  <text x="190" y="171" text-anchor="middle" font-size="10.5" fill="#7a5050">没有 retry_policy —— 抖一次就失败</text>
+
+  <rect x="60" y="188" width="260" height="30" rx="6" fill="#fff" stroke="#e8b0b0" stroke-width="1.1"/>
+  <text x="190" y="207" text-anchor="middle" font-size="10.5" fill="#7a5050">没有 error_handler —— 一挂全挂</text>
+
+  <text x="190" y="238" text-anchor="middle" font-size="11" font-weight="600" fill="#8a2020">✗ 3 个来源串行 = 3 倍耗时</text>
+  <text x="190" y="254" text-anchor="middle" font-size="10" fill="#7a6a6a">✗ 第 2 个挂了，第 3 个根本没机会跑</text>
+
+  <!-- 反例2：error_handler 签名 -->
+  <rect x="40" y="286" width="300" height="106" rx="9" fill="#fdeeee" stroke="#d98a8a" stroke-width="1.4"/>
+  <text x="190" y="308" text-anchor="middle" font-size="12" font-weight="700" fill="#8a2020">反例 · error_handler 写两个参数</text>
+  <rect x="56" y="318" width="268" height="30" rx="6" fill="#fff" stroke="#e8b0b0" stroke-width="1.1"/>
+  <text x="190" y="337" text-anchor="middle" font-size="10" font-family="monospace" fill="#7a5050">def degrade(state, error):</text>
+  <text x="190" y="364" text-anchor="middle" font-size="9.5" fill="#8a2020">TypeError: missing 1 required</text>
+  <text x="190" y="380" text-anchor="middle" font-size="9.5" fill="#7a6a6a">实测：只接受 1 个参数，且是 state</text>
+
+  <!-- 对比箭头 -->
+  <path d="M348 170 L392 170" stroke="#bbb" stroke-width="2" fill="none" stroke-dasharray="5 4" marker-end="url(#v)"/>
+  <text x="370" y="160" font-size="15" fill="#4f9d69">→</text>
+
+  <!-- 正解 -->
+  <rect x="400" y="80" width="420" height="312" rx="9" fill="#eef8f0" stroke="#4f9d69" stroke-width="1.4"/>
+  <text x="610" y="102" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1f5c33">正解 · 扇出 + 子图 + 重试 + 降级</text>
+
+  <rect x="420" y="116" width="380" height="28" rx="6" fill="#fff" stroke="#a8d5b8" stroke-width="1.1"/>
+  <text x="610" y="134" text-anchor="middle" font-size="10.5" fill="#2f5c33">Send 扇出：N 个来源并行，耗时 = 最慢的那个</text>
+
+  <rect x="420" y="150" width="380" height="28" rx="6" fill="#fff" stroke="#a8d5b8" stroke-width="1.1"/>
+  <text x="610" y="168" text-anchor="middle" font-size="10.5" fill="#2f5c33">子图隔离：各自的中间产物不互相污染</text>
+
+  <rect x="420" y="184" width="380" height="28" rx="6" fill="#fff" stroke="#a8d5b8" stroke-width="1.1"/>
+  <text x="610" y="202" text-anchor="middle" font-size="10.5" fill="#2f5c33">retry_on=TransientError：抖动的救回来</text>
+
+  <rect x="420" y="218" width="380" height="28" rx="6" fill="#fff" stroke="#a8d5b8" stroke-width="1.1"/>
+  <text x="610" y="236" text-anchor="middle" font-size="10.5" fill="#2f5c33">retry_on 不含 PermanentError：不白重试</text>
+
+  <rect x="420" y="252" width="380" height="28" rx="6" fill="#fff" stroke="#a8d5b8" stroke-width="1.1"/>
+  <text x="610" y="270" text-anchor="middle" font-size="10.5" fill="#2f5c33">error_handler 单参数：兜底不炸图</text>
+
+  <rect x="420" y="286" width="380" height="28" rx="6" fill="#fff" stroke="#a8d5b8" stroke-width="1.1"/>
+  <text x="610" y="304" text-anchor="middle" font-size="10.5" fill="#2f5c33">错误信息节点内自存（error_handler 收不到）</text>
+
+  <text x="610" y="344" text-anchor="middle" font-size="11" font-weight="600" fill="#1f5c33">✓ 2/3 成功也出报告，失败的标注清楚</text>
+  <text x="610" y="362" text-anchor="middle" font-size="10" fill="#2f7a48">实测：3 来源 2 成功 1 降级，报告照出</text>
+  <text x="610" y="380" text-anchor="middle" font-size="10" fill="#2f7a48">实测：抖动来源 3 次调用后成功</text>
+
+  <defs>
+    <marker id="v" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#bbb"/></marker>
+  </defs>
+</svg>

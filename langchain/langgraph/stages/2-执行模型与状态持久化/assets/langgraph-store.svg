@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" width="900" height="480" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif">
+  <rect width="900" height="480" fill="#ffffff"/>
+  <text x="450" y="34" text-anchor="middle" font-size="19" font-weight="700" fill="#1f2937">一次会话结束，这家伙就忘了你</text>
+  <text x="450" y="56" text-anchor="middle" font-size="13" fill="#6b7280">左边：东西都记在「这一次对话」里 ｜ 右边：记在「这个人」名下</text>
+
+  <!-- 左半：跟着对话走 -->
+  <rect x="40" y="86" width="380" height="180" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="230" y="110" text-anchor="middle" font-size="15" font-weight="600" fill="#b91c1c">记在「这一次对话」里</text>
+  <text x="230" y="130" text-anchor="middle" font-size="12" fill="#991b1b">（每换一次对话，就换一个空本子）</text>
+
+  <rect x="66" y="146" width="105" height="86" rx="7" fill="#ffffff" stroke="#fca5a5" stroke-width="1.2"/>
+  <text x="118" y="168" text-anchor="middle" font-size="12" font-weight="600" fill="#b91c1c">周一 对话</text>
+  <text x="118" y="190" text-anchor="middle" font-size="11" fill="#4b5563">他说偏好邮件</text>
+  <text x="118" y="207" text-anchor="middle" font-size="11" fill="#4b5563">他说时区是东京</text>
+  <text x="118" y="222" text-anchor="middle" font-size="10" fill="#9ca3af">本子收走了</text>
+
+  <rect x="182" y="146" width="105" height="86" rx="7" fill="#ffffff" stroke="#fca5a5" stroke-width="1.2"/>
+  <text x="234" y="168" text-anchor="middle" font-size="12" font-weight="600" fill="#b91c1c">周二 对话</text>
+  <text x="234" y="190" text-anchor="middle" font-size="11" fill="#4b5563">（空）</text>
+  <text x="234" y="207" text-anchor="middle" font-size="11" fill="#4b5563">（空）</text>
+  <text x="234" y="222" text-anchor="middle" font-size="10" fill="#9ca3af">什么都没有</text>
+
+  <rect x="298" y="146" width="105" height="86" rx="7" fill="#ffffff" stroke="#fca5a5" stroke-width="1.2"/>
+  <text x="350" y="168" text-anchor="middle" font-size="12" font-weight="600" fill="#b91c1c">周三 对话</text>
+  <text x="350" y="190" text-anchor="middle" font-size="11" fill="#4b5563">（空）</text>
+  <text x="350" y="207" text-anchor="middle" font-size="11" fill="#4b5563">（空）</text>
+  <text x="350" y="222" text-anchor="middle" font-size="10" fill="#9ca3af">又得重说一遍</text>
+
+  <text x="230" y="252" text-anchor="middle" font-size="12" font-weight="600" fill="#b91c1c">✗ 三次对话 = 三个互不认识的本子</text>
+
+  <!-- 右半：跟着人走 -->
+  <rect x="470" y="86" width="390" height="180" rx="10" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="1.5"/>
+  <text x="665" y="110" text-anchor="middle" font-size="15" font-weight="600" fill="#047857">记在「这个人」名下</text>
+  <text x="665" y="130" text-anchor="middle" font-size="12" fill="#065f46">（一个档案柜，谁接待他都能打开）</text>
+
+  <rect x="500" y="146" width="88" height="86" rx="7" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="544" y="168" text-anchor="middle" font-size="12" font-weight="600" fill="#047857">周一 对话</text>
+  <text x="544" y="188" text-anchor="middle" font-size="10" fill="#4b5563">读柜子</text>
+  <text x="544" y="203" text-anchor="middle" font-size="10" fill="#4b5563">写柜子</text>
+  <text x="544" y="220" text-anchor="middle" font-size="10" fill="#9ca3af">空  写下两条</text>
+
+  <rect x="600" y="146" width="88" height="86" rx="7" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="644" y="168" text-anchor="middle" font-size="12" font-weight="600" fill="#047857">周二 对话</text>
+  <text x="644" y="188" text-anchor="middle" font-size="10" fill="#4b5563">读柜子</text>
+  <text x="644" y="203" text-anchor="middle" font-size="10" fill="#4b5563">写柜子</text>
+  <text x="644" y="220" text-anchor="middle" font-size="10" fill="#9ca3af">读到 2 条</text>
+
+  <rect x="700" y="146" width="88" height="86" rx="7" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="744" y="168" text-anchor="middle" font-size="12" font-weight="600" fill="#047857">周三 对话</text>
+  <text x="744" y="188" text-anchor="middle" font-size="10" fill="#4b5563">读柜子</text>
+  <text x="744" y="203" text-anchor="middle" font-size="10" fill="#4b5563">写柜子</text>
+  <text x="744" y="220" text-anchor="middle" font-size="10" fill="#9ca3af">读到 3 条</text>
+
+  <rect x="800" y="146" width="46" height="86" rx="7" fill="#d1fae5" stroke="#059669" stroke-width="1.6"/>
+  <text x="823" y="175" text-anchor="middle" font-size="11" font-weight="700" fill="#047857">档案</text>
+  <text x="823" y="192" text-anchor="middle" font-size="11" font-weight="700" fill="#047857">柜</text>
+  <text x="823" y="215" text-anchor="middle" font-size="9" fill="#065f46">越攒越多</text>
+
+  <path d="M588 189 L600 189" stroke="#059669" stroke-width="1.5" marker-end="url(#ar)"/>
+  <path d="M688 189 L700 189" stroke="#059669" stroke-width="1.5" marker-end="url(#ar)"/>
+  <path d="M788 189 L800 189" stroke="#059669" stroke-width="2" marker-end="url(#ar)"/>
+  <text x="665" y="252" text-anchor="middle" font-size="12" font-weight="600" fill="#047857">✓ 三次对话 = 共用一个柜子</text>
+
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#059669"/>
+    </marker>
+  </defs>
+
+  <!-- 底部一句话 -->
+  <rect x="40" y="292" width="820" height="60" rx="9" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.2"/>
+  <text x="450" y="316" text-anchor="middle" font-size="14" font-weight="600" fill="#1e40af">本课做的事：在图外面加一个「档案柜」</text>
+  <text x="450" y="338" text-anchor="middle" font-size="12" fill="#1e3a8a">每次对话都能打开它、往里放东西；放进去的东西不归任何一次对话所有</text>
+
+  <!-- 三个动作 -->
+  <rect x="40" y="368" width="255" height="86" rx="9" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="167" y="392" text-anchor="middle" font-size="13" font-weight="600" fill="#1f2937">① 柜子在哪</text>
+  <text x="167" y="414" text-anchor="middle" font-size="11" fill="#4b5563">在图外面，跟图平级</text>
+  <text x="167" y="432" text-anchor="middle" font-size="11" fill="#4b5563">编译的时候交给图</text>
+  <text x="167" y="448" text-anchor="middle" font-size="10" fill="#9ca3af">节点里能直接拿到它</text>
+
+  <rect x="322" y="368" width="255" height="86" rx="9" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="449" y="392" text-anchor="middle" font-size="13" font-weight="600" fill="#1f2937">② 东西怎么摆</text>
+  <text x="449" y="414" text-anchor="middle" font-size="11" fill="#4b5563">按「谁的、哪一类」分层放</text>
+  <text x="449" y="432" text-anchor="middle" font-size="11" fill="#4b5563">人和类别对上才拿得到</text>
+  <text x="449" y="448" text-anchor="middle" font-size="10" fill="#9ca3af">摆错层 = 换个人就丢</text>
+
+  <rect x="604" y="368" width="256" height="86" rx="9" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="732" y="392" text-anchor="middle" font-size="13" font-weight="600" fill="#1f2937">③ 放什么进去</text>
+  <text x="732" y="414" text-anchor="middle" font-size="11" fill="#4b5563">记住那些「不会变的事」</text>
+  <text x="732" y="432" text-anchor="middle" font-size="11" fill="#4b5563">和「发生过的事」</text>
+  <text x="732" y="448" text-anchor="middle" font-size="10" fill="#9ca3af">不是什么都往里塞</text>
+</svg>

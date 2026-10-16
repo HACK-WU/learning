@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 470" width="900" height="470" font-family="system-ui,-apple-system,Segoe UI,Robo,Helvetica Neue,Arial,sans-serif">
+  <rect width="900" height="470" fill="#ffffff"/>
+  <text x="450" y="34" text-anchor="middle" font-size="19" font-weight="700" fill="#1f2937">有些事让它自己决定，有些事必须先问人</text>
+  <text x="450" y="56" text-anchor="middle" font-size="13" fill="#6b7280">左边：一路跑到底，钱扣错了才知道 ｜ 右边：到关键处停下问一句，答了再走</text>
+
+  <!-- 左：一路跑到底 -->
+  <rect x="40" y="82" width="380" height="200" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="230" y="106" text-anchor="middle" font-size="15" font-weight="600" fill="#b91c1c">一路跑到底</text>
+
+  <rect x="66" y="124" width="72" height="44" rx="6" fill="#ffffff" stroke="#fca5a5" stroke-width="1.2"/>
+  <text x="102" y="150" text-anchor="middle" font-size="11" fill="#7f1d1d">查订单</text>
+
+  <path d="M138 146 L162 146" stroke="#f87171" stroke-width="2" marker-end="url(#r1)"/>
+
+  <rect x="162" y="124" width="72" height="44" rx="6" fill="#fee2e2" stroke="#dc2626" stroke-width="1.6"/>
+  <text x="198" y="150" text-anchor="middle" font-size="11" font-weight="700" fill="#b91c1c">付款</text>
+
+  <path d="M234 146 L258 146" stroke="#f87171" stroke-width="2" marker-end="url(#r1)"/>
+
+  <rect x="258" y="124" width="72" height="44" rx="6" fill="#ffffff" stroke="#fca5a5" stroke-width="1.2"/>
+  <text x="294" y="150" text-anchor="middle" font-size="11" fill="#7f1d1d">发通知</text>
+
+  <rect x="66" y="182" width="264" height="44" rx="7" fill="#ffffff" stroke="#fecaca" stroke-width="1.2"/>
+  <text x="198" y="202" text-anchor="middle" font-size="11" fill="#7f1d1d">没人拦它，一路冲过去</text>
+  <text x="198" y="219" text-anchor="middle" font-size="11" fill="#991b1b">扣错了？等钱出去了才发现</text>
+
+  <text x="230" y="254" text-anchor="middle" font-size="12" font-weight="600" fill="#b91c1c">❌ 出事才补救</text>
+
+  <!-- 右：停下问一句 -->
+  <rect x="470" y="82" width="390" height="200" rx="10" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="1.5"/>
+  <text x="665" y="106" text-anchor="middle" font-size="15" font-weight="600" fill="#047857">到关键处停下问一句</text>
+
+  <rect x="496" y="124" width="72" height="44" rx="6" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="532" y="150" text-anchor="middle" font-size="11" fill="#065f46">查订单</text>
+
+  <path d="M568 146 L592 146" stroke="#34d399" stroke-width="2" marker-end="url(#g1)"/>
+
+  <rect x="592" y="118" width="86" height="56" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.8"/>
+  <text x="635" y="138" text-anchor="middle" font-size="11" font-weight="700" fill="#92400e">付款（暂停）</text>
+  <text x="635" y="154" text-anchor="middle" font-size="9" fill="#78350f">举起手：批吗？</text>
+  <text x="635" y="168" text-anchor="middle" font-size="9" fill="#78350f">等人回答</text>
+
+  <path d="M678 146 L702 146" stroke="#34d399" stroke-width="2" marker-end="url(#g1)"/>
+
+  <rect x="702" y="124" width="72" height="44" rx="6" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="738" y="150" text-anchor="middle" font-size="11" fill="#065f46">发通知</text>
+
+  <!-- 人 -->
+  <path d="M635 174 L635 196" stroke="#f59e0b" stroke-width="1.6" stroke-dasharray="3 3"/>
+  <rect x="560" y="196" width="150" height="40" rx="8" fill="#fffbeb" stroke="#fbbf24" stroke-width="1.4"/>
+  <text x="635" y="214" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">👤 人在这里回答</text>
+  <text x="635" y="229" text-anchor="middle" font-size="10" fill="#78350f">「批准」/「驳回」</text>
+
+  <path d="M635 236 L635 252 M640 246 L636 252 L644 252 Z" stroke="#f59e0b" stroke-width="1.4" fill="#f59e0b"/>
+
+  <text x="665" y="270" text-anchor="middle" font-size="12" font-weight="600" fill="#047857">✅ 出事前拦住</text>
+
+  <defs>
+    <marker id="r1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#f87171"/></marker>
+    <marker id="g1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#34d399"/></marker>
+  </defs>
+
+  <!-- 底部 -->
+  <rect x="40" y="300" width="820" height="56" rx="9" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.2"/>
+  <text x="450" y="324" text-anchor="middle" font-size="14" font-weight="600" fill="#1e40af">本课做的事：在图里指定「这里必须先问我」</text>
+  <text x="450" y="346" text-anchor="middle" font-size="12" fill="#1e3a8a">停下来的时候，现场会被拍张照存好 —— 人回答完，从照片处接着走</text>
+
+  <!-- 三个关键点 -->
+  <rect x="40" y="376" width="255" height="80" rx="9" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="167" y="400" text-anchor="middle" font-size="13" font-weight="600" fill="#1f2937">① 怎么停</text>
+  <text x="167" y="422" text-anchor="middle" font-size="11" fill="#4b5563">节点里喊一声「等一下」</text>
+  <text x="167" y="440" text-anchor="middle" font-size="11" fill="#4b5563">人就收到这个问题</text>
+
+  <rect x="322" y="376" width="255" height="80" rx="9" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="449" y="400" text-anchor="middle" font-size="13" font-weight="600" fill="#1f2937">② 停在哪了</text>
+  <text x="449" y="422" text-anchor="middle" font-size="11" fill="#4b5563">现场拍照存进存档点</text>
+  <text x="449" y="440" text-anchor="middle" font-size="11" fill="#4b5563">所以要能存档才停得住</text>
+
+  <rect x="604" y="376" width="256" height="80" rx="9" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="732" y="400" text-anchor="middle" font-size="13" font-weight="600" fill="#1f2937">③ 怎么接着走</text>
+  <text x="732" y="422" text-anchor="middle" font-size="11" fill="#4b5563">把人的回答递回去</text>
+  <text x="732" y="440" text-anchor="middle" font-size="11" fill="#4b5563">节点从头再跑一遍</text>
+</svg>

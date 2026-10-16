@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" width="900" height="500" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif">
+  <rect width="900" height="500" fill="#ffffff"/>
+  <text x="450" y="32" text-anchor="middle" font-size="19" font-weight="700" fill="#1f2937">课 10 知识全景：Fault-tolerance 与 Subgraphs</text>
+  <text x="450" y="54" text-anchor="middle" font-size="12" fill="#6b7280">给刚学完的你复习：怎么扛错 / 怎么兜底 / 超时怎么配 / 怎么拆 → 往下接什么</text>
+
+  <!-- 列1 重试 -->
+  <rect x="30" y="76" width="200" height="322" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="130" y="102" text-anchor="middle" font-size="14" font-weight="700" fill="#166534">① 重试 RetryPolicy</text>
+
+  <rect x="48" y="116" width="164" height="62" rx="7" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="130" y="136" text-anchor="middle" font-size="12" font-weight="600" fill="#166534">max_attempts</text>
+  <text x="130" y="154" text-anchor="middle" font-size="10" fill="#475569">含第一次</text>
+  <text x="130" y="170" text-anchor="middle" font-size="10" fill="#475569">实测 =3 就跑 3 次</text>
+
+  <rect x="48" y="186" width="164" height="76" rx="7" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.4"/>
+  <text x="130" y="206" text-anchor="middle" font-size="12" font-weight="600" fill="#b91c1c">retry_on ★</text>
+  <text x="130" y="224" text-anchor="middle" font-size="9" fill="#7f1d1d">默认把 ValueError/</text>
+  <text x="130" y="238" text-anchor="middle" font-size="9" fill="#7f1d1d">RuntimeError/TypeError</text>
+  <text x="130" y="252" text-anchor="middle" font-size="9" font-weight="700" fill="#dc2626">一律不重试！</text>
+
+  <rect x="48" y="270" width="164" height="62" rx="7" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="130" y="290" text-anchor="middle" font-size="12" font-weight="600" fill="#166534">只认三类</text>
+  <text x="130" y="308" text-anchor="middle" font-size="10" fill="#475569">ConnectionError</text>
+  <text x="130" y="324" text-anchor="middle" font-size="10" fill="#475569">HTTP 5xx / 自定义</text>
+
+  <rect x="48" y="340" width="164" height="42" rx="7" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="130" y="358" text-anchor="middle" font-size="10" font-weight="600" fill="#334155">退避</text>
+  <text x="130" y="374" text-anchor="middle" font-size="9" fill="#475569">initial × backoff</text>
+
+  <!-- 列2 兜底 -->
+  <rect x="248" y="76" width="200" height="322" rx="10" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="348" y="102" text-anchor="middle" font-size="14" font-weight="700" fill="#1e40af">② 兜底 error_handler</text>
+
+  <rect x="266" y="116" width="164" height="62" rx="7" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.2"/>
+  <text x="348" y="136" text-anchor="middle" font-size="12" font-weight="600" fill="#1e3a8a">add_node 参数</text>
+  <text x="348" y="154" text-anchor="middle" font-size="10" fill="#475569">节点级</text>
+  <text x="348" y="170" text-anchor="middle" font-size="10" fill="#475569">也可 set_node_defaults</text>
+
+  <rect x="266" y="186" width="164" height="76" rx="7" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.4"/>
+  <text x="348" y="206" text-anchor="middle" font-size="12" font-weight="600" fill="#b91c1c">签名是单参 ★</text>
+  <text x="348" y="224" text-anchor="middle" font-size="9" fill="#7f1d1d">handler(state)</text>
+  <text x="348" y="238" text-anchor="middle" font-size="9" fill="#7f1d1d">(state, error) 会</text>
+  <text x="348" y="252" text-anchor="middle" font-size="9" font-weight="700" fill="#dc2626">TypeError！</text>
+
+  <rect x="266" y="270" width="164" height="76" rx="7" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.2"/>
+  <text x="348" y="290" text-anchor="middle" font-size="11" font-weight="600" fill="#1e3a8a">error 怎么拿</text>
+  <text x="348" y="308" text-anchor="middle" font-size="9" fill="#475569">config 里的</text>
+  <text x="348" y="322" text-anchor="middle" font-size="9" fill="#475569">__pregel_node_error</text>
+  <text x="348" y="338" text-anchor="middle" font-size="9" fill="#059669">是 NodeError 对象</text>
+
+  <rect x="266" y="354" width="164" height="28" rx="7" fill="#fefce8" stroke="#fde047" stroke-width="1.2"/>
+  <text x="348" y="372" text-anchor="middle" font-size="9" fill="#854d0e">handler 崩了 = 整跑崩</text>
+
+  <!-- 列3 超时 -->
+  <rect x="466" y="76" width="200" height="322" rx="10" fill="#fff7ed" stroke="#fdba74" stroke-width="1.5"/>
+  <text x="566" y="102" text-anchor="middle" font-size="14" font-weight="700" fill="#9a3412">③ 超时 timeout</text>
+
+  <rect x="484" y="116" width="164" height="76" rx="7" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.4"/>
+  <text x="566" y="136" text-anchor="middle" font-size="12" font-weight="600" fill="#b91c1c">同步节点不行 ★</text>
+  <text x="566" y="154" text-anchor="middle" font-size="9" fill="#7f1d1d">compile 时就抛</text>
+  <text x="566" y="168" text-anchor="middle" font-size="9" fill="#7f1d1d">ValueError:</text>
+  <text x="566" y="182" text-anchor="middle" font-size="9" font-weight="700" fill="#dc2626">only for async</text>
+
+  <rect x="484" y="200" width="164" height="62" rx="7" fill="#ffffff" stroke="#fed7aa" stroke-width="1.2"/>
+  <text x="566" y="220" text-anchor="middle" font-size="12" font-weight="600" fill="#9a3412">async 才生效</text>
+  <text x="566" y="238" text-anchor="middle" font-size="10" fill="#475569">NodeTimeoutError</text>
+  <text x="566" y="254" text-anchor="middle" font-size="10" fill="#059669">能走 error_handler</text>
+
+  <rect x="484" y="270" width="164" height="76" rx="7" fill="#ffffff" stroke="#fed7aa" stroke-width="1.2"/>
+  <text x="566" y="290" text-anchor="middle" font-size="11" font-weight="600" fill="#9a3412">TimeoutPolicy</text>
+  <text x="566" y="308" text-anchor="middle" font-size="9" fill="#475569">run_timeout</text>
+  <text x="566" y="322" text-anchor="middle" font-size="9" fill="#475569">idle_timeout</text>
+  <text x="566" y="336" text-anchor="middle" font-size="9" fill="#b91c1c">没有 max_attempts</text>
+
+  <rect x="484" y="354" width="164" height="28" rx="7" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="566" y="372" text-anchor="middle" font-size="9" fill="#475569">超时可被 retry 重试</text>
+
+  <!-- 列4 子图 -->
+  <rect x="684" y="76" width="186" height="322" rx="10" fill="#faf5ff" stroke="#d8b4fe" stroke-width="1.5"/>
+  <text x="777" y="102" text-anchor="middle" font-size="14" font-weight="700" fill="#6b21a8">④ 子图 Subgraph</text>
+
+  <rect x="702" y="116" width="150" height="62" rx="7" fill="#ffffff" stroke="#e9d5ff" stroke-width="1.2"/>
+  <text x="777" y="136" text-anchor="middle" font-size="12" font-weight="600" fill="#6b21a8">编译后当节点</text>
+  <text x="777" y="154" text-anchor="middle" font-size="10" fill="#475569">add_node('sub', sub)</text>
+  <text x="777" y="170" text-anchor="middle" font-size="10" fill="#475569">sub = 子图.compile()</text>
+
+  <rect x="702" y="186" width="150" height="76" rx="7" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.4"/>
+  <text x="777" y="206" text-anchor="middle" font-size="12" font-weight="600" fill="#b91c1c">只传共享 key ★</text>
+  <text x="777" y="224" text-anchor="middle" font-size="9" fill="#7f1d1d">子图私有字段</text>
+  <text x="777" y="238" text-anchor="middle" font-size="9" fill="#7f1d1d">父图吞掉，不报错</text>
+  <text x="777" y="252" text-anchor="middle" font-size="9" font-weight="700" fill="#dc2626">静默丢失</text>
+
+  <rect x="702" y="270" width="150" height="76" rx="7" fill="#ffffff" stroke="#e9d5ff" stroke-width="1.2"/>
+  <text x="777" y="290" text-anchor="middle" font-size="11" font-weight="600" fill="#6b21a8">不挂 cp 时</text>
+  <text x="777" y="308" text-anchor="middle" font-size="9" fill="#475569">内部不单独存档</text>
+  <text x="777" y="322" text-anchor="middle" font-size="9" fill="#475569">父图历史 4 条</text>
+  <text x="777" y="338" text-anchor="middle" font-size="9" fill="#059669">要看需 subgraphs=True</text>
+
+  <rect x="702" y="354" width="150" height="28" rx="7" fill="#f0fdf4" stroke="#6ee7b7" stroke-width="1.2"/>
+  <text x="777" y="372" text-anchor="middle" font-size="9" fill="#166534">retry 配在内部节点</text>
+
+  <!-- 底部 -->
+  <rect x="30" y="412" width="840" height="70" rx="9" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="450" y="434" text-anchor="middle" font-size="13" font-weight="600" fill="#334155">往下接：课 11 Functional API（@entrypoint/@task 与两套 API 选型）</text>
+  <text x="450" y="454" text-anchor="middle" font-size="11" fill="#475569">抉择：重试默认只认"外部故障"（ValueError 不重试，要显式 retry_on）；超时只支持 async 节点（同步用编译期报错拦下）；</text>
+  <text x="450" y="472" text-anchor="middle" font-size="11" fill="#475569">子图换来了拆分复用，代价是"父图看不见内部"与"私有字段静默丢弃"——排障必须靠 subgraphs=True</text>
+</svg>

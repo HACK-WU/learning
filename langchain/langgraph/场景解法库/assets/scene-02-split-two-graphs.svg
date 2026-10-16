@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="320" viewBox="0 0 900 320" font-family="system-ui,-apple-system,Segoe UI,sans-serif">
+  <rect width="900" height="320" fill="#fbfaf7"/>
+  <text x="24" y="30" font-size="15" font-weight="700" fill="#1a1a1a">解法 C：拆两段图（审批前 / 审批后，中间靠外部状态衔接）</text>
+
+  <g>
+    <rect x="30" y="58" width="200" height="62" rx="9" fill="#dceefb" stroke="#2b7cba" stroke-width="1.8"/>
+    <text x="130" y="80" font-size="12" text-anchor="middle" fill="#1a1a1a">图 1：审批前</text>
+    <text x="130" y="97" font-size="10" text-anchor="middle" fill="#555">校验 → 风控 → 落库待审</text>
+    <text x="130" y="112" font-size="10" text-anchor="middle" fill="#555">跑到 END 就结束</text>
+  </g>
+  <path d="M230 89 L300 89" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <g>
+    <rect x="300" y="52" width="200" height="74" rx="9" fill="#f2ecf9" stroke="#7a5ea8" stroke-width="1.8"/>
+    <text x="400" y="74" font-size="12" text-anchor="middle" fill="#1a1a1a">外部持久化</text>
+    <text x="400" y="91" font-size="10" text-anchor="middle" fill="#555">待审表（自己的库）</text>
+    <text x="400" y="107" font-size="10" text-anchor="middle" fill="#555">status=pending</text>
+    <text x="400" y="121" font-size="10" text-anchor="middle" fill="#555">审批人 UI 读这张表</text>
+  </g>
+  <path d="M500 89 L570 89" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <g>
+    <rect x="570" y="52" width="150" height="74" rx="9" fill="#fff6d9" stroke="#c99a1e" stroke-width="1.8"/>
+    <text x="645" y="74" font-size="12" text-anchor="middle" fill="#1a1a1a">人工审批</text>
+    <text x="645" y="91" font-size="10" text-anchor="middle" fill="#555">改 status=approved</text>
+    <text x="645" y="107" font-size="10" text-anchor="middle" fill="#555">几秒 ~ 几天</text>
+    <text x="645" y="121" font-size="10" text-anchor="middle" fill="#555">图不占任何资源</text>
+  </g>
+
+  <path d="M645 126 L645 175 L130 175 L130 120" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <text x="390" y="194" font-size="11" text-anchor="middle" fill="#1a1a1a">审批通过后 → 触发图 2（新 thread 或新 run）</text>
+
+  <g>
+    <rect x="30" y="204" width="200" height="58" rx="9" fill="#eaf5ea" stroke="#3d8b3d" stroke-width="1.8"/>
+    <text x="130" y="226" font-size="12" text-anchor="middle" fill="#1a1a1a">图 2：审批后</text>
+    <text x="130" y="243" font-size="10" text-anchor="middle" fill="#555">打款 → 通知 → END</text>
+    <text x="130" y="256" font-size="10" text-anchor="middle" fill="#555">可独立重试 / 回放</text>
+  </g>
+
+  <g>
+    <rect x="30" y="272" width="830" height="40" rx="9" fill="#fdecec" stroke="#c0392b" stroke-width="2"/>
+    <text x="46" y="291" font-size="12" font-weight="700" fill="#c0392b">✗ 失效点</text>
+    <text x="46" y="307" font-size="11.5" fill="#1a1a1a">失去「跨两段的整体回放」——time-travel 只能在单段内做；两段间的状态一致性要你自己保证</text>
+  </g>
+
+  <defs><marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#333"/></marker></defs>
+</svg>

@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="320" viewBox="0 0 900 320" font-family="system-ui,-apple-system,Segoe UI,sans-serif">
+  <rect width="900" height="320" fill="#fbfaf7"/>
+  <text x="24" y="30" font-size="15" font-weight="700" fill="#1a1a1a">解法 B：PgBouncer 事务池（把 N×M 收敛成固定小连接数）</text>
+
+  <g>
+    <rect x="30" y="58" width="140" height="54" rx="8" fill="#dceefb" stroke="#2b7cba" stroke-width="1.5"/>
+    <text x="100" y="80" font-size="12" text-anchor="middle" fill="#1a1a1a">副本 1</text>
+    <text x="100" y="97" font-size="10" text-anchor="middle" fill="#555">pool max=20</text>
+  </g>
+  <g>
+    <rect x="30" y="122" width="140" height="54" rx="8" fill="#dceefb" stroke="#2b7cba" stroke-width="1.5"/>
+    <text x="100" y="144" font-size="12" text-anchor="middle" fill="#1a1a1a">副本 2</text>
+    <text x="100" y="161" font-size="10" text-anchor="middle" fill="#555">pool max=20</text>
+  </g>
+  <g>
+    <rect x="30" y="186" width="140" height="54" rx="8" fill="#dceefb" stroke="#2b7cba" stroke-width="1.5"/>
+    <text x="100" y="208" font-size="12" text-anchor="middle" fill="#1a1a1a">副本 N</text>
+    <text x="100" y="225" font-size="10" text-anchor="middle" fill="#555">pool max=20</text>
+  </g>
+  <text x="100" y="258" font-size="11" text-anchor="middle" fill="#c0392b">合计 N×20 条</text>
+
+  <path d="M170 85 L250 130" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <path d="M170 149 L250 149" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <path d="M170 213 L250 168" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <g>
+    <rect x="250" y="110" width="210" height="80" rx="10" fill="#eaf5ea" stroke="#3d8b3d" stroke-width="2.2"/>
+    <text x="355" y="134" font-size="13" font-weight="700" text-anchor="middle" fill="#1a1a1a">PgBouncer</text>
+    <text x="355" y="153" font-size="11" text-anchor="middle" fill="#555">transaction pooling 模式</text>
+    <text x="355" y="170" font-size="10" text-anchor="middle" fill="#555">把 N×20 复用为固定小池</text>
+    <text x="355" y="184" font-size="10" text-anchor="middle" fill="#555">（如 30 条真实连接）</text>
+  </g>
+  <path d="M460 150 L530 150" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <g>
+    <rect x="530" y="118" width="150" height="64" rx="9" fill="#f2ecf9" stroke="#7a5ea8" stroke-width="1.5"/>
+    <text x="605" y="140" font-size="12" text-anchor="middle" fill="#1a1a1a">PostgreSQL</text>
+    <text x="605" y="157" font-size="10" text-anchor="middle" fill="#555">max_connections=100</text>
+    <text x="605" y="172" font-size="10" text-anchor="middle" fill="#555">实际只被占 30</text>
+  </g>
+
+  <g>
+    <rect x="700" y="106" width="170" height="88" rx="9" fill="#fff8e6" stroke="#c99a1e" stroke-width="1.5"/>
+    <text x="785" y="128" font-size="12" text-anchor="middle" fill="#1a1a1a">关键约束</text>
+    <text x="785" y="148" font-size="10" text-anchor="middle" fill="#555">事务池下禁用</text>
+    <text x="785" y="164" font-size="10" text-anchor="middle" fill="#555">会话级状态：</text>
+    <text x="785" y="180" font-size="10" text-anchor="middle" fill="#555">prepared stmt / advisory lock</text>
+  </g>
+
+  <g>
+    <rect x="30" y="276" width="830" height="36" rx="9" fill="#fdecec" stroke="#c0392b" stroke-width="2"/>
+    <text x="46" y="293" font-size="12" font-weight="700" fill="#c0392b">✗ 失效点</text>
+    <text x="46" y="308" font-size="11.5" fill="#1a1a1a">事务池下 prepared statement / 会话级 advisory lock 失效——用了这些特性的代码会报 InvalidSqlStatementName 类错误</text>
+  </g>
+
+  <defs><marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#333"/></marker></defs>
+</svg>

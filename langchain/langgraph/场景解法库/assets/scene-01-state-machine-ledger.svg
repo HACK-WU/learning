@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="330" viewBox="0 0 900 330" font-family="system-ui,-apple-system,Segoe UI,sans-serif">
+  <rect width="900" height="330" fill="#fbfaf7"/>
+  <text x="24" y="30" font-size="15" font-weight="700" fill="#1a1a1a">解法 C：状态机记账（把「打没打过」写进 State，由 checkpoint 持久化）</text>
+
+  <g>
+    <rect x="30" y="58" width="130" height="54" rx="8" fill="#dceefb" stroke="#2b7cba" stroke-width="1.5"/>
+    <text x="95" y="80" font-size="12" text-anchor="middle" fill="#1a1a1a">打款节点</text>
+    <text x="95" y="97" font-size="10" text-anchor="middle" fill="#555">读 state.paid</text>
+  </g>
+  <path d="M160 85 L212 85" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <g>
+    <polygon points="212,85 284,48 356,85 284,122" fill="#fff6d9" stroke="#c99a1e" stroke-width="1.8"/>
+    <text x="284" y="82" font-size="12" text-anchor="middle" fill="#1a1a1a">paid 已为真?</text>
+  </g>
+
+  <path d="M356 70 L440 70" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <text x="398" y="62" font-size="10" text-anchor="middle" fill="#3d8b3d">是</text>
+  <g>
+    <rect x="440" y="46" width="140" height="46" rx="8" fill="#eaf5ea" stroke="#3d8b3d" stroke-width="1.5"/>
+    <text x="510" y="68" font-size="12" text-anchor="middle" fill="#1a1a1a">跳过打款</text>
+    <text x="510" y="83" font-size="10" text-anchor="middle" fill="#555">直接返回原结果</text>
+  </g>
+
+  <path d="M356 100 L440 100" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+  <text x="398" y="120" font-size="10" text-anchor="middle" fill="#2b7cba">否</text>
+  <g>
+    <rect x="440" y="100" width="140" height="46" rx="8" fill="#dceefb" stroke="#2b7cba" stroke-width="1.5"/>
+    <text x="510" y="122" font-size="12" text-anchor="middle" fill="#1a1a1a">执行打款</text>
+    <text x="510" y="137" font-size="10" text-anchor="middle" fill="#555">返回 paid=True</text>
+  </g>
+
+  <path d="M580 123 L640 123 L640 190 L95 190 L95 118" stroke="#7a5ea8" stroke-width="1.6" stroke-dasharray="5,4" marker-end="url(#arp)"/>
+  <g>
+    <rect x="660" y="86" width="200" height="72" rx="9" fill="#f2ecf9" stroke="#7a5ea8" stroke-width="1.5"/>
+    <text x="760" y="108" font-size="12" text-anchor="middle" fill="#1a1a1a">checkpoint 落盘</text>
+    <text x="760" y="125" font-size="10" text-anchor="middle" fill="#555">paid=True 随 superstep 存档</text>
+    <text x="760" y="142" font-size="10" text-anchor="middle" fill="#555">崩溃重跑也能读到</text>
+  </g>
+
+  <g>
+    <rect x="30" y="215" width="830" height="92" rx="9" fill="#fdecec" stroke="#c0392b" stroke-width="2"/>
+    <text x="46" y="238" font-size="13" font-weight="700" fill="#c0392b">✗ 失效点</text>
+    <text x="46" y="260" font-size="11.5" fill="#1a1a1a">1. 「打款成功」与「paid=True 落盘」之间有窗口——此刻崩溃，钱出去了但账上没记</text>
+    <text x="46" y="280" font-size="11.5" fill="#1a1a1a">2. 只挡同一 thread 内的重跑；换 thread_id / 新会话即失效（State 是会话内记忆）</text>
+    <text x="46" y="300" font-size="11.5" fill="#1a1a1a">3. 依赖 checkpointer——不挂则 paid 根本不持久化，解法完全失效</text>
+  </g>
+
+  <defs>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#333"/></marker>
+    <marker id="arp" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#7a5ea8"/></marker>
+  </defs>
+</svg>

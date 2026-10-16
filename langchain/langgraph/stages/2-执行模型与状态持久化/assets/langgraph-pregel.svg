@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="520" viewBox="0 0 920 520" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="920" height="520" fill="#ffffff"/>
+
+  <defs>
+    <marker id="a4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5b6b7f"/>
+    </marker>
+  </defs>
+
+  <text x="460" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="#16324f">一次运行，是怎么被切成一批一批来跑的</text>
+
+  <rect x="16" y="42" width="888" height="196" rx="12" fill="#f7f9fc" stroke="#c9d4e2" stroke-width="1.5"/>
+  <text x="460" y="66" text-anchor="middle" font-size="14" font-weight="700" fill="#16324f">把一张图切成"批"：同一批的方框，看到的是同一份旧记录，改动最后才合在一起</text>
+
+  <rect x="40" y="84" width="130" height="40" rx="8" fill="#e5f4ff" stroke="#006ddd" stroke-width="1.4"/>
+  <text x="105" y="109" text-anchor="middle" font-size="13" fill="#16324f">第 1 批：A</text>
+
+  <line x1="170" y1="104" x2="206" y2="104" stroke="#5b6b7f" stroke-width="1.8" marker-end="url(#a4)"/>
+
+  <rect x="210" y="84" width="130" height="40" rx="8" fill="#e5f4ff" stroke="#006ddd" stroke-width="1.4"/>
+  <text x="275" y="109" text-anchor="middle" font-size="13" fill="#16324f">第 2 批：B</text>
+
+  <line x1="340" y1="104" x2="376" y2="104" stroke="#5b6b7f" stroke-width="1.8" marker-end="url(#a4)"/>
+
+  <rect x="380" y="84" width="130" height="40" rx="8" fill="#e5f4ff" stroke="#006ddd" stroke-width="1.4"/>
+  <text x="445" y="109" text-anchor="middle" font-size="13" fill="#16324f">第 3 批：A</text>
+
+  <line x1="510" y1="104" x2="546" y2="104" stroke="#5b6b7f" stroke-width="1.8" marker-end="url(#a4)"/>
+
+  <rect x="550" y="84" width="150" height="40" rx="8" fill="#eaf7ee" stroke="#2e8540" stroke-width="1.4"/>
+  <text x="625" y="109" text-anchor="middle" font-size="13" fill="#1d5c2b">够了，收工</text>
+
+  <text x="460" y="152" text-anchor="middle" font-size="12" fill="#5b6b7f">一批 = 一次"同时开工"；上一批的改动合进记录本之后，下一批才开工</text>
+
+  <rect x="40" y="166" width="840" height="58" rx="9" fill="#fff8ea" stroke="#e0b060" stroke-width="1.3"/>
+  <text x="60" y="188" font-size="12" fill="#8a5200">同一批里并排开工的两个方框，看到的都是<b>开工那一刻</b>的旧记录</text>
+  <text x="60" y="210" font-size="12" fill="#8a5200">（实测：两个分支都看到空列表，而不是"先跑完的那个改过之后"的版本）</text>
+
+  <rect x="16" y="252" width="290" height="240" rx="12" fill="#fbfcfe" stroke="#c9d4e2" stroke-width="1.5"/>
+  <text x="161" y="278" text-anchor="middle" font-size="15" font-weight="700" fill="#16324f">想开几份，开工才知道</text>
+  <line x1="42" y1="292" x2="280" y2="292" stroke="#dde4ec" stroke-width="1.2"/>
+  <text x="161" y="316" text-anchor="middle" font-size="12" fill="#33415c">事先画箭头，得知道有几个方框</text>
+  <text x="161" y="338" text-anchor="middle" font-size="12" fill="#33415c">可"拆成几份"往往要跑起来才定</text>
+  <rect x="42" y="354" width="238" height="46" rx="8" fill="#eaf7ee" stroke="#2e8540" stroke-width="1.4"/>
+  <text x="161" y="376" text-anchor="middle" font-size="12" font-weight="700" fill="#1d5c2b">开一张"派工单"</text>
+  <text x="161" y="393" text-anchor="middle" font-size="11" fill="#33513a">几份就几张，各带自己的料</text>
+  <text x="161" y="424" text-anchor="middle" font-size="12" fill="#33415c">改完都写回同一本记录本</text>
+  <text x="161" y="444" text-anchor="middle" font-size="11" fill="#5b7a63">（所以那一栏也得能叠加）</text>
+  <text x="161" y="478" text-anchor="middle" font-size="11" fill="#7b8798">实测：3 份 = 3 批，但都写回同一栏</text>
+
+  <rect x="318" y="252" width="290" height="240" rx="12" fill="#fbfcfe" stroke="#c9d4e2" stroke-width="1.5"/>
+  <text x="463" y="278" text-anchor="middle" font-size="15" font-weight="700" fill="#16324f">一个方框干两件事</text>
+  <line x1="344" y1="292" x2="582" y2="292" stroke="#dde4ec" stroke-width="1.2"/>
+  <text x="463" y="316" text-anchor="middle" font-size="12" fill="#33415c">本来：改记录是一件事</text>
+  <text x="463" y="338" text-anchor="middle" font-size="12" fill="#33415c">决定下一步是另一件事</text>
+  <rect x="344" y="354" width="238" height="46" rx="8" fill="#eaf7ee" stroke="#2e8540" stroke-width="1.4"/>
+  <text x="463" y="376" text-anchor="middle" font-size="12" font-weight="700" fill="#1d5c2b">一张"指令条"同时写两样</text>
+  <text x="463" y="393" text-anchor="middle" font-size="11" fill="#33513a">改哪几栏 + 下一步去哪</text>
+  <text x="463" y="424" text-anchor="middle" font-size="12" fill="#33415c">省掉"只看路不干活"的空方框</text>
+  <rect x="344" y="440" width="238" height="40" rx="8" fill="#fde8e8" stroke="#c0392b" stroke-width="1.3"/>
+  <text x="463" y="458" text-anchor="middle" font-size="11" font-weight="700" fill="#8f2318">写错名字不报错，只悄悄跳过</text>
+  <text x="463" y="474" text-anchor="middle" font-size="10" fill="#7a2f26">（标注清单可提前拦住）</text>
+
+  <rect x="620" y="252" width="284" height="240" rx="12" fill="#fff8ea" stroke="#e0b060" stroke-width="1.5"/>
+  <text x="762" y="278" text-anchor="middle" font-size="15" font-weight="700" fill="#8a5200">顺带回答上节课的问号</text>
+  <line x1="646" y1="292" x2="878" y2="292" stroke="#e8d3ae" stroke-width="1.2"/>
+  <text x="762" y="316" text-anchor="middle" font-size="12" fill="#8a5200">"一个来回为什么占 2 轮？"</text>
+  <text x="762" y="344" text-anchor="middle" font-size="12" fill="#7a5f33">因为轮数算的是<b>批</b>，</text>
+  <text x="762" y="364" text-anchor="middle" font-size="12" fill="#7a5f33">不是"来回"，也不是方框个数</text>
+  <line x1="646" y1="382" x2="878" y2="382" stroke="#e8d3ae" stroke-width="1.2"/>
+  <text x="762" y="406" text-anchor="middle" font-size="12" fill="#7a5f33">实测：一个方框自转 3 次 = 3 批</text>
+  <text x="762" y="426" text-anchor="middle" font-size="12" fill="#7a5f33">两个方框来回 2 次 = 4 批</text>
+  <text x="762" y="452" text-anchor="middle" font-size="11" fill="#a08050">所以上限要给"批"留够</text>
+  <text x="762" y="474" text-anchor="middle" font-size="11" fill="#a08050">不是给"来回"留</text>
+</svg>

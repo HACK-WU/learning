@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 380" width="880" height="380" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif">
+  <rect width="880" height="380" fill="#ffffff"/>
+  <text x="440" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#1f2937">第 1 跳：让它每做完一步就说一声</text>
+  <text x="440" y="52" text-anchor="middle" font-size="12" fill="#6b7280">左右是同一张图，区别只在「要的方式」</text>
+
+  <rect x="40" y="76" width="380" height="150" rx="9" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.4"/>
+  <text x="230" y="100" text-anchor="middle" font-size="13" font-weight="600" fill="#b91c1c">改之前：invoke（只有终态）</text>
+  <rect x="62" y="112" width="336" height="30" rx="6" fill="#ffffff" stroke="#fecaca" stroke-width="1.1"/>
+  <text x="230" y="132" text-anchor="middle" font-size="11" fill="#7f1d1d">检索 → 生成 → 校对，三步全黑</text>
+  <rect x="62" y="148" width="336" height="30" rx="6" fill="#fee2e2" stroke="#dc2626" stroke-width="1.4"/>
+  <text x="230" y="168" text-anchor="middle" font-size="11" fill="#b91c1c">最后才拿到一条完整答案</text>
+  <text x="230" y="200" text-anchor="middle" font-size="11" fill="#991b1b">中间十几秒：屏幕全白</text>
+
+  <rect x="460" y="76" width="380" height="150" rx="9" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="1.4"/>
+  <text x="650" y="100" text-anchor="middle" font-size="13" font-weight="600" fill="#047857">改之后：stream(updates)</text>
+  <rect x="482" y="112" width="336" height="26" rx="6" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.1"/>
+  <text x="650" y="130" text-anchor="middle" font-size="10" fill="#065f46">{'检索': {...}}</text>
+  <rect x="482" y="142" width="336" height="26" rx="6" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.1"/>
+  <text x="650" y="160" text-anchor="middle" font-size="10" fill="#065f46">{'生成': {...}}</text>
+  <rect x="482" y="172" width="336" height="26" rx="6" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.1"/>
+  <text x="650" y="190" text-anchor="middle" font-size="10" fill="#065f46">{'校对': {...}}</text>
+  <text x="650" y="214" text-anchor="middle" font-size="11" fill="#059669">每步一个 chunk，进度肉眼可见</text>
+
+  <rect x="40" y="244" width="800" height="52" rx="8" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.2"/>
+  <text x="440" y="266" text-anchor="middle" font-size="12" font-weight="600" fill="#1e40af">这一跳的改动：只换了调用方式，图一行没动</text>
+  <text x="440" y="286" text-anchor="middle" font-size="11" fill="#1e3a8a">stream_mode="updates" 吐 {节点名: 改动} —— 前端拿到就能渲染"第几步完成"</text>
+
+  <rect x="40" y="308" width="385" height="56" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="232" y="330" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">这一跳还没解决</text>
+  <text x="232" y="349" text-anchor="middle" font-size="10" fill="#475569">节点内部的"查到第几条 / 还差多少"说不出来</text>
+
+  <rect x="455" y="308" width="385" height="56" rx="8" fill="#f0fdf4" stroke="#6ee7b7" stroke-width="1.2"/>
+  <text x="647" y="330" text-anchor="middle" font-size="11" font-weight="600" fill="#047857">下一跳要加什么</text>
+  <text x="647" y="349" text-anchor="middle" font-size="10" fill="#065f46">让节点自己在中途喊话 —— 用 custom</text>
+</svg>

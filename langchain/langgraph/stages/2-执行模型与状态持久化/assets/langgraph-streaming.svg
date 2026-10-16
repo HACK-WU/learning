@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 460" width="900" height="460" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif">
+  <rect width="900" height="460" fill="#ffffff"/>
+  <text x="450" y="34" text-anchor="middle" font-size="19" font-weight="700" fill="#1f2937">等它跑完才给结果，中间那段时间你在干嘛</text>
+  <text x="450" y="56" text-anchor="middle" font-size="13" fill="#6b7280">左边：干等，什么也看不到 ｜ 右边：边跑边看，中途就知道对不对</text>
+
+  <!-- 左半：干等 -->
+  <rect x="40" y="82" width="380" height="180" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="230" y="106" text-anchor="middle" font-size="15" font-weight="600" fill="#b91c1c">干等（一次拿全部）</text>
+
+  <rect x="70" y="122" width="80" height="52" rx="6" fill="#ffffff" stroke="#fca5a5" stroke-width="1.2"/>
+  <text x="110" y="144" text-anchor="middle" font-size="12" font-weight="600" fill="#7f1d1d">步骤 1</text>
+  <text x="110" y="162" text-anchor="middle" font-size="10" fill="#9ca3af">看不见</text>
+
+  <rect x="164" y="122" width="80" height="52" rx="6" fill="#ffffff" stroke="#fca5a5" stroke-width="1.2"/>
+  <text x="204" y="144" text-anchor="middle" font-size="12" font-weight="600" fill="#7f1d1d">步骤 2</text>
+  <text x="204" y="162" text-anchor="middle" font-size="10" fill="#9ca3af">看不见</text>
+
+  <rect x="258" y="122" width="80" height="52" rx="6" fill="#ffffff" stroke="#fca5a5" stroke-width="1.2"/>
+  <text x="298" y="144" text-anchor="middle" font-size="12" font-weight="600" fill="#7f1d1d">步骤 3</text>
+  <text x="298" y="162" text-anchor="middle" font-size="10" fill="#9ca3af">看不见</text>
+
+  <rect x="352" y="122" width="52" height="52" rx="6" fill="#fee2e2" stroke="#dc2626" stroke-width="1.6"/>
+  <text x="378" y="150" text-anchor="middle" font-size="11" font-weight="700" fill="#b91c1c">结果</text>
+
+  <rect x="70" y="190" width="334" height="54" rx="7" fill="#ffffff" stroke="#fecaca" stroke-width="1.2"/>
+  <text x="237" y="212" text-anchor="middle" font-size="12" fill="#7f1d1d">这中间十几秒，屏幕上什么都没有</text>
+  <text x="237" y="232" text-anchor="middle" font-size="11" fill="#991b1b">跑偏了？不知道，只能等它结束才发现</text>
+
+  <!-- 右半：边跑边看 -->
+  <rect x="470" y="82" width="390" height="180" rx="10" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="1.5"/>
+  <text x="665" y="106" text-anchor="middle" font-size="15" font-weight="600" fill="#047857">边跑边看（分段给）</text>
+
+  <rect x="500" y="122" width="80" height="52" rx="6" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="540" y="144" text-anchor="middle" font-size="12" font-weight="600" fill="#065f46">步骤 1</text>
+  <text x="540" y="162" text-anchor="middle" font-size="10" fill="#059669">✓ 看到了</text>
+
+  <rect x="594" y="122" width="80" height="52" rx="6" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="634" y="144" text-anchor="middle" font-size="12" font-weight="600" fill="#065f46">步骤 2</text>
+  <text x="634" y="162" text-anchor="middle" font-size="10" fill="#059669">✓ 看到了</text>
+
+  <rect x="688" y="122" width="80" height="52" rx="6" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="728" y="144" text-anchor="middle" font-size="12" font-weight="600" fill="#065f46">步骤 3</text>
+  <text x="728" y="162" text-anchor="middle" font-size="10" fill="#059669">✓ 看到了</text>
+
+  <rect x="782" y="122" width="52" height="52" rx="6" fill="#d1fae5" stroke="#059669" stroke-width="1.6"/>
+  <text x="808" y="150" text-anchor="middle" font-size="11" font-weight="700" fill="#047857">结果</text>
+
+  <rect x="500" y="190" width="334" height="54" rx="7" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="667" y="212" text-anchor="middle" font-size="12" fill="#065f46">每一步做完就报一次，人一直有东西看</text>
+  <text x="667" y="232" text-anchor="middle" font-size="11" fill="#047857">跑偏了？第二步就能看出来，可以早停</text>
+
+  <!-- 底部一句话 -->
+  <rect x="40" y="278" width="820" height="56" rx="9" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.2"/>
+  <text x="450" y="302" text-anchor="middle" font-size="14" font-weight="600" fill="#1e40af">本课做的事：把「一次全给」换成「做完一段就给一段」</text>
+  <text x="450" y="324" text-anchor="middle" font-size="12" fill="#1e3a8a">同一张图不用改，换个「要的方式」就行</text>
+
+  <!-- 三个选择 -->
+  <rect x="40" y="354" width="255" height="88" rx="9" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="167" y="378" text-anchor="middle" font-size="13" font-weight="600" fill="#1f2937">① 每次给整张快照</text>
+  <text x="167" y="400" text-anchor="middle" font-size="11" fill="#4b5563">拿到的是当下的完整状态</text>
+  <text x="167" y="418" text-anchor="middle" font-size="11" fill="#4b5563">省事，但重复多、费带宽</text>
+  <text x="167" y="435" text-anchor="middle" font-size="10" fill="#9ca3af">想"随时知道全貌"用它</text>
+
+  <rect x="322" y="354" width="255" height="88" rx="9" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="449" y="378" text-anchor="middle" font-size="13" font-weight="600" fill="#1f2937">② 每次只给这一段的改动</text>
+  <text x="449" y="400" text-anchor="middle" font-size="11" fill="#4b5563">拿到的是"刚才变了什么"</text>
+  <text x="449" y="418" text-anchor="middle" font-size="11" fill="#4b5563">省带宽，但要自己攒起来</text>
+  <text x="449" y="435" text-anchor="middle" font-size="10" fill="#9ca3af">想"看进度"用它</text>
+
+  <rect x="604" y="354" width="256" height="88" rx="9" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="732" y="378" text-anchor="middle" font-size="13" font-weight="600" fill="#1f2937">③ 自己往里插话</text>
+  <text x="732" y="400" text-anchor="middle" font-size="11" fill="#4b5563">节点里主动喊一嗓子</text>
+  <text x="732" y="418" text-anchor="middle" font-size="11" fill="#4b5563">"还差一半"、"正在查库"</text>
+  <text x="732" y="435" text-anchor="middle" font-size="10" fill="#9ca3af">想"自定义进度"用它</text>
+</svg>

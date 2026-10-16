@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="900" height="520" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif">
+  <rect width="900" height="520" fill="#ffffff"/>
+  <text x="450" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#1f2937">第 3 跳：重试 + 兜底 + 拆子图</text>
+  <text x="450" y="52" text-anchor="middle" font-size="12" fill="#6b7280">高亮为本跳新增：自定义异常保证重试、async 才能配超时、风控拆成子图</text>
+
+  <!-- 主流程 -->
+  <rect x="26" y="68" width="848" height="120" rx="9" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3"/>
+  <text x="450" y="88" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">最终形态：主流程 + 风控子图</text>
+
+  <rect x="44" y="98" width="106" height="58" rx="7" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.2"/>
+  <text x="97" y="120" text-anchor="middle" font-size="11" font-weight="600" fill="#1e40af">查库存</text>
+  <text x="97" y="138" text-anchor="middle" font-size="9" fill="#475569">同步节点</text>
+
+  <path d="M150 127 L178 127" stroke="#6366f1" stroke-width="2" marker-end="url(#f1)"/>
+
+  <rect x="178" y="98" width="216" height="58" rx="7" fill="#faf5ff" stroke="#a855f7" stroke-width="1.6"/>
+  <text x="286" y="118" text-anchor="middle" font-size="11" font-weight="700" fill="#6b21a8">风控子图（本跳拆出）</text>
+  <text x="286" y="137" text-anchor="middle" font-size="9" fill="#7e22ce">内部：调风控 → 评分 → 判定</text>
+
+  <path d="M394 127 L422 127" stroke="#6366f1" stroke-width="2" marker-end="url(#f1)"/>
+
+  <rect x="422" y="98" width="106" height="58" rx="7" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.2"/>
+  <text x="475" y="120" text-anchor="middle" font-size="11" font-weight="600" fill="#1e40af">出结论</text>
+  <text x="475" y="138" text-anchor="middle" font-size="9" fill="#475569">同步节点</text>
+
+  <path d="M528 127 L556 127" stroke="#6366f1" stroke-width="2" marker-end="url(#f1)"/>
+
+  <rect x="556" y="98" width="106" height="58" rx="7" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.2"/>
+  <text x="609" y="120" text-anchor="middle" font-size="11" font-weight="600" fill="#1e40af">通知</text>
+  <text x="609" y="138" text-anchor="middle" font-size="9" fill="#475569">同步节点</text>
+
+  <rect x="682" y="98" width="172" height="58" rx="7" fill="#f0fdf4" stroke="#6ee7b7" stroke-width="1.3"/>
+  <text x="768" y="118" text-anchor="middle" font-size="11" font-weight="600" fill="#047857">只传共享字段</text>
+  <text x="768" y="137" text-anchor="middle" font-size="9" fill="#065f46">order_id / log / risk</text>
+
+  <defs>
+    <marker id="f1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#6366f1"/></marker>
+  </defs>
+
+  <!-- 子图内部 -->
+  <path d="M286 156 L286 186" stroke="#a855f7" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#f2)"/>
+  <defs>
+    <marker id="f2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#a855f7"/></marker>
+  </defs>
+
+  <rect x="178" y="192" width="216" height="106" rx="8" fill="#fefce8" stroke="#fde047" stroke-width="1.4"/>
+  <text x="286" y="212" text-anchor="middle" font-size="11" font-weight="700" fill="#854d0e">子图内部各管各的容错</text>
+  <text x="286" y="232" text-anchor="middle" font-size="9" fill="#78350f">调风控：自定义异常 + retry ×3</text>
+  <text x="286" y="250" text-anchor="middle" font-size="9" fill="#78350f">评分：async + timeout 0.5s</text>
+  <text x="286" y="268" text-anchor="middle" font-size="9" fill="#78350f">判定：error_handler 兜底</text>
+  <text x="286" y="288" text-anchor="middle" font-size="9" font-weight="600" fill="#b45309">父图只看到「风控」一步</text>
+
+  <!-- 四块 -->
+  <rect x="26" y="192" width="140" height="106" rx="8" fill="#f0fdf4" stroke="#6ee7b7" stroke-width="1.3"/>
+  <text x="96" y="212" text-anchor="middle" font-size="11" font-weight="700" fill="#166534">① 自定义异常</text>
+  <text x="96" y="232" text-anchor="middle" font-size="9" fill="#065f46">class NetError</text>
+  <text x="96" y="250" text-anchor="middle" font-size="9" fill="#065f46">默认就重试</text>
+  <text x="96" y="270" text-anchor="middle" font-size="9" fill="#065f46">不用写 retry_on</text>
+  <text x="96" y="288" text-anchor="middle" font-size="9" font-weight="600" fill="#b91c1c">ValueError 则不重试</text>
+
+  <rect x="26" y="312" width="368" height="106" rx="8" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.3"/>
+  <text x="210" y="332" text-anchor="middle" font-size="11" font-weight="700" fill="#b91c1c">② 同步节点配不了超时（实测）</text>
+  <text x="210" y="352" text-anchor="middle" font-size="9" fill="#7f1d1d">add_node('x', sync_fn, timeout=0.5)</text>
+  <text x="210" y="370" text-anchor="middle" font-size="9" fill="#7f1d1d">compile() -> ValueError:</text>
+  <text x="210" y="388" text-anchor="middle" font-size="9" fill="#b91c1c">only supported for async nodes</text>
+  <text x="210" y="408" text-anchor="middle" font-size="9" fill="#7f1d1d">正解：改用 async def + ainvoke</text>
+
+  <rect x="406" y="312" width="468" height="106" rx="8" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.3"/>
+  <text x="640" y="332" text-anchor="middle" font-size="11" font-weight="700" fill="#1e40af">③ 兜底与超时串成一条链</text>
+  <text x="640" y="352" text-anchor="middle" font-size="9" fill="#1e3a8a">handler(state)  ← 单参数，error 在 config 里</text>
+  <text x="640" y="370" text-anchor="middle" font-size="9" fill="#1e3a8a">超时触发 -> 也走 error_handler（实测 0.40s 兜底成功）</text>
+  <text x="640" y="388" text-anchor="middle" font-size="9" fill="#1e3a8a">timeout × retry 会叠乘：0.3s × 3 = 1.35s</text>
+  <text x="640" y="408" text-anchor="middle" font-size="9" fill="#1e3a8a">handler 自己崩了 = 整跑崩</text>
+
+  <!-- 铁律 -->
+  <rect x="26" y="432" width="848" height="70" rx="9" fill="#fefce8" stroke="#fde047" stroke-width="1.4"/>
+  <text x="450" y="452" text-anchor="middle" font-size="12" font-weight="700" fill="#854d0e">五条必须记住（全是实测）</text>
+  <text x="450" y="472" text-anchor="middle" font-size="10" fill="#78350f">① 默认 retry_on 不认 ValueError/RuntimeError/TypeError　② max_attempts 含第一次　③ handler 是 (state) 单参</text>
+  <text x="450" y="490" text-anchor="middle" font-size="10" fill="#78350f">④ 同步节点配 timeout 编译期就抛错　⑤ 父子只传共享字段，私有的静默丢弃</text>
+</svg>

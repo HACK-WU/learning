@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="500" viewBox="0 0 940 500" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="940" height="500" fill="#ffffff"/>
+
+  <defs>
+    <marker id="s3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5b6b7f"/>
+    </marker>
+  </defs>
+
+  <text x="470" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="#16324f">课 3 全景：填了四样，踩了四个坑</text>
+
+  <rect x="16" y="44" width="212" height="330" rx="12" fill="#f7f9fc" stroke="#c9d4e2" stroke-width="1.5"/>
+  <text x="122" y="70" text-anchor="middle" font-size="15" font-weight="700" fill="#16324f">填四样（按顺序）</text>
+
+  <rect x="38" y="86" width="168" height="52" rx="8" fill="#eaf7ee" stroke="#2e8540" stroke-width="1.5"/>
+  <text x="122" y="108" text-anchor="middle" font-size="13" font-weight="700" fill="#1d5c2b">① State</text>
+  <text x="122" y="127" text-anchor="middle" font-size="11" fill="#33513a">本子有哪些栏位</text>
+
+  <rect x="38" y="148" width="168" height="52" rx="8" fill="#e5f4ff" stroke="#006ddd" stroke-width="1.5"/>
+  <text x="122" y="170" text-anchor="middle" font-size="13" font-weight="700" fill="#16324f">② 节点</text>
+  <text x="122" y="189" text-anchor="middle" font-size="11" fill="#16324f">普通函数，交回改动</text>
+
+  <rect x="38" y="210" width="168" height="52" rx="8" fill="#fff4e0" stroke="#d98200" stroke-width="1.5"/>
+  <text x="122" y="232" text-anchor="middle" font-size="13" font-weight="700" fill="#8a5200">③ 边</text>
+  <text x="122" y="251" text-anchor="middle" font-size="11" fill="#8a5200">谁接谁 + 首尾虚拟框</text>
+
+  <rect x="38" y="272" width="168" height="52" rx="8" fill="#f3eafc" stroke="#7c4dbd" stroke-width="1.5"/>
+  <text x="122" y="294" text-anchor="middle" font-size="13" font-weight="700" fill="#5b2f8f">④ 条件边</text>
+  <text x="122" y="313" text-anchor="middle" font-size="11" fill="#5b2f8f">岔路口 + 回头路</text>
+
+  <text x="122" y="348" text-anchor="middle" font-size="12" font-weight="700" fill="#16324f">图成了</text>
+
+  <rect x="248" y="44" width="450" height="330" rx="12" fill="#fbfcfe" stroke="#c9d4e2" stroke-width="1.5"/>
+  <text x="473" y="70" text-anchor="middle" font-size="15" font-weight="700" fill="#16324f">每样各有一个坑（都实测过）</text>
+
+  <rect x="272" y="86" width="402" height="62" rx="9" fill="#fde8e8" stroke="#c0392b" stroke-width="1.4"/>
+  <text x="290" y="108" font-size="13" font-weight="700" fill="#8f2318">坑 1　不写 reducer = 覆盖，静默丢数据</text>
+  <text x="290" y="130" font-size="11" fill="#7a2f26">plain: ['第一版'] → ['第二版']　第一版消失，不报错</text>
+
+  <rect x="272" y="158" width="402" height="62" rx="9" fill="#fde8e8" stroke="#c0392b" stroke-width="1.4"/>
+  <text x="290" y="180" font-size="13" font-weight="700" fill="#8f2318">坑 2　累加字段返回空列表清不掉</text>
+  <text x="290" y="202" font-size="11" fill="#7a2f26">{'errors': []} 没清掉 → 要用 Overwrite([])</text>
+
+  <rect x="272" y="230" width="402" height="62" rx="9" fill="#fde8e8" stroke="#c0392b" stroke-width="1.4"/>
+  <text x="290" y="252" font-size="13" font-weight="700" fill="#8f2318">坑 3　并发写同一字段直接报错</text>
+  <text x="290" y="274" font-size="11" fill="#7a2f26">InvalidUpdateError（课 2 埋的雷）→ 加 reducer 即通</text>
+
+  <rect x="272" y="302" width="402" height="62" rx="9" fill="#fde8e8" stroke="#c0392b" stroke-width="1.4"/>
+  <text x="290" y="324" font-size="13" font-weight="700" fill="#8f2318">坑 4　回头路没终点 → 转到抛异常</text>
+  <text x="290" y="346" font-size="11" fill="#7a2f26">GraphRecursionError；上限是保险丝，不是终止条件</text>
+
+  <rect x="714" y="44" width="210" height="330" rx="12" fill="#f7f9fc" stroke="#c9d4e2" stroke-width="1.5"/>
+  <text x="819" y="70" text-anchor="middle" font-size="15" font-weight="700" fill="#16324f">下一课接什么</text>
+  <text x="819" y="98" text-anchor="middle" font-size="13" fill="#16324f">你会"写"循环了</text>
+  <text x="819" y="120" text-anchor="middle" font-size="12" fill="#5b6b7f">但"轮"是谁划分的？</text>
+  <line x1="740" y1="140" x2="898" y2="140" stroke="#dde4ec" stroke-width="1.2"/>
+  <text x="819" y="166" text-anchor="middle" font-size="12" fill="#5b6b7f">Pregel 消息传递</text>
+  <text x="819" y="188" text-anchor="middle" font-size="12" fill="#5b6b7f">超级步推进规则</text>
+  <text x="819" y="210" text-anchor="middle" font-size="12" fill="#5b6b7f">Send 扇出</text>
+  <text x="819" y="232" text-anchor="middle" font-size="12" fill="#5b6b7f">Command 一步改状态+跳转</text>
+  <line x1="740" y1="254" x2="898" y2="254" stroke="#dde4ec" stroke-width="1.2"/>
+  <text x="819" y="282" text-anchor="middle" font-size="12" font-weight="700" fill="#8a5200">本课留下的问号</text>
+  <text x="819" y="306" text-anchor="middle" font-size="12" fill="#5b6b7f">一个来回为什么</text>
+  <text x="819" y="326" text-anchor="middle" font-size="12" fill="#5b6b7f">占 2 轮？</text>
+  <text x="819" y="352" text-anchor="middle" font-size="11" fill="#7b8798">（课 4 解答）</text>
+
+  <line x1="228" y1="210" x2="248" y2="210" stroke="#5b6b7f" stroke-width="1.8" marker-end="url(#s3)"/>
+  <line x1="698" y1="210" x2="714" y2="210" stroke="#5b6b7f" stroke-width="1.8" marker-end="url(#s3)"/>
+
+  <rect x="16" y="392" width="908" height="90" rx="12" fill="#f7f9fc" stroke="#c9d4e2" stroke-width="1.5"/>
+  <text x="470" y="418" text-anchor="middle" font-size="15" font-weight="700" fill="#16324f">一句话串起来</text>
+  <text x="470" y="444" text-anchor="middle" font-size="13" fill="#33415c">填四样就能跑，但每样的默认值都不是你以为的那个：</text>
+  <text x="470" y="468" text-anchor="middle" font-size="13" font-weight="700" fill="#16324f">状态默认覆盖、清空要 Overwrite、并发要 reducer、循环要自己写终点。</text>
+</svg>

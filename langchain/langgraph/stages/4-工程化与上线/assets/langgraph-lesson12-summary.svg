@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" width="900" height="500" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif">
+  <rect width="900" height="500" fill="#ffffff"/>
+  <text x="450" y="30" text-anchor="middle" font-size="19" font-weight="700" fill="#1f2937">课 12 知识全景：Application structure 与测试</text>
+  <text x="450" y="52" text-anchor="middle" font-size="12" fill="#6b7280">给刚学完的你复习：门牌表 / 怎么测 / 改了别打断 → 往下接什么</text>
+
+  <!-- 列1 门牌表 -->
+  <rect x="28" y="72" width="202" height="326" rx="10" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="129" y="98" text-anchor="middle" font-size="14" font-weight="700" fill="#1e40af">① 门牌表</text>
+
+  <rect x="46" y="112" width="166" height="62" rx="7" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.2"/>
+  <text x="129" y="132" text-anchor="middle" font-size="12" font-weight="600" fill="#1e3a8a">langgraph.json</text>
+  <text x="129" y="150" text-anchor="middle" font-size="9" fill="#475569">部署的契约</text>
+  <text x="129" y="166" text-anchor="middle" font-size="9" fill="#475569">写错直接起不来</text>
+
+  <rect x="46" y="182" width="166" height="76" rx="7" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.4"/>
+  <text x="129" y="202" text-anchor="middle" font-size="11" font-weight="600" fill="#b91c1c">三个必填 ★</text>
+  <text x="129" y="220" text-anchor="middle" font-size="9" fill="#7f1d1d">dependencies 缺了报错</text>
+  <text x="129" y="236" text-anchor="middle" font-size="9" fill="#7f1d1d">graphs 文件:变量名</text>
+  <text x="129" y="252" text-anchor="middle" font-size="9" font-weight="700" fill="#dc2626">对象形式不支持</text>
+
+  <rect x="46" y="266" width="166" height="62" rx="7" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.2"/>
+  <text x="129" y="286" text-anchor="middle" font-size="11" font-weight="600" fill="#1e3a8a">路径相对 CWD ★</text>
+  <text x="129" y="304" text-anchor="middle" font-size="9" fill="#475569">实测：换了目录就</text>
+  <text x="129" y="320" text-anchor="middle" font-size="9" fill="#475569">找不到文件</text>
+
+  <rect x="46" y="336" width="166" height="46" rx="7" fill="#fefce8" stroke="#fde047" stroke-width="1.2"/>
+  <text x="129" y="354" text-anchor="middle" font-size="10" font-weight="600" fill="#854d0e">改 key = 换门牌</text>
+  <text x="129" y="370" text-anchor="middle" font-size="9" fill="#78350f">老 assistant 指向旧 graph_id</text>
+
+  <!-- 列2 怎么测 -->
+  <rect x="248" y="72" width="202" height="326" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="349" y="98" text-anchor="middle" font-size="14" font-weight="700" fill="#166534">② 怎么测</text>
+
+  <rect x="266" y="112" width="166" height="62" rx="7" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="349" y="132" text-anchor="middle" font-size="11" font-weight="600" fill="#166534">假模型</text>
+  <text x="349" y="150" text-anchor="middle" font-size="9" fill="#475569">GenericFakeChatModel</text>
+  <text x="349" y="166" text-anchor="middle" font-size="9" fill="#475569">输出固定，可断言</text>
+
+  <rect x="266" y="182" width="166" height="76" rx="7" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.4"/>
+  <text x="349" y="202" text-anchor="middle" font-size="11" font-weight="600" fill="#b91c1c">注入方式 ★</text>
+  <text x="349" y="220" text-anchor="middle" font-size="9" fill="#7f1d1d">模型不能塞 State</text>
+  <text x="349" y="236" text-anchor="middle" font-size="9" fill="#7f1d1d">实测 KeyError</text>
+  <text x="349" y="252" text-anchor="middle" font-size="9" font-weight="700" fill="#dc2626">走 config 注入</text>
+
+  <rect x="266" y="266" width="166" height="76" rx="7" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="349" y="286" text-anchor="middle" font-size="11" font-weight="600" fill="#166534">断言轨迹</text>
+  <text x="349" y="304" text-anchor="middle" font-size="9" fill="#475569">不只断言结果</text>
+  <text x="349" y="320" text-anchor="middle" font-size="9" fill="#475569">updates 能看走了哪</text>
+  <text x="349" y="336" text-anchor="middle" font-size="9" fill="#059669">实测 [s1, s2]</text>
+
+  <rect x="266" y="350" width="166" height="32" rx="7" fill="#fefce8" stroke="#fde047" stroke-width="1.2"/>
+  <text x="349" y="370" text-anchor="middle" font-size="9" fill="#854d0e">假模型迭代器一次性 ★</text>
+
+  <!-- 列3 改了别断 -->
+  <rect x="468" y="72" width="202" height="326" rx="10" fill="#fff7ed" stroke="#fdba74" stroke-width="1.5"/>
+  <text x="569" y="98" text-anchor="middle" font-size="14" font-weight="700" fill="#9a3412">③ 改了别断</text>
+
+  <rect x="486" y="112" width="166" height="62" rx="7" fill="#d1fae5" stroke="#059669" stroke-width="1.3"/>
+  <text x="569" y="132" text-anchor="middle" font-size="11" font-weight="600" fill="#065f46">加尾巴步骤</text>
+  <text x="569" y="150" text-anchor="middle" font-size="9" fill="#047857">实测自动补跑</text>
+  <text x="569" y="166" text-anchor="middle" font-size="9" fill="#047857">log 出现 b</text>
+
+  <rect x="486" y="182" width="166" height="76" rx="7" fill="#fee2e2" stroke="#dc2626" stroke-width="1.4"/>
+  <text x="569" y="202" text-anchor="middle" font-size="11" font-weight="600" fill="#b91c1c">删卡住那步 ★</text>
+  <text x="569" y="220" text-anchor="middle" font-size="9" fill="#7f1d1d">实测静默丢弃</text>
+  <text x="569" y="236" text-anchor="middle" font-size="9" fill="#7f1d1d">log 停在 a</text>
+  <text x="569" y="252" text-anchor="middle" font-size="9" font-weight="700" fill="#dc2626">不报错，最危险</text>
+
+  <rect x="486" y="266" width="166" height="62" rx="7" fill="#ffffff" stroke="#fed7aa" stroke-width="1.2"/>
+  <text x="569" y="286" text-anchor="middle" font-size="11" font-weight="600" fill="#9a3412">加字段</text>
+  <text x="569" y="304" text-anchor="middle" font-size="9" fill="#475569">老存档没值</text>
+  <text x="569" y="320" text-anchor="middle" font-size="9" fill="#475569">下游要默认值</text>
+
+  <rect x="486" y="336" width="166" height="46" rx="7" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.2"/>
+  <text x="569" y="354" text-anchor="middle" font-size="10" font-weight="600" fill="#b91c1c">ns 不是版本号</text>
+  <text x="569" y="370" text-anchor="middle" font-size="9" fill="#7f1d1d">实测：找不到隔间</text>
+
+  <!-- 列4 实测坑 -->
+  <rect x="688" y="72" width="184" height="326" rx="10" fill="#faf5ff" stroke="#d8b4fe" stroke-width="1.5"/>
+  <text x="780" y="98" text-anchor="middle" font-size="14" font-weight="700" fill="#6b21a8">④ 撞出来的坑</text>
+
+  <rect x="704" y="112" width="152" height="56" rx="7" fill="#ffffff" stroke="#e9d5ff" stroke-width="1.2"/>
+  <text x="780" y="132" text-anchor="middle" font-size="10" fill="#6b21a8">路径相对 CWD</text>
+  <text x="780" y="148" text-anchor="middle" font-size="9" fill="#7e22ce">换目录起不来</text>
+  <text x="780" y="162" text-anchor="middle" font-size="9" fill="#7e22ce">FileNotFoundError</text>
+
+  <rect x="704" y="176" width="152" height="56" rx="7" fill="#ffffff" stroke="#e9d5ff" stroke-width="1.2"/>
+  <text x="780" y="196" text-anchor="middle" font-size="10" fill="#6b21a8">对象形式不支持</text>
+  <text x="780" y="212" text-anchor="middle" font-size="9" fill="#7e22ce">Invalid path</text>
+  <text x="780" y="226" text-anchor="middle" font-size="9" fill="#7e22ce">Did you miss...</text>
+
+  <rect x="704" y="240" width="152" height="56" rx="7" fill="#ffffff" stroke="#e9d5ff" stroke-width="1.2"/>
+  <text x="780" y="260" text-anchor="middle" font-size="10" fill="#6b21a8">SqliteSaver 是</text>
+  <text x="780" y="276" text-anchor="middle" font-size="9" fill="#7e22ce">上下文管理器</text>
+  <text x="780" y="290" text-anchor="middle" font-size="9" fill="#7e22ce">直接传会 TypeError</text>
+
+  <rect x="704" y="304" width="152" height="56" rx="7" fill="#ffffff" stroke="#e9d5ff" stroke-width="1.2"/>
+  <text x="780" y="324" text-anchor="middle" font-size="10" fill="#6b21a8">变量名写错</text>
+  <text x="780" y="340" text-anchor="middle" font-size="9" fill="#7e22ce">会提示"你是不是</text>
+  <text x="780" y="354" text-anchor="middle" font-size="9" fill="#7e22ce">想写 xxx"</text>
+
+  <rect x="704" y="368" width="152" height="14" rx="4" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="780" y="379" text-anchor="middle" font-size="8" fill="#475569">CLI 需单独装</text>
+
+  <!-- 底部 -->
+  <rect x="28" y="412" width="844" height="70" rx="9" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="450" y="434" text-anchor="middle" font-size="13" font-weight="600" fill="#334155">往下接：课 13《Deployment 与 Observability》（部署方式 / Studio 与 Chat UI / tracing）</text>
+  <text x="450" y="454" text-anchor="middle" font-size="11" fill="#475569">抉择：langgraph.json 是部署契约（路径相对 CWD、对象形式不支持）；测试的重点是消除非确定性（假模型 + config 注入 + 断言轨迹）；</text>
+  <text x="450" y="472" text-anchor="middle" font-size="11" fill="#475569">改图的安全边界是"别动正在卡住的那一步"——加尾巴安全、删卡住的静默丢、加字段要默认值</text>
+</svg>

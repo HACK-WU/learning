@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 400" width="880" height="400" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif">
+  <rect width="880" height="400" fill="#ffffff"/>
+  <text x="440" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#1f2937">第 1 跳：给已有脚本加两个装饰器</text>
+  <text x="440" y="52" text-anchor="middle" font-size="12" fill="#6b7280">左右是同一份业务代码，区别只在加了 @entrypoint / @task</text>
+
+  <rect x="40" y="76" width="380" height="180" rx="9" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.4"/>
+  <text x="230" y="100" text-anchor="middle" font-size="13" font-weight="600" fill="#b91c1c">改之前：纯脚本，崩了就从头来</text>
+  <rect x="62" y="112" width="336" height="28" rx="6" fill="#ffffff" stroke="#fecaca" stroke-width="1.1"/>
+  <text x="230" y="131" text-anchor="middle" font-size="11" fill="#7f1d1d">def process(x): a=读(x)  b=清洗(a) ...</text>
+  <rect x="62" y="146" width="336" height="70" rx="6" fill="#fee2e2" stroke="#dc2626" stroke-width="1.4"/>
+  <text x="230" y="166" text-anchor="middle" font-size="10" fill="#b91c1c">读数据 ✅ 已做完</text>
+  <text x="230" y="184" text-anchor="middle" font-size="10" fill="#b91c1c">清洗 ❌ 崩了</text>
+  <text x="230" y="202" text-anchor="middle" font-size="10" fill="#b91c1c">重跑 = 读数据再做一遍</text>
+  <text x="230" y="234" text-anchor="middle" font-size="11" font-weight="600" fill="#991b1b">没有存档、不能在中间停</text>
+
+  <rect x="460" y="76" width="380" height="180" rx="9" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="1.4"/>
+  <text x="650" y="100" text-anchor="middle" font-size="13" font-weight="600" fill="#047857">改之后：加两个装饰器</text>
+  <rect x="482" y="112" width="336" height="28" rx="6" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.1"/>
+  <text x="650" y="131" text-anchor="middle" font-size="11" fill="#065f46">@task  /  @entrypoint(checkpointer=...)</text>
+  <rect x="482" y="146" width="336" height="70" rx="6" fill="#d1fae5" stroke="#059669" stroke-width="1.4"/>
+  <text x="650" y="166" text-anchor="middle" font-size="10" fill="#065f46">读数据 ✅ 已写进存档点</text>
+  <text x="650" y="184" text-anchor="middle" font-size="10" fill="#065f46">清洗 🔄 崩了 / 暂停了</text>
+  <text x="650" y="202" text-anchor="middle" font-size="10" fill="#065f46">续跑 = 从存档点接，读数据不重来</text>
+  <text x="650" y="234" text-anchor="middle" font-size="11" font-weight="600" fill="#047857">业务代码一行没动</text>
+
+  <rect x="40" y="274" width="800" height="52" rx="8" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.2"/>
+  <text x="440" y="296" text-anchor="middle" font-size="12" font-weight="600" fill="#1e40af">这一跳的改动：两个装饰器 + 每次调用多传一个 config</text>
+  <text x="440" y="316" text-anchor="middle" font-size="11" fill="#1e3a8a">没有 State、没有 add_node、没有 add_edge —— 控制流还是原来那几行</text>
+
+  <rect x="40" y="340" width="385" height="48" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="232" y="360" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">这一跳还没解决</text>
+  <text x="232" y="378" text-anchor="middle" font-size="10" fill="#475569">① 只有标了 @task 的才不重跑</text>
+
+  <rect x="455" y="340" width="385" height="48" rx="8" fill="#fefce8" stroke="#fde047" stroke-width="1.2"/>
+  <text x="647" y="360" text-anchor="middle" font-size="11" font-weight="600" fill="#854d0e">下一跳要撞什么</text>
+  <text x="647" y="378" text-anchor="middle" font-size="10" fill="#78350f">② 想改中间某一步的结果，做不到</text>
+</svg>

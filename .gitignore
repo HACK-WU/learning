@@ -1065,3 +1065,25 @@ kafka/kafka-python-client/capstone/_*
 kafka/kafka-python-client/capstone/tests/_*
 !kafka/kafka-python-client/capstone/tests/_count.py
 !kafka/kafka-python-client/capstone/**/__init__.py
+
+# ---- LangGraph 教程：运行时产物（2026-10-15 卫生处理）----
+# 背景：langgraph/ 下四个实战项目与 playground/ 演示脚本在运行 / 测试时会生成
+#   两类可再生产物，均非教学资产：
+#   1. `__pycache__/` `*.pyc` `.pytest_cache/` —— 跑 `uv run pytest` 与 `demo.py` 的字节码缓存。
+#      实测：一次四项目全量测试即产生 47 个 __pycache__ 目录；删除后重跑测试
+#      16+20+16+21 = 73 passed 全绿，不影响任何教学资产。
+#   2. `playground/.langgraph_api/` —— `langgraph dev` 的本地内存态
+#      （.langgraph_checkpoint.*.pckl / store.pckl / .langgraph_ops.pckl 等，共 7 个文件）。
+#      每次 dev server 启动即重写，内容随会话变化，属于典型的"过程残留"。
+#   3. `*.sqlite` `*.sqlite3` —— 项目运行时落的开发库（如项目 2 的 Store 后端），
+#      学员按 README 步骤重跑即可重建。
+# 判据：与 `.probe/` `/temp/` 同构 —— 讲义引用的是源码与 md 文档，从不引用这些产物；
+#   实测全仓 .md 零处引用。删了课程仍完整。
+# ⚠️ 用 `langchain/langgraph/` 锚定，不波及仓库其它主题的 py 缓存
+#   （那些由根级通用规则 `__pycache__/` 与 `.pytest_cache/` 覆盖）。
+langchain/langgraph/**/__pycache__/
+langchain/langgraph/**/*.pyc
+langchain/langgraph/**/.pytest_cache/
+langchain/langgraph/**/*.sqlite
+langchain/langgraph/**/*.sqlite3
+langchain/langchain/playground/.langgraph_api/

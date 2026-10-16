@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 510" width="920" height="510" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif">
+  <rect width="920" height="510" fill="#ffffff"/>
+  <text x="460" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#1f2937">快照链与分叉：改一个值之后，历史长什么样</text>
+  <text x="460" y="52" text-anchor="middle" font-size="12" fill="#6b7280">实测于 langgraph 1.2.11 —— 同 thread 分叉 vs 跨 thread 分叉，差别比想象中大</text>
+
+  <!-- 主链 -->
+  <text x="60" y="86" font-size="12" font-weight="700" fill="#334155">原始执行（thread = o1）</text>
+
+  <rect x="60" y="96" width="150" height="52" rx="7" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.3"/>
+  <text x="135" y="118" text-anchor="middle" font-size="11" font-weight="600" fill="#1e40af">④ 跑完</text>
+  <text x="135" y="136" text-anchor="middle" font-size="10" font-family="ui-monospace,monospace" fill="#0f172a">next=() log=[s1,s2,s3]</text>
+
+  <path d="M210 122 L240 122" stroke="#94a3b8" stroke-width="2" marker-end="url(#c2)"/>
+
+  <rect x="240" y="96" width="150" height="52" rx="7" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.3"/>
+  <text x="315" y="118" text-anchor="middle" font-size="11" font-weight="600" fill="#1e40af">③ 跑完 s2</text>
+  <text x="315" y="136" text-anchor="middle" font-size="10" font-family="ui-monospace,monospace" fill="#0f172a">next=('s3',) log=[s1,s2]</text>
+
+  <path d="M390 122 L420 122" stroke="#94a3b8" stroke-width="2" marker-end="url(#c2)"/>
+
+  <rect x="420" y="96" width="160" height="52" rx="7" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+  <text x="500" y="118" text-anchor="middle" font-size="11" font-weight="700" fill="#92400e">② 分叉点（选中）</text>
+  <text x="500" y="136" text-anchor="middle" font-size="10" font-family="ui-monospace,monospace" fill="#0f172a">next=('s2',) log=[s1]</text>
+
+  <path d="M580 122 L610 122" stroke="#94a3b8" stroke-width="2" marker-end="url(#c2)"/>
+
+  <rect x="610" y="96" width="150" height="52" rx="7" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.3"/>
+  <text x="685" y="118" text-anchor="middle" font-size="11" font-weight="600" fill="#1e40af">① 起步</text>
+  <text x="685" y="136" text-anchor="middle" font-size="10" font-family="ui-monospace,monospace" fill="#0f172a">next=('s1',) log=[]</text>
+
+  <path d="M760 122 L790 122" stroke="#94a3b8" stroke-width="2" marker-end="url(#c2)"/>
+  <rect x="790" y="96" width="100" height="52" rx="7" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.3"/>
+  <text x="840" y="118" text-anchor="middle" font-size="11" font-weight="600" fill="#475569">⓪ 输入</text>
+  <text x="840" y="136" text-anchor="middle" font-size="10" font-family="ui-monospace,monospace" fill="#0f172a">next=(start,)</text>
+
+  <text x="460" y="172" text-anchor="middle" font-size="10" fill="#64748b">← 新　　　　　　　　　　　　　　　　　　　　　　　旧 →</text>
+
+  <!-- 分叉箭头 -->
+  <path d="M500 148 L500 190" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#o2)"/>
+
+  <!-- 同 thread 分叉 -->
+  <rect x="40" y="196" width="420" height="150" rx="9" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="250" y="218" text-anchor="middle" font-size="12" font-weight="700" fill="#166534">同 thread 分叉：update_state(历史点)</text>
+  <rect x="58" y="230" width="384" height="102" rx="6" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.1"/>
+  <text x="250" y="250" text-anchor="middle" font-size="10" fill="#065f46">状态保住，进度也保住</text>
+  <text x="76" y="270" font-size="9" font-family="ui-monospace,monospace" fill="#0f172a">next=('s2',)  values={'log':['s1'],'decision':'批准'}</text>
+  <text x="76" y="288" font-size="9" font-family="ui-monospace,monospace" fill="#0f172a">invoke(None) -> ['s1','s2','s3:批准']</text>
+  <text x="76" y="306" font-size="9" font-family="ui-monospace,monospace" fill="#059669">只有 s2/s3 重跑，s1 不动</text>
+  <text x="250" y="326" text-anchor="middle" font-size="10" font-weight="600" fill="#b91c1c">⚠ 原 thread 被改写：历史 5 → 8 条</text>
+
+  <!-- 跨 thread 分叉 -->
+  <rect x="480" y="196" width="420" height="150" rx="9" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="690" y="218" text-anchor="middle" font-size="12" font-weight="700" fill="#b91c1c">跨 thread 分叉：换 thread_id 后 update_state</text>
+  <rect x="498" y="230" width="384" height="102" rx="6" fill="#ffffff" stroke="#fecaca" stroke-width="1.1"/>
+  <text x="690" y="250" text-anchor="middle" font-size="10" fill="#7f1d1d">状态丢了，进度也丢了</text>
+  <text x="516" y="270" font-size="9" font-family="ui-monospace,monospace" fill="#0f172a">next=('s1',)   values={'decision':'批准'}</text>
+  <text x="516" y="288" font-size="9" font-family="ui-monospace,monospace" fill="#dc2626">log 不见了！只剩 update 进去的那一项</text>
+  <text x="516" y="306" font-size="9" font-family="ui-monospace,monospace" fill="#0f172a">invoke(None) -> ['s1','s2','s3:批准']  从头跑</text>
+  <text x="690" y="326" text-anchor="middle" font-size="10" font-weight="600" fill="#059669">✅ 原 thread 完好：仍是 s3:驳回</text>
+
+  <!-- 对比结论 -->
+  <rect x="40" y="360" width="860" height="62" rx="9" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.3"/>
+  <text x="460" y="382" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">一句话：同 thread 分叉「状态和进度都带」但会改写原历史；跨 thread 分叉「原历史不动」但要重跑</text>
+  <text x="460" y="402" text-anchor="middle" font-size="11" fill="#1e3a8a">想要「原历史不动 + 不重跑」？Graph API 的 update_state 做不到 —— 只能自己把 values 整体搬过去（进度仍会丢）</text>
+
+  <!-- 底部：快照链 -->
+  <rect x="40" y="436" width="420" height="60" rx="9" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="250" y="456" text-anchor="middle" font-size="11" font-weight="700" fill="#334155">parent_config 把快照串成链</text>
+  <text x="250" y="476" text-anchor="middle" font-size="10" font-family="ui-monospace,monospace" fill="#475569">[0] 5b8af05f → parent 8374d0b1 → parent 0612fd19</text>
+
+  <rect x="480" y="436" width="420" height="60" rx="9" fill="#fefce8" stroke="#fde047" stroke-width="1.2"/>
+  <text x="690" y="456" text-anchor="middle" font-size="11" font-weight="700" fill="#854d0e">翻历史的两个参数</text>
+  <text x="690" y="476" text-anchor="middle" font-size="10" font-family="ui-monospace,monospace" fill="#78350f">limit=2 只取 2 条 ｜ before=某条 取它更早的</text>
+
+  <defs>
+    <marker id="c2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#94a3b8"/></marker>
+    <marker id="o2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#f59e0b"/></marker>
+  </defs>
+</svg>

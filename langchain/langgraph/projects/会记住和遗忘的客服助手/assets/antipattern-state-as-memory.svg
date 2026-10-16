@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 400" width="880" height="400" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+  <rect width="880" height="400" fill="#fdfbfb"/>
+  <text x="440" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#8a2020">反例：把长期记忆塞进 State</text>
+  <text x="440" y="50" text-anchor="middle" font-size="11.5" fill="#7a6a6a">看起来能跑，换个会话就失忆 —— 还污染了每一轮的存档</text>
+
+  <!-- 三个 thread -->
+  <rect x="30" y="78" width="250" height="120" rx="9" fill="#fdeeee" stroke="#d98a8a" stroke-width="1.3"/>
+  <text x="155" y="100" text-anchor="middle" font-size="12.5" font-weight="700" fill="#8a2020">会话 1 · 周一</text>
+  <rect x="50" y="112" width="210" height="30" rx="6" fill="#fff" stroke="#d98a8a" stroke-width="1.1"/>
+  <text x="155" y="132" text-anchor="middle" font-size="11" fill="#5a3030">State: {prefers: 邮件}</text>
+  <text x="155" y="162" text-anchor="middle" font-size="10.5" fill="#8a2020">写入成功 ✓</text>
+  <text x="155" y="182" text-anchor="middle" font-size="10" fill="#7a6a6a">checkpointer 存了一份</text>
+
+  <rect x="310" y="78" width="250" height="120" rx="9" fill="#fdeeee" stroke="#d98a8a" stroke-width="1.3"/>
+  <text x="435" y="100" text-anchor="middle" font-size="12.5" font-weight="700" fill="#8a2020">会话 2 · 周五</text>
+  <rect x="330" y="112" width="210" height="30" rx="6" fill="#fff" stroke="#d98a8a" stroke-width="1.1"/>
+  <text x="435" y="132" text-anchor="middle" font-size="11" fill="#a0a0a0">State: {}</text>
+  <text x="435" y="162" text-anchor="middle" font-size="10.5" fill="#8a2020">读不到 ✗ 失忆了</text>
+  <text x="435" y="182" text-anchor="middle" font-size="10" fill="#7a6a6a">新 thread = 新世界</text>
+
+  <rect x="590" y="78" width="250" height="120" rx="9" fill="#fdeeee" stroke="#d98a8a" stroke-width="1.3"/>
+  <text x="715" y="100" text-anchor="middle" font-size="12.5" font-weight="700" fill="#8a2020">会话 3 · 次周</text>
+  <rect x="610" y="112" width="210" height="30" rx="6" fill="#fff" stroke="#d98a8a" stroke-width="1.1"/>
+  <text x="715" y="132" text-anchor="middle" font-size="11" fill="#a0a0a0">State: {}</text>
+  <text x="715" y="162" text-anchor="middle" font-size="10.5" fill="#8a2020">读不到 ✗ 还是失忆</text>
+  <text x="715" y="182" text-anchor="middle" font-size="10" fill="#7a6a6a">每个 thread 各存各的</text>
+
+  <!-- 断裂箭头 -->
+  <path d="M282 138 L308 138" stroke="#d98a8a" stroke-width="2" fill="none" stroke-dasharray="5 4" marker-end="url(#r)"/>
+  <path d="M562 138 L588 138" stroke="#d98a8a" stroke-width="2" fill="none" stroke-dasharray="5 4" marker-end="url(#r)"/>
+  <text x="295" y="128" font-size="14" fill="#8a2020">✗</text>
+  <text x="575" y="128" font-size="14" fill="#8a2020">✗</text>
+
+  <!-- 三个后果 -->
+  <rect x="30" y="224" width="270" height="72" rx="8" fill="#fff" stroke="#d98a8a" stroke-width="1.2"/>
+  <text x="165" y="246" text-anchor="middle" font-size="12" font-weight="600" fill="#8a2020">① 换个会话就丢</text>
+  <text x="165" y="266" text-anchor="middle" font-size="10.5" fill="#7a6a6a">checkpoint 是 thread 作用域的</text>
+  <text x="165" y="283" text-anchor="middle" font-size="10.5" fill="#7a6a6a">它忠实存了，但只存给这一个 thread</text>
+
+  <rect x="312" y="224" width="270" height="72" rx="8" fill="#fff" stroke="#d98a8a" stroke-width="1.2"/>
+  <text x="447" y="246" text-anchor="middle" font-size="12" font-weight="600" fill="#8a2020">② 每个存档点都塞着档案</text>
+  <text x="447" y="266" text-anchor="middle" font-size="10.5" fill="#7a6a6a">回放时看到的不是"这一轮在算什么"</text>
+  <text x="447" y="283" text-anchor="middle" font-size="10.5" fill="#7a6a6a">而是混进了用户档案的杂烩</text>
+
+  <rect x="594" y="224" width="246" height="72" rx="8" fill="#fff" stroke="#d98a8a" stroke-width="1.2"/>
+  <text x="717" y="246" text-anchor="middle" font-size="12" font-weight="600" fill="#8a2020">③ 没法按用户查</text>
+  <text x="717" y="266" text-anchor="middle" font-size="10.5" fill="#7a6a6a">想知道"这用户说过什么"</text>
+  <text x="717" y="283" text-anchor="middle" font-size="10.5" fill="#7a6a6a">只能挨个 thread 翻</text>
+
+  <!-- 正解对比 -->
+  <rect x="30" y="318" width="810" height="56" rx="9" fill="#eef8f0" stroke="#4f9d69" stroke-width="1.3"/>
+  <text x="435" y="340" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1f5c33">正解：档案放进 Store，按 user_id 分格</text>
+  <text x="435" y="361" text-anchor="middle" font-size="10.5" fill="#2f7a48">State 只装"这一轮在算什么"，Store 装"这个用户是谁" —— 两把不同的钥匙</text>
+
+  <defs>
+    <marker id="r" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#d98a8a"/></marker>
+  </defs>
+</svg>

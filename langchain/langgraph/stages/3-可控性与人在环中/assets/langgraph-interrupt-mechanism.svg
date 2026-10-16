@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 480" width="920" height="480" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif">
+  <rect width="920" height="480" fill="#ffffff"/>
+  <text x="460" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#1f2937">中断时到底存了什么、恢复时到底跑了什么</text>
+  <text x="460" y="52" text-anchor="middle" font-size="12" fill="#6b7280">实测于 langgraph 1.2.11 —— 关键在「节点整体重跑」而不是「半途续跑」</text>
+
+  <!-- 时间轴 -->
+  <line x1="60" y1="90" x2="860" y2="90" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 4"/>
+
+  <!-- 阶段1 -->
+  <rect x="60" y="106" width="180" height="150" rx="9" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.4"/>
+  <text x="150" y="128" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">① 跑到 interrupt</text>
+  <rect x="78" y="140" width="144" height="26" rx="5" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.1"/>
+  <text x="150" y="158" text-anchor="middle" font-size="10" fill="#1e3a8a">节点开始执行</text>
+  <rect x="78" y="172" width="144" height="26" rx="5" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.1"/>
+  <text x="150" y="190" text-anchor="middle" font-size="10" fill="#1e3a8a">喊「等一下」</text>
+  <rect x="78" y="204" width="144" height="38" rx="5" fill="#fef3c7" stroke="#fbbf24" stroke-width="1.3"/>
+  <text x="150" y="220" text-anchor="middle" font-size="9" fill="#92400e">抛异常，被图接住</text>
+  <text x="150" y="234" text-anchor="middle" font-size="9" fill="#92400e">节点 return 没执行</text>
+
+  <path d="M240 180 L268 180" stroke="#6366f1" stroke-width="2" marker-end="url(#c)"/>
+
+  <!-- 阶段2 -->
+  <rect x="268" y="106" width="200" height="150" rx="9" fill="#f0fdf4" stroke="#86efac" stroke-width="1.4"/>
+  <text x="368" y="128" text-anchor="middle" font-size="12" font-weight="700" fill="#166534">② 存快照（真实数据）</text>
+  <rect x="286" y="140" width="164" height="100" rx="5" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.1"/>
+  <text x="368" y="158" text-anchor="middle" font-size="9" font-family="ui-monospace,monospace" fill="#0f172a">next = ('pay',)</text>
+  <text x="368" y="174" text-anchor="middle" font-size="9" font-family="ui-monospace,monospace" fill="#0f172a">values = {</text>
+  <text x="368" y="188" text-anchor="middle" font-size="9" font-family="ui-monospace,monospace" fill="#0f172a">  amount: 100,</text>
+  <text x="368" y="202" text-anchor="middle" font-size="9" font-family="ui-monospace,monospace" fill="#0f172a">  approved: ''</text>
+  <text x="368" y="216" text-anchor="middle" font-size="9" font-family="ui-monospace,monospace" fill="#0f172a">}</text>
+  <text x="368" y="232" text-anchor="middle" font-size="9" fill="#059669">checkpoint 数：2</text>
+
+  <path d="M468 180 L496 180" stroke="#6366f1" stroke-width="2" marker-end="url(#c)"/>
+
+  <!-- 阶段3 -->
+  <rect x="496" y="106" width="180" height="150" rx="9" fill="#faf5ff" stroke="#d8b4fe" stroke-width="1.4"/>
+  <text x="586" y="128" text-anchor="middle" font-size="12" font-weight="700" fill="#6b21a8">③ 人回答</text>
+  <rect x="514" y="140" width="144" height="26" rx="5" fill="#ffffff" stroke="#e9d5ff" stroke-width="1.1"/>
+  <text x="586" y="158" text-anchor="middle" font-size="10" fill="#475569">前端拿到问题</text>
+  <rect x="514" y="172" width="144" height="26" rx="5" fill="#ffffff" stroke="#e9d5ff" stroke-width="1.1"/>
+  <text x="586" y="190" text-anchor="middle" font-size="10" fill="#475569">人点「批准」</text>
+  <rect x="514" y="204" width="144" height="38" rx="5" fill="#fef3c7" stroke="#fbbf24" stroke-width="1.3"/>
+  <text x="586" y="220" text-anchor="middle" font-size="9" fill="#92400e">Command(resume="批准")</text>
+  <text x="586" y="234" text-anchor="middle" font-size="9" fill="#92400e">带 thread_id 回来</text>
+
+  <path d="M676 180 L704 180" stroke="#6366f1" stroke-width="2" marker-end="url(#c)"/>
+
+  <!-- 阶段4 -->
+  <rect x="704" y="106" width="176" height="150" rx="9" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.6"/>
+  <text x="792" y="128" text-anchor="middle" font-size="12" font-weight="700" fill="#b91c1c">④ 重跑（关键！）</text>
+  <rect x="722" y="140" width="140" height="100" rx="5" fill="#ffffff" stroke="#fecaca" stroke-width="1.1"/>
+  <text x="792" y="158" text-anchor="middle" font-size="9" fill="#7f1d1d">节点从头再跑一遍</text>
+  <text x="792" y="176" text-anchor="middle" font-size="9" fill="#7f1d1d">前面的代码也重跑</text>
+  <text x="792" y="194" text-anchor="middle" font-size="9" fill="#7f1d1d">这次 interrupt 返回</text>
+  <text x="792" y="208" text-anchor="middle" font-size="9" fill="#7f1d1d">「批准」→ 继续</text>
+  <text x="792" y="226" text-anchor="middle" font-size="9" fill="#dc2626">实测：执行 2 次</text>
+
+  <defs>
+    <marker id="c" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#6366f1"/></marker>
+  </defs>
+
+  <!-- checkpoint 历史 -->
+  <rect x="60" y="272" width="400" height="186" rx="9" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.3"/>
+  <text x="260" y="294" text-anchor="middle" font-size="12" font-weight="700" fill="#334155">存档点历史（新 → 旧，实测）</text>
+  <text x="80" y="316" font-size="10" font-family="ui-monospace,monospace" fill="#0f172a">next=()            approved='ok', tries=1</text>
+  <text x="80" y="336" font-size="10" font-family="ui-monospace,monospace" fill="#0f172a">next=('pay',)      approved='',   tries=0</text>
+  <text x="80" y="356" font-size="10" font-family="ui-monospace,monospace" fill="#0f172a">next=('__start__',) values={}</text>
+  <text x="80" y="384" font-size="10" fill="#475569">⚠ 中断的那个点：next=('pay',)，</text>
+  <text x="80" y="402" font-size="10" fill="#475569">  状态还是「没批准」的原样 ——</text>
+  <text x="80" y="420" font-size="10" fill="#475569">  因为节点 return 根本没跑到</text>
+  <text x="80" y="444" font-size="10" fill="#64748b">（这个历史，课 9 时光旅行要用）</text>
+
+  <!-- 副作用警告 -->
+  <rect x="480" y="272" width="400" height="186" rx="9" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="680" y="294" text-anchor="middle" font-size="12" font-weight="700" fill="#b91c1c">⚠ 最大的坑：interrupt 之前的代码会重跑</text>
+  <rect x="498" y="306" width="364" height="70" rx="6" fill="#ffffff" stroke="#fecaca" stroke-width="1.1"/>
+  <text x="680" y="326" text-anchor="middle" font-size="10" fill="#7f1d1d">实测：节点执行了 2 次</text>
+  <text x="500" y="344" font-size="9" font-family="ui-monospace,monospace" fill="#0f172a">[第 1 次] 副作用发生 ...查库/扣款...</text>
+  <text x="500" y="360" font-size="9" font-family="ui-monospace,monospace" fill="#0f172a">[第 2 次] 副作用发生 ...查库/扣款...</text>
+
+  <text x="680" y="398" text-anchor="middle" font-size="11" font-weight="600" fill="#b91c1c">所以：扣款、发短信这类动作</text>
+  <text x="680" y="418" text-anchor="middle" font-size="11" font-weight="600" fill="#b91c1c">必须放在 interrupt 之后</text>
+  <text x="680" y="440" text-anchor="middle" font-size="10" fill="#7f1d1d">放在之前？恢复一次就重复执行一次</text>
+</svg>

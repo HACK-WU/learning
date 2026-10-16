@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 520" width="920" height="520" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif">
+  <rect width="920" height="520" fill="#ffffff"/>
+  <text x="460" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#1f2937">改图之后，正在跑到一半的活会怎样（实测）</text>
+  <text x="460" y="52" text-anchor="middle" font-size="12" fill="#6b7280">同一个存档库，v1 跑到「等人确认」卡住，换 v2 代码来接</text>
+
+  <!-- 场景1 加节点 -->
+  <rect x="24" y="68" width="430" height="196" rx="9" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="1.5"/>
+  <text x="239" y="92" text-anchor="middle" font-size="13" font-weight="700" fill="#166534">情况一：v2 在后面新加了一步</text>
+
+  <rect x="46" y="104" width="120" height="44" rx="6" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="106" y="122" text-anchor="middle" font-size="11" font-weight="600" fill="#166534">v1 跑到</text>
+  <text x="106" y="140" text-anchor="middle" font-size="10" fill="#475569">「等人确认」卡住</text>
+
+  <path d="M166 126 L194 126" stroke="#22c55e" stroke-width="2" marker-end="url(#d1)"/>
+
+  <rect x="194" y="104" width="120" height="44" rx="6" fill="#fee2e2" stroke="#dc2626" stroke-width="1.3"/>
+  <text x="254" y="122" text-anchor="middle" font-size="11" font-weight="600" fill="#b91c1c">中断在这里</text>
+  <text x="254" y="140" text-anchor="middle" font-size="10" fill="#7f1d1d">log = [a]</text>
+
+  <path d="M314 126 L342 126" stroke="#22c55e" stroke-width="2" marker-end="url(#d1)"/>
+
+  <rect x="342" y="104" width="92" height="44" rx="6" fill="#d1fae5" stroke="#059669" stroke-width="1.3"/>
+  <text x="388" y="122" text-anchor="middle" font-size="11" font-weight="600" fill="#065f46">v2 接上并补跑</text>
+  <text x="388" y="140" text-anchor="middle" font-size="10" fill="#047857">新步骤也跑了</text>
+
+  <rect x="46" y="162" width="388" height="46" rx="6" fill="#d1fae5" stroke="#059669" stroke-width="1.3"/>
+  <text x="240" y="182" text-anchor="middle" font-size="10" font-weight="700" fill="#065f46">实测：log = [a] → [a, ask=批准, b]</text>
+  <text x="240" y="200" text-anchor="middle" font-size="10" fill="#047857">在途任务没断，新增的 b 被自动补上</text>
+
+  <rect x="46" y="216" width="388" height="34" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="240" y="238" text-anchor="middle" font-size="10" fill="#475569">✅ 安全的改法：只在尾巴上加步骤</text>
+
+  <!-- 场景2 删节点 -->
+  <rect x="474" y="68" width="422" height="196" rx="9" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="685" y="92" text-anchor="middle" font-size="13" font-weight="700" fill="#b91c1c">情况二：v2 把「等人确认」这步删了</text>
+
+  <rect x="496" y="104" width="120" height="44" rx="6" fill="#ffffff" stroke="#fecaca" stroke-width="1.2"/>
+  <text x="556" y="122" text-anchor="middle" font-size="11" font-weight="600" fill="#b91c1c">v1 跑到</text>
+  <text x="556" y="140" text-anchor="middle" font-size="10" fill="#7f1d1d">「等人确认」卡住</text>
+
+  <path d="M616 126 L644 126" stroke="#ef4444" stroke-width="2" marker-end="url(#d2)"/>
+
+  <rect x="644" y="104" width="132" height="44" rx="6" fill="#fee2e2" stroke="#dc2626" stroke-width="1.4"/>
+  <text x="710" y="122" text-anchor="middle" font-size="11" font-weight="600" fill="#b91c1c">v2 接不上</text>
+  <text x="710" y="140" text-anchor="middle" font-size="10" fill="#7f1d1d">中断被丢掉，没报错</text>
+
+  <rect x="496" y="162" width="388" height="46" rx="6" fill="#fee2e2" stroke="#dc2626" stroke-width="1.3"/>
+  <text x="690" y="182" text-anchor="middle" font-size="10" font-weight="700" fill="#7f1d1d">实测：resume 后 log 仍 = [a]，没抛异常</text>
+  <text x="690" y="200" text-anchor="middle" font-size="10" fill="#991b1b">在途的那个"等人确认"悄悄没了</text>
+
+  <rect x="496" y="216" width="388" height="34" rx="6" fill="#fefce8" stroke="#fde047" stroke-width="1.2"/>
+  <text x="690" y="238" text-anchor="middle" font-size="10" fill="#854d0e">⚠ 危险的改法：删/改名正在卡住的那一步，且静默</text>
+
+  <!-- 场景3 加字段 -->
+  <rect x="24" y="280" width="430" height="140" rx="9" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="239" y="304" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">情况三：v2 给登记表加了一格</text>
+  <rect x="46" y="316" width="388" height="30" rx="6" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.1"/>
+  <text x="240" y="336" text-anchor="middle" font-size="10" font-family="ui-monospace,monospace" fill="#1e3a8a">v1 存档：{x:1, log:[a]}</text>
+  <rect x="46" y="350" width="388" height="30" rx="6" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.3"/>
+  <text x="240" y="370" text-anchor="middle" font-size="10" font-family="ui-monospace,monospace" fill="#1e3a8a">v2 读回：{x:1, log:[a]}   ← 新格 y 没值</text>
+  <text x="240" y="398" text-anchor="middle" font-size="10" fill="#1e3a8a">不报错，但新字段读出来是空的</text>
+  <text x="240" y="414" text-anchor="middle" font-size="10" fill="#1e3a8a">→ 下游节点要做"取不到就给默认值"</text>
+
+  <!-- 场景4 ns -->
+  <rect x="474" y="280" width="422" height="140" rx="9" fill="#faf5ff" stroke="#d8b4fe" stroke-width="1.5"/>
+  <text x="685" y="304" text-anchor="middle" font-size="13" font-weight="700" fill="#6b21a8">情况四：想让新旧版本同时跑</text>
+  <rect x="496" y="316" width="388" height="30" rx="6" fill="#ffffff" stroke="#e9d5ff" stroke-width="1.1"/>
+  <text x="690" y="336" text-anchor="middle" font-size="10" font-family="ui-monospace,monospace" fill="#6b21a8">同一个 thread_id，换一个"隔间名"就互不可见</text>
+  <rect x="496" y="350" width="388" height="30" rx="6" fill="#fee2e2" stroke="#dc2626" stroke-width="1.3"/>
+  <text x="690" y="370" text-anchor="middle" font-size="10" font-family="ui-monospace,monospace" fill="#7f1d1d">但自己乱起隔间名会报错：找不到这个隔间</text>
+  <text x="690" y="398" text-anchor="middle" font-size="10" fill="#7e22ce">隔间名是给"图里套图"用的，不是给你当版本号的</text>
+  <text x="690" y="414" text-anchor="middle" font-size="10" fill="#7e22ce">真要并存：另起一个 thread_id 前缀，或另开一个库</text>
+
+  <!-- 结论 -->
+  <rect x="24" y="434" width="872" height="70" rx="9" fill="#fefce8" stroke="#fde047" stroke-width="1.4"/>
+  <text x="460" y="456" text-anchor="middle" font-size="12" font-weight="700" fill="#854d0e">三条实操结论</text>
+  <text x="460" y="476" text-anchor="middle" font-size="11" fill="#78350f">① 加尾巴上的步骤是安全的（实测自动补跑）；② 删/改名"正卡住的那一步"最危险且不报错；</text>
+  <text x="460" y="494" text-anchor="middle" font-size="11" fill="#78350f">③ 加字段不报错但老存档没值，下游要有默认值。改之前：先在测试环境把老存档喂给新代码跑一遍。</text>
+
+  <defs>
+    <marker id="d1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#22c55e"/></marker>
+    <marker id="d2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#ef4444"/></marker>
+  </defs>
+</svg>

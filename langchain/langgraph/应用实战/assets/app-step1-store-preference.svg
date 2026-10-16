@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 400" width="880" height="400" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif">
+  <rect width="880" height="400" fill="#ffffff"/>
+  <text x="440" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#1f2937">第 1 跳：把偏好存进图的状态里</text>
+  <text x="440" y="52" text-anchor="middle" font-size="12" fill="#6b7280">它能跑，但偏好跟着会话走——换个会话就丢</text>
+
+  <rect x="40" y="76" width="250" height="130" rx="9" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.4"/>
+  <text x="165" y="100" text-anchor="middle" font-size="13" font-weight="600" fill="#1e40af">会话 1（周一）</text>
+  <rect x="62" y="112" width="206" height="34" rx="6" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.1"/>
+  <text x="165" y="134" text-anchor="middle" font-size="11" fill="#1e3a8a">节点读到偏好 = 空</text>
+  <rect x="62" y="152" width="206" height="34" rx="6" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.1"/>
+  <text x="165" y="174" text-anchor="middle" font-size="11" fill="#1e3a8a">写入 State: 邮件沟通</text>
+
+  <rect x="315" y="76" width="250" height="130" rx="9" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.4"/>
+  <text x="440" y="100" text-anchor="middle" font-size="13" font-weight="600" fill="#1e40af">会话 2（周二）</text>
+  <rect x="337" y="112" width="206" height="34" rx="6" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.1"/>
+  <text x="440" y="134" text-anchor="middle" font-size="11" fill="#1e3a8a">节点读到偏好 = 空</text>
+  <rect x="337" y="152" width="206" height="34" rx="6" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.1"/>
+  <text x="440" y="174" text-anchor="middle" font-size="11" fill="#1e3a8a">又问了一遍</text>
+
+  <rect x="590" y="76" width="250" height="130" rx="9" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.4"/>
+  <text x="715" y="100" text-anchor="middle" font-size="13" font-weight="600" fill="#1e40af">会话 3（周三）</text>
+  <rect x="612" y="112" width="206" height="34" rx="6" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.1"/>
+  <text x="715" y="134" text-anchor="middle" font-size="11" fill="#1e3a8a">节点读到偏好 = 空</text>
+  <rect x="612" y="152" width="206" height="34" rx="6" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.1"/>
+  <text x="715" y="174" text-anchor="middle" font-size="11" fill="#1e3a8a">又问了一遍</text>
+
+  <path d="M290 141 L315 141" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a1)"/>
+  <path d="M565 141 L590 141" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#a1)"/>
+  <defs>
+    <marker id="a1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+
+  <rect x="40" y="222" width="800" height="56" rx="8" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.3"/>
+  <text x="440" y="244" text-anchor="middle" font-size="13" font-weight="700" fill="#b91c1c">✗ 问题：偏好写在 State 里，State 归这次会话所有</text>
+  <text x="440" y="266" text-anchor="middle" font-size="11" fill="#7f1d1d">checkpointer 忠实地存了，但换 thread 就是另一个世界（实测：换 thread 读到 {}）</text>
+
+  <rect x="40" y="292" width="385" height="88" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="232" y="314" text-anchor="middle" font-size="12" font-weight="600" fill="#334155">这一版的结构</text>
+  <text x="232" y="336" text-anchor="middle" font-size="11" fill="#475569">图 ── 节点读写 State ── checkpointer</text>
+  <text x="232" y="356" text-anchor="middle" font-size="11" fill="#475569">（偏好混在"这一轮在算什么"里）</text>
+  <text x="232" y="374" text-anchor="middle" font-size="10" fill="#94a3b8">只有一套记忆，作用域 = thread</text>
+
+  <rect x="455" y="292" width="385" height="88" rx="8" fill="#ecfdf5" stroke="#6ee7b7" stroke-width="1.2"/>
+  <text x="647" y="314" text-anchor="middle" font-size="12" font-weight="600" fill="#047857">下一跳要改什么</text>
+  <text x="647" y="336" text-anchor="middle" font-size="11" fill="#065f46">把偏好挪出图，放进外部仓库</text>
+  <text x="647" y="356" text-anchor="middle" font-size="11" fill="#065f46">按「这个用户」而不是「这次会话」存</text>
+  <text x="647" y="374" text-anchor="middle" font-size="10" fill="#059669">→ 加一个 Store</text>
+</svg>

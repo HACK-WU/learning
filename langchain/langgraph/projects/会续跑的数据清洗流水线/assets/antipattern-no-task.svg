@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 430" width="880" height="430" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+  <rect width="880" height="430" fill="#fdfbfb"/>
+  <text x="440" y="30" text-anchor="middle" font-size="17" font-weight="700" fill="#8a2020">反例：把 Functional API 当"简化版 Graph"写</text>
+  <text x="440" y="50" text-anchor="middle" font-size="11.5" fill="#7a6a6a">能跑通，但续跑时白干、卡住时丢数据、入参传错就炸</text>
+
+  <!-- 反例1：不标 task -->
+  <rect x="36" y="74" width="392" height="140" rx="9" fill="#fdeeee" stroke="#d98a8a" stroke-width="1.4"/>
+  <text x="232" y="96" text-anchor="middle" font-size="12.5" font-weight="700" fill="#8a2020">反例 1 · 重活不标 @task</text>
+  <rect x="54" y="108" width="356" height="30" rx="6" fill="#fff" stroke="#e8b0b0" stroke-width="1.1"/>
+  <text x="232" y="127" text-anchor="middle" font-size="10" font-family="monospace" fill="#7a5050">def clean(r): ...   # 普通函数</text>
+  <text x="232" y="158" text-anchor="middle" font-size="10.5" fill="#8a2020">✗ resume 时全部重跑</text>
+  <text x="232" y="175" text-anchor="middle" font-size="9.5" fill="#7a6a6a">实测：普通函数 resume 跑了 2 次</text>
+  <text x="232" y="191" text-anchor="middle" font-size="9.5" fill="#7a6a6a">10 万行 × 每次卡住 → 前面白洗</text>
+
+  <!-- 反例2：resume 传 dict -->
+  <rect x="36" y="224" width="392" height="140" rx="9" fill="#fdeeee" stroke="#d98a8a" stroke-width="1.4"/>
+  <text x="232" y="246" text-anchor="middle" font-size="12.5" font-weight="700" fill="#8a2020">反例 2 · resume 传 dict[int, str]</text>
+  <rect x="54" y="258" width="356" height="30" rx="6" fill="#fff" stroke="#e8b0b0" stroke-width="1.1"/>
+  <text x="232" y="277" text-anchor="middle" font-size="10" font-family="monospace" fill="#7a5050">Command(resume={1: "accept"})</text>
+  <text x="232" y="308" text-anchor="middle" font-size="9.5" fill="#8a2020">✗ TypeError: expected string or bytes-like</text>
+  <text x="232" y="324" text-anchor="middle" font-size="9.5" fill="#7a6a6a">框架把 dict 的 key 当 interrupt id 校验</text>
+  <text x="232" y="340" text-anchor="middle" font-size="9.5" fill="#7a6a6a">（pregel/_loop.py: is_xxh3_128_hexdigest）</text>
+  <text x="232" y="356" text-anchor="middle" font-size="9.5" fill="#7a6a6a">行 id 是 int → 直接炸</text>
+
+  <!-- 反例3：立即 result -->
+  <rect x="36" y="298" width="0" height="0"/>
+
+  <!-- 对比箭头 -->
+  <path d="M436 144 L470 144" stroke="#bbb" stroke-width="2" fill="none" stroke-dasharray="5 4" marker-end="url(#v)"/>
+  <path d="M436 294 L470 294" stroke="#bbb" stroke-width="2" fill="none" stroke-dasharray="5 4" marker-end="url(#v)"/>
+
+  <!-- 正解 -->
+  <rect x="480" y="74" width="364" height="140" rx="9" fill="#eef8f0" stroke="#4f9d69" stroke-width="1.4"/>
+  <text x="662" y="96" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1f5c33">正解 · 重活标 @task</text>
+  <rect x="498" y="108" width="328" height="30" rx="6" fill="#fff" stroke="#a8d5b8" stroke-width="1.1"/>
+  <text x="662" y="127" text-anchor="middle" font-size="10" font-family="monospace" fill="#2f5c33">@task  def clean(r): ...</text>
+  <text x="662" y="158" text-anchor="middle" font-size="10.5" fill="#1f5c33">✓ resume 时复用存档，不重跑</text>
+  <text x="662" y="175" text-anchor="middle" font-size="9.5" fill="#2f7a48">实测：resume 后计数仍为 1</text>
+  <text x="662" y="191" text-anchor="middle" font-size="9.5" fill="#2f7a48">卡住 10 次，前面的活也只干一遍</text>
+
+  <rect x="480" y="224" width="364" height="140" rx="9" fill="#eef8f0" stroke="#4f9d69" stroke-width="1.4"/>
+  <text x="662" y="246" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1f5c33">正解 · 用 list[dict] 传裁决</text>
+  <rect x="498" y="258" width="328" height="30" rx="6" fill="#fff" stroke="#a8d5b8" stroke-width="1.1"/>
+  <text x="662" y="277" text-anchor="middle" font-size="10" font-family="monospace" fill="#2f5c33">resume=[{"id":1,"decision":"accept"}]</text>
+  <text x="662" y="308" text-anchor="middle" font-size="10" fill="#1f5c33">✓ 实测 21 passed</text>
+  <text x="662" y="324" text-anchor="middle" font-size="9.5" fill="#2f7a48">行 id 放 value 里，不做 dict key</text>
+  <text x="662" y="340" text-anchor="middle" font-size="9.5" fill="#2f7a48">人工裁决正常生效</text>
+
+  <defs>
+    <marker id="v" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#bbb"/></marker>
+  </defs>
+</svg>

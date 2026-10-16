@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 640" width="940" height="640" font-family="system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+  <rect width="940" height="640" fill="#fbfcfe"/>
+  <text x="470" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#1a2b45">LangGraph 四项目决策树</text>
+  <text x="470" y="47" text-anchor="middle" font-size="11" fill="#6b7d94">新需求来了，从上往下问 —— 每个菱形是一个判据，终点指向对应项目</text>
+
+  <!-- 判据1：中间过程 -->
+  <path d="M470 66 L470 96" stroke="#8aa4bf" stroke-width="1.4"/>
+
+  <path d="M470 96 L520 121 L470 146 L420 121 Z" fill="#eef4fb" stroke="#4a7fb5" stroke-width="1.6"/>
+  <text x="470" y="118" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1a2b45">中间过程要</text>
+  <text x="470" y="131" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1a2b45">逐格看见/改？</text>
+
+  <!-- 左：要 → Graph -->
+  <path d="M420 121 L280 121 L280 166" stroke="#4f9d69" stroke-width="1.6" fill="none" marker-end="url(#g)"/>
+  <text x="345" y="115" font-size="10" font-weight="700" fill="#2f7a48">要</text>
+
+  <rect x="150" y="168" width="260" height="40" rx="8" fill="#eef8f0" stroke="#4f9d69" stroke-width="1.5"/>
+  <text x="280" y="184" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1f5c33">用 Graph API</text>
+  <text x="280" y="200" text-anchor="middle" font-size="9.5" fill="#2f7a48">状态具名 · 历史 4 条 · update_state 可改</text>
+
+  <!-- 右：不要 → Functional -->
+  <path d="M520 121 L690 121 L690 166" stroke="#8b5cc7" stroke-width="1.6" fill="none" marker-end="url(#p)"/>
+  <text x="600" y="115" font-size="10" font-weight="700" fill="#6a3d9a">不要</text>
+
+  <rect x="580" y="168" width="220" height="40" rx="8" fill="#f3e8fb" stroke="#8b5cc7" stroke-width="1.5"/>
+  <text x="690" y="184" text-anchor="middle" font-size="11.5" font-weight="700" fill="#6a3d9a">用 Functional API</text>
+  <text x="690" y="200" text-anchor="middle" font-size="9.5" fill="#7a5aa0">@entrypoint/@task · 历史 2 条</text>
+
+  <rect x="580" y="212" width="220" height="26" rx="6" fill="#fff" stroke="#d9c8ea" stroke-width="1"/>
+  <text x="690" y="229" text-anchor="middle" font-size="9.5" fill="#6a3d9a">→ [项目 4] 会续跑的清洗流水线</text>
+
+  <!-- Graph 分支下探 -->
+  <path d="M280 210 L280 246" stroke="#8aa4bf" stroke-width="1.4"/>
+
+  <path d="M280 246 L345 271 L280 296 L215 271 Z" fill="#eef4fb" stroke="#4a7fb5" stroke-width="1.6"/>
+  <text x="280" y="268" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1a2b45">要跨会话</text>
+  <text x="280" y="281" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1a2b45">记住东西？</text>
+
+  <!-- 是 → Store -->
+  <path d="M215 271 L110 271 L110 320" stroke="#d98a2b" stroke-width="1.6" fill="none" marker-end="url(#o)"/>
+  <text x="152" y="265" font-size="10" font-weight="700" fill="#8a5d0c">是</text>
+
+  <rect x="26" y="322" width="176" height="52" rx="8" fill="#fff5e6" stroke="#d98a2b" stroke-width="1.5"/>
+  <text x="114" y="340" text-anchor="middle" font-size="11" font-weight="700" fill="#8a5d0c">上 Store</text>
+  <text x="114" y="355" text-anchor="middle" font-size="9" fill="#8a6a3a">(namespace, key) 寻址</text>
+  <text x="114" y="368" text-anchor="middle" font-size="9" fill="#8a6a3a">必须配冲突治理</text>
+
+  <rect x="26" y="378" width="176" height="26" rx="6" fill="#fff" stroke="#e8d0a8" stroke-width="1"/>
+  <text x="114" y="395" text-anchor="middle" font-size="9.5" fill="#8a5d0c">→ [项目 2] 客服助手</text>
+
+  <!-- 否 → 单次执行 -->
+  <path d="M345 271 L440 271 L440 320" stroke="#4a7fb5" stroke-width="1.6" fill="none" marker-end="url(#b)"/>
+  <text x="392" y="265" font-size="10" font-weight="700" fill="#2c5282">否</text>
+
+  <!-- 再下探：外部依赖 -->
+  <path d="M440 348 L440 380" stroke="#8aa4bf" stroke-width="1.4"/>
+
+  <path d="M440 380 L510 405 L440 430 L370 405 Z" fill="#eef4fb" stroke="#4a7fb5" stroke-width="1.6"/>
+  <text x="440" y="402" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1a2b45">外部依赖</text>
+  <text x="440" y="415" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1a2b45">不可靠？</text>
+
+  <!-- 是 → 扇出+重试 -->
+  <path d="M370 405 L300 405 L300 452" stroke="#d98a2b" stroke-width="1.6" fill="none" marker-end="url(#o)"/>
+  <text x="330" y="399" font-size="10" font-weight="700" fill="#8a5d0c">是</text>
+
+  <rect x="176" y="454" width="248" height="52" rx="8" fill="#fff5e6" stroke="#d98a2b" stroke-width="1.5"/>
+  <text x="300" y="472" text-anchor="middle" font-size="11" font-weight="700" fill="#8a5d0c">Send 扇出 + 分类重试 + 降级</text>
+  <text x="300" y="487" text-anchor="middle" font-size="9" fill="#8a6a3a">retry_on=TransientError（显式分类）</text>
+  <text x="300" y="500" text-anchor="middle" font-size="9" fill="#8a6a3a">error_handler 兜底不拖垮父图</text>
+
+  <rect x="196" y="510" width="208" height="26" rx="6" fill="#fff" stroke="#e8d0a8" stroke-width="1"/>
+  <text x="300" y="527" text-anchor="middle" font-size="9.5" fill="#8a5d0c">→ [项目 3] 调研流水线</text>
+
+  <!-- 否 → 人要介入 -->
+  <path d="M510 405 L600 405 L600 452" stroke="#4a7fb5" stroke-width="1.6" fill="none" marker-end="url(#b)"/>
+  <text x="552" y="399" font-size="10" font-weight="700" fill="#2c5282">否</text>
+
+  <rect x="490" y="454" width="222" height="52" rx="8" fill="#eef8f0" stroke="#4f9d69" stroke-width="1.5"/>
+  <text x="601" y="472" text-anchor="middle" font-size="11" font-weight="700" fill="#1f5c33">interrupt() 卡住等人</text>
+  <text x="601" y="487" text-anchor="middle" font-size="9" fill="#2f7a48">副作用一律放 interrupt 之后</text>
+  <text x="601" y="500" text-anchor="middle" font-size="9" fill="#2f7a48">有幂等键才能安全重跑</text>
+
+  <rect x="510" y="510" width="182" height="26" rx="6" fill="#fff" stroke="#a8d5b8" stroke-width="1"/>
+  <text x="601" y="527" text-anchor="middle" font-size="9.5" fill="#1f5c33">→ [项目 1] 退款工单</text>
+
+  <!-- 右下：Functional 的下探 -->
+  <path d="M690 240 L690 282" stroke="#8aa4bf" stroke-width="1.4"/>
+  <rect x="580" y="284" width="220" height="46" rx="8" fill="#f3e8fb" stroke="#8b5cc7" stroke-width="1.3"/>
+  <text x="690" y="302" text-anchor="middle" font-size="10" font-weight="600" fill="#6a3d9a">重活标 @task</text>
+  <text x="690" y="317" text-anchor="middle" font-size="9" fill="#7a5aa0">resume 时才不白干</text>
+
+  <!-- 底部三条铁律 -->
+  <rect x="26" y="552" width="888" height="66" rx="8" fill="#fdeeee" stroke="#d98a8a" stroke-width="1.3"/>
+  <text x="46" y="572" font-size="11" font-weight="700" fill="#8a2020">⚠️ 三条跨项目铁律（实测）</text>
+  <text x="46" y="589" font-size="9.5" fill="#7a5050">1. interrupt() 之前不放副作用 —— Graph 整体节点重跑，Functional 含 interrupt 那次重跑</text>
+  <text x="46" y="603" font-size="9.5" fill="#7a5050">2. 配了 RetryPolicy 不等于有重试 —— 默认 retry_on 不认 ValueError，必须显式分类异常</text>
+  <text x="46" y="614" font-size="9.5" fill="#7a5050">3. 同 thread_id 再 invoke 是「接着跑」不是「重新开始」—— 要重开就换 thread_id</text>
+
+  <defs>
+    <marker id="g" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#4f9d69"/></marker>
+    <marker id="p" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#8b5cc7"/></marker>
+    <marker id="o" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#d98a2b"/></marker>
+    <marker id="b" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#4a7fb5"/></marker>
+  </defs>
+</svg>

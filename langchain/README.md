@@ -16,7 +16,7 @@
 | 子目录 | 组件 | 状态 | 入口 |
 |--------|------|------|------|
 | [langchain/](./langchain/) | LangChain（基础组件） | ✅ 已完成（4 阶段 / 13 课 / 44 知识点 + 结课实战项目 + 收尾四件套） | [学习档案](./langchain/00-学习档案.md) · [学习路径总览](./langchain/01-学习路径总览.md) · [课程手册](./langchain/final-课程手册.md) |
-| langgraph/ | LangGraph（底层编排） | ⬜ 规划中 | - |
+| [langgraph/](./langgraph/) | LangGraph（底层编排） | 🚧 进行中（4 阶段 / 13 课 / 30 知识点，大纲已定稿） | [学习档案](./langgraph/00-学习档案.md) · [学习路径总览](./langgraph/01-学习路径总览.md) · [课程目录](./langgraph/02-课程目录.md) · [官方文档索引](./langgraph/web-index/INDEX.md) |
 | 其他组件 | Deep Agents / Managed Deep Agents / OpenWiki 等 | ⬜ 待定 | - |
 
 ## 说明

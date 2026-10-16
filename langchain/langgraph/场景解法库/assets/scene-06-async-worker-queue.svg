@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="330" viewBox="0 0 900 330" font-family="system-ui,-apple-system,Segoe UI,sans-serif">
+  <rect width="900" height="330" fill="#fbfaf7"/>
+  <text x="24" y="30" font-size="15" font-weight="700" fill="#1a1a1a">解法 C：长任务与请求解耦（提交即返回，后台 worker 推进）</text>
+
+  <g>
+    <rect x="30" y="60" width="140" height="52" rx="8" fill="#dceefb" stroke="#2b7cba" stroke-width="1.5"/>
+    <text x="100" y="82" font-size="12" text-anchor="middle" fill="#1a1a1a">客户端提交</text>
+    <text x="100" y="98" font-size="10" text-anchor="middle" fill="#555">POST /runs</text>
+  </g>
+  <path d="M170 86 L220 86" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <g>
+    <rect x="220" y="54" width="160" height="64" rx="9" fill="#eaf5ea" stroke="#3d8b3d" stroke-width="1.8"/>
+    <text x="300" y="76" font-size="12" text-anchor="middle" fill="#1a1a1a">API 层（无状态）</text>
+    <text x="300" y="93" font-size="10" text-anchor="middle" fill="#555">入队 + 立刻返回 run_id</text>
+    <text x="300" y="109" font-size="10" text-anchor="middle" fill="#555">不占 HTTP 连接</text>
+  </g>
+  <path d="M380 86 L430 86" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <g>
+    <rect x="430" y="54" width="150" height="64" rx="9" fill="#fff6d9" stroke="#c99a1e" stroke-width="1.8"/>
+    <text x="505" y="76" font-size="12" text-anchor="middle" fill="#1a1a1a">队列</text>
+    <text x="505" y="93" font-size="10" text-anchor="middle" fill="#555">Redis / SQS / Kafka</text>
+    <text x="505" y="109" font-size="10" text-anchor="middle" fill="#555">削峰 + 重试</text>
+  </g>
+  <path d="M580 86 L635 86" stroke="#333" stroke-width="1.6" marker-end="url(#ar)"/>
+
+  <g>
+    <rect x="635" y="44" width="160" height="84" rx="9" fill="#f2ecf9" stroke="#7a5ea8" stroke-width="1.8"/>
+    <text x="715" y="66" font-size="12" text-anchor="middle" fill="#1a1a1a">Worker 池</text>
+    <text x="715" y="83" font-size="10" text-anchor="middle" fill="#555">消费任务 → 跑图</text>
+    <text x="715" y="99" font-size="10" text-anchor="middle" fill="#555">可独立扩缩</text>
+    <text x="715" y="115" font-size="10" text-anchor="middle" fill="#555">崩了任务回队列</text>
+  </g>
+
+  <path d="M715 128 L715 172 L300 172 L300 118" stroke="#7a5ea8" stroke-width="1.6" marker-end="url(#arp)"/>
+  <g>
+    <rect x="180" y="172" width="440" height="46" rx="9" fill="#f2ecf9" stroke="#7a5ea8" stroke-width="1.5"/>
+    <text x="400" y="194" font-size="12" text-anchor="middle" fill="#1a1a1a">状态仍走共享 checkpointer（与解法 A 叠加）</text>
+    <text x="400" y="209" font-size="10" text-anchor="middle" fill="#555">worker 无状态，任何 worker 都能接着跑</text>
+  </g>
+
+  <g>
+    <rect x="30" y="232" width="440" height="60" rx="9" fill="#eaf5ea" stroke="#3d8b3d" stroke-width="1.5"/>
+    <text x="46" y="252" font-size="11.5" fill="#1a1a1a">✅ 客户端如何知道进度：</text>
+    <text x="46" y="270" font-size="11" fill="#1a1a1a">　SSE / WebSocket 订阅 run_id（LangGraph 的 stream 天然适配）</text>
+    <text x="46" y="286" font-size="11" fill="#1a1a1a">　或轮询 /runs/{id} 状态</text>
+  </g>
+
+  <g>
+    <rect x="490" y="232" width="380" height="60" rx="9" fill="#fdecec" stroke="#c0392b" stroke-width="2"/>
+    <text x="506" y="252" font-size="12" font-weight="700" fill="#c0392b">✗ 失效点</text>
+    <text x="506" y="272" font-size="11" fill="#1a1a1a">1. 引入队列 = 新的一层要运维、要监控积压</text>
+    <text x="506" y="288" font-size="11" fill="#1a1a1a">2. 延迟换吞吐：提交后不是立刻执行（取决于队列深度）</text>
+  </g>
+
+  <defs>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#333"/></marker>
+    <marker id="arp" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#7a5ea8"/></marker>
+  </defs>
+</svg>

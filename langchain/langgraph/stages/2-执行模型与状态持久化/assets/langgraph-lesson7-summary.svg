@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 460" width="900" height="460" font-family="system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif">
+  <rect width="900" height="460" fill="#ffffff"/>
+  <text x="450" y="32" text-anchor="middle" font-size="19" font-weight="700" fill="#1f2937">课 7 知识全景：Streaming 流式输出</text>
+  <text x="450" y="54" text-anchor="middle" font-size="12" fill="#6b7280">给刚学完的你复习：要的方式有几种 / 事件流是什么 / 子图怎么冒上来 → 往下接什么</text>
+
+  <!-- 第一列：流模式 -->
+  <rect x="30" y="76" width="270" height="300" rx="10" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="165" y="102" text-anchor="middle" font-size="14" font-weight="700" fill="#1e40af">① 要的方式有七种</text>
+
+  <rect x="50" y="116" width="230" height="50" rx="7" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.2"/>
+  <text x="165" y="136" text-anchor="middle" font-size="12" font-weight="600" fill="#1e3a8a">常用四种</text>
+  <text x="165" y="155" text-anchor="middle" font-size="11" fill="#475569">values / updates / messages / custom</text>
+
+  <rect x="50" y="174" width="230" height="50" rx="7" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.2"/>
+  <text x="165" y="194" text-anchor="middle" font-size="12" font-weight="600" fill="#1e3a8a">另有三种</text>
+  <text x="165" y="213" text-anchor="middle" font-size="11" fill="#475569">checkpoints / tasks / debug</text>
+
+  <rect x="50" y="232" width="230" height="62" rx="7" fill="#fef3c7" stroke="#fbbf24" stroke-width="1.2"/>
+  <text x="165" y="252" text-anchor="middle" font-size="12" font-weight="600" fill="#92400e">选型口诀</text>
+  <text x="165" y="271" text-anchor="middle" font-size="11" fill="#78350f">看全貌→values</text>
+  <text x="165" y="288" text-anchor="middle" font-size="11" fill="#78350f">看进度→updates</text>
+
+  <rect x="50" y="302" width="230" height="58" rx="7" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.2"/>
+  <text x="165" y="322" text-anchor="middle" font-size="12" font-weight="600" fill="#b91c1c">三个静默坑</text>
+  <text x="165" y="341" text-anchor="middle" font-size="11" fill="#7f1d1d">写错模式名不报错</text>
+  <text x="165" y="356" text-anchor="middle" font-size="11" fill="#7f1d1d">custom 不声明即丢弃</text>
+
+  <!-- 第二列：事件流 -->
+  <rect x="315" y="76" width="270" height="300" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
+  <text x="450" y="102" text-anchor="middle" font-size="14" font-weight="700" fill="#166534">② 事件流</text>
+
+  <rect x="335" y="116" width="230" height="50" rx="7" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="450" y="136" text-anchor="middle" font-size="12" font-weight="600" fill="#166534">细到每个动作都报</text>
+  <text x="450" y="155" text-anchor="middle" font-size="11" fill="#475569">astream_events(version="v2")</text>
+
+  <rect x="335" y="174" width="230" height="50" rx="7" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="450" y="194" text-anchor="middle" font-size="12" font-weight="600" fill="#166534">六种事件名</text>
+  <text x="450" y="213" text-anchor="middle" font-size="11" fill="#475569">on_chain_start/stream/end ...</text>
+
+  <rect x="335" y="232" width="230" height="62" rx="7" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.2"/>
+  <text x="450" y="252" text-anchor="middle" font-size="12" font-weight="600" fill="#b91c1c">name 参数是无效的</text>
+  <text x="450" y="271" text-anchor="middle" font-size="11" fill="#7f1d1d">实测：传不存在的名字</text>
+  <text x="450" y="288" text-anchor="middle" font-size="11" fill="#7f1d1d">仍返回全部 10 个事件</text>
+
+  <rect x="335" y="302" width="230" height="58" rx="7" fill="#ffffff" stroke="#a7f3d0" stroke-width="1.2"/>
+  <text x="450" y="322" text-anchor="middle" font-size="12" font-weight="600" fill="#166534">要用 include_names</text>
+  <text x="450" y="341" text-anchor="middle" font-size="11" fill="#065f46">实测：10 个 → 3 个</text>
+  <text x="450" y="356" text-anchor="middle" font-size="11" fill="#065f46">筛选才真的生效</text>
+
+  <!-- 第三列：子图 -->
+  <rect x="600" y="76" width="270" height="300" rx="10" fill="#faf5ff" stroke="#d8b4fe" stroke-width="1.5"/>
+  <text x="735" y="102" text-anchor="middle" font-size="14" font-weight="700" fill="#6b21a8">③ 子图事件</text>
+
+  <rect x="620" y="116" width="230" height="62" rx="7" fill="#ffffff" stroke="#e9d5ff" stroke-width="1.2"/>
+  <text x="735" y="136" text-anchor="middle" font-size="12" font-weight="600" fill="#6b21a8">默认被藏起来</text>
+  <text x="735" y="155" text-anchor="middle" font-size="11" fill="#475569">父图只看到自己的两步</text>
+  <text x="735" y="172" text-anchor="middle" font-size="11" fill="#475569">子图内部一步都看不到</text>
+
+  <rect x="620" y="186" width="230" height="62" rx="7" fill="#ffffff" stroke="#e9d5ff" stroke-width="1.2"/>
+  <text x="735" y="206" text-anchor="middle" font-size="12" font-weight="600" fill="#6b21a8">subgraphs=True 才露出</text>
+  <text x="735" y="225" text-anchor="middle" font-size="11" fill="#475569">实测：ns 变成 ('sub:xxx',)</text>
+  <text x="735" y="242" text-anchor="middle" font-size="11" fill="#475569">多吐出子图的两步</text>
+
+  <rect x="620" y="256" width="230" height="62" rx="7" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.2"/>
+  <text x="735" y="276" text-anchor="middle" font-size="12" font-weight="600" fill="#b91c1c">custom 也要它才冒泡</text>
+  <text x="735" y="295" text-anchor="middle" font-size="11" fill="#7f1d1d">实测：不开 = []</text>
+  <text x="735" y="312" text-anchor="middle" font-size="11" fill="#7f1d1d">开了才收到子图的话</text>
+
+  <rect x="620" y="326" width="230" height="34" rx="7" fill="#fef3c7" stroke="#fbbf24" stroke-width="1.2"/>
+  <text x="735" y="347" text-anchor="middle" font-size="11" fill="#78350f">事件流里靠 tags 区分父子</text>
+
+  <!-- 底部 -->
+  <rect x="30" y="392" width="840" height="48" rx="9" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="450" y="412" text-anchor="middle" font-size="13" font-weight="600" fill="#334155">往下接：课 8 让人插手改状态 ｜ 课 9 回到过去重跑 ｜ 课 13 推给前端与可观测</text>
+  <text x="450" y="430" text-anchor="middle" font-size="11" fill="#475569">抉择：日常用 stream_mode 够用且开销小；要 token 级 / 工具调用细节才上 astream_events（开销更大）</text>
+</svg>

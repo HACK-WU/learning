@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="520" viewBox="0 0 940 520" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect x="0" y="0" width="940" height="520" fill="#ffffff"/>
+
+  <defs>
+    <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5b6b7f"/>
+    </marker>
+    <marker id="a2d" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#9aa7b6"/>
+    </marker>
+  </defs>
+
+  <text x="470" y="26" text-anchor="middle" font-size="18" font-weight="700" fill="#16324f">课 2 全景：我从哪来、学了什么、还要往哪走</text>
+
+  <rect x="16" y="44" width="216" height="212" rx="12" fill="#f7f9fc" stroke="#c9d4e2" stroke-width="1.5"/>
+  <text x="124" y="70" text-anchor="middle" font-size="15" font-weight="700" fill="#16324f">① 它在生态的哪一层</text>
+
+  <rect x="40" y="86" width="168" height="40" rx="8" fill="#eaf7ee" stroke="#2e8540" stroke-width="1.5"/>
+  <text x="124" y="111" text-anchor="middle" font-size="13" fill="#1d5c2b">成品 Deep Agents</text>
+
+  <rect x="40" y="136" width="168" height="40" rx="8" fill="#e5f4ff" stroke="#006ddd" stroke-width="1.5"/>
+  <text x="124" y="161" text-anchor="middle" font-size="13" fill="#16324f">框架 LangChain</text>
+
+  <rect x="40" y="186" width="168" height="48" rx="8" fill="#33415c"/>
+  <text x="124" y="207" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">运行时 LangGraph</text>
+  <text x="124" y="226" text-anchor="middle" font-size="11" fill="#d6dee8">本课所在层</text>
+
+  <line x1="124" y1="126" x2="124" y2="136" stroke="#9aa7b6" stroke-width="1.5" marker-end="url(#a2d)"/>
+  <line x1="124" y1="176" x2="124" y2="186" stroke="#9aa7b6" stroke-width="1.5" marker-end="url(#a2d)"/>
+  <text x="212" y="160" font-size="11" fill="#7b8798">长在</text>
+  <text x="212" y="212" font-size="11" fill="#7b8798">其上</text>
+
+  <rect x="248" y="44" width="450" height="212" rx="12" fill="#f7f9fc" stroke="#c9d4e2" stroke-width="1.5"/>
+  <text x="473" y="70" text-anchor="middle" font-size="15" font-weight="700" fill="#16324f">② 四个词：一张图是怎么跑起来的</text>
+
+  <rect x="378" y="86" width="190" height="46" rx="8" fill="#eaf7ee" stroke="#2e8540" stroke-width="1.5"/>
+  <text x="473" y="107" text-anchor="middle" font-size="14" font-weight="700" fill="#1d5c2b">state 共用记录</text>
+  <text x="473" y="124" text-anchor="middle" font-size="11" fill="#33513a">所有节点都读它、写它</text>
+
+  <rect x="270" y="160" width="112" height="40" rx="8" fill="#e5f4ff" stroke="#006ddd" stroke-width="1.5"/>
+  <text x="326" y="185" text-anchor="middle" font-size="13" fill="#16324f">node 一小步</text>
+
+  <rect x="404" y="160" width="112" height="40" rx="8" fill="#e5f4ff" stroke="#006ddd" stroke-width="1.5"/>
+  <text x="460" y="185" text-anchor="middle" font-size="13" fill="#16324f">node 一小步</text>
+
+  <rect x="538" y="160" width="112" height="40" rx="8" fill="#e5f4ff" stroke="#006ddd" stroke-width="1.5"/>
+  <text x="594" y="185" text-anchor="middle" font-size="13" fill="#16324f">node 一小步</text>
+
+  <path d="M 326 200 L 326 216 L 568 216 L 568 200" fill="none" stroke="#9aa7b6" stroke-width="1.4" stroke-dasharray="4 3"/>
+  <path d="M 460 216 L 460 200" fill="none" stroke="#9aa7b6" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#a2d)"/>
+  <rect x="404" y="222" width="244" height="28" rx="14" fill="#fff4e0" stroke="#d98200" stroke-width="1.3"/>
+  <text x="526" y="241" text-anchor="middle" font-size="12" fill="#8a5200">superstep 同一轮：互不等的一起跑</text>
+
+  <path d="M 473 132 L 473 152" fill="none" stroke="#9aa7b6" stroke-width="1.4" stroke-dasharray="4 3" marker-end="url(#a2d)"/>
+  <text x="620" y="120" font-size="11" fill="#7b8798">读 / 写</text>
+
+  <rect x="248" y="272" width="450" height="90" rx="12" fill="#f7f9fc" stroke="#c9d4e2" stroke-width="1.5"/>
+  <text x="473" y="298" text-anchor="middle" font-size="15" font-weight="700" fill="#16324f">③ 一个选择：这个路口交给谁</text>
+  <rect x="272" y="312" width="196" height="36" rx="8" fill="#e5f4ff" stroke="#006ddd" stroke-width="1.5"/>
+  <text x="370" y="335" text-anchor="middle" font-size="13" fill="#16324f">workflow：规则写死</text>
+  <rect x="480" y="312" width="196" height="36" rx="8" fill="#fff4e0" stroke="#d98200" stroke-width="1.5"/>
+  <text x="578" y="335" text-anchor="middle" font-size="13" fill="#8a5200">agent：让模型挑</text>
+
+  <rect x="714" y="44" width="210" height="318" rx="12" fill="#fbfcfe" stroke="#c9d4e2" stroke-width="1.5"/>
+  <text x="819" y="70" text-anchor="middle" font-size="15" font-weight="700" fill="#16324f">④ 下一课</text>
+  <text x="819" y="100" text-anchor="middle" font-size="13" fill="#16324f">把它们翻译成代码</text>
+  <text x="819" y="126" text-anchor="middle" font-size="12" fill="#5b6b7f">状态怎么声明</text>
+  <text x="819" y="150" text-anchor="middle" font-size="12" fill="#5b6b7f">节点怎么加</text>
+  <text x="819" y="174" text-anchor="middle" font-size="12" fill="#5b6b7f">条件分支怎么写</text>
+  <text x="819" y="198" text-anchor="middle" font-size="12" fill="#5b6b7f">循环怎么收住</text>
+  <line x1="740" y1="222" x2="898" y2="222" stroke="#dde4ec" stroke-width="1.2"/>
+  <text x="819" y="250" text-anchor="middle" font-size="12" font-weight="700" fill="#8a5200">本课埋的雷</text>
+  <text x="819" y="274" text-anchor="middle" font-size="12" fill="#5b6b7f">同轮并发写同一字段</text>
+  <text x="819" y="292" text-anchor="middle" font-size="12" fill="#5b6b7f">会报错 → 解法：</text>
+  <text x="819" y="312" text-anchor="middle" font-size="13" font-weight="700" fill="#8a5200">reducer</text>
+  <text x="819" y="340" text-anchor="middle" font-size="11" fill="#7b8798">（课 3 主角）</text>
+
+  <line x1="232" y1="150" x2="248" y2="150" stroke="#5b6b7f" stroke-width="1.8" marker-end="url(#a2)"/>
+  <line x1="698" y1="203" x2="714" y2="203" stroke="#5b6b7f" stroke-width="1.8" marker-end="url(#a2)"/>
+
+  <rect x="16" y="382" width="908" height="112" rx="12" fill="#f7f9fc" stroke="#c9d4e2" stroke-width="1.5"/>
+  <text x="470" y="406" text-anchor="middle" font-size="15" font-weight="700" fill="#16324f">一句话串起来</text>
+  <text x="470" y="434" text-anchor="middle" font-size="13" fill="#33415c">你从「框架层」下沉到「运行时层」，换来四个词（state / node / edge / superstep）</text>
+  <text x="470" y="458" text-anchor="middle" font-size="13" fill="#33415c">与一个选择（哪些路口写死、哪些交给模型）；</text>
+  <text x="470" y="482" text-anchor="middle" font-size="13" font-weight="700" fill="#16324f">代价是多写代码，回报是每一步都能单独看、单独改、单独拦。</text>
+</svg>
