@@ -16,7 +16,9 @@
 
 > 读图：第 1 轮跑完即丢弃（红框），第 2 轮拿不到任何历史；下方三个红框是它的短板——上下文不接续、出错无法追溯、重开即失忆。
 
-```python
+::: code-group
+
+```python [Python]
 # memory_v1.py：第 1 版，无记忆
 import os
 
@@ -42,6 +44,33 @@ r = agent.invoke({"messages": [{"role": "user", "content": "我叫什么名字�
 print(r["messages"][-1].content)               # 消息数仍是 2 → 答不上来
 ```
 
+```typescript [TypeScript]
+// memory_v1.ts：第 1 版，无记忆
+import "dotenv/config";
+import { createAgent } from "langchain";
+import { initChatModel } from "langchain";
+
+const model = await initChatModel("qwen3.8-flash", {
+  modelProvider: "openai",
+  baseUrl: process.env.BAILIAN_BASE_URL,
+  apiKey: process.env.BAILIAN_API_KEY,
+});
+
+const agent = createAgent({ model, tools: [] });   // 没有 checkpointer
+
+let r = await agent.invoke({
+  messages: [{ role: "user", content: "你好，我叫小明。" }],
+});
+console.log(r.messages.at(-1)?.text);              // 消息数 2
+
+r = await agent.invoke({
+  messages: [{ role: "user", content: "我叫什么名字？" }],
+});
+console.log(r.messages.at(-1)?.text);              // 消息数仍是 2 → 答不上来
+```
+
+:::
+
 **它的问题**：**上下文不接续**——第二次调用时 agent 完全不知道上一轮存在（实测：两次 invoke 都是 2 条消息）；**无法追溯**——出错时看不到当时聊了什么；**重开即失忆**——换会话或重启进程，用户偏好全部归零。
 
 ## 第 2 版：checkpointer 按线程续接（改进实现）
@@ -52,7 +81,9 @@ print(r["messages"][-1].content)               # 消息数仍是 2 → 答不上
 
 > 读图：比上张多了紫色的 thread_id 与黄色的 checkpointer——历史自动续接；右框显示换线程仍然隔离（这正是我们要的）。红框是本版遗留：消息链会无限增长。
 
-```python
+::: code-group
+
+```python [Python]
 # memory_v2.py：第 2 版，checkpointer 按线程续接
 from langgraph.checkpoint.memory import InMemorySaver
 
@@ -71,9 +102,41 @@ cfg_b = {"configurable": {"thread_id": "thread-B"}}
 agent.invoke({"messages": [{"role": "user", "content": "我叫什么？"}]}, config=cfg_b)   # 答不知道
 ```
 
+```typescript [TypeScript]
+// memory_v2.ts：第 2 版，checkpointer 按线程续接
+// TS 内存 checkpointer 类名是 MemorySaver（Python InMemorySaver）
+import { MemorySaver } from "@langchain/langgraph";
+
+const agent = createAgent({ model, tools: [], checkpointer: new MemorySaver() });
+
+const cfgA = { configurable: { threadId: "thread-A" } };   // TS 键 camelCase
+await agent.invoke(
+  { messages: [{ role: "user", content: "我叫小明，最喜欢蓝色。请记住。" }] },
+  cfgA,
+);
+await agent.invoke(
+  { messages: [{ role: "user", content: "我叫什么？最喜欢什么颜色？" }] },
+  cfgA,
+);
+
+// 追溯：取回已持久化的消息链（TS 经 agent.graph.getState，异步）
+const state = await agent.graph.getState(cfgA);
+console.log(state.values.messages.length);       // 4
+
+// 换线程：记忆隔离
+await agent.invoke(
+  { messages: [{ role: "user", content: "我叫什么？" }] },
+  { configurable: { threadId: "thread-B" } },    // 答不知道
+);
+```
+
+:::
+
 > 实测确认：同线程第 1 轮 2 条、第 2 轮 4 条，链路为 `human, ai, human, ai`；`get_state(cfg)` 的 `values` 含 `messages`，可取回已持久化的 4 条；**换 `thread_id` 后消息数回到 2、答不出名字**——线程间隔离有效。
 >
 > ⚠️ **选型提醒**：`InMemorySaver` 存在内存里，**进程重启即丢失**。生产环境换 `SqliteSaver`（单机）或 `PostgresSaver`（多实例），接口一致、只改构造。
+>
+> 📌 **TypeScript 侧差异（本机实测）**：① 内存 checkpointer 类名是 **`MemorySaver`**（`@langchain/langgraph`），Python 是 `InMemorySaver`；② 配置键是 camelCase 的 **`threadId`**（Python `thread_id`）；③ 取持久化消息链用 **`agent.graph.getState(config)`** 且需 `await`（Python `agent.get_state(config)`）——同一手法两侧都能取到已持久化消息。
 
 **它的问题**：**消息链无限增长**——实测 4 轮后 8 条、第 5 轮 10 条，token 与延迟随轮次线性上升；**换会话即失忆**——`checkpointer` 只在线程内有效，开新会话用户偏好归零。
 
@@ -85,7 +148,9 @@ agent.invoke({"messages": [{"role": "user", "content": "我叫什么？"}]}, con
 
 > 读图：上半是短期的三种策略实测对比（全量 10 条 / 裁剪 6 条 / 摘要 1 条摘要 + 最近消息），下半是长期的 store + user_id 链路（紫色新增）。
 
-```python
+::: code-group
+
+```python [Python]
 # memory_v3.py：第 3 版
 import os
 from dataclasses import dataclass
@@ -158,13 +223,113 @@ agent = create_agent(
 # 换成 user_456 → 查不到（用户隔离）
 ```
 
+```typescript [TypeScript]
+// memory_v3.ts：第 3 版
+// TS 形态分岔：裁剪用 createMiddleware({ beforeModel })；摘要用 summarizationMiddleware 工厂；
+// 长期用 InMemoryStore + contextSchema（zod），工具内以 ToolRuntime 拿 store / context
+import "dotenv/config";
+import * as z from "zod";
+import { initChatModel } from "langchain";
+import {
+  createAgent,
+  createMiddleware,
+  summarizationMiddleware,
+  tool,
+  type ToolRuntime,
+} from "langchain";
+import { RemoveMessage } from "@langchain/core/messages";
+import {
+  MemorySaver,
+  InMemoryStore,
+  REMOVE_ALL_MESSAGES,
+} from "@langchain/langgraph";
+
+const model = await initChatModel("qwen3.8-flash", {
+  modelProvider: "openai",
+  baseUrl: process.env.BAILIAN_BASE_URL,
+  apiKey: process.env.BAILIAN_API_KEY,
+});
+
+// ---------- 短期：裁剪（保留首条 + 最近 4 条）----------
+const trimMessages = createMiddleware({
+  name: "TrimMessages",
+  beforeModel: async ({ messages }) => {
+    if (messages.length <= 6) return;                 // 不裁剪，照常调用模型
+    const first = messages[0];
+    const recent = messages.slice(-4);
+    return {                                         // 返回状态即"重写消息"并跳过本轮模型
+      messages: [
+        new RemoveMessage({ id: REMOVE_ALL_MESSAGES }),
+        first,
+        ...recent,
+      ],
+    };
+  },
+});
+
+// ---------- 短期：摘要（超阈值压缩早期历史）----------
+const sumAgent = createAgent({
+  model,
+  tools: [],
+  middleware: [summarizationMiddleware({                 // 工厂函数，参数为对象
+    trigger: { messages: 6 },
+    keep: { messages: 4 },
+  })],
+  checkpointer: new MemorySaver(),
+});
+
+// ---------- 长期：store 按 user_id 存 ----------
+const ContextSchema = z.object({ userId: z.string() });   // zod → 字段 camelCase
+type UserContext = z.infer<typeof ContextSchema>;
+
+const saveUserName = tool(
+  async ({ name }: { name: string }, runtime: ToolRuntime<unknown, UserContext>) => {
+    await runtime.store.put(["users"], runtime.context.userId, { name });
+    return `已保存：${name}`;
+  },
+  {
+    name: "save_user_name",
+    description: "保存用户名字到长期记忆（跨会话）。",
+    schema: z.object({ name: z.string() }),
+  },
+);
+
+const getUserName = tool(
+  async (_: unknown, runtime: ToolRuntime<unknown, UserContext>) => {
+    const item = await runtime.store.get(["users"], runtime.context.userId);
+    return item?.value ? String(item.value.name) : "没有找到该用户的记录";
+  },
+  {
+    name: "get_user_name",
+    description: "从长期记忆读取用户名字（跨会话）。",
+    schema: z.object({}),
+  },
+);
+
+const agent = createAgent({
+  model,
+  tools: [saveUserName, getUserName],
+  store: new InMemoryStore(),
+  contextSchema: ContextSchema,
+  checkpointer: new MemorySaver(),
+});
+// session-1 教 → session-2 查（同一 userId）→ 拿得到
+// 换成 user_456 → 查不到（用户隔离）
+```
+
+:::
+
 > 实测确认（同一组 4 轮对话 + 1 次检查）：**全量** 2→4→6→8→10 条，token 估算 62；**裁剪** 稳定 6 条、token 估算 38，链路为 `human, ai, human, ai, human, ai`；**摘要** 稳定 6 条，首条变成 `Here is a summary of the conversation to date:…`。
 >
 > 长期记忆实测：`session-1` 教完 store 里是 `{'name': 'Tom'}`；`session-2`（新线程）仍取到 `Tom`；换 `user_456` 查不到——**跨会话有效、按用户隔离**。
+>
+> 📌 **TypeScript 侧差异（本机实测）**：① context 字段是 camelCase（`runtime.context.userId`），因为 `contextSchema` 用 zod 定义（Python 用 `@dataclass class UserContext: user_id`）；② TS 传运行时上下文是 invoke 配置的 `context` 键——`agent.invoke(payload, { configurable: { threadId }, context: { userId: "user_123" } })`（Python 为 `invoke(..., context=UserContext(user_id=...))`）；③ 摘要中间件是**工厂函数** `summarizationMiddleware({ trigger: { messages: 6 }, keep: { messages: 4 } })`（Python `SummarizationMiddleware(...)` 类构造，trigger/keep 为元组）。
 
 **写入必须「读 → 合并 → 写回」**：实测直接 `put` 覆盖写会把既有字段弄丢——
 
-```python
+::: code-group
+
+```python [Python]
 @tool
 def remember_preference(preference: str, runtime: ToolRuntime[UserContext]) -> str:
     """记住偏好：读取现有档案 → 合并 → 写回。"""
@@ -177,6 +342,29 @@ def remember_preference(preference: str, runtime: ToolRuntime[UserContext]) -> s
     runtime.store.put(ns, key, profile)
     return f"已记住。当前档案: {profile}"
 ```
+
+```typescript [TypeScript]
+const rememberPreference = tool(
+  async ({ preference }: { preference: string }, runtime: ToolRuntime<unknown, UserContext>) => {
+    const ns = ["users"];
+    const key = runtime.context.userId;
+    const item = await runtime.store.get(ns, key);
+    const profile = item?.value ? { ...item.value } : {};   // 读 → 深拷贝
+    const prefs = Array.isArray(profile.preferences) ? [...profile.preferences] : [];
+    prefs.push(preference);                                  // 合并
+    profile.preferences = prefs;
+    await runtime.store.put(ns, key, profile);               // 写回
+    return `已记住。当前档案: ${JSON.stringify(profile)}`;
+  },
+  {
+    name: "remember_preference",
+    description: "记住偏好：读取现有档案 → 合并 → 写回。",
+    schema: z.object({ preference: z.string() }),
+  },
+);
+```
+
+:::
 
 > 实测对照：档案原为 `{'name': '小明', 'city': '北京'}`，**合并写**后是 `{'name': '小明', 'city': '北京', 'preferences': ['喜欢喝咖啡']}`；**直接覆盖写**后只剩 `{'preferences': ['喜欢喝咖啡']}`——`name` 和 `city` 全丢了。
 

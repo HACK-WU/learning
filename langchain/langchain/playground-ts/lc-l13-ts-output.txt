@@ -1,0 +1,36 @@
+=== 课 13 · TS 复刻：Testing 与 Observability ===
+
+===== 单元测试层：fakeModel 替换模型（对应知识点 2 第一层）=====
+断言① 消息序列（应为 human → ai → tool → ai）: human → ai → tool → ai
+  → 序列断言: true
+断言② 第 3 条是工具结果（type 应为 tool）: tool
+  → 类型断言: true
+断言③ 工具被调用且内容非空（结构断言的核心）: true
+  → 结构断言(3/3): true
+📌 TS 差异: fakeModel 自动实现 bindTools（官方文档快照核对），Python 侧 GenericFakeChatModel 挂工具到 create_agent 会抛 NotImplementedError 需补子类。
+   model.callCount（spy 断言调用次数）: 2
+--- 多轮记忆（MemorySaver）---
+首轮输入消息数: 2 | 次轮输入消息数: 4 (记忆接续)
+
+===== 轨迹匹配层：agentevals createTrajectoryMatchEvaluator（对应知识点 2 第三层）=====
+superset 判「没办成」轨迹  → false (应 false：缺必要动作 apply_return)
+strict 换序（应 false，顺序敏感）: false
+unordered 同构（应 true，顺序无关）: true
+subset 实际含参考外动作（应 false，超范围）: false
+
+===== LLM 裁判层：agentevals createTrajectoryLLMAsJudge（对应知识点 2 第三层）=====
+📌 judge 实测说明：链路已发起（带 response_format 结构化评分请求），但本机 mock 返回非结构化文本，评分解析报: Error reading response: invalid structured output JSON.
+   与 Python 侧一致——LLM 裁判需接真实模型端点（能回 json_schema），mock 不满足。
+   TS 侧端口接法同 Python: model:'openai:qwen3.8-flash' + OPENAI_BASE_URL 指向真实端点
+
+===== 可观测性：BaseCallbackHandler 迷你 trace 收集器（对应知识点 3 本地替代）=====
+收集到的 trace 时间线（一次真实运行的留痕）：
+  +000.01s  ▶ LLM 调用（输入 1 条消息）
+  +000.00s  ◀ LLM 返回：请求调用工具 → get_weather({"city":"北京"})
+  +000.00s  ▶ 工具执行 {"city":"北京"}
+  +000.00s  ◀ 工具返回：{"lc":1,"type":"constructor","…
+  +000.00s  ▶ LLM 调用（输入 3 条消息）
+  +000.00s  ◀ LLM 返回文本：
+📌 与 Python set_debug/callback 对应：TS 侧用 BaseCallbackHandler 子类，钩子为 handleChatModelStart/LLMEnd/ToolStart/ToolEnd。
+
+=== 课 13 全部板块运行完毕 ===

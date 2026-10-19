@@ -63,7 +63,62 @@ const server = http.createServer(async (req, res) => {
   req.on("data", (c) => (body += c));
   await new Promise((r) => req.on("end", r));
 
-  const url = req.url ?? "";
+const url = req.url ?? "";
+
+  // ============ 课 11：确定性 /embeddings 端点 ============
+  // 字符级 n-gram hash 桶 → 稀疏向量 → L2 归一化。同一文本返回同一向量；
+  // 字符重叠多的文本向量的余弦相似度更高（复现「语义相近→向量近」的教学意图）。
+  // 支持 dimensions 参数做 MRL 截维（取前 dims 维）。仅供 TS 侧实测证据采集，不进入教程产物。
+if (url.includes("/embeddings")) {
+let ep = {};
+    try {
+      ep = JSON.parse(body);
+    } catch {}
+    const texts = Array.isArray(ep.input)
+      ? ep.input.filter((t) => typeof t === "string")
+      : typeof ep.input === "string"
+        ? [ep.input]
+        : [];
+    const dims = typeof ep.dimensions === "number" ? Math.max(2, Math.floor(ep.dimensions)) : 4096;
+    const norm = (v) => {
+      let s = 0;
+      for (const x of v) s += x * x;
+      const r = Math.sqrt(s) || 1;
+      return v.map((x) => x / r);
+    };
+const embedOne = (text) => {
+      const full = Math.min(8192, Math.max(2, dims)); // 桶数=维度（MRL 截维：4096 与 1024 返回不同长度向量）
+      const vec = new Array(full).fill(0);
+      const grams = [];
+      for (const ch of text) if (/[^\s]/.test(ch)) grams.push("1:" + ch);
+      for (let i = 0; i < text.length - 1; i++) {
+        const pair = text.slice(i, i + 2).replace(/\s+/g, " ");
+        if (/[^\s\s]/.test(pair.replace(" ", "_"))) grams.push("2:" + pair);
+      }
+      for (let i = 0; i < text.length - 2; i++) {
+        const tri = text.slice(i, i + 3).replace(/\s+/g, " ");
+        grams.push("3:" + tri);
+      }
+      for (const g of grams) {
+        let h = 2166136261;
+        for (let i = 0; i < g.length; i++) {
+          h ^= g.charCodeAt(i);
+          h = Math.imul(h, 16777619) >>> 0;
+        }
+        vec[h % full] += 1;
+      }
+      return norm(vec);
+    };
+    const data = texts.map((t, i) => ({
+      object: "embedding",
+      index: i,
+      embedding: embedOne(t),
+    }));
+    const tok = texts.reduce((a, t) => a + Math.ceil(t.length / 2), 0);
+    const usage = { prompt_tokens: tok, total_tokens: tok };
+    return json(res, 200, { object: "list", data, model: ep.model ?? "Qwen/Qwen3-Embedding-8B", usage });
+  }
+
   if (!url.includes("/chat/completions")) {
     return json(res, 404, { error: { message: "path not found", type: "invalid_request_error" } });
   }
@@ -277,6 +332,20 @@ if (payload.stream) {
       return;
     }
 
+// 10-2g: 流式配合（send_email → eve@corp.com；中断前文本流 + 恢复后继续）
+    if (toolNames6.includes("send_email") && lastText6.includes("eve@corp.com")) {
+      if (toolMsgs6.length === 0) {
+        await sleep(200);
+        await sseText(["好的，我先说明我的计划：", "准备给 eve@corp.com 发送一封主题为「流式测试」的邮件，", "这一步需要你审批。"]);
+        await sseToolCalls([{ id: "call_l10_2g_01", name: "send_email", args: { recipient: "eve@corp.com", subject: "流式测试" } }]);
+      } else {
+        await sleep(200);
+        await sseText(["邮件已发送给 eve@corp.com，主题：流式测试。"]);
+        sseFinish("stop", { prompt_tokens: 340, completion_tokens: 18, total_tokens: 358 });
+      }
+      return;
+    }
+
     // 旧：死锁流（课 1 遗留）
     const pieces = ["死锁是指两个", "或多个进程", "因互相等待", "对方持有的资源", "而永久阻塞。"];
     let i = 0;
@@ -370,9 +439,185 @@ const toolCallBody = (calls, usage) => ({
 
 // 工具调用链路（含错配/缺回执场景）
 if (hasTools) {
-    const logResp = (kind) => {
+const logResp = (kind) => {
       if (process.env.MOCK_DEBUG === "1") console.log(`[mock-resp] ${kind}`);
     };
+// ==== 课 11 场景路由（带工具）：Agentic RAG（检索做工具）====
+    if (hasToolNamed("search_knowledge_base")) {
+      // 次轮：已有工具结果 → 基于检索内容返回最终回答
+      if (lastIsTool) {
+        const tb = lastToolContent;
+        if (tb.includes("VPN")) {
+          return json(res, 200, completionBody(model, { prompt_tokens: 640, completion_tokens: 130, total_tokens: 770, reasoning_tokens: 0 }, { echo: "**VPN 客户端名称：NebulaConnect**（支持 Windows、macOS 与移动端）。重置密码可访问 `it.nebula-tech.example` 自助操作；账号为员工工号，初始密码入职时由 IT 服务台发放。" }));
+        }
+        if (tb.includes("每年")) {
+          return json(res, 200, completionBody(model, { prompt_tokens: 660, completion_tokens: 120, total_tokens: 780, reasoning_tokens: 0 }, { echo: "星云科技年假按在公司的连续服务年限阶梯计算：\n- 入职满 1 年不满 3 年：每年 5 天\n- 入职满 3 年不满 5 年：每年 10 天\n- 入职满 5 年及以上：每年 15 天\n全年累计事假超过 15 天的，次年年假按比例折算。" }));
+        }
+        return json(res, 200, completionBody(model, { prompt_tokens: 700, completion_tokens: 140, total_tokens: 840, reasoning_tokens: 0 }, { echo: "您好！针对您的问题：\n- **年假申请**需提前 **5 个工作日**提交（来源：01-考勤与休假制度.md）。\n- **北京出差住宿**每晚上限 **600 元**、市内交通每日上限 **150 元**（来源：02-报销与费用标准.md）。\n如需预订或报销，可随时告诉我。" }));
+      }
+      // 首轮：根据问题返回工具调用（可能并行多条）
+      logResp("K11:call:search_knowledge_base");
+      if (lastText.includes("每年有多少天年假")) {
+        return json(res, 200, toolCallBody([{ id: "call_l11_year_01", name: "search_knowledge_base", args: { query: "员工年假天数 政策" } }], { prompt_tokens: 520, completion_tokens: 24, total_tokens: 544 }));
+      }
+      if (lastText.includes("VPN 客户端叫什么") && lastText.includes("怎么重置密码")) {
+        return json(res, 200, toolCallBody([
+          { id: "call_l11_vpn_01", name: "search_knowledge_base", args: { query: "VPN 客户端名称" } },
+          { id: "call_l11_vpn_02", name: "search_knowledge_base", args: { query: "VPN 密码重置 忘记" } },
+        ], { prompt_tokens: 540, completion_tokens: 40, total_tokens: 580 }));
+      }
+      if (lastText.includes("北京出差")) {
+        return json(res, 200, toolCallBody([
+          { id: "call_l11_travel_01", name: "search_knowledge_base", args: { query: "年假申请 提前 工作日" } },
+          { id: "call_l11_travel_02", name: "search_knowledge_base", args: { query: "北京 出差 住宿 报销" } },
+        ], { prompt_tokens: 600, completion_tokens: 40, total_tokens: 640 }));
+      }
+      // 兜底：单条
+      return json(res, 200, toolCallBody([{ id: "call_l11_kb_01", name: "search_knowledge_base", args: { query: lastText.slice(0, 20) } }], { prompt_tokens: 500, completion_tokens: 24, total_tokens: 524 }));
+    }
+// ==== 课 10 场景路由（带工具）：HITL 人机协同 & 护栏 ====
+    // 10-1b: read_inbox 未设闸门 → 直通执行（首轮调工具 / 执行后回文本）
+    if (hasToolNamed("read_inbox") && lastText.includes("收件箱有几封新邮件")) {
+      if (lastIsTool) return json(res, 200, completionBody(model, { prompt_tokens: 300, completion_tokens: 16, total_tokens: 316, reasoning_tokens: 0 }, { echo: "收件箱里有 3 封新邮件。" }));
+      logResp("K10-1b:call:read_inbox");
+      return json(res, 200, toolCallBody([{ id: "call_l10_rb_01", name: "read_inbox", args: {} }]));
+    }
+    // 10-1a: send_email 审批（alice / 周会提醒）
+    if (hasToolNamed("send_email") && lastText.includes("周会提醒")) {
+      if (lastIsTool) return json(res, 200, completionBody(model, { prompt_tokens: 340, completion_tokens: 22, total_tokens: 362, reasoning_tokens: 0 }, { echo: "邮件已成功发送给 alice@corp.com，主题：周会提醒。" }));
+      logResp("K10-1a:call:send_email");
+      return json(res, 200, toolCallBody([{ id: "call_l10_1a_01", name: "send_email", args: { recipient: "alice@corp.com", subject: "周会提醒" } }]));
+    }
+    // 10-2a: reject（spam-list 广告 → 拒绝后模型改道）
+    if (hasToolNamed("send_email") && lastText.includes("spam-list@corp.com")) {
+      if (toolMsgs.length > 0) return json(res, 200, completionBody(model, { prompt_tokens: 350, completion_tokens: 36, total_tokens: 386, reasoning_tokens: 0 }, { echo: "抱歉，我无法向外部列表群发广告邮件——公司政策不允许这种操作。" }));
+      logResp("K10-2a:call:send_email");
+      return json(res, 200, toolCallBody([{ id: "call_l10_2a_01", name: "send_email", args: { recipient: "spam-list@corp.com", subject: "广告" } }]));
+    }
+    // 10-2b: edit（charlie 草稿 → 改后 dave）
+    if (hasToolNamed("send_email") && lastText.includes("charlie@corp.com")) {
+      if (toolMsgs.length > 0) return json(res, 200, completionBody(model, { prompt_tokens: 360, completion_tokens: 30, total_tokens: 390, reasoning_tokens: 0 }, { echo: "已按修改后的收件人 dave@corp.com 发送邮件，主题：修改后的主题。" }));
+      logResp("K10-2b:call:send_email");
+      return json(res, 200, toolCallBody([{ id: "call_l10_2b_01", name: "send_email", args: { recipient: "charlie@corp.com", subject: "草稿" } }]));
+    }
+    // 10-2c: ask_user（respond 人工代答；工具真实实现不执行）
+    if (hasToolNamed("ask_user") && lastText.includes("订一张机票")) {
+      logResp("K10-2c:call:ask_user");
+      return json(res, 200, toolCallBody([{ id: "call_l10_2c_01", name: "ask_user", args: { question: "请问您想订哪天的机票、从哪到哪、舱位等级呢？" } }]));
+    }
+// 10-2d: 批量决策（并行两封邮件：alice 批准 / bob 拒绝；与讲义 C 段叙述一致）
+    if (hasToolNamed("send_email") && lastText.includes("alice@corp.com") && lastText.includes("bob@corp.com")) {
+      if (toolMsgs.length > 0) return json(res, 200, completionBody(model, { prompt_tokens: 420, completion_tokens: 40, total_tokens: 460, reasoning_tokens: 0 }, { echo: "已按审批结果处理批量请求：给 alice 的邮件已批准并发送；给 bob 的邮件被拒绝（审批人未同意）。" }));
+      logResp("K10-2d:call:batch");
+      return json(res, 200, toolCallBody([
+        { id: "call_l10_2d_alice", name: "send_email", args: { recipient: "alice@corp.com", subject: "批量邮件" } },
+        { id: "call_l10_2d_bob", name: "send_email", args: { recipient: "bob@corp.com", subject: "批量邮件" } },
+      ]));
+    }
+    // 10-2e: 条件中断（internal.com 直通 → 首轮调工具 / 执行后回文本）
+    if (hasToolNamed("send_email") && lastText.includes("内部同步")) {
+      if (lastIsTool) return json(res, 200, completionBody(model, { prompt_tokens: 320, completion_tokens: 18, total_tokens: 338, reasoning_tokens: 0 }, { echo: "已直接发送内部邮件给 teammate@internal.com（内部域名直通，无需审批）。" }));
+      logResp("K10-2e:call:send_email");
+      return json(res, 200, toolCallBody([{ id: "call_l10_2e_01", name: "send_email", args: { recipient: "teammate@internal.com", subject: "内部同步" } }]));
+    }
+    // 10-2f: v2 形态（v2test@corp.com；TS 默认 v2）
+    if (hasToolNamed("send_email") && lastText.includes("v2test@corp.com")) {
+      if (lastIsTool) return json(res, 200, completionBody(model, { prompt_tokens: 340, completion_tokens: 18, total_tokens: 358, reasoning_tokens: 0 }, { echo: "邮件已发送给 v2test@corp.com，主题：v2 形态。" }));
+      logResp("K10-2f:call:send_email");
+      return json(res, 200, toolCallBody([{ id: "call_l10_2f_01", name: "send_email", args: { recipient: "v2test@corp.com", subject: "v2 形态" } }]));
+    }
+    // 10-2g: 流式配合（eve@corp.com）
+    if (hasToolNamed("send_email") && lastText.includes("eve@corp.com")) {
+      if (lastIsTool) return json(res, 200, completionBody(model, { prompt_tokens: 340, completion_tokens: 18, total_tokens: 358, reasoning_tokens: 0 }, { echo: "邮件已发送给 eve@corp.com，主题：流式测试。" }));
+      logResp("K10-2g:call:send_email");
+      return json(res, 200, toolCallBody([{ id: "call_l10_2g_01", name: "send_email", args: { recipient: "eve@corp.com", subject: "流式测试" } }]));
+    }
+    // 10-2h: 决策数量不匹配（count@corp.com；多给一个决策 → 报错）
+    if (hasToolNamed("send_email") && lastText.includes("count@corp.com")) {
+      if (lastIsTool) return json(res, 200, completionBody(model, { prompt_tokens: 340, completion_tokens: 16, total_tokens: 356, reasoning_tokens: 0 }, { echo: "邮件已发送给 count@corp.com，主题：数量核对。" }));
+      logResp("K10-2h:call:send_email");
+      return json(res, 200, toolCallBody([{ id: "call_l10_2h_01", name: "send_email", args: { recipient: "count@corp.com", subject: "数量核对" } }]));
+    }
+    // ==== 课 9 场景路由（带工具）====
+    // 9-1a: 组装视图（get_weather 单轮）
+    if (hasToolNamed("get_weather") && lastText.includes("北京天气怎么样？")) {
+      if (lastIsTool) {
+        logResp("K9-1a:final");
+        return json(res, 200, completionBody(model, { prompt_tokens: 380, completion_tokens: 14, total_tokens: 394, reasoning_tokens: 0 }, { echo: "北京 晴天，22°C" }));
+      }
+      logResp("K9-1a:call:get_weather");
+      return json(res, 200, toolCallBody([{ id: "call_k9_w1", name: "get_weather", args: { city: "北京" } }]));
+    }
+    // 9-2e: 角色过滤（viewer 只见 read_data → 删除被拒；admin 见三工具 → 能读取）
+    if (hasToolNamed("read_data") && !hasToolNamed("delete_data") && lastText.includes("请删除所有业务数据")) {
+      logResp("K9-2e:final(viewer)");
+      return json(res, 200, completionBody(model, { prompt_tokens: 380, completion_tokens: 46, total_tokens: 426, reasoning_tokens: 0 }, { echo: "很抱歉，我无法执行这个请求。我仅有的工具是 read_data（读取业务数据），我并不具备任何删除数据的能力。" }));
+    }
+    if (hasToolNamed("delete_data") && lastText.includes("请读取业务数据")) {
+      if (lastIsTool) {
+        logResp("K9-2e:final(admin)");
+        return json(res, 200, completionBody(model, { prompt_tokens: 400, completion_tokens: 12, total_tokens: 412, reasoning_tokens: 0 }, { echo: "业务数据读取结果：**42**。" }));
+      }
+      logResp("K9-2e:call:read_data");
+      return json(res, 200, toolCallBody([{ id: "call_k9_rd_01", name: "read_data", args: {} }]));
+    }
+    // 9-2g: 长报告（工具在 TS 侧真正生成 1144 字；模型看短版）
+    if (hasToolNamed("big_report") && lastText.includes("请获取主题报告")) {
+      if (lastIsTool) {
+        logResp("K9-2g:final");
+        return json(res, 200, completionBody(model, { prompt_tokens: 400, completion_tokens: 6, total_tokens: 406, reasoning_tokens: 0 }, { echo: "**已阅**" }));
+      }
+      logResp("K9-2g:call:big_report");
+      return json(res, 200, toolCallBody([{ id: "call_k9_br_01", name: "big_report", args: { topic: "主题" } }]));
+    }
+    // 9-3a: 工具读 runtime.context（user_id）
+    if (hasToolNamed("get_my_user_id") && lastText.includes("请查询我的用户 ID")) {
+      if (lastIsTool) {
+        logResp("K9-3a:final");
+        return json(res, 200, completionBody(model, { prompt_tokens: 390, completion_tokens: 18, total_tokens: 408, reasoning_tokens: 0 }, { echo: "您的用户 ID 是：**user_777**。" }));
+      }
+      logResp("K9-3a:call:get_my_user_id");
+      return json(res, 200, toolCallBody([{ id: "call_k9_uid_01", name: "get_my_user_id", args: {} }]));
+    }
+    // 9-3b: login（Command 写状态）→ check_auth（读状态）
+    if (hasToolNamed("login") && lastText.includes("请先用密码 correct 登录")) {
+      if (lastToolContent.includes("当前登录状态")) {
+        logResp("K9-3b:final");
+        return json(res, 200, completionBody(model, { prompt_tokens: 430, completion_tokens: 22, total_tokens: 452, reasoning_tokens: 0 }, { echo: "登录成功，当前登录状态已认证（authenticated = true）。" }));
+      }
+      if (lastToolContent.includes("登录成功")) {
+        logResp("K9-3b:call:check_auth");
+        return json(res, 200, toolCallBody([{ id: "call_k9_auth_01", name: "check_auth", args: {} }]));
+      }
+      logResp("K9-3b:call:login");
+      return json(res, 200, toolCallBody([{ id: "call_k9_login_01", name: "login", args: { password: "correct" } }]));
+    }
+    // 9-3c: store 跨会话（会话 A 保存 / 会话 B 读取）
+    if (hasToolNamed("save_preference") && lastText.includes("请保存我的偏好")) {
+      if (lastIsTool) {
+        logResp("K9-3c:final(save)");
+        return json(res, 200, completionBody(model, { prompt_tokens: 410, completion_tokens: 26, total_tokens: 436, reasoning_tokens: 0 }, { echo: "已保存你的偏好：语言 = **中文**。" }));
+      }
+      logResp("K9-3c:call:save_preference");
+      return json(res, 200, toolCallBody([{ id: "call_k9_pref_save", name: "save_preference", args: { key: "语言", value: "中文" } }]));
+    }
+    if (hasToolNamed("get_preference") && lastText.includes("请读取我的偏好")) {
+      if (lastIsTool) {
+        logResp("K9-3c:final(get)");
+        return json(res, 200, completionBody(model, { prompt_tokens: 410, completion_tokens: 30, total_tokens: 440, reasoning_tokens: 0 }, { echo: "已读取你的偏好「语言」：**中文**。之后我都会用中文与你交流。" }));
+      }
+      logResp("K9-3c:call:get_preference");
+      return json(res, 200, toolCallBody([{ id: "call_k9_pref_get", name: "get_preference", args: { key: "语言" } }]));
+    }
+    // 9-4b: 审计钩子（get_weather 工具链）
+    if (hasToolNamed("get_weather") && lastText.includes("查一下北京天气")) {
+      if (lastIsTool) {
+        logResp("K9-4b:final");
+        return json(res, 200, completionBody(model, { prompt_tokens: 420, completion_tokens: 40, total_tokens: 460, reasoning_tokens: 0 }, { echo: "北京天气：晴天，22°C。" }));
+      }
+      logResp("K9-4b:call:get_weather");
+      return json(res, 200, toolCallBody([{ id: "call_k9_audit_w1", name: "get_weather", args: { city: "北京" } }]));
+    }
     // ---- 课 7 场景路由（带工具）----
     // 7-2d: 自定义 state：save_name → Command 写状态 / get_name 读状态
     if (hasToolNamed("save_name") && lastText.includes("我的名字是小明，请记录下来")) {
@@ -582,7 +827,16 @@ if (hasTools) {
     }
     // ---- 课 5 场景路由 ----
     // 5-1. 结构化输出：thinking 关闭后，返回"虚拟工具"调用（含自我校准 / 多输出重试两个剧本）
-    if (payload.tool_choice === "required") {
+if (payload.tool_choice === "required") {
+      // 课 9 2f：格式收窄（Simple → Detailed，toolStrategy 候选收窄）
+      if (hasToolNamed("Simple")) {
+        logResp("K9-2f:Simple");
+        return json(res, 200, toolCallBody([{ id: "call_k9_2f_s1", name: "Simple", args: { answer: "你好！👋 有什么我可以帮你的吗？" } }]));
+      }
+      if (hasToolNamed("Detailed")) {
+        logResp("K9-2f:Detailed");
+        return json(res, 200, toolCallBody([{ id: "call_k9_2f_d1", name: "Detailed", args: { answer: "你好，我是一个能给出带置信度回答的通用助手。", confidence: 1.0 } }]));
+      }
       if (hasToolNamed("EventDetails")) {
         // Union 场景：第一轮一口气调两个；错误回执后第二次只调一个
         if (toolMsgs.length === 0) {
@@ -777,6 +1031,34 @@ if (hasTools) {
   }
 
 // ---- 课 8 场景路由（无工具）----
+// ---- 课 10 场景路由（无工具）：PII 检测 & 自定义护栏 ----
+  // 10-3a: PII 三策略输入侧脱敏（模型只复述脱敏后内容，据此分流）
+  if (lastText.includes("我的邮箱是 john.doe@example.com")) {
+    if (lastText.includes("@example.com") || lastText.includes("john")) {
+      return json(res, 200, completionBody(model, { prompt_tokens: 80, completion_tokens: 48, total_tokens: 128, reasoning_tokens: 0 }, { echo: "我收到的是：邮箱【已脱敏的邮箱】，卡号【已掩码的卡号】，服务器 IP【已哈希的 IP】。" }));
+    }
+    return json(res, 200, completionBody(model, { prompt_tokens: 80, completion_tokens: 48, total_tokens: 128, reasoning_tokens: 0 }, { echo: "已按你提供的原文保留：邮箱 john.doe@example.com，卡号 5105-1051-0510-5100，IP 192.168.1.100。" }));
+  }
+  // 10-3b: block（api_key 检测到即拒，不调用模型）+ 自定义 detector（emp 工号掩码）
+  if (lastText.includes("请复述这个工号")) {
+    return json(res, 200, completionBody(model, { prompt_tokens: 60, completion_tokens: 20, total_tokens: 80, reasoning_tokens: 0 }, { echo: "这个工号是 EMP-【已掩码】，我看不到具体的五位数字。" }));
+  }
+  // 10-3c: apply_to_output（模型输出作用域脱敏，输出含示例邮箱）
+  if (lastText.includes("展示一个供测试的联系邮箱")) {
+    return json(res, 200, completionBody(model, { prompt_tokens: 60, completion_tokens: 22, total_tokens: 82, reasoning_tokens: 0 }, { echo: "请使用测试联系邮箱：leak@corp.com。" }));
+  }
+  // 10-4a: before_agent 拦截的"正常请求"对照组（拦截请求不调用模型）
+  if (lastText.includes("用一句话打招呼")) {
+    return json(res, 200, completionBody(model, { prompt_tokens: 40, completion_tokens: 12, total_tokens: 52, reasoning_tokens: 0 }, { echo: "你好！很高兴见到你。" }));
+  }
+  // 10-4b: after_agent 确定性审查（模型故意泄露内部编号 INTERNAL-8888）
+  if (lastText.includes("给我内部编号")) {
+    return json(res, 200, completionBody(model, { prompt_tokens: 60, completion_tokens: 20, total_tokens: 80, reasoning_tokens: 0 }, { echo: "内部编号是 INTERNAL-8888（本演示故意泄露）。" }));
+  }
+  // 10-4c: after_agent 模型审查（生成含手机号的测试数据）
+  if (lastText.includes("包含手机号的测试数据")) {
+    return json(res, 200, completionBody(model, { prompt_tokens: 60, completion_tokens: 26, total_tokens: 86, reasoning_tokens: 0 }, { echo: "测试数据：姓名 张三，手机号 138-0000-0000。" }));
+  }
   // 8-2e: 模型降级（坏模型 404 后由备用模型应答；此路由只会被备用模型收到）
   if (lastText.includes("用一个词回答")) {
     return json(res, 200, completionBody(model, { prompt_tokens: 40, completion_tokens: 3, total_tokens: 43, reasoning_tokens: 0 }, { echo: "好" }));
@@ -893,6 +1175,52 @@ if (lastText.includes("用一句话向我问好")) {
 
 if (lastText.includes("你好")) {
     return json(res, 200, completionBody(model, { prompt_tokens: 20, completion_tokens: 20, total_tokens: 40, reasoning_tokens: 0 }, { echo: "你好！很高兴见到你 😊 有什么我可以帮你的吗？" }));
+  }
+
+// ---- 课 9 1b 成本对照：同一问题，system prompt 长短 → 不同 input tokens ----
+  if (lastText.includes("请只回答数字：1+1 等于几？")) {
+    const sysRaw = messages.find((m) => m.role === "system")?.content ?? "";
+    const sysText = typeof sysRaw === "string"
+      ? sysRaw
+      : Array.isArray(sysRaw) ? sysRaw.filter((b) => b?.type === "text").map((b) => b.text).join("") : String(sysRaw);
+    const hasRef = sysText.includes("【参考资料】");
+    if (process.env.MOCK_DEBUG === "1") console.log(`[mock-resp] ${hasRef ? "K9-1b:long" : "K9-1b:short"}`);
+const usage = hasRef
+      ? { prompt_tokens: 520, completion_tokens: 3, total_tokens: 523, reasoning_tokens: 0 }
+      : { prompt_tokens: 30, completion_tokens: 3, total_tokens: 33, reasoning_tokens: 0 };
+    return json(res, 200, completionBody(model, usage, { echo: "2" }));
+  }
+
+  // ============ 课 11：无工具模型调用路由 ============
+  // 1a 拒答式猜测（年假）：纯问题、无<资料>
+  if (lastText.includes("星云科技（Nebula Tech）的员工年假有多少天")) {
+    return json(res, 200, completionBody(model, { prompt_tokens: 40, completion_tokens: 120, total_tokens: 160, reasoning_tokens: 0 }, {
+      echo: `关于“星云科技（Nebula Tech）”的员工年假天数，目前公开渠道并没有统一的确切信息。\n  * **中国大陆法定标准**：累计工作满1年不满10年享5天；满10年不满20年享10天；满20年以上享15天。\n  * **科技公司常见福利**：很多科技/互联网公司会在法定基础上增加“福利年假”。例如，入职第一年通常享有 7～15 天不等。\n  ……`,
+    }));
+  }
+  // 1a 编造式幻觉（VPN）：纯问题、无<资料>（需同时排除带<资料>的 3d）
+  if (lastText.includes("星云科技的 VPN 客户端叫什么") && !lastText.includes("<资料>")) {
+    return json(res, 200, completionBody(model, { prompt_tokens: 38, completion_tokens: 130, total_tokens: 168, reasoning_tokens: 0 }, {
+      echo: `关于“星云科技”的 VPN 客户端名称，通常取决于您指的是其面向**企业用户**还是**个人用户**的产品线：\n  1. **企业级产品（星云星空）**：……他们的核心客户端软件名称就叫作 **“星云星空”**（英文名称：**Nebula**）。\n  2. **个人网络加速/代理工具**：……其客户端通常被直接命名为 **“星云VPN”**\n  ……`,
+    }));
+  }
+  // 3f-a 无检索（年假）：通用猜测、无<资料>
+  if (lastText.includes("星云科技员工每年有多少天年假") && !lastText.includes("<资料>")) {
+    return json(res, 200, completionBody(model, { prompt_tokens: 42, completion_tokens: 110, total_tokens: 152, reasoning_tokens: 0 }, {
+      echo: `根据国家法定标准，职工累计工作已满1年不满10年的，年休假5天；已满10年不满20年的，年休假10天；已满20年的，年休假15天。许多公司会在此基础上提供额外福利。但具体到“星云科技”的内部规定，公开资料中没有确切信息，建议咨询该公司人力资源部门。`,
+    }));
+  }
+  // 3d 2-step RAG（VPN·带<资料>）
+  if (lastText.includes("<资料>") && lastText.includes("星云科技的 VPN 客户端叫什么？怎么重置密码")) {
+    return json(res, 200, completionBody(model, { prompt_tokens: 640, completion_tokens: 150, total_tokens: 790, reasoning_tokens: 0 }, {
+      echo: `- **VPN 客户端名称**：「NebulaConnect」来源：\`03-IT-服务指南.md\`\n- **重置密码方式（资料中的“忘记密码”说明为域账号密码重置）**：可访问 \`it.nebula-tech.example\`，点击「忘记密码」，通过企业邮箱接收验证链接进行自助重置；若企业邮箱不可用，需携带工牌到 IT 服务台现场重置。来源：\`03-IT-服务指南.md\`\n补充：VPN 账号为员工工号，初始密码在入职时由 IT 服务台发放；若因连续输错被锁定，会锁定 30 分钟后自动解锁。若特指“VPN 密码”的专门重置流程，资料未单独涵盖。`,
+    }));
+  }
+  // 3f-b 2-step RAG（年假·带<资料>）：检索截断 → 资料未涵盖
+  if (lastText.includes("<资料>") && lastText.includes("星云科技员工每年有多少天年假")) {
+    return json(res, 200, completionBody(model, { prompt_tokens: 620, completion_tokens: 90, total_tokens: 710, reasoning_tokens: 0 }, {
+      echo: `资料只说明：年假天数按员工在公司的连续服务年限阶梯计算。但具体每年有多少天年假，资料未涵盖。`,
+    }));
   }
 
   const fallback = { prompt_tokens: 68, completion_tokens: 43, total_tokens: 111, reasoning_tokens: 16 };

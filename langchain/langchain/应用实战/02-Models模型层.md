@@ -16,7 +16,9 @@
 
 > 读图：业务脚本直接 `init_chat_model` 出一个模型，调用链只有一条；下方红框是它挂掉时的情形——异常一路抛给调用方。
 
-```python
+::: code-group
+
+```python [Python]
 # app.py：第 1 版，单模型硬编码
 import os
 
@@ -35,17 +37,35 @@ model = init_chat_model(
 print(model.invoke("你好").content)
 ```
 
+```typescript [TypeScript]
+// app.ts：第 1 版，单模型硬编码
+import "dotenv/config";
+import { initChatModel } from "langchain";
+
+const model = await initChatModel("qwen3.8-flash", {
+  modelProvider: "openai",
+  baseUrl: process.env.BAILIAN_BASE_URL,
+  apiKey: process.env.BAILIAN_API_KEY,
+});
+
+console.log((await model.invoke("你好")).text);
+```
+
+:::
+
 **它的问题**：模型是**单点**——它 502 / 超时 / 被限流，整个功能就不可用，用户看到的是一串异常；模型配置散落在每个脚本里，换模型要改 N 个文件；「这个模型到底支不支持工具调用」从来没先验过，上线靠运气。
 
 ## 第 2 版：主备降级（改进实现）
 
-第 1 版有一条马上能治：**业务不该只依赖一个模型**。LangChain 的 `with_fallbacks` 把「主模型失败就换下一个」变成一行——业务侧 `.invoke()` 完全不变：
+第 1 版有一条马上能治：**业务不该只依赖一个模型**。Python 的 `with_fallbacks`（TS 侧官方推荐为 agent 级 `modelFallbackMiddleware`）把「主模型失败就换下一个」变成一行——业务调用方基本不变：
 
 ![第 2 版设计：主备降级](assets/app-step2-02-主备降级.svg)
 
 > 读图：比上张多了右侧的「降级编排」框——主模型失败时自动切到备用模型；业务脚本零改动。下方三个红框是本版遗留问题。
 
-```python
+::: code-group
+
+```python [Python]
 # model_chain.py：第 2 版，主备降级
 import os
 
@@ -78,7 +98,45 @@ model = primary.with_fallbacks([backup])
 print(model.invoke("你好").content)
 ```
 
-> 实测确认（本机 langchain 1.4.0）：`with_fallbacks(fallbacks, *, exceptions_to_handle=(Exception,), exception_key=None)`；用假模型模拟主模型抛 `RuntimeError`，结果确实返回了备用模型的内容。
+```typescript [TypeScript]
+// model_chain.ts：第 2 版，主备降级
+import "dotenv/config";
+import { createAgent, initChatModel, modelFallbackMiddleware } from "langchain";
+
+const primary = await initChatModel("qwen3.8-flash", {
+  modelProvider: "openai",
+  baseUrl: process.env.BAILIAN_BASE_URL,
+  apiKey: process.env.BAILIAN_API_KEY,
+  timeout: 30_000, // 毫秒（Python 侧为秒）
+  maxRetries: 2,
+});
+
+const backup = await initChatModel("qwen3.8-flash", {
+  modelProvider: "openai",
+  baseUrl: process.env.BACKUP_BASE_URL,
+  apiKey: process.env.BACKUP_API_KEY,
+  timeout: 30_000,
+  maxRetries: 2,
+});
+
+// TS 侧官方推荐的模型降级走 agent 级 modelFallbackMiddleware
+//（Python 的 with_fallbacks 直接作用于裸模型，TS v1 无等价官方 API）
+const agent = createAgent({
+  model: primary,
+  tools: [],
+  middleware: [modelFallbackMiddleware(backup)],
+});
+
+// 调用方形态：结构化消息输入（Python 侧是 model.invoke("你好")）
+const result = await agent.invoke({
+  messages: [{ role: "user", content: "你好" }],
+});
+console.log(result.messages.at(-1)?.text);
+```
+
+:::
+
+> 实测确认（本机 langchain 1.4.0）：`with_fallbacks(fallbacks, *, exceptions_to_handle=(Exception,), exception_key=None)`；用假模型模拟主模型抛 `RuntimeError`，结果确实返回了备用模型的内容。TS 侧形态为 agent 级 `modelFallbackMiddleware(备用模型)`，主模型失联时自动切换（课 8 已实测）。
 
 **它的问题**：**降级是黑盒的**——你不知道刚才那次是不是走了备用、为什么走，故障被静默吞掉，事后无从复盘；备用也挂了仍然会抛异常（链末端没有兜底）；两个模型依旧写死在代码里，换环境要改源码。
 
@@ -90,7 +148,7 @@ print(model.invoke("你好").content)
 
 > 读图：比上张多了三块——紫色的配置层（yaml/env）、黄色的能力门禁（启动期 profile 探测）、蓝色的可观测降级（每次切换留痕）。三层各就各位，互不替代。
 
-**① 配置外置**（改配置不改代码）：
+**① 配置外置**（改配置不改代码；这是语言无关的 YAML，Python 与 TypeScript 共用同一份）：
 
 ```yaml
 # models.yaml
@@ -119,7 +177,9 @@ required_capabilities: [tool_calling]   # 缺这项能力 = 启动即失败
 
 **② 装配 + 能力门禁 + 降级留痕**：
 
-```python
+::: code-group
+
+```python [Python]
 # model_chain.py：第 3 版，配置化 + 能力门禁 + 可观测降级
 import logging
 import os
@@ -188,7 +248,89 @@ model = build_chain()
 print(model.invoke("你好").content)
 ```
 
-> 实测确认：`init_chat_model(..., profile={...})` 手动覆写生效（传入后 `model.profile` 返回该字典，不传时为 `None`）；`logged_fallback` 包装在假模型降级实验中正常打印日志并返回备用结果。
+```typescript [TypeScript]
+// model_chain.ts：第 3 版，配置化 + 能力门禁 + 可观测降级
+// 注：TS 侧为免引入 YAML 解析器，把配置外置到 models.ts 模块
+//    （内容与 models.yaml 同构）；能力门禁的 profile 字段在 TS 侧为驼峰。
+import "dotenv/config";
+import { createAgent, initChatModel, modelFallbackMiddleware } from "langchain";
+
+// models.ts —— 配置外置（与 Python 侧 models.yaml 对应，密钥仍从环境变量取）
+export const DEFAULT_CFG = {
+  model: "qwen3.8-flash",
+  modelProvider: "openai",
+  baseUrlEnv: "BAILIAN_BASE_URL",
+  apiKeyEnv: "BAILIAN_API_KEY",
+  timeout: 30,
+  maxRetries: 2,
+  profile: { maxInputTokens: 100_000, toolCalling: true }, // 驼峰；手动覆写自建/网关模型 profile
+};
+export const FALLBACK_CFGS = [
+  {
+    model: "qwen3.8-flash",
+    modelProvider: "openai",
+    baseUrlEnv: "BACKUP_BASE_URL",
+    apiKeyEnv: "BACKUP_API_KEY",
+    timeout: 30,
+    maxRetries: 2,
+    profile: { maxInputTokens: 100_000, toolCalling: true },
+  },
+];
+export const REQUIRED_CAPABILITIES = ["toolCalling"] as const;  // 驼峰；缺这项能力 = 启动即失败
+
+type ModelCfg = typeof DEFAULT_CFG;
+
+async function buildModel(cfg: ModelCfg) {
+  return initChatModel(cfg.model, {
+    modelProvider: cfg.modelProvider,
+    baseUrl: process.env[cfg.baseUrlEnv],
+    apiKey: process.env[cfg.apiKeyEnv],
+    timeout: cfg.timeout * 1000, // Python 秒 → TS 毫秒
+    maxRetries: cfg.maxRetries,
+    profile: cfg.profile,        // undefined = 沿用模型自带档案
+  } as any);
+}
+
+function checkCapabilities(model: any, required: readonly string[], label: string) {
+  const profile = model.profile ?? {};
+  const missing = required.filter((cap) => !profile[cap]);
+  if (missing.length) {
+    throw new Error(
+      `${label} 缺少必需能力 ${missing.join(",")}；` +
+      `profile=${JSON.stringify(profile)}（自建/网关模型通常返回空，请在配置里手动覆写 profile）`,
+    );
+  }
+}
+
+async function buildChain() {
+  const primary = await buildModel(DEFAULT_CFG);
+  checkCapabilities(primary, REQUIRED_CAPABILITIES, "主模型");
+
+  const fallbackModels = await Promise.all(
+    FALLBACK_CFGS.map(async (fbCfg) => {
+      const fb = await buildModel(fbCfg);
+      checkCapabilities(fb, REQUIRED_CAPABILITIES, "备用模型");
+      return fb;
+    }),
+  );
+
+  // 降级挂 agent 级 modelFallbackMiddleware（主模型抛错自动切备用）
+  // 降级日志留痕：TS 侧叠加一个 wrapModelCall 自定义中间件或接观测，见课 8 / 课 13
+  return createAgent({
+    model: primary,
+    tools: [],
+    middleware: [modelFallbackMiddleware(...fallbackModels)],
+  });
+}
+
+const model = await buildChain();
+const result = await model.invoke({ messages: [{ role: "user", content: "你好" }] });
+console.log(result.messages.at(-1)?.text);
+```
+
+:::
+
+> 实测确认：`init_chat_model(..., profile={...})` 手动覆写生效（传入后 `model.profile` 返回该字典，不传时为 `None`）；`logged_fallback` 包装在假模型降级实验中正常打印日志并返回备用结果。TS 侧 profile 字段为驼峰（`toolCalling` / `maxInputTokens`，见[官方 Model Profile 文档](https://docs.langchain.com/oss/javascript/langchain/models.md)）；TS 的 `modelFallbackMiddleware` 在 agent 级工作，降级触发日志需配合自定义 `wrapModelCall` 中间件或接入观测（课 8 / 课 13），与 Python 的包装链 `with_fallbacks` + `RunnableLambda` 形态不同。
 
 **③ 为什么门禁要放在装配期**：模型能力（能不能调工具、能不能看图）是**出厂属性**，不会因为你调用得好就变有。第 1 版把它留到运行时才发现，代价是用户先撞上错误；放到装配期，代价只是服务启动失败——**失败越早越便宜**。
 

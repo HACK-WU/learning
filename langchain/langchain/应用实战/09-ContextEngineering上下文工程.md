@@ -18,7 +18,9 @@ agent 聊到第三十轮，每次调用都把全部历史、全部工具定义�
 
 > 读图：一次调用要打包四样东西（红框）；成本对照是实测数字——同一问题，短提示词 input 70、长提示词 input 1034。
 
-```python
+::: code-group
+
+```python [Python]
 # context_v1.py：第 1 版，全量直塞
 from langchain.agents import create_agent
 
@@ -35,6 +37,29 @@ r = agent.invoke({"messages": [{"role": "user", "content": "请只回答数字�
 print(r["messages"][-1].usage_metadata)
 ```
 
+```typescript [TypeScript]
+// context_v1.ts：第 1 版，全量直塞
+import { createAgent } from "langchain";
+
+const ref =
+  "【参考资料】" +
+  "该项目采用微服务架构，订单服务负责交易流程……".repeat(30); // 1746 字，一次性写进 system prompt
+
+const agent = createAgent({
+  model,
+  tools: all_tools, // 无论用不用，全给
+  systemPrompt: "你是一个简洁的助手。\n" + ref,
+});
+const r = await agent.invoke({
+  messages: [{ role: "user", content: "请只回答数字：1+1 等于几？" }],
+});
+console.log(r.messages.at(-1)?.usage_metadata);
+```
+
+:::
+
+> 📌 **TS 差异**：`createAgent({ systemPrompt })` 以字符串字面量传（Python 为 `create_agent(..., system_prompt=...)`）；token 读取走 `r.messages.at(-1)?.usage_metadata`（`.input_tokens` / `.total_tokens`），与 Python 的 `usage_metadata` 同构。
+
 > 实测确认（真实模型，同一问题）：
 > - 短提示词（10 字）：`input_tokens = 70`、`total_tokens = 98`；
 > - 长提示词（1746 字参考资料）：`input_tokens = 1034`、`total_tokens = 1064`；
@@ -50,7 +75,9 @@ print(r["messages"][-1].usage_metadata)
 
 > 读图：比上张多了黄色的动态层——状态（消息数）与运行时（角色）两个输入源决定本次视图；右下实测显示同一份代码在不同输入下产出不同提示词。
 
-```python
+::: code-group
+
+```python [Python]
 # context_v2.py：第 2 版，动态组装
 from dataclasses import dataclass
 
@@ -96,6 +123,70 @@ agent = create_agent(model, tools=[read_data, write_data, delete_data],
                      middleware=[role_prompt, role_tools], context_schema=RoleCtx)
 ```
 
+```typescript [TypeScript]
+// context_v2.ts：第 2 版，动态组装（TS 无 @dynamic_prompt 装饰器、无原地 override）
+import { z } from "zod";
+import { createAgent, createMiddleware } from "langchain";
+
+const RoleSchema = z.object({ role: z.string() });
+
+// ① 按状态：长对话自动切简洁模式（改 request.systemMessage）
+const stateAware = createMiddleware({
+  name: "StateAware",
+  wrapModelCall: async (request, handler) => {
+    let base = String(request.systemMessage?.content ?? "");
+    if (request.messages.length >= 5) {
+      base += "\n这是长对话，请格外简洁。";
+    }
+    return handler({ ...request, systemMessage: request.systemMessage.concat(base) });
+  },
+});
+
+// ② 按运行时上下文：不同角色看到不同权限说明
+const rolePrompt = createMiddleware({
+  name: "RolePrompt",
+  wrapModelCall: async (request, handler) => {
+    const role = (request.runtime.context as any).role; // unknown → as any
+    let base = "你是一个数据管理助手。";
+    base +=
+      role === "admin"
+        ? "\n当前用户是管理员，拥有全部操作权限。"
+        : "\n当前用户是只读访客，只能执行读取操作，不能修改数据。";
+    return handler({ ...request, systemMessage: request.systemMessage.concat(base) });
+  },
+});
+
+// ③ 动态工具：按角色收窄模型可见的工具清单
+const roleTools = createMiddleware({
+  name: "RoleTools",
+  wrapModelCall: async (request, handler) => {
+    const role = (request.runtime.context as any).role;
+    let tools: any[] = request.tools ?? [];
+    if (role === "viewer") {
+      tools = tools.filter((t) => (t.name ?? "").startsWith("read_"));
+    }
+    return handler({ ...request, tools });
+  },
+});
+
+const agent = createAgent({
+  model,
+  tools: [readData, writeData, deleteData],
+  middleware: [rolePrompt, roleTools],
+  contextSchema: RoleSchema,
+});
+
+// 调用时第二参数传身份（Python 为 context=RoleCtx(role="admin")）
+await agent.invoke({ messages: [...] }, { context: { role: "viewer" } });
+```
+
+:::
+
+> 📌 **TS 差异**（三条核心）：
+> - **无 `@dynamic_prompt` 装饰器**：动态提示词统一 `createMiddleware({ name, wrapModelCall })`，改 `request.systemMessage`（`request.systemMessage.concat(extra)` 追加）。起点差异——TS 的 `systemMessage` **恒存在**（无 systemPrompt 时默认为 `SystemMessage("")`），不像 Python 可能为 `None`。
+> - **无请求原地 `override`**：瞬时改动统一 `handler({ ...request, messages/tools })` 浅拷贝覆盖。
+> - **context 读取**：TS 用 `(request.runtime.context as any).role`（类型推断为 `unknown` 需 `as any`），schema 用 zod `z.object({ role: z.string() })` 传 `createAgent({ contextSchema })`；身份在 `invoke(..., { context: { role } })` 第二参数传入。
+
 > 实测确认（离线假模型，行为一致）：
 > - 消息 1 条 → `system: 你是一个助手。`；消息 5 条 → `system: 你是一个助手。\n这是长对话，请格外简洁。`；
 > - `admin` → 「…管理员，拥有全部操作权限」；`viewer` → 「…只读访客，只能执行读取操作，不能修改数据」；
@@ -111,7 +202,9 @@ agent = create_agent(model, tools=[read_data, write_data, delete_data],
 
 > 读图：上半对比瞬时注入（状态 0 条）与持久注入（状态 1 条且不重复累积）的实测差异；下半是两种工具结果瘦身的实测数字，绿框点出共同点。
 
-```python
+::: code-group
+
+```python [Python]
 # context_v3.py：第 3 版
 from langchain.agents.middleware import (
     ContextEditingMiddleware,
@@ -153,6 +246,70 @@ agent = create_agent(
     middleware=[ContextEditingMiddleware(edits=[ClearToolUsesEdit(trigger=100, keep=0)])],
 )
 ```
+
+```typescript [TypeScript]
+// context_v3.ts：第 3 版（TS 无 ExtendedModelResponse 导出→直接返回 Command）
+import { createAgent, createMiddleware } from "langchain";
+import { contextEditingMiddleware, ClearToolUsesEdit } from "langchain/middleware";
+import { HumanMessage } from "langchain/messages";
+import { Command } from "@langchain/langgraph";
+import { MemorySaver } from "langgraph/checkpoint/memory"; // 持久注入需 checkpointer
+
+// ① 瞬时注入：只改本次视图，不落状态（不返回 Command，就不写状态）
+const injectTransient = createMiddleware({
+  name: "InjectTransient",
+  wrapModelCall: async (request, handler) => {
+    const msgs = [...request.messages, new HumanMessage("[档案注入] 项目代号是 LYRA-9。")];
+    return handler({ ...request, messages: msgs });
+  },
+});
+// 实测：模型能答出 LYRA-9；状态中含注入标记的消息数 = 0
+
+
+// ② 持久注入：本轮带上 + handler 后返回 Command 写入状态
+const persistNote = createMiddleware({
+  name: "PersistNote",
+  wrapModelCall: async (request, handler) => {
+    const already = request.messages.some((m) =>
+      String(m.content).includes("LYRA-9"),
+    );
+    if (already) return handler(request);            // 已存在则不再注入
+    const msgs = [...request.messages, new HumanMessage("[档案] 项目代号是 LYRA-9。")];
+    await handler({ ...request, messages: msgs });
+    return new Command({
+      update: { messages: [new HumanMessage("[档案] 项目代号是 LYRA-9。")] },
+    });
+  },
+});
+// 实测：第一轮后状态中含标记消息数 = 1；第二轮日志「已在消息中，本次不再注入」；第二轮后仍为 1
+
+
+// ③ 工具结果瘦身（内置件，开箱即用）
+const agent = createAgent({
+  model,
+  tools: [bigReport],
+  checkpointer: new MemorySaver(),
+  middleware: [
+    contextEditingMiddleware({
+      edits: [new ClearToolUsesEdit({ trigger: { tokens: 100 }, keep: { messages: 0 } })],
+    }),
+  ],
+});
+
+// invoke 时配 thread_id（持久注入跨轮靠它）
+await agent.invoke(
+  { messages: [{ role: "user", content: "项目代号是什么？" }] },
+  { configurable: { thread_id: "ctx-persist" } },
+);
+```
+
+:::
+
+> 📌 **TS 差异**：
+> - **瞬时注入**：`handler({ ...request, messages })` 浅拷贝覆盖（Python `request.override(messages=...)`），不返回 `Command` 就不写状态。
+> - **持久注入**：TS **无 `ExtendedModelResponse` 导出**——`handler` 调完后**直接 `return new Command({ update: { messages: [...] } })`**（Python 用 `ExtendedModelResponse(model_response=..., command=...)`），效果等价。幂等判断用 `String(m.content).includes("LYRA-9")`。
+> - **清理中间件**：TS `contextEditingMiddleware({ edits: [new ClearToolUsesEdit(...)] })`（Python `ContextEditingMiddleware(edits=[ClearToolUsesEdit(...)])`）；**阈值对象形态**——`new ClearToolUsesEdit({ trigger: { tokens: 100 }, keep: { messages: 0 } })`（Python `ClearToolUsesEdit(trigger=100, keep=0)`）。
+> - 持久注入需给 agent 配 `checkpointer: new MemorySaver()`，thread 用 `{ configurable: { thread_id } }`（Python 侧同样需要）。
 
 > 实测确认（1144 字报告）：
 > - **自写截断**（超 120 字截断）：模型侧 `len = 127`，状态侧 `len = 1144`；

@@ -16,7 +16,9 @@
 
 > 读图：一份提示词塞进四领域知识与 8 个工具（1983 字符）→ 每次调用全量携带 → 模型在 8 个里挑一个；下方三个红框是它的短板。
 
-```python
+::: code-group
+
+```python [Python]
 # multi_v1.py：第 1 版，一个 agent 挂满所有工具
 from langchain.agents import create_agent
 from langchain.tools import tool
@@ -40,6 +42,38 @@ OMNI_PROMPT = "你是全能助手，覆盖四个领域：\n" + "\n".join(DOMAIN_
 agent = create_agent(model, tools=ALL_TOOLS, system_prompt=OMNI_PROMPT)
 ```
 
+```typescript [TypeScript]
+// multi_v1.ts：第 1 版，一个 agent 挂满所有工具
+import { createAgent, tool } from "langchain";
+import { z } from "zod";
+
+const getWeather = tool(
+  async ({ city }: { city: string }) => `${city}：晴，22°C`,
+  {
+    name: "get_weather",
+    description: "查询指定城市的当前天气。",
+    schema: z.object({ city: z.string().describe("城市名称") }),
+  },
+);
+
+// ... 其余 7 个工具（get_stock / convert_currency / explain_sql /
+//     send_email / create_event / translate_text / search_docs）
+
+const ALL_TOOLS = [getWeather, getStock, convertCurrency, explainSql,
+  sendEmail, createEvent, translateText, searchDocs];
+
+const OMNI_PROMPT =
+  "你是全能助手，覆盖四个领域：\n" +
+  Object.values(DOMAIN_KNOWLEDGE).join("\n") +
+  "\n根据用户问题选择合适的工具完成任务。";
+
+const agent = createAgent({ model, tools: ALL_TOOLS, systemPrompt: OMNI_PROMPT });
+```
+
+:::
+
+> 📌 **TS 差异**：`@tool` 装饰器 → `tool(fn, { name, description, schema })` 工厂，参数用 **zod** 声明（`z.object({ city: z.string() })`），函数体为 async；`create_agent(model, tools=, system_prompt=)` → `createAgent({ model, tools, systemPrompt })`（配置对象、驼峰）。TS 侧 `tool()` 的 `name` 必须显式给（兜底取函数名，匿名箭头函数会得到占位名）。
+
 > 实测确认（8 个工具、四份领域知识）：`system_prompt` 247 字符 + 工具 schema 1736 字符 = **合计 1983 字符**，每次模型调用都携带。
 
 **它的问题**：**上下文成本刚性**——单轮就要 1983 字符，不管这次用不用得上（多轮还要再叠加历史）；**工具选择变难**——8 选 1 比 2 选 1 难得多，模型会调错或漏调；**领域知识互相污染**——「不提供投资建议」可能出现在天气回答里。
@@ -54,7 +88,9 @@ agent = create_agent(model, tools=ALL_TOOLS, system_prompt=OMNI_PROMPT)
 
 > 读图：主代理只剩 611 字符（4 个专家工具、零领域知识），四个专家各自带自己的知识与工具；中部是成本对照，底部两个红框是实测确认的性质。
 
-```python
+::: code-group
+
+```python [Python]
 # multi_v2.py：第 2 版，按域拆分
 from langchain.agents import create_agent
 from langchain.tools import tool
@@ -81,6 +117,53 @@ main_agent = create_agent(
     system_prompt="你是总协调员。把子任务交给对应专家，最后汇总答复。",
 )
 ```
+
+```typescript [TypeScript]
+// multi_v2.ts：第 2 版，按域拆分
+import { createAgent, tool } from "langchain";
+import { z } from "zod";
+
+function makeSpecialist(name: string, tools: any[], knowledge: string, desc: string) {
+  const agent = createAgent({ model, tools, systemPrompt: knowledge }); // 专家自带领域知识
+
+  return tool(
+    async ({ query }: { query: string }) => {
+      const r: any = await agent.invoke({
+        messages: [{ role: "user", content: query }],
+      });
+      return r.messages.at(-1)?.content ?? "";
+    },
+    {
+      name, // 📌 name 必填（Python 侧是 @tool(name, description=...) 装饰器参数）
+      description: desc,
+      schema: z.object({ query: z.string().describe("交给该专家的任务描述") }),
+    },
+  );
+}
+
+const weatherExpert = makeSpecialist(
+  "weather_expert", [getWeather],
+  DOMAIN_KNOWLEDGE.weather, "查询天气。输入城市名称。",
+);
+const financeExpert = makeSpecialist(
+  "finance_expert", [getStock, convertCurrency],
+  DOMAIN_KNOWLEDGE.finance, "查询股票价格或做货币换算。",
+);
+
+const mainAgent = createAgent({
+  model,
+  tools: [weatherExpert, financeExpert],
+  systemPrompt: "你是总协调员。把子任务交给对应专家，最后汇总答复。",
+});
+```
+
+:::
+
+> 📌 **TS 差异**：
+> - **工厂即工具**：Python 用 `@tool(name, description=desc)` 装饰闭包函数，TS 用 `tool(async fn, { name, description, schema })` 返回工具对象——`name`/`description` 走第二参数，不是装饰器参数。
+> - **调用子代理**：`agent.invoke(...)` 必须 `await`；取末条消息 `r.messages.at(-1)?.content`（Python 侧 `r["messages"][-1].content`）。
+> - **参数 schema**：`z.object({ query: z.string().describe(...) })`，工具入参在 TS 里从 `{ query }` 解构（不像 Python 位置参数直传）。
+> - ⚠️ 本模式两个性质两侧一致：子代理内部消息在主会话不可见、上下文隔离（主会话说过的话不会自动传给子代理，必须显式写进 `query`）。
 
 > 实测确认：
 > - **成本**：单 agent 每次 1983 字符；拆分后主代理 **611 字符**，子代理按需 231~907 字符（weather 231 / finance 566 / database 242 / office 907）；典型一次任务（主 + 一个子）842~1518 字符，**节省 23%~58%**；
@@ -114,7 +197,9 @@ main_agent = create_agent(
 
 把「怎么做」写成一段可加载的技能，避免一上来就全塞进提示词：
 
-```python
+::: code-group
+
+```python [Python]
 SKILLS = {"sql_expert": "你是 SQL 专家。写查询时必须遵守：1) 禁止 SELECT *…"}
 
 
@@ -130,11 +215,40 @@ agent = create_agent(
 )
 ```
 
+```typescript [TypeScript]
+const SKILLS: Record<string, string> = {
+  sql_expert: "你是 SQL 专家。写查询时必须遵守：1) 禁止 SELECT *…",
+};
+
+const loadSkill = tool(
+  async ({ skill_name }: { skill_name: string }) =>
+    `[技能已加载: ${skill_name}]\n${SKILLS[skill_name]}`,
+  {
+    name: "load_skill",
+    description: "加载专业技能包。可用技能：sql_expert / legal_reviewer",
+    schema: z.object({ skill_name: z.string().describe("技能名") }),
+  },
+);
+
+const agent = createAgent({
+  model,
+  tools: [loadSkill],
+  systemPrompt:
+    "任务涉及 SQL 或合同审查时，必须先调用 load_skill 加载对应技能，再按技能要求完成。",
+});
+```
+
+:::
+
+> 📌 **TS 差异**：`@tool` + docstring → `tool(fn, { name, description, schema })`，工具描述写在 `description` 而**不是 docstring**（TS 无 docstring 解析机制）；`SKILLS` 用 `Record<string, string>` 标注。本模式依赖 checkpointer 才能让技能内容留在历史里、第二轮不重复加载——TS 侧同样需 `checkpointer: new MemorySaver()` 且带 `thread_id`。
+
 > 实测：turn1 = 3 次（加载技能 + 查询 + 回复），turn2 = **2 次**且轨迹里**没有再次加载技能**——技能内容已在对话历史里，模型直接执行。**注意这依赖 checkpointer**：没有它，第二轮会话不累积，技能会重复加载（这是本课最容易踩的坑之一，与课 7 memory、课 10 HITL 同源）。
 
 ### C. router：先分类再分派
 
-```python
+::: code-group
+
+```python [Python]
 import operator
 from typing_extensions import Annotated, TypedDict
 from langgraph.graph import END, START, StateGraph
@@ -162,6 +276,57 @@ for n in ("tech", "finance", "hr"):
     g.add_edge(n, END)
 ```
 
+```typescript [TypeScript]
+import { StateGraph, START, END } from "@langchain/langgraph";
+import { z } from "zod";
+
+// 📌 TS 无 TypedDict + Annotated：并行累加靠 channels 的 reducer 显式声明
+const RouterState = new StateSchema({
+  query: z.string().default(""),
+  domains: z.array(z.string()).default([]),
+  results: z.array(z.string()).default([]), // ← 并行分支都写此键，必须配累加 reducer
+  final: z.string().default(""),
+});
+
+async function classify(state: { query: string }) {
+  const r: any = await model.invoke(
+    "判断问题涉及哪些领域，只输出 JSON 数组…\n问题：" + state.query,
+  );
+  const content = typeof r === "string" ? r : r?.content ?? "";
+  const m = content.match(/\[[^\]]*\]/);
+  return { domains: JSON.parse(m ? m[0] : "[]") };
+}
+
+const g = new (StateGraph as any)({
+  channels: {
+    query: (_cur: any, upd: any) => upd,
+    domains: (_cur: any, upd: any) => upd,
+    // 📌 等价于 Python 的 Annotated[list, operator.add]：追加而非覆盖
+    results: (cur: string[], upd: string[] | string) =>
+      upd == null ? cur : Array.isArray(upd) ? [...(cur ?? []), ...upd] : [...(cur ?? []), upd],
+    final: (_cur: any, upd: any) => upd,
+  },
+})
+  .addNode("classify", classify)
+  .addNode("tech", makeDomainNode("tech"))
+  .addNode("finance", makeDomainNode("finance"))
+  .addNode("hr", makeDomainNode("hr"))
+  .addEdge(START, "classify")
+  .addConditionalEdges("classify", (s: any) => s.domains, ["tech", "finance", "hr"])
+  .addEdge("tech", END)
+  .addEdge("finance", END)
+  .addEdge("hr", END)
+  .compile();
+```
+
+:::
+
+> 📌 **TS 差异（本块最需要留意）**：
+> - **并行写入的累加器写法不同**：Python 用 `Annotated[list, operator.add]` 类型标注声明 reducer；**TS 无 TypedDict/Annotated**，要在 `new StateGraph({ channels: { results: reducer } })` 里手写 reducer 函数——数组就 `[...cur, ...upd]`。漏写 reducer 两侧都会报「多值同键」类错误，只是 TS 是静默覆盖而非抛 `InvalidUpdateError`，**更难发现**。
+> - **`StateGraph` 构造**：TS 侧以 `new (StateGraph as any)({ channels })` 形式传 channels（strict 模式下 `StateGraph` 的泛型会被误解析，脚本里用 `as any` 规避）。
+> - **`add_conditional_edges` → `addConditionalEdges`**；分支函数返回领域名数组，与 Python `lambda s: s["domains"]` 等价。
+> - `makeDomainNode` 内部：TS 把子 agent 的 `invoke` 包一层 async 函数再 `addNode`（**`createAgent` 的返回值不能直接作为 `addNode` 的节点**，源码 `_coerceToRunnable` 不识别，会报 unsupported type）。
+
 > 实测：`classify` 命中 `["tech", "hr"]` 后，**只有 tech 与 hr 节点被激活，finance 节点全程未执行**——这就是 router 相对 subagents 的价值：不靠模型「选对工具」，而靠图结构保证「没命中的根本不会跑」。
 >
 > ⚠️ **实测踩到的坑**：并行分支都往 `results` 写时抛 `InvalidUpdateError: At key 'results': Can receive only one value per step. Use an Annotated key to handle multiple values`。**修法是把字段声明为 `Annotated[list, operator.add]`**——并行写入必须配累加器，这不是可选优化，是硬性要求。
@@ -170,7 +335,9 @@ for n in ("tech", "finance", "hr"):
 
 用 `wrap_model_call` 按状态切换提示词与工具集，**一个 agent 在不同阶段扮演不同角色**：
 
-```python
+::: code-group
+
+```python [Python]
 class SupportState(AgentState):
     current_step: str = "triage"
 
@@ -192,6 +359,50 @@ def apply_step_config(request, handler):
 agent = create_agent(model, tools=[...], state_schema=SupportState,
                      middleware=[apply_step_config], checkpointer=InMemorySaver())
 ```
+
+```typescript [TypeScript]
+import { createAgent, createMiddleware } from "langchain";
+import { MemorySaver, StateSchema } from "@langchain/langgraph";
+import { z } from "zod";
+
+const SupportState = new StateSchema({
+  current_step: z.string().default("triage"),
+});
+
+const STEP_CONFIGS: Record<string, { prompt: string; tools: any[] }> = {
+  triage: { prompt: "你是客服分诊员，询问设备型号与保修状态。", tools: [recordWarranty] },
+  diagnose: { prompt: "你是故障诊断员，询问故障现象。", tools: [diagnoseIssue] },
+  resolution: { prompt: "你是维修专家，给出解决方案。", tools: [provideSolution] },
+};
+
+const applyStepConfig = createMiddleware({
+  name: "ApplyStepConfig", // 📌 TS 中间件 name 必填
+  wrapModelCall: async (request: any, handler: any) => {
+    const step: string = request.state?.current_step ?? "triage";
+    const cfg = STEP_CONFIGS[step];
+    // 📌 TS 无 request.override()，用展开覆盖 systemPrompt / tools
+    return handler({ ...request, systemPrompt: cfg.prompt, tools: cfg.tools });
+  },
+});
+
+const agent = createAgent({
+  model,
+  tools: [recordWarranty, diagnoseIssue, provideSolution],
+  stateSchema: SupportState, // 驼峰
+  middleware: [applyStepConfig],
+  checkpointer: new MemorySaver(), // TS 为 MemorySaver（Python InMemorySaver）
+});
+```
+
+:::
+
+> 📌 **TS 差异（handoffs 的核心机制差异）**：
+> - **无 `request.override()`**：Python 用 `request.override(system_prompt=..., tools=...)` 生成新请求；**TS 直接展开覆盖** `handler({ ...request, systemPrompt: cfg.prompt, tools: cfg.tools })`——这是课 9 讲过的同一处差异。
+> - **无 `@wrap_model_call` 装饰器**：改 `createMiddleware({ name, wrapModelCall })` 工厂，`name` 必填（重名构造期报错）。
+> - **状态字段读取**：Python `request.state.get("current_step", "triage")` → TS `request.state?.current_step ?? "triage"`。
+> - **自定义 state**：Python `class SupportState(AgentState)` 子类 + `state_schema=`；TS 用 `new StateSchema({ current_step: z.string().default("triage") })` + `stateSchema:`。
+> - **checkpointer**：Python `InMemorySaver`（`langgraph.checkpoint.memory`）→ TS `MemorySaver`（`@langchain/langgraph`）。
+> - 实测性质两侧一致：同一模型、同一 agent，工具集随 `current_step` 切换；调用次数 1→3→1，是三/四种模式里唯一「不为已知信息重复付费」的。
 
 > 实测：中间件轨迹显示**同一模型、同一 agent，工具集随 `current_step` 切换**（`triage` 阶段只给 `record_warranty`）。真实模型三轮对话的调用次数是 **1 → 3 → 1**：turn1 还没问到城市，先问（1 次）；turn2 补齐城市后迁移到 `ready`（3 次）；turn3 状态保持 `ready`，直接执行（1 次）。
 >

@@ -16,7 +16,9 @@
 
 > 读图：提问后进入一段无输出的灰区，跑完才一次性返回；下方三个红框是它的短板——首字延迟等于总耗时、无法判断存活、失败即全丢。
 
-```python
+::: code-group
+
+```python [Python]
 # stream_v1.py：第 1 版，非流式
 import os
 import time
@@ -51,6 +53,40 @@ print(f"耗时 {time.time() - t0:.1f}s")
 print(result["messages"][-1].content)
 ```
 
+```typescript [TypeScript]
+// stream_v1.ts：第 1 版，非流式
+import "dotenv/config";
+import { performance } from "node:perf_hooks";
+import { createAgent, tool } from "langchain";
+import { initChatModel } from "langchain";
+import * as z from "zod";
+
+const getWeather = tool(
+  ({ city }) => `${city}：晴天，22°C，湿度 45%`,
+  {
+    name: "get_weather",
+    description: "查询城市天气。",
+    schema: z.object({ city: z.string() }),
+  },
+);
+
+const model = await initChatModel("qwen3.8-flash", {
+  modelProvider: "openai",
+  baseUrl: process.env.BAILIAN_BASE_URL,
+  apiKey: process.env.BAILIAN_API_KEY,
+});
+const agent = createAgent({ model, tools: [getWeather] });
+
+const t0 = performance.now();
+const result = await agent.invoke({
+  messages: [{ role: "user", content: "北京天气怎么样？一句话回答。" }],
+});
+console.log(`耗时 ${((performance.now() - t0) / 1000).toFixed(1)}s`);
+console.log(result.messages.at(-1)?.text);
+```
+
+:::
+
 **它的问题**：**首字延迟 = 总耗时**——要 8 秒的活儿，用户就得干等 8 秒才见到第一个字；**无法判断存活**——空白页和卡死在用户看来没区别，只能刷新重试（于是请求被重发）；**失败即全丢**——跑到 90% 崩了，中间产物一个都拿不到。
 
 ## 第 2 版：stream 给进度与逐字（改进实现）
@@ -61,7 +97,9 @@ print(result["messages"][-1].content)
 
 > 读图：比上张多了蓝色两块——`updates` 给节点级进度、`messages` 给 token 级文本；时间轴从「一段灰」切成「三段有色」。红框是本版遗留：工具内部进度仍不可见。
 
-```python
+::: code-group
+
+```python [Python]
 # stream_v2.py：第 2 版，stream 给进度与逐字
 
 # ① updates：看「跑到哪一步」——适合做进度条
@@ -89,9 +127,42 @@ for chunk in agent.stream(
             print(block["text"], end="", flush=True)
 ```
 
+```typescript [TypeScript]
+// stream_v2.ts：第 2 版，stream 给进度与逐字
+// TS 侧 stream() 没有 version:"v2"——单模式下 chunk 就是裸负载 / 元组，写法如下
+
+// ① updates：看「跑到哪一步」——适合做进度条
+for await (const chunk of agent.stream(
+  { messages: [{ role: "user", content: "上海天气怎么样？" }] },
+  { streamMode: "updates" },    // TS 单模式 updates 产出裸负载 {节点名: 输出}
+)) {
+  const nodeName = Object.keys(chunk)[0];          // 例如 model_request / tools
+  const nodeOutput = (chunk as any)[nodeName];
+  const msg = nodeOutput?.messages?.at(-1);
+  console.log(`  [${nodeName}] ${String(msg?.content ?? "").slice(0, 60)}`);
+}
+
+// ② messages：看「正在说什么」——适合打字机效果
+for await (const [token, metadata] of agent.stream(
+  { messages: [{ role: "user", content: "用一句话介绍北京。" }] },
+  { streamMode: "messages" },   // TS messages 模式产出 [token, metadata] 元组
+)) {
+  const node = (metadata as any)?.langgraph_node ?? "?";
+  for (const block of (token as any).contentBlocks ?? []) {   // TS 字段 camelCase
+    if (block?.type === "text") {
+      process.stdout.write(block.text);
+    }
+  }
+}
+```
+
+:::
+
 > 实测确认：`stream_mode='updates'` + `version='v2'` 时 chunk 形如 `{'type': 'updates', 'data': {'model': {...}}}`，节点序列为 `model → tools → model`（3 个 chunk）；不加 `version` 时 chunk 直接是 `{节点名: {...}}` 的字典——**两种结构不同，别混用写法**。
 >
 > ⚠️ **实测发现的一个坑**：`messages` 模式里有**大量空增量 chunk**（本例 3 个内容块之外还有空块），直接 `print` 会刷屏——必须按 `content_blocks` 过滤后再输出。
+>
+> 📌 **TypeScript 侧差异（本机实测）**：TS `stream()` **没有 `version:"v2"`**——① updates 单模式 chunk 就是**裸负载** `{节点名: 输出}`（Python 加 v2 后是 `{'type':'updates','data':{...}}`），故取节点名用 `Object.keys(chunk)[0]`；② messages 单模式产出 **`[token, metadata]` 元组**直接 for-await 解包（Python 需先判 `chunk["type"]`）；③ 增量块字段为 camelCase 的 `contentBlocks`（Python `content_blocks`）。上述三条是 TS 侧最常见的两种模式写法，均无 v2 包装。
 
 **它的问题**：**工具内部进度不可见**——只知道进了 `tools` 节点，不知道慢搜索搜到第几条、跑了百分之多少；**进度语义靠猜节点名**——`model` / `tools` 是框架内部约定，用户看不懂「tools 节点执行中」是什么意思。
 
@@ -103,7 +174,9 @@ for chunk in agent.stream(
 
 > 读图：比上张多了黄色的 `get_stream_writer`（工具内部吐业务信号）与 `stream_events` v3（按消息聚合）；三种模式的分工在底部一目了然。
 
-```python
+::: code-group
+
+```python [Python]
 # stream_v3.py：第 3 版，业务进度信号 + 事件流
 import time
 
@@ -148,9 +221,63 @@ final_state = stream.output
 print(list(final_state.keys()))          # ['messages']
 ```
 
+```typescript [TypeScript]
+// stream_v3.ts：第 3 版，业务进度信号 + 事件流
+// TS 工具函数收第二参数 config：内部用 config.writer?.() 发业务进度信号（等价 Python get_stream_writer）
+import * as z from "zod";
+import { createAgent, tool } from "langchain";
+
+const slowSearch = tool(
+  async ({ query }, config) => {
+    const writer = config.writer;                 // LangGraphRunnableConfig，custom 模式下存在
+    writer?.(`🔍 正在搜索：${query}`);
+    await new Promise((r) => setTimeout(r, 500));
+    writer?.("📊 已检索 3 条数据库记录");
+    await new Promise((r) => setTimeout(r, 300));
+    writer?.("✅ 搜索完成");
+    return `关于「${query}」找到 3 条结果：……`;
+  },
+  {
+    name: "slow_search",
+    description: "模拟慢速搜索（用于演示流式进度信号）。",
+    schema: z.object({ query: z.string() }),
+  },
+);
+
+const agentCustom = createAgent({ model, tools: [slowSearch] });
+
+// ① 业务进度：工具内部随便吐，前端直接显示（TS 单模式 custom 产出裸负载 = writer 发的值）
+for await (const chunk of agentCustom.stream(
+  { messages: [{ role: "user", content: "搜索一下 LangChain streaming 的最新文档。" }] },
+  { streamMode: "custom" },
+)) {
+  console.log(`  📡 ${chunk}`);
+}
+
+// ② 事件流 v3：按消息聚合，省去手工拼 chunk（TS 方法名 streamEvents）
+const stream = await agentCustom.streamEvents(
+  { messages: [{ role: "user", content: "广州天气怎么样？" }] },
+  { version: "v3" as any },                       // v3 协议当前标记为 experimental
+);
+for await (const message of stream.messages) {
+  process.stdout.write(`  [${message.node}] `);
+  for await (const delta of message.text) {
+    process.stdout.write(delta);
+  }
+  process.stdout.write("\n");
+}
+
+const finalState = await stream.output;
+console.log(Object.keys(finalState));             // ['messages']
+```
+
+:::
+
 > 实测确认：`get_stream_writer()` 发出的两条信号按发出顺序抵达，`chunk['type'] == 'custom'`；`stream_events(version='v3')` 返回 `GraphRunStream`，含 `.messages`（按消息聚合，可直接遍历 `message.text`）与 `.output`（最终状态，keys 为 `['messages']`）。
 >
 > ⚠️ **实测注意**：v3 协议目前**会打印 `LangChainBetaWarning`（实验特性）**，生产环境请用 v2；另外离线脚本化模型下 `.messages` 可能为空（真实模型才有 token 流），`.output` 始终可用。
+>
+> 📌 **TypeScript 侧差异（本机实测）**：① 发 custom 信号的钩子是工具函数**第二参数 `config.writer`**（`LangGraphRunnableConfig`），用 `config.writer?.(...)` 可选调用，等价 Python 的 `get_stream_writer()`，但**只有 `streamMode` 包含 `custom` 时才会注入 writer**；② TS 方法名是 `streamEvents`（Python `stream_events`），投影名 `stream.toolCalls`（Python `tool_calls`），`stream.output` 是 Promise 需 `await`；③ v3 事件流在两端都被标记为 experimental。
 
 **为什么业务进度要自己发**：框架只告诉你「进了 tools 节点」，而用户关心的是「搜到第几条」——这是**业务语义，只有工具自己知道**。`get_stream_writer()` 就是把这个信息从工具内部透出来的官方通道，成本是三行代码，收益是用户不再对着空白页猜。
 

@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "description": "LangChain 课程 · TypeScript 实操工程（与 playground/ 的 Python 脚本一一对应）",
-"scripts": {
+  "scripts": {
     "check": "tsc --noEmit",
     "conn": "tsx check_connection.ts",
     "l01": "tsx 01-first-agent.ts",
@@ -12,18 +12,28 @@
     "l02-compare": "tsx compare-models.ts",
     "l03": "tsx 03-messages-lab.ts",
     "l03-edge": "tsx 03-messages-lab2.ts",
-"l04": "tsx 04-tools-lab.ts",
+    "l04": "tsx 04-tools-lab.ts",
     "l04-mcp": "tsx 04-mcp-lab.ts",
-"l05": "tsx 05-agent-lab.ts",
+    "l05": "tsx 05-agent-lab.ts",
     "l06": "tsx 06-streaming-lab.ts",
     "l07": "tsx 07-memory-lab.ts",
-    "l08": "tsx 08-middleware-lab.ts"
+    "l08": "tsx 08-middleware-lab.ts",
+    "l09": "tsx 09-context-lab.ts",
+    "l10": "tsx 10-hitl-lab.ts",
+    "l11": "tsx 11-retrieval-lab.ts",
+    "l12": "tsx 12-multi-agent-lab.ts",
+    "l13": "tsx 13-testing-lab.ts",
+    "test:unit": "vitest run --config vitest.config.ts",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
+    "test": "vitest run --config vitest.config.ts"
   },
   "dependencies": {
     "@langchain/core": "^1.2.18",
     "@langchain/langgraph": "^1.5.0",
     "@langchain/mcp-adapters": "^2.0.1",
     "@langchain/openai": "^1.6.2",
+    "@langchain/textsplitters": "^1.0.2",
+    "agentevals": "^0.0.7",
     "dotenv": "^18.0.8",
     "langchain": "^1.5.18",
     "zod": "^4.6.7"
@@ -31,6 +41,7 @@
   "devDependencies": {
     "@types/node": "^26.6.5",
     "tsx": "^4.23.15",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.5"
   }
 }

@@ -16,7 +16,9 @@ agent 上线后要加四件事：调用日志、模型调用限额、工具失�
 
 > 读图：三个调用点各写一遍同样的四件事（红框重复片段）；下方三个红框是它的短板——改一处要改 N 处、业务与横切耦合、漏一处就裸奔。
 
-```python
+::: code-group
+
+```python [Python]
 # middleware_v1.py：第 1 版，横切逻辑散在业务里
 import time
 
@@ -36,6 +38,35 @@ def call_weather(city: str) -> str:
     print(f"[log] 调用结束")                    # ④ 兜错后的日志
 ```
 
+```typescript [TypeScript]
+// middleware_v1.ts：第 1 版，横切逻辑散在业务里（TS 侧无 LangChain API，逻辑同构）
+import { setTimeout as sleep } from "node:timers/promises";
+
+const callCount: { n: number } = { n: 0 };
+
+function callWeather(city: string): string {
+  console.log(`[log] 调用开始 ${city}`);     // ① 日志
+  if (callCount.n >= 10) {                   // ② 限额
+    throw new Error("超出调用上限");
+  }
+  callCount.n += 1;
+  for (let i = 0; i < 3; i++) {              // ③ 重试
+    try {
+      return doRequest(city);
+    } catch (e) {
+      if (i === 2) throw e;
+      await sleep(100);
+    }
+  }
+  console.log("[log] 调用结束");               // ④ 兜错后的日志
+  return "";
+}
+```
+
+:::
+
+> 📌 **TS 差异**：第 1 版是纯业务代码，不涉及 LangChain API，两侧逐行等价（TS 用 `setTimeout`/`node:timers/promises` 的 `setTimeout` 代替 `time.sleep`）。它的问题与 Python 侧完全相同——真正解决要靠下文的中间件。
+
 **它的问题**：**改一处要改 N 处**——重试次数从 3 改 5 要翻遍所有调用点；**业务与横切耦合**——「查天气」这段本该只有一句话的地方混着计数和重试；**漏一处就裸奔**——新增调用点忘记包，就没有限额也没有重试。
 
 ## 第 2 版：单个中间件抽离横切能力（改进实现）
@@ -46,7 +77,9 @@ def call_weather(city: str) -> str:
 
 > 读图：比上张多了黄色的 `middleware=[...]`——一处配置对所有调用点生效；四块实测行为分别是限额、容错、兜错、自定义。红框是本版遗留：多个中间件谁先谁后。
 
-```python
+::: code-group
+
+```python [Python]
 # middleware_v2.py：第 2 版，用中间件抽离
 from langchain.agents import create_agent
 from langchain.agents.middleware import (
@@ -88,6 +121,77 @@ def content_guard(state, runtime):
     return None
 ```
 
+```typescript [TypeScript]
+// middleware_v2.ts：第 2 版，用中间件抽离（TS 统一 createMiddleware 工厂）
+import { createAgent, createMiddleware } from "langchain";
+import {
+  modelCallLimitMiddleware,
+  toolCallLimitMiddleware,
+  toolErrorMiddleware,
+  toolRetryMiddleware,
+} from "langchain/middleware";
+import { AIMessage } from "langchain/messages";
+
+// ① 限额：模型调用上限，超限优雅收尾（不是抛异常）
+const agentLimit = createAgent({
+  model,
+  tools: [getWeather],
+  middleware: [modelCallLimitMiddleware({ runLimit: 2, exitBehavior: "end" })],
+});
+
+// ② 容错：工具失败自动重试
+const agentRetry = createAgent({
+  model,
+  tools: [flakyService],
+  middleware: [toolRetryMiddleware({
+    maxRetries: 3,
+    initialDelayMs: 50,
+    backoffFactor: 0,
+    jitter: false,
+  })],
+});
+
+// ③ 兜错：工具异常转成一条消息交给模型，让它自己调整
+const agentErr = createAgent({
+  model,
+  tools: [strictDivide],
+  middleware: [toolErrorMiddleware({
+    onError: (exc: Error, request) => {
+      if (exc instanceof Error) {
+        return `\`${request.toolCall.name}\` 执行失败（${exc.name}），请调整输入后重试。`;
+      }
+      return undefined;
+    },
+  })],
+});
+
+// ④ 自定义：beforeModel 守护，命中即跳过模型直接收尾
+const contentGuard = createMiddleware({
+  name: "ContentGuard",
+  beforeModel: {
+    canJumpTo: ["end"],
+    hook: (state) => {
+      const last = state.messages.at(-1);
+      if (String(last?.content ?? "").includes("禁止话题")) {
+        return {
+          messages: [new AIMessage("抱歉，这个话题我不能处理。")],
+          jumpTo: "end" as const,
+        };
+      }
+      return;
+    },
+  },
+});
+```
+
+:::
+
+> 📌 **TS 差异**：
+> - **内置中间件一律是小写驼峰的工厂函数**（`toolRetryMiddleware({ ... })` 传配置对象），Python 侧是大写驼峰的类（构造参数直传）；关税对应关系见课 8 知识点 2 全景表。
+> - **自定义中间件统一 `createMiddleware` 工厂**——TS 无 `before_model` 装饰器，跳转声明是对象形态 `beforeModel: { canJumpTo: ["end"], hook: (state) => ... }`，指令字段为 `jumpTo`，返回消息用 `new AIMessage(...)`。
+> - ⚠️ **默认错误处理相反**（易踩坑）：Python 侧无中间件时工具异常**直接冒泡、agent 中断**；TS 侧默认就把它转成错误工具消息、**不中断**。所以 TS 的 `toolErrorMiddleware` 角色是"统一/自定义错误文案"（默认文案带 `Please fix your mistakes.`）；Python 侧才是"从崩到不崩"。挂上中间件后两侧行为一致。
+> - ⚠️ **`exitBehavior`**：与 Python 相同，默认抛异常，想优雅收尾必须显式写 `"end"`。
+
 > 实测确认（离线假模型验证，行为与真实模型一致）：
 > - `ModelCallLimitMiddleware(run_limit=2, exit_behavior='end')`：消息数 6，末条是 `Model call limits exceeded: run limit (2/2)`——**超限优雅收尾，不是抛异常崩掉**；
 > - `ToolCallLimitMiddleware(tool_name='calculator', run_limit=1)`：第二次调用变成 `Tool call limit exceeded. Do not call 'calculator' again.`；
@@ -105,7 +209,9 @@ def content_guard(state, runtime):
 
 > 读图：上半是三中间件实测顺序（before 正序 / after 逆序 / wrap 嵌套），下半是同一个组合换位置后结果不同的对照，底部是钩子选型速查。
 
-```python
+::: code-group
+
+```python [Python]
 # middleware_v3.py：第 3 版，多中间件组合
 from langchain.agents.middleware import (
     AgentMiddleware, LLMToolSelectorMiddleware,
@@ -133,14 +239,46 @@ agent = create_agent(model, tools=[calculator],
                                  OrderMiddleware("M3")])
 ```
 
-> 实测确认（三中间件 + 一次工具调用），触发顺序为：
+```typescript [TypeScript]
+// middleware_v3.ts：第 3 版，多中间件组合（TS 用 createMiddleware 工厂声明，name 必填且须唯一）
+import { createAgent, createMiddleware } from "langchain";
+import { llmToolSelectorMiddleware } from "langchain/middleware";
+
+// 三个实例用不同 tag，制造唯一 name——同类中间件默认同名会被判重拒绝
+const makeOrder = (tag: string) =>
+  createMiddleware({
+    name: `order-${tag}`,
+    beforeModel: () => {
+      console.log(`  [${tag}] before_model`);
+      return;
+    },
+    afterModel: () => {
+      console.log(`  [${tag}] after_model`);
+      return;
+    },
+  });
+
+const agent = createAgent({
+  model,
+  tools: [calculator],
+  middleware: [makeOrder("M1"), makeOrder("M2"), makeOrder("M3")],
+});
+```
+
+:::
+
+> 实测确认（三中间件 + 一次工具调用），触发顺序为、顺序规则两侧完全一致（课 8 知识点 4 实测）：
 > `before_agent: M1→M2→M3` → `before_model: M1→M2→M3` → `wrap_model_call 进入: M1→M2→M3` →（真实模型）→ `wrap_model_call 返回: M3→M2→M1` → `after_model: M3→M2→M1` → `wrap_tool_call` 同为进 M1→M3、出 M3→M1 → 第二轮模型同理 → `after_agent: M3→M2→M1`。
 >
 > 一句话记：**before 正序、after 逆序、wrap 嵌套（进入正序、返回逆序）**——写在前面的中间件是外层，包住后面所有。
+>
+> ⚠️ **TS 差异（判重机制一致，报错文案不同）**：同类中间件默认同名会被引擎在构造期拒绝——Python 抛 `AssertionError: Please remove duplicate middleware instances.`，TS 抛 `Error: Middleware order-A is defined multiple times`。解法相同：让每个实例有唯一 `name`（TS 在 `createMiddleware({ name })` 传）——上面的 `makeOrder(tag)` 就是为每个实例起唯一名。
 
 **顺序为什么真的重要**：把「工具选择器」和「观察者」换个位置，观察者看到的东西就不一样——
 
-```python
+::: code-group
+
+```python [Python]
 # 顺序 A：过滤者在前（外层）→ 观察者看到的是已过滤结果
 create_agent(model, tools=pool,
              middleware=[LLMToolSelectorMiddleware(model=model, max_tools=2), ToolObserver()])
@@ -149,6 +287,32 @@ create_agent(model, tools=pool,
 create_agent(model, tools=pool,
              middleware=[ToolObserver(), LLMToolSelectorMiddleware(model=model, max_tools=2)])
 ```
+
+```typescript [TypeScript]
+// 顺序 A：过滤者在前（外层）→ 观察者看到的是已过滤结果
+createAgent({
+  model,
+  tools: pool,
+  middleware: [
+    llmToolSelectorMiddleware({ model, maxTools: 2 }),
+    myObserver,
+  ],
+});
+
+// 顺序 B：观察者在前（外层）→ 它看到的是未过滤的原始清单
+createAgent({
+  model,
+  tools: pool,
+  middleware: [
+    myObserver,
+    llmToolSelectorMiddleware({ model, maxTools: 2 }),
+  ],
+});
+```
+
+:::
+
+> 实测（课 8 知识点 4b：6 个工具筛到 ≤2 个）：顺序 A 时观察者看到 `['get_weather']`（1 个），顺序 B 时看到全部 6 个——外层先改请求、内层见结果。📌 **TS 差异**：观察者与选择器都用 `createMiddleware` 工厂声明，选择器直接用内置工厂 `llmToolSelectorMiddleware({ maxTools: 2 })`。
 
 **排顺序的经验**：**过滤者在前，观察者在后**。过滤类（工具选择、消息裁剪、提示词改写）放前面，观察/记账类（日志、审计、计数）放后面——否则你记的是「未经处理的原始数据」，而不是模型真正看到的东西。
 

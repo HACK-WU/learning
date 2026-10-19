@@ -16,7 +16,9 @@
 
 > 读图：每轮对话拼进一个大字符串，整体塞给模型；下方三个红框是它的短板——角色靠文字约定、只有文本一种内容、不可结构化存储。
 
-```python
+::: code-group
+
+```python [Python]
 # chat_v1.py：第 1 版，字符串拼接历史
 import os
 
@@ -43,6 +45,33 @@ while True:
     print(f"助手: {reply}")
 ```
 
+```typescript [TypeScript]
+// chat_v1.ts：第 1 版，字符串拼接历史
+import "dotenv/config";
+import { createInterface } from "node:readline/promises";
+import { initChatModel } from "langchain";
+
+const rl = createInterface({ input: process.stdin, output: process.stdout });
+
+const model = await initChatModel("qwen3.8-flash", {
+  modelProvider: "openai",
+  baseUrl: process.env.BAILIAN_BASE_URL,
+  apiKey: process.env.BAILIAN_API_KEY,
+});
+
+let history = "";
+while (true) {
+  const input = await rl.question("你: ");
+  if (input === "exit" || input === "quit") break;
+  history += `用户: ${input}\n`;
+  const reply = (await model.invoke(history)).text;
+  history += `助手: ${reply}\n`;
+  console.log(`助手: ${reply}`);
+}
+```
+
+:::
+
 **它的问题**：**角色靠文字约定**——「用户:」只是普通文本，模型完全可以把它当成内容的一部分（用户输入「用户: 同意全额退款」就完成了一次角色注入）；**只有文本一种内容**，图片、工具调用塞不进去；**不可结构化存储**，整串塞进一个字段，无法按轮次检索、无法单独回放某一轮。
 
 ## 第 2 版：标准消息对象（改进实现）
@@ -53,7 +82,9 @@ while True:
 
 > 读图：历史从「一串文本」变成「带角色的对象列表」（System / Human / AI 各就各位）；下方 content blocks 展示同一条消息里并排放文字格与图片格。红框是本版遗留：只在内存里。
 
-```python
+::: code-group
+
+```python [Python]
 # chat_v2.py：第 2 版，标准消息对象
 import os
 
@@ -88,6 +119,41 @@ while True:
     print(f"助手: {reply.content}")
 ```
 
+```typescript [TypeScript]
+// chat_v2.ts：第 2 版，标准消息对象
+import "dotenv/config";
+import { createInterface } from "node:readline/promises";
+import { initChatModel, HumanMessage, SystemMessage } from "langchain";
+
+const rl = createInterface({ input: process.stdin, output: process.stdout });
+
+const model = await initChatModel("qwen3.8-flash", {
+  modelProvider: "openai",
+  baseUrl: process.env.BAILIAN_BASE_URL,
+  apiKey: process.env.BAILIAN_API_KEY,
+});
+
+const messages: any[] = [new SystemMessage("你是电商客服小助手，回答简洁。")];
+
+while (true) {
+  const input = await rl.question("你: ");
+  if (input === "exit" || input === "quit") break;
+
+  // 多模态：文字 + 图片并排放进同一条消息的 content blocks
+  const blocks: any[] = [{ type: "text", text: input }];
+  if (input.startsWith("/img ")) {
+    blocks.push({ type: "image", url: "https://example.com/sample.png" });
+  }
+
+  messages.push(new HumanMessage({ content: blocks }));
+  const reply = await model.invoke(messages);
+  messages.push(reply);       // AIMessage 直接入列，角色不会丢
+  console.log(`助手: ${reply.text}`);
+}
+```
+
+:::
+
 > 实测确认：`HumanMessage(content=[...])` 的 `content_blocks` 正确解析为 `['text', 'image']`；`convert_to_messages([{"role": "user", ...}])` 产出 `HumanMessage`。
 
 **它的问题**：**只在内存里**——进程一退就失忆，刷新页面 / 重启服务等于从头开始；更麻烦的是**工具调用记忆带不出进程**：`AIMessage.tool_calls` 与 `ToolMessage.tool_call_id` 必须配对才有效，手工拼丢一个 id 就报错（本课实测：id 不匹配会直接抛异常）。
@@ -102,7 +168,9 @@ while True:
 
 **① 存：对象 → 纯数据 → 数据库**
 
-```python
+::: code-group
+
+```python [Python]
 # store.py：第 3 版，序列化落库
 import json
 import sqlite3
@@ -139,9 +207,37 @@ def save_messages(conn, session_id: str, messages: list[BaseMessage]) -> None:
     conn.commit()
 ```
 
+```typescript [TypeScript]
+// store.ts：第 3 版，序列化落库（Node 22 内置 node:sqlite）
+import { DatabaseSync } from "node:sqlite";
+import type { BaseMessageLike } from "@langchain/core/messages";
+
+const db = new DatabaseSync("chat.db");
+db.exec(`
+CREATE TABLE IF NOT EXISTS messages (
+  session_id TEXT NOT NULL,
+  seq INTEGER NOT NULL,
+  payload TEXT NOT NULL,
+  PRIMARY KEY (session_id, seq)
+)
+`);
+
+function saveMessages(sessionId: string, messages: BaseMessageLike[]): void {
+  const stmt = db.prepare(
+    "INSERT OR REPLACE INTO messages (session_id, seq, payload) VALUES (?, ?, ?)",
+  );
+  // @ts-expect-error 消息对象均有 toJSON()（Python dumpd 的 TS 对等物）
+  messages.forEach((msg, i) => stmt.run(sessionId, i, JSON.stringify(msg.toJSON())));
+}
+```
+
+:::
+
 **② 取：纯数据 → 对象 → 继续对话（回放）**
 
-```python
+::: code-group
+
+```python [Python]
 # store.py（续）：还原与回放
 from langchain_core.load import load
 
@@ -167,15 +263,55 @@ def replay(conn, session_id: str, model) -> None:
     print("回放提问 →", result.content)
 ```
 
-**③ 安全边界（红线，务必照做）**：`load()` 会实例化 Python 对象、可能触发副作用，**绝不要对不可信或未认证来源的数据调用它**。本课实测：`load` 处于 beta（运行时提示 `LangChainBetaWarning`），且未来版本要求显式传 `allowed_objects`——传 `allowed_objects="messages"` 即可消除该警告（实测有效）。
+```typescript [TypeScript]
+// store.ts（续）：还原与回放
+import { load } from "@langchain/core/load";
 
-```python
+async function loadMessages(sessionId: string): Promise<any[]> {
+  const rows = db
+    .prepare("SELECT payload FROM messages WHERE session_id = ? ORDER BY seq")
+    .all(sessionId) as Array<{ payload: string }>;
+  // load 接受序列化负载的 JSON 字符串；只 load 自己写入的库
+  return Promise.all(rows.map((r) => load<any>(r.payload)));
+}
+
+async function replay(sessionId: string, model: any): Promise<void> {
+  const history = await loadMessages(sessionId);
+  console.log(`--- 回放 ${sessionId}：共 ${history.length} 条 ---`);
+  for (const m of history) {
+    console.log(`  [${m.type}] ${String(m.content).slice(0, 40)}`);
+  }
+  const result = await model.invoke([
+    ...history,
+    { role: "human", content: "我叫什么名字？" },
+  ]);
+  console.log("回放提问 →", result.text);
+}
+```
+
+:::
+
+**③ 安全边界（红线，务必照做）**：`load()` 会实例化 Python 对象、可能触发副作用，**绝不要对不可信或未认证来源的数据调用它**。本课实测：`load` 处于 beta（运行时提示 `LangChainBetaWarning`），且未来版本要求显式传 `allowed_objects`——传 `allowed_objects="messages"` 即可消除该警告（实测有效）。序列化 API 两侧对照：Python `dumpd()` / `load()`（`langchain_core`）↔ TypeScript `message.toJSON()` / `load()`（`@langchain/core/load`）。
+
+::: code-group
+
+```python [Python]
 # ✅ 正确：只 load 自己存进去的数据
 history = load(data, allowed_objects="messages")
 
 # ❌ 错误：load 来自用户上传 / 第三方接口的消息数据
 # history = load(untrusted_data)
 ```
+
+```typescript [TypeScript]
+// ✅ 正确：只 load 自己存进去的数据
+const history = await load<any>(ownSerializedData);
+
+// ❌ 错误：load 来自用户上传 / 第三方接口的消息数据
+// const history = await load<any>(untrustedData);
+```
+
+:::
 
 **④ 现在的日常节奏**：每轮结束 `save_messages` → 下次会话 `load_messages` 接回 → 需要复现时用 `replay` 单独回放某会话。历史从「看天吃饭的内存变量」变成「可按轮次检索、可裁剪、可回放的资产」。
 

@@ -2,7 +2,9 @@
 
 > 所属阶段：阶段 4《组合与工程化》｜ 水平：进阶（有扎实 Python 与后端工程基础，LangChain 从零）｜ 本课知识点：为什么 agent 需要测试、测试层次、可观测性
 > 故事情节：故事收束章——交付之前，先让 agent「可证明」（测试）与「可观察」（tracing）；这是从「能跑」到「敢用」的最后一步
-> 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：docs.langchain.com 的 test 系列（总览 / 单元测试 / 集成测试 / Agent Evals）+ observability + studio + ui 页面，链接见各知识点「官方文档」；关键行为均经本机实测——实验脚本位于 `playground/lesson-13-*-lab.py`、测试套件位于 `playground/tests_l13/`；测试工具链：pytest 9.1.1 + agentevals 0.0.9 + vcrpy 8.3.0 + pytest-recording 0.13.4）
+> 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：docs.langchain.com 的 test 系列（总览 / 单元测试 / 集成测试 / Agent Evals）+ observability + studio + ui 页面，链接见各知识点「官方文档」；关键行为均经本机实测——实验脚本位于 `playground/lesson-13-*-lab.py`、测试套件位于 `playground/tests_l13/`；**TypeScript 侧复刻脚本位于 `playground-ts/13-testing-lab.ts`，运行证据 `playground-ts/lc-l13-ts-output.txt`（执行 `npm run l13`，见第四幕实操验证）**。
+>
+> 测试工具链（两侧）：Python 侧 = pytest 9.1.1 + agentevals 0.0.9 + vcrpy 8.3.0 + pytest-recording 0.13.4；TypeScript 侧 = vitest + agentevals 0.0.7 + `langchain` 的 `fakeModel`（官方 unit-testing / evals 页对应）。两侧在「单元测试替身」「轨迹匹配」「LLM 裁判」上**官方 API 一一对应**；VCR 录制回放与 pytest marker 是 **Python 侧专属**（TS 侧无官方等价，相关代码块标注「仅 Python」）。
 
 ## 🎯 本课目标
 
@@ -132,7 +134,9 @@ flowchart TB
 
 先看三层里最「反直觉」的一层——确定性匹配怎么工作（完整操作在知识点 2）：把第二幕的退货场景写成参考轨迹，然后用 superset 模式核对「该做的动作有没有做」——
 
-```python
+::: code-group
+
+```python [Python]
 from agentevals.trajectory.match import create_trajectory_match_evaluator
 
 # 参考轨迹（期望行为）：查订单 → 发起退货 → 告知结果
@@ -152,6 +156,29 @@ missed = [ ... ]
 print(evaluator(outputs=missed, reference_outputs=REFERENCE)['score'])
 # → False：缺「必须调用的工具」apply_return，当场判失败
 ```
+
+```typescript [TypeScript]
+import { createTrajectoryMatchEvaluator } from "agentevals";
+import { HumanMessage, AIMessage, ToolMessage } from "@langchain/core/messages";
+
+// 参考轨迹（期望行为）：查订单 → 发起退货 → 告知结果（用 makeReturnTrajectory(true) 构造）
+const reference = makeReturnTrajectory(true);
+
+// 与 Python create_trajectory_match_evaluator 一一对应；用对象形式传参数
+const evaluator = createTrajectoryMatchEvaluator({
+  trajectoryMatchMode: "superset",   // superset = 实际调用 ⊇ 参考（可多不能少）
+});
+
+// 实测中「没办成事」的那次运行（只查了订单和物流，没有发起退货）
+const missed = makeReturnTrajectory(false);
+const result = await evaluator({ outputs: missed, referenceOutputs: reference });
+console.log(result.score);
+// → false：缺「必须调用的工具」apply_return，当场判失败
+```
+
+:::
+
+> 两种语言在「轨迹匹配」上**官方 API 一一对应**（agentevals 包同时支持 TS）：Python 用 `create_trajectory_match_evaluator`、TS 用 `createTrajectoryMatchEvaluator`，四种匹配模式（strict / unordered / subset / superset）两侧同名同义。
 
 看点在最后一行：**它不比对回复文本，只核对「该做的动作有没有做」**——这正是「跑一次看看」永远给不出的保证。参考轨迹的具体写法、四种匹配模式的差异，在知识点 2 展开。
 
@@ -176,8 +203,8 @@ print(evaluator(outputs=missed, reference_outputs=REFERENCE)['score'])
 
 #### 官方文档
 
-- [Test · 总览（三层策略的官方定义，本知识点主参考页）](https://docs.langchain.com/oss/python/langchain/test/index)
-- [Agent Evals（轨迹评估概念）](https://docs.langchain.com/oss/python/langchain/test/evals)
+- [Test · 总览（三层策略的官方定义，本知识点主参考页 · Python）](https://docs.langchain.com/oss/python/langchain/test/index) ｜ [TypeScript 版](https://docs.langchain.com/oss/javascript/langchain/test/index)
+- [Agent Evals（轨迹评估概念 · Python）](https://docs.langchain.com/oss/python/langchain/test/evals) ｜ [TypeScript 版](https://docs.langchain.com/oss/javascript/langchain/test/evals)
 
 ### 知识点 2：测试层次
 
@@ -213,9 +240,11 @@ print(evaluator(outputs=missed, reference_outputs=REFERENCE)['score'])
 
 核心手法：**测试替身**——用「剧本模型」替换真模型：预设好「这次回复什么、调什么工具」。剩下的一切（工具执行、消息组装、状态流转、多轮记忆）就是确定的，可以精确断言。
 
-官方工具：`GenericFakeChatModel`（接受响应迭代器，每次调用按顺序吐一个）+ `InMemorySaver`（内存中的多轮记忆）。
+官方工具：Python 侧 `GenericFakeChatModel`（接受响应迭代器，每次调用按顺序吐一个）+ `InMemorySaver`（内存中的多轮记忆）；TS 侧 `fakeModel`（`langchain` 包）+ `MemorySaver`（`@langchain/langgraph`）——**API 一一对应**。
 
-```python
+::: code-group
+
+```python [Python]
 from langchain_core.language_models.fake_chat_models import GenericFakeChatModel
 from langgraph.checkpoint.memory import InMemorySaver
 
@@ -233,41 +262,106 @@ assert result['messages'][2].type == 'tool'
 assert result['messages'][2].content == '北京：晴，22°C。'
 ```
 
-> ⚠️ **本课实测发现（官方文档未覆盖的组合）**：agent 挂了工具时，把 `GenericFakeChatModel` 直接传给 `create_agent` 会抛 `NotImplementedError`——**所有内置 fake 模型的 `bind_tools` 都未实现**（官方 unit-testing 页的两个示例恰好都绕开了这个组合：一个直接 `model.invoke()`，一个 `create_agent(model, tools=[])`）。补法只要三行测试替身子类：
->
-> ```python
-> class ScriptedToolModel(GenericFakeChatModel):
->     """剧本模型 + 工具支持：剧本里已预设 tool_calls，绑定时原样返回自身。"""
->     def bind_tools(self, tools, *, tool_choice=None, **kwargs):
->         return self
-> ```
+```typescript [TypeScript]
+import { fakeModel, createAgent } from "langchain";
+import { AIMessage, HumanMessage } from "@langchain/core/messages";
+import { MemorySaver } from "@langchain/langgraph";
+
+// 剧本：第一条消息发起工具调用，第二条给出最终回答
+// ⚠️ TS 差异：fakeModel 自动实现 bindTools，无需 Python 侧 ScriptedToolModel 补丁
+const model = fakeModel()
+  .respondWithTools([
+    { name: "get_weather", args: { city: "北京" }, id: "call_1" },
+  ])
+  .respond(new AIMessage("北京今天晴，22 度。"));
+
+const agent = createAgent({ model, tools: [getWeather] });
+const result = await agent.invoke({ messages: [new HumanMessage("北京天气？")] });
+
+// 断言消息序列：用户 → AI(含 tool_calls) → 工具结果 → AI(终答)
+const types = result.messages.map((m) => m._getType()).join(" → ");
+console.assert(types === "human → ai → tool → ai");
+console.assert(result.messages[2]._getType() === "tool");
+console.assert((result.messages[2] as ToolMessage).content.length > 0);
+```
+
+:::
+
+> ⚠️ **本课实测发现（官方文档未覆盖的组合，Python 侧）**：agent 挂了工具时，把 `GenericFakeChatModel` 直接传给 `create_agent` 会抛 `NotImplementedError`——**Python 所有内置 fake 模型的 `bind_tools` 都未实现**（官方 unit-testing 页的两个示例恰好都绕开了这个组合：一个直接 `model.invoke()`，一个 `create_agent(model, tools=[])`）。补法只要三行测试替身子类。**TS 侧无此问题**——`fakeModel` 的 `.respondWithTools(...)` 自动注册工具绑定，无需补丁：
+
+::: code-group
+
+```python [Python]
+class ScriptedToolModel(GenericFakeChatModel):
+    """剧本模型 + 工具支持：剧本里已预设 tool_calls，绑定时原样返回自身。"""
+    def bind_tools(self, tools, *, tool_choice=None, **kwargs):
+        return self
+```
+
+```typescript [TypeScript]
+// ⚠️ TS 侧无需此补丁：fakeModel 自动实现 bindTools（官方 unit-testing 页核对应代码）。
+// 此处仅列出占位说明 —— TS 用 fakeModel().respondWithTools(...) 即可直接挂到 agent。
+const model = fakeModel()
+  .respondWithTools([{ name: "get_weather", args: { city: "北京" }, id: "call_1" }]);
+```
+
+:::
 
 **③ 第二层：集成测试——「真的调用一次，验它真的配合」。**
 
 两个原则（均为官方主张，核对于 2026-09）：
 
 - **断言结构，不断内容**：验证「工具被调用了 / 消息类型正确 / 回复非空」，而不是「回复等于某句话」。
-- **与单测分流**：用 pytest marker 打标签，默认跑快的、显式跑慢的：
+- **与单测分流**：用测试框架的标签 / 目录机制打标记，默认跑快的、显式跑慢的——Python 用 pytest marker，TS 用 vitest 按目录 / tag 区分：
 
-```ini
+::: code-group
+
+```ini [Python]
+# Python：pytest.ini —— marker 打标签，默认排除集成测试
 [pytest]
 markers =
     integration: tests that call real LLM APIs
 addopts = -m "not integration"
 ```
 
-```bash
+```typescript [TypeScript]
+// TypeScript：vitest —— 分目录组织快/慢层（无 pytest marker）
+// test/unit/（快层，无网络） 与 test/integration/（真调 API）
+// 分流靠两份 config 各自 include 一个目录（详见 playground-ts/）：
+//   vitest.config.ts              → include: ["test/unit/**/*.test.ts"]
+//   vitest.integration.config.ts  → include: ["test/integration/**/*.test.ts"]
+// ⚠️ 实测：主配置 include 已白名单为 test/unit/** 时，再叠加 `--dir test/integration`
+//    会取交集变成 "No test files found"，所以真层要用独立 config 而不是 --dir。
+```
+
+:::
+
+::: code-group
+
+```bash [Python]
 uv run pytest tests_l13/                 # 默认：只跑非集成（快）
 uv run pytest tests_l13/ -m integration  # 显式：真调 API（慢）
 ```
+
+```bash [TypeScript]
+# TypeScript：vitest 的配套 npm script（playground-ts/package.json 实际登记）
+#   "test:unit": "vitest run --config vitest.config.ts"
+#   "test:integration": "vitest run --config vitest.integration.config.ts"
+npm run test:unit          # 默认：只跑快层（fakeModel，零网络）
+npm run test:integration   # 显式：真调 API（无密钥则整组 skip）
+```
+
+:::
 
 > 本课程的实现有一个小变体：官方示例把密钥检查做成 `autouse`（对所有测试生效），我们改为**显式 fixture**——纯离线测试（单元 / 轨迹匹配）不依赖密钥、也不应该被跳过；只有真调 API 的测试才要求 `require_api_key`，缺密钥时 `pytest.skip`（跳过而不是报错）。
 
 **密钥纪律**：密钥从环境变量 / `.env` 读取，绝不写进代码；`.env` 必须进 `.gitignore`。
 
-**省钱的近路：录制回放（VCR）**——首次运行真实调用并录下 HTTP 请求 / 响应（cassette 文件），之后运行直接回放，零成本零波动：
+> ⚠️ **省钱的近路：录制回放（VCR）——以下内容仅 Python**。VCR 录制回放 / cassette 是 **vcrpy + pytest-recording 的 Python 专属能力**，TS 侧无官方等价（LangChain.js 官方 test 系列没有对应的「HTTP 录制回放」工具），相关代码块标注「仅 Python」：
 
-```python
+```python [Python（仅 Python · vcrpy 专属）]
+# （仅 Python）录制回放：首次运行真实调用并录下 HTTP 请求 / 响应（cassette 文件），之后运行直接回放
+# TS 侧无等价能力：LangChain.js 官方 test 系列没有 HTTP 录制回放工具
 @pytest.mark.vcr()
 def test_agent_trajectory_record_and_replay():
     agent = create_agent(_build_model(), tools=[get_weather])
@@ -277,6 +371,7 @@ def test_agent_trajectory_record_and_replay():
 ```
 
 ```ini
+# （仅 Python）pytest.ini —— 录制回放相关配置
 markers = vcr: record/replay HTTP via VCR
 addopts = --record-mode=once    # 首次录制、之后回放
 ```
@@ -294,20 +389,39 @@ addopts = --record-mode=once    # 首次录制、之后回放
 | `subset` | 实际调用 ⊆ 参考（不超范围） | 防越权 / 防多余动作 |
 | `superset` | 实际调用 ⊇ 参考（可多不能少） | 验证「必要动作都做了」 |
 
-**LLM 裁判（模糊质量）**——`create_trajectory_llm_as_judge`：按评分标准对轨迹打分；可不给参考（评「整条轨迹是否合理」）或给参考（评「与参考的语义等价度」）。
+**LLM 裁判（模糊质量）**——`create_trajectory_llm_as_judge`（Python） / `createTrajectoryLLMAsJudge`（TS）：按评分标准对轨迹打分；可不给参考（评「整条轨迹是否合理」）或给参考（评「与参考的语义等价度」）。
 
-> ⚠️ **本课实测适配（接自定义端点）**：官方示例写 `model="openai:o3-mini"`（字符串，走 OpenAI）。实测发现 `judge=` 参数可直接传**任意 LangChain 模型实例**——包括本课程的自定义端点模型，裁判链路完整跑通：
->
-> ```python
-> judge_model = init_chat_model('qwen3.8-flash', model_provider='openai',
->                               base_url=..., api_key=...)
-> evaluator = create_trajectory_llm_as_judge(judge=judge_model,
->                                            prompt=TRAJECTORY_ACCURACY_PROMPT)
-> result = evaluator(outputs=trajectory)
-> # {'key': 'trajectory_accuracy', 'score': True, 'comment': '...英文点评...'}
-> ```
+> ⚠️ **本课实测适配（接自定义端点）**：官方示例写 `model="openai:o3-mini"`（字符串，走 OpenAI）。实测发现两侧均可接自定义端点模型，但**接收形式不同**：
+> - **Python 侧**：`judge=` 参数可直接传**任意 LangChain 模型实例**——包括本课程的自定义端点模型，裁判链路完整跑通；
+> - **TS 侧**：`model:` 只接受**字符串模型标识**（如 `"openai:qwen3.8-flash"`，经 `OPENAI_BASE_URL` / `OPENAI_API_KEY` 环境变量接端点），**不接受模型实例**；且 LLM 裁判要求模型能返回 `json_schema` 结构化输出，mock 纯文本无法满足——需接真实模型端点。
 
-**⑤ 三层的运行节奏（本课实测的完整流水）**：
+::: code-group
+
+```python [Python]
+judge_model = init_chat_model('qwen3.8-flash', model_provider='openai',
+                              base_url=..., api_key=...)
+evaluator = create_trajectory_llm_as_judge(judge=judge_model,
+                                           prompt=TRAJECTORY_ACCURACY_PROMPT)
+result = evaluator(outputs=trajectory)
+# {'key': 'trajectory_accuracy', 'score': True, 'comment': '...英文点评...'}
+```
+
+```typescript [TypeScript]
+import { createTrajectoryLLMAsJudge, TRAJECTORY_ACCURACY_PROMPT } from "agentevals";
+
+// ⚠️ TS 差异：只接受字符串 model 标识（内部经 initChatModel 解析 provider），
+// 端点 / key 从 OPENAI_BASE_URL / OPENAI_API_KEY 环境变量读取，不能传模型实例。
+const evaluator = createTrajectoryLLMAsJudge({
+  model: "openai:qwen3.8-flash",       // 接自定义端点：OPENAI_BASE_URL 指向真实端点
+  prompt: TRAJECTORY_ACCURACY_PROMPT,
+});
+const result = await evaluator({ outputs: trajectory });
+// { key: 'trajectory_accuracy', score: true, comment: '...' }
+```
+
+:::
+
+**⑤ 三层的运行节奏（本课实测的完整流水）**——下面是 Python（pytest）的实测输出；TS 侧 vitest 的「日常快层 / 交付全层」分跑方式见上文集成测试分流，本课未对 vitest 输出做独立计时（结构等价）：
 
 ```text
 uv run pytest tests_l13/                → 9 passed（单元 5 + 轨迹匹配 3 + 回放 1），2.07 秒
@@ -318,7 +432,7 @@ uv run pytest tests_l13/ -m integration → 3 passed（真调用 2 + 裁判 1）
 
 #### 示例演示
 
-完整的三层套件（本课实测，位于 `playground/tests_l13/`）：
+完整的三层套件（本课实测，位于 `playground/tests_l13/`；⬇️ 以下「录制回放与 cassette 脱敏」三个细节均为 **VCR 相关，仅 Python**——class 命名与目录结构参考即可，TS 侧无对应测试资产）：
 
 ```text
 tests_l13/
@@ -330,7 +444,7 @@ tests_l13/
 └── test_vcr.py          # 录制回放：1 项 → cassettes/*.yaml
 ```
 
-三个可复用的细节（全部实测）：
+三个可复用的细节（全部实测；**均为 VCR / cassette 主题，仅 Python**——LangChain.js 官方 test 系列没有对应的录制回放工具）：
 
 **细节一：录制回放的「离线证明」**。录一次真调用后，把端点改成不可达地址（`https://127.0.0.1:9/...`）再跑——**测试照样通过，耗时从 6.66 秒降到 1.85 秒**。这证明回放**完全不发网络请求**，可以在断网 / CI 无密钥环境稳定复跑。
 
@@ -347,7 +461,8 @@ OpenAIConnectionError: Connection error.
 
 **细节三：cassette 入库前必须脱敏**。录制文件会随项目进版本库（它是团队共享的测试资产），默认带着**请求头里的凭据与端点**。本课在官方 `filter_headers` 基础上补了两处（入库纪律）：
 
-```python
+```python [Python（仅 Python · vcrpy 专属）]
+# （仅 Python）cassette 脱敏配置：vcrpy 的 vcr_config 钩子，TS 侧无等价能力
 def vcr_config():
     return {
         "filter_headers": [
@@ -386,9 +501,9 @@ def vcr_config():
 
 #### 官方文档
 
-- [Unit testing（替身模型与内存持久化）](https://docs.langchain.com/oss/python/langchain/test/unit-testing)
-- [Integration testing（分流、密钥、结构断言、VCR）](https://docs.langchain.com/oss/python/langchain/test/integration-testing)
-- [Agent Evals（四种匹配模式与 LLM 裁判）](https://docs.langchain.com/oss/python/langchain/test/evals)
+- [Unit testing（替身模型与内存持久化 · Python）](https://docs.langchain.com/oss/python/langchain/test/unit-testing) ｜ [TypeScript 版（fakeModel / MemorySaver）](https://docs.langchain.com/oss/javascript/langchain/test/unit-testing)
+- [Integration testing（分流、密钥、结构断言、VCR · Python）](https://docs.langchain.com/oss/python/langchain/test/integration-testing)
+- [Agent Evals（四种匹配模式与 LLM 裁判 · Python）](https://docs.langchain.com/oss/python/langchain/test/evals) ｜ [TypeScript 版（createTrajectory*Evaluator）](https://docs.langchain.com/oss/javascript/langchain/test/evals)
 
 ### 知识点 3：可观测性
 
@@ -424,16 +539,18 @@ def vcr_config():
 
 **② 两条接入路径。**
 
-**路径一：托管平台（LangSmith）。** 官方描述（核对于 2026-09）：所有用 `create_agent` 构建的 agent **自动支持 tracing**，启用只需两行环境变量：
+**路径一：托管平台（LangSmith）。** 官方描述（核对于 2026-09）：所有用 `create_agent` 构建的 agent **自动支持 tracing**，启用只需两行环境变量（**Python 与 TypeScript 完全一致，这是跨语言通用的接入方式**）：
 
 ```bash
 export LANGSMITH_TRACING=true
 export LANGSMITH_API_KEY=<YOUR_API_KEY>
 ```
 
-跑起来后默认记到名为 `default` 的项目；可指定项目名，也可给单次调用打 tags / metadata：
+跑起来后默认记到名为 `default` 的项目；可指定项目名，也可给单次调用打 tags / metadata（两侧的 `config` 参数写法一致）：
 
-```python
+::: code-group
+
+```python [Python]
 response = agent.invoke(
     {"messages": [{"role": "user", "content": "..."}]},
     config={
@@ -444,9 +561,27 @@ response = agent.invoke(
 )
 ```
 
-按调用粒度开关追踪：
+```typescript [TypeScript]
+const response = await agent.invoke(
+  { messages: [{ role: "user", content: "..." }] },
+  {
+    tags: ["production", "email-assistant", "v1.0"],
+    metadata: {
+      user_id: "user_123",
+      session_id: "session_456",
+      environment: "production",
+    },
+  }
+);
+```
 
-```python
+:::
+
+按调用粒度开关追踪（Python 用 `ls.tracing_context` 上下文管理器；TS 用 `tracingContext` 函数包裹回调）：
+
+::: code-group
+
+```python [Python]
 import langsmith as ls
 
 with ls.tracing_context(enabled=True):                     # 只追踪这一段
@@ -456,22 +591,63 @@ with ls.tracing_context(project_name="email-agent-test", enabled=True):  # 指�
     agent.invoke(...)
 ```
 
+```typescript [TypeScript]
+import { tracingContext } from "langchain/callbacks";
+
+// 只追踪这一段
+await tracingContext({ enabled: true }, () => agent.invoke(...));
+
+// 指定项目
+await tracingContext(
+  { projectName: "email-agent-test", enabled: true },
+  () => agent.invoke(...)
+);
+```
+
+:::
+
 > ⚠️ **本课实测补充（官方未述的两个行为）**：
 >
 > - **无 key 时的表现**：`LANGSMITH_TRACING=true` 但没配 key——agent **功能完全正常**（照常回答），首次运行收到 `LangSmithMissingAPIKeyWarning` 警告；后台尝试上报 trace 被 401 拒绝（日志打在 stderr：`Authentication failed ... 401`）。**功能与追踪解耦，追踪失败不拖垮业务**——但同时意味着「以为在追踪、实际没追踪」的静默风险，配完后建议验证一次。
 > - **tracing 状态的「固化」行为**：tracing 的启用状态在**进程内首次调用时确定**；之后再修改 `LANGSMITH_TRACING` 不会生效（需重启进程）。实测对照：首次即开启的进程 stderr 有上报日志；首次未开启、中途才设置的进程 stderr **零上报**（连尝试都没有）。**结论：`LANGSMITH_*` 环境变量在程序启动前配好。**
 
-**路径二：本地替代（不接平台也能看）**——两层手段，从轻到重：
+**路径二：本地替代（不接平台也能看）**——两层手段，从轻到重；Python 用 `set_debug` / `BaseCallbackHandler`，TS 用 `BaseCallbackHandler` 子类（钩子 `handleChatModelStart` / `handleLLMEnd` / `handleToolStart` / `handleToolEnd`）：
 
-```python
+::: code-group
+
+```python [Python]
 # 手段 1：set_debug——把每个环节的执行细节打到控制台（含 token 用量、耗时）
+# （仅 Python：set_debug 是 langchain_core 的 Python 侧能力，TS 无直接等价，
+#   手段 2 的 callback / TS 的 BaseCallbackHandler 是两侧通用的本地替代）
 from langchain_core.globals import set_debug
 set_debug(True)
 agent.invoke(...)
 set_debug(False)
 ```
 
-```python
+```typescript [TypeScript]
+// 手段 1'：TS 无 set_debug 等价物，用 BaseCallbackHandler 子类做本地留痕（下块给出）。
+// 手段 2'：自建 callback 收集器——把一次运行的关键步骤收集成时间线
+class MiniTraceHandler extends BaseCallbackHandler {
+  events: string[] = [];
+  async handleChatModelStart(_llm, messages) {
+    this.events.push(`▶ LLM 调用（输入 ${messages[0].length} 条消息）`);
+  }
+  async handleLLMEnd(response) {
+    // 记录 tool_calls 或文本 ...（判断 response.generations[0].message.tool_calls）
+  }
+  async handleToolStart(_tool, input) {
+    this.events.push(`▶ 工具执行 ${input ?? ""}`.slice(0, 50));
+  }
+  async handleToolEnd(output) {
+    // 💡 TS 输出可能是对象：用 typeof 判断后再序列化
+    const text = typeof output === "string" ? output : JSON.stringify(output);
+    this.events.push(`◀ 工具返回：${text.slice(0, 30)}…`);
+  }
+}
+```
+
+```python [Python]
 # 手段 2：自建 callback 收集器——把一次运行的关键步骤收集成时间线
 class MiniTraceHandler(BaseCallbackHandler):
     def on_chat_model_start(self, serialized, messages, **kwargs):  # 模型开始
@@ -486,7 +662,21 @@ class MiniTraceHandler(BaseCallbackHandler):
 agent.invoke(..., config={'callbacks': [MiniTraceHandler()]})
 ```
 
-实测输出（一次真实运行的时间线）：
+```typescript [TypeScript]
+// TS：向 invoke 的第三参传 callbacks 钩子（等价于 Python 的 config={'callbacks': [...]}）
+const handler = new MiniTraceHandler();
+const agent = createAgent({ model, tools: [getWeather] });
+await agent.invoke(
+  { messages: [new HumanMessage("北京天气？")] },
+  { callbacks: [handler] }        // 对应 Python 的 config={'callbacks': [...]}
+);
+```
+
+:::
+
+> TS 侧 `MiniTraceHandler` 与 Python 侧同构：`handle*` 钩子对应的正是 Python 的各 `on_*` 回调；实测中收集到的时间线（模型调用 → 工具调用 → 模型调用，含每步耗时）与平台 trace 同构，证据见 `playground-ts/lc-l13-ts-output.txt`。
+
+实测输出（一次真实运行的时间线；**两侧同构**——Python 与 TS 的 callback 收集器都会产出这种 `▶◀` 时间线，TS 实例见 `playground-ts/lc-l13-ts-output.txt`）：
 
 ```text
 +  0.00s  ▶ LLM 调用（输入 2 条消息）
@@ -542,7 +732,7 @@ agent.invoke(..., config={'callbacks': [MiniTraceHandler()]})
 
 #### 官方文档
 
-- [LangSmith Observability（tracing 接入、项目、metadata，本知识点主参考页）](https://docs.langchain.com/oss/python/langchain/observability)
+- [LangSmith Observability（tracing 接入、项目、metadata，本知识点主参考页 · Python）](https://docs.langchain.com/oss/python/langchain/observability) ｜ [TypeScript 版](https://docs.langchain.com/oss/javascript/langchain/observability)
 - [LangSmith Studio（本地可视化调试）](https://docs.langchain.com/oss/python/langchain/studio)
 - [Agent Chat UI（现成聊天界面）](https://docs.langchain.com/oss/python/langchain/ui)
 
@@ -550,7 +740,11 @@ agent.invoke(..., config={'callbacks': [MiniTraceHandler()]})
 
 ## 第四幕：实操验证
 
-回到第一幕：交付前的三个问题。以下覆盖 **12 组实验**，全部本机跑通（脚本：`playground/lesson-13-*-lab.py` 系列与测试套件 `playground/tests_l13/`；运行方式：在 `playground/` 内执行 `uv run python <脚本名>` 或 `uv run pytest tests_l13/`）：
+回到第一幕：交付前的三个问题。以下覆盖 **12 组实验**，全部本机跑通。
+
+**Python**（脚本：`playground/lesson-13-*-lab.py` 系列与测试套件 `playground/tests_l13/`；运行方式：在 `playground/` 内执行 `uv run python <脚本名>` 或 `uv run pytest tests_l13/`）
+
+**TypeScript**（复刻脚本：`playground-ts/13-testing-lab.ts`，覆盖四大板块——单元测试层 / 轨迹匹配层 / LLM 裁判层 / 可观测性；运行方式：在 `playground-ts/` 内执行 `npm run l13`，输出见 `playground-ts/lc-l13-ts-output.txt`，tsc 类型检查 0 错误）
 
 **非确定性实证（第 1–3 组）**：
 

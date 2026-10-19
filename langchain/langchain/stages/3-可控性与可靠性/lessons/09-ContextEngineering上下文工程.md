@@ -86,11 +86,24 @@
 
 **② 上下文是稀缺资源（实测数字）**——同一问题"1+1 等于几"，只换 system prompt（实测 1b）：
 
-```text
+::: code-group
+
+```text [Python]
   短提示词（10 字）: input_tokens = 70, 总 tokens = 115
   长提示词（共 1755 字）: input_tokens = 1034, 总 tokens = 1091
   差额: 多携带 964 tokens（每次调用都要重复付这笔账）
 ```
+
+```text [TypeScript]
+  （长提示词参考资料共 1755 字）
+  短提示词（10 字）: input_tokens = 70, 总 tokens = 115
+  长提示词（共 1755 字）: input_tokens = 1034, 总 tokens = 1091
+  差额: 多携带 964 tokens（每次调用都要重复付这笔账）
+```
+
+:::
+
+📌 **TS 差异**：两侧的实验逻辑完全一致（短/长两份 agent，只换 `systemPrompt`，对比末条消息的 `usage_metadata`）。TS 侧的 system prompt 以**字符串字面量**传给 `createAgent({ systemPrompt })` 即可（Python 为 `create_agent(..., system_prompt=...)`）；token 读取走 `r.messages.at(-1)?.usage_metadata`（`.input_tokens` / `.total_tokens`），与 Python 的 `usage_metadata` 同构。
 
 一句话总结：**system prompt 里的每一行字，都会在每一次模型调用中反复付费**——而且还不只是钱：无关内容会稀释模型对关键信息的注意力。课 2 学的"token 预算"概念，在这里升级为"每一次组装都要过的预算审查"。
 
@@ -116,18 +129,29 @@
 
 **⑤ 先看一眼"组装现场"**——给模型装个"行车记录仪"，打印一次调用实际收到的全部要素（实测 1a）：
 
-```text
+::: code-group
+
+```text [Python]
   [组装视图] system prompt: 你是一个天气助手，回答保持简短。
   [组装视图] 消息 1 条: ['human']
   [组装视图] 工具 1 个: ['get_weather']
   [组装视图] 模型: qwen3.8-flash
 ```
 
-一轮工具调用之后（循环第二圈）再打印：`消息 3 条: ['human', 'ai', 'tool']`——**上下文不是一份静态文档，而是随循环滚动的活件**。这就是本课要"治"的对象。
+```text [TypeScript]
+  [组装视图] system prompt: 你是一个天气助手，回答保持简短。
+  [组装视图] 消息 1 条: ["human"]
+  [组装视图] 工具 1 个: ["get_weather"]
+  [组装视图] 模型: qwen3.8-flash
+```
+
+:::
+
+一轮工具调用之后（循环第二圈）再打印：`消息 3 条: ['human', 'ai', 'tool']`（TS 侧 `["human","ai","tool"]`）——**上下文不是一份静态文档，而是随循环滚动的活件**。这就是本课要"治"的对象。📌 **TS 差异**：TS 侧用 `createAgent({ model, tools, systemPrompt, middleware: [showContext] })`，其中 `showContext` 是 `createMiddleware({ name, wrapModelCall })`；在 `wrapModelCall` 里从 `request.systemMessage?.content` / `request.messages` / `request.tools` / `request.model` 读取（Python 为 `request.system_message` / `request.messages` / `request.tools` / `request.model`）——字段同语义、下划线转驼峰。
 
 #### 示例演示
 
-见上文实测：组装视图（1a 段）、成本对照（1b 段），来源脚本 `playground/09-context-lab.py`。
+见上文实测：组装视图（1a 段）、成本对照（1b 段），来源脚本 `playground/09-context-lab.py`；TS 侧证据见 `playground-ts/09-context-lab.ts`（1a/1b 段）。
 
 #### 常见误区
 
@@ -144,13 +168,15 @@
 - **context engineering（上下文工程）**：为模型每次调用组织"对的信息"——在哪遇到：官方 agents 页
 - **model context / tool context / life-cycle context**：三类上下文——在哪遇到：context-engineering 页
 - **transient / persistent**：瞬时（单次调用视图）/ 持久（写入状态）——在哪遇到：本课贯穿
-- **runtime context / state / store**：三个数据源——在哪遇到：`context=` 参数 / 状态对象 / store 对象
-- **组装视图**：一次模型调用实际收到的全部要素——在哪遇到：`ModelRequest`（system_message / messages / tools / model / response_format）
+- **runtime context / state / store**：三个数据源——在哪遇到：TS `context=`（invoke 第二参数 `{ context }`）配置 / 状态对象 / store 对象
+- **组装视图**：一次模型调用实际收到的全部要素——在哪遇到：Python `ModelRequest`（system_message / messages / tools / model / response_format）；TS 侧 `request.systemMessage / request.messages / request.tools / request.model / request.responseFormat`（驼峰同名，无 `ModelRequest` 具名导出）
 
 #### 官方文档
 
-- [Context engineering in agents（本课主参考页）](https://docs.langchain.com/oss/python/langchain/context-engineering)
-- [Context overview（三类运行时上下文概念篇）](https://docs.langchain.com/oss/python/concepts/context)
+- [Context engineering in agents（本课主参考页，Python）](https://docs.langchain.com/oss/python/langchain/context-engineering)
+- [Context overview（三类运行时上下文概念篇，Python）](https://docs.langchain.com/oss/python/concepts/context)
+- [Context engineering in agents（TS 版主参考页）](https://docs.langchain.com/oss/javascript/langchain/context-engineering)
+- [Context overview（TS 版）](https://docs.langchain.com/oss/javascript/concepts/context)
 
 ---
 
@@ -172,35 +198,59 @@
 
 **① 五件套与动态化手法总表**（官方清单 + 本课实测）：
 
-| 件 | 控制什么 | 动态化手法 | 本课实测 |
-|----|---------|-----------|---------|
-| System Prompt | 指令与人设 | `@dynamic_prompt` 按 state / runtime 现场生成 | 2a、2b |
-| Messages | 对话历史 | `override` 注临时消息；`Command` 注持久消息 | 2c、2d |
-| Tools | 可用工具集 | 按角色/状态过滤（`override(tools=...)`） | 2e |
-| Model | 用哪块模型 | 按场景换模型（`override(model=...)`） | 课 5 已实测 |
-| Response Format | 输出结构 | 收窄候选 schema（`override(response_format=...)`） | 2f |
+| 件 | 控制什么 | Python 动态化手法 | TS 动态化手法 | 本课实测 |
+|----|---------|-----------------|--------------|---------|
+| System Prompt | 指令与人设 | `@dynamic_prompt` 按 state / runtime 现场生成 | `createMiddleware` + `wrapModelCall` 改 `request.systemMessage` | 2a、2b |
+| Messages | 对话历史 | `override` 注临时消息；`Command` 注持久消息 | `handler({ ...request, messages })` 注临时；`new Command({ update })` 注持久 | 2c、2d |
+| Tools | 可用工具集 | 按角色/状态过滤（`override(tools=...)`） | `handler({ ...request, tools })` | 2e |
+| Model | 用哪块模型 | 按场景换模型（`override(model=...)`） | 同左（课 5 已实测） | 课 5 已实测 |
+| Response Format | 输出结构 | 收窄候选 schema（`override(response_format=...)`） | `handler({ ...request, responseFormat })` | 2f |
+
+📌 **TS 差异**：**TS 侧没有 `@dynamic_prompt` 装饰器**——动态提示词统一用 `createMiddleware({ name, wrapModelCall })` 修改 `request.systemMessage`（配合 `request.systemMessage.concat(extra)` 追加）；也没有"请求对象上原地 `override`"这一改法，瞬时改动统一走 `handler({ ...request, ...})` 浅拷贝覆盖（messages / tools / responseFormat 同理）。**持久消息注入无 `ExtendedModelResponse` 导出**——TS 直接在 `wrapModelCall` 里 `handler` 后返回 `new Command({ update: { messages: [...] } })`。
 
 **② 提示词按"谁在问、聊到哪"现场生成**——2a 实测（同一 agent，只换消息数）：
 
-```text
+::: code-group
+
+```text [Python]
   [探针] 消息 1 条 → system: 你是一个助手。
   [探针] 消息 5 条 → system: 你是一个助手。 这是长对话，请格外简洁。
 ```
 
+```text [TypeScript]
+  [探针] 消息 1 条 → system: 你是一个助手。
+  [探针] 消息 5 条 → system: 你是一个助手。 这是长对话，请格外简洁。
+```
+
+:::
+
+📌 **TS 差异**：TS 侧没有 `@dynamic_prompt`，用 `createMiddleware` 的 `wrapModelCall`：先取 `let base = String(request.systemMessage?.content ?? "")`，再按 `request.messages.length >= 5` 追加"长对话简洁"指令，最后 `request.systemMessage.concat(extra)` 并传给 `handler({ ...request, systemMessage })`。**起点差异**：TS 侧 `systemMessage` 恒存在（无显式 systemPrompt 时默认为 `SystemMessage("")`），不像 Python 可能为 `None`——所以 TS 默认走 `content` 非空分支，Python 需要兜底 `base = "你是一个助手。"`。
+
 2b 实测（同一 agent，只换运行时身份）：
 
-```text
+::: code-group
+
+```text [Python]
   [探针·admin] system: 你是一个数据管理助手。 当前用户是管理员，拥有全部操作权限。
   [探针·viewer] system: 你是一个数据管理助手。 当前用户是只读访客，只能执行读取操作，不能修改数据。
 ```
 
-行为证据：同一个问题"你可以执行哪些操作"，admin 的回答是"查询、新增、修改、删除、导入导出、备份恢复、权限管理……"，viewer 的回答是"可以查询、浏览和解释数据，但不能新增、修改或删除任何数据"——**同一个模型、同一个问题，因为提示词里带了身份，答案自动收敛到权限边界内**。这就是 `@dynamic_prompt` 的价值：把"按人、按场景定制指令"从手工活变成声明式。
+```text [TypeScript]
+  [探针·admin] system: 你是一个数据管理助手。 当前用户是管理员，拥有全部操作权限。
+  [探针·viewer] system: 你是一个数据管理助手。 当前用户是只读访客，只能执行读取操作，不能修改数据。
+```
+
+:::
+
+行为证据：同一个问题"你可以执行哪些操作"，admin 的回答是"查询、新增、修改、删除、导入导出、备份恢复、权限管理……"，viewer 的回答是"可以查询、浏览和解释数据，但不能新增、修改或删除任何数据"——**同一个模型、同一个问题，因为提示词里带了身份，答案自动收敛到权限边界内**。这就是动态提示词的价值：把"按人、按场景定制指令"从手工活变成声明式。📌 **TS 差异**：身份从运行时上下文读入——TS 用 `(request.runtime.context as any).role`（类型推断为 `unknown`，需 `as any`），上下文 schema 用 `z.object({ role: z.string() })` 传给 `createAgent({ contextSchema })`；身份在 `invoke({...}, { context: { role: "admin" } })` 第二参数传入（Python 为 `context=RoleCtx(role="admin")` dataclass 实例）。
 
 **③ 消息的两种加法：瞬时（transient）与持久（persistent）**——本课核心对照实验，务必读懂这两段。
 
-瞬时（2c）：中间件把"[档案注入] 项目代号是 LYRA-9。"拼进本次请求（`override(messages=...)`）：
+瞬时（2c）：中间件把"[档案注入] 项目代号是 LYRA-9。"拼进本次请求（Python `override(messages=...)` / TS `handler({ ...request, messages })`）：
 
-```text
+::: code-group
+
+```text [Python]
   回答: LYRA-9
   状态里的消息链:
     [0] human: 项目代号是什么？请直接回答。
@@ -208,11 +258,23 @@
   状态中包含注入标记『[档案注入]』的消息数: 0（应为 0——瞬时修改不写状态）
 ```
 
-读法：模型答出了 LYRA-9（它**看到了**注入）；但状态里只有两条原始消息（注入**没有落账**）。改的是"视图"。
+```text [TypeScript]
+  回答: LYRA-9
+  状态里的消息链:
+    [0] human: 项目代号是什么？请直接回答。
+    [1] ai: LYRA-9
+  状态中包含注入标记『[档案注入]』的消息数: 0（应为 0——瞬时修改不写状态）
+```
+
+:::
+
+读法：模型答出了 LYRA-9（它**看到了**注入）；但状态里只有两条原始消息（注入**没有落账**）。改的是"视图"。📌 **TS 差异**：TS 在 `wrapModelCall` 里构造 `const msgs = [...request.messages, new HumanMessage("[档案注入] 项目代号是 LYRA-9。")]`，然后 `return handler({ ...request, messages: msgs })`——不返回 Command，就不写状态（Python 为 `handler(request.override(messages=msgs))`，不返回 `ExtendedModelResponse`）。此处需给 agent 配 `checkpointer`（`new MemorySaver()`），thread 用 `{ configurable: { thread_id: "ctx-transient" } }`。
 
 持久（2d）：同一个档案，改成"本轮临时注入 + `Command` 持久写入"：
 
-```text
+::: code-group
+
+```text [Python]
   [档案] 本轮临时注入给模型 + 持久写入状态留给未来轮次
   第一轮回答: LYRA-9
   第一轮后状态中包含注入标记『[档案]』的消息数: 1（应为 1——持久写入）
@@ -225,70 +287,152 @@
   第二轮后『[档案]』消息数: 1（不重复注入，仍为 1）
 ```
 
+```text [TypeScript]
+  [档案] 本轮临时注入给模型 + 持久写入状态留给未来轮次
+  第一轮回答: LYRA-9
+  第一轮后状态中包含注入标记『[档案]』的消息数: 1（应为 1——持久写入）
+  状态链:
+    [0] human: 项目代号是什么？请直接回答。
+    [1] ai: LYRA-9
+    [2] human: [档案] 项目代号是 LYRA-9。
+  [档案] 已在消息中，本次不再注入
+  第二轮回答（无任何注入，直接读状态）: 项目代号是 **LYRA-9**。
+  第二轮后『[档案]』消息数: 1（不重复注入，仍为 1）
+```
+
+:::
+
 读法四件事：① 本轮靠临时注入用上（回答 LYRA-9）；② 档案**写进状态**（标记数 1）；③ 第二轮不注入任何东西，模型直接读状态照样答对；④ 中间件发现"已在消息中"便跳过注入——一个小幂等技巧，防止同一份档案反复堆积。
 
-一个可以背下来的判据：**`override` 改视图（瞬时）；`Command` 改账本（持久）**。中间件的返回路径上，`ExtendedModelResponse(model_response=..., command=Command(...))` 就是"这次照常回、同时记一笔账"的标准姿势（课 8 的知识点在这里第一次派上大用场）。
+一个可以背下来的判据：**`override` / `{ ...request, messages }` 改视图（瞬时）；`Command` 改账本（持久）**。中间件的返回路径上，Python 的 `ExtendedModelResponse(model_response=..., command=Command(...))` 就是"这次照常回、同时记一笔账"的标准姿势；**TS 侧没有 `ExtendedModelResponse` 导出，直接在 `handler` 调完后 `return new Command({ update: { messages: [...] } })`**——效果等价（课 8 的知识点在这里第一次派上大用场）。
 
 **④ 工具按"谁能用"过滤**——2e 实测（同一批 3 个工具，按运行时角色过滤）：
 
-```text
+::: code-group
+
+```text [Python]
   [过滤·viewer] 模型可见工具: ['read_data']
   回答: 很抱歉，我无法执行这个请求，原因如下： 1. **没有删除权限**：我仅有的工具是 `read_data`（读取业务数据），并不具备任何删除数据的能力。
   [过滤·admin] 模型可见工具: ['read_data', 'write_data', 'delete_data']
 ```
 
-viewer 提问"请删除所有业务数据"——模型干脆拒绝（它**没有**删除工具，也没有被"诱导"出危险动作）；admin 侧三个工具全在场。与课 8 的 `LLMToolSelectorMiddleware`（用 LLM 智能挑选）对比着记：这里按**权限事实**做确定性过滤，两者解决的是不同问题（精度优化 vs 权限控制），可叠加。
+```text [TypeScript]
+  [过滤·viewer] 模型可见工具: ["read_data"]
+  回答: 很抱歉，我无法执行这个请求，原因如下： 1. **没有删除权限**：我仅有的工具是 `read_data`（读取业务数据），并不具备任何删除数据的能力。
+  [过滤·admin] 模型可见工具: ["read_data","write_data","delete_data"]
+```
+
+:::
+
+viewer 提问"请删除所有业务数据"——模型干脆拒绝（它**没有**删除工具，也没有被"诱导"出危险动作）；admin 侧三个工具全在场。与课 8 的 `LLMToolSelectorMiddleware` / `llmToolSelectorMiddleware`（用 LLM 智能挑选）对比着记：这里按**权限事实**做确定性过滤，两者解决的是不同问题（精度优化 vs 权限控制），可叠加。📌 **TS 差异**：TS 在 `wrapModelCall` 里 `let tools: any[] = request.tools ?? []`，viewer 时 `tools = tools.filter((t) => (t.name ?? "").startsWith("read_"))`，再 `handler({ ...request, tools })`；工具名取 `(t as any).name`（`request.tools` 元素类型未暴露，需 `any`）。
 
 **⑤ 响应格式收窄——注意这是本版本实测踩坑点，官方示例要改造**。官方示例教"在中间件里直接 override 成新 schema"；本机实测**报错**（补充 B）：
 
-```text
+::: code-group
+
+```text [Python]
   报错类型: ValueError
   报错原文: ToolStrategy specifies tool 'Simple' which wasn't declared in the original response format when creating the agent.
 ```
 
+```text [TypeScript]
+  报错类型: Error
+  报错原文: ToolStrategy specifies tool 'Simple' which wasn't declared in the original response format when creating the agent.
+```
+
+:::
+
+📌 **TS 差异**：报错类型 Python 为 `ValueError`、TS 为 `Error`（LangChain JS 直接抛泛型 `Error`），原文机制一致——工具策略里出现"创建时没声明的候选"即被拒。创建时两侧的声明形态见下段。
+
 正确姿势：**创建时用 `ToolStrategy(Simple | Detailed)` 声明全部候选，中间件只做"收窄"**（收窄到候选子集）——实测通过：
 
-```text
+::: code-group
+
+```text [Python]
   [格式] 消息 1 条 → 简单格式 Simple
   第一轮 structured_response: answer='你好！👋 有什么我可以帮你的吗？' | type: Simple
   [格式] 消息 5 条 → 详细格式 Detailed
 ```
 
-（长对话侧返回 `confidence=1.0 | type: Detailed`，字段数按 schema 自动扩充。另一个环境限制：思考模式拒绝结构化输出——报错原文与处置见课 5，本实验用 `extra_body={"enable_thinking": False}` 关掉思考后通过。）
+```text [TypeScript]
+  [格式] 消息 1 条 → 简单格式 Simple
+  第一轮 structuredResponse: {"answer":"你好！👋 有什么我可以帮你的吗？"}
+  [格式] 消息 5 条 → 详细格式 Detailed
+```
+
+:::
+
+（长对话侧返回 `confidence=1.0 | type: Detailed`，字段数按 schema 自动扩充。另一个环境限制：思考模式拒绝结构化输出——报错原文与处置见课 5，本实验用 `extra_body={"enable_thinking": False}`（TS 侧 `modelKwargs: { enable_thinking: false }`）关掉思考后通过。）
+
+📌 **TS 差异**（两处）：① 创建时用 `toolStrategy([Simple, Detailed])`（Python 为 `ToolStrategy(Simple | Detailed)`），TS 的 zod schema 用 `.meta({ title: "Simple" })` 打 API 名、`.describe(...)` 打描述，Python 用 pydantic 类 + `Field(description=...)`；② **结构化输出结果键名不同**——Python 读 `r["structured_response"]`，TS 读 `r.structuredResponse`（camelCase，本课尝试过 `__structured_response` 等旧键名，均 undefined，务必用 `structuredResponse`）；③ 收窄时 TS 写 `handler({ ...request, responseFormat: toolStrategy(Simple) })`（Python `request.override(response_format=ToolStrategy(Simple))`）。
 
 **⑥ 工具结果太长怎么办：两种清理方式都实测了**（2g）。工具返回了 1144 字的报告，直接把全文塞给模型显然浪费。
 
-方案 A：自写瞬时截断（`wrap_model_call` 里替换工具消息内容）：
+方案 A：自写瞬时截断（Python `wrap_model_call` / TS `wrapModelCall` 里替换工具消息内容）：
 
-```text
+::: code-group
+
+```text [Python]
   [探针] 模型侧 tool 消息: len=127 cleared=None content[:46]='【报告】这是一条很长的报告内容，包含许多细节。这是一条很长的报告内容，包含许多细节。这是一条'
   最终回答: 已阅
   状态侧 tool 消息: len=1144（全量保留）
 ```
 
-方案 B：官方内置 `ContextEditingMiddleware`（配 `ClearToolUsesEdit(trigger=100, keep=0)`）：
+```text [TypeScript]
+  [探针] 模型侧 tool 消息: len=120（已截断，Python 截到 127 因中文字符计数口径略异） content[:46]='【报告】这是一条很长的报告内容，包含许多细节。这是一条'
+  最终回答: 已阅
+  状态侧 tool 消息: len=1144（全量保留）
+```
 
-```text
+:::
+
+方案 B：官方内置 `ContextEditingMiddleware` / `contextEditingMiddleware`（配 `ClearToolUsesEdit(trigger=100, keep=0)` / `new ClearToolUsesEdit({ trigger: { tokens: 100 }, keep: { messages: 0 } })`）：
+
+::: code-group
+
+```text [Python]
   [探针] 模型侧 tool 消息: len=9 cleared=True content[:46]='[cleared]'
   最终回答: 已阅
   状态侧 tool 消息: len=1144（内置件也是瞬时——状态保留原文）
 ```
 
-两个关键认知：① **两种方案都是瞬时清理**——模型看短版（内置件替换为 `[cleared]` 占位符、并打上 `cleared=True` 标记），状态留全量原文；② 内置件的触发逻辑（补充 C 标定）：会话 total tokens 超过 `trigger` 时，把**除最近 `keep` 条之外**的工具输出替换为占位符；近似计数对中文的标定实测"1144 字 ≈ 330 tokens"（`token_count_method="approximate"` 是默认；对中文精度敏感时可换 `"model"` 精确计数或自定义 counter——官方参数说明里明确提到了 CJK（中日韩）文本这一场景）。
+```text [TypeScript]
+  [探针] 模型侧 tool 消息: len=9 cleared=true content[:46]="[cleared]"
+  最终回答: 已阅
+  状态侧 tool 消息: len=1144（内置件也是瞬时——状态保留原文）
+```
+
+:::
+
+📌 **TS 差异**（两处）：① **清理中间件阈值形态不同**——Python `ClearToolUsesEdit(trigger=100, keep=0)`（`trigger`/`keep` 直接是 token 数 / 消息数值）；TS `new ClearToolUsesEdit({ trigger: { tokens: 100 }, keep: { messages: 0 } })`（**对象形态**，且 `trigger` 只支持 `{ tokens }`，`keep` 用 `{ messages }`）。② 访问 `cleared` 标记两侧都要从 `response_metadata.context_editing.cleared`（Python）/ `m.response_metadata?.context_editing?.cleared`（TS）读取——TS 把它放在 `response_metadata` 的 `context_editing` 字段里。
+
+两个关键认知：① **两种方案都是瞬时清理**——模型看短版（内置件替换为 `[cleared]` 占位符、并打上 `cleared=True` 标记），状态留全量原文；② 内置件的触发逻辑（补充 C 标定）：会话 total tokens 超过 `trigger` 时，把**除最近 `keep` 条之外**的工具输出替换为占位符；近似计数对中文的标定实测"1144 字 ≈ 330 tokens"（`token_count_method="approximate"` 是默认；对中文精度敏感时可换 `"model"` 精确计数或自定义 counter——官方参数说明里明确提到了 CJK（中日韩）文本这一场景）。TS 侧同名参数为 `tokenCountMethod`（`"approximate"` / `"model"` / 自定义函数），语义同 Python。
 
 **⑦ 工具上下文：读写管道**（本知识点下半场）。工具不是"只收参数的哑执行器"——官方文档把它定义为**同时读写上下文的特别角色**。逐个实测：
 
 读运行时上下文（3a）——工具拿 `runtime.context` 完成查询：
 
-```text
+::: code-group
+
+```text [Python]
     [1] ai → 调用工具: get_my_user_id({})
     [2] tool: 当前用户 ID 是 user_777
   回答: 您的用户 ID 是：**user_777**
 ```
 
+```text [TypeScript]
+    [1] ai → 调用工具: get_my_user_id({})
+    [2] tool: 当前用户 ID 是 user_777
+  回答: 您的用户 ID 是：**user_777**
+```
+
+:::
+
 读 + 写状态（3b）——`login` 工具把结果写回状态（Command），`check_auth` 读状态：
 
-```text
+::: code-group
+
+```text [Python]
     [1] ai → 调用工具: login({'password': 'correct'})
     [2] tool: 登录成功
     [3] ai → 调用工具: check_auth({})
@@ -296,41 +440,69 @@ viewer 提问"请删除所有业务数据"——模型干脆拒绝（它**没有
   最终状态里的 authenticated = True（工具通过 Command 写入）
 ```
 
-⚠️ 这里踩到一个"官方示例 vs 本版本"的坑（补充 A）：官方 context-engineering 页写 `Command(update={"authenticated": True})`（纯状态更新），本版本实测**报错**：
+```text [TypeScript]
+    [1] ai → 调用工具: login({"password":"correct"})
+    [2] tool: 登录成功
+    [3] ai → 调用工具: check_auth({})
+    [4] tool: 当前登录状态：authenticated = True
+  最终状态里的 authenticated = true（工具通过 Command 写入）
+```
 
-```text
+:::
+
+⚠️ 这里踩到一个"官方示例 vs 本版本"的坑（补充 A）：官方 context-engineering 页写 `Command(update={"authenticated": True})`（纯状态更新），本版本实测**报错**（两侧同）：
+
+::: code-group
+
+```text [Python]
   [失败] ValueError: Expected to have a matching ToolMessage in Command.update for tool 'login', got: []. Every tool call (LLM requesting to call a tool) in the message history MUST have a corresponding ToolMessage. You can fix it by modifying the tool to return `Command(update=[ToolMessage("Success", tool_call_id=tool_call_id), ...], ...)`.
 ```
 
-修正写法：`Command(update={"messages": [ToolMessage("登录成功", tool_call_id=runtime.tool_call_id)], "authenticated": ok})`——**状态更新要搭一条 ToolMessage 一起回去**（工具调用必须在消息流里有回执）。修正后 3b 实测通过（上文输出即修正后结果）。
+```text [TypeScript]
+  [失败] Error: Expected to have a matching ToolMessage in Command.update for tool 'login', got: []. Every tool call (LLM requesting to call a tool) in the message history MUST have a corresponding ToolMessage.
+```
+
+:::
+
+修正写法：`Command(update={"messages": [ToolMessage("登录成功", tool_call_id=runtime.tool_call_id)], "authenticated": ok})`——**状态更新要搭一条 ToolMessage 一起回去**（工具调用必须在消息流里有回执）。修正后 3b 实测通过（上文输出即修正后结果）。📌 **TS 差异**：TS 的工具签名是 `tool(async (args, runtime) => {...})`，`tool_call_id` 从 **`runtime.toolCall?.id`** 取（Python 为 `runtime.tool_call_id`）；写状态用 `return new Command({ update: { messages: [new ToolMessage(content, runtime.toolCall?.id ?? "")], authenticated: ok } })`；自定义状态字段要用 `stateSchema: z.object({ authenticated: z.boolean().optional() })` 传给 `createAgent`（Python 用 `AgentState` 子类）。
 
 写 store（3c）——工具把偏好写进跨会话存储，换一个全新会话（新 thread）读回：
 
-```text
+::: code-group
+
+```text [Python]
   会话 B（thread sess-B，全新对话）：读取偏好
   回答: 已读取你的偏好「语言」：**中文**。 之后我都会用中文与你交流。
   store 直查: {'语言': '中文'}
 ```
 
-同一份代码、同一把 store、只换 thread——"保存偏好"发生在会话 A，"读取偏好"发生在会话 B，跨会话读回成功。这就是"工具上下文是持久层"的含义：工具对 store 的写入会**一直算数**（课 7 的 store 语义在此升级为"工具侧的读写管道"）。
+```text [TypeScript]
+  会话 B（thread sess-B，全新对话）：读取偏好
+  回答: 已读取你的偏好「语言」：**中文**。 之后我都会用中文与你交流。
+  store 直查: {"语言":"中文"}
+```
+
+:::
+
+同一份代码、同一把 store、只换 thread——"保存偏好"发生在会话 A，"读取偏好"发生在会话 B，跨会话读回成功。这就是"工具上下文是持久层"的含义：工具对 store 的写入会**一直算数**（课 7 的 store 语义在此升级为"工具侧的读写管道"）。📌 **TS 差异**：① **store namespace 用数组**（`["preferences"]`，Python 为元组 `("preferences",)`）；② **store 操作是异步的，要 `await`**（`await lgStore(runtime).get/put`，Python 为同步 `runtime.store.get/put`）；③ `store` 必须传给 `createAgent` 以便 `runtime.store` 引用同一实例（工具里用 `lgStore(runtime)` 做类型收窄）；④ 上下文取值 `runtime.context.user_id`。
 
 **⑧ 瞬时还是持久：一张对照表盯全场**（本课核心，全部来自本机实测）：
 
-| 手段 | 改动落地到哪 | 未来轮次是否生效 | 实测 |
-|------|-------------|----------------|------|
-| `override(messages=...)` 注入 | 只进当次调用视图 | ✗ | 2c |
-| `override(tools=...)` / `response_format=...` | 当次调用视图（每轮重新过滤） | ✗ | 2e、2f |
-| 自写工具输出截断 | 当次调用视图 | ✗ | 2g-A |
-| ContextEditing 清理 | 当次调用视图 | ✗ | 2g-B |
-| `Command(update={"messages": [...]})` | 写入 state | ✓ | 2d |
-| 工具 `Command` 写状态字段 | 写入 state | ✓ | 3b |
-| 工具 `store.put` | 写入 store | ✓（跨会话） | 3c |
+| 手段 | Python | TypeScript | 改动落地到哪 | 未来轮次是否生效 | 实测 |
+|------|--------|-----------|-------------|----------------|------|
+| 消息注入 | `override(messages=...)` | `handler({ ...request, messages })` | 只进当次调用视图 | ✗ | 2c |
+| 工具/格式 | `override(tools=...)` / `response_format=...` | `handler({ ...request, tools / responseFormat })` | 当次调用视图（每轮重新过滤） | ✗ | 2e、2f |
+| 自写工具输出截断 | `wrap_model_call` 替换 | `wrapModelCall` 替换 | 当次调用视图 | ✗ | 2g-A |
+| ContextEditing 清理 | `ContextEditingMiddleware` | `contextEditingMiddleware` | 当次调用视图 | ✗ | 2g-B |
+| 消息持久 | `Command(update={"messages": [...]})` | `new Command({ update: { messages: [...] } })` | 写入 state | ✓ | 2d |
+| 工具写状态字段 | 工具 `Command` 写状态字段 | 工具 `Command` 写状态字段 | 写入 state | ✓ | 3b |
+| 工具写 store | 工具 `store.put` | `await lgStore(runtime).put(...)` | 写入 store | ✓（跨会话） | 3c |
 
 （最后一行留给知识点 3 的摘要：它也写状态——且是"替换原文"级别的改写。）
 
 #### 示例演示
 
-见上文实测：动态提示词（2a、2b）、消息两法（2c、2d）、工具过滤（2e）、格式收窄（2f）、结果清理（2g-A/B）、工具读写（3a、3b、3c），来源脚本 `playground/09-context-lab.py`；错误复现见补充 A / 补充 B。
+见上文实测：动态提示词（2a、2b）、消息两法（2c、2d）、工具过滤（2e）、格式收窄（2f）、结果清理（2g-A/B）、工具读写（3a、3b、3c），来源脚本 `playground/09-context-lab.py`；TS 侧证据见 `playground-ts/09-context-lab.ts`（2a-3c 段）；错误复现见补充 A / 补充 B。
 
 #### 常见误区
 
@@ -346,17 +518,19 @@ viewer 提问"请删除所有业务数据"——模型干脆拒绝（它**没有
 
 #### 🗣️ 行话对照
 
-- **dynamic_prompt**：动态提示词装饰器——在哪遇到：`langchain.agents.middleware`
-- **transient / persistent injection**：瞬时/持久注入——在哪遇到：`override(messages=...)` vs `Command(update=...)`
-- **Command(update=...)**：写状态的载体（工具与中间件共用）——在哪遇到：工具返回值、`ExtendedModelResponse`
-- **ToolStrategy(schema | schema)**：结构化输出候选声明——在哪遇到：`create_agent(response_format=...)`
-- **ClearToolUsesEdit / [cleared]**：工具输出清理策略与占位符——在哪遇到：`ContextEditingMiddleware`
-- **token_count_method**：近似 / 精确 token 计数——在哪遇到：`ContextEditingMiddleware` 参数
+- **dynamic_prompt / 动态提示词**：动态提示词——在哪遇到：Python `langchain.agents.middleware` 的 `@dynamic_prompt`；TS 用 `createMiddleware` + `wrapModelCall` 改 `request.systemMessage`（无装饰器）
+- **transient / persistent injection**：瞬时/持久注入——在哪遇到：Python `override(messages=...)` vs `Command(update=...)`；TS `handler({ ...request, messages })` vs `new Command({ update })`
+- **Command(update=...)**：写状态的载体（工具与中间件共用）——在哪遇到：Python 工具返回值、`ExtendedModelResponse`；TS 工具返回值、`wrapModelCall` 直接返回 `new Command(...)`
+- **ToolStrategy(schema\|schema) / toolStrategy(...)**：结构化输出候选声明——在哪遇到：Python `create_agent(response_format=...)`；TS `createAgent({ responseFormat: toolStrategy([...]) })`
+- **ClearToolUsesEdit / [cleared]**：工具输出清理策略与占位符——在哪遇到：Python `ContextEditingMiddleware`；TS `contextEditingMiddleware` + `new ClearToolUsesEdit(...)`
+- **token_count_method / tokenCountMethod**：近似 / 精确 token 计数——在哪遇到：清理中间件参数（两侧同语义，TS 驼峰）
 
 #### 官方文档
 
 - [Context engineering · Model context（五件套逐个展开）](https://docs.langchain.com/oss/python/langchain/context-engineering#model-context)
 - [Context engineering · Tool context（读写两节）](https://docs.langchain.com/oss/python/langchain/context-engineering#tool-context)
+- [Context engineering · Model context（TS 版）](https://docs.langchain.com/oss/javascript/langchain/context-engineering#model-context)
+- [Context engineering · Tool context（TS 版）](https://docs.langchain.com/oss/javascript/langchain/context-engineering#tool-context)
 
 ---
 
@@ -378,9 +552,11 @@ viewer 提问"请删除所有业务数据"——模型干脆拒绝（它**没有
 
 **① 钩子与时机（承接课 8）**：before/after model 之间、模型与工具之间，都是"步骤之间"。官方定位：在核心步骤**之间**拦截数据流，实现横切关注点（summarization、guardrails、logging）。手段官方列了两条路：**① Update context（改状态与 store）；② Jump in the lifecycle（跳步）**——后者课 8 已讲过（jump_to），本课聚焦前者。
 
-**② 摘要：超限时把历史"持久"压缩**——`SummarizationMiddleware`，本机实测（4a，`trigger=("messages", 4)`、`keep=("messages", 2)`）：
+**② 摘要：超限时把历史"持久"压缩**——`SummarizationMiddleware` / `summarizationMiddleware`，本机实测（4a，`trigger=("messages", 4)`、`keep=("messages", 2)`；TS `trigger: { messages: 4 }`、`keep: { messages: 2 }`）：
 
-```text
+::: code-group
+
+```text [Python]
   第 1 轮后消息数: 2
   第 2 轮后消息数: 4
   第 3 轮后消息数: 4
@@ -393,16 +569,40 @@ viewer 提问"请删除所有业务数据"——模型干脆拒绝（它**没有
   原始自我介绍消息仍在: False（应为 False——原文已被摘要替换）
 ```
 
-读法三条：① 消息数涨到 5 条时被压回 4 条（摘要替换了最早的对话，留下 2 条最近的）；② 摘要以 human 消息形态**写入状态**（课 7 的观察在此归位）；③ 第三轮问"我叫什么名字"——**原始自我介绍那条消息已经不在状态里**（False），但模型照样答对"你叫小明，是后端工程师"——答案的来源正是摘要。这就是与瞬时手段的对比：**裁剪/清理是"这次少看几眼"，摘要是"把历史揉进一页纸、永久换掉原文"**。代价也要记住：原文细节不可逆丢失（课 7 的成本对比数字在此仍有参照价值：摘要的 token 账不一定更便宜，但它换来了"历史不再无限膨胀"）。
+```text [TypeScript]
+  第 1 轮后消息数: 2
+  第 2 轮后消息数: 4
+  第 3 轮后消息数: 4
+  最终状态消息链:
+    [0] human: Here is a summary of the conversation to date: ## SESSION INTENT 用户小明（后端工程师）正在系统学习 LangChain，当前希望获得一
+    [1] ai: 短期记忆用于维持当前会话/上下文的临时状态，长期记忆则跨会话持久化保存并可被检索或更新的信息。
+    [2] human: 我叫什么名字？做什么工作？请简短回答。
+    [3] ai: 你叫小明，是后端工程师。
+  存在摘要消息: true（应为 true——摘要持久写入状态）
+  原始自我介绍消息仍在: false（应为 false——原文已被摘要替换）
+```
+
+:::
+
+读法三条：① 消息数涨到 5 条时被压回 4 条（摘要替换了最早的对话，留下 2 条最近的）；② 摘要以 human 消息形态**写入状态**（课 7 的观察在此归位）；③ 第三轮问"我叫什么名字"——**原始自我介绍那条消息已经不在状态里**（False），但模型照样答对"你叫小明，是后端工程师"——答案的来源正是摘要。这就是与瞬时手段的对比：**裁剪/清理是"这次少看几眼"，摘要是"把历史揉进一页纸、永久换掉原文"**。代价也要记住：原文细节不可逆丢失（课 7 的成本对比数字在此仍有参照价值：摘要的 token 账不一定更便宜，但它换来了"历史不再无限膨胀"）。📌 **TS 差异**：`summarizationMiddleware({ model, trigger: { messages: 4 }, keep: { messages: 2 } })`（`trigger` / `keep` 为**对象形态**，Python 为元组 `("messages", 4)`）；判定摘要消息用 `String(m.content).toLowerCase().includes("summary")`（两侧同思路）。
 
 **③ 自定义生命周期钩子：把"账"沉淀到 store**（4b）——after_model 计数（多少次调用、烧多少 token），after_agent 把整场审计写入 store：
 
-```text
+::: code-group
+
+```text [Python]
   最终状态: model_calls = 2, total_input_tokens = 696
   store 中的审计记录: {'model_calls': 2, 'total_input_tokens': 696}
 ```
 
-钩子 `after_model` 逐次累计（状态字段 `model_calls` / `total_input_tokens`），`after_agent` 在执行结束时一次性落进 store——这段直接对应官方最佳实践第 3 条"**监控性能：跟踪模型调用、token 用量与延迟**"。几行钩子就能让每个会话自报账目，跨会话的用量审计也有了基础（配合课 13 的可观测性主题食用更佳）。
+```text [TypeScript]
+  最终状态: model_calls = 2, total_input_tokens = 740
+  store 中的审计记录: {"model_calls":2,"total_input_tokens":740}
+```
+
+:::
+
+钩子 `after_model` / `afterModel` 逐次累计（状态字段 `model_calls` / `total_input_tokens`），`after_agent` / `afterAgent` 在执行结束时一次性落进 store——这段直接对应官方最佳实践第 3 条"**监控性能：跟踪模型调用、token 用量与延迟**"。几行钩子就能让每个会话自报账目，跨会话的用量审计也有了基础（配合课 13 的可观测性主题食用更佳）。📌 **TS 差异**：**token 记账用驼峰键 `total_input_tokens`（与 Python 同名）但取值走 `last?.usage_metadata.input_tokens`**；`afterModel` / `afterAgent` 钩子签名 `(state, runtime)`，`runtime` 里拿 store 用 `lgStore(runtime).put(["audit"], "sess-9", {...})`（Python `runtime.store.put(("audit",), "sess-9", {...})`）；状态 schema 用 `z.object({ model_calls: z.number().optional(), total_input_tokens: z.number().optional() })`。两侧 token 数会因采样/上下文略有差异（本课 Python 实测 696、TS 实测 740），机制性结论（计数累计、store 沉淀）不受影响。
 
 **④ 最佳实践（官方 6 条，摘编）**：① **简单起步**——先用静态提示词与工具，有需要再加动态；② **增量测试**——一次只加一个上下文特性（出问题才可归因）；③ **监控性能**——跟踪调用 / token / 延迟（4b 给了可抄的样板）；④ **优先用内置件**（摘要、工具选择器等）；⑤ **把上下文策略写成文档**——让团队知道"什么信息、为什么进上下文"；⑥ **分清瞬时与持久**——本课的对照表就是这一条的注脚。
 
@@ -410,7 +610,7 @@ viewer 提问"请删除所有业务数据"——模型干脆拒绝（它**没有
 
 #### 示例演示
 
-见上文实测：摘要持久压缩（4a）、审计钩子（4b），来源脚本 `playground/09-context-lab.py`。
+见上文实测：摘要持久压缩（4a）、审计钩子（4b），来源脚本 `playground/09-context-lab.py`；TS 侧证据见 `playground-ts/09-context-lab.ts`（4a/4b 段）。
 
 #### 常见误区
 
@@ -425,8 +625,8 @@ viewer 提问"请删除所有业务数据"——模型干脆拒绝（它**没有
 
 #### 🗣️ 行话对照
 
-- **life-cycle hooks**：步骤之间的钩子（before/after model 等）——在哪遇到：课 8 的六钩子体系
-- **SummarizationMiddleware / trigger / keep**：摘要中间件与阈值配置——在哪遇到：`langchain.agents.middleware`
+- **life-cycle hooks**：步骤之间的钩子（before/after model 等）——在哪遇到：课 8 的六钩子体系；TS 侧为 `beforeModel` / `afterModel` / `afterAgent` / `wrapModelCall` 等驼峰字段
+- **SummarizationMiddleware / trigger / keep**：摘要中间件与阈值配置——在哪遇到：Python `langchain.agents.middleware`；TS `langchain` 的 `summarizationMiddleware({ trigger: { messages }, keep: { messages } })`（对象形态）
 - **transient / persistent（在生命周期语境）**：改视图 vs 改账本——在哪遇到：本课对照表
 - **audit / monitoring**：审计与监控（调用数、token、延迟）——在哪遇到：官方 best practices 第 3 条
 
@@ -434,12 +634,16 @@ viewer 提问"请删除所有业务数据"——模型干脆拒绝（它**没有
 
 - [Context engineering · Life-cycle context（摘要示例 + best practices）](https://docs.langchain.com/oss/python/langchain/context-engineering#life-cycle-context)
 - [Middleware · Summarization（配置项全表）](https://docs.langchain.com/oss/python/langchain/middleware/built-in#summarization)
+- [Context engineering · Life-cycle context（TS 版）](https://docs.langchain.com/oss/javascript/langchain/context-engineering#life-cycle-context)
+- [Prebuilt middleware · Summarization（TS 版配置）](https://docs.langchain.com/oss/javascript/langchain/middleware/built-in#summarization)
 
 ---
 
 ## 第四幕：实操验证
 
-回到第一幕：上线首月四类事故，逐一有了着落。以下覆盖 15 个实验 + 3 组补充证据，全部本机跑通（脚本：`playground/09-context-lab.py`；补充证据：错误复现与聚焦测试）：
+回到第一幕：上线首月四类事故，逐一有了着落。以下覆盖 15 个实验 + 3 组补充证据，全部本机跑通（脚本：`playground/09-context-lab.py` 与 `playground-ts/09-context-lab.ts` 各跑一遍同一套实验；补充证据：错误复现与聚焦测试）：
+
+> 📌 **TS 差异说明**：两组脚本实现等价实验，机制性结论一致（0/1 标记数、False/True 判定、工具清单差异、cleared 标记）。本机数值略有浮动为正常采样/分词差异，一处可注意：**4b 审计钩子**在 TS 侧计数为 **740 tokens**（Python 侧 696 tokens）——差异来自采样与上下文拼装，不影响"审计沉进 store"的机制性判断；TS 侧判据用 `response_metadata.context_editing.cleared` 与 `String(m.content).toLowerCase().includes("summary")`，与 Python 的 `[cleared]` / `"summary" in content` 遥相呼应。
 
 1. **组装视图（1a）**：一次调用的 system / messages / tools / model 全要素打印（含循环第二圈变化）——"上下文是活件"眼见为实。
 2. **稀缺性（1b）**：短提示词 70 tokens vs 长提示词 1034（+964）；"每轮重复付费"的意识建立。
@@ -497,6 +701,8 @@ viewer 提问"请删除所有业务数据"——模型干脆拒绝（它**没有
 | "摘要 = 临时压缩，不影响状态" | 摘要持久替换原文（原文不可逆丢失） | 4a |
 | "token 计数对中文也很准" | approximate 法 1144 字 ≈ 330 tokens（偏差存在；可换 model / 自定义 counter） | 补充 C |
 | "上下文工程 = 高级提示词工程" | 五件套 + 三类上下文 + 三数据源 + 瞬时/持久——提示词只是其中一件 | 1a、全课 |
+
+> 📌 **TS 侧一致性**：上表各行的机制性结论在 TS 侧全部成立（`playground-ts/09-context-lab.ts` 逐条复现）；仅 API 形态不同——`override` 改视图对应 TS `transient` handler 的 `{ ...request, messages }`，持久写状态为返回 `new Command({ update: { messages: [...] } })`，工具读运行时 `runtime.context / runtime.state / runtime.store`，写长期记忆 `lgStore(runtime).put(...)`。
 
 ## 一图总结
 

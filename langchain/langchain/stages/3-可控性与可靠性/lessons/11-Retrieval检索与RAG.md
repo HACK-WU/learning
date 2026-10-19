@@ -101,7 +101,9 @@
 
 **④ 实测：无检索直问的两种失败模式（1a）**。同一批「私有知识」问题，直接问模型（不挂任何检索），两个问题暴露了两种失败：
 
-```text
+::: code-group
+
+```text [Python]
 [问题 1] 星云科技（Nebula Tech）的员工年假有多少天？
 [回答 1] 关于“星云科技（Nebula Tech）”的员工年假天数，目前公开渠道并没有统一的确切信息。
   * **中国大陆法定标准**：累计工作满1年不满10年享5天；满10年不满20年享10天；满20年以上享15天。
@@ -109,9 +111,20 @@
   ……
 ```
 
+```text [TypeScript]
+[问题 1] 星云科技（Nebula Tech）的员工年假有多少天？
+[回答 1] 关于“星云科技（Nebula Tech）”的员工年假天数，目前公开渠道并没有统一的确切信息。 * **中国大陆法定标准**：累计工作满1年不满10年享5天；满10年不满20年享10天；满20年以上享15天。 * **科技公司常见福利**：很多科技/互联网公司会在法定基础上增加“福利年假”。例如，入职第一年通常享有 7～15 天不等。 ……
+```
+
+:::
+
+两个阵营的 TS 侧输出与 Python 完全复现（同一模型 qwen3.8-flash、同一批问题）——TS 版经 `brief()` 压缩了连续空白，仅格式差异，机制性结论一致。
+
 看点在「猜测的包围」：模型嘴上说「没有确切信息」，手上却没闲着——把法定标准、行业常见值、各种可能性全铺了一遍。这些内容**没有一个字来星云科技**，且真实政策（按司龄 1-3 年 5 天 / 3-5 年 10 天 / 5 年以上 15 天）与它推测的分档逻辑并不相同——**看起来「差不多」，用起来全不对**。
 
-```text
+::: code-group
+
+```text [Python]
 [问题 2] 星云科技的 VPN 客户端叫什么？
 [回答 2] 关于“星云科技”的 VPN 客户端名称，通常取决于您指的是其面向**企业用户**还是**个人用户**的产品线：
   1. **企业级产品（星云星空）**： 如果您指的是提供企业内网穿透、SD-WAN 组网以及远程办公服务的**北京星云星空科技有限公司**，
@@ -119,6 +132,15 @@
   2. **个人网络加速/代理工具**： 如果是指市面上以“星云”命名的个人网络代理工具或加速器，其客户端通常被直接命名为 **“星云VPN”**
   ……
 ```
+
+```text [TypeScript]
+[问题 2] 星云科技的 VPN 客户端叫什么？
+[回答 2] 关于“星云科技”的 VPN 客户端名称，通常取决于您指的是其面向**企业用户**还是**个人用户**的产品线： 1. **企业级产品（星云星空）**：……他们的核心客户端软件名称就叫作 **“星云星空”**（英文名称：**Nebula**）。 2. **个人网络加速/代理工具**：……其客户端通常被直接命名为 **“星云VPN”** ……
+```
+
+:::
+
+TS 侧同样复现「星云星空 / Nebula / 星云VPN」这组编造细节——两种失败模式的随机摆动与语言无关，机制在模型层。
 
 这一条是标准的**编造式幻觉**：真实答案（知识库里的）是 **NebulaConnect**——模型给出的「星云星空」「Nebula」「星云VPN」全部是它「拼」出来的近似物。注意它甚至编出了「北京星云星空科技有限公司」这样一个具体的公司实体，并配上产品线说明——**细节越多，越像真的，越危险**。
 
@@ -148,6 +170,7 @@
 #### 官方文档
 
 - [Retrieval（本知识点主参考页）](https://docs.langchain.com/oss/python/langchain/retrieval)
+- [Retrieval（TS 版主参考页）](https://docs.langchain.com/oss/javascript/langchain/retrieval)
 - [Build a semantic search engine（语义搜索教程）](https://docs.langchain.com/oss/python/langchain/knowledge-base)
 
 ---
@@ -202,7 +225,9 @@
 
 **⑤ 实测（2a-2e）**：
 
-```text
+::: code-group
+
+```text [Python]
 -- 2a 加载：文件 → Document --
   文件数: 5
     01-考勤与休假制度.md: 701 字符
@@ -216,9 +241,29 @@
   默认分隔符: ['\n\n', '\n', ' ', '']
 ```
 
+```text [TypeScript]
+-- 2a 加载：文件 → Document --
+  文件数: 5
+    01-考勤与休假制度.md: 701 字符
+    ……
+  Document 字段: pageContent=string / metadata=Object / id=undefined
+
+-- 2b 切分：三档 chunk_size 对照 --
+  chunk_size= 200 overlap= 40 ->  26 块 | 长度 min=32 max=198 avg=135
+  chunk_size= 300 overlap= 60 ->  15 块 | 长度 min=127 max=290 avg=230
+  chunk_size= 400 overlap= 80 ->  12 块 | 长度 min=94 max=371 avg=295
+  默认分隔符: ["\n\n","\n"," ",""]
+```
+
+:::
+
+📌 **TS 差异**：`Document` 字段在 TS 为驼峰 `pageContent` / `metadata` / `id`（`undefined` 表示未赋值），Python 为 `page_content` / `metadata` / `id`（`None`）；默认分隔符数组的 `'\n'` 在 TS 中打印为 `"\n"` 字面转义，语义一致。
+
 看点在「块数与粒度的权衡」：200 字符档被切出 26 块——块多了检索更精准，但最小块只有 32 字符（可能语义不完整）；400 字符档 12 块——上下文更完整，但单块包含的无关内容也更多。**没有万能参数，只有「用评估来调」的工程循环**（埋个伏笔：课 13 的评测就是干这个的）。
 
-```text
+::: code-group
+
+```text [Python]
 -- 2c 切分：块结构与 metadata --
   共 15 块；取第 2 块展示：
   metadata: {'source': '01-考勤与休假制度.md', 'start_index': 220}
@@ -230,9 +275,30 @@
     | - 入职满 5 年及以上：每年 15 天
 ```
 
+```text [TypeScript]
+-- 2c 切分：块结构与 metadata --
+  共 15 块；取第 2 块展示：
+  metadata: {"source":"01-考勤与休假制度.md","loc":{"lines":{"from":9,"to":21}}}
+  内容（290 字符）：
+    | ## 二、年假
+    | 
+    | 年假天数按员工在公司的连续服务年限阶梯计算：
+    | 
+    | - 入职满 1 年不满 3 年：每年 5 天
+    | - 入职满 3 年不满 5 年：每年 10 天
+    | - 入职满 5 年及以上：每年 15 天
+    | 
+```
+
+:::
+
+📌 **TS 差异（关键）**：`addStartIndex`（TS 侧对应 Python 的 `add_start_index=True`）产生的定位字段，Python 是扁平字符偏移 `start_index: 220`，**TS 则是行区间 `loc.lines={from: 9, to: 21}`**——两者都是「块在原文的位置」，只是单位不同（字符偏移 vs 行号区间）。引用溯源逻辑据此适配。
+
 两个细节：① 块从 `## 二、年假` 标题开始——递归切分天然尊重 Markdown 的章节结构（**切分质量好，检索命中率就高**）；② `metadata` 自动继承了来源文件名，并带上 `start_index=220`（启用 `add_start_index=True` 后的字符偏移，用于定位原文）——**metadata 是引用溯源的基础**（知识点 3 的答案里「来源：xx 文件」就靠它）。
 
-```text
+::: code-group
+
+```text [Python]
 -- 2d 嵌入：维度 / 批量 / 截维 --
   embed_documents 批量 3 条: 每条 4096 维
   embed_query: 4096 维
@@ -244,13 +310,30 @@
   store 内块数: 15
 ```
 
+```text [TypeScript]
+-- 2d 嵌入：维度 / 批量 / 截维 --
+  embed_documents 批量 3 条: 每条 4096 维 | 耗时 0.0s
+  embed_query: 4096 维 | 前 3 位: [0, 0, 0]
+  embed_query 与 embed_documents 对同一文本: 向量差绝对值之和=0.000000（0 表示同一空间同一条路径）
+  dimensions=1024 截维（MRL）: 实际返回 1024 维
+
+-- 2e 入库：add_documents --
+  add_documents: 15 块入库 | 耗时 0.0s
+  返回 id 前 2 个: b0153f29-6261-42fe... / c0cea29c-b474-410f...
+  store 内块数: 15
+```
+
+:::
+
+📌 **TS 差异**：TS 连的是本地 mock 嵌入端点（确定性向量、无真实网络往返），故「前 3 位」固定为 `[0,0,0]`、`embed_query` 与 `embed_documents` 同一文本向量差为 `0`、耗时 `0.0s`；Python 侧接真实 SiliconFlow 网络，故有时间开销（2e 的 33.4s）与 `~0.46/4096` 的浮点噪声。**这些是「mock 确定性 vs 真实网络」的环境差异，不是语言差异**——向量维度（4096）、截维（1024）、块数（15）两语言完全一致；返回的 uuid 前缀为随机值，跨语言不可比。
+
 入库返回自动生成的 uuid 列表（可用于后续更新/删除）；嵌入调用是本链路唯一的「网络开销大头」——**生产上要关心批量与缓存**（同一文档反复嵌入是常见浪费，本课补跑中实测到嵌入接口存在微弱的浮点非确定性，见第四幕数值说明）。
 
 **⑥ 与后续环节的接口**：链路跑完，你得到的是一个「向量库对象」——它已经支持相似度查询；而把它变成「标准检索器」、再接进 RAG 流程，是知识点 3 的内容。
 
 #### 示例演示
 
-见上文实测 2a-2e。完整脚本 `playground/11-retrieval-lab.py`（站二部分）。
+见上文实测 2a-2e。完整脚本 `playground/11-retrieval-lab.py`（站二部分）；TypeScript 侧对应 `playground-ts/11-retrieval-lab.ts` 的 2a-2e 段（`npm run l11`）。
 
 #### 常见误区
 
@@ -272,10 +355,12 @@
 - **Embeddings / embed_documents / embed_query**：嵌入接口两方法——在哪遇到：`langchain_core.embeddings` / 各家集成
 - **MRL（Matryoshka 截维）**：高维向量裁剪为低维——在哪遇到：本课截维实测 / 部分模型支持
 - **Vector Store / InMemoryVectorStore**：向量库 / 内存实现——在哪遇到：`langchain_core.vectorstores`
+- **TS API 差异**：以上均为 Python 命名；TS 侧驼峰化——`page_content`→`pageContent`、`embed_documents/embed_query`→`embedDocuments/embedQuery`、`add_documents`→`addDocuments`、`chunk_size/chunk_overlap`→`chunkSize/chunkOverlap`、`add_start_index`→`addStartIndex`（且 TS 产出的定位字段是 `loc.lines` 行区间而非 Python 的 `start_index` 字符偏移）；`InMemoryVectorStore` 在 TS 无现成实现，本课基于 `@langchain/core` 的 `VectorStore` 抽象基类自实现（`MiniMemoryVectorStore`，见 `playground-ts/11-retrieval-lab.ts`）。
 
 #### 官方文档
 
 - [Build a semantic search engine（本知识点主参考页：Create documents / Generate embeddings / Load and split / Index）](https://docs.langchain.com/oss/python/langchain/knowledge-base)
+- [Build a semantic search engine（TS 版主参考页）](https://docs.langchain.com/oss/javascript/langchain/knowledge-base)
 - [Document Loaders 集成索引](https://docs.langchain.com/oss/python/integrations/document_loaders)
 - [Text Splitters 集成索引](https://docs.langchain.com/oss/python/integrations/splitters)
 - [Embedding 集成索引](https://docs.langchain.com/oss/python/integrations/embeddings)
@@ -309,12 +394,27 @@
 
 **分数方向是第一个坑**：官方教程里的示例（某向量库）score 是**距离**——「越小越相似」；而本课实测的 `InMemoryVectorStore` 是**余弦相似度**——「越大越相似」。实测证据：
 
-```text
+::: code-group
+
+```text [Python]
 [similarity_search_with_score] 分数方向验证:
   score=0.5416 | [01-考勤与休假制度.md] ## 二、年假
   对照: 原文查询 score=0.6800 vs 无关查询 score=0.3329
   -> 结论: score 为余弦相似度（越大越相似）
 ```
+
+```text [TypeScript]
+[similarity_search_with_score] 分数方向验证:
+    score=0.2107 | [01-考勤与休假制度.md] ## 二、年假
+    score=0.0772 | [01-考勤与休假制度.md] # 星云科技 · 考勤与休假制度
+    score=0.0654 | [01-考勤与休假制度.md] ## 四、远程办公
+  对照: 原文查询 score=0.3641 vs 无关查询 score=0.1076
+  -> 结论: score 为余弦相似度（越大越相似）
+```
+
+:::
+
+📌 **TS 差异**：分数**绝对值**因嵌入实现不同而不同（TS 走本地 mock 向量，量纲整体更小），但**方向结论完全一致**——原文查询分（0.36）显著高于无关查询（0.10），`similarity_search_with_score` 返回的都是「越大越相似」的余弦相似度。
 
 实践建议：**不要凭直觉解读 score**——先像上面一样做两个对照（相关 vs 无关），确认方向再写阈值逻辑。
 
@@ -326,18 +426,38 @@
 
 `search_type` 官方支持三种（教程原文）：`"similarity"`（默认）、`"mmr"`（最大边际相关性——在相似与多样之间平衡，避免返回一堆几乎相同的块）、`"similarity_score_threshold"`（按分数阈值过滤）。**实测差异（重要）**：本版本的 `InMemoryVectorStore` 对第三种**未实现**——
 
-```text
+::: code-group
+
+```text [Python]
 [similarity_score_threshold] NotImplementedError（InMemoryVectorStore 未实现 relevance scores 方法）
 替代方案（手动阈值过滤）: 15 条中保留 2 条 ->
   score=0.5547 | [01-考勤与休假制度.md] ## 四、远程办公
   score=0.4970 | [03-IT-服务指南.md] # 星云科技 · IT 服务指南
 ```
 
+```text [TypeScript]
+[similarity_score_threshold] TS 侧退化为 similarity，返回 4 条（不抛错）
+    [01-考勤与休假制度.md] ## 四、远程办公
+    [03-IT-服务指南.md] ## 四、办公设备
+    [05-信息安全规范.md] ## 二、数据外发规则
+    [02-报销与费用标准.md] ## 二、发票要求
+  替代方案（手动阈值过滤 ≥0.05，mock 标度）: 15 条中保留 4 条 ->
+    score=0.2953 | [01-考勤与休假制度.md] ## 四、远程办公
+    score=0.0819 | [03-IT-服务指南.md] ## 四、办公设备
+    score=0.0629 | [05-信息安全规范.md] ## 二、数据外发规则
+```
+
+:::
+
+📌 **TS 差异（核心）**：同一「未实现」点两语言**行为不同**——Python 的 `InMemoryVectorStore` 对 `similarity_score_threshold` 直接抛 `NotImplementedError`；TS 的 `VectorStoreRetriever` 只实现了 `similarity`/`mmr` 两种，传 `similarity_score_threshold` 时**不报错、静默退化为 `similarity`**（不按阈值过滤）。这正是课里说的「接口层承诺 vs 实现层因库而异」——趋势相反但都提醒你：**用之前先试一下**。手动阈值过滤的兜底方案两语言通用（TS 侧阈值同为 `≥0.05`，因 mock 分数标度更小故保留 4 条）。
+
 这不是文档写错了——`VectorStoreRetriever` 的三种 search_type 是**接口层的承诺**，具体向量库实现到什么程度各家不同（生产库如 Chroma/PGVector 通常完整支持）。工程习惯：**用之前先试一下**；不可用时用「拿分数手动过滤」兜底（见上面替代方案）。
 
 mmr 的多样性效果实测（同一查询「远程办公」）：
 
-```text
+::: code-group
+
+```text [Python]
 [as_retriever · similarity] 返回 3 条:
   [01-考勤与休假制度.md] ## 四、远程办公
   [03-IT-服务指南.md] # 星云科技 · IT 服务指南
@@ -347,6 +467,22 @@ mmr 的多样性效果实测（同一查询「远程办公」）：
   [03-IT-服务指南.md] # 星云科技 · IT 服务指南
   [05-信息安全规范.md] ## 二、数据外发规则
 ```
+
+```text [TypeScript]
+[as_retriever · similarity] 返回 4 条:
+    [01-考勤与休假制度.md] ## 四、远程办公
+    [03-IT-服务指南.md] ## 四、办公设备
+    [05-信息安全规范.md] ## 二、数据外发规则
+    [02-报销与费用标准.md] ## 二、发票要求
+  [as_retriever · mmr] 返回 3 条:
+    [01-考勤与休假制度.md] ## 四、远程办公
+    [05-信息安全规范.md] # 星云科技 · 信息安全规范
+    [03-IT-服务指南.md] ## 四、办公设备
+```
+
+:::
+
+📌 **TS 差异**：检索命中的**块集合**两语言不同（TS mock 向量与 Python 真实嵌入的相似度排序有差异，返回条数与具体块略有出入，如 similarity 侧 TS 4 条/Python 3 条）——但**mmr 的机制结论一致**：它把第 3 条换成了与第 1/2 条主题更不同的块（TS 换成「信息安全规范」、Python 换成「数据外发规则」），多样性效果清晰可复现。
 
 **③ RAG 架构三种模式**（官方 retrieval 页对比表）：
 
@@ -360,7 +496,9 @@ mmr 的多样性效果实测（同一查询「远程办公」）：
 
 **④ 2-step RAG 完整实现**（官方教程的极简形态）：检索 → 拼 prompt → 生成。本课实测（3d）：
 
-```text
+::: code-group
+
+```text [Python]
 -- 3d 2-step RAG 全链路 --
   检索到 3 块: ['03-IT-服务指南.md', '04-产品与售后政策.md', '03-IT-服务指南.md']
   拼接后 prompt 总长: 970 字符（资料 846）
@@ -369,11 +507,24 @@ mmr 的多样性效果实测（同一查询「远程办公」）：
         补充：VPN 账号为员工工号，初始密码在入职时由 IT 服务台发放；若因连续输错被锁定，会锁定 30 分钟后自动解锁。若特指“VPN 密码”的专门重置流程，资料未单独涵盖。
 ```
 
+```text [TypeScript]
+-- 3d 2-step RAG 全链路 --
+  检索到 3 块: ["03-IT-服务指南.md","03-IT-服务指南.md","04-产品与售后政策.md"]
+  拼接后 prompt 总长: 970 字符（资料 846）
+  回答: - **VPN 客户端名称**：「NebulaConnect」来源：`03-IT-服务指南.md` - **重置密码方式（资料中的“忘记密码”说明为域账号密码重置）**：可访问 `it.nebula-tech.example`，点击「忘记密码」，通过企业邮箱接收验证链接进行自助重置；若企业邮箱不可用，需携带工牌到 IT 服务台现场重置。来源：`03-IT-服务指南.md` 补充：VPN 账号为员工工号，初始密码在入职时由 IT 服务台发放；若因连续输错被锁定，会锁定 30 分钟后自动解锁。若特指“VPN 密码”的专门重置流程，资料未单独涵盖。
+```
+
+:::
+
+📌 **TS 差异**：检索到的 3 块**顺序**两语言略异（TS `["03","03","04"]`，Python `['03','04','03']`——mock 向量对两块同源同内容块的相对排序不同），但**命中的文件集合、prompt 长度（970 字符/资料 846）、回答正文**（同模型 qwen3.8-flash）完全一致——「准确带来源 + 对未覆盖内容如实标注」的核心结论不因语言改变。
+
 三个看点：① 回答**准确且带来源**（metadata 溯源在这里兑现）；② 模型对「资料没覆盖的细分问题」如实标注（**「只依据资料」的约束在起作用**，对比知识点 1 的放任状态）；③ 提示词里显式放入结构化资料（`[来源: 文件名]` + 正文），这个拼接模板就是 2-step RAG 的核心代码。
 
 **⑤ Agentic RAG 完整实现**：把检索包成**工具**（课 4 的技能直接复用），交给 agent：
 
-```python
+::: code-group
+
+```python [Python]
 @tool
 def search_knowledge_base(query: str) -> str:
     """搜索星云科技公司内部知识库。当用户询问公司制度、流程、IT 服务、
@@ -385,13 +536,50 @@ def search_knowledge_base(query: str) -> str:
 agent = create_agent(model, tools=[search_knowledge_base], system_prompt="……必须先检索……")
 ```
 
+```javascript [TypeScript]
+// @tool 用 zod schema 声明参数（Python 用函数注解）
+const searchKnowledgeBase = tool(
+  async ({ query }: { query: string }) => {
+    const hits = await store.similaritySearch(query, 3);
+    return hits
+      .map((h) => `[来源: ${h.metadata.source}]\n${h.pageContent}`)
+      .join("\n\n---\n\n");
+  },
+  {
+    name: "search_knowledge_base",
+    description: "搜索星云科技公司内部知识库。当用户询问公司制度、流程、IT 服务、报销、产品政策等公司相关问题时必须使用此工具。",
+    schema: z.object({ query: z.string().describe("知识库检索查询") }),
+  },
+);
+const agent = await createAgent({
+  model,
+  tools: [searchKnowledgeBase],
+  systemPrompt: "……必须先检索……",
+});
+```
+
+:::
+
 官方 Tip（意译）：**agent 想要 RAG 行为，唯一需要的就是「能取外部知识的工具」。**实测（3e）中 agent 拿到复合问题「VPN 客户端叫什么？怎么重置密码？」后，**自主拆成两条查询并行检索**：
 
-```text
+::: code-group
+
+```text [Python]
 [1] ai -> 调用工具 search_knowledge_base({'query': 'VPN 客户端名称'})
 [1] ai -> 调用工具 search_knowledge_base({'query': 'VPN 密码重置 忘记'})
 [4] ai 最终回答: **VPN 客户端名称：NebulaConnect**（支持 Windows、macOS 与移动端）
 ```
+
+```text [TypeScript]
+[1] ai -> 调用工具 search_knowledge_base({"query":"VPN 客户端名称"}); search_knowledge_base({"query":"VPN 密码重置 忘记"})
+[2] tool 返回: [来源: 03-IT-服务指南.md] # 星云科技 · IT 服务指南 版本：v4.1 ｜ 生效日期：2026-02-01 ｜ 归口部门：IT 支持部 ## 
+[3] tool 返回: [来源: 03-IT-服务指南.md] # 星云科技 · IT 服务指南 版本：v4.1 ｜ 生效日期：2026-02-01 ｜ 归口部门：IT 支持部 ## 
+[4] ai 最终回答: **VPN 客户端名称：NebulaConnect**（支持 Windows、macOS 与移动端）。重置密码可访问 `it.nebula-tech.example` 自助操作；账号为员工工号，初始密码入职时由 IT 服务台发放。
+```
+
+:::
+
+TS 侧 `showChain` 把并行调用的两条工具调用打印在同一行（中间以 `;` 连接），并补出 `tool 返回` 与最终回答——`agentic RAG = 检索作为工具、agent 自主拆两条查询并行检索` 的行为两语言一致。
 
 **⑥ 命门实测：检索质量决定 RAG 成败**（本课最有价值的一组数据）。同一个问题「星云科技员工每年有多少天年假？」，三种方式对照（3f）：
 
@@ -401,7 +589,9 @@ agent = create_agent(model, tools=[search_knowledge_base], system_prompt="……
 
 为什么 (b) 会漏？补跑精确定位（「答案块」= 含「每年 5 天」的那一块；分数从大到小取前 k 名）：
 
-```text
+::: code-group
+
+```text [Python]
 查询: 星云科技员工每年有多少天年假？（k=3）
   score=0.7030 start=   0 答案块=否 | # 星云科技 · 考勤与休假制度
   score=0.5692 start=   0 答案块=否 | # 星云科技 · 产品与售后政策
@@ -414,6 +604,19 @@ agent = create_agent(model, tools=[search_knowledge_base], system_prompt="……
   score=0.5405 start=   0 答案块=否 | # 星云科技 · IT 服务指南
 ```
 
+```text [TypeScript]
+[(a) 无检索] 问: 星云科技员工每年有多少天年假？
+  -> 根据国家法定标准，职工累计工作已满1年不满10年的，年休假5天；已满10年不满20年的，年休假10天；已满20年的，年休假15天。……但具体到“星云科技”的内部规定，公开资料中没有确切信息，建议咨询该公司人力资源部门。
+[(b) 2-step RAG] 检索: ["01-考勤与休假制度.md","01-考勤与休假制度.md","04-产品与售后政策.md"]
+  -> 资料只说明：年假天数按员工在公司的连续服务年限阶梯计算。但具体每年有多少天年假，资料未涵盖。
+[(c) Agentic RAG] ai -> 调用工具 search_knowledge_base({"query":"员工年假天数 政策"})
+  -> 星云科技年假按在公司的连续服务年限阶梯计算：- 入职满 1 年不满 3 年：每年 5 天 - 入职满 3 年不满 5 年：每年 10 天 - 入职满 5 年及以上：每年 15 天
+```
+
+:::
+
+📌 **TS 侧同样复现「检索截断」**：(a) 无检索给通用国家法定答案（无星云信息）；(b) 2-step 检索到的 3 块不含答案块，模型同样如实答「资料未涵盖」；(c) agent 改写查询 `员工年假天数 政策` 后命中答案块，给出完整分档表。**检索截断是检索侧数据问题，与语言无关**——TS 侧 k=3 同样漏掉含「每年 5 天」的块。Python 侧的 `start=` 偏移定位（fix2 补跑）依赖 `add_start_index` 字符偏移，TS 对应为 `loc.lines` 行区间，机制一致。
+
 根因浮出水面：用户原话（含「星云科技」的公司名）把**文档头部块**（start=0）推上第一（0.70），真正的答案块（start=220）只排第 4（0.56）——`k=3` 一刀切在第 3 名，答案块被截断在门外。而 agent 改写的查询（「员工年假天数 政策」）去掉了公司名等「高相似度噪声词」，答案块直接排第一（0.6444，补跑 A）。
 
 > 🎯 **这组实测给出三条工程结论**：① RAG 失败**多数发生在检索侧**，且是**静默失败**（不报错、模型还答得很像样——「资料未涵盖」）；② **k 值、查询措辞、chunk 切法**都会左右命中（k=4 起答案块进入；查询改写立竿见影）；③ **这些参数不该拍脑袋**——用一批问题+标准答案做评估集来调（伏笔：课 13）。
@@ -422,7 +625,7 @@ agent = create_agent(model, tools=[search_knowledge_base], system_prompt="……
 
 #### 示例演示
 
-见上文 3a-3g 与补跑。完整脚本 `playground/11-retrieval-lab.py`（站三部分）与 `11-retrieval-lab-fix.py` / `-fix2.py`。
+见上文 3a-3g 与补跑。完整脚本 `playground/11-retrieval-lab.py`（站三部分）与 `11-retrieval-lab-fix.py` / `-fix2.py`；TypeScript 侧对应 `playground-ts/11-retrieval-lab.ts` 的 3a-3g 段（`npm run l11`）——其中 3c 的 `@chain` 在 TS 为手写 Promise 函数、3f 的 k 值扫描定位是 Python `-fix2.py` 特有（TS 侧用 3f 三方对照复现同一「检索截断」结论，见上文 code-group）。
 
 #### 常见误区
 
@@ -443,17 +646,19 @@ agent = create_agent(model, tools=[search_knowledge_base], system_prompt="……
 - **search_type（similarity / mmr / threshold）**：检索器三形态——在哪遇到：`as_retriever` 参数
 - **2-step / Agentic / Hybrid RAG**：三种架构模式——在哪遇到：官方 retrieval 页
 - **@chain**：把函数包装成 Runnable——在哪遇到：`langchain_core.runnables`
+- **TS API 差异**：`as_retriever`（TS `asRetriever({ searchType, searchKwargs })`）、`similaritySearch / similaritySearchWithScore / similaritySearchByVector`、`@chain`（TS 无该装饰器，改用手写返回 `Promise<Document[]>` 的普通函数 + `batch` 用 `Promise.all` 模拟）；**`similarity_score_threshold` 在 TS 侧不抛错、静默退化为 similarity**（Python 抛 `NotImplementedError`），见 3b code-group。
 
 #### 官方文档
 
 - [Retrieval · RAG architectures（本知识点主参考页：2-step / Agentic / Hybrid 对比）](https://docs.langchain.com/oss/python/langchain/retrieval)
+- [Retrieval · RAG architectures（TS 版主参考页）](https://docs.langchain.com/oss/javascript/langchain/retrieval)
 - [Build a semantic search engine · Query / Use retrievers（查询三法与检索器用法）](https://docs.langchain.com/oss/python/langchain/knowledge-base)
 
 ---
 
 ## 第四幕：实操验证
 
-回到第一幕：助手答不了「我们自己的事」，还编造了「星云星空」。以下覆盖 **13 个主实验 + 3 项补充核查**，全部本机跑通（脚本：`playground/11-retrieval-lab.py` 与 `-fix.py` / `-fix2.py` 两个补跑脚本；运行方式：在 `playground/` 内执行 `uv run python 11-retrieval-lab.py`；证据合并文件 `lc-l11-lab-output.txt`）：
+回到第一幕：助手答不了「我们自己的事」，还编造了「星云星空」。以下覆盖 **13 个主实验 + 3 项补充核查**，全部本机跑通。Python 侧：脚本 `playground/11-retrieval-lab.py` 与 `-fix.py` / `-fix2.py` 两个补跑脚本，运行在 `playground/` 内执行 `uv run python 11-retrieval-lab.py`，证据文件 `lc-l11-lab-output.txt`；**TypeScript 侧**：`playground-ts/11-retrieval-lab.ts`（与 Python 一一对应的 13 个实验，运行在 `playground-ts/` 内执行 `npm run l11`，前提是本地 mock 嵌入端点已启动，见脚本头注释），证据文件 `playground-ts/lc-l11-ts-output.txt`。下表实验编号两侧通用，TS 侧差异见各 code-group 的 📌 标注：
 
 1. **无检索直问（1a）**：两种失败模式实录——「拒答式猜测」（年假：铺满法定标准与行业常见值）与「编造式幻觉」（VPN：编出「星云星空/Nebula/北京星云星空科技有限公司」）。
 2. **加载（2a）**：5 份 Markdown → 5 个 Document（588-818 字符）；字段确认 page_content / metadata / id=None。
