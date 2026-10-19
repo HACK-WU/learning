@@ -84,7 +84,9 @@
 
 **① 引擎内部的流水线（拆开看）**——实测把 agent 编译后的图打印出来（脚本 1b 段，`agent.get_graph()`）：
 
-```text
+::: code-group
+
+```text [Python]
 节点清单: __start__ / model / tools / __end__
 
 边清单:
@@ -93,6 +95,20 @@
   model -> tools （条件边）    （有工具申请 → 去执行）
   tools -> model （条件边）    （回执并入 → 回到模型）
 ```
+
+```text [TypeScript]
+节点清单: __start__ / model_request / tools / __end__
+
+边清单:
+  __start__ -> model_request           （进入引擎）
+  model_request -> __end__ （条件边）   （没有工具申请 → 结束）
+  model_request -> tools （条件边）     （有工具申请 → 去执行）
+  tools -> model_request （条件边）     （回执并入 → 回到模型）
+```
+
+:::
+
+> 📌 **TypeScript 侧差异（本机实测）**：TS 侧取图用 `await agent.graph.getGraphAsync({})`（没有同步版 `get_graph()`）；模型节点的名字是 `model_request`（Python 侧为 `model`）——其余结构（`tools` 节点、两条条件边、回执回到模型）完全一致。
 
 ```mermaid
 flowchart LR
@@ -110,7 +126,9 @@ flowchart LR
 
 **② 三站任务，跑一遍记一次账**——同一个模式（模型 + 工具）配三种任务难度，实测的完整消息链（脚本 2 段）：
 
-```text
+::: code-group
+
+```text [Python]
 站一（无工具·干脆直接答）：问"什么是 agent loop"
   [0] human: 请用一句话说明什么是 agent loop。
   [1] ai: Agent loop 是智能体不断执行“感知环境、推理决策、调用工具/采取行动、观察结果”的循环过程，直到完成目标。
@@ -137,6 +155,37 @@ flowchart LR
   [账本] 模型被调用 3 次；工具申请 3 条；工具回执 3 条；消息共 7 条
 ```
 
+```text [TypeScript]
+站一（无工具·干脆直接答）：问"什么是 agent loop"
+  [0] human: 请用一句话说明什么是 agent loop。
+  [1] ai: Agent loop 是智能体不断执行“感知环境、推理决策、调用工具/采取行动、观察结果”的循环过程，直到完成目标。
+  [账本] 模型被调用 1 次；工具申请 0 条；工具回执 0 条；消息共 2 条
+
+站二（两条申请·查账）：问"订单 A1024 一共要付多少钱（含运费）"
+  [0] human: 帮我算下订单 A1024 一共要付多少钱（含运费）
+  [1] AI 请求: get_order({"order_id":"A1024"})
+  [2] tool: 订单 A1024：机械键盘 x2，单价 349 元；运费 12 元
+  [3] AI 请求: calculator({"expression":"349 * 2 + 12"})
+  [4] tool: 710
+  [5] ai: 订单 A1024 应付 **710 元**（机械键盘 2 件 × 349 元 + 运费 12 元）。
+  [账本] 模型被调用 3 次；工具申请 2 条；工具回执 2 条；消息共 6 条
+
+站三（多步任务·查账 + 设提醒）：
+  [0] human: 帮我算下订单 A1024 总共多少钱，算完再设一个明天上午 10 点的提醒：给客户回电话
+  [1] AI 请求: get_order({"order_id":"A1024"})
+  [1] AI 请求: set_reminder({"content":"给客户回电话","when":"明天上午10点"})
+  [2] tool: 订单 A1024：机械键盘 x2，单价 349 元；运费 12 元
+  [3] tool: 已设置提醒 [明天上午10点]：给客户回电话
+  [4] AI 请求: calculator({"expression":"349 * 2 + 12"})
+  [5] tool: 710
+  [6] ai: 订单 A1024 明细如下：机械键盘 x2（单价 349 元）+ 运费 12 元，总计 **710 元**。另外，提醒已设好：明天上午 10 点「给客户回电话」。
+  [账本] 模型被调用 3 次；工具申请 3 条；工具回执 3 条；消息共 7 条
+```
+
+:::
+
+> 📌 **TypeScript 侧差异（本机实测）**：TS 侧参数打印为紧凑 JSON（`JSON.stringify` 无空格，如 `{"order_id":"A1024"}`）；账本统计逻辑两侧一致，TS 的 `tool_calls` 读取不含 `type` 字段（课 4 已提）。
+
 三站连起来看，账本规律就出来了（注意"申请消息"与"申请条数"是两回事——一条 AI 消息里可以装多个申请）：
 
 - **模型调用次数 = 申请消息条数 + 1 次收尾**（站二：2 条申请消息 + 1 收尾 = 3 次；站三：消息 [1] 装 2 个申请、消息 [4] 装 1 个申请 = 2 条申请消息 + 1 收尾 = 3 次）。
@@ -147,21 +196,42 @@ flowchart LR
 
 **③ 怎么停（终止条件）**——实测站三返回后的最后一条消息（脚本 2d 段）：
 
-```text
+::: code-group
+
+```text [Python]
 最后一条消息类型: AIMessage
 最后一条消息 tool_calls: []
 ```
+
+```text [TypeScript]
+最后一条消息类型: AIMessage
+最后一条消息 tool_calls: []
+```
+
+:::
 
 引擎的"停"就是这么朴素：它每次转完检查一遍——模型这条回复的 `tool_calls` 是不是空列表。**空 → 停**（这条 AIMessage 就是交给你的终答）；**非空 → 继续转**。所以"任务完成"的定义，实际上是"模型自己认为不用再申请了"。
 
 **④ 刹车（步数预算）**——如果模型判断错了、或者任务本身就是无底洞呢？实测把同一条任务的预算压到 4（脚本 5 段）：
 
-```text
+::: code-group
+
+```text [Python]
 触发 → GraphRecursionError | Recursion limit of 4 reached without hitting a stop condition.
 You can increase the limit by setting the `recursion_limit` config key.
 ```
 
+```text [TypeScript]
+触发 → GraphRecursionError | Recursion limit of 4 reached without hitting a stop condition. You can
+increase the limit by setting the "recursionLimit" config key.
+Troubleshooting URL: https://docs.langchain.com/oss/javascript/langgraph/GRAPH_RECURSION_LIMIT/
+```
+
+:::
+
 报错信息说得很直白：**在没碰到停止条件的情况下，预算（4 步）用完了**。每一步都消耗预算——模型调用、工具执行各算一步。本机版本的默认预算是 `create_agent` 源码里写的 9999（源码注释：*Set recursion limit to 9_999*）——日常任务根本用不到，但"预算耗尽就报错"这条纪律一直在。
+
+> 📌 **TypeScript 侧差异（本机实测 + 源码核对）**：① 配置键是 `recursionLimit`（camelCase），报错文案因此不同，且附一条官方 Troubleshooting URL；② **TS 侧默认预算只有 25**（LangGraph JS 的 `DEFAULT_LOOP_LIMIT = 25`，不是 Python 侧的 9999）——复杂长任务的默认安全垫更薄，超过 25 步会直接抛错，需要显式调大（`{ recursionLimit: 1000 }` 或 `agent.withConfig({ recursionLimit: 1000 })`）。
 
 **⑤ 参数全景（15 个）**——实测 `inspect.signature(create_agent)` 拿到的本机版本全貌：
 
@@ -178,9 +248,31 @@ You can increase the limit by setting the `recursion_limit` config key.
 
 不要求背下来——记住**三分法**就够了：核心三件（模型/工具/提示词）天天用；`response_format`/`middleware`/`checkpointer` 是进阶主力（各有专课）；其余是运维动作，用到再查。
 
+> 📌 **TypeScript 侧差异（本机实测 + 官方类型定义核对）**：TS 侧统一参数对象式配置（`createAgent({ ... })`），键位为 camelCase；且**没有运行时签名反射**（`inspect.signature` 的等价物），列全貌要看官方类型定义 `CreateAgentParams`。实测 `agent.options` 只回读显式传入的键（`createAgent({ model, tools })` → `["model","tools"]`）。对照键位：
+
+::: code-group
+
+```text [Python]
+model / tools / system_prompt / response_format /
+state_schema / context_schema / middleware /
+checkpointer / store / name / debug / cache /
+interrupt_before / interrupt_after / transformers
+```
+
+```text [TypeScript]
+model / tools / systemPrompt / responseFormat /
+stateSchema / contextSchema / middleware /
+checkpointer / store / name / description /
+includeAgentName / signal / version / streamTransformers
+```
+
+:::
+
+注意最后几项两侧并不一一对应：Python 的 `debug` / `cache` 在 TS 侧走 `agent.withConfig({ ... })`；`interrupt_before` / `interrupt_after` 在 TS 侧不在 `createAgent` 参数内，而是走 LangGraph 的中断配置（`interruptBefore` / `interruptAfter`，课 10 展开）；TS 多出的 `description` / `includeAgentName` / `signal` / `version` / `streamTransformers` 属运维与流式扩展位（用到再查）。
+
 #### 示例演示
 
-见上文实测：引擎图结构（①）、三站账本（②）、终止条件（③）、预算刹车（④）、参数全景（⑤），来源脚本 `playground/05-agent-lab.py`。
+见上文实测：引擎图结构（①）、三站账本（②）、终止条件（③）、预算刹车（④）、参数全景（⑤），来源脚本 `playground/05-agent-lab.py`（TS 对照：`playground-ts/05-agent-lab.ts`）。
 
 #### 常见误区
 
@@ -197,8 +289,8 @@ You can increase the limit by setting the `recursion_limit` config key.
 
 - **agent loop / agent 引擎**：模型与工具往返、直到任务完成的循环——在哪遇到：官方 agents 页、tracing 记录的多步消息
 - **harness**：循环之外的一切（提示词 + 工具 + 中间件）——在哪遇到：`create_agent` 的每个参数都是它的零件
-- **model / tools 节点**：引擎内部两个干活的节点——在哪遇到：`agent.get_graph()` 的节点清单、LangGraph 文档
-- **recursion_limit**：步数预算——在哪遇到：`config={"recursion_limit": N}`、`GraphRecursionError`
+- **model / tools 节点**：引擎内部两个干活的节点（TS 侧模型节点名为 `model_request`）——在哪遇到：`agent.get_graph()` / `agent.graph.getGraphAsync({})` 的节点清单、LangGraph 文档
+- **recursion_limit**：步数预算（TS 侧 `recursionLimit`，默认 25）——在哪遇到：`config={"recursion_limit": N}`、`GraphRecursionError`
 
 #### 官方文档
 
@@ -225,9 +317,19 @@ You can increase the limit by setting the `recursion_limit` config key.
 
 **① 输入：你传的是"状态更新"**——官方原文：*Behind the scenes that passes an update to the agent's State*。翻译成人话：你不需要构造完整对话，只递给它**新的一句话**；引擎把它追加进内部状态（消息列表），然后开始转：
 
-```python
+::: code-group
+
+```python [Python]
 result = agent.invoke({"messages": [{"role": "user", "content": "帮我算下订单 A1024 一共要付多少钱（含运费）"}]})
 ```
+
+```typescript [TypeScript]
+const result = await agent.invoke({
+  messages: [{ role: "user", content: "帮我算下订单 A1024 一共要付多少钱（含运费）" }],
+});
+```
+
+:::
 
 可选的两个伴随参数（本课只露脸，课 7/课 9 展开）：
 
@@ -236,34 +338,69 @@ result = agent.invoke({"messages": [{"role": "user", "content": "帮我算下订
 
 **② 输出：一个字典，两个看点**——实测（脚本 2d / 3b 段）：
 
-```text
+::: code-group
+
+```text [Python]
 无结构化输出时:  keys: ['messages']
 配置结构化输出后: keys: ['messages', 'structured_response']
 ```
 
+```text [TypeScript]
+无结构化输出时:  keys: ["messages"]
+配置结构化输出后: keys: ["messages","structuredResponse"]
+```
+
+:::
+
 - **`messages`**——完整消息链（人话 + 每条申请 + 每条回执 + 终答），课 3 学的消息体系在这儿聚齐（HumanMessage 开场、AIMessage 负责申请与终答、ToolMessage 是回执）。三个常用读法：拿终答（最后一条 `AIMessage` 的 `content`）、审计（逐条看它转了几圈、申请了什么）、账本（数数模型调用与工具执行次数）。
 - **`structured_response`**——程序要的"格式化小票"（见下）。
 
+> 📌 **TypeScript 侧差异（本机实测）**：字段名是 camelCase 的 `structuredResponse`（Python 侧 `structured_response`）；终答文本在 TS 侧取 `res.messages.at(-1)?.text`（或 `content` 属性）。
+
 **③ 结构化输出：把"一坨话"变成程序能用的数据**。`response_format=Schema` 就是开关；官方支持四种 schema 写法（Pydantic 模型 / dataclass / TypedDict / JSON Schema 字典——前三种实测覆盖，JSON Schema 字典**必须显式包一层策略**，是官方明确的坑）。策略自动选择：模型支持原生结构化输出就用 `ProviderStrategy`（服务端强制 schema），否则用 `ToolStrategy`——用"工具调用"来收数据。本课实测走了 `ToolStrategy`，它的真面目在消息链里一眼可见（脚本 3b 段）：
 
-```text
+::: code-group
+
+```text [Python]
   [0] human: 从这段信息中提取联系人：John Doe, john@example.com, (555) 123-4567
   [1] AI 请求: ContactInfo({"name": "John Doe", "email": "john@example.com", "phone": "(555) 123-4567"})
   [2] tool: Returning structured response: name='John Doe' email='john@example.com' phone='(555) 123-4567'
 ```
 
+```text [TypeScript]
+  [0] human: 从这段信息中提取联系人：John Doe, john@example.com, (555) 123-4567
+  [1] AI 请求: ContactInfo({"name":"John Doe","email":"john@example.com","phone":"(555) 123-4567"})
+  [2] tool: {"name":"John Doe","email":"john@example.com","phone":"(555) 123-4567"}
+  [3] ai: Returning structured response: {"name":"John Doe","email":"john@example.com","phone":"(555) 123-4567"}
+```
+
+:::
+
 **看明白了吗——结构化输出就是让模型调用一个"虚拟工具"**：schema 被包装成工具，模型"申请调用"它填数据，引擎收下、校验、放进 `structured_response`。课 4 学的工具机制，在这里复用了一次（你不需要自己写这个工具）。
+
+> 📌 **TypeScript 侧差异（本机实测）**：① 开关是 `responseFormat: toolStrategy(schema)`（camelCase + 函数包裹，`toolStrategy` 从 `"langchain"` 导入）；② TS 消息链比 Python 多一条 `[3] ai: Returning structured response: {...}` 收尾消息（引擎补的确认消息）；③ 虚拟工具的命名规则（实测 + 源码核对）：工具名取自 schema 的标题（`title`）——不设标题时自动生成 `extract-1`、`extract-2` 这样的内部编号（源码 `getFunctionName` 的兜底逻辑）；要给虚拟工具一个可读的名字（调试和错误提示里都会出现），用 zod 的 `.meta({ title: "ContactInfo" })` 显式命名。
 
 **④ 结构化输出也要过"环境适配"这一关**（重要实测，脚本 3a/3b 段）——直接上默认模型，第一条路就撞了墙：
 
-```text
+::: code-group
+
+```text [Python]
 失败 → OpenAIInvalidRequestError | Error code: 400 - {…'message': 'The tool_choice parameter does not
 support being set to required or object in thinking mode'…}
 ```
 
+```text [TypeScript]
+失败 → BadRequestError | 400 The tool_choice parameter does not support being set to required or
+object in thinking mode
+```
+
+:::
+
 原因：`ToolStrategy` 需要**强制**模型调用虚拟工具（设置 `tool_choice=required`），而百炼的 thinking 模式（推理模型默认开启思考）**服务端不允许强制工具选择**。修复只需一个参数——关掉思考模式：
 
-```python
+::: code-group
+
+```python [Python]
 model_nothink = init_chat_model(
     "qwen3.8-flash",
     model_provider="openai",
@@ -273,28 +410,60 @@ model_nothink = init_chat_model(
 )
 ```
 
+```typescript [TypeScript]
+const modelNoThink = await initChatModel("qwen3.8-flash", {
+  modelProvider: "openai",
+  apiKey: API_KEY,
+  baseUrl: BASE_URL,
+  modelKwargs: { enable_thinking: false },   // ← 关键一行（附请求体字段）
+});
+```
+
+:::
+
 关掉后立刻成功（脚本 3b 段）：
 
-```text
+::: code-group
+
+```text [Python]
 structured_response: ContactInfo(name='John Doe', email='john@example.com', phone='(555) 123-4567')
 类型: ContactInfo
 ```
 
+```text [TypeScript]
+structuredResponse: {"name":"John Doe","email":"john@example.com","phone":"(555) 123-4567"}
+类型: Object
+```
+
+:::
+
 > ⚠️ **记两条通用教训**：① 官方文档说 ToolStrategy"适用于所有支持工具调用的模型"——但隐含前提是**服务端接受强制工具选择**；thinking 模式模型（百炼 qwen 默认、DeepSeek 官方链路实测同样受限）不满足，这不是代码问题，是环境限制。② 遇到 `tool_choice` 类报错，先查模型的"思考模式"开关（或换一个默认非思考的模型——实测百炼 `deepseek-v4.1-flash` 默认即可跑通），不要怀疑自己的代码。
+
+> 📌 **TypeScript 侧差异（本机实测）**：① 关思考的写法是 `modelKwargs: { enable_thinking: false }`（Python 侧 `extra_body`）——它会把字段直接附进请求体（mock 请求实测可见）；② TS 侧走 ToolStrategy 时同样会向服务端发送 `tool_choice: "required"`（框架内部设 `"any"`，OpenAI 适配层转成 `"required"` 发出；mock 请求实测字段值与 Python 侧一致），因此同一环境限制完全适用，报错表现一致；③ Python 侧结果是强类型对象（`ContactInfo(...)`），TS 侧是普通对象（`Object`）——zod 校验通过后不再有类型标签。
 
 **⑤ 结构化输出还会"自我兜错"**——两个实测场景（都是真实发生的）：
 
 场景一（模型自我校准，脚本 3c 段）：故意喂"10/10"分（schema 限制 1–5），想看它出错——结果模型**直接在生成时就校准了**：
 
-```text
+::: code-group
+
+```text [Python]
 structured_response: ProductRating(rating=5, comment='Amazing product, 10/10!')
 ```
+
+```text [TypeScript]
+structuredResponse: {"rating":5,"comment":"Amazing product, 10/10!"}
+```
+
+:::
 
 一次成功，重试机制根本没轮到上场。（模型读了 schema 里的"1 到 5"描述，自己把 10 压成了 5。）
 
 场景二（重试机制真实开火，脚本 3d 段）：给两个候选 schema（Union），信息里同时提到联系人和活动——模型**一口气把两个都申请了**，于是：
 
-```text
+::: code-group
+
+```text [Python]
   [1] AI 请求: ContactInfo({"name": "John Doe", "email": "john@email.com", "phone": ""})
   [1] AI 请求: EventDetails({"event_name": "Tech Conference", "date": "March 15th"})
   [2] tool: Error: Model incorrectly returned multiple structured responses (ContactInfo, EventDetails)
@@ -304,11 +473,27 @@ structured_response: ProductRating(rating=5, comment='Amazing product, 10/10!')
   [5] tool: Returning structured response: name='John Doe' email='john@email.com' phone=''
 ```
 
+```text [TypeScript]
+  [1] AI 请求: ContactInfo({"name":"John Doe","email":"john@email.com","phone":""})
+  [1] AI 请求: EventDetails({"event_name":"Tech Conference","date":"March 15th"})
+  [2] tool: The model has called multiple tools: ContactInfo, EventDetails to return a structured
+ output. This is not supported. Please provide a single structured output.
+  [3] AI 请求: ContactInfo({"name":"John Doe","email":"john@email.com","phone":""})
+  [4] tool: {"name":"John Doe","email":"john@email.com","phone":""}
+  [5] ai: Returning structured response: {"name":"John Doe","email":"john@email.com","phone":""}
+```
+
+:::
+
 **错误没有让程序崩溃**——引擎把"你多调了，只能要一个"变成**错误回执**递回去，模型读完重试，第二次只申请了一个，成功。这个"失败 → 把失败变成消息 → 模型修正"的循环，正是课 4 里你自己用中间件搭的那套——结构化输出把它内置了（重试策略可配：`ToolStrategy(handle_errors=...)`，默认开启"捕捉并提示重试"，也可精确到异常类型或自定义错误文案——用到再查官方页）。
+
+> 📌 **TypeScript 侧差异（本机实测 + 源码核对）**：① 错误回执**只发一条**（Python 侧是两个申请各回一条）——源码核对：TS 的 `#handleMultipleStructuredOutputs` 只取第一个申请生成回执；② 错误文案不同（TS：`The model has called multiple tools: ... to return a structured output. This is not supported.`），但机制同构——错误回执 → 模型重读 → 第二次只申请一个；③ 重试策略参数名是 `handleError`（单数，Python 侧 `handle_errors`），可传 `true`（默认）/ `false`（不重试直接抛）/ 字符串（自定义提示）/ 函数（按异常类型分流）。
 
 **⑥ 多轮对话：thread_id + checkpointer（本课埋伏笔）**——实测（脚本 4d 段）：
 
-```text
+::: code-group
+
+```text [Python]
 第一轮: 用户"我叫小明，最喜欢蓝色。请记住。"
         → 回复："好的，小明！我记住了——你最喜欢蓝色。……"
 第二轮（同一 thread_id）: 用户"我叫什么？最喜欢什么颜色？"
@@ -318,11 +503,25 @@ structured_response: ProductRating(rating=5, comment='Amazing product, 10/10!')
 对照（无 checkpointer 的新 agent）: "我不知道你叫什么，也不知道你最喜欢的颜色呀。……"
 ```
 
+```text [TypeScript]
+第一轮: 用户"我叫小明，最喜欢蓝色。请记住。"
+        → 回复："好的，小明！我记住了——你最喜欢蓝色。"
+第二轮（同一 thread_id）: 用户"我叫什么？最喜欢什么颜色？"
+        → 回复："你叫**小明**，最喜欢**蓝色**。😊"
+第二轮返回的消息总数（含本轮与历史）: 4
+
+对照（无 checkpointer 的新 agent）: "我不知道你叫什么，也不知道你最喜欢的颜色呀。这是我们的第一次对话。"
+```
+
+:::
+
 给 `create_agent` 配一个 `checkpointer=InMemorySaver()`，invoke 时带上同一个 `thread_id`——历史自动接续；不配就是每次从零开始。注意返回的 `messages` 是**这段线程的全部历史**（4 条 = 上轮 2 条 + 本轮 2 条），不是只有本轮。存储选型、裁剪、摘要这些"记忆工程"是课 7 的正题，这里先记住两件事：**它是参数，不是框架魔法；历史默认全量保留，越聊越长**。
+
+> 📌 **TypeScript 侧差异（本机实测）**：① 类名不同——TS 侧是 `MemorySaver`（`@langchain/langgraph`），Python 侧是 `InMemorySaver`（`langgraph.checkpoint.memory`）；② `config` 写法同构（`{ configurable: { thread_id: "..." } }`）。
 
 #### 示例演示
 
-见上文六段实测：输入形态（①）、输出两个看点（②）、虚拟工具真相（③）、thinking 适配（④）、自我校准与重试（⑤）、多轮记忆（⑥），来源脚本 `playground/05-agent-lab.py`。
+见上文六段实测：输入形态（①）、输出两个看点（②）、虚拟工具真相（③）、thinking 适配（④）、自我校准与重试（⑤）、多轮记忆（⑥），来源脚本 `playground/05-agent-lab.py`（TS 对照：`playground-ts/05-agent-lab.ts`）。
 
 #### 常见误区
 
@@ -339,10 +538,10 @@ structured_response: ProductRating(rating=5, comment='Amazing product, 10/10!')
 #### 🗣️ 行话对照
 
 - **State update / invoke 输入**：一次调用传给 agent 的状态更新——在哪遇到：`invoke({"messages": [...]})`
-- **structured_response**：结构化输出结果字段——在哪遇到：返回值 keys、官方 structured-output 页
-- **ToolStrategy / ProviderStrategy**：结构化输出的两条实现路线（工具调用 / 服务端原生）——在哪遇到：`langchain.agents.structured_output`
+- **structured_response**：结构化输出结果字段（TS 侧 `structuredResponse`）——在哪遇到：返回值 keys、官方 structured-output 页
+- **ToolStrategy / ProviderStrategy**：结构化输出的两条实现路线（工具调用 / 服务端原生）——在哪遇到：`langchain.agents.structured_output`、TS 侧 `toolStrategy` / `providerStrategy`
 - **thread_id / checkpointer**：对话线程号与历史持久化——在哪遇到：`config` 参数、课 7 记忆
-- **handle_errors**：结构化输出的重试策略——在哪遇到：`ToolStrategy(handle_errors=...)`
+- **handle_errors**：结构化输出的重试策略（TS 侧 `handleError`）——在哪遇到：`ToolStrategy(handle_errors=...)`
 
 #### 官方文档
 
@@ -369,18 +568,33 @@ Harness = 循环之外的一切（官方原话：*everything around that loop: t
 
 **① system_prompt：两种形态，一个去处**。形态一：字符串；形态二：`SystemMessage` 对象（需要带附加信息时用）。实测对照（脚本 4a/4b 段）——同一个问题"请介绍一下你自己"，三种配置的行为：
 
-```text
+::: code-group
+
+```text [Python]
 [无提示词]     你好！我是**通义千问**（Qwen），由阿里巴巴集团通义实验室自主研发的大语言模型。……
 [海盗提示词]   俺是纵横七海的海盗船长，宝藏和故事都塞满船舱！有什么风声要报，快快说来，别耽误顺风！
 [SystemMessage] 【学术模式】
                 您好。感谢提问，我将以学术规范的方式对自身进行简要介绍。……
 ```
 
+```text [TypeScript]
+[无提示词]     你好！我是**通义千问**（Qwen），由阿里巴巴集团通义实验室自主研发的大语言模型。
+[海盗提示词]   俺是纵横七海的海盗船长，宝藏和故事都塞满船舱！有什么风声要报，快快说来，别耽误顺风！
+[SystemMessage] 【学术模式】
+                您好。感谢提问，我将以学术规范的方式对自身进行简要介绍。
+```
+
+:::
+
 同一模型、同一问题——提示词换一段，人格换一个。这就是"提示词 → 行为塑形"的直接证据（海盗那条还意外演示了"人设会带口吻、但要它别说太长也会听话"）。注意它的另一个属性：**每次请求系统提示词都会被带上**（课 4"说明书随请求出示"的同一机制）——所以它是"长期人设与规则"，不是一次性指令。需要**按运行时信息动态拼提示词**（比如按用户语言/身份定制）？那属于中间件（`@dynamic_prompt`），课 8 展开。
+
+> 📌 **TypeScript 侧差异（本机实测）**：参数名是 `systemPrompt`，两种形态同构（字符串 / `new SystemMessage(...)`）。
 
 **② 动态选择模型：让"用哪个模型"变成一道运行时判断题**。场景很实在：简单问题用便宜快的，复杂问题调强的；长对话升配、敏感请求降配——官方把这个能力放在 `models` 页的"Dynamic model selection"，形态是一个 `@wrap_model_call` 装饰器包住"换模型"逻辑（本课实测 4c 段，完整可运行）：
 
-```python
+::: code-group
+
+```python [Python]
 from langchain.agents.middleware import ModelRequest, ModelResponse, wrap_model_call
 
 @wrap_model_call
@@ -397,9 +611,32 @@ def dynamic_model_selection(request: ModelRequest, handler) -> ModelResponse:
 agent = create_agent(model=model, tools=[], middleware=[dynamic_model_selection])
 ```
 
+```typescript [TypeScript]
+import { createAgent, createMiddleware } from "langchain";
+
+const dynamicModelSelection = createMiddleware({
+  name: "DynamicModelSelectionMiddleware",
+  wrapModelCall: (request, handler) => {
+    const n = request.messages.length;
+    const [chosen, m] =
+      n > 2
+        ? ["deepseek-v4.1-flash（高级）", modelAdvanced]
+        : ["qwen3.8-flash（基础）", model];
+    console.log(`    [路由] 当前 ${n} 条消息 → 选用 ${chosen}`);
+    return handler({ ...request, model: m });
+  },
+});
+
+const agent = createAgent({ model, tools: [], middleware: [dynamicModelSelection] });
+```
+
+:::
+
 实测输出（同一段对话的两次调用，路由真实发生）：
 
-```text
+::: code-group
+
+```text [Python]
 第一轮（1 条消息）:
     [路由] 当前 1 条消息 → 选用 qwen3.8-flash（基础）
   → 函数是一种将每个输入唯一对应到一个输出的规则或关系。
@@ -408,7 +645,20 @@ agent = create_agent(model=model, tools=[], middleware=[dynamic_model_selection]
   → 举个例子：设函数 \(f(x)=x^2\)。输入 \(2\)，输出 \(4\)：\(f(2)=4\)……
 ```
 
+```text [TypeScript]
+第一轮（1 条消息）:
+    [路由] 当前 1 条消息 → 选用 qwen3.8-flash（基础）
+  → 函数是一种将每个输入唯一对应到一个输出的规则或关系。
+第二轮（携带历史，消息数变多）:
+    [路由] 当前 3 条消息 → 选用 deepseek-v4.1-flash（高级）
+  → 举个例子：设函数 f(x)=x^2。输入 2，输出 4——f(2)=4。
+```
+
+:::
+
 两个要点：`request.state["messages"]` 是**运行时读到的真实状态**（消息数、内容都可以当路由依据）；`request.override(model=...)` 是**官方提供的换模型接口**。至于 `@wrap_model_call` 背后的钩子机制、与其它中间件的组合顺序——那是课 8 的正题，本课只把"用法"跑通：**知道有这道菜、会点，即可**。（预告标注与课 8 分工：课 8 知识点 1 会接住这条线展开。）
+
+> 📌 **TypeScript 侧差异（本机实测 + 官方文档核对）**：① 形态从"装饰器"变为 `createMiddleware({ name, wrapModelCall })` 工厂函数；② 消息列表读的是 `request.messages`（Python 侧 `request.state["messages"]`）；③ **没有** `request.override(...)` 方法（Python 侧有）——TS 侧用展开对象的方式传新请求：`handler({ ...request, model: m })`（官方 Dynamic model selection 示例即此写法）；④ TS 动态模型路由会**真的把请求发到所选模型**——本机实测第二轮的请求实际打到了 `deepseek-v4.1-flash` 的端点。
 
 **③ harness 能力地图**（官方 agents 页把"中间件生态"分成六类能力，本课只画地图，课 8 逐类展开）：
 
@@ -425,7 +675,7 @@ agent = create_agent(model=model, tools=[], middleware=[dynamic_model_selection]
 
 #### 示例演示
 
-见上文实测：提示词三配置对照（①）、动态模型路由两次调用（②），来源脚本 `playground/05-agent-lab.py`；能力地图为官方 agents 页归纳（未实测，属预告性内容）。
+见上文实测：提示词三配置对照（①）、动态模型路由两次调用（②），来源脚本 `playground/05-agent-lab.py`（TS 对照：`playground-ts/05-agent-lab.ts`）；能力地图为官方 agents 页归纳（未实测，属预告性内容）。
 
 #### 常见误区
 
@@ -440,9 +690,9 @@ agent = create_agent(model=model, tools=[], middleware=[dynamic_model_selection]
 
 #### 🗣️ 行话对照
 
-- **system_prompt**：系统提示词（str 或 SystemMessage）——在哪遇到：create_agent 参数、每次请求的消息列表头部
-- **Dynamic model selection**：运行时按规则换模型——在哪遇到：models 官方页、`@wrap_model_call`
-- **wrap_model_call / request.override**：包装模型调用的钩子与换模型接口——在哪遇到：`langchain.agents.middleware`
+- **system_prompt**：系统提示词（str 或 SystemMessage；TS 侧 `systemPrompt`）——在哪遇到：create_agent 参数、每次请求的消息列表头部
+- **Dynamic model selection**：运行时按规则换模型——在哪遇到：models 官方页、`@wrap_model_call`（TS 侧 `wrapModelCall`）
+- **wrap_model_call / request.override**：包装模型调用的钩子与换模型接口（TS 侧用 `{ ...request, model }` 展开实现）——在哪遇到：`langchain.agents.middleware`
 - **harness 能力六类**：执行环境 / 上下文管理 / 规划委派 / 容错 / 护栏 / 引导——在哪遇到：agents 页 "Configure the harness"
 
 #### 官方文档
@@ -454,18 +704,18 @@ agent = create_agent(model=model, tools=[], middleware=[dynamic_model_selection]
 
 ## 第四幕：实操验证
 
-回到第一幕：客服助手要"删掉手写循环、交给引擎"。以下六项验证全部本机跑通（脚本：`playground/05-agent-lab.py`）：
+回到第一幕：客服助手要"删掉手写循环、交给引擎"。以下六项验证全部本机跑通（脚本：`playground/05-agent-lab.py`；TS 对照：`playground-ts/05-agent-lab.ts`）：
 
 1. **引擎拆解**：`agent.get_graph()` 打出两个工作节点（`model` / `tools`）+ 三条条件边——"自动转"的骨架一目了然，没有魔法。
 2. **三站账本**：无工具任务直接答（0 条申请）；查账任务 2 条申请（模型调用 3 次）；多步任务 3 条申请、含并行（一条申请消息里同时装了查单与设提醒）——**转几圈、哪几条并行，由任务与模型现场决定，你无法预编排**。
-3. **终止与刹车**：返回的最后一条 `AIMessage` 的 `tool_calls` 为空列表（终止条件即此）；把预算压到 4，同一任务立刻抛 `GraphRecursionError`（保护真实存在）。
+3. **终止与刹车**：返回的最后一条 `AIMessage` 的 `tool_calls` 为空列表（终止条件即此）；把预算压到 4，同一任务立刻抛 `GraphRecursionError`（保护真实存在；TS 侧默认预算 25，比 Python 侧 9999 薄得多）。
 4. **结构化输出四场景**：thinking 模式被拒（复现报错）→ 关思考后成功拿到 `structured_response` → 模型自我校准（10 → 5）→ 多输出错误被引擎兜住并重试成功。
 5. **harness 配置**：无 / 海盗 / 学术三组提示词对照，同一模型呈现三种人格；动态路由实测两次调用分别命中基础/高级模型。
 6. **多轮记忆**：同一 `thread_id` 第二轮记得"小明/蓝色"（返回历史 4 条）；无 checkpointer 对照如实回答"不知道"。
 
 > ✅ **回扣场景**：第一幕的诉求全部有了着落——"删掉手写循环" = `create_agent(model, tools, system_prompt)` 一行组装；"别让它转飞" = 终止条件 + 预算兜底（实测）；"拿回去给程序用" = `messages` 流水 + `structured_response` 小票。
 >
-> ⚠️ 数值说明：以上为 2026-09-15 本机实测；模型措辞、参数写法、申请节奏均有浮动（站三已观察到三种节奏，属正常）。
+> ⚠️ 数值说明：以上为 2026-09-15 本机实测；模型措辞、参数写法、申请节奏均有浮动（站三已观察到三种节奏，属正常）。TypeScript 侧输出由 `playground-ts/05-agent-lab.ts` 在本地 OpenAI 兼容 mock 端点上运行采集。
 
 **应用实战（4.2）**：把本课知识点组装成一条「让 agent 跑得可控、结果可接」的演进路线——独立成册：
 
@@ -506,6 +756,7 @@ agent = create_agent(model=model, tools=[], middleware=[dynamic_model_selection]
 | "结构化输出 = 让模型输出 JSON 再解析" | 是"虚拟工具调用 + 校验 + 失败重试"；失败会变成错误回执让模型修正（实测） | structured-output 页 + 实测 3d |
 | "只要模型支持工具调用，结构化输出就能用" | 还要服务端接受强制工具选择；thinking 模式（百炼 qwen 默认 / DeepSeek 官方链路）实测被拒 | 实测 3a |
 | "多轮记忆开箱即有" | 需要 `checkpointer` + 同一 `thread_id`；不配就是无记忆（实测对照） | runtime 页 + 实测 4d |
+| "TS 与 Python 只是语法不同，行为一致" | 骨架一致但细节有分岔：默认预算（9999 vs 25）、结构化输出错误回执条数、虚拟工具默认名、`request.override` 有无等（本课均实测） | 本课 TS 侧实测 + 源码核对 |
 
 ## 一图总结
 

@@ -102,19 +102,39 @@ flowchart LR
 
 三种构造写法，实测（同一模型、同一环境）：
 
-```python
+::: code-group
+
+```python [Python]
 model.invoke("用一句话向我问好。")                                   # 字符串快捷
 model.invoke([SystemMessage("..."), HumanMessage("...")])            # 消息对象列表
 model.invoke([{"role": "system", "content": "..."}, {"role": "user", ...}])  # 字典（OpenAI 风格）
 ```
 
+```typescript [TypeScript]
+await model.invoke("用一句话向我问好。");                                  // 字符串快捷
+await model.invoke([new SystemMessage("..."), new HumanMessage("...")]);   // 消息对象列表
+await model.invoke([{ role: "system", content: "..." }, { role: "user", content: "..." }]); // 字典（OpenAI 风格）
+```
+
+:::
+
 实测输出：
 
-```text
+::: code-group
+
+```text [Python]
 1a. 返回类型: AIMessage | 内容: 你好，很高兴见到你，祝你今天一切顺利！
 1b. 返回类型: AIMessage | 内容: 好雨知时节，当春乃发生。
 1c. 返回类型: AIMessage | 内容: 荷风送香气，竹露滴清响。
 ```
+
+```text [TypeScript]
+1a. 返回类型: AIMessage | 内容: 你好，很高兴见到你，祝你今天一切顺利！
+1b. 返回类型: AIMessage | 内容: 好雨知时节，当春乃发生。
+1c. 返回类型: AIMessage | 内容: 荷风送香气，竹露滴清响。
+```
+
+:::
 
 三种写法都拿到 `AIMessage`——入口处自动归一（细节在知识点 4）。官方建议：单次、独立的请求用字符串快捷；多轮、多模态、要带系统设定时用消息列表。
 
@@ -182,7 +202,9 @@ sequenceDiagram
 
 **③ AI 消息上的"调用请求"长什么样**（实测）：
 
-```python
+::: code-group
+
+```python [Python]
 AIMessage(
     content="",
     tool_calls=[{"name": "get_weather", "args": {"city": "北京"}, "id": "call_demo_1"}],
@@ -190,6 +212,16 @@ AIMessage(
 # 实际存储时自动补全了类型标记：
 # [{'name': 'get_weather', 'args': {'city': '北京'}, 'id': 'call_demo_1', 'type': 'tool_call'}]
 ```
+
+```typescript [TypeScript]
+new AIMessage({
+  content: "",
+  tool_calls: [{ name: "get_weather", args: { city: "北京" }, id: "call_demo_1" }],
+});
+// 读取 tool_calls 时同样是 [{ name, args, id }] 结构（TypeScript 侧不带 type 字段）
+```
+
+:::
 
 注意三个字段：`name`（调哪个工具）、`args`（参数）、`id`（对号）。还有第四个事实：**content 是空的**——这一轮模型什么都没"说"，它只提出了请求。
 
@@ -211,13 +243,25 @@ AIMessage(
 
 真实链路捕获（本机实测，脚本见第四幕）：
 
-```text
+::: code-group
+
+```text [Python]
 第 1 轮 AI 消息: content=''
   tool_calls: name='get_weather' | args={'city': '北京'} | id='call_80ab0a311a5d4041953a4dcb'
 该消息的 content_blocks: [{'type': 'tool_call', 'name': 'get_weather', 'args': {'city': '北京'}, 'id': 'call_80ab0a311a5d4041953a4dcb'}]
 Tool 消息: content='北京：晴，26℃，微风。' | tool_call_id='call_80ab0a311a5d4041953a4dcb'
 第 2 轮 AI 消息: 北京今天天气：晴，气温26℃，微风。
 ```
+
+```text [TypeScript]
+第 1 轮 AI 消息: content = ""
+  tool_calls: [{"name":"get_weather","args":{"city":"北京"},"id":"call_80ab0a311a5d4041953a4dcb"}]
+该消息的 contentBlocks: [{"type":"text","text":""},{"type":"tool_call","id":"call_80ab0a311a5d4041953a4dcb","name":"get_weather","args":{"city":"北京"}}]
+Tool 消息: content = "北京：晴，26℃，微风。" | tool_call_id = call_80ab0a311a5d4041953a4dcb
+第 2 轮 AI 消息: 北京今天天气：晴，气温26℃，微风。
+```
+
+:::
 
 四个观察点：① 请求 id 是模型生成的真实编号；② 请求在 `content_blocks` 里同样有标准化表达（`tool_call` 块）；③ Tool 回执报的是同一个 id；④ 第 2 轮 AI 消息才是给用户的答复。
 
@@ -291,7 +335,9 @@ flowchart LR
 
 **发一张图片**（标准格式构造，本机实测）：
 
-```python
+::: code-group
+
+```python [Python]
 msg = HumanMessage(content_blocks=[
     {"type": "text", "text": "这张图是什么颜色？只回答颜色名。"},
     {"type": "image", "base64": "<132 个字符的 base64>", "mime_type": "image/png"},
@@ -299,17 +345,42 @@ msg = HumanMessage(content_blocks=[
 resp = model.invoke([msg])
 ```
 
+```typescript [TypeScript]
+const msg = new HumanMessage({
+  content: [
+    { type: "text", text: "这张图是什么颜色？只回答颜色名。" },
+    { type: "image", source_type: "base64", mime_type: "image/png", data: "<132 个字符的 base64>" },
+  ],
+});
+const resp = await model.invoke([msg]);
+```
+
+:::
+
 实测输出：
 
-```text
+::: code-group
+
+```text [Python]
 构造后的 .content 与 .content_blocks 均包含 text + image 两块（当前版本构造侧直接保留标准格式）
 模型回答: '红色'
 响应的 content_blocks: [{'type': 'text', 'text': '红色'}]
 ```
 
+```text [TypeScript]
+构造后的 content 块类型: ["text","image"]
+构造后的 contentBlocks 块类型: ["text","image"]
+模型回答: "红色"
+响应的 contentBlocks: [{"type":"text","text":"红色"}]
+```
+
+:::
+
 **懒解析演示**（离线，无需 API）：
 
-```python
+::: code-group
+
+```python [Python]
 message = AIMessage(
     content=[{"type": "thinking", "thinking": "先想一下……", "signature": "sig_demo"},
              {"type": "text", "text": "最终回答"}],
@@ -317,14 +388,35 @@ message = AIMessage(
 )
 ```
 
+```typescript [TypeScript]
+const message = new AIMessage({
+  content: [
+    { type: "thinking", thinking: "先想一下……", signature: "sig_demo" },
+    { type: "text", text: "最终回答" },
+  ],
+  response_metadata: { model_provider: "anthropic" },
+});
+```
+
+:::
+
 实测输出：
 
-```text
+::: code-group
+
+```text [Python]
 content 原样类型: ['thinking', 'text']
 content_blocks 标准化: [{'type': 'reasoning', 'reasoning': '先想一下……', 'extras': {'signature': 'sig_demo'}}, {'type': 'text', 'text': '最终回答'}]
 ```
 
-一个 `thinking` 方言块，被翻译成了标准的 `reasoning` 块，附加签名也原样收进 `extras`。
+```text [TypeScript]
+content 原样类型: ["thinking","text"]
+contentBlocks 标准化: [{"type":"reasoning","reasoning":"先想一下……","signature":"sig_demo"},{"type":"text","text":"最终回答"}]
+```
+
+:::
+
+一个 `thinking` 方言块，被翻译成了标准的 `reasoning` 块，附加签名也原样收进（Python 侧 `extras`，TS 侧同名顶层字段）——两边读取代码从此统一。
 
 #### 常见误区
 
@@ -380,9 +472,18 @@ content_blocks 标准化: [{'type': 'reasoning', 'reasoning': '先想一下…�
 
 拼错角色名会得到一条很有用的报错（实测原文）：
 
-```text
+::: code-group
+
+```text [Python]
 ValueError: Unexpected message type: 'foo'. Use one of 'human', 'user', 'ai', 'assistant', 'function', 'tool', 'system', or 'developer'.
 ```
+
+```text [TypeScript]
+Error: Unable to coerce message from array: only human, AI, system, developer, or tool
+       message coercion is currently supported.
+```
+
+:::
 
 **② 序列化往返**：
 
@@ -401,19 +502,37 @@ flowchart LR
 
 **字典写法实测**（旧别名仍兼容）：
 
-```text
+::: code-group
+
+```text [Python]
 role='human'  -> 未报错 | 回答: 你好！很高兴见到你 😊 有什么我可以帮你的吗？
 ```
 
+```text [TypeScript]
+role='human'  -> 未报错 | 转换类型: HumanMessage
+```
+
+:::
+
 **序列化往返实测**：
 
-```text
+::: code-group
+
+```text [Python]
 dumpd(HumanMessage) 前 200 字符: {'lc': 1, 'type': 'constructor', 'id': ['langchain', 'schema', 'messages', 'HumanMessage'], 'kwargs': {'content': '北京今天天气怎么样？', 'type': 'human'}}
 load 恢复: HumanMessage | content='北京今天天气怎么样？'
 AI 消息恢复后 tool_calls 保留: [{'name': 'get_weather', 'args': {'city': '北京'}, 'id': 'call_80ab0a311a5d4041953a4dcb', 'type': 'tool_call'}]
 ```
 
-含工具调用的 AI 消息也完整往返——这就是"对话历史持久化"的地基（课 7 记忆会直接用到）。
+```text [TypeScript]
+toJSON(HumanMessage) 前 200 字符: {"lc":1,"type":"constructor","id":["langchain_core","messages","HumanMessage"],"kwargs":{"content":"北京今天天气怎么样？","additional_kwargs":{},"response_metadata":{}}}
+load 恢复: HumanMessage | content = "北京今天天气怎么样？"
+AI 消息恢复后 tool_calls 保留: [{"name":"get_weather","args":{"city":"北京"},"id":"call_80ab0a311a5d4041953a4dcb"}]
+```
+
+:::
+
+含工具调用的 AI 消息也完整往返——这就是"对话历史持久化"的地基（课 7 记忆会直接用到）。序列化 API 对照：Python `dumpd()` / `load()`（`langchain_core`）↔ TypeScript `message.toJSON()` / `load()`（`@langchain/core/load`）。
 
 #### 常见误区
 
@@ -444,11 +563,21 @@ AI 消息恢复后 tool_calls 保留: [{'name': 'get_weather', 'args': {'city': 
 
 **验证一：无状态对照实验（"记忆"的真相）**
 
-```text
+::: code-group
+
+```text [Python]
 第 1 轮（告知幸运数字）: '好的'
 第 2 轮（不携带历史）: '我没法真正知道你的幸运数字，不过我可以给你一个今天的小幸运数字：**7**...'
 第 2 轮（携带历史）: '您的幸运数字是 **42**。'
 ```
+
+```text [TypeScript]
+第 1 轮（告知幸运数字）: "好的"
+第 2 轮（不携带历史）: "我没法真正知道你的幸运数字，不过我可以给你一个今天的小幸运数字：**7**。"
+第 2 轮（携带历史）: "您的幸运数字是 **42**。"
+```
+
+:::
 
 同一个问题、同一个模型，唯一的差别是第二个请求里**带没带上第 1 轮的消息**。这就是"多轮对话"的全部秘密。
 
@@ -456,16 +585,26 @@ AI 消息恢复后 tool_calls 保留: [{'name': 'get_weather', 'args': {'city': 
 
 **验证三（慎学）：配对实验**——故意把回执的 id 写错、故意缺失回执：
 
-```text
+::: code-group
+
+```text [Python]
 [B 错配 id] 未报错 | 回答: '北京今天天气为 **晴**。☀️ ...'（模型把错配回执当成了结果）
 [C 缺回执] 未报错 | 回答为空（另一次实测为"我正在为您查询北京今天的天气情况，请稍候。"）
 ```
+
+```text [TypeScript]
+AI 请求的 id: "call_80ab0a311a5d4041953a4dcb"
+[B 错配 id] 未报错 | 回答: "北京今天天气为 **晴**。☀️"（模型把错配回执当成了结果）
+[C 缺回执] 未报错 | 回答为空
+```
+
+:::
 
 两次都**不报错**——但结果没有一次可信（"晴"来自一条接错线的回执；缺回执时模型只能空转或憋话）。结论：**消息链路的正确性靠你保证，运行时报错不会替你兜底。**
 
 > ✅ **回扣场景**：第一幕的两个需求都有了着落——"接着聊"= 把历史消息一起递回（而不是指望模型记住）；"发图看图"= 一条带 `image` 块的消息；换平台重写的事也不再发生——三种写法归一、内容块标准视图让读取代码与平台解耦。
 >
-> ⚠️ 数值说明：以上均为 2026-09-15 本机单次实测；模型措辞会随运行浮动，id 每次不同属正常。
+> ⚠️ 数值说明：以上均为 2026-09-15 本机单次实测；模型措辞会随运行浮动，id 每次不同属正常。TypeScript 侧输出由 `playground-ts/03-messages-lab.ts` / `03-messages-lab2.ts` 在本地 OpenAI 兼容 mock 端点上运行采集（脚本与输出结构一致，措辞随运行浮动）。
 
 **应用实战（4.2）**：把本课知识点组装成一条「会话历史落库与回放」的演进路线——独立成册：
 

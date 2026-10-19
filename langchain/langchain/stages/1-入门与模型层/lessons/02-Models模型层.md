@@ -96,7 +96,9 @@ flowchart TD
 
 #### 示例演示
 
-```python
+::: code-group
+
+```python [Python]
 from langchain.chat_models import init_chat_model
 from langchain_openai import ChatOpenAI
 
@@ -110,14 +112,44 @@ model_b = ChatOpenAI(model="qwen3.8-flash", api_key=API_KEY, base_url=BASE_URL)
 print(type(model_a).__name__, "/", type(model_b).__name__)
 ```
 
+```typescript [TypeScript]
+import { initChatModel } from "langchain";
+import { ChatOpenAI } from "@langchain/openai";
+
+const modelA = await initChatModel("qwen3.8-flash", {
+  modelProvider: "openai",
+  apiKey: API_KEY,
+  baseUrl: BASE_URL,
+});
+const modelB = new ChatOpenAI({
+  model: "qwen3.8-flash",
+  apiKey: API_KEY,
+  configuration: { baseURL: BASE_URL },
+});
+console.log(modelA.constructor.name, "/", modelB.constructor.name);
+```
+
+:::
+
 实测输出：
 
-```text
+::: code-group
+
+```text [Python]
 init_chat_model 返回类型: ChatOpenAI
 Model Class  返回类型: ChatOpenAI
 ```
 
-两条路，同一个终点——记住这个事实，下一条"接入任意平台"就不会有心理负担。
+```text [TypeScript]
+initChatModel 返回类型: ConfigurableModel
+Model Class  返回类型: ChatOpenAI
+```
+
+:::
+
+Python 侧两条路同一个终点（都是 `ChatOpenAI`）；TypeScript 侧有一个差异要留意：`initChatModel` 返回的是可配置包装对象 `ConfigurableModel`（懒实例化，调用时才确定具体模型类），而 `ChatOpenAI` 直拨仍是 `ChatOpenAI`——用起来无差别（都支持 `invoke` / `stream`），只是类型打印不同。
+
+两条路，同一个能力终点——记住这个事实，下一条"接入任意平台"就不会有心理负担。
 
 #### 常见误区
 
@@ -187,7 +219,9 @@ flowchart LR
 
 再看一层：这些异常和你从文档里看到的 LangChain 标准异常类是什么关系？实测打印异常的继承链：
 
-```text
+::: code-group
+
+```text [Python]
 实际异常类型: OpenAIAuthenticationError
 MRO: OpenAIAuthenticationError -> AuthenticationError -> APIStatusError -> APIError
      -> OpenAIError -> ModelAuthenticationError -> ModelError -> LangChainException -> Exception
@@ -195,7 +229,19 @@ MRO: OpenAIAuthenticationError -> AuthenticationError -> APIStatusError -> APIEr
 isinstance(e, ModelAuthenticationError): True
 ```
 
+```text [TypeScript]
+实际异常类型: AuthenticationError
+原型链: AuthenticationError -> APIError -> OpenAIError -> Error
+status: 401
+lc_error_code: MODEL_AUTHENTICATION
+getRetryable(e): false
+```
+
+:::
+
 **双重继承**：它既是 OpenAI SDK 的异常（`OpenAIAuthenticationError`），又是 LangChain 的标准异常（`ModelAuthenticationError`）——所以你 `except` 哪一个都能接住。LangChain 定义了九种标准异常（认证 / 权限 / 请求无效 / 模型不存在 / 限流 / API 错误 / 连接 / 超时 / 上下文超限），每种都带 `is_retryable` 属性，与官方的自动重试策略一致。
+
+**TypeScript 侧机制不同**：错误保留 OpenAI SDK 的类（401 → `AuthenticationError`、404 → `NotFoundError`、连接失败 → `APIConnectionError`），LangChain 不改类，而是打上 `lc_error_code` 标记（如 `MODEL_AUTHENTICATION`）；能否重试用 `getRetryable(e)` 函数读取（`true` / `false` / `undefined`）——401 / 404 不重试、限流与 5xx 自动重试的总体策略与 Python 侧一致。
 
 #### 常见误区
 
@@ -270,6 +316,8 @@ flowchart LR
 - 调用时：`model.invoke("...", temperature=0)`（覆盖本次调用）
 - 常用参数：`model`、`api_key`、`temperature`（随机性：低=更稳定、高=更发散）、`max_tokens`（输出上限）、`timeout`、`max_retries`。
 
+> 📌 **TypeScript 侧差异（本机实测）**：调用时覆盖参数要**显式声明**——初始化时加 `configurableFields: ["temperature"]`，调用时传 `{ configurable: { temperature: 0 } }` 才会写进请求；直接传 `{ temperature: 0 }` 会被忽略（请求体里不会出现）。也可以走 Model Class 的初始化参数，或 `modelKwargs` 固定注入。
+
 **max_tokens 的坑（推理模型专属，本课实测重头戏）**：
 
 同一个长文请求（"请用尽可能长的篇幅介绍杭州"），只改 `max_tokens`，输出居然**全是空白**：
@@ -285,19 +333,44 @@ flowchart LR
 
 #### 示例演示
 
-```python
+::: code-group
+
+```python [Python]
 resp = model.invoke("用一句话解释什么是内存泄漏。")
 print(resp.content)
 print(resp.usage_metadata)
 ```
 
+```typescript [TypeScript]
+const resp = await model.invoke("用一句话解释什么是内存泄漏。");
+console.log(resp.text);
+console.log(resp.usage_metadata);
+```
+
+:::
+
 实测输出：
 
-```text
+::: code-group
+
+```text [Python]
 内容: 内存泄漏是指程序不再使用的内存没有被释放，导致可用内存逐渐被占用，最终可能变慢或崩溃。
 usage_metadata: {'input_tokens': 68, 'output_tokens': 43, 'total_tokens': 111,
                   'output_token_details': {'reasoning': 16}}
 ```
+
+```text [TypeScript]
+内容: 内存泄漏是指程序不再使用的内存没有被释放，导致可用内存逐渐被占用，最终可能变慢或崩溃。
+usage_metadata: {
+  output_tokens: 43,
+  input_tokens: 68,
+  total_tokens: 111,
+  input_token_details: { audio: undefined, cache_read: undefined },
+  output_token_details: { audio: undefined, reasoning: 16 }
+}
+```
+
+:::
 
 `usage_metadata` 就是"账单明细"：输入 68 + 输出 43 = 总计 111，其中输出里 16 个是推理消耗——后面算成本、做对比全靠它。
 
@@ -358,10 +431,21 @@ usage_metadata: {'input_tokens': 68, 'output_tokens': 43, 'total_tokens': 111,
 
 两个模型都没有 profile——因为它们不在 models.dev 的收录范围内。官方给了**手动覆写**的口子，实测生效：
 
-```python
+::: code-group
+
+```python [Python]
 custom = init_chat_model(..., profile={"max_input_tokens": 100_000, "tool_calling": True})
 print(custom.profile)   # {'max_input_tokens': 100000, 'tool_calling': True}
 ```
+
+```typescript [TypeScript]
+const custom = await initChatModel("...", {
+  profile: { maxInputTokens: 100_000, toolCalling: true },
+});
+console.log(custom.profile);   // { maxInputTokens: 100000, toolCalling: true }
+```
+
+:::
 
 profile 是 beta 特性（官方注明格式可能变化），但"查不到就自己写一份"的用法是稳的。
 
@@ -406,11 +490,21 @@ graph TD
 
 #### 示例演示
 
-```python
+::: code-group
+
+```python [Python]
 print(model.profile)                      # None（本课实测）
 print([b["type"] for b in resp.content_blocks])  # ['text']
 print(resp.usage_metadata["output_token_details"])  # {'reasoning': 126}
 ```
+
+```typescript [TypeScript]
+console.log(model.profile);                       // {}（本课实测：空对象）
+console.log(resp.contentBlocks.map((b) => b.type)); // [ 'text' ]
+console.log(resp.usage_metadata.output_token_details); // { audio: undefined, reasoning: 126 }
+```
+
+:::
 
 三行输出，三个事实：档案未必有、推理未必露脸、但账单一定如实。
 
@@ -444,7 +538,9 @@ print(resp.usage_metadata["output_token_details"])  # {'reasoning': 126}
 
 回到第一幕的场景：模型选型月，你要出**"同一份代码、两个平台"的对比报告**。整合本课四个知识点——统一初始化（K1）、双平台接入（K2）、batch 并发 + 账单统计（K3）、token 用量洞察（K4）：
 
-```python
+::: code-group
+
+```python [Python]
 PLATFORMS = {
     "阿里云百炼 / qwen3.8-flash": dict(model="qwen3.8-flash", api_key=..., base_url=...),
     "DeepSeek / deepseek-flash": dict(model="deepseek-flash", api_key=..., base_url=...),
@@ -457,9 +553,29 @@ for name, cfg in PLATFORMS.items():          # 同一份循环，接两个平台
     ...
 ```
 
-实测输出（完整脚本见 `playground/compare-models.py`）：
+```typescript [TypeScript]
+const PLATFORMS: Record<string, Record<string, unknown>> = {
+  "阿里云百炼 / qwen3.8-flash": { model: "qwen3.8-flash", apiKey: ..., baseUrl: ... },
+  "DeepSeek / deepseek-flash": { model: "deepseek-flash", apiKey: ..., baseUrl: ... },
+};
 
-```text
+for (const [name, cfg] of Object.entries(PLATFORMS)) {   // 同一份循环，接两个平台
+  const { model: modelName, ...rest } = cfg;
+  const model = await initChatModel(String(modelName), { modelProvider: "openai", ...rest });
+  const results = await model.batch(QUESTIONS);           // 并发三条
+  // 账单统计：TS 侧没有 get_usage_metadata_callback 对应物，逐条累加 usage_metadata
+  const bill = results.reduce((acc, r) => { /* 累加 input/output/total/reasoning */ }, {...});
+  ...
+}
+```
+
+:::
+
+实测输出（完整脚本见 `playground/compare-models.py`，TS 对照脚本见 `playground-ts/compare-models.ts`）：
+
+::: code-group
+
+```text [Python]
 ===== 阿里云百炼 / qwen3.8-flash =====
 3 条并发耗时: 2.99s
   token 账单: {'total_tokens': 427, 'output_tokens': 227, 'reasoning': 135, 'input_tokens': 200}
@@ -469,9 +585,21 @@ for name, cfg in PLATFORMS.items():          # 同一份循环，接两个平台
   token 账单: {'total_tokens': 645, 'output_tokens': 538, 'reasoning': 447, 'input_tokens': 107}
 ```
 
+```text [TypeScript]
+===== 阿里云百炼 / qwen3.8-flash =====
+3 条并发耗时: 2.93s
+  token 账单: {"total_tokens":424,"output_tokens":236,"reasoning":128,"input_tokens":188}
+
+===== DeepSeek / deepseek-flash =====
+3 条并发耗时: 2.21s
+  token 账单: {"total_tokens":649,"output_tokens":548,"reasoning":458,"input_tokens":101}
+```
+
+:::
+
 > ✅ **回扣场景**：第一幕的"两套 SDK、两套错误处理"消失了——接入两家平台只差一段配置；第一幕的空白输出也真相大白（推理吃掉了 token 预算）。选型报告需要的"速度 + 账单"两项数据，一个脚本全出。真实选型还会看回答质量与更多样本——但骨架已经立住：**改配置换平台、batch 并发、callback 记账**。
 
-> ⚠️ 数值说明：单次运行数据（2026-09-15 本机），耗时与 token 随网络和内容而浮动；横向比较时建议同一批次运行取数。
+> ⚠️ 数值说明：单次运行数据（2026-09-15 本机），耗时与 token 随网络和内容而浮动；横向比较时建议同一批次运行取数。TypeScript 侧输出由 `playground-ts/compare-models.ts` 在本地 OpenAI 兼容 mock 端点上运行采集（脚本与输出结构一致，数值随运行浮动）。
 
 **应用实战（4.2）**：把本课知识点组装成一条「模型接入主备保险」的演进路线——独立成册：
 

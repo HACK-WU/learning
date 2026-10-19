@@ -102,7 +102,9 @@
 
 **② 一次真实调用，钩子触发顺序**——本机实测（脚本 1a 段，一个带工具的完整调用）：
 
-```text
+::: code-group
+
+```text [Python]
 【钩子】before_agent（每次调用一次）
 【钩子】before_model（第 1 条消息已就位）
 【钩子】wrap_model_call 进入 →（调用内层/模型）
@@ -117,11 +119,30 @@
 【钩子】after_agent（agent 结束）
 ```
 
-读法：`before_agent` 开局一次；进入循环后每一圈是「before_model →（模型）→ after_model」；模型申请工具时插入「wrap_tool_call →（工具）→ wrap_tool_call 返回」；工具结果回来再转一圈；最终以 `after_agent` 收尾。**钩子的位置，就是你能插手的位置**。
+```text [TypeScript]
+  【钩子】before_agent（每次调用一次）
+  【钩子】before_model（第 1 条消息已就位）
+  【钩子】wrap_model_call 进入 →（调用内层/模型）
+  【钩子】wrap_model_call 返回
+  【钩子】after_model（模型刚返回）
+  【钩子】wrap_tool_call 进入 → 即将执行工具 calculator
+  【钩子】wrap_tool_call 返回 ← 工具 calculator 完成
+  【钩子】before_model（第 3 条消息已就位）
+  【钩子】wrap_model_call 进入 →（调用内层/模型）
+  【钩子】wrap_model_call 返回
+  【钩子】after_model（模型刚返回）
+  【钩子】after_agent（agent 结束）
+```
 
-**③ 声明方式：装饰器式与类式两种写法**——装饰器式（适合单个钩子）：
+:::
 
-```python
+两侧触发顺序完全一致（六钩子的挂载位置是引擎架构，与语言无关）。读法：`before_agent` 开局一次；进入循环后每一圈是「before_model →（模型）→ after_model」；模型申请工具时插入「wrap_tool_call →（工具）→ wrap_tool_call 返回」；工具结果回来再转一圈；最终以 `after_agent` 收尾。**钩子的位置，就是你能插手的位置**。
+
+**③ 声明方式：Python 装饰器式/类式，TS 一律 `createMiddleware` 工厂**——Python 装饰器式（适合单个钩子）：
+
+::: code-group
+
+```python [Python]
 from langchain.agents.middleware import before_model, after_model, AgentState
 from langgraph.runtime import Runtime
 from typing import Any
@@ -137,9 +158,30 @@ def log_response(state: AgentState, runtime: Runtime) -> dict[str, Any] | None:
     return None
 ```
 
-类式（适合多个钩子/需要配置，本课实测的钩子全景就是这么写的）：
+```typescript [TypeScript]
+import { createMiddleware } from "langchain";
 
-```python
+const loggingMiddleware = createMiddleware({
+  name: "LoggingMiddleware",
+  beforeModel: (state) => {
+    console.log(`About to call model with ${state.messages.length} messages`);
+    return;
+  },
+  afterModel: (state) => {
+    const lastMessage = state.messages[state.messages.length - 1];
+    console.log(`Model returned: ${lastMessage.content}`);
+    return;
+  },
+});
+```
+
+:::
+
+Python 类式（适合多个钩子/需要配置，本课实测的钩子全景就是这么写的）：
+
+::: code-group
+
+```python [Python]
 from langchain.agents.middleware import AgentMiddleware
 
 class HookTourMiddleware(AgentMiddleware):
@@ -155,25 +197,58 @@ class HookTourMiddleware(AgentMiddleware):
     # ... 其余钩子同理
 ```
 
-两种写法效果等价；装饰器速写、类式组织。**中间件类还可以声明三个"编译期属性"**：`state_schema`（扩展 agent 状态）、`tools`（顺带注册工具，如待办清单的 `write_todos`）、`transformers`（注册流式转换器）。
+```typescript [TypeScript]
+import { createMiddleware } from "langchain";
 
-**④ 钩子运行在编译后的图里，不是另一个运行时**——官方原话："Middleware is not a separate runtime: hooks run inside the compiled LangGraph that `create_agent` returns"。本机实测（结构核验，无模型调用）——给 agent 挂一个 `TodoListMiddleware` 后，编译图的节点列表：
+const hookTourMiddleware = createMiddleware({
+  name: "HookTourMiddleware",
+  beforeAgent: () => {
+    console.log("before_agent");
+  },
+  beforeModel: () => {
+    console.log("before_model");
+  },
+  wrapModelCall: async (request, handler) => {
+    const response = await handler(request);
+    return response;
+  },
+  // ... 其余钩子同理
+});
+```
 
-```text
+:::
+
+📌 **TS 差异**：TS 侧没有装饰器，也无需 `AgentMiddleware` 子类——无论单钩子还是多钩子，统一用 `createMiddleware({ name, ...钩子 })` 工厂函数；`name` 是必填项（Python 类式则默认取类名）。"编译期属性"在 TS 侧对应 `stateSchema` / `tools` / `streamTransformers` 三个配置字段。
+
+两种写法效果等价；装饰器速写、类式组织。**中间件类还可以声明三个"编译期属性"**：`state_schema`（扩展 agent 状态）、`tools`（顺带注册工具，如待办清单的 `write_todos`）、`transformers`（注册流式转换器；TS 侧为 `streamTransformers`，需 langchain>=1.4.3）。
+
+**④ 钩子运行在编译后的图里，不是另一个运行时**——官方原话："Middleware is not a separate runtime: hooks run inside the compiled LangGraph that `create_agent` returns"。本机实测（结构核验，无模型调用）——给 agent 挂一个待办清单中间件后，编译图的节点列表：
+
+::: code-group
+
+```text [Python]
 图节点: ['__start__', 'model', 'tools', 'TodoListMiddleware.after_model', '__end__']
 ```
 
-中间件的钩子**以节点形态出现在同一张图里**——所以你能把整个 agent（连同全部中间件）当积木放进更大的工作流，钩子照样生效。同时实测：`TodoListMiddleware().tools` 注册的工具名为 `['write_todos']`——"中间件顺带注册工具"的机制眼见为实。
+```text [TypeScript]
+图节点: ["__start__","todoListMiddleware.after_model","model_request","tools","__end__"]
+```
+
+:::
+
+中间件的钩子**以节点形态出现在同一张图里**——所以你能把整个 agent（连同全部中间件）当积木放进更大的工作流，钩子照样生效。同时实测：`TodoListMiddleware().tools`（TS 侧 `todoListMiddleware().tools`）注册的工具名均为 `['write_todos']`——"中间件顺带注册工具"的机制眼见为实。
+
+📌 **TS 差异**：两处节点名与顺序不同——TS 的模型节点叫 `model_request`（Python 为 `model`，课 5 已见），中间件节点名取 `name` 字段（小写驼峰 `todoListMiddleware.after_model`，Python 取类名 `TodoListMiddleware.after_model`）。
 
 #### 示例演示
 
-见上文实测：钩子触发顺序（②）、图节点（④），来源脚本 `playground/08-middleware-lab.py`（1a 段）与结构核验（无模型调用）。
+见上文实测：钩子触发顺序（②）、图节点（④），来源脚本 `playground/08-middleware-lab.py`（1a 段）与结构核验（无模型调用）；TS 侧证据见 `playground-ts/08-middleware-lab.ts`（1a/1b 段）。
 
 #### 常见误区
 
 1. **以为"包在 agent 外面"就行**：外面包一层够不着循环内部——每次模型调用、每次工具调用都在循环里，必须走钩子（本课六钩子全部"进"循环）。
 2. **以为中间件是旁路外挂**：钩子运行在同一条编译图里（实测图节点可见）；它不能凭空改变引擎，只能在你声明它的位置插手。
-3. **以为必须先学类式写法**：单个钩子用装饰器一行搞定；需要多钩子协同或配置参数时再升级到类式。
+3. **以为必须先学类式写法**：Python 侧单个钩子用装饰器一行搞定，需要多钩子协同或配置参数时再升级到类式；TS 侧统一 `createMiddleware` 工厂，无装饰器/子类之分。
 
 #### 一句话记住
 
@@ -181,17 +256,19 @@ class HookTourMiddleware(AgentMiddleware):
 
 #### 🗣️ 行话对照
 
-- **middleware（中间件）**：循环上的钩子集合——在哪遇到：`create_agent(middleware=[...])`
-- **节点式钩子（node-style hooks）**：before/after agent、before/after model——在哪遇到：装饰器或类方法
-- **包裹式钩子（wrap-style hooks）**：wrap_model_call / wrap_tool_call——在哪遇到：`request` + `handler` 两个参数
+- **middleware（中间件）**：循环上的钩子集合——在哪遇到：`create_agent(middleware=[...])`（TS 侧 `createAgent({ middleware: [...] })`）
+- **节点式钩子（node-style hooks）**：before/after agent、before/after model——在哪遇到：装饰器或类方法（TS 侧为 `createMiddleware` 配置字段：`beforeAgent` / `beforeModel` / `afterModel` / `afterAgent`）
+- **包裹式钩子（wrap-style hooks）**：wrap_model_call / wrap_tool_call——在哪遇到：`request` + `handler` 两个参数（两侧同构；TS 侧为 `wrapModelCall` / `wrapToolCall`）
 - **handler**：包裹钩子里的"下一步调用入口"——在哪遇到：`handler(request)`；调几次由你定
-- **state_schema / tools / transformers**：中间件类的三个编译期属性——在哪遇到：`AgentMiddleware` 子类
-- **@dynamic_prompt**：动态系统提示词装饰器——在哪遇到：`langchain.agents.middleware`
+- **state_schema / tools / transformers**：中间件类的三个编译期属性——在哪遇到：`AgentMiddleware` 子类（TS 侧为 `createMiddleware({ stateSchema, tools, streamTransformers })`）
+- **@dynamic_prompt**：动态系统提示词装饰器——在哪遇到：`langchain.agents.middleware`（TS 侧为 `dynamicSystemPromptMiddleware` 工厂）
 
 #### 官方文档
 
 - [Middleware overview（六钩子、图内运行、组合）](https://docs.langchain.com/oss/python/langchain/middleware/overview)
 - [Custom middleware（写法、state、执行顺序、jump）](https://docs.langchain.com/oss/python/langchain/middleware/custom)
+- [Middleware overview（TS 版，六钩子）](https://docs.langchain.com/oss/javascript/langchain/middleware/overview)
+- [Custom middleware（TS 版，createMiddleware / 执行顺序 / jump）](https://docs.langchain.com/oss/javascript/langchain/middleware/custom)
 
 ---
 
@@ -213,35 +290,39 @@ class HookTourMiddleware(AgentMiddleware):
 
 **① 全景表：五组 19 个**（官方 built-in 页；与课 5 六类地图的对应关系一并在括号里）：
 
-| 组 | 中间件 | 一句话 | 对应课 5 地图 |
-|----|--------|--------|---------------|
-| 容错 | Tool error | 工具异常转为错误消息，模型可自愈 | 容错 |
-| 容错 | Tool retry | 工具失败自动重试（指数退避） | 容错 |
-| 容错 | Model retry | 模型调用失败自动重试 | 容错 |
-| 容错 | Model fallback | 主模型失联自动降级到备用模型 | 容错 |
-| 上下文 | Summarization | 超阈值压缩历史（课 7 已实测，本课归位） | 上下文管理 |
-| 上下文 | Context editing | 清理旧工具输出（保留最近 N 条） | 上下文管理 |
-| 上下文 | To-do list | 给 agent 配备 `write_todos` 规划工具 | 规划与委派 |
-| 安全 | Human-in-the-loop | 高危工具调用前暂停等人工审批（课 10 展开） | 引导 |
-| 安全 | PII detection | 检测并处理个人信息（脱敏/掩码/阻断/哈希） | 护栏 |
-| 安全 | Model call limit | 模型调用次数上限（防烧钱/防死循环） | 护栏 |
-| 安全 | Tool call limit | 工具调用次数上限（可全局或单工具） | 护栏 |
-| 工具增强 | LLM tool selector | 用 LLM 预选相关工具（工具多时提精度） | （新） |
-| 工具增强 | Provider tool search | 把工具交给服务端按需检索（需模型支持） | （新） |
-| 工具增强 | LLM tool emulator | 用 LLM 模拟工具执行（测试用） | （新） |
-| 能力扩展 | Shell tool | 给 agent 一个持久 shell 会话 | 执行环境 |
-| 能力扩展 | Filesystem | 文件读写工具（短期/长期记忆载体） | 执行环境 |
-| 能力扩展 | Subagent | 派子 agent 干活（隔离上下文） | 规划与委派 |
-| 能力扩展 | Rubric grading（beta） | LLM 评审官按评分标准迭代（自评自改） | （新） |
-| 能力扩展 | File search | 提供 Glob/Grep 搜索工具 | 执行环境 |
+| 组 | 中间件 | Python 名 | TS 名 | 一句话 | 对应课 5 地图 |
+|----|--------|-----------|-------|--------|---------------|
+| 容错 | Tool error | `ToolErrorMiddleware` | `toolErrorMiddleware` | 工具异常转为错误消息，模型可自愈 | 容错 |
+| 容错 | Tool retry | `ToolRetryMiddleware` | `toolRetryMiddleware` | 工具失败自动重试（指数退避） | 容错 |
+| 容错 | Model retry | `ModelRetryMiddleware` | `modelRetryMiddleware` | 模型调用失败自动重试 | 容错 |
+| 容错 | Model fallback | `ModelFallbackMiddleware` | `modelFallbackMiddleware` | 主模型失联自动降级到备用模型 | 容错 |
+| 上下文 | Summarization | `SummarizationMiddleware` | `summarizationMiddleware` | 超阈值压缩历史（课 7 已实测，本课归位） | 上下文管理 |
+| 上下文 | Context editing | `ContextEditingMiddleware` | `contextEditingMiddleware` | 清理旧工具输出（保留最近 N 条） | 上下文管理 |
+| 上下文 | To-do list | `TodoListMiddleware` | `todoListMiddleware` | 给 agent 配备 `write_todos` 规划工具 | 规划与委派 |
+| 安全 | Human-in-the-loop | `HumanInTheLoopMiddleware` | `humanInTheLoopMiddleware` | 高危工具调用前暂停等人工审批（课 10 展开） | 引导 |
+| 安全 | PII detection | `PIIMiddleware` | `piiMiddleware` | 检测并处理个人信息（脱敏/掩码/阻断/哈希） | 护栏 |
+| 安全 | Model call limit | `ModelCallLimitMiddleware` | `modelCallLimitMiddleware` | 模型调用次数上限（防烧钱/防死循环） | 护栏 |
+| 安全 | Tool call limit | `ToolCallLimitMiddleware` | `toolCallLimitMiddleware` | 工具调用次数上限（可全局或单工具） | 护栏 |
+| 工具增强 | LLM tool selector | `LLMToolSelectorMiddleware` | `llmToolSelectorMiddleware` | 用 LLM 预选相关工具（工具多时提精度） | （新） |
+| 工具增强 | Provider tool search | `ProviderToolSearchMiddleware` | `providerToolSearchMiddleware` | 把工具交给服务端按需检索（需模型支持） | （新） |
+| 工具增强 | LLM tool emulator | `LLMToolEmulatorMiddleware` | `toolEmulatorMiddleware` | 用 LLM 模拟工具执行（测试用） | （新） |
+| 能力扩展 | Shell tool | `ShellToolMiddleware` | （核心包未导出） | 给 agent 一个持久 shell 会话 | 执行环境 |
+| 能力扩展 | Filesystem | `FilesystemMiddleware`（deepagents） | `createFilesystemMiddleware`（deepagents） | 文件读写工具（短期/长期记忆载体） | 执行环境 |
+| 能力扩展 | Subagent | `SubAgentMiddleware`（deepagents） | `createSubAgentMiddleware`（deepagents） | 派子 agent 干活（隔离上下文） | 规划与委派 |
+| 能力扩展 | Rubric grading（beta） | `RubricMiddleware`（deepagents） | （deepagents） | LLM 评审官按评分标准迭代（自评自改） | （新） |
+| 能力扩展 | File search | `FilesystemFileSearchMiddleware`（deepagents） | （deepagents） | 提供 Glob/Grep 搜索工具 | 执行环境 |
 
-另有 **Provider 专属**：Anthropic（提示词缓存、bash、文本编辑、记忆、文件搜索）、AWS（Bedrock 提示词缓存）、OpenAI（内容审核）——需要对应厂商模型，本课不实测。
+> 📌 **TS 名称规律**：内置中间件在 TS 侧一律是**小写驼峰的工厂函数**（`toolRetryMiddleware(...)`），调用形态为传配置对象（`toolRetryMiddleware({ maxRetries: 3 })`）；Python 侧是**大写驼峰的类**（构造参数直传）。TS 侧 `langchain` 包实际导出 24 个中间件相关符号（含 `createMiddleware`、`piiRedactionMiddleware`、`dynamicSystemPromptMiddleware` 等本表未列的补充件）。
+
+另有 **Provider 专属**：Anthropic（提示词缓存、bash、文本编辑、记忆、文件搜索）、AWS（Bedrock 提示词缓存）、OpenAI（内容审核）——需要对应厂商模型，本课不实测（TS 侧对应 `anthropicPromptCachingMiddleware`、`bedrockPromptCachingMiddleware`、`openAIModerationMiddleware`）。
 
 **② 容错组：错误四件套的本机实测**——这组直接回应第一幕"工具报错就崩"的痛点：
 
-先看**对照实验**（脚本 2d 段）——同一个会抛异常的工具，不加中间件 vs 加 `ToolErrorMiddleware`：
+先看**对照实验**（脚本 2d 段）——同一个会抛异常的工具，不加中间件 vs 加错误兜底中间件：
 
-```text
+::: code-group
+
+```text [Python]
   对照组（无中间件）：
     agent 中断：ValueError: 除数不能为 0
   实验组（ToolErrorMiddleware）：
@@ -253,11 +334,28 @@ class HookTourMiddleware(AgentMiddleware):
     [3] ai: 算不了 —— 10 除以 0 在数学上是**未定义**的。
 ```
 
-无中间件时异常**直接冒泡、agent 中断**（与课 4 结论一致）；挂上 `ToolErrorMiddleware(on_error=...)` 后，异常被转成**错误工具消息**（`status="error"`）交给模型——模型读懂后给出得体答复。官方还提醒：`on_error` 里**建议回类型名而不是原始异常文案**（原始文案可能带内部细节）；以及一个组合姿势——`ToolRetryMiddleware` 放**内层**（列表更前）并配 `on_failure="error"`，让"重试到耗尽"之后异常才冒到 `ToolErrorMiddleware` 手里。
+```text [TypeScript]
+  对照组（无中间件，TS 默认兜底）：
+    工具消息（默认文案）: Error: 除数不能为 0 Please fix your mistakes.
+    最终回答: 算不了 —— 10 除以 0 在数学上是**未定义**的。工具返回了错误提示（除数不能为 0），需要换一个除数再试。
+  实验组（toolErrorMiddleware 自定义文案）：
+  最终回答: 算不了 —— 10 除以 0 在数学上是**未定义**的。 刚才调用 `strict_divide(10, 0)` 时，工具按设计直接抛出了 `ValueError`，而不是返回一个数字。
+  消息链:
+    [0] human: 请算 10 除以 0。
+    [1] ai → 调用工具: strict_divide({"a":10,"b":0})
+    [2] tool: `strict_divide` 执行失败（Error），请调整输入后重试。
+    [3] ai: 算不了 —— 10 除以 0 在数学上是**未定义**的。
+```
 
-再看**重试**（脚本 2c 段）——一个"前两次必故障、第三次成功"的工具，挂 `ToolRetryMiddleware(max_retries=3, initial_delay=0.05, backoff_factor=0.0, jitter=False)`：
+:::
 
-```text
+📌 **TS 差异（重要）**：**两侧默认行为相反**——Python 侧无中间件时异常**直接冒泡、agent 中断**（与课 4 结论一致）；TS 侧默认就会把异常转成错误工具消息（内容附 `Please fix your mistakes.`），agent 不中断。因此在 TS 侧 `toolErrorMiddleware` 的角色是"**统一/自定义错误文案**"（默认文案可能带原始异常细节），而在 Python 侧是"**从崩到不崩**"。挂上中间件后两侧行为就一致了：异常被转成**错误工具消息**（`status="error"`）交给模型——模型读懂后给出得体答复。官方还提醒：`on_error` 里**建议回类型名而不是原始异常文案**（原始文案可能带内部细节）；以及一个组合姿势——重试放**内层**（列表更前）并配 `on_failure="error"`，让"重试到耗尽"之后异常才冒到错误兜底中间件手里。
+
+再看**重试**（脚本 2c 段）——一个"前两次必故障、第三次成功"的工具，Python 侧挂 `ToolRetryMiddleware(max_retries=3, initial_delay=0.05, backoff_factor=0.0, jitter=False)`，TS 侧挂 `toolRetryMiddleware({ maxRetries: 3, initialDelayMs: 50, backoffFactor: 0, jitter: false })`：
+
+::: code-group
+
+```text [Python]
     （工具实际被执行：第 1 次）
     （工具实际被执行：第 2 次）
     （工具实际被执行：第 3 次）
@@ -266,19 +364,43 @@ class HookTourMiddleware(AgentMiddleware):
     [2] tool: 查询成功：订单 A100 的结果 的结果是 42
 ```
 
-工具被**实际执行 3 次**（2 败 1 成），模型侧只看到最终成功的结果——"重试"对其他环节完全透明。参数一句话版：`max_retries`（重试几次，默认 2）、`backoff_factor`/`initial_delay`/`max_delay`（退避节奏）、`jitter`（加随机抖动防"惊群"）、`retry_on`（重试哪些异常）、`on_failure`（耗尽后：`continue` 返回错误消息 / `error` 重新抛）。`ModelRetryMiddleware` 是模型侧的同款。
+```text [TypeScript]
+    （工具实际被执行：第 1 次）
+    （工具实际被执行：第 2 次）
+    （工具实际被执行：第 3 次）
+  最终回答: 查询完成 ✅ 订单 **A100** 的结果为：**42**
+  消息链:
+    [0] human: 请查询订单 A100 的结果。
+    [1] ai → 调用工具: flaky_service({"query":"订单 A100"})
+    [2] tool: 查询成功：订单 A100 的结果是 42
+    [3] ai: 查询完成 ✅ 订单 **A100** 的结果为：**42**
+```
 
-**降级**（脚本 2e 段）——给一个"模型名不存在"的主模型，挂 `ModelFallbackMiddleware(备用模型)`：
+:::
 
-```text
+工具被**实际执行 3 次**（2 败 1 成），模型侧只看到最终成功的结果——"重试"对其他环节完全透明。参数一句话版：`max_retries` / `maxRetries`（重试几次，默认 2）、`backoff_factor` / `initial_delay` / `max_delay`（TS 侧 `backoffFactor` / `initialDelayMs` / `maxDelayMs`，退避节奏）、`jitter`（加随机抖动防"惊群"）、`retry_on` / `retryOn`（重试哪些异常）、`on_failure` / `onFailure`（耗尽后：`continue` 返回错误消息 / `error` 重新抛）。模型侧重试是 `ModelRetryMiddleware` / `modelRetryMiddleware`。
+
+**降级**（脚本 2e 段）——给一个"模型名不存在"的主模型，挂备用模型（Python：`ModelFallbackMiddleware(备用模型)`；TS：`modelFallbackMiddleware(备用模型)`）：
+
+::: code-group
+
+```text [Python]
   最终回答（来自降级模型）: 好
 ```
 
+```text [TypeScript]
+  最终回答（来自降级模型）: 好
+```
+
+:::
+
 主模型失联（服务端报错），中间件自动切到备用模型完成回答——多供应商冗余的最简实现。
 
-**③ 安全与限制组：两道"刹车"的实测**——先看**模型调用限额**（脚本 2a 段，`run_limit=2`、`exit_behavior="end"`）：
+**③ 安全与限制组：两道"刹车"的实测**——先看**模型调用限额**（脚本 2a 段，Python `run_limit=2` / TS `runLimit: 2`，均 `exit_behavior="end"`）：
 
-```text
+::: code-group
+
+```text [Python]
   最终回答: Model call limits exceeded: run limit (2/2)
   消息链（注意最后一条）:
     [0] human: 先查北京天气，再查北京当前时间，最后给一句出行建议。
@@ -289,11 +411,26 @@ class HookTourMiddleware(AgentMiddleware):
     [5] ai: Model call limits exceeded: run limit (2/2)
 ```
 
-任务需要第 3 次模型调用（汇总建议）时额度耗尽——引擎**优雅收尾**：最后一条 AI 消息是限额说明（`exit_behavior="error"` 则改为直接抛异常）。`thread_limit`（跨整个会话）与 `run_limit`（单次 invoke）取其一或并用；`thread_limit` 需要 checkpointer 配合（跨轮计数）。
+```text [TypeScript]
+  最终回答: Model call limits exceeded: run level call limit reached with 2 model calls
+  消息链（注意最后一条）:
+    [0] human: 先查北京天气，再查北京当前时间，最后给一句出行建议。
+    [1] ai → 调用工具: get_weather({"city":"北京"})
+    [2] tool: 北京：晴天，22°C
+    [3] ai → 调用工具: get_time({"city":"北京"})
+    [4] tool: 北京 当前时间 14:30
+    [5] ai: Model call limits exceeded: run level call limit reached with 2 model calls
+```
 
-**工具调用限额**（脚本 2b 段，`tool_name="calculator", run_limit=1`）：
+:::
 
-```text
+任务需要第 3 次模型调用（汇总建议）时额度耗尽——引擎**优雅收尾**：最后一条 AI 消息是限额说明（`exit_behavior="error"` 则改为直接抛异常）。`thread_limit`（跨整个会话）与 `run_limit`（单次 invoke）取其一或并用；`thread_limit` 需要 checkpointer 配合（跨轮计数）。📌 **TS 差异**：限额文案不同——Python 为 `run limit (2/2)`，TS 为 `run level call limit reached with 2 model calls`（判定侧一致：两轮工具调用后拦下第 3 次汇总）。
+
+**工具调用限额**（脚本 2b 段，Python `tool_name="calculator", run_limit=1` / TS `toolName: "calculator", runLimit: 1`）：
+
+::: code-group
+
+```text [Python]
   最终回答: 第一次计算器结果：**12 × 8 = 96**。 第二次调用时工具返回了“超过调用次数限制”，所以没有成功用计算器计算。手算结果是：**15 × 7 = 105**。
   消息链（注意被拦下的第二次调用）:
     [0] human: 请连续用计算器算两次：先算 12*8，再算 15*7。
@@ -303,31 +440,60 @@ class HookTourMiddleware(AgentMiddleware):
     （[4] 为模型终答，内容见上方"最终回答"行）
 ```
 
-一个值得注意的实测细节：模型把两次计算**放在同一条 AI 消息里并行申请**——限额放行了第一次、拦下第二次（错误消息 `Tool call limit exceeded...`），默认 `exit_behavior="continue"` 让 agent 继续跑，模型改用"心算"补上了第二次并如实说明。限额可以**全局**（不传 `tool_name`）或**单工具**，两种写法实测均按预期生效。
+```text [TypeScript]
+  最终回答: 第一次计算器结果：**12 × 8 = 96**。第二次调用时工具返回了「超过调用次数限制」，所以没能用计算器算。手算结果是：**15 × 7 = 105**。
+  消息链（注意被拦下的第二次调用）:
+    [0] human: 请连续用计算器算两次：先算 12*8，再算 15*7。
+    [1] ai → 调用工具: calculator({"expression":"12*8"}); calculator({"expression":"15*7"})
+    [2] tool: Tool call limit exceeded. Do not call 'calculator' again.
+    [3] tool: 12*8 = 96
+    [4] ai: 第一次计算器结果：**12 × 8 = 96**。第二次调用时工具返回了「超过调用次数限制」，所以没能用计算器算。手算结果是：**15 × 7 = 105**。
+```
 
-**PII 脱敏**（脚本 2f 段）——`PIIMiddleware("email", strategy="redact")` + `PIIMiddleware("credit_card", strategy="mask")`：
+:::
 
-```text
+一个值得注意的实测细节：模型把两次计算**放在同一条 AI 消息里并行申请**——限额放行了第一次、拦下第二次（错误消息 `Tool call limit exceeded...`，两侧同文案），默认 `exit_behavior="continue"` 让 agent 继续跑，模型改用"心算"补上了第二次并如实说明。限额可以**全局**（不传 `tool_name` / `toolName`）或**单工具**，两种写法实测均按预期生效。
+
+**PII 脱敏**（脚本 2f 段）——Python：`PIIMiddleware("email", strategy="redact")` + `PIIMiddleware("credit_card", strategy="mask")`；TS：`piiMiddleware("email", { strategy: "redact" })` + `piiMiddleware("credit_card", { strategy: "mask" })`：
+
+::: code-group
+
+```text [Python]
   最终回答: 邮箱 [REDACTED_EMAIL]，卡号 **** **** **** 1111。
 ```
 
-模型回复里复述出的正是**脱敏后**的文本——说明敏感的原文**没有**送进模型（模型只见到替换后的形式）。四种策略：`redact`（替换为 `[REDACTED_类型]`）/ `mask`（部分打码）/ `hash`（确定性哈希）/ `block`（直接抛异常阻断）。内置类型有 `email`、`credit_card`、`ip`、`mac_address`、`url`；不够用可自定义检测器（正则字符串 / 编译后正则 / 自定义函数三选一）。检查方向可分别开关：`apply_to_input`（默认开）、`apply_to_output`、`apply_to_tool_results`。
+```text [TypeScript]
+  最终回答: 邮箱 [REDACTED_EMAIL]，卡号 ****-****-****-1111。
+```
 
-**④ 工具增强组：选择器实测**（脚本 2g 段，6 个工具、`max_tools=2`）——拿到"北京天气"问题后，选择器先让 LLM 预选工具，实际调用链只有 `get_weather`：
+:::
 
-```text
+模型回复里复述出的正是**脱敏后**的文本——说明敏感的原文**没有**送进模型（模型只见到替换后的形式）。四种策略：`redact`（替换为 `[REDACTED_类型]`）/ `mask`（部分打码）/ `hash`（确定性哈希）/ `block`（直接抛异常阻断）。内置类型有 `email`、`credit_card`、`ip`、`mac_address`、`url`（两侧同类集）；不够用可自定义检测器（正则字符串 / 编译后正则 / 自定义函数三选一）。检查方向可分别开关：`apply_to_input`（默认开）、`apply_to_output`、`apply_to_tool_results`（TS 侧为驼峰 `applyToInput` / `applyToOutput` / `applyToToolResults`）。📌 **TS 差异**：卡号掩码分隔符不同（Python `**** **** **** 1111` 空格、TS `****-****-****-1111` 连字符，源码核对掩码实现）。
+
+**④ 工具增强组：选择器实测**（脚本 2g 段，6 个工具、`max_tools=2` / `maxTools: 2`）——拿到"北京天气"问题后，选择器先让 LLM 预选工具，实际调用链只有 `get_weather`：
+
+::: code-group
+
+```text [Python]
     [1] ai → 调用工具: get_weather({'city': '北京'})
 ```
 
-更硬的证据在知识点 4（顺序换位实验）：同一批 6 个工具，经过选择器后模型只见 **1 个**（`['get_weather']`）；不经过选择器则见全部 **6 个**。选中的工具名、`always_include`（永远保留的工具）、`max_tools` 上限都可配；官方还标注它用结构化输出实现——**每次多一次选择模型调用**（工具多、提示词长的场景才回本）。同组的 `Provider tool search` 把筛选放到模型服务端（需 Anthropic/OpenAI 特定模型支持，本机环境不适用、未实测）；`LLM tool emulator` 用 LLM 假扮工具执行——集成测试时的"替身演员"。
+```text [TypeScript]
+    [1] ai → 调用工具: get_weather({"city":"北京"})
+```
 
-**⑤ 上下文组与规划：待办清单实测**（脚本 2h 段）——`TodoListMiddleware()` 给 agent 注册 `write_todos` 工具（实测注册名 `['write_todos']`）。它的行为有一处**需要如实说明的观察**：
+:::
 
-- 3 步简单任务：模型**未**调用 `write_todos`（直接并行调用两个工具搞定）。
-- 5 步带决策依赖任务：模型**仍未**主动调用（直接逐步执行）。
+更硬的证据在知识点 4（顺序换位实验）：同一批 6 个工具，经过选择器后模型只见 **1 个**（`['get_weather']`，两侧一致）；不经过选择器则见全部 **6 个**。选中的工具名、`always_include` / `alwaysInclude`（永远保留的工具）、`max_tools` / `maxTools` 上限都可配；官方还标注它用结构化输出实现——**每次多一次选择模型调用**（工具多、提示词长的场景才回本）。📌 **TS 差异**：选择器的结构化输出走 **OpenAI 原生 `response_format: json_schema`**（本脚本 mock 日志实测确认；Python 侧经 `with_structured_output` 包装，落到提供商时可能是虚拟工具或原生模式，取决于模型与适配层）。同组的 `Provider tool search` / `providerToolSearchMiddleware` 把筛选放到模型服务端（需 Anthropic/OpenAI 特定模型支持，本机环境不适用、未实测）；`LLM tool emulator` / `toolEmulatorMiddleware` 用 LLM 假扮工具执行——集成测试时的"替身演员"。
+
+**⑤ 上下文组与规划：待办清单实测**（脚本 2h 段）——待办清单中间件给 agent 注册 `write_todos` 工具（实测注册名 `['write_todos']`，两侧一致）。它的行为有一处**需要如实说明的观察**：
+
+- 简单多步任务：模型**未**主动调用 `write_todos`（直接并行调用两个工具搞定；两侧脚本实测一致）。
 - 只有**用户明确要求**"先用待办清单列出计划"时，才出现完整闭环：
 
-```text
+::: code-group
+
+```text [Python]
     [1] ai → 调用工具: write_todos({'todos': [{'content': '第一步：查询北京天气', 'status': 'in_progress'}, {'content': '第二步：查询北京当前时间', 'status': 'in_progress'}, {'content': '第三步：汇总天气和时间，给出一句出行建议', 'status': 'pending'}]})
     [2] tool: Updated todo list to [{'content': '第一步：查询北京天气', 'status': 'in_progress'},
     [3] ai → 调用工具: get_weather({'city': '北京'})
@@ -338,20 +504,34 @@ class HookTourMiddleware(AgentMiddleware):
     （[0] 为任务输入、[4][5] 为两个查询工具的回执，此处为节选展示）
 ```
 
-原因在工具自带的说明书里：`write_todos` 的描述写明"若任务少于 3 个步骤且直接可做，**最好别用**这个工具"——本机模型（qwen3.8-flash）确实按此指引**自行判断**了两次。所以对这套中间件的正确期待是：它提供**能力与使用指引**，但**不强制**规划；要在关键场景确保被用，需要在系统提示词里明确要求（或结合课 9 的上下文工程）。同组的 `SummarizationMiddleware` 课 7 已详测（此处归位）；`ContextEditingMiddleware` 专清"旧的工具输出"（保留最近 N 条、按 token 阈值触发）——本机未实测，按官方口径标注。
+```text [TypeScript]
+    [1] ai → 调用工具: write_todos({"todos":[{"content":"第一步：查询北京天气","status":"in_progress"},{"content":"第二步：查询北京当前时间","status":"in_progress"},{"content":"第三步：汇总天气和时间，给出一句出行建议","status":"pending"}]})
+    [2] tool: Updated todo list to [{"content":"第一步：查询北京天气","status":"in_progress"},
+    [3] ai → 调用工具: get_weather({"city":"北京"})
+    [3] ai → 调用工具: get_time({"city":"北京"})
+    [6] ai → 调用工具: write_todos({"todos":[{"content":"第一步：查询北京天气","status":"completed"},{"content":"第二步：查询北京当前时间","status":"completed"},{"content":"第三步：汇总天气和时间，给出一句出行建议","status":"completed"}]})
+    [7] tool: Updated todo list to [{"content":"第一步：查询北京天气","status":"completed"},
+    [8] ai: 任务已全部完成，汇报如下： **查询结果** - 北京天气：晴天，22°C - 北京当前时间：14:30
+    （[0] 为任务输入、[4][5] 为两个查询工具的回执，此处为节选展示）
+```
 
-**⑥ 能力扩展组：整体标注**——`ShellToolMiddleware`（持久 shell，注意执行策略与安全红线）、`FilesystemMiddleware`（官方来源为 `deepagents` 包，含 ls/read/write/edit 四工具，可后端配 State/Store 实现短期/长期记忆）、`SubAgentMiddleware`（派子 agent，隔离上下文）、`RubricMiddleware`（beta，自评迭代）、`FilesystemFileSearchMiddleware`（Glob/Grep 搜索）——这些属于"给 agent 加手脚"的重型件，多数来自 `deepagents` 附加包；本课**未实测**（按官方口径收录，用到再深挖）。
+:::
+
+原因在工具自带的说明书里：`write_todos` 的描述写明"若任务少于 3 个步骤且直接可做，**最好别用**这个工具"——本机模型（qwen3.8-flash）确实按此指引**自行判断**跳过。所以对这套中间件的正确期待是：它提供**能力与使用指引**，但**不强制**规划；要在关键场景确保被用，需要在系统提示词里明确要求（或结合课 9 的上下文工程）。📌 **TS 差异**：TS 侧 `todoListMiddleware()` 同样顺带注册 `write_todos` 并注入系统提示词（源码 `TODO_LIST_MIDDLEWARE_SYSTEM_PROMPT` 与 Python 同源），且额外在 `afterModel` 里**拦截同一轮的并行 write_todos 调用**（避免歧义，本课未触发）。同组的摘要中间件课 7 已详测（此处归位）；上下文编辑中间件（`ContextEditingMiddleware` / `contextEditingMiddleware`）专清"旧的工具输出"（保留最近 N 条、按 token 阈值触发）——本机未实测，按官方口径标注。
+
+**⑥ 能力扩展组：整体标注**——Shell 工具（Python `ShellToolMiddleware`；TS 侧核心包未导出同名件）、Filesystem（官方来源为 `deepagents` 包，含 ls/read/write/edit 四工具，可后端配 State/Store 实现短期/长期记忆；TS 侧为 `createFilesystemMiddleware`）、Subagent（派子 agent，隔离上下文；TS 侧为 `createSubAgentMiddleware`）、Rubric grading（beta，自评迭代）、File search（Glob/Grep 搜索）——这些属于"给 agent 加手脚"的重型件，多数来自 `deepagents` 附加包；本课**未实测**（按官方口径收录，用到再深挖）。
 
 #### 示例演示
 
-见上文实测：容错四件套（②）、限额两闸门与 PII（③）、工具选择器（④）、待办清单（⑤），来源脚本 `playground/08-middleware-lab.py`（2a-2h 段）；能力扩展组为官方归纳（未实测，已标注）。
+见上文实测：容错四件套（②）、限额两闸门与 PII（③）、工具选择器（④）、待办清单（⑤），来源脚本 `playground/08-middleware-lab.py`（2a-2h 段）；TS 侧证据见 `playground-ts/08-middleware-lab.ts`（2a-2h 段，全部同场景）；能力扩展组为官方归纳（未实测，已标注）。
 
 #### 常见误区
 
-1. **以为"工具报错会被引擎自动兜住"**：默认不兜——实测直接中断（2d 对照），要兜就挂 `ToolErrorMiddleware`（或课 4 的自定义包裹钩子）。
+1. **以为"工具报错会被引擎自动兜住"**：Python 侧默认不兜——实测直接中断（2d 对照），要兜就挂错误兜底中间件（或课 4 的自定义包裹钩子）；TS 侧默认**已兜**（转错误消息不中断），`toolErrorMiddleware` 用于自定义文案。
 2. **以为限额是"到了就抛错"**：默认行为可配——`continue`（拦下超额调用、让 agent 继续）或 `end`（优雅收尾）或 `error`（抛异常）；实测两者均按预期。
 3. **以为挂了待办清单就会自动规划**：实测两次自主跳过——它提供能力+指引，`用不用`由模型按任务复杂度判断（描述里明确写了"少于 3 步别用"）。
-4. **以为重试是"零成本"**：工具被真实执行多次（实测 3 次）——对幂等/无副作用的工具才可放心重试，写操作要配 `max_retries` 与去重设计。
+4. **以为重试是"零成本"**：工具被真实执行多次（实测 3 次）——对幂等/无副作用的工具才可放心重试，写操作要配 `max_retries` / `maxRetries` 与去重设计。
+5. **以为两侧同名件行为完全一致**：多数一致，但**默认错误处理相反**（易踩坑）；限额文案、掩码格式、选择器的结构化输出通道也有细微差异（本课均实测标注）。
 
 #### 一句话记住
 
@@ -359,17 +539,18 @@ class HookTourMiddleware(AgentMiddleware):
 
 #### 🗣️ 行话对照
 
-- **ToolErrorMiddleware / ToolRetryMiddleware**：工具异常兜底 / 工具重试——在哪遇到：`langchain.agents.middleware`
-- **ModelFallbackMiddleware**：模型降级——在哪遇到：主模型后接备用模型列表
-- **run_limit / thread_limit**：单次调用 / 跨会话的限额——在哪遇到：Model/Tool call limit
-- **on_failure**：重试耗尽后的行为（continue/error）——在哪遇到：重试类中间件
-- **PIIMiddleware / strategy**：个人信息中间件 / 处理策略（redact/mask/hash/block）——在哪遇到：安全组
-- **write_todos**：待办清单工具（由 TodoListMiddleware 注册）——在哪遇到：工具列表自动多出一个
+- **ToolErrorMiddleware / ToolRetryMiddleware**：工具异常兜底 / 工具重试——在哪遇到：`langchain.agents.middleware`（TS 侧 `langchain` 的 `toolErrorMiddleware` / `toolRetryMiddleware`）
+- **ModelFallbackMiddleware**：模型降级——在哪遇到：主模型后接备用模型列表（TS 侧 `modelFallbackMiddleware(...)` 直接收备用模型）
+- **run_limit / thread_limit**：单次调用 / 跨会话的限额——在哪遇到：Model/Tool call limit（TS 侧 `runLimit` / `threadLimit`）
+- **on_failure**：重试耗尽后的行为（continue/error）——在哪遇到：重试类中间件（TS 侧 `onFailure`）
+- **PIIMiddleware / strategy**：个人信息中间件 / 处理策略（redact/mask/hash/block）——在哪遇到：安全组（TS 侧 `piiMiddleware("email", { strategy: "redact" })`）
+- **write_todos**：待办清单工具（由待办清单中间件注册）——在哪遇到：工具列表自动多出一个（两侧同名）
 
 #### 官方文档
 
 - [Built-in middleware（五组 19 个 + Provider 专属全集）](https://docs.langchain.com/oss/python/langchain/middleware/built-in)
 - [Built-in · Summarization / HITL / Limits / PII 各段落](https://docs.langchain.com/oss/python/langchain/middleware/built-in#provider-agnostic-middleware)
+- [Prebuilt middleware（TS 版，五组全集）](https://docs.langchain.com/oss/javascript/langchain/middleware/built-in)
 
 ---
 
@@ -389,9 +570,11 @@ class HookTourMiddleware(AgentMiddleware):
 
 #### 核心原理
 
-**① 装饰器式：单钩子速写**——本机实测（脚本 3a 段）：两个装饰器中间件协同，一个计数、一个打日志，用**自定义 state 字段** `model_call_count` 跨步传递：
+**① 装饰器式 / 工厂式：单钩子速写**——本机实测（脚本 3a 段）：两个中间件协同，一个计数、一个打日志，用**自定义 state 字段** `model_call_count` / `modelCallCount` 跨步传递：
 
-```python
+::: code-group
+
+```python [Python]
 class CounterState(AgentState):
     model_call_count: NotRequired[int]
 
@@ -407,9 +590,31 @@ def count_after(state: CounterState, runtime):
     return {"model_call_count": c}
 ```
 
+```typescript [TypeScript]
+import { createMiddleware } from "langchain";
+import * as z from "zod";
+
+const counterMiddleware = createMiddleware({
+  name: "CallCounterMiddleware",
+  stateSchema: z.object({ modelCallCount: z.number().default(0) }),
+  beforeModel: (state) => {
+    console.log(`[自定义] before_model：即将进行第 ${state.modelCallCount + 1} 次模型调用`);
+  },
+  afterModel: (state) => {
+    const c = state.modelCallCount + 1;
+    console.log(`[自定义] after_model：模型调用计数 → ${c}`);
+    return { modelCallCount: c };
+  },
+});
+```
+
+:::
+
 实测输出（一次带工具的调用，两圈循环）：
 
-```text
+::: code-group
+
+```text [Python]
   [自定义] before_model：即将进行第 1 次模型调用
   [自定义] after_model：模型调用计数 → 1
   [自定义] before_model：即将进行第 2 次模型调用
@@ -417,15 +622,27 @@ def count_after(state: CounterState, runtime):
   最终状态里的计数 model_call_count = 2
 ```
 
-三个要点：**装饰器要带 `state_schema=`**（声明这个钩子参与哪个状态形状）；**返回 dict 即更新状态**（`after_model` 返回 `{"model_call_count": c}`，走图的归约器合并；返回 `None` 表示不动）；**计数跨步保持**（最终 invoke 返回值里 `model_call_count = 2`）——这就是"自定义 state 在循环中读写"的完整闭环。
+```text [TypeScript]
+  [自定义] before_model：即将进行第 1 次模型调用
+  [自定义] after_model：模型调用计数 → 1
+  [自定义] before_model：即将进行第 2 次模型调用
+  [自定义] after_model：模型调用计数 → 2
+  最终状态里的计数 modelCallCount = 2
+```
 
-**② 类式：多钩子组织**——知识点 1 的"钩子全景"就是类式（`class HookTourMiddleware(AgentMiddleware)`），把六个钩子写在同一个类里。类的三个"编译期属性"（官方）：`state_schema`（等价于装饰器的 `state_schema=`）、`tools`（顺带注册工具，如待办清单）、`transformers`（注册流式转换器，需 langchain>=1.3.2）。选型口诀：**单钩子用装饰器，多钩子/要配置/要复用用类**。
+:::
 
-**③ 包裹式钩子的状态更新：走 `Command`**（官方）——包裹钩子里没有"直接返回 dict"这条路：模型侧要返回 `ExtendedModelResponse(model_response=..., command=Command(update={...}))`，工具侧直接返回 `Command`。多中间件同时更新时的合成规则（官方）：命令**每个都经归约器应用**（消息是追加式）；非归约器字段**外层赢**（conflicts 时 outermost 优先）；外层若重试导致多次调用，**早先调用的命令被丢弃**（retry-safe）。
+三个要点：**声明 `state_schema` / `stateSchema`**（声明这个钩子参与哪个状态形状；Python 装饰器必须显式带上）；**返回 dict 即更新状态**（`after_model` 返回计数对象，走图的归约器合并；返回 `None` / `undefined` 表示不动）；**计数跨步保持**（最终 invoke 返回值里计数为 2）——这就是"自定义 state 在循环中读写"的完整闭环。📌 **TS 差异**：TS 侧自定义 state 用 **zod schema 或 `StateSchema` 实例**（`stateSchema:` 配置字段），字段值直接从 `state.xxx` 读（Python 用 `state.get("xxx")` 字典式读法）。
 
-**④ jump_to：提前收尾**——本机实测（脚本 3b 段）：一个"内容守护"中间件，检测到触发词就跳过模型、直接给兜底回复并结束：
+**② 类式 / 工厂式：多钩子组织**——知识点 1 的"钩子全景"在 Python 侧是类式（`class HookTourMiddleware(AgentMiddleware)`，六个钩子写在同一类里）；TS 侧同一批钩子写在 `createMiddleware({ name, ... })` 的配置对象里。三个"编译期属性"（官方）：`state_schema`（等价于装饰器的 `state_schema=`）、`tools`（顺带注册工具，如待办清单）、`transformers`（注册流式转换器，需 langchain>=1.3.2；TS 侧为 `streamTransformers`，需 langchain>=1.4.3）。选型口诀：Python 侧"单钩子用装饰器、多钩子/要配置/要复用用类"；TS 侧无此分岔，统一工厂。
 
-```python
+**③ 包裹式钩子的状态更新：走 `Command`**（官方，两侧同构）——包裹钩子里没有"直接返回 dict"这条路：TS 侧 `wrapModelCall` 里返回 `new Command({ update: { ... } })`，工具侧同理（Python 侧为 `Command(update={...})`）。多中间件同时更新时的合成规则（官方）：命令**每个都经归约器应用**（消息是追加式）；非归约器字段**外层赢**（conflicts 时 outermost 优先）；外层若重试导致多次调用，**早先调用的命令被丢弃**（retry-safe）。
+
+**④ jump：提前收尾**——本机实测（脚本 3b 段）：一个"内容守护"中间件，检测到触发词就跳过模型、直接给兜底回复并结束：
+
+::: code-group
+
+```python [Python]
 @before_model(can_jump_to=["end"])
 def content_guard(state, runtime):
     last = state["messages"][-1]
@@ -437,9 +654,34 @@ def content_guard(state, runtime):
     return None
 ```
 
+```typescript [TypeScript]
+const contentGuard = createMiddleware({
+  name: "ContentGuard",
+  beforeModel: {
+    canJumpTo: ["end"],
+    hook: (state) => {
+      const last = state.messages.at(-1);
+      if (String(last?.content ?? "").includes("禁止话题")) {
+        return {
+          messages: [new AIMessage("抱歉，这个话题我不能处理。")],
+          jumpTo: "end" as const,
+        };
+      }
+      return;
+    },
+  },
+});
+```
+
+:::
+
+📌 **TS 差异**：跳转声明是**对象形态**——`beforeModel: { canJumpTo: ["end"], hook: (state) => ... }`（`hook` 字段承载原函数）；指令字段为 `jumpTo`（Python 为 `jump_to`），返回消息用 `new AIMessage(...)` 构造。
+
 实测两个场景：正常输入照常走模型（"你好！"）；触发词输入被**直接拦下**——
 
-```text
+::: code-group
+
+```text [Python]
   场景二（触发守护）：
   [守护] 检测到敏感输入，跳过模型直接收尾
   最终回答: 抱歉，这个话题我不能处理。
@@ -448,34 +690,46 @@ def content_guard(state, runtime):
     [1] ai: 抱歉，这个话题我不能处理。
 ```
 
-消息链只有"用户输入 + 兜底回复"两条（没有模型输出）——跳转**省掉了这次模型调用**。三个跳转目标（官方）：`'end'`（跳到结束/第一个 after_agent）、`'tools'`、`'model'`；能跳的方向要用 `can_jump_to=[...]`（类式配 `@hook_config(can_jump_to=[...])`）**先声明**——声明是安全设计：引擎据此把图编译成允许跳转的形态。
+```text [TypeScript]
+  场景二（触发守护）：
+  [守护] 检测到敏感输入，跳过模型直接收尾
+  最终回答: 抱歉，这个话题我不能处理。
+  消息数（应为 2：输入 + 兜底回复，无模型输出）: 2
+    [0] human: 我们来聊禁止话题吧。
+    [1] ai: 抱歉，这个话题我不能处理。
+```
+
+:::
+
+消息链只有"用户输入 + 兜底回复"两条（没有模型输出）——跳转**省掉了这次模型调用**。三个跳转目标（官方，两侧一致）：`'end'`（跳到结束/第一个 after_agent）、`'tools'`、`'model'`；能跳的方向要**先声明**（Python：装饰器参数 `can_jump_to=[...]`、类式配 `@hook_config(can_jump_to=[...])`；TS：`beforeModel: { canJumpTo: [...] }` 对象形态）——声明是安全设计：引擎据此把图编译成允许跳转的形态。
 
 #### 示例演示
 
-见上文实测：计数 + state（①）、jump 守护（④），来源脚本 `playground/08-middleware-lab.py`（3a、3b 段）。
+见上文实测：计数 + state（①）、jump 守护（④），来源脚本 `playground/08-middleware-lab.py`（3a、3b 段）；TS 侧证据见 `playground-ts/08-middleware-lab.ts`（3a、3b 段）。
 
 #### 常见误区
 
 1. **以为消息要自己"拼回去"**：节点式钩子返回的 dict 经默认归约器合并——消息是**追加**语义，不用手动重排（要删改才用课 7 的 `RemoveMessage` 手法）。
-2. **以为 `jump_to` 随手可用**：需要先 `can_jump_to` 声明（官方示例里装饰器参数、类式的 `@hook_config`）；未声明就跳会被状态 schema 拒绝。
-3. **以为 `state_schema=` 可省**：不对——装饰器模式要显式带上，否则该字段/自定义状态不生效（官方示例与实测均如此写）。
+2. **以为 `jump_to` / `jumpTo` 随手可用**：需要先声明跳转许可（Python：`can_jump_to`；TS：`canJumpTo`）；未声明就跳会被状态 schema 拒绝。
+3. **以为状态声明可省**：不对——Python 装饰器模式要显式带 `state_schema=`，TS 工厂要显式带 `stateSchema:`，否则该字段/自定义状态不生效（官方示例与两侧实测均如此写）。
 
 #### 一句话记住
 
-> 装饰器速写单钩子、类式组织多钩子；状态更新节点式返 dict、包裹式走 Command；提前收尾先声明 can_jump_to。
+> Python 装饰器速写、类式组织；TS 统一 createMiddleware 工厂；状态更新节点式返 dict、包裹式走 Command；提前收尾先声明跳转许可。
 
 #### 🗣️ 行话对照
 
-- **state_schema / CustomState**：自定义状态形状——在哪遇到：装饰器参数、`AgentState` 子类
-- **can_jump_to / jump_to**：跳转许可声明 / 跳转指令——在哪遇到：装饰器参数、`@hook_config`、返回 dict
-- **ExtendedModelResponse**：包裹模型钩子的带命令返回——在哪遇到：`wrap_model_call` 内
-- **hook_config**：类式钩子的配置装饰器——在哪遇到：`@hook_config(can_jump_to=[...])`
+- **state_schema / CustomState**：自定义状态形状——在哪遇到：装饰器参数、`AgentState` 子类（TS 侧为 `stateSchema:` 配置 + zod schema / `StateSchema` 实例）
+- **can_jump_to / jump_to**：跳转许可声明 / 跳转指令——在哪遇到：装饰器参数、`@hook_config`、返回 dict（TS 侧为 `canJumpTo` / `jumpTo`）
+- **ExtendedModelResponse**：包裹模型钩子的带命令返回（Python 概念）——在哪遇到：`wrap_model_call` 内（TS 侧直接返回 `new Command({ update })`）
+- **hook_config**：类式钩子的配置装饰器——在哪遇到：`@hook_config(can_jump_to=[...])`（TS 侧无此物，直接写 `canJumpTo` 字段）
 - **reduce / 归约器**：状态合并规则（如 add_messages）——在哪遇到：自定义状态字段设计
 
 #### 官方文档
 
 - [Custom middleware · State updates（dict vs Command）](https://docs.langchain.com/oss/python/langchain/middleware/custom#state-updates)
 - [Custom middleware · Agent jumps（jump_to 与 can_jump_to）](https://docs.langchain.com/oss/python/langchain/middleware/custom#agent-jumps)
+- [Custom middleware（TS 版：createMiddleware / state updates / jumps）](https://docs.langchain.com/oss/javascript/langchain/middleware/custom)
 
 ---
 
@@ -495,9 +749,11 @@ def content_guard(state, runtime):
 
 #### 核心原理
 
-**① 顺序规则与实测**——官方三条规则：`before_*` 正序、`after_*` 逆序、`wrap_*` 嵌套。本机实测（脚本 4a 段，M1/M2/M3 三个全钩子中间件；该次调用模型直接作答、未走工具，故先看 agent 层与模型层的完整顺序）：
+**① 顺序规则与实测**——官方三条规则：`before_*` 正序、`after_*` 逆序、`wrap_*` 嵌套。本机实测（脚本 4a 段，M1/M2/M3 三个全钩子中间件）——Python 侧首跑时模型直接作答、未走工具，工具圈顺序由补测段验证；TS 侧同次调用一次走完两圈（模型圈 + 工具圈）：
 
-```text
+::: code-group
+
+```text [Python]
   [M1] before_agent
   [M2] before_agent
   [M3] before_agent
@@ -516,11 +772,8 @@ def content_guard(state, runtime):
   [M3] after_agent
   [M2] after_agent
   [M1] after_agent
-```
 
-工具被真实调用时，工具圈的包裹顺序（4a 补测段：大数乘法强制走工具）：
-
-```text
+  （附：4a 补测段——大数乘法强制走工具，工具圈包裹顺序）
   [M1] wrap_tool_call 进入
   [M2] wrap_tool_call 进入
   [M3] wrap_tool_call 进入
@@ -529,26 +782,87 @@ def content_guard(state, runtime):
   [M1] wrap_tool_call 返回
 ```
 
-三条规则在真实运行中逐条应验：进场正序、出场逆序、包裹嵌套。
+```text [TypeScript]
+  [M1] before_agent
+  [M2] before_agent
+  [M3] before_agent
+  [M1] before_model
+  [M2] before_model
+  [M3] before_model
+  [M1] wrap_model_call 进入
+  [M2] wrap_model_call 进入
+  [M3] wrap_model_call 进入
+  [M3] wrap_model_call 返回
+  [M2] wrap_model_call 返回
+  [M1] wrap_model_call 返回
+  [M3] after_model
+  [M2] after_model
+  [M1] after_model
+  [M1] wrap_tool_call 进入
+  [M2] wrap_tool_call 进入
+  [M3] wrap_tool_call 进入
+  [M3] wrap_tool_call 返回
+  [M2] wrap_tool_call 返回
+  [M1] wrap_tool_call 返回
+  [M1] before_model
+  [M2] before_model
+  [M3] before_model
+  [M1] wrap_model_call 进入
+  [M2] wrap_model_call 进入
+  [M3] wrap_model_call 进入
+  [M3] wrap_model_call 返回
+  [M2] wrap_model_call 返回
+  [M1] wrap_model_call 返回
+  [M3] after_model
+  [M2] after_model
+  [M1] after_model
+  [M3] after_agent
+  [M2] after_agent
+  [M1] after_agent
+  最终回答: 1234 × 5678 = **7006652**
+```
+
+:::
+
+三条规则在真实运行中逐条应验：进场正序、出场逆序、包裹嵌套。📌 **TS 差异**：TS 侧同一实验用 `createMiddleware({ name: "order-M1", ... })` 工厂声明（`beforeAgent` / `beforeModel` / `afterModel` / `afterAgent` / `wrapModelCall` / `wrapToolCall` 全驼峰字段），输出顺序规则与 Python 完全一致——模型圈、工具圈共用同一套"进场正序、出场逆序、包裹嵌套"。
 
 **② 顺序影响行为：换位实测**——脚本 4b 段：同一个"观察者"中间件（打印模型可见的工具清单）与同一个"工具选择器"（把 6 个工具筛到 ≤2 个），只交换两者在列表里的位置：
 
-```text
+::: code-group
+
+```text [Python]
   顺序 A：selector 在前（外层），观察者在后（内层）
   [观察者] 模型可见工具（1 个）: ['get_weather']
   顺序 B：观察者在前（外层），selector 在后（内层）
   [观察者] 模型可见工具（6 个）: ['get_weather', 'translate_text', 'tell_joke', 'unit_convert', 'book_flight', 'get_time']
 ```
 
-同一个观察者：外层时看到**全部 6 个**（选择器还没动手），内层时看到**过滤后的 1 个**。这就是"wrap 嵌套"的实际含义——**外层的修改先发生，内层看到的是已被外层改过的请求**（这也解释了课 5 动态模型路由为什么一个 `@wrap_model_call` 就能全局换模型）。官方还能佐证：多个中间件同时注入状态时"外层赢"的规则、以及重试在外层则"早先调用的命令被丢弃"——都是同一条嵌套语义的推论。
+```text [TypeScript]
+  顺序 A：selector 在前（外层），观察者在后（内层）
+  [观察者] 模型可见工具（1 个）: ["get_weather"]
+  顺序 B：观察者在前（外层），selector 在后（内层）
+  [观察者] 模型可见工具（6 个）: ["get_weather","translate_text","tell_joke","unit_convert","book_flight","get_time"]
+```
+
+:::
+
+（TS 侧同次调用会打印两遍，即模型圈各自跑一次观察者；两侧结论一致）同一个观察者：外层时看到**全部 6 个**（选择器还没动手），内层时看到**过滤后的 1 个**。这就是"wrap 嵌套"的实际含义——**外层的修改先发生，内层看到的是已被外层改过的请求**（这也解释了课 5 动态模型路由为什么两个 `wrap_model_call`（Python）或用工厂起不同名（TS）就能按次序改变模型可见的工具集）。官方还能佐证：多个中间件同时注入状态时"外层赢"的规则、以及重试在外层则"早先调用的命令被丢弃"——都是同一条嵌套语义的推论。📌 **TS 差异**：观察者与选择器都用 `createMiddleware` 工厂声明（`wrapModelCall` / 选择器 `llmToolSelectorMiddleware({ maxTools: 2 })`），无需起独立 `name` 之外的额外配置。
 
 **③ 一个实测到的边界**：**同类中间件默认同名，不能挂两个**——首跑时挂三个 `OrderMiddleware` 实例被引擎拒绝：
 
-```text
-AssertionError: Please remove duplicate middleware instances.
+::: code-group
+
+```text [Python]
+  构造报错: AssertionError: Please remove duplicate middleware instances.
 ```
 
-原因是 `AgentMiddleware.name` 默认取**类名**，引擎启动时按 name 判重（源码：`len({m.name for m in middleware}) != len(middleware)` 即报错）。解决：让每个实例有唯一 name（本课实测通过 `@property name` 返回 `f"order-{tag}"` 修复）。对使用者的意义：**同一中间件类要实例化多份时（不同参数的限额、不同目标的观察者），记得给实例起名**。
+```text [TypeScript]
+  构造报错: Error: Middleware order-A is defined multiple times
+```
+
+:::
+
+原因是 `AgentMiddleware.name` 默认取**类名**（TS 侧 `createMiddleware` 的 `name` 为必填），`create_agent` / `createAgent` 在**构造期**按 name 判重（Python 源码：`len({m.name for m in middleware}) != len(middleware)` 即抛 `AssertionError`；TS 源码：`middlewareNames` 集合发现重复即抛 `Error`）——**两侧都在构造期报错、机制一致**，区别只在报错时机与文案。解决：让每个实例有唯一 name（本课实测 Python 通过 `@property name` 返回 `f"order-{tag}"`、TS 在工厂里传 `name: "order-M1"` 修复）。对使用者的意义：**同一中间件类要实例化多份时（不同参数的限额、不同目标的观察者），记得给实例起名**。
 
 **④ 实用规则**（官方 best practices 摘编 + 实测印证）：
 
@@ -561,45 +875,46 @@ AssertionError: Please remove duplicate middleware instances.
 
 #### 示例演示
 
-见上文实测：三中间件顺序（①）、换位对照（②）、同类判重（③），来源脚本 `playground/08-middleware-lab.py`（4a/4b 段）与续跑/补跑脚本（见 temp 留档）。
+见上文实测：三中间件顺序（①）、换位对照（②）、同类判重（③），来源脚本 `playground/08-middleware-lab.py`（4a/4b 段）与续跑/补跑脚本（见 temp 留档）；TS 侧证据见 `playground-ts/08-middleware-lab.ts`（4a/4b/4c 段）。
 
 #### 常见误区
 
 1. **以为顺序只是"打印差异"**：顺序即行为——4b 中同一观察者看到 1 个 vs 6 个工具，这就是"外层先改、内层后见"的直接后果。
-2. **以为两个同类实例可以直接挂**：默认同名被拒（实测 AssertionError）——用 name 区分（或换不同类）。
+2. **以为两个同类实例可以直接挂**：默认同名被拒（实测 AssertionError / Error）——用 name 区分（或换不同类）。
 3. **以为重试放哪层都一样**：放外层时内层被重跑、早先命令丢弃（官方 retry-safe 规则）；想"重试到耗尽再交错误兜底"，要按官方姿势把 retry 放内层、error 兜底放外层。
 
 #### 一句话记住
 
-> 进场正序、出场逆序、包裹嵌套——顺序表就是行为表；外层先动手，内层见结果。
+> 进场正序、出场逆序、包裹嵌套——顺序表就是行为表；外层先动手，内层见结果（Python 与 TS 同一条规则）。
 
 #### 🗣️ 行话对照
 
-- **执行顺序（execution order）**：before 正序 / after 逆序 / wrap 嵌套——在哪遇到：多中间件列表
-- **name 判重**：同类实例需要唯一名称——在哪遇到：`AgentMiddleware.name` 属性
+- **执行顺序（execution order）**：before 正序 / after 逆序 / wrap 嵌套——在哪遇到：多中间件列表（Python `middleware=[...]` / TS `middleware: [...]`）
+- **name 判重**：同类实例需要唯一名称——在哪遇到：`AgentMiddleware.name` 属性（Python）/ `createMiddleware({ name })` 必填（TS）
 - **outer wins / retry-safe**：包裹式命令的合成规则——在哪遇到：官方 custom middleware 页
 
 #### 官方文档
 
 - [Custom middleware · Execution order（三条规则）](https://docs.langchain.com/oss/python/langchain/middleware/custom#execution-order)
 - [Custom middleware · Best practices](https://docs.langchain.com/oss/python/langchain/middleware/custom#best-practices)
+- [Custom middleware（TS 版 · Execution order & Best practices）](https://docs.langchain.com/oss/javascript/langchain/middleware/custom#execution-order)
 
 ---
 
 ## 第四幕：实操验证
 
-回到第一幕：评审会上的四个问题，逐一有了着落。以下六组验证全部本机跑通（脚本：`playground/08-middleware-lab.py` + 续跑/补跑脚本）：
+回到第一幕：评审会上的四个问题，逐一有了着落。以下六组验证全部本机跑通（Python：`playground/08-middleware-lab.py` + 续跑/补跑脚本；TS：`playground-ts/08-middleware-lab.ts`）：
 
-1. **钩子机制（1a）**：单中间件全钩子触发顺序完整捕获（before_agent → 循环内 model/tool 钩子交替 → after_agent）；编译图节点实测含中间件节点（`TodoListMiddleware.after_model`）。
-2. **容错四件套（2c-2e）**：重试 3 次成功（对模型透明）；错误兜底对照（默认崩 vs 转错误消息自愈）；模型降级（坏模型名 → 备用模型完成回答）。
-3. **限额两道闸门（2a/2b）**：模型限额优雅收尾（`Model call limits exceeded: run limit (2/2)`）；工具限额拦下并行调用中的超额项（`Tool call limit exceeded...`），模型继续并如实说明。
-4. **PII 脱敏（2f）**：邮箱 `[REDACTED_EMAIL]` + 卡号掩码（`**** **** **** 1111`）——原文未进模型。
-5. **工具选择器与待办清单（2g/2h）**：6 工具筛到 1 个（选择器）；待办清单注册 `write_todos`、明确要求后完整闭环（建模版 → 执行 → 更新 → 汇报），自主跳过两次的原因出自工具自带指引（"少于 3 步别用"）。
-6. **自定义与顺序（3a/3b/4a/4b）**：计数 state 跨步保持（最终 `model_call_count = 2`）；jump 守护跳过模型（消息数 2）；三中间件顺序三条规则应验；换位对照（1 个 vs 6 个工具）；同类判重与 name 修复。
+1. **钩子机制（1a/1b）**：单中间件全钩子触发顺序完整捕获（before_agent → 循环内 model/tool 钩子交替 → after_agent）；编译图节点实测含中间件节点——Python `TodoListMiddleware.after_model`、TS `todoListMiddleware.after_model`（中间件节点名两侧分别取类名 / `name` 字段）。
+2. **容错四件套（2c-2e）**：重试 3 次成功（对模型透明）；错误兜底对照（Python 默认崩 vs TS 默认转工具消息不中断，`toolErrorMiddleware` 角色不同——见知识点 2 📌）；模型降级（坏模型名 → 备用模型完成回答）。
+3. **限额两道闸门（2a/2b）**：模型限额优雅收尾（Python `run limit (2/2)` / TS `run level call limit reached with 2 model calls`）；工具限额拦下并行调用中的超额项（`Tool call limit exceeded...`，两侧文案一致），模型继续并如实说明。
+4. **PII 脱敏（2f）**：邮箱 `[REDACTED_EMAIL]` + 卡号掩码（Python `**** **** **** 1111` / TS `****-****-****-1111`，掩码分隔符不同）——原文未进模型。
+5. **工具选择器与待办清单（2g/2h）**：6 工具筛到 1 个（选择器，TS 走 OpenAI 原生 `json_schema`）；待办清单注册 `write_todos`、明确要求后完整闭环（建模版 → 执行 → 更新 → 汇报），自主跳过两次的原因出自工具自带指引（"少于 3 步别用"）。
+6. **自定义与顺序（3a/3b/4a/4b/4c）**：计数 state 跨步保持（Python `model_call_count = 2` / TS `modelCallCount = 2`）；jump 守护跳过模型（消息数 2，TS `canJumpTo`/`jumpTo` 对象形态）；三中间件顺序三条规则应验；换位对照（1 个 vs 6 个工具）；同类判重与 name 修复（两侧都在构造期报错，Python `AssertionError` / TS `Error: ... is defined multiple times`）。
 
-> ✅ **回扣场景**：第一幕四个痛点全部有解——"工具报错就崩" = ToolErrorMiddleware（2d）；"没有刹车" = 两道限额（2a/2b）；"敏感信息直通" = PIIMiddleware（2f）；"工具太多选错" = LLMToolSelectorMiddleware（2g）。而且全部**不改引擎源码**——插槽体系兑现了承诺。
+> ✅ **回扣场景**：第一幕四个痛点全部有解——"工具报错就崩" = ToolErrorMiddleware（2d）；"没有刹车" = 两道限额（2a/2b）；"敏感信息直通" = PIIMiddleware（2f）；"工具太多选错" = LLMToolSelectorMiddleware（2g）。而且全部**不改引擎源码**——插槽体系兑现了承诺（Python 与 TS 一致）。
 >
-> ⚠️ 数值说明：以上为 2026-09-15 本机实测；限额与重试行为取决于配置参数（重试次数、退避设置），本课为演示取了小值；模型回答措辞受采样影响（对照实验的行为差异——崩溃/继续、1 个/6 个工具——为机制性差异，非措辞浮动）；能力扩展组与 Provider 专属未实测（已标注）。
+> ⚠️ 数值说明：以上为 2026-10-16 本机实测（Python 1.4.0 / langchain.js 1.5.18）；限额与重试行为取决于配置参数（重试次数、退避设置），本课为演示取了小值；模型回答措辞受采样影响（对照实验的行为差异——继续/中断、1 个/6 个工具、掩码分隔符——为机制性差异，非措辞浮动）；能力扩展组与 Provider 专属未实测（已标注）。
 
 **应用实战（4.2）**：把本课知识点组装成一条「横切能力抽离」的演进路线——独立成册：
 
@@ -623,23 +938,23 @@ AssertionError: Please remove duplicate middleware instances.
 
 ## 🐞 常见误区
 
-1. **以为"包在 agent 外面"能替代中间件**：循环内部的每一步只有钩子够得着（六个钩子全部"进"循环）。
-2. **以为工具异常会默认被兜住**：默认直接崩（实测 2d 对照）——兜底要显式挂件。
+1. **以为"包在 agent 外面"能替代中间件**：循环内部的每一步只有钩子够得着（六个钩子全部"进"循环，Python 与 TS 一致）。
+2. **以为工具异常两侧默认都一样**：**方向相反**——Python 默认异常冒泡、agent 中断；TS 默认把异常转成 ToolMessage（status:"error"）不中断。兜底要显式挂件（Python 用 ToolErrorMiddleware 实现"从崩到不崩"，TS 用它改默认文案）——见知识点 2 📌。
 3. **以为限额到顶就抛错**：行为可配（continue/end/error），默认拦下超额项让 agent 继续（2b/2a 实测两种姿态）。
 4. **以为顺序无所谓**：4b 换位实测——同一观察者看到 1 个 vs 6 个工具。
-5. **以为同类中间件可以随便挂多个**：默认同名判重（实测 AssertionError），要起唯一 name。
+5. **以为同类中间件可以随便挂多个**：默认同名判重（实测 Python `AssertionError` / TS `Error`，都在构造期），要起唯一 name。
 
 ### ⏳ 与过时说法对照（写前核对 + 实测发现的差异）
 
 | 旧说法（网上教程 / 直觉） | 现状（官方文档 + 本课实测） | 依据 |
 |---|---|---|
-| "给 agent 加控制逻辑 = 改 create_agent 源码" | 官方在循环上预留六个钩子，`middleware=[...]` 即插即用 | overview + 全部实测 |
-| "工具报错会被引擎自动转成消息" | 默认异常冒泡、agent 中断；要兜底需 ToolErrorMiddleware（或自定义包裹钩子） | 2d 对照 |
+| "给 agent 加控制逻辑 = 改 create_agent 源码" | 官方在循环上预留六个钩子，`middleware=[...]`（TS `middleware: [...]`）即插即用 | overview + 全部实测 |
+| "工具报错会被引擎自动转成消息" | **分语言**：Python 默认异常冒泡、agent 中断；TS 默认转 ToolMessage 不中断。要统一兜底需 ToolErrorMiddleware | 2d 双侧对照 |
 | "重试/限额这类优化是免费的" | 工具被真实多次执行；限额改变控制流；行为都要按参数与场景选择 | 2c、2a、2b |
 | "挂了待办清单 agent 就会自动规划" | 本机模型两次自主跳过（按工具指引判断"不需要"）；明确要求后完整闭环 | 2h 三段观察 |
 | "中间件顺序不影响结果" | 顺序即行为：外层先改请求、内层见结果（1 个 vs 6 个工具） | 4b 换位 |
-| "多个同参数中间件直接挂就行" | 默认同名判重报错，需 name 区分 | 4a 首跑 AssertionError |
-| "中间件是外挂旁路，与执行图无关" | 钩子运行在编译后的同一张图（图节点实测可见） | 结构核验 |
+| "多个同参数中间件直接挂就行" | 默认同名判重报错（Python `AssertionError` / TS `Error`，均在构造期），需 name 区分 | 4a/4c 实测 |
+| "中间件是外挂旁路，与执行图无关" | 钩子运行在编译后的同一张图（图节点实测可见） | 结构核验（TS 节点名 `todoListMiddleware.after_model`） |
 
 ## 一图总结
 

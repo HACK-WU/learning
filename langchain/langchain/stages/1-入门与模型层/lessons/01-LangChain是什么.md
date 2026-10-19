@@ -99,19 +99,35 @@ flowchart LR
 
 旧教程最经典的写法，在我们当前环境（langchain 1.4.0）里直接运行：
 
-```bash
+::: code-group
+
+```bash [Python]
 uv run python -c "from langchain.chains import LLMChain"
 ```
 
+```bash [TypeScript]
+node -e "import('langchain/chains').catch(e => console.log(e.code))"
+```
+
+:::
+
 实测输出（真实报错，勿被吓到）：
 
-```text
+::: code-group
+
+```text [Python]
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
 ModuleNotFoundError: No module named 'langchain.chains'
 ```
 
-这不是装错了包——`langchain.chains` 这个模块在 1.x 主包里已经不存在了（旧实现在 `langchain-classic` 里保留）。这就是"为什么必须先懂历史"最直接的证据：**看到教程的第一步，是先判断它属于哪个时代**。
+```text [TypeScript]
+ERR_PACKAGE_PATH_NOT_EXPORTED
+```
+
+:::
+
+这不是装错了包——`langchain.chains` 这个模块在 1.x 主包里已经不存在了（旧实现分别在 `langchain-classic`（Python）/ `@langchain/classic`（JS）里保留），TS 侧的报错是 `ERR_PACKAGE_PATH_NOT_EXPORTED`——包的导出表里没有这个子路径。这就是"为什么必须先懂历史"最直接的证据：**看到教程的第一步，是先判断它属于哪个时代**。
 
 #### 常见误区
 
@@ -242,26 +258,38 @@ flowchart TD
 
 #### 核心原理
 
-**① 安装**：官方要求 Python 3.10+（本课程环境用 3.12），两条路径——`pip` 或 `uv`。本课程用 **uv**：依赖锁进 `uv.lock`、虚拟环境隔离、不污染全局 Python。
+**① 安装**：官方要求 Python 3.10+（本课程环境用 3.12），两条路径——`pip` 或 `uv`。本课程用 **uv**：依赖锁进 `uv.lock`、虚拟环境隔离、不污染全局 Python。TypeScript 侧对应 Node 20+，用 npm 安装、`tsx` 直接运行 `.ts` 脚本。
 
-```bash
+::: code-group
+
+```bash [Python]
 uv init                                  # 初始化项目（生成 pyproject.toml，声明项目依赖）
 uv add langchain langchain-openai        # 主包 + OpenAI 兼容集成包
 ```
 
+```bash [TypeScript]
+npm init -y                              # 初始化项目（生成 package.json，声明项目依赖）
+npm install langchain @langchain/openai  # 主包 + OpenAI 兼容集成包
+npm install -D typescript tsx            # 工具链：类型检查 + 直接运行 .ts（脚本用到顶层 await，package.json 需加 "type": "module"）
+```
+
+:::
+
 注意最后一行：模型接入是**独立集成包**（`langchain-openai` 等）——这是 2024 年集成拆分后的结构，主包保持精简。
 
-**② 配置密钥**：密钥放 `.env` 文件，用 `python-dotenv` 加载；`.env` 加进 `.gitignore`，**永远不写进代码、不提交**。可分享的模板用占位符：
+**② 配置密钥**：密钥放 `.env` 文件，用 `python-dotenv`（Python）/ `dotenv`（TypeScript）加载；`.env` 加进 `.gitignore`，**永远不写进代码、不提交**。可分享的模板用占位符（两端通用，键名一致）：
 
 ```text
-# .env（本机文件，不入库）
+# .env（本机文件，不入库；Python 与 TypeScript 脚本共用同一份）
 BAILIAN_API_KEY=<YOUR_API_KEY>
 BAILIAN_BASE_URL=<YOUR_OPENAI_COMPATIBLE_ENDPOINT>
 ```
 
 **③ create_agent 最小示例**（本课程第一个可运行脚本，核心约 30 行）：
 
-```python
+::: code-group
+
+```python [Python]
 import os
 
 from dotenv import load_dotenv
@@ -295,12 +323,48 @@ result = agent.invoke(
 print(result["messages"][-1].content)
 ```
 
-逐段解读：
+```typescript [TypeScript]
+import dotenv from "dotenv";
+import { createAgent, initChatModel, tool } from "langchain";
+import * as z from "zod";
 
-- `get_weather`：一个普通函数 + docstring + 类型标注，**自动变成工具**（模型据此理解"这个帮手是干什么的"；原理课 4 展开）。
-- `init_chat_model`：统一的模型初始化入口；这里指向自备的 OpenAI 兼容端点（完整接法与排查课 2 展开）。
-- `create_agent(model=, tools=, system_prompt=)`：把"模型 + 工具 + 提示词"三件组装成一个 agent——正是上一幕公式的落地。
-- `invoke({"messages": [...]})`：输入是**消息列表**（课 3 展开消息体系）；返回的 `result["messages"]` 是完整消息流，取 `[-1]` 就是最终回复。
+dotenv.config({ path: [".env", "../playground/.env"] });
+
+const getWeather = tool(
+  ({ city }) => `${city}：晴，26℃，微风。`,
+  {
+    name: "get_weather",
+    description: "查询指定城市的天气。",
+    schema: z.object({ city: z.string().describe("城市名") }),
+  },
+);
+
+const model = await initChatModel("qwen3.8-flash", {
+  modelProvider: "openai",
+  apiKey: process.env.BAILIAN_API_KEY,
+  baseUrl: process.env.BAILIAN_BASE_URL,
+});
+
+const agent = createAgent({
+  model,
+  tools: [getWeather],
+  systemPrompt: "你是一个乐于助人的助手，回答简洁。",
+});
+
+const result = await agent.invoke({
+  messages: [{ role: "user", content: "北京今天天气怎么样？" }],
+});
+console.log(result.messages.at(-1)?.text);
+```
+
+:::
+
+逐段解读（两侧对照）：
+
+- `get_weather` / `getWeather`：Python 是"普通函数 + docstring + 类型标注"**自动变成工具**；TypeScript 用 `tool()` 包裹函数，把 docstring 职责交给 `description` 字段、类型标注换成 zod `schema`（模型据此理解"这个帮手是干什么的"；原理课 4 展开）。
+- `init_chat_model` / `initChatModel`：统一的模型初始化入口（TS 侧是异步的，需 `await`）；这里指向自备的 OpenAI 兼容端点（完整接法与排查课 2 展开）。
+- `create_agent(model=, tools=, system_prompt=)` / `createAgent({ model, tools, systemPrompt })`：把"模型 + 工具 + 提示词"三件组装成一个 agent——正是上一幕公式的落地。
+- `invoke({"messages": [...]})` / `await agent.invoke({ messages: [...] })`：输入是**消息列表**（课 3 展开消息体系）；返回的 `result["messages"]` / `result.messages` 是完整消息流，取 `[-1]` / `.at(-1)` 就是最终回复。
 
 **④ 第一次运行会发生什么**（机制解剖）：
 
@@ -324,11 +388,22 @@ sequenceDiagram
 
 #### 示例演示
 
-```bash
+::: code-group
+
+```bash [Python]
+# 在 playground/ 目录内运行
 uv run python 01-first-agent.py
 ```
 
-> 完整脚本已落盘在本课程 `playground/01-first-agent.py`（在 `playground/` 目录内运行）；下面是本机实测的核心输出，第四幕有完整版与解读。
+```bash [TypeScript]
+# 在 playground-ts/ 目录内运行
+npx tsx 01-first-agent.ts
+# 或 npm run l01
+```
+
+:::
+
+> 完整脚本已落盘在本课程 `playground/01-first-agent.py`（TypeScript 对照脚本见 `playground-ts/01-first-agent.ts`）；下面是本机实测的核心输出，第四幕有完整版与解读。
 
 ```text
 1. [HumanMessage] 北京今天天气怎么样？

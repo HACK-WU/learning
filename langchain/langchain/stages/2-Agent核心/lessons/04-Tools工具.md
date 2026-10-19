@@ -96,9 +96,11 @@ flowchart LR
 
 > 看图（全景版）：上半部分——函数被"翻译"成说明书（名字/用途/参数表）递给模型，**函数体永远不交给它**；下半部分——四步循环（① 写申请条 → ② 你这边执行 → ③ 回执带编号 → ④ 回执进消息列表）与"编号配对"要点，后文逐段展开。
 
-**② 说明书长什么样（给模型的最终形态）**：实测把工具转换成模型收到的格式（`convert_to_openai_tool`）：
+**② 说明书长什么样（给模型的最终形态）**：实测把工具转换成模型收到的格式（Python 侧 `convert_to_openai_tool` / TS 侧 `convertToOpenAITool`）：
 
-```json
+::: code-group
+
+```json [Python]
 {
  "type": "function",
  "function": {
@@ -109,39 +111,100 @@ flowchart LR
 }
 ```
 
-三个字段就是"说明书三件套"：`name`（叫什么）、`description`（干什么用、何时用）、`parameters`（要什么参数）。注意：**函数体不在里面**——模型永远看不到你的实现。
+```json [TypeScript]
+{
+ "type": "function",
+ "function": {
+  "name": "get_user_preference",
+  "description": "Get a user preference value.",
+  "parameters": {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {"pref_name": {"type": "string"}},
+  "required": ["pref_name"],
+  "additionalProperties": false
+ }
+ }
+}
+```
+
+:::
+
+三个字段就是"说明书三件套"：`name`（叫什么）、`description`（干什么用、何时用）、`parameters`（要什么参数）。注意：**函数体不在里面**——模型永远看不到你的实现。（TS 侧参数表由 zod 转换而来，会多出 `$schema`、`additionalProperties` 两个转换器附带的元字段；三件套语义不变。）
 
 **③ 申请条长什么样（先有个印象，下一站细讲）**——本课实测（脚本 3 段）：
 
-```text
+::: code-group
+
+```text [Python]
 问题: 帮我算 23*17 是多少
 tool_calls: [{'name': 'calculator', 'args': {'expression': '23 * 17'}, 'id': 'call_9183199ed5964d08a0e5b730', 'type': 'tool_call'}]
 ```
 
-模型读了 calculator 的说明书，生成了一条申请：调用 `calculator`，参数 `{'expression': '23 * 17'}`，编号 `call_9183...`。
+```text [TypeScript]
+问题: 帮我算 23*17 是多少
+tool_calls: [{"name":"calculator","args":{"expression":"23 * 17"},"id":"call_calc_4f8a2b1d"}]
+```
+
+:::
+
+模型读了 calculator 的说明书，生成了一条申请：调用 `calculator`，参数 `{'expression': '23 * 17'}`，编号 `call_9183...`。（TS 侧读取 `tool_calls` 时不含 `type` 字段——那是 Python 侧对象的展现形态。）
 
 **④ 一次可以申请多个**（parallel tool calls）——实测（脚本 4a 段）：问"北京和上海的天气分别怎么样？"，模型一次返回两条申请：
 
-```text
+::: code-group
+
+```text [Python]
 tool_calls 数量: 2
   - get_weather args={"location": "北京", "units": "celsius", "include_forecast": false} id=call_b1661205bc8241d...
   - get_weather args={"location": "上海", "units": "celsius", "include_forecast": false} id=call_9b03a2dab8f14d3...
 ```
 
+```text [TypeScript]
+tool_calls 数量: 2
+  - get_weather args={"location":"北京","units":"celsius","include_forecast":false} id=call_b1661205bc8241d...
+  - get_weather args={"location":"上海","units":"celsius","include_forecast":false} id=call_9b03a2dab8f14d3...
+```
+
+:::
+
 注意措辞：这是"一次申请两条"，不代表两条在并行执行——**执行节奏由你这边的代码决定**（你可以串行、也可以并发跑，官方甚至为并发写状态冲突准备了 reducer 机制，进阶话题）。
 
 **⑤ 回执闭环——三家实验补全最后一块**：手动执行循环（实测 4b 段）：
 
-```python
+::: code-group
+
+```python [Python]
 for tc in r1.tool_calls:
     tm = get_weather.invoke(tc)   # 把"申请条"整个交给工具：自动执行 + 自动包成 ToolMessage
 ```
 
-```text
+```typescript [TypeScript]
+for (const tc of r1.tool_calls ?? []) {
+  const tm = await getWeather.invoke(tc);   // 把"申请条"整个交给工具：自动执行 + 自动包成 ToolMessage
+}
+```
+
+:::
+
+::: code-group
+
+```text [Python]
 执行 北京 -> 返回类型: ToolMessage, tool_call_id 匹配: True
 执行 上海 -> 返回类型: ToolMessage, tool_call_id 匹配: True
 最终答复: 查询结果如下（摄氏温度）：- 北京：22°C - 上海：22°C 两地当前气温相同……
 ```
+
+```text [TypeScript]
+执行 北京 -> 返回类型: ToolMessage, tool_call_id 匹配: true
+执行 上海 -> 返回类型: ToolMessage, tool_call_id 匹配: true
+最终答复: 查询结果如下（摄氏温度）：
+- 北京：22°C
+- 上海：22°C
+两地当前气温相同，均为 22°C。
+```
+
+:::
 
 三行循环完成了"申请 → 执行 → 回执"，再把回执拼进消息列表递回去，模型就给出了终答。这就是一个最小 agent 的全部秘密——课 5 会看到，这整段循环框架会替你跑。
 
@@ -193,15 +256,27 @@ for tc in r1.tool_calls:
 
 #### 核心原理
 
-**① docstring 是必填项**（实测）：不写 docstring 且未给 `description` 时，装饰器直接报错——
+**① docstring 是必填项**（Python 实测）：不写 docstring 且未给 `description` 时，装饰器直接报错——
 
-```text
+::: code-group
+
+```text [Python]
 无 docstring: ValueError | Function must have a docstring if description not provided.
 ```
 
+```text [TypeScript]
+完全不传 description: "no_desc2 tool"（自动生成，不报错）
+```
+
+:::
+
+> 📌 **TypeScript 侧差异（本机实测）**：TS 的 `tool()` 不强制 description——不传时会自动生成一句"name + tool"的占位文案，静默通过。**不报错不等于写好了**：占位文案对模型选工具毫无帮助，description 在 TS 侧从"必填项"变成了"你自己的责任心"。
+
 **② 类型标注 → 参数表**（实测 1a 段）：`@tool def search_database(query: str, limit: int = 10)` 自动生成：
 
-```json
+::: code-group
+
+```json [Python]
 "properties": {
   "query": {"title": "Query", "type": "string"},
   "limit": {"default": 10, "title": "Limit", "type": "integer"}
@@ -209,55 +284,203 @@ for tc in r1.tool_calls:
 "required": ["query"]
 ```
 
-有默认值的参数不进 `required`（可选）、参数名进参数表、类型进 `type`——**这就是模型看到的"要什么材料"**。反例（实测 1d 段）：不写类型标注不报错，但参数表里 `a`、`b` 没有任何类型信息——模型只能瞎猜格式，框架也无从校验。
+```json [TypeScript]
+"properties": {
+  "query": {"type": "string", "description": "Search terms to look for"},
+  "limit": {"default": 10, "description": "Maximum number of results to return", "type": "number"}
+},
+"required": ["query", "limit"]
+```
 
-**③ Args 段进不进参数表，取决于一个开关**（实测对比）：
-- 默认（`parse_docstring=False`）：整个 docstring 作为工具描述，`Args:` 段的逐参数描述**不**进入参数表（1a 段实测：`query` 只有 `title` 和 `type`）；
-- `@tool(parse_docstring=True)`：`Args:` 段的描述被解析进每个参数的 `description`（1b 段实测：`"query": {"description": "Search terms to look for", ...}`）——模型能看到每个参数的用途说明。
+:::
 
-**④ 名字与描述都可以定制**（实测 1c 段）：`@tool("web_search")` 换名字（实测生效）、`@tool("calculator", description=...)` 覆写描述（**会替换掉 docstring 的角色**，实测生效）。
+参数名进参数表、类型进 `type`——**这就是模型看到的"要什么材料"**。反例（实测 1d 段）：Python 侧不写类型标注不报错，但参数表里 `a`、`b` 没有任何类型信息——模型只能瞎猜格式，框架也无从校验。
 
-**⑤ 复杂参数表用 Pydantic**（实测 1e 段）：`args_schema=WeatherInput` 时：
+> 📌 **TypeScript 侧差异（本机实测）**：① 参数描述不靠 docstring 的 `Args:` 段，而是逐字段 `.describe(...)`（见 ③）；② `required` 语义与 Python 不同——zod 里带 `.default(10)` 的字段**仍然进 `required`**（Python 侧 pydantic 的默认值字段不进 `required`）；要不要"可选"，用 `.optional()` 表达。
 
-```json
+**③ 参数级描述：Python 靠开关，TS 靠逐字段写**（实测对比）：
+
+::: code-group
+
+```python [Python]
+# 默认（parse_docstring=False）：Args: 段的逐参数描述不进入参数表
+@tool
+def search_database(query: str, limit: int = 10) -> str:
+    """Search the customer database...
+
+    Args:
+        query: Search terms to look for
+    """
+
+# @tool(parse_docstring=True)：Args: 段的描述被解析进每个参数的 description
+@tool(parse_docstring=True)
+def search_v2(query: str, limit: int = 10) -> str:
+    """Search the customer database...
+
+    Args:
+        query: Search terms to look for
+    """
+```
+
+```typescript [TypeScript]
+import * as z from "zod";
+import { tool } from "langchain";
+
+// 参数级描述直接写在 zod 字段上：.describe(...)
+const searchDatabase = tool(
+  ({ query, limit }) => `Found ${limit} results for '${query}'`,
+  {
+    name: "search_database",
+    description: "Search the customer database for records matching the query.",
+    schema: z.object({
+      query: z.string().describe("Search terms to look for"),
+      limit: z.number().default(10).describe("Maximum number of results to return"),
+    }),
+  },
+);
+```
+
+:::
+
+Python 侧：默认 `parse_docstring=False` 时整个 docstring 作为工具描述（1a 段实测：`query` 只有 `title` 和 `type`）；开 `parse_docstring=True` 后 `Args:` 段的描述进入参数表（1b 段实测）。TS 侧没有这个开关：参数描述永远来自 `.describe(...)`（1a/1b 段实测，两段 schema 输出的 `description` 一致）——**没有"写了等于没写"的陷阱，但也没有"自动解析 docstring"的便利**。
+
+**④ 名字与描述都可以定制**（实测 1c 段）：
+
+::: code-group
+
+```python [Python]
+@tool("web_search")            # 换名字
+def search(query: str) -> str: ...
+
+@tool("calculator", description="Performs arithmetic calculations. Use this for any math problems.")
+def calc(expression: str) -> str: ...   # 覆写描述（替换掉 docstring 的角色）
+```
+
+```typescript [TypeScript]
+const webSearch = tool(({ query }) => `Results for: ${query}`, {
+  name: "web_search",                                  // 换名字
+  description: "Search the web for information.",
+  schema: z.object({ query: z.string() }),
+});
+
+const calc = tool(({ expression }) => ..., {
+  name: "calculator",
+  description: "Performs arithmetic calculations. Use this for any math problems.",  // 描述即"说明书"
+  schema: z.object({ expression: z.string().describe("Mathematical expression") }),
+});
+```
+
+:::
+
+两边实测均生效：`name`、`description` 是 `tool()` 配置里的两个键，写什么模型就看到什么。
+
+**⑤ 复杂参数表：Python 用 Pydantic，TS 用 zod**（实测 1e 段）：
+
+::: code-group
+
+```python [Python]
+class WeatherInput(BaseModel):
+    """Input for weather queries."""
+
+    location: str = Field(description="City name or coordinates")
+    units: Literal["celsius", "fahrenheit"] = Field(default="celsius", description="Temperature unit preference")
+    include_forecast: bool = Field(default=False, description="Include 5-day forecast")
+
+@tool(args_schema=WeatherInput)
+def get_weather(location: str, units: str = "celsius", include_forecast: bool = False) -> str: ...
+```
+
+```typescript [TypeScript]
+const WeatherInput = z.object({
+  location: z.string().describe("City name or coordinates"),
+  units: z.enum(["celsius", "fahrenheit"]).default("celsius").describe("Temperature unit preference"),
+  include_forecast: z.boolean().default(false).describe("Include 5-day forecast"),
+});
+
+const getWeather = tool(({ location, units, include_forecast }) => ..., {
+  name: "get_weather",
+  description: "Get current weather and optional forecast.",
+  schema: WeatherInput,
+});
+```
+
+:::
+
+生成结果（实测）：
+
+::: code-group
+
+```json [Python]
 "units": {"default": "celsius", "description": "Temperature unit preference", "enum": ["celsius", "fahrenheit"], ...},
 "required": ["location"]
 ```
 
-`Field(description=...)` → 参数描述、`Literal[...]` → `enum` 取值清单（模型知道只能从这两个里选）、默认值 → `default`、非默认 → `required`。**约束越清楚，模型传错参数的概率越低**（校验失败详情见下节实测）。
+```json [TypeScript]
+"units": {"default": "celsius", "description": "Temperature unit preference", "type": "string", "enum": ["celsius", "fahrenheit"]},
+"required": ["location", "units", "include_forecast"]
+```
+
+:::
+
+`Field(description=...)` / `.describe(...)` → 参数描述、`Literal[...]` / `z.enum([...])` → `enum` 取值清单（模型知道只能从这两个里选）、默认值 → `default`、非默认 → `required`。**约束越清楚，模型传错参数的概率越低**（校验失败详情见下节实测）。（注：`required` 的差异来自 zod 的 `.default()` 语义——TS 侧带默认值字段仍进 `required`，见 ② 的差异说明。）
 
 **⑥ `runtime` 参数对模型隐藏**（实测 1f 段）：
 
-```text
+::: code-group
+
+```text [Python]
 args_schema 字段（工具内部全貌，含注入参数）: ['runtime']
 tool_call_schema 字段（模型看到的）: []
 混合参数工具 get_user_preference，模型实际收到：
   "parameters": {"properties": {"pref_name": {"type": "string"}}, "required": ["pref_name"], "type": "object"}
 ```
 
-同一个工具：函数签名里的 `runtime`（框架注入用）留在内部；发给模型的参数表里**只有** `pref_name`。这套"注入参数不进说明书"的机制，是知识点 3 上下文能力的基础。
+```text [TypeScript]
+schema 字段（模型看到的参数表，函数入参）: ["pref_name"]
+get_user_preference 的 schema（模型实际收到）:
+{
+ "type": "object",
+ "properties": {"pref_name": {"type": "string", "description": "preference name"}},
+ "required": ["pref_name"]
+}
+（对比：TS 侧 runtime/config 是第二参数，不在 schema 里，天然对模型隐藏）
+```
 
-**⑦ 保留参数名（踩坑实测）**：`config` 与 `runtime` 是保留名（官方）。实测把参数命名成 `config`：
+:::
 
-```text
+同一个工具：Python 侧函数签名里的 `runtime`（框架注入用）留在内部，发给模型的参数表里**只有** `pref_name`；TS 侧更彻底——运行时信息是 `tool()` 回调的**第二个参数**（`(input, config) => ...`），压根不经过 schema，模型永远看不到。这套"注入参数不进说明书"的机制，是知识点 3 上下文能力的基础。
+
+**⑦ 保留参数名（踩坑实测）**：Python 侧 `config` 与 `runtime` 是保留名（官方）。实测把参数命名成 `config`：
+
+::: code-group
+
+```text [Python]
 定义成功，调用报错: TypeError | needs_config() missing 1 required positional argument: 'config'
 ```
 
-定义时不报错、运行时才炸——因为 `config` 参数会被框架当作"运行配置"截走，永远不会传给你的业务逻辑。**这是最容易在深夜调出来的那类 bug，起名时避开即可。**
+```text [TypeScript]
+zod 字段名 config: 调用返回: "{\"config\":\"hello\"}"
+```
+
+:::
+
+Python 侧定义时不报错、运行时才炸——因为 `config` 参数会被框架当作"运行配置"截走，永远不会传给你的业务逻辑。**这是最容易在深夜调出来的那类 bug，起名时避开即可。**
+
+> 📌 **TypeScript 侧差异（本机实测）**：TS 不存在这个保留名陷阱——业务参数一律走 zod schema（第一个参数），运行时信息走回调第二参数，两者物理隔离；`config` 当业务字段名实测正常。**同一个概念（运行时信息），两边用不同机制实现了"隔离"。**
 
 **⑧ 命名规范**（官方警告）：工具名用小写 + 下划线（`web_search` 而不是 `Web Search`）——部分模型平台对含空格/特殊字符的名字会直接报错。
 
 #### 示例演示
 
-本节全部输出（1a-1g 段）来自脚本 `playground/04-tools-lab.py`，上文已引用关键段落。
+本节全部输出（1a-1g 段）来自脚本 `playground/04-tools-lab.py`（TS 对照：`playground-ts/04-tools-lab.ts`），上文已引用关键段落。
 
 #### 常见误区
 
-1. **不写 docstring**：直接报错（实测），且说明书不能只有名字。
+1. **不写 docstring**：Python 侧直接报错（实测）；TS 侧自动生成占位描述、静默通过——**两边都不是"能跑就行"**，说明书不能只有名字。
 2. **忘记类型标注**：能跑，但参数表没有类型信息（实测）——模型传递格式全靠猜。
-3. **写好了 `Args:` 段却没开 `parse_docstring`**：参数级描述静默不生效（实测对比）——写了等于没写。
+3. **写好了 `Args:` 段却没开 `parse_docstring`**：参数级描述静默不生效（Python 实测对比）——写了等于没写；TS 侧没有这个开关，描述必须写在 `.describe(...)` 里。
 4. **把描述写成实现笔记**："先用 pandas 读 csv 然后 groupby"——这是写给你自己看的；description 要写**用途与何时用**（给模型决策用）。
-5. **踩保留名**：`config` / `runtime` 当业务参数名（实测：能定义、调用必炸）。
+5. **踩保留名（Python 专属）**：`config` / `runtime` 当业务参数名（实测：能定义、调用必炸）；TS 侧无此陷阱。
 
 #### 一句话记住
 
@@ -311,12 +534,24 @@ tool_call_schema 字段（模型看到的）: []
 
 **实测（脚本 6 段）**——同一位用户"小明"：
 
-```text
+::: code-group
+
+```text [Python]
 6a. 问『我是谁』→ 你是 **小明**（用户 ID：user123）。……（工具内读 runtime.context + state + tool_call_id）
 6b. 保存颜色 → 好的，已记住：你喜欢的颜色是**蓝色**（工具内 runtime.store.put 写入长期记忆）
 6c. 新会话读取 → 你喜欢的颜色是：**蓝色**。（全新会话、无对话历史——靠 store 读回）
 6d. 从外部直查存储桶: ('prefs',) user123 {'favorite_color': '蓝色'}
 ```
+
+```text [TypeScript]
+6a. 问『我是谁』→ 你是 **小明**（用户 ID：user123）。我已经通过工具确认了你的身份信息。
+6b. 保存颜色 → 好的，已记住：你喜欢的颜色是**蓝色**。（工具内 config.store.put 写入长期记忆）
+6c. 新会话读取 → 你喜欢的颜色是：**蓝色**。
+6d. 从外部直查存储桶:
+    {"value":{"favorite_color":"蓝色"},"key":"user123","namespace":["prefs"],...}
+```
+
+:::
 
 6c 是最能说明问题的一条：这次对话**没有任何历史消息**，模型能答"蓝色"的唯一通路就是 store——长期记忆（课 7 的主角）在工具层的雏形。
 
@@ -325,18 +560,37 @@ tool_call_schema 字段（模型看到的）: []
 - **字符串**：给人话结果（示例工具都是这一型）。
 - **对象（dict）**：结构化结果，序列化后进回执——实测 7b 段，`delete_data` 返回 `{"deleted": True, "table": "orders", "rows": 128}`，模型收到的 ToolMessage 原文正是：
 
-```text
+::: code-group
+
+```text [Python]
 [Tool 回执] {"deleted": true, "table": "orders", "rows": 128}
 ```
 
+```text [TypeScript]
+[Tool 回执] {"deleted":true,"table":"orders","rows":128}
+```
+
+:::
+
 - **Command**：想**直接写 agent 状态**时用它——返回值里带状态变更，并自建一条 ToolMessage 作为回执（官方姿势）。实测 8 段：
 
-```text
+::: code-group
+
+```text [Python]
 最终状态里的 user_name: 小明
    [AI 请求] set_user_name({"new_name": "小明"})
    [Tool 回执] 用户名已设置为 小明。   ← Command 里自带的 ToolMessage
    [ai] 好的，小明！您的用户名已经成功设置为「小明」了。
 ```
+
+```text [TypeScript]
+最终状态里的 user_name: 小明
+   [AI 请求] set_user_name({"new_name":"小明"})
+   [Tool 回执] 用户名已设置为 小明。   ← Command 里自带的 ToolMessage
+   [ai] 好的，小明！您的用户名已经成功设置为「小明」了。
+```
+
+:::
 
 一个值得养成的习惯（官方提示）：状态字段被多个工具可能并发更新时，给它配一个 reducer（课 5/进阶再展开）。
 
@@ -346,7 +600,9 @@ tool_call_schema 字段（模型看到的）: []
 
 **实测（脚本 7 段）**——同一个问题"请删除 orders 数据表里的全部数据"：
 
-```text
+::: code-group
+
+```text [Python]
 7a. viewer（工具集只有 read_data）→ 我这边没法执行这个操作……我目前只有一个工具 read_data（只读），
     不具备 DELETE / TRUNCATE / DROP 等任何写入或删除能力。……（如实拒绝）
 7b. admin（工具集含 delete_data）→ [AI 请求] delete_data({"table": "orders"}) → 执行成功：
@@ -355,21 +611,59 @@ tool_call_schema 字段（模型看到的）: []
     当前核实结果为 0 行，数据已清空。」
 ```
 
+```text [TypeScript]
+7a. viewer（只给 read_data）→ 我这边没法执行这个操作。我目前只有一个工具 read_data（只读），不具备
+    DELETE / TRUNCATE / DROP 等任何写入或删除能力。如需执行删除，请联系管理员账号操作。
+7b. admin（工具集含 delete_data）:
+   [AI 请求] delete_data({"table":"orders"})
+   [Tool 回执] {"deleted":true,"table":"orders","rows":128}
+   [ai] 已成功删除 orders 数据表中的全部数据，共清除 128 行记录。⚠️ 提醒：此操作不可恢复，请知悉。
+7c. 用户确认后（携带历史继续）：
+   [AI 请求] read_data({"table":"orders"})
+   [Tool 回执] （orders 表数据：0 行，已清空）
+   [ai] 无需重复执行——orders 表的删除操作已经在上一轮完成，当前核实结果为 0 行，数据已清空。
+```
+
+:::
+
 注意 7a 的价值：**模型不会"硬闯"**——没有的工具它调不了，只能如实说不能。想让一个操作"从物理上不可能发生"，最硬的边界不是提示词，而是**不给工具**。（提示词可以被绕过，工具集不能。）
 
 **④ 错误处理：让失败变成模型能读的消息**
 
 先看**默认行为**（实测 5b-1 段）：让模型调用一个必然失败的工具——
 
-```text
+::: code-group
+
+```text [Python]
 5b-1 默认行为：agent 直接崩溃 → ValueError | 分析失败：尚未加载数据集。先调用 load_dataset（可试用 name='demo'）再重试。
 ```
 
-崩溃的原因是：**工具抛出的业务异常默认直接向上冒泡**（官方注释："Exceptions propagate unless handle_tool_errors is configured"）——异常没有变成消息递回给模型，整条运行被迫中断。**"模型会自己重试"是个误解**；它重试的前提，是错误以回执的形式回到它手里。
+```text [TypeScript]
+5b-1 默认行为（未崩溃）：
+   [human] 帮我看看数据集的整体情况
+   [AI 请求] analyze({})
+   [Tool 回执] Error: 分析失败：尚未加载数据集。先调用 load_dataset（可试用 name='demo'）再重试。
+ Please fix your mistakes.
+   [AI 请求] load_dataset({"name":"demo"})
+   [Tool 回执] 数据集 demo 已加载，共 1000 行。
+   [AI 请求] analyze({})
+   [Tool 回执] 数据集 demo：共 1000 行，平均分 87.5，无缺失值。
+   [ai] 数据集 demo 的整体情况如下：……（终答）
+```
 
-**标准做法**（官方工具页给出的姿势）：用 `wrap_tool_call` 中间件把异常转成 ToolMessage——
+:::
 
-```python
+Python 侧崩溃的原因是：**工具抛出的业务异常默认直接向上冒泡**（官方注释："Exceptions propagate unless handle_tool_errors is configured"）——异常没有变成消息递回给模型，整条运行被迫中断。**"模型会自己重试"是个误解**；它重试的前提，是错误以回执的形式回到它手里。
+
+> 📌 **TypeScript 侧差异（本机实测 + 源码核对）**：TS 侧**默认就把工具异常转成 ToolMessage**（`ToolNode` 的默认错误处理器，附言 `Please fix your mistakes.`、`status: "error"`）——同一段代码不写任何中间件，模型已完成"出错 → 读错误 → 换路 → 成功"的全自动修正（见上方输出）。**"要不要让模型看到错误"这条分岔，两侧的默认值是反的**：Python 默认拒绝、TS 默认放行。TS 侧用中间件的目的因此变成：**替换默认文案、区分错误类型、加审计**——而不是"从崩溃中救命"。
+
+**标准做法**（官方工具页给出的姿势）：用中间件把异常转成 ToolMessage——
+
+::: code-group
+
+```python [Python]
+from langchain.agents.middleware import wrap_tool_call
+
 @wrap_tool_call
 def handle_tool_errors(request, handler):
     try:
@@ -381,9 +675,31 @@ def handle_tool_errors(request, handler):
         )
 ```
 
+```typescript [TypeScript]
+import { createMiddleware, ToolMessage } from "langchain";
+
+const handleToolErrors = createMiddleware({
+  name: "HandleToolErrors",
+  wrapToolCall: async (request, handler) => {
+    try {
+      return await handler(request);
+    } catch (error) {
+      return new ToolMessage({
+        content: `Tool error: Please check your input and try again. (${error})`,
+        tool_call_id: request.toolCall.id!,
+      });
+    }
+  },
+});
+```
+
+:::
+
 **实测（5b-2 段）**，同一个问题"帮我看看数据集的整体情况"，加上中间件之后——完整链路：
 
-```text
+::: code-group
+
+```text [Python]
 [human] 帮我看看数据集的整体情况
 [AI 请求] analyze({})
 [Tool 回执] Tool error: Please check your input and try again. (分析失败：尚未加载数据集。先调用 load_dataset（可试用 name='demo'）再重试。)
@@ -394,21 +710,34 @@ def handle_tool_errors(request, handler):
 [ai] 数据集 demo 的整体情况如下：……（终答）
 ```
 
+```text [TypeScript]
+[human] 帮我看看数据集的整体情况
+[AI 请求] analyze({})
+[Tool 回执] Tool error: Please check your input and try again. (Error: 分析失败：尚未加载数据集。先调用 load_dataset（可试用 name='demo'）再重试。)
+[AI 请求] load_dataset({"name":"demo"})
+[Tool 回执] 数据集 demo 已加载，共 1000 行。
+[AI 请求] analyze({})
+[Tool 回执] 数据集 demo：共 1000 行，平均分 87.5，无缺失值。
+[ai] 数据集 demo 的整体情况如下：共 1000 行，平均分 87.5，无缺失值。数据质量良好，无需额外清洗。
+```
+
+:::
+
 四步"出错 → 读错误 → 换路 → 成功"全自动完成。这条链路上有两个设计要点：
 
 - **错误消息要写给"下一步"**：我们的消息包含"先调用 load_dataset（可试用 name='demo'）"——模型照着做了。只说"失败了"的错误消息，会让模型卡在原地。
 - **不要把内部细节写进错误**（密钥、堆栈、表结构）——消息会进入对话与日志。
 
-工程惯例（经验补充）：**预期内**的错误（参数不合法、资源不存在）可以在工具内 `try/except` 处理后返回说明性字符串；**意外异常**（代码 bug、依赖故障）建议交给中间件统一兜底（转换、重试策略等）——中间件是课 8 的主角，今天只认识它这一副面孔。
+工程惯例（经验补充）：**预期内**的错误（参数不合法、资源不存在）可以在工具内 `try/except` / `try/catch` 处理后返回说明性字符串；**意外异常**（代码 bug、依赖故障）建议交给中间件统一兜底（转换、重试策略等）——中间件是课 8 的主角，今天只认识它这一副面孔。
 
 #### 示例演示
 
-本节实测覆盖：runtime 三件套（6 段）、返回值三型（7b/8 段）、权限边界（7a/b/c 段）、错误兜底与自修正（5b 段）。脚本：`playground/04-tools-lab.py`。
+本节实测覆盖：runtime 三件套（6 段）、返回值三型（7b/8 段）、权限边界（7a/b/c 段）、错误兜底与自修正（5b 段）。脚本：`playground/04-tools-lab.py`（TS 对照：`playground-ts/04-tools-lab.ts`）。
 
 #### 常见误区
 
-1. **用全局变量传用户身份**：多用户并发必串号；`runtime.context` 是官方答案（依赖注入，还可测试）。
-2. **以为"模型会重试失败的工具"**：默认它压根收不到错误（异常冒泡打断运行）；错误转成消息递回它，它才会修正（5b 实测对照）。
+1. **用全局变量传用户身份**：多用户并发必串号；`runtime.context` / `config.context` 是官方答案（依赖注入，还可测试）。
+2. **以为"模型会重试失败的工具"**：Python 侧默认它压根收不到错误（异常冒泡打断运行）；错误转成消息递回它，它才会修正（5b 实测对照）。TS 侧默认已转消息（实测）。
 3. **用提示词管权限**："不要删数据"挡不住任何事（prompt 可被绕过）；**工具集才是硬边界**（7a 实测）。
 4. **把内部信息塞进返回值/错误消息**：返回值和错误消息都会作为文本进入对话（可能被用户看到、被日志留存）。
 5. **忽略并发写状态**：多个工具并发改同一状态字段时，用 reducer 定义合并规则（官方提示）。
@@ -419,10 +748,10 @@ def handle_tool_errors(request, handler):
 
 #### 🗣️ 行话对照
 
-- **ToolRuntime / runtime.context**：工具内的运行时信息面板与注入配置——在哪遇到：`runtime: ToolRuntime`、依赖注入
-- **store（长期记忆）**：跨会话持久化，namespace/key 组织——在哪遇到：`runtime.store.put/get`、课 7
+- **ToolRuntime / runtime.context**：工具内的运行时信息面板与注入配置——在哪遇到：`runtime: ToolRuntime`（Python）/ `(input, config) => ...` 第二参数（TS）、依赖注入
+- **store（长期记忆）**：跨会话持久化，namespace/key 组织——在哪遇到：`runtime.store.put/get`（Python）/ `config.store.put/get`（TS）、课 7
 - **wrap_tool_call（中间件）**：包裹工具执行的钩子（错误转换、重试、审计）——在哪遇到：本课错误兜底、课 8 系统展开
-- **Command**：工具的"状态写入"返回值——在哪遇到：`from langgraph.types import Command`
+- **Command**：工具的"状态写入"返回值——在哪遇到：`from langgraph.types import Command`（Python）/ `@langchain/langgraph`（TS）
 - **reducer**：并发状态更新的合并规则——在哪遇到：官方 state 文档、进阶话题
 
 #### 官方文档
@@ -453,9 +782,11 @@ def handle_tool_errors(request, handler):
 
 **② MCP：工具生态的"标准插座"**。MCP（Model Context Protocol）是一个开放协议，规定"工具服务器"如何把能力暴露给"客户端"（任何 AI 应用）。链路是：服务器暴露工具清单 → 客户端连接、发现、转换 → 当作普通工具使用。
 
-本课**直连实测**（不装任何 MCP 依赖，用普通 HTTP 手写 JSON-RPC，脚本 `04-mcp-lab.py` A 段）——直连官方文档服务器 `https://docs.langchain.com/mcp`：
+本课**直连实测**（不装任何 MCP 依赖，用普通 HTTP 手写 JSON-RPC，脚本 `04-mcp-lab.py` / `04-mcp-lab.ts` A 段）——直连官方文档服务器 `https://docs.langchain.com/mcp`：
 
-```text
+::: code-group
+
+```text [Python]
 1) initialize -> 200 | session: （无）
    服务器: {"name": "Docs by LangChain", "version": "1.0.0"}
    协议版本: 2025-06-18
@@ -469,11 +800,29 @@ def handle_tool_errors(request, handler):
    Title: Create a tool / Link: https://docs.langchain.com/langsmith/smith-api/tools/create-a-tool / …
 ```
 
-这段"裸链"输出值得记住：MCP 的底层就是**握手（initialize）→ 列清单（tools/list）→ 调用（tools/call）**的 JSON-RPC 对话——LangChain 的 `MCPAdapter` 就是把这三步封装成一行代码。
+```text [TypeScript]
+1) initialize -> 200 | session: （无）
+   服务器: {"name":"Docs by LangChain","version":"1.0.0"}
+   协议版本: 2025-06-18
+
+2) tools/list -> 3 个工具:
+   - search_docs_by_lang_chain: Search across the Docs by LangChain knowledge base to find relevant in…
+   - query_docs_filesystem_docs_by_lang_chain: Run a read-only shell-like query against a virtualized, in-memory file…
+   - submit_feedback: Report a problem with this documentation site so the docs team can fix…
+
+3) tools/call(search_docs_by_lang_chain) -> 返回 2227 字符，节选:
+   Title: Create a custom tool / Link: https://docs.langchain.com/langsmith/use-tools#create-a-custom-tool / Page: langsmith/use-tools / …
+```
+
+:::
+
+这段"裸链"输出值得记住：MCP 的底层就是**握手（initialize）→ 列清单（tools/list）→ 调用（tools/call）**的 JSON-RPC 对话——LangChain 的 `MCPAdapter` 就是把这三步封装成一行代码。（两侧返回字符数不同是检索结果浮动，属正常。）
 
 **③ LangChain 侧接入（MCPAdapter）**——官方写法：
 
-```python
+::: code-group
+
+```python [Python]
 from langchain.mcp import MCPAdapter
 
 async with MCPAdapter("https://example.com/mcp") as adapter:
@@ -481,11 +830,30 @@ async with MCPAdapter("https://example.com/mcp") as adapter:
     agent = create_agent(model, tools)
 ```
 
-两个工程注意点（官方原文）：依赖 `langchain[mcp]`（底层是 FastMCP），命名空间目前是 **beta**（导入即收到 beta 警告、API 可能变化）；连接目标可以是 http 地址、本地脚本（stdio 子进程）、内存内 FastMCP 实例等，适配器自动识别传输方式。
+```typescript [TypeScript]
+import { MCPAdapter } from "@langchain/mcp-adapters";
+import { createAgent } from "langchain";
 
-> ✅ **实测（2026-09-15 补测）**：安装 `langchain[mcp]`（fastmcp 4.0.3）后运行脚本 B 段——适配器把服务器的 3 个工具原样转成 LangChain 工具，agent 经 MCP 工具完成检索并给出带文档引用的回答：
+const adapter = new MCPAdapter({ servers: { docs: { url: "https://example.com/mcp" } } });
 
-```text
+try {
+  const tools = await adapter.listTools();
+  const agent = createAgent({ model, tools });
+  // ...此后正常 invoke
+} finally {
+  await adapter.close();   // TS 侧：adapter 全程保持打开，用完在 finally 里关闭
+}
+```
+
+:::
+
+工程注意点（官方原文）：Python 侧依赖 `langchain[mcp]`（底层是 FastMCP），命名空间目前是 **beta**（导入即收到 beta 警告、API 可能变化）；TS 侧依赖 `@langchain/mcp-adapters` 2.x，用 `try/finally` 保证 `close()`；连接目标可以是 http 地址、本地脚本（stdio 子进程）等，适配器自动识别传输方式。
+
+> ✅ **实测（2026-09-15 补测；TS 侧为 2026-10-16 补测）**：安装 `langchain[mcp]`（fastmcp 4.0.3）/ `@langchain/mcp-adapters` 2.x 后运行脚本 B 段——适配器把服务器的 3 个工具原样转成 LangChain 工具，agent 经 MCP 工具完成检索并给出带文档引用的回答：
+
+::: code-group
+
+```text [Python]
 适配器把服务器工具转成了 3 个 LangChain 工具:
    - search_docs_by_lang_chain
    - query_docs_filesystem_docs_by_lang_chain
@@ -494,29 +862,50 @@ agent（经 MCP 工具）回答: 最佳实践是把工具描述当作提示词�
 并为每个参数写明确的名称和描述，以此引导模型正确决定何时、如何调用该工具（详见工具定义与 Tool prompts 文档）……
 ```
 
-beta 状态同步实测：导入 `langchain.mcp` 时进程收到一次 `LangChainBetaWarning`——"beta 可能变化"不只是文档声明，连警告都是真的（原样收录）。
+```text [TypeScript]
+适配器把服务器工具转成了 3 个 LangChain 工具:
+   - docs_search_docs_by_lang_chain
+   - docs_query_docs_filesystem_docs_by_lang_chain
+   - docs_submit_feedback
+agent（经 MCP 工具）回答: 最佳实践是把工具描述当作提示词来做：提供清晰（snake_case）的名称、在描述中说明工具做什么以及何时使用，并为每个参数写明确的名称和描述，以此引导模型正确决定何时、如何调用该工具。
+```
+
+:::
+
+（工具名差异：TS 侧 `MCPAdapter` 会加服务器名前缀 `docs_`，适配器文档明确说明；Python 侧保持原名。）beta 状态同步实测：Python 侧导入 `langchain.mcp` 时进程收到一次 `LangChainBetaWarning`——"beta 可能变化"不只是文档声明，连警告都是真的（原样收录）。
 
 **④ server-side tool use（服务端工具）**：部分厂商在模型服务端内置了工具（网页搜索、代码解释器等），启用后由**厂商侧执行**、不占你的进程。写法取决于具体平台（官方建议查对应 provider 页）。本课环境（百炼兼容接口）未提供此类内置工具——**本课未实测**，按平台文档使用。
 
-**⑤ headless tools（无头工具）**：工具的**定义**（名字/描述/参数表）注册在服务端，**实现**只存在于客户端（典型是浏览器），执行前通过"中断 → 客户端执行 → 恢复"握手完成；适用于依赖设备环境的能力（定位、剪贴板、本地文件）与隐私敏感场景（数据不出设备）。**本机实测**（脚本 C 段）：当前安装的 langchain 1.4.0 **尚未包含**该 API——
+**⑤ headless tools（无头工具）**：工具的**定义**（名字/描述/参数表）注册在服务端，**实现**只存在于客户端（典型是浏览器），执行前通过"中断 → 客户端执行 → 恢复"握手完成；适用于依赖设备环境的能力（定位、剪贴板、本地文件）与隐私敏感场景（数据不出设备）。**本机实测**（脚本 C 段）——两侧的版本现状**正好相反**：
 
-```text
+::: code-group
+
+```text [Python]
 tool('name', description=...) 返回: function        ← 返回的是装饰器工厂，不是 HeadlessTool
 tool(name=...) 报错: TypeError | tool() got an unexpected keyword argument 'name'
 ```
 
-官方文档已收录该特性（文档先行于发行版）。这是个健康的习惯示范：**文档写了 ≠ 你的版本有**——动手前先 `实测 API 是否存在`。
+```text [TypeScript]
+tool({ name, description }) 返回类型: DynamicTool
+有 .implement 方法: function
+implement() 返回类型: Object | 有 execute: function
+实现体执行结果: "缩放已设置为 150"
+```
+
+:::
+
+TS 侧 1.5.x **已包含** headless 形态的 API（`tool({name, description, schema})` 定义 + `.implement(...)` 绑定客户端实现）；Python 侧当前安装的 langchain 1.4.0 **尚未包含**该 API。官方文档已收录该特性（文档先行于发行版）。这是个健康的习惯示范：**文档写了 ≠ 你的版本有，也 ≠ 别的语言版本没有**——动手前先 `实测 API 是否存在`。
 
 #### 示例演示
 
-见上文实测（裸链、适配器接入、headless 状态），来源脚本 `playground/04-mcp-lab.py`。
+见上文实测（裸链、适配器接入、headless 状态），来源脚本 `playground/04-mcp-lab.py`（TS 对照：`playground-ts/04-mcp-lab.ts`）。
 
 #### 常见误区
 
 1. **以为 MCP 是某家私有协议**：它是开放标准——任何客户端可连任何服务器（本课用一个"非 LangChain 阵营"的普通 HTTP 直连就验证了这点）。
-2. **以为接 MCP 要手写适配**：裸链的三步（握手/列表/调用）正是 `MCPAdapter` 替你做的；你只需要 `list_tools()`。
+2. **以为接 MCP 要手写适配**：裸链的三步（握手/列表/调用）正是 `MCPAdapter` 替你做的；你只需要 `list_tools()` / `listTools()`。
 3. **以为服务端工具人人有**：取决于平台与模型（有的没有）；用之前先查 provider 页与实测。
-4. **忽略 beta/版本现实**：`langchain.mcp` 是 beta；headless 在本机版本还不存在——**以实测为准，不以文档为想当然**。
+4. **忽略 beta/版本现实**：`langchain.mcp` 是 beta；headless 在 Python 侧本机版本还不存在（TS 侧已可用）——**以实测为准，不以文档为想当然**。
 
 #### 一句话记住
 
@@ -538,18 +927,18 @@ tool(name=...) 报错: TypeError | tool() got an unexpected keyword argument 'na
 
 ## 第四幕：实操验证
 
-回到第一幕：给客服助手装上"手脚"。整合本课四站——从定义工具（K2）到请求闭环（K1），再到上下文与权限（K3），最后看一眼生态（K4）。以下六项验证全部本机跑通（脚本：`playground/04-tools-lab.py`、`playground/04-mcp-lab.py`）：
+回到第一幕：给客服助手装上"手脚"。整合本课四站——从定义工具（K2）到请求闭环（K1），再到上下文与权限（K3），最后看一眼生态（K4）。以下六项验证全部本机跑通（脚本：`playground/04-tools-lab.py`、`playground/04-mcp-lab.py`；TS 对照：`playground-ts/04-tools-lab.ts`、`playground-ts/04-mcp-lab.ts`）：
 
 1. **说明书生效**：模型读 description 后选对工具——问"23*17"，它选中 `calculator` 而非 `search_database`，参数 `{'expression': '23 * 17'}`。
 2. **闭环跑通**：一次问出两条申请（北京/上海），手动循环执行、拼回回执，模型给出双城终答。
-3. **出错能救回来**：默认配置下工具异常让 agent 崩溃；一行中间件转换后，同一问题自动完成"出错 → 读错误 → 加载数据 → 重试成功"四步。
+3. **出错能救回来**：Python 侧默认配置下工具异常让 agent 崩溃、一行中间件转换后自动完成四步修正；TS 侧默认就完成修正，中间件用于自定义错误文案（两侧实测对照见知识点 3）。
 4. **知道"为谁服务"**：`runtime.context` 注入用户身份（小明/user123）；`runtime.store` 写入偏好后，**全新会话**仍能读回"蓝色"。
 5. **权限边界真实存在**：viewer 工具集下模型如实拒绝删除请求；admin 工具集下真的执行成功（含 dict 回执与后续核实）。
-6. **生态直连**：手写 JSON-RPC 完成 MCP 三连（握手 → 工具清单 → 真实调用返回 1368 字符）；安装 `langchain[mcp]` 后，`MCPAdapter` 把 3 个工具接入 agent 并实测调用成功（agent 引用官方文档作答）。
+6. **生态直连**：手写 JSON-RPC 完成 MCP 三连（握手 → 工具清单 → 真实调用，两侧均实测）；安装适配器后，`MCPAdapter` 把 3 个工具接入 agent 并实测调用成功（agent 引用官方文档作答）。
 
 > ✅ **回扣场景**：第一幕的三个需求都有了着落——"查订单/算账/提醒"= 三个白名单工具（它们拿到 `runtime.context` 里的用户身份）；"不敢让它碰生产库"= 工具集就是权限（viewer 连删的选项都没有）；第一幕担心的"人肉搬运"= 申请→执行→回执的自动闭环。
 >
-> ⚠️ 数值说明：以上为 2026-09-15 本机实测；模型措辞与参数写法会有浮动（同一问题两次运行分别出现过 `23 * 17` 与 `23*17` 两种参数写法，属正常）。
+> ⚠️ 数值说明：以上为 2026-09-15 本机实测；模型措辞与参数写法会有浮动（同一问题两次运行分别出现过 `23 * 17` 与 `23*17` 两种参数写法，属正常）。TypeScript 侧输出由 `playground-ts/04-tools-lab.ts` / `04-mcp-lab.ts` 在本地 OpenAI 兼容 mock 端点（MCP 部分为真实公网服务器）上运行采集。
 
 **应用实战（4.2）**：把本课知识点组装成一条「内部 API 变成敢用的工具」的演进路线——独立成册：
 
@@ -575,19 +964,19 @@ tool(name=...) 报错: TypeError | tool() got an unexpected keyword argument 'na
 ## 🐞 常见误区
 
 1. **以为"模型调用工具"是模型执行了工具**：它只生成申请条；执行永远在你的进程里（安全与审计的地基）。
-2. **以为模型会自动重试失败的工具调用**：默认异常直接冒泡打断运行（实测崩溃）；要它自我修正，必须先让错误"变成消息"递回（中间件转换实测）。
+2. **以为模型会自动重试失败的工具调用**：Python 侧默认异常直接冒泡打断运行（实测崩溃）；要它自我修正，必须先让错误"变成消息"递回（中间件转换实测）。TS 侧默认已转消息（实测），中间件用于替换文案、加审计。
 3. **以为提示词能管权限**：能拦住它的不是措辞而是工具集——没给的工具，它调不了（viewer 实测）。
-4. **以为"文档有 = 我能用"**：headless 工具文档已收录、本机版本尚无该 API（实测）；MCP 适配器依赖 `langchain[mcp]`——动手前先验证环境。
+4. **以为"文档有 = 我能用"**：headless 工具文档已收录、Python 侧本机版本尚无该 API（TS 侧已可用，实测）；MCP 适配器依赖 `langchain[mcp]` / `@langchain/mcp-adapters`——动手前先验证环境。
 5. **把内部信息（密钥/堆栈/表结构）写进返回值或错误消息**：这些文本会进入对话与日志。
 
 ### ⏳ 与过时说法对照（写前核对 + 实测发现的差异）
 
 | 旧说法（网上教程 / 直觉） | 现状（官方文档 + 本课实测） | 依据 |
 |---|---|---|
-| "function calling 是 OpenAI 的独有功能" | 已是跨厂商标准；LangChain 用 `bind_tools` / `@tool` 统一，本课在百炼链路上全部实测通过 | tools / models 页 + 实测 |
-| "工具报错时 agent 会自动重试" | 默认**不兜底**：业务异常直接冒泡、打断运行（实测崩溃）；转成消息递回后模型才会修正——这是你（用中间件）配置的行为 | 实测 5b + 源码注释 |
+| "function calling 是 OpenAI 的独有功能" | 已是跨厂商标准；LangChain 用 `bind_tools` / `@tool` / `tool()` 统一，本课在百炼链路上全部实测通过（两侧） | tools / models 页 + 实测 |
+| "工具报错时 agent 会自动重试" | Python 侧默认**不兜底**：业务异常直接冒泡、打断运行（实测崩溃）；转成消息递回后模型才会修正——这是你（用中间件）配置的行为。TS 侧默认**已兜底**（异常自动转 ToolMessage，实测+源码）——两侧默认相反 | 实测 5b + 源码核对 |
 | "工具的返回值只能是字符串" | 字符串 / dict / Command 三型均可；dict 会序列化进回执、Command 可写状态（均实测） | tools 页 + 实测 7b/8 |
-| "MCP 是某家厂商的私有协议" | 开放标准：普通 HTTP 手写 JSON-RPC 即可直连服务器（实测 3 连），与 LangChain 无强绑定 | mcp 页 + 裸链实测 |
+| "MCP 是某家厂商的私有协议" | 开放标准：普通 HTTP 手写 JSON-RPC 即可直连服务器（实测 3 连，两侧），与 LangChain 无强绑定 | mcp 页 + 裸链实测 |
 | "模型记住有哪些工具" | 说明书随每次请求递送；没递就没有（"消息列表 = 全部输入"的延伸） | tools 页 + 实测 1f |
 
 ## 一图总结
@@ -613,12 +1002,12 @@ tool(name=...) 报错: TypeError | tool() got an unexpected keyword argument 'na
 **Q2**：工具在执行中抛出业务异常（如"数据未加载"），默认会发生什么？想让模型据此自我修正要做什么？
 - A. 默认自动重试三次；什么都不用做
 - B. 默认把异常塞进回执；模型天然可见
-- C. 默认异常冒泡、打断运行；用 `wrap_tool_call` 中间件把异常转成 ToolMessage 递回，模型才会修正
+- C. Python 侧默认异常冒泡、打断运行，用 `wrap_tool_call` 中间件把异常转成 ToolMessage 递回才会修正；TS 侧默认已转成 ToolMessage（附 `Please fix your mistakes.`），中间件用于替换文案
 - D. 默认静默忽略；修不修正看运气
 
 <details><summary>答案与解析</summary>
 
-**答案：C**。本课实测：默认直接崩溃；加官方姿势的中间件后，模型完成"出错 → 读错误 → 换路 → 成功"全自动修正。要点：错误必须"变成消息"，模型才能看到。
+**答案：C**。本课实测：Python 侧默认直接崩溃；加官方姿势的中间件后，模型完成"出错 → 读错误 → 换路 → 成功"全自动修正。TS 侧默认就把异常转为 ToolMessage（`status: "error"`），不写中间件也能修正——中间件的职责变成替换文案、区分错误类型。要点（两侧共通）：错误必须"变成消息"，模型才能看到。
 
 </details>
 

@@ -5,4 +5,6 @@
 
 | 站点 | slug | 起始 URL | 范围 | 条数 | 生成日期 |
 |------|------|----------|------|------|----------|
-| LangChain Docs | docs-langchain | https://docs.langchain.com/oss/python/langchain/overview | /oss/python/langchain | 76 | 2026-09-15 |
+| LangChain Docs（Python 版） | docs-langchain | https://docs.langchain.com/oss/python/langchain/overview | /oss/python/langchain | 76 | 2026-09-15 |
+| LangChain Docs（JS/TS 版） | docs-langchain-js | https://docs.langchain.com/oss/javascript/langchain/overview | /oss/javascript/langchain | 67 | 2026-10-16 |
+| LangGraph Docs（JS/TS 版） | docs-langgraph-js | https://docs.langchain.com/oss/javascript/langgraph/overview | /oss/javascript/langgraph | 34 | 2026-10-16 |

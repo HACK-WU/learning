@@ -84,17 +84,29 @@
 
 **① 模型无状态：本次看到什么，只取决于这轮递给它什么**——实测对照（脚本 1a 段）：
 
-```text
+::: code-group
+
+```text [Python]
 -- 1a. 无 checkpointer：两次 invoke 相互独立 --
   [无记忆·第1轮] 你好，小明！很高兴认识你 😊 我是 Qwen3.8。有什么我可以帮你的吗？
   [无记忆·第2轮] 我不知道你的名字哦 😊 我没有关于你的任何个人信息。 如果你愿意告诉我，我可以记住这次对话中你怎么称呼；不过每次新的对话我都是"从零开始"，不会保留之前的记忆。 方便说说你叫什么名字吗？
 ```
 
+```text [TypeScript]
+-- 1a. 无 checkpointer：两次 invoke 相互独立 --
+  [无记忆·第1轮] 你好，小明！很高兴认识你 😊 我是 Qwen3.8。有什么我可以帮你的吗？
+  [无记忆·第2轮] 我不知道你的名字哦 😊 我没有关于你的任何个人信息。如果你愿意告诉我，我可以记住这次对话中你怎么称呼；不过每次新的对话我都是「从零开始」，不会保留之前的记忆。 方便说说你叫什么名字吗？
+```
+
+:::
+
 第二轮问"我叫什么名字"——agent 不知道。**这不是模型能力问题，是机制问题**：第二轮 invoke 只递了"我叫什么名字？"这一句，模型确实"没见过"名字。
 
 **② checkpointer：把状态持久化到线程，下一轮自动接续**——实测（脚本 1b 段）：
 
-```text
+::: code-group
+
+```text [Python]
 -- 1b. 有 checkpointer + 同一 thread_id：历史自动接续 --
   [同线程·第1轮] 好的，小明，我记住了：你最喜欢蓝色。
        （消息数: 2）
@@ -105,13 +117,38 @@
        （消息数: 4）
 ```
 
-给 `create_agent` 配上 `checkpointer=InMemorySaver()`，invoke 时带上同一个 `thread_id`——第一轮结束状态被持久化（`get_state` 可查：2 条消息），第二轮自动载入后变成 4 条，模型直接答出名字和喜好。换个 `thread_id`（脚本 1c 段）则完全隔离：
+```text [TypeScript]
+-- 1b. 有 checkpointer + 同一 thread_id：历史自动接续 --
+  [同线程·第1轮] 好的，小明！我记住了——你最喜欢蓝色。
+       （消息数: 2）
+  状态核验（graph.getState）——已持久化的消息链:
+    [0] human: 我叫小明，最喜欢蓝色。请记住。
+    [1] ai: 好的，小明！我记住了——你最喜欢蓝色。
+  [同线程·第2轮] 你叫**小明**，最喜欢**蓝色**。😊
+       （消息数: 4）
+```
 
-```text
+:::
+
+给 `create_agent` 配上 `checkpointer=InMemorySaver()`（TS 侧 `createAgent({ checkpointer: new MemorySaver() })`），invoke 时带上同一个 `thread_id`——第一轮结束状态被持久化（`get_state` 可查：2 条消息），第二轮自动载入后变成 4 条，模型直接答出名字和喜好。换个 `thread_id`（脚本 1c 段）则完全隔离：
+
+::: code-group
+
+```text [Python]
 -- 1c. 换一个 thread_id：记忆相互隔离 --
   [新线程·问名字] 我目前还不知道你叫什么。 如果你愿意，可以告诉我怎么称呼你。
        （消息数: 2）
 ```
+
+```text [TypeScript]
+-- 1c. 换一个 thread_id：记忆相互隔离 --
+  [新线程·问名字] 我目前还不知道你叫什么。 如果你愿意，可以告诉我怎么称呼你。
+       （消息数: 2）
+```
+
+:::
+
+> 📌 **TypeScript 侧差异（本机实测）**：① 内存 checkpointer 类名不同——TS 侧是 `MemorySaver`（`@langchain/langgraph`），Python 侧是 `InMemorySaver`（课 5 已提）；② 状态核验 API 路径不同——Python 侧 `agent.get_state(config)`，TS 侧为 `agent.graph.getState(config)`（ReactAgent 的 `getState` 声明为 internal 且类型返回 `never`，公开路径是经 `agent.graph` 访问底层图）；③ 两侧输出均来自本地 mock 端点按同一剧本回放（历史文案是回放数据，模型措辞以各自实测为准）。
 
 **③ 机制细节（官方口径）**：状态是 agent 运行时的一部分——短期记忆**在 invoke 或某一步（如工具调用）完成时更新，在每一步开始时被读取**；checkpointer 负责把它落到数据库（或内存），这样线程随时可以恢复。官方文档还列了两个配套要点：
 
@@ -126,11 +163,11 @@
 | 自定义 state 字段 | 同上（需 `state_schema` 扩展） | 单个线程 | 结构化会话数据（名字、标记、中间结果） |
 | store（命名空间 + 键） | 独立存储（store 后端） | 跨线程、跨会话 | 用户档案、偏好、跨会话事实 |
 
-**⑤ 验证纪律：记忆在不在，看状态不看嘴**——1b 段的 `get_state` 是核验记忆的可靠手法：状态里有几条消息、内容是什么，一查便知。模型"这一轮怎么用记忆"受采样影响（措辞、是否引用都可能波动），不能反过来用单次回答断言"机制坏了/没生效"。
+**⑤ 验证纪律：记忆在不在，看状态不看嘴**——1b 段的 `get_state` 是核验记忆的可靠手法：状态里有几条消息、内容是什么，一查便知。模型"这一轮怎么用记忆"受采样影响（措辞、是否引用都可能波动），不能反过来用单次回答断言"机制坏了/没生效"。TS 侧同一手法写成 `agent.graph.getState(config)`（本机实测：同样取到 2 条已持久化消息的完整链）。
 
 #### 示例演示
 
-见上文实测：无状态对照（①）、同线程接续（②）、线程隔离（③），以及官方机制口径（④、⑤），来源脚本 `playground/07-memory-lab.py`（1a-1c 段）。
+见上文实测：无状态对照（①）、同线程接续（②）、线程隔离（③），以及官方机制口径（④、⑤），来源脚本 `playground/07-memory-lab.py`（1a-1c 段；TS 对照：`playground-ts/07-memory-lab.ts`）。
 
 #### 常见误区
 
@@ -145,11 +182,11 @@
 #### 🗣️ 行话对照
 
 - **无状态（stateless）**：本次输出只取决于本次输入——在哪遇到：所有 LLM/agent 的底层事实
-- **checkpointer**：把 agent 状态持久化、可恢复的组件——在哪遇到：`create_agent(checkpointer=...)`
-- **thread（线程）**：一次会话的组织单位（类似一封邮件串）——在哪遇到：`{"configurable": {"thread_id": "..."}}`
-- **state / get_state**：agent 的状态快照 / 读取手法——在哪遇到：`agent.get_state(config)`
-- **store**：跨会话的 JSON 文档存储——在哪遇到：`create_agent(store=...)`
-- **namespace（命名空间）**：store 里类似"文件夹"的组织单位——在哪遇到：`store.put(("users",), key, value)`
+- **checkpointer**：把 agent 状态持久化、可恢复的组件——在哪遇到：`create_agent(checkpointer=...)`（TS 侧 `createAgent({ checkpointer })`）
+- **thread（线程）**：一次会话的组织单位（类似一封邮件串）——在哪遇到：`{"configurable": {"thread_id": "..."}}`（两侧同构）
+- **state / get_state**：agent 的状态快照 / 读取手法——在哪遇到：`agent.get_state(config)`（TS 侧 `agent.graph.getState(config)`）
+- **store**：跨会话的 JSON 文档存储——在哪遇到：`create_agent(store=...)`（TS 侧 `createAgent({ store })`）
+- **namespace（命名空间）**：store 里类似"文件夹"的组织单位——在哪遇到：`store.put(("users",), key, value)`（TS 侧 `store.put(["users"], key, value)`）
 
 #### 官方文档
 
@@ -176,7 +213,9 @@
 
 **① 默认全量：越聊越长（增长轨迹实测）**——脚本 2a 段（同一线程连续 4 轮 + 检查问题）：
 
-```text
+::: code-group
+
+```text [Python]
   第 1 轮后消息数: 2
   第 2 轮后消息数: 4
   第 3 轮后消息数: 6
@@ -185,11 +224,24 @@
        （消息数: 10）
 ```
 
+```text [TypeScript]
+  第 1 轮后消息数: 2
+  第 2 轮后消息数: 4
+  第 3 轮后消息数: 6
+  第 4 轮后消息数: 8
+  [全量·检查] 你叫**小明**，喜欢**蓝色**。
+       （消息数: 10）
+```
+
+:::
+
 每一轮 +2 条（human + ai），第 5 次调用结束时已经 10 条。官方把问题说得很直白：长对话可能超过上下文窗口；即使塞得下，模型也会被过时/离题内容**分心**，同时**响应变慢、成本变高**——所以需要"删或忘"的技术。
 
 **② 裁剪：保留"首条 + 最近 4 条"，封顶 6 条**——用 `@before_model` 中间件在每次模型调用前改写历史（脚本 2b 段，同一段对话）：
 
-```text
+::: code-group
+
+```text [Python]
   第 1 轮后消息数: 2
   第 2 轮后消息数: 4
   第 3 轮后消息数: 6
@@ -205,11 +257,31 @@
     [5] ai: 你叫**小明**，这个你一开始就告诉我啦 😊 至于喜欢的颜色——我得老实承认：**你从来没有告诉过我**。我之前回复里提到的"蓝色"，是我自
 ```
 
+```text [TypeScript]
+  第 1 轮后消息数: 2
+  第 2 轮后消息数: 4
+  第 3 轮后消息数: 6
+  第 4 轮后消息数: 6            ← 触发裁剪：7 条 → 保留 5 条 → +1 回复
+  [裁剪·检查] 你叫**小明**，这个你一开始就告诉我啦 😊 至于喜欢的颜色——我得老实承认：**你从来没有告诉过我**。我之前回复里提到的「蓝色」，是我自己擅自假设、编出来的，是我的一个小失误，跟你道个歉 🙇‍♀️。
+       （消息数: 6）
+  最终保留的消息链:
+    [0] human: 你好，我叫小明。
+    [1] ai: 北京是一座很有魅力的城市呢！如果再加上你喜欢的蓝色，我脑海里会浮现出晴朗日子里的天空蓝，或者颐和园昆明湖的那种蓝。😊 你住在哪个区呀？
+    [2] human: 我养了一只猫，叫咪咪。
+    [3] ai: 咪咪听起来好可爱呀！🐱 你是喜欢它毛茸茸的样子，还是它调皮时像小毛球滚来滚去的样子呢？
+    [4] human: 我叫什么名字？我喜欢什么颜色？
+    [5] ai: 你叫**小明**，这个你一开始就告诉我啦 😊 至于喜欢的颜色——我得老实承认：**你从来没有告诉过我**。我之前回复里提到的「蓝色」，是我
+```
+
+:::
+
 注意结果里的**关键对照**：消息数被死死封在 6 条，而且"名字"答对了（因为保留策略把**首条**留着）；但"喜欢的颜色"**丢了**（它在第二条 human 消息里，被裁掉了）——模型甚至老实承认"你从来没跟我说过"。
 
-实现方式——`@before_model` 钩子 + `RemoveMessage`：
+实现方式——`@before_model` 钩子 + `RemoveMessage`（TS 侧为 `createMiddleware({ beforeModel })`）：
 
-```python
+::: code-group
+
+```python [Python]
 from langchain.messages import RemoveMessage
 from langgraph.graph.message import REMOVE_ALL_MESSAGES
 from langchain.agents.middleware import before_model
@@ -225,11 +297,47 @@ def trim_messages(state, runtime):
     return {"messages": [RemoveMessage(id=REMOVE_ALL_MESSAGES), first, *recent]}
 ```
 
-两个机制细节（官方口径）：`RemoveMessage` 需要消息键带 `add_messages` 归约器才生效——默认 `AgentState` 自带；`REMOVE_ALL_MESSAGES` 表示"清空后重放保留项"。**裁剪的本质是选择**：保留哪些、丢弃哪些，就是你在决定"哪些信息可以丢"——2b 的丢失演示就是这个选择的直接后果。
+```typescript [TypeScript]
+import { RemoveMessage } from "@langchain/core/messages";
+import { createAgent, createMiddleware } from "langchain";
+import { MemorySaver, REMOVE_ALL_MESSAGES } from "@langchain/langgraph";
 
-**③ 摘要：超阈值时把早期历史压缩成一条摘要**——用官方预置的 `SummarizationMiddleware`（脚本 2c 段，同一段对话、同样 4 轮）：
+const trimMessages = createMiddleware({
+  name: "TrimMessages",
+  beforeModel: (state) => {
+    const messages = state.messages;
+    if (messages.length <= 6) return; // 无变化
+    const first = messages[0];
+    const recent = messages.slice(-4);
+    return {
+      messages: [
+        new RemoveMessage({ id: REMOVE_ALL_MESSAGES }),
+        first,
+        ...recent,
+      ],
+    };
+  },
+});
 
-```text
+const agent = createAgent({
+  model,
+  tools: [],
+  middleware: [trimMessages],
+  checkpointer: new MemorySaver(),
+});
+```
+
+:::
+
+两个机制细节（官方口径）：`RemoveMessage` 需要消息键带 `add_messages` 归约器才生效——默认 `AgentState` 自带（TS 侧为 `messagesStateReducer` 归约的 messages 通道）；`REMOVE_ALL_MESSAGES` 表示"清空后重放保留项"。**裁剪的本质是选择**：保留哪些、丢弃哪些，就是你在决定"哪些信息可以丢"——2b 的丢失演示就是这个选择的直接后果。
+
+> 📌 **TypeScript 侧差异（本机实测）**：① 钩子形态不同——Python 用 `@before_model` 装饰器，TS 用 `createMiddleware({ name, beforeModel })` 工厂；② `RemoveMessage` 的导入路径不同——Python 为 `langchain.messages`，TS 为 `@langchain/core/messages`（`REMOVE_ALL_MESSAGES` 两侧都来自 langgraph）；③ 两侧裁剪行为同构（本机实测：第 4 轮起封顶 6 条，"颜色"同样丢失）。
+
+**③ 摘要：超阈值时把早期历史压缩成一条摘要**——用官方预置的 `SummarizationMiddleware`（TS 侧 `summarizationMiddleware` 工厂，脚本 2c 段，同一段对话、同样 4 轮）：
+
+::: code-group
+
+```text [Python]
   第 4 轮后消息数: 6            ← 同样触发压缩
   [摘要·检查] 你叫 **小明**。 你喜欢的颜色是 **蓝色**。😊
        （消息数: 6）
@@ -242,11 +350,28 @@ def trim_messages(state, runtime):
     [5] ai: 你叫 **小明**。 你喜欢的颜色是 **蓝色**。😊
 ```
 
-和裁剪的对比很清楚：**同样封顶 6 条，但"颜色"也记住了**——因为早期历史不是被扔掉，而是被压缩进了 [0] 那条摘要消息（实测形态：一条 human 消息，内容以 `Here is a summary of the conversation to date:` 开头，摘要里含用户的名字、颜色等关键信息；同配置补证实测：摘要 1212 字符，含"小明""蓝色""北京"）。代价：每次触发摘要要**多跑一次模型调用**（阈值太小会频繁触发——本例小阈值下被多次触发）。
+```text [TypeScript]
+  第 4 轮后消息数: 6            ← 同样触发压缩
+  [摘要·检查] 你叫 **小明**。 你喜欢的颜色是 **蓝色**。😊
+       （消息数: 6）
+  最终保留的消息链:
+    [0] human: Here is a summary of the conversation to date: ## SESSION INTENT User (小明) is providing personal background in
+    [1] ai: 北京是一座很有魅力的城市呢！如果再加上你喜欢的蓝色，我脑海里会浮现出晴朗日子里的天空蓝，或者颐和园昆明湖的那种蓝。😊 你住在哪个区呀？
+    [2] human: 我养了一只猫，叫咪咪。
+    [3] ai: 咪咪听起来好可爱呀！🐱 你是喜欢它毛茸茸的样子，还是它调皮时像小毛球滚来滚去的样子呢？
+    [4] human: 我叫什么名字？我喜欢什么颜色？
+    [5] ai: 你叫 **小明**。 你喜欢的颜色是 **蓝色**。😊
+```
+
+:::
+
+和裁剪的对比很清楚：**同样封顶 6 条，但"颜色"也记住了**——因为早期历史不是被扔掉，而是被压缩进了 [0] 那条摘要消息（实测形态：一条 human 消息，内容以 `Here is a summary of the conversation to date:` 开头，摘要里含用户的名字、颜色等关键信息；同配置补证实测：摘要 1212 字符，含"小明""蓝色""北京"——TS 侧实测同构）。代价：每次触发摘要要**多跑一次模型调用**（阈值太小会频繁触发——本例小阈值下被多次触发）。
 
 配置方式（官方参数）：
 
-```python
+::: code-group
+
+```python [Python]
 from langchain.agents.middleware import SummarizationMiddleware
 
 SummarizationMiddleware(
@@ -256,11 +381,27 @@ SummarizationMiddleware(
 )
 ```
 
+```typescript [TypeScript]
+import { summarizationMiddleware } from "langchain";
+
+summarizationMiddleware({
+  model,                        // 用来生成摘要的模型（可与主模型不同）
+  trigger: { messages: 6 },     // 触发条件：消息数达到 6；也支持 { tokens: N } / { fraction: 0.8 }
+  keep: { messages: 4 },        // 压缩后保留：最近 4 条
+});
+```
+
+:::
+
 补充细节：`fraction` 形式的阈值依赖模型的 profile 数据（课 2 讲过 profile；缺失时需手动指定或用另外两种形式）；摘要面向**文本**压缩——图片/音视频块不会被打小，重要媒体建议存到文件系统/对象存储后在历史里传引用。
 
-**④ 自定义 state：把关键信息从聊天记录里"抽出来"**——扩展 `AgentState` 加字段，工具里读（`runtime.state`）写（`Command(update=...)`）。脚本 2d 段：
+> 📌 **TypeScript 侧差异（本机实测）**：① 形态不同——Python 是 `SummarizationMiddleware(...)` 类构造，TS 是 `summarizationMiddleware({...})` 工厂函数；② 参数名同义、写法不同——trigger/keep 在 Python 侧是元组（`("messages", 6)`）、TS 侧是对象（`{ messages: 6 }`）；③ 摘要消息形态两侧同构（均为一条 human 消息，前缀 `Here is a summary of the conversation to date:`，源码核对 TS 侧 `summarization.js` 的 `DEFAULT_SUMMARY_PREFIX`）；④ TS 侧生成的摘要消息带 `additional_kwargs.lc_source = "summarization"` 标记（源码核对），Python 侧同源提示信息。
 
-```text
+**④ 自定义 state：把关键信息从聊天记录里"抽出来"**——扩展 `AgentState` 加字段（TS 侧用 `StateSchema` 实例），工具里读（`runtime.state`）写（`Command(update=...)`）。脚本 2d 段：
+
+::: code-group
+
+```text [Python]
   [写状态] 消息链:
     [0] human: 我的名字是小明，请记录下来。
     [1] ai → 调用工具: save_name({'name': '小明'})
@@ -269,9 +410,22 @@ SummarizationMiddleware(
   [读状态] 您之前告诉我的名字是：**小明**。
 ```
 
+```text [TypeScript]
+  [写状态] 消息链:
+    [0] human: 我的名字是小明，请记录下来。
+    [1] ai → 调用工具: save_name({"name":"小明"})
+    [2] tool: 已记录：小明
+    [3] ai: 好的，我已经记录下您的名字：**小明**。
+  [读状态] 您之前告诉我的名字是：**小明**。
+```
+
+:::
+
 工具实现（写状态用 `Command`，读状态用 `runtime.state`）：
 
-```python
+::: code-group
+
+```python [Python]
 class CustomState(AgentState):
     user_name: str
 
@@ -290,11 +444,57 @@ def get_name(runtime: ToolRuntime) -> str:
     return f"之前记录的用户名是：{name}" if name else "没有记录过。"
 ```
 
+```typescript [TypeScript]
+import * as z from "zod";
+import { tool, createAgent, ToolMessage, type ToolRuntime } from "langchain";
+import { Command, StateSchema, MemorySaver } from "@langchain/langgraph";
+
+const CustomState = new StateSchema({
+  userName: z.string().optional(),
+});
+
+const saveName = tool(
+  async ({ name }: { name: string }, runtime: ToolRuntime<typeof CustomState.State>) => {
+    return new Command({
+      update: {
+        userName: name,
+        messages: [
+          new ToolMessage({
+            content: `已记录：${name}`,
+            tool_call_id: runtime.toolCall?.id ?? "",
+          }),
+        ],
+      },
+    });
+  },
+  { name: "save_name", description: "记录用户的名字到状态。", schema: z.object({ name: z.string() }) },
+);
+
+const getName = tool(
+  async (_: unknown, runtime: ToolRuntime<typeof CustomState.State>) => {
+    const name = runtime.state.userName;
+    return `之前记录的用户名是：${name}`;
+  },
+  { name: "get_name", description: "查询之前记录的用户名字。", schema: z.object({}) },
+);
+
+const agent = createAgent({
+  model,
+  tools: [saveName, getName],
+  stateSchema: CustomState,
+  checkpointer: new MemorySaver(),
+});
+```
+
+:::
+
 价值：结构化信息不再依赖"模型从聊天记录里读"——它成了状态里的显式字段，工具随时取用（后续中间件、动态提示词也都能读）。
+
+> 📌 **TypeScript 侧差异（本机实测）**：① 状态扩展方式不同——Python 是 `AgentState` 子类（`state_schema=CustomState`），TS 是 `new StateSchema({...})` 实例（`stateSchema: CustomState`，传入 `createAgent` 顶层参数）；② 工具读状态写法同构但字段访问不同——Python `runtime.state.get("user_name")`，TS `runtime.state.userName`（类型来自 `ToolRuntime<typeof CustomState.State>`，IDE 可直接补全）；③ 写状态的 `Command` 两侧同源（`@langchain/langgraph`），`ToolMessage` 的 `tool_call_id` 在 TS 侧取自 `runtime.toolCall?.id`；④ TS 侧提供权威类型与 Python 侧不完全一致：`ToolRuntime.store` 声明为 core 包 `BaseStore`（仅 `mget/mset`），而运行时实际是 LangGraph 的 `BaseStore`（含 `put/get/search`，见官方 long-term memory 文档写法）——脚本内做一次类型收窄即可（`playground-ts/07-memory-lab.ts` 已附注释）。
 
 #### 示例演示
 
-见上文实测：全量增长（①）、裁剪与丢失（②）、摘要与保留（③）、自定义 state 读写（④），来源脚本 `playground/07-memory-lab.py`（2a-2d 段）。
+见上文实测：全量增长（①）、裁剪与丢失（②）、摘要与保留（③）、自定义 state 读写（④），来源脚本 `playground/07-memory-lab.py`（2a-2d 段；TS 对照：`playground-ts/07-memory-lab.ts`）。
 
 #### 常见误区
 
@@ -308,12 +508,12 @@ def get_name(runtime: ToolRuntime) -> str:
 
 #### 🗣️ 行话对照
 
-- **trim（裁剪）**：只保留部分消息——在哪遇到：`@before_model` + `RemoveMessage`
-- **RemoveMessage / REMOVE_ALL_MESSAGES**：删除消息的指令 / 全量清空标记——在哪遇到：`langchain.messages` / `langgraph.graph.message`
-- **摘要中间件（SummarizationMiddleware）**：超阈值自动压缩历史——在哪遇到：`langchain.agents.middleware`
-- **trigger / keep**：触发压缩的条件 / 压缩后保留多少——在哪遇到：`SummarizationMiddleware(...)`
-- **state_schema**：自定义状态扩展——在哪遇到：`create_agent(state_schema=CustomState)`
-- **Command（工具写状态）**：工具返回值里携带状态更新——在哪遇到：`langgraph.types.Command`
+- **trim（裁剪）**：只保留部分消息——在哪遇到：`@before_model` + `RemoveMessage`（TS 侧 `createMiddleware({ beforeModel })`）
+- **RemoveMessage / REMOVE_ALL_MESSAGES**：删除消息的指令 / 全量清空标记——在哪遇到：`langchain.messages` / `langgraph.graph.message`（TS 侧 `@langchain/core/messages` / `@langchain/langgraph`）
+- **摘要中间件（SummarizationMiddleware）**：超阈值自动压缩历史——在哪遇到：`langchain.agents.middleware`（TS 侧 `summarizationMiddleware`，`langchain` 包）
+- **trigger / keep**：触发压缩的条件 / 压缩后保留多少——在哪遇到：`SummarizationMiddleware(...)`（TS 侧 `summarizationMiddleware({ trigger, keep })`）
+- **state_schema**：自定义状态扩展——在哪遇到：`create_agent(state_schema=CustomState)`（TS 侧 `createAgent({ stateSchema: CustomState })`，CustomState 为 `new StateSchema({...})`）
+- **Command（工具写状态）**：工具返回值里携带状态更新——在哪遇到：`langgraph.types.Command`（TS 侧 `new Command({ update: {...} })`，`@langchain/langgraph`）
 
 #### 官方文档
 
@@ -341,19 +541,32 @@ def get_name(runtime: ToolRuntime) -> str:
 
 **① store 的基本操作：put / get / search**——脚本 3a 段（不经模型，直接操作）：
 
-```text
+::: code-group
+
+```text [Python]
   get(('users',), 'user_123'): {'name': '小明', 'language': '中文'}
   search(('users',)) 全部: [{'name': '小明', 'language': '中文'}, {'name': '小红', 'language': '英文'}]
   search(filter={'language': '中文'}): [{'name': '小明', 'language': '中文'}]
   search(query='名字')（未配嵌入函数）: [{'name': '小明', 'language': '中文'}, {'name': '小红', 'language': '英文'}]
 ```
 
-- `put(namespace, key, value)`：写入；`get(namespace, key)`：按名取；`search(namespace, filter=...)`：按内容键值过滤。
-- 注意最后一行：**`query` 语义检索需要给 store 配嵌入函数**（`IndexConfig(embed=...)`）；未配置时实测 query 未改变返回结果（仍是全量两条）——语义检索是 RAG 化方向的延伸（课 11 展开）。
+```text [TypeScript]
+  get(['users'], 'user_123'): { name: '小明', language: '中文' }
+  search(['users']) 全部: [ { name: '小明', language: '中文' }, { name: '小红', language: '英文' } ]
+  search(filter={language: '中文'}): [ { name: '小明', language: '中文' } ]
+  search(query='名字')（未配嵌入函数）: [ { name: '小明', language: '中文' }, { name: '小红', language: '英文' } ]
+```
+
+:::
+
+- `put(namespace, key, value)`：写入；`get(namespace, key)`：按名取；`search(namespace, filter=...)`：按内容键值过滤。TS 侧命名空间用**数组**（`["users"]`，Python 侧为元组）、`filter` 以对象传入。
+- 注意最后一行：**`query` 语义检索需要给 store 配嵌入函数**（Python 侧 `IndexConfig(embed=...)`，TS 侧 `new InMemoryStore({ index: { embed, dims } })`）；未配置时实测 query 未改变返回结果（仍是全量两条）——语义检索是 RAG 化方向的延伸（课 11 展开）。
 
 **② 工具读写：`runtime.store` + `context` 传用户身份**——3b 段的 agent 配置：
 
-```python
+::: code-group
+
+```python [Python]
 @dataclass
 class UserContext:
     user_id: str
@@ -374,11 +587,48 @@ agent = create_agent(model, tools=[save_user_name, get_user_name],
                      store=store, context_schema=UserContext)
 ```
 
-要点：`runtime` 参数对模型不可见（模型只看到工具的其他参数），但工具能借它拿到 **store**（同一份传给 `create_agent` 的实例）和 **context**（调用时传的 `UserContext(user_id=...)`）。
+```typescript [TypeScript]
+import * as z from "zod";
+import { tool, createAgent, type ToolRuntime } from "langchain";
+import { InMemoryStore } from "@langchain/langgraph";
+
+const ContextSchema = z.object({
+  userId: z.string(),
+});
+
+const saveUserName = tool(
+  async ({ name }: { name: string }, runtime: ToolRuntime<unknown, z.infer<typeof ContextSchema>>) => {
+    await runtime.store.put(["users"], runtime.context.userId, { name });
+    return `已保存：${name}`;
+  },
+  { name: "save_user_name", description: "保存用户名字到长期记忆（跨会话）。", schema: z.object({ name: z.string() }) },
+);
+
+const getUserName = tool(
+  async (_: unknown, runtime: ToolRuntime<unknown, z.infer<typeof ContextSchema>>) => {
+    const item = await runtime.store.get(["users"], runtime.context.userId);
+    return item?.value ? String(item.value.name) : "没有找到该用户的记录";
+  },
+  { name: "get_user_name", description: "从长期记忆读取用户名字（跨会话）。", schema: z.object({}) },
+);
+
+const agent = createAgent({
+  model,
+  tools: [saveUserName, getUserName],
+  store: new InMemoryStore(),
+  contextSchema: ContextSchema,
+});
+```
+
+:::
+
+要点：`runtime` 参数对模型不可见（模型只看到工具的其他参数），但工具能借它拿到 **store**（同一份传给 `create_agent` 的实例）和 **context**（Python 侧传 `UserContext(user_id=...)`，TS 侧传 `{ context: { userId: "user_123" } }`）。
 
 **③ 跨线程召回：session-1 里教，session-2 里查**——3b 段实测（两个不同 `thread_id`）：
 
-```text
+::: code-group
+
+```text [Python]
   [session-1·教] 消息链:
     [0] human: 你好，记住：我叫小明。
     [1] ai → 调用工具: save_user_name({'name': '小明'})
@@ -392,11 +642,29 @@ agent = create_agent(model, tools=[save_user_name, get_user_name],
     [3] ai: 你叫小明 😊
 ```
 
+```text [TypeScript]
+  [session-1·教] 消息链:
+    [0] human: 你好，记住：我叫小明。
+    [1] ai → 调用工具: save_user_name({"name":"小明"})
+    [2] tool: 已保存：小明
+    [3] ai: 好的，小明，我已经记住你的名字啦！😊 有什么我可以帮你的吗？
+  直连 store 查看: { name: '小明' }
+  [session-2·查] 你叫小明 😊
+    [0] human: 我叫什么名字？
+    [1] ai → 调用工具: get_user_name({})
+    [2] tool: 小明
+    [3] ai: 你叫小明 😊
+```
+
+:::
+
 注意 session-2 的消息链**只有本轮问答**（新线程没有历史）——"小明"完全来自 store。这就是短期记忆做不到的事：**信息跨过了线程边界**。
 
 **④ 用户隔离与更新**——3c/3d 段实测：
 
-```text
+::: code-group
+
+```text [Python]
   [session-3·user_456 查] 我这边还没有关于你姓名的记录，所以暂时不知道你的名字 😊 如果你愿意告诉我，我可以帮你记下来，以后就能随时叫出你的名字啦。
   ...
   [session-1·改名] 消息链:
@@ -407,6 +675,19 @@ agent = create_agent(model, tools=[save_user_name, get_user_name],
   直连 store 查看: {'name': '大明'}
 ```
 
+```text [TypeScript]
+  [session-3·user_456 查] 我这边还没有关于你姓名的记录，所以暂时不知道你的名字 😊 如果你愿意告诉我，我可以帮你记下来，以后就能随时叫出你的名字啦。
+  ...
+  [session-1·改名] 消息链:
+    ...
+    [5] ai → 调用工具: save_user_name({"name":"大明"})
+    [6] tool: 已保存：大明
+    [7] ai: 好的，大明，已经帮你更新啦 ✅ 以后我就这样称呼你。有什么需要尽管说！
+  直连 store 查看: { name: '大明' }
+```
+
+:::
+
 - **隔离**：换个 `user_id`（user_456）就查不到——数据按命名空间+键分开存放，不会串号。
 - **更新**：`put` 同一个键 = **覆盖**原来的值（改名后 store 里只剩"大明"）——"更新一条记忆"到底是覆盖、合并还是追加，需要显式设计（知识点 4 展开）。
 
@@ -414,7 +695,7 @@ agent = create_agent(model, tools=[save_user_name, get_user_name],
 
 #### 示例演示
 
-见上文实测：store 基本操作（①）、工具读写（②）、跨线程召回（③）、隔离与更新（④），来源脚本 `playground/07-memory-lab.py`（3a-3d 段）。
+见上文实测：store 基本操作（①）、工具读写（②）、跨线程召回（③）、隔离与更新（④），来源脚本 `playground/07-memory-lab.py`（3a-3d 段；TS 对照：`playground-ts/07-memory-lab.ts`）。
 
 #### 常见误区
 
@@ -428,11 +709,11 @@ agent = create_agent(model, tools=[save_user_name, get_user_name],
 
 #### 🗣️ 行话对照
 
-- **store**：跨会话 JSON 文档存储——在哪遇到：`create_agent(store=...)`、`runtime.store`
-- **namespace / key**：命名空间（文件夹）/ 键（文件名）——在哪遇到：`store.put(("users",), "user_123", {...})`
-- **put / get / search**：写 / 读 / 检索——在哪遇到：`runtime.store.*`
-- **context_schema / context**：运行上下文类型 / 实例（常用来传 user_id）——在哪遇到：`create_agent(context_schema=...)`、`invoke(..., context=...)`
-- **IndexConfig / embed**：为语义检索配置嵌入函数——在哪遇到：`InMemoryStore(index=IndexConfig(...))`
+- **store**：跨会话 JSON 文档存储——在哪遇到：`create_agent(store=...)`、`runtime.store`（TS 侧 `createAgent({ store })`、`runtime.store`）
+- **namespace / key**：命名空间（文件夹）/ 键（文件名）——在哪遇到：`store.put(("users",), "user_123", {...})`（TS 侧 `store.put(["users"], "user_123", {...})`）
+- **put / get / search**：写 / 读 / 检索——在哪遇到：`runtime.store.*`（两侧同构，TS 侧均为异步 `await`）
+- **context_schema / context**：运行上下文类型 / 实例（常用来传 user_id）——在哪遇到：`create_agent(context_schema=...)`、`invoke(..., context=...)`（TS 侧 `createAgent({ contextSchema })`、`invoke(..., { context })`）
+- **IndexConfig / embed**：为语义检索配置嵌入函数——在哪遇到：`InMemoryStore(index=IndexConfig(...))`（TS 侧 `new InMemoryStore({ index: { embed, dims } })`）
 
 #### 官方文档
 
@@ -473,7 +754,9 @@ agent = create_agent(model, tools=[save_user_name, get_user_name],
 
 **④ 更新模式：合并 vs 覆盖**——4a 段实测：
 
-```text
+::: code-group
+
+```text [Python]
   更新前: {'name': '小明', 'city': '北京'}
   [合并更新] 消息链:
     [0] human: 记住：我喜欢喝咖啡。
@@ -484,9 +767,24 @@ agent = create_agent(model, tools=[save_user_name, get_user_name],
   对照·若直接覆盖写（只写新内容不读旧档案）: {'preferences': ['喜欢喝咖啡']}
 ```
 
+```text [TypeScript]
+  更新前: { name: '小明', city: '北京' }
+  [合并更新] 消息链:
+    [0] human: 记住：我喜欢喝咖啡。
+    [1] ai → 调用工具: remember_preference({"preference":"我喜欢喝咖啡。"})
+    [2] tool: 已记住。当前档案: {"name":"小明","city":"北京","preferences":["我喜欢喝咖啡。"]}
+    [3] ai: 好的，已记住你喜欢喝咖啡。以后在推荐或安排相关事项时，我会把这一点考虑进去。
+  更新后（合并）: { name: '小明', city: '北京', preferences: [ '我喜欢喝咖啡。' ] }
+  对照·若直接覆盖写（只写新内容不读旧档案）: { preferences: [ '喜欢喝咖啡' ] }
+```
+
+:::
+
 合并（读 → 改 → 写）：旧字段（name、city）保留，新偏好追加进列表；裸覆盖：名字、城市全丢。工具实现：
 
-```python
+::: code-group
+
+```python [Python]
 @tool
 def remember_preference(preference: str, runtime: ToolRuntime[UserContext]) -> str:
     """记住用户的偏好（读取现有档案，追加到 preferences 列表后写回）。"""
@@ -501,28 +799,62 @@ def remember_preference(preference: str, runtime: ToolRuntime[UserContext]) -> s
     return f"已记住。当前档案: {profile}"
 ```
 
+```typescript [TypeScript]
+const rememberPreference = tool(
+  async ({ preference }: { preference: string }, runtime: ToolRuntime<unknown, z.infer<typeof ContextSchema>>) => {
+    const ns = ["users"];
+    const key = runtime.context.userId;
+    const item = await runtime.store.get(ns, key);
+    const profile: Record<string, any> = item?.value ? { ...item.value } : {};
+    const prefs: string[] = [...(profile.preferences ?? [])];
+    prefs.push(preference);
+    profile.preferences = prefs;
+    await runtime.store.put(ns, key, profile);
+    return `已记住。当前档案: ${JSON.stringify(profile)}`;
+  },
+  {
+    name: "remember_preference",
+    description: "记住用户的偏好（读取现有档案，追加到 preferences 列表后写回）。",
+    schema: z.object({ preference: z.string() }),
+  },
+);
+```
+
+:::
+
 （档案变大后"更新"会越来越难——官方建议拆分成多文档、或用严格解码保证 schema 有效；集合式的更新/删除是另一类难点。）
 
 **⑤ 成本对比：同一段对话，三种策略**——4b 段实测（4 轮对话 + 1 个检查问题）：
 
-```text
+::: code-group
+
+```text [Python]
   策略     | 消息数   | token 估算 | 检查问题的回答
   全量     | 10      | 135          | 你叫**小明**，喜欢**蓝色**。
   裁剪     | 6       | 116          | （名字对；颜色丢失——原文见 2b）
   摘要     | 6       | 303          | 你叫 **小明**。 你喜欢的颜色是 **蓝色**。😊
 ```
 
+```text [TypeScript]
+  策略   | 消息数  | token 估算 | 检查问题的回答
+  全量   | 10      | 60           | 你叫**小明**，喜欢**蓝色**。
+  裁剪   | 6       | 62           | 你叫**小明**，这个你一开始就告诉我啦 😊 至于喜欢的颜色——我得老实承认：**你从来没有告诉过我**。我之前回复里
+  摘要   | 6       | 98           | 你叫 **小明**。 你喜欢的颜色是 **蓝色**。😊
+```
+
+:::
+
 三条工程结论（本课最值得记住的部分）：
 
-- **消息数 ≠ token 数**：裁剪把条数从 10 压到 6，token 只降了约 14%（135→116）——留下的消息本身较长；"省成本"要按**内容体量**评估，不能只看条数。
-- **摘要不是自动省钱**：本例摘要 303 token，反而**最高**——摘要文本有固定体量，且每次触发多一次模型调用。它解决的是"历史无限增长"（长对话才回本），小对话用它反而亏。
+- **消息数 ≠ token 数**：裁剪把条数从 10 压到 6，token 只降了约 14%（Python 侧 135→116；TS 侧估算器不同：60→62，条数降了、估算值甚至略升——两种口径都说明"省成本要按内容体量评估，不能只看条数"）。
+- **摘要不是自动省钱**：本例摘要 303 token（TS 侧 98），反而**最高**——摘要文本有固定体量，且每次触发多一次模型调用。它解决的是"历史无限增长"（长对话才回本），小对话用它反而亏。
 - **取舍对齐目标**：要全保真 → 全量；要省事且能接受丢失 → 裁剪；要压规模但保语义 → 摘要；要"结构化直取" → 把信息抽到 state/store（让未来轮次根本不用背长历史）。
 
-（token 为 `count_tokens_approximately` 估算值，用于横向对比；真实计费以提供方为准。）
+（token 为 `count_tokens_approximately` 估算值，用于横向对比；真实计费以提供方为准。两侧估算器实现不同——Python 侧按模型 tokenizer 规则估算，TS 侧为 `countTokensApproximately`（约 4 字符 ≈ 1 token 的字数口径），故绝对值不可跨语言对比，结论方向一致。）
 
 #### 示例演示
 
-见上文实测：合并更新与覆盖对照（④）、三策略成本对比（⑤），来源脚本 `playground/07-memory-lab.py`（4a-4b 段）。
+见上文实测：合并更新与覆盖对照（④）、三策略成本对比（⑤），来源脚本 `playground/07-memory-lab.py`（4a-4b 段；TS 对照：`playground-ts/07-memory-lab.ts`）。
 
 #### 常见误区
 
@@ -551,17 +883,17 @@ def remember_preference(preference: str, runtime: ToolRuntime[UserContext]) -> s
 
 ## 第四幕：实操验证
 
-回到第一幕：客服助手要"记得住"。以下五组验证全部本机跑通（脚本：`playground/07-memory-lab.py`）：
+回到第一幕：客服助手要"记得住"。以下五组验证全部本机跑通（脚本：`playground/07-memory-lab.py`；TS 对照：`playground-ts/07-memory-lab.ts`）：
 
-1. **无状态对照（1a-1c）**：无 checkpointer 两轮互不相识（"我不知道你的名字哦"）；同线程接续（状态核验 2 → 4 条，答出"你叫小明，最喜欢蓝色"）；换线程隔离（"我目前还不知道你叫什么"）。
-2. **短期三策略对照（2a-2c）**：全量 10 条（全记得）vs 裁剪封顶 6 条（名字对、颜色丢）vs 摘要封顶 6 条（全记得，摘要以 human 消息形态出现）。
-3. **自定义 state（2d）**：工具写状态（`Command`）→ 工具读状态（`runtime.state`），名字跨轮取用成功。
-4. **长期记忆链路（3a-3d）**：store 直接读写（put/get/search）；跨线程召回（session-1 教 → session-2 答"你叫小明"）；用户隔离（user_456 查不到）；同键更新（改名后 store 为"大明"）。
-5. **工程实践（4a-4b）**：合并更新保住 name/city 并追加偏好（对照覆盖写只剩 preferences）；三策略成本（10 条/135、6 条/116、6 条/303）。
+1. **无状态对照（1a-1c）**：无 checkpointer 两轮互不相识（"我不知道你的名字哦"）；同线程接续（状态核验 2 → 4 条，答出"你叫小明，最喜欢蓝色"）；换线程隔离（"我目前还不知道你叫什么"）——TS 侧同构（`MemorySaver` + `agent.graph.getState` 核验，2 → 4 条）。
+2. **短期三策略对照（2a-2c）**：全量 10 条（全记得）vs 裁剪封顶 6 条（名字对、颜色丢）vs 摘要封顶 6 条（全记得，摘要以 human 消息形态出现）——TS 侧同构（同样封顶 6 条，摘要前缀同为 `Here is a summary of the conversation to date:`）。
+3. **自定义 state（2d）**：工具写状态（`Command`）→ 工具读状态（`runtime.state`），名字跨轮取用成功——TS 侧同构（`StateSchema` + `runtime.state.userName`，读写链路一致）。
+4. **长期记忆链路（3a-3d）**：store 直接读写（put/get/search）；跨线程召回（session-1 教 → session-2 答"你叫小明"）；用户隔离（user_456 查不到）；同键更新（改名后 store 为"大明"）——TS 侧同构（命名空间数组写法，链路逐项一致）。
+5. **工程实践（4a-4b）**：合并更新保住 name/city 并追加偏好（对照覆盖写只剩 preferences）；三策略成本（Python 侧 10 条/135、6 条/116、6 条/303；TS 侧 10 条/60、6 条/62、6 条/98——两侧估算器口径不同，方向一致）。
 
 > ✅ **回扣场景**：第一幕的三个尴尬全部有了解法——"每次都问您怎么称呼" = checkpointer 同线程接续（1b）；"历史太长塞不下" = 裁剪/摘要（2b/2c）；"换个会话就失忆" = store 跨会话召回（3b）。
 >
-> ⚠️ 数值说明：以上为 2026-09-15 本机实测；模型回答措辞与消息条数受采样和对话内容影响（如 2b/2c 的检查回答逐字为当次实测，复跑可能不同）；token 数为估算值；生产使用需替换数据库后端并补充清理/合规策略。
+> ⚠️ 数值说明：以上为 2026-09-15 本机实测；模型回答措辞与消息条数受采样和对话内容影响（如 2b/2c 的检查回答逐字为当次实测，复跑可能不同）；token 数为估算值；生产使用需替换数据库后端并补充清理/合规策略。TypeScript 侧输出由 `playground-ts/07-memory-lab.ts` 在本地 OpenAI 兼容 mock 端点上运行采集。
 
 **应用实战（4.2）**：把本课知识点组装成一条「让 agent 记住上一轮聊了什么」的演进路线——独立成册：
 
@@ -588,6 +920,7 @@ def remember_preference(preference: str, runtime: ToolRuntime[UserContext]) -> s
 2. **以为"窗口够大就不需要记忆机制"**：窗口大只是塞得下——长历史变慢、变贵、让模型分心（官方明确列出）。
 3. **以为裁剪/摘要"免费"**：裁剪要接受丢失（2b 实测颜色答不出）；摘要要付额外调用+摘要体量（4b 实测 303 > 135）。
 4. **用单次回答判断记忆是否生效**：看状态（`get_state` / 消息条数）——模型措辞受采样影响，不能反推机制。
+5. **以为 Python 和 TS 的记忆写法是"逐字翻译"**：TS 侧是 `MemorySaver`（非 `InMemorySaver`）、经 `agent.graph.getState` 核验（非 `agent.get_state`）、`createMiddleware` 工厂（非 `@before_model` 装饰器）、`summarizationMiddleware` 工厂函数（非类）、`StateSchema` 实例（非类继承）——目的相同、形态不同（本课均实测）。
 
 ### ⏳ 与过时说法对照（写前核对 + 实测发现的差异）
 
@@ -598,6 +931,7 @@ def remember_preference(preference: str, runtime: ToolRuntime[UserContext]) -> s
 | "摘要一定省 token" | 同一个对话实测：摘要 303 vs 全量 135——摘要文本有体量、触发有额外调用；长对话才回本 | 4b |
 | "存进 store 就完事" | 更新语义（覆盖 vs 合并）与隔离（命名空间/user_id）必须显式设计 | 3d、4a |
 | "模型答不出 = 记忆没生效" | 验证看状态（get_state）；回答措辞受采样影响 | 1b 状态核验 |
+| "TS 与 Python 的记忆 API 只是换个写法" | 骨架同构但形态有分岔：`MemorySaver` vs `InMemorySaver`、`agent.graph.getState` vs `agent.get_state`、中间件工厂 vs 装饰器/类、`StateSchema` 实例 vs 类继承、store 命名空间数组 vs 元组、token 估算器口径不同（本课均实测） | 本课 TS 侧实测 + 源码核对 |
 
 ## 一图总结
 

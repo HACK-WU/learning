@@ -43,7 +43,7 @@
 三个追问把这件事拆开：
 
 - 追问一：**"流"的到底是什么？**——不是"整个答案"，而是**引擎每一步的产物**：模型调用完成 → 一个 chunk（含 tool_calls 状态）；工具执行完成 → 一个 chunk（含 ToolMessage）；模型逐 token 生成 → 每个 token 一个 chunk。**三种粒度对应三种需求**：看进度用 updates、做打字机用 messages、发自定义信号用 custom。
-- 追问二：**三种模式能混用吗？**——能。`stream_mode=["updates", "custom"]` 会同时输出两种 chunk，每个 chunk 带 `type` 字段区分来源。v2 协议统一了格式：每个 chunk 都是 `{"type": "updates|messages|custom", "ns": [...], "data": ...}`。
+- 追问二：**三种模式能混用吗？**——能。`stream_mode=["updates", "custom"]` 会同时输出两种 chunk，每个 chunk 带 `type` 字段区分来源。v2 协议统一了格式：每个 chunk 都是 `{"type": "updates|messages|custom", "ns": [...], "data": ...}`。（TS 侧同能力、无 v2 包装——多模式输出 `[mode, chunk]` 元组，详见知识点 1）
 - 追问三：**v3 事件流又是什么？和 v2 什么关系？**——v2 是 LangGraph 底层的流协议（`stream()` 方法），v3 是 LangChain v1.3 引入的**上层封装**（`stream_events()` 方法）。v3 把 v2 的"按 mode 分 chunk"升级为"按投影（projection）分迭代器"——`stream.messages` 拿模型输出、`stream.tool_calls` 拿工具执行、`stream.values` 拿状态快照，各自独立迭代，不用再 `if chunk["type"] == "messages"` 分支判断。官方推荐新项目用 v3。
 
 由此得到本课的第一个关键认知：**流式不是"另一种调用"，是"同一次调用的不同交付方式"**。invoke 是"全部做完再给你"，stream 是"做一步给一步"——引擎没变、循环没变、工具没变，变的是**你什么时候拿到信息**。
@@ -82,9 +82,11 @@
 
 #### 核心原理
 
-**① invoke vs stream：同一条路，不同交付方式**——实测对照（脚本 1 段）：
+**① invoke vs stream：同一条路，不同交付方式**——两侧实测对照（脚本 1 段）：
 
-```text
+::: code-group
+
+```text [Python]
 [非流式 invoke] 开始计时…
   耗时 2.8s
   终答: 北京现在是晴天，气温22°C，湿度45%。…
@@ -99,6 +101,25 @@
   总耗时 2.8s
 ```
 
+```text [TypeScript]
+[非流式 invoke] 开始计时…
+  耗时 2.9s
+  终答: 北京现在是晴天，气温22°C，湿度45%。…
+
+[流式 stream(updates)] 开始计时…
+  [1.4s] 收到 chunk: updates
+    节点 model_request: （空内容——模型只申请了工具，还没说话）
+  [1.4s] 收到 chunk: updates
+    节点 tools: 北京：晴天，22°C，湿度 45%
+  [2.8s] 收到 chunk: updates
+    节点 model_request: 北京现在是晴天，气温22°C，湿度45%。
+  总耗时 2.8s
+```
+
+:::
+
+> 📌 **TypeScript 侧差异（本机实测）**：节点名为 `model_request`（Python 侧 `model`，课 5 已提）；两侧结论同构——首 chunk 在 1.4s 到达、总耗时与 invoke 持平（TS 侧数字由本地 mock 端点按同一剧本回放采集：invoke 2.9s / stream 2.8s，毫秒差来自请求开销）。
+
 同一个 agent、同一个问题——总耗时完全一样（2.8 秒）。区别在于：invoke 让你干等 2.8 秒才看到结果；stream 在 1.4 秒时就告诉你"模型已经决定调工具了"、紧接着告诉你"工具返回了天气数据"、最后逐字输出终答。**用户 1.4 秒就看到反馈，而不是 2.8 秒**。
 
 **② 三种粒度，一张表说清**（官方 streaming 页定义，本课实测验证）：
@@ -109,9 +130,13 @@
 | `messages` | LLM 每次生成的 token chunk | `{"type":"messages", "data":(AIMessageChunk, metadata)}` | 打字机效果（逐字输出） |
 | `custom` | 工具/节点内手动发送的信号 | `{"type":"custom", "data":"正在搜索…"}` | 工具进度、自定义事件 |
 
-**③ v2 统一格式**——从 LangGraph 1.1 起，`stream(version="v2")` 让所有 chunk 共享同一结构：
+> 📌 **TypeScript 侧差异（本机实测）**：表格中"chunk 长什么样"列是 Python 侧 v2 包装后的形态；TS 侧单模式直接产出**裸负载**（updates 为 `{节点名: 输出}` 对象、messages 为 `[token, metadata]` 元组、custom 为原始值），多模式才包成 `[mode, chunk]` 元组（见 ③）。
 
-```python
+**③ v2 统一格式**——从 LangGraph 1.1 起，Python 侧 `stream(version="v2")` 让所有 chunk 共享同一结构：
+
+::: code-group
+
+```python [Python]
 for chunk in agent.stream(
     {"messages": [{"role": "user", "content": "..."}]},
     stream_mode=["updates", "custom"],
@@ -121,11 +146,27 @@ for chunk in agent.stream(
     print(chunk["data"])   # 对应的负载
 ```
 
-不再需要 `for mode, chunk in agent.stream(...)` 这种元组解包——`chunk["type"]` 统一分拣。v2 是当前默认推荐（v1 为向后兼容保留）。
+```typescript [TypeScript]
+for await (const [mode, chunk] of await agent.stream(
+  { messages: [{ role: "user", content: "..." }] },
+  { streamMode: ["updates", "custom"] },
+)) {
+  console.log(mode);   // "updates" 或 "custom"
+  console.log(chunk);  // 对应的负载
+}
+```
 
-**④ v3 事件流：从"按 mode 分 chunk"到"按投影分迭代器"**——LangChain v1.3 引入 `stream_events(version="v3")`，官方推荐新项目使用：
+:::
 
-```python
+> 📌 **TypeScript 侧差异（本机实测）**：TS 侧 `stream()` **没有** `version="v2"` 这个选项——多模式混用时它直接返回 `[mode, chunk]` 元组（for-await 里解包即可，无需 `chunk["type"]` 分拣）。两侧的"按 mode 分拣"目的相同、手段不同：Python 是"统一包装成一个对象"，TS 是"天然的两元组"。
+
+不再需要 `for mode, chunk in agent.stream(...)` 这种"先判断再解包"——Python 侧 `chunk["type"]` 统一分拣、TS 侧元组首位即 mode。v2 是 Python 侧当前默认推荐（v1 为向后兼容保留）。
+
+**④ v3 事件流：从"按 mode 分 chunk"到"按投影分迭代器"**——LangChain v1.3 引入 `stream_events(version="v3")`（TS 侧 `streamEvents`），官方推荐新项目使用：
+
+::: code-group
+
+```python [Python]
 stream = agent.stream_events(
     {"messages": [{"role": "user", "content": "..."}]},
     version="v3",
@@ -138,11 +179,28 @@ for message in stream.messages:      # 模型输出投影
 final_state = stream.output          # 最终状态
 ```
 
-v3 的核心变化：**不再需要 `if chunk["type"] == "messages"` 分支判断**——`stream.messages`、`stream.tool_calls`、`stream.values` 各自是独立的迭代器，类型安全、IDE 友好。本机实测验证了基本用法：`message.text` 是可迭代的文本投影（实测类型 `SyncTextProjection`，本次迭代 6 个文本块）——与官方文档示例写法一致；需注意当前版本（langgraph 1.2.11）v3 协议标记为 `LangChainBetaWarning`（experimental）。
+```typescript [TypeScript]
+const stream = await agent.streamEvents(
+  { messages: [{ role: "user", content: "..." }] },
+  { version: "v3" },
+);
+
+for await (const message of stream.messages) {   // 模型输出投影
+  for await (const delta of message.text) {      // 逐块迭代（文本投影）
+    process.stdout.write(delta);
+  }
+}
+
+const finalState = await stream.output;          // 最终状态
+```
+
+:::
+
+v3 的核心变化：**不再需要 `if chunk["type"] == "messages"` 分支判断**——`stream.messages`、`stream.tool_calls`（TS 侧 `stream.toolCalls`）、`stream.values` 各自是独立的迭代器，类型安全、IDE 友好。本机实测验证了基本用法：`message.text` 是可迭代的文本投影（Python 侧实测类型 `SyncTextProjection`、TS 侧实测类型 `TextContentStream`，本次分别迭代 6 / 3 个文本块）——与官方文档示例写法一致；需注意 Python 侧当前版本（langgraph 1.2.11）v3 协议标记为 `LangChainBetaWarning`（experimental，TS 侧类型注释同样标注 experimental 但不打警告）。
 
 #### 示例演示
 
-见上文实测：invoke vs stream 对照（①）、三种模式定义（②）、v2 格式（③）、v3 事件流（④），来源脚本 `playground/06-streaming-lab.py`。
+见上文实测：invoke vs stream 对照（①）、三种模式定义（②）、v2 格式（③）、v3 事件流（④），来源脚本 `playground/06-streaming-lab.py`（TS 对照：`playground-ts/06-streaming-lab.ts`）。
 
 #### 常见误区
 
@@ -156,12 +214,12 @@ v3 的核心变化：**不再需要 `if chunk["type"] == "messages"` 分支判�
 
 #### 🗣️ 行话对照
 
-- **streaming / 流式输出**：逐块递送而非一次性返回——在哪遇到：`agent.stream()`、`stream_mode` 参数
-- **chunk**：流式输出中的一块数据——在哪遇到：`for chunk in agent.stream(...)`
-- **stream_mode**：流的粒度（updates / messages / custom）——在哪遇到：`stream()` 的 `stream_mode` 参数
-- **v2 / v3 protocol**：流事件格式版本——在哪遇到：`version="v2"` / `version="v3"`
-- **stream_events**：v3 事件流 API——在哪遇到：`agent.stream_events()`
-- **projection**：v3 中的类型化数据视图（messages / tool_calls / values）——在哪遇到：`stream.messages`、`stream.tool_calls`
+- **streaming / 流式输出**：逐块递送而非一次性返回——在哪遇到：`agent.stream()`、`stream_mode` / `streamMode` 参数
+- **chunk**：流式输出中的一块数据——在哪遇到：`for chunk in agent.stream(...)` / `for await (const chunk of ...)`
+- **stream_mode**：流的粒度（updates / messages / custom）——在哪遇到：`stream()` 的 `stream_mode` 参数（TS 侧 `streamMode`）
+- **v2 / v3 protocol**：流事件格式版本——在哪遇到：`version="v2"` / `version="v3"`（TS 侧只有 v3 事件流；多模式为 `[mode, chunk]` 元组）
+- **stream_events**：v3 事件流 API——在哪遇到：`agent.stream_events()`（TS 侧 `agent.streamEvents()`）
+- **projection**：v3 中的类型化数据视图（messages / tool_calls / values）——在哪遇到：`stream.messages`、`stream.tool_calls`（TS 侧 `stream.toolCalls`）
 
 #### 官方文档
 
@@ -186,9 +244,11 @@ LangChain 提供三种流模式：`updates`（每节点执行完后的状态更�
 
 #### 核心原理
 
-**① updates：每步结束报进度**——实测（脚本 2 段）：
+**① updates：每步结束报进度**——两侧实测（脚本 2 段）：
 
-```text
+::: code-group
+
+```text [Python]
 共收到 3 个 chunk
   chunk 1: 节点 ['model']
     model → AIMessage (tool_calls=True)
@@ -198,11 +258,25 @@ LangChain 提供三种流模式：`updates`（每节点执行完后的状态更�
     model → AIMessage (tool_calls=False)
 ```
 
+```text [TypeScript]
+共收到 3 个 chunk
+  chunk 1: 节点 ['model_request']
+    model_request → AIMessage (tool_calls=true)
+  chunk 2: 节点 ['tools']
+    tools → ToolMessage (tool_calls=false)
+  chunk 3: 节点 ['model_request']
+    model_request → AIMessage (tool_calls=false)
+```
+
+:::
+
 三个 chunk 对应课 5 的 agent loop 三步：模型申请工具 → 工具执行 → 模型终答。每个 chunk 告诉你**哪个节点刚刚完成、产出了什么类型的消息、有没有 tool_calls**。这就是"agent 进度条"的数据源——前端收到 chunk 1 显示"思考中…"，收到 chunk 2 显示"查询天气中…"，收到 chunk 3 显示最终答案。
 
-**② messages：每个 token chunk 都给你**——实测（脚本 3 段）：
+**② messages：每个 token chunk 都给你**——两侧实测（脚本 3 段）：
 
-```text
+::: code-group
+
+```text [Python]
 逐块输出（内容块一行，截断显示）:
   [model] '北京是中国'
   [model] '的首都，也是一'
@@ -212,13 +286,27 @@ LangChain 提供三种流模式：`updates`（每节点执行完后的状态更�
   （共 39 个 chunk：内容块 5 个（即上方 5 行）+ 空增量 34 个，空增量已跳过）
 ```
 
-每个 chunk 是一个 `(AIMessageChunk, metadata)` 元组。`AIMessageChunk` 是 `AIMessage` 的流式版本——它的 `content_blocks` 属性包含本次增量（可能是一个词、一个标点、或一个 tool_call_chunk）。`metadata` 里有关键字段 `langgraph_node`（告诉你这个 token 来自哪个节点）。
+```text [TypeScript]
+逐块输出（内容块一行，截断显示）:
+  [model_request] "北京是中国"
+  [model_request] "的首都，也是一"
+  [model_request] "座融合了悠久历史"
+  [model_request] "与现代"
+  [model_request] "活力的国际化大都市。"
+  （共 41 个 chunk：内容块 5 个 + 空增量 36 个，空增量已跳过）
+```
 
-注意两个实测现象：① **文本块粒度取决于模型**——本机 qwen3.8-flash 一次回答是"几个字一块"（实测 5 个文本块 / 37 字），不是逐字，不同模型的分块策略不同，不要把"逐 token"理解成"逐汉字"；② **流中混有大量空增量 chunk**——本机实测一次调用 39 个 chunk 中 34 个为空（`content` 为空、无内容块），做打字机效果必须判空后再输出（见知识点 3）。
+:::
 
-**③ custom：工具里随时发信号**——实测（脚本 4 段）：
+每个 chunk 是一个 `(AIMessageChunk, metadata)` 元组（TS 侧同构，`for await` 直接解包）。`AIMessageChunk` 是 `AIMessage` 的流式版本——它的 `content_blocks`（TS 侧 `contentBlocks`）属性包含本次增量（可能是一个词、一个标点、或一个 tool_call_chunk）。`metadata` 里有关键字段 `langgraph_node`（告诉你这个 token 来自哪个节点）。
 
-```text
+注意两个实测现象：① **文本块粒度取决于模型**——本机 qwen3.8-flash 一次回答是"几个字一块"（两组实测均为 5 个文本块 / 37 字），不是逐字，不同模型的分块策略不同，不要把"逐 token"理解成"逐汉字"；② **流中混有大量空增量 chunk**——本机实测一次调用 39～41 个 chunk 中 34～36 个为空（`content` 为空、无内容块），做打字机效果必须判空后再输出（见知识点 3）。
+
+**③ custom：工具里随时发信号**——两侧实测（脚本 4 段）：
+
+::: code-group
+
+```text [Python]
 自定义进度信号:
   📡 🔍 正在搜索：LangChain streaming latest documentation
   📡 📊 已检索 3 条数据库记录
@@ -231,9 +319,26 @@ LangChain 提供三种流模式：`updates`（每节点执行完后的状态更�
   📡 ✅ 搜索完成
 ```
 
-实现方式——在工具函数内调用 `get_stream_writer()`：
+```text [TypeScript]
+自定义进度信号:
+  📡 🔍 正在搜索：LangChain streaming 最新文档
+  📡 🔍 正在搜索：LangChain 三种流模式官方指南
+  📡 🔍 正在搜索：LangGraph streaming 实践要点
+  📡 📊 已检索 3 条数据库记录
+  📡 📊 已检索 3 条数据库记录
+  📡 📊 已检索 3 条数据库记录
+  📡 ✅ 搜索完成
+  📡 ✅ 搜索完成
+  📡 ✅ 搜索完成
+```
 
-```python
+:::
+
+实现方式——Python 侧在工具函数内调用 `get_stream_writer()`；TS 侧工具函数收第二个参数 `config`，用 `config.writer?.()` 发送：
+
+::: code-group
+
+```python [Python]
 from langgraph.config import get_stream_writer
 
 @tool
@@ -245,11 +350,29 @@ def slow_search(query: str) -> str:
     return f"关于「{query}」找到 3 条结果：……"
 ```
 
-然后 `stream_mode="custom"` 就能收到这些信号。注意实测中的一个现象：**当模型并行调用多个工具时，custom 信号会交错**（上例中 3 次搜索的进度信号混在一起）。这是正常的——custom 信号按实际执行顺序到达，不保证按工具调用顺序排列。
+```typescript [TypeScript]
+const slowSearch = tool(
+  async ({ query }, config: LangGraphRunnableConfig) => {
+    config.writer?.(`🔍 正在搜索：${query}`);
+    // …执行搜索…
+    config.writer?.(`✅ 搜索完成`);
+    return `关于「${query}」找到 3 条结果：……`;
+  },
+  { name: "slow_search", schema: z.object({ query: z.string() }) },
+);
+```
 
-**④ 多模式混用**——`stream_mode=["updates", "custom"]` 同时输出两种 chunk，用 `chunk["type"]` 区分：
+:::
 
-```python
+> 📌 **TypeScript 侧差异（本机实测）**：① TS 侧没有 `get_stream_writer()` 的等价导出（`@langchain/langgraph` 的独立 `writer()` 函数实测不生效——0 个信号）；官方写法是工具函数第二参数 `config.writer?.()`（`LangGraphRunnableConfig` 类型，官方 streaming 页 Custom updates 节即此写法）；② mock 剧本下两侧信号条数均为 9 条（3 次并行搜索 × 3 条信号）。
+
+然后 `stream_mode="custom"`（TS 侧 `streamMode: "custom"`）就能收到这些信号。注意实测中的一个现象：**当模型并行调用多个工具时，custom 信号会交错**（两侧实测均可见 3 次搜索的进度信号混在一起）。这是正常的——custom 信号按实际执行顺序到达，不保证按工具调用顺序排列。
+
+**④ 多模式混用**——`stream_mode=["updates", "custom"]`（TS 侧 `streamMode: [...]`）同时输出两种 chunk：
+
+::: code-group
+
+```python [Python]
 for chunk in agent.stream(
     {"messages": [...]},
     stream_mode=["updates", "custom"],
@@ -261,11 +384,28 @@ for chunk in agent.stream(
         # 处理自定义信号
 ```
 
+```typescript [TypeScript]
+for await (const [mode, chunk] of await agent.stream(
+  { messages: [...] },
+  { streamMode: ["updates", "custom"] },
+)) {
+  if (mode === "updates") {
+    // 处理状态更新
+  } else if (mode === "custom") {
+    // 处理自定义信号
+  }
+}
+```
+
+:::
+
+> 📌 **TypeScript 侧差异（本机实测）**：TS 侧多模式 chunk 是 `[mode, chunk]` 元组（探针实测 11 个 item 依次为 updates/custom/custom…，首位即 mode、次位为对应负载）；Python 侧因 `version="v2"` 统一包装成 `{"type": ..., "data": ...}` 对象。两侧都是"按 mode 分派"，写法不同而已。
+
 三种模式可以任意组合——`["updates", "messages", "custom"]` 全开也行，但注意 messages 模式 chunk 量很大（每个 token 一个），混用时做好过滤。
 
 #### 示例演示
 
-见上文实测：updates 三节点进度（①）、messages 逐 token（②）、custom 工具信号（③）、多模式混用（④），来源脚本 `playground/06-streaming-lab.py`。
+见上文实测：updates 三节点进度（①）、messages 逐 token（②）、custom 工具信号（③）、多模式混用（④），来源脚本 `playground/06-streaming-lab.py`（TS 对照：`playground-ts/06-streaming-lab.ts`）。
 
 #### 常见误区
 
@@ -279,11 +419,11 @@ for chunk in agent.stream(
 
 #### 🗣️ 行话对照
 
-- **updates mode**：状态更新流——在哪遇到：`stream_mode="updates"`
-- **messages mode**：LLM token 流——在哪遇到：`stream_mode="messages"`
-- **custom mode**：自定义信号流——在哪遇到：`stream_mode="custom"`、`get_stream_writer()`
-- **AIMessageChunk**：AIMessage 的流式片段——在哪遇到：messages 模式的 chunk data
-- **get_stream_writer**：获取流写入器——在哪遇到：`langgraph.config`
+- **updates mode**：状态更新流——在哪遇到：`stream_mode="updates"`（TS 侧 `streamMode: "updates"`）
+- **messages mode**：LLM token 流——在哪遇到：`stream_mode="messages"`（TS 侧 `streamMode: "messages"`）
+- **custom mode**：自定义信号流——在哪遇到：`stream_mode="custom"`、`get_stream_writer()`（TS 侧工具内 `config.writer?.()`）
+- **AIMessageChunk**：AIMessage 的流式片段——在哪遇到：messages 模式的 chunk data（TS 侧同名类）
+- **get_stream_writer**：获取流写入器——在哪遇到：`langgraph.config`（TS 侧无对应函数，用工具的 `config` 参数）
 
 #### 官方文档
 
@@ -298,7 +438,7 @@ for chunk in agent.stream(
 
 #### 一句话定义
 
-实战流式 = 把三种流模式接成用户可感知的体验：打字机效果（messages 模式逐 token 打印）、工具进度条（custom 模式发进度信号）、思考过程可见（reasoning tokens）、多 agent 来源标注（sub-agents 的 name 参数）。v3 事件流（`stream_events`）是官方推荐的新写法，用 typed projections 替代分支判断。
+实战流式 = 把三种流模式接成用户可感知的体验：打字机效果（messages 模式逐 token 打印）、工具进度条（custom 模式发进度信号）、思考过程可见（reasoning tokens）、多 agent 来源标注（sub-agents 的 name 参数）。v3 事件流（`stream_events`，TS 侧 `streamEvents`）是官方推荐的新写法，用 typed projections 替代分支判断。
 
 #### 直觉建立（类比）
 
@@ -308,9 +448,11 @@ for chunk in agent.stream(
 
 #### 核心原理
 
-**① 打字机效果**——最简单的实战：`stream_mode="messages"` + 逐 token 打印：
+**① 打字机效果**——最简单的实战：`stream_mode="messages"`（TS 侧 `streamMode: "messages"`）+ 逐 token 打印：
 
-```python
+::: code-group
+
+```python [Python]
 for chunk in agent.stream(
     {"messages": [{"role": "user", "content": "用一句话介绍北京。"}]},
     stream_mode="messages",
@@ -322,17 +464,33 @@ for chunk in agent.stream(
             print(token.content, end="", flush=True)
 ```
 
-两个关键点：① `end=""` 不换行 + `flush=True` 强制刷新——否则终端会等缓冲区满了才显示，打字机效果出不来；② **判空**——实测流中大多数 chunk 是空增量（一次调用 39 个中 34 个为空），不判空会让输出空转、逻辑难排查。
+```typescript [TypeScript]
+const stream = await agent.stream(
+  { messages: [{ role: "user", content: "用一句话介绍北京。" }] },
+  { streamMode: "messages" },
+);
+for await (const [token, _metadata] of stream) {
+  if (token.text) {          // 关键：判空，跳过空增量（TS 侧 token.text / token.content 皆可）
+    process.stdout.write(token.text);
+  }
+}
+```
 
-**② 工具进度条**——`stream_mode="custom"` + `get_stream_writer()`（知识点 2 已演示）。进阶用法：结合 `stream_mode=["updates", "custom"]`，用 updates 跟踪当前步骤、用 custom 显示工具内部进度。
+:::
+
+两个关键点：① Python 侧 `end=""` 不换行 + `flush=True` 强制刷新（TS 侧 `process.stdout.write` 天然不换行）——否则终端会等缓冲区满了才显示，打字机效果出不来；② **判空**——实测流中大多数 chunk 是空增量（两组实测一次调用 39～41 个中 34～36 个为空），不判空会让输出空转、逻辑难排查。
+
+**② 工具进度条**——`stream_mode="custom"` + `get_stream_writer()`（TS 侧 `streamMode: "custom"` + 工具内 `config.writer?.()`；知识点 2 已演示）。进阶用法：结合 `stream_mode=["updates", "custom"]`，用 updates 跟踪当前步骤、用 custom 显示工具内部进度。
 
 **③ 思考过程可见（reasoning tokens）**——部分模型（如 Claude、支持 reasoning 的 OpenAI 模型）在生成最终答案前会先输出"思考"内容。官方给出两条接收路径：`stream_mode="messages"` 下过滤 `type="reasoning"` 的内容块，或 v3 事件流的 `message.reasoning` 投影。本机实测（qwen3.8-flash + 百炼端点，简单问题）：未产生独立 reasoning 流——v3 的 `message.reasoning` 投影存在但迭代 0 项（是否输出思考内容与模型及端点通道有关）。要用好这一能力，先按官方 streaming 页确认你的模型/端点会发出 reasoning 块，再上 UI。
 
-**④ 多 agent 来源标注**——当 agent A 调用 agent B（通过工具）时，`stream_mode="messages"` + `subgraphs=True` 可以在 metadata 中拿到 `lc_agent_name`，区分当前 token 来自哪个 agent。给每个 `create_agent` 传 `name="weather_agent"` 等参数即可启用。
+**④ 多 agent 来源标注**——当 agent A 调用 agent B（通过工具）时，`stream_mode="messages"` + `subgraphs=True` 可以在 metadata 中拿到 `lc_agent_name`，区分当前 token 来自哪个 agent。给每个 `create_agent` 传 `name="weather_agent"` 等参数即可启用（TS 侧 `createAgent({ name: "weather_agent", ... })`，框架同样注入 `lc_agent_name` 元数据——源码核对：`ReactAgent` 构造时写入 `metadata.lc_agent_name`）。
 
-**⑤ v3 事件流深入**——本机实测（脚本 5 段 + 评审核查补充）：
+**⑤ v3 事件流深入**——两侧本机实测（脚本 5 段 + 评审核查补充）：
 
-```text
+::: code-group
+
+```text [Python]
 v3 事件流（messages 投影）:
   [model] 广州当前天气：晴天，气温 22°C，湿度 45%。天气不错，适合外出～
 
@@ -343,14 +501,30 @@ v3 事件流（messages 投影）:
 最终状态 keys: ['messages']
 ```
 
-v3 基本用法验证通过：`stream.messages` 逐块拿模型输出（`for delta in message.text` 写法成立）、`stream.output` 拿最终状态。两个实测要点：
+```text [TypeScript]
+v3 事件流（messages 投影）:
+  [model_request] （本轮无文本内容——工具调用轮）
+  [model_request] 广州当前天气：晴天，气温 22°C，湿度 45%。天气不错，适合外出～
 
-- **`message.text` 是可迭代文本投影**（实测类型 `SyncTextProjection`）——迭代产出文本块，与官方文档示例一致；`message.reasoning` 同为投影（本轮 0 项，见 ③）。
-- **v3 协议当前标记为 `LangChainBetaWarning`（experimental）**——终端输出中明确提示。生产环境建议 v2 为主、v3 为辅，等协议稳定后再全面迁移。
+投影形态实测（探针脚本）:
+  message.text       类型 TextContentStream —— 迭代出 3 个文本块（拼接为上方回答）
+  message.reasoning  类型 ReasoningContentStream —— 迭代出 0 项（本轮无思考内容）
+
+最终状态 keys: ['messages']
+```
+
+:::
+
+> 📌 **TypeScript 侧差异（本机实测 + 源码核对）**：① 方法名是 camelCase 的 `streamEvents`（Python 侧 `stream_events`）；② 投影类型名不同（`TextContentStream` / `ReasoningContentStream`，Python 侧 `SyncTextProjection`）；③ **TS 侧运行时无 `LangChainBetaWarning` 输出**（类型注释仍标注 experimental，行为比 Python 侧安静）；④ TS 侧 `stream.messages` 会把"工具调用轮"的空消息也作为一条迭代项产出（首条无文本内容），按需过滤。
+
+v3 基本用法验证通过：`stream.messages` 逐块拿模型输出（`for delta in message.text` / `for await (const delta of message.text)` 写法成立）、`stream.output` 拿最终状态。两个实测要点：
+
+- **`message.text` 是可迭代文本投影**（实测类型 `SyncTextProjection` / TS 侧 `TextContentStream`）——迭代产出文本块，与官方文档示例一致；`message.reasoning` 同为投影（本轮 0 项，见 ③）。
+- **v3 协议当前标记为 experimental（Python 侧打 `LangChainBetaWarning`）**——终端输出中明确提示。生产环境建议 v2 为主、v3 为辅，等协议稳定后再全面迁移。
 
 #### 示例演示
 
-见上文实测：打字机效果（①，判空版示例经补测验证）、工具进度条（②）、v3 事件流（⑤），来源脚本 `playground/06-streaming-lab.py`；reasoning tokens（③）本机实测未产生独立输出、多 agent 标注（④）为官方文档归纳（均如实标注）。
+见上文实测：打字机效果（①，判空版示例经补测验证）、工具进度条（②）、v3 事件流（⑤），来源脚本 `playground/06-streaming-lab.py`（TS 对照：`playground-ts/06-streaming-lab.ts`）；reasoning tokens（③）本机实测未产生独立输出、多 agent 标注（④）为官方文档归纳（均如实标注）。
 
 #### 常见误区
 
@@ -364,11 +538,11 @@ v3 基本用法验证通过：`stream.messages` 逐块拿模型输出（`for del
 
 #### 🗣️ 行话对照
 
-- **打字机效果 / typewriter effect**：逐 token 打印，模拟打字——在哪遇到：`stream_mode="messages"` + `print(end="", flush=True)`
-- **reasoning tokens**：模型的思考过程 token——在哪遇到：`content_blocks` 中 `type="reasoning"` 的块
-- **sub-agents**：被其他 agent 调用的 agent——在哪遇到：`create_agent(name="...")` + `subgraphs=True`
-- **stream_events**：v3 事件流 API——在哪遇到：`agent.stream_events(version="v3")`
-- **typed projections**：v3 中类型化的数据视图——在哪遇到：`stream.messages`、`stream.tool_calls`、`stream.values`
+- **打字机效果 / typewriter effect**：逐 token 打印，模拟打字——在哪遇到：`stream_mode="messages"` + `print(end="", flush=True)`（TS 侧 `process.stdout.write`）
+- **reasoning tokens**：模型的思考过程 token——在哪遇到：`content_blocks`（TS 侧 `contentBlocks`）中 `type="reasoning"` 的块
+- **sub-agents**：被其他 agent 调用的 agent——在哪遇到：`create_agent(name="...")`（TS 侧 `createAgent({ name })`）+ `subgraphs=True`
+- **stream_events**：v3 事件流 API——在哪遇到：`agent.stream_events(version="v3")`（TS 侧 `agent.streamEvents(..., { version: "v3" })`）
+- **typed projections**：v3 中类型化的数据视图——在哪遇到：`stream.messages`、`stream.tool_calls`、`stream.values`（TS 侧 `stream.toolCalls`）
 
 #### 官方文档
 
@@ -379,17 +553,17 @@ v3 基本用法验证通过：`stream.messages` 逐块拿模型输出（`for del
 
 ## 第四幕：实操验证
 
-回到第一幕：客服助手要"让转的过程实时可见"。以下五项验证全部本机跑通（脚本：`playground/06-streaming-lab.py`）：
+回到第一幕：客服助手要"让转的过程实时可见"。以下五项验证全部本机跑通（脚本：`playground/06-streaming-lab.py`；TS 对照：`playground-ts/06-streaming-lab.ts`）：
 
-1. **invoke vs stream 对照**：同一 agent、同一问题——invoke 2.8 秒无中间反馈；stream 在 1.4 秒即收到首 chunk（模型申请工具），总耗时相同（2.8 秒）——**stream 不改变执行速度，只改变反馈时机**。
-2. **updates 模式**：3 个 chunk 对应 agent loop 三步（model → tools → model），每个 chunk 标注节点名、消息类型、tool_calls 状态——**agent 进度条的数据源**。
-3. **messages 模式**：文本块逐块输出（本机 qwen3.8-flash 实测 5 个文本块 / 37 字；同期混有大量空增量 chunk——39 个 chunk 中 34 个为空）——**打字机效果的数据源**（务必判空）。
-4. **custom 模式**：`get_stream_writer()` 在工具内发送"正在搜索…""已检索 3 条记录""搜索完成"信号——**工具进度条的数据源**。并行调用时信号交错（实测 3 次搜索进度混在一起）。
-5. **v3 事件流**：`stream_events(version="v3")` 基本用法验证通过——`message.text` 为可迭代文本投影（逐块迭代）、`stream.output` 拿到最终状态；协议标记为 beta。
+1. **invoke vs stream 对照**：同一 agent、同一问题——invoke 2.8 秒无中间反馈；stream 在 1.4 秒即收到首 chunk（模型申请工具），总耗时相同（2.8 秒）——**stream 不改变执行速度，只改变反馈时机**（TS 侧同构：invoke 2.9s / stream 首 chunk 1.4s / 总耗时 2.8s）。
+2. **updates 模式**：3 个 chunk 对应 agent loop 三步（`model` → `tools` → `model`；TS 侧节点名 `model_request`），每个 chunk 标注节点名、消息类型、tool_calls 状态——**agent 进度条的数据源**。
+3. **messages 模式**：文本块逐块输出（本机 qwen3.8-flash 实测 5 个文本块 / 37 字；同期混有大量空增量 chunk——39 个 chunk 中 34 个为空；TS 侧同构：41 个中 36 个为空）——**打字机效果的数据源**（务必判空）。
+4. **custom 模式**：Python 侧 `get_stream_writer()`、TS 侧 `config.writer?.()` 在工具内发送"正在搜索…""已检索 3 条记录""搜索完成"信号——**工具进度条的数据源**。并行调用时信号交错（两组实测均可见 3 次搜索进度混在一起）。
+5. **v3 事件流**：`stream_events(version="v3")`（TS 侧 `streamEvents`）基本用法验证通过——`message.text` 为可迭代文本投影（逐块迭代）、`stream.output` 拿到最终状态；协议标记为 beta（experimental）。
 
 > ✅ **回扣场景**：第一幕的诉求全部有了着落——"用户盯空屏" = stream 首 chunk 1.4 秒即到（实测）；"不知道中间发生了什么" = updates 模式每步可见（实测）；"打字机效果" = messages 模式逐 token 输出（实测）；"工具进度" = custom 模式发信号（实测）。
 >
-> ⚠️ 数值说明：以上为 2026-09-15 本机实测；文本块粒度、chunk 数量（多次实测 21～80 个不等，其中多数为空增量）、首 chunk 延迟因模型与网络而异；v3 协议当前为 beta。
+> ⚠️ 数值说明：以上为 2026-09-15 本机实测；文本块粒度、chunk 数量（多次实测 21～80 个不等，其中多数为空增量）、首 chunk 延迟因模型与网络而异；v3 协议当前为 beta。TypeScript 侧输出由 `playground-ts/06-streaming-lab.ts` 在本地 OpenAI 兼容 mock 端点上运行采集。
 
 **应用实战（4.2）**：把本课知识点组装成一条「让用户看得见它在跑」的演进路线——独立成册：
 
@@ -414,9 +588,10 @@ v3 基本用法验证通过：`stream.messages` 逐块拿模型输出（`for del
 ## 🐞 常见误区
 
 1. **以为 stream 是"另一种调用"**：同一个 agent、同一条路——invoke 攒着给，stream 拆开给（实测总耗时完全一样）。
-2. **以为"逐 token"就是"逐汉字"**：token 粒度由模型决定——本机 qwen3.8-flash 是"几个字一组"（实测 5 个 chunk 覆盖整句）。
-3. **以为 v3 已经可以生产使用**：当前标记为 beta，API 行为可能与文档有差异（本机实测 `message.text` 返回完整文本而非迭代器）。
+2. **以为"逐 token"就是"逐汉字"**：token 粒度由模型决定——本机 qwen3.8-flash 是"几个字一组"（两组实测均 5 个 chunk 覆盖整句）。
+3. **以为 v3 已经可以生产使用**：当前标记为 experimental（Python 侧打 `LangChainBetaWarning`），API 行为可能与文档有差异；本次核查已修正早期描述——`message.text` 实测为可迭代投影（逐块迭代），与官方示例一致。
 4. **以为 custom 信号会按工具调用顺序排列**：并行调用时信号交错（实测 3 次搜索的进度混在一起）。
+5. **以为 Python 和 TS 的流式写法是"逐字翻译"**：TS 侧没有 `version="v2"` 包装（多模式为 `[mode, chunk]` 元组）、没有 `get_stream_writer()`（用工具的 `config.writer?.()`）——目的相同、形态不同（本课均实测）。
 
 ### ⏳ 与过时说法对照（写前核对 + 实测发现的差异）
 
@@ -424,8 +599,9 @@ v3 基本用法验证通过：`stream.messages` 逐块拿模型输出（`for del
 |---|---|---|
 | "流式输出就是 `stream=True`" | LangChain 把流式从模型层提升到 agent 层——不只是 token 能流，每步状态、工具进度、自定义信号都能流 | streaming 页 + 实测 |
 | "v2 和 v3 是同一套东西的不同版本号" | v2 是 LangGraph 底层协议（`stream()`），v3 是 LangChain 上层封装（`stream_events()`）——不同 API、不同设计理念 | streaming 页 + event-streaming 页 |
-| "messages 模式的每个 chunk 都是一段内容" | 实测大多数 chunk 是空增量（多次采样：39 中 34、80 中 74 等）——打字机效果必须判空 | 实测 + 评审核查 |
+| "messages 模式的每个 chunk 都是一段内容" | 实测大多数 chunk 是空增量（多次采样：39 中 34、80 中 74、41 中 36 等）——打字机效果必须判空 | 实测 + 评审核查 |
 | "流式输出会让 agent 跑得更快" | 总耗时不变（实测 2.8s）——只改变反馈时机，不改变执行速度 | 实测 1 段 |
+| "TS 与 Python 的流式 API 只是换个写法" | 骨架同构但形态有分岔：无 v2 包装（`[mode, chunk]` 元组）、无 `get_stream_writer`、投影类型名不同、TS 侧运行时无 beta 警告等（本课均实测） | 本课 TS 侧实测 + 源码核对 |
 
 ## 一图总结
 
