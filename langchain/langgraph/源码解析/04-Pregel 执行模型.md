@@ -39,7 +39,7 @@ flowchart TD
 
 `pregel/_algo.py:392`
 
-```python
+```python [Python 源码摘录 · langgraph 1.2.11 · 不可运行]
 def prepare_next_tasks(
     checkpoint: Checkpoint,
     pending_writes: list[PendingWrite],
@@ -52,6 +52,8 @@ def prepare_next_tasks(
 ) -> dict[str, PregelTask] | dict[str, PregelExecutableTask]:
     """Prepare the set of tasks that will make up the next Pregel step."""
 ```
+
+> ℹ️ **E5 标注**：这是 `pregel/_algo.py:392` 的**签名摘录**（省略了若干无关参数，因此不能直接运行）。TS 侧对应 `pregel/algo.js` 的 `prepareNextTasks`，参数名全部驼峰化（`pendingWrites` / `step` / `stop`），但**不是公开 API**，没有稳定的对外写法可给，故不做双语改写；本篇的四条结论对两侧都成立。
 
 **三个关键观察**：
 
@@ -69,7 +71,7 @@ def prepare_next_tasks(
 
 `pregel/_runner.py:176`
 
-```python
+```python [Python 源码摘录 · langgraph 1.2.11 · 不可运行]
 def tick(
     self,
     tasks: Iterable[PregelExecutableTask],
@@ -83,6 +85,8 @@ def tick(
     tasks = tuple(tasks)
     futures = FuturesDict(...)
 ```
+
+> ℹ️ **E5 标注**：这是 `pregel/_runner.py:176` 的 `PregelRunner.tick` 摘录。TS 侧是 `pregel/runner.js` 的 `PregelRunner.tick`，用 `Promise` + 弱引用回调替代 `FuturesDict`，但"generator 驱动 / 单任务 fast path / 多任务并发"三条结论一致。
 
 **关键观察**：
 
@@ -98,7 +102,7 @@ def tick(
 
 `pregel/_algo.py:232`
 
-```python
+```python [Python 源码摘录 · langgraph 1.2.11 · 不可运行]
 def apply_writes(
     checkpoint: Checkpoint,
     channels: Mapping[str, BaseChannel],
@@ -111,6 +115,8 @@ def apply_writes(
     # sort tasks on path, to ensure deterministic order for update application
     tasks = sorted(tasks, key=lambda t: task_path_str(t.path[:3]))
 ```
+
+> ℹ️ **E5 标注**：这是 `pregel/_algo.py:232` 的 `apply_writes` 摘录。TS 侧 `pregel/algo.js` 的 `applyWrites` **同样按 task path 排序**，所以"谁先跑完不影响结果"在 TS 侧一样成立。
 
 **两个关键观察**：
 
@@ -130,10 +136,12 @@ def apply_writes(
 
 而 `stop` 的来源，正是课 3 查到的那一行：
 
-```python
+```python [Python 源码摘录 · langgraph 1.2.11 · 不可运行]
 # langgraph/_internal/_config.py
 DEFAULT_RECURSION_LIMIT = int(getenv("LANGGRAPH_DEFAULT_RECURSION_LIMIT", "10007"))
 ```
+
+> ℹ️ **E5 标注**：单行常量摘录。⚠️ TS 侧默认是 **25**（不是 10007），配置字段为 `recursionLimit`；本机实测传 `recursion_limit`（下划线）不报错但被忽略、仍按 25 跑。
 
 > ✅ **三处证据串成一条线**：课 3 实测"默认跑 10007 轮" → 源码常量 → 本篇的 `step` / `stop` 计数器。**"轮"就是这里的 `step`。**
 

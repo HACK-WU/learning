@@ -58,10 +58,25 @@
 
 ### 1. `RetryPolicy` 在 `langgraph.types`，不在 `langgraph.pregel`
 
-```python
+::: code-group
+
+```python [Python]
 from langgraph.pregel import RetryPolicy   # ❌ ImportError
 from langgraph.types import RetryPolicy    # ✅
 ```
+
+```typescript [TypeScript]
+// ⚠️ TS 侧没有"从哪个模块 import"这个问题：只有 `@langchain/langgraph` 一个入口，
+//    而且 **RetryPolicy 只是类型（type-only export），没有运行时值**。
+//    所以不能 `new RetryPolicy(...)`——本机实测 `"RetryPolicy" in m === false`。
+import type { RetryPolicy } from "@langchain/langgraph";   // ✅ 只能当类型用
+
+const policy: RetryPolicy = { maxAttempts: 3, initialInterval: 500 };  // ✅ 字面量对象
+```
+
+:::
+
+> 🇹🇸 **TS 侧差异**：Python 的坑是"模块路径写错"，TS 的坑是"**以为有个类可以 new**"。`index.d.ts` 里 `RetryPolicy` 由 `./pregel/utils/index.js` 导入并再导出，但在 ESM 运行时对象上取不到（实测 `typeof m.RetryPolicy === "undefined"`）。所以 TS 侧一律写字面量对象 `{ maxAttempts, initialInterval }`。本机实测：普通 `import { RetryPolicy } from "@langchain/langgraph"` **能编译也能运行**（`tsc --noEmit` exit=0），因为本工程未开 `verbatimModuleSyntax`；只有开了该选项，才必须改写成 `import type`。真正不能做的是 `new RetryPolicy(...)`——运行时没有这个值。
 
 ### 2. 默认 `retry_on` 对 `ValueError` **不重试**
 

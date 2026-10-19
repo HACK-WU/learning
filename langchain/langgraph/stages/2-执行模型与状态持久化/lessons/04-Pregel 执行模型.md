@@ -144,7 +144,9 @@ flowchart LR
 
 课 3 留下的问题是"一个 draft→check 来回为什么占 2 轮"。实测：
 
-```python
+::: code-group
+
+```python [Python]
 # 两个节点来回
 第 1 轮 -> {'draft': {'n': 1}}
 第 2 轮 -> {'check': None}
@@ -156,6 +158,23 @@ flowchart LR
 第 2 轮 -> {'solo': {'n': 2}}
 第 3 轮 -> {'solo': {'n': 3}}
 ```
+
+```typescript [TypeScript]
+// 两个节点来回
+// 第 1 轮 -> {"generate":{"n":1}}
+// 第 2 轮 -> {"check":{}}
+// 第 3 轮 -> {"generate":{"n":2}}
+// 第 4 轮 -> {"check":{}}
+
+// 对照：只有一个节点自转
+// 第 1 轮 -> {"solo":{"n":1}}
+// 第 2 轮 -> {"solo":{"n":2}}
+// 第 3 轮 -> {"solo":{"n":3}}
+```
+
+:::
+
+> 📌 **TS 侧读数差异**：Python 里"节点无返回"显示为 `None`，TS 侧显示为 `{}`（空对象）。**轮次结构完全相同**——这是本课的核心结论，两侧一致。
 
 > ✅ **答案**：因为 `draft` 和 `check` 是**接力**关系（check 要读 draft 的产出），所以它们落在**不同的批**——一个来回 naturally 占 2 批。而单节点自转时，一次自转 = 1 批。
 >
@@ -184,8 +203,8 @@ flowchart LR
 
 #### 官方文档
 
-- [Graph API overview（Graphs / super-step）](https://docs.langchain.com/oss/python/langgraph/graph-api)
-- [Use the Graph API（Create and control loops）](https://docs.langchain.com/oss/python/langgraph/use-graph-api)
+- [Graph API overview（Graphs / super-step）](https://docs.langchain.com/oss/python/langgraph/graph-api) ｜ [TS 版](https://docs.langchain.com/oss/javascript/langgraph/graph-api)
+- [Use the Graph API（Create and control loops）](https://docs.langchain.com/oss/python/langgraph/use-graph-api) ｜ [TS 版](https://docs.langchain.com/oss/javascript/langgraph/use-graph-api)
 
 ---
 
@@ -222,7 +241,9 @@ flowchart TD
 
 > 看图：同一个节点 `generate` 被开了三份，每份拿到的状态**只有自己的 subject**；三份的产出都写回同一个带 reducer 的字段。
 
-```python
+::: code-group
+
+```python [Python]
 from langgraph.types import Send
 
 def continue_to_jokes(state: OverallState):
@@ -230,6 +251,19 @@ def continue_to_jokes(state: OverallState):
 
 builder.add_conditional_edges(START, continue_to_jokes)
 ```
+
+```typescript [TypeScript]
+import { Send } from "@langchain/langgraph";
+
+const continueToJokes = (state: typeof OverallState.State) =>
+  state.subjects.map((s) => new Send("generate_joke", { subject: s }));
+
+builder.addConditionalEdges(START, continueToJokes);
+```
+
+:::
+
+> ⚠️ **TS 侧必须 `new Send(...)`**：Python 的 `Send` 是可调用类（`Send(...)` 即构造），TS 的 `Send` 是 class，必须写 `new Send(node, state)`。传第二个参数时它是**该节点收到的状态**，只含你给的字段——这正是 map-reduce 的关键。
 
 官方的说法（核对于 2026-10）：*节点和边默认都是事先定义好的、操作同一份共享状态；但有些情况下边的数量事先未知、且你需要同时存在不同版本的 State——典型例子就是 map-reduce。`Send` 接受两个参数：节点名，和传给该节点的状态。*
 
@@ -275,8 +309,8 @@ KeyError: 'subject'
 
 #### 官方文档
 
-- [Graph API overview（Send）](https://docs.langchain.com/oss/python/langgraph/graph-api#send)
-- [Use the Graph API（Map-reduce and the Send API）](https://docs.langchain.com/oss/python/langgraph/use-graph-api#map-reduce-and-the-send-api)
+- [Graph API overview（Send）](https://docs.langchain.com/oss/python/langgraph/graph-api#send) ｜ [TS 版](https://docs.langchain.com/oss/javascript/langgraph/graph-api#send)
+- [Use the Graph API（Map-reduce and the Send API）](https://docs.langchain.com/oss/python/langgraph/use-graph-api#map-reduce-and-the-send-api) ｜ [TS 版](https://docs.langchain.com/oss/javascript/langgraph/use-graph-api#map-reduce-and-the-send-api)
 
 ---
 
@@ -299,7 +333,9 @@ KeyError: 'subject'
 
 #### 核心原理
 
-```python
+::: code-group
+
+```python [Python]
 from langgraph.types import Command
 
 def node_a(state: State) -> Command[Literal["node_b", END]]:
@@ -307,6 +343,20 @@ def node_a(state: State) -> Command[Literal["node_b", END]]:
         return Command(update={"foo": "收工"}, goto=END)
     return Command(update={"foo": "去b"}, goto="node_b")
 ```
+
+```typescript [TypeScript]
+import { Command } from "@langchain/langgraph";
+
+const nodeA = (state: typeof State.State): Command => {
+  if (该收工了) return new Command({ update: { foo: "收工" }, goto: END });
+  return new Command({ update: { foo: "去b" }, goto: "node_b" });
+};
+
+// ⚠️ 关键差异：TS 还必须在 addNode 里声明可达目标，否则编译期报错
+builder.addNode("node_a", nodeA, { ends: ["node_b"] });
+```
+
+:::
 
 官方的说法（核对于 2026-10）：*`Command` 是一个 versatile primitive，接受四个参数；**如果你想把状态更新和路由合并在一个函数里，用 `Command` 而不是条件边**。*
 
@@ -333,14 +383,23 @@ def node_a(state: State) -> Command[Literal["node_b", END]]:
 
 #### ⚠️ 一个实测发现的坑：goto 写错不报错
 
-这是本课**最该记住的一条**：
+这是本课**最该记住的一条**，而且**两侧行为完全不同**：
 
-```python
+::: code-group
+
+```python [Python]
 # 节点实际叫 "real"，这里拼成了 "Real"
 Command(update={"foo": "starter"}, goto="Real")
 ```
 
-实测结果：
+```typescript [TypeScript]
+// 节点实际叫 "real"，这里拼成了 "Real"
+new Command({ update: { foo: "starter" }, goto: "Real" });
+```
+
+:::
+
+Python 侧实测结果：
 
 ```
 结果: {'foo': 'starter'}          # 没有报错！目标节点根本没跑
@@ -355,15 +414,36 @@ branch:to:Real, ignoring it.
 
 对照正常写法的 `goto="real"`：目标节点正常执行。
 
-> ⚠️ **这意味着 `Command` 的 `goto` 写错节点名时会静默跳过**，状态更新生效、流程提前结束，**你在 `invoke` 的返回值里看不出任何异常**。排查时记得看 stderr。
+> ⚠️ **Python 侧**：`Command` 的 `goto` 写错节点名时会**静默跳过**，状态更新生效、流程提前结束，**你在 `invoke` 的返回值里看不出任何异常**。排查时记得看 stderr。
+>
+> 🛡️ **TS 侧不会静默**：`addNode(name, fn, { ends: ["目标"] })` 声明的目标若与实际 `goto` 不一致或指向不存在的节点，**编译期直接抛 `UnreachableNodeError`**。实测把 `ends` 漏写时报：
+>
+> ```
+> UnreachableNodeError: Node `node_b` is not reachable.
+> ```
+>
+> 同样的错在两侧的代价差别很大：Python 是"运行完才发现结果不对"，TS 是"根本跑不起来"。**TS 的严格在这里是优势，但也意味着教程里的 `ends` 不能省。**
 
-**但有个实测发现的好消息**：给返回值加上 `Literal[...]` 标注后，写错的节点名会在**编译时**就被抓住：
+**但有个实测发现的好消息**：Python 侧给返回值加上 `Literal[...]` 标注后，写错的节点名会在**编译时**就被抓住：
 
-```python
+::: code-group
+
+```python [Python]
 # 函数签名里标注合法目标
 def node_with_literal(s: State) -> Command[Literal["ghost", END]]:
     return Command(update={"foo": "x"}, goto=END)
 ```
+
+```typescript [TypeScript]
+// TS 用 ends 声明合法目标（无 Literal 等价物）
+builder.addNode("node_with_literal", (s) => {
+  return new Command({ update: { foo: "x" }, goto: END });
+}, { ends: ["ghost"] });
+```
+
+:::
+
+> 📌 **机制不同，效果趋同**：Python 靠**返回类型标注**（`Literal`）让类型检查器发现非法目标；TS 靠**节点注册时声明**（`ends`）让图构建器发现不可达节点。**TS 侧没有 `Literal` 的运行期等价物，`ends` 就是它的替代品**——漏写 `ends` 会导致误报"不可达"，写错目标名则直接报错。
 
 实测：
 
@@ -398,8 +478,8 @@ ValueError: Found edge ending at unknown node `ghost`
 
 #### 官方文档
 
-- [Graph API overview（Command）](https://docs.langchain.com/oss/python/langgraph/graph-api#command)
-- [Use the Graph API（Combine control flow and state updates）](https://docs.langchain.com/oss/python/langgraph/use-graph-api#combine-control-flow-and-state-updates-with-command)
+- [Graph API overview（Command）](https://docs.langchain.com/oss/python/langgraph/graph-api#command) ｜ [TS 版](https://docs.langchain.com/oss/javascript/langgraph/graph-api#command)
+- [Use the Graph API（Combine control flow and state updates）](https://docs.langchain.com/oss/python/langgraph/use-graph-api#combine-control-flow-and-state-updates-with-command) ｜ [TS 版](https://docs.langchain.com/oss/javascript/langgraph/use-graph-api#combine-control-flow-and-state-updates-with-command)
 
 ---
 

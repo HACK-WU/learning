@@ -3,7 +3,7 @@
 > 对应：[课 3 Graph API 第一个图](../stages/1-从create_agent到StateGraph/lessons/03-Graph%20API%20第一个图.md)
 > 覆盖知识点：State 的定义与 reducer / 节点与边 / 条件边与循环
 > ✅ 全部代码实测于 langgraph 1.2.11 / Python 3.12（在 `../langchain/playground` 以 `uv run` 隔离执行）
-> ✅ 全部代码实测于 langgraph 1.2.11 / Python 3.12（在 `../langchain/playground` 以 `uv run` 隔离执行）
+> ✅ TypeScript 侧实测于 `playground-ts/`（`@langchain/langgraph` 1.5.1 / Node 20，`npm run a03`）
 
 ## 场景
 
@@ -23,7 +23,8 @@
 
 先跑通最简单的直线：提问 → 生成 → 结束。
 
-```python
+::: code-group
+```python [Python]
 from typing_extensions import TypedDict
 
 from langgraph.graph import END, START, StateGraph
@@ -54,14 +55,49 @@ print(app.invoke({"question": "退款", "answer": ""}))
 print(app.invoke({"question": "怎么申请发票", "answer": ""}))
 ```
 
-实测输出：
+```typescript [TypeScript]
+import { Annotation, END, START, StateGraph } from "@langchain/langgraph";
+
+const KNOWLEDGE: Record<string, string> = {
+  退款: "退款需在签收后 7 天内申请，且商品未使用。",
+};
+
+const State = Annotation.Root({
+  question: Annotation<string>({ reducer: (_p, n) => n, default: () => "" }),
+  answer: Annotation<string>({ reducer: (_p, n) => n, default: () => "" }),
+});
+
+const g = new StateGraph(State)
+  // ⚠️ 节点名不能与状态字段同名（课 3 已记录），所以叫 generate 而不是 answer
+  .addNode("generate", (s) => ({
+    answer: KNOWLEDGE[s.question.trim()] ?? "您好，已收到您的反馈。",
+  }))
+  .addEdge(START, "generate")
+  .addEdge("generate", END)
+  .compile();
+
+console.log(await g.invoke({ question: "退款", answer: "" }));
+console.log(await g.invoke({ question: "怎么申请发票", answer: "" }));
+```
+:::
+
+
+实测输出（Python）：
 
 ```
 {'question': '退款', 'answer': '退款需在签收后 7 天内申请，且商品未使用。'}
 {'question': '怎么申请发票', 'answer': '您好，已收到您的反馈。'}
 ```
 
+实测输出（TypeScript，`npm run a03`）：
+
+```
+{ question: '退款', answer: '退款需在签收后 7 天内申请，且商品未使用。' }
+{ question: '怎么申请发票', answer: '您好，已收到您的反馈。' }
+```
+
 > ✅ 跑通了。但第二个问题已经是**劣质回答**——它什么都没解决，却被原样发出去。
+> 💡 只是一处表象差异：Python 打印 dict 带引号，TS 打印对象的键不带引号，**内容逐字相同**。另外 TS 侧节点名从 `answer` 改成了 `generate`——**节点名不能与状态字段同名**（课 3 已记录），否则 `addNode` 当场抛 `answer is already being used as a state attribute`。
 
 ---
 
@@ -72,7 +108,8 @@ print(app.invoke({"question": "怎么申请发票", "answer": ""}))
 - `history` 字段要用 `Annotated[list[str], add]` **累加**（否则只留最后一版，课 3 坑 1）
 - 用 `add_conditional_edges` 挂路由函数决定"放行还是回退"
 
-```python
+::: code-group
+```python [Python]
 from operator import add
 from typing import Annotated
 
@@ -126,7 +163,60 @@ for h in r["history"]:
     print("  -", h)
 ```
 
-实测输出：
+```typescript [TypeScript]
+import { Annotation, END, START, StateGraph } from "@langchain/langgraph";
+
+const KNOWLEDGE: Record<string, string> = {
+  退款: "退款需在签收后 7 天内申请，且商品未使用。",
+};
+
+const State = Annotation.Root({
+  question: Annotation<string>({ reducer: (_p, n) => n, default: () => "" }),
+  answer: Annotation<string>({ reducer: (_p, n) => n, default: () => "" }),
+  // 累加：每版都留着（等价于 Python 的 Annotated[list[str], add]）
+  history: Annotation<string[]>({ reducer: (a, b) => a.concat(b), default: () => [] }),
+  verdict: Annotation<string>({ reducer: (_p, n) => n, default: () => "" }),
+});
+
+const draft = (s: typeof State.State) => {
+  const n = s.history.length;
+  const ans =
+    n === 0
+      ? (KNOWLEDGE[s.question.trim()] ?? "您好，已收到您的反馈。")
+      : (KNOWLEDGE[s.question.trim()] ??
+        `关于「${s.question}」，我目前没有可靠信息，已为您转人工。`);
+  return { answer: ans, history: [`第${n + 1}版：${ans}`] };
+};
+
+const check = (s: typeof State.State) => ({
+  verdict: s.answer === "您好，已收到您的反馈。" ? "打回" : "通过",
+});
+
+const route = (s: typeof State.State) => (s.verdict === "通过" ? END : "draft");
+
+const g = new StateGraph(State)
+  .addNode("draft", draft)
+  .addNode("check", check)
+  .addEdge(START, "draft")
+  .addEdge("draft", "check")
+  // ⚠️ TS 侧要把所有可能的去向写进第三个参数，否则运行期抛 UnreachableNodeError
+  .addConditionalEdges("check", route, ["draft", END])
+  .compile();
+
+const r = await g.invoke({
+  question: "怎么申请发票",
+  answer: "",
+  history: [],
+  verdict: "",
+});
+console.log("最终回复：", r.answer);
+console.log("改写历史：");
+for (const h of r.history) console.log("  -", h);
+```
+:::
+
+
+实测输出（Python）：
 
 ```
 最终回复： 关于「怎么申请发票」，我目前没有可靠信息，已为您转人工。
@@ -134,6 +224,17 @@ for h in r["history"]:
   - 第1版：您好，已收到您的反馈。
   - 第2版：关于「怎么申请发票」，我目前没有可靠信息，已为您转人工。
 ```
+
+实测输出（TypeScript）：
+
+```
+最终回复： 关于「怎么申请发票」，我目前没有可靠信息，已为您转人工。
+改写历史：
+  - 第1版：您好，已收到您的反馈。
+  - 第2版：关于「怎么申请发票」，我目前没有可靠信息，已为您转人工。
+```
+
+> ✅ **两侧逐字相同**。唯一要改的写法是条件边的第三个参数：Python 的 `add_conditional_edges("check", route)` 两参数即可，TS 必须写成 `addConditionalEdges("check", route, ["draft", END])`，把所有可能去向列全，否则运行期抛 `UnreachableNodeError`。
 
 > ✅ 劣质回答被拦下来了，而且**两版都留着**——这正是 `Annotated[list[str], add]` 的功劳。如果这里用了普通 `list`，`history` 只会剩最后一版（课 3 验证一实测）。
 
@@ -145,7 +246,8 @@ for h in r["history"]:
 
 真实的循环需要两道保险：**显式的放弃条件**（改 N 次还不行就转人工）+ `recursion_limit`（万一你漏写了放弃条件）。
 
-```python
+::: code-group
+```python [Python]
 from operator import add
 from typing import Annotated
 
@@ -207,7 +309,73 @@ print("最终回复：", r["answer"])
 print("共改写：", len(r["history"]), "版")
 ```
 
-实测输出：
+```typescript [TypeScript]
+import { Annotation, END, START, StateGraph } from "@langchain/langgraph";
+
+const MAX_ROUNDS = 3;
+const KNOWLEDGE: Record<string, string> = {
+  退款: "退款需在签收后 7 天内申请，且商品未使用。",
+};
+
+const State = Annotation.Root({
+  question: Annotation<string>({ reducer: (_p, n) => n, default: () => "" }),
+  answer: Annotation<string>({ reducer: (_p, n) => n, default: () => "" }),
+  history: Annotation<string[]>({ reducer: (a, b) => a.concat(b), default: () => [] }),
+  verdict: Annotation<string>({ reducer: (_p, n) => n, default: () => "" }),
+});
+
+const draft = (s: typeof State.State) => {
+  const n = s.history.length;
+  let ans: string;
+  if (n === 0) {
+    ans = KNOWLEDGE[s.question.trim()] ?? "您好，已收到您的反馈。";
+  } else if (n < MAX_ROUNDS - 1) {
+    ans =
+      KNOWLEDGE[s.question.trim()] ??
+      `关于「${s.question}」，我目前没有可靠信息，已为您转人工。`;
+  } else {
+    ans = "抱歉，这个问题我反复确认后仍无法给出可靠答复，已转人工客服，请稍候。";
+  }
+  return { answer: ans, history: [`第${n + 1}版：${ans}`] };
+};
+
+const check = (s: typeof State.State) => ({
+  verdict: s.history.length < MAX_ROUNDS ? "打回" : "通过",
+});
+
+const route = (s: typeof State.State) => {
+  if (s.verdict === "通过") return END;
+  if (s.history.length >= MAX_ROUNDS) return END;
+  return "draft";
+};
+
+const g = new StateGraph(State)
+  .addNode("draft", draft)
+  .addNode("check", check)
+  .addEdge(START, "draft")
+  .addEdge("draft", "check")
+  .addConditionalEdges("check", route, ["draft", END])
+  .compile();
+
+// 第二道保险：recursionLimit 当保险丝（TS 侧是驼峰，不是 recursion_limit）
+const r = await g.invoke(
+  { question: "怎么申请发票", answer: "", history: [], verdict: "" },
+  { recursionLimit: 25 }
+);
+console.log("最终回复：", r.answer);
+console.log("共改写：", r.history.length, "版");
+```
+:::
+
+
+实测输出（Python）：
+
+```
+最终回复： 抱歉，这个问题我反复确认后仍无法给出可靠答复，已转人工客服，请稍候。
+共改写： 3 版
+```
+
+实测输出（TypeScript）：
 
 ```
 最终回复： 抱歉，这个问题我反复确认后仍无法给出可靠答复，已转人工客服，请稍候。
@@ -230,17 +398,33 @@ print("共改写：", len(r["history"]), "版")
 
 把 `route` 里的放弃条件删掉，只留 `return "draft"`，再看 `recursion_limit` 的作用：
 
-```python
+::: code-group
+```python [Python]
 def route_no_stop(state: State) -> str:
     return "draft"      # 永远回退
 ```
 
-实测：
+```typescript [TypeScript]
+const routeNoStop = (_s: typeof State.State) => "draft" as const;   // 永远回退
+```
+:::
+
+
+实测（Python）：
 
 ```
 GraphRecursionError: Recursion limit of 25 reached without hitting a stop condition.
 You can increase the limit by setting the `recursion_limit` config key.
 ```
+
+实测（TypeScript）：
+
+```
+GraphRecursionError: Recursion limit of 25 reached without hitting a stop condition.
+You can increase the limit by setting the "recursionLimit" config key.
+```
+
+> 💡 异常类名与前半句**逐字相同**，只有配置键名一个蛇形一个驼峰（`recursion_limit` ↔ `recursionLimit`）。
 
 > ⚠️ **注意**：超限是**抛异常**，用户拿到的是一次失败请求，不是那个兜底回复。所以 `recursion_limit` **只能当保险丝，不能当终止条件**——这一条是课 3 的核心结论。
 

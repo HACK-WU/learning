@@ -38,11 +38,22 @@
 
 先从第一个卡点开始。你很自然地写下这样的状态：
 
-```python
+::: code-group
+
+```python [Python]
 class State(TypedDict):
     draft: str      # 当前这版回复
     history: list   # 每次改的版本都记下来
 ```
+
+```typescript [TypeScript]
+const State = Annotation.Root({
+  draft: Annotation<string>(),                        // 当前这版回复
+  history: Annotation<string[]>(),                    // 每次改的版本都记下来
+});
+```
+
+:::
 
 然后生成节点返回 `{"history": ["第2版"]}`，你期待 `history` 变成 `["第1版", "第2版"]`——结果它变成了 `["第2版"]`。**第一版没了，不报错，不打招呼。**
 
@@ -94,13 +105,15 @@ LangGraph 的残酷之处在于：**默认所有栏都是覆盖式的**。你以
 
 官方文档的写法（核对于 2026-10）：
 
-| 写法 | 什么时候用 | 节点里怎么读 |
-|---|---|---|
-| **`TypedDict`** | 默认、首选 | `state["foo"]`（就是 dict） |
-| **`dataclass`** | 需要字段**默认值** | `state.foo`（是对象，**不能** `state["foo"]`） |
-| **Pydantic `BaseModel`** | 需要**递归数据校验**（性能低于前两者） | `state.foo` |
+| 写法 | 什么时候用 | 节点里怎么读 | TS 侧对应 |
+|---|---|---|---|
+| **`TypedDict`** | 默认、首选 | `state["foo"]`（就是 dict） | `Annotation.Root({...})`（运行时对象），读 `state.foo` |
+| **`dataclass`** | 需要字段**默认值** | `state.foo`（是对象，**不能** `state["foo"]`） | 用 `Annotation<T>({ default: () => 初值 })` 表达默认值 |
+| **Pydantic `BaseModel`** | 需要**递归数据校验**（性能低于前两者） | `state.foo` | 用 `z.object({...})` + `z.infer`，或 `Annotation<T>` 直接写 TS 类型 |
 
-```python
+::: code-group
+
+```python [Python]
 # TypedDict：默认值？没有。输入没给的字段，节点就读不到（实测 KeyError）
 class State(TypedDict):
     n: int
@@ -113,13 +126,33 @@ class State:
     tags: list[str] = field(default_factory=list)
 ```
 
+```typescript [TypeScript]
+// 无 default：输入没给的字段，节点读到的是 undefined（TS 类型上也是 undefined）
+const State = Annotation.Root({
+  n: Annotation<number>(),
+  tags: Annotation<string[]>(),
+});
+
+// 有 default：不传输入也能跑（实测 invoke({}) -> { n: 1, tags: [] }）
+const StateWithDefault = Annotation.Root({
+  n: Annotation<number>({ reducer: (_p, v) => v, default: () => 0 }),
+  tags: Annotation<string[]>({ reducer: (_p, v) => v, default: () => [] }),
+});
+```
+
+:::
+
 > ⚠️ **换写法会改访问方式**：实测 `dataclass` 状态传进节点的是 `DCState(n=0, tags=[])` 对象，用 `state["n"]` 会报 `TypeError: 'DCState' object is not subscriptable`，必须写成 `state.n`。**这是从 TypedDict 切到 dataclass 时最常见的报错。**
+>
+> ⚠️ **TS 侧更严**：`Annotation.Root` 是**运行时对象**，不是纯类型标注。所以（1）字段必须显式列出，不能只声明 TS `interface` 就完事；（2）`default` 是函数 `() => 初值` 而非字面值，这样每个新运行拿到的是**不同的数组/对象实例**，不会跨线程串数据。
 
 > ⚠️ 官方还有一条：**高层 `create_agent` 不支持 Pydantic 状态**——所以从 `../langchain/` 过来的同学，别在这里用 Pydantic 当状态。
 
 **reducer 怎么声明**：用 `Annotated[类型, reducer函数]`。官方给的例子是 `operator.add`：
 
-```python
+::: code-group
+
+```python [Python]
 from operator import add
 from typing import Annotated
 from typing_extensions import TypedDict
@@ -129,11 +162,31 @@ class State(TypedDict):
     bar: Annotated[list[str], add]    # 有 reducer：累加
 ```
 
+```typescript [TypeScript]
+import { Annotation } from "@langchain/langgraph";
+
+const State = Annotation.Root({
+  foo: Annotation<number>(),                                        // 无 reducer：默认覆盖
+  bar: Annotation<string[]>({ reducer: (a, b) => a.concat(b),       // 有 reducer：累加
+                              default: () => [] }),
+});
+```
+
+:::
+
 官方还给了 reducer 的精确语义——**它是个二元函数，左参数是状态里的旧值，右参数是节点返回的新值**：
 
-```python
+::: code-group
+
+```python [Python]
 new_value = reducer(left=current_state[key], right=node_update[key])
 ```
+
+```typescript [TypeScript]
+const newValue = reducer(currentState[key], nodeUpdate[key]);
+```
+
+:::
 
 ```mermaid
 flowchart LR
@@ -153,9 +206,11 @@ flowchart LR
 
 #### 示例演示
 
-实测（本机 langgraph 1.2.11，见 4.1 验证 A）：
+实测（本机 Python 侧 langgraph 1.2.11 / TS 侧 @langchain/langgraph 1.5.1，见 4.1 验证 A）：
 
-```python
+::: code-group
+
+```python [Python]
 class State(TypedDict):
     plain: list[str]                      # 默认：覆盖
     history: Annotated[list[str], add]    # 累加
@@ -164,18 +219,60 @@ class State(TypedDict):
 {'plain': ['第二版'], 'history': ['第一版', '第二版']}
 ```
 
+```typescript [TypeScript]
+const State = Annotation.Root({
+  plain: Annotation<string[]>(),                                   // 默认：覆盖
+  history: Annotation<string[]>({ reducer: (a, b) => a.concat(b),  // 累加
+                                  default: () => [] }),
+});
+
+// 两个节点各写一次
+// { plain: ['第二版'], history: ['第一版', '第二版'] }
+```
+
+:::
+
 #### 常见误区
 
 1. **"reducer 是可选的优化，不写也行"**——错。不写 = 明确选择了"覆盖"。**这是本课最常见的数据丢失来源**：想累积历史的字段忘了加 reducer，跑起来一切正常，只是历史永远是最后一条。
 2. **"加了累加 reducer，返回空列表就能清空"**——**这是官方专门点名的高频误解**。累加 reducer 把右参数**合并**进左参数，返回 `[]` 等于"合并了一个空列表"，旧值全留着。实测：
 
-```python
+::: code-group
+
+```python [Python]
 # node A 返回 {"errors": ["第一次不合格"]}
 # node B 返回 {"errors": []}
 {'errors': ['第一次不合格']}   # 没清掉！
 ```
 
-官方给的解法是包一层 `Overwrite`（实测有效）：`return {"errors": Overwrite([])}` → `{'errors': []}`。
+```typescript [TypeScript]
+// node A 返回 { errors: ["第一次不合格"] }
+// node B 返回 { errors: [] }
+// { errors: ["第一次不合格"] }   // 没清掉！
+```
+
+:::
+
+官方给的解法是包一层 `Overwrite`（两侧实测有效）：`return {"errors": Overwrite([])}` → `{'errors': []}`。
+
+::: code-group
+
+```python [Python]
+from langgraph.types import Overwrite
+
+def clear(state: State) -> dict:
+    return {"errors": Overwrite([])}      # 实测 -> {'errors': []}
+```
+
+```typescript [TypeScript]
+import { Overwrite } from "@langchain/langgraph";
+
+const clear = (state: typeof State.State) => ({
+  errors: new Overwrite([]),               // 实测 -> { errors: [] }；注意有 new
+});
+```
+
+:::
 
 3. **"并发写同一字段报错是设计缺陷"**——不，是保护。加 reducer 后就通了（实测：`{'log': ['分支一', '分支二']}`，详见 4.1 验证 B）。**它逼你显式回答"两个值怎么合"，而不是让运行时偷偷帮你决定。**
 
@@ -187,16 +284,16 @@ class State(TypedDict):
 
 | 本课说法（人话） | 行业标准叫法 | 典型配置 / 在哪遇到 | 代价 |
 |---|---|---|---|
-| 本子上有哪些栏位 | **state schema**（状态模式）· 社区常译"状态结构" | `class State(TypedDict)`；官方 Graph API「Schema」节 | 默认输入与输出同结构，字段多了要额外拆 input/output schema |
-| "新值替掉还是叠上" | **reducer**（归约函数）· 社区常译"归约器" | `Annotated[list[str], add]`；报错信息里 `Use an Annotated key` 就是让你加这个 | 忘了加 = 静默丢数据；加了 = 清空变难（要 `Overwrite`） |
-| 绕过累加直接覆盖 | **Overwrite**（覆盖类型） | `from langgraph.types import Overwrite`；官方 [Bypass reducers with Overwrite](https://docs.langchain.com/oss/python/langgraph/use-graph-api#bypass-reducers-with-overwrite) | 属于进阶用法，初学容易滥用成"到处 Overwrite"，等于退回默认值语义 |
+| 本子上有哪些栏位 | **state schema**（状态模式）· 社区常译"状态结构" | Py：`class State(TypedDict)`；TS：`Annotation.Root({...})`；官方 Graph API「Schema」节 | 默认输入与输出同结构，字段多了要额外拆 input/output schema |
+| "新值替掉还是叠上" | **reducer**（归约函数）· 社区常译"归约器" | Py：`Annotated[list[str], add]`；TS：`Annotation<string[]>({ reducer })`；报错信息里 `Use an Annotated key`（TS：`LastValue can only receive one value per step`）就是让你加这个 | 忘了加 = 静默丢数据；加了 = 清空变难（要 `Overwrite`） |
+| 绕过累加直接覆盖 | **Overwrite**（覆盖类型） | Py：`from langgraph.types import Overwrite` → `Overwrite([])`；TS：`import { Overwrite } from "@langchain/langgraph"` → `new Overwrite([])`；官方 [Bypass reducers with Overwrite](https://docs.langchain.com/oss/python/langgraph/use-graph-api#bypass-reducers-with-overwrite) | 属于进阶用法，初学容易滥用成"到处 Overwrite"，等于退回默认值语义 |
 
 > 三者中文均为**社区常用译法 / 本文自拟，官方未定名中文**，检索用英文。
 
 #### 官方文档
 
-- [Graph API overview（State / Reducers）](https://docs.langchain.com/oss/python/langgraph/graph-api)
-- [Use the Graph API（Overwrite / 多 schema）](https://docs.langchain.com/oss/python/langgraph/use-graph-api)
+- [Graph API overview（State / Reducers）](https://docs.langchain.com/oss/python/langgraph/graph-api) ｜ [TS 版](https://docs.langchain.com/oss/javascript/langgraph/graph-api)
+- [Use the Graph API（Overwrite / 多 schema）](https://docs.langchain.com/oss/python/langgraph/use-graph-api) ｜ [TS 版](https://docs.langchain.com/oss/javascript/langgraph/use-graph-api)
 
 ---
 
@@ -240,17 +337,38 @@ flowchart TD
 
 **START / END 是虚拟节点**——实测把图的节点清单打出来，它们确实混在里面：
 
-```python
+::: code-group
+
+```python [Python]
 sorted(app.get_graph().nodes)
 # ['A', 'B', '__end__', '__start__', 'named_by_fn']
 ```
 
+```typescript [TypeScript]
+const graph = await app.getGraphAsync({});
+Object.keys(graph.nodes).sort();
+// [ 'A', 'B', '__end__', '__start__', 'named_by_fn' ]
+```
+
+:::
+
+> **TS 侧差异**：取图结构用 `await getGraphAsync({})`，**没有同步版**（不像 Python 的 `get_graph()`）。
+
 而且 `END` 这个常量**本身就是字符串 `'__end__'`**：
 
-```python
+::: code-group
+
+```python [Python]
 >>> END
 '__end__'
 ```
+
+```typescript [TypeScript]
+>>> END
+"__end__"
+```
+
+:::
 
 > 💡 这意味着 `add_edge("n", END)` 和 `add_edge("n", "__end__")` 是等价的——**但请永远用 `END` 常量**，写字符串会在 LangGraph 改内部约定时静默失效。
 
@@ -272,6 +390,14 @@ sorted(app.get_graph().nodes)
 1. **"节点要返回完整的 State"**——不必，也不该。返回**只含你改动的字段**的字典即可；返回整份 State 会把别人的改动一起写回去（覆盖语义下容易造成回退）。
 2. **"节点返回 None 会报错"**——不会。实测 `{'B': None}`，状态不变。**"只做副作用"的节点（发通知、写日志）就该这么写。**
 3. **"一个节点只能有一个后继"**——错。`add_edge` 可以调多次，一个节点接多个后继，这些后继会在**同一轮**跑（课 2 已实测）。
+4. **（TS 专属）节点名不能与状态字段同名**——这是实测撞出来的：状态里有个字段叫 `draft`，同时把节点也命名成 `"draft"`，Python 侧能跑，**TS 侧编译期直接报错**：
+
+```text
+Error: draft is already being used as a state attribute (a.k.a. a channel),
+cannot also be used as a node name.
+```
+
+> 来源：`@langchain/langgraph/dist/graph/state.ts` 的 `addNode` 校验。**养成"节点名用动词、字段名用名词"的习惯**就能避开：`generate` / `check` 而不是 `draft` / `verdict`。
 
 #### 一句话记住
 
@@ -281,15 +407,15 @@ sorted(app.get_graph().nodes)
 
 | 本课说法（人话） | 行业标准叫法 | 典型配置 / 在哪遇到 | 代价 |
 |---|---|---|---|
-| 方框 / 工位 | **node**（节点） | `builder.add_node("name", fn)`；`stream` 输出的 key 就是节点名 | 后台被包成 `RunnableLambda`，栈会多一层 |
-| 箭头 | **edge**（边） | `add_edge` / `add_conditional_edges` | 只管走向，不传数据 |
-| 大门 / 出货口 | **START / END**（起止虚拟节点）· 常量值为 `'__start__'` / `'__end__'` | `from langgraph.graph import START, END` | 写字符串等价但脆弱，务必用常量 |
+| 方框 / 工位 | **node**（节点） | Py：`builder.add_node("name", fn)`；TS：`builder.addNode("name", fn)`；`stream` 输出的 key 就是节点名 | 后台被包成 `RunnableLambda`，栈会多一层 |
+| 箭头 | **edge**（边） | Py：`add_edge` / `add_conditional_edges`；TS：`addEdge` / `addConditionalEdges` | 只管走向，不传数据 |
+| 大门 / 出货口 | **START / END**（起止虚拟节点）· 常量值为 `'__start__'` / `'__end__'` | Py：`from langgraph.graph import START, END`；TS：`import { START, END } from "@langchain/langgraph"` | 写字符串等价但脆弱，务必用常量 |
 
 > 中文均为社区常用译法，官方未定名中文。
 
 #### 官方文档
 
-- [Graph API overview（Nodes / START / END）](https://docs.langchain.com/oss/python/langgraph/graph-api)
+- [Graph API overview（Nodes / START / END）](https://docs.langchain.com/oss/python/langgraph/graph-api) ｜ [TS 版](https://docs.langchain.com/oss/javascript/langgraph/graph-api)
 
 ---
 
@@ -327,7 +453,9 @@ flowchart TD
 
 **路由函数怎么写**：
 
-```python
+::: code-group
+
+```python [Python]
 def route(state: State) -> str:
     if state["verdict"] == "通过":
         return END                     # 也可以返回 "end_node" 节点名
@@ -338,7 +466,21 @@ def route(state: State) -> str:
 builder.add_conditional_edges("check", route)
 ```
 
+```typescript [TypeScript]
+const route = (state: typeof State.State): string => {
+  if (state.verdict === "通过") return END;              // 也可以返回 "end_node" 节点名
+  if (state.rounds.length >= 3) return END;              // 放弃：超过 3 轮就不改了
+  return "draft";                                        // 回到生成节点 = 循环
+};
+
+builder.addConditionalEdges("check", route);
+```
+
+:::
+
 > 关键点：路由函数**返回的是节点名（或 `END`）**，不是布尔值。想扇出到多个节点、返回列表，那是课 4 的内容。
+>
+> ⚠️ **TS 侧必须声明返回类型**：不写返回类型时，TS 会把 `END`（其实是字符串字面量常量）和 `"draft"` 推断成 `string`，多数情况下没问题；但如果后续加了 `Send` / `Command` 分支，联合类型会推不出来。养成写返回类型的习惯。**另外 Python 侧路由函数返回不存在的节点名会被 `Literal` 类型检查器提前发现，TS 侧不会**——只能在运行时报错。
 
 **`recursion_limit` 数的是几轮？** 我实测数了一遍（死循环图，故意不写终止条件）：
 
@@ -352,7 +494,15 @@ builder.add_conditional_edges("check", route)
 
 > 即：**上限设成 N，就跑满 N 轮抛错**。注意这个"轮"是 superstep，所以**一个"生成 + 质检"的来回要占 2 轮**——实测一个跑 3 版的质检循环总共用了 **6 轮**。
 
-**默认值到底是多少？** 网上教程普遍说是 **25**，但我实测不是——不传 `recursion_limit` 的死循环图跑了 **10007 轮**才抛错：
+**默认值到底是多少？这个问题两侧答案不同，必须分开看**：
+
+| | Python 侧（langgraph 1.2.11） | TS 侧（@langchain/langgraph 1.5.1） |
+|---|---|---|
+| 默认 `recursionLimit` | **10007**（实测跑满 10007 轮才抛错） | **25**（实测不传时抛 `Recursion limit of 25 reached`） |
+| 可否用环境变量覆盖 | 可以，`LANGGRAPH_DEFAULT_RECURSION_LIMIT` | 未提供等价环境变量，须显式传配置 |
+| 源码位置 | `langgraph/_internal/_config.py` | `pregel/utils/config.js`：`const DEFAULT_RECURSION_LIMIT = 25;` |
+
+网上教程普遍说默认是 **25**——这个说法在 **TS 侧是对的**，在 **Python 侧已不适用**。Python 侧我实测不传 `recursion_limit` 的死循环图跑了 **10007 轮**才抛错：
 
 ```
 跑了 10007 轮后 GraphRecursionError: Recursion limit of 10007 reached without hitting a stop condition.
@@ -360,18 +510,29 @@ builder.add_conditional_edges("check", route)
 
 翻本机安装包的源码坐实了这一点：
 
-```python
+::: code-group
+
+```python [Python]
 # langgraph/_internal/_config.py
 DEFAULT_RECURSION_LIMIT = int(getenv("LANGGRAPH_DEFAULT_RECURSION_LIMIT", "10007"))
 ```
 
-> ⚠️ **所以别拿 25 当默认值**：旧资料里的 25 已不适用于当前版本（本机 1.2.11），而且这个值**能用环境变量 `LANGGRAPH_DEFAULT_RECURSION_LIMIT` 覆盖**。更重要的是——**默认值再大也救不了没写终止条件的循环**：跑一万轮意味着你的服务卡了一万轮才失败。
+```typescript [TypeScript]
+// @langchain/langgraph/dist/pregel/utils/config.js
+const DEFAULT_RECURSION_LIMIT = 25;
+```
+
+:::
+
+> ⚠️ **所以别拿 25 当唯一答案**：旧资料里的 25 在 Python 侧已不适用于当前版本（本机 1.2.11），而 TS 侧至今仍是 25。**更重要的是——默认值再大也救不了没写终止条件的循环**：Python 侧跑一万轮意味着你的服务卡了一万轮才失败；TS 侧虽然 25 轮就停，但用户拿到的同样是一次失败请求。
 
 #### 示例演示
 
-实测（见 4.1 验证三）：
+实测（见 4.1 验证三/五）：
 
-```python
+::: code-group
+
+```python [Python]
 # 情况一：写了终止条件
 {'draft': '第3版回复', 'rounds': ['生成第1版', '生成第2版', '生成第3版'], 'verdict': '通过'}
 
@@ -379,6 +540,19 @@ DEFAULT_RECURSION_LIMIT = int(getenv("LANGGRAPH_DEFAULT_RECURSION_LIMIT", "10007
 GraphRecursionError: Recursion limit of 6 reached without hitting a stop condition.
 You can increase the limit by setting the `recursion_limit` config key.
 ```
+
+```typescript [TypeScript]
+// 情况一：写了终止条件
+// { draft: '第3版回复', rounds: ['生成第1版', '生成第2版', '生成第3版'], verdict: '通过' }
+
+// 情况二：故意不写终止条件
+// GraphRecursionError: Recursion limit of 6 reached without hitting a stop condition.
+// You can increase the limit by setting the "recursionLimit" config key.
+```
+
+:::
+
+> **报错文案差异**：Python 用下划线 `recursion_limit`，TS 用驼峰 `"recursionLimit"`——配置键名两侧不同，照抄另一侧的键名会静默不生效。
 
 #### 常见误区
 
@@ -394,16 +568,16 @@ You can increase the limit by setting the `recursion_limit` config key.
 
 | 本课说法（人话） | 行业标准叫法 | 典型配置 / 在哪遇到 | 代价 |
 |---|---|---|---|
-| 岔路口的小裁判 | **routing function**（路由函数）· 社区常译"路由函数" | `add_conditional_edges("check", route)`；官方 [Conditional edges](https://docs.langchain.com/oss/python/langgraph/graph-api#conditional-edges) | 返回值写错（布尔 / 不存在的节点名）会直接报错 |
+| 岔路口的小裁判 | **routing function**（路由函数）· 社区常译"路由函数" | Py：`add_conditional_edges("check", route)`；TS：`addConditionalEdges("check", route)`；官方 [Conditional edges](https://docs.langchain.com/oss/python/langgraph/graph-api#conditional-edges) | 返回值写错（布尔 / 不存在的节点名）会直接报错 |
 | 回去重做 | **cycle / loop**（循环） | 路由函数返回上游节点名 | 必须有终止条件，否则靠异常兜底 |
-| 最多转几圈的硬规矩 | **recursion_limit**（递归上限）· 默认 25 | `graph.invoke(..., {"recursion_limit": 50})` | 数的是轮不是次；超限抛 `GraphRecursionError`，属失败而非正常结束 |
+| 最多转几圈的硬规矩 | **recursion_limit**（递归上限）· **默认值两侧不同：Py 10007 / TS 25** | Py：`graph.invoke(..., {"recursion_limit": 50})`；TS：`graph.invoke(input, { recursionLimit: 50 })` | 数的是轮不是次；超限抛 `GraphRecursionError`，属失败而非正常结束 |
 
 > 中文均为社区常用译法 / 本文自拟，官方未定名中文。
 
 #### 官方文档
 
-- [Graph API overview（Conditional edges / Cycles）](https://docs.langchain.com/oss/python/langgraph/graph-api)
-- [LangGraph errors: GRAPH_RECURSION_LIMIT](https://docs.langchain.com/oss/python/langgraph/errors/GRAPH_RECURSION_LIMIT)
+- [Graph API overview（Conditional edges / Cycles）](https://docs.langchain.com/oss/python/langgraph/graph-api) ｜ [TS 版](https://docs.langchain.com/oss/javascript/langgraph/graph-api)
+- [LangGraph errors: GRAPH_RECURSION_LIMIT](https://docs.langchain.com/oss/python/langgraph/errors/GRAPH_RECURSION_LIMIT) ｜ [TS 版](https://docs.langchain.com/oss/javascript/langgraph/errors/GRAPH_RECURSION_LIMIT)
 
 ---
 
@@ -412,10 +586,13 @@ You can increase the limit by setting the `recursion_limit` config key.
 ### 4.1 机制验证
 
 > ✅ 实测于 langgraph 1.2.11 / Python 3.12（在 `../langchain/playground` 以 `uv run` 隔离执行）
+> ✅ TS 侧独立实测于 @langchain/langgraph 1.5.1 / Node 26（`playground-ts/`），见各验证后的「TS 侧对照」
 
-**验证一：默认覆盖 vs reducer 累加（同一份代码，只差一个 `Annotated`）**
+**验证一：默认覆盖 vs reducer 累加（同一份代码，只差一个 reducer 声明）**
 
-```python
+::: code-group
+
+```python [Python]
 class State(TypedDict):
     plain: list[str]                      # 默认 reducer：覆盖
     history: Annotated[list[str], add]    # 自定义 reducer：累加
@@ -424,6 +601,19 @@ class State(TypedDict):
 # n2 返回 {"plain": ["第二版"], "history": ["第二版"]}
 ```
 
+```typescript [TypeScript]
+const State = Annotation.Root({
+  plain: Annotation<string[]>(),                                  // 默认 reducer：覆盖
+  history: Annotation<string[]>({ reducer: (a, b) => a.concat(b), // 自定义 reducer：累加
+                                  default: () => [] }),
+});
+
+// n1 返回 { plain: ['第一版'], history: ['第一版'] }
+// n2 返回 { plain: ['第二版'], history: ['第二版'] }
+```
+
+:::
+
 实测输出：
 
 ```
@@ -431,6 +621,8 @@ class State(TypedDict):
 ```
 
 > ⚠️ **`plain` 的第一版消失了，没有任何报错**——这就是"默认覆盖"的代价。
+>
+> 🔁 **TS 侧对照（实测）**：同一份逻辑在 `playground-ts/test/unit/graph.test.ts` 有确定性断言（零网络），`npm run test:unit` 通过，实际值为 `plain: ['第二版']`、`history: ['第一版','第二版']`，**与 Python 完全一致**。
 
 **验证二：课 2 埋的雷，在这里被拆掉**
 
@@ -442,12 +634,16 @@ InvalidUpdateError: At key 'log': Can receive only one value per step. Use an An
 加了 reducer 之后： {'log': ['分支一', '分支二']}
 ```
 
+> 🔁 **TS 侧对照（实测）**：报错名为同一个 `InvalidUpdateError`，文案 `LastValue can only receive one value per step.`（见课 2 的双语报错对照）；补上 `reducer: (a, b) => a.concat(b)` 后并发写通过。**但请注意课 2 提到的那个 TS 专属坑**：只要写了 reducer（哪怕是"取新值"），并发就不再报错而是静默取一个——想保留这道保护，就不要给该字段写覆盖式 reducer。
+
 **验证三：reducer 字段能不能清空**
 
 ```
 返回空列表想清空 -> {'errors': ['第一次不合格']}      # 没清掉
 用 Overwrite 清空 -> {'errors': []}                  # 清掉了
 ```
+
+> 🔁 **TS 侧对照（实测于 `playground-ts/`）**：返回 `{ errors: [] }` 得到 `["第一次不合格"]`（没清掉）；返回 `{ errors: new Overwrite([]) }` 得到 `[]`（清掉了）。**两侧行为完全一致，唯一差别是 TS 要写 `new`**。
 
 **验证四：节点返回 None、START/END 是虚拟节点**
 
@@ -460,6 +656,8 @@ InvalidUpdateError: At key 'log': Can receive only one value per step. Use an An
 END 的值 -> '__end__'
 ```
 
+> 🔁 **TS 侧对照（实测）**：`await app.getGraphAsync({})` 取到的节点键同样包含 `__start__` / `__end__`；`END` 常量值同样是字符串 `"__end__"`。**但"节点不返回任何东西"要写 `return {}` 或直接不返回**——TS 里返回 `undefined` 与返回 `{}` 都表示"不改状态"，不要返回 `null`（类型上不接受）。
+
 **验证五：质检循环 + recursion_limit 兜底**
 
 ```
@@ -469,6 +667,8 @@ END 的值 -> '__end__'
 # 故意不写终止条件
 GraphRecursionError: Recursion limit of 6 reached without hitting a stop condition.
 ```
+
+> 🔁 **TS 侧对照（实测）**：显式 `{ recursionLimit: 6 }` 时报 `Recursion limit of 6 reached without hitting a stop condition.`，**轮数与 Python 侧完全一致**（上限设 N 就跑满 N 轮）。但**默认值不同**：TS 侧不传时实测报 `Recursion limit of 25 reached`，Python 侧不传时是 10007。这是本课最值得记住的双侧差异之一。
 
 > ✅ **回扣场景**：第一幕的三个卡点全部解决——① 版本历史用 `Annotated[list, add]` 累加，不再丢；② 合格/打回用 `add_conditional_edges` 的路由函数选路；③ 跑不完的循环由"第 3 版放弃"兜住，`recursion_limit` 当最后一道保险丝。**质检同事要的那个循环，现在真的跑起来了。**
 
@@ -506,7 +706,7 @@ GraphRecursionError: Recursion limit of 6 reached without hitting a stop conditi
 |---|---|---|
 | 循环上限靠自己加计数器，`recursion_limit` 只是调试用 | 官方把 `recursion_limit` 作为**正式兜底**写进执行模型，超限抛 `GraphRecursionError` 并给出独立错误码页（核对于 2026-10） | [GRAPH_RECURSION_LIMIT](https://docs.langchain.com/oss/python/langgraph/errors/GRAPH_RECURSION_LIMIT) |
 | reducer 只能用官方内置的那几个 | reducer 是**任意二元函数** `(left, right) -> new`，官方明确给出自定义函数写法（核对于 2026-10） | [Graph API - Reducers](https://docs.langchain.com/oss/python/langgraph/graph-api#reducers) |
-| "`recursion_limit` 默认 25" | 本机 langgraph **1.2.11** 实测默认跑了 **10007 轮**才超限；源码 `DEFAULT_RECURSION_LIMIT = int(getenv("LANGGRAPH_DEFAULT_RECURSION_LIMIT", "10007"))`（实测于 2026-10） | 本机 `langgraph/_internal/_config.py` |
+| "`recursion_limit` 默认 25" | **两侧不同**：Python 侧本机 langgraph **1.2.11** 实测默认跑了 **10007 轮**才超限（源码 `DEFAULT_RECURSION_LIMIT = int(getenv("LANGGRAPH_DEFAULT_RECURSION_LIMIT", "10007"))`）；TS 侧 `@langchain/langgraph` **1.5.1** 实测默认仍是 **25**（源码 `const DEFAULT_RECURSION_LIMIT = 25;`）。旧说法的 25 只在 TS 侧成立（实测于 2026-10） | 本机 `langgraph/_internal/_config.py` / `@langchain/langgraph/dist/pregel/utils/config.js` |
 
 ## 一图总结
 
@@ -550,7 +750,7 @@ GraphRecursionError: Recursion limit of 6 reached without hitting a stop conditi
 
 **答案：B**。`recursion_limit` 数的是 superstep **轮**数，一个"生成 + 质检"的来回占 **2 轮**（实测：3 个来回 = 6 轮），所以 25 轮约 12 个来回。
 
-顺带纠正一个流传很广的说法：**`recursion_limit` 的默认值不是 25**——本机 1.2.11 实测不设上限时跑了 **10007 轮**才抛错，源码里写的是 `int(getenv("LANGGRAPH_DEFAULT_RECURSION_LIMIT", "10007"))`。默认值大不等于安全：跑一万轮才失败，比跑 25 轮就失败更糟。
+顺带纠正一个流传很广的说法：**`recursion_limit` 的默认值在两侧不一样**——Python 侧本机 1.2.11 实测不设上限时跑了 **10007 轮**才抛错（源码 `int(getenv("LANGGRAPH_DEFAULT_RECURSION_LIMIT", "10007"))`）；TS 侧 1.5.1 实测不传时报的是 **25**（源码 `const DEFAULT_RECURSION_LIMIT = 25;`）。默认值大不等于安全：跑一万轮才失败，比跑 25 轮就失败更糟。
 
 </details>
 

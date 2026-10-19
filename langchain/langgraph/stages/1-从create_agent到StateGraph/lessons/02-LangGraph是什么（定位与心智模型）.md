@@ -108,7 +108,9 @@ LangChain 生态里，**框架（framework）、运行时（runtime）、成品�
 
 不必理解细节，只要确认"它确实是图"就够了：
 
-```python
+::: code-group
+
+```python [Python]
 from langchain.agents import create_agent
 
 # 你在 ../langchain/ 课程里写的那一行
@@ -118,7 +120,21 @@ agent = create_agent(model=..., tools=[...])
 print(agent.get_graph())
 ```
 
-> ⚠️ 未实测（本机 playground 未配置模型 provider，`create_agent` 需真实 model 实例才能构造）：上例仅示意"返回的是图对象"这一点，**具体类名请以你本机实际打印为准**。这一点的事实依据是官方表述 "LangChain 1.0 is built on top of LangGraph"（核对于 2026-10）。
+```typescript [TypeScript]
+import { createAgent } from "langchain";
+
+// 你在 ../langchain/ 课程里写的那一行
+const agent = createAgent({ model: "openai:gpt-4o-mini", tools: [...] });
+
+// 它返回的也是一个"已编译的图"，所以能查出结构、也能当图来跑
+console.log(await agent.getGraphAsync({}));
+```
+
+:::
+
+> ⚠️ Python 侧未实测（本机 playground 未配置模型 provider，`create_agent` 需真实 model 实例才能构造）：上例仅示意"返回的是图对象"这一点，**具体类名请以你本机实际打印为准**。这一点的事实依据是官方表述 "LangChain 1.0 is built on top of LangGraph"（核对于 2026-10）。
+>
+> ✅ **TS 侧已实测**（`playground-ts/`，langchain 1.5.18）：`createAgent` 返回对象的自有键只有 `options`，图能力挂在原型上——**有 `getGraphAsync`，没有 `getGraph`**（与 Python 的同步 `get_graph()` 不同，TS 侧一律异步）。实测 `await agent.getGraphAsync({})` 打印出的节点为 `__start__ | model_request | tools | __end__`，**这就是"底下是一张图"的直接证据**：两个真实执行节点加起止哨兵。
 
 #### 常见误区
 
@@ -139,7 +155,7 @@ print(agent.get_graph())
 
 #### 官方文档
 
-- [LangGraph overview](https://docs.langchain.com/oss/python/langgraph/overview)
+- [LangGraph overview](https://docs.langchain.com/oss/python/langgraph/overview) ｜ [TS 版](https://docs.langchain.com/oss/javascript/langgraph/overview)
 - [Runtimes, frameworks, and harnesses](https://docs.langchain.com/oss/python/concepts/products)
 
 ---
@@ -200,7 +216,9 @@ flowchart TD
 
 下面这个脚本不调任何模型，纯粹看"步"和"共用记录"是怎么工作的（代码见 `本课 4.1`，这里先给结构）：
 
-```python
+::: code-group
+
+```python [Python]
 from typing_extensions import TypedDict
 from langgraph.graph import StateGraph, START, END
 
@@ -214,17 +232,46 @@ def step_a(s: State) -> dict:
     return {"note": "原始请求：导出 PDF 报错"}
 ```
 
+```typescript [TypeScript]
+import { StateGraph, Annotation, START, END } from "@langchain/langgraph";
+
+const State = Annotation.Root({
+  note: Annotation<string>({ reducer: (_p, n) => n, default: () => "" }),   // 第 1 步写
+  doc: Annotation<string>({ reducer: (_p, n) => n, default: () => "" }),    // 分支一写
+  ticket: Annotation<string>({ reducer: (_p, n) => n, default: () => "" }), // 分支二写
+});
+
+// 每个节点：读 state 对象，返回"要更新哪些字段"
+const stepA = (s: typeof State.State) => ({ note: "原始请求：导出 PDF 报错" });
+```
+
+:::
+
+> **TS 侧差异**：`TypedDict` 的类型标注只管静态检查、不产生运行时结构；TS 侧的 `Annotation.Root({...})` **本身就是运行时对象**，所以字段必须连同 `reducer` 和 `default` 一起声明。`state["note"]` 在 TS 里写 `state.note`。
+
 #### 常见误区
 
-1. **同一轮里两个节点写同一个字段 → 直接报错**。这是我实测撞出来的（本机 langgraph 1.2.11）：
+1. **同一轮里两个节点写同一个字段 → 直接报错**。这是我实测撞出来的（本机 Python 侧 langgraph 1.2.11，TS 侧 @langchain/langgraph 1.5.1）：
 
-```
+::: code-group
+
+```text [Python 报错原文]
 langgraph.errors.InvalidUpdateError: At key 'log': Can receive only one value per step.
 Use an Annotated key to handle multiple values.
 For troubleshooting, visit: https://docs.langchain.com/oss/python/langgraph/errors/INVALID_CONCURRENT_GRAPH_UPDATE
 ```
 
-> 两个分支同时往 `log` 写，运行时不知道该留哪个。**这不是 bug，是保护**：它逼你显式声明"这个字段要累加"（用 `Annotated` + reducer），而这正是课 3 的核心内容。
+```text [TypeScript 报错原文]
+InvalidUpdateError: Invalid update for channel "log" with values ["来自 b","来自 c"]:
+LastValue can only receive one value per step.
+Troubleshooting URL: https://docs.langchain.com/oss/javascript/langgraph/INVALID_CONCURRENT_GRAPH_UPDATE/
+```
+
+:::
+
+> 两个分支同时往 `log` 写，运行时不知道该留哪个。**这不是 bug，是保护**：它逼你显式声明"这个字段要累加"（Python 用 `Annotated` + reducer，TS 用 `Annotation<T>({ reducer })`），而这正是课 3 的核心内容。
+>
+> ⚠️ **TS 侧有个更隐蔽的坑**（实测）：只要你给字段写了 `reducer`，哪怕写的是"取新值"`(_prev, next) => next`，**并发写就不再报错，而是静默取其中一个**。也就是说 Python 侧"不写 `Annotated` 就报错"的保护，在 TS 侧会被"补一个默认 reducer"这个习惯动作抹掉。要复现报错必须是**完全不声明 reducer**（`Annotation<string>()`）。
 2. **把"节点"当成"函数抽取"来用**——节点不只是复用代码，它是**可被单独观测、单独重试、单独暂停**的执行单位。抽成普通函数就失去了这些。
 3. **往 state 里塞已经拼好的提示词**——官方明确建议 state 存**原始数据**，提示词在节点里现拼。原因是：同一份数据不同节点要用不同格式拼，改提示词不该动状态结构。
 
@@ -236,17 +283,17 @@ For troubleshooting, visit: https://docs.langchain.com/oss/python/langgraph/erro
 
 | 本课说法（人话） | 行业标准叫法 | 典型配置 / 在哪遇到 | 代价 |
 |---|---|---|---|
-| 共用记录本 | **state**（State）· 社区常译"状态" | `class State(TypedDict)` / `StateGraph(State)`；官方 [Graph API](https://docs.langchain.com/oss/python/langgraph/graph-api) | 所有节点都能看到全部字段，靠约定而非封装隔离 |
-| 一小步 | **node**（Node）· 社区常译"节点" | `graph.add_node("name", fn)`；报错里出现节点名 | 节点太碎会让图读不懂，太粗则失去可观测性 |
-| 谁接谁 | **edge**（Edge）· 社区常译"边" | `add_edge` / `add_conditional_edges`；`draw_ascii()` 画出来的连线 | 边只管走向，不传数据 |
-| 一轮 | **superstep**（Superstep）· 社区常译"超级步" | 官方 [LangGraph runtime](https://docs.langchain.com/oss/python/langgraph/pregel) 页；`stream_mode="updates"` 的一批输出 | 同一轮内并发写同一字段会报错，须用 reducer 声明 |
+| 共用记录本 | **state**（State）· 社区常译"状态" | Py：`class State(TypedDict)` / `StateGraph(State)`；TS：`Annotation.Root({...})` / `new StateGraph(State)`；官方 [Graph API](https://docs.langchain.com/oss/python/langgraph/graph-api) ｜ [TS 版](https://docs.langchain.com/oss/javascript/langgraph/graph-api) | 所有节点都能看到全部字段，靠约定而非封装隔离 |
+| 一小步 | **node**（Node）· 社区常译"节点" | Py：`graph.add_node("name", fn)`；TS：`.addNode("name", fn)`；报错里出现节点名 | 节点太碎会让图读不懂，太粗则失去可观测性 |
+| 谁接谁 | **edge**（Edge）· 社区常译"边" | Py：`add_edge` / `add_conditional_edges`；TS：`.addEdge` / `.addConditionalEdges`；`draw_ascii()` 画出来的连线 | 边只管走向，不传数据 |
+| 一轮 | **superstep**（Superstep）· 社区常译"超级步" | 官方 [LangGraph runtime](https://docs.langchain.com/oss/python/langgraph/pregel) 页；`stream_mode="updates"`（TS：`streamMode: "updates"`）的一批输出 | 同一轮内并发写同一字段会报错，须用 reducer 声明 |
 
 > 四个术语的中文均为**社区常用译法，官方未在中文文档定名**，官方页面一律用英文；检索用英文。
 
 #### 官方文档
 
-- [Thinking in LangGraph](https://docs.langchain.com/oss/python/langgraph/thinking-in-langgraph)
-- [Graph API overview](https://docs.langchain.com/oss/python/langgraph/graph-api)
+- [Thinking in LangGraph](https://docs.langchain.com/oss/python/langgraph/thinking-in-langgraph) ｜ [TS 版](https://docs.langchain.com/oss/javascript/langgraph/thinking-in-langgraph)
+- [Graph API overview](https://docs.langchain.com/oss/python/langgraph/graph-api) ｜ [TS 版](https://docs.langchain.com/oss/javascript/langgraph/graph-api)
 
 ---
 
@@ -304,7 +351,9 @@ flowchart LR
 
 同一个需求（`../langchain/` 课里那个会查文档的助手）的两种写法对比，实测输出见 4.1 第三段。
 
-```python
+::: code-group
+
+```python [Python]
 # 写法 A：固定流程——不管输入是什么，走过的路都一样
 wf.add_edge(START, "one")
 wf.add_edge("one", "two")
@@ -312,6 +361,19 @@ wf.add_edge("one", "two")
 # 写法 B：交给模型——返回什么，就走哪条路
 ag.add_conditional_edges("model", lambda s: s["route"])
 ```
+
+```typescript [TypeScript]
+// 写法 A：固定流程——不管输入是什么，走过的路都一样
+wf.addEdge(START, "one");
+wf.addEdge("one", "two");
+
+// 写法 B：交给模型——返回什么，就走哪条路
+ag.addConditionalEdges("model", (s) => s.route);
+```
+
+:::
+
+> **TS 侧差异**：两者是同一套图 API 的不同边类型，这一点两侧完全一致。但 TS 侧的条件路由函数**必须返回字符串或字符串数组**（或 `Send` / `Command` 对象），不能返回 `undefined`——否则运行时报无处可去。Python 因为用 `Literal` 标注了合法目标，类型检查器能提前提醒，TS 侧无 `Literal` 运行期等价物，只能靠你自己保证返回值落在已注册的节点名里。
 
 #### 常见误区
 
@@ -334,7 +396,7 @@ ag.add_conditional_edges("model", lambda s: s["route"])
 
 #### 官方文档
 
-- [Workflows and agents](https://docs.langchain.com/oss/python/langgraph/workflows-agents)
+- [Workflows and agents](https://docs.langchain.com/oss/python/langgraph/workflows-agents) ｜ [TS 版](https://docs.langchain.com/oss/javascript/langgraph/workflows-agents)
 
 ---
 
@@ -343,14 +405,32 @@ ag.add_conditional_edges("model", lambda s: s["route"])
 ### 4.1 机制验证
 
 > ✅ 实测于 langgraph 1.2.11 / Python 3.12（在 `../langchain/playground` 以 `uv run` 隔离执行，未污染全局环境）
+> ✅ TS 侧独立实测于 @langchain/langgraph 1.5.1 / Node 26（`playground-ts/`），输出见下方「TS 侧对照」——**结论与 Python 侧一致**
 
 **验证一：一次运行被切成一轮一轮，状态在轮与轮之间累积**
 
-```python
+::: code-group
+
+```python [Python]
 # 四个节点：a 之后同时接 b、c，最后都汇到 d
 for i, chunk in enumerate(app.stream({"note": "", "doc": "", "ticket": ""}, stream_mode="updates"), 1):
     print(f"第 {i} 轮 ->", chunk)
 ```
+
+```typescript [TypeScript]
+// 四个节点：a 之后同时接 b、c，最后都汇到 d
+let round = 0;
+for await (const chunk of await app.stream(
+  { note: "", doc: "", ticket: "" },
+  { streamMode: "updates" }
+)) {
+  console.log(`第 ${++round} 轮 ->`, chunk);
+}
+```
+
+:::
+
+> **TS 侧注意**：TS 的 `stream` **返回的是 Promise 包着异步迭代器**，所以是 `for await (const chunk of await app.stream(...))`——`await` 不能漏，漏了就报 not async iterable。`streamMode` 是**配置对象里的驼峰字段**，不是 Python 那样的关键字参数。
 
 实测输出：
 
@@ -365,10 +445,23 @@ for i, chunk in enumerate(app.stream({"note": "", "doc": "", "ticket": ""}, stre
 
 **验证二：两个分支到底是不是同一轮？用秒表证明**
 
-```python
+::: code-group
+
+```python [Python]
 # b、c 各 sleep(1.0)，分别写不同字段
 t0 = time.time(); app.invoke({...}); print(f"{time.time() - t0:.2f} 秒")
 ```
+
+```typescript [TypeScript]
+// b、c 各 sleep(1.0)，分别写不同字段
+const t0 = performance.now();
+await app.invoke({ note: "", doc: "", ticket: "" });
+console.log(`${((performance.now() - t0) / 1000).toFixed(2)} 秒`);
+```
+
+:::
+
+> **TS 侧写法**：计时用 `performance.now()`（毫秒），除以 1000 才是秒；Python 的 `time.time()` 两侧概念对应。本机实测两侧同为"两个各睡 1 秒的分支总耗时约 1.00 秒"，即同一轮并行。
 
 实测输出：
 
@@ -376,6 +469,8 @@ t0 = time.time(); app.invoke({...}); print(f"{time.time() - t0:.2f} 秒")
 两个各睡 1 秒的分支，总耗时 = 1.00 秒
 若串行 ≈ 2 秒；若同一轮并行 ≈ 1 秒 -> 并行（同一轮）
 ```
+
+> 🔁 **TS 侧对照（本机实测）**：同一张图在 `playground-ts/` 跑出的轮次结构**与上方 Python 输出逐条一致**（第 1 轮 `a` → 第 2 轮 `b` → 第 3 轮 `c` → 第 4 轮 `d`），两个各睡 1000ms 的分支总耗时 **1.01 秒**。这同时证明了两件事：`streamMode: "updates"` 的"每完成一个节点吐一次"行为与 Python 相同；"同一轮"确实是真并发而非串行。
 
 **验证三：固定流程 vs 交给模型，路径真的会变**
 

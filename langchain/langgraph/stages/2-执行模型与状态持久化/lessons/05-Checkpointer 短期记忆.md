@@ -40,10 +40,19 @@
 
 先做个实验。你写了个最简单的图，连跑两次，**第二次还传了一份"新起点"的初始值**：
 
-```python
+::: code-group
+
+```python [Python]
 {"log": [], "last": ""}                    # 第 1 次
 {"log": ["新起点"], "last": "新起点"}        # 第 2 次，我以为会重新开始
 ```
+
+```typescript [TypeScript]
+// 第 1 次：{ log: [], last: "" }
+// 第 2 次（我以为会重新开始）：{ log: ["新起点"], last: "新起点" }
+```
+
+:::
 
 结果：
 
@@ -125,13 +134,27 @@
 
 **怎么传 `thread_id`**：放在 `configurable` 里。
 
-```python
+::: code-group
+
+```python [Python]
 from langgraph.checkpoint.memory import InMemorySaver
 
 graph = builder.compile(checkpointer=InMemorySaver())
 config = {"configurable": {"thread_id": "user-123"}}
 graph.invoke({"messages": [...]}, config)
 ```
+
+```typescript [TypeScript]
+import { MemorySaver } from "@langchain/langgraph";
+
+const graph = builder.compile({ checkpointer: new MemorySaver() });
+const config = { configurable: { thread_id: "user-123" } };
+await graph.invoke({ messages: [...] }, config);
+```
+
+:::
+
+> ⚠️ **两侧类名与参数形态都不同**：Python 是 `InMemorySaver`（从 `langgraph.checkpoint.memory` 导入）、`compile(checkpointer=...)` 关键字参数；TS 是 **`MemorySaver`**（直接从 `@langchain/langgraph` 导入）、`compile({ checkpointer })` **对象参数**。写在 `configurable` 里的键名 `thread_id` 两侧一致（下划线，不是驼峰）。
 
 实测：忘了传会直接报错——
 
@@ -351,10 +374,22 @@ State 加了字段或改了类型后，老 `thread_id` 里的快照还是旧结�
 
 **排查 4：用 `get_state_history` 看看到底存了什么**
 
-```python
+::: code-group
+
+```python [Python]
 for s in graph.get_state_history(config):
     print(s.values, s.next, s.metadata.get("step"))
 ```
+
+```typescript [TypeScript]
+for await (const s of await graph.getStateHistory(config)) {
+  console.log(s.values, s.next, s.metadata?.step);
+}
+```
+
+:::
+
+> ⚠️ **TS 侧 `getStateHistory` 返回的是异步迭代器**，要 `for await` 且外层还要 `await`——两个 `await` 分工不同：里层等"取到迭代器"，`for await` 等"逐个取快照"。另 `metadata` 在 TS 类型上是可选的，用 `?.` 访问。
 
 > 💡 **这是最有用的一步**：与其猜，不如把存档点逐个打出来。课 9 会把它系统化。
 

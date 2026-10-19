@@ -1,0 +1,51 @@
+{
+  "name": "langgraph-playground-ts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "LangGraph 课程 · TypeScript 实操工程（与 ../langchain/playground/ 的 Python 脚本对应）",
+  "scripts": {
+    "check": "tsc --noEmit",
+    "conn": "tsx 01-env-check.ts",
+    "l02": "tsx 02-what-is-langgraph.ts",
+    "l03": "tsx 03-first-graph.ts",
+    "l04": "tsx 04-pregel.ts",
+    "l05": "tsx 05-checkpointer.ts",
+    "l06": "tsx 06-store.ts",
+    "l07": "tsx 07-streaming.ts",
+    "l08": "tsx 08-interrupts.ts",
+    "l09": "tsx 09-time-travel.ts",
+    "l10": "tsx 10-fault-tolerance.ts",
+    "l11": "tsx 11-functional-api.ts",
+    "l12": "tsx 12-application-structure.ts",
+    "l13": "tsx 13-deployment.ts",
+    "a03": "tsx app-03.ts",
+    "a04": "tsx app-04.ts",
+    "a05": "tsx app-05.ts",
+    "a06": "tsx app-06.ts",
+    "test:unit": "vitest run --config vitest.config.ts",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
+    "test": "vitest run --config vitest.config.ts",
+    "a07": "tsx app-07.ts",
+    "a08": "tsx app-08.ts",
+    "a09": "tsx app-09.ts",
+    "a10": "tsx app-10.ts",
+    "a11": "tsx app-11.ts"
+  },
+  "dependencies": {
+    "@langchain/core": "^1.2.18",
+    "@langchain/langgraph": "^1.5.0",
+    "@langchain/langgraph-checkpoint": "^1.0.0",
+    "@langchain/langgraph-checkpoint-sqlite": "^1.1.0",
+    "@langchain/openai": "^1.6.2",
+    "dotenv": "^18.0.8",
+    "langchain": "^1.5.18",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.5"
+  }
+}

@@ -92,12 +92,27 @@ TypeError: expected string or bytes-like object, got 'int'
 
 ### 4. 挂了 checkpointer 后 config 必填
 
-```python
+::: code-group
+
+```python [Python]
 flow.invoke(1)                                    # ❌ ValueError
 flow.invoke(1, {"configurable": {"thread_id": "t1"}})   # ✅
 ```
 
+```typescript [TypeScript]
+// ⚠️ TS 侧报错类型不同：不是 ValueError，而是运行期普通 Error
+//    （checkpointer 写盘点抛，实测原文见下）。
+await flow.invoke(1);                                        // ❌ Error
+await flow.invoke(1, { configurable: { thread_id: "t1" } }); // ✅
+```
+
+:::
+
 Graph API 不传也能跑，Functional API 不行。
+
+> 🇹🇸 **TS 侧实测原文**（比 Python 的 `ValueError` 长得多，但信息更全）：
+> `Error: Failed to put checkpoint. The passed RunnableConfig is missing a required "thread_id" field in its "configurable" property. When using a checkpointer, you must pass a "thread_id" so the checkpointer knows which conversation thread to persist state for.`
+> 另外两点：① `{ configurable: {} }` 与完全不传**报同一个错**（不是"传了就行"）；② **没挂 checkpointer 时传不传都不报错**（实测返回正常值）——所以"必传"的前提是先挂了 checkpointer。
 
 ### 5. 历史只有 2 条（Graph API 同流程 4 条）
 

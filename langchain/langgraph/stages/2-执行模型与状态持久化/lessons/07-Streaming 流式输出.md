@@ -40,10 +40,20 @@
 
 你以为流式输出就是"把 `invoke` 换成 `stream`"，于是写下：
 
-```python
+::: code-group
+
+```python [Python]
 for chunk in graph.stream({"topic": "A"}, stream_mode="messages"):
     print(chunk)
 ```
+
+```typescript [TypeScript]
+for await (const chunk of await graph.stream({ topic: "A" }, { streamMode: "messages" })) {
+  console.log(chunk);
+}
+```
+
+:::
 
 结果——**一个 chunk 都没有**，循环体一次没进。
 
@@ -144,10 +154,20 @@ updates（同一步两个节点分开吐）：
 
 **一次开多个模式**（实测）：
 
-```python
+::: code-group
+
+```python [Python]
 for mode, chunk in g.stream(inp, stream_mode=["updates", "values"]):
     print(mode, chunk)
 ```
+
+```typescript [TypeScript]
+for await (const [mode, chunk] of await g.stream(inp, { streamMode: ["updates", "values"] })) {
+  console.log(mode, chunk);
+}
+```
+
+:::
 
 ```
 ('values',  {'topic':'A','draft':'','review':''})
@@ -161,7 +181,9 @@ for mode, chunk in g.stream(inp, stream_mode=["updates", "values"]):
 
 **`custom` 怎么用**：
 
-```python
+::: code-group
+
+```python [Python]
 from langgraph.config import get_stream_writer
 
 def node(state):
@@ -172,22 +194,57 @@ def node(state):
     return {"out": "done"}
 ```
 
+```typescript [TypeScript]
+import { getWriter } from "@langchain/langgraph";
+
+const node = (state: typeof State.State) => {
+  const w = getWriter();
+  w({ progress: 0.1, msg: "开始" });
+  w({ progress: 0.5, msg: "一半" });
+  w({ progress: 1.0, msg: "完成" });
+  return { out: "done" };
+};
+```
+
+:::
+
 必须声明 `stream_mode="custom"` 才能收到。
+
+> 🇹🇸 **TS 侧两个等价的取 writer 方式（实测）**：包内导入 `getWriter()`，或从节点第二个参数 `config.writer` 取——两条路都能把数据发出去。**但注意 Python 用 `get_stream_writer`、TS 用 `getWriter`**，名字不一样，直接照抄 Python 名字会 `ImportError`/`undefined is not a function`。
 
 #### 🐞 三个静默坑（全是实测撞出来的）
 
 **坑 1：写错模式名不报错**
 
-```python
+::: code-group
+
+```python [Python]
 list(g.stream({"out": ""}, stream_mode="不存在的模式"))   # -> [] 静默无输出
 ```
 
+```typescript [TypeScript]
+const out = [];
+for await (const c of await g.stream({ out: "" }, { streamMode: "不存在的模式" as any })) out.push(c);
+console.log(out.length);   // -> 0，同样静默无输出
+```
+
+:::
+
 **坑 2：`custom` 不声明就丢弃**
 
-```python
+::: code-group
+
+```python [Python]
 stream_mode="values"  -> [{'out':''}, {'out':'done'}]      # 自定义数据没了
 stream_mode="custom"  -> [{'隐藏信息': '你看不到我'}]        # 要这样才收得到
 ```
+
+```typescript [TypeScript]
+// streamMode: "values"  -> [{ out: "" }, { out: "done" }]       自定义数据没了
+// streamMode: "custom"  -> [{ 隐藏信息: "你看不到我" }]           要这样才收得到
+```
+
+:::
 
 **坑 3：`messages` 在没有大模型调用时一条都不吐**
 
@@ -226,7 +283,9 @@ stream_mode="custom"  -> [{'隐藏信息': '你看不到我'}]        # 要这�
 #### 官方文档
 
 - [Streaming（官方流模式总览）](https://docs.langchain.com/oss/python/langgraph/streaming)
+- [Streaming · JavaScript（`streamMode` 驼峰、`for await` 迭代）](https://docs.langchain.com/oss/javascript/langgraph/streaming)
 - [Event streaming（事件流）](https://docs.langchain.com/oss/python/langgraph/event-streaming)
+- [Event streaming · JavaScript（`streamEvents`）](https://docs.langchain.com/oss/javascript/langgraph/event-streaming)
 - [Custom stream channels（前端消费 custom 数据）](https://docs.langchain.com/oss/python/langgraph/frontend/custom-stream-channels)
 
 ---
@@ -253,10 +312,24 @@ stream_mode="custom"  -> [{'隐藏信息': '你看不到我'}]        # 要这�
 
 **基本用法**：
 
-```python
+::: code-group
+
+```python [Python]
 async for event in graph.astream_events(input, version="v2"):
     print(event["event"], event.get("name"))
 ```
+
+```typescript [TypeScript]
+for await (const event of graph.streamEvents(input, { version: "v2" })) {
+  console.log(event.event, event.name);
+}
+```
+
+:::
+
+> 🇹🇸 **方法名差异（实测）**：Python 是 `astream_events`，TS 是 **`streamEvents`**（同步得到异步迭代器，不用 `await` 方法本身）。误写成 `astreamEvents` 会直接 `TypeError: g.astreamEvents is not a function`。另外 TS 的事件对象字段是 `event.event` / `event.name` / `event.tags` / `event.data`（点号访问），不是 Python 的字典下标。
+>
+> ⚠️ **两侧事件条数不同**：同一张两节点图，Python 实测 6 个事件，TS 实测 **10 个**（多出 `__start__` 节点的 start/end 与两次 `on_chain_stream`）。**别把事件条数当断言指标**，按事件名筛选才是稳的。
 
 实测（两节点图）共 6 个事件：
 
@@ -296,7 +369,9 @@ on_chain_end      name=LangGraph
 
 子图默认**完全不可见**——父图只看得到自己节点的起止（实测：父图 `values` 只吐 2 个 chunk）。
 
-```python
+::: code-group
+
+```python [Python]
 # 默认：子图内部一步都看不到
 for c in pg.stream({"text": "起"}, stream_mode="values"):
     print(c)                     # {'text':'起'}  ->  {'text':'起+子图'}
@@ -305,6 +380,20 @@ for c in pg.stream({"text": "起"}, stream_mode="values"):
 for ns, c in pg.stream({"text": "起"}, stream_mode="values", subgraphs=True):
     print(ns, c)
 ```
+
+```typescript [TypeScript]
+// 默认：子图内部一步都看不到
+for await (const c of await pg.stream({ text: "起" }, { streamMode: "values" })) {
+  console.log(c);                // { text: '起' }  ->  { text: '起+子图' }
+}
+
+// subgraphs: true：多吐出子图内部的步骤，输出变成 [命名空间, 数据]
+for await (const [ns, c] of await pg.stream({ text: "起" }, { streamMode: "values", subgraphs: true })) {
+  console.log(ns, c);
+}
+```
+
+:::
 
 ```
 ns=()                                              {'text': '起'}
@@ -323,15 +412,31 @@ ns=()                                              {'text': '起+子图'}
 | 只开 `subgraphs` | `(命名空间, 数据)` | `(('n2:uuid',), {'sn': {...}})` |
 | **两个都开** | **`(命名空间, 模式, 数据)`** | `((), 'custom', {'p': 1})` |
 
-```python
+::: code-group
+
+```python [Python]
 # 两个都开 → 三元组
 for ns, mode, data in graph.stream(inp, stream_mode=["updates", "custom"], subgraphs=True):
     ...
 ```
 
-> ⚠️ 写成 `for mode, data in ...` 会直接 **`ValueError: too many values to unpack (expected 2)`**。
+```typescript [TypeScript]
+// 两个都开 → 也是三元组（数组形式）
+for await (const [ns, mode, data] of await graph.stream(inp, {
+  streamMode: ["updates", "custom"],
+  subgraphs: true,
+})) {
+  // ...
+}
+```
 
-**⚠️ `custom` 数据也要靠 `subgraphs=True` 才能冒泡**（实测，这条最容易踩）：
+:::
+
+> ⚠️ 写成 `for mode, data in ...` 会直接 **`ValueError: too many values to unpack (expected 2)`**；TS 侧对应报错是解构拿到 `undefined` 而不是抛错，**更难发现**——所以宁可多打一行 `console.log` 对着长度确认。
+>
+> 🇹🇸 **TS 侧元组的真实形状（实测）**：`subgraphs: true` 时是**数组** `[命名空间数组, 数据]`，命名空间是 `string[]` 不是元组，主图为空数组 `[]`（不是 Python 的 `()`）。两个都开时是 `[["call_sub:uuid"], "updates", { inner: {...} }]`。
+
+**⚠️ `custom` 数据也要靠 `subgraphs=True` 才能冒泡**（Python 侧实测，这条最容易踩）：
 
 ```
 父图 stream(custom)                -> []                                    ← 收不到！
@@ -339,6 +444,8 @@ for ns, mode, data in graph.stream(inp, stream_mode=["updates", "custom"], subgr
 ```
 
 > ✅ 子图节点里 `get_stream_writer()` 写的数据，**父图默认收不到**，必须开 `subgraphs=True`。
+
+> 🇹🇸 **TS 侧这里和 Python 不一样（实测，容易误判）**：TS 不开 `subgraphs` 也能收到子图的 `custom` 数据——`streamMode: "custom"` 直接拿到 `{ 来自: '子图内部', 进度: 50 }`（1 条）；开了 `subgraphs: true` 则变成 `[["sub:uuid"], { 来自: '子图内部', 进度: 50 }]`，**多的是"它从哪个子图来的"这条路径信息，不是数据本身**。所以：Python 侧 `subgraphs=True` 是"能不能收到"的开关，TS 侧它是"要不要知道来源"的开关。跨语言照抄代码时这条最容易出现"TS 能跑、Python 收不到"的错觉。
 
 **事件流里怎么区分父子**：靠 `tags`。实测：
 
@@ -353,7 +460,9 @@ on_chain_start  name='sn'         tags=['graph:step:1']    ← 子图内部节�
 
 #### 示例演示：什么时候该用哪个
 
-```python
+::: code-group
+
+```python [Python]
 # 场景 A：只想看"做到第几步" → 流模式够了，开销小
 for chunk in graph.stream(inp, stream_mode="updates"):
     print(list(chunk.keys())[0], "完成")
@@ -368,6 +477,32 @@ for ns, chunk in graph.stream(inp, stream_mode="updates", subgraphs=True):
     print(f"[{'/'.join(n.split(':')[0] for n in ns) or '主图'}]", chunk)
 ```
 
+```typescript [TypeScript]
+// 场景 A：只想看"做到第几步" → 流模式够了，开销小
+for await (const chunk of await graph.stream(inp, { streamMode: "updates" })) {
+  console.log(Object.keys(chunk)[0], "完成");
+}
+
+// 场景 B：要 token 级输出 / 工具调用细节 → 上事件流
+for await (const ev of graph.streamEvents(inp, { version: "v2" })) {
+  if (ev.event === "on_chat_model_stream") {
+    process.stdout.write(ev.data.chunk.content as string);
+  }
+}
+
+// 场景 C：图里有子图，想看子图内部 → 必须 subgraphs: true
+for await (const [ns, chunk] of await graph.stream(inp, { streamMode: "updates", subgraphs: true })) {
+  const path = ns.map((n) => n.split(":")[0]).join("/") || "主图";
+  console.log(`[${path}]`, chunk);
+}
+```
+
+:::
+
+> 🇹🇸 **筛选参数的位置（实测，TS 侧最容易放错）**：`includeNames` / `includeTypes` 属于 **`streamEvents` 的第三个参数**（`streamOptions`），不是第二个 options 对象里的字段。放进第二个参数**不报错、也不生效**——实测 10 个事件一个不少；放第三个参数才对：`includeNames: ["draft_node"]` → 2 个事件（该节点的 start + end），`includeNames: ["不存在"]` → 0 个。
+>
+> ⚠️ **但 `includeTypes` 的语义两侧也要当心**：实测 TS 传 `includeTypes: ["chain"]` 仍是 10 个（链/节点都算 chain），传 `["llm"]` 才是 0 个——**它不是"只留某个节点"，而是按 LangChain 的回调对象类型筛**。Python 侧实测 `include_types: ["chain"]` 同样无效（也是 10 个）。**所以最稳的仍是自己在循环里按 `event` 和 `name` 过滤。**
+
 #### ⚠️ 深度：`version` 参数会改变 `stream` 的输出结构
 
 不只是 `astream_events`，**`stream` 也接受 `version`**（实测）：
@@ -378,6 +513,8 @@ version='v1'        : [{'merged': []}, {'merged': ['A']}]
 ```
 
 > ✅ **`v1` 吐裸数据，`v2` 吐带 `type` / `ns` / `data` / `interrupts` 的结构化字典。** 老教程常见 `for state in graph.stream(...)` 直接当字典用，那是 `v1` 的写法——**`v2` 下要取 `chunk["data"]`**。
+
+> 🇹🇸 **TS 侧这条不成立（实测）**：TS 的 `stream()` 只吐裸数据，`version` 选项对它**没有任何影响**——传 `"v1"`、传 `"v2"`、完全不传，三次输出逐字节相同（都是 `{"v":1}`）。`version` 在 TS 侧只对 `streamEvents` 有意义（`"v1" | "v2"`，1.5.1 类型声明实测）。**所以"v2 要取 chunk.data"这句话只适用于 Python 侧的 `stream`。**
 
 #### 常见误区
 
@@ -406,7 +543,9 @@ version='v1'        : [{'merged': []}, {'merged': ['A']}]
 #### 官方文档
 
 - [Event streaming（事件流与子图）](https://docs.langchain.com/oss/python/langgraph/event-streaming)
+- [Event streaming · JavaScript（`streamEvents` + `includeNames` 第三参数）](https://docs.langchain.com/oss/javascript/langgraph/event-streaming)
 - [Streaming（流模式与 version）](https://docs.langchain.com/oss/python/langgraph/streaming)
+- [Streaming · JavaScript](https://docs.langchain.com/oss/javascript/langgraph/streaming)
 
 ---
 
@@ -525,15 +664,54 @@ task_result: name=d result={'n':1} error=None
 
 **验证十六：写错模式名静默无输出**
 
-```python
+::: code-group
+
+```python [Python]
 list(g.stream({"out": ""}, stream_mode="不存在的模式"))   # -> []
 ```
+
+```typescript [TypeScript]
+// 实测：0 条输出，不抛错
+const out: unknown[] = [];
+for await (const c of await g.stream({ out: "" }, { streamMode: "不存在的模式" as any })) out.push(c);
+```
+
+:::
 
 **验证十七：`values` 会把输入状态也吐一次**
 
 ```
 共 3 个 chunk（2 个节点 + 1 个初始）
 ```
+
+#### 🇹🇸 TS 侧实测（`playground-ts/07-streaming.ts`，`@langchain/langgraph` 1.5.1）
+
+跑 `npm run l07` 的关键输出：
+
+```
+values : [0] {"draft":"草稿-A","review":""}          # 输入非空时会多这一条初态
+         [1] {"draft":"草稿-A","review":"审阅-草稿-A"}
+updates: {"draft_node":{"draft":"草稿-A"}}
+         {"review_node":{"review":"审阅-草稿-A"}}
+多模式 : updates:{...} / values:{...} / updates:{...} / values:{...}   交错输出 [mode, data]
+custom : values 下只剩 {"draft":"done","review":""}（自定义数据被丢）
+         custom 下 {"progress":0.1,...} / 0.5 / 1.0
+messages: 无大模型 → 0 条
+checkpoints: 4 次           # Python 侧实测 3 次，TS 多一次终态存档
+tasks  : draft_node start/result → review_node start/result
+debug  : checkpoint ×4 与 task/task_result 交替
+写错模式名: 0 条，不报错
+事件流 : 10 个事件（Python 侧 6 个）
+includeNames 放第三参数 → 2 个；放第二参数 → 10 个（不生效也不报错）
+子图默认 : {"text":"起"} / {"text":"起+子图"}
+subgraphs: [] {...} / ["call_sub:uuid",] {...} / ["call_sub:uuid",] {...} / [] {...}
+custom 跨子图: 默认就能收到 {"来自":"子图内部","进度":50}；开 subgraphs 变成 [["sub:uuid"], {...}]
+stream 的 version: v1 与 v2 输出逐字节相同
+```
+
+> ✅ **两侧一致的五条**：`values` 全量（输入非空时多一条初态）、`updates` 只给改动、多模式输出交错、`custom` 不声明即丢、`messages` 无 LLM 时 0 条、写错模式名静默无输出。
+>
+> ⚠️ **两侧不同的五条（都已写进上文对应小节）**：① 事件流方法名 `astream_events` / `streamEvents`，事件数 6 vs 10；② 事件对象取字段：Python 字典下标 `event["event"]`，TS 属性 `event.event`；③ `subgraphs` 的元组形态：Python `(ns, data)` 与空命名空间 `()`，TS `[ns, data]` 与空数组 `[]`；④ `custom` 跨子图：Python 需 `subgraphs=True` 才收得到，TS 默认就收得到（`subgraphs` 只补来源路径）；⑤ `version` 只影响 Python 的 `stream`，TS 的 `stream` 不吃这个参数（只对 `streamEvents` 有意义）。
 
 ### 4.2 应用实战
 
@@ -574,6 +752,7 @@ list(g.stream({"out": ""}, stream_mode="不存在的模式"))   # -> []
 | "LangGraph 有四种流模式" | 本机 `Pregel.stream` docstring 列出 **7 种**（多 `checkpoints` / `tasks` / `debug`）；官方 Streaming 页同步 | 本机 `langgraph/pregel/__init__.py` + [Streaming](https://docs.langchain.com/oss/python/langgraph/streaming) |
 | `astream_events(name="node")` 可按节点筛选 | 实测**完全无效**（传不存在的名字仍返回全部 10 个事件）；**`include_names` 才有效**（10 → 3） | 实测 + [Event streaming](https://docs.langchain.com/oss/python/langgraph/event-streaming) |
 | `for state in graph.stream(...)` 直接当字典用 | 那是 `version="v1"` 的写法；**默认 `v2` 吐的是带 `type`/`ns`/`data` 的包装字典** | 实测 `version='v1'` vs `'v2'` 输出对照 |
+| TS 侧照抄 `astreamEvents` / `stream_mode` / `subgraphs=True` | TS 是 **`streamEvents`** + `streamMode` / `subgraphs`（驼峰属性和布尔值）；写错方法名直接 `TypeError: g.astreamEvents is not a function`（实测） | 本机 `@langchain/langgraph` 1.5.1 `pregel/index.d.ts` |
 
 ## 一图总结
 

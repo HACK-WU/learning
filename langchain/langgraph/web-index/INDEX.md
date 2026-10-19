@@ -7,3 +7,6 @@
 | 站点 | slug | 起始 URL | 范围 | 条数 | 生成日期 |
 |------|------|----------|------|------|----------|
 | LangGraph Docs（Python） | docs-langgraph | https://docs.langchain.com/oss/python/langgraph/overview | /oss/python/langgraph（另收 9 条强相关参考页） | 44 | 2026-10-14 |
+| LangGraph Docs（JS/TS） | docs-langgraph-js | https://docs.langchain.com/oss/javascript/langgraph/overview | /oss/javascript/langgraph | 35 | 2026-10-19 |
+
+> TS 版索引（`docs-langgraph-js`）为 2026-10-19 双语改造时补建，35 条链接逐条实测返回 200，分区与 Python 版一一对应，便于同一知识点左右对照。写 TS 代码查它，写 Python 代码查 `docs-langgraph`。

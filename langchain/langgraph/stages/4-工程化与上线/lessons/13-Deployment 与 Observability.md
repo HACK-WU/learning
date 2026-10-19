@@ -2,7 +2,7 @@
 
 > 所属阶段：阶段 4《工程化与上线》｜ 水平：进阶 ｜ 本课知识点：部署方式 / Studio 与 Agent Chat UI / observability 接入
 > 故事情节：故事主线「搬到生产环境」的第二章，也是**全课程知识点的收束**——跑起来了，还得看得见
-> 📖 结论已按官方文档核对（核对于 2026-10 ｜ 来源：LangGraph Deployment / Studio / Agent Chat UI / LangSmith Observability 官方文档 + 本机 langgraph 1.2.11 / langgraph-cli 0.4.35 / langgraph-api 0.16.0 / Docker 29.4.1 / langsmith 0.12.4 实测）
+> 📖 结论已按官方文档核对（核对于 2026-10 ｜ 来源：LangGraph Deployment / Studio / Agent Chat UI / LangSmith Observability 官方文档 + 本机 langgraph 1.2.11 / langgraph-cli 0.4.35 / langgraph-api 0.16.0 / Docker 29.4.1 / langsmith 0.12.4 实测；TypeScript 侧 @langchain/langgraph 1.5.1 / @langchain/langgraph-cli 1.5.4 + langgraph-api 0.16.1 实测）
 
 ## 🎯 本课目标
 
@@ -14,7 +14,7 @@
 
 ## 第一幕：起源与场景引入
 
-课 12 结尾，`langgraph.json` 写对了，测试也有了，`langgraph dev` 一条命令就起服务。**你在自己电脑上一切正常**。
+课 12 结尾，`langgraph.json` 写对了，测试也有了，`langgraph dev`（TypeScript 侧是 `langgraphjs dev`）一条命令就起服务。**你在自己电脑上一切正常**。
 
 然后上线第一天：
 
@@ -28,7 +28,7 @@
 
 > 📌 **一句话本质**：**部署的本质是"谁替你备那三样东西"——排队用的（Redis）、存档用的库（Postgres）、授权（License Key）；自托管要自己备（实测连撞三道门才起得来），托管平台替你备（代价是数据出机房）；而界面与 tracing 都挂在同一个东西上：服务端那套 HTTP + SSE 接口。**
 >
-> ⚖️ **处境对照**：不知道这层，你只能本地跑着给人演示、出事靠 print、临时学前端；知道了，一条命令打包成镜像、Studio 里一步步看、Chat UI 直接接上、出事翻 trace——**代价是三条**：① **`langgraph build` 成功 ≠ 能跑起来**，实测打包只校验依赖，**运行时配置（Redis/Postgres/License）一个都不校**，起容器连撞三次；② **镜像默认 Python 3.11 而不是你本机的版本**，实测基础镜像是 `langchain/langgraph-api:3.11`，装了 3.12-only 的依赖会在构建期或启动期炸；③ **自托管不是"免费自己跑"**，实测没有 `LANGGRAPH_CLOUD_LICENSE_KEY` 直接 `License verification failed`，乱填一个密钥报 `Not enough segments`（它是 JWT）。
+> ⚖️ **处境对照**：不知道这层，你只能本地跑着给人演示、出事靠 print、临时学前端；知道了，一条命令打包成镜像、Studio 里一步步看、Chat UI 直接接上、出事翻 trace——**代价是三条**：① **`langgraph build` 成功 ≠ 能跑起来**，实测打包只校验依赖，**运行时配置（Redis/Postgres/License）一个都不校**，起容器连撞三次；② **镜像默认不是你的本机版本**——Python 侧基础镜像是 `langchain/langgraph-api:3.11`（默认 Python 3.11，装了 3.12-only 的依赖会在构建期或启动期炸），TypeScript 侧是 `langchain/langgraphjs-api:20`（默认 Node 20）；③ **自托管不是"免费自己跑"**，实测没有 `LANGGRAPH_CLOUD_LICENSE_KEY` 直接 `License verification failed`，乱填一个密钥报 `Not enough segments`（它是 JWT）。
 
 ---
 
@@ -36,9 +36,15 @@
 
 你信心满满地打包：
 
-```bash
+::: code-group
+```bash [Python]
 langgraph build -t my-agent:test
 ```
+
+```bash [TypeScript]
+npx @langchain/langgraph-cli build -t my-agent:test
+```
+:::
 
 输出一片绿色：
 
@@ -49,9 +55,15 @@ langgraph build -t my-agent:test
 
 **镜像出来了！** 你马上跑起来：
 
-```bash
+::: code-group
+```bash [Python]
 docker run --rm -p 8234:8000 lgdemo:test
 ```
+
+```bash [TypeScript]
+docker run --rm -p 8234:8000 lgdemo-ts:test
+```
+:::
 
 **第一次**：
 
@@ -82,7 +94,7 @@ ValueError: License verification failed. Please ensure proper configuration:
 jwt.exceptions.DecodeError: Not enough segments
 ```
 
-> ❓ **问题**：**明明 `langgraph build` 成功了，为什么跑不起来？为什么本地 `langgraph dev` 从没出过这三个错？为什么乱填的密钥还被识别成"格式不对"？**
+> ❓ **问题**：**明明 `langgraph build` 成功了，为什么跑不起来？为什么本地 `langgraph dev` 从没出过这三个错？为什么乱填的密钥还被识别成"格式不对"？**（TypeScript 侧把 `langgraph` 换成 `langgraphjs`，结论完全相同——实测报错文本逐字一致。）
 
 ---
 
@@ -130,8 +142,8 @@ jwt.exceptions.DecodeError: Not enough segments
 
 | 方式 | 命令 | 存档 | 要备什么 | 适合 |
 |---|---|---|---|---|
-| **本地开发** | `langgraph dev` | 内存 | 无 | 调试、演示、跑测试 |
-| **自托管** | `langgraph build` + `docker run` | Postgres | **Redis + Postgres + License** | 数据不能出机房 |
+| **本地开发** | `langgraph dev` / `langgraphjs dev` | 内存 | 无 | 调试、演示、跑测试 |
+| **自托管** | `langgraph build` / `langgraphjs build` + `docker run` | Postgres | **Redis + Postgres + License** | 数据不能出机房 |
 | **云托管** | 平台接 GitHub 或 CLI 推 | 平台管 | 无（平台备） | 最快上线、不想运维 |
 
 ##### 实测：`build` 只校依赖，不校运行时配置
@@ -149,7 +161,8 @@ WORKDIR /deps/outer-lgdev-3qgexjcp/src
 
 ##### 三道门的真实报错（按顺序）
 
-```bash
+::: code-group
+```bash [Python]
 docker run --rm lgdemo:test
 # ① KeyError: "Config 'REDIS_URI' is missing, and has no default."
 
@@ -164,12 +177,28 @@ docker run --rm -e ... -e LANGGRAPH_CLOUD_LICENSE_KEY="fake-key-for-test" lgdemo
 #    jwt.exceptions.DecodeError: Not enough segments     ← 它是 JWT，乱填会被识别
 ```
 
+```bash [TypeScript]
+docker run --rm lgdemo-ts:test
+# ① KeyError: "Config 'REDIS_URI' is missing, and has no default."
+
+docker run --rm -e REDIS_URI="..." lgdemo-ts:test
+# ② AttributeError: 'NoneType' object has no attribute 'encode'   ← 同样是 POSTGRES_URI 没给
+
+docker run --rm -e REDIS_URI="..." -e POSTGRES_URI="..." lgdemo-ts:test
+# ③ ValueError: License verification failed.  ← 报错文本与 Python 侧逐字相同
+
+docker run --rm -e ... -e LANGGRAPH_CLOUD_LICENSE_KEY="fake-key-for-test" lgdemo-ts:test
+#    jwt.exceptions.DecodeError: Not enough segments     ← TS 镜像里跑的服务端也是 Python
+```
+:::
+
 > 💡 **报错②最坑**：它不说"缺 POSTGRES_URI"，只说 `'NoneType' object has no attribute 'encode'`——因为 URI 是 `None` 被拿去解析了。
 > 🔴 **自托管同样要授权**：这一点常被误解成"自己跑就免费"。
 
 ##### `langgraph.json` 里还有课 12 没讲的字段
 
-```json
+::: code-group
+```json [Python]
 {
   "dependencies": ["."],
   "graphs": { "my_agent": "./src/my_agent/graph.py:graph" },
@@ -177,6 +206,16 @@ docker run --rm -e ... -e LANGGRAPH_CLOUD_LICENSE_KEY="fake-key-for-test" lgdemo
   "dockerfile_lines": ["RUN echo 'custom line' > /tmp/custom.txt"]
 }
 ```
+
+```json [TypeScript]
+{
+  "node_version": "20",
+  "dependencies": ["."],
+  "graphs": { "my_agent": "./src/graph.ts:graph" },
+  "dockerfile_lines": ["RUN echo 'custom line' > /tmp/custom.txt"]
+}
+```
+:::
 
 **实测**：
 
@@ -207,10 +246,11 @@ data: {"n1":null}
 
 1. **"`langgraph build` 成功就能跑"**——错，**只校依赖不校运行时配置**，实测连撞三道门。
 2. **"自托管不用授权"**——错，实测 `License verification failed`，**要 `LANGGRAPH_CLOUD_LICENSE_KEY`**。
-3. **"镜像用我本机的 Python 版本"**——错，**默认 3.11**，实测基础镜像 `:3.11`。
+3. **"镜像用我本机的版本"**——错。Python 侧默认 **3.11**（基础镜像 `langchain/langgraph-api:3.11`）；TypeScript 侧默认 **Node 20**（`langchain/langgraphjs-api:20`），且 `node_version` 只认字符串 `"20"` / `"22"`，写数字 `20` 会被 Zod 拒绝。
 4. **"乱填个 License Key 能绕过"**——错，它是 **JWT**，实测 `Not enough segments`。
 5. **"dev 和生产的差别只是端口"**——错，**存档后端完全不同**（内存 vs Postgres），这是最大差别。
-6. **"`REDIS_URI` 报错会明确说缺它"**——只对①成立；②的 Postgres 报错是 `'NoneType' ... 'encode'`，**看不出缺什么**。
+6. **"`REDIS_URI` 报错会明确说缺它"**——只对①成立；②的 Postgres 报错是 `'NoneType' ... 'encode'`，**看不出缺什么**。这条**两侧一模一样**（TS 镜像里跑的服务端仍是 Python）。
+7. **"`python_version` 在 TS 侧也能用"**——错，**被静默忽略**：不报错、也不生效，基础镜像还是 `:20`。TS 侧的版本键是 `node_version`。
 
 #### 一句话记住
 
@@ -226,12 +266,14 @@ data: {"n1":null}
 | 排队叫号 | **Redis（队列）** | `REDIS_URI` | 缺了起不来 |
 | 冰箱 | **Postgres（存档）** | `POSTGRES_URI` | 缺了报错难懂 |
 | 执照 | **LANGGRAPH_CLOUD_LICENSE_KEY** | 自托管也要 | JWT，不能乱填 |
-| 打包 | **langgraph build** | 出 Docker 镜像 | 只校依赖 |
+| 版本声明 | **`python_version`** / **`node_version`** | `langgraph.json` | Python 数字符串版本号，TS 只认 `"20"`/`"22"` |
+| 打包 | **langgraph build** / `langgraphjs build` | 出 Docker 镜像 | 只校依赖 |
 | 接线口 | **HTTP + SSE（/runs/stream）** | 前端都靠它 | 要按 SSE 解析 |
 
 #### 官方文档
 
-- [Deployment](https://docs.langchain.com/oss/python/langgraph/deploy.md)
+- [Deployment（Python）](https://docs.langchain.com/oss/python/langgraph/deploy.md)
+- [Deployment（TypeScript）](https://docs.langchain.com/oss/javascript/langgraph/deploy.md)
 
 ---
 
@@ -268,20 +310,41 @@ data: {"n1":null}
 
 ##### 实测：服务的自证入口 `/info`
 
-```json
+::: code-group
+```json [Python]
 {"version":"0.16.0","langgraph_py_version":"1.2.11",
  "flags":{"assistants":true,"crons":true,"langsmith":false,...},
  "host":{"kind":"self-hosted","project_id":null,...}}
 ```
 
+```json [TypeScript]
+{"version":"1.5.4","langgraph_js_version":"1.5.1","context":"js",
+ "flags":{"assistants":true,"crons":false,"langsmith":false,
+          "langsmith_tracing_replicas":true}}
+```
+:::
+
+> 🔑 **字段名两侧不同**：Python 有 `langgraph_py_version` 与 `host`；TS 只有 `langgraph_js_version` 与 `context: "js"`，**没有 `host`**。`crons` 在 TS dev 模式下是 `false`。
+
 > 💡 **`/info` 是判断"服务到底起来没、接了什么"的第一手证据**——比看日志快。
 
 ##### 实测：assistant 与 graph_id 的关系
 
-```json
+::: code-group
+```json [Python]
 [{"assistant_id":"eac7a2dc-...","graph_id":"my_agent","name":"my_agent",
   "metadata":{"created_by":"system"},...}]
 ```
+
+```json [TypeScript]
+[{"assistant_id":"eac7a2dc-f2ac-5973-91d0-f90689344d99","version":1,
+  "config":{},"context":{},"created_at":"2026-10-19T08:18:18.554Z",
+  "updated_at":"2026-10-19T08:18:18.554Z","graph_id":"my_agent",
+  "metadata":{"created_by":"system"},"name":"my_agent","description":null}]
+```
+:::
+
+> 💡 TS 侧多出 `version`、`config`、`context`、`description`，时间字段是 **ISO 字符串**（`created_at`），字段名仍是下划线风格。
 
 > 🔑 印证课 12：**`graph_id` 就是 `langgraph.json` 里的 key**；assistant 是它的一个具名版本（`created_by: system` 表示自动创建）。
 
@@ -313,7 +376,7 @@ data: {"n1":null}
 1. **"Studio 要单独安装"**——不用，**`langgraph dev` 起服务后点它给出的 URL**。
 2. **"Chat UI 是 LangGraph 的一部分"**——不是，**独立 npm 应用**，要另起并指到你服务地址。
 3. **"SSE 返回的是 JSON"**——不是，是 **`event:` / `data:` 文本流**，要按 SSE 解析。
-4. **"`/docs` 只有文档"**——它同时是**端点自测台**，实测返回 200。
+4. **"`/docs` 只有文档"**——Python 侧它同时是**端点自测台**，实测返回 200；**TypeScript 侧 `/docs` 直接 404**，`/openapi.json`、`/metrics` 也全都没有，TS 侧能用的自证入口只剩 `/ok` 与 `/info`。
 5. **"assistant_id 和 graph_id 是一回事"**——不是，**`graph_id` 是你配置的 key，assistant 是它的具名版本**。
 
 #### 一句话记住
@@ -328,7 +391,7 @@ data: {"n1":null}
 | 普通遥控器 | **Agent Chat UI** | 独立 npm 应用 | 要另起进程 |
 | 播出信号 | **SSE（Server-Sent Events）** | `POST /runs/stream` | 要按格式解析 |
 | 自证入口 | **`/info`** | 判断服务状态 | — |
-| 端点自测台 | **`/docs`（OpenAPI）** | 浏览器直接试 | — |
+| 端点自测台 | **`/docs`（OpenAPI）** | 浏览器直接试 | **TS 侧 404，不存在** |
 | 具名版本 | **assistant** | `/assistants/search` | 与 graph_id 不同 |
 
 #### 官方文档
@@ -336,6 +399,7 @@ data: {"n1":null}
 - [LangSmith Studio](https://docs.langchain.com/oss/python/langgraph/studio.md)
 - [Agent Chat UI](https://docs.langchain.com/oss/python/langgraph/ui.md)
 - [Frontend overview](https://docs.langchain.com/oss/python/langgraph/frontend/overview.md)（延伸）
+- [Deployment（TypeScript）](https://docs.langchain.com/oss/javascript/langgraph/deploy.md)
 
 ---
 
@@ -364,15 +428,29 @@ data: {"n1":null}
 
 **未设 key**：
 
-```json
+::: code-group
+```json [Python]
 "flags":{...,"langsmith":false,...}
 ```
 
+```json [TypeScript]
+"flags":{"assistants":true,"crons":false,"langsmith":false,"langsmith_tracing_replicas":true}
+```
+:::
+
+
 **设了 `LANGSMITH_API_KEY` 重启**：
 
-```json
+::: code-group
+```json [Python]
 "flags":{...,"langsmith":true,...}
 ```
+
+```json [TypeScript]
+"flags":{"assistants":true,"crons":false,"langsmith":true,"langsmith_tracing_replicas":true}
+```
+:::
+
 
 > 🔑 **就这一个开关**——`false → true`，实测可复现。这是本课最"便宜"的实操。
 
@@ -425,7 +503,7 @@ python_gc_objects_collected_total{generation="0"} 1359.0
 1. **"接 tracing 要改代码"**——不用，**一个环境变量**（实测 flag 直接翻转）。
 2. **"没 key 会跑不起来"**——错，**业务照跑**，只是上报 401（实测 `invoke 成功: hi`）。
 3. **"设了 key 就一定接上了"**——要**用 `/info` 自证**，否则可能一直 401 你也不知道。
-4. **"只有 LangSmith 一条路"**——错，**`/metrics` 是内置的**（实测 200）。
+4. **"只有 LangSmith 一条路"**——Python 侧错，**`/metrics` 是内置的**（实测 200）；**TypeScript 侧这条路没有**，`/metrics` 实测 404，要指标得自己接。
 5. **"tracing 能替代 checkpoint"**——不能，**trace 只读，checkpoint 能让你重跑**（课 9）。
 
 #### 一句话记住
@@ -439,13 +517,14 @@ python_gc_objects_collected_total{generation="0"} 1359.0
 | 行车记录仪 | **tracing / observability** | `LANGSMITH_API_KEY` | — |
 | 那一段录像 | **trace / run** | LangSmith 后台 | — |
 | 开关 | **`flags.langsmith`** | `GET /info` | 可自证 |
-| 免费指标 | **`/metrics`（Prometheus / OTel）** | 服务端内置 | 要自己接看板 |
+| 免费指标 | **`/metrics`（Prometheus / OTel）** | 服务端内置 | 要自己接看板；**TS 侧 404** |
 | 事后翻 | **trace** | 排障 | 只读 |
 | 回去重跑 | **checkpoint + time-travel** | 课 5 / 课 9 | 可改可执行 |
 
 #### 官方文档
 
-- [LangSmith Observability](https://docs.langchain.com/oss/python/langgraph/observability.md)
+- [LangSmith Observability（Python）](https://docs.langchain.com/oss/python/langgraph/observability.md)
+- [LangSmith Observability（TypeScript）](https://docs.langchain.com/oss/javascript/langgraph/observability.md)
 
 ---
 
@@ -532,27 +611,53 @@ GET /docs  -> 200
 
 **验证十一：`/info`（未接 tracing）**
 
-```json
+::: code-group
+```json [Python]
 {"version":"0.16.0","langgraph_py_version":"1.2.11",
  "flags":{"assistants":true,"crons":true,"langsmith":false,
           "langsmith_tracing_replicas":true,"langsmith_tracing_session_on_runs":true},
  "host":{"kind":"self-hosted","project_id":null,...}}
 ```
 
+```json [TypeScript]
+{"version":"1.5.4","langgraph_js_version":"1.5.1","context":"js",
+ "flags":{"assistants":true,"crons":false,"langsmith":false,
+          "langsmith_tracing_replicas":true}}
+```
+:::
+
+
 **验证十二：`/info`（设了 `LANGSMITH_API_KEY` 后）**
 
-```json
+::: code-group
+```json [Python]
 "flags":{"assistants":true,"crons":true,"langsmith":true,...}
 ```
+
+```json [TypeScript]
+"flags":{"assistants":true,"crons":false,"langsmith":true,"langsmith_tracing_replicas":true}
+```
+:::
+
 
 > 🔑 **`langsmith`: `false` → `true`**——就这一个开关。
 
 **验证十三：assistant 与 graph_id**
 
-```json
+::: code-group
+```json [Python]
 [{"assistant_id":"eac7a2dc-f2ac-5973-91d0-f90689344d99","graph_id":"my_agent",
   "name":"my_agent","metadata":{"created_by":"system"},...}]
 ```
+
+```json [TypeScript]
+[{"assistant_id":"eac7a2dc-f2ac-5973-91d0-f90689344d99","version":1,
+  "config":{},"context":{},"created_at":"2026-10-19T08:18:18.554Z",
+  "updated_at":"2026-10-19T08:18:18.554Z","graph_id":"my_agent",
+  "metadata":{"created_by":"system"},"name":"my_agent","description":null}]
+```
+:::
+
 
 **验证十四：SSE 真实格式**
 
@@ -598,6 +703,146 @@ Starting 1 background workers            langgraph_runtime_inmem.queue
 
 > 🔑 **`inmem`**——内存队列，与生产的 Postgres/Redis 完全不同。这是"本地好好的，上线起不来"的根因。
 
+#### 🇹🇸 TS 侧实测（`playground-ts/13-deployment.ts`，`@langchain/langgraph-cli` 1.5.4 + `@langchain/langgraph` 1.5.1）
+
+上面十八段验证全部是 Python 侧。下面这一段是**同一套部署链路在 TypeScript 侧的实测**，用 `npm run l13` 可直接复现。
+
+**T0：`langgraphjs dev` 的启动横幅**
+
+```
+Welcome to LangGraph.js
+
+- 🚀 API: http://localhost:8191
+- 🎨 Studio UI: https://smith.langchain.com/studio?baseUrl=http://localhost:8191
+
+This in-memory server is designed for development and testing.
+For production use, please use LangSmith Deployment.
+```
+
+> 🔑 三点差异：① Studio URL 少了中间的斜杠（`/studio?baseUrl=` vs Python 的 `/studio/?baseUrl=`）；② **没有 `📚 API Docs:` 那一行**——因为 `/docs` 在 TS 侧不存在（见 T7）；③ 多了 `This in-memory server is designed for development and testing.` 这段提示。
+
+**T1：`dockerfile` 子命令的默认契约（不写 `node_version`）**
+
+```
+FROM langchain/langgraphjs-api:20
+ADD . /deps/lgjs-l13-SgeTGj
+ENV LANGSERVE_GRAPHS='{"my_agent":"./graph.ts:graph"}'
+WORKDIR /deps/lgjs-l13-SgeTGj
+RUN npm i
+RUN (test ! -f /api/langgraph_api/js/build.mts && echo "Prebuild script not found, skipping") || tsx /api/langgraph_api/js/build.mts
+```
+
+> 🔑 三点：① 基础镜像换成 **`langchain/langgraphjs-api:20`**（默认 **Node 20**，不是 Python 3.11）；② `LANGSERVE_GRAPHS` 换成 `.ts` 路径，**其他一字不差**；③ 多出 `npm i` 与 `tsx /api/langgraph_api/js/build.mts` 两步预构建。
+
+**T2：`node_version` 只认字符串 `"20"` / `"22"`**
+
+```
+node_version="22" -> 通过 | FROM langchain/langgraphjs-api:22
+node_version=20   -> 被拒 | "expected": "20"
+node_version="18" -> 被拒 | "expected": "20"
+```
+
+> ⚠️ 写成数字 `20` 也不行——Zod 认的是**字符串字面量**。`"18"` 同样被拒。
+
+**T3：`python_version` 在 TS 侧被静默忽略**
+
+```
+带 python_version 仍成功: true
+基础镜像 = FROM langchain/langgraphjs-api:20
+```
+
+> ⚠️ 不报错、也不生效——**别把 Python 的键照搬过来**，它会安安静静地失效。
+
+**T4～T6：`dependencies` 可省、`dockerfile_lines` 位置、导出名不校验**
+
+```
+dependencies 省略 -> 成功: true | 首行 = FROM langchain/langgraphjs-api:20
+dockerfile_lines -> 自定义行在第 2 行，ADD 在第 3 行
+graphs 导出名写错 -> dockerfile 仍生成: true
+```
+
+> 🔑 三件事：① **TS 侧不强制 `dependencies`**（Python 侧省略直接报错）；② `dockerfile_lines` 插在 `ADD` **之前**，适合在装依赖前补系统包；③ **导出名对不对 CLI 不管**，校验只到「字符串格式」，错了要等服务启动才炸。
+
+**T7：内嵌服务的端点是这套差异的最大来源**
+
+```
+GET /ok             -> 200 {"ok":true}
+GET /info           -> 200 {"version":"1.5.4","langgraph_js_version":"1.5.1","context":"js",
+                            "flags":{"assistants":true,"crons":false,"langsmith":false,
+                                     "langsmith_tracing_replicas":true}}
+GET /docs           -> 404
+GET /openapi.json   -> 404
+GET /metrics        -> 404
+POST /runs/stream   -> 200
+  event: metadata
+  data: {"run_id":"01a1535b-...","attempt":1}
+
+  event: updates
+  data: {"n1":{"n":1}}
+```
+
+> 🔴 **`/docs`、`/openapi.json`、`/metrics` 在 TS 侧全部 404**。Python 侧引以为证的三条"自证入口"在这里都不存在；能用的只剩 `/ok`、`/info`、`/runs/stream`。`/ok` 也只返回 `{"ok":true}`，**没有 `services` 字段**。
+
+**T8：`/info` 的 `langsmith` flag 同样能翻转**
+
+```
+未设 key: "flags":{...,"langsmith":false,...}
+设了 key: "flags":{...,"langsmith":true,...}
+```
+
+> ✅ 这一条**两侧一致**——`LANGSMITH_API_KEY` 在 TS 侧同样是唯一开关。但注意假 key 会在日志里留 `Failed to get organization ID ... 403`，**服务照常起来**，与 Python 侧的「只 warning + 401」是同一个性子。
+
+**T9：TS 镜像启动同样撞那三道门**
+
+```
+docker run --rm lgdemo-ts:test
+# → KeyError: "Config 'REDIS_URI' is missing, and has no default."
+
+docker run --rm -e REDIS_URI="..." lgdemo-ts:test
+# → AttributeError: 'NoneType' object has no attribute 'encode'
+
+docker run --rm -e REDIS_URI="..." -e POSTGRES_URI="..." lgdemo-ts:test
+# → ValueError: License verification failed. ...
+
+docker run --rm ... -e LANGGRAPH_CLOUD_LICENSE_KEY="fake-key-for-test" lgdemo-ts:test
+# → jwt.exceptions.DecodeError: Not enough segments
+```
+
+> 🔑 **报错文本与 Python 侧逐字相同**。原因在 T1 的镜像结构里：`langgraphjs-api` 换的只是外层 Node 运行环境，**里面的服务端仍是 `/api/langgraph_api`（Python）**，所以 Redis/Postgres/License 三道门一个都没少。
+
+##### 两侧一致的 5 条
+
+| # | 事实 | 证据 |
+|---|---|---|
+| 1 | `build` 成功 ≠ 能跑，运行时配置一个都不校 | T9 三连撞 |
+| 2 | 自托管同样要 License，乱填被识别成 JWT | `Not enough segments`（两侧同文本） |
+| 3 | `dockerfile_lines` 会进镜像并执行 | T5 |
+| 4 | `LANGSMITH_API_KEY` 是 tracing 的唯一开关，`/info` 可自证 | T8 |
+| 5 | 前端接线口都是 `POST /runs/stream` 的 SSE，`event:` 是模式名 | 两段 SSE 格式一致 |
+
+##### 两侧不同的 8 条
+
+| # | 维度 | Python | TypeScript |
+|---|---|---|---|
+| 1 | 基础镜像 | `langchain/langgraph-api:3.11` | `langchain/langgraphjs-api:20` |
+| 2 | 版本键 | `python_version`，默认 `3.11` | `node_version`，只认 `"20"`/`"22"`，默认 `"20"` |
+| 3 | 版本键类型 | 字符串 | **必须字符串**，数字 `20` 被 Zod 拒 |
+| 4 | `dependencies` | 必填 | **可省** |
+| 5 | CLI 包名 / 命令 | `langgraph-cli` / `langgraph` | `@langchain/langgraph-cli` / `langgraphjs` |
+| 6 | `/docs`、`/openapi.json`、`/metrics` | 200 | **404（全无）** |
+| 7 | `/ok` 响应 | `{"ok":true,"services":{}}` | `{"ok":true}`（**无 `services`**） |
+| 8 | `/info` 字段 | 有 `langgraph_py_version`、`host` | 只有 `langgraph_js_version`、`context:"js"`，**无 `host`** |
+
+> ⚠️ 还有一个坑不在表里但很要命：**`langgraphjs` 配置校验失败时退出码仍是 0**，报错打在 stdout 且不产出文件。写脚本判断成败只能看「文件有没有生成」，不能看退出码。
+
+**移植检查清单（Python → TypeScript）**
+
+1. `python_version` 换成 `node_version`，值必须是 `"20"` 或 `"22"` 的**字符串**。
+2. `graphs` 的值从 `xxx.py:graph` 换成 `xxx.ts:graph`。
+3. CLI 换成 `npx @langchain/langgraph-cli`，所有子命令前加 `langgraphjs`（或直接用 `npx` 调）。
+4. 别指望 `/docs`、`/metrics`——要在 TS 侧做健康检查，只用 `/ok` 与 `/info`。
+5. 基础镜像里仍是 Python 服务端，**Redis/Postgres/License 三样照旧要备**。
+
 ### 4.2 本课实操
 
 > 本课的实操由**结课综合实战项目**承接（跨阶段整合），不单配应用实战。
@@ -608,9 +853,9 @@ Starting 1 background workers            langgraph_runtime_inmem.queue
 
 三句话带走：
 
-1. **部署选的是"谁备那三样"**——Redis + Postgres + License；`build` 只校依赖，运行时配置一个都不校。
-2. **Studio 和 Chat UI 都是 SSE 的消费者**——`dev` 起服务，点给出的 URL 就能调试；`/info` 是判断服务状态的第一手证据。
-3. **observability 的接入点就是一个环境变量**——`/info` 的 `langsmith` flag 可自证，且没它也不影响业务，所以默认就该开。
+1. **部署选的是"谁备那三样"**——Redis + Postgres + License；`build` 只校依赖，运行时配置一个都不校（Python / TypeScript 两侧一致）。
+2. **Studio 和 Chat UI 都是 SSE 的消费者**——`dev` 起服务，点给出的 URL 就能调试；`/info` 是判断服务状态的第一手证据（TS 侧只剩它和 `/ok`，`/docs` 没有）。
+3. **observability 的接入点就是一个环境变量**——`/info` 的 `langsmith` flag 可自证（两侧都能翻转），且没它也不影响业务，所以默认就该开。
 
 > 📍 **全局定位**：🎉 **全课程 13 课知识点到此讲完**。
 > 🔗 **下一步**：结课综合实战项目（跨阶段整合，计入阶段 4 收束）。
@@ -625,17 +870,17 @@ Starting 1 background workers            langgraph_runtime_inmem.queue
 
 1. **"`langgraph build` 成功就能跑"**——错，只校依赖不校运行时配置。
 2. **"自托管不用授权"**——错，要 `LANGGRAPH_CLOUD_LICENSE_KEY`。
-3. **"镜像用我本机的 Python 版本"**——错，默认 **3.11**。
+3. **"镜像用我本机的版本"**——错，Python 默认 **3.11**、TypeScript 默认 **Node 20**。
 4. **"乱填 License Key 能绕过"**——错，是 **JWT**（`Not enough segments`）。
 5. **"dev 和生产的差别只是端口"**——错，存档后端不同（`inmem` vs Postgres）。
 6. **"缺 Postgres 会明确报错"**——错，`'NoneType' object has no attribute 'encode'`。
 7. **"Studio 要单独安装"**——不用，`dev` 后点给出的 URL。
 8. **"Chat UI 是 LangGraph 的一部分"**——不是，独立 npm 应用。
-9. **"SSE 返回的是 JSON"**——不是，是 `event:` / `data:` 文本流。
+9. **"SSE 返回的是 JSON"**——不是，是 `event:` / `data:` 文本流（两侧格式一致）。
 10. **"assistant_id = graph_id"**——不是，graph_id 是配置的 key，assistant 是具名版本。
 11. **"接 tracing 要改代码"**——不用，一个环境变量。
 12. **"没 key 会跑不起来"**——错，业务照跑（只 401）。
-13. **"只有 LangSmith 一条路"**——错，`/metrics` 内置。
+13. **"只有 LangSmith 一条路"**——Python 侧错，`/metrics` 内置；**TS 侧 `/metrics` 404**，这条路不存在。
 14. **"tracing 能替代 checkpoint"**——不能，trace 只读。
 
 ### ⏳ 与过时说法对照（写前核对有差异时才有，≤3 行）
@@ -644,7 +889,7 @@ Starting 1 background workers            langgraph_runtime_inmem.queue
 |---|---|---|
 | "自托管就是把开源版自己跑起来，不用授权" | 实测**没有 `LANGGRAPH_CLOUD_LICENSE_KEY` 直接 `License verification failed`**；`langgraph build` 用的基础镜像是 `langchain/langgraph-api`（`api_variant=licensed`），乱填密钥报 `Not enough segments`（JWT） | 实测 + deploy 文档 |
 | "`langgraph build` 成功 = 镜像能跑" | 实测**打包只校依赖**；起容器连撞 `REDIS_URI` / `POSTGRES_URI` / License 三道门，且第二道报错为 `'NoneType' object has no attribute 'encode'`，看不出缺什么 | 实测 |
-| "打出来的镜像和你本机 Python 版本一致" | 实测默认 **`langchain/langgraph-api:3.11`**（`python_version` 默认 3.11）；配 `"python_version": "3.12"` 后基础镜像才换成 `:3.12` | 实测（`langgraph build --help` 亦注明默认 3.11） |
+| "打出来的镜像和你本机 Python 版本一致" | 实测默认 **`langchain/langgraph-api:3.11`**（`python_version` 默认 3.11）；配 `"python_version": "3.12"` 后基础镜像才换成 `:3.12`。TS 侧同理：默认 **`langchain/langgraphjs-api:20`**，`node_version` 只认 `"20"`/`"22"` | 实测（`langgraph build --help` 亦注明默认 3.11；`langgraphjs dockerfile` 实测默认 `:20`） |
 
 ## 一图总结
 

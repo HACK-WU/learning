@@ -18,7 +18,7 @@
 
 `langgraph/types.py:683`
 
-```python
+```python [Python 源码摘录 · langgraph 1.2.11 · 不可运行]
 class StateSnapshot(NamedTuple):
     """Snapshot of the state of the graph at the beginning of a step."""
     values: dict[str, Any] | Any
@@ -30,6 +30,8 @@ class StateSnapshot(NamedTuple):
     tasks: tuple[PregelTask, ...]
     interrupts: tuple[Interrupt, ...]
 ```
+
+> ℹ️ **E5 标注**：这是 `langgraph/types.py:683` 的 `StateSnapshot` 定义摘录。TS 侧对应 interface `StateSnapshot<ValuesType>`，八个字段一一对应，只有两处驼峰差异：`created_at` -> `createdAt`、`parent_config` -> `parentConfig`；且 `next` 是 **`string[]` 而非元组**（本机实测 `getState().next` 返回数组）。
 
 **三个关键观察**：
 

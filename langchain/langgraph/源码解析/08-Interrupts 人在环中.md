@@ -29,7 +29,7 @@ interrupt(value)                       types.py:851
 
 ## 二、`interrupt()` 本体（types.py:851-970）
 
-```python
+```python [Python 源码摘录 · langgraph 1.2.11 · 不可运行]
 def interrupt(value: Any) -> Any:
     conf = get_config()["configurable"]
     scratchpad = conf[CONFIG_KEY_SCRATCHPAD]
@@ -52,16 +52,31 @@ def interrupt(value: Any) -> Any:
     )
 ```
 
+> ℹ️ **E5 标注**：这是 `langgraph/types.py:851-970` 的 `interrupt()` 实现摘录。TS 侧同为 `interrupt<I, R>(value: I): R`，机制一致（`scratchpad.resume` 按 `interruptCounter()` 下标取回）；差别只在要显式写双泛型，只写一个编译报 `TS2345`。
+
 ### 三个关键设计
 
 **① `interrupt_counter()` 是"第几次调用"的计数器**
 
 这解释了一个课上实测的现象——**循环里三次 `interrupt()`，每次 resume 只推进一个**：
 
-```python
+::: code-group
+
+```python [Python]
 for it in ["A", "B", "C"]:
     ans = interrupt(f"处理 {it}?")     # 第一次 idx=0，第二次 idx=1...
 ```
+
+```typescript [TypeScript]
+for (const it of ["A", "B", "C"]) {
+  // ⚠️ 双泛型：I = 传进去的值，R = resume 回来的值。只写一个会被当成 I，报 TS2345。
+  const ans = interrupt<string, string>(`处理 ${it}?`);   // 第一次 idx=0，第二次 idx=1...
+}
+```
+
+:::
+
+> 🇹🇸 TS 侧同构：`interruptCounter()` 的下标匹配逻辑一模一样，本机实测循环里三个 `interrupt` 需要三次 `resume` 才能推进完；唯一的写法差异是泛型必须写两个。
 
 第一次跑：idx=0，无 resume → 抛异常问 A。
 第二次跑：idx=0，resume 里有 1 个值 → **返回那个值**（不再问 A）；循环继续，idx=1 无值 → 抛异常问 B。
@@ -85,12 +100,14 @@ errors.py:102  class GraphInterrupt(GraphBubbleUp)
 
 ## 三、`Interrupt` 对象（types.py:575）
 
-```python
+```python [Python 源码摘录 · langgraph 1.2.11 · 不可运行]
 @dataclass(init=False, slots=True)
 class Interrupt:
     value: Any        # 你传给 interrupt() 的东西
     id: str           # 自动生成的唯一 id
 ```
+
+> ℹ️ **E5 标注**：这是 `langgraph/types.py:575` 的 `Interrupt` 定义摘录。TS 侧的 `Interrupt` 是对外暴露的类型，`value` 为泛型 `T`、`id` 为 string，前端拿到的字段名相同。
 
 > ✅ 这对应课上实测的：
 > ```
@@ -133,10 +150,12 @@ docstring 里写着版本变迁（v0.6.0 移除了 `ns` / `when` / `resumable` /
 
 源码里这一行值得记住：
 
-```python
+```python [Python 源码摘录 · langgraph 1.2.11 · 不可运行]
 v = scratchpad.get_null_resume(True)
 if v is not None:
 ```
+
+> ℹ️ **E5 标注**：这是 `interrupt()` 内部两行判断的摘录。TS 侧对应的是 `resume === undefined` 判定（**不是 `!== null`**），因此 TS 传 `resume: null` 会被当成"带了一个 null 答案"，与 Python 有微妙差异——这也是两侧都建议"别传 None/null"的原因。
 
 **判断用的是 `is not None`**——所以 **`resume=None` 在语义上等于"没带答案"**，会走到抛异常分支……但课 8 实测 `Command(resume=None)` 却抛了 `UnboundLocalError`（`pregel/_loop.py:927` 的 `resume_is_map` 未初始化）。
 

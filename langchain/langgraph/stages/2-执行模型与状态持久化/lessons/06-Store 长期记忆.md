@@ -40,7 +40,9 @@
 
 你信心满满地把用户偏好存进了 State——课 5 不是说了吗，状态会被持久化！
 
-```python
+::: code-group
+
+```python [Python]
 # 会话 1：写入
 g.invoke({"user_id": "1", "profile": {}}, {"configurable": {"thread_id": "sess-1"}})
 #  -> profile = {'lang': 'Python'}       ✅ 存进去了
@@ -49,6 +51,18 @@ g.invoke({"user_id": "1", "profile": {}}, {"configurable": {"thread_id": "sess-1
 g.invoke({"user_id": "1", "profile": {}}, {"configurable": {"thread_id": "sess-2"}})
 #  -> profile = {}                       ❌ 空的！
 ```
+
+```typescript [TypeScript]
+// 会话 1：写入
+await g.invoke({ user_id: "1", profile: {} }, { configurable: { thread_id: "sess-1" } });
+//  -> profile = { lang: 'Python' }       ✅ 存进去了
+
+// 会话 2：换个 thread 读
+await g.invoke({ user_id: "1", profile: {} }, { configurable: { thread_id: "sess-2" } });
+//  -> profile = {}                       ❌ 空的！
+```
+
+:::
 
 > ❓ **问题**：状态**确实**被持久化了（课 5 讲的没错），可为什么换个会话就全没了？——**"持久化"和"跨会话可见"是两件事吗？**
 
@@ -109,7 +123,9 @@ g.invoke({"user_id": "1", "profile": {}}, {"configurable": {"thread_id": "sess-2
 
 **四个动作**：
 
-```python
+::: code-group
+
+```python [Python]
 from langgraph.store.memory import InMemoryStore
 
 store = InMemoryStore()
@@ -121,12 +137,41 @@ items = store.search(ns)                                    # 找一片
 store.delete(ns, "m1")                                      # 删
 ```
 
+```typescript [TypeScript]
+import { InMemoryStore } from "@langchain/langgraph";
+
+const store = new InMemoryStore();
+const ns = ["1", "memories"];               // namespace：数组，这里是 [用户, 类别]
+
+await store.put(ns, "m1", { food_preference: "I like pizza" });  // 放
+const item = await store.get(ns, "m1");                           // 取一条
+const items = await store.search(ns);                             // 找一片
+await store.delete(ns, "m1");                                     // 删
+```
+
+:::
+
+> ⚠️ **命名空间形态不同（实测）**：Python 用**元组** `("1", "memories")`，TS 用**数组** `["1", "memories"]`。TS 侧四个方法**全部返回 Promise**，四个 `await` 都不能省。`get` 返回的是 `{ value, key, namespace, createdAt, updatedAt }` 包装对象，取内容要 `.value`。</parameter>
+
 `search` 的完整签名（本机 `langgraph/store/base/__init__.py`，`BaseStore` 抽象基类）：
 
-```python
+::: code-group
+
+```python [Python]
 search(self, namespace_prefix, /, *, query=None, filter=None,
        limit=10, offset=0, refresh_ttl=None) -> list[SearchItem]
 ```
+
+```typescript [TypeScript]
+search(namespacePrefix: string[], options?: {
+  query?: string; filter?: Record<string, unknown>;
+  limit?: number; offset?: number;
+}): Promise<SearchItem[]>
+```
+
+:::
+
+> **TS 侧没有 `refresh_ttl`**：TTL 刷新是 Python 侧 Store 后端的特性，TS 侧的 `search` 选项里没有这个字段（`@langchain/langgraph` 1.5.1 类型声明实测）。其余参数（`query` / `filter` / `limit` / `offset`）都有，且都收在一个 options 对象里，而不是关键字参数。
 
 > ⚠️ **`limit` 默认是 10**——这是本课最容易埋雷的一个默认值。实测写入 25 条后不带参数 `search`，**只回来 10 条，且不报错**：
 >
@@ -152,7 +197,9 @@ list_namespaces()          -> [('1','memories'), ('1','profile'), ('2','memories
 
 **怎么把 store 交给图**：两个位置——`compile` 时传，节点里用**仅限关键字参数**接。
 
-```python
+::: code-group
+
+```python [Python]
 from langgraph.store.base import BaseStore
 
 def node(state, *, store: BaseStore):        # ← 注意这个 * 和类型标注
@@ -162,6 +209,23 @@ def node(state, *, store: BaseStore):        # ← 注意这个 * 和类型标�
 graph = builder.compile(checkpointer=InMemorySaver(), store=store)
 ```
 
+```typescript [TypeScript]
+import { MemorySaver, InMemoryStore, type LangGraphRunnableConfig } from "@langchain/langgraph";
+
+// TS 侧没有"关键字参数注入"这回事：store 挂在节点第二个参数（config）的 store 字段上
+const node = async (state: typeof State.State, config: LangGraphRunnableConfig) => {
+  const store = config.store!;                       // ← 从 config 上取，不是函数签名里声明
+  await store.put([state.user_id, "memories"], "k", { fact: "..." });
+  return {};
+};
+
+const graph = builder
+  .addNode("node", node)
+  .compile({ checkpointer: new MemorySaver(), store: new InMemoryStore() });
+```
+
+:::
+
 实测三种写法：
 
 | 写法 | 实测结果 |
@@ -169,6 +233,8 @@ graph = builder.compile(checkpointer=InMemorySaver(), store=store)
 | `def node(state, *, store: BaseStore)` | ✅ 拿到 `InMemoryStore` |
 | `def node(state, runtime: Runtime)` → `runtime.store` | ✅ 拿到 `InMemoryStore` |
 | `config["configurable"]["store"]` | ❌ 是 `None`（别这么取） |
+
+> 🇹🇸 **TS 侧对应关系（实测于 `@langchain/langgraph` 1.5.1）**：节点第二个参数上确实带着 `store` 字段（实测该参数的全部键：`tags, metadata, recursionLimit, configurable, signal, writer, interrupt, control, store, runName, executionInfo`），所以 `config.store` 可用；另一种等价写法是从包内导入 `getStore()`——**两者都拿到同一个包装后的 `AsyncBatchedStore`**。但 `config.configurable.store` 是 `undefined`，与 Python 侧"别从 configurable 里取"的结论一致。
 
 > ⚠️ **只挂 checkpointer 不挂 store 会怎样**：节点里 `store` 是 `None`，一用就 `AttributeError: 'NoneType' object has no attribute 'search'`（实测）。**这不是"降级成空 store"，是直接拿到 `None`。**
 
@@ -201,10 +267,19 @@ thread=C: 读到的长期=['事实1','事实2'] 自己的短期=['本轮']
 
 **坑 1：把 `thread_id` 当命名空间第一层**
 
-```python
+::: code-group
+
+```python [Python]
 store.put(("session-A", "prefs"), "lang", {"v": "Python"})   # ❌
 store.put(("session-B", "prefs"), "lang", {"v": "Go"})
 ```
+
+```typescript [TypeScript]
+await store.put(["session-A", "prefs"], "lang", { v: "Python" });   // ❌
+await store.put(["session-B", "prefs"], "lang", { v: "Go" });
+```
+
+:::
 
 实测：新开 session-C 去搜 `("session-C","prefs")` → `[]`。**换成 thread 就失忆，等于把长期记忆退化成了短期记忆**——官方与社区一致的点名坑。
 
@@ -237,7 +312,7 @@ store.put(("session-B", "prefs"), "lang", {"v": "Go"})
 | 图外面的档案柜 | **Store**（长期记忆存储）· `BaseStore` | `compile(store=...)`；节点 `*, store: BaseStore` | 不挂则节点里是 `None`（实测 `AttributeError`） |
 | 分层位置 / 一串名字 | **namespace**（命名空间）· `tuple[str, ...]` | `("user_id", "memories")`；`search` 按前缀匹配 | **用 thread_id 当首层 = 退化成短期记忆** |
 | 放 / 取 / 找 / 删 | **put / get / search / delete** | `store.put(ns, key, value)` | 必须手动写；`search` 默认 `limit=10` 会截断 |
-| 看看有哪些格子 | **list_namespaces** | `store.list_namespaces(prefix=..., max_depth=...)` | 默认 `limit=100` |
+| 看看有哪些格子 | **list_namespaces** / TS `listNamespaces` | Python `store.list_namespaces(prefix=..., max_depth=...)`；TS `store.listNamespaces({ prefix, maxDepth })` | 默认 `limit=100`；`maxDepth` 只到该深度的前缀（实测 `maxDepth:1` 返回 `[["1"],["2"],["u"]]`） |
 | 按内容像不像找 | **semantic search**（语义搜索） | `search(ns, query="...")`，需 `InMemoryStore(index={...})` | 不配 embedding 时 **query 被静默忽略**（实测） |
 | 一条记录 | **Item** · `SearchItem` | 含 `namespace` / `key` / `value` / `created_at` / `updated_at` | — |
 
@@ -246,8 +321,11 @@ store.put(("session-B", "prefs"), "lang", {"v": "Go"})
 #### 官方文档
 
 - [Stores（官方 Store 页：基本用法 / 命名空间 / 语义搜索）](https://docs.langchain.com/oss/python/langgraph/stores)
+- [Stores · JavaScript（TS 版同页，命名空间用数组、方法全异步）](https://docs.langchain.com/oss/javascript/langgraph/stores)
 - [Persistence（checkpointer vs store 对照表）](https://docs.langchain.com/oss/python/langgraph/persistence)
+- [Persistence · JavaScript](https://docs.langchain.com/oss/javascript/langgraph/persistence)
 - [Memory（长期记忆三类与写入时机）](https://docs.langchain.com/oss/python/langgraph/memory)
+- [Memory · JavaScript](https://docs.langchain.com/oss/javascript/langgraph/memory)
 
 ---
 
@@ -326,7 +404,9 @@ sequenceDiagram
 
 #### 示例演示：三类记忆在同一个柜子里怎么摆
 
-```python
+::: code-group
+
+```python [Python]
 # 语义：关于这个人的事实——一份档案，反复改写
 store.put(("u1", "profile"), "profile", {
     "name": "小王", "prefers": "邮件沟通", "timezone": "Asia/Shanghai"
@@ -343,13 +423,44 @@ store.put(("u1", "rules"), "greeting", {
 })
 ```
 
+```typescript [TypeScript]
+// 语义：关于这个人的事实——一份档案，反复改写
+await store.put(["u1", "profile"], "profile", {
+  name: "小王", prefers: "邮件沟通", timezone: "Asia/Shanghai",
+});
+
+// 情景：发生过的事——一条条往里加，key 用时间/事件 id
+await store.put(["u1", "episodes"], "2026-10-08-refund", {
+  event: "申请退款被拒", reason: "超过 7 天无理由期限",
+});
+
+// 程序：做事的规矩——通常落在提示词里
+await store.put(["u1", "rules"], "greeting", {
+  rule: "回复前先确认订单号",
+});
+```
+
+:::
+
 取的时候各取各的格子：
 
-```python
+::: code-group
+
+```python [Python]
 profile  = store.get(("u1", "profile"), "profile")         # 点名取一条
 episodes = store.search(("u1", "episodes"), limit=20)      # 捞一批（注意 limit）
 rules    = store.search(("u1", "rules"), filter={"enabled": True})   # 按字段过滤
 ```
+
+```typescript [TypeScript]
+const profile  = await store.get(["u1", "profile"], "profile");        // 点名取一条
+const episodes = await store.search(["u1", "episodes"], { limit: 20 }); // 捞一批（注意 limit）
+const rules    = await store.search(["u1", "rules"], { filter: { enabled: true } }); // 按字段过滤
+```
+
+:::
+
+> ⚠️ **TS 侧的取值形态（实测）**：`get` 返回 `{ value, key, namespace, createdAt, updatedAt }` 包装对象，取内容要 `profile?.value`；`search` 返回 `SearchItem[]`，取内容要 `items.map(i => i.value)`。四个方法全部返回 `Promise`，`await` 一个都不能省。
 
 实测 `filter` 的效果：
 
@@ -364,11 +475,23 @@ filter kind=preference: ['a']
 
 实测：
 
-```python
+::: code-group
+
+```python [Python]
 store.put(("u","m"), "k0", {"i": 0})
 store.put(("u","m"), "k0", {"i": 999, "edited": True})
 store.get(("u","m"), "k0").value   # -> {'i': 999, 'edited': True}
 ```
+
+```typescript [TypeScript]
+await store.put(["u", "m"], "k0", { i: 0 });
+await store.put(["u", "m"], "k0", { i: 999, edited: true });
+(await store.get(["u", "m"], "k0"))?.value;   // -> { i: 999, edited: true }
+```
+
+:::
+
+> ⚠️ **TS 侧 `put` 返回 `void`**（`Promise<void>`，实测打印为 `undefined`），不像 Python 侧那样能顺手拿到写入结果——要确认写得对不对，得自己再 `get` 一次。
 
 > ✅ **同 key 再 `put` = 整条覆盖**，不是合并。这正好符合"语义记忆是"**一份持续更新的档案**"的用法——官方原话：更新档案时要**把旧档案传进去，让模型生成新档案**（或生成 JSON Patch），而不是无脑追加。
 >
@@ -380,7 +503,7 @@ store.get(("u","m"), "k0").value   # -> {'i': 999, 'edited': True}
 2. **"语义记忆 = 语义搜索"**——官方点名的混淆点（见上文加粗说明）。
 3. **"配了 `query` 就是在做向量检索"**——**不配 embedding 时 `query` 被静默忽略**（实测）。
 4. **"情景记忆也用固定 key 反复 put"**——会互相覆盖，应用时间戳 / 事件 id。
-5. **"Store 会自动清理旧记忆"**——不会。`InMemoryStore` 甚至**不支持 TTL**（实测 `NotImplementedError: TTL is not supported by InMemoryStore`）。
+5. **"Store 会自动清理旧记忆"**——不会，两侧都没有 TTL 可用：Python 的 `InMemoryStore` 抛 `NotImplementedError: TTL is not supported by InMemoryStore`；TS 的 `put(namespace, key, value, index?)` **签名里根本没有 ttl 参数**（第 4 个参数是 `index`，类型为 `false | string[]`，写 `{ ttl: 60 }` 会直接类型报错），硬塞进去也不生效——实测传 `{ ttl: 0.02 }`（约 1.2 秒）后等 2.5 秒，`get` 照样取得到。
 
 #### 一句话记住
 
@@ -395,14 +518,16 @@ store.get(("u","m"), "k0").value   # -> {'i': 999, 'edited': True}
 | 记做事的规矩 | **procedural memory**（程序性记忆） | 系统提示词 / 代码 | 写错了会**污染所有后续会话** |
 | 边干活边记 | **hot path**（热路径写入） | 节点里直接 `put` | 增加主流程延迟与复杂度 |
 | 事后慢慢提炼 | **background**（后台写入） | 异步任务 / 另一个图 | 记忆不即时生效 |
-| 按含义找 | **semantic search**（语义搜索） | `InMemoryStore(index={"dims":…, "embed":…})` | 不配则 `query` 被忽略（不报错） |
+| 按含义找 | **semantic search**（语义搜索） | Python `InMemoryStore(index={"dims":…, "embed":…})`；TS `new InMemoryStore({ index: { dims, embeddings } })` | 不配则 `query` 被忽略（不报错） |
 
 > 中文均为社区常用译法，官方未定名中文。
 
 #### 官方文档
 
 - [Memory（三类记忆 + 写入时机）](https://docs.langchain.com/oss/python/langgraph/memory)
+- [Memory · JavaScript](https://docs.langchain.com/oss/javascript/langgraph/memory)
 - [Stores - Semantic search（配 embedding 才能向量检索）](https://docs.langchain.com/oss/python/langgraph/stores)
+- [Stores · JavaScript（`InMemoryStore({ index: { dims, embeddings } })`）](https://docs.langchain.com/oss/javascript/langgraph/stores)
 
 ---
 
@@ -512,6 +637,33 @@ thread=C: 读到的长期=['事实1','事实2']  自己的短期=['本轮']
 ```
 
 > ✅ **长期跨 thread 累积，短期每 thread 各一份**——一张输出看清两套记忆的作用域。
+
+#### 🇹🇸 TS 侧实测（`playground-ts/06-store.ts`，`@langchain/langgraph` 1.5.1）
+
+跑 `npm run l06` 得到的关键输出（与上面 Python 侧逐条对齐）：
+
+```
+get: {"value":{"food_preference":"I like pizza"},"key":"m1",
+      "namespace":["1","memories"],"createdAt":"...","updatedAt":"..."}
+search: ['m1={"food_preference":"I like pizza"}', 'm2={"food_preference":"I like sushi"}']
+
+thread=session-A: 本轮=["本轮读到 0 条"] 长期共 1 条
+thread=session-B: 本轮=["本轮读到 1 条"] 长期共 2 条
+thread=session-C: 本轮=["本轮读到 2 条"] 长期共 3 条
+user=2 thread=session-D: ["本轮读到 0 条"]
+
+新会话搜 session-C: 0 条                      # 坑 1 复现
+filter kind=preference: ['a'] / 无 filter: ['a', 'b']
+写 25 条，不带 limit: 10  带 limit=100: 25     # 默认 limit 同样是 10
+无 query: ['q1','q2'] / query='pizza': ['q1','q2']   # query 同样被静默忽略
+同 key 再 put: {"i":999,"edited":true} / delete 后 get: null
+不挂 store 时 config.store: undefined
+直接使用报错: Cannot read properties of undefined (reading 'get')
+```
+
+> ✅ **两侧行为一致的五条**：命名空间前缀匹配、`search` 默认 `limit=10`、`query` 不配 embedding 被静默忽略、同 key 覆盖、delete 后取 `null`。
+>
+> ⚠️ **两侧写法/表现不同的四条**：① 命名空间 Python 元组 / TS 数组；② 节点取 store 的入口 Python 关键字参数 / TS `config.store` 或 `getStore()`；③ TS 的 `get` 返回包装对象（Python 的 `Item` 也是对象，但 TS 要 `.value` 才拿到业务内容）；④ 不挂 store 时的报错文本不同——Python 是 `AttributeError: 'NoneType' object has no attribute 'search'`，TS 是 `Cannot read properties of undefined (reading 'get')`（本质同一个病）。
 
 ### 4.2 应用实战
 

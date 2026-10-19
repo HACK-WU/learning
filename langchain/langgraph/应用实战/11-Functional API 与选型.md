@@ -3,6 +3,7 @@
 > 对应：[课 11 Functional API 与选型](../stages/3-可控性与人在环中/lessons/11-Functional%20API%20%E4%B8%8E%E9%80%89%E5%9E%8B.md)
 > 覆盖知识点：@entrypoint / @task 模型 / 两套 API 选型
 > ✅ 全部代码实测于 langgraph 1.2.11 / Python 3.12（在 `../langchain/playground` 以 `uv run` 隔离执行）
+> ✅ TypeScript 侧实测于 `playground-ts/`（`@langchain/langgraph` 1.5.1 / Node 22，`npm run a11`）
 
 ## 场景
 
@@ -26,7 +27,9 @@
 
 > 看图：左右是同一份业务代码，区别只在加了 `@entrypoint` / `@task`——**业务代码一行没动**，就有了存档点和暂停能力。
 
-```python
+::: code-group
+
+```python [Python]
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.func import entrypoint, task
 from langgraph.types import interrupt
@@ -59,6 +62,42 @@ print("invoke ->", r)
 print(f"副作用计数: {SIDE}")
 ```
 
+```typescript [TypeScript]
+import { entrypoint, task, interrupt, MemorySaver } from "@langchain/langgraph";
+
+const SIDE = { load: 0, clean: 0 };
+
+// ⚠️ TS 的 task 是 task(name, fn) 工厂，没有装饰器语法
+const load = task("load", async (src: string) => {
+  SIDE.load += 1;
+  return [3, 1, 2];
+});
+
+// ← 这个故意不标 task（就是普通函数）
+const clean = (data: number[]) => {
+  SIDE.clean += 1;
+  return [...data].sort((a, b) => a - b);
+};
+
+const process = entrypoint(
+  { name: "process", checkpointer: new MemorySaver() },
+  async (src: string) => {
+    const data = await load(src);      // ⚠️ TS 返回 Promise，不是 .result()
+    const cleaned = clean(data);
+    const ok = interrupt({ question: "清洗结果对吗", data: cleaned });
+    return { data: cleaned, approved: ok };
+  }
+);
+
+const cfg = { configurable: { thread_id: "job-1" } };
+const r = await process.invoke("orders.csv", cfg);
+console.log("invoke ->", JSON.stringify(r));
+console.log(`副作用计数: ${JSON.stringify(SIDE)}`);
+```
+
+:::
+
+
 实测输出：
 
 ```
@@ -66,8 +105,19 @@ invoke -> {'__interrupt__': [Interrupt(value={'question': '清洗结果对吗', 
 副作用计数: {'load': 1, 'clean': 1}
 ```
 
+TypeScript 侧（`npm run a11` 第一段）：
+
+```
+不传 config -> Error: Failed to put checkpoint. The passed RunnableConfig is missing a required "thread_id" field in its "configurable" property. When using a che
+invoke -> {"__interrupt__":[{"id":"0d708c1d6a68471b2a863afda7573fec","value":{"question":"清洗结果对吗","data":[1,2,3]}}]}
+副作用计数: {"load":1,"clean":1}
+```
+
 > ✅ **没有 State、没有 `add_node`、没有 `add_edge`**——控制流还是原来那几行，只是多了两个装饰器和一个 `config`。
 > ⚠️ **`config` 是必填的**（挂了 checkpointer 时）。不传直接 `ValueError: Checkpointer requires one or more of the following 'configurable' keys: thread_id, checkpoint_ns, checkpoint_id`。
+
+> ⚠️ **TS 侧三处写法差异**：① 没有装饰器——`entrypoint({ name, checkpointer }, fn)` 是**选项对象在前、函数在后**，而且 **`name` 必填**（Python 自动取函数名）；② `task("load", fn)` 也是**名字在前**，调用后返回 `Promise`，用 `await`（Python 是 `.result()`）；③ 不传 config 的报错文本完全不同——TS 是 `Failed to put checkpoint. The passed RunnableConfig is missing a required "thread_id" field...`，不是 Python 的 `ValueError: Checkpointer requires...`。
+> 💡 `interrupt()` 两侧都直接返回值（不抛异常），返回值形态也一致；TS 的 `__interrupt__` 数组元素是 `{ id, value }` 的普通对象（Python 是 `Interrupt` 命名元组）。
 
 ### 它的问题
 
@@ -82,7 +132,9 @@ invoke -> {'__interrupt__': [Interrupt(value={'question': '清洗结果对吗', 
 
 **坑一：没标 @task 的函数，resume 时必然重跑**
 
-```python
+::: code-group
+
+```python [Python]
 from langgraph.types import Command
 
 print("resume 前:", SIDE)
@@ -90,6 +142,18 @@ r2 = process.invoke(Command(resume="通过"), config=cfg)
 print("resume ->", r2)
 print(f"resume 后: {SIDE}")
 ```
+
+```typescript [TypeScript]
+import { Command } from "@langchain/langgraph";
+
+console.log("resume 前:", JSON.stringify(SIDE));
+const r2 = await process.invoke(new Command({ resume: "通过" }), cfg);
+console.log("resume ->", JSON.stringify(r2));
+console.log(`resume 后: ${JSON.stringify(SIDE)}`);
+```
+
+:::
+
 
 实测输出：
 
@@ -99,23 +163,57 @@ resume -> {'data': [1, 2, 3], 'approved': '通过'}
 resume 后: {'load': 1, 'clean': 2}
 ```
 
+TypeScript 侧：
+
+```
+resume 前: {"load":1,"clean":1}
+resume -> {"data":[1,2,3],"approved":"通过"}
+resume 后: {"load":1,"clean":2}
+```
+
+> ✅ **这一条两侧完全一致**——`load` 保持 1 次、`clean` 从 1 变 2。TS 的 `new Command({ resume: "通过" })` 与 Python 的 `Command(resume="通过")` 语义相同，只是要 `new`。
+
 > ❌ **`clean` 从 1 次变成 2 次**——重跑了一遍。
 > 🔑 **`load` 保持 1 次**（标了 `@task`，结果在存档点里），**`clean` 变成 2 次**（普通函数，没进存档点）。
 > 💡 如果 `clean` 里有副作用（调外部接口、扣款、发消息），**副作用就重复发生了**。
 
 **坑二：想改中间某一步的结果，做不到**
 
-```python
+::: code-group
+
+```python [Python]
 st = process.get_state(cfg)
 print("get_state ->", st.values)
 print("历史条数:", len(list(process.get_state_history(cfg))))
 ```
+
+```typescript [TypeScript]
+const st = await process.getState(cfg);
+console.log("getState ->", JSON.stringify(st.values));
+
+// ⚠️ getStateHistory 返回异步迭代器，外层还要 await
+const hist: any[] = [];
+for await (const s of await process.getStateHistory(cfg)) hist.push(s);
+console.log("历史条数:", hist.length);
+console.log("next 形态:", JSON.stringify(hist.map((h) => h.next)));
+```
+
+:::
+
 
 实测输出：
 
 ```
 get_state -> {'data': [1, 2, 3], 'approved': '通过'}
 历史条数: 2
+```
+
+TypeScript 侧：
+
+```
+getState -> {"data":[1,2,3],"approved":"通过"}
+历史条数: 2
+next 形态: [[],["process"]]
 ```
 
 > ❌ **只有 2 条历史**：`()` 和 `('process',)`。
@@ -133,7 +231,9 @@ get_state -> {'data': [1, 2, 3], 'approved': '通过'}
 
 ### 第一步：给所有有副作用的步骤标 @task
 
-```python
+::: code-group
+
+```python [Python]
 SIDE2 = {"load": 0, "clean": 0, "write": 0}
 
 
@@ -172,6 +272,47 @@ print("resume ->", r4)
 print(f"  计数: {SIDE2}")
 ```
 
+```typescript [TypeScript]
+const SIDE2 = { load: 0, clean: 0, write: 0 };
+
+const load2 = task("load2", async (src: string) => {
+  SIDE2.load += 1;
+  return [3, 1, 2];
+});
+
+const clean2 = task("clean2", async (data: number[]) => {
+  SIDE2.clean += 1;
+  return [...data].sort((a, b) => a - b);
+});
+
+const write2 = task("write2", async (data: number[], ok: unknown) => {
+  SIDE2.write += 1;
+  return `写回 ${data.length} 条（审批=${String(ok)}）`;
+});
+
+const process2 = entrypoint(
+  { name: "process2", checkpointer: new MemorySaver() },
+  async (src: string) => {
+    const data = await load2(src);
+    const cleaned = await clean2(data);
+    const ok = interrupt({ question: "确认", data: cleaned });
+    return { result: await write2(cleaned, ok) };
+  }
+);
+
+const cfg2 = { configurable: { thread_id: "job-2" } };
+const r3 = await process2.invoke("orders.csv", cfg2);
+console.log("invoke ->", JSON.stringify(r3));
+console.log(`  计数: ${JSON.stringify(SIDE2)}`);
+
+const r4 = await process2.invoke(new Command({ resume: "通过" }), cfg2);
+console.log("resume ->", JSON.stringify(r4));
+console.log(`  计数: ${JSON.stringify(SIDE2)}`);
+```
+
+:::
+
+
 实测输出：
 
 ```
@@ -181,12 +322,24 @@ resume -> {'result': '写回 3 条（审批=通过）'}
   计数: {'load': 1, 'clean': 1, 'write': 1}
 ```
 
+TypeScript 侧：
+
+```
+invoke -> {"__interrupt__":[{"id":"cb1f64ae...","value":{"question":"确认","data":[1,2,3]}}]}
+  计数: {"load":1,"clean":1,"write":0}
+resume -> {"result":"写回 3 条（审批=通过）"}
+  计数: {"load":1,"clean":1,"write":1}
+task 不是缓存：同 thread 再 invoke，load 计数 2 -> 3
+```
+
 > ✅ **`clean` 保持 1 次**——标了 `@task` 就不再重跑。三次 interrupt 的场景实测：3 个 task 只跑 3 次，不是 3×3。
 > ⚠️ **但 `@task` 不是缓存**：同 thread 再 `invoke` 一次（不中断），实测执行次数照样 +1。它只在**从存档点恢复**时才体现价值。
 
 ### 第二步：previous 承载跨轮状态
 
-```python
+::: code-group
+
+```python [Python]
 @entrypoint(checkpointer=InMemorySaver())
 def pipeline(batch: list, previous=None) -> dict:
     done = (previous or {}).get("done", [])
@@ -200,6 +353,28 @@ print("第2批:", pipeline.invoke([3, 4, 5], config=cfg3))
 print("第3批:", pipeline.invoke([6], config=cfg3))
 ```
 
+```typescript [TypeScript]
+import { getPreviousState } from "@langchain/langgraph";
+
+const pipeline = entrypoint(
+  { name: "pipeline", checkpointer: new MemorySaver() },
+  async (batch: number[]) => {
+    // ⚠️ TS 回调只有 (input, config)，没有 previous 形参
+    const prev = getPreviousState<{ done: number[] }>();
+    const done = [...(prev?.done ?? []), batch.length];
+    return { done, total: done.reduce((a, b) => a + b, 0) };
+  }
+);
+
+const cfg3 = { configurable: { thread_id: "pipe" } };
+console.log("第1批:", JSON.stringify(await pipeline.invoke([1, 2], cfg3)));
+console.log("第2批:", JSON.stringify(await pipeline.invoke([3, 4, 5], cfg3)));
+console.log("第3批:", JSON.stringify(await pipeline.invoke([6], cfg3)));
+```
+
+:::
+
+
 实测输出：
 
 ```
@@ -208,12 +383,24 @@ print("第3批:", pipeline.invoke([6], config=cfg3))
 第3批: {'done': [2, 3, 1], 'total': 6}
 ```
 
+TypeScript 侧（结果逐字一致）：
+
+```
+第1批: {"done":[2],"total":2}
+第2批: {"done":[2,3],"total":5}
+第3批: {"done":[2,3,1],"total":6}
+```
+
 > ✅ **`previous` 就是上一次的返回值**——天然累加，不用配 reducer。
 > ⚠️ **但它是整体值**：你只能整体替换，不能说"把 total 改成 100"。
 
+> ⚠️ **TS 没有 `previous` 形参**：`entrypoint` 回调只接受 `(input, config)`，第二个位置被 `config` 占了。要用 `getPreviousState<T>()` 从当前上下文里读——上例 `const prev = getPreviousState<{ done: number[] }>()`。首次调用它返回 `undefined`，所以要 `prev?.done ?? []`。
+
 **对照 Graph API 的同样操作**：
 
-```python
+::: code-group
+
+```python [Python]
 from langgraph.graph import END, START, StateGraph
 
 b = StateGraph(dict)
@@ -226,6 +413,31 @@ print("Graph 第1次:", g.invoke({"v": 0, "inc": 10}, config=cfgg)["v"])
 print("Graph 第2次:", g.invoke({"inc": 5}, config=cfgg)["v"])
 ```
 
+```typescript [TypeScript]
+import { StateGraph, Annotation, START, END } from "@langchain/langgraph";
+
+const GState = Annotation.Root({
+  v: Annotation<number>({ reducer: (_p, n) => n, default: () => 0 }),
+  inc: Annotation<number>({ reducer: (_p, n) => n, default: () => 0 }),
+});
+
+const g = new StateGraph(GState)
+  .addNode("add", (s: typeof GState.State) => ({ v: s.v + s.inc }))
+  .addEdge(START, "add")
+  .addEdge("add", END)
+  .compile({ checkpointer: new MemorySaver() });
+
+const cfgg = { configurable: { thread_id: "g" } };
+console.log("Graph 第1次:", (await g.invoke({ v: 0, inc: 10 }, cfgg)).v);
+// ⚠️ 只传增量：TS 会把存档点里的 v=10 带进来（Python 传 {} 时 v 缺省为 0，得到 5）
+console.log("Graph 第2次:", (await g.invoke({ inc: 5 }, cfgg)).v);
+// 显式把 v 归零，才是与 Python 对齐的「覆盖」语义
+console.log("Graph 第2次（显式 v:0）:", (await g.invoke({ v: 0, inc: 5 }, cfgg)).v);
+```
+
+:::
+
+
 实测输出：
 
 ```
@@ -233,12 +445,24 @@ Graph 第1次: 10
 Graph 第2次: 5
 ```
 
+TypeScript 侧这里有一处**结果不同**，值得单独记住：
+
+```
+Graph 第1次: 10
+Graph 第2次（只传 inc）: 15   <- Python 是 5，TS 是 15
+Graph 第2次（显式传 v:0）: 5
+```
+
 > 🔑 **同一件事两套写法结果不同**：Functional 的 `previous` 天然累加（2→5→6），Graph API 没配 reducer 就是**覆盖**（10→5）。
 > 💡 想要 Graph 也累加，得给字段配 reducer（课 3 学过）——**这是"显式声明"与"隐式继承"的差别**。
 
+> ⚠️ **注意 TS 那行 `15`**：Python 的 `invoke({"inc": 5})` 里 `v` 缺席、`s.get("v", 0)` 取到 0，所以是 5；TS 侧因为 `v` 声明了 `default: 0`，**未传的字段会沿用上一次的值**（上一轮 `v=10`；实测不挂 checkpointer 也是 15，属通道内的「上次值」机制），于是 `10 + 5 = 15`。想复现 Python 的"覆盖"效果，必须显式写 `{ v: 0, inc: 5 }`。这是 `Annotation` 的 `default` 与 Python `TypedDict` 缺省值之间的语义缝隙——**移植时要特别留意"没传字段"到底是 0 还是上一轮的值**。
+
 ### 第三步：混用——把旧图当函数调
 
-```python
+::: code-group
+
+```python [Python]
 @task
 def call_legacy_graph(x: int) -> int:
     return g.invoke({"v": x}, {"configurable": {"thread_id": f"legacy-{x}"}})["v"]
@@ -254,11 +478,39 @@ print("混用 ->", mixed.invoke(1, config=cfg4))
 print("再来 ->", mixed.invoke(1, config=cfg4))
 ```
 
+```typescript [TypeScript]
+const callLegacyGraph = task("callLegacy", async (x: number) => {
+  // ⚠️ 内层图的入参契约是它自己的 State schema，跟外层 Functional 的入参无关
+  const r = await g.invoke({ v: x }, { configurable: { thread_id: `legacy-${x}` } });
+  return r.v;
+});
+
+const mixed = entrypoint(
+  { name: "mixed", checkpointer: new MemorySaver() },
+  async (x: number) => ({ out: await callLegacyGraph(x) })
+);
+
+const cfg4 = { configurable: { thread_id: "mix" } };
+console.log("混用 ->", JSON.stringify(await mixed.invoke(1, cfg4)));
+console.log("再来 ->", JSON.stringify(await mixed.invoke(1, cfg4)));
+```
+
+:::
+
+
 实测输出：
 
 ```
 混用 -> {'out': 1}
 再来 -> {'out': 1}
+```
+
+TypeScript 侧（一致）：
+
+```
+混用 -> {"out":1}
+再来 -> {"out":1}
+传全字段 -> {"out":11}
 ```
 
 > ⚠️ **不是 12！** 内层图 `g` 的 `add` 节点是 `v = s.get("v",0) + s.get("inc",0)`，外层传进去的是 `{"v": x}`（没传 `inc`），所以就是 `1 + 0 = 1`。
@@ -269,13 +521,36 @@ print("再来 ->", mixed.invoke(1, config=cfg4))
 
 改法：显式传全内层图需要的字段，并让每次调用有独立 thread：
 
-```python
+::: code-group
+
+```python [Python]
 @task
 def call_legacy_graph(x: int) -> int:
     return g.invoke({"v": x, "inc": 10},
                     {"configurable": {"thread_id": f"legacy-{x}"}})["v"]
 # -> {'out': 11}
 ```
+
+```typescript [TypeScript]
+const callLegacyFull = task("callLegacyFull", async (x: number) => {
+  const r = await g.invoke(
+    { v: x, inc: 10 },
+    { configurable: { thread_id: `legacy-full-${x}` } }
+  );
+  return r.v;
+});
+
+const mixedFull = entrypoint(
+  { name: "mixedFull", checkpointer: new MemorySaver() },
+  async (x: number) => ({ out: await callLegacyFull(x) })
+);
+
+const c5 = { configurable: { thread_id: "mix2" } };
+console.log("传全字段 ->", JSON.stringify(await mixedFull.invoke(1, c5)));   // -> {"out":11}
+```
+
+:::
+
 
 > ✅ 实测 `11`。**但这仍不是"外层能管内层"**——只是把契约写全了。
 
@@ -298,6 +573,30 @@ def call_legacy_graph(x: int) -> int:
 5. **选型问一句**：中间过程要不要被单独看见和逐格改？要就 Graph，不要就 Functional。
 
 🎯 **会用标志**：能给已有脚本加两个装饰器获得 checkpoint 与人在环中，能解释"为什么普通函数 resume 会重跑"，能说清 `previous` 与 Graph State 的差别并据此选型，能把已有的图包成 task 混用并知道三个坑。
+
+### 🇹🇸 五条提醒在 TS 侧是否还成立
+
+| # | Python 说法 | TS 侧实测 |
+|:--:|------------|-----------|
+| 1 | 只有 `@task` 进存档点，普通函数 resume 必然重跑 | ✅ 成立（`clean` 1→2，`load` 保持 1） |
+| 2 | `@task` 不是缓存，同 thread 再跑照样重算 | ✅ 成立（`load` 计数 2→3） |
+| 3 | 挂了 checkpointer 必须传 `config` | ✅ 成立，但**报错文本不同**（`Failed to put checkpoint... missing a required "thread_id"`） |
+| 4 | `previous` 是整体值，历史只有 2 条 | ✅ 成立，但 **TS 没有 `previous` 形参**，要用 `getPreviousState<T>()` |
+| 5 | 中间过程要不要被单独看见和逐格改 | ✅ 成立，判据两侧通用 |
+
+### 🇹🇸 TS 写法对照表
+
+| Python | TypeScript |
+|--------|-----------|
+| `@task` 装饰器 | `task("name", fn)`，名字必填，返回 `Promise` |
+| `@entrypoint(checkpointer=...)` | `entrypoint({ name, checkpointer }, fn)`，选项在前 |
+| `load(src).result()` | `await load(src)` |
+| `f(x, previous=None)` | `async (x) => { getPreviousState<T>() }`（没有 previous 形参） |
+| `process.invoke(..., config=cfg)` | `process.invoke(input, cfg)`（config 是第二位置参数） |
+| `process.get_state(cfg)` | `await process.getState(cfg)` |
+| `process.get_state_history(cfg)` | `for await (const s of await process.getStateHistory(cfg))` |
+| `Command(resume="通过")` | `new Command({ resume: "通过" })` |
+| `type(entrypoint(...)).__name__ == 'Pregel'` | `entrypoint(...).constructor.name === "Pregel"` |
 
 ## 回到开头的问题
 

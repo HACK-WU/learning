@@ -40,7 +40,9 @@
 
 客户投诉判错了，你想"回到判驳回之前，把决定改成批准，只重跑判定那步"。于是你写：
 
-```python
+::: code-group
+
+```python [Python]
 # 找历史点，改状态，从那里继续
 old = list(graph.get_state_history(cfg))[2]
 fork = {"configurable": {**old.config["configurable"], "thread_id": "new-thread"}}   # 换个 thread 保存证据
@@ -48,6 +50,21 @@ graph.update_state(fork, {"decision": "批准"})
 result = graph.invoke(None, config=fork)
 print(result["log"])
 ```
+
+```typescript [TypeScript]
+// 找历史点，改状态，从那里继续
+const hist = [];
+for await (const s of await graph.getStateHistory(cfg)) hist.push(s);
+const old = hist[2];
+const fork = {
+  configurable: { ...old.config.configurable, thread_id: "new-thread" }, // 换个 thread 保存证据
+};
+await graph.updateState(fork, { decision: "批准" });
+const result = await graph.invoke(null, fork);
+console.log(result.log);
+```
+
+:::
 
 你以为会得到 `['s1', 's2', 's3:批准']`（只重跑 s3）。
 
@@ -107,7 +124,9 @@ print(result["log"])
 
 **最小可运行例子**（3 节点线性图）：
 
-```python
+::: code-group
+
+```python [Python]
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.graph import END, START, StateGraph
 from typing_extensions import TypedDict
@@ -133,6 +152,35 @@ for s in graph.get_state_history(cfg):
     print(s.next, s.values)
 ```
 
+```typescript [TypeScript]
+import { Annotation, END, MemorySaver, START, StateGraph } from "@langchain/langgraph";
+
+const S = Annotation.Root({
+  log: Annotation<string[]>({ reducer: (a, b) => a.concat(b), default: () => [] }),
+  amount: Annotation<number>({ reducer: (_p, n) => n, default: () => 0 }),
+  decision: Annotation<string>({ reducer: (_p, n) => n, default: () => "" }),
+});
+
+const b = new StateGraph(S)
+  .addNode("s1", () => ({ log: ["s1:查订单"] }))
+  .addNode("s2", (s) => ({ log: [s.amount > 1000 ? "s2:判定=True" : "s2:判定=False"] }))
+  .addNode("s3", (s) => ({ log: [`s3:${s.decision}`] }))
+  .addEdge(START, "s1")
+  .addEdge("s1", "s2")
+  .addEdge("s2", "s3")
+  .addEdge("s3", END);
+
+const graph = b.compile({ checkpointer: new MemorySaver() });
+const cfg = { configurable: { thread_id: "tt1" } };
+await graph.invoke({ log: [], amount: 5000, decision: "驳回" }, cfg);
+
+for await (const s of await graph.getStateHistory(cfg)) {
+  console.log(s.next, s.values);
+}
+```
+
+:::
+
 实测输出（**5 条**，新 → 旧）：
 
 ```
@@ -144,6 +192,7 @@ for s in graph.get_state_history(cfg):
 ```
 
 > ⚠️ **3 个节点却存了 5 条**——多出来的是 ① `s3` 跑完那张（`next=()`）和 ② 输入那张（`next=('__start__',)`）。
+> 🇹🇸 **TS 侧同样 5 条**，位置一一对应；差异只有两处：`next` 是数组 `["s3"]` 而非元组 `('s3',)`，`metadata` 里**没有** `writes` 字段（只有 `source` / `step` / `parents` / `thread_id`）。
 
 #### 快照里到底有哪些字段
 
@@ -159,6 +208,13 @@ for s in graph.get_state_history(cfg):
 | `created_at` | 时间戳 | `2026-10-15T03:35:30.320715+00:00` |
 | `tasks` | 待执行任务 | `()` |
 | `interrupts` | 中断信息（课 8） | `()` |
+
+> 🇹🇸 **TS 侧字段对照（实测 `Object.keys(snapshot)`）**：`values, next, tasks, metadata, config, createdAt, parentConfig` —— 共 7 个键。差异四处：
+>
+> 1. **`parent_config` → `parentConfig`**（驼峰）；
+> 2. **`created_at` → `createdAt`，且类型是 `string`**（实测 `"2026-10-19T07:43:50.773Z"`），不是 `Date`；
+> 3. **没有顶层 `interrupts` 字段**（课 8 已知：要看 `tasks[0].interrupts`）；
+> 4. **`metadata` 没有 `writes` 键**（实测只有 `{"source":"loop","step":2,"parents":{},"thread_id":"y1"}`），且 `tasks[].interrupts` 在普通执行时是 `[]` 而非 `()`。
 
 **`parent_config` 那根链**（实测）：
 
@@ -177,11 +233,23 @@ for s in graph.get_state_history(cfg):
 
 #### 只读地"回到过去"
 
-```python
+::: code-group
+
+```python [Python]
 old = list(graph.get_state_history(cfg))[2]
 snap = graph.get_state(old.config)
 print(snap.next, snap.values)
 ```
+
+```typescript [TypeScript]
+const hist = [];
+for await (const s of await graph.getStateHistory(cfg)) hist.push(s);
+const old = hist[2];
+const snap = await graph.getState(old.config);
+console.log(snap.next, snap.values);
+```
+
+:::
 
 实测：
 
@@ -194,9 +262,18 @@ next=('s2',)   values={'log': ['s1:查订单'], 'amount': 5000, 'decision': '驳
 
 #### 翻页参数
 
-```python
+::: code-group
+
+```python [Python]
 graph.get_state_history(cfg, *, filter=None, before=None, limit=None)
 ```
+
+```typescript [TypeScript]
+graph.getStateHistory(cfg, { filter: {}, before: cfg, limit: 2 });
+// 类型来源：CheckpointListOptions = { limit?: number; before?: RunnableConfig; filter?: Record<string, any> }
+```
+
+:::
 
 实测（历史 6 条）：
 
@@ -207,25 +284,46 @@ before=第1条的config -> 4 条: ['s3', 's2', 's1', '__start__']
 ```
 
 > ✅ `limit` 控制条数，`before` 从某条**更早**的开始取（不含它自己）。历史很长时用这两个翻页。
+> 🇹🇸 **TS 侧三个参数同名同义**（`{ limit, before, filter }`，签名 `getStateHistory(config, options?)`），实测 `limit: 2` 得 2 条、`before: 第0条.config` 得 7 条（8 条历史里去掉最新那条）。
 
 #### 🔴 没有 checkpointer 就没有历史（实测）
 
-```python
+::: code-group
+
+```python [Python]
 g_nocp = b.compile()
 list(g_nocp.get_state_history(cfg))                # ValueError: No checkpointer set
 g_nocp.update_state(cfg, {"decision": "x"})        # ValueError: No checkpointer set
 ```
 
+```typescript [TypeScript]
+const gNoCp = b.compile();
+for await (const _ of await gNoCp.getStateHistory(cfg)) { }  // Error: No checkpointer set
+await gNoCp.updateState(cfg, { decision: "x" });             // Error: No checkpointer set
+```
+
+:::
+
 > ✅ 课 8 说"interrupt 能停不能恢复"，课 9 更彻底：**time-travel 干脆不存在**。阶段 2 先学 checkpointer 的原因就在这。
+> 🇹🇸 TS 侧报错文本相同（`No checkpointer set`，附 `MISSING_CHECKPOINTER` 的 troubleshooting 链接），但**异常类型是 `Error`** 而非 Python 的 `ValueError`。
 
 #### 🐞 一个静默陷阱：手工拼 `checkpoint_id` 不校验
 
-```python
+::: code-group
+
+```python [Python]
 fake = {"configurable": {"thread_id": "o", "checkpoint_id": "不存在的id"}}
 graph.get_state(fake)     # -> {}   （不报错！）
 ```
 
-> ⚠️ 拼错 `checkpoint_id` **不报错**，返回空状态 `{}`——你会以为"回到原点了"。**所以分叉一定要用 `get_state_history` 返回的 `config`，不要手工拼。**
+```typescript [TypeScript]
+const fake = { configurable: { thread_id: "o", checkpoint_id: "不存在的id" } };
+await graph.getState(fake); // -> values={} next=[]  （同样不报错！）
+```
+
+:::
+
+> ⚠️ 拼错 `checkpoint_id` **不报错**，返回空状态 `{}`——你会以为"回到原点了"。**所以分叉一定要用 `get_state_history` 返回的 `config`，不要手工拼。** TS 侧实测 `values: {}` / `next: []`，行为一致。
 
 #### 常见误区
 
@@ -242,19 +340,21 @@ graph.get_state(fake)     # -> {}   （不报错！）
 
 | 本课说法（人话） | 行业标准叫法 | 典型配置 / 在哪遇到 | 代价 |
 |---|---|---|---|
-| 每步拍的照片 | **StateSnapshot** | `get_state_history(config)` 的返回元素 | 量大，需后端清理策略 |
-| 翻回看 | **get_state_history** | `graph.get_state_history(cfg, limit=10)` | 不挂 checkpointer 直接抛错 |
-| 上一步照片在哪 | **parent_config** | `snapshot.parent_config` | 最后一张是 `None` |
-| 照片编号 | **checkpoint_id** | `snapshot.config['configurable']['checkpoint_id']` | 手工拼错不报错，返回 `{}` |
-| 第几步 | **metadata['step']** | `snapshot.metadata` | 输入那张是 `-1` |
-| 只读回看 | **get_state(历史 config)** | `graph.get_state(old.config)` | 不改变图 |
+| 每步拍的照片 | **StateSnapshot** | `getStateHistory(config)` / `get_state_history(config)` 的返回元素 | 量大，需后端清理策略 |
+| 翻回看 | **get_state_history / getStateHistory** | `graph.getStateHistory(cfg, { limit: 10 })` | 不挂 checkpointer 直接抛错 |
+| 上一步照片在哪 | **parent_config / parentConfig** | `snapshot.parentConfig` | 最后一张是 `None` / `undefined` |
+| 照片编号 | **checkpoint_id** | `snapshot.config.configurable.checkpoint_id` | 手工拼错不报错，返回 `{}` |
+| 第几步 | **metadata.step** | `snapshot.metadata` | 输入那张是 `-1` |
+| 只读回看 | **get_state(历史 config) / getState** | `graph.getState(old.config)` | 不改变图 |
 
 > 中文均为社区常用译法 / 本文自拟，官方未定名中文，检索用英文。
 
 #### 官方文档
 
-- [Use time-travel（快照链与回放）](https://docs.langchain.com/oss/python/langgraph/use-time-travel)
-- [Checkpointers（存档后端）](https://docs.langchain.com/oss/python/langgraph/checkpointers)
+- [Use time-travel（Python · 快照链与回放）](https://docs.langchain.com/oss/python/langgraph/use-time-travel)
+- [Use time-travel（TypeScript · 快照链与回放）](https://docs.langchain.com/oss/javascript/langgraph/use-time-travel)
+- [Checkpointers（Python）](https://docs.langchain.com/oss/python/langgraph/checkpointers)
+- [Persistence（TypeScript）](https://docs.langchain.com/oss/javascript/langgraph/persistence)
 
 ---
 
@@ -282,11 +382,23 @@ graph.get_state(fake)     # -> {}   （不报错！）
 
 **形态一：同 thread 分叉**（状态和进度都保留）
 
-```python
+::: code-group
+
+```python [Python]
 old = list(graph.get_state_history(cfg))[2]      # next=('s2',) 那张
 fork_cfg = graph.update_state(old.config, {"decision": "批准"})
 print(graph.get_state(fork_cfg).next, graph.get_state(fork_cfg).values)
 ```
+
+```typescript [TypeScript]
+const hist = [];
+for await (const s of await graph.getStateHistory(cfg)) hist.push(s);
+const old = hist[2]; // next=["s2"] 那张
+const forkCfg = await graph.updateState(old.config, { decision: "批准" });
+console.log((await graph.getState(forkCfg)).next, (await graph.getState(forkCfg)).values);
+```
+
+:::
 
 实测：
 
@@ -298,10 +410,19 @@ next=('s2',)   values={'log': ['s1:查订单'], 'decision': '批准'}
 
 继续跑：
 
-```python
+::: code-group
+
+```python [Python]
 result = graph.invoke(None, config=fork_cfg)
 print(result["log"])
 ```
+
+```typescript [TypeScript]
+const result = await graph.invoke(null, forkCfg);
+console.log(result.log);
+```
+
+:::
 
 实测：
 
@@ -317,7 +438,7 @@ print(result["log"])
 分叉后调用:   ['b', 'c']      ← 只有分叉点之后的被重跑
 ```
 
-> ✅ **`a` 没重跑**——前面几步的成果保住了。这就是本课最实在的价值。
+> ✅ **`a` 没重跑**——前面几步的成果保住了。这就是本课最实在的价值。TS 侧实测同样是 `["s2","s3"]`，`s1` 没重跑。
 
 **代价：原历史被改写**
 
@@ -340,11 +461,25 @@ print(result["log"])
 
 **形态二：跨 thread 分叉**（第二幕的答案）
 
-```python
+::: code-group
+
+```python [Python]
 old = list(graph.get_state_history(cfg))[2]
 fork_cfg = {"configurable": {**old.config["configurable"], "thread_id": "fork1"}}
 graph.update_state(fork_cfg, {"decision": "批准"})
 ```
+
+```typescript [TypeScript]
+const hist = [];
+for await (const s of await graph.getStateHistory(cfg)) hist.push(s);
+const old = hist[2];
+const forkCfg = {
+  configurable: { ...old.config.configurable, thread_id: "fork1" },
+};
+await graph.updateState(forkCfg, { decision: "批准" });
+```
+
+:::
 
 实测对比（**这是本课最强反直觉点**）：
 
@@ -359,19 +494,37 @@ graph.update_state(fork_cfg, {"decision": "批准"})
 >
 > 因为 `update_state` 是按 `config` 找存档的。你换了 `thread_id`，但 `checkpoint_id` 还是旧 thread 的——**新 thread 里根本没有这个存档**。实测：
 
-```python
+::: code-group
+
+```python [Python]
 graph.get_state(fork_cfg)     # -> {}  next=()     空状态！
 ```
+
+```typescript [TypeScript]
+await graph.getState(forkCfg); // -> values={} next=[]  空状态！
+```
+
+:::
 
 > 所以 `update_state` 是在**一个空状态上**做更新，结果自然只剩你塞进去的那一项，`next` 也只能是起点。
 
 **那怎么正确跨 thread 分叉？**——先整体搬 `values`：
 
-```python
+::: code-group
+
+```python [Python]
 new_thread = {"configurable": {"thread_id": "fk2"}}
 graph.update_state(new_thread, old.values)                  # ① 先把历史状态整体搬过去
 graph.update_state(new_thread, {"decision": "批准"})        # ② 再改要改的
 ```
+
+```typescript [TypeScript]
+const newThread = { configurable: { thread_id: "fk2" } };
+await graph.updateState(newThread, old.values); // ① 先把历史状态整体搬过去
+await graph.updateState(newThread, { decision: "批准" }); // ② 再改要改的
+```
+
+:::
 
 实测：
 
@@ -385,21 +538,37 @@ graph.update_state(new_thread, {"decision": "批准"})        # ② 再改要改
 > 1. **`next` 仍是 `('s1',)`**——进度**带不过去**，一定从头跑；
 > 2. 输出 `['s1', 's1', ...]`——**`s1` 出现了两次**！因为搬过去的 `log` 里已经有 `s1`，重跑又追加一次。
 
+> 🇹🇸 **TS 侧实测有两处细节（重要差异）**：
+> 1. 跨 thread 分叉后，`updateState` 返回的坐标里 `thread_id` 已变成新 thread，但 `checkpoint_id` 仍是旧 thread 那个 —— 拿**带旧 `checkpoint_id` 的 config**（即你传进去的 `fork`）去 `getState` → `values={}`、`next=[]`；拿 `updateState` **的返回值**或**只含新 `thread_id` 的 config** 去 `getState` → 能读到 `{log:[], amount:0, decision:"批准"}`、`next=["s1"]`。所以 Python 那句"`get_state(fork_cfg)` 返回 `{}`"在 TS 里**取决于你拿哪个 config 查**，写法上要统一用"仅 thread_id"的 config。
+> 2. 因此 TS 侧"状态只剩你塞进去的那一项"这个现象**更明显**：`log` 变成 `[]`（连初始空数组都是重新默认出来的），`amount` 也回到 `0`。
+
 > 🔑 **结论：Graph API 层面，跨 thread 分叉 = "状态能带，进度不能带"。** 想要"原历史不动 + 不重跑"，`update_state` 做不到。
 
 #### `as_node` 参数
 
-```python
+::: code-group
+
+```python [Python]
 graph.update_state(config, values, as_node=None, task_id=None)
 ```
+
+```typescript [TypeScript]
+graph.updateState(config, values, asNode?: string, taskId?: string);
+```
+
+:::
 
 | 用法 | 效果（实测） |
 |---|---|
 | 不传 `as_node` | 沿用"上一个更新状态的节点"；有歧义时会抛错 |
 | `as_node="s2"` | 明确声明"这次更新来自 s2" |
 
-> ⚠️ **第三参数是 `as_node`，不是 thread_id**——初学时很容易写成 `update_state(old.config, values, new_thread)`，实测直接 `TypeError: unhashable type: 'dict'`。
-> ⚠️ `as_node` 传了不存在的节点名会抛错（源码 `if as_node not in self.nodes`）。
+> ⚠️ **第三参数是 `as_node`，不是 thread_id**——初学时很容易写成 `update_state(old.config, values, new_thread)`，实测直接 `TypeError: unhashable type: 'dict'`。TS 侧第三参是 `asNode`（驼峰），传错类型是编译期报错而非运行时报错。
+> ⚠️ `as_node` 传了不存在的节点名会抛错（源码 `if as_node not in self.nodes`）；TS 侧实测报 `Node "no_such_node" does not exist`。
+> 🇹🇸 **`asNode` 在 TS 侧决定的是"分叉后从哪继续"**（实测三种取值，同一历史点 `next=["s2"]`）：
+> - `asNode="s1"` → `next=["s2"]`（等价于不传）
+> - `asNode="s2"` → `next=["s3"]`（跳过 s2）
+> - `asNode="s3"` → `next=[]`（直接收尾）
 
 #### 分叉 + interrupt（回扣课 8）
 
@@ -431,10 +600,19 @@ graph.update_state(config, values, as_node=None, task_id=None)
 >
 > 但这里还有一层。只改 `risk` 仍然不够——因为跨 thread 分叉 `next` 回到起点重跑，`算风险` 会按 `amount=5000` **把 `risk` 重新算回 0.9**。实测改 `amount` 才真正生效：
 
-```python
+::: code-group
+
+```python [Python]
 graph.update_state(fork, {"amount": 500, "risk": 0.1})   # ← 改最上游依据
 # -> 最终决定: 批准
 ```
+
+```typescript [TypeScript]
+await graph.updateState(fork, { amount: 500, risk: 0.1 }); // ← 改最上游依据
+// -> 最终决定: 批准
+```
+
+:::
 
 > 💡 **判据**：改完之后问一句——**从分叉点往后的每个节点，还会不会把你改的字段重新算一遍？** 会，就继续往上找，直到找到那个不会被重算的字段。
 > 💡 同 thread 分叉也一样——只不过程度轻一些（分叉点之后的节点仍会重跑并重算）。
@@ -463,18 +641,20 @@ graph.update_state(fork, {"amount": 500, "risk": 0.1})   # ← 改最上游依�
 
 | 本课说法（人话） | 行业标准叫法 | 典型配置 / 在哪遇到 | 代价 |
 |---|---|---|---|
-| 从过去某点另起一条 | **fork / 分叉** | `update_state(历史 config, {...})` | 同 thread 会改写原历史 |
-| 改几个字 | **update_state** | `graph.update_state(cfg, values, as_node="s2")` | 第三参是 `as_node` 不是 thread |
-| 从那继续跑 | **invoke(None, config=fork)** | `graph.invoke(None, config=fork_cfg)` | 只重跑 next 之后的 |
-| 声明这次更新来自谁 | **as_node** | `update_state(cfg, v, as_node="s2")` | 传错节点名抛错 |
-| 另存一份 | **换 thread_id** | `{"configurable": {"thread_id": "fork1"}}` | 状态和进度都丢 |
+| 从过去某点另起一条 | **fork / 分叉** | `update_state(历史 config, {...})` / `updateState(历史 config, {...})` | 同 thread 会改写原历史 |
+| 改几个字 | **update_state / updateState** | `graph.updateState(cfg, values, "s2")` | 第三参是 `asNode` 不是 thread |
+| 从那继续跑 | **invoke(None) / invoke(null)** | `graph.invoke(null, forkCfg)` | 只重跑 next 之后的 |
+| 声明这次更新来自谁 | **as_node / asNode** | `updateState(cfg, v, "s2")` | 传错节点名抛错 |
+| 另存一份 | **换 thread_id** | `{ configurable: { thread_id: "fork1" } }` | 状态和进度都丢 |
 
 > 中文均为社区常用译法。
 
 #### 官方文档
 
-- [Use time-travel（分叉重跑）](https://docs.langchain.com/oss/python/langgraph/use-time-travel)
-- [Checkpointers（存档后端）](https://docs.langchain.com/oss/python/langgraph/checkpointers)
+- [Use time-travel（Python · 分叉重跑）](https://docs.langchain.com/oss/python/langgraph/use-time-travel)
+- [Use time-travel（TypeScript · 分叉重跑）](https://docs.langchain.com/oss/javascript/langgraph/use-time-travel)
+- [Checkpointers（Python）](https://docs.langchain.com/oss/python/langgraph/checkpointers)
+- [Persistence（TypeScript）](https://docs.langchain.com/oss/javascript/langgraph/persistence)
 
 ---
 
@@ -482,7 +662,7 @@ graph.update_state(fork, {"amount": 500, "risk": 0.1})   # ← 改最上游依�
 
 ### 4.1 机制验证
 
-> ✅ 实测于 langgraph 1.2.11 / Python 3.12（在 `../langchain/playground` 以 `uv run` 隔离执行）
+> ✅ Python 侧实测于 langgraph 1.2.11 / Python 3.12（在 `../langchain/playground` 以 `uv run` 隔离执行）；TypeScript 侧实测于 `@langchain/langgraph` 1.5.x / Node 22（在 `playground-ts` 以 `npm run l09` 执行）
 
 **验证一：历史条数与内容**（3 节点线性图，5 条）
 
@@ -608,6 +788,67 @@ before=第1条 -> 4 条
   next=()     approved='批准'
   next=('p',) approved=''
 ```
+
+#### 🇹🇸 TS 侧实测（`playground-ts/09-time-travel.ts`，`@langchain/langgraph` 1.5.x）
+
+> 运行：`cd langchain/langgraph/playground-ts && npm run l09`（12 项验证逐条打印）
+
+关键输出（原样摘录）：
+
+```
+验证一 历史条数: 5   首次执行调用: ["s1","s2","s3"]
+  [0] next=[] step=3 source=loop log=["s1:查订单","s2:判定=true","s3:驳回"]
+  [1] next=["s3"] step=2 source=loop
+  [2] next=["s2"] step=1 source=loop
+  [3] next=["s1"] step=0 source=loop
+  [4] next=["__start__"] step=-1 source=input
+
+验证二 getState(old.config) -> next: ["s2"]  log: ["s1:查订单"]
+        当前最新仍是 next: []   ← 图没动
+
+验证三 updateState 返回 keys: configurable
+        分叉后 next: ["s2"]  decision: 批准
+        分叉后历史条数: 6（5 → 6）
+        跑完 log: ["s1:查订单","s2:判定=true","s3:批准"]
+        重跑调用: ["s2","s3"]   ← s1 没重跑
+
+验证五 跨 thread 分叉：
+        用旧 config（带旧 checkpoint_id）查: values={} next=[]
+        仅 thread_id 查: values={"log":[],"amount":0,"decision":"批准","risk":0} next=["s1"]
+        原 thread 仍完好: ["s1:查订单","s2:判定=true","s3:驳回"]
+
+验证六 搬 values 后 next: ["s1"]；跑完 log: ["s1:查订单","s1:查订单",...]  ← s1 出现两次
+
+验证七 asNode=undefined -> next=["s2"] ／ s1 -> ["s2"] ／ s2 -> ["s3"] ／ s3 -> []
+        asNode 不存在: Node "no_such_node" does not exist
+
+验证八 getStateHistory: No checkpointer set ／ updateState: No checkpointer set
+验证九 假 checkpoint_id -> values={} next=[]   ← 不报错！
+验证十 默认 5 ／ limit=2 -> 2 ／ before=第0条 -> 4
+验证十一 只改 decision -> 判定:驳回 → 最终驳回（被重算覆盖）
+         改 risk=0.1（从算风险前分叉）-> 最终驳回（amount 又算回 0.9）
+         改 amount=500 -> 判定:批准 → 最终批准（生效）
+验证十二 历史条数 5 -> 6 -> 7
+```
+
+**与 Python 一致的 8 点**
+
+1. 历史条数：3 节点 → 5 条，位置与 `step`（3/2/1/0/-1）、`source`（loop/input）完全对应。
+2. 只读回看：`getState(历史 config)` 不改变图，最新仍是终态。
+3. 同 thread 分叉：`next` 与 `values` 都保住，历史 5 → 6（跑完 8）。
+4. 重跑范围：只重跑 `next` 之后的节点（`["s2","s3"]`，`s1` 未重跑）。
+5. 跨 thread 分叉：原 thread 完好，新 thread `next` 回到 `["s1"]`、`values` 只剩 update 的项。
+6. 先搬 `values` 可保住状态，但 `s1` 会出现两次。
+7. 无 checkpointer：`getStateHistory` / `updateState` 都报 `No checkpointer set`。
+8. 假 `checkpoint_id` 不报错，返回空状态。
+
+**与 Python 不同的 5 点（务必注意）**
+
+1. **`next` 是数组不是元组**：`["s2"]` vs `('s2',)`；`values` 里布尔值也会被 JSON 化成小写 `true`（Python 是 `True`）。
+2. **`metadata` 没有 `writes` 键**：TS 只有 `{source, step, parents, thread_id}`；Python 有 `writes`。
+3. **`parentConfig` / `createdAt` 命名与类型**：驼峰命名；`createdAt` 是 **`string`**（`"2026-10-19T07:43:50.773Z"`），不是 `Date`。
+4. **跨 thread 分叉的"空状态"取决于用哪个 config 查**：拿带旧 `checkpoint_id` 的 config 查是 `{}`；拿 `updateState` 返回值或只含新 `thread_id` 的 config 查，能读到 `{log:[], amount:0, decision:"批准"}`、`next=["s1"]`。Python 只有前一种表现。
+5. **`asNode` 语义更明确**：同一历史点（`next=["s2"]`）下，`asNode` 直接决定分叉后从哪继续 —— `s1`→`["s2"]`、`s2`→`["s3"]`、`s3`→`[]`；Python 文档只描述为"声明这次更新来自哪个节点"，不强调这个跳转效果。
 
 ### 4.2 应用实战
 

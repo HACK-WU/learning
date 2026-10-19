@@ -41,7 +41,9 @@
 
 你把课 8 的 interrupt 搬过来，想在"清洗"之后暂停：
 
-```python
+::: code-group
+
+```python [Python]
 from langgraph.func import entrypoint, task
 from langgraph.types import interrupt
 
@@ -57,20 +59,55 @@ def flow(x):
     return {"a": a, "b": b, "ans": ans}
 ```
 
+```typescript [TypeScript]
+import { entrypoint, interrupt, MemorySaver, task } from "@langchain/langgraph";
+
+const load = task("load", async (x: number) => x + 1);
+
+const flow = entrypoint({ name: "flow", checkpointer: new MemorySaver() },
+  async (x: number) => {
+    const a = await load(x);
+    const ans = await interrupt({ question: "继续吗", a });
+    const b = transform(a);        // ← 这个函数没包成 task
+    return { a, b, ans };
+  });
+```
+
+:::
+
 跑起来，`resume` 之后你数了一下日志——**`transform` 之前的步骤被重跑了一遍**。
+
+> 💡 **TS 侧有两条写法差异**：① `entrypoint` 是 **`entrypoint({ name, checkpointer }, fn)`——选项对象在前、函数在后**（Python 是装饰器）；② `task("name", fn)` 也是**名字在前**，返回的函数被调用后给的是 **`Promise`**，配 `await` 用（Python 是 `.result()`）。
 
 更怪的是，你只是想先跑通看看：
 
-```python
+::: code-group
+
+```python [Python]
 flow.invoke(1)          # ← 没传 config
 ```
+
+```typescript [TypeScript]
+await flow.invoke(1);   // ← 没传 config
+```
+
+:::
 
 结果：
 
 ```
+── Python ──
 ValueError: Checkpointer requires one or more of the following
 'configurable' keys: thread_id, checkpoint_ns, checkpoint_id
+
+── TypeScript ──
+Error: Failed to put checkpoint. The passed RunnableConfig is missing a required
+"thread_id" field in its "configurable" property. When using a checkpointer,
+you must pass a "thread_id" so the checkpointer knows which conversation thread
+to persist state for. ...
 ```
+
+> ✅ **这一条两侧完全一致（连"必须传 config"都是硬要求）**，只是报错文本与异常类型不同：Python `ValueError`，TS 是普通 `Error` 且文案长得像一封说明信。
 
 > ❓ **问题**：**同样是"暂停再恢复"，为什么 Graph API 不会重跑前面的节点，这里却会？为什么连 `config` 都成了必填？**
 
@@ -116,7 +153,9 @@ ValueError: Checkpointer requires one or more of the following
 
 **最小形态**：
 
-```python
+::: code-group
+
+```python [Python]
 from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.func import entrypoint, task
 
@@ -136,21 +175,47 @@ def flow(x: int) -> int:
 print(flow.invoke(1, {"configurable": {"thread_id": "t1"}}))     # -> 3
 ```
 
-> ⚠️ **`config` 是必填的**（挂了 checkpointer 时）。不传直接 `ValueError`，而 Graph API 不传也能跑。
+```typescript [TypeScript]
+import { entrypoint, MemorySaver, task } from "@langchain/langgraph";
+
+const addOne = task("addOne", async (x: number) => x + 1);
+
+const flow = entrypoint({ name: "flow", checkpointer: new MemorySaver() },
+  async (x: number) => {
+    const a = await addOne(x);
+    const b = await addOne(a);
+    return b;
+  });
+
+console.log(await flow.invoke(1, { configurable: { thread_id: "t1" } }));   // -> 3
+```
+
+:::
+
+> ⚠️ **`config` 是必填的**（挂了 checkpointer 时）。不传直接报错，而 Graph API 不传也能跑。
+> 💡 **TS 的两个硬约束**：① `entrypoint` 的选项对象里 **`name` 是必填**（不是可选的调试字段）；② **`task` 必须给名字**——`task("addOne", fn)`，不像 Python 能靠 `@task` 装饰器自动取函数名。
 
 **`@entrypoint` 编译出来是什么**——实测：
 
 ```
+── Python ──
 entrypoint 对象类型: Pregel
 有 invoke: True      有 stream: True
 有 get_state: True   有 update_state: True   有 get_state_history: True
+
+── TypeScript ──
+构造器: Pregel
+有 invoke: true      有 stream: true
+有 getState: true    有 updateState: true    有 getStateHistory: true
 ```
 
 > 🔑 **和 Graph API 是同一个东西**。所以课 4–课 10 学到的**全部能力都能用**：interrupt、time-travel、retry、流式、子图。
 
 **并发靠"不急着取"**（实测）：
 
-```python
+::: code-group
+
+```python [Python]
 @entrypoint(checkpointer=InMemorySaver())
 def parallel(x: int) -> int:
     f1 = slow_add(x)          # 0.3s
@@ -158,12 +223,29 @@ def parallel(x: int) -> int:
     return f1.result() + f2.result()   # 先全提交，再统一收
 ```
 
+```typescript [TypeScript]
+const parallel = entrypoint({ name: "parallel", checkpointer: new MemorySaver() },
+  async (x: number) => {
+    const f1 = slowAdd(x);         // 0.3s，返回 Promise，先不 await
+    const f2 = slowAdd(x + 10);    // 0.3s，同时起飞
+    return (await f1) + (await f2); // 先全提交，再统一收
+  });
 ```
+
+:::
+
+```
+── Python ──
 并发两个 0.3s task -> 14  耗时 0.30s
 串行（立即 .result()） -> 14  耗时 0.60s
+
+── TypeScript ──
+并发 -> 14  耗时 0.31s
+串行 -> 14  耗时 0.60s
 ```
 
 > 💡 对照课 4 的 `Send`：**Functional API 的动态扇出就是列表推导**——`[work(i) for i in items]` 先全部提交，再 `[f.result() for f in futs]` 统一收。实测 `f8([1,2,3]) -> {'results': [10, 20, 30]}`。
+> 💡 **TS 版本更自然**：`task` 调出来本来就是 `Promise`，所以扇出就是 `await Promise.all(items.map((i) => work(i)))`——实测 `{"results":[10,20,30]}`，和 Python 逐项一致。
 
 ---
 
@@ -171,7 +253,9 @@ def parallel(x: int) -> int:
 
 这是本课**最重要**的一点。实测对照：
 
-```python
+::: code-group
+
+```python [Python]
 @task
 def t_a(x):
     print(f"[副作用] t_a 真的跑了")
@@ -185,19 +269,48 @@ def flow(x):
     return {...}
 ```
 
+```typescript [TypeScript]
+const tA = task("tA", async (x: number) => {
+  console.log("[副作用] tA 真的跑了，输入", x);
+  return x + 1;
+});
+
+const flow = entrypoint({ name: "flow", checkpointer: new MemorySaver() },
+  async (x: number) => {
+    const a = await tA(x);
+    const ans = await interrupt({ question: "继续吗" });
+    const b = await tB(a);
+    return { a, b, ans };
+  });
+```
+
+:::
+
 实测输出：
 
 ```
+── Python ──
 第一次:  [副作用] t_a 真的跑了，输入 1    t_a=1  t_b=0
 resume:  [副作用] t_b 真的跑了，输入 2    t_a=1  t_b=1   ← t_a 没重跑！
+
+── TypeScript ──
+第一次:  [副作用] tA 真的跑了，输入 1    tA 次数= 1  tB 次数= 0
+resume:  [副作用] tB 真的跑了，输入 2    tA 次数= 1  tB 次数= 1   ← tA 没重跑
 ```
 
 **对照：不用 `@task` 的普通函数**
 
 ```
+── Python ──
 第一次:  [副作用] plain_a 真的跑了   执行 1 次
 resume:  [副作用] plain_a 真的跑了   执行 2 次   ← 又跑了一遍
+
+── TypeScript ──
+第一次:  [副作用] plain_a 真的跑了  执行 1 次
+resume:  [副作用] plain_a 真的跑了  执行 2 次   ← 又跑了一遍
 ```
+
+> ✅ **这一条是两套 API、两种语言里都最稳定的语义**：持久化单位就是 `task` 的边界，两侧一字不差。
 
 ![task 持久化语义](../assets/langgraph-task-persistence.svg)
 
@@ -218,21 +331,41 @@ resume 2:  完成      -> 累计 3 次
 
 ---
 
-##### `previous` 参数：Functional API 的"状态"
+##### `previous` 参数：Functional API 的"状态"（🔴 TS 没有这个形参）
 
-```python
+::: code-group
+
+```python [Python]
 @entrypoint(checkpointer=InMemorySaver())
 def f10(x, previous=None):
     prev = previous or 0
     return prev + x
 ```
 
+```typescript [TypeScript]
+const f10 = entrypoint({ name: "f10", checkpointer: new MemorySaver() },
+  async (x: number) => {
+    const prev = getPreviousState<number>() ?? 0;   // ← 用函数取，不是形参
+    return prev + x;
+  });
+```
+
+:::
+
 实测：
 
 ```
+── Python ──
 第1次 invoke(10): 10
 第2次 invoke(5) : 15       <- previous 就是上次的返回值
+
+── TypeScript ──
+第1次 invoke(10): 10
+第2次 invoke(5) : 15       <- 需要 getPreviousState
 ```
+
+> 🔴 **TS 的 `entrypoint` 回调只接受两个参数**：`(input, config)`。第二个位置被 `config` 占了，**没有 `previous` 这个形参**——要用 `getPreviousState<T>()` 从当前上下文里读。
+> 💡 **TS 还多一个 `entrypoint.final({ value, save })`**：可以把"返回给调用方的值"和"写进存档点的值"分开。实测 `value: prev, save: 2*x+prev` → 第 1 次返回 `0`、第 2 次返回 `20`（返回 0 是因为首次 `previous` 为空）。Python 侧没有这个 API。
 
 **对照 Graph API**（同样"累加"语义）：
 
@@ -245,68 +378,100 @@ Graph API 第2次 (inc=5)          : 5       <- 没有 reducer 就是覆盖
 
 ---
 
-##### 三个装饰参数（课 10 的结论直接迁移）
+##### 三个配置项（课 10 的结论直接迁移）
 
-```python
+::: code-group
+
+```python [Python]
 @task(retry_policy=RetryPolicy(max_attempts=3))
 @task(cache_policy=CachePolicy(ttl=60))
 @task(timeout=0.3)          # 同步 task 装饰时就抛错
 ```
 
-**`retry_policy`**——课 10 的 `default_retry_on` 完全适用（实测）：
+```typescript [TypeScript]
+task({ name: "a", retry: { maxAttempts: 3 } }, fn)         // ← 键名是 retry，不是 retryPolicy
+task({ name: "b", cachePolicy: { ttl: 60 } }, fn)
+task({ name: "c", timeout: 300 }, fn)                     // ← 毫秒，且 TS 不抛错
+```
+
+:::
+
+**`retry_policy` / `retry`**——课 10 的默认策略结论完全适用（实测）：
 
 ```
+── Python ──
 NetError + max_attempts=3 -> 执行 3 次后成功
 ValueError                -> 执行 1 次（默认不重试）
+
+── TypeScript ──
+NetError + maxAttempts=3  -> 执行 3 次后成功
+new Error("代码bug")      -> 执行 3 次（配了 retry 后的默认黑名单；与课 10 一致，不配则 0 重试）
 ```
 
-**`cache_policy`**——**要两头配**（实测）：
+> ⚠️ **键名陷阱**：TS 的 `task` 选项里这个键叫 **`retry`**，不是 `retryPolicy`（后者是 `addNode` 用的）。写错不报错、静默不生效——`task({ name, retryPolicy: ... })` 会被当成未知字段忽略。
+
+**`cache_policy` / `cachePolicy`**——**要两头配**（实测）：
 
 ```
+── Python ──
 A) task 有 cache_policy，entrypoint 没配 cache -> 同 thread 再来，执行 2 次（没缓存）
 B) task 有 + entrypoint 配了 cache           -> 同 thread 1 次，新 thread 也 1 次
+
+── TypeScript ──
+A) task 有 cachePolicy，entrypoint 无 cache   -> 执行 2 次（没缓存）
+B) task 有 + entrypoint 有 cache（不同 thread）-> 执行 1 次  <- 缓存跨 thread
 ```
 
-> 🔑 **`cache_policy` 必须配 `entrypoint(cache=...)` 才生效**，而且**缓存是跨 thread 的**。
+> 🔑 **`cache_policy` 必须配 `entrypoint(cache=...)` 才生效**，而且**缓存是跨 thread 的**（两侧一致）。
+> 🔴 **TS 的 cache 实例有坑**：必须用 **`@langchain/langgraph-checkpoint` 的 `InMemoryCache`**。误用 `@langchain/core/caches` 里的同名类会通过类型检查，但运行时抛 `TypeError: this.cache[type] is not a function`——两个 `InMemoryCache` 接口不兼容（LangGraph 的要 `get/set/clear` 三件套，core 的是发给 LLM 的缓存）。
 
-**`timeout`**——比 Graph API **更早**报错（实测）：
+**`timeout`**——Python 比 Graph API **更早**报错，TS 仍然不报（实测）：
 
 ```
+── Python ──
 @task(timeout=0.3) 同步 -> ValueError: Node timeouts are only supported for async nodes...
+
+── TypeScript ──
+task({ name: "syncSlow", timeout: 100 }, async (x) => x)  -> 定义阶段 ok（不抛）
+async 慢 task + timeout: 100 -> NodeTimeoutError: Node "slow" exceeded its run timeout of 100ms
 ```
 
-> ⚠️ **Graph API 是 `compile()` 时才抛，Functional API 是装饰器求值那一刻就抛**——你连函数都定义不出来。
+> ⚠️ **Graph API 是 `compile()` 时才抛，Python 的 Functional API 是装饰器求值那一刻就抛**——你连函数都定义不出来。
+> ⚠️ **TS 侧没有任何编译期拦截**：`task({ timeout })` 对同步/异步都只是运行期判罚（沿用课 10 的协作式取消语义）。
 
 #### 常见误区
 
 1. **"`@task` 会缓存结果"**——错，**它只把结果写进存档点**；不中断时同 thread 再跑照样重算。
 2. **"普通函数也会被记住"**——错，**只有 `@task` 进存档点**，普通函数 resume 必重跑。
-3. **"`config` 可传可不传"**——错，挂了 checkpointer **必传**，不传 `ValueError`。
+3. **"`config` 可传可不传"**——错，挂了 checkpointer **必传**。
 4. **"`cache_policy` 单独配就行"**——错，**还要 `entrypoint(cache=...)`**。
-5. **"同步 task 能配 timeout"**——错，**装饰时就抛 ValueError**。
+5. **"同步 task 能配 timeout"**——Python 错（**装饰时就抛 `ValueError`**）；**TS 不会抛**，运行期才判罚。
+6. **"TS 也能用 `previous` 参数"**——错，TS 的第二个参数是 `config`，要写 `getPreviousState<T>()`。
+7. **"TS 的 task 配置项叫 `retryPolicy`"**——错，叫 **`retry`**；写成 `retryPolicy` 静默失效。
+8. **"两个 `InMemoryCache` 可以互换"**——错，要用 `@langchain/langgraph-checkpoint` 的那个，core 的会在运行时抛 `TypeError`。
 
 #### 一句话记住
 
-**`@task` 是持久化的单位（普通函数 resume 必重跑）；`previous` 是 Functional 的"状态"但没有具名字段；三个装饰参数与 Graph API 语义一致，只是 timeout 报错更早。**
+**`@task` 是持久化的单位（普通函数 resume 必重跑）；Python 用 `previous` 形参、TS 用 `getPreviousState()`，两者都只是"上一次的结果"没有具名字段；三个配置项语义与 Graph API 一致，但 TS 的键名是 `retry`、缓存实例必须来自 checkpoint 包。**
 
 #### 🗣️ 行话对照
 
-| 本课说法（人话） | 行业标准叫法 | 典型配置 / 在哪遇到 | 代价 |
+| 本课说法（人话） | 行业标准叫法 | Python 写法 | TypeScript 写法 |
 |---|---|---|---|
-| 整个流程的入口 | **@entrypoint** | `@entrypoint(checkpointer=...)` | 挂了 cp 必须传 config |
-| 放进冰箱的那一步 | **@task** | `@task` + `.result()` | 不标注就不持久化 |
-| 拿结果 | **Future.result()** | `fut = t(x); fut.result()` | 不调就丢弃 |
-| 上一次的结果 | **previous** | `def f(x, previous=None)` | 整体值，无具名字段 |
-| 真缓存 | **cache_policy** | `@task(cache_policy=CachePolicy(ttl=60))` | 还得配 `entrypoint(cache=)` |
-| 并发 | **先提交后收** | `[t(i) for i in xs]` 再统一 `.result()` | 立即 result 就串行 |
-| 编译产物 | **Pregel** | 同 Graph API | — |
+| 整个流程的入口 | **@entrypoint** | `@entrypoint(checkpointer=...)` | `entrypoint({ name, checkpointer }, fn)` |
+| 放进冰箱的那一步 | **@task** | `@task` + `.result()` | `task("name", fn)` + `await` |
+| 拿结果 | **Future / Promise** | `fut.result()` | `await fut` |
+| 上一次的结果 | **previous** | `def f(x, previous=None)` | `getPreviousState<T>()` |
+| 真缓存 | **cache_policy / cachePolicy** | `@task(cache_policy=CachePolicy(ttl=60))` | `task({ cachePolicy: { ttl: 60 } }, fn)` + `InMemoryCache` |
+| 并发 | **先提交后收** | `[t(i) for i in xs]` 再统一 `.result()` | `Promise.all(xs.map((i) => t(i)))` |
+| 编译产物 | **Pregel** | 同 Graph API | 同 Graph API |
 
 > 中文均为社区常用译法 / 本文自拟。
 
 #### 官方文档
 
-- [Functional API](https://docs.langchain.com/oss/python/langgraph/functional-api)
-- [Use the Functional API](https://docs.langchain.com/oss/python/langgraph/use-functional-api)
+- Python：[Functional API](https://docs.langchain.com/oss/python/langgraph/functional-api)｜[Use the Functional API](https://docs.langchain.com/oss/python/langgraph/use-functional-api)
+- TypeScript：[Functional API（JS）](https://docs.langchain.com/oss/javascript/langgraph/functional-api)｜[Use the Functional API（JS）](https://docs.langchain.com/oss/javascript/langgraph/use-functional-api)
 
 ---
 
@@ -334,12 +499,14 @@ B) task 有 + entrypoint 配了 cache           -> 同 thread 1 次，新 thread
 
 | 维度 | Graph API（2 节点） | Functional API（2 task） |
 |---|---|---|
-| `get_state().values` | `{'log': ['step1','step2']}` | `{'a': 2}` |
+| `get_state().values` / `getState().values` | `{'log': ['step1','step2']}` | `{'a': 2}` |
 | 历史条数 | **4 条** | **2 条** |
-| 历史内容 | `() / ('step2',) / ('step1',) / ('__start__',)` | `() / ('f1',)` |
+| 历史内容（Python） | `() / ('step2',) / ('step1',) / ('__start__',)` | `() / ('f1',)` |
+| 历史内容（TS） | `[] / ["step2"] / ["step1"] / ["__start__"]` | `[] / ["h-f"]` |
 | 能逐字段改 | ✅ `update_state({'v': 100})` | ⚠️ 只能整体替换返回值 |
 
 > 🔑 **Functional API 只有 entrypoint 一层存档**——task 的结果进了 checkpoint，但**不在历史里单列**。这是它最实质的代价。
+> ✅ **两侧数字完全对得上**：Graph 4 条、Functional 2 条；差异只在 `next` 的容器类型（元组 vs 数组）与命名（Functional 的 `next` 是 entrypoint 的名字，Python 用装饰的函数名、TS 用 `name` 选项）。
 
 **控制流写法对照**：
 
@@ -352,10 +519,14 @@ B) task 有 + entrypoint 配了 cache           -> 同 thread 1 次，新 thread
 实测：
 
 ```
+── Python ──
 Functional f4(20) -> {'kind': '大', 'msg': '走大单流程'}
 Functional f4(5)  -> {'kind': '小', 'msg': '走小单流程'}
 Functional while 循环 -> {'v': 5}
 f8([1,2,3]) -> {'results': [10, 20, 30]}
+
+── TypeScript ──
+fan([1,2,3]) -> {"results":[10,20,30]}
 ```
 
 #### 选型判据
@@ -381,7 +552,9 @@ f8([1,2,3]) -> {'results': [10, 20, 30]}
 
 **可以混**：把已编译的图当普通函数在 task 里调（实测）：
 
-```python
+::: code-group
+
+```python [Python]
 @task
 def call_graph(x):
     return g.invoke({"v": x}, {"configurable": {"thread_id": f"gg{x}"}})["v"]
@@ -391,6 +564,19 @@ def outer(x):
     return call_graph(x).result() + 1
 # -> 12
 ```
+
+```typescript [TypeScript]
+const callGraph = task("callGraph", async (x: number) =>
+  ((await g.invoke({ v: x }, { configurable: { thread_id: `gg${x}` } })) as any).v);
+
+const outer = entrypoint({ name: "outer", checkpointer: new MemorySaver() },
+  async (x: number) => (await callGraph(x)) + 1);
+// -> 12
+```
+
+:::
+
+> 💡 **TS 侧写法要点**：内层图必须带**自己的 `thread_id`**（这里用 `` `gg${x}` `` 按入参生成），否则挂了 checkpointer 的内层图会报缺 `thread_id`；内层返回值是整份 State，要自己取字段（`as any).v`）。
 
 > ⚠️ **三个坑**（实战里逐个撞出来的）：
 > 1. **内层图的入参契约是它自己的 State schema**——外层传 `x=1`，内层收到的是 `{"v": 1}`；**字段名对不上就静默取默认值**（实战实测外层传 `{"v": x}` 得到 `1` 而不是期望的 `11`）。
@@ -404,26 +590,27 @@ def outer(x):
 1. **"Functional API 是'简化版'，能力少一些"**——错，**同一个 Pregel 引擎**，interrupt / 回放 / 重试 / 流式全都有。
 2. **"选一个就只能用到底"**——错，**可以混用**（图当函数调）。
 3. **"混用后 time-travel 能覆盖内层图"**——错，**内层图有独立 thread**。
-4. **"Functional 没有状态"**——不准确，**有 `previous`**，只是没有具名字段。
+4. **"Functional 没有状态"**——不准确，**有 `previous`（TS 是 `getPreviousState()`）**，只是没有具名字段。
+5. **"TS 的 `previous` 也是第二个形参"**——错，第二个位置是 `config`，`previous` 要靠 `getPreviousState<T>()` 取。
 
 #### 一句话记住
 
-**能力对等，差别在"中间过程放哪"——放具名的 State（Graph）还是放 `previous` 整体值（Functional）；可以混用，但存档和缓存各管各的。**
+**能力对等，差别在"中间过程放哪"——放具名的 State（Graph）还是放"上一次的结果"（Functional 的 `previous` / `getPreviousState()`）；可以混用，但存档和缓存各管各的。**
 
 #### 🗣️ 行话对照
 
-| 本课说法（人话） | 行业标准叫法 | 在哪遇到 | 代价 |
-|---|---|---|---|
-| 画板写法 | **Graph API / StateGraph** | 课 3 起一直在用 | 样板多、加步要动结构 |
-| 脚本写法 | **Functional API** | `@entrypoint` / `@task` | 没有具名中间状态 |
-| 怎么选 | **choosing between APIs** | 官方 apis 分区 | 看"中间过程要不要可见" |
-| 混着用 | **interop** | task 里 `g.invoke(...)` | 存档各管各 |
-| 历史条数 | **state history depth** | `get_state_history` | Functional 只有 2 条 |
+| 本课说法（人话） | 行业标准叫法 | Python | TypeScript | 代价 |
+|---|---|---|---|---|
+| 画板写法 | **Graph API / StateGraph** | `StateGraph(...)` | 同 | 样板多、加步要动结构 |
+| 脚本写法 | **Functional API** | `@entrypoint` / `@task` | `entrypoint({...}, fn)` / `task("n", fn)` | 没有具名中间状态 |
+| 怎么选 | **choosing between APIs** | 官方 apis 分区 | 同 | 看"中间过程要不要可见" |
+| 混着用 | **interop** | task 里 `g.invoke(...)` | 同（记得传内层 thread_id） | 存档各管各 |
+| 历史条数 | **state history depth** | `get_state_history` | `getStateHistory` | Functional 只有 2 条 |
 
 #### 官方文档
 
-- [Choosing between the APIs](https://docs.langchain.com/oss/python/langgraph/choosing-apis)
-- [Functional API](https://docs.langchain.com/oss/python/langgraph/functional-api)
+- Python：[Choosing between the APIs](https://docs.langchain.com/oss/python/langgraph/choosing-apis)｜[Functional API](https://docs.langchain.com/oss/python/langgraph/functional-api)
+- TypeScript：[Choosing between the APIs（JS）](https://docs.langchain.com/oss/javascript/langgraph/choosing-apis)｜[Functional API（JS）](https://docs.langchain.com/oss/javascript/langgraph/functional-api)
 
 ---
 
@@ -637,6 +824,164 @@ resume -> {'a': 2, 'b': 4, 'ans': 'ok'}
 无 checkpointer invoke -> {'__interrupt__': [...]}     <- 能停
 get_state -> ValueError: No checkpointer set           <- 不能恢复
 ```
+
+#### 🇹🇸 TS 侧实测（`playground-ts/11-functional-api.ts`，`@langchain/langgraph` 1.5.x）
+
+> ✅ 实测于 `@langchain/langgraph` 1.5.0 / Node.js（`npm run l11`，共 23 项验证，三闸门全绿）
+
+**验证一 / 二：最小 entrypoint / task 与能力面**
+
+```
+flow.invoke(1) -> 3
+
+构造器: Pregel
+有 invoke: true   有 stream: true
+有 getState: true 有 updateState: true 有 getStateHistory: true
+```
+
+**验证三 / 四：并发与动态扇出**
+
+```
+并发 -> 14  耗时 0.31s
+串行 -> 14  耗时 0.60s
+fan([1,2,3]) -> {"results":[10,20,30]}
+```
+
+**验证五：同 thread 再 invoke，task 会不会复用**
+
+```
+第一次: 20  task 执行 1 次
+同 thread 再 invoke: 20  task 执行 2 次  <- 不复用
+```
+
+**验证六 / 七：config 必填与否**
+
+```
+挂 checkpointer 不传 config -> Error: Failed to put checkpoint. The passed RunnableConfig
+  is missing a required "thread_id" field in its "configurable" property. ...
+不挂 checkpointer -> 2
+```
+
+**验证八 / 九：task 持久化 vs 普通函数**
+
+```
+[副作用] tA 真的跑了，输入 1
+第一次: {"__interrupt__":[{"id":"ec59c1ef...","value":{"question":"继续吗"}}]}  tA=1  tB=0
+[副作用] tB 真的跑了，输入 2
+resume: {"a":2,"b":3,"ans":"ok"}  tA=1  tB=1  <- tA 没重跑
+
+[副作用] plain_a 真的跑了  执行 1 次
+[副作用] plain_a 真的跑了  执行 2 次
+```
+
+**验证十 / 十二：`getPreviousState` 与 `entrypoint.final`**
+
+```
+第1次 invoke(10): 10
+第2次 invoke(5) : 15
+
+entrypoint.final:
+第1次 invoke(10): 0
+第2次 invoke(5) : 20   <- TS 独有 API，value 与 save 分离
+```
+
+**验证十一：Graph API 累加对照**
+
+```
+第1次 (total=0, inc=10): {"total":10,"inc":10}
+第2次 (inc=5): {"total":15,"inc":5}
+```
+
+> 💡 这条在 TS 侧**没有**重现 Python 课文里"第二次得 5"的现象——因为 TS 的 `total` 虽然没声明 reducer，但节点自己读了 `s.total` 并写了 `s.total + s.inc`，是"读改写"而不是"覆盖输入"。**真正的覆盖场景要写成节点只返回入参**。这个问题在 TS 侧不构成对比价值，故只记录实测结果。
+
+**验证十三：task 的 retry（键名是 `retry`）**
+
+```
+NetError + maxAttempts=3 -> 结果 4，task 执行 3 次
+new Error("代码bug") + maxAttempts=3 -> 抛错，task 执行 3 次  <- TS 默认重试
+```
+
+**验证十四：cachePolicy 两头配**
+
+```
+A) task 有 cachePolicy / entrypoint 无 cache -> 执行 2 次（没缓存）
+B) task 有 + entrypoint 有 cache（不同 thread）-> 执行 1 次  <- 缓存跨 thread
+```
+
+**验证十五：task 配 timeout**
+
+```
+定义阶段 -> ok（TS 不抛）
+async 慢 task + timeout: 100 -> NodeTimeoutError: Node "slow" exceeded its run timeout of 100ms
+```
+
+**验证十六 / 十七：状态可见性与历史条数**
+
+```
+Graph getState values: {"log":["step1","step2"]}   next: []
+Functional getState values: {"a":2}                 next: []
+
+Graph（2 节点） 历史 4 条: ["[]","[\"step2\"]","[\"step1\"]","[\"__start__\"]"]
+Functional（2 task） 历史 2 条: ["[]","[\"h-f\"]"]
+```
+
+**验证十八 / 十九：混用与嵌套**
+
+```
+图当函数调 -> 12
+entrypoint 嵌套 -> 11
+```
+
+**验证二十：stream 的粒度**
+
+```
+streamMode=updates:
+  {"t9":18}
+  {"f9s":{"r":18}}
+streamMode=values:
+  {"r":18}
+```
+
+**验证二十一：updateState 语义**
+
+```
+Graph updateState 后: {"v":100}
+Functional updateState 后: {"v":100}  <- 整体替换返回值
+```
+
+**验证二十二 / 二十三：不取结果与返回类型**
+
+```
+-> {"done":true}          <- 不 await 就丢弃，不报错
+调用后未 await 时: type = Promise  instanceof Promise = true
+```
+
+**✅ 两侧一致的 7 条**
+
+1. `task` 是持久化的唯一单位，普通函数 resume 必重跑
+2. 同 thread 再 invoke 不复用 task 结果（不是缓存）
+3. 挂了 checkpointer 必须传 `thread_id`
+4. 并发靠"先全部提交、再统一收"（0.3s + 0.3s ≈ 0.3s）
+5. `cachePolicy` 必须两头配才生效，且缓存跨 thread
+6. 状态可见性：Graph 有具名字段、Functional 只有返回值；历史 4 条 vs 2 条
+7. 可以混用（图当函数调）、可以嵌套 entrypoint
+
+**🔴 两侧不同的 7 条**
+
+| 维度 | Python | TypeScript |
+|---|---|---|
+| 定义方式 | `@entrypoint` / `@task` 装饰器 | `entrypoint({ name, checkpointer }, fn)` / `task("name", fn)`，**选项对象在前** |
+| `name` | 自动取函数名 | **必填**（`entrypoint` 与 `task` 都要显式给） |
+| 上一次的值 | 形参 `previous=None` | **`getPreviousState<T>()`**，第二个形参位置被 `config` 占用 |
+| `value`/`save` 分离 | 无 | **`entrypoint.final({ value, save })`** 独有 |
+| `retry` 键名 | `retry_policy=` | **`retry:`**（写成 `retryPolicy` 静默失效） |
+| 同步 task + `timeout` | **装饰器求值即抛 `ValueError`** | **不抛**，运行期才 `NodeTimeoutError` |
+| 缓存实例 | `InMemoryCache`（langgraph 内置） | 必须用 **`@langchain/langgraph-checkpoint` 的 `InMemoryCache`**；误用 core 的同名类 → `TypeError: this.cache[type] is not a function` |
+| 不传 config 的报错 | `ValueError: Checkpointer requires ...` | `Error: Failed to put checkpoint. ... missing a required "thread_id" ...` |
+| task 返回值 | `Future`（`.result()`） | **`Promise`**（`await`） |
+| 空输入 | 可传 `None` | **`invoke(null, cfg)` 抛 `EmptyInputError: Received no input writes for "__start__"`**，要传实际值 |
+
+> 💡 **移植检查清单**：① `@entrypoint` 装饰器要展开成 `entrypoint({ name, checkpointer }, fn)`；② `previous` 形参换成 `getPreviousState<T>()`；③ `.result()` 换成 `await`；④ `retry_policy=` 换成 `retry:`；⑤ 缓存实例从 `@langchain/langgraph-checkpoint` 导入；⑥ `invoke` 不能传 `null`。
 
 ### 4.2 应用实战
 
