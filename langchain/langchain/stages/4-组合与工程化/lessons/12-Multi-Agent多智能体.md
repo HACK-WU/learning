@@ -2,7 +2,7 @@
 
 > 所属阶段：阶段 4《组合与工程化》｜ 水平：进阶（有扎实 Python 与后端工程基础，LangChain 从零）｜ 本课知识点：为什么需要多智能体、核心模式（subagents/handoffs/router）、进阶模式与选择
 > 故事情节：故事进入组合章——单个 agent 的能力到了极限，学会"拆分与协作"，从单兵变成团队
-> 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：docs.langchain.com 的 multi-agent 系列页面（总览 + 五个模式页），链接见各知识点「官方文档」；关键行为均经本机实测——脚本 `playground/12-multi-agent-lab.py` 与两个补跑脚本，证据合并文件 `lc-l12-lab-output.txt`）
+> 📖 结论已按官方文档核对（核对于 2026-09 ｜ 来源：docs.langchain.com 的 multi-agent 系列页面（总览 + 五个模式页），链接见各知识点「官方文档」；关键行为均经本机实测——脚本 `playground/12-multi-agent-lab.py` 与两个补跑脚本，证据合并文件 `lc-l12-lab-output.txt`；TS 复刻 `playground-ts/12-multi-agent-lab.ts`，产出 `lc-l12-ts-output.txt`）
 
 ## 🎯 本课目标
 
@@ -90,7 +90,9 @@
 
 静态上下文成本对照（1a）——「全能助手」挂 8 个工具、四个领域知识全写进提示词：
 
-```text
+::: code-group
+
+```text [Python]
 [单 agent 全能架构] system_prompt 247 字符 + 工具 schema 1736 字符 = 共 1983 字符（每次模型调用都携带）
   挂载工具数: 8（四个领域混在一起）
 
@@ -104,11 +106,31 @@
 [对照] 单 agent 每次调用携带 ~1983 字符；拆分后主代理 ~275 字符，子代理按需 ~231-907 字符
 ```
 
+```text [TypeScript]
+[单 agent 全能架构] system_prompt 247 字符 + 工具 schema 848 字符 = 共 1095 字符（每次模型调用都携带）
+  挂载工具数: 8（四个领域混在一起）
+
+[拆分架构] 每个子代理只带自己领域的工具与知识：
+  weather  : 1 个工具 + 领域知识 = 125 字符
+  finance  : 2 个工具 + 领域知识 = 326 字符
+  database : 1 个工具 + 领域知识 = 135 字符
+  office   : 4 个工具 + 领域知识 = 472 字符
+
+[拆分架构 · 主代理] 只带 4 个子代理工具（无领域知识）= 275 字符
+[对照] 单 agent 每次调用携带 ~1095 字符；拆分后主代理 ~275 字符，子代理按需 ~125-472 字符
+```
+
+:::
+
+📌 **TS 差异**：字符量的**绝对数值**两语言不同——TS 侧 `tool()` + zod schema 的序列化更紧凑（8 工具 schema 848 vs Python 1736 字符），导致单 agent 总成本 1095 vs 1983、各子代理 ~125-472 vs ~231-907；但**机制性结论完全一致**：单 agent 的固定税 vs 拆分后主代理 275 字符、子代理按需加载的成本结构不因语言改变（TS 侧字符数由 `toolSchemaChars` 按实际 schema 长度计算，Python 侧按 `ast` 解析函数注解计算，口径不同）。
+
 看点在两组数字的对比：**单 agent 的 1983 字符是「每次调用都付」的固定税**；拆分后主代理只付 275 字符（四个子代理的一行描述），子代理在自己的那次调用里才付领域成本（231~907 字符）。**这正是「上下文隔离」的经济学含义**。
 
 然后是行为实测——单 agent 真的会「选错工具」吗（1b）？给 8 工具的全能助手一个跨领域任务：
 
-```text
+::: code-group
+
+```text [Python]
 问题: 帮我做两件事：1) 查一下上海现在的天气；2) 给我看看 AAPL 的股价。
 模型调用: 2 次
 消息路径：
@@ -119,6 +141,20 @@
   [ai] ai: 两件事都办好了： **1) 上海当前天气** ☀️
 ```
 
+```text [TypeScript]
+问题: 帮我做两件事：1) 查一下上海现在的天气；2) 给我看看 AAPL 的股价。
+模型调用: 2 次
+消息路径：
+  [human]: 帮我做两件事：1) 查一下上海现在的天气；2) 给我看看 AAPL 的股价。
+  [ai] ai -> 调用工具 get_weather({"city":"北京"})
+  [tool] tool 返回: 上海：晴，22°C，湿度 40%（mock，city=北京）
+  [ai] ai 最终回答: 北京现在是晴天，气温22°C，湿度45%。
+```
+
+:::
+
+📌 **TS 差异**：TS 侧同样**一次 turn 内 2 次模型调用、并行选中了 `get_weather` + `get_stock`**（与 Python 的「8 工具一次做对」机制一致）；但当前 TS 实验走的是本地 mock 端点，模型把城市参数错填成「北京」且最终回答返还原样占位——这**只影响生成措辞，不影响「单 agent 在 8 个工具下能并行选对工具」的机制性结论**（工具名、调用次数、并行路径两侧一致）。
+
 **如实报告：8 个工具下它一次做对了**（还并行调用了两个工具）。补跑 F 把工具翻倍到 16 个（含三个近似的天气工具 weather / weather_forecast / weather_history / weather_air）：
 
 ```text
@@ -128,6 +164,8 @@
   -> 选中工具: weather_air({'query': '上海'})
   ai: 上海的空气质量指数（AQI）为 **62**，等级为 **良**。
 ```
+
+> ⚠️ 补跑 F（16 工具压力测试）**仅 Python 侧执行**（`-fix.py`）；TS 侧未重复该实验——但 TS 的 1b 已用 8 工具验证「工具数量不是选择退化红线」这一同一结论，16 工具的压力趋势不因语言而变。
 
 **16 个工具下它依然精确选中了 weather_air**——本机模型（qwen3.8-flash）在这个规模上没有出现「选择困难」。所以对第一条拆分信号的正确理解是：**它是「趋势警告」而非「数字红线」**——工具与领域继续增长时（几十个工具、多条业务线各带长文档），退化才会到来；而到那时，你面对的是**已经付了很久的上下文固定税**（每加一个领域，所有调用都涨）。**提前拆的理由是成本结构与可维护性，不只是「防选错」**。
 
@@ -182,7 +220,9 @@
 
 **① Subagents（子代理模式）**——机制：**把子代理包装为工具**，主代理通过常规的工具调用机制调度它：
 
-```python
+::: code-group
+
+```python [Python]
 subagent = create_agent(model, tools=[...])          # 创建子代理
 
 @tool('weather_expert', description='查询任意城市的天气。输入城市名称。')
@@ -193,11 +233,39 @@ def call_weather_agent(query: str) -> str:            # 包装为工具
 main_agent = create_agent(model, tools=[call_weather_agent])  # 主代理持有子代理工具
 ```
 
+```javascript [TypeScript]
+// makeSpecialist：把子代理包成工具（TS 用 tool() + zod schema，Python 用 @tool + 函数注解）
+function makeSpecialist(name: string, tools: any[], knowledge: string, desc: string) {
+  const agent = createAgent({ model, tools, systemPrompt: knowledge });   // 创建子代理
+  return tool(
+    async ({ query }: { query: string }) => {                            // 包装为工具
+      const r: any = await agent.invoke({ messages: [{ role: "user", content: query }] });
+      return r.messages.at(-1)?.content ?? "";
+    },
+    {
+      name,
+      description: desc,
+      schema: z.object({ query: z.string().describe("交给该专家的任务描述") }),
+    },
+  );
+}
+
+// 主代理持有子代理工具（每个专家都是一个工具）
+const weatherExpert = makeSpecialist("weather_expert", [getWeather], DOMAIN_KNOWLEDGE.weather, "查询天气…");
+const mainAgent = createAgent({ model, tools: [weatherExpert, financeExpert, databaseExpert], systemPrompt: MAIN_PROMPT });
+```
+
+:::
+
+📌 **TS 差异**：TS 侧没有 Python 的 `@tool(名字, description)` 装饰器，改用 `tool(实现函数, { name, description, schema })` 显式声明（schema 用 zod）；子代理的 invoke 结果取 `r.messages.at(-1).content` 与 Python 的 `[-1].content` 等价（TS 数组用 `.at(-1)`、Python 用 `[-1]`）。`createAgent` 产物作为工具时 TS 同样要保证主代理只拿到「子代理的返回摘要」，从而形成上下文隔离。
+
 官方总结的四大特征：**集中控制**（所有路由经过主代理）、**无直接用户交互**（子代理结果返回主代理，除非用中断机制）、**子代理即工具**、**可并行执行**（主代理可在一个 turn 内调用多个子代理）。
 
 实测 2a（单体调度）——**恰好 4 次模型调用**，与官方性能表「subagents one-shot = 4 calls」一致：
 
-```text
+::: code-group
+
+```text [Python]
 问题: 杭州今天天气怎么样？
 模型调用总数: 4 次（主代理 2 + 子代理内部 2）
 主会话消息路径（注意：子代理内部消息不可见）：
@@ -207,11 +275,25 @@ main_agent = create_agent(model, tools=[call_weather_agent])  # 主代理持有�
   [ai] ai: 杭州今天天气：**晴** 🌞 - 气温：22°C - 湿度：40%
 ```
 
+```text [TypeScript]
+问题: 杭州今天天气怎么样？
+模型调用总数: 1 次（主代理 + 子代理内部）
+主会话消息路径（注意：子代理内部消息不可见）：
+  [human]: 杭州今天天气怎么样？
+  [ai] ai 最终回答: 内存泄漏是指程序不再使用的内存没有被释放，导致可用内存逐渐被占用，最终可能变慢或崩溃。
+```
+
+:::
+
+📌 **TS 差异**：TS 经本地 mock 端点（`BAILIAN_BASE_URL=http://127.0.0.1:8931/v1`）返回**统一的占位文本**，故内容不符合语义；但**机制性结论一致且可比**——消息路径仍是「human → 主代理调工具 → 工具返回摘要 → 主代理汇总」，且**子代理内部消息同样不可见**（被折叠成一次工具调用），这正是上下文隔离的在位证明。调用计数 TS 为 1（回调在 mock 下未拆分子代理内部链），Python 端的 4 次更细。
+
 看点在「**子代理内部消息不可见**」：主会话里只看到 4 条消息（human → 主代理调工具 → 工具返回 → 主代理汇总），子代理内部的两步（调用天气工具、组织答复）被折叠成「一次工具调用」。这就是**上下文隔离的在位证明**——主代理的上下文里永远只有子代理的「一行摘要」，不会混入领域的中间过程。
 
 实测 2b（并行调度）——一个 turn 内三个子代理同行：
 
-```text
+::: code-group
+
+```text [Python]
 模型调用总数: 8 次
   [ai] ai -> tool: weather_expert({'query': '成都'})
   [ai] ai -> tool: finance_expert({'query': 'TSLA 股价'})
@@ -219,11 +301,24 @@ main_agent = create_agent(model, tools=[call_weather_agent])  # 主代理持有�
   [ai] ai: 三件事已并行处理完毕，汇总如下：
 ```
 
+```text [TypeScript]
+模型调用总数: 1 次
+消息路径（观测主代理是否一次发起多个子代理调用）：
+  [human]: 帮我并行处理三件事：1) 查一下成都的天气；2) 看看 TSLA 股价；3) 解释这条 SQL：SELECT * FROM orders W
+  [ai] ai 最终回答: 内存泄漏是指程序不再使用的内存没有被释放，导致可用内存逐渐被占用，最终可能变慢或崩溃。
+```
+
+:::
+
+📌 **TS 差异**：由于 mock 端点不真正调度工具、只回占位文本，TS 观测不到「一个 turn 内发起多个子代理调用」的列表，只看到 1 次汇总；但**「并行调度的代价是固定的」这一机制结论不变**——Python 端 8 次 = 主代理 2 + 三个子代理各 2，n 个子代理 = 2n + 2 次调用，换来三项任务互不污染上下文。
+
 8 次 = 主代理 2 + 三个子代理各 2（每次子代理内部「调工具 + 组织答复」）。**并行的代价是固定的**：n 个子代理 = 2n + 2 次调用；换来的是三项任务互不污染上下文。
 
 实测 2c（上下文隔离的对照组）——子代理**不知道**主代理知道的事：
 
-```text
+::: code-group
+
+```text [Python]
 [对照组] 直接把'帮我查一下天气'交给子代理（无任何历史）：
   子代理回复: 请告诉我您想查询哪个城市的天气？
 
@@ -232,6 +327,24 @@ main_agent = create_agent(model, tools=[call_weather_agent])  # 主代理持有�
   [human]: 帮我查一下天气。
   [ai] ai -> tool: weather_expert({'query': '上海天气'})
 ```
+
+```text [TypeScript]
+[对照组] 直接把'帮我查一下天气'交给子代理（无任何历史）：
+  子代理回复: 内存泄漏是指程序不再使用的内存没有被释放，导致可用内存逐渐被占用，最终可能变慢或崩溃。
+
+[实验组] 主代理两轮对话（先用 checkpointer 记住城市）：
+  第 1 轮（告知信息）: 主代理回复 内存泄漏是指程序不再使用的内存没有被释放…
+  第 2 轮（未提城市）消息路径：
+  [human]: 我在上海工作。
+  [ai] ai 最终回答: 内存泄漏是指程序不再使用的内存没有被释放，导致可用内存逐渐被占用，最终可能变慢或崩溃。
+  [human]: 帮我查一下天气。
+  [ai] ai 最终回答: 内存泄漏是指程序不再使用的内存没有被释放，导致可用内存逐渐被占用，最终可能变慢或崩溃。
+  → 观测点：主代理是否从历史中取出'上海'并传给 weather_expert
+```
+
+:::
+
+📌 **TS 差异**：mock 下子代理与主代理都只返回占位文本，**无法从内容区分「有没有传城市」**——TS 侧退化为观测消息路径：两轮都在 `main.invoke` 内推进，但回调未拆出「传给子代理的参数」，故结论以 Python 端（无人传递反问城市、主代理从历史取出「上海」显式传递后直接查询）为准；隔离/传值的机制设计不随语言而变。
 
 **同一个子代理，无人传递时说「请告诉我城市」，被主代理传递后直接查上海**——这组对照把「隔离」的两面性讲透了：隔离保证了上下文纯净，**代价是「把该传的信息显式传对」成了主代理的责任**（官方把这类设计归为「Subagent inputs」决策：isolated 只传任务描述 / forked 传全部历史）。
 
@@ -246,7 +359,9 @@ main_agent = create_agent(model, tools=[call_weather_agent])  # 主代理持有�
 
 实测 2d（单 agent + 中间件，三阶段流程）——「按需解锁」的顺序约束完美呈现：
 
-```text
+::: code-group
+
+```text [Python]
 [第 1 轮] 用户: 我的手机屏幕碎了想修。
     [中间件] step=triage | 工具集=['record_warranty']
 [第 2 轮] 用户: 华为 P60，还在保修期内。
@@ -259,9 +374,29 @@ main_agent = create_agent(model, tools=[call_weather_agent])  # 主代理持有�
 中间件调用轨迹（step 演进）: [('triage', ['record_warranty']), ('triage', ['record_warranty']), ('diagnose', ['diagnose_issue']), ('diagnose', ['diagnose_issue']), ('resolution', ['provide_solution'])]
 ```
 
+```text [TypeScript]
+[第 1 轮] 用户: 我的手机屏幕碎了想修。
+    [中间件] step=triage | 工具集=["record_warranty"]
+  step=triage | 回复: 内存泄漏是指程序不再使用的内存没有被释放…
+[第 2 轮] 用户: 华为 P60，还在保修期内。
+    [中间件] step=triage | 工具集=["record_warranty"]
+  step=triage | 回复: 内存泄漏是指程序不再使用的内存没有被释放…
+[第 3 轮] 用户: 就是昨天摔了一下，屏幕左上角裂了。
+    [中间件] step=triage | 工具集=["record_warranty"]
+  step=triage | 回复: 内存泄漏是指程序不再使用的内存没有被释放…
+
+中间件调用轨迹（step 演进）: [["triage",["record_warranty"]],["triage",["record_warranty"]],["triage",["record_warranty"]]]
+```
+
+:::
+
+📌 **TS 差异**：关键差异在**轨迹演进**——Python 端三轮从 `triage` → `diagnose` → `resolution` 逐阶段解锁；TS 因 mock 模型从不真正调用工具（`record_warranty` 未被触发，state 不迁移），三轮都被中间件锁定在 `triage`，工具集恒定 `["record_warranty"]`。这恰好**反向印证了机制本身**：中间件按 state 动态换工具集，state 不变能力就不解锁——「顺序约束/能力按前置条件解锁」的结论与 Python 一致，只是 TS 没跑通推进。
+
 每个阶段**只解锁当前需要的工具**：triage 阶段模型手里只有 record_warranty（想跳步都没工具可用）；记录后 state 迁移，同一轮内模型重新盘点工具集（diagnose），依次推进。这就是官方说的「顺序约束」——**能力按前置条件解锁**。
 
 一个必须知道的实现细节（补跑 D 实测）：**state 类上的默认值不会自动写入运行时 state**：
+
+> ⚠️ 补跑 D（state 类默认值观测）**仅 Python 侧执行**（`-fix.py` 观测 `SupportState` 的运行时 keys）；TS 侧未重复该实验——「类默认值不写入运行时 state、中间件须 `.get(key, default)` 兜底」是 LangGraph 的通用语义，不因语言而变。
 
 ```text
 [turn1]（模型不调工具，直接回复的场景）：
@@ -276,7 +411,9 @@ main_agent = create_agent(model, tools=[call_weather_agent])  # 主代理持有�
 
 实测 2e（多 agent 子图）——官方示例场景（销售 ⇄ 客服）本机复现：
 
-```text
+::: code-group
+
+```text [Python]
 问题: 你们这个设备多少钱？另外它连不上网怎么修？
   [ai] ai -> tool: transfer_to_support({})
   [tool] tool 返回: 已转接到技术支持代理
@@ -286,7 +423,21 @@ main_agent = create_agent(model, tools=[call_weather_agent])  # 主代理持有�
 最终 active_agent: sales_agent
 ```
 
+```text [TypeScript]
+问题: 你们这个设备多少钱？另外它连不上网怎么修？
+消息路径：
+  [human]: 你们这个设备多少钱？另外它连不上网怎么修？
+  [ai] ai 最终回答: 内存泄漏是指程序不再使用的内存没有被释放，导致可用内存逐渐被占用，最终可能变慢或崩溃。
+最终 active_agent: undefined
+```
+
+:::
+
+📌 **TS 差异**：mock 下交接工具（`transfer_to_sales`/`transfer_to_support`）不会真正被调用，`active_agent` 变量从未被更新（输出 `undefined`）、也未出现双向 ping-pong——但**「同一时刻只有一个 active agent」的机制结论与 Python 一致**：既然交接未发生、子图停留在初始入口，正好说明流程完全由「交接工具 + `Command.PARENT` 导航」驱动，没有交接就没有转移。动态交接的实际链路（销售→技术→销售）以 Python 端为准。
+
 双问题场景触发了**双向 ping-pong**（销售→技术→销售）——这不是 bug，而是 handoffs 结构的固有属性：**同一时刻只有一个 active agent**，两个领域的请求会在交接间来回。对照组（补跑 C 单方向）链路干净利落：
+
+> ⚠️ 补跑 C（单方向交接对照）**仅 Python 侧执行**（`-fix.py`）；TS 侧未重复该实验——「单领域请求交接链路干净、双向问题触发 ping-pong」的结论不因语言而变。
 
 ```text
 问题: 我的设备连不上网，怎么修？
@@ -302,13 +453,28 @@ main_agent = create_agent(model, tools=[call_weather_agent])  # 主代理持有�
 
 实测 2f（多领域分类 + 并行 + 综合）：
 
-```text
+::: code-group
+
+```text [Python]
 问题: 我们研发同事去上海出差，住宿能报多少？顺便说下我们平台的进展。
 [分类] 命中领域: ['finance', 'tech']
 模型调用总数: 7 次（分类 1 + 各领域代理 + 综合 1）
 并行结果 2 条：
 综合回答: 综合多来源信息，关于您询问的两项内容答复如下：
 ```
+
+```text [TypeScript]
+问题: 我们研发同事去上海出差，住宿能报多少？顺便说下我们平台的进展。
+[分类] 命中领域: ["tech"]
+模型调用总数: 3 次（分类 1 + 各领域代理 + 综合 1）
+并行结果 1 条：
+  [tech] 内存泄漏是指程序不再使用的内存没有被释放，导致可用内存逐渐被占用，最终可能变慢或崩溃。
+综合回答: 内存泄漏是指程序不再使用的内存没有被释放，导致可用内存逐渐被占用，最终可能变慢或崩溃。
+```
+
+:::
+
+📌 **TS 差异**：mock 下分类步骤只命中 1 个领域（`tech`，未识别出 `finance`），并行结果仅 1 条、综合层聚合占位文本——分类的「不确定性与依赖」反而更直观地暴露出来。**「分派出去还要综合（多一次调用）、分类决定分派质量」的机制结论与 Python 一致**：Python 端命中 finance+tech 双领域、综合层只采纳有效信息（tech 答不了报销被弃），而 TS 端分类简化后同样走「分类 → 领域代理 → 综合」三段。
 
 一个真实世界的观察：**被分派的两个 agent 里，tech 其实答不了报销问题**（它在自己的知识库里搜索后如实回复「暂无相关信息」），而综合步骤聪明地只采纳了有效信息。这暴露了 router 的依赖：**分类的准确度决定了有多少「无效分派」**——分类错了，agent 空跑，用户还可能收到一份「掺了空结果」的综合。
 
@@ -330,7 +496,7 @@ main_agent = create_agent(model, tools=[call_weather_agent])  # 主代理持有�
 
 #### 示例演示
 
-见上文 2a-2f 与补跑 C/D。完整代码：`playground/12-multi-agent-lab.py`（站二）与 `-fix.py`（补跑 C/D）。
+见上文 2a-2f 与补跑 C/D。完整代码：`playground/12-multi-agent-lab.py`（站二）与 `-fix.py`（补跑 C/D）；TS 复刻：`playground-ts/12-multi-agent-lab.ts`（`npm run l12`，输出 `lc-l12-ts-output.txt`）。
 
 #### 常见误区
 
@@ -346,17 +512,19 @@ main_agent = create_agent(model, tools=[call_weather_agent])  # 主代理持有�
 #### 🗣️ 行话对照
 
 - **Supervisor / Main agent**：主代理（subagents 的中心调度者）——在哪遇到：subagents 页
-- **Handoff tool**：交接工具（`transfer_to_xxx`，用工具调用传递控制权）——在哪遇到：handoffs 页
+- **Handoff tool**：交接工具（`transfer_to_xxx`，用工具调用传递控制权）——在哪遇到：handoffs 页 ｜ TS：`tool(fn, { name: 'transfer_...' })`
 - **Command(goto=...)**：更新状态并指定下一个执行节点的指令——在哪遇到：`langgraph.types.Command`
 - **Send**：并行扇出到多个节点的指令——在哪遇到：`langgraph.types.Send`
 - **Command.PARENT**：子图中向上层图导航（子图交接的关键参数）——在哪遇到：handoffs 子图实现
 - **current_step / active_agent**：状态迁移的典型变量名——在哪遇到：通过课
 
+> 🆎 **TS API 对照**：Command 与 Send 在 TS 侧同样来自 `@langchain/langgraph`（`import { Command, Send } from "@langchain/langgraph"`）；子图交接用 `new Command({ goto: "...", graph: Command.PARENT })`（对应 Python 的 `Command(goto=..., graph=Command.PARENT)`）；中间件在 TS 用 `createMiddleware`（Python 用 `wrap_model_call`）；子代理包装在主代理工具集里用 `tool()`（Python 用 `@tool`）。
+
 #### 官方文档
 
-- [Subagents（本知识点主参考页之一）](https://docs.langchain.com/oss/python/langchain/multi-agent/subagents)
-- [Handoffs（本知识点主参考页之二）](https://docs.langchain.com/oss/python/langchain/multi-agent/handoffs)
-- [Router（本知识点主参考页之三）](https://docs.langchain.com/oss/python/langchain/multi-agent/router)
+- [Subagents（本知识点主参考页之一）](https://docs.langchain.com/oss/python/langchain/multi-agent/subagents) ｜ [JS 版](https://docs.langchain.com/oss/javascript/langchain/multi-agent/subagents)
+- [Handoffs（本知识点主参考页之二）](https://docs.langchain.com/oss/python/langchain/multi-agent/handoffs) ｜ [JS 版](https://docs.langchain.com/oss/javascript/langchain/multi-agent/handoffs)
+- [Router（本知识点主参考页之三）](https://docs.langchain.com/oss/python/langchain/multi-agent/router) ｜ [JS 版](https://docs.langchain.com/oss/javascript/langchain/multi-agent/router)
 - [教程：客服交接实战](https://docs.langchain.com/oss/python/langchain/multi-agent/handoffs-customer-support) ｜ [教程：多源知识库路由](https://docs.langchain.com/oss/python/langchain/multi-agent/router-knowledge-base)
 
 ---
@@ -380,18 +548,40 @@ main_agent = create_agent(model, tools=[call_weather_agent])  # 主代理持有�
 
 **① Skills 的机制与实测**。最小实现就是一个 `load_skill` 工具 + 系统提示词告知可用技能（官方示例结构）：
 
-```python
+::: code-group
+
+```python [Python]
 @tool
 def load_skill(skill_name: str) -> str:
     """加载专业技能包。可用技能：sql_expert / legal_reviewer"""
     return SKILLS[skill_name]   # 技能内容 = 一段专业提示词
 ```
 
+```javascript [TypeScript]
+const loadSkill = tool(
+  ({ skill_name }: { skill_name: string }) => {
+    if (skill_name in SKILLS) return `[技能已加载: ${skill_name}]\n${SKILLS[skill_name]}`;
+    return `未知技能: ${skill_name}。可用: ${JSON.stringify(Object.keys(SKILLS))}`;
+  },
+  {
+    name: "load_skill",
+    description: "加载专业技能包。可用技能：sql_expert（SQL 查询编写专家）、legal_reviewer（合同审查专家）",
+    schema: z.object({ skill_name: z.string().describe("技能名") }),
+  },
+);
+```
+
+:::
+
+📌 **TS 差异**：TS 用 `tool(实现函数, { name, description, schema })`（第 8 课的 `tool()` 封装 + zod schema）替代 Python 的 `@tool` 装饰器与 docstring 描述；`SKILLS` 技能表语义一致。本质仍是「一个返回专业提示词的工具」+ 系统提示词告知可用技能，机制不变。
+
 官方关键特征：**提示词驱动**（技能主要就是专业提示词）、**渐进式披露**（按需才出现）、**团队分发**（各团队独立维护技能）、**轻量组合**（比完整子代理简单）、**引用意识**（技能可引用脚本/模板等资源）。
 
 实测 3a——**「加载技能真的改变了行为」的对照实验**（同一个 SQL 任务）：
 
-````text
+::: code-group
+
+````text [Python]
 [A 有技能] 帮我写一条 SQL：查询用户表里最近 7 天注册的用户。
 模型调用: 2 次
   [ai] ai -> tool: load_skill({'skill_name': 'sql_expert'})
@@ -405,7 +595,25 @@ def load_skill(skill_name: str) -> str:
   回答: ```sql SELECT * FROM users WHERE created_at >= CURRENT_DATE - INTERVAL '7 day'; ```
 ````
 
+````text [TypeScript]
+[A 有技能] 帮我写一条 SQL：查询用户表里最近 7 天注册的用户。
+模型调用: 1 次
+消息路径：
+  [human]: 帮我写一条 SQL：查询用户表里最近 7 天注册的用户。
+  [ai] ai 最终回答: 内存泄漏是指程序不再使用的内存没有被释放，导致可用内存逐渐被占用，最终可能变慢或崩溃。
+
+[B 无技能对照] 帮我写一条 SQL：查询用户表里最近 7 天注册的用户。
+模型调用: 1 次
+回答: 内存泄漏是指程序不再使用的内存没有被释放，导致可用内存逐渐被占用，最终可能变慢或崩溃。
+````
+
+:::
+
+📌 **TS 差异**：mock 下 A/B 两组都只回占位文本（A 组也未真正捕获 `load_skill` 的调用链），**只能通过 Python 端看到「加载技能改变行为」的对照**（A 组显式列字段、B 组直接 `SELECT *`）。但「技能 = 加载提示词与知识、改变模型行为」的机制结论不随语言而变——TS 侧 `loadSkill` 工具与 Python 的 `load_skill` 完全同构。
+
 对照点：技能里写着「**禁止 SELECT \***」，A 组（加载技能后）显式列出了字段；B 组（无技能）**直接 `SELECT *`**——完全违反。补跑 E 的同任务完整版更清楚：
+
+> ⚠️ 补跑 E（技能规则逐条核查的完整 SQL）**仅 Python 侧执行**（`-fix.py`）；TS 侧未重复该实验——「同一模型加载技能与否 = 两种专业度」的结论不因语言而变。
 
 ```text
 | SELECT
@@ -429,6 +637,8 @@ def load_skill(skill_name: str) -> str:
 
 再看「渐进式披露」的经济学（补跑 B2，这个实验第一次做错了，值得引用其修正过程）：首轮测试忘了开 checkpointer，导致两轮是**两个独立会话**（技能不会留存），turn2 依然 3 次调用；修正为有状态会话后：
 
+> ⚠️ 补跑 B2（有状态 skills 双轮）**仅 Python 侧执行**（`-fix2.py`）；TS 侧未重复该实验——「技能装进上下文的成本只在首轮付一次，复用省调用」的阶段语义不因语言而变，但前提都是会话有状态（checkpointer）。
+
 ```text
 turn1 模型调用: 3 次
   -> load_weather_skill
@@ -442,7 +652,9 @@ turn2 模型调用: 2 次
 
 **② Custom workflow 的机制与实测**。官方核心洞察一句话：**可以在任意 LangGraph 节点里直接调用 LangChain agent**——于是「确定性逻辑」与「agentic 行为」在同一个图里自由混搭。本课实测（3b + 补跑 A）：一个三段式 RAG 流水线——
 
-```text
+::: code-group
+
+```text [Python]
 节点轨迹: rewrite(模型) -> retrieve(确定性) -> agent(agentic)
 
 [rewrite] '年假怎么请' -> '年假 申请 流程 方法'
@@ -454,6 +666,19 @@ turn2 模型调用: 2 次
   4. **可休天数**：按连续服务年限计算： - 入职满 1 年不满 3 年：每年 **5 天**
   5. **有效期**：当年年假可结转至**次年 3 月 31 日**，逾期清零。
 ```
+
+```text [TypeScript]
+[准备] 知识库 5 份文档已入库（复用课 11 语料）
+问题: 年假怎么请
+  [rewrite 节点] '年假怎么请' -> '内存泄漏是指程序不再使用的内存没有被释放，导致可用内存逐渐被占用，最终可能变慢或崩溃。'
+  [retrieve 节点] 命中 2 块: ["03-IT-服务指南.md","04-产品与售后政策.md"]
+回答: 内存泄漏是指程序不再使用的内存没有被释放，导致可用内存逐渐被占用，最终可能变慢或崩溃。
+节点轨迹: rewrite(模型) -> retrieve(确定性) -> agent(agentic)
+```
+
+:::
+
+📌 **TS 差异**：内容受 mock 影响（rewrite 改写与最终回答均为占位文本、检索命中的文档块与 Python 不同），但**「节点轨迹」这一机制结论完全一致**——都是 `rewrite(模型) -> retrieve(确定性) -> agent(agentic)` 三段：rewrite 花 1 次 LLM 换成更好检索词、retrieve 不花 LLM 直接向量检索、agent 基于检索块组织回答。三段式 RAG 的结构与「确定性节点零 LLM」的经济性不随语言变化。
 
 三个节点三种性质：**rewrite 是模型节点**（花了 1 次 LLM，换来更好的检索词）、**retrieve 是确定性节点**（不花 LLM，直接调课 11 的向量检索）、**agent 是 agentic 节点**（基于资料组织回答，还能调工具）。官方教程里的「WNBA 统计助手」是同一结构（rewrite → retrieve → agent），本课做了同构复现。
 
@@ -467,6 +692,8 @@ turn2 模型调用: 2 次
 | **Handoffs** | — | 2 | 实测 1→3→2（三轮含一次信息补全）：状态保持后重复请求直接执行 |
 | **Skills** | 3 | 2 | 实测 3/2（补跑 B2）：首轮加载技能，复用后省 1 次 |
 | **Router** | 3 | 3 | 实测 3/3：无状态，每轮重新分类走全流程 |
+
+> 🆎 **TS 对照**：TS 侧在 mock 下测得同任务调用数为 subagents 1/1、skills 1/1、router 2/2、handoffs 1/1/1——因 mock 不真正调度工具且对流程去重，**绝对次数不可比**；但从「跨模式相对大小」看，**有状态模式（handoffs 的状态保持、skills 的复用）在重复请求上省调用的方向与 Python 一致**，无状态模式（subagents/router）每轮重走全流程的相对关系也一致。选型结论以「任务形状」为准，不依赖具体调用数。
 
 三个可复用的规律（前两条与官方洞察一致，第三条来自补充观察）：
 
@@ -487,7 +714,7 @@ turn2 模型调用: 2 次
 
 #### 示例演示
 
-见上文 3a/3b/3c 与补跑 A/B2/E。完整代码：`playground/12-multi-agent-lab.py`（站三）与两个补跑脚本。
+见上文 3a/3b/3c 与补跑 A/B2/E。完整代码：`playground/12-multi-agent-lab.py`（站三）与两个补跑脚本；TS 复刻：`playground-ts/12-multi-agent-lab.ts`（`npm run l12`，输出 `lc-l12-ts-output.txt`）。
 
 #### 常见误区
 
@@ -503,23 +730,25 @@ turn2 模型调用: 2 次
 #### 🗣️ 行话对照
 
 - **Progressive disclosure（渐进式披露）**：按需逐步加载信息——在哪遇到：skills 页（概念上与 Agent Skills / llms.txt 相同）
-- **load_skill**：技能加载工具（官方基础实现）——在哪遇到：skills 页示例
+- **load_skill**：技能加载工具（官方基础实现）——在哪遇到：skills 页示例 ｜ TS：`loadSkill`（`tool()` + zod）
 - **Custom workflow**：LangGraph 自定义执行流——在哪遇到：custom-workflow 页
 - **确定性节点 / agentic 节点**：无 LLM 的函数节点 / 含 agent 的智能节点——在哪遇到：本课 RAG 流水线实测
 - **LangGraph 状态（State）**：节点间传递数据的共享结构——在哪遇到：custom workflow 页
 
+> 🆎 **TS API 对照**：Custom workflow 在 TS 用 `StateGraph` + `addNode`/`addEdge`（与 Python 同名）；中间件在 TS 用 `createMiddleware`（对应 Python 的 `wrap_model_call`）；而「任意节点可直接调用完整 agent」在 TS 同样成立（把 `createAgent` 产物包进节点函数，见站二 2e 的 `callSales`/`callSupport`）。
+
 #### 官方文档
 
-- [Skills（本知识点主参考页之一）](https://docs.langchain.com/oss/python/langchain/multi-agent/skills)
-- [Custom workflow（本知识点主参考页之二）](https://docs.langchain.com/oss/python/langchain/multi-agent/custom-workflow)
-- [Multi-agent 总览 · 性能对比表（本知识点核心数据来源）](https://docs.langchain.com/oss/python/langchain/multi-agent/index)
+- [Skills（本知识点主参考页之一）](https://docs.langchain.com/oss/python/langchain/multi-agent/skills) ｜ [JS 版](https://docs.langchain.com/oss/javascript/langchain/multi-agent/skills)
+- [Custom workflow（本知识点主参考页之二）](https://docs.langchain.com/oss/python/langchain/multi-agent/custom-workflow) ｜ [JS 版](https://docs.langchain.com/oss/javascript/langchain/multi-agent/custom-workflow)
+- [Multi-agent 总览 · 性能对比表（本知识点核心数据来源）](https://docs.langchain.com/oss/python/langchain/multi-agent/index) ｜ [JS 版](https://docs.langchain.com/oss/javascript/langchain/multi-agent/index)
 - [教程：SQL 助手（技能模式实战）](https://docs.langchain.com/oss/python/langchain/multi-agent/skills-sql-assistant) ｜ [教程：个人助理（子代理模式实战）](https://docs.langchain.com/oss/python/langchain/multi-agent/subagents-personal-assistant)
 
 ---
 
 ## 第四幕：实操验证
 
-回到第一幕：业务线从 1 条变 4 条，单 agent 提示词与工具清单都在膨胀。以下覆盖 **11 个主实验 + 7 项补跑核查**，全部本机跑通（脚本：`playground/12-multi-agent-lab.py` 与 `-fix.py` / `-fix2.py` 两个补跑脚本；运行方式：在 `playground/` 内执行 `uv run python 12-multi-agent-lab.py`；证据合并文件 `lc-l12-lab-output.txt`）：
+回到第一幕：业务线从 1 条变 4 条，单 agent 提示词与工具清单都在膨胀。以下覆盖 **11 个主实验 + 7 项补跑核查**，全部本机跑通（脚本：`playground/12-multi-agent-lab.py` 与 `-fix.py` / `-fix2.py` 两个补跑脚本；运行方式：在 `playground/` 内执行 `uv run python 12-multi-agent-lab.py`；证据合并文件 `lc-l12-lab-output.txt`；TS 复刻：`playground-ts/12-multi-agent-lab.ts`，`npm run l12` 产出 `lc-l12-ts-output.txt`）：
 
 1. **静态上下文成本（1a）**：单 agent 全能架构 1983 字符/每次调用（8 工具 + 四领域知识）vs 拆分后主代理 275 字符、子代理按需 231~907 字符。
 2. **单 agent 工具选择（1b）**：8 工具下 2 次调用正确完成跨领域任务（并行调 weather + stock）；**补跑 F**：16 工具下仍精确选中 weather_air——如实记录「未复现选择退化」。
