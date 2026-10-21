@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="580" viewBox="0 0 1060 580">
+  <defs>
+    <marker id="m13a" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#5b6b7c"/>
+    </marker>
+  </defs>
+  <rect width="1060" height="580" fill="#ffffff"/>
+  <text x="30" y="40" font-family="sans-serif" font-size="21" font-weight="bold" fill="#1f2d3d">本课三层：故障 → 恢复开关 → 交付动作</text>
+  <text x="30" y="66" font-family="sans-serif" font-size="13" fill="#667788">不是能力阶梯，是"枚举故障 → 挂开关 → 收进清单"的递进</text>
+
+  <!-- 底层：故障 -->
+  <rect x="30" y="92" width="1000" height="150" rx="9" fill="#fdf3f3" stroke="#e0a0a0" stroke-width="1.5"/>
+  <text x="48" y="114" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#a33b3b">第 0 层 · 先枚举故障（没枚举全别谈上线）</text>
+  <rect x="60" y="128" width="180" height="54" rx="6" fill="#ffffff" stroke="#e0a0a0"/>
+  <text x="76" y="150" font-family="sans-serif" font-size="10.5" fill="#a33b3b">超时 / 网络抖动</text>
+  <text x="76" y="168" font-family="monospace" font-size="8.5" fill="#667788">瞬时错误</text>
+  <rect x="260" y="128" width="180" height="54" rx="6" fill="#ffffff" stroke="#e0a0a0"/>
+  <text x="276" y="150" font-family="sans-serif" font-size="10.5" fill="#a33b3b">429 / 失控循环</text>
+  <text x="276" y="168" font-family="monospace" font-size="8.5" fill="#667788">过量调用</text>
+  <rect x="460" y="128" width="180" height="54" rx="6" fill="#ffffff" stroke="#e0a0a0"/>
+  <text x="476" y="150" font-family="sans-serif" font-size="10.5" fill="#a33b3b">模型供应商全挂</text>
+  <text x="476" y="168" font-family="monospace" font-size="8.5" fill="#667788">provider outage</text>
+  <rect x="660" y="128" width="180" height="54" rx="6" fill="#ffffff" stroke="#e0a0a0"/>
+  <text x="676" y="150" font-family="sans-serif" font-size="10.5" fill="#a33b3b">进程崩溃</text>
+  <text x="676" y="168" font-family="monospace" font-size="8.5" fill="#667788">durability</text>
+
+  <!-- 连接线向下对应的开关 -->
+  <line x1="150" y1="182" x2="170" y2="268" stroke="#7fb2e5" stroke-width="1.5" marker-end="url(#m13a)"/>
+  <line x1="360" y1="182" x2="330" y2="268" stroke="#e0b877" stroke-width="1.5" marker-end="url(#m13a)"/>
+  <line x1="555" y1="182" x2="570" y2="268" stroke="#86bfa0" stroke-width="1.5" marker-end="url(#m13a)"/>
+  <line x1="745" y1="182" x2="780" y2="268" stroke="#e0a0a0" stroke-width="1.5" marker-end="url(#m13a)"/>
+
+  <!-- 中层：恢复开关 -->
+  <rect x="30" y="268" width="1000" height="150" rx="9" fill="#f7f9fc" stroke="#a8b8c8" stroke-width="1.4"/>
+  <text x="48" y="290" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#33475b">第 1 层 · 每个故障挂一个恢复开关</text>
+  <rect x="60" y="304" width="225" height="84" rx="6" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.3"/>
+  <text x="76" y="326" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#1e4b7a">重试</text>
+  <text x="76" y="344" font-family="monospace" font-size="8.5" fill="#33475b">ModelRetryMiddleware</text>
+  <text x="76" y="360" font-family="monospace" font-size="8.5" fill="#33475b">ToolRetryMiddleware</text>
+  <text x="76" y="378" font-family="sans-serif" font-size="8.5" fill="#a33b3b">默认会重试 401（普通异常）</text>
+
+  <rect x="310" y="304" width="225" height="84" rx="6" fill="#fff8ec" stroke="#e0b877" stroke-width="1.3"/>
+  <text x="326" y="326" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#7a4f13">次数上限（不是限速）</text>
+  <text x="326" y="344" font-family="monospace" font-size="8.5" fill="#33475b">ModelCallLimitMiddleware</text>
+  <text x="326" y="360" font-family="monospace" font-size="8.5" fill="#33475b">ToolCallLimitMiddleware</text>
+  <text x="326" y="378" font-family="sans-serif" font-size="8.5" fill="#a33b3b">框架里没有 RateLimit</text>
+
+  <rect x="560" y="304" width="225" height="84" rx="6" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.3"/>
+  <text x="576" y="326" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#1f5537">降级（顺序重要）</text>
+  <text x="576" y="344" font-family="monospace" font-size="8.5" fill="#33475b">ModelFallbackMiddleware</text>
+  <text x="576" y="378" font-family="sans-serif" font-size="8.5" fill="#a33b3b">重试外、降级内</text>
+
+  <rect x="810" y="304" width="200" height="84" rx="6" fill="#fdf3f3" stroke="#e0a0a0" stroke-width="1.3"/>
+  <text x="826" y="326" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#a33b3b">持久化</text>
+  <text x="826" y="344" font-family="monospace" font-size="8.5" fill="#33475b">durability:</text>
+  <text x="826" y="360" font-family="monospace" font-size="8.5" fill="#33475b">exit / async / sync</text>
+  <text x="826" y="378" font-family="sans-serif" font-size="8.5" fill="#a33b3b">非 MemorySaver</text>
+
+  <!-- 向上收束 -->
+  <line x1="565" y1="418" x2="565" y2="452" stroke="#5b6b7c" stroke-width="1.6" marker-end="url(#m13a)"/>
+
+  <!-- 顶层：交付 -->
+  <rect x="200" y="452" width="730" height="110" rx="9" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="218" y="474" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#1e4b7a">第 2 层 · 八项交付清单（最容易漏三个）</text>
+  <rect x="228" y="486" width="160" height="56" rx="5" fill="#fdf3f3" stroke="#e0a0a0" stroke-width="1.3"/>
+  <text x="242" y="506" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#a33b3b">checkpointer</text>
+  <text x="242" y="524" font-family="sans-serif" font-size="8" fill="#a33b3b">不配则中断不可恢复</text>
+  <rect x="408" y="486" width="160" height="56" rx="5" fill="#fdf3f3" stroke="#e0a0a0" stroke-width="1.3"/>
+  <text x="422" y="506" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#a33b3b">durable 模式</text>
+  <text x="422" y="524" font-family="sans-serif" font-size="8" fill="#a33b3b">崩溃丢哪一步</text>
+  <rect x="588" y="486" width="180" height="56" rx="5" fill="#fdf3f3" stroke="#e0a0a0" stroke-width="1.3"/>
+  <text x="602" y="506" font-family="sans-serif" font-size="9.5" font-weight="bold" fill="#a33b3b">版本锁定 v0.7</text>
+  <text x="602" y="524" font-family="sans-serif" font-size="8" fill="#a33b3b">write_todos 静默消失</text>
+  <rect x="788" y="492" width="120" height="44" rx="5" fill="#ffffff" stroke="#9ccfae"/>
+  <text x="802" y="510" font-family="sans-serif" font-size="9" fill="#33475b">其余 5 项稳定</text>
+  <text x="802" y="526" font-family="sans-serif" font-size="8" fill="#667788">Thread/沙箱/上限</text>
+
+  <!-- 底部注释 -->
+  <text x="30" y="572" font-family="sans-serif" font-size="10" fill="#667788">实测：deepagents 0.7.28 / langchain 1.4.6 ｜ 401 重试判定 / 降级顺序 / 单订阅限制均来自真实探针</text>
+</svg>

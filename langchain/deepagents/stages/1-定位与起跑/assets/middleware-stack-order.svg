@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 620" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="940" height="620" fill="#fbfcfd"/>
+  <text x="470" y="30" text-anchor="middle" font-size="16.5" font-weight="600" fill="#1f2937">中间件栈：谁在前、谁在后、你的插在哪</text>
+  <text x="470" y="52" text-anchor="middle" font-size="11.5" fill="#64748b">顺序不是排版偏好——每个位置都对应一个"它必须看到什么"</text>
+
+  <rect x="40" y="72" width="520" height="30" rx="5" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.2"/>
+  <text x="56" y="92" font-size="10.5" font-weight="600" fill="#1e4b7a">1 FilesystemMiddleware</text>
+  <text x="330" y="92" font-size="10" fill="#64748b">文件工具 + 权限执行（不可排除）</text>
+
+  <rect x="40" y="108" width="520" height="30" rx="5" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.2"/>
+  <text x="56" y="128" font-size="10.5" font-weight="600" fill="#1e4b7a">2 SubAgentMiddleware</text>
+  <text x="330" y="128" font-size="10" fill="#64748b">task 工具；默认给通用子代理就有</text>
+
+  <rect x="40" y="144" width="520" height="30" rx="5" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.2"/>
+  <text x="56" y="164" font-size="10.5" font-weight="600" fill="#1e4b7a">3 SummarizationMiddleware</text>
+  <text x="330" y="164" font-size="10" fill="#64748b">历史过长时压缩</text>
+
+  <rect x="40" y="180" width="520" height="30" rx="5" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.2"/>
+  <text x="56" y="200" font-size="10.5" font-weight="600" fill="#1e4b7a">4 PatchToolCallsMiddleware</text>
+  <text x="330" y="200" font-size="10" fill="#64748b">修补悬空工具调用（恢复时救场）</text>
+
+  <rect x="40" y="216" width="520" height="30" rx="5" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.2" stroke-dasharray="5 3"/>
+  <text x="56" y="236" font-size="10.5" font-weight="600" fill="#1e4b7a">5 AsyncSubAgentMiddleware（可选）</text>
+  <text x="330" y="236" font-size="10" fill="#64748b">配了异步子代理才出现</text>
+
+  <rect x="40" y="252" width="520" height="38" rx="5" fill="#ffe9c9" stroke="#d99100" stroke-width="1.8"/>
+  <text x="56" y="268" font-size="10.8" font-weight="700" fill="#7a4f13">★ 你的 middleware 插在这里</text>
+  <text x="56" y="284" font-size="10" fill="#8a5a10">同名则原位替换上面某一条，不同名则新增在此处</text>
+
+  <rect x="40" y="296" width="520" height="30" rx="5" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.2"/>
+  <text x="56" y="316" font-size="10.5" fill="#1f5537">6 profile extras（按模型注入）</text>
+  <text x="330" y="316" font-size="10" fill="#64748b">provider 专属中间件</text>
+
+  <rect x="40" y="332" width="520" height="30" rx="5" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.2"/>
+  <text x="56" y="352" font-size="10.5" fill="#1f5537">7 SkillsMiddleware（传 skills 才出现）</text>
+  <text x="330" y="352" font-size="10" fill="#64748b">要看压缩后的对话与真实模型</text>
+
+  <rect x="40" y="368" width="520" height="30" rx="5" fill="#dff0e4" stroke="#86bfa0" stroke-width="1.5"/>
+  <text x="56" y="388" font-size="10.5" font-weight="600" fill="#1f5537">8 提示缓存（始终注册，不支持的模型空转）</text>
+  <text x="330" y="388" font-size="10" fill="#64748b">缓存前缀必须与真实请求一致</text>
+
+  <rect x="40" y="404" width="520" height="30" rx="5" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.2"/>
+  <text x="56" y="424" font-size="10.5" fill="#1f5537">9 MemoryMiddleware（传 memory 才出现）</text>
+  <text x="330" y="424" font-size="10" fill="#64748b">刻意排在缓存之后，免得改记忆就击穿缓存</text>
+
+  <rect x="40" y="440" width="520" height="30" rx="5" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.2"/>
+  <text x="56" y="460" font-size="10.5" fill="#1f5537">10 HumanInTheLoopMiddleware（传 interrupt_on）</text>
+  <text x="330" y="460" font-size="10" fill="#64748b">审批闸门</text>
+
+  <rect x="40" y="476" width="520" height="30" rx="5" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.2"/>
+  <text x="56" y="496" font-size="10.5" fill="#1f5537">11 UnsupportedContentMiddleware（永远）</text>
+  <text x="330" y="496" font-size="10" fill="#64748b">模型不收的多模态块换成文字，别让整条会话卡死</text>
+
+  <rect x="40" y="512" width="520" height="30" rx="5" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.2"/>
+  <text x="56" y="532" font-size="10.5" fill="#1f5537">12 工具排除过滤（profile 配了 excluded_tools）</text>
+  <text x="330" y="532" font-size="10" fill="#64748b">最后一步剥，防止被你的中间件加回来</text>
+
+  <rect x="596" y="72" width="304" height="150" rx="9" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3"/>
+  <text x="614" y="94" font-size="11.5" font-weight="600" fill="#334155">三个"为什么必须"</text>
+  <text x="614" y="116" font-size="10.3" fill="#475569">· 修补在压缩之后：先压缩才可能产生</text>
+  <text x="628" y="132" font-size="10.3" fill="#475569">悬空调用，顺序反了就补不到</text>
+  <text x="614" y="152" font-size="10.3" fill="#475569">· 技能在缓存之前：它要看到压缩后的</text>
+  <text x="628" y="168" font-size="10.3" fill="#475569">真实对话，才知道该披露哪个技能</text>
+  <text x="614" y="188" font-size="10.3" fill="#475569">· 记忆在缓存之后：更新记忆不击穿</text>
+  <text x="628" y="204" font-size="10.3" fill="#475569">prompt 前缀，省钱</text>
+
+  <rect x="596" y="238" width="304" height="128" rx="9" fill="#fff8ec" stroke="#e0b877" stroke-width="1.3"/>
+  <text x="614" y="260" font-size="11.5" font-weight="600" fill="#7a4f13">"同名原位替换"的实际效果</text>
+  <text x="614" y="282" font-size="10.3" fill="#475569">传一个 name 也叫</text>
+  <text x="614" y="298" font-size="10.3" fill="#475569" font-family="ui-monospace, Menlo, monospace">"SummarizationMiddleware"</text>
+  <text x="614" y="316" font-size="10.3" fill="#475569">的中间件 → 顶掉第 3 条，</text>
+  <text x="614" y="332" font-size="10.3" fill="#475569">不是再加一条。</text>
+  <text x="614" y="352" font-size="10" fill="#94a3b8">想要"两条都留"只能换 name。</text>
+
+  <rect x="596" y="380" width="304" height="162" rx="9" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2" stroke-dasharray="4 3"/>
+  <text x="614" y="402" font-size="11.5" font-weight="600" fill="#475569">只给 model 时的 bare stack</text>
+  <text x="614" y="424" font-size="10.3" fill="#475569">核心 1 → 2 → 3 → 4，</text>
+  <text x="614" y="440" font-size="10.3" fill="#475569">再加上始终在场的 8 与 11。</text>
+  <text x="614" y="462" font-size="10.3" fill="#64748b">其余全是"你给了参数才有"。</text>
+  <text x="614" y="482" font-size="10.3" fill="#94a3b8">实测节点里还多一个</text>
+  <text x="614" y="498" font-size="10.3" fill="#94a3b8">_ParentNotifierMiddleware</text>
+  <text x="614" y="514" font-size="10.3" fill="#94a3b8">（异步子代理唤醒器，本表不列）。</text>
+  <text x="614" y="532" font-size="10" fill="#a16207">文档表 ≠ 全部节点，排查以实测为准。</text>
+
+  <text x="470" y="594" text-anchor="middle" font-size="10.8" fill="#64748b">读图：从上往下 = 由外到内。越靠上越先接触"进出模型的请求"，越靠下越贴近最终调用。</text>
+</svg>

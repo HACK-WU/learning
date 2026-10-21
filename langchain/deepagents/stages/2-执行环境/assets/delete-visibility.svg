@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 540" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="c4" markerWidth="10" markerHeight="10" refX="7.5" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5a6b7d"/>
+    </marker>
+  </defs>
+  <rect width="940" height="540" fill="#fbfcfd"/>
+  <text x="470" y="30" text-anchor="middle" font-size="16.5" font-weight="600" fill="#1f2937">同一个工具名，三种命运：在、不在、看不见</text>
+  <text x="470" y="52" text-anchor="middle" font-size="11.5" fill="#64748b">"我 print 出来有"和"模型看得到"，中间隔着一道请求期的门</text>
+
+  <rect x="28" y="80" width="884" height="52" rx="8" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.4"/>
+  <text x="44" y="102" font-size="11.8" font-weight="600" fill="#1f5537">① 构造期：FilesystemMiddleware(tools=[...]) 里没列 → 压根不进 self.tools</text>
+  <text x="44" y="122" font-size="10.5" fill="#334155">它是"真的没有了"，任何地方都查不到；但 read_file 必须列进去，否则构造直接抛 ValueError</text>
+
+  <rect x="28" y="146" width="884" height="52" rx="8" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.4"/>
+  <text x="44" y="168" font-size="11.8" font-weight="600" fill="#1e4b7a">② 静态表：self.tools 里有 → 你在 agent.nodes["tools"].bound.tools_by_name 里能 print 到</text>
+  <text x="44" y="188" font-size="10.5" fill="#334155">这只是"中间件造出来的清单"，还不等于模型这次会收到什么</text>
+
+  <rect x="28" y="212" width="884" height="72" rx="8" fill="#fff8ec" stroke="#e0b877" stroke-width="1.6"/>
+  <text x="44" y="234" font-size="11.8" font-weight="600" fill="#7a4f13">③ 请求期（wrap_model_call 里）：按后端能力再筛一次 → 模型实际看到的</text>
+  <text x="44" y="256" font-size="10.6" fill="#334155">后端不支持 delete：delete 被加进 unsupported 集合，请求里被 override 掉</text>
+  <text x="44" y="276" font-size="10.6" fill="#334155">后端不支持 execute：同理；顺带把 grep 描述里"用 rg 跑正则"那句提示也去掉</text>
+
+  <line x1="470" y1="284" x2="470" y2="306" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#c4)"/>
+
+  <rect x="28" y="312" width="432" height="120" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3"/>
+  <text x="44" y="334" font-size="12" font-weight="600" fill="#334155">能力怎么判定</text>
+  <text x="44" y="358" font-size="10.6" fill="#334155" font-family="ui-monospace, Menlo, monospace">type(backend).delete</text>
+  <text x="44" y="376" font-size="10.6" fill="#334155" font-family="ui-monospace, Menlo, monospace">  is not BackendProtocol.delete</text>
+  <text x="44" y="400" font-size="10.3" fill="#64748b">就是"这个类有没有重写过它"。没重写 = 继承默认 = 不支持。</text>
+  <text x="44" y="420" font-size="10.3" fill="#64748b">不看实例、不看有没有抛错，只看类型的归属。</text>
+
+  <rect x="480" y="312" width="432" height="120" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3"/>
+  <text x="496" y="334" font-size="12" font-weight="600" fill="#334155">实测两种后端的差别</text>
+  <text x="496" y="358" font-size="10.4" fill="#1f5537" font-family="ui-monospace, Menlo, monospace">StateBackend → unsupported={'execute'}</text>
+  <text x="496" y="378" font-size="10.4" fill="#8f3a3a" font-family="ui-monospace, Menlo, monospace">BareBackend  → unsupported={'execute','delete'}</text>
+  <text x="496" y="402" font-size="10.3" fill="#64748b">两者静态清单都是 8 项，一模一样。</text>
+  <text x="496" y="422" font-size="10.3" fill="#64748b">差别只在请求期——所以"看清单对比后端"永远看不出问题。</text>
+
+  <rect x="28" y="450" width="884" height="74" rx="10" fill="#fdeeee" stroke="#e39a9a" stroke-width="1.3"/>
+  <text x="44" y="472" font-size="11.8" font-weight="600" fill="#8f3a3a">这意味着：删/执行这类能力"消失"时，不会有任何报错</text>
+  <text x="44" y="494" font-size="10.6" fill="#334155">模型不会说"我没有 delete 权限"，它只会换个办法（比如用 write_file 写空内容）——你得自己知道少了什么</text>
+  <text x="44" y="514" font-size="10.3" fill="#64748b">排查顺序：先看后端类型，再看 _supports_delete / supports_execution，最后才怀疑模型</text>
+</svg>

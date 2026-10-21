@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 420" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="pf" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5a6b7d"/>
+    </marker>
+  </defs>
+  <rect width="940" height="420" fill="#fbfcfd"/>
+  <text x="470" y="30" text-anchor="middle" font-size="16.5" font-weight="600" fill="#1f2937">Profile：在"模型被选中"那一刻自动加上的一层默认</text>
+
+  <rect x="34" y="62" width="200" height="66" rx="9" fill="#ffffff" stroke="#94a3b8" stroke-width="1.4"/>
+  <text x="134" y="86" text-anchor="middle" font-size="11.5" font-weight="600" fill="#334155">你写 model 字符串</text>
+  <text x="134" y="108" text-anchor="middle" font-size="10" fill="#64748b" font-family="ui-monospace, Menlo, monospace">"openai:gpt-5.4"</text>
+
+  <line x1="238" y1="95" x2="272" y2="95" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#pf)"/>
+
+  <rect x="278" y="62" width="200" height="66" rx="9" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="378" y="86" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1e4b7a">查表：匹配 profile</text>
+  <text x="378" y="108" text-anchor="middle" font-size="10" fill="#64748b">先精确匹配，再退到 provider 默认</text>
+
+  <line x1="482" y1="95" x2="516" y2="95" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#pf)"/>
+
+  <rect x="522" y="52" width="384" height="86" rx="9" fill="#fff8ec" stroke="#e0b877" stroke-width="1.5"/>
+  <text x="542" y="74" font-size="11.5" font-weight="600" fill="#7a4f13">profile 能改的五件事</text>
+  <text x="542" y="94" font-size="10.3" fill="#475569">系统提示 / 工具描述 · 排除工具 · 排除中间件 · 加中间件 · 通用子代理开关</text>
+  <text x="542" y="114" font-size="10.3" fill="#64748b">改的是"harness 怎么配"，不是你 agent 的业务逻辑</text>
+  <text x="542" y="132" font-size="10" fill="#94a3b8">provider profile 另管 temperature / timeout 这类构造参数</text>
+
+  <rect x="34" y="168" width="872" height="112" rx="9" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3"/>
+  <text x="54" y="192" font-size="11.5" font-weight="600" fill="#334155">提示词三段拼装（顺序固定，不管选了哪个模型）</text>
+  <rect x="54" y="204" width="240" height="30" rx="5" fill="#dff0e4" stroke="#86bfa0" stroke-width="1.2"/>
+  <text x="174" y="223" text-anchor="middle" font-size="10.3" fill="#1f5537">① 你传的 system_prompt（永远最前）</text>
+  <rect x="302" y="204" width="240" height="30" rx="5" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.2"/>
+  <text x="422" y="223" text-anchor="middle" font-size="10.3" fill="#1e4b7a">② profile 的 base_system_prompt</text>
+  <rect x="550" y="204" width="240" height="30" rx="5" fill="#fff8ec" stroke="#e0b877" stroke-width="1.2"/>
+  <text x="670" y="223" text-anchor="middle" font-size="10.3" fill="#7a4f13">③ profile 的 suffix（永远最后）</text>
+  <line x1="296" y1="219" x2="298" y2="219" stroke="#5a6b7d" stroke-width="1.5"/>
+  <line x1="544" y1="219" x2="546" y2="219" stroke="#5a6b7d" stroke-width="1.5"/>
+  <text x="54" y="258" font-size="10.3" fill="#64748b">子代理会拿自己的 model 重新跑一遍 profile 解析——同一个 profile 对主代理与子代理各生效一次。</text>
+
+  <rect x="34" y="296" width="424" height="98" rx="9" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.3"/>
+  <text x="54" y="320" font-size="11.5" font-weight="600" fill="#1f5537">什么时候别覆盖</text>
+  <text x="54" y="342" font-size="10.3" fill="#475569">官方为弱项模型调过的默认值：</text>
+  <text x="54" y="360" font-size="10.3" fill="#475569">工具描述、提示词、要不要开某能力</text>
+  <text x="54" y="380" font-size="10.3" fill="#64748b">先按默认跑，出问题再定位</text>
+
+  <rect x="482" y="296" width="424" height="98" rx="9" fill="#fff8ec" stroke="#e0b877" stroke-width="1.3"/>
+  <text x="502" y="320" font-size="11.5" font-weight="600" fill="#7a4f13">什么时候必须覆盖</text>
+  <text x="502" y="342" font-size="10.3" fill="#475569">① 你的模型太爱调某个工具 → 排除它</text>
+  <text x="502" y="360" font-size="10.3" fill="#475569">② 某能力在你的场景是噪音 → 关掉</text>
+  <text x="502" y="380" font-size="10.3" fill="#64748b">③ 公司规范要求统一提示词后缀</text>
+</svg>

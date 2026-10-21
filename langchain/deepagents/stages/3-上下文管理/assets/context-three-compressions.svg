@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="620" viewBox="0 0 1040 620">
+  <defs>
+    <marker id="m9b" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#5b6b7c"/>
+    </marker>
+  </defs>
+  <rect width="1040" height="620" fill="#ffffff"/>
+  <text x="30" y="40" font-family="sans-serif" font-size="21" font-weight="bold" fill="#1f2d3d">三种压缩动作：频率不同、可逆性不同</text>
+  <text x="30" y="66" font-family="sans-serif" font-size="13" fill="#667788">卸载最常见也最安全，摘要最重也最危险——危险不在丢数据，而在丢掉"想起来的机会"</text>
+
+  <!-- 动作一：卸载 -->
+  <rect x="30" y="92" width="312" height="238" rx="9" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.8"/>
+  <text x="48" y="120" font-family="sans-serif" font-size="14" font-weight="bold" fill="#1e4b7a">① 卸载 offload</text>
+  <text x="48" y="142" font-family="sans-serif" font-size="10.5" fill="#33475b">频率：每次工具调用都检查</text>
+  <text x="48" y="162" font-family="sans-serif" font-size="10.5" fill="#33475b">阈值：20,000 token ≈ 80,000 字符</text>
+  <text x="48" y="182" font-family="sans-serif" font-size="10.5" fill="#33475b">落点：/large_tool_results/{call_id}</text>
+  <text x="48" y="208" font-family="monospace" font-size="10" fill="#a33b3b">实测：400,000 → 1,588 字符</text>
+  <text x="48" y="228" font-family="sans-serif" font-size="10" fill="#2e6b4f">可逆：原文在磁盘，read_file 能读回</text>
+  <line x1="48" y1="244" x2="324" y2="244" stroke="#a8b8c8" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="48" y="266" font-family="sans-serif" font-size="10" font-weight="bold" fill="#a33b3b">谁被排除：</text>
+  <text x="48" y="286" font-family="monospace" font-size="9" fill="#a33b3b">ls glob grep read_file</text>
+  <text x="48" y="302" font-family="monospace" font-size="9" fill="#a33b3b">edit_file write_file delete</text>
+  <text x="48" y="320" font-family="sans-serif" font-size="9.5" fill="#667788">文件工具有分页协议，不会变大</text>
+
+  <!-- 动作二：裁剪 -->
+  <rect x="362" y="92" width="312" height="238" rx="9" fill="#fff8ec" stroke="#e0b877" stroke-width="1.8"/>
+  <text x="380" y="120" font-family="sans-serif" font-size="14" font-weight="bold" fill="#7a4f13">② 裁剪 truncate args</text>
+  <text x="380" y="142" font-family="sans-serif" font-size="10.5" fill="#33475b">频率：越过约 85% 才动手</text>
+  <text x="380" y="162" font-family="sans-serif" font-size="10.5" fill="#33475b">对象：老的 write/edit 参数</text>
+  <text x="380" y="182" font-family="sans-serif" font-size="10.5" fill="#33475b">理由：内容早已落盘，历史里那份冗余</text>
+  <text x="380" y="208" font-family="monospace" font-size="10" fill="#a33b3b">实测：180,000 → 43 字符</text>
+  <text x="380" y="228" font-family="sans-serif" font-size="10" fill="#2e6b4f">可逆：state 保留原文，磁盘也完整</text>
+  <line x1="380" y1="244" x2="656" y2="244" stroke="#a8b8c8" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="380" y="266" font-family="sans-serif" font-size="10" font-weight="bold" fill="#7a4f13">替换后的样子：</text>
+  <text x="380" y="288" font-family="monospace" font-size="9.5" fill="#33475b">'x = 1\nx = 1\nx = 1\nx ...(argument</text>
+  <text x="380" y="304" font-family="monospace" font-size="9.5" fill="#33475b"> truncated)'</text>
+  <text x="380" y="324" font-family="sans-serif" font-size="9.5" fill="#667788">最"无痛"的一种：模型本就不需要重看</text>
+
+  <!-- 动作三：摘要 -->
+  <rect x="694" y="92" width="316" height="238" rx="9" fill="#fdf3f3" stroke="#e0a0a0" stroke-width="1.8"/>
+  <text x="712" y="120" font-family="sans-serif" font-size="14" font-weight="bold" fill="#a33b3b">③ 摘要 summarize</text>
+  <text x="712" y="142" font-family="sans-serif" font-size="10.5" fill="#33475b">频率：约 85% 且无可卸载时才做</text>
+  <text x="712" y="162" font-family="sans-serif" font-size="10.5" fill="#33475b">默认：窗口 85% 触发 / 保留 10%</text>
+  <text x="712" y="182" font-family="sans-serif" font-size="10.5" fill="#33475b">落点：/conversation_history/session_*.md</text>
+  <text x="712" y="208" font-family="monospace" font-size="10" fill="#a33b3b">实测：16 条 → 4 条送模型</text>
+  <text x="712" y="228" font-family="sans-serif" font-size="10" fill="#a33b3b">代价：模型只能看转述，不是原文</text>
+  <line x1="712" y1="244" x2="992" y2="244" stroke="#a8b8c8" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="712" y="266" font-family="sans-serif" font-size="10" font-weight="bold" fill="#a33b3b">重要细节：不动 state</text>
+  <text x="712" y="286" font-family="sans-serif" font-size="9.5" fill="#33475b">输入 16 条 → state 仍是 17 条（原文全在）</text>
+  <text x="712" y="304" font-family="sans-serif" font-size="9.5" fill="#33475b">压缩只发生在 wrap_model_call</text>
+  <text x="712" y="322" font-family="sans-serif" font-size="9.5" fill="#2e6b4f">→ 原始日志可回放、可评测</text>
+
+  <!-- 频率轴 -->
+  <rect x="30" y="352" width="980" height="118" rx="9" fill="#f7f9fc" stroke="#a8b8c8" stroke-width="1.5"/>
+  <text x="48" y="376" font-family="sans-serif" font-size="12" font-weight="bold" fill="#33475b">频率决定调优顺序（从左到右越来越低频）</text>
+  <line x1="70" y1="412" x2="960" y2="412" stroke="#667788" stroke-width="1.4" marker-end="url(#m9b)"/>
+  <circle cx="150" cy="412" r="7" fill="#7fb2e5"/>
+  <text x="118" y="438" font-family="sans-serif" font-size="10.5" fill="#1e4b7a">每次工具调用</text>
+  <text x="122" y="454" font-family="sans-serif" font-size="9.5" fill="#667788">卸载检查</text>
+
+  <circle cx="360" cy="412" r="7" fill="#e0b877"/>
+  <text x="330" y="438" font-family="sans-serif" font-size="10.5" fill="#7a4f13">约 85% 窗口</text>
+  <text x="334" y="454" font-family="sans-serif" font-size="9.5" fill="#667788">裁剪 → 摘要</text>
+
+  <circle cx="600" cy="412" r="7" fill="#86bfa0"/>
+  <text x="566" y="438" font-family="sans-serif" font-size="10.5" fill="#1f5537">模型判断值得</text>
+  <text x="572" y="454" font-family="sans-serif" font-size="9.5" fill="#667788">派子代理</text>
+
+  <circle cx="840" cy="412" r="7" fill="#e0a0a0"/>
+  <text x="806" y="438" font-family="sans-serif" font-size="10.5" fill="#a33b3b">跨会话</text>
+  <text x="812" y="454" font-family="sans-serif" font-size="9.5" fill="#667788">写长期记忆</text>
+
+  <!-- 底部：修补 -->
+  <rect x="30" y="490" width="980" height="110" rx="9" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.5"/>
+  <text x="48" y="514" font-family="sans-serif" font-size="12" font-weight="bold" fill="#1f5537">还有一个不压缩但必需的：PatchToolCallsMiddleware 修补悬空调用</text>
+  <text x="48" y="538" font-family="sans-serif" font-size="10.5" fill="#1f5537">中断或取消会让 AI 发出工具调用却没有结果，多数 provider 直接报错 → thread 报废</text>
+  <text x="48" y="558" font-family="monospace" font-size="9.5" fill="#33475b">实测补上：'Tool call read_file with id c2 did not complete - no result was recorded. It may have been cancelled or interrupted.'</text>
+  <text x="48" y="578" font-family="monospace" font-size="9.5" fill="#a33b3b">畸形参数另算：'... could not be executed - arguments were malformed or truncated.'</text>
+  <text x="48" y="596" font-family="sans-serif" font-size="9.5" fill="#667788">干净历史 → before_agent 返回 None（不打扰）；status 都标为 'error'</text>
+</svg>

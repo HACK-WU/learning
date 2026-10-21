@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 620" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="c5c" markerWidth="10" markerHeight="10" refX="7.5" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5a6b7d"/>
+    </marker>
+  </defs>
+  <rect width="940" height="620" fill="#fbfcfd"/>
+  <text x="470" y="30" text-anchor="middle" font-size="16.5" font-weight="600" fill="#1f2937">权限是一列"从上往下问"的规则，加上三条边界</text>
+  <text x="470" y="52" text-anchor="middle" font-size="11.5" fill="#64748b">第一条命中的规则说了算；一条都不命中，就放行</text>
+
+  <rect x="30" y="76" width="420" height="132" rx="9" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="46" y="98" font-size="11.8" font-weight="600" fill="#1e4b7a">规则三要素</text>
+  <text x="46" y="120" font-size="10.5" fill="#334155" font-family="ui-monospace, Menlo, monospace">operations: ["read"] / ["write"] / 两个都写</text>
+  <text x="46" y="140" font-size="10.4" fill="#64748b">read 管 ls/read_file/glob/grep</text>
+  <text x="46" y="158" font-size="10.4" fill="#64748b">write 管 write_file/edit_file/delete</text>
+  <text x="46" y="180" font-size="10.5" fill="#334155" font-family="ui-monospace, Menlo, monospace">paths: glob（支持 ** 与 {a,b}）</text>
+  <text x="46" y="198" font-size="10.5" fill="#334155" font-family="ui-monospace, Menlo, monospace">mode: allow / deny / interrupt</text>
+
+  <rect x="466" y="76" width="444" height="132" rx="9" fill="#fff8ec" stroke="#e0b877" stroke-width="1.6"/>
+  <text x="482" y="98" font-size="11.8" font-weight="600" fill="#7a4f13">判定循环（源码 _check_fs_permission）</text>
+  <text x="482" y="122" font-size="10.5" fill="#334155" font-family="ui-monospace, Menlo, monospace">for rule in rules:</text>
+  <text x="482" y="142" font-size="10.5" fill="#334155" font-family="ui-monospace, Menlo, monospace">    if op not in rule.operations: continue</text>
+  <text x="482" y="162" font-size="10.5" fill="#334155" font-family="ui-monospace, Menlo, monospace">    if globmatch(path, any(rule.paths)): return rule.mode</text>
+  <text x="482" y="182" font-size="10.5" fill="#334155" font-family="ui-monospace, Menlo, monospace">return "allow"   ← 兜底是放行，不是拒绝</text>
+  <text x="482" y="200" font-size="10.2" fill="#8f3a3a">没有"最具体优先"，也没有"deny 总赢"</text>
+
+  <line x1="470" y1="208" x2="470" y2="228" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#c5c)"/>
+
+  <rect x="30" y="234" width="432" height="140" rx="9" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.4"/>
+  <text x="46" y="256" font-size="11.8" font-weight="600" fill="#1f5537">正确顺序（实测：deny 生效）</text>
+  <text x="46" y="278" font-size="10.3" fill="#334155" font-family="ui-monospace, Menlo, monospace">1. deny  /workspace/secret.txt</text>
+  <text x="46" y="296" font-size="10.3" fill="#334155" font-family="ui-monospace, Menlo, monospace">2. allow /workspace/**</text>
+  <text x="46" y="314" font-size="10.3" fill="#334155" font-family="ui-monospace, Menlo, monospace">3. deny  /**</text>
+  <text x="46" y="338" font-size="10.4" fill="#1f5537">读 /workspace/secret.txt → deny ✓</text>
+  <text x="46" y="356" font-size="10.4" fill="#1f5537">读 /workspace/notes.md   → allow ✓</text>
+
+  <rect x="478" y="234" width="432" height="140" rx="9" fill="#fdeeee" stroke="#e39a9a" stroke-width="1.4"/>
+  <text x="494" y="256" font-size="11.8" font-weight="600" fill="#8f3a3a">反过来的顺序（实测：deny 失效）</text>
+  <text x="494" y="278" font-size="10.3" fill="#334155" font-family="ui-monospace, Menlo, monospace">1. allow /workspace/**</text>
+  <text x="494" y="296" font-size="10.3" fill="#334155" font-family="ui-monospace, Menlo, monospace">2. deny  /workspace/secret.txt  ← 永远轮不到</text>
+  <text x="494" y="314" font-size="10.3" fill="#334155" font-family="ui-monospace, Menlo, monospace">3. deny  /**</text>
+  <text x="494" y="338" font-size="10.4" fill="#8f3a3a">读 /workspace/secret.txt → allow ✗</text>
+  <text x="494" y="356" font-size="10.4" fill="#8f3a3a">规则顺序错了，等于没写</text>
+
+  <line x1="470" y1="374" x2="470" y2="394" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#c5c)"/>
+
+  <rect x="30" y="400" width="880" height="86" rx="9" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.4"/>
+  <text x="46" y="422" font-size="11.8" font-weight="600" fill="#334155">三条最容易踩的边界（都实测过）</text>
+  <text x="46" y="444" font-size="10.5" fill="#334155">① 只管内置文件工具：自定义工具、MCP 工具照旧能读能写（实测带 deny-all 的 agent 里 peek_env 仍在）</text>
+  <text x="46" y="462" font-size="10.5" fill="#334155">② 对沙箱 execute 无效：所以 Composite(default=sandbox) + 越出路由的路径会直接 NotImplementedError</text>
+  <text x="46" y="480" font-size="10.5" fill="#334155">③ 对子代理默认继承，spec 里写了 permissions 则整体替换（不是合并）</text>
+
+  <rect x="30" y="498" width="880" height="102" rx="10" fill="#fff8ec" stroke="#e0b877" stroke-width="1.8"/>
+  <text x="46" y="520" font-size="11.8" font-weight="600" fill="#7a4f13">最反直觉的一条：/** 盖不住点开头的文件</text>
+  <text x="46" y="542" font-size="10.5" fill="#334155">实测 deny paths=["/**"] 之后，/notes.md 被拦，而 /.env、/.aws/credentials 依然可读</text>
+  <text x="46" y="560" font-size="10.5" fill="#334155">原因：glob flags = BRACE | GLOBSTAR，没带 DOTMATCH，点文件被排除在匹配之外</text>
+  <text x="46" y="578" font-size="10.5" fill="#8f3a3a">要真挡住，得显式补点号：["/**", "/**/.*", "/**/.*/**"]</text>
+  <text x="46" y="594" font-size="10.2" fill="#64748b">这条对"挡 .env"这个最典型的诉求直接相关——按官方示例只写 /workspace/.env 是对的，但别指望 /** 兜底</text>
+</svg>

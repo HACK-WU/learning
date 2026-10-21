@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1030" height="600" viewBox="0 0 1030 600">
+  <rect width="1030" height="600" fill="#ffffff"/>
+  <text x="30" y="40" font-family="sans-serif" font-size="21" font-weight="bold" fill="#1f2d3d">第 2 步：量化 + 验证缓存断点</text>
+  <text x="30" y="66" font-family="sans-serif" font-size="13" fill="#667788">三处变化：强制触发看链路、量清楚卸载边界、验证缓存到底有没有打上</text>
+
+  <!-- 变化一 -->
+  <rect x="30" y="92" width="316" height="230" rx="8" fill="#fff8ec" stroke="#e0b877" stroke-width="1.6" stroke-dasharray="6 4"/>
+  <text x="48" y="118" font-family="sans-serif" font-size="13" font-weight="bold" fill="#7a4f13">变化①：强制触发压缩</text>
+  <text x="48" y="144" font-family="monospace" font-size="9.5" fill="#33475b">trigger=("tokens", 200)</text>
+  <text x="48" y="162" font-family="monospace" font-size="9.5" fill="#33475b">keep=("messages", 2)</text>
+  <text x="48" y="190" font-family="sans-serif" font-size="10" font-weight="bold" fill="#2e6b4f">实测结果</text>
+  <text x="48" y="212" font-family="monospace" font-size="10" fill="#a33b3b">输入 16 条 → 送模型 4 条</text>
+  <text x="48" y="232" font-family="monospace" font-size="10" fill="#a33b3b">state 仍是 17 条（原文保留）</text>
+  <text x="48" y="252" font-family="monospace" font-size="10" fill="#a33b3b">存档 2,061 字符 .md</text>
+  <line x1="48" y1="268" x2="328" y2="268" stroke="#a8b8c8" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="48" y="290" font-family="sans-serif" font-size="9.5" fill="#667788">看懂这组数字 = 知道压缩在渲染层</text>
+  <text x="48" y="308" font-family="sans-serif" font-size="9.5" fill="#667788">→ 原始日志仍可用于评测回放</text>
+
+  <!-- 变化二 -->
+  <rect x="358" y="92" width="316" height="230" rx="8" fill="#fff8ec" stroke="#e0b877" stroke-width="1.6" stroke-dasharray="6 4"/>
+  <text x="376" y="118" font-family="sans-serif" font-size="13" font-weight="bold" fill="#7a4f13">变化②：量清卸载边界</text>
+  <text x="376" y="144" font-family="sans-serif" font-size="10" fill="#33475b">三种情况对照</text>
+  <text x="376" y="170" font-family="monospace" font-size="9.5" fill="#a33b3b">自定义工具 400,000</text>
+  <text x="388" y="188" font-family="monospace" font-size="9.5" fill="#2e6b4f">→ 1,588（卸载了）</text>
+  <text x="376" y="212" font-family="monospace" font-size="9.5" fill="#a33b3b">read_file 600,015</text>
+  <text x="388" y="230" font-family="monospace" font-size="9.5" fill="#a33b3b">→ 455（未卸载）</text>
+  <text x="376" y="254" font-family="monospace" font-size="9.5" fill="#33475b">20k token × 4 = 80,000 字符</text>
+  <line x1="376" y1="268" x2="656" y2="268" stroke="#a8b8c8" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="376" y="290" font-family="sans-serif" font-size="9.5" fill="#2e6b4f">结论：自己写工具要做分页</text>
+  <text x="376" y="308" font-family="sans-serif" font-size="9.5" fill="#667788">被动卸载是补救，主动分页是控制</text>
+
+  <!-- 变化三 -->
+  <rect x="686" y="92" width="316" height="230" rx="8" fill="#fff8ec" stroke="#e0b877" stroke-width="1.6" stroke-dasharray="6 4"/>
+  <text x="704" y="118" font-family="sans-serif" font-size="13" font-weight="bold" fill="#7a4f13">变化③：验证缓存断点</text>
+  <text x="704" y="144" font-family="monospace" font-size="9.5" fill="#33475b">检查 system.content blocks</text>
+  <text x="704" y="162" font-family="monospace" font-size="9.5" fill="#33475b">里有没有 cache_control</text>
+  <text x="704" y="190" font-family="sans-serif" font-size="10" font-weight="bold" fill="#2e6b4f">实测对照</text>
+  <text x="704" y="212" font-family="monospace" font-size="9.5" fill="#2e6b4f">ChatAnthropic → ephemeral</text>
+  <text x="704" y="232" font-family="monospace" font-size="9.5" fill="#a33b3b">非 Anthropic → None</text>
+  <line x1="704" y1="248" x2="984" y2="248" stroke="#a8b8c8" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="704" y="270" font-family="sans-serif" font-size="9.5" fill="#a33b3b">自伤陷阱：系统提示放时间戳</text>
+  <text x="704" y="288" font-family="sans-serif" font-size="9.5" fill="#667788">→ 前缀每次都变，缓存归零</text>
+  <text x="704" y="306" font-family="sans-serif" font-size="9.5" fill="#2e6b4f">→ 动态信息放用户消息里</text>
+
+  <!-- 缓存失效清单 -->
+  <rect x="30" y="342" width="500" height="152" rx="8" fill="#fdf3f3" stroke="#e0a0a0" stroke-width="1.5"/>
+  <text x="48" y="368" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#a33b3b">缓存失效的六种常见原因</text>
+  <text x="48" y="392" font-family="sans-serif" font-size="10" fill="#a33b3b">① 改了系统提示（含改 AGENTS.md）</text>
+  <text x="48" y="410" font-family="sans-serif" font-size="10" fill="#a33b3b">② 改了技能表（增删技能）</text>
+  <text x="48" y="428" font-family="sans-serif" font-size="10" fill="#a33b3b">③ 提示最前面插了动态内容（时间戳 / 用户名）</text>
+  <text x="48" y="446" font-family="sans-serif" font-size="10" fill="#a33b3b">④ 换了模型（缓存不跨模型）</text>
+  <text x="48" y="464" font-family="sans-serif" font-size="10" fill="#a33b3b">⑤ provider 侧缓存过期（默认 5 分钟）</text>
+  <text x="48" y="482" font-family="sans-serif" font-size="10" fill="#a33b3b">⑥ 中间件顺序变了（前缀跟着变）</text>
+
+  <!-- 支持范围 -->
+  <rect x="548" y="342" width="454" height="152" rx="8" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="566" y="368" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#1e4b7a">默认生效范围（含文档滞后）</text>
+  <text x="566" y="392" font-family="monospace" font-size="10" fill="#2e6b4f">Anthropic        → 默认开启</text>
+  <text x="566" y="412" font-family="monospace" font-size="10" fill="#2e6b4f">Amazon Bedrock   → 默认开启</text>
+  <text x="566" y="432" font-family="monospace" font-size="10" fill="#7a4f13">Fireworks        → 装包后注册</text>
+  <text x="566" y="452" font-family="monospace" font-size="10" fill="#a33b3b">OpenAI / DeepSeek → no-op</text>
+  <line x1="566" y1="464" x2="986" y2="464" stroke="#a8b8c8" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="566" y="484" font-family="sans-serif" font-size="9.5" fill="#667788">官方文档说"两家"，代码里实际三家</text>
+
+  <!-- 自检 -->
+  <rect x="30" y="510" width="972" height="72" rx="8" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.5"/>
+  <text x="48" y="534" font-family="sans-serif" font-size="12" font-weight="bold" fill="#1f5537">落盘前自检</text>
+  <text x="48" y="556" font-family="sans-serif" font-size="10.5" fill="#1f5537">① 两版可对比 ② 三组膨胀都有实测数字 ③ 缓存断点有 Anthropic / 非 Anthropic 对照 ④ 图 2 张均 xmllint 通过 ⑤ 双入口已挂索引</text>
+  <text x="48" y="574" font-family="sans-serif" font-size="10" fill="#667788">⑥ 代码与输出一致：16→4、400k→1,588、600KB→455、180k→43、cache_control 均本轮实测</text>
+</svg>

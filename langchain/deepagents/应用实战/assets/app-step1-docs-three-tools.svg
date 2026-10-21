@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 470" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="s41" markerWidth="10" markerHeight="10" refX="7.5" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5a6b7d"/>
+    </marker>
+  </defs>
+  <rect width="940" height="470" fill="#fbfcfd"/>
+  <text x="470" y="28" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">第 1 步：三个散落的工具，谁也不知道什么时候该用哪个</text>
+  <text x="470" y="50" text-anchor="middle" font-size="11.3" fill="#64748b">能跑通，但模型面对 12 个工具时挑错率很高</text>
+
+  <rect x="28" y="76" width="270" height="132" rx="10" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.5"/>
+  <text x="44" y="98" font-size="12" font-weight="600" fill="#1f5537">你写的三个普通函数</text>
+  <text x="44" y="122" font-size="10.4" fill="#334155" font-family="ui-monospace, Menlo, monospace">search_docs(query)</text>
+  <text x="44" y="142" font-size="10.4" fill="#334155" font-family="ui-monospace, Menlo, monospace">fetch_doc(path)</text>
+  <text x="44" y="162" font-size="10.4" fill="#334155" font-family="ui-monospace, Menlo, monospace">list_endpoints(service)</text>
+  <text x="44" y="186" font-size="10" fill="#64748b">返回值都是字符串，docstring 一句话</text>
+
+  <line x1="302" y1="142" x2="342" y2="142" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#s41)"/>
+
+  <rect x="348" y="76" width="300" height="132" rx="10" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="364" y="98" font-size="12" font-weight="600" fill="#1e4b7a">模型看到的工具表</text>
+  <text x="364" y="122" font-size="10.4" fill="#334155" font-family="ui-monospace, Menlo, monospace">12 项 = 9 内置 + 3 你的</text>
+  <text x="364" y="146" font-size="10" fill="#64748b">search_docs / fetch_doc / list_endpoints</text>
+  <text x="364" y="166" font-size="10" fill="#64748b">和 grep / glob / read_file 混在一起</text>
+  <text x="364" y="190" font-size="10" fill="#8f3a3a">"查文档" vs "在文件里搜" 分不清</text>
+
+  <line x1="652" y1="142" x2="692" y2="142" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#s41)"/>
+
+  <rect x="698" y="76" width="214" height="132" rx="10" fill="#fff8ec" stroke="#e0b877" stroke-width="1.5"/>
+  <text x="714" y="98" font-size="12" font-weight="600" fill="#7a4f13">观察到的坏行为</text>
+  <text x="714" y="124" font-size="10.2" fill="#334155">① 该查文档时去 grep 代码库</text>
+  <text x="714" y="146" font-size="10.2" fill="#334155">② 拿到文件名就编内容</text>
+  <text x="714" y="168" font-size="10.2" fill="#334155">③ fetch_doc 传了 URL 而不是路径</text>
+  <text x="714" y="192" font-size="10" fill="#64748b">都不是模型笨，是描述不够分清</text>
+
+  <rect x="28" y="228" width="884" height="106" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3"/>
+  <text x="44" y="250" font-size="12" font-weight="600" fill="#334155">这一版的三个真问题</text>
+  <text x="44" y="274" font-size="10.7" fill="#334155">1. 工具之间没有"先后关系"约束：模型可以先 fetch_doc 再 search_docs，顺序反了也能跑，结果自然不对</text>
+  <text x="44" y="296" font-size="10.7" fill="#334155">2. 描述只有一句话，模型不知道"该在什么时候用我"——这是工具选择失败的第一大原因</text>
+  <text x="44" y="318" font-size="10.7" fill="#334155">3. 工具输出是裸字符串：文档一长就塞满上下文，且没有出处锚点，无法核对</text>
+
+  <rect x="28" y="350" width="884" height="96" rx="10" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.3"/>
+  <text x="44" y="372" font-size="12" font-weight="600" fill="#1e4b7a">下一步要改的三处（对应第 2 步）</text>
+  <text x="44" y="396" font-size="10.7" fill="#334155">① 工具描述写成"什么时候用我 + 不什么时候用我"，把 search_docs 与 grep 的边界写死</text>
+  <text x="44" y="418" font-size="10.7" fill="#334155">② 三个工具合成一条链路：search 给 id、fetch 按 id 取全文，避免"先拿文件名再猜内容"</text>
+  <text x="44" y="438" font-size="10.7" fill="#334155">③ 让 fetch 把大文档写进虚拟文件系统，只回一句摘要 + 路径，把细读交给 read_file</text>
+</svg>

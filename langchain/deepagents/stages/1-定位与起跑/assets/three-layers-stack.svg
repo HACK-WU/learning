@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 460" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="lb" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5a6b7d"/>
+    </marker>
+    <marker id="lb2" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#b45309"/>
+    </marker>
+  </defs>
+  <rect width="940" height="460" fill="#fbfcfd"/>
+  <text x="470" y="30" text-anchor="middle" font-size="16.5" font-weight="600" fill="#1f2937">三层：谁提供砖、谁提供传送带、谁已经把房子盖好</text>
+
+  <rect x="40" y="58" width="860" height="86" rx="10" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.5"/>
+  <text x="60" y="82" font-size="13" font-weight="600" fill="#1f5537">第一层 · deepagents（harness，你要装的那个包）</text>
+  <text x="60" y="104" font-size="11.5" fill="#334155">给你：预装的工具与提示词、子代理、文件系统与上下文管理、权限与审批开关、按 provider 打包的默认参数</text>
+  <text x="60" y="126" font-size="11" fill="#64748b">它就是本课程的主角。它本身不做"执行"，执行是下面两层的事。</text>
+
+  <rect x="40" y="164" width="860" height="86" rx="10" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="60" y="188" font-size="13" font-weight="600" fill="#1e4b7a">第二层 · LangChain（framework，构件库）</text>
+  <text x="60" y="210" font-size="11.5" fill="#334155">给你：模型接入、消息与内容块、工具定义、agent 循环、中间件机制 —— harness 手上的零件全部来自这里</text>
+  <text x="60" y="232" font-size="11" fill="#64748b">你在 `../langchain/` 里学过的 `create_agent` / `@tool` / middleware，就是这一层。</text>
+
+  <rect x="40" y="270" width="860" height="86" rx="10" fill="#fff8ec" stroke="#e0b877" stroke-width="1.5"/>
+  <text x="60" y="294" font-size="13" font-weight="600" fill="#7a4f13">第三层 · LangGraph（runtime，执行引擎）</text>
+  <text x="60" y="316" font-size="11.5" fill="#334155">给你：图执行、durable execution（断了能续）、流式事件、跨轮持久化、中断与恢复</text>
+  <text x="60" y="338" font-size="11" fill="#64748b">`create_deep_agent` 返回的对象，类型就是 LangGraph 的 `CompiledStateGraph`——它交出来的是"能跑的图"。</text>
+
+  <line x1="470" y1="144" x2="470" y2="160" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#lb)"/>
+  <text x="482" y="158" font-size="10.5" fill="#5a6b7d">建立在</text>
+  <line x1="470" y1="250" x2="470" y2="266" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#lb)"/>
+  <text x="482" y="264" font-size="10.5" fill="#5a6b7d">运行在</text>
+
+  <rect x="40" y="376" width="860" height="66" rx="9" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.3" stroke-dasharray="4 3"/>
+  <text x="60" y="400" font-size="11.5" fill="#475569">看图：三层是"越往下越通用、越往下越底层"——最上层替你做了最多决定，也最不灵活；最下层什么都能做，但什么都要自己写。</text>
+  <text x="60" y="422" font-size="11.5" fill="#7a4f13">调参时先认清"我在改哪一层"：改 harness 参数 ≠ 改 LangChain 中间件 ≠ 改 LangGraph 图。</text>
+</svg>

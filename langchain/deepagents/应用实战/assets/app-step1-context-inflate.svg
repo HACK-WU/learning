@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1030" height="560" viewBox="0 0 1030 560">
+  <defs>
+    <marker id="ma1" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#5b6b7c"/>
+    </marker>
+  </defs>
+  <rect width="1030" height="560" fill="#ffffff"/>
+  <text x="30" y="40" font-family="sans-serif" font-size="21" font-weight="bold" fill="#1f2d3d">第 1 步：三种膨胀源，三种救援</text>
+  <text x="30" y="66" font-family="sans-serif" font-size="13" fill="#667788">先看清"什么会让上下文变大"，再对着找"谁负责收它"</text>
+
+  <!-- 左侧：三种膨胀 -->
+  <rect x="30" y="92" width="260" height="86" rx="8" fill="#fdf3f3" stroke="#e0a0a0" stroke-width="1.5"/>
+  <text x="48" y="116" font-family="sans-serif" font-size="12" font-weight="bold" fill="#a33b3b">膨胀源 A：大工具结果</text>
+  <text x="48" y="138" font-family="sans-serif" font-size="10" fill="#a33b3b">第三方 API / MCP 工具</text>
+  <text x="48" y="156" font-family="sans-serif" font-size="10" fill="#a33b3b">一次返回几百 KB JSON</text>
+
+  <rect x="30" y="192" width="260" height="86" rx="8" fill="#fdf3f3" stroke="#e0a0a0" stroke-width="1.5"/>
+  <text x="48" y="216" font-family="sans-serif" font-size="12" font-weight="bold" fill="#a33b3b">膨胀源 B：大写入参数</text>
+  <text x="48" y="238" font-family="sans-serif" font-size="10" fill="#a33b3b">write_file 写 300KB 文件</text>
+  <text x="48" y="256" font-family="sans-serif" font-size="10" fill="#a33b3b">内容在历史里重复一份</text>
+
+  <rect x="30" y="292" width="260" height="86" rx="8" fill="#fdf3f3" stroke="#e0a0a0" stroke-width="1.5"/>
+  <text x="48" y="316" font-family="sans-serif" font-size="12" font-weight="bold" fill="#a33b3b">膨胀源 C：超长对话</text>
+  <text x="48" y="338" font-family="sans-serif" font-size="10" fill="#a33b3b">几十轮交互累积</text>
+  <text x="48" y="356" font-family="sans-serif" font-size="10" fill="#a33b3b">每轮都在往上加</text>
+
+  <!-- 中间：占用曲线 -->
+  <rect x="310" y="92" width="380" height="286" rx="8" fill="#f7f9fc" stroke="#a8b8c8" stroke-width="1.4"/>
+  <line x1="340" y1="350" x2="670" y2="350" stroke="#667788" stroke-width="1.2"/>
+  <line x1="340" y1="120" x2="340" y2="350" stroke="#667788" stroke-width="1.2"/>
+  <line x1="340" y1="140" x2="668" y2="140" stroke="#a33b3b" stroke-width="1.4" stroke-dasharray="6 4"/>
+  <text x="588" y="134" font-family="sans-serif" font-size="9" fill="#a33b3b">窗口上限</text>
+
+  <polyline points="350,340 350,300 400,292 400,250 450,242 450,300 510,292 510,230 560,222 560,290 620,282 620,235 660,228"
+            fill="none" stroke="#33475b" stroke-width="2"/>
+  <circle cx="450" cy="300" r="3.5" fill="#e0b877"/>
+  <circle cx="560" cy="290" r="3.5" fill="#e0b877"/>
+  <circle cx="620" cy="282" r="3.5" fill="#e0b877"/>
+  <text x="376" y="370" font-family="sans-serif" font-size="9" fill="#667788">时间 →</text>
+  <text x="318" y="130" font-family="sans-serif" font-size="9" fill="#667788">占用</text>
+
+  <!-- 右侧：三种救援 -->
+  <rect x="710" y="92" width="292" height="86" rx="8" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="728" y="116" font-family="sans-serif" font-size="12" font-weight="bold" fill="#1e4b7a">救 A：卸载</text>
+  <text x="728" y="138" font-family="monospace" font-size="9.5" fill="#33475b">400,000 → 1,588 字符</text>
+  <text x="728" y="156" font-family="sans-serif" font-size="9.5" fill="#667788">阈值 20k token，每次调用都查</text>
+
+  <rect x="710" y="192" width="292" height="86" rx="8" fill="#fff8ec" stroke="#e0b877" stroke-width="1.5"/>
+  <text x="728" y="216" font-family="sans-serif" font-size="12" font-weight="bold" fill="#7a4f13">救 B：裁剪参数</text>
+  <text x="728" y="238" font-family="monospace" font-size="9.5" fill="#33475b">180,000 → 43 字符</text>
+  <text x="728" y="256" font-family="sans-serif" font-size="9.5" fill="#667788">约 85% 触发，state 仍留原文</text>
+
+  <rect x="710" y="292" width="292" height="86" rx="8" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.5"/>
+  <text x="728" y="316" font-family="sans-serif" font-size="12" font-weight="bold" fill="#1f5537">救 C：摘要</text>
+  <text x="728" y="338" font-family="monospace" font-size="9.5" fill="#33475b">16 条 → 4 条送模型</text>
+  <text x="728" y="356" font-family="sans-serif" font-size="9.5" fill="#667788">存档 /conversation_history/</text>
+
+  <line x1="292" y1="135" x2="706" y2="135" stroke="#7fb2e5" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#ma1)"/>
+  <line x1="292" y1="235" x2="706" y2="235" stroke="#e0b877" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#ma1)"/>
+  <line x1="292" y1="335" x2="706" y2="335" stroke="#86bfa0" stroke-width="1.2" stroke-dasharray="4 3" marker-end="url(#ma1)"/>
+
+  <!-- 红框：反直觉 -->
+  <rect x="30" y="400" width="972" height="140" rx="8" fill="#fdf3f3" stroke="#a33b3b" stroke-width="1.8"/>
+  <text x="48" y="426" font-family="sans-serif" font-size="13" font-weight="bold" fill="#a33b3b">反直觉：read_file 不在这套救援体系里</text>
+  <text x="48" y="452" font-family="sans-serif" font-size="10.5" fill="#a33b3b">实测：读 600,015 字节的文件 → 交给模型只有 455 字符，且 /large_tool_results 目录根本没被创建</text>
+  <text x="48" y="474" font-family="monospace" font-size="10" fill="#33475b">TOOLS_EXCLUDED_FROM_EVICTION = ('ls','glob','grep','read_file','edit_file','write_file','delete')</text>
+  <text x="48" y="498" font-family="sans-serif" font-size="10.5" fill="#1f5537">原因：它有 offset/limit 分页协议，从一开始就只返回一段，不给自己变大的机会</text>
+  <text x="48" y="518" font-family="sans-serif" font-size="10.5" fill="#7a4f13">含义：你自己写工具时，做分页比依赖事后卸载更彻底（455 字符 vs 1,588 字符预览）</text>
+  <text x="48" y="536" font-family="sans-serif" font-size="9.5" fill="#667788">→ 基础版埋的坑：以为"所有大结果都安全"，其实只对非文件工具成立</text>
+</svg>

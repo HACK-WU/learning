@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="540" viewBox="0 0 1000 540">
+  <defs>
+    <marker id="ap1" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#5b6b7c"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="540" fill="#ffffff"/>
+  <text x="30" y="40" font-family="sans-serif" font-size="21" font-weight="bold" fill="#1f2d3d">第 1 步：一个合法 skill 目录跑起来</text>
+  <text x="30" y="66" font-family="sans-serif" font-size="13" fill="#667788">目录名 = name（必须一致），配套文件任意；后端认得虚拟路径 /skills/ 才读得到</text>
+
+  <rect x="30" y="90" width="260" height="330" rx="8" fill="#f7f9fc" stroke="#a8b8c8" stroke-width="1.5"/>
+  <text x="48" y="116" font-family="sans-serif" font-size="13.5" font-weight="bold" fill="#33475b">skills/ 目录</text>
+  <text x="48" y="146" font-family="monospace" font-size="11" fill="#2e6b4f">code-review/           ← 目录名</text>
+  <text x="60" y="170" font-family="monospace" font-size="11" fill="#33475b">├─ SKILL.md            ← 必需</text>
+  <text x="66" y="188" font-family="monospace" font-size="10" fill="#a33b3b">frontmatter: name</text>
+  <text x="66" y="204" font-family="monospace" font-size="10" fill="#a33b3b">            description</text>
+  <text x="60" y="224" font-family="monospace" font-size="11" fill="#33475b">├─ checklist.md        ← 可选参考</text>
+  <text x="60" y="244" font-family="monospace" font-size="11" fill="#33475b">└─ scripts/            ← 可选脚本</text>
+  <text x="78" y="262" font-family="monospace" font-size="10.5" fill="#33475b">jsdiff.py</text>
+  <text x="48" y="292" font-family="sans-serif" font-size="11.5" fill="#667788">校验规则（实测）：</text>
+  <text x="48" y="312" font-family="sans-serif" font-size="10.5" fill="#a33b3b">name≠目录 -> 仅告警仍加载</text>
+  <text x="48" y="330" font-family="sans-serif" font-size="10.5" fill="#a33b3b">缺 description -> 整个丢弃</text>
+  <text x="48" y="348" font-family="sans-serif" font-size="10.5" fill="#a33b3b">无 frontmatter -> 整个丢弃</text>
+  <text x="48" y="376" font-family="sans-serif" font-size="11" fill="#667788">注意：这是"给后端看的"目录，</text>
+  <text x="48" y="394" font-family="sans-serif" font-size="11" fill="#667788">不是当前进程的磁盘路径</text>
+
+  <line x1="290" y1="230" x2="332" y2="230" stroke="#5b6b7c" stroke-width="1.6" marker-end="url(#ap1)"/>
+
+  <rect x="336" y="90" width="620" height="190" rx="8" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="354" y="116" font-family="sans-serif" font-size="13.5" font-weight="bold" fill="#1e4b7a">三级触发时间线（这是"基础实现"能看到的全部）</text>
+  <text x="354" y="144" font-family="sans-serif" font-size="11" fill="#33475b">① 启动：before_agent 扫库，把 name+desc 写进系统提示</text>
+  <text x="354" y="166" font-family="sans-serif" font-size="11" fill="#33475b">② 任务匹配：模型主动 read_file("/skills/code-review/SKILL.md")</text>
+  <text x="354" y="188" font-family="sans-serif" font-size="11" fill="#33475b">③ 执行：读到正文里"跑 scripts/jsdiff.py"，才再读脚本</text>
+  <text x="354" y="218" font-family="sans-serif" font-size="11" fill="#a33b3b">读过的正文留对话直到压缩——"用时才读"不是"用完就删"</text>
+  <text x="354" y="238" font-family="sans-serif" font-size="11" fill="#a33b3b">read_file 返回完整文件（含 frontmatter 的 name:）</text>
+
+  <rect x="336" y="292" width="620" height="128" rx="8" fill="#fff8ec" stroke="#e0b877" stroke-width="1.5"/>
+  <text x="354" y="318" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#7a4f13">三个"坑"在基础版已经埋好</text>
+  <text x="354" y="344" font-family="sans-serif" font-size="11" fill="#7a4f13">① 路径绑后端：StateBackend + 磁盘路径 -> path_not_found（静默）</text>
+  <text x="354" y="364" font-family="sans-serif" font-size="11" fill="#7a4f13">② 改目录不生效：每 thread 只加载一次，需 skills_metadata=None 重载</text>
+  <text x="354" y="384" font-family="sans-serif" font-size="11" fill="#7a4f13">③ 看不到省没省：没有任何数字告诉你"这技能值不值得做"</text>
+
+  <rect x="30" y="440" width="926" height="72" rx="8" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.5"/>
+  <text x="48" y="464" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#1f5537">一句话指路</text>
+  <text x="48" y="488" font-family="sans-serif" font-size="11.5" fill="#1f5537">本步跑通了"skill 碰得到、任务能触发、正文能读到"——但这只是"会用"的最低门槛。</text>
+  <text x="48" y="506" font-family="sans-serif" font-size="11.5" fill="#1f5537">下一步要回答"它到底省了多少"→ 换探针量化启动成本，并支持用户点名（pinned）</text>
+</svg>

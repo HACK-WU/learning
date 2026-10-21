@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="560" viewBox="0 0 1040 560">
+  <rect width="1040" height="560" fill="#ffffff"/>
+  <text x="30" y="40" font-family="sans-serif" font-size="21" font-weight="bold" fill="#1f2d3d">第 2 步：验证 + 开关边界</text>
+  <text x="30" y="66" font-family="sans-serif" font-size="13" fill="#667788">三组验证把"派活"从玄学变成可量化的事实，两个开关实验摸清 task 的边界</text>
+
+  <!-- 左侧验证 -->
+  <rect x="30" y="92" width="520" height="360" rx="9" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.6" stroke-dasharray="6 4"/>
+  <text x="48" y="118" font-family="sans-serif" font-size="13" font-weight="bold" fill="#1f5537">验证一：隔离真的有效</text>
+  <text x="48" y="142" font-family="monospace" font-size="9.5" fill="#33475b">父对话带 "Alpha" 和 "SECRET_123"</text>
+  <text x="48" y="160" font-family="monospace" font-size="9.5" fill="#2e6b4f">子代理看到 Alpha？False</text>
+  <text x="48" y="178" font-family="monospace" font-size="9.5" fill="#2e6b4f">子代理看到 SECRET_123？False</text>
+  <text x="48" y="202" font-family="sans-serif" font-size="10" fill="#667788">→ 只有 description 传过去，父对话完全不透</text>
+
+  <line x1="48" y1="216" x2="532" y2="216" stroke="#a8b8c8" stroke-width="1" stroke-dasharray="4 3"/>
+
+  <text x="48" y="240" font-family="sans-serif" font-size="13" font-weight="bold" fill="#1f5537">验证二：只回最后一条报告</text>
+  <text x="48" y="264" font-family="monospace" font-size="9.5" fill="#a33b3b">子代理内部 2 轮 + 600 字符噪声</text>
+  <text x="48" y="282" font-family="monospace" font-size="9.5" fill="#2e6b4f">父上下文只多 1 条 14 字符 ToolMessage</text>
+  <text x="48" y="300" font-family="monospace" font-size="9.5" fill="#2e6b4f">总消息数：4</text>
+  <text x="48" y="324" font-family="sans-serif" font-size="10" fill="#667788">→ 中间过程全部丢弃，父上下文保持小巧</text>
+
+  <line x1="48" y1="338" x2="532" y2="338" stroke="#a8b8c8" stroke-width="1" stroke-dasharray="4 3"/>
+
+  <text x="48" y="362" font-family="sans-serif" font-size="13" font-weight="bold" fill="#1f5537">验证三：task 的开关边界</text>
+  <text x="48" y="386" font-family="monospace" font-size="9.5" fill="#33475b">默认 8 工具（含 task）</text>
+  <text x="48" y="404" font-family="monospace" font-size="9.5" fill="#a33b3b">excluded_middleware 移除 → 被故意拒绝</text>
+  <text x="48" y="422" font-family="monospace" font-size="9.5" fill="#2e6b4f">profile 关默认 + 不传同步 → 7 工具，task 消失</text>
+  <text x="400" y="404" font-family="monospace" font-size="9.5" fill="#33475b">再传一个子代理 → 8，task 回来</text>
+
+  <!-- 右侧开关实验 -->
+  <rect x="570" y="92" width="442" height="360" rx="9" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.6" stroke-dasharray="6 4"/>
+  <text x="588" y="118" font-family="sans-serif" font-size="13" font-weight="bold" fill="#1e4b7a">任务：关掉 task 的两个条件</text>
+
+  <text x="588" y="146" font-family="sans-serif" font-size="10.5" fill="#a33b3b">条件①：profile 禁掉 general-purpose</text>
+  <text x="600" y="168" font-family="monospace" font-size="9.5" fill="#33475b">GeneralPurposeSubagentProfile(enabled=False)</text>
+  <text x="588" y="192" font-family="sans-serif" font-size="10.5" fill="#a33b3b">条件②：subagents= 不传任何同步子代理</text>
+  <text x="600" y="214" font-family="monospace" font-size="9.5" fill="#33475b">（若无条件②，子代理存在 → task 就在）</text>
+
+  <line x1="588" y1="232" x2="994" y2="232" stroke="#a8b8c8" stroke-width="1" stroke-dasharray="4 3"/>
+
+  <text x="588" y="256" font-family="sans-serif" font-size="12" font-weight="bold" fill="#1e4b7a">默认 general-purpose 的存在</text>
+  <text x="588" y="280" font-family="sans-serif" font-size="10" fill="#33475b">条件①② 都不满足时 → 自动加</text>
+  <text x="588" y="300" font-family="sans-serif" font-size="10" fill="#33475b">同款模型 + 完整文件系统 + 继承技能</text>
+  <text x="588" y="320" font-family="sans-serif" font-size="10" fill="#2e6b4f">它是"刚想隔离、还没定制"时的默认出口</text>
+
+  <line x1="588" y1="338" x2="994" y2="338" stroke="#a8b8c8" stroke-width="1" stroke-dasharray="4 3"/>
+
+  <text x="588" y="362" font-family="sans-serif" font-size="12" font-weight="bold" fill="#1e4b7a">递归保护</text>
+  <text x="588" y="386" font-family="monospace" font-size="9.5" fill="#a33b3b">fork 子代理的 task → "You are a subagent"</text>
+  <text x="588" y="404" font-family="monospace" font-size="9.5" fill="#a33b3b">isolated 子代理 → 根本没有 task</text>
+  <text x="588" y="428" font-family="sans-serif" font-size="10" fill="#667788">→ 模型无法制造无限委派</text>
+
+  <!-- 底部自检 -->
+  <rect x="30" y="468" width="982" height="76" rx="8" fill="#f7f9fc" stroke="#a8b8c8" stroke-width="1.4"/>
+  <text x="48" y="490" font-family="sans-serif" font-size="12" font-weight="bold" fill="#33475b">落盘前自检</text>
+  <text x="48" y="512" font-family="sans-serif" font-size="10.5" fill="#1f5537">① 两版可对比 ② 三组验证都有实测数字 ③ 开关边界有 8→7→8 工具数对照</text>
+  <text x="48" y="532" font-family="sans-serif" font-size="10" fill="#667788">④ 图 2 张均 xmllint 通过 ⑤ 双入口已挂索引 ⑥ 代码与输出一致（Alpha/SECRET 不可见、内部噪声丢弃）</text>
+</svg>

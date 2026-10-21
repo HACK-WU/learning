@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 470" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="a61" markerWidth="10" markerHeight="10" refX="7.5" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5a6b7d"/>
+    </marker>
+  </defs>
+  <rect width="940" height="470" fill="#fbfcfd"/>
+  <text x="470" y="28" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">第 1 步：只用解释器——能算，但读不了工单文件</text>
+  <text x="470" y="50" text-anchor="middle" font-size="11.3" fill="#64748b">eval 是一张"只算不碰"的白纸；任务需要读宿主文件，于是卡住</text>
+
+  <rect x="28" y="76" width="270" height="150" rx="10" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.5"/>
+  <text x="44" y="98" font-size="12" font-weight="600" fill="#1f5537">任务：批量统计工单</text>
+  <text x="44" y="122" font-size="10.4" fill="#334155">50 个 /tickets/t*.json</text>
+  <text x="44" y="142" font-size="10.4" fill="#334155">按 team 求 score 加权和</text>
+  <text x="44" y="162" font-size="10.4" fill="#334155">取 top 3，拼一段摘要</text>
+  <text x="44" y="190" font-size="10" fill="#64748b">数据在宿主文件系统里</text>
+
+  <line x1="302" y1="150" x2="342" y2="150" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#a61)"/>
+
+  <rect x="348" y="76" width="300" height="150" rx="10" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="364" y="98" font-size="12" font-weight="600" fill="#1e4b7a">eval（只算不碰）</text>
+  <text x="364" y="124" font-size="10.4" fill="#334155">✅ 循环 / 分支 / reduce</text>
+  <text x="364" y="144" font-size="10.4" fill="#334155">✅ 内存里聚合、排序、取 top</text>
+  <text x="364" y="164" font-size="10.4" fill="#334155">⚠️ 只返回最后一行结果</text>
+  <text x="364" y="188" font-size="10" fill="#8f3a3a">❌ require('fs') -> ReferenceError</text>
+  <text x="364" y="206" font-size="10" fill="#8f3a3a">❌ 读不到宿主文件系统</text>
+
+  <line x1="652" y1="150" x2="692" y2="150" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#a61)"/>
+
+  <rect x="698" y="76" width="214" height="150" rx="10" fill="#fff8ec" stroke="#e0b877" stroke-width="1.5"/>
+  <text x="714" y="98" font-size="12" font-weight="600" fill="#7a4f13">卡在哪</text>
+  <text x="714" y="124" font-size="10.4" fill="#334155">数据"看得见摸不着"：</text>
+  <text x="714" y="146" font-size="10.4" fill="#334155">纸不会自己从抽屉拿文件</text>
+  <text x="714" y="172" font-size="10.4" fill="#8f3a3a">要么搭桥（PTC），</text>
+  <text x="714" y="194" font-size="10.4" fill="#8f3a3a">要么换路（沙箱）</text>
+
+  <rect x="60" y="268" width="820" height="120" rx="10" fill="#faf6f0" stroke="#d8c9a8" stroke-width="1.2"/>
+  <text x="82" y="292" font-size="12" font-weight="600" fill="#5a4a20">这一步的教训</text>
+  <text x="82" y="318" font-size="10.6" fill="#334155">· 解释器是"纸"，纸自己不会从抽屉里拿文件。</text>
+  <text x="82" y="340" font-size="10.6" fill="#334155">· 要"读文件 + 在代码里统计"，必须显式搭桥（PTC 白名单）——桥不搭，它就只能隔空算一份读不到的数据。</text>
+  <text x="82" y="366" font-size="10.6" fill="#334155">· 别急着上沙箱：先看任务是不是"数据已到手、纯计算"；是，纸就够。</text>
+
+  <text x="470" y="424" text-anchor="middle" font-size="11" fill="#94a3b8">eval 的边界：算，但不碰文件 / 网络 / shell</text>
+</svg>

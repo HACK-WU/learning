@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 470" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="a63" markerWidth="10" markerHeight="10" refX="7.5" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5a6b7d"/>
+    </marker>
+  </defs>
+  <rect width="940" height="470" fill="#fbfcfd"/>
+  <text x="470" y="28" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">第 3 步：沙箱跑测试 + 解释器统计 + 权限挡 secrets</text>
+  <text x="470" y="50" text-anchor="middle" font-size="11.3" fill="#64748b">三条路各干各的；红线交给权限闸（注意合法组合姿势）</text>
+
+  <rect x="28" y="76" width="284" height="150" rx="10" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.5"/>
+  <text x="44" y="98" font-size="12" font-weight="600" fill="#1f5537">机器路 · execute（沙箱）</text>
+  <text x="44" y="124" font-size="10.4" fill="#334155" font-family="ui-monospace, Menlo, monospace">pytest -x</text>
+  <text x="44" y="144" font-size="10.4" fill="#334155" font-family="ui-monospace, Menlo, monospace">pip install -e .</text>
+  <text x="44" y="166" font-size="10" fill="#64748b">装包 / 跑测试 / 碰 OS 环境</text>
+  <text x="44" y="190" font-size="10" fill="#8f3a3a">shell 不认权限规则</text>
+
+  <line x1="316" y1="150" x2="348" y2="150" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#a63)"/>
+
+  <rect x="354" y="76" width="276" height="150" rx="10" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="370" y="98" font-size="12" font-weight="600" fill="#1e4b7a">纸路 · eval + PTC</text>
+  <text x="370" y="124" font-size="10.4" fill="#334155">读 50 个工单</text>
+  <text x="370" y="144" font-size="10.4" fill="#334155">聚合 / 取 top（中间不进上下文）</text>
+  <text x="370" y="168" font-size="10" fill="#64748b">分工：机器管跑，纸管算</text>
+
+  <line x1="634" y1="150" x2="666" y2="150" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#a63)"/>
+
+  <rect x="672" y="76" width="240" height="150" rx="10" fill="#fdf3f3" stroke="#e0a0a0" stroke-width="1.5"/>
+  <text x="688" y="98" font-size="12" font-weight="600" fill="#8f3a3a">红线 · secrets</text>
+  <text x="688" y="124" font-size="10.4" fill="#334155">/tickets/ 里夹着 secrets.json</text>
+  <text x="688" y="146" font-size="10.4" fill="#334155">权限：`/**/.*` deny + `/**` deny</text>
+  <text x="688" y="170" font-size="10" fill="#64748b">glob 默认不带 DOTMATCH → 必须显式补点文件</text>
+
+  <rect x="60" y="268" width="820" height="120" rx="10" fill="#faf6f0" stroke="#d8c9a8" stroke-width="1.2"/>
+  <text x="82" y="292" font-size="12" font-weight="600" fill="#5a4a20">怎么组合才合法（避免构造期 NotImplementedError）</text>
+  <text x="82" y="318" font-size="10.6" fill="#334155">· 姿势 1：沙箱设 default，权限路径全落在 routes 前缀内（path-scoped）。</text>
+  <text x="82" y="340" font-size="10.6" fill="#334155">· 姿势 2：无执行能力后端（FilesystemBackend）+ 声明式权限——本实例采用，权限自然可用。</text>
+  <text x="82" y="362" font-size="10.6" fill="#8f3a3a">· 真沙箱（有 execute）时：shell 不认权限；最终姿态 = 封网 + 不放 secrets + HITL。</text>
+  <text x="82" y="384" font-size="10.6" fill="#334155">· 记住：有权限规则 + 有执行能力 + 路径越界 → 构造直接抛 NotImplementedError，不是运行时保护。</text>
+</svg>

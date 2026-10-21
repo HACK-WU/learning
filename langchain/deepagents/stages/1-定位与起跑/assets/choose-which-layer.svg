@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 480" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="cc" markerWidth="10" markerHeight="10" refX="7.5" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5a6b7d"/>
+    </marker>
+  </defs>
+  <rect width="940" height="480" fill="#fbfcfd"/>
+  <text x="470" y="30" text-anchor="middle" font-size="16.5" font-weight="600" fill="#1f2937">选哪一层：三个问题的答案指向三个入口</text>
+
+  <rect x="30" y="58" width="180" height="120" rx="10" fill="#ffffff" stroke="#94a3b8" stroke-width="1.4"/>
+  <text x="120" y="84" text-anchor="middle" font-size="12.5" font-weight="600" fill="#334155">你的任务长什么样</text>
+  <text x="120" y="108" text-anchor="middle" font-size="10.5" fill="#64748b">跑很久？</text>
+  <text x="120" y="126" text-anchor="middle" font-size="10.5" fill="#64748b">步骤多且不确定？</text>
+  <text x="120" y="144" text-anchor="middle" font-size="10.5" fill="#64748b">要读写文件、要分头干？</text>
+  <text x="120" y="162" text-anchor="middle" font-size="10.5" fill="#64748b">要人能中途插手？</text>
+
+  <line x1="214" y1="118" x2="250" y2="118" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#cc)"/>
+
+  <rect x="256" y="52" width="212" height="70" rx="9" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.5"/>
+  <text x="362" y="74" text-anchor="middle" font-size="12" font-weight="600" fill="#1f5537">全是"是"</text>
+  <text x="362" y="94" text-anchor="middle" font-size="10.5" fill="#334155">→ 直接用 harness</text>
+  <text x="362" y="110" text-anchor="middle" font-size="9.5" fill="#64748b">create_deep_agent</text>
+
+  <rect x="256" y="136" width="212" height="70" rx="9" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="362" y="158" text-anchor="middle" font-size="12" font-weight="600" fill="#1e4b7a">要自控，但复用零件</text>
+  <text x="362" y="178" text-anchor="middle" font-size="10.5" fill="#334155">→ 用框架搭</text>
+  <text x="362" y="194" text-anchor="middle" font-size="9.5" fill="#64748b">create_agent + 自己的 middleware</text>
+
+  <rect x="256" y="220" width="212" height="70" rx="9" fill="#fff8ec" stroke="#e0b877" stroke-width="1.5"/>
+  <text x="362" y="242" text-anchor="middle" font-size="12" font-weight="600" fill="#7a4f13">流程要精确掌控</text>
+  <text x="362" y="262" text-anchor="middle" font-size="10.5" fill="#334155">→ 自己画图</text>
+  <text x="362" y="278" text-anchor="middle" font-size="9.5" fill="#64748b">自定义 LangGraph workflow</text>
+
+  <line x1="472" y1="88" x2="520" y2="88" stroke="#5a6b7d" stroke-width="1.5" marker-end="url(#cc)"/>
+  <line x1="472" y1="171" x2="520" y2="171" stroke="#5a6b7d" stroke-width="1.5" marker-end="url(#cc)"/>
+  <line x1="472" y1="255" x2="520" y2="255" stroke="#5a6b7d" stroke-width="1.5" marker-end="url(#cc)"/>
+
+  <rect x="526" y="52" width="384" height="70" rx="9" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.3"/>
+  <text x="546" y="74" font-size="10.5" font-weight="600" fill="#334155">代价：你能改的只有它开放的参数</text>
+  <text x="546" y="92" font-size="10.5" fill="#64748b">换来的：文件工具、子代理、压缩、缓存开箱即用</text>
+  <text x="546" y="110" font-size="10" fill="#94a3b8">适合：调研、写作、长流程自动化</text>
+
+  <rect x="526" y="136" width="384" height="70" rx="9" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.3"/>
+  <text x="546" y="158" font-size="10.5" font-weight="600" fill="#334155">代价：循环与工具链自己设计</text>
+  <text x="546" y="176" font-size="10.5" fill="#64748b">换来的：模型/工具/中间件精确可控</text>
+  <text x="546" y="194" font-size="10" fill="#94a3b8">适合：业务流程固定的生产 agent</text>
+
+  <rect x="526" y="220" width="384" height="70" rx="9" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.3"/>
+  <text x="546" y="242" font-size="10.5" font-weight="600" fill="#334155">代价：节点、边、状态全自己定义</text>
+  <text x="546" y="260" font-size="10.5" fill="#64748b">换来的：确定性流程 + 断点续跑</text>
+  <text x="546" y="278" font-size="10" fill="#94a3b8">适合：批处理、有严格审批环节的链路</text>
+
+  <rect x="30" y="316" width="880" height="140" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3"/>
+  <text x="52" y="342" font-size="12.5" font-weight="600" fill="#334155">同一件事，三层各要写多少（示意：一个"读三个文件、各自总结、合成一份"的任务）</text>
+  <text x="52" y="368" font-size="11" fill="#475569">harness：一次 create_deep_agent 调用 + 一句系统提示，剩下的循环、派活、合成由它推</text>
+  <text x="52" y="390" font-size="11" fill="#475569">框架：自己写工具、自己写 middleware 决定何时压缩、自己组织多轮调用</text>
+  <text x="52" y="412" font-size="11" fill="#475569">流程：自己定义 state、节点、条件边，连"要不要并行"都是你写的</text>
+  <text x="52" y="438" font-size="10.5" fill="#94a3b8">越往下代码越多、行为越可预测；越往上代码越少、智能体越自主——这是取舍，不是优劣。</text>
+</svg>

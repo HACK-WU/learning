@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 430" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="da" markerWidth="10" markerHeight="10" refX="7.5" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5a6b7d"/>
+    </marker>
+  </defs>
+  <rect width="900" height="430" fill="#fbfcfd"/>
+  <text x="450" y="30" text-anchor="middle" font-size="16.5" font-weight="600" fill="#1f2937">你写的是一行，跑起来的是一摞</text>
+  <text x="450" y="52" text-anchor="middle" font-size="11.5" fill="#64748b">中间那些不是你接的，是它按固定顺序替你叠上去的</text>
+
+  <rect x="34" y="82" width="250" height="128" rx="10" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.5"/>
+  <text x="159" y="106" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1f5537">你写下的</text>
+  <text x="159" y="134" text-anchor="middle" font-size="11" fill="#334155" font-family="ui-monospace, Menlo, monospace">create_deep_agent(</text>
+  <text x="159" y="152" text-anchor="middle" font-size="11" fill="#334155" font-family="ui-monospace, Menlo, monospace">  model="..."</text>
+  <text x="159" y="170" text-anchor="middle" font-size="11" fill="#334155" font-family="ui-monospace, Menlo, monospace">)</text>
+  <text x="159" y="196" text-anchor="middle" font-size="10.5" fill="#94a3b8">一行，两个参数</text>
+
+  <line x1="290" y1="146" x2="322" y2="146" stroke="#5a6b7d" stroke-width="1.8" marker-end="url(#da)"/>
+  <text x="306" y="136" text-anchor="middle" font-size="9.5" fill="#64748b">调用</text>
+
+  <rect x="330" y="82" width="536" height="272" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3"/>
+  <text x="598" y="106" text-anchor="middle" font-size="12.5" font-weight="600" fill="#334155">跑起来的：一摞零件，顺序固定</text>
+
+  <rect x="356" y="120" width="484" height="32" rx="6" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.2"/>
+  <text x="372" y="141" font-size="10.8" fill="#1e4b7a">① 会读写文件的那层</text>
+  <text x="700" y="141" font-size="10" fill="#64748b">你什么都没配，它就在</text>
+
+  <rect x="356" y="158" width="484" height="32" rx="6" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.2"/>
+  <text x="372" y="179" font-size="10.8" fill="#1e4b7a">② 会派帮手的那层</text>
+  <text x="700" y="179" font-size="10" fill="#64748b">默认送你一个通用帮手</text>
+
+  <rect x="356" y="196" width="484" height="32" rx="6" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.2"/>
+  <text x="372" y="217" font-size="10.8" fill="#1e4b7a">③ 话太长会自己精简的那层</text>
+  <text x="700" y="217" font-size="10" fill="#64748b">不需要你写阈值</text>
+
+  <rect x="356" y="234" width="484" height="32" rx="6" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.2"/>
+  <text x="372" y="255" font-size="10.8" fill="#1e4b7a">④ 把断掉的对话补好的那层</text>
+  <text x="700" y="255" font-size="10" fill="#64748b">中断恢复时才显形</text>
+
+  <rect x="356" y="272" width="484" height="32" rx="6" fill="#dff0e4" stroke="#86bfa0" stroke-width="1.2"/>
+  <text x="372" y="293" font-size="10.8" fill="#1f5537">⑤ 省钱的那层（按模型自动生效）</text>
+  <text x="700" y="293" font-size="10" fill="#64748b">不支持的模型上啥也不做</text>
+
+  <text x="598" y="330" text-anchor="middle" font-size="10.5" fill="#94a3b8">你的中间件、记忆、审批、技能，都是往这摞里"插槽"，不是另起一摞</text>
+
+  <rect x="34" y="374" width="832" height="42" rx="8" fill="#fff8ec" stroke="#e0b877" stroke-width="1.3"/>
+  <text x="52" y="400" font-size="11.3" fill="#7a4f13">看图：左边是你敲下的字，右边是它真正装进去的东西——本课就是把右边这摞摊开，弄清楚每一层管什么、为什么必须是这个顺序。</text>
+</svg>

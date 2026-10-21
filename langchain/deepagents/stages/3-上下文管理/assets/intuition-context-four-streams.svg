@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="640" viewBox="0 0 1040 640">
+  <defs>
+    <marker id="m9a" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#5b6b7c"/>
+    </marker>
+  </defs>
+  <rect width="1040" height="640" fill="#ffffff"/>
+  <text x="30" y="40" font-family="sans-serif" font-size="21" font-weight="bold" fill="#1f2d3d">四段上下文流：谁在什么时候动手</text>
+  <text x="30" y="66" font-family="sans-serif" font-size="13" fill="#667788">横轴是任务时间，纵轴是上下文占用量。四段流合起来，让那条曲线永远碰不到窗口上限</text>
+
+  <!-- 坐标轴 -->
+  <line x1="90" y1="520" x2="960" y2="520" stroke="#667788" stroke-width="1.4" marker-end="url(#m9a)"/>
+  <line x1="90" y1="120" x2="90" y2="520" stroke="#667788" stroke-width="1.4" marker-end="url(#m9a)"/>
+  <text x="880" y="545" font-family="sans-serif" font-size="10.5" fill="#667788">任务时间 →</text>
+  <text x="46" y="130" font-family="sans-serif" font-size="10.5" fill="#667788">占用</text>
+
+  <!-- 窗口上限虚线 -->
+  <line x1="90" y1="150" x2="955" y2="150" stroke="#a33b3b" stroke-width="1.6" stroke-dasharray="7 5"/>
+  <text x="820" y="142" font-family="sans-serif" font-size="10.5" fill="#a33b3b">窗口上限</text>
+
+  <!-- 占用曲线：阶梯上升 + 压缩下坠 -->
+  <polyline points="100,505 100,400 180,392 180,300 240,292 240,360 320,352 320,250 380,242 380,330 460,322 460,215 520,208 520,300 600,292 600,196 660,190 660,280 740,272 740,215 800,210"
+            fill="none" stroke="#33475b" stroke-width="2.2"/>
+
+  <!-- 压缩下坠标记 -->
+  <circle cx="240" cy="360" r="4" fill="#e0b877"/>
+  <circle cx="380" cy="330" r="4" fill="#e0b877"/>
+  <circle cx="520" cy="300" r="4" fill="#e0b877"/>
+  <circle cx="660" cy="280" r="4" fill="#e0b877"/>
+  <text x="196" y="378" font-family="sans-serif" font-size="9.5" fill="#7a4f13">压缩</text>
+  <text x="336" y="348" font-family="sans-serif" font-size="9.5" fill="#7a4f13">压缩</text>
+  <text x="476" y="318" font-family="sans-serif" font-size="9.5" fill="#7a4f13">压缩</text>
+  <text x="616" y="298" font-family="sans-serif" font-size="9.5" fill="#7a4f13">压缩</text>
+
+  <!-- 输入段：起始柱 -->
+  <rect x="96" y="400" width="10" height="105" fill="#7fb2e5"/>
+  <line x1="120" y1="400" x2="215" y2="392" stroke="#7fb2e5" stroke-width="1.2" stroke-dasharray="3 3"/>
+  <text x="112" y="432" font-family="sans-serif" font-size="10" fill="#1e4b7a">输入段</text>
+  <text x="112" y="448" font-family="sans-serif" font-size="9" fill="#1e4b7a">开工时一次性付</text>
+
+  <!-- 隔离分叉 -->
+  <line x1="600" y1="240" x2="700" y2="170" stroke="#86bfa0" stroke-width="1.6" stroke-dasharray="5 3"/>
+  <polygon points="700,170 690,180 704,184" fill="#86bfa0"/>
+  <line x1="700" y1="170" x2="780" y2="185" stroke="#86bfa0" stroke-width="1.2" stroke-dasharray="3 3"/>
+  <line x1="780" y1="185" x2="800" y2="210" stroke="#86bfa0" stroke-width="1.6"/>
+  <text x="700" y="160" font-family="sans-serif" font-size="9.5" fill="#1f5537">子代理扛走重活</text>
+  <text x="700" y="198" font-family="sans-serif" font-size="9" fill="#1f5537">只回结论，细节不进主线</text>
+
+  <!-- 长期记忆横跨 -->
+  <rect x="96" y="556" width="856" height="52" rx="8" fill="#fdf3f3" stroke="#e0a0a0" stroke-width="1.5"/>
+  <text x="112" y="578" font-family="sans-serif" font-size="11.5" font-weight="bold" fill="#a33b3b">长期记忆（跨会话留存）</text>
+  <text x="112" y="596" font-family="sans-serif" font-size="10" fill="#a33b3b">虚拟文件系统 / Store 后端 —— 不占这次任务的窗口，但下次开工就在（课 8）</text>
+
+  <!-- 图例 -->
+  <rect x="600" y="418" width="352" height="96" rx="7" fill="#f7f9fc" stroke="#a8b8c8" stroke-width="1.2"/>
+  <text x="616" y="440" font-family="sans-serif" font-size="11" font-weight="bold" fill="#33475b">四个玩家，四种频率</text>
+  <text x="616" y="460" font-family="sans-serif" font-size="9.5" fill="#1e4b7a">输入：每次请求都付（最高频）</text>
+  <text x="616" y="476" font-family="sans-serif" font-size="9.5" fill="#7a4f13">压缩：越过阈值才动手（中频）</text>
+  <text x="616" y="492" font-family="sans-serif" font-size="9.5" fill="#1f5537">隔离：模型判断值得才用（低频）</text>
+  <text x="616" y="508" font-family="sans-serif" font-size="9.5" fill="#a33b3b">记忆：跨会话才起作用（最低频）</text>
+
+  <!-- 底部说明 -->
+  <text x="96" y="530" font-family="sans-serif" font-size="9.5" fill="#667788">阶梯下降的每个拐点 = 一次压缩触发</text>
+</svg>

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 470" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="a62" markerWidth="10" markerHeight="10" refX="7.5" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5a6b7d"/>
+    </marker>
+  </defs>
+  <rect width="940" height="470" fill="#fbfcfd"/>
+  <text x="470" y="28" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">第 2 步：解释器 + PTC——读文件与统计一次完成</text>
+  <text x="470" y="50" text-anchor="middle" font-size="11.3" fill="#64748b">白名单把 read_file 借给 eval；50 个文件的内容一条都不进模型上下文</text>
+
+  <rect x="28" y="76" width="250" height="150" rx="10" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.5"/>
+  <text x="44" y="98" font-size="12" font-weight="600" fill="#1f5537">文件平面</text>
+  <text x="44" y="124" font-size="10.4" fill="#334155" font-family="ui-monospace, Menlo, monospace">backend=FilesystemBackend(root)</text>
+  <text x="44" y="148" font-size="10.4" fill="#334155">read_file 落在 root 里</text>
+  <text x="44" y="172" font-size="10" fill="#64748b">负责"够得着"</text>
+
+  <line x1="282" y1="150" x2="322" y2="150" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#a62)"/>
+
+  <rect x="328" y="76" width="300" height="150" rx="10" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="344" y="98" font-size="12" font-weight="600" fill="#1e4b7a">eval 脚本（纸平面）</text>
+  <text x="344" y="124" font-size="10.2" fill="#334155" font-family="ui-monospace, Menlo, monospace">for (id of files) {</text>
+  <text x="344" y="144" font-size="10.2" fill="#334155" font-family="ui-monospace, Menlo, monospace">  t = await tools.readFile({file_path:id})</text>
+  <text x="344" y="164" font-size="10.2" fill="#334155" font-family="ui-monospace, Menlo, monospace">  rows.push(JSON.parse(t));</text>
+  <text x="344" y="184" font-size="10.2" fill="#334155" font-family="ui-monospace, Menlo, monospace">}</text>
+  <text x="344" y="206" font-size="10" fill="#334155">聚合 → 排序 → 取 top3</text>
+
+  <line x1="632" y1="150" x2="672" y2="150" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#a62)"/>
+
+  <rect x="678" y="76" width="234" height="150" rx="10" fill="#fff8ec" stroke="#e0b877" stroke-width="1.5"/>
+  <text x="694" y="98" font-size="12" font-weight="600" fill="#7a4f13">交回上下文</text>
+  <text x="694" y="126" font-size="10.6" fill="#334155">只给最后一行：</text>
+  <text x="694" y="150" font-size="10.6" fill="#334155" font-family="ui-monospace, Menlo, monospace">top3: alpha=444, ...</text>
+  <text x="694" y="176" font-size="10" fill="#64748b">50 个 .json 正文全程</text>
+  <text x="694" y="196" font-size="10" fill="#64748b">只在 JS 里流转</text>
+
+  <rect x="60" y="268" width="820" height="120" rx="10" fill="#faf6f0" stroke="#d8c9a8" stroke-width="1.2"/>
+  <text x="82" y="292" font-size="12" font-weight="600" fill="#5a4a20">关键收获</text>
+  <text x="82" y="318" font-size="10.6" fill="#334155">· 中间结果不进上下文——省 token，也避免"50000 字符全文灌给模型"。这正是解释器的主打卖点。</text>
+  <text x="82" y="340" font-size="10.6" fill="#334155">· PTC 是白名单：ptc=["read_file"] 只借读，write_file/delete/网络都没借。</text>
+  <text x="82" y="362" font-size="10.6" fill="#8f3a3a">· 记住：PTC 调用不经过 interrupt_on 审批——白名单本身就是权限边界。</text>
+  <text x="82" y="384" font-size="10.6" fill="#334155">· "跑测试"仍没着落——pytest 要 shell / 装依赖，纸做不到（下一步上机器）。</text>
+</svg>

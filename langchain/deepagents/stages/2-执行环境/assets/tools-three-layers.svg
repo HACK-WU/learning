@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 560" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="b4" markerWidth="10" markerHeight="10" refX="7.5" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5a6b7d"/>
+    </marker>
+  </defs>
+  <rect width="940" height="560" fill="#fbfcfd"/>
+  <text x="470" y="30" text-anchor="middle" font-size="16.5" font-weight="600" fill="#1f2937">8 个文件工具：按"改不改东西"分三层</text>
+  <text x="470" y="52" text-anchor="middle" font-size="11.5" fill="#64748b">危险度不是按名字排的，是按"它能不能把已有内容变没"排的</text>
+
+  <rect x="28" y="80" width="284" height="176" rx="10" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.5"/>
+  <text x="44" y="102" font-size="12" font-weight="600" fill="#1f5537">只读：问它什么都不会变</text>
+  <text x="44" y="128" font-size="10.7" fill="#334155" font-family="ui-monospace, Menlo, monospace">ls      glob     grep</text>
+  <text x="44" y="150" font-size="10.7" fill="#334155" font-family="ui-monospace, Menlo, monospace">read_file</text>
+  <text x="44" y="176" font-size="10" fill="#64748b">唯一有分页的：offset / limit</text>
+  <text x="44" y="196" font-size="10" fill="#64748b">唯一会读非文本的：图片/音视频/PDF</text>
+  <text x="44" y="222" font-size="10" fill="#7a4f13">grep 是字面匹配，不是正则</text>
+  <text x="44" y="242" font-size="10" fill="#7a4f13">glob 的 *.yml 比 **/*.yml 更宽</text>
+
+  <rect x="328" y="80" width="284" height="176" rx="10" fill="#fff8ec" stroke="#e0b877" stroke-width="1.5"/>
+  <text x="344" y="102" font-size="12" font-weight="600" fill="#7a4f13">改写：内容会变，但不会变少</text>
+  <text x="344" y="128" font-size="10.7" fill="#334155" font-family="ui-monospace, Menlo, monospace">write_file</text>
+  <text x="344" y="148" font-size="10" fill="#7a4f13">整文件覆盖：同名即旧内容全没</text>
+  <text x="344" y="172" font-size="10.7" fill="#334155" font-family="ui-monospace, Menlo, monospace">edit_file</text>
+  <text x="344" y="192" font-size="10" fill="#7a4f13">精确字符串替换，找不到就报错</text>
+  <text x="344" y="216" font-size="10" fill="#64748b">replace_all=False 时只换第一处</text>
+  <text x="344" y="238" font-size="10" fill="#64748b">实测不匹配时 error 带原文，path 为 None</text>
+
+  <rect x="628" y="80" width="284" height="176" rx="10" fill="#fdeeee" stroke="#e39a9a" stroke-width="1.5"/>
+  <text x="644" y="102" font-size="12" font-weight="600" fill="#8f3a3a">删除：内容真的没了</text>
+  <text x="644" y="128" font-size="10.7" fill="#334155" font-family="ui-monospace, Menlo, monospace">delete</text>
+  <text x="644" y="152" font-size="10" fill="#8f3a3a">递归：删目录连里面的东西一起删</text>
+  <text x="644" y="174" font-size="10" fill="#8f3a3a">需 deepagents &gt;= 0.7</text>
+  <text x="644" y="198" font-size="10" fill="#8f3a3a">后端不支持时从模型视野里消失</text>
+  <text x="644" y="222" font-size="10" fill="#64748b">不是报错，是"这一项根本不存在"</text>
+  <text x="644" y="244" font-size="10" fill="#64748b">排查：看后端有没有重写 delete</text>
+
+  <line x1="170" y1="258" x2="170" y2="286" stroke="#5a6b7d" stroke-width="1.4" marker-end="url(#b4)"/>
+  <line x1="470" y1="258" x2="470" y2="286" stroke="#5a6b7d" stroke-width="1.4" marker-end="url(#b4)"/>
+  <line x1="770" y1="258" x2="770" y2="286" stroke="#5a6b7d" stroke-width="1.4" marker-end="url(#b4)"/>
+
+  <rect x="28" y="292" width="884" height="118" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3"/>
+  <text x="44" y="314" font-size="12" font-weight="600" fill="#334155">三个最容易判断错的细节</text>
+  <text x="44" y="338" font-size="10.8" fill="#334155">① write_file 会自动建父目录，路径写错的代价是"多出一棵空树"，不是报错</text>
+  <text x="44" y="360" font-size="10.8" fill="#334155">② edit_file 的 old_string 必须逐字符一致，多一个缩进就匹配不上；匹配不上时不改文件</text>
+  <text x="44" y="382" font-size="10.8" fill="#334155">③ grep 的 output_mode 有三种：files_with_matches（默认）/ content（带行号）/ count</text>
+  <text x="44" y="402" font-size="10.2" fill="#94a3b8">实测 grep 的默认值是 files_with_matches——只给文件名时，模型容易再花一轮去 read_file 找具体行</text>
+
+  <rect x="28" y="426" width="884" height="112" rx="10" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.3"/>
+  <text x="44" y="448" font-size="12" font-weight="600" fill="#1e4b7a">还有两个不属于"文件工具"的</text>
+  <text x="44" y="472" font-size="10.8" fill="#334155">execute：只有沙箱类后端才有；对 StateBackend 调它是"工具根本不在表里"（课 6）</text>
+  <text x="44" y="494" font-size="10.8" fill="#334155">task：派子代理，来自 SubAgentMiddleware，不是文件能力（课 10）</text>
+  <text x="44" y="518" font-size="10.2" fill="#64748b">把这两个算进"文件工具"会让计数变成 9，但它们的边界完全是另一门课的事</text>
+</svg>

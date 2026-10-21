@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 520" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="s42" markerWidth="10" markerHeight="10" refX="7.5" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5a6b7d"/>
+    </marker>
+  </defs>
+  <rect width="940" height="520" fill="#fbfcfd"/>
+  <text x="470" y="28" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">第 2 步：改成一条链路 + 落盘 + 只读裁剪</text>
+  <text x="470" y="50" text-anchor="middle" font-size="11.3" fill="#64748b">橙色虚线是相对第 1 步的变化点，一共三处</text>
+
+  <rect x="28" y="74" width="288" height="196" rx="10" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.5"/>
+  <text x="44" y="96" font-size="12" font-weight="600" fill="#1f5537">你的工具（描述被重写）</text>
+  <text x="44" y="120" font-size="10.3" fill="#334155" font-family="ui-monospace, Menlo, monospace">search_docs(query, limit)</text>
+  <text x="44" y="138" font-size="9.6" fill="#64748b">→ 返回 [{id, title, path}]</text>
+  <text x="44" y="160" font-size="10.3" fill="#334155" font-family="ui-monospace, Menlo, monospace">fetch_doc(doc_id)</text>
+  <text x="44" y="178" font-size="9.6" fill="#64748b">→ 写入虚拟盘，回摘要 + 路径</text>
+  <text x="44" y="200" font-size="10.3" fill="#334155" font-family="ui-monospace, Menlo, monospace">list_endpoints(service)</text>
+  <text x="44" y="218" font-size="9.6" fill="#64748b">→ 只给接口名与一句话用途</text>
+  <text x="44" y="244" font-size="9.8" fill="#7a4f13">每条 docstring 都写"何时用 / 何时别用"</text>
+  <text x="44" y="262" font-size="9.8" fill="#7a4f13">这是提升工具选择准确率最便宜的一招</text>
+
+  <rect x="330" y="74" width="288" height="196" rx="10" fill="#fff8ec" stroke="#e0b877" stroke-width="1.8" stroke-dasharray="6 4"/>
+  <text x="346" y="96" font-size="12" font-weight="600" fill="#7a4f13">① fetch_doc 落盘</text>
+  <text x="346" y="120" font-size="10.2" fill="#334155">大文档不再塞进消息，而是</text>
+  <text x="346" y="138" font-size="10.2" fill="#334155">写进后端：</text>
+  <text x="346" y="160" font-size="10" fill="#334155" font-family="ui-monospace, Menlo, monospace">backend.write("/docs/auth.md", body)</text>
+  <text x="346" y="184" font-size="10.2" fill="#334155">返回：</text>
+  <text x="346" y="202" font-size="10" fill="#334155" font-family="ui-monospace, Menlo, monospace">"已存 /docs/auth.md（1.2KB），</text>
+  <text x="346" y="220" font-size="10" fill="#334155" font-family="ui-monospace, Menlo, monospace"> 摘要：限流 100 req/min"</text>
+  <text x="346" y="246" font-size="9.8" fill="#8f3a3a">模型要细节时自己 read_file</text>
+  <text x="346" y="264" font-size="9.8" fill="#8f3a3a">上下文从 O(全文) 降到 O(摘要)</text>
+
+  <rect x="632" y="74" width="280" height="196" rx="10" fill="#fff8ec" stroke="#e0b877" stroke-width="1.8" stroke-dasharray="6 4"/>
+  <text x="648" y="96" font-size="12" font-weight="600" fill="#7a4f13">② 工具表只留读</text>
+  <text x="648" y="120" font-size="10.2" fill="#334155">用同名替换裁掉写类：</text>
+  <text x="648" y="142" font-size="9.8" fill="#334155" font-family="ui-monospace, Menlo, monospace">FilesystemMiddleware(</text>
+  <text x="648" y="160" font-size="9.8" fill="#334155" font-family="ui-monospace, Menlo, monospace">  tools=["ls","read_file",</text>
+  <text x="648" y="178" font-size="9.8" fill="#334155" font-family="ui-monospace, Menlo, monospace">         "glob","grep"])</text>
+  <text x="648" y="202" font-size="10.2" fill="#334155">结果 9 → 5：</text>
+  <text x="648" y="220" font-size="9.8" fill="#1f5537">读 4 个 + task，写类彻底不在表里</text>
+  <text x="648" y="246" font-size="9.8" fill="#64748b">不是"藏起来"，是构造期就没注册</text>
+  <text x="648" y="264" font-size="9.8" fill="#64748b">（与 excluded_tools 的层次不同）</text>
+
+  <line x1="172" y1="270" x2="172" y2="296" stroke="#5a6b7d" stroke-width="1.4" marker-end="url(#s42)"/>
+  <line x1="474" y1="270" x2="474" y2="296" stroke="#5a6b7d" stroke-width="1.4" marker-end="url(#s42)"/>
+  <line x1="772" y1="270" x2="772" y2="296" stroke="#5a6b7d" stroke-width="1.4" marker-end="url(#s42)"/>
+
+  <rect x="28" y="302" width="884" height="120" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3"/>
+  <text x="44" y="324" font-size="12" font-weight="600" fill="#334155">③ MCP 那条路：把"外部文档服务"整包接进来</text>
+  <text x="44" y="348" font-size="10.6" fill="#334155" font-family="ui-monospace, Menlo, monospace">async with MCPAdapter({"mcpServers": {"docs": {"url": "http://docs-svc:8000/mcp"}}}) as adapter:</text>
+  <text x="44" y="368" font-size="10.6" fill="#334155" font-family="ui-monospace, Menlo, monospace">    mcp_tools = await adapter.list_tools()      # 实测：2 个工具 → 总数 9 + 2 + 3 = 14</text>
+  <text x="44" y="394" font-size="10.4" fill="#8f3a3a">三个必知约束：MCP 工具必须在 async with 内使用｜langchain.mcp 仍是 beta｜工具名与你自己的要避开重名</text>
+  <text x="44" y="414" font-size="10.2" fill="#64748b">如果你的服务已经有 MCP，优先接 MCP 而不是再写一遍函数——省掉"描述写得好不好"这件事的一部分</text>
+
+  <rect x="28" y="436" width="884" height="66" rx="10" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.3"/>
+  <text x="44" y="458" font-size="11.6" font-weight="600" fill="#1e4b7a">这一版仍然没解决的事</text>
+  <text x="44" y="480" font-size="10.5" fill="#334155">文档落盘落在哪个后端？进程一重启就没了（StateBackend）——这是课 5 的问题，不是本课的锅</text>
+</svg>

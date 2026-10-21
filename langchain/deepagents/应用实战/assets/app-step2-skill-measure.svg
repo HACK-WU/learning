@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1020" height="620" viewBox="0 0 1020 620">
+  <defs>
+    <marker id="ap2" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#5b6b7c"/>
+    </marker>
+  </defs>
+  <rect width="1020" height="620" fill="#ffffff"/>
+  <text x="30" y="40" font-family="sans-serif" font-size="21" font-weight="bold" fill="#1f2d3d">第 2 步：量化 + 拆脚本 + pinned 点名</text>
+  <text x="30" y="66" font-family="sans-serif" font-size="13" fill="#667788">橙色虚线是相对第 1 步的变化点，一共三处</text>
+
+  <rect x="30" y="92" width="300" height="160" rx="8" fill="#fff8ec" stroke="#e0b877" stroke-width="1.6" stroke-dasharray="6 4"/>
+  <text x="48" y="118" font-family="sans-serif" font-size="13" font-weight="bold" fill="#7a4f13">变化①：量化启动成本</text>
+  <text x="48" y="144" font-family="sans-serif" font-size="11" fill="#7a4f13">造 n 个同体积 skill，量系统提示增量</text>
+  <text x="48" y="168" font-family="monospace" font-size="10.5" fill="#33475b">1 个 500 字符   → 3940 字符增量</text>
+  <text x="48" y="188" font-family="monospace" font-size="10.5" fill="#33475b">10 个 8000 字符 → 2770 字符增量</text>
+  <text x="48" y="216" font-family="sans-serif" font-size="10.5" fill="#a33b3b">关键：固定说明约 1.9k，不随个数变</text>
+  <text x="48" y="236" font-family="sans-serif" font-size="10.5" fill="#a33b3b">→ 单个小技能反而更贵</text>
+
+  <rect x="356" y="92" width="300" height="160" rx="8" fill="#fff8ec" stroke="#e0b877" stroke-width="1.6" stroke-dasharray="6 4"/>
+  <text x="374" y="118" font-family="sans-serif" font-size="13" font-weight="bold" fill="#7a4f13">变化②：逻辑拆进 scripts/</text>
+  <text x="374" y="144" font-family="sans-serif" font-size="11" fill="#7a4f13">正文只写"怎么用"</text>
+  <text x="374" y="166" font-family="sans-serif" font-size="11" fill="#7a4f13">可执行逻辑放 scripts/ 下</text>
+  <text x="374" y="192" font-family="monospace" font-size="10" fill="#33475b">code-review/</text>
+  <text x="374" y="210" font-family="monospace" font-size="10" fill="#33475b">├─ SKILL.md      （怎么用）</text>
+  <text x="374" y="228" font-family="monospace" font-size="10" fill="#33475b">└─ scripts/jsdiff.py（逻辑）</text>
+  <text x="374" y="248" font-family="sans-serif" font-size="10" fill="#a33b3b">可版本管理、可共享、可复跑的说明书</text>
+
+  <rect x="682" y="92" width="300" height="160" rx="8" fill="#fff8ec" stroke="#e0b877" stroke-width="1.6" stroke-dasharray="6 4"/>
+  <text x="700" y="118" font-family="sans-serif" font-size="13" font-weight="bold" fill="#7a4f13">变化③：pinned_skills 点名</text>
+  <text x="700" y="144" font-family="sans-serif" font-size="11" fill="#7a4f13">用户敲 /code-review</text>
+  <text x="700" y="166" font-family="monospace" font-size="10" fill="#33475b">{ "pinned_skills": ["code-review"] }</text>
+  <text x="700" y="192" font-family="sans-serif" font-size="11" fill="#2e6b4f">首轮模型调用前正文就进上下文</text>
+  <text x="700" y="212" font-family="sans-serif" font-size="10" fill="#a33b3b">省掉 read_file 往返</text>
+  <text x="700" y="230" font-family="sans-serif" font-size="10" fill="#a33b3b">注意：pinned 剥 frontmatter；read_file 不剥</text>
+
+  <rect x="30" y="276" width="952" height="230" rx="8" fill="#f7f9fc" stroke="#a8b8c8" stroke-width="1.5"/>
+  <text x="48" y="302" font-family="sans-serif" font-size="13.5" font-weight="bold" fill="#33475b">实测数据（探针 p7 / p6 输出）</text>
+  <text x="48" y="328" font-family="monospace" font-size="11" fill="#33475b">规模扫描（中文长说明，约 1 字 ~ 1 token）</text>
+  <text x="48" y="350" font-family="monospace" font-size="10.5" fill="#33475b">  1 个   500 字符    启动增量 1942   占比 388%   ← 反直觉</text>
+  <text x="48" y="370" font-family="monospace" font-size="10.5" fill="#33475b">  1 个  2000 字符    启动增量 1942    97%</text>
+  <text x="48" y="390" font-family="monospace" font-size="10.5" fill="#33475b">  3 个  6000 字符    启动增量 2126    35%</text>
+  <text x="48" y="410" font-family="monospace" font-size="10.5" fill="#33475b"> 10 个 20000 字符   启动增量 2770    14%</text>
+  <text x="48" y="430" font-family="monospace" font-size="10.5" fill="#33475b"> 10 个 80000 字符   启动增量 2770   3.5%   ← 规模才划算</text>
+  <text x="48" y="462" font-family="sans-serif" font-size="11" fill="#2e6b4f">pinned 行为：首调用即带正文，且不含 frontmatter；对照 `read_file` 含 frontmatter</text>
+
+  <rect x="30" y="524" width="952" height="72" rx="8" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.5"/>
+  <text x="48" y="548" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#1f5537">落盘前自检</text>
+  <text x="48" y="572" font-family="sans-serif" font-size="11" fill="#1f5537">① 三处变化都有图可溯 ② 数据全部实测 ③ scripts/ 与 body 分离 ④ pinned 偏离点已标注（与 read_file 行为不一致）</text>
+</svg>

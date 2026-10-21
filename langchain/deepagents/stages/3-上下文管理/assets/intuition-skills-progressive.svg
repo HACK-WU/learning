@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1020" height="620" viewBox="0 0 1020 620">
+  <defs>
+    <marker id="k7a" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#5b6b7c"/>
+    </marker>
+    <marker id="k7o" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#e08a2e"/>
+    </marker>
+  </defs>
+  <rect width="1020" height="620" fill="#ffffff"/>
+  <text x="30" y="40" font-family="sans-serif" font-size="21" font-weight="bold" fill="#1f2d3d">三级披露：上下文里什么时候多出什么</text>
+  <text x="30" y="66" font-family="sans-serif" font-size="13" fill="#667788">一个 skill 目录 = 三层文件；每一层只在被需要的那一刻才进入上下文</text>
+
+  <rect x="30" y="94" width="240" height="300" rx="8" fill="#f7f9fc" stroke="#a8b8c8" stroke-width="1.5"/>
+  <text x="48" y="120" font-family="sans-serif" font-size="14" font-weight="bold" fill="#33475b">skill 目录（后端里）</text>
+  <text x="48" y="148" font-family="monospace" font-size="11.5" fill="#33475b">code-review/</text>
+  <text x="48" y="170" font-family="monospace" font-size="11.5" fill="#7a4f13">├─ SKILL.md</text>
+  <text x="66" y="190" font-family="sans-serif" font-size="10.5" fill="#7a4f13">frontmatter + 正文</text>
+  <text x="48" y="214" font-family="monospace" font-size="11.5" fill="#33475b">├─ checklist.md</text>
+  <text x="48" y="236" font-family="monospace" font-size="11.5" fill="#33475b">├─ scripts/</text>
+  <text x="66" y="256" font-family="monospace" font-size="10.5" fill="#33475b">lint.sh</text>
+  <text x="48" y="278" font-family="monospace" font-size="11.5" fill="#33475b">└─ references/</text>
+  <text x="66" y="298" font-family="monospace" font-size="10.5" fill="#33475b">review-rules.md</text>
+  <text x="48" y="330" font-family="sans-serif" font-size="11.5" fill="#a33b3b">整个目录都不在提示词里</text>
+  <text x="48" y="350" font-family="sans-serif" font-size="11.5" fill="#a33b3b">它在后端，等着被读</text>
+  <text x="48" y="376" font-family="sans-serif" font-size="11" fill="#667788">（默认 StateBackend 时</text>
+  <text x="48" y="392" font-family="sans-serif" font-size="11" fill="#667788"> 这里可能根本读不到）</text>
+
+  <line x1="270" y1="190" x2="312" y2="190" stroke="#5b6b7c" stroke-width="1.6" marker-end="url(#k7a)"/>
+  <text x="270" y="180" font-family="sans-serif" font-size="10" fill="#667788">启动扫描</text>
+
+  <rect x="316" y="94" width="300" height="140" rx="8" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.6"/>
+  <text x="334" y="120" font-family="sans-serif" font-size="13.5" font-weight="bold" fill="#1e4b7a">第 1 层：发现（启动期）</text>
+  <text x="334" y="146" font-family="sans-serif" font-size="11.5" fill="#1e4b7a">只解析 frontmatter，只取两字段</text>
+  <text x="334" y="170" font-family="monospace" font-size="11" fill="#1e4b7a">name: code-review</text>
+  <text x="334" y="190" font-family="monospace" font-size="11" fill="#1e4b7a">description: 按团队 SOP ...</text>
+  <text x="334" y="216" font-family="sans-serif" font-size="11" fill="#2e6b4f">→ 写进系统提示的 Available Skills</text>
+
+  <rect x="316" y="254" width="300" height="140" rx="8" fill="#fff8ec" stroke="#e0b877" stroke-width="1.6" stroke-dasharray="6 4"/>
+  <text x="334" y="280" font-family="sans-serif" font-size="13.5" font-weight="bold" fill="#7a4f13">第 2 层：读取（模型主动）</text>
+  <text x="334" y="306" font-family="sans-serif" font-size="11.5" fill="#7a4f13">模型判断任务匹配 description</text>
+  <text x="334" y="330" font-family="monospace" font-size="10.5" fill="#7a4f13">read_file("/skills/code-review/</text>
+  <text x="334" y="348" font-family="monospace" font-size="10.5" fill="#7a4f13">          SKILL.md", limit=1000)</text>
+  <text x="334" y="374" font-family="sans-serif" font-size="11" fill="#a33b3b">→ 此刻正文才进上下文</text>
+
+  <rect x="316" y="414" width="300" height="140" rx="8" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.6"/>
+  <text x="334" y="440" font-family="sans-serif" font-size="13.5" font-weight="bold" fill="#1f5537">第 3 层：执行（按需再读）</text>
+  <text x="334" y="466" font-family="sans-serif" font-size="11.5" fill="#1f5537">正文里说"去跑 lint.sh"</text>
+  <text x="334" y="490" font-family="monospace" font-size="10.5" fill="#1f5537">→ 模型自己 read_file 脚本</text>
+  <text x="334" y="514" font-family="monospace" font-size="10.5" fill="#1f5537">→ 或 execute 直接跑</text>
+  <text x="334" y="540" font-family="sans-serif" font-size="11" fill="#1f5537">→ 配套文件也只在需要时读</text>
+
+  <line x1="616" y1="164" x2="658" y2="164" stroke="#5b6b7c" stroke-width="1.6" marker-end="url(#k7a)"/>
+  <line x1="616" y1="324" x2="658" y2="324" stroke="#5b6b7c" stroke-width="1.6" marker-end="url(#k7a)"/>
+  <line x1="616" y1="484" x2="658" y2="484" stroke="#5b6b7c" stroke-width="1.6" marker-end="url(#k7a)"/>
+
+  <rect x="662" y="94" width="326" height="460" rx="8" fill="#fdf3f3" stroke="#e0a0a0" stroke-width="1.5"/>
+  <text x="680" y="120" font-family="sans-serif" font-size="13.5" font-weight="bold" fill="#a33b3b">上下文窗口里实际有什么</text>
+
+  <rect x="680" y="134" width="290" height="76" rx="6" fill="#ffffff" stroke="#7fb2e5" stroke-width="1.2"/>
+  <text x="694" y="154" font-family="sans-serif" font-size="11" font-weight="bold" fill="#1e4b7a">启动时：只多出 2~3 行</text>
+  <text x="694" y="174" font-family="monospace" font-size="9.5" fill="#33475b">- **code-review**: 按团队 SOP 审查…</text>
+  <text x="694" y="190" font-family="monospace" font-size="9.5" fill="#33475b">  -&gt; Read `/skills/.../SKILL.md`</text>
+  <text x="694" y="204" font-family="sans-serif" font-size="9.5" fill="#a33b3b">+ 一段固定使用说明（约 1.9k 字符）</text>
+
+  <rect x="680" y="222" width="290" height="88" rx="6" fill="#ffffff" stroke="#e0b877" stroke-width="1.2"/>
+  <text x="694" y="242" font-family="sans-serif" font-size="11" font-weight="bold" fill="#7a4f13">任务匹配后：多出正文</text>
+  <text x="694" y="262" font-family="monospace" font-size="9.5" fill="#33475b">@@ lines 1-47 of 47 @@</text>
+  <text x="694" y="278" font-family="monospace" font-size="9.5" fill="#33475b"># 代码审查 SOP</text>
+  <text x="694" y="294" font-family="sans-serif" font-size="9.5" fill="#a33b3b">含 frontmatter（实测没剥掉）</text>
+
+  <rect x="680" y="322" width="290" height="70" rx="6" fill="#ffffff" stroke="#86bfa0" stroke-width="1.2"/>
+  <text x="694" y="342" font-family="sans-serif" font-size="11" font-weight="bold" fill="#1f5537">执行时：再多出被点名的文件</text>
+  <text x="694" y="362" font-family="sans-serif" font-size="10" fill="#1f5537">checklist.md / lint.sh / rules.md</text>
+  <text x="694" y="380" font-family="sans-serif" font-size="9.5" fill="#667788">读几个就多几个，不读就不进</text>
+
+  <rect x="680" y="404" width="290" height="130" rx="6" fill="#fff8ec" stroke="#e0b877" stroke-width="1.4"/>
+  <text x="694" y="424" font-family="sans-serif" font-size="11" font-weight="bold" fill="#7a4f13">关键：三层不是"逐层累加"</text>
+  <text x="694" y="446" font-family="sans-serif" font-size="10" fill="#7a4f13">第 1 层是"索引"，永远在</text>
+  <text x="694" y="464" font-family="sans-serif" font-size="10" fill="#7a4f13">第 2 层是"整本手册"，用一次读一次</text>
+  <text x="694" y="482" font-family="sans-serif" font-size="10" fill="#7a4f13">第 3 层是"手册里提到的附件"</text>
+  <text x="694" y="508" font-family="sans-serif" font-size="10" fill="#a33b3b">读过的会留在对话里，不会自动消失</text>
+  <text x="694" y="524" font-family="sans-serif" font-size="9.5" fill="#667788">（除非压缩把它丢掉）</text>
+
+  <rect x="30" y="566" width="958" height="40" rx="6" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.4"/>
+  <text x="48" y="591" font-family="sans-serif" font-size="12" fill="#1f5537">一句话：启动时付"目录费"，用时付"手册费"，真要用脚本才付"附件费"——所以 skill 越多越省，单个小 skill 反而更贵</text>
+</svg>

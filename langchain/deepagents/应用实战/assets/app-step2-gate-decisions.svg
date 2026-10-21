@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="560" viewBox="0 0 1040 560">
+  <rect width="1040" height="560" fill="#ffffff"/>
+  <text x="30" y="40" font-family="sans-serif" font-size="21" font-weight="bold" fill="#1f2d3d">第 2 步：四种决策 + 三层收窄</text>
+  <text x="30" y="66" font-family="sans-serif" font-size="13" fill="#667788">左边看清人能做什么，右边看清什么情况下才该问他</text>
+
+  <!-- 左：四种决策 -->
+  <rect x="30" y="92" width="520" height="330" rx="9" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.6" stroke-dasharray="6 4"/>
+  <text x="48" y="118" font-family="sans-serif" font-size="13" font-weight="bold" fill="#1f5537">变化一 + 二：读出中断 + 走完四种决策</text>
+
+  <rect x="48" y="136" width="238" height="82" rx="7" fill="#ffffff" stroke="#9ccfae" stroke-width="1.3"/>
+  <text x="62" y="158" font-family="sans-serif" font-size="11.5" font-weight="bold" fill="#1f5537">approve</text>
+  <text x="62" y="178" font-family="sans-serif" font-size="9.5" fill="#33475b">按原参数执行</text>
+  <text x="62" y="196" font-family="monospace" font-size="9" fill="#2e6b4f">→ 文件写入 "hello"</text>
+
+  <rect x="298" y="136" width="238" height="82" rx="7" fill="#ffffff" stroke="#9ccfae" stroke-width="1.3"/>
+  <text x="312" y="158" font-family="sans-serif" font-size="11.5" font-weight="bold" fill="#1f5537">edit</text>
+  <text x="312" y="178" font-family="sans-serif" font-size="9.5" fill="#33475b">改参数后执行</text>
+  <text x="312" y="196" font-family="monospace" font-size="9" fill="#2e6b4f">→ /safe.txt "改过的内容"</text>
+
+  <rect x="48" y="230" width="238" height="82" rx="7" fill="#ffffff" stroke="#e0b877" stroke-width="1.3"/>
+  <text x="62" y="252" font-family="sans-serif" font-size="11.5" font-weight="bold" fill="#7a4f13">reject</text>
+  <text x="62" y="272" font-family="sans-serif" font-size="9.5" fill="#33475b">不执行 + 回传原因</text>
+  <text x="62" y="290" font-family="monospace" font-size="8.5" fill="#a33b3b">"User rejected ... reason: 不许"</text>
+
+  <rect x="298" y="230" width="238" height="82" rx="7" fill="#ffffff" stroke="#e0a0a0" stroke-width="1.3"/>
+  <text x="312" y="252" font-family="sans-serif" font-size="11.5" font-weight="bold" fill="#a33b3b">respond</text>
+  <text x="312" y="272" font-family="sans-serif" font-size="9.5" fill="#33475b">不执行，话当结果</text>
+  <text x="312" y="290" font-family="monospace" font-size="8.5" fill="#a33b3b">→ ToolMessage = 人的原话</text>
+
+  <text x="48" y="336" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#33475b">读中断的正确姿势</text>
+  <text x="48" y="356" font-family="monospace" font-size="9" fill="#33475b">out["__interrupt__"][0].value["action_requests"]</text>
+  <text x="48" y="374" font-family="monospace" font-size="9" fill="#33475b">  → [{'name':'write_file','args':{...}}]</text>
+  <text x="48" y="394" font-family="monospace" font-size="9" fill="#a33b3b">错误恢复格式 → TypeError / ValueError</text>
+
+  <!-- 右：三层收窄 -->
+  <rect x="570" y="92" width="442" height="330" rx="9" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.6" stroke-dasharray="6 4"/>
+  <text x="588" y="118" font-family="sans-serif" font-size="13" font-weight="bold" fill="#1e4b7a">变化三：三层收窄，别每次都问</text>
+
+  <text x="588" y="144" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#33475b">第 1 层：工具名</text>
+  <text x="604" y="164" font-family="monospace" font-size="9" fill="#33475b">interrupt_on={"delete": True}</text>
+  <text x="604" y="182" font-family="sans-serif" font-size="9" fill="#667788">→ 所有 delete 都问</text>
+
+  <text x="588" y="208" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#33475b">第 2 层：when 谓词（按参数）</text>
+  <text x="604" y="228" font-family="monospace" font-size="9" fill="#2e6b4f">def only_prod(req): "prod" in path</text>
+  <text x="604" y="246" font-family="sans-serif" font-size="9" fill="#2e6b4f">→ 改 prod 配置才问（实测 True/False）</text>
+
+  <text x="588" y="272" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#33475b">第 3 层：permissions</text>
+  <text x="604" y="292" font-family="monospace" font-size="9" fill="#a33b3b">deny **/.env → 问都不问，直接拒</text>
+  <text x="604" y="310" font-family="monospace" font-size="9" fill="#7a4f13">interrupt /config/** → 写前问</text>
+  <text x="604" y="328" font-family="sans-serif" font-size="9" fill="#a33b3b">deny 与 interrupt 同命中 → deny 赢</text>
+
+  <text x="588" y="356" font-family="sans-serif" font-size="10" fill="#667788">allowed_decisions 收紧后传越界决策</text>
+  <text x="588" y="374" font-family="monospace" font-size="9" fill="#a33b3b">→ ValueError: Unexpected human decision</text>
+  <text x="588" y="394" font-family="sans-serif" font-size="9.5" fill="#33475b">它不是 UI 提示，是硬校验</text>
+
+  <!-- 底部自检 -->
+  <rect x="30" y="440" width="982" height="100" rx="8" fill="#f7f9fc" stroke="#a8b8c8" stroke-width="1.4"/>
+  <text x="48" y="462" font-family="sans-serif" font-size="12" font-weight="bold" fill="#33475b">落盘前自检</text>
+  <text x="48" y="484" font-family="sans-serif" font-size="10.5" fill="#1f5537">① 两版可对比 ② 四种决策都有实测结果 ③ 三层收窄各有一句实测结论</text>
+  <text x="48" y="506" font-family="sans-serif" font-size="10" fill="#667788">④ 图 2 张均 xmllint 通过 ⑤ 双入口已挂索引 ⑥ 代码与输出一致（approve/edit/reject/respond 结果全部核对）</text>
+  <text x="48" y="526" font-family="sans-serif" font-size="10" fill="#667788">⑦ 纠正骨架"不能按参数条件触发"的错误说法，实测 when 谓词与 permissions 均可条件触发</text>
+</svg>

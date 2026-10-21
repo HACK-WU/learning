@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="a4" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5a6b7d"/>
+    </marker>
+  </defs>
+  <rect width="900" height="340" fill="#fbfcfd"/>
+  <text x="450" y="30" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">阶段 4 路径：分活 → 加闸 → 并行可调 → 才敢上线</text>
+
+  <rect x="34" y="62" width="200" height="118" rx="9" fill="#f9f2fb" stroke="#b992c7" stroke-width="1.5"/>
+  <text x="134" y="86" text-anchor="middle" font-size="12" font-weight="600" fill="#5b2f6b">课 10 · 规划与子代理</text>
+  <text x="134" y="108" text-anchor="middle" font-size="10.8" fill="#334155">write_todos（v0.7 opt-in）</text>
+  <text x="134" y="126" text-anchor="middle" font-size="10.8" fill="#334155">task 工具 · 五特征</text>
+  <text x="134" y="144" text-anchor="middle" font-size="10.8" fill="#334155">isolated / fork</text>
+  <text x="134" y="164" text-anchor="middle" font-size="9.8" fill="#94a3b8">坑：升级后待办工具消失</text>
+
+  <rect x="264" y="62" width="196" height="118" rx="9" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="362" y="86" text-anchor="middle" font-size="12" font-weight="600" fill="#1e4b7a">课 11 · 人在环中</text>
+  <text x="362" y="108" text-anchor="middle" font-size="10.8" fill="#334155">interrupt_on 映射</text>
+  <text x="362" y="126" text-anchor="middle" font-size="10.8" fill="#334155">底层 LangGraph interrupt</text>
+  <text x="362" y="144" text-anchor="middle" font-size="10.8" fill="#334155">权限 vs 审批分工</text>
+  <text x="362" y="164" text-anchor="middle" font-size="9.8" fill="#94a3b8">坑：没有 checkpointer 恢复不了</text>
+
+  <rect x="490" y="62" width="196" height="118" rx="9" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.5"/>
+  <text x="588" y="86" text-anchor="middle" font-size="12" font-weight="600" fill="#1f5537">课 12 · 异步与动态</text>
+  <text x="588" y="108" text-anchor="middle" font-size="10.8" fill="#334155">launch/check/update/cancel</text>
+  <text x="588" y="126" text-anchor="middle" font-size="10.8" fill="#334155">动态子代理（解释器编排）</text>
+  <text x="588" y="144" text-anchor="middle" font-size="10.8" fill="#334155">同步 / 异步 / 动态选型</text>
+  <text x="588" y="164" text-anchor="middle" font-size="9.8" fill="#94a3b8">坑：异步也要配上审批</text>
+
+  <rect x="716" y="62" width="150" height="118" rx="9" fill="#fff8ec" stroke="#e0b877" stroke-width="1.5"/>
+  <text x="791" y="86" text-anchor="middle" font-size="12" font-weight="600" fill="#7a4f13">课 13 · 生产化</text>
+  <text x="791" y="108" text-anchor="middle" font-size="10.8" fill="#334155">容错三件套</text>
+  <text x="791" y="126" text-anchor="middle" font-size="10.8" fill="#334155">流式 / 事件流</text>
+  <text x="791" y="144" text-anchor="middle" font-size="10.8" fill="#334155">上线清单</text>
+
+  <line x1="236" y1="120" x2="260" y2="120" stroke="#5a6b7d" stroke-width="1.5" marker-end="url(#a4)"/>
+  <line x1="462" y1="120" x2="486" y2="120" stroke="#5a6b7d" stroke-width="1.5" marker-end="url(#a4)"/>
+  <line x1="688" y1="120" x2="712" y2="120" stroke="#5a6b7d" stroke-width="1.5" marker-end="url(#a4)"/>
+
+  <rect x="34" y="212" width="832" height="86" rx="9" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.3"/>
+  <text x="54" y="234" font-size="11.5" font-weight="600" fill="#334155">上线前必查（课 13 收口，逐项打勾）</text>
+  <text x="54" y="255" font-size="10.8" fill="#475569">☐ 权限规则是否覆盖全部敏感路径　☐ 高危工具是否配 interrupt_on　☐ 子代理是否会自我委派成环　☐ 上下文压缩阈值是否合理</text>
+  <text x="54" y="275" font-size="10.8" fill="#475569">☐ 限流 / 重试 / 降级是否就位　☐ 是否用 stream.subagents 观测到每个子代理　☐ 版本锁定（v0.7 行为差异）　☐ 沙箱环境是否最小权限</text>
+
+  <text x="450" y="322" text-anchor="middle" font-size="10.5" fill="#94a3b8">本阶段课 13 只讲「能力开关与清单」；真做多文件工程化与部署，归 Phase 3 结课项目</text>
+</svg>

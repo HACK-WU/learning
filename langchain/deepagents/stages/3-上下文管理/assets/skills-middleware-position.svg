@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1010" height="600" viewBox="0 0 1010 600">
+  <defs>
+    <marker id="k7c" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#5b6b7c"/>
+    </marker>
+  </defs>
+  <rect width="1010" height="600" fill="#ffffff"/>
+  <text x="30" y="40" font-family="sans-serif" font-size="21" font-weight="bold" fill="#1f2d3d">SkillsMiddleware 站在中间件栈的哪一格</text>
+  <text x="30" y="66" font-family="sans-serif" font-size="13" fill="#667788">位置不是随意的：它必须看到"被压缩后的对话"和"实际被调用的模型"</text>
+
+  <text x="30" y="104" font-family="sans-serif" font-size="12" fill="#667788">请求从下往上走（越靠下越外层）：</text>
+
+  <rect x="30" y="118" width="600" height="44" rx="6" fill="#f7f9fc" stroke="#a8b8c8" stroke-width="1.3"/>
+  <text x="46" y="146" font-family="monospace" font-size="11.5" fill="#33475b">文件工具 / 子代理 / 异步子代理（核心栈）</text>
+
+  <rect x="30" y="168" width="600" height="44" rx="6" fill="#f7f9fc" stroke="#a8b8c8" stroke-width="1.3"/>
+  <text x="46" y="196" font-family="monospace" font-size="11.5" fill="#33475b">你传进来的 middleware=[...]（按你的顺序）</text>
+
+  <rect x="30" y="218" width="600" height="44" rx="6" fill="#f7f9fc" stroke="#a8b8c8" stroke-width="1.3"/>
+  <text x="46" y="246" font-family="monospace" font-size="11.5" fill="#33475b">Summarization / ModelFallback 等压缩与路由</text>
+
+  <rect x="30" y="268" width="600" height="52" rx="6" fill="#eef6ff" stroke="#7fb2e5" stroke-width="2"/>
+  <text x="46" y="290" font-family="monospace" font-size="12" font-weight="bold" fill="#1e4b7a">SkillsMiddleware  ← 就插在这里</text>
+  <text x="46" y="310" font-family="sans-serif" font-size="10.5" fill="#1e4b7a">只在传了 skills= 时才存在；同名实例会原位替换它</text>
+
+  <rect x="30" y="328" width="600" height="44" rx="6" fill="#fff8ec" stroke="#e0b877" stroke-width="1.3"/>
+  <text x="46" y="356" font-family="monospace" font-size="11.5" fill="#7a4f13">Prompt Caching（缓存断点）</text>
+
+  <rect x="30" y="378" width="600" height="44" rx="6" fill="#fdf3f3" stroke="#e0a0a0" stroke-width="1.3"/>
+  <text x="46" y="406" font-family="monospace" font-size="11.5" fill="#a33b3b">MemoryMiddleware（AGENTS.md，全量加载）</text>
+
+  <rect x="30" y="428" width="600" height="44" rx="6" fill="#f7f9fc" stroke="#a8b8c8" stroke-width="1.3"/>
+  <text x="46" y="456" font-family="monospace" font-size="11.5" fill="#33475b">HumanInTheLoop / UnsupportedContent</text>
+
+  <rect x="30" y="484" width="600" height="52" rx="6" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.4"/>
+  <text x="46" y="506" font-family="sans-serif" font-size="11.5" font-weight="bold" fill="#1f5537">图中箭头方向 = 内层到外层</text>
+  <text x="46" y="525" font-family="sans-serif" font-size="10.5" fill="#1f5537">写在上面的先处理请求，所以在 skills 之前已把对话压缩过了</text>
+
+  <line x1="630" y1="294" x2="668" y2="294" stroke="#5b6b7c" stroke-width="1.6" marker-end="url(#k7c)"/>
+
+  <rect x="672" y="118" width="308" height="180" rx="8" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="690" y="144" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#1e4b7a">三个"必须在这个位置"的理由</text>
+  <text x="690" y="170" font-family="sans-serif" font-size="10.5" fill="#1e4b7a">① 在压缩之后</text>
+  <text x="690" y="188" font-family="sans-serif" font-size="10" fill="#33475b">否则它看到的是没压缩的长对话</text>
+  <text x="690" y="212" font-family="sans-serif" font-size="10.5" fill="#1e4b7a">② 在 fallback/路由之后</text>
+  <text x="690" y="230" font-family="sans-serif" font-size="10" fill="#33475b">否则它按错的模型决定披露格式</text>
+  <text x="690" y="254" font-family="sans-serif" font-size="10.5" fill="#1e4b7a">③ 在 prompt caching 之前</text>
+  <text x="690" y="272" font-family="sans-serif" font-size="10" fill="#33475b">让技能段成为可缓存前缀的一部分</text>
+
+  <rect x="672" y="310" width="308" height="140" rx="8" fill="#fff8ec" stroke="#e0b877" stroke-width="1.5"/>
+  <text x="690" y="336" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#7a4f13">和 Memory 的位置正好相反</text>
+  <text x="690" y="360" font-family="sans-serif" font-size="10.5" fill="#7a4f13">Skills：缓存之前</text>
+  <text x="690" y="380" font-family="sans-serif" font-size="10.5" fill="#7a4f13">Memory：缓存之后</text>
+  <text x="690" y="408" font-family="sans-serif" font-size="10" fill="#667788">因为 memory 会随对话更新内容，</text>
+  <text x="690" y="426" font-family="sans-serif" font-size="10" fill="#667788">放在缓存前缀里会让缓存一直失效</text>
+
+  <rect x="672" y="462" width="308" height="74" rx="8" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.5"/>
+  <text x="690" y="486" font-family="sans-serif" font-size="12" font-weight="bold" fill="#1f5537">手写 create_agent 时</text>
+  <text x="690" y="508" font-family="sans-serif" font-size="10" fill="#1f5537">必须自己放 FilesystemMiddleware，</text>
+  <text x="690" y="524" font-family="sans-serif" font-size="10" fill="#1f5537">否则模型没有 read_file 去读 SKILL.md</text>
+</svg>

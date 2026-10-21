@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 300" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="a1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5a6b7d"/>
+    </marker>
+  </defs>
+  <rect width="900" height="300" fill="#fbfcfd"/>
+  <text x="450" y="30" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">阶段 1 路径：从「装得上」到「看得懂」</text>
+
+  <rect x="40" y="70" width="200" height="96" rx="9" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="140" y="96" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1e4b7a">课 1 · 环境准备</text>
+  <text x="140" y="118" text-anchor="middle" font-size="11" fill="#334155">装 deepagents</text>
+  <text x="140" y="136" text-anchor="middle" font-size="11" fill="#334155">配 key · 跑通验证</text>
+  <text x="140" y="155" text-anchor="middle" font-size="10" fill="#94a3b8">卡点：装完不知道跑什么</text>
+
+  <rect x="290" y="70" width="240" height="96" rx="9" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.5"/>
+  <text x="410" y="96" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1f5537">课 2 · 它是什么</text>
+  <text x="410" y="118" text-anchor="middle" font-size="11" fill="#334155">harness 心智模型</text>
+  <text x="410" y="136" text-anchor="middle" font-size="11" fill="#334155">三层分工 · 选型边界</text>
+  <text x="410" y="155" text-anchor="middle" font-size="10" fill="#94a3b8">卡点：分不清它和 create_agent</text>
+
+  <rect x="580" y="70" width="280" height="96" rx="9" fill="#fff8ec" stroke="#e0b877" stroke-width="1.5"/>
+  <text x="720" y="96" text-anchor="middle" font-size="12.5" font-weight="600" fill="#7a4f13">课 3 · 第一个 agent 与默认装配</text>
+  <text x="720" y="118" text-anchor="middle" font-size="11" fill="#334155">签名 · 模型两种写法</text>
+  <text x="720" y="136" text-anchor="middle" font-size="11" fill="#334155">中间件栈全序 · Profiles</text>
+  <text x="720" y="155" text-anchor="middle" font-size="10" fill="#94a3b8">卡点：不知道默认塞了什么进去</text>
+
+  <line x1="242" y1="118" x2="286" y2="118" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#a1)"/>
+  <line x1="532" y1="118" x2="576" y2="118" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#a1)"/>
+
+  <rect x="40" y="205" width="820" height="60" rx="9" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.3" stroke-dasharray="4 3"/>
+  <text x="60" y="230" font-size="11.5" fill="#475569">阶段 1 结束后你手里应有：① 一个能跑的最小 agent 脚本　② 一张三层依赖图　③ 一份「默认装了什么」的清单 —— 这三样是后面三阶段每次调参时的对照基线</text>
+  <text x="60" y="250" font-size="10.5" fill="#94a3b8">注：课 1 为环境准备附加课，不占「每阶段 2–4 课」配额</text>
+</svg>

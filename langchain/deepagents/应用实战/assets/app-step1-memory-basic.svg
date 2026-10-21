@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1010" height="540" viewBox="0 0 1010 540">
+  <defs>
+    <marker id="m1a" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#5b6b7c"/>
+    </marker>
+  </defs>
+  <rect width="1010" height="540" fill="#ffffff"/>
+  <text x="30" y="40" font-family="sans-serif" font-size="21" font-weight="bold" fill="#1f2d3d">第 1 步：把 AGENTS.md 挂上去</text>
+  <text x="30" y="66" font-family="sans-serif" font-size="13" fill="#667788">注释给人看（不进模型），正文字字都付钱（每次请求都注入）</text>
+
+  <rect x="30" y="90" width="300" height="270" rx="8" fill="#f7f9fc" stroke="#a8b8c8" stroke-width="1.5"/>
+  <text x="48" y="116" font-family="sans-serif" font-size="13" font-weight="bold" fill="#33475b">AGENTS.md（你写的）</text>
+  <text x="48" y="142" font-family="monospace" font-size="9.5" fill="#667788">&lt;!-- 维护说明，不进模型 --&gt;</text>
+  <text x="48" y="166" font-family="monospace" font-size="10.5" fill="#33475b"># 项目规范</text>
+  <text x="48" y="188" font-family="monospace" font-size="10.5" fill="#33475b">## 代码风格</text>
+  <text x="48" y="208" font-family="monospace" font-size="10.5" fill="#2e6b4f">- 用 ruff，行宽 100</text>
+  <text x="48" y="228" font-family="monospace" font-size="10.5" fill="#2e6b4f">- 禁止裸 except</text>
+  <text x="48" y="252" font-family="monospace" font-size="10.5" fill="#33475b">## 测试</text>
+  <text x="48" y="272" font-family="monospace" font-size="10.5" fill="#2e6b4f">- pytest；新分支必须有测试</text>
+  <text x="48" y="306" font-family="sans-serif" font-size="10.5" fill="#667788">多源时按序拼接：</text>
+  <text x="48" y="324" font-family="monospace" font-size="10" fill="#33475b">["/user/AGENTS.md", "/proj/AGENTS.md"]</text>
+  <text x="48" y="342" font-family="sans-serif" font-size="10" fill="#a33b3b">→ 两段都在，后者更靠后（注意力更集中）</text>
+
+  <line x1="330" y1="220" x2="372" y2="220" stroke="#5b6b7c" stroke-width="1.6" marker-end="url(#m1a)"/>
+  <text x="332" y="210" font-family="sans-serif" font-size="10" fill="#667788">memory=</text>
+
+  <rect x="376" y="90" width="300" height="270" rx="8" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="394" y="116" font-family="sans-serif" font-size="13" font-weight="bold" fill="#1e4b7a">注入后的系统提示</text>
+  <text x="394" y="142" font-family="monospace" font-size="10" fill="#1e4b7a">&lt;agent_memory&gt;</text>
+  <text x="406" y="160" font-family="monospace" font-size="9.5" fill="#33475b">/AGENTS.md          ← 路径作标题</text>
+  <text x="406" y="178" font-family="monospace" font-size="9.5" fill="#2e6b4f"># 项目规范</text>
+  <text x="406" y="194" font-family="monospace" font-size="9.5" fill="#2e6b4f">- 用 ruff，行宽 100</text>
+  <text x="394" y="214" font-family="monospace" font-size="10" fill="#1e4b7a">&lt;/agent_memory&gt;</text>
+  <text x="394" y="240" font-family="monospace" font-size="10" fill="#7a4f13">&lt;memory_guidelines&gt;</text>
+  <text x="406" y="258" font-family="sans-serif" font-size="9.5" fill="#7a4f13">该记 / 不该记 / 怎么记</text>
+  <text x="406" y="274" font-family="sans-serif" font-size="9.5" fill="#7a4f13">（固定 5,118 字符）</text>
+  <text x="394" y="294" font-family="monospace" font-size="10" fill="#7a4f13">&lt;/memory_guidelines&gt;</text>
+  <text x="394" y="322" font-family="sans-serif" font-size="10" fill="#a33b3b">注释被剥掉了（实测）</text>
+  <text x="394" y="340" font-family="sans-serif" font-size="10" fill="#667788">正文一字不改地进来</text>
+
+  <line x1="676" y1="220" x2="718" y2="220" stroke="#5b6b7c" stroke-width="1.6" marker-end="url(#m1a)"/>
+
+  <rect x="722" y="90" width="258" height="270" rx="8" fill="#fff8ec" stroke="#e0b877" stroke-width="1.6"/>
+  <text x="740" y="116" font-family="sans-serif" font-size="13" font-weight="bold" fill="#7a4f13">这笔税多少（实测）</text>
+  <text x="740" y="144" font-family="monospace" font-size="10" fill="#a33b3b">正文   0  →  5,124</text>
+  <text x="740" y="164" font-family="monospace" font-size="10" fill="#a33b3b">正文 500  →  5,618</text>
+  <text x="740" y="184" font-family="monospace" font-size="10" fill="#a33b3b">正文 2k   →  7,118</text>
+  <text x="740" y="204" font-family="monospace" font-size="10" fill="#a33b3b">正文 20k  → 25,118</text>
+  <text x="740" y="232" font-family="sans-serif" font-size="10" fill="#7a4f13">固定税稳定在 5,118</text>
+  <text x="740" y="250" font-family="sans-serif" font-size="10" fill="#7a4f13">与正文长度无关</text>
+  <text x="740" y="278" font-family="sans-serif" font-size="10.5" fill="#a33b3b">对比 skills 的 1,900</text>
+  <text x="740" y="296" font-family="sans-serif" font-size="10.5" fill="#a33b3b">→ memory 贵 2.7 倍</text>
+  <text x="740" y="322" font-family="sans-serif" font-size="10" fill="#667788">空文件也照付</text>
+  <text x="740" y="340" font-family="sans-serif" font-size="10" fill="#667788">路径写错也照付</text>
+
+  <rect x="30" y="382" width="950" height="130" rx="8" fill="#fdf3f3" stroke="#e0a0a0" stroke-width="1.5"/>
+  <text x="48" y="408" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#a33b3b">基础版埋好的三个问题</text>
+  <text x="48" y="434" font-family="sans-serif" font-size="11" fill="#a33b3b">① 存不住：用 FilesystemBackend 才活过 thread，换机器还是会丢（StateBackend 连 thread 都活不过）</text>
+  <text x="48" y="456" font-family="sans-serif" font-size="11" fill="#a33b3b">② 不知多贵：没有任何数字告诉你"这篇 AGENTS.md 值不值"</text>
+  <text x="48" y="478" font-family="sans-serif" font-size="11" fill="#a33b3b">③ 管不住：它默认有 edit_file 写记忆的能力，可能乱记、记错，而你没有任何约束</text>
+  <text x="48" y="500" font-family="sans-serif" font-size="10.5" fill="#667788">下一步：迁 Store 让记忆真持久 → 量出固定税据此瘦身 → 打开自更新但用权限管住笔</text>
+</svg>

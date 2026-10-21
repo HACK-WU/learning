@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="600" viewBox="0 0 1040 600">
+  <defs>
+    <marker id="m10a" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#5b6b7c"/>
+    </marker>
+  </defs>
+  <rect width="1040" height="600" fill="#ffffff"/>
+  <text x="30" y="40" font-family="sans-serif" font-size="21" font-weight="bold" fill="#1f2d3d">子代理执行：五步流程与五条特征</text>
+  <text x="30" y="66" font-family="sans-serif" font-size="13" fill="#667788">前两步是"运行形态"，中两步是"交互协议"，最后一步是整个机制存在的理由</text>
+
+  <!-- 流程五步 -->
+  <g font-family="sans-serif">
+    <rect x="40" y="100" width="176" height="96" rx="8" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.6"/>
+    <text x="56" y="124" font-size="13" font-weight="bold" fill="#1e4b7a">1. 主代理调 task</text>
+    <text x="56" y="146" font-size="10" fill="#33475b">description +</text>
+    <text x="56" y="162" font-size="10" fill="#33475b">subagent_type</text>
+    <text x="56" y="184" font-size="9.5" fill="#667788">参数 schema forbid 未知键</text>
+
+    <line x1="216" y1="148" x2="246" y2="148" stroke="#5b6b7c" stroke-width="1.6" marker-end="url(#m10a)"/>
+
+    <rect x="252" y="100" width="176" height="96" rx="8" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.6"/>
+    <text x="268" y="124" font-size="13" font-weight="bold" fill="#1e4b7a">2. 新实例 + 空上下文</text>
+    <text x="268" y="146" font-size="10" fill="#33475b">只见 system（可选）</text>
+    <text x="268" y="162" font-size="10" fill="#33475b">+ 你的 description</text>
+    <text x="268" y="184" font-size="9.5" fill="#667788">父对话不可见（isolated）</text>
+
+    <line x1="428" y1="148" x2="458" y2="148" stroke="#5b6b7c" stroke-width="1.6" marker-end="url(#m10a)"/>
+
+    <rect x="464" y="100" width="176" height="96" rx="8" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.6"/>
+    <text x="480" y="124" font-size="13" font-weight="bold" fill="#1f5537">3. 自主跑（内部）</text>
+    <text x="480" y="146" font-size="10" fill="#33475b">可能调一堆工具</text>
+    <text x="480" y="162" font-size="10" fill="#33475b">中间 token 全在内部</text>
+    <text x="480" y="184" font-size="9.5" fill="#667788">实测内部 600 字符噪声</text>
+
+    <line x1="640" y1="148" x2="670" y2="148" stroke="#5b6b7c" stroke-width="1.6" marker-end="url(#m10a)"/>
+
+    <rect x="676" y="100" width="176" height="96" rx="8" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.6"/>
+    <text x="692" y="124" font-size="13" font-weight="bold" fill="#1f5537">4. 只回一份报告</text>
+    <text x="692" y="146" font-size="10" fill="#33475b">最后一条有文本的</text>
+    <text x="692" y="162" font-size="10" fill="#33475b">AIMessage</text>
+    <text x="692" y="184" font-size="9.5" fill="#667788">空 end_turn 被跳过</text>
+
+    <line x1="852" y1="148" x2="880" y2="140" stroke="#5b6b7c" stroke-width="1.6" marker-end="url(#m10a)"/>
+
+    <rect x="886" y="96" width="118" height="104" rx="8" fill="#fff8ec" stroke="#e0b877" stroke-width="1.6"/>
+    <text x="902" y="120" font-size="12" font-weight="bold" fill="#7a4f13">5. 父上下文</text>
+    <text x="902" y="138" font-size="12" font-weight="bold" fill="#7a4f13">小巧</text>
+    <text x="902" y="160" font-size="9.5" fill="#33475b">总消息数</text>
+    <text x="902" y="176" font-size="9.5" fill="#33475b">实测只多 1 条</text>
+    <text x="902" y="192" font-size="9.5" fill="#33475b">短 ToolMessage</text>
+  </g>
+
+  <!-- 特征标签 -->
+  <g font-family="sans-serif">
+    <rect x="40" y="240" width="214" height="118" rx="8" fill="#f7f9fc" stroke="#a8b8c8" stroke-width="1.4"/>
+    <text x="56" y="264" font-size="12" font-weight="bold" fill="#1e4b7a">特征① 全新上下文</text>
+    <text x="56" y="286" font-size="10" fill="#33475b">每次调用新实例</text>
+    <text x="56" y="304" font-size="10" fill="#33475b">isolated：只看任务单</text>
+    <text x="56" y="322" font-size="10" fill="#33475b">fork：才继承父对话</text>
+    <text x="56" y="344" font-size="9" fill="#667788">→ 可配置</text>
+
+    <rect x="268" y="240" width="214" height="118" rx="8" fill="#f7f9fc" stroke="#a8b8c8" stroke-width="1.4"/>
+    <text x="284" y="264" font-size="12" font-weight="bold" fill="#1e4b7a">特征② 自主到完成</text>
+    <text x="284" y="286" font-size="10" fill="#33475b">subagent.invoke 一路跑</text>
+    <text x="284" y="304" font-size="10" fill="#33475b">直到最后一条消息</text>
+    <text x="284" y="322" font-size="10" fill="#33475b">中途不问你</text>
+    <text x="284" y="344" font-size="9" fill="#667788">→ 只负责交结果</text>
+
+    <rect x="496" y="240" width="214" height="118" rx="8" fill="#f7f9fc" stroke="#a8b8c8" stroke-width="1.4"/>
+    <text x="512" y="264" font-size="12" font-weight="bold" fill="#1e4b7a">特征③ 只回一份报告</text>
+    <text x="512" y="286" font-size="10" fill="#33475b">过程不进父上下文</text>
+    <text x="512" y="304" font-size="10" fill="#33475b">从后往前找最后一条</text>
+    <text x="512" y="322" font-size="10" fill="#33475b">非空 AIMessage</text>
+    <text x="512" y="344" font-size="9" fill="#667788">→ 干净交付</text>
+
+    <rect x="724" y="240" width="280" height="118" rx="8" fill="#f7f9fc" stroke="#a8b8c8" stroke-width="1.4"/>
+    <text x="740" y="264" font-size="12" font-weight="bold" fill="#1e4b7a">特征④ 无状态 + 特征⑤ 高效</text>
+    <text x="740" y="286" font-size="10" fill="#33475b">无状态：不记得上次，</text>
+    <text x="740" y="304" font-size="10" fill="#33475b">description 必须写清返回格式</text>
+    <text x="740" y="322" font-size="10" fill="#2e6b4f">高效：重活隔离，压缩成一</text>
+    <text x="740" y="340" font-size="10" fill="#2e6b4f">份报告才回主上下文</text>
+  </g>
+
+  <!-- 递归保护 -->
+  <rect x="40" y="392" width="380" height="116" rx="8" fill="#fdf3f3" stroke="#e0a0a0" stroke-width="1.5"/>
+  <text x="56" y="416" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#a33b3b">递归保护：模型无法制造无限委派</text>
+  <text x="56" y="440" font-family="monospace" font-size="9.5" fill="#a33b3b">fork 子代理的 task → 被替换成只会拒绝：</text>
+  <text x="56" y="460" font-family="monospace" font-size="9.5" fill="#a33b3b">"You are a subagent and cannot delegate to</text>
+  <text x="56" y="478" font-family="monospace" font-size="9.5" fill="#a33b3b"> another subagent."</text>
+  <text x="56" y="498" font-family="sans-serif" font-size="9.5" fill="#667788">isolated 子代理则根本没有 task 工具</text>
+
+  <!-- 默认 general-purpose -->
+  <rect x="440" y="392" width="566" height="116" rx="8" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="456" y="416" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#1e4b7a">默认 general-purpose：隔离但不想定制的选项</text>
+  <text x="456" y="440" font-family="sans-serif" font-size="10" fill="#33475b">自动加入，除非 profile 禁掉或你已传同名 spec</text>
+  <text x="456" y="460" font-family="sans-serif" font-size="10" fill="#33475b">用主代理同款模型 + 完整文件系统工具 + 继承技能</text>
+  <text x="456" y="482" font-family="monospace" font-size="9.5" fill="#a33b3b">task(description="研究一下...", subagent_type="general-purpose")</text>
+  <text x="456" y="500" font-family="sans-serif" font-size="9.5" fill="#2e6b4f">适合"刚想隔离、还没想定制"的过渡场景</text>
+
+  <!-- 底部实测数据 -->
+  <rect x="40" y="528" width="966" height="56" rx="8" fill="#f7f9fc" stroke="#a8b8c8" stroke-width="1.2"/>
+  <text x="56" y="550" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#33475b">本轮实测数据</text>
+  <text x="56" y="570" font-family="sans-serif" font-size="9.5" fill="#33475b">isolated 收到 2 条消息 / fork 收到 5 条 / 内部 600 字符噪声 → 父只多 14 字符 ToolMessage / 父对话总消息数 4</text>
+</svg>

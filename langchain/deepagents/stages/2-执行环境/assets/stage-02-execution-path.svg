@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 320" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="a2" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5a6b7d"/>
+    </marker>
+  </defs>
+  <rect width="900" height="320" fill="#fbfcfd"/>
+  <text x="450" y="30" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">阶段 2 路径：能力逐级放开，约束逐级跟上</text>
+
+  <rect x="36" y="66" width="250" height="104" rx="9" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="161" y="92" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1e4b7a">课 4 · 工具与虚拟文件系统</text>
+  <text x="161" y="114" text-anchor="middle" font-size="11" fill="#334155">tools= 三来源 · MCP</text>
+  <text x="161" y="132" text-anchor="middle" font-size="11" fill="#334155">七个内置文件工具</text>
+  <text x="161" y="150" text-anchor="middle" font-size="11" fill="#334155">多模态读取 · delete 可见性</text>
+  <text x="161" y="166" text-anchor="middle" font-size="10" fill="#94a3b8">风险：读文件时把密钥也读进来</text>
+
+  <rect x="322" y="66" width="256" height="104" rx="9" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.5"/>
+  <text x="450" y="92" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1f5537">课 5 · 后端与权限</text>
+  <text x="450" y="114" text-anchor="middle" font-size="11" fill="#334155">六种内置后端 · 组合路由</text>
+  <text x="450" y="132" text-anchor="middle" font-size="11" fill="#334155">permissions first-match-wins</text>
+  <text x="450" y="150" text-anchor="middle" font-size="11" fill="#334155">自定义后端协议 · policy hooks</text>
+  <text x="450" y="166" text-anchor="middle" font-size="10" fill="#94a3b8">风险：以为规则挡住了，其实没挡</text>
+
+  <rect x="614" y="66" width="250" height="104" rx="9" fill="#fff8ec" stroke="#e0b877" stroke-width="1.5"/>
+  <text x="739" y="92" text-anchor="middle" font-size="12.5" font-weight="600" fill="#7a4f13">课 6 · 代码执行</text>
+  <text x="739" y="114" text-anchor="middle" font-size="11" fill="#334155">Sandbox · execute 工具</text>
+  <text x="739" y="132" text-anchor="middle" font-size="11" fill="#334155">Interpreter · eval 工具</text>
+  <text x="739" y="150" text-anchor="middle" font-size="11" fill="#334155">SandboxBackendProtocolV2</text>
+  <text x="739" y="166" text-anchor="middle" font-size="10" fill="#94a3b8">风险：权限管不到 execute</text>
+
+  <line x1="288" y1="118" x2="318" y2="118" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#a2)"/>
+  <line x1="580" y1="118" x2="610" y2="118" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#a2)"/>
+
+  <rect x="36" y="196" width="828" height="52" rx="8" fill="#fef3f2" stroke="#e2a19a" stroke-width="1.3"/>
+  <text x="56" y="218" font-size="11.5" fill="#7a2626" font-weight="600">能力 ↔ 约束对照（本阶段核心心法）</text>
+  <text x="56" y="237" font-size="11" fill="#7f5a5a">给文件工具 → 配 permissions　｜　给沙箱 execute → permissions 失效，必须靠沙箱隔离 + HITL 审批（课 11）　｜　给解释器 eval → 无文件无网络，风险最低</text>
+
+  <text x="450" y="286" text-anchor="middle" font-size="10.5" fill="#94a3b8">本阶段只讲 harness 新增与差异；@tool 定义规范、中间件基础机制见 ../../langchain/ 课 4 与课 8</text>
+</svg>

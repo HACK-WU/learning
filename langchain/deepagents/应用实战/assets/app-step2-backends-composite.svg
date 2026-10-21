@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="660" viewBox="0 0 1000 660">
+  <defs>
+    <marker id="a2" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#5b6b7c"/>
+    </marker>
+    <marker id="a2o" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#e08a2e"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="660" fill="#ffffff"/>
+  <text x="30" y="40" font-family="sans-serif" font-size="21" font-weight="bold" fill="#1f2d3d">第 2 步：Composite 三区路由 + 前缀剥离 + 权限顺序</text>
+  <text x="30" y="66" font-family="sans-serif" font-size="13" fill="#667788">橙色虚线是相对第 1 步的变化点，一共三处</text>
+
+  <rect x="30" y="92" width="300" height="176" rx="8" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="48" y="118" font-family="sans-serif" font-size="14" font-weight="bold" fill="#1e4b7a">CompositeBackend</text>
+  <text x="48" y="142" font-family="monospace" font-size="11.5" fill="#33475b">default = StateBackend()</text>
+  <text x="48" y="164" font-family="monospace" font-size="11.5" fill="#33475b">routes = {</text>
+  <text x="60" y="184" font-family="monospace" font-size="11.5" fill="#33475b">"/workspace/": Filesystem...,</text>
+  <text x="60" y="204" font-family="monospace" font-size="11.5" fill="#33475b">"/memories/": StoreBackend(...)</text>
+  <text x="48" y="224" font-family="monospace" font-size="11.5" fill="#33475b">}</text>
+  <text x="48" y="250" font-family="sans-serif" font-size="11.5" fill="#667788">最长前缀优先（按 len 降序排）</text>
+
+  <line x1="330" y1="180" x2="376" y2="180" stroke="#5b6b7c" stroke-width="1.6" marker-end="url(#a2)"/>
+
+  <rect x="380" y="92" width="290" height="176" rx="8" fill="#fff8ec" stroke="#e0b877" stroke-width="1.6" stroke-dasharray="6 4"/>
+  <text x="398" y="118" font-family="sans-serif" font-size="13.5" font-weight="bold" fill="#7a4f13">变化②：前缀在转发前剥掉</text>
+  <text x="398" y="144" font-family="monospace" font-size="11.5" fill="#7a4f13">写 /workspace/plan.md</text>
+  <text x="398" y="164" font-family="monospace" font-size="11.5" fill="#7a4f13">  -&gt; 命中 "/workspace/"</text>
+  <text x="398" y="184" font-family="monospace" font-size="11.5" fill="#7a4f13">  -&gt; 剥成 "/plan.md"</text>
+  <text x="398" y="204" font-family="monospace" font-size="11.5" fill="#7a4f13">  -&gt; 落到 root_dir/plan.md</text>
+  <text x="398" y="232" font-family="sans-serif" font-size="11.5" fill="#a33b3b">磁盘上没有 workspace/ 目录</text>
+  <text x="398" y="252" font-family="sans-serif" font-size="11.5" fill="#a33b3b">两条前缀指向同目录会套娃</text>
+
+  <line x1="670" y1="180" x2="716" y2="180" stroke="#5b6b7c" stroke-width="1.6" marker-end="url(#a2)"/>
+
+  <rect x="720" y="92" width="250" height="176" rx="8" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.5"/>
+  <text x="738" y="118" font-family="sans-serif" font-size="13.5" font-weight="bold" fill="#1f5537">三个区各自归宿</text>
+  <text x="738" y="144" font-family="monospace" font-size="11.5" fill="#1f5537">/draft.md     -&gt; 会话内</text>
+  <text x="738" y="164" font-family="monospace" font-size="11.5" fill="#1f5537">/workspace/*  -&gt; 真磁盘</text>
+  <text x="738" y="184" font-family="monospace" font-size="11.5" fill="#1f5537">/memories/*   -&gt; 跨会话</text>
+  <text x="738" y="214" font-family="sans-serif" font-size="11.5" fill="#667788">换 thread 后：</text>
+  <text x="738" y="234" font-family="sans-serif" font-size="11.5" fill="#a33b3b">草稿消失（符合预期）</text>
+  <text x="738" y="254" font-family="sans-serif" font-size="11.5" fill="#2e6b4f">笔记、偏好都还在</text>
+
+  <rect x="30" y="292" width="470" height="238" rx="8" fill="#fff8ec" stroke="#e0b877" stroke-width="1.6" stroke-dasharray="6 4"/>
+  <text x="48" y="318" font-family="sans-serif" font-size="14" font-weight="bold" fill="#7a4f13">变化③：权限改成"窄 deny 在前"</text>
+  <text x="48" y="344" font-family="monospace" font-size="11" fill="#7a4f13">FilesystemPermission(ops, ["/workspace/.env"], "deny")</text>
+  <text x="48" y="362" font-family="monospace" font-size="11" fill="#7a4f13">FilesystemPermission(ops, ["/workspace/.aws/**"], "deny")</text>
+  <text x="48" y="380" font-family="monospace" font-size="11" fill="#2e6b4f">FilesystemPermission(ops, ["/workspace/**"], "allow")</text>
+  <text x="48" y="398" font-family="monospace" font-size="11" fill="#7a4f13">FilesystemPermission(ops, ["/**"], "deny")</text>
+  <text x="48" y="424" font-family="sans-serif" font-size="11.5" fill="#33475b">判定：从上往下扫，第一条命中说了算</text>
+  <text x="48" y="444" font-family="sans-serif" font-size="11.5" fill="#33475b">一条都不命中 -&gt; 兜底放行（不是拒绝）</text>
+  <text x="48" y="472" font-family="sans-serif" font-size="11.5" fill="#a33b3b">顺序反了：宽 allow 在前，.aws/** 会漏</text>
+  <text x="48" y="492" font-family="sans-serif" font-size="11.5" fill="#a33b3b">因为窄 deny 之后没有能兜住的规则</text>
+  <text x="48" y="516" font-family="sans-serif" font-size="11.5" fill="#7a4f13">/** 不匹配点路径 -&gt; 必须显式补点目录</text>
+
+  <rect x="520" y="292" width="450" height="238" rx="8" fill="#f7f9fc" stroke="#a8b8c8" stroke-width="1.5"/>
+  <text x="538" y="318" font-family="sans-serif" font-size="14" font-weight="bold" fill="#33475b">实测对照（同一份文件，三套规则）</text>
+  <text x="538" y="344" font-family="monospace" font-size="11" fill="#a33b3b">规则A deny /**</text>
+  <text x="538" y="362" font-family="monospace" font-size="11" fill="#33475b">  plan.md       -&gt; denied</text>
+  <text x="538" y="380" font-family="monospace" font-size="11" fill="#a33b3b">  .env          -&gt; 读到密钥</text>
+  <text x="538" y="398" font-family="monospace" font-size="11" fill="#a33b3b">  .aws/cred     -&gt; 读到密钥</text>
+  <text x="538" y="420" font-family="monospace" font-size="11" fill="#2e6b4f">规则B 窄deny在前</text>
+  <text x="538" y="438" font-family="monospace" font-size="11" fill="#33475b">  plan.md       -&gt; 正常读到</text>
+  <text x="538" y="456" font-family="monospace" font-size="11" fill="#2e6b4f">  .env          -&gt; denied</text>
+  <text x="538" y="474" font-family="monospace" font-size="11" fill="#2e6b4f">  .aws/cred     -&gt; denied</text>
+  <text x="538" y="496" font-family="monospace" font-size="11" fill="#a33b3b">规则C 顺序反了</text>
+  <text x="538" y="514" font-family="monospace" font-size="11" fill="#a33b3b">  .aws/cred     -&gt; 读到密钥（漏）</text>
+
+  <rect x="30" y="550" width="940" height="86" rx="8" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="48" y="576" font-family="sans-serif" font-size="13" font-weight="bold" fill="#1e4b7a">一句话收束</text>
+  <text x="48" y="600" font-family="sans-serif" font-size="12.5" fill="#1e4b7a">草稿给 default、笔记给磁盘、偏好给 Store，再用 Composite 按前缀拼起来；权限从窄到宽写，点目录必须显式列出</text>
+  <text x="48" y="622" font-family="sans-serif" font-size="12" fill="#a33b3b">但权限只审内置文件工具：自定义工具、MCP 工具、沙箱 shell 都不过这道闸</text>
+</svg>

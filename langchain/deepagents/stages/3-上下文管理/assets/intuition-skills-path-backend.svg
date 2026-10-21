@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="600" viewBox="0 0 1000 600">
+  <defs>
+    <marker id="k7b" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#5b6b7c"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="600" fill="#ffffff"/>
+  <text x="30" y="40" font-family="sans-serif" font-size="21" font-weight="bold" fill="#1f2d3d">skills 源路径由后端解析，不是由操作系统解析</text>
+  <text x="30" y="66" font-family="sans-serif" font-size="13" fill="#667788">同一个 "/skills/"，交给不同后端就是完全不同的地方——这是本课最贵的一个坑</text>
+
+  <rect x="30" y="94" width="200" height="120" rx="8" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="48" y="120" font-family="sans-serif" font-size="13" font-weight="bold" fill="#1e4b7a">skills=["/skills/"]</text>
+  <text x="48" y="146" font-family="sans-serif" font-size="11" fill="#33475b">传给 create_deep_agent</text>
+  <text x="48" y="168" font-family="sans-serif" font-size="11" fill="#33475b">原样存进 SkillsMiddleware</text>
+  <text x="48" y="192" font-family="monospace" font-size="10.5" fill="#a33b3b">不做任何路径翻译</text>
+
+  <line x1="230" y1="154" x2="272" y2="154" stroke="#5b6b7c" stroke-width="1.6" marker-end="url(#k7b)"/>
+
+  <rect x="276" y="80" width="300" height="150" rx="8" fill="#f7f9fc" stroke="#a8b8c8" stroke-width="1.6"/>
+  <text x="294" y="104" font-family="sans-serif" font-size="13" font-weight="bold" fill="#33475b">backend.download_files([...])</text>
+  <text x="294" y="130" font-family="sans-serif" font-size="11" fill="#33475b">后端去列目录、读 SKILL.md</text>
+  <text x="294" y="152" font-family="sans-serif" font-size="11" fill="#33475b">它理解的 "/skills/" 是自己的虚拟根</text>
+  <text x="294" y="180" font-family="sans-serif" font-size="11" fill="#a33b3b">→ 后端不认识 OS 的 /tmp/xxx</text>
+  <text x="294" y="202" font-family="sans-serif" font-size="11" fill="#a33b3b">→ 更不会读你的当前工作目录</text>
+  <text x="294" y="222" font-family="monospace" font-size="10" fill="#667788">源码 skills.py:_list_skills_with_errors</text>
+
+  <line x1="576" y1="130" x2="618" y2="130" stroke="#5b6b7c" stroke-width="1.6" marker-end="url(#k7b)"/>
+  <line x1="576" y1="190" x2="618" y2="190" stroke="#5b6b7c" stroke-width="1.6" marker-end="url(#k7b)"/>
+
+  <rect x="622" y="70" width="348" height="104" rx="8" fill="#fdf3f3" stroke="#e0a0a0" stroke-width="1.6"/>
+  <text x="640" y="94" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#a33b3b">默认 StateBackend</text>
+  <text x="640" y="116" font-family="monospace" font-size="10.5" fill="#a33b3b">skills=["/tmp/xxx/skills"]</text>
+  <text x="640" y="136" font-family="monospace" font-size="10.5" fill="#a33b3b">→ path_not_found</text>
+  <text x="640" y="158" font-family="sans-serif" font-size="10.5" fill="#a33b3b">提示词里显示 "No skills available yet"</text>
+
+  <rect x="622" y="184" width="348" height="104" rx="8" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.6"/>
+  <text x="640" y="208" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#1f5537">FilesystemBackend(root_dir=...)</text>
+  <text x="640" y="230" font-family="monospace" font-size="10.5" fill="#1f5537">skills=["/skills/"]  ← 虚拟路径</text>
+  <text x="640" y="250" font-family="monospace" font-size="10.5" fill="#1f5537">真的落到 root_dir/skills/</text>
+  <text x="640" y="272" font-family="sans-serif" font-size="10.5" fill="#2e6b4f">提示词里出现 name + description</text>
+
+  <rect x="30" y="290" width="940" height="128" rx="8" fill="#fff8ec" stroke="#e0b877" stroke-width="1.6"/>
+  <text x="48" y="316" font-family="sans-serif" font-size="13.5" font-weight="bold" fill="#7a4f13">四种组合，实测只有一种生效</text>
+  <text x="48" y="344" font-family="monospace" font-size="11" fill="#a33b3b">StateBackend    + 磁盘绝对路径   → 空态（No skills available yet）</text>
+  <text x="48" y="364" font-family="monospace" font-size="11" fill="#a33b3b">Filesystem(vm)  + 磁盘绝对路径   → 空态（虚拟模式下绝对路径被当虚拟路径）</text>
+  <text x="48" y="384" font-family="monospace" font-size="11" fill="#2e6b4f">Filesystem(vm)  + /skills/       → 生效 ✓</text>
+  <text x="48" y="404" font-family="monospace" font-size="11" fill="#2e6b4f">StateBackend    + files= 预置     → 生效 ✓（值要 {content, encoding}）</text>
+
+  <rect x="30" y="436" width="458" height="128" rx="8" fill="#f7f9fc" stroke="#a8b8c8" stroke-width="1.5"/>
+  <text x="48" y="462" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#33475b">为什么容易踩</text>
+  <text x="48" y="486" font-family="sans-serif" font-size="11" fill="#33475b">一个"路径"参数，看起来像文件系统路径</text>
+  <text x="48" y="508" font-family="sans-serif" font-size="11" fill="#33475b">其实是"给后端看的路径"</text>
+  <text x="48" y="530" font-family="sans-serif" font-size="11" fill="#a33b3b">而失败是静默的：只进日志与提示词里的</text>
+  <text x="48" y="550" font-family="sans-serif" font-size="11" fill="#a33b3b">一行 "No skills available yet"</text>
+
+  <rect x="512" y="436" width="458" height="128" rx="8" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.5"/>
+  <text x="530" y="462" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#1f5537">怎么快速判断生效了</text>
+  <text x="530" y="486" font-family="sans-serif" font-size="11" fill="#1f5537">① 看日志有没有 "Cannot load skills from"</text>
+  <text x="530" y="508" font-family="sans-serif" font-size="11" fill="#1f5537">② 看系统提示里有没有 "No skills available yet"</text>
+  <text x="530" y="530" font-family="sans-serif" font-size="11" fill="#1f5537">③ 看 Available Skills 下列没列出 name</text>
+  <text x="530" y="550" font-family="sans-serif" font-size="11" fill="#667788">三条里任一条异常，就说明路径没对上后端</text>
+</svg>

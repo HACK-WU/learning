@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="600" viewBox="0 0 980 600">
+  <defs>
+    <marker id="a1" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#5b6b7c"/>
+    </marker>
+    <marker id="a1r" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#c94f4f"/>
+    </marker>
+  </defs>
+  <rect width="980" height="600" fill="#ffffff"/>
+  <text x="30" y="40" font-family="sans-serif" font-size="21" font-weight="bold" fill="#1f2d3d">第 1 步：默认 StateBackend + 天真 deny 规则</text>
+  <text x="30" y="66" font-family="sans-serif" font-size="13" fill="#667788">看起来一切正常，实际两个坑同时埋着</text>
+
+  <rect x="30" y="92" width="270" height="150" rx="8" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="48" y="118" font-family="sans-serif" font-size="14" font-weight="bold" fill="#1e4b7a">create_deep_agent()</text>
+  <text x="48" y="142" font-family="monospace" font-size="12" fill="#33475b">backend 未传</text>
+  <text x="48" y="162" font-family="monospace" font-size="12" fill="#33475b">= StateBackend()</text>
+  <text x="48" y="182" font-family="monospace" font-size="12" fill="#33475b">checkpointer=InMemorySaver()</text>
+  <text x="48" y="212" font-family="sans-serif" font-size="12" fill="#2e6b4f">同 thread 跨 turn 可保留</text>
+  <text x="48" y="230" font-family="sans-serif" font-size="12" fill="#a33b3b">换 thread 直接 not found</text>
+
+  <line x1="300" y1="167" x2="345" y2="167" stroke="#5b6b7c" stroke-width="1.6" marker-end="url(#a1)"/>
+
+  <rect x="350" y="92" width="270" height="150" rx="8" fill="#f7f9fc" stroke="#a8b8c8" stroke-width="1.5"/>
+  <text x="368" y="118" font-family="sans-serif" font-size="14" font-weight="bold" fill="#33475b">写入都进 agent state</text>
+  <text x="368" y="142" font-family="monospace" font-size="11.5" fill="#33475b">state.files = {</text>
+  <text x="368" y="162" font-family="monospace" font-size="11.5" fill="#33475b">  "/notes/roadmap.md": {...}</text>
+  <text x="368" y="182" font-family="monospace" font-size="11.5" fill="#33475b">}</text>
+  <text x="368" y="210" font-family="sans-serif" font-size="12" fill="#667788">返回 "Updated file" 是真的</text>
+  <text x="368" y="228" font-family="sans-serif" font-size="12" fill="#a33b3b">磁盘上一个字节都没有</text>
+
+  <line x1="620" y1="167" x2="665" y2="167" stroke="#5b6b7c" stroke-width="1.6" marker-end="url(#a1)"/>
+
+  <rect x="670" y="92" width="280" height="150" rx="8" fill="#fff8ec" stroke="#e0b877" stroke-width="1.5"/>
+  <text x="688" y="118" font-family="sans-serif" font-size="14" font-weight="bold" fill="#7a4f13">两个坑就绪</text>
+  <text x="688" y="142" font-family="sans-serif" font-size="12" fill="#7a4f13">① 换会话：笔记"蒸发"</text>
+  <text x="688" y="162" font-family="sans-serif" font-size="12" fill="#7a4f13">② 权限：deny /** 有盲区</text>
+  <text x="688" y="186" font-family="monospace" font-size="11.5" fill="#a33b3b">plan.md  -&gt; denied  ✓</text>
+  <text x="688" y="206" font-family="monospace" font-size="11.5" fill="#a33b3b">.env     -&gt; 放行！   ✗</text>
+  <text x="688" y="226" font-family="monospace" font-size="11.5" fill="#a33b3b">.aws/cred-&gt; 放行！   ✗</text>
+
+  <rect x="30" y="268" width="920" height="196" rx="8" fill="#fdf3f3" stroke="#e0a0a0" stroke-width="1.5"/>
+  <text x="48" y="294" font-family="sans-serif" font-size="14" font-weight="bold" fill="#a33b3b">实测输出：deny /** 的真实行为</text>
+  <text x="48" y="322" font-family="monospace" font-size="12" fill="#33475b">[写入]        Updated file /notes/roadmap.md</text>
+  <text x="48" y="342" font-family="monospace" font-size="12" fill="#2e6b4f">[同 thread 再读] @@ lines 1-1 of 1 @@ | Week1 打通沙箱</text>
+  <text x="48" y="362" font-family="monospace" font-size="12" fill="#a33b3b">[换 thread 读]  Error: File '/notes/roadmap.md' not found</text>
+  <text x="48" y="392" font-family="monospace" font-size="12" fill="#33475b">-- 规则 A：deny /** --</text>
+  <text x="48" y="412" font-family="monospace" font-size="12" fill="#a33b3b">[plan.md]     Error: permission denied for read on /workspace/plan.md</text>
+  <text x="48" y="432" font-family="monospace" font-size="12" fill="#a33b3b">[.env]        @@ lines 1-1 of 1 @@ | OPENAI_API_KEY=sk-real-secret</text>
+  <text x="48" y="452" font-family="monospace" font-size="12" fill="#a33b3b">[credentials] @@ lines 1-2 of 2 @@ | [default] | aws_secret_access_key=abc</text>
+
+  <rect x="30" y="486" width="920" height="86" rx="8" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.5"/>
+  <text x="48" y="512" font-family="sans-serif" font-size="13" font-weight="bold" fill="#1f5537">根因（一句话）</text>
+  <text x="48" y="536" font-family="sans-serif" font-size="12.5" fill="#1f5537">_FS_WCMATCH_FLAGS = wcglob.BRACE | wcglob.GLOBSTAR = 768，不含 DOTMATCH(64)</text>
+  <text x="48" y="558" font-family="sans-serif" font-size="12.5" fill="#1f5537">"拒绝一切"的规则只挡住了不以点开头的路径，密钥恰恰全在点目录里</text>
+</svg>

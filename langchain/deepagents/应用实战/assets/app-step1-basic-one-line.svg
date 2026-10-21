@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 470" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="a1" markerWidth="10" markerHeight="10" refX="7.5" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5a6b7d"/>
+    </marker>
+  </defs>
+  <rect width="900" height="470" fill="#fbfcfd"/>
+  <text x="450" y="30" text-anchor="middle" font-size="16.5" font-weight="600" fill="#1f2937">第 1 步：一行调用，先让它跑起来</text>
+  <text x="450" y="52" text-anchor="middle" font-size="11.5" fill="#64748b">只给 model 和一句 system_prompt，其余全用默认</text>
+
+  <rect x="34" y="80" width="230" height="112" rx="10" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.5"/>
+  <text x="149" y="104" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1f5537">你写的</text>
+  <text x="149" y="128" text-anchor="middle" font-size="10.5" fill="#334155" font-family="ui-monospace, Menlo, monospace">create_deep_agent(</text>
+  <text x="149" y="146" text-anchor="middle" font-size="10.5" fill="#334155" font-family="ui-monospace, Menlo, monospace">  model=...,</text>
+  <text x="149" y="164" text-anchor="middle" font-size="10.5" fill="#334155" font-family="ui-monospace, Menlo, monospace">  system_prompt=...</text>
+  <text x="149" y="182" text-anchor="middle" font-size="10.5" fill="#334155" font-family="ui-monospace, Menlo, monospace">)</text>
+
+  <line x1="270" y1="136" x2="300" y2="136" stroke="#5a6b7d" stroke-width="1.8" marker-end="url(#a1)"/>
+
+  <rect x="308" y="80" width="558" height="290" rx="10" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.3"/>
+  <text x="587" y="104" text-anchor="middle" font-size="12.5" font-weight="600" fill="#334155">跑起来的样子</text>
+
+  <rect x="334" y="120" width="150" height="46" rx="7" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.2"/>
+  <text x="409" y="140" text-anchor="middle" font-size="11" font-weight="600" fill="#1e4b7a">模型</text>
+  <text x="409" y="156" text-anchor="middle" font-size="9.5" fill="#64748b">会思考</text>
+
+  <line x1="490" y1="143" x2="524" y2="143" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#a1)"/>
+  <line x1="524" y1="158" x2="490" y2="158" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#a1)"/>
+  <text x="507" y="136" text-anchor="middle" font-size="9" fill="#94a3b8">调用</text>
+
+  <rect x="530" y="112" width="310" height="62" rx="7" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.2"/>
+  <text x="685" y="132" text-anchor="middle" font-size="11" font-weight="600" fill="#1f5537">工具：9 个（全都来自中间件）</text>
+  <text x="685" y="150" text-anchor="middle" font-size="9.3" fill="#334155" font-family="ui-monospace, Menlo, monospace">ls read_file write_file edit_file delete</text>
+  <text x="685" y="165" text-anchor="middle" font-size="9.3" fill="#334155" font-family="ui-monospace, Menlo, monospace">glob grep execute task</text>
+
+  <line x1="685" y1="180" x2="685" y2="212" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#a1)"/>
+  <text x="697" y="200" font-size="9.5" fill="#64748b">读写落到哪</text>
+
+  <rect x="530" y="218" width="310" height="60" rx="7" fill="#fff8ec" stroke="#e0b877" stroke-width="1.6" stroke-dasharray="6 4"/>
+  <text x="685" y="238" text-anchor="middle" font-size="11" font-weight="600" fill="#7a4f13">默认虚拟盘（StateBackend）</text>
+  <text x="685" y="256" text-anchor="middle" font-size="9.5" fill="#7a4f13">一个空抽屉：里面什么都没有</text>
+  <text x="685" y="271" text-anchor="middle" font-size="9.3" fill="#a16207">除非 invoke 时把文件塞进 files=</text>
+
+  <rect x="334" y="298" width="506" height="56" rx="7" fill="#fdf2f2" stroke="#e5a3a3" stroke-width="1.3"/>
+  <text x="350" y="318" font-size="10.8" font-weight="600" fill="#8f2f2f">这一步暴露的问题</text>
+  <text x="350" y="336" font-size="9.8" fill="#8f2f2f">它看不到你磁盘上的仓库——"能读文件"和"能读你的文件"是两件事</text>
+  <text x="350" y="350" font-size="9.8" fill="#8f2f2f">另外 9 个工具里有 4 个是写 / 删 / 执行，回答质量无关却都是风险面</text>
+
+  <rect x="34" y="392" width="832" height="58" rx="8" fill="#fff8ec" stroke="#e0b877" stroke-width="1.3"/>
+  <text x="52" y="414" font-size="11.3" fill="#7a4f13">看图：这一版只有"模型 ↔ 工具 ↔ 一个空抽屉"三件东西。工具是真的，抽屉是空的。</text>
+  <text x="52" y="434" font-size="11.3" fill="#7a4f13">下一步要解决的就是那个橙色虚线框——把空抽屉换成指向你仓库的目录。</text>
+</svg>

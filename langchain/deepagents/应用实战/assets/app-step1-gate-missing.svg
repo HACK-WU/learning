@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="480" viewBox="0 0 1040 480">
+  <defs>
+    <marker id="m11s1" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#5b6b7c"/>
+    </marker>
+  </defs>
+  <rect width="1040" height="480" fill="#ffffff"/>
+  <text x="30" y="40" font-family="sans-serif" font-size="21" font-weight="bold" fill="#1f2d3d">第 1 步：闸门落没落下的分界</text>
+  <text x="30" y="66" font-family="sans-serif" font-size="13" fill="#667788">同一份 interrupt_on 配置，缺了 checkpointer 就完全不起作用</text>
+
+  <!-- 左：没 checkpointer -->
+  <rect x="30" y="92" width="478" height="230" rx="9" fill="#fdf3f3" stroke="#e0a0a0" stroke-width="1.6"/>
+  <text x="48" y="118" font-family="sans-serif" font-size="13" font-weight="bold" fill="#a33b3b">配了 interrupt_on，但没传 checkpointer</text>
+
+  <rect x="52" y="138" width="200" height="44" rx="6" fill="#ffffff" stroke="#c8b0b0"/>
+  <text x="66" y="156" font-family="monospace" font-size="9.5" fill="#33475b">interrupt_on=</text>
+  <text x="66" y="172" font-family="monospace" font-size="9.5" fill="#33475b">{"write_file": True}</text>
+
+  <line x1="252" y1="160" x2="278" y2="160" stroke="#5b6b7c" stroke-width="1.5" marker-end="url(#m11s1)"/>
+
+  <rect x="284" y="138" width="200" height="44" rx="6" fill="#fdf3f3" stroke="#e0a0a0"/>
+  <text x="298" y="156" font-family="sans-serif" font-size="10" fill="#a33b3b">闸门想落下但没地方存</text>
+  <text x="298" y="172" font-family="sans-serif" font-size="9.5" fill="#667788">→ 直接跑完了</text>
+
+  <rect x="52" y="196" width="432" height="46" rx="6" fill="#ffffff" stroke="#c8b0b0"/>
+  <text x="66" y="214" font-family="sans-serif" font-size="10" fill="#33475b">结果：文件被改了，什么都没停</text>
+  <text x="66" y="232" font-family="monospace" font-size="9" fill="#a33b3b">Command(resume=...) → RuntimeError: without checkpointer</text>
+
+  <text x="52" y="272" font-family="sans-serif" font-size="10.5" fill="#a33b3b">关键：中断其实产生了（__interrupt__ 在输出里）</text>
+  <text x="52" y="292" font-family="sans-serif" font-size="10.5" fill="#a33b3b">但没有任何地方记住"停在哪一步"→ 接不回来</text>
+
+  <!-- 右：有 checkpointer -->
+  <rect x="536" y="92" width="474" height="230" rx="9" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.6"/>
+  <text x="554" y="118" font-family="sans-serif" font-size="13" font-weight="bold" fill="#1f5537">加上 checkpointer=InMemorySaver()</text>
+
+  <rect x="558" y="138" width="200" height="44" rx="6" fill="#ffffff" stroke="#9ccfae"/>
+  <text x="572" y="156" font-family="monospace" font-size="9.5" fill="#33475b">interrupt_on=</text>
+  <text x="572" y="172" font-family="monospace" font-size="9.5" fill="#33475b">{"write_file": True}</text>
+
+  <line x1="758" y1="160" x2="784" y2="160" stroke="#5b6b7c" stroke-width="1.5" marker-end="url(#m11s1)"/>
+
+  <rect x="790" y="138" width="200" height="44" rx="6" fill="#fff8ec" stroke="#e0b877"/>
+  <text x="804" y="156" font-family="sans-serif" font-size="10" fill="#7a4f13">存盘 → 抛出中断 → 停下</text>
+  <text x="804" y="172" font-family="sans-serif" font-size="9.5" fill="#667788">文件没被改</text>
+
+  <rect x="558" y="196" width="432" height="46" rx="6" fill="#ffffff" stroke="#9ccfae"/>
+  <text x="572" y="214" font-family="sans-serif" font-size="10" fill="#1f5537">结果：停在待批，把参数摆给你看</text>
+  <text x="572" y="232" font-family="monospace" font-size="9" fill="#2e6b4f">{'file_path': '/config/prod.yaml', 'content': 'retention: 1'}</text>
+
+  <text x="558" y="272" font-family="sans-serif" font-size="10.5" fill="#1f5537">关键：__interrupt__ 携带 action_requests</text>
+  <text x="558" y="292" font-family="sans-serif" font-size="10.5" fill="#1f5537">里面有完整工具名 + 参数 + 允许的决策</text>
+
+  <!-- 底部 -->
+  <rect x="30" y="344" width="980" height="112" rx="8" fill="#f7f9fc" stroke="#a8b8c8" stroke-width="1.4"/>
+  <text x="48" y="368" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#33475b">下一步要解决的三个问题</text>
+  <text x="48" y="392" font-family="sans-serif" font-size="10.5" fill="#33475b">① 只看 messages 看不出"在等批准"——要读 __interrupt__ 键</text>
+  <text x="48" y="414" font-family="sans-serif" font-size="10.5" fill="#33475b">② 恢复格式是 {"decisions": [...]}，不是布尔也不是裸列表</text>
+  <text x="48" y="436" font-family="sans-serif" font-size="10.5" fill="#33475b">③ 每次写都问太吵——需要用 when 谓词 + permissions 收窄</text>
+</svg>

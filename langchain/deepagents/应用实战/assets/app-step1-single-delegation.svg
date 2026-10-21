@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="520" viewBox="0 0 1040 520">
+  <rect width="1040" height="520" fill="#ffffff"/>
+  <text x="30" y="40" font-family="sans-serif" font-size="21" font-weight="bold" fill="#1f2d3d">第 1 步：单层硬扛 vs 派活</text>
+  <text x="30" y="66" font-family="sans-serif" font-size="13" fill="#667788">对比两种跑法的"主上下文宽度"——派活的意义就是让那条细线永远细下去</text>
+
+  <!-- 左：单层 -->
+  <g font-family="sans-serif">
+    <rect x="30" y="92" width="470" height="270" rx="9" fill="#fdf3f3" stroke="#e0a0a0" stroke-width="1.6"/>
+    <text x="48" y="120" font-size="13" font-weight="bold" fill="#a33b3b">单层 agent 硬扛</text>
+
+    <rect x="60" y="140" width="120" height="34" rx="5" fill="#eef6ff" stroke="#7fb2e5"/>
+    <text x="72" y="162" font-size="10" fill="#1e4b7a">主代理</text>
+    <rect x="240" y="475" width="0" height="0" fill="none"/>
+    <rect x="220" y="140" width="220" height="34" rx="5" fill="#fdf3f3" stroke="#e0a0a0"/>
+    <text x="232" y="162" font-size="10" fill="#a33b3b">查询噪声 200KB 全留在主上下文</text>
+
+    <rect x="60" y="190" width="120" height="34" rx="5" fill="#eef6ff" stroke="#7fb2e5"/>
+    <text x="72" y="212" font-size="10" fill="#1e4b7a">主代理</text>
+    <rect x="220" y="190" width="220" height="34" rx="5" fill="#fdf3f3" stroke="#e0a0a0"/>
+    <text x="232" y="212" font-size="10" fill="#a33b3b">又一批噪声 + 写报告要一起带上</text>
+
+    <rect x="60" y="240" width="120" height="34" rx="5" fill="#eef6ff" stroke="#7fb2e5"/>
+    <text x="72" y="262" font-size="10" fill="#1e4b7a">主代理</text>
+    <rect x="220" y="240" width="220" height="34" rx="5" fill="#f0f8f2" stroke="#86bfa0"/>
+    <text x="232" y="262" font-size="10" fill="#1f5537">最终报告（很薄）</text>
+
+    <text x="60" y="300" font-size="10.5" fill="#a33b3b">→ 主上下文 = 38 条消息、噪声全带</text>
+    <text x="60" y="320" font-size="10.5" fill="#a33b3b">→ 越跑越大、越跑越慢（上下文腐化）</text>
+    <text x="60" y="344" font-size="9.5" fill="#667788">问题：查询结果几十 KB，写报告时还得带着</text>
+  </g>
+
+  <!-- 右：派活 -->
+  <g font-family="sans-serif">
+    <rect x="520" y="92" width="492" height="270" rx="9" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.6"/>
+    <text x="540" y="120" font-size="13" font-weight="bold" fill="#1f5537">派活：子代理隔离</text>
+
+    <rect x="540" y="210" width="130" height="120" rx="6" fill="#eef6ff" stroke="#7fb2e5"/>
+    <text x="552" y="272" font-size="10" fill="#1e4b7a" transform="rotate(-90 552 218)">子代理内部：30 次检索</text>
+
+    <line x1="670" y1="270" x2="716" y2="170" stroke="#5b6b7c" stroke-width="1.6" marker-end="url(#m10b)"/>
+
+    <rect x="720" y="140" width="260" height="34" rx="5" fill="#f0f8f2" stroke="#86bfa0"/>
+    <text x="732" y="162" font-size="10" fill="#1f5537">主代理：只拿 3 行要点报告</text>
+
+    <rect x="720" y="240" width="260" height="34" rx="5" fill="#f0f8f2" stroke="#86bfa0"/>
+    <text x="732" y="262" font-size="10" fill="#1f5537">主代理：写报告（干净上下文）</text>
+
+    <text x="540" y="300" font-size="10.5" fill="#1f5537">→ 主上下文 = 4 条消息、噪声全隔离</text>
+    <text x="540" y="320" font-size="10.5" fill="#1f5537">→ 重活内耗，主代理只协调</text>
+    <text x="540" y="344" font-size="9.5" fill="#667788">实测：内部 600 字符噪声 → 父只多 14 字符报告</text>
+  </g>
+
+  <defs>
+    <marker id="m10b" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#5b6b7c"/>
+    </marker>
+  </defs>
+
+  <!-- 对比箭头 -->
+  <rect x="130" y="394" width="780" height="100" rx="8" fill="#f7f9fc" stroke="#a8b8c8" stroke-width="1.4"/>
+  <text x="150" y="418" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#33475b">两种跑法的本质差别：谁的上下文负担重？</text>
+  <text x="150" y="444" font-family="sans-serif" font-size="10.5" fill="#a33b3b">单层：主上下文 = 38 条消息，查询噪声 200KB 全带着，写报告时还要一并算</text>
+  <text x="150" y="468" font-family="sans-serif" font-size="10.5" fill="#1f5537">派活：主上下文 = 4 条消息，子代理内部 30 次检索压缩成 3 行报告</text>
+  <text x="150" y="488" font-family="sans-serif" font-size="10" fill="#667788">→ 下一张图开始验证：隔离真的有效？父对话真的没泄漏？</text>
+</svg>

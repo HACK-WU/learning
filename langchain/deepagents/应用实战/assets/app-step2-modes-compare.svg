@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="600" viewBox="0 0 1060 600">
+  <defs>
+    <marker id="m12s2" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#5b6b7c"/>
+    </marker>
+    <marker id="m12s2r" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#a33b3b"/>
+    </marker>
+  </defs>
+  <rect width="1060" height="600" fill="#ffffff"/>
+  <text x="30" y="40" font-family="sans-serif" font-size="21" font-weight="bold" fill="#1f2d3d">第 2 步：量化对比 + 异步生命周期</text>
+  <text x="30" y="66" font-family="sans-serif" font-size="13" fill="#667788">上半看"省了多少"，下半看"异步那套状态怎么走"</text>
+
+  <!-- 上半：量化对比 -->
+  <rect x="30" y="88" width="1000" height="216" rx="9" fill="#f7f9fc" stroke="#a8b8c8" stroke-width="1.4"/>
+  <text x="48" y="112" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#33475b">变化一：N=8，每个子代理返回约 600 字</text>
+
+  <rect x="48" y="126" width="466" height="160" rx="7" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.4"/>
+  <text x="64" y="148" font-family="sans-serif" font-size="11.5" font-weight="bold" fill="#1f5537">并行 task tool_calls</text>
+  <text x="64" y="172" font-family="monospace" font-size="10" fill="#33475b">主上下文   3526 字符</text>
+  <text x="64" y="192" font-family="monospace" font-size="10" fill="#33475b">tool 结果   8 条</text>
+  <text x="64" y="212" font-family="monospace" font-size="10" fill="#33475b">messages   11 条</text>
+  <text x="64" y="238" font-family="monospace" font-size="10" fill="#2e6b4f">耗时 N=4   0.087s</text>
+  <text x="64" y="258" font-family="monospace" font-size="10" fill="#2e6b4f">耗时 N=12  0.111s</text>
+  <text x="64" y="278" font-family="sans-serif" font-size="9" fill="#a33b3b">代价：N 份报告全进主上下文</text>
+
+  <rect x="532" y="126" width="480" height="160" rx="7" fill="#fff8ec" stroke="#e0b877" stroke-width="1.4"/>
+  <text x="548" y="148" font-family="sans-serif" font-size="11.5" font-weight="bold" fill="#7a4f13">动态 eval + 循环</text>
+  <text x="548" y="172" font-family="monospace" font-size="10" fill="#7a4f13">主上下文     38 字符  ← 省 93 倍</text>
+  <text x="548" y="192" font-family="monospace" font-size="10" fill="#33475b">tool 结果   1 条</text>
+  <text x="548" y="212" font-family="monospace" font-size="10" fill="#33475b">messages   4 条</text>
+  <text x="548" y="238" font-family="monospace" font-size="10" fill="#a33b3b">耗时 N=4   0.329s  ← 慢 3.8 倍</text>
+  <text x="548" y="258" font-family="monospace" font-size="10" fill="#a33b3b">耗时 N=12  0.225s</text>
+  <text x="548" y="278" font-family="sans-serif" font-size="9" fill="#667788">解释器启动 + 序列化是固定开销，不摊薄</text>
+
+  <!-- 下半：异步生命周期 -->
+  <rect x="30" y="326" width="1000" height="248" rx="9" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.4"/>
+  <text x="48" y="350" font-family="sans-serif" font-size="12.5" font-weight="bold" fill="#1e4b7a">变化二 + 三：异步任务的状态流转（五个工具）</text>
+
+  <!-- 状态节点 -->
+  <rect x="60" y="380" width="130" height="52" rx="7" fill="#ffffff" stroke="#7fb2e5" stroke-width="1.4"/>
+  <text x="76" y="402" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#1e4b7a">start</text>
+  <text x="76" y="420" font-family="monospace" font-size="8.5" fill="#33475b">→ task_id</text>
+
+  <rect x="240" y="380" width="130" height="52" rx="7" fill="#ffffff" stroke="#7fb2e5" stroke-width="1.4"/>
+  <text x="256" y="402" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#1e4b7a">running</text>
+  <text x="256" y="420" font-family="monospace" font-size="8.5" fill="#667788">远程在跑</text>
+
+  <rect x="420" y="380" width="160" height="52" rx="7" fill="#fff8ec" stroke="#e0b877" stroke-width="1.6"/>
+  <text x="436" y="402" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#7a4f13">waiting</text>
+  <text x="436" y="420" font-family="monospace" font-size="8.5" fill="#a33b3b">run=success, thread 在等</text>
+
+  <rect x="640" y="380" width="150" height="52" rx="7" fill="#fdf3f3" stroke="#e0a0a0" stroke-width="1.4"/>
+  <text x="656" y="402" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#a33b3b">check / list</text>
+  <text x="656" y="420" font-family="monospace" font-size="8.5" fill="#33475b">拉实时状态</text>
+
+  <rect x="850" y="380" width="150" height="52" rx="7" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.4"/>
+  <text x="866" y="402" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#1f5537">success</text>
+  <text x="866" y="420" font-family="monospace" font-size="8.5" fill="#2e6b4f">结果按需取</text>
+
+  <line x1="190" y1="406" x2="236" y2="406" stroke="#5b6b7c" stroke-width="1.5" marker-end="url(#m12s2)"/>
+  <line x1="370" y1="406" x2="416" y2="406" stroke="#5b6b7c" stroke-width="1.5" marker-end="url(#m12s2)"/>
+  <line x1="580" y1="406" x2="636" y2="406" stroke="#a33b3b" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#m12s2r)"/>
+  <line x1="790" y1="406" x2="846" y2="406" stroke="#5b6b7c" stroke-width="1.5" marker-end="url(#m12s2)"/>
+
+  <!-- update 与 cancel -->
+  <rect x="60" y="456" width="330" height="98" rx="7" fill="#ffffff" stroke="#9ccfae" stroke-width="1.3"/>
+  <text x="76" y="478" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#1f5537">update_async_task</text>
+  <text x="76" y="498" font-family="monospace" font-size="8.5" fill="#33475b">multitask_strategy="interrupt"</text>
+  <text x="76" y="516" font-family="sans-serif" font-size="9" fill="#667788">中断旧 run → 同 thread 开新 run</text>
+  <text x="76" y="534" font-family="sans-serif" font-size="9" fill="#2e6b4f">task_id 不变，run_id 变了</text>
+
+  <rect x="412" y="456" width="330" height="98" rx="7" fill="#ffffff" stroke="#e0a0a0" stroke-width="1.3"/>
+  <text x="428" y="478" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#a33b3b">cancel_async_task</text>
+  <text x="428" y="498" font-family="sans-serif" font-size="9" fill="#33475b">waiting 状态 → 不调远程 cancel</text>
+  <text x="428" y="516" font-family="sans-serif" font-size="9" fill="#667788">（没有活跃 run 可取消）</text>
+  <text x="428" y="534" font-family="sans-serif" font-size="9" fill="#2e6b4f">只标本地状态为 cancelled</text>
+
+  <rect x="764" y="456" width="248" height="98" rx="7" fill="#fdf3f3" stroke="#e0a0a0" stroke-width="1.3"/>
+  <text x="780" y="478" font-family="sans-serif" font-size="10.5" font-weight="bold" fill="#a33b3b">坑：waiting 不能代批</text>
+  <text x="780" y="498" font-family="sans-serif" font-size="9" fill="#33475b">主代理不能替人回答</text>
+  <text x="780" y="516" font-family="sans-serif" font-size="9" fill="#33475b">用户得去子代理自己的</text>
+  <text x="780" y="534" font-family="sans-serif" font-size="9" fill="#33475b">thread 上点批准</text>
+</svg>

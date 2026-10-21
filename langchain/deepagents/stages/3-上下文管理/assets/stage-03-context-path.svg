@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 340" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="a3" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5a6b7d"/>
+    </marker>
+  </defs>
+  <rect width="900" height="340" fill="#fbfcfd"/>
+  <text x="450" y="30" text-anchor="middle" font-size="16" font-weight="600" fill="#1f2937">阶段 3 路径：两种「补知识」，一个「收口」</text>
+
+  <rect x="40" y="66" width="330" height="120" rx="9" fill="#fff8ec" stroke="#e0b877" stroke-width="1.5"/>
+  <text x="205" y="92" text-anchor="middle" font-size="12.5" font-weight="600" fill="#7a4f13">课 7 · Skills（按需加载）</text>
+  <text x="205" y="114" text-anchor="middle" font-size="11" fill="#334155">SKILL.md 标准 · frontmatter</text>
+  <text x="205" y="132" text-anchor="middle" font-size="11" fill="#334155">启动只读目录，用时才读全文</text>
+  <text x="205" y="150" text-anchor="middle" font-size="11" fill="#334155">适合：部门 SOP · 长流程 · 模板集</text>
+  <text x="205" y="170" text-anchor="middle" font-size="10" fill="#94a3b8">不占常驻预算，但要多一次读取</text>
+
+  <rect x="40" y="204" width="330" height="110" rx="9" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.5"/>
+  <text x="205" y="230" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1f5537">课 8 · Memory（总是加载）</text>
+  <text x="205" y="252" text-anchor="middle" font-size="11" fill="#334155">AGENTS.md · memory= 参数</text>
+  <text x="205" y="270" text-anchor="middle" font-size="11" fill="#334155">每次请求都在上下文里</text>
+  <text x="205" y="288" text-anchor="middle" font-size="11" fill="#334155">适合：项目规范 · 个人偏好（要短）</text>
+
+  <rect x="440" y="120" width="420" height="150" rx="10" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.7"/>
+  <text x="650" y="146" text-anchor="middle" font-size="13" font-weight="600" fill="#1e4b7a">课 9 · 上下文工程（总调度）</text>
+  <line x1="470" y1="158" x2="830" y2="158" stroke="#b9d5ef"/>
+  <text x="470" y="180" font-size="11" fill="#334155">① 输入上下文：系统提示 + memory + skills + 工具提示</text>
+  <text x="470" y="200" font-size="11" fill="#334155">② 压缩：历史摘要 + 大结果卸载到文件</text>
+  <text x="470" y="220" font-size="11" fill="#334155">③ 隔离：子代理扛重活，只回一份结论</text>
+  <text x="470" y="240" font-size="11" fill="#334155">④ 长期记忆：虚拟文件系统跨线程留东西</text>
+  <text x="470" y="260" font-size="10" fill="#94a3b8">外加：提示缓存（只 Anthropic / Bedrock 默认开）</text>
+
+  <line x1="374" y1="126" x2="436" y2="160" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#a3)"/>
+  <line x1="374" y1="258" x2="436" y2="230" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#a3)"/>
+
+  <text x="450" y="312" text-anchor="middle" font-size="10.5" fill="#94a3b8">一句话记法：Skills 是「用时再翻手册」，Memory 是「开工前必须记住的几条」，上下文工程是「装不下时怎么取舍」</text>
+</svg>
