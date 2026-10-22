@@ -4,6 +4,9 @@
 > 定位：**会用，不上生产**——课里学完，在这里动手。
 > 📖 结论已按官方文档 + 本地实测核对（核对于 2026-10 ｜ 来源：docs.langchain.com/oss/python/deepagents/backends、permissions）
 > ✅ 本文全部代码在 `deepagents 0.7.28` / `langchain 1.4.6` 下实测（假模型驱动真实 agent 图，不发网络请求）
+> ✅ TypeScript 侧实测于 2026-10-22 ｜ `deepagents 1.15.1` ｜ 对照 `playground-ts/l05-backends-permissions.ts`
+
+> 🧭 **双语说明**：标 🇹🇸 的段落是 TS 侧实测补充。**本文是全部应用实战里两侧差异最大的一篇**——`delete` 的判定方式、`permissions` 的规则表达、点开头文件的匹配行为都不同，三条都会静默失效，请重点看 🇹🇸 段落。
 
 ## 场景：临时草稿不落盘、项目笔记要跨会话、`.env` 必须挡住
 
@@ -23,7 +26,9 @@
 
 > 看图：左边是默认后端，所有写入都进会话 state；中间是"写了看起来成功"的假象；右边是换 thread 后连续两个 not found。右下角红框是第二个坑——`deny /**` 拦住了 `plan.md`，却**放过了 `.env`**。
 
-```python
+::: code-group
+
+```python [Python]
 from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.messages import AIMessage
 from langchain_core.outputs import ChatGeneration, ChatResult
@@ -76,6 +81,53 @@ go(agent1, "读:/notes/roadmap.md", "T-A", "同 thread 再读")
 go(agent1, "读:/notes/roadmap.md", "T-B", "换 thread 读")
 ```
 
+```typescript [TypeScript]
+import { BaseChatModel } from "@langchain/core/language_models/chat_models";
+import { AIMessage } from "@langchain/core/messages";
+import { MemorySaver } from "@langchain/langgraph";
+import { createDeepAgent } from "deepagents";
+
+class DirectiveModel extends BaseChatModel {
+  constructor() { super({}); }        // 必须调 super，否则 callbacks 解构会炸
+  _llmType() { return "directive"; }
+  bindTools() { return this; }
+  async _generate(messages: any[]) {
+    const human = messages.filter((m) => m.getType?.() === "human").at(-1);
+    const text = String(human?.content ?? "");
+    const cmd = text.split(":")[0];
+    const arg = text.slice(cmd.length + 1).trim();
+    let tool_calls: any[] = [];
+    if (cmd === "写") {
+      const [path, body] = arg.split("=");
+      tool_calls = [{ name: "write_file", args: { file_path: path.trim(), content: body }, id: "c0" }];
+    } else if (cmd === "读") {
+      tool_calls = [{ name: "read_file", args: { file_path: arg }, id: "c0" }];
+    }
+    return { generations: [{ text: "", message: new AIMessage({ content: "", tool_calls }) }] };
+  }
+}
+
+const agent1 = await createDeepAgent({
+  model: new DirectiveModel() as never,
+  checkpointer: new MemorySaver(),
+});
+const go = async (agent: any, text: string, tid: string) => {
+  const out = await agent.invoke(
+    { messages: [{ role: "user", content: text }] },
+    { configurable: { thread_id: tid } },
+  );
+  const tools = out.messages.filter((m: any) => m.getType() === "tool");
+  console.log(`[${tid}]`, String(tools.at(-1)?.content ?? "").slice(0, 90));
+};
+await go(agent1, "写:/notes/roadmap.md=Week1 打通沙箱", "T-A");
+await go(agent1, "读:/notes/roadmap.md", "T-A");
+await go(agent1, "读:/notes/roadmap.md", "T-B");
+```
+
+:::
+
+🇹🇸 写门派模型的三个硬要求（漏一个就崩在构造期，且报错信息不指向真正原因）：`constructor() { super({}) }` 必须调、`bindTools()` 必须实现、`_generate` 必须返回 `{ generations: [{ text, message }] }`。
+
 实测输出：
 
 ```
@@ -107,7 +159,9 @@ thread T-A 的 state.files: ['/notes/roadmap.md']
 
 **变化一：用 `CompositeBackend` 把三类东西分到三个区**
 
-```python
+::: code-group
+
+```python [Python]
 import tempfile
 from pathlib import Path
 
@@ -138,6 +192,34 @@ agent2 = create_deep_agent(
 )
 ```
 
+```typescript [TypeScript]
+import { mkdtempSync, mkdirSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import {
+  createDeepAgent, CompositeBackend, FilesystemBackend, StateBackend, StoreBackend,
+} from "deepagents";
+
+const project = join(mkdtempSync(join(tmpdir(), "notes-")), "project");
+mkdirSync(project, { recursive: true });
+
+const agent2 = await createDeepAgent({
+  model: new DirectiveModel() as never,
+  backend: new CompositeBackend(
+    new StateBackend(),                                       // 草稿：会话内，用完就没
+    {
+      "/workspace/": new FilesystemBackend({ rootDir: project, virtualMode: true }),  // 笔记：真磁盘
+      "/memories/": new StoreBackend({ namespace: () => ["global"] }),                // 偏好：跨会话
+    },
+  ),
+  checkpointer: new MemorySaver(),
+});
+```
+
+:::
+
+🇹🇸 两处签名差异：`CompositeBackend` 在 Python 是关键字参数 `default=` / `routes=`，TS 是**位置参数** `(defaultBackend, routesObject)`；`StoreBackend` 的 `namespace` 在 Python 收 callable（`lambda rt: (...)`），TS 收函数 `() => [...]`，返回值是数组不是元组。另外 TS 侧 `store` 参数不在这里显式传——`StoreBackend` 自己带。
+
 三个区各写一份，再换 thread 读回来：
 
 ```
@@ -166,9 +248,17 @@ agent2 = create_deep_agent(
 
 先看天真写法为什么失败：
 
-```python
+::: code-group
+
+```python [Python]
 naive = [FilesystemPermission(operations=["read", "write"], paths=["/**"], mode="deny")]
 ```
+
+```typescript [TypeScript]
+const naive = [{ operations: ["read", "write"], paths: ["/**"], mode: "deny" }];
+```
+
+:::
 
 ```
 [plan.md] Error: permission denied for read on /workspace/plan.md
@@ -186,9 +276,21 @@ _FS_WCMATCH_FLAGS = 768
   BRACE|GLOBSTAR = 768
 ```
 
+🇹🇸 **TS 侧同一个坑更隐蔽**：`deny /**` 同样挡不住 `.env`，而且**必须显式补点号通配**才拦得住（`l05-backends-permissions.ts` 实测）：
+
+```text [TypeScript]
+deny-all /notes.md  -> BLOCKED:Error: permission denied    ← 普通文件被拦
+deny-all /.env      -> OK:SECRET=1                          ← 密钥被读了
+deny+点号 /.env     -> BLOCKED:Error: permission denied    ← 补 /**/.* 后才拦得住
+```
+
+TS 侧要补的路径是三条：`["/**", "/**/.*", "/**/.*/**"]`——第一条管普通路径、第二条管当前层的点文件、第三条管点目录里的文件。Python 侧同理要补点目录，但两侧**在"要不要补"这件事上表现一致，在"补几条"上都得自己试**。
+
 改成"窄规则在前"：
 
-```python
+::: code-group
+
+```python [Python]
 fixed = [
     FilesystemPermission(operations=["read", "write"], paths=["/workspace/.env"], mode="deny"),
     FilesystemPermission(operations=["read", "write"], paths=["/workspace/.aws/**"], mode="deny"),
@@ -196,6 +298,17 @@ fixed = [
     FilesystemPermission(operations=["read", "write"], paths=["/**"], mode="deny"),
 ]
 ```
+
+```typescript [TypeScript]
+const fixed = [
+  { operations: ["read", "write"], paths: ["/workspace/.env"], mode: "deny" },
+  { operations: ["read", "write"], paths: ["/workspace/.aws/**"], mode: "deny" },
+  { operations: ["read", "write"], paths: ["/workspace/**"], mode: "allow" },
+  { operations: ["read", "write"], paths: ["/**"], mode: "deny" },
+];
+```
+
+:::
 
 ```
 [plan.md] @@ lines 1-1 of 1 @@ | 项目计划 v1
@@ -217,7 +330,9 @@ fixed = [
 
 **变化三：写自定义后端时，`delete` 是可选的那一个**
 
-```python
+::: code-group
+
+```python [Python]
 from deepagents.backends.protocol import (
     BackendProtocol, EditResult, GlobResult, GrepResult,
     LsResult, ReadResult, WriteResult,
@@ -235,14 +350,38 @@ class NoDeleteBackend(BackendProtocol):
     def grep(self, pattern, path=None, glob=None): return GrepResult(matches=[])
 ```
 
-用一个只记录工具清单的假模型看模型实际拿到什么：
+```typescript [TypeScript]
+// TS 用"鸭子类型"：只要对象有那 8 个方法就是后端，没有继承要求
+class BareBackend {
+  async ls() { return { files: [] }; }
+  async read() { return { content: "" }; }
+  async write(p: string) { return { path: p }; }
+  async edit(p: string) { return { path: p, occurrences: 1 }; }
+  async glob() { return { files: [] }; }
+  async grep() { return { matches: [] }; }
+  async uploadFiles() { return []; }
+  async downloadFiles() { return []; }
+}
+
+// 关键差异：TS 判定 delete 看**实例上有没有这个方法**，不看类
+const noDelete = new BareBackend();
+const withDelete = Object.assign(new BareBackend(), {
+  delete: async (p: string) => ({ path: p }),   // 挂到实例上就够了
+});
+```
+
+:::
+
+🇹🇸 **这是本篇最重要的一条差异**：Python 的判定是 `type(backend).delete is not BackendProtocol.delete`（严格比类上有没有重写），所以**给实例挂 `delete` 属性无效**；TS 的判定是**实例级**——`Object.assign` 挂上去就生效（`l05-backends-permissions.ts` 实测 `自定义(无 delete)` 与 `自定义(挂 delete)` 两行结果不同）。所以从 Python 迁到 TS 时，`NoDeleteBackend.__getattr__` 那套写法可以丢，但反过来 TS 迁 Python 时要小心：实例挂属性会静默无效。
+
+再看模型实际拿到什么：
 
 ```
 StateBackend       n=8 -> ['delete', 'edit_file', 'glob', 'grep', 'ls', 'read_file', 'task', 'write_file']
 NoDelete(自定义)    n=7 -> ['edit_file', 'glob', 'grep', 'ls', 'read_file', 'task', 'write_file']
 ```
 
-`delete` 静默消失，**没有报错、没有警告**。判定条件是严格的类型比较：
+`delete` 静默消失，**没有报错、没有警告**。Python 侧的判定条件是严格的类型比较：
 
 ```python
 return type(backend).delete is not BackendProtocol.delete

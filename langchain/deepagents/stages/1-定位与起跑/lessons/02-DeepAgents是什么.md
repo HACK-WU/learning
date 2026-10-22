@@ -2,8 +2,9 @@
 
 > 所属阶段：阶段 1《定位与起跑》｜ 水平：进阶 ｜ 本课知识点：harness 心智模型、三层分工（deepagents / LangChain / LangGraph）、选型边界与版本演进
 > 故事情节：主角发现官方有个"开箱即用"的包，但必须先搞清它到底是新框架还是包装纸——否则后面每次调参都会调错地方
-> 📖 结论已按官方文档核对（核对于 2026-10 ｜ 来源：docs.langchain.com/oss/python/deepagents/overview、comparison、concepts/products、PyPI 与 GitHub CHANGELOG）
+> 📖 结论已按官方文档核对（核对于 2026-10 ｜ 来源：docs.langchain.com/oss/python/deepagents/overview、comparison、concepts/products、PyPI 与 GitHub CHANGELOG；TS 侧：docs.langchain.com/oss/javascript/deepagents/overview）
 > ✅ 代码结论实测于 2026-10-20 ｜ `deepagents 0.7.28` / `langchain 1.4.6` / `langgraph 1.2.16`
+> ✅ TypeScript 侧实测于 2026-10-21 ｜ `deepagents 1.15.1` / `@langchain/langgraph 1.5.1` / Node 22.22.2
 
 ## 🎯 本课目标
 
@@ -201,17 +202,27 @@ flowchart LR
 
 上一步的实测已经能同时证明三件事（下一节 4.1 会给完整命令）：
 
-```
+::: code-group
+
+```text [Python]
 返回对象类型: langgraph.graph.state.CompiledStateGraph
 默认工具: ['delete', 'edit_file', 'execute', 'glob', 'grep', 'ls', 'read_file', 'task', 'write_file']
 加 TodoListMiddleware 后: [..., 'write_todos']
 ```
 
+```text [TypeScript]
+返回对象类型: ReactAgent
+默认工具: ['delete', 'edit_file', 'execute', 'glob', 'grep', 'ls', 'read_file', 'task', 'write_file']
+加 todoListMiddleware 后: [..., 'write_todos']
+```
+
+:::
+
 三行输出分别对应三层：
 
-- 第一行证明**运行时是 LangGraph**（不是自研执行器）。
+- 第一行证明**运行时是 LangGraph**（不是自研执行器）。Python 打印 `CompiledStateGraph`、TS 打印 `ReactAgent`，指的都是 LangGraph 编译后的图，只是 TS 侧包了一层的类名。
 - 第二行是**harness 的预装**（你不用一个个定义）。
-- 第三行是**framework 的构件**（`TodoListMiddleware` 来自 `langchain.agents.middleware`，harness 只是替你决定要不要装）。
+- 第三行是**framework 的构件**（`TodoListMiddleware` 来自 `langchain.agents.middleware`，TS 侧是 `langchain` 的 `todoListMiddleware` 工厂函数；harness 只是替你决定要不要装）。
 
 #### 常见误区
 
@@ -288,7 +299,9 @@ flowchart LR
 
 **变更一：任务规划从默认开启变成 opt-in。**
 
-```python
+::: code-group
+
+```python [Python]
 from deepagents import create_deep_agent
 from langchain.agents.middleware import TodoListMiddleware
 
@@ -302,7 +315,24 @@ print(sorted(b.nodes["tools"].bound.tools_by_name))
 # [..., 'task', 'write_file', 'write_todos']
 ```
 
-官方 CHANGELOG 在 `0.7.0` 的 BREAKING CHANGES 里写得很直接：`create_deep_agent` 不再默认包含 `TodoListMiddleware`，`write_todos` 工具、`todos` 状态通道、规划提示词**全部消失**；要给主 agent 恢复得传 `middleware=[TodoListMiddleware()]`，要给子代理恢复得逐个加。
+```typescript [TypeScript]
+import { createDeepAgent } from "deepagents";
+import { todoListMiddleware } from "langchain";
+
+// TS 侧同样不默认给 write_todos
+const a = await createDeepAgent({ model: "openai:gpt-4o-mini", tools: [] });
+
+const b = await createDeepAgent({
+  model: "openai:gpt-4o-mini",
+  tools: [],
+  middleware: [todoListMiddleware()],
+});
+// 差集同样是 write_todos
+```
+
+:::
+
+官方 CHANGELOG 在 `0.7.0` 的 BREAKING CHANGES 里写得很直接：`create_deep_agent` 不再默认包含 `TodoListMiddleware`，`write_todos` 工具、`todos` 状态通道、规划提示词**全部消失**；要给主 agent 恢复得传 `middleware=[TodoListMiddleware()]`，要给子代理恢复得逐个加。TS 侧这条行为一致（实测不传就没有 `write_todos`），只是写法换成工厂函数 `todoListMiddleware()`。
 
 > 这就是本课最值钱的一条经验：**"升级后 agent 不会做计划了"不是模型变笨，是默认值变了。**
 
@@ -348,9 +378,12 @@ print(sorted(b.nodes["tools"].bound.tools_by_name))
 ### 4.1 机制验证
 
 > ✅ 实测于 2026-10-20 ｜ 临时 venv ｜ Python 3.12.13 ｜ `deepagents 0.7.28` / `langchain 1.4.6` / `langgraph 1.2.16`
+> ✅ TypeScript 侧实测于 2026-10-21 ｜ Node 22.22.2 ｜ `deepagents 1.15.1` / `@langchain/langgraph 1.5.1`
 > 本段不发任何网络请求（用占位 key 构造模型对象），所以不需要真 key，也不花钱。
 
-```python
+::: code-group
+
+```python [Python]
 # three_layer_probe.py
 import deepagents
 from deepagents import create_deep_agent
@@ -366,18 +399,71 @@ agent2 = create_deep_agent(model="openai:gpt-5.4", tools=[], middleware=[TodoLis
 print("加 TodoListMiddleware 后:", sorted(agent2.nodes["tools"].bound.tools_by_name))
 ```
 
+```typescript [TypeScript]
+// 对应 playground-ts/l02-what.ts
+import { createDeepAgent } from "deepagents";
+import { todoListMiddleware } from "langchain";
+import { createRequire } from "node:module";
+
+const require = createRequire(import.meta.url);
+
+function toolsOf(agent: { options: { middleware?: readonly unknown[] } }): string[] {
+  const collected: string[] = [];
+  for (const mw of (agent.options.middleware ?? []) as Array<{ tools?: unknown }>) {
+    const t = mw.tools;
+    if (!t) continue;
+    const arr = typeof t === "function" ? (t as () => unknown[])() : (t as unknown[]);
+    for (const x of arr ?? []) {
+      const n = (x as { name?: string }).name;
+      if (n) collected.push(n);
+    }
+  }
+  return [...new Set(collected)].sort();
+}
+
+const agent = await createDeepAgent({ model: "openai:gpt-4o-mini", tools: [] });
+console.log("deepagents", require("deepagents/package.json").version);
+console.log("返回对象类型:", agent.constructor.name);
+console.log("默认工具:", toolsOf(agent));
+
+const agent2 = await createDeepAgent({
+  model: "openai:gpt-4o-mini",
+  tools: [],
+  middleware: [todoListMiddleware()],
+});
+console.log("加 todoListMiddleware 后:", toolsOf(agent2));
+```
+
+:::
+
 实测输出：
 
-```
+::: code-group
+
+```text [Python]
 deepagents 0.7.28
 返回对象类型: langgraph.graph.state.CompiledStateGraph
 默认工具: ['delete', 'edit_file', 'execute', 'glob', 'grep', 'ls', 'read_file', 'task', 'write_file']
 加 TodoListMiddleware 后: ['delete', 'edit_file', 'execute', 'glob', 'grep', 'ls', 'read_file', 'task', 'write_file', 'write_todos']
 ```
 
-> ✅ **回扣场景**：第一幕那个"写到第 400 行还在造脚手架"的困境，在这四行输出里被量化了——**9 个工具、一张现成的图、一行调用**。同时它证明了本课的核心论点：多的不是新引擎（还是 `CompiledStateGraph`），是装配。第三行和第四行的差集 `write_todos`，就是"v0.7 之后你要自己开的那个开关"。
+```text [TypeScript]
+deepagents 1.15.1
+返回对象类型: ReactAgent
+默认工具: ['delete', 'edit_file', 'execute', 'glob', 'grep', 'ls', 'read_file', 'task', 'write_file']
+加 todoListMiddleware 后: ['delete', 'edit_file', 'execute', 'glob', 'grep', 'ls', 'read_file', 'task', 'write_file', 'write_todos']
+```
 
-> ⚠️ 读 `agent.nodes[...]` 属于**内部结构**，只适合做环境自检与教学验证；它不是公开 API，升级可能变。业务代码里不要依赖它。
+:::
+
+> 📌 **两处必须留意的命名差异**（照抄会报错）：
+>
+> - **返回类型名不同**：Python 打印 `langgraph.graph.state.CompiledStateGraph`，TS 打印 `ReactAgent`。两者都是 LangGraph 编译后的图，只是 TS 侧包了一层 `ReactAgent` 类名。判断"运行时是 LangGraph"的证据两侧都成立。
+> - **中间件写法不同**：Python 是类、需实例化 `TodoListMiddleware()`；TS 是工厂函数、小写开头 `todoListMiddleware()`。写成 `TodoListMiddleware()` 在 TS 侧会得到 `undefined is not a function`。
+
+> ✅ **回扣场景**：第一幕那个"写到第 400 行还在造脚手架"的困境，在这四行输出里被量化了——**9 个工具、一张现成的图、一行调用**。同时它证明了本课的核心论点：多的不是新引擎（两侧返回的都是 LangGraph 图），是装配。第三行和第四行的差集 `write_todos`，就是"v0.7 之后你要自己开的那个开关"。
+
+> ⚠️ 读 `agent.nodes[...]`（Python）与 `agent.options.middleware`（TS）属于**内部结构**，只适合做环境自检与教学验证；都不是公开 API，升级可能变。业务代码里不要依赖。
 
 ---
 

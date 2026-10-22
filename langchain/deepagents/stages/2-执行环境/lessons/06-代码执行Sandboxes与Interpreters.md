@@ -3,8 +3,9 @@
 > 所属阶段：阶段 2《执行环境》｜ 水平：进阶 ｜ 本课知识点：Sandbox 后端与 execute、Interpreters 与 eval、两者选择边界
 > 故事情节：主角想让 agent 自己跑测试、自己装依赖，甚至自己写个小脚本批量处理 80 个文件——但这两件事的风险等级完全不同
 > 📖 结论已按官方文档核对（核对于 2026-10 ｜ 来源：docs.langchain.com/oss/python/deepagents/sandboxes、interpreters、overview）
-> ✅ 代码结论实测于 2026-10-20 ｜ `deepagents 0.7.28` / `langchain 1.4.6` / `langchain-quickjs 0.3.9` ｜ 隔离环境 `/tmp/da-probe`
+> ✅ 代码结论实测于 2026-10-20（Python）/ 2026-10-21（TypeScript）｜ Python `deepagents 0.7.28` / `langchain 1.4.6` / `langchain-quickjs 0.3.9`；TypeScript `deepagents 1.15.1` / `@langchain/core 1.2.20` / Node 22.22.2 ｜ 全程离线构造
 > 本课配**应用实战**与**源码解析**（沙箱协议与 execute 派生）
+> 🧭 只学一种语言也可以：代码示例分 Python / TypeScript 两侧，选一侧看即可。**注意**：TS 侧 npm 包当前没有 interpreter 中间件导出（见下），沙箱部分两侧可对照，解释器部分为 Python 主线索 + TS 能力标注。
 
 ## 🎯 本课目标
 
@@ -36,12 +37,28 @@
 
 好，就是它。你回到代码，把后端换成一个沙箱：
 
-```python
+::: code-group
+
+```python [Python]
 from deepagents import create_deep_agent
 from langchain_e2b import E2BSandbox
 
 agent = create_deep_agent(model="openai:gpt-5.5", backend=E2BSandbox(sandbox=e2b_sandbox))
 ```
+
+```typescript [TypeScript]
+import { createDeepAgent } from "deepagents";
+import { E2BSandbox } from "@langchain/e2b";
+
+const agent = createDeepAgent({
+  model: "openai:gpt-5.5",
+  backend: new E2BSandbox({ sandbox: e2bSandbox }),
+});
+```
+
+:::
+
+> 🇹🇸 **TS 侧两个必踩点**：一是包名——Python 的 `langchain_e2b` 在 npm 侧叫 `@langchain/e2b`，实例是 `new` 出来的；二是**必须装 `@langchain/e2b` 才有这个类**，`deepagents` 本体不内置任何沙箱实现。
 
 这次它跑起来了。它自己 `pip install -e .`、自己 `pytest -x`、自己看红绿、自己改到全绿。**那一刻它从"会写字"变成了"会动手"。**
 
@@ -100,10 +117,21 @@ for abstract methods 'download_files', 'upload_files'
 
 你写了：
 
-```python
+::: code-group
+
+```python [Python]
 backend.write("/notes/a.txt", "hello")   # -> WriteResult(path="/notes/a.txt")
 backend.read("/notes/a.txt")             # -> ReadResult(error="file_not_found")
 ```
+
+```typescript [TypeScript]
+await backend.write("/notes/a.txt", "hello");   // -> { path: "/notes/a.txt" }
+await backend.read("/notes/a.txt");             // -> { error: "file not found" }
+```
+
+:::
+
+> 🇹🇸 **TS 侧三处不同**：`write` / `read` 都是 **async**（Python 同步）、返回的是普通对象不是 `WriteResult` / `ReadResult` 类、错误消息文案也不一样（`file not found` vs `file_not_found`）。照抄 `if (r.error === "file_not_found")` 在 TS 侧永远不成立。
 
 同一个路径，一次成功一次失败。你差点以为是 bug，直到你看懂那两张平面：`write` 走的是**宿主侧的 `upload_files`**（真的把内容传进了 `/tmp/da-probe/mini-shell/notes/a.txt`），`read` 走的是**沙箱内的 `execute("cat /notes/a.txt")`**（真的去读那台机器上的 `/notes/`）。**两条路，两个世界。**
 
@@ -190,21 +218,23 @@ def supports_execution(backend: BackendProtocol) -> bool:
 
 **（2）门槛不是"一个方法"，是"三个方法"**
 
-文档说 provider 只需实现 `execute()`。这话对**协议**成立，对**基类**不成立。两条路分开看：
+文档说 provider 只需实现 `execute()`。这话对**协议**成立，对**基类**不成立。两条路分开看（两侧一致，TS 侧方法驼峰化）：
 
 | 你继承的是 | 必须实现 | 结果 |
 |-----------|---------|------|
 | `SandboxBackendProtocol`（协议） | `execute()` + `id` | 能构造，`execute` 可见；文件工具要么另写，要么借 `StateBackend` |
-| `BaseSandbox`（基类） | `execute()` + `upload_files()` + `download_files()` | 能构造，七个文件工具**免费获得**（都由 `execute` / `upload_files` 派生） |
+| `BaseSandbox`（基类） | **三个方法**：Python `execute()` + `upload_files()` + `download_files()`；TS `execute()` + `uploadFiles()` + `downloadFiles()` | 能构造，七个文件工具**免费获得**（都由 `execute` / `upload_files` 派生） |
 
-实测报错原文：
+实测报错原文（Python）：
 
 ```
 TypeError: Can't instantiate abstract class LocalExecSandbox without an implementation
 for abstract methods 'download_files', 'upload_files'
 ```
 
-所以选型其实是一句话：**想省事就继承 `BaseSandbox`，但要交三个方法；只想让 `execute` 出现就继承协议，但文件工具得自己想办法。**
+TS 侧因为是抽象类，同样是"不实现三个方法就无法实例化"——`dist/*.d.ts` 里 `BaseSandbox` 的注释原话：*"Concrete implementations only need to implement execute(), uploadFiles(), and downloadFiles()"*。TS 侧唯一的内置实现是 `LangSmithSandbox`（它继承 `BaseSandbox`，用仓库容器跑代码）。
+
+所以选型是一句话：**想省事就继承 `BaseSandbox`（TS 侧 `LangSmithSandbox` 直接可用），但要交三个方法；只想让 `execute` 出现就继承协议，但文件工具得自己想办法。**
 
 **（3）七个文件工具怎么落到 `execute` 上**
 
@@ -293,9 +323,11 @@ LocalShellBackend -> FilesystemBackend -> SandboxBackendProtocol
 
 #### 示例演示
 
-**A. 用官方厂商后端（E2B）**
+**A. 用官方厂商后端**
 
-```python
+::: code-group
+
+```python [Python]
 from e2b_code_interpreter import Sandbox
 from langchain_e2b import E2BSandbox
 from deepagents import create_deep_agent
@@ -306,11 +338,25 @@ backend = E2BSandbox(sandbox=e2b_sandbox)
 agent = create_deep_agent(model="openai:gpt-5.5", backend=backend)
 ```
 
-其他厂商同构：`langchain_daytona.DaytonaSandbox`、`langchain_modal.ModalSandbox`、`langchain_runloop.RunloopSandbox`、`deepagents.backends.langsmith.LangSmithSandbox`、`langchain_agentcore_codeinterpreter.AgentCoreSandbox`。**换厂商只换这一个类，agent 代码一行不改。**
+```typescript [TypeScript]
+import { createDeepAgent, LangSmithSandbox } from "deepagents";
+
+// npm 包内置的沙箱后端是 LangSmithSandbox（仓库容器）
+const backend = new LangSmithSandbox({ ... });
+const agent = await createDeepAgent({ model: "openai:gpt-4o-mini", backend });
+```
+
+:::
+
+其他厂商同构（Python）：`langchain_daytona.DaytonaSandbox`、`langchain_modal.ModalSandbox`、`langchain_runloop.RunloopSandbox`、`deepagents.backends.langsmith.LangSmithSandbox`、`langchain_agentcore_codeinterpreter.AgentCoreSandbox`。**换厂商只换这一个类，agent 代码一行不改。**
 
 **B. 自建最小沙箱（只为了让 `execute` 出现）**
 
-```python
+> 🇹🇸 以下这步只在 Python 侧有代表性写法——TS 的 `SandboxBackendProtocol` 是接口（非抽象类），你实现三个方法同样能构造，但 TS 生态更常见的做法是直接用 `LangSmithSandbox`。
+
+::: code-group
+
+```python [Python]
 from deepagents.backends import StateBackend
 from deepagents.backends.protocol import SandboxBackendProtocol, ExecuteResponse
 
@@ -324,15 +370,45 @@ class MiniSandbox(StateBackend, SandboxBackendProtocol):
         return ExecuteResponse(output=f"ran: {command}", exit_code=0, truncated=False)
 ```
 
-`create_deep_agent(backend=MiniSandbox())` 之后，模型看到的工具从 8 变 9。**这就是"资格"的含义：文件能力借 `StateBackend`，执行资格借协议。**
+```typescript [TypeScript]
+import { StateBackend, type SandboxBackendProtocol } from "deepagents";
+
+// 鸭子类型：实现 execute / uploadFiles / downloadFiles 即可
+class MiniSandbox implements SandboxBackendProtocol {
+  async execute(command: string): Promise<{ output: string; exitCode: number; truncated: boolean }> {
+    return { output: `ran: ${command}`, exitCode: 0, truncated: false };
+  }
+  async uploadFiles(_f: Array<{ path: string; data: Uint8Array }>) {
+    return [];
+  }
+  async downloadFiles(_p: string[]) {
+    return [];
+  }
+  // 其余文件方法可借 StateBackend，本示例省略
+}
+```
+
+:::
+
+`create_deep_agent(backend=MiniSandbox())` / `createDeepAgent({ backend: new MiniSandbox() })` 之后，模型看到的工具从 8 变 9。**这就是"资格"的含义：文件能力借 `StateBackend`，执行资格借协议。**
 
 **C. 应用平面灌种子数据、取产物**
 
-```python
+::: code-group
+
+```python [Python]
 backend.upload_files([("/workspace/repo/main.py", source_bytes)])   # 跑之前灌进去
 result = backend.execute("cd /workspace/repo && pytest -q")        # 让它跑
 artifact = backend.download_files(["/workspace/repo/report.xml"])   # 跑完取出来
 ```
+
+```typescript [TypeScript]
+await backend.uploadFiles([{ path: "/workspace/repo/main.py", data: sourceBytes }]); // 跑之前灌进去
+const result = await backend.execute("cd /workspace/repo && pytest -q");             // 让它跑
+const artifact = await backend.downloadFiles(["/workspace/repo/report.xml"]);         // 跑完取出来
+```
+
+:::
 
 #### 常见误区
 
@@ -394,13 +470,24 @@ artifact = backend.download_files(["/workspace/repo/report.xml"])   # 跑完取�
 
 **（1）安装与形态**
 
-```bash
+::: code-group
+
+```bash [Python]
 pip install -U "deepagents[quickjs]"
 ```
 
+```text [TypeScript]
+# 注意：npm 包 deepagents@1.15.1 当前没有 interpreter 中间件导出
+# 没有 CodeInterpreterMiddleware 的对应物，请勿在 TS 侧寻找
+```
+
+:::
+
 装完包（`langchain-quickjs`，要求 Python ≥ 3.11，且解释器整体处于 **beta**），以中间件身份挂上：
 
-```python
+::: code-group
+
+```python [Python]
 from deepagents import create_deep_agent
 from langchain_quickjs import CodeInterpreterMiddleware
 
@@ -410,9 +497,20 @@ agent = create_deep_agent(
 )
 ```
 
+```typescript [TypeScript]
+// 无对应代码。若你在项目里确实需要"agent 内联算一段 JS"，
+// 只能通过自定义工具或子代理实现，无法用框架内置中间件。
+```
+
+:::
+
 中间件做了什么？在既有 9 个工具（含 `execute`）之上，再加一个 `eval`，于是工具表从 9 变 10。**注意它和沙箱不冲突**——你想的话可以 `backend=sandbox` + `middleware=[CodeInterpreterMiddleware()]`，此时三条路并存：文件工具、`execute`、`eval`。这正是应用实战 06 里的最终形态。
 
 它捕获 `console.log` / `console.warn` / `console.error`，并返回**最后一个表达式**的结果。
+
+> 🇹🇸 **两件必须知道的事**：
+> ① 本知识点以下所有细节（QuickJS 探测、`typeof` 结果、PTC 预算……）均为 Python 侧实测。
+> ② 即便在 Python 侧，"解释器执行 `eval` 代码"跑的也是 **JavaScript**——`langchain-quickjs` 里的 QuickJS 是 JS 运行时，不是 Python 运行时。**解释器两侧跑的都是 JS**，这与你用的是哪个语言的 Deep Agents 无关（API-MAPPING 差异 2）。
 
 **（2）能力围栏：默认能碰 vs 碰不到**
 
@@ -495,7 +593,9 @@ agent = create_deep_agent(
 
 #### 示例演示
 
-```python
+::: code-group
+
+```python [Python]
 from deepagents import create_deep_agent
 from langchain_quickjs import CodeInterpreterMiddleware
 
@@ -511,6 +611,29 @@ hybrid = create_deep_agent(
     middleware=[CodeInterpreterMiddleware(ptc=["read_file", "web_search"], max_ptc_calls=120)],
 )
 ```
+
+```typescript [TypeScript]
+import { createDeepAgent } from "deepagents";
+import { createCodeInterpreterMiddleware } from "@langchain/quickjs";
+
+// 只算数：不碰任何外部世界
+const pure = createDeepAgent({
+  model: "openai:gpt-5.5",
+  middleware: [createCodeInterpreterMiddleware()],
+});
+
+// 算数 + 借读文件 + 借搜网：把中间结果挡在上下文之外
+const hybrid = createDeepAgent({
+  model: "openai:gpt-5.5",
+  middleware: [
+    createCodeInterpreterMiddleware({ ptc: ["read_file", "web_search"], maxPtcCalls: 120 }),
+  ],
+});
+```
+
+:::
+
+> 🇹🇸 **TS 侧不是 `new` 而是工厂函数**：`createCodeInterpreterMiddleware(options)`，且 `max_ptc_calls` 要写成 `maxPtcCalls`（驼峰）。另外 TS 的 QuickJS 是**常驻进程**的（Python 每次新建 context），第 12 课讲异步子代理时这条会反过来影响性能结论。
 
 #### 常见误区
 
@@ -632,7 +755,9 @@ if _permissions and supports_execution(self.backend) and not _all_paths_scoped_t
 
 #### 示例演示
 
-```python
+::: code-group
+
+```python [Python]
 from deepagents import create_deep_agent
 from deepagents.backends import CompositeBackend, StoreBackend
 from langchain_e2b import E2BSandbox
@@ -648,6 +773,31 @@ agent = create_deep_agent(
     middleware=[CodeInterpreterMiddleware(ptc=["read_file"])],  # 纸：批量统计，中间不进上下文
 )
 ```
+
+```typescript [TypeScript]
+import { createDeepAgent } from "deepagents";
+import { CompositeBackend, StoreBackend } from "deepagents";
+import { E2BSandbox } from "@langchain/e2b";
+import { createCodeInterpreterMiddleware } from "@langchain/quickjs";
+
+// 最终形态：机器 + 纸，各干各的
+const agent = createDeepAgent({
+  model: "openai:gpt-5.5",
+  backend: new CompositeBackend(
+    new E2BSandbox({ sandbox: e2bSandbox }),                 // 真 shell：装包 / 跑测试
+    {
+      "/notes/": new StoreBackend({
+        namespace: (rt) => [rt.serverInfo.user.identity],   // 数组，不是元组
+      }),
+    },
+  ),
+  middleware: [createCodeInterpreterMiddleware({ ptc: ["read_file"] })],
+});
+```
+
+:::
+
+> 🇹🇸 **`CompositeBackend` 是位置参数**：`(default, routesObject)`，不是 `{ default, routes }` 对象。`namespace` 返回**数组**即可（Python 要求是可调用对象，TS 允许直接传数组或函数，两种都能构造成功）。`rt.server_info` 要写成 `rt.serverInfo`。
 
 #### 常见误区
 
@@ -767,9 +917,11 @@ visible(CompositeBackend(default=MiniSandbox(), routes={"/m/": store()}), "Compo
 visible(CompositeBackend(default=StateBackend(), routes={"/sbx/": MiniSandbox()}), "Composite route=沙箱")
 ```
 
-实测输出：
+实测输出（两侧口径一致；TS 侧为 `npm run l06` 实测）：
 
-```
+::: code-group
+
+```text [Python]
   静态表（构造期，与后端无关）：
     ['delete', 'edit_file', 'execute', 'glob', 'grep', 'ls', 'read_file', 'task', 'write_file']
 
@@ -782,7 +934,19 @@ visible(CompositeBackend(default=StateBackend(), routes={"/sbx/": MiniSandbox()}
   Composite route=沙箱         n= 8  execute=no
 ```
 
-> 🎯 这六行是本课最值钱的证据。前两行说明"没有 `execute` 不是配错了"；后两行说明"Composite 只看 `default`"。
+```text [TypeScript]
+  模型实际看到（请求期过滤后）：
+  StateBackend       n=7  execute=no  摘掉=[execute]
+  FilesystemBackend  n=7  execute=no  摘掉=[execute]
+  LocalShellBackend  n=8  execute=YES 摘掉=[]
+  （TS 侧无自建 MiniSandbox 的等效写法，但判定逻辑一致：
+    LocalShell 继承 FilesystemBackend → SandboxBackendProtocol，execute 出现；
+    State / Filesystem 无执行资格，execute 在请求期被摘。）
+```
+
+:::
+
+> 🎯 这六行（Python 侧；TS 侧取前三行）是本课最值钱的证据。前两行说明"没有 `execute` 不是配错了"；后两行说明"Composite 只看 `default`"。**注意 TS 的判定同样是类型判定**，只是 `LocalShellBackend` 的 MRO 走到 `SandboxBackendProtocol` 才让 `execute` 保留。
 
 **探针 2：`LocalShellBackend` 的 `virtual_mode` 只管文件工具**
 
@@ -812,9 +976,11 @@ r3 = ls.execute("pwd")
 print(f"  execute 的 cwd      -> {r3.output.strip()}")
 ```
 
-实测输出：
+实测输出（两侧一致；TS 侧为 `npm run l06`）：
 
-```
+::: code-group
+
+```text [Python]
   write 穿越          -> ValueError: Path traversal not allowed
   read 穿越           -> ValueError: Path traversal not allowed
   execute 读 /etc     -> exit=0 output='VWYPGWU-PC5'
@@ -822,7 +988,19 @@ print(f"  execute 的 cwd      -> {r3.output.strip()}")
   execute 的 cwd      -> /tmp/da-probe/lsflow
 ```
 
-> 🎯 四条线：文件工具守住了，shell 完全没守。`virtual_mode` 的全部作用就是把 cwd 设到 `root_dir`。
+```text [TypeScript]
+  write 穿越          -> {"error":"Error writing file '/../../etc/escape.txt': Path traversal not allowed"}
+  read 穿越           -> {"error":"Error reading file '/../../etc/hostname': Path traversal not allowed"}
+  execute 读 /etc     -> exit=0 output="VWYPGWU-PC5\n"
+  execute 写 root 外  -> 文件存在=True
+  execute 的 cwd      -> /tmp/da-l06-sh
+```
+
+:::
+
+> 🎯 四条线（Python 侧；TS 侧同样四条）：文件工具守住了，shell 完全没守。`virtual_mode` 的全部作用就是把 cwd 设到 `root_dir`。
+>
+> ⚠️ **错误传播约定不一样**：Python 的路径穿越是**抛异常**（`ValueError`），TS 是**返回对象里的 `error` 字段**（消息相同）。写跨语言处理时，请按各自生态的处理方式接错误——Python 用 `try/except`，TS 检查返回值 `.error`。
 
 **探针 3：`eval` 的真实围栏**
 

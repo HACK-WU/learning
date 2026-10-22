@@ -3,8 +3,11 @@
 > 所属阶段：阶段 3《上下文管理》｜ 水平：进阶 ｜ 本课知识点：Agent Skills 标准与 SKILL.md、渐进式披露、SkillsMiddleware 的插入位置
 > 故事情节：主角想把团队的代码审查 SOP 教给 agent，但直接写进系统提示词会把每一次请求都撑胖——于是有了"用时再翻手册"的做法
 > 📖 结论已按官方文档核对（核对于 2026-10 ｜ 来源：docs.langchain.com/oss/python/deepagents/skills、customization#skills）
-> ✅ 代码结论实测于 2026-10-20 ｜ `deepagents 0.7.28` / `langchain 1.4.6` ｜ 隔离环境 `/tmp/da-probe`
+> ✅ Python 侧实测于 2026-10-20 ｜ `deepagents 0.7.28` / `langchain 1.4.6` ｜ 隔离环境 `/tmp/da-probe`
+> ✅ TypeScript 侧实测于 2026-10-22 ｜ `deepagents 1.15.1` / `@langchain/core 1.2.20` / Node 22.22.2 ｜ `playground-ts/l07-skills.ts`
 > 本课配**应用实战**与**源码解析**（SkillsMiddleware 与披露链路）
+>
+> 🧭 **只学一种语言也可以**：每个代码块都是 `::: code-group`，左标签 Python、右标签 TypeScript，内容一一对应。两侧结论不同的地方会单独用 `🇹🇸` 标出；没有标记的结论两侧通用。不想看的语言直接切走即可。
 
 ## 🎯 本课目标
 
@@ -123,6 +126,26 @@ code-review/
 | `license` | ❌ | 仅存进元数据，并在技能列表里显示 |
 | `compatibility` | ❌ | 同 license |
 
+🇹🇸 **这四条字段的规则两侧完全一致**。TS 侧的 `validateSkillName` 逐条照搬了同一套判定（长度 ≤ 64、单连字符、Unicode 小写字母与数字、必须与目录名一致），丢弃时的日志文案也几乎逐字相同：
+
+```text [Python]
+Skipping ...: missing required 'name' or 'description'
+Skipping ...: no valid YAML frontmatter found
+Invalid YAML in ...
+name 'x' must match directory name 'y'      # 仅告警，仍加载
+```
+
+```text [TypeScript]
+Skipping /no-desc/SKILL.md: missing required 'name' or 'description'
+Skipping ...: no valid YAML frontmatter found
+Invalid YAML in ...
+Skill 'Bad-Name' in /bad-name/SKILL.md does not follow Agent Skills specification:
+  name must be lowercase alphanumeric with single hyphens only.
+  Consider renaming for spec compliance.          # 仅告警，仍加载
+```
+
+> 🇹🇸 唯一差别在告警的语气：Python 是 `logger.warning`，TS 是 `console.warn`，且 TS 的文案里多了一句 `does not follow Agent Skills specification` 与 `Consider renaming for spec compliance`，但**行为完全相同**——都继续把这个 skill 加载进列表。
+
 实测的几条规则：
 
 ```
@@ -138,6 +161,8 @@ description 超 1024        -> 截断到 1024，只影响模型"决定要不要�
 > 关键差别记住：**名字写歪了没事（只告警），`description` 写错了或者干脆不写，整个 skill 直接消失。** `description` 是唯一让模型在发现阶段"选中"你的机会，所以它比正文还重要。
 
 #### 示例演示
+
+`SKILL.md` 是纯 Markdown，**与语言无关**——同一份文件 Python 和 TypeScript 项目都能直接用，不存在"两套写法"：
 
 ```markdown
 ---
@@ -155,6 +180,8 @@ description: 按团队 SOP 审查代码 diff，输出分级问题清单。当用
 ## 五类必查项
 - 语义一致性 / 空值与边界 / 异常处理 / 资源泄露 / 测试覆盖
 ```
+
+两侧唯一的写法差异出现在"把这个目录挂给 agent"的那一行代码上（见知识点 2 的示例演示）。
 
 #### 常见误区
 
@@ -234,7 +261,9 @@ description: 按团队 SOP 审查代码 diff，输出分级问题清单。当用
 
 #### 示例演示
 
-```python
+::: code-group
+
+```python [Python]
 from deepagents import create_deep_agent
 from deepagents.backends import FilesystemBackend
 
@@ -246,6 +275,36 @@ agent = create_deep_agent(
 # 启动：系统提示出现 Available Skills 列表
 # 用户说"帮我把这个 PR 过一遍规范" → 模型 read_file("/skills/code-review/SKILL.md")
 ```
+
+```typescript [TypeScript]
+import { createDeepAgent } from "deepagents";
+import { FilesystemBackend } from "deepagents";
+
+const agent = createDeepAgent({
+  model: "openai:gpt-4.1-mini",
+  // virtualMode 必须显式打开，否则 "/skills/" 会被当成真实的绝对路径去读磁盘
+  backend: new FilesystemBackend({ rootDir: "/path", virtualMode: true }),
+  skills: ["/skills/"],
+});
+// 启动：系统提示出现 Available Skills 列表
+// 用户说"帮我把这个 PR 过一遍规范" → 模型 read_file("/skills/code-review/SKILL.md")
+```
+
+:::
+
+🇹🇸 **两侧行为完全一致**，只有两处写法差异：
+1. `create_deep_agent(...)` 是关键字参数，`createDeepAgent({...})` 是配置对象；`root_dir`/`virtual_mode` 驼峰化为 `rootDir`/`virtualMode`。
+2. **`virtualMode` 在 TS 侧默认是 `false`**，必须显式写 `virtualMode: true`。忘了这一句，`"/skills/"` 会被当作真实的绝对路径去读主机磁盘，技能列表静默变空——这是 TS 侧最容易踩的坑，也是本课探针 2 实测确认的现象。
+
+实测输出（TS 侧，探针 2）：
+
+```text [TypeScript]
+StateBackend    + 磁盘绝对路径 → No skills available yet
+Filesystem(vm)  + 磁盘绝对路径 → No skills available yet
+Filesystem(vm)  + "/"        → 列出: code-review
+```
+
+三行分别对应：默认 state 后端不认识主机路径、虚拟模式下主机绝对路径也不通、只有虚拟路径才生效。与 Python 侧的实测对照表逐行一致。
 
 #### 常见误区
 
@@ -294,24 +353,52 @@ agent = create_deep_agent(
 
 #### 核心原理
 
-**1. 存在条件（源码 `graph.py`）：**
+**1. 存在条件（源码 `graph.py` / `agent.js`）：**
 
-```python
+::: code-group
+
+```python [Python]
 if skills is not None:
     deepagent_middleware.append(SkillsMiddleware(backend=backend, sources=skills))
 ```
 
-只有这一行。不看 `middleware` 里有没有别人传同名的——除非传入的 `middleware` 里有一个 `name == "SkillsMiddleware"` 的实例，它会被拿去**原位替换**默认的：
+```typescript [TypeScript]
+// createDeepAgent 内部：传了 skills 才追加，否则整条中间件不存在
+if (skills !== undefined) {
+  middleware.push(createSkillsMiddleware({ backend, sources: skills }));
+}
+```
 
-```python
+:::
+
+只有这一处。不看 `middleware` 里有没有别人传同名的——除非传入的 `middleware` 里有一个 `name == "SkillsMiddleware"` 的实例，它会被拿去**原位替换**默认的：
+
+::: code-group
+
+```python [Python]
 # graph.py `_passed_skills_sources`：从你传的 middleware 里找同名实例的 sources
 if skills is None:
     skills = _passed_skills_sources(middleware or ())
 ```
 
+```typescript [TypeScript]
+// TS 侧：自定义的 SkillsMiddleware 优先，没有才按 sources 新建
+const resolveSkillsMiddleware = (sources, custom) => {
+  const passed = custom.findLast((e) => e.name === "SkillsMiddleware");
+  if (passed !== undefined) return [passed];              // 有你传的 → 只用你传的
+  return sources != null && sources.length > 0
+    ? [createSkillsMiddleware({ backend, sources })]      // 否则按 skills= 新建
+    : [];                                                 // 都没有 → 整条不存在
+};
+```
+
+:::
+
 所以两种写法的效果完全等价——只要保证那个实例叫 `SkillsMiddleware`：
 
-```python
+::: code-group
+
+```python [Python]
 # 写法一：传 skills=
 agent = create_deep_agent(model=m, skills=["/skills/"])
 
@@ -320,7 +407,27 @@ mw = SkillsMiddleware(backend=fsb, sources=["/skills/"])
 agent = create_deep_agent(model=m, middleware=[mw])
 ```
 
+```typescript [TypeScript]
+// 写法一：传 skills
+const agent1 = createDeepAgent({ model, skills: ["/skills/"] });
+
+// 写法二：传同名实例（优先于 skills=）
+const mw = createSkillsMiddleware({ backend: fsb, sources: ["/skills/"] });
+const agent2 = createDeepAgent({ model, middleware: [mw] });
+```
+
+:::
+
 实测：写法二不传 `skills=` 也生效（`Available Skills` 照常出现）。
+
+> 🇹🇸 **TS 侧的语义和 Python 有一处关键不同，别按"替换"去理解**：
+> - Python 的口径是"默认槽位被同名实例替换"，所以 `skills=` 和 `middleware=[同名实例]` 同时给时，两者都会参与（需要你自己保证不冲突）。
+> - TS 的口径是**二选一**：源码 `resolveSkillsMiddleware` 先 `findLast` 找你传的同名实例，**找到就直接用它、完全忽略 `skills=`**；找不到才按 `skills=` 新建。所以两者同时给时，写在 `middleware` 里的那个赢。
+> - 另外 TS 取的是**最后一个**同名实例（`findLast`）。你传两个 `SkillsMiddleware`，生效的是数组里靠后的那个，前面的被丢弃——Python 侧没有这条"取最后"的规则。
+>
+> 实践建议：两侧都只选一种写法，别混用，这个差异就不会碰到你。
+
+> 🇹🇸 TS 侧多一个便利：`createSkillsMiddleware` 是**公开导出**的，可以脱离 `createDeepAgent` 单独构造并驱动（探针 7 实测 `mw.name === "SkillsMiddleware"`、直连构造后系统提示正常出现技能段）。Python 侧的 `SkillsMiddleware` 也可直接 import，但课程主推走 `skills=` 这条路。
 
 **2. 位置顺序，配一张图就够了：**
 
@@ -343,13 +450,40 @@ agent = create_deep_agent(model=m, middleware=[mw])
 
 #### 示例演示
 
-```python
+::: code-group
+
+```python [Python]
 # 用户直接点名技能：正文进上下文，省掉 read_file 往返
 agent.invoke(
     {"messages": [{"role": "user", "content": "/write-tests 帮我补测试"}],
      "pinned_skills": ["write-tests"]},
     config,
 )
+```
+
+```typescript [TypeScript]
+// TS 侧状态键是驼峰 pinnedSkills
+await agent.invoke(
+  { messages: [{ role: "user", content: "/write-tests 帮我补测试" }], pinnedSkills: ["write-tests"] },
+  config,
+);
+```
+
+:::
+
+🇹🇸 **状态键命名两侧不同**：Python 是 `pinned_skills`，TS 是 `pinnedSkills`（整个 state 的键都驼峰化）。这是 `deepagents` 侧的约定，不是 LangChain 的通用规则——写错键名不会报错，只会静默不生效，模型看不到正文。
+
+TS 侧还导出了 `pinnedSkillsValue`（zod schema）与 `skillsMetadataValue`，如果你的 agent 单独声明 `stateSchema`，要把这两个值显式挂上去，否则技能相关的 state 字段不会被识别：
+
+```typescript [TypeScript]
+import { StateSchema } from "@langchain/langgraph";
+import { skillsMetadataValue, pinnedSkillsValue } from "deepagents";
+
+const MyState = new StateSchema({
+  skillsMetadata: skillsMetadataValue,
+  pinnedSkills: pinnedSkillsValue,
+  // ...你的其它字段
+});
 ```
 
 #### 常见误区
@@ -384,7 +518,9 @@ agent.invoke(
 
 **探针 1：不传 `skills=` 与传了的系统提示差异**
 
-```python
+::: code-group
+
+```python [Python]
 from deepagents import create_deep_agent
 agent_a = create_deep_agent(model="openai:gpt-5.4")          # 无技能段
 agent_b = create_deep_agent(model="openai:gpt-5.4",
@@ -392,11 +528,26 @@ agent_b = create_deep_agent(model="openai:gpt-5.4",
                             skills=["/skills/"])             # 有 Available Skills
 ```
 
+```typescript [TypeScript]
+// 判定方式：看装配出来的中间件栈里有没有 name === "SkillsMiddleware"
+const bare = createDeepAgent({ model: "openai:gpt-4.1-mini" });
+console.log(bare.options.middleware.some((m) => m.name === "SkillsMiddleware"));   // false
+
+const withSkills = createDeepAgent({ model: "openai:gpt-4.1-mini", backend: fsb, skills: ["/"] });
+console.log(withSkills.options.middleware.some((m) => m.name === "SkillsMiddleware")); // true
+```
+
+:::
+
 含义：不传则系统提示根本不渲染技能段；传了才出现 `**Available Skills:**`。
+
+实测（TS 侧，探针 1）：无 `skills=` → `有 SkillsMiddleware? false`；传 `skills=["/"]` → `true`，系统提示长度 2110 字符、含 `**Available Skills:**`。
 
 **探针 2：路径由后端解析（最容易踩的坑）**
 
-```python
+::: code-group
+
+```python [Python]
 from deepagents import create_deep_agent
 from deepagents.backends import FilesystemBackend, StateBackend
 
@@ -414,18 +565,47 @@ agent3 = create_deep_agent(model="openai:gpt-5.4",
                            skills=["/skills/"])
 ```
 
+```typescript [TypeScript]
+import { createDeepAgent, FilesystemBackend, StateBackend } from "deepagents";
+
+// 1) 默认 StateBackend + 磁盘绝对路径 -> 空态
+createDeepAgent({ model, backend: new StateBackend(), skills: [skillRoot] });
+
+// 2) FilesystemBackend(虚拟模式) + 磁盘绝对路径 -> 也空态
+createDeepAgent({ model, backend: new FilesystemBackend({ rootDir: "/p", virtualMode: true }), skills: [skillRoot] });
+
+// 3) FilesystemBackend(虚拟模式) + 虚拟路径 -> 生效
+createDeepAgent({ model, backend: new FilesystemBackend({ rootDir: "/p", virtualMode: true }), skills: ["/skills/"] });
+```
+
+:::
+
 实测对照（同一个 `root_dir` 目录）：
 
-```
+::: code-group
+
+```text [Python]
 StateBackend    + 磁盘绝对路径   → No skills available yet
 Filesystem(vm)  + 磁盘绝对路径   → No skills available yet
 Filesystem(vm)  + /skills/      → Available Skills 里列出了 name+desc
 StateBackend    + files= 预置    → 生效（值需 {content, encoding}）
 ```
 
+```text [TypeScript]
+StateBackend    + 磁盘绝对路径 → No skills available yet
+Filesystem(vm)  + 磁盘绝对路径 → No skills available yet
+Filesystem(vm)  + "/"        → 列出: code-review
+```
+
+:::
+
+前两行两侧完全一致。第三行 Python 用 `/skills/`、TS 用 `/`（因为 TS 侧的临时 skill 库根就是虚拟根），二者都是"指向后端虚拟根下的某个目录"，语义相同。
+
+> 🇹🇸 TS 侧这里有个**比 Python 更容易踩**的坑：`FilesystemBackend` 的 `virtualMode` **默认是 `false`**。忘了写 `virtualMode: true`，`"/skills/"` 会被当成真实的绝对路径去读主机磁盘——而主机上通常没有这个目录，于是同样静默变空态，但日志里的报错方向完全不同（一个是"路径不存在"，一个是"路径不在虚拟根内"）。
+
 **探针 3：全身发现正确的提示段长什么样**
 
-```
+```text [Python]
 **Available Skills:**
 
 - **code-review**: 按团队 SOP 审查代码 diff，输出分级问题清单。当用户要求 review 时使用。
@@ -435,11 +615,33 @@ StateBackend    + files= 预置    → 生效（值需 {content, encoding}）
 ...
 ```
 
+```text [TypeScript]
+**Available Skills:**
+
+- **Bad-Name**: 名字写歪了。
+  → Read `/bad-name/SKILL.md` for full instructions
+- **code-review**: 按团队 SOP 审查代码 diff，输出分级问题清单。当用户要求 review 时使用。
+  → Read `/code-review/SKILL.md` for full instructions
+
+**How to Use Skills (Progressive Disclosure):**
+
+Skills follow a **progressive disclosure** pattern - you know they exist (name + description above), but you only read the full instructions when needed:
+
+1. **Recognize when a skill applies**: Check if the user's task matches any skill's description
+2. **Read the skill's full instructions**: Use `read_file` on the path shown in the skill list above.
+   Pass `limit=1000` since the default of 100 lines is too small for most skill files.
+...
+```
+
 `description` 是模型"选中"你的唯一钩子；`Read .../SKILL.md` 是它"翻开手册"的入口。
+
+🇹🇸 **两处细微差异**（不影响语义）：Python 的箭头是 `->`，TS 是 `→`（Unicode 箭头）；TS 侧多一句 `Pass \`limit=1000\`` 的行数提示。另外 TS 这份输出里 `Bad-Name` 也在列表里——正是探针 6 要展示的"名字写歪仍加载"。
+
+TS 侧的固定说明段总长实测 **2110 字符**（含技能列表行），其中固定部分不随技能数量变化——与 Python 侧约 1900 字符的固定说明同一量级。
 
 **探针 4：读全文会拿到完整 frontmatter**
 
-```
+```text [Python]
 @@ lines 1-47 of 47 @@
 ---
 name: code-review
@@ -448,7 +650,35 @@ description: ...
 # 代码审查 SOP   <- 正文
 ```
 
+```text [TypeScript]
+首行: ---
+含 name: 字段? true
+含正文标题? true
+总行数: 15
+```
+
+> 两侧行为一致：`read_file` 读的是**完整文件**，frontmatter 一个字都不少。TS 侧的数字小是因为探针的示例 SKILL.md 更短（15 行 vs 47 行），行为本身相同。
+
 > 和 `pinned_skills` 对比：pinned 的正文**剥掉**了 frontmatter（`<skill ...>` 包裹的纯正文）；`read_file` 读的是完整文件。两条路径行为不一致，别想当然。
+
+**探针 5：name 写歪 / description 缺失 的实际效果**（TS 侧新增，验证与 Python 一致）
+
+```text [TypeScript]
+实际加载的技能: Bad-Name | code-review
+  bad-name 在不在: true
+  no-desc  在不在: false
+```
+
+日志同时打出两条：
+
+```text [TypeScript]
+Skill 'Bad-Name' in /bad-name/SKILL.md does not follow Agent Skills specification:
+  name must be lowercase alphanumeric with single hyphens only.
+  Consider renaming for spec compliance.
+Skipping /no-desc/SKILL.md: missing required 'name' or 'description'
+```
+
+前一条是告警、技能照常出现在列表里；后一条直接丢弃。**与 Python 侧完全一致**——这正是知识点 1 那句"名字歪了没事、description 丢了就消失"在 TS 侧的实证。
 
 ### 4.2 应用实战：把团队代码审查 SOP 做成按需加载的技能包（入口）
 
@@ -479,14 +709,32 @@ description: ...
 | "`name` 写错会加载失败" | 只告警仍加载；`description` 缺失才丢弃 | 看日志 `must match directory name` |
 | "用过就少了" | `read_file` 会把正文留进对话，压缩才丢 | 长会话后看 turn 长度 |
 | "磁盘改了技能会自动生效" | 每 thread 只加载一次，需 `skills_metadata=None` 重载 | 重载后再查 Available Skills |
+| 🇹🇸 "TS 里 `FilesystemBackend` 直接给 `rootDir` 就能用虚拟路径" | `virtualMode` 默认 `false`，必须显式 `true`，否则路径按真实磁盘解析 | 看是否静默 `No skills available yet` |
+| 🇹🇸 "TS 里 `skills=` 和 `middleware=[SkillsMiddleware]` 会合并" | 二选一：有同名中间件就**完全忽略** `skills=`，且取最后一个同名实例 | 只想用一套就只传一种 |
+| 🇹🇸 "TS 的状态键跟 Python 一样是下划线" | `pinnedSkills` / `skillsMetadata` 都是驼峰；写错静默不生效 | 检查 state 键名 |
 
 ### ⏳ 与过时说法对照
 
 | 过时的说法 | 现在该怎么说 |
 |-----------|-------------|
-| "skills 是 Deep Agents 特有的" | 遵循 agentskills.io 开放标准，其它 agent 系统也可复用 |
-| "`read_file` 拿到的是纯正文" | 实测拿到完整 frontmatter + 正文（`name:` 也在） |
+| "skills 是 Deep Agents 特有的" | 遵循 agentskills.io 开放标准，其它 agent 系统也可复用（两侧共用同一份 SKILL.md） |
+| "`read_file` 拿到的是纯正文" | 实测拿到完整 frontmatter + 正文（`name:` 也在），两侧一致 |
 | "skill 正文越详细越好" | 官方建议正文 ≤ 5,000 token，启动只读 frontmatter 才撑得起大规模 |
+| 🇹🇸 "TS 侧 `skills` 比 Python 少" | 两侧 `skills` 参数同名同义、`sources` 语义一致；TS 侧还多导出了 `createSkillsMiddleware` 可单独使用 |
+| 🇹🇸 "TS 的 `FilesystemBackend` 与 Python 行为一致" | 参数驼峰化之外，`virtualMode` 默认值不同（TS 默认 `false`），必须显式开启 |
+
+### 🇹🇸 本课双语差异速查
+
+| 维度 | Python（0.7.28） | TypeScript（1.15.1） |
+|---|---|---|
+| 入口 | `create_deep_agent(skills=[...])` | `createDeepAgent({ skills: [...] })` |
+| 后端构造 | `FilesystemBackend(root_dir=..., virtual_mode=True)` | `new FilesystemBackend({ rootDir: ..., virtualMode: true })`，`virtualMode` 默认 `false` |
+| 同名实例与 `skills=` | 默认槽位被同名实例替换 | 同名实例**优先且完全覆盖** `skills=`；多个同名取最后一个 |
+| 状态键 | `pinned_skills` / `skills_metadata` | `pinnedSkills` / `skillsMetadata` |
+| 中间件构造 | `SkillsMiddleware(backend=, sources=)` | `createSkillsMiddleware({ backend, sources })`（公开导出） |
+| frontmatter 校验 | 名字不合规告警仍加载；`description` 缺失丢弃 | 完全相同，仅告警文案措辞更长 |
+| `read_file` 返回 | 完整文件含 frontmatter | 完全相同 |
+| 重载技能 | `skills_metadata=None` | `agent.updateState(config, { skillsMetadata: null })` 或 invoke 时传 `skillsMetadata: null` |
 
 ## 一图总结
 
@@ -527,6 +775,8 @@ flowchart TD
 
 **答案：B**。`skills` 里的路径是给后端解析的，不是操作系统路径。`./my_skills` 在默认 `StateBackend` 的虚拟文件系统里不存在，于是 `path_not_found`、提示词渲染成空态。改正法是用 `FilesystemBackend(root_dir=...)` + 虚拟路径（如 `/skills/`），或用 `files=` 预置进 state。
 
+> 🇹🇸 **TS 侧答案是同一个 B**，但要额外记住那个默认值陷阱：即使改成 `new FilesystemBackend({ rootDir })`，**还必须写 `virtualMode: true`**，否则 `rootDir` 只用于解析相对路径，`"/skills/"` 仍会被当成真实绝对路径。两步都做对才生效。
+
 </details>
 
 **Q2**：一个 skill 的 `SKILL.md` 里 `name` 与父目录名不一致。会发生什么？
@@ -538,6 +788,8 @@ flowchart TD
 <details><summary>答案与解析</summary>
 
 **答案：B**。`_validate_skill_name` 对名字校验失败只 `logger.warning` 并继续加载（"warn but continue loading for backwards compatibility"）。真正让 skill 消失的是 `description` 缺失或 frontmatter 非法。
+
+> 🇹🇸 **TS 侧同样是 B**。`validateSkillName` 返回 `{valid:false, error:"..."}` 后走的是 `console.warn` 分支，技能仍进列表；探针 5 实测 `实际加载的技能: Bad-Name | code-review` 就是证据。TS 侧唯一的额外信息是告警文案里多了 `does not follow Agent Skills specification` 与 `Consider renaming for spec compliance`。
 
 </details>
 
@@ -562,6 +814,8 @@ flowchart TD
 <details><summary>答案与解析</summary>
 
 **答案：B**。`pinned_skills` 会在下一次模型调用前把对应 SKILL.md 正文（剥掉 frontmatter）作为一条 `lc_source=pinned_skill` 的 HumanMessage 塞进对话，省掉 `read_file` 往返。`skills_metadata=None` 是重载技能，与"点名进上下文"无关。
+
+> 🇹🇸 **TS 侧答案仍是 B，但键名要换**：传的是 `pinnedSkills: ["write-tests"]`（驼峰）。写 `pinned_skills` 不会报错，也不会生效——这是 TS 侧最容易静默失败的一处。另外 TS 侧若自定义了 `stateSchema`，需要把 `pinnedSkillsValue` 挂上去。
 
 </details>
 

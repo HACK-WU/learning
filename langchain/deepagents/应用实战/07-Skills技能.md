@@ -3,6 +3,9 @@
 > 对应课程：[第 7 课：Skills 技能](../stages/3-上下文管理/lessons/07-Skills技能.md) ｜ 覆盖知识点：Agent Skills 标准与 SKILL.md、渐进式披露、SkillsMiddleware 的插入位置
 > 定位：**会用，不上生产**——课里学完，在这里动手。
 > ✅ 本文全部代码在 `deepagents 0.7.28` / `langchain 1.4.6` 下实测（假模型驱动真实 agent 图，不发网络请求）
+> ✅ TypeScript 侧实测于 2026-10-22 ｜ `deepagents 1.15.1` ｜ 对照 `playground-ts/l07-skills.ts`
+
+> 🧭 **双语说明**：标 🇹🇸 的段落是 TS 侧实测补充。Skills 的目录约定（`SKILL.md` + frontmatter + 目录名一致）两语言**完全通用**，因为那是 Agent Skills 标准，不是框架 API。差异集中在参数名（`skills` / `skills` 一致但路径语义不同）与 `pinned_skills` 的传法上。
 
 ## 场景：把团队代码审查 SOP 做成按需加载的技能包
 
@@ -22,7 +25,9 @@
 
 > 看图：左边是 skill 目录的真实形态（一个目录 + SKILL.md + 可选的 scripts/references）；右边是触发它三级加载的三条时间线。注意中间"目录名"和"name"必须一致。
 
-```python
+::: code-group
+
+```python [Python]
 import tempfile
 from pathlib import Path
 
@@ -52,13 +57,48 @@ d.mkdir(parents=True, exist_ok=True)
     "五类必查项：语义一致性 / 空值与边界 / 异常处理 / 资源泄露 / 测试覆盖\n",
     encoding="utf-8",
 )
-```
 
-```python
+
 # 2. 用 FilesystemBackend 挂上，让后端能读到这个目录 -----
 fsb = FilesystemBackend(root_dir=str(root), virtual_mode=True)
 agent = create_deep_agent(model="openai:gpt-5.4", backend=fsb, skills=["/skills/"])
 ```
+
+```typescript [TypeScript]
+import { mkdtempSync, mkdirSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { createDeepAgent, FilesystemBackend } from "deepagents";
+
+// 1. 造一个合法的 skill 目录（目录结构两语言完全一致，因为这是 Agent Skills 标准）
+const root = mkdtempSync(join(tmpdir(), "skills-"));
+const skillsDir = join(root, "skills");
+const d = join(skillsDir, "code-review");        // 目录名
+mkdirSync(d, { recursive: true });
+
+writeFileSync(
+  join(d, "SKILL.md"),
+  "---\n" +
+    "name: code-review\n"                        // 必须与目录名一致
+    + "description: 按团队 SOP 审查代码 diff，输出分级问题清单。当用户要求 review、审查代码时使用。\n"
+    + "---\n\n"
+    + "# 代码审查 SOP\n\n"
+    + "## 步骤\n"
+    + "1. 先看 diff 范围\n"
+    + "2. 逐文件读，标出五类问题\n\n"
+    + "五类必查项：语义一致性 / 空值与边界 / 异常处理 / 资源泄露 / 测试覆盖\n",
+);
+
+// 2. 用 FilesystemBackend 挂上，让后端能读到这个目录 -----
+const fsb = new FilesystemBackend({ rootDir: root, virtualMode: true });
+const agent = await createDeepAgent({
+  model: "openai:gpt-4o-mini",
+  backend: fsb,
+  skills: ["/skills/"],
+});
+```
+
+:::
 
 > ⚠️ **它的三个问题**：
 > 1. **路径不是 OS 路径**。`skills=["/skills/"]` 是给 `FilesystemBackend` 看的虚拟键，不是 `/root/.../skills`。写 `skills=["./skills"]` 或 `["/tmp/..."]` 在默认 `StateBackend` 下会 `path_not_found`。
@@ -77,7 +117,9 @@ agent = create_deep_agent(model="openai:gpt-5.4", backend=fsb, skills=["/skills/
 
 用一个假模型记录每次系统提示的字节数，扫出"技能数量 × 正文体积"的启动成本：
 
-```python
+::: code-group
+
+```python [Python]
 def measure(n_skills: int, body_len: int):
     """造 n 个同体积的 skill，量出启动期系统提示的增量。"""
     root = Path(tempfile.mkdtemp())
@@ -96,6 +138,33 @@ def measure(n_skills: int, body_len: int):
     a.invoke({"messages": [{"role": "user", "content": "go"}]})
     return len(sys_of(SEEN[0]))
 ```
+
+```typescript [TypeScript]
+const measure = async (nSkills: number, bodyLen: number): Promise<number> => {
+  const root = mkdtempSync(join(tmpdir(), "measure-"));
+  const sd = join(root, "skills");
+  mkdirSync(sd, { recursive: true });
+  const body = "字".repeat(bodyLen);
+  for (let i = 0; i < nSkills; i += 1) {
+    const d = join(sd, `skill-${i}`);
+    mkdirSync(d);
+    writeFileSync(
+      join(d, "SKILL.md"),
+      `---\nname: skill-${i}\ndescription: 第 ${i} 个技能。\n---\n\n${body}`,
+    );
+  }
+  seen.length = 0;
+  const a = await createDeepAgent({
+    model: new Spy() as never,
+    backend: new FilesystemBackend({ rootDir: root, virtualMode: true }),
+    skills: ["/skills/"],
+  });
+  await a.invoke({ messages: [{ role: "user", content: "go" }] });
+  return systemPromptOf(seen[0]).length;
+};
+```
+
+:::
 
 实测结果（正文是中文长说明，约 1 字 ≈ 1 token）：
 
@@ -133,7 +202,9 @@ description: 按团队 SOP 审查代码 diff，输出分级问题清单。当用
 - 语义一致性 / 空值与边界 / 异常处理 / 资源泄露 / 测试覆盖
 ```
 
-```python
+::: code-group
+
+```python [Python]
 scripts_dir = skills_dir / "code-review" / "scripts"
 scripts_dir.mkdir()
 (scripts_dir / "jsdiff.py").write_text(
@@ -144,13 +215,26 @@ scripts_dir.mkdir()
 )
 ```
 
+```typescript [TypeScript]
+const scriptsDir = join(skillsDir, "code-review", "scripts");
+mkdirSync(scriptsDir, { recursive: true });
+writeFileSync(
+  join(scriptsDir, "jsdiff.py"),
+  "#!/usr/bin/env python3\nimport sys\nprint('改动了', len(sys.argv) - 1, '个文件')\n",
+);
+```
+
+:::
+
 正文只留“怎么用”，脚本才放逻辑——这样 skill 是可复用、可共享的说明书，而不是一份贴死的操作清单。
 
 **变化三：用 `pinned_skills` 支持用户点名**
 
 用户直接敲 `/code-review` 时，让正文在第一次模型调用前就进上下文：
 
-```python
+::: code-group
+
+```python [Python]
 from langgraph.checkpoint.memory import InMemorySaver
 
 agent = create_deep_agent(
@@ -167,6 +251,28 @@ out = agent.invoke(
     config={"configurable": {"thread_id": "T1"}},
 )
 ```
+
+```typescript [TypeScript]
+import { MemorySaver } from "@langchain/langgraph";
+
+const agent = await createDeepAgent({
+  model: "openai:gpt-4o-mini",
+  backend: new FilesystemBackend({ rootDir: root, virtualMode: true }),
+  skills: ["/skills/"],
+  checkpointer: new MemorySaver(),
+});
+
+// 用户输入斜杠命令 → 正文立即进上下文（TS 键名同为 pinned_skills，是 state 字段不是参数）
+const out = await agent.invoke(
+  {
+    messages: [{ role: "user", content: "/code-review 帮我看看这个 PR" }],
+    pinned_skills: ["code-review"],
+  },
+  { configurable: { thread_id: "T1" } },
+);
+```
+
+:::
 
 实测：第一次模型调用就收到带 `lc_source=pinned_skill` 的 HumanMessage，里面已含正文（且**不含 frontmatter**）。
 

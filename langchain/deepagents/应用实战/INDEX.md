@@ -3,6 +3,25 @@
 > 本教程的课级应用实战：跟着作者走一遍「基础实现 → 它的问题 → 综合实现」，把知识点焊进真实用法。
 > 不是每课都配（按需配套是常态，不是缺漏）。**课 2（纯概念）与课 13（能力清单）不配**。
 
+## 🧭 双语口径
+
+10 篇实战全部是 Python + TypeScript 双标签页，读法与课文一致：
+
+- **`[Python]`** 是原始版本，`deepagents 0.7.28`，场景叙述、数字与结论都以这侧为准
+- **`[TypeScript]`** 是实测对照版本，`deepagents 1.15.1`，跑通同一场景后补上的写法与差异
+- 每篇结构固定为：文件头 TS 基线行 → `🧭 双语说明`（点明本篇差异数量与要旨）→ 正文 `::: code-group` 段 → `🇹🇸` 实测差异段
+- `🇹🇸` 段落里的数字都是真跑出来的；标 `text [TypeScript]` 的输出块是对照结果，不是伪代码
+
+**只读一侧即可**：Python 侧读逻辑，TS 侧读落地差异。两侧不是逐行翻译——有几处行为本身不同，TS 侧的 `🇹🇸` 段会说清「照抄会怎样」。
+
+**几篇差异最值得先看的**：
+
+- 08 篇：Store 值必须是 `FileData`，照抄 Python 的 `{content, encoding}` 会**静默**读成 `(No memory loaded)`
+- 11 篇：`permissions` 的 `interrupt` 档在 TS 侧静默当 allow；`batched` 混合决策会丢掉被批准的调用
+- 12 篇：`graphId` 才是异步子代理的分流开关；TS 的 QuickJS 常驻，动态模式 N≥8 反超并行 `task`
+
+可运行代码见 [`../playground-ts/README.md`](../playground-ts/README.md)，跨语言差异全表见 [`../playground-ts/API-MAPPING.md`](../playground-ts/API-MAPPING.md)。
+
 ## 阶段 1：定位与起跑
 
 | 课 | 场景 | 覆盖知识点 | 实战 |

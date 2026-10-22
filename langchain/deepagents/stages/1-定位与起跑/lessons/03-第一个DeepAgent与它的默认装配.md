@@ -2,8 +2,9 @@
 
 > 所属阶段：阶段 1《定位与起跑》｜ 水平：进阶 ｜ 本课知识点：最小可运行（签名与模型写法）、默认中间件栈全序、Profiles 与模型默认
 > 故事情节：主角写出第一行 `create_deep_agent(model=...)`，agent 跑起来了——但它到底被塞进了什么？不知道这个，后面所有"为什么它自己会读文件"都答不上
-> 📖 结论已按官方文档核对（核对于 2026-10 ｜ 来源：docs.langchain.com/oss/python/deepagents/quickstart、customization#middleware、profiles、models）
+> 📖 结论已按官方文档核对（核对于 2026-10 ｜ 来源：docs.langchain.com/oss/python/deepagents/quickstart、customization#middleware、profiles、models；TS 侧：docs.langchain.com/oss/javascript/deepagents/quickstart、customization、models）
 > ✅ 代码结论实测于 2026-10-20 ｜ `deepagents 0.7.28`
+> ✅ TypeScript 侧实测于 2026-10-21 ｜ `deepagents 1.15.1` ｜ Node 22.22.2
 > 本课配**应用实战**（见 `../../../应用实战/03-第一个DeepAgent与它的默认装配.md`）与**源码解析**（见 `../../../源码解析/03-第一个DeepAgent与它的默认装配.md`）
 
 ## 🎯 本课目标
@@ -20,7 +21,9 @@
 
 你敲下这几行，跑起来了：
 
-```python
+::: code-group
+
+```python [Python]
 from deepagents import create_deep_agent
 
 agent = create_deep_agent(
@@ -29,6 +32,22 @@ agent = create_deep_agent(
 )
 agent.invoke({"messages": [{"role": "user", "content": "把这份 csv 的列名整理成一个 md 表格"}]})
 ```
+
+```typescript [TypeScript]
+import { createDeepAgent } from "deepagents";
+
+const agent = await createDeepAgent({
+  model: "openai:gpt-5.4",
+  systemPrompt: "你是一个严谨的助手。",
+});
+await agent.invoke({
+  messages: [{ role: "user", content: "把这份 csv 的列名整理成一个 md 表格" }],
+});
+```
+
+:::
+
+> 📌 注意 `system_prompt` / `systemPrompt` 的驼峰差异，这是两侧最常见的照抄翻车点。
 
 然后你注意到几件怪事：
 
@@ -105,7 +124,9 @@ agent.invoke({"messages": [{"role": "user", "content": "把这份 csv 的列名�
 
 **模型的两种写法**：
 
-```python
+::: code-group
+
+```python [Python]
 # 写法一：字符串 "provider:model" —— 前缀决定用哪个 LangChain 集成
 agent_a = create_deep_agent(model="openai:gpt-5.4", tools=[])
 
@@ -114,23 +135,63 @@ from langchain_openai import ChatOpenAI
 agent_b = create_deep_agent(model=ChatOpenAI(model="gpt-5.4", timeout=60), tools=[])
 ```
 
+```typescript [TypeScript]
+import { createDeepAgent } from "deepagents";
+import { ChatOpenAI } from "@langchain/openai";
+
+// 写法一：字符串 "provider:model" —— 前缀决定用哪个集成包
+const agentA = await createDeepAgent({ model: "openai:gpt-5.4", tools: [] });
+
+// 写法二：已初始化的模型对象 —— 参数、超时、baseURL 全自己控
+const agentB = await createDeepAgent({
+  model: new ChatOpenAI({ model: "gpt-5.4", timeout: 60 }),
+  tools: [],
+});
+```
+
+:::
+
 两种写法**在 harness 侧等价**（实测两者的图结构、工具清单完全一致），差别只在模型构造：
 
 - 字符串写法：由框架按 `provider` 找集成、按 profile 填默认参数（temperature、timeout 等 provider profile 只在这条路径生效）。
 - 对象写法：构造参数你自己定，profile 的 harness 部分照常生效，provider profile **不生效**。
 
 > ⚠️ 前缀写错是高频坑：`openai:...` 与 `openai-chat:...` 指向不同集成；写成裸模型名（`"gpt-5.4"`）会走默认 provider 解析，容易得到一个你没想到的模型。
+>
+> TS 侧还有一处构造差异：`ChatOpenAI` 的 `baseURL` 要放进 `configuration` 里（`configuration: { baseURL: ... }`），不像 Python 那样是顶层参数。
 
 **默认就有文件工具**——这点最容易让人误判"我是不是配了什么"：
 
-```python
+::: code-group
+
+```python [Python]
 from deepagents import create_deep_agent
 
 agent = create_deep_agent(model="openai:gpt-5.4", tools=[])   # 注意 tools 是空列表
 print(sorted(agent.nodes["tools"].bound.tools_by_name))
 ```
 
-实测输出：
+```typescript [TypeScript]
+import { createDeepAgent } from "deepagents";
+
+const agent = await createDeepAgent({ model: "openai:gpt-5.4", tools: [] });
+// TS 侧没有 nodes["tools"] 入口，需从各中间件的 tools 字段汇总
+const names: string[] = [];
+for (const mw of agent.options.middleware ?? []) {
+  const t = (mw as { tools?: unknown }).tools;
+  if (!t) continue;
+  const arr = typeof t === "function" ? (t as () => unknown[])() : (t as unknown[]);
+  for (const x of arr ?? []) {
+    const n = (x as { name?: string }).name;
+    if (n) names.push(n);
+  }
+}
+console.log([...new Set(names)].sort());
+```
+
+:::
+
+实测输出（两侧一致）：
 
 ```
 ['delete', 'edit_file', 'execute', 'glob', 'grep', 'ls', 'read_file', 'task', 'write_file']
@@ -142,7 +203,9 @@ print(sorted(agent.nodes["tools"].bound.tools_by_name))
 
 一次跑通"两种写法 + 工具清单"，验证它们确实等价：
 
-```python
+::: code-group
+
+```python [Python]
 from deepagents import create_deep_agent
 from langchain_openai import ChatOpenAI
 
@@ -154,16 +217,42 @@ for tag, agent in (("string", a), ("object", b)):
     print(tag, "tools:", sorted(agent.nodes["tools"].bound.tools_by_name))
 ```
 
-实测输出（两行一组，完全一致）：
+```typescript [TypeScript]
+import { createDeepAgent } from "deepagents";
+import { ChatOpenAI } from "@langchain/openai";
 
+const a = await createDeepAgent({ model: "openai:gpt-5.4", tools: [] });
+const b = await createDeepAgent({ model: new ChatOpenAI({ model: "gpt-5.4" }), tools: [] });
+
+for (const [tag, agent] of [["string", a], ["object", b]] as const) {
+  console.log(tag, "stack:", (agent.options.middleware ?? []).length);
+  console.log(tag, "tools:", toolsOf(agent)); // toolsOf 见课 1 脚本
+}
 ```
+
+:::
+
+实测输出：
+
+::: code-group
+
+```text [Python]
 string nodes: ['__start__', 'model', 'tools', '_ParentNotifierMiddleware.after_agent', 'PatchToolCallsMiddleware.before_agent']
 string tools: ['delete', 'edit_file', 'execute', 'glob', 'grep', 'ls', 'read_file', 'task', 'write_file']
 object nodes: ['__start__', 'model', 'tools', '_ParentNotifierMiddleware.after_agent', 'PatchToolCallsMiddleware.before_agent']
 object tools: ['delete', 'edit_file', 'execute', 'glob', 'grep', 'ls', 'read_file', 'task', 'write_file']
 ```
 
-> 提示：这段需要一个能构造的模型对象，所以要有 provider 包；不需要真 key（构造时不发请求），`OPENAI_API_KEY=sk-placeholder` 即可。
+```text [TypeScript]
+string stack: 5
+string tools: ['delete', 'edit_file', 'execute', 'glob', 'grep', 'ls', 'read_file', 'task', 'write_file']
+object stack: 5
+object tools: ['delete', 'edit_file', 'execute', 'glob', 'grep', 'ls', 'read_file', 'task', 'write_file']
+```
+
+:::
+
+> 提示：Python 这段需要一个能构造的模型对象，所以要有 provider 包；不需要真 key（构造时不发请求），`OPENAI_API_KEY=sk-placeholder` 即可。TS 侧传字符串即可，无需假 key。
 
 #### 常见误区
 
@@ -214,7 +303,9 @@ object tools: ['delete', 'edit_file', 'execute', 'glob', 'grep', 'ls', 'read_fil
 
 > 看图：从上往下是由外到内；橙色那条是"你的中间件"的固定插入点，绿色是尾栈（能改配置才出现的东西），蓝色是默认就在的核心栈。
 
-**bare stack（只给 model，实测 5 个节点）**：
+**bare stack（只给 model，实测 5 个图节点 / 7 条中间件）**：
+
+先看文档口径的核心栈：
 
 | # | 中间件 | 它给什么 |
 |---|--------|---------|
@@ -224,9 +315,42 @@ object tools: ['delete', 'edit_file', 'execute', 'glob', 'grep', 'ls', 'read_fil
 | 4 | `PatchToolCallsMiddleware` | 修补悬空/畸形的工具调用，恢复执行时救场 |
 | 5 | 提示缓存中间件 | 始终注册；对不支持的模型 no-op |
 
-注意第 5 条容易被误读成"只有 4 层"。官方原文是"**always registered**，每个 entry 在不支持的模型上 no-op"——所以严格说是"4 条核心 + 缓存层始终在场"。
+再看实测——**拦 `create_agent` 捕获到的真实 7 条**（这是唯一可靠口径）：
 
-> 🔍 **一个只有实测才看得到的细节**：bare stack 实测节点里还有一个 `_ParentNotifierMiddleware.after_agent`，它**不在上面这张表里**（文档的栈清单不列它）。源码 `middleware/_parent_notifier.py` 的 docstring 写得很清楚：`create_deep_agent` 给每个 deep agent 都挂上它，"除非这次 run 带着父引用，否则什么都不做，嵌套 run 直接跳过"——它服务的是异步子代理跑完后唤醒父代理。**结论：文档列的是"会影响你使用的槽位"，不等于全部节点；排查时以实测节点为准，不要拿文档表当完整清单。**
+::: code-group
+
+```text [Python]
+1. FilesystemMiddleware                 (name=FilesystemMiddleware)
+2. SubAgentMiddleware                   (name=SubAgentMiddleware)
+3. _ParentNotifierMiddleware            (name=_ParentNotifierMiddleware)
+4. _DeepAgentsSummarizationMiddleware   (name=SummarizationMiddleware)
+5. PatchToolCallsMiddleware             (name=PatchToolCallsMiddleware)
+6. AnthropicPromptCachingMiddleware     (name=AnthropicPromptCachingMiddleware)
+7. UnsupportedContentMiddleware         (name=UnsupportedContentMiddleware)
+```
+
+```text [TypeScript]
+1. FilesystemMiddleware
+2. subAgentMiddleware
+3. SummarizationMiddleware
+4. patchToolCallsMiddleware
+5. UnsupportedContentMiddleware
+```
+
+:::
+
+**三个必须记住的结论**：
+
+1. **图节点数 ≠ 中间件条数**。Python 图节点只有 5 个（`__start__` / `model` / `tools` / `_ParentNotifierMiddleware.after_agent` / `PatchToolCallsMiddleware.before_agent`），但中间件有 7 条。差的那两条：`_ParentNotifierMiddleware` 挂着 `after_agent` 但另外几条也在 model 节点内部包裹，不单独成节点；`AnthropicPromptCachingMiddleware` 完全在 model 调用内部生效，节点名里看不到。**排查时以中间件列表为准，不要拿节点名当完整清单。**
+2. **两侧成员差 2 条**。TS 默认栈 5 条，**没有** `_ParentNotifierMiddleware`（异步子代理唤醒父代理用）与提示缓存中间件。所以 TS 版默认**不带**提示缓存——需要的话自己挂 `anthropicPromptCachingMiddleware()`（从 `langchain` 导入）。
+3. **`_ParentNotifierMiddleware` 文档不列**。源码 `middleware/_parent_notifier.py` 的 docstring 写得很清楚：`create_deep_agent` 给每个 deep agent 都挂上它，"除非这次 run 带着父引用，否则什么都不做，嵌套 run 直接跳过"。它服务的是异步子代理跑完后唤醒父代理。文档列的是"会影响你使用的槽位"，不等于全部成员。
+
+> 🔍 TS 侧要读完整清单，只能看 `agent.options.middleware` 的 `name` 字段，没有别的入口：
+>
+> ```typescript
+> const stack = (agent.options.middleware ?? []).map((m) => (m as { name?: string }).name);
+> console.log(stack.length, stack);
+> ```
 
 **full stack（完整装配：核心栈 + 可选槽位 + 两个恒在场项）**，官方文档的完整顺序，加上源码写出的插入点：
 
@@ -264,7 +388,9 @@ object tools: ['delete', 'edit_file', 'execute', 'glob', 'grep', 'ls', 'read_fil
 
 源码里的合并逻辑（`_apply_custom_middleware`，节选）：
 
-```python
+::: code-group
+
+```python [Python]
 for m in custom:
     if m.name in current_names:
         replacements[m.name] = m      # 同名 → 记下替换
@@ -277,13 +403,28 @@ if to_append and core_names is not None:
     result[pos:pos] = to_append
 ```
 
+```typescript [TypeScript]
+// TS 侧同样的语义，但实现分散在 agent 工厂里：
+// 传入的 middleware 数组按 name 与默认栈逐条比对，
+// 同名项原位替换，不同名项追加在默认栈之后。
+const agent = createDeepAgent({
+  middleware: [new MyMiddleware()],   // 同名（如 "filesystem"）→ 顶掉默认那条
+});
+```
+
+:::
+
+> 🇹🇸 **TS 没有 `_apply_custom_middleware` 这个可读入口**：同名替换的规则一样成立，但你无法从公开 API 里看到合并过程；要确认结果只能读 `agent.options.middleware`。
+
 这就是"想覆盖默认行为"的正确姿势：**不用删，用同名替换**。反过来，如果你想"两条都留"，就不能用同名。
 
 #### 示例演示
 
-实测三件事：默认节点、加了自定义中间件、同名替换。
+实测三件事：默认栈、加了自定义中间件、同名替换。
 
-```python
+::: code-group
+
+```python [Python]
 from deepagents import create_deep_agent
 from langchain.agents.middleware import AgentMiddleware
 
@@ -302,24 +443,60 @@ for tag, a in (("base", base), ("added", added), ("replaced", replaced)):
     print(tag, list(a.nodes))
 ```
 
+```typescript [TypeScript]
+import { createDeepAgent } from "deepagents";
+import { createMiddleware } from "langchain";
+
+const probe = createMiddleware({ name: "ProbeMiddleware", tools: [] });
+const myPatch = createMiddleware({ name: "patchToolCallsMiddleware", tools: [] });
+
+const base = await createDeepAgent({ model: "openai:gpt-4o-mini", tools: [] });
+const added = await createDeepAgent({
+  model: "openai:gpt-4o-mini", tools: [], middleware: [probe],
+});
+const replaced = await createDeepAgent({
+  model: "openai:gpt-4o-mini", tools: [], middleware: [myPatch],
+});
+
+const stack = (a: { options: { middleware?: readonly unknown[] } }) =>
+  (a.options.middleware ?? []).map((m) => (m as { name?: string }).name);
+for (const [tag, a] of [["base", base], ["added", added], ["replaced", replaced]] as const) {
+  console.log(tag, stack(a));
+}
+```
+
+:::
+
 实测输出：
 
-```
+::: code-group
+
+```text [Python]
 base     : ['__start__', 'model', 'tools', '_ParentNotifierMiddleware.after_agent', 'PatchToolCallsMiddleware.before_agent']
 added    : ['__start__', 'model', 'tools', '_ParentNotifierMiddleware.after_agent', 'PatchToolCallsMiddleware.before_agent', 'ProbeMiddleware.before_agent']
 replaced : ['__start__', 'model', 'tools', '_ParentNotifierMiddleware.after_agent', 'PatchToolCallsMiddleware.before_agent']
 ```
 
+```text [TypeScript]
+base     : FilesystemMiddleware → subAgentMiddleware → SummarizationMiddleware → patchToolCallsMiddleware → UnsupportedContentMiddleware
+added    : FilesystemMiddleware → subAgentMiddleware → SummarizationMiddleware → patchToolCallsMiddleware → ProbeMiddleware → UnsupportedContentMiddleware
+replaced : FilesystemMiddleware → subAgentMiddleware → SummarizationMiddleware → patchToolCallsMiddleware → UnsupportedContentMiddleware
+```
+
+:::
+
 读法：
 
-- `added` 比 `base` 多了一个 `ProbeMiddleware.before_agent` → 不同名**新增**，且排在 `PatchToolCallsMiddleware` 之后（节点顺序就是证据）。
-- `replaced` 与 `base` 节点名完全一致 → 同名**原位替换**。注意这里的一个观察陷阱：节点名来自中间件的类名，我故意让自定义类名也叫 `PatchToolCallsMiddleware`，所以看不出替换；真实的替换判断看 `.name` 属性，而不是节点名。
+- `added` 比 `base` 多了一条 `ProbeMiddleware`，位置**紧跟在 `patchToolCallsMiddleware` 之后**（Python 侧表现为新增 `ProbeMiddleware.before_agent` 节点；TS 侧名字直接插在栈里）→ 不同名**新增**。
+- `replaced` 与 `base` 完全一致 → 同名**原位替换**（Python 侧因节点名来自类名而看不出替换，改看 `.name` 属性；TS 侧直接看栈里的名字，位置没变就是替换成功）。
 
 > 想让替换"看得见"，把自定义类的 `name` 设成 `"PatchToolCallsMiddleware"` 但**类名不同**，节点名就会变成你的类名。
 
 再补一组"参数带来尾栈"的实测：
 
-```python
+::: code-group
+
+```python [Python]
 from deepagents import create_deep_agent
 
 print("base     :", list(create_deep_agent(model="openai:gpt-5.4", tools=[]).nodes))
@@ -327,15 +504,52 @@ print("interrupt:", list(create_deep_agent(model="openai:gpt-5.4", tools=[], int
 print("memory   :", list(create_deep_agent(model="openai:gpt-5.4", tools=[], memory=["/AGENTS.md"]).nodes))
 ```
 
+```typescript [TypeScript]
+import { createDeepAgent } from "deepagents";
+
+const nodesOf = (a: { options: { middleware?: readonly unknown[] } }) =>
+  (a.options.middleware ?? []).map((m) => (m as { name?: string }).name);
+
+const base = await createDeepAgent({ model: "openai:gpt-4o-mini", tools: [] });
+const hitl = await createDeepAgent({
+  model: "openai:gpt-4o-mini", tools: [], interruptOn: { write_file: true },
+});
+const mem = await createDeepAgent({
+  model: "openai:gpt-4o-mini", tools: [], memory: ["/AGENTS.md"],
+});
+console.log("base     :", nodesOf(base));
+console.log("interrupt:", nodesOf(hitl));
+console.log("memory   :", nodesOf(mem));
+```
+
+:::
+
 实测输出：
 
-```
+::: code-group
+
+```text [Python]
 base     : ['__start__', 'model', 'tools', '_ParentNotifierMiddleware.after_agent', 'PatchToolCallsMiddleware.before_agent']
 interrupt: [... , 'HumanInTheLoopMiddleware.after_model']
 memory   : [... , 'MemoryMiddleware.before_agent']
 ```
 
-这两个"多出来的节点"就是尾栈：给 `interrupt_on` 才有审批，给 `memory` 才有记忆。
+```text [TypeScript]
+base     : FilesystemMiddleware → subAgentMiddleware → SummarizationMiddleware → patchToolCallsMiddleware → UnsupportedContentMiddleware
+interrupt: FilesystemMiddleware → subAgentMiddleware → SummarizationMiddleware → patchToolCallsMiddleware → HumanInTheLoopMiddleware → UnsupportedContentMiddleware
+memory   : FilesystemMiddleware → subAgentMiddleware → SummarizationMiddleware → patchToolCallsMiddleware → MemoryMiddleware → UnsupportedContentMiddleware
+```
+
+:::
+
+这些"多出来的成员"就是尾栈：给 `interrupt_on`/`interruptOn` 才有审批，给 `memory` 才有记忆。
+
+注意两侧插入位置的差别：
+
+- Python 侧 `MemoryMiddleware` 在缓存之后、`HumanInTheLoopMiddleware` 更靠后（贴近执行端拦得住）。
+- TS 侧两者都插在 `patchToolCallsMiddleware` 之后、`UnsupportedContentMiddleware` **之前**，且没有提示缓存层。
+
+**所以"我的中间件排在谁前面"这类问题，两侧要分别实测，不能按另一侧的顺序推。**
 
 #### 常见误区
 
@@ -411,7 +625,9 @@ Harness profile 是**按 provider / 模型打包的一组默认**：选定模型
 
 实测 `excluded_tools` 的效果与它的**真实作用层**：
 
-```python
+::: code-group
+
+```python [Python]
 from deepagents import create_deep_agent, HarnessProfile, register_harness_profile
 
 register_harness_profile("openai:gpt-5.4", HarnessProfile(excluded_tools={"execute"}))
@@ -420,25 +636,63 @@ print("nodes:", list(a.nodes))
 print("静态工具清单:", sorted(a.nodes["tools"].bound.tools_by_name))
 ```
 
+```typescript [TypeScript]
+import { createDeepAgent, createHarnessProfile, registerHarnessProfile } from "deepagents";
+
+registerHarnessProfile(
+  "openai:gpt-4.1-mini",
+  createHarnessProfile({ excludedTools: new Set(["execute"]) }),
+);
+const a = await createDeepAgent({ model: "openai:gpt-4.1-mini", tools: [] });
+console.log("静态工具清单:", toolsOf(a));
+```
+
+:::
+
 实测输出：
 
-```
+::: code-group
+
+```text [Python]
 nodes: ['__start__', 'model', 'tools', '_ParentNotifierMiddleware.after_agent', 'PatchToolCallsMiddleware.before_agent']
 静态工具清单: ['delete', 'edit_file', 'execute', 'glob', 'grep', 'ls', 'read_file', 'task', 'write_file']
 ```
 
-关键观察：**`execute` 仍在静态清单里，图节点也没多出任何东西**。因为 `excluded_tools` 是靠 `_ToolExclusionMiddleware.wrap_model_call` 在**请求发给模型前**过滤的：
+```text [TypeScript]
+静态工具清单: ['delete', 'edit_file', 'glob', 'grep', 'ls', 'read_file', 'task', 'write_file']
+```
 
-```python
+:::
+
+**这里是两侧最实质的一处行为差异**：
+
+- **Python 侧**：`execute` 仍在静态清单里、图节点也没多出任何东西。因为 `excluded_tools` 是靠 `_ToolExclusionMiddleware.wrap_model_call` 在**请求发给模型前**过滤的。
+- **TypeScript 侧**：`execute` 直接从中间件的 `tools` 列表里消失了——说明 TS 在**装配期**就把工具摘掉了。
+
+> ⚠️ 这条对排查极其重要：**"工具在清单里" ≠ "模型看得到它"**。Python 侧必须看"模型收到的请求"；TS 侧看清单就够了。反过来也成立——`delete` / `execute` 在清单里，但后端不支持时也会被裁掉（课 4、课 6）。
+
+::: code-group
+
+```python [Python]
 # 节选 deepagents/middleware/_tool_exclusion.py
 def wrap_model_call(self, request, handler):
     if self._excluded:
         filtered = [t for t in request.tools if _tool_name(t) not in self._excluded]
 ```
 
-所以验证方式不能是"看清单"，只能是"看模型收到的请求"或"看它还会不会调这个工具"。
+```typescript [TypeScript]
+// TS 侧没有等价的请求期过滤钩子——
+// excludedTools 在装配期直接决定 middleware.tools 里放哪些工具
+const agent = createDeepAgent({ excludedTools: ["execute"] });
+const tools = (agent.options.middleware ?? [])
+  .flatMap((m: any) => m.tools ?? [])
+  .map((t: any) => t.name);
+// tools 里已经没有 "execute"
+```
 
-> ⚠️ 这条对排查极其重要：**"工具在清单里" ≠ "模型看得到它"**。反过来也成立——`delete` / `execute` 在清单里，但后端不支持时也会被裁掉（课 4、课 6）。
+:::
+
+> 🇹🇸 **这条差异直接影响排查方法**：Python 侧工具还在清单里、只是请求期被过滤掉，所以你查 `middleware.tools` 会误判成"能用"；TS 侧装配期就摘掉了，查清单就够。同一个问题，两侧要查的位置不同。
 
 #### 常见误区
 
@@ -449,7 +703,7 @@ def wrap_model_call(self, request, handler):
    它对**之后创建的所有**匹配该模型的 agent 生效。做实验时记得它是有状态的，跑完换进程或用不同 model 隔离。
 
 3. **误区：`excluded_tools` 等于"这个工具不存在"。**
-   它只是在请求期被过滤；执行端仍然注册着（源码注释明确说"executor still has them registered"），所以它**不是安全边界**——要拦危险操作，用权限（课 5）或审批（课 11）。
+   Python 侧它只在请求期过滤；执行端仍然注册着（源码注释明确说"executor still has them registered"），所以**不是安全边界**。TS 侧虽然在装配期就从清单里摘掉了，同样不等于安全边界（配置层过滤不是权限）。要拦危险操作，用权限（课 5）或审批（课 11）。
 
 #### 一句话记住
 
@@ -474,10 +728,13 @@ def wrap_model_call(self, request, handler):
 ### 4.1 机制验证
 
 > ✅ 实测于 2026-10-20 ｜ `deepagents 0.7.28` / `langchain 1.4.6` ｜ 全程离线构造，不发请求、不需要真 key
+> ✅ TypeScript 侧实测于 2026-10-21 ｜ `deepagents 1.15.1` ｜ Node 22.22.2
 
 一次脚本把三个知识点串起来验证：
 
-```python
+::: code-group
+
+```python [Python]
 # stack_probe.py
 import deepagents
 from deepagents import create_deep_agent
@@ -508,9 +765,47 @@ mem = create_deep_agent(model="openai:gpt-5.4", tools=[], memory=["/AGENTS.md"])
 print("5) 传 memory → 多出节点:", sorted(set(mem.nodes) - set(base.nodes)))
 ```
 
+```typescript [TypeScript]
+// 完整版见 playground-ts/l03-first-agent.ts
+import { createDeepAgent } from "deepagents";
+import { createMiddleware, todoListMiddleware } from "langchain";
+
+const stackOf = (a) => (a.options.middleware ?? []).map((m) => m.name);
+const toolsOf = (a) => { /* 见课 1 脚本，汇总各中间件的 tools */ };
+
+const base = await createDeepAgent({ model: "openai:gpt-4o-mini", tools: [] });
+console.log("1) 默认栈:", stackOf(base).join(" → "));
+console.log("   工具:", toolsOf(base));
+
+const added = await createDeepAgent({
+  model: "openai:gpt-4o-mini", tools: [],
+  middleware: [createMiddleware({ name: "ProbeMiddleware", tools: [] })],
+});
+console.log("2) 加自定义中间件 →", stackOf(added).join(" → "));
+
+const todo = await createDeepAgent({
+  model: "openai:gpt-4o-mini", tools: [], middleware: [todoListMiddleware()],
+});
+console.log("3) 新增工具:", toolsOf(todo).filter((t) => !toolsOf(base).includes(t)));
+
+const hitl = await createDeepAgent({
+  model: "openai:gpt-4o-mini", tools: [], interruptOn: { write_file: true },
+});
+console.log("4) interruptOn →", stackOf(hitl).join(" → "));
+
+const mem = await createDeepAgent({
+  model: "openai:gpt-4o-mini", tools: [], memory: ["/AGENTS.md"],
+});
+console.log("5) memory →", stackOf(mem).join(" → "));
+```
+
+:::
+
 实测输出：
 
-```
+::: code-group
+
+```text [Python]
 version: 0.7.28
 1) 只给 model → 节点: ['__start__', 'model', 'tools', '_ParentNotifierMiddleware.after_agent', 'PatchToolCallsMiddleware.before_agent']
    工具: ['delete', 'edit_file', 'execute', 'glob', 'grep', 'ls', 'read_file', 'task', 'write_file']
@@ -520,9 +815,21 @@ version: 0.7.28
 5) 传 memory → 多出节点: ['MemoryMiddleware.before_agent']
 ```
 
-> ✅ **回扣场景**：第一幕的四个"怪事"全部有了出处——文件工具来自 `FilesystemMiddleware`（第 1 行工具清单里 8 个文件工具）；子代理来自 `SubAgentMiddleware`（`task` 工具）；压缩来自 `SummarizationMiddleware`（不在节点名里，因为它在 model 节点内部包裹，不单独成节点）；断点修补就是那个 `PatchToolCallsMiddleware.before_agent` 节点。**"我什么都没配"是错觉。**
+```text [TypeScript]
+deepagents: 1.15.1
+1) 默认栈: FilesystemMiddleware → subAgentMiddleware → SummarizationMiddleware → patchToolCallsMiddleware → UnsupportedContentMiddleware
+   工具: ['delete', 'edit_file', 'execute', 'glob', 'grep', 'ls', 'read_file', 'task', 'write_file']
+2) 加自定义中间件 → FilesystemMiddleware → subAgentMiddleware → SummarizationMiddleware → patchToolCallsMiddleware → ProbeMiddleware → UnsupportedContentMiddleware
+3) 新增工具: ['write_todos']
+4) interruptOn → FilesystemMiddleware → subAgentMiddleware → SummarizationMiddleware → patchToolCallsMiddleware → HumanInTheLoopMiddleware → UnsupportedContentMiddleware
+5) memory → FilesystemMiddleware → subAgentMiddleware → SummarizationMiddleware → patchToolCallsMiddleware → MemoryMiddleware → UnsupportedContentMiddleware
+```
 
-> ⚠️ 读 `agent.nodes` / `.bound` 属内部结构，只用于自检与教学；业务代码别依赖。
+:::
+
+> ✅ **回扣场景**：第一幕的四个"怪事"全部有了出处——文件工具来自 `FilesystemMiddleware`（工具清单里 8 个文件工具）；子代理来自 `SubAgentMiddleware`（`task` 工具）；压缩来自 `SummarizationMiddleware`（不在节点名里，因为它在 model 节点内部包裹，不单独成节点）；断点修补就是那个 `PatchToolCallsMiddleware.before_agent` 节点。**"我什么都没配"是错觉。**
+
+> ⚠️ 读 `agent.nodes` / `.bound`（Python）与 `agent.options.middleware`（TS）属内部结构，只用于自检与教学；业务代码别依赖。
 
 ### 4.2 应用实战：代码库答疑助手（入口）
 

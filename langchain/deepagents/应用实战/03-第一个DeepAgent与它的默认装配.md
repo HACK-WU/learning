@@ -4,6 +4,9 @@
 > 定位：**会用，不上生产**——课里学完，在这里动手（结构与边界见 SKILL.md「教学叙事骨架 · 应用实战」）。
 > 📖 结论已按官方文档 + 本地实测核对（核对于 2026-10 ｜ 来源：docs.langchain.com/oss/python/deepagents + `deepagents 0.7.28` 实测）
 > ✅ 本文全部代码在 `deepagents 0.7.28` / `langchain 1.4.6` 下离线构造验证（不发请求、不需要真 key）；涉及真实模型调用的地方单独标注。
+> ✅ TypeScript 侧实测于 2026-10-22 ｜ `deepagents 1.15.1` / `langchain ^1.5.10` ｜ 对照 `playground-ts/l03-first-agent.ts`
+
+> 🧭 **双语说明**：标 🇹🇸 的段落是 TS 侧实测补充。本文有一处结构性差异必须先讲清：**TS 的 `createDeepAgent` 是 async，要 `await`**，而且**没有 `agent.nodes`**——要看中间件栈得读 `agent.options.middleware`。所以下文中凡是靠 `agent.nodes` 做的"栈位观察"，TS 侧换了入口，结论仍然成立但要换写法。
 
 ## 场景 1：给团队做一个"代码库答疑助手"
 
@@ -19,7 +22,9 @@
 
 > 看图：这一版只有三件东西——模型、9 个工具、一个**空的虚拟盘**。工具是真的（`ls` / `read_file` / `grep` 都在），但抽屉里没有任何文件。
 
-```python
+::: code-group
+
+```python [Python]
 from deepagents import create_deep_agent
 
 agent = create_deep_agent(
@@ -31,12 +36,38 @@ print("节点:", list(agent.nodes))
 print("工具:", sorted(agent.nodes["tools"].bound.tools_by_name))
 ```
 
+```typescript [TypeScript]
+import { createDeepAgent } from "deepagents";
+
+// ⚠️ TS 的 createDeepAgent 是 async：必须 await
+const agent = await createDeepAgent({
+  model: "openai:gpt-4o-mini",                   // 写法一：provider:model 字符串
+  systemPrompt: "你是一个代码库答疑助手。回答必须给出文件路径与行号。",
+});
+
+// TS 没有 agent.nodes：栈要从 options.middleware 读，工具要从每个中间件的 tools 收集
+const stack = (agent.options.middleware ?? []).map((m: any) => m.name ?? "<unnamed>");
+console.log("栈:", stack.join(" → "));
+```
+
+:::
+
 实测输出（`OPENAI_API_KEY=sk-placeholder`，离线构造）：
 
 ```
 节点: ['__start__', 'model', 'tools', '_ParentNotifierMiddleware.after_agent', 'PatchToolCallsMiddleware.before_agent']
 工具: ['delete', 'edit_file', 'execute', 'glob', 'grep', 'ls', 'read_file', 'task', 'write_file']
 ```
+
+🇹🇸 **TS 侧默认栈只有 5 条，不是 7 条**（`l03-first-agent.ts` 实测）：
+
+```text [TypeScript]
+deepagents: 1.15.1
+栈: <unnamed> → <unnamed> → <unnamed> → <unnamed> → <unnamed>
+工具: [ 'delete', 'edit_file', 'execute', 'glob', 'grep', 'ls', 'read_file', 'task', 'write_file' ]
+```
+
+工具清单**完全一致**（9 个，含 `execute`），但栈少两条：TS 侧没有 `_ParentNotifier`（父代理通知器）和 Anthropic 提示缓存那条。而且 TS 的中间件**多数没有 `name`**，直接打 `m.name` 会得到一串 `<unnamed>`——想看名字要按 `constructor.name` 或显式给中间件命名。这也意味着 TS 侧"同名原位替换"的判据不同：你得先知道默认栈里到底有没有一个可比的 `name`。
 
 > ⚠️ **它的问题**：
 > 1. **它读不到你的仓库。** 默认后端是 `StateBackend`——文件存在 LangGraph 的 state 里，初始为空。实测直接在外面调它会报 `RuntimeError: StateBackend must be used within a LangGraph graph execution`；在 agent 里跑则是"抽屉是空的"，`ls /` 什么都看不到。
@@ -51,7 +82,9 @@ print("工具:", sorted(agent.nodes["tools"].bound.tools_by_name))
 
 > 看图：和上一张同位置对比——橙色虚线①把空抽屉换成指向真实仓库的 `FilesystemBackend`；橙色虚线②加了 `permissions` 把写操作锁死。工具清单**没变**，变的是一、工具能不能成功执行；二、模型还看不看得到它们。
 
-```python
+::: code-group
+
+```python [Python]
 from deepagents import (
     create_deep_agent,
     FilesystemPermission,
@@ -96,6 +129,39 @@ print("节点:", list(agent.nodes))
 print("静态工具:", sorted(agent.nodes["tools"].bound.tools_by_name))
 ```
 
+```typescript [TypeScript]
+import { createDeepAgent, FilesystemBackend, createMiddleware } from "deepagents";
+
+// ④ 自定义中间件：不重名 → 插在 patch 之后（TS 用 createMiddleware 工厂）
+const AuditMiddleware = createMiddleware({
+  name: "AuditMiddleware",
+  beforeModel: (state: any) => {
+    console.log("[audit] 本轮消息数:", (state.messages ?? []).length);
+    return undefined;
+  },
+});
+
+const agent = await createDeepAgent({
+  model: "openai:gpt-4o-mini",
+  systemPrompt: "你是代码库答疑助手。回答必须给出文件路径与行号；找不到就明说找不到。",
+  // ② 后端：virtualMode 把路径钉在 rootDir 内（注意驼峰）
+  backend: new FilesystemBackend({ rootDir: "/path/to/your/repo", virtualMode: true }),
+  // ③ 权限：first-match-wins，具体规则写在前
+  permissions: [
+    { operations: ["read"], paths: ["/**"], mode: "allow" },
+    { operations: ["write"], paths: ["/**"], mode: "deny" },
+  ],
+  middleware: [AuditMiddleware],
+});
+
+const stack = (agent.options.middleware ?? []).map((m: any) => m.name ?? "<unnamed>");
+console.log("栈:", stack.join(" → "));
+```
+
+:::
+
+🇹🇸 TS 侧这段有两个必须先说的差异：**没有 `register_harness_profile` / `HarnessProfile`**（"排除工具"在 TS 侧走 `createFilesystemMiddleware({ tools: [...] })` 或给中间件显式传 `tools`，见本文场景 2），所以 TS 版把 profile 那一层整个去掉，只保留自定义中间件 + permissions。另外 **TS 没有 `FilesystemPermission` 这个类**，permissions 就是普通对象字面量。
+
 实测输出：
 
 ```
@@ -110,7 +176,9 @@ print("静态工具:", sorted(agent.nodes["tools"].bound.tools_by_name))
 
 **权限是真的会拦**（离线直接验规则匹配，不写文件）：
 
-```python
+::: code-group
+
+```python [Python]
 from deepagents.middleware.filesystem import FilesystemPermission, _permission_error
 from deepagents.backends import FilesystemBackend
 
@@ -124,6 +192,26 @@ print(_permission_error(perms, "read",  b, "/src/calc.py"))
 print(_permission_error(perms, "write", b, "/src/new.py"))
 ```
 
+```typescript [TypeScript]
+import { createDeepAgent, FilesystemBackend } from "deepagents";
+
+// TS 没有 _permission_error 这个公开入口，验权限走"真调工具看返回"
+const agent = await createDeepAgent({
+  model: "openai:gpt-4o-mini",
+  backend: new FilesystemBackend({ rootDir: "/path/to/your/repo", virtualMode: true }),
+  permissions: [
+    { operations: ["read"], paths: ["/**"], mode: "allow" },
+    { operations: ["write"], paths: ["/**"], mode: "deny" },
+  ],
+});
+// 关键：TS 侧被拒时不抛异常，而是在结果对象里放 error 字段
+// → 所以"catch 不到错"不等于"权限生效了"，必须看返回值
+```
+
+:::
+
+🇹🇸 这里有个必须记住的行为差异：**Python 侧 `_permission_error` 返回 `Error: permission denied ...` 字符串；TS 侧同样用结果对象的 `error` 字段表达，不抛异常**。两者都不抛，这点一致；但 TS 侧没有 `_permission_error` 这种可直接调的内部函数，验证只能靠真调工具读返回。
+
 实测输出：
 
 ```
@@ -133,7 +221,9 @@ Error: permission denied for write on /src/new.py
 
 **顺序敏感**——规则是"第一条命中的生效"，把 deny 放前面和放后面结果不同：
 
-```python
+::: code-group
+
+```python [Python]
 # deny 在前：先命中 deny，/docs 写不进去
 perms_deny_first = [
     FilesystemPermission(operations=["write"], paths=["/docs/**"], mode="deny"),
@@ -149,6 +239,23 @@ perms_allow_first = [
 ]
 print(_permission_error(perms_allow_first, "write", b, "/docs/a.md"))  # None
 ```
+
+```typescript [TypeScript]
+// first-match-wins 在 TS 侧完全一样，只是规则是普通对象
+const denyFirst = [
+  { operations: ["write"], paths: ["/docs/**"], mode: "deny" },
+  { operations: ["read", "write"], paths: ["/**"], mode: "allow" },
+];
+// → /ok.py 放行、/docs/a.md 被拒
+
+const allowFirst = [
+  { operations: ["read", "write"], paths: ["/**"], mode: "allow" },
+  { operations: ["write"], paths: ["/docs/**"], mode: "deny" },
+];
+// → /docs/a.md 也能写：具体 deny 被宽 allow 抢先命中，形同失效
+```
+
+:::
 
 > 🕳️ **这一步真正的坑**：大多数人写权限规则时习惯"先写通用 allow，再写具体 deny"，在别的系统里这是"例外优先"；这里恰好相反——**先命中者胜**，所以具体规则必须写在前面。
 
@@ -166,7 +273,9 @@ print(_permission_error(perms_allow_first, "write", b, "/docs/a.md"))  # None
 
 > 看图：对比第 2 步——后端和权限这几格没动，真正变的是右上那格：工具表从 9 个缩到 5 个，写类工具**不再注册**。
 
-```python
+::: code-group
+
+```python [Python]
 from deepagents import create_deep_agent
 from deepagents.backends import FilesystemBackend
 from deepagents.middleware import FilesystemMiddleware
@@ -180,6 +289,26 @@ agent = create_deep_agent(
 )
 print("工具:", sorted(agent.nodes["tools"].bound.tools_by_name))
 ```
+
+```typescript [TypeScript]
+import { createDeepAgent, createFilesystemMiddleware, FilesystemBackend } from "deepagents";
+
+const agent = await createDeepAgent({
+  model: "openai:gpt-4o-mini",
+  tools: [],
+  backend: new FilesystemBackend({ rootDir: "/path/to/your/repo", virtualMode: true }),
+  // 同名（name === "FilesystemMiddleware"）→ 原位替换掉默认那条
+  middleware: [createFilesystemMiddleware({ tools: ["ls", "read_file", "glob", "grep"] })],
+});
+
+// TS 没有 agent.nodes，工具名从中间件的 tools 收集
+const names = (agent.options.middleware ?? [])
+  .flatMap((m: any) => (typeof m.tools === "function" ? m.tools() : m.tools ?? []))
+  .map((t: any) => t.name);
+console.log("工具:", [...new Set(names)].sort());
+```
+
+:::
 
 实测输出：
 

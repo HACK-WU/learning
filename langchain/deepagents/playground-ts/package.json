@@ -1,0 +1,37 @@
+{
+  "name": "deepagents-playground-ts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Deep Agents 教程 · TypeScript 实操工程（与 /tmp/da-probe 的 Python 探针一一对应）",
+  "scripts": {
+    "check": "tsc --noEmit",
+    "l01": "tsx l01-setup.ts",
+    "l02": "tsx l02-what.ts",
+    "l03": "tsx l03-first-agent.ts",
+    "l04": "tsx l04-tools-vfs.ts",
+    "l05": "tsx l05-backends-permissions.ts",
+    "l06": "tsx l06-sandbox-interpreter.ts",
+    "l07": "tsx l07-skills.ts",
+    "l08": "tsx l08-memory.ts",
+    "l09": "tsx l09-context-engineering.ts",
+    "l10": "tsx l10-subagents.ts",
+    "l11": "tsx l11-hitl.ts",
+    "l12": "tsx l12-async-subagents.ts",
+    "l13": "tsx l13-production.ts"
+  },
+  "dependencies": {
+    "@langchain/core": "^1.2.20",
+    "@langchain/langgraph": "^1.5.1",
+    "@langchain/openai": "^1.6.2",
+    "@langchain/quickjs": "^0.6.5",
+    "deepagents": "^1.15.1",
+    "dotenv": "^18.0.8",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}

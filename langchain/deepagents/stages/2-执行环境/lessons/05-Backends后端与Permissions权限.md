@@ -3,14 +3,15 @@
 > 所属阶段：阶段 2《执行环境》｜ 水平：进阶 ｜ 本课知识点：内置后端六种、CompositeBackend 路由与自定义后端协议、permissions 声明式规则与边界
 > 故事情节：主角发现 agent 写的笔记一换会话就没了——原来"文件"只是个虚拟概念；接着又想挡住它读 `.env`，结果发现规则没生效
 > 📖 结论已按官方文档核对（核对于 2026-10 ｜ 来源：docs.langchain.com/oss/python/deepagents/backends、permissions、overview）
-> ✅ 代码结论实测于 2026-10-20 ｜ `deepagents 0.7.28` / `langchain 1.4.6` ｜ 隔离环境 `/tmp/da-probe`
+> ✅ 代码结论实测于 2026-10-20（Python）/ 2026-10-21（TypeScript）｜ Python `deepagents 0.7.28` / `langchain 1.4.6`；TypeScript `deepagents 1.15.1` / `@langchain/core 1.2.20` / Node 22.22.2 ｜ 全程离线构造
 > 本课配**应用实战**与**源码解析**（后端协议与可选能力）
+> 🧭 只学一种语言也可以：代码示例分 Python / TypeScript 两侧，选一侧看即可。
 
 ## 🎯 本课目标
 
 - 按"存哪 / 活多久 / 谁共享"三条轴，为任务选出后端或后端组合
 - 写出 `CompositeBackend` 路由规则，并实现一个最小自定义后端的七个方法
-- 写出禁止读 `.env` 的权限规则，并指出它对沙箱无效
+- 写出禁止读 `.env` 的权限规则，并说清两侧"能不能拦住点开头文件"的差异
 
 ---
 
@@ -38,11 +39,23 @@ Error: File '/notes/roadmap.md' not found
 
 你给这个 agent 加了权限，想挡住它读 `.env`：
 
-```python
+::: code-group
+
+```python [Python]
 permissions=[
     FilesystemPermission(operations=["read", "write"], paths=["/**"], mode="deny"),
 ]
 ```
+
+```typescript [TypeScript]
+permissions: [
+  { operations: ["read", "write"], paths: ["/**"], mode: "deny" },
+],
+```
+
+:::
+
+> 🇹🇸 **TS 的 `mode` 只有 `allow` / `deny` 两档**，没有 Python 的 `interrupt`；写了 `"interrupt"` 不报错，会被静默当成 `allow`（课 11 有实测对照）。另外 TS 的 `permissions` 是拦在**中间件层**的，直调 `backend.write()` 能绕过 deny。
 
 "凡是文件都别碰"——够狠了吧？结果它依然把 `.env` 的内容读了出来。**用最宽的 deny 规则，都没能拦住点开头的文件。** 你陷入了更深的困惑……
 
@@ -142,7 +155,9 @@ permissions=[
 
 #### 示例演示
 
-```python
+::: code-group
+
+```python [Python]
 from deepagents import create_deep_agent
 from deepagents.backends import StateBackend, StoreBackend, FilesystemBackend
 
@@ -156,11 +171,29 @@ agent_state = create_deep_agent(model="openai:gpt-5.4", backend=StateBackend())
 # 见应用实战 05
 ```
 
+```typescript [TypeScript]
+import { createDeepAgent } from "deepagents";
+import { StateBackend, StoreBackend, FilesystemBackend } from "deepagents";
+
+// 默认：不传 backend 就是 StateBackend
+const agentDefault = await createDeepAgent({ model: "openai:gpt-4o-mini" });
+
+// 显式写：同一个效果（TS 是配置对象，后端用 new 实例）
+const agentState = await createDeepAgent({
+  model: "openai:gpt-4o-mini",
+  backend: new StateBackend(),
+});
+
+// 跨线程持久：需要配 namespace，见应用实战 05
+```
+
+:::
+
 #### 常见误区
 
-- ❌ 「`store=` 参数就是后端配置」——`store` 是传给 `create_deep_agent` 的 LangGraph store 实例，只有 `StoreBackend` 才消费它；其余后端不依赖它。
+- ❌ 「`store=` 参数就是后端配置」——`store` 是传给 `create_deep_agent` / `createDeepAgent` 的 LangGraph store 实例，只有 `StoreBackend` 才消费它；其余后端不依赖它。TS 侧对应 `new StoreBackend({ store })` 或 `{ store }` 配置项。
 - ❌ 「换 `backend=` 会改变工具清单」——静态工具表固定 8 项，变的只是「请求期模型能看到的工具」。
-- ❌ 「`offload_binary_content=True` 是配置文件的路径」——它是「是否把媒体块从消息历史卸到 `/blobs/`」，默认关；当 blob 路径落到 `StateBackend` 时会直接报 UserWarning 说"没有效果"。
+- ❌ 「`offload_binary_content=True` 是配置文件的路径」——它是「是否把媒体块从消息历史卸到 `/blobs/`」，默认关；当 blob 路径落到 `StateBackend` 时会直接报 UserWarning 说"没有效果"。TS 侧对应 `createFilesystemMiddleware({ offloadBinaryContent: true })`。
 
 #### 一句话记住
 
@@ -214,7 +247,9 @@ agent_state = create_deep_agent(model="openai:gpt-5.4", backend=StateBackend())
 
 **2. 自定义后端（实测）**
 
-```python
+::: code-group
+
+```python [Python]
 from deepagents.backends.protocol import BackendProtocol, LsResult, ReadResult, WriteResult, ...
 
 class MyBackend(BackendProtocol):  # 不实现 delete
@@ -226,7 +261,26 @@ class MyBackend(BackendProtocol):  # 不实现 delete
     def grep(self, pattern, path=None, glob=None): ...
 ```
 
-不实现 `delete` 时，`_supports_delete` 返回 `False`，`delete` 工具会在**请求期**被静默摘掉（课 4 讲过的"静默降级"）。要支持 `execute`，改继承 `SandboxBackendProtocol`（多一个 `execute` 方法）。
+```typescript [TypeScript]
+import type { BackendProtocol } from "deepagents";
+
+// TS 鸭子类型：实现这些方法即可，delete 可选
+class MyBackend implements BackendProtocol {
+  ls(_path: string) { return { files: [] }; }
+  read(_filePath: string, _offset = 0, _limit = 2000) { return { content: "" }; }
+  write(filePath: string, _content: string) { return { path: filePath }; }
+  edit(filePath: string, _old: string, _new: string, _replaceAll = false) {
+    return { path: filePath, occurrences: 0 };
+  }
+  glob(_pattern: string, _path?: string) { return { files: [] }; }
+  grep(_pattern: string, _path?: string, _glob?: string) { return { matches: [] }; }
+  // 不实现 delete → 请求期静默摘掉（见课 4）
+}
+```
+
+:::
+
+不实现 `delete` 时，Python `_supports_delete` 返回 `False`、TS `supportsDelete` 返回 `false`，`delete` 工具会在**请求期**被静默摘掉（课 4 讲过的"静默降级"；Python 看类、TS 看实例）。要支持 `execute`，Python 继承 `SandboxBackendProtocol`（多一个 `execute` 方法），TS 需让 `backend` 通过 `isSandboxBackend` 判定（通常带 `execute` 方法）。
 
 **3. 从"后端工厂"迁移（`deepagents>=0.5.0` 起改直接传实例）**
 
@@ -236,7 +290,7 @@ class MyBackend(BackendProtocol):  # 不实现 delete
 | `backend=lambda rt: StoreBackend(rt, namespace=...)` | `backend=StoreBackend(namespace=...)` |
 | `backend=lambda rt: CompositeBackend(default=StateBackend(rt), ...)` | `backend=CompositeBackend(default=StateBackend(), ...)` |
 
-工厂模式仍可用，但会发弃用警告，未来移除。
+工厂模式仍可用，但会发弃用警告，未来移除。**TS 侧注意**：`CompositeBackend` 是位置参数构造 `new CompositeBackend(defaultBackend, routes)`，不是配置对象；`StoreBackend` 的 `namespace` 用配置对象 `new StoreBackend({ namespace })`。
 
 **4. policy hooks（比声明式权限更细的那层）**
 
@@ -248,7 +302,9 @@ class MyBackend(BackendProtocol):  # 不实现 delete
 
 #### 示例演示
 
-```python
+::: code-group
+
+```python [Python]
 from deepagents import create_deep_agent
 from deepagents.backends import CompositeBackend, StateBackend, FilesystemBackend, StoreBackend
 
@@ -264,11 +320,30 @@ agent = create_deep_agent(
 )
 ```
 
+```typescript [TypeScript]
+import { createDeepAgent } from "deepagents";
+import { CompositeBackend, StateBackend, FilesystemBackend, StoreBackend } from "deepagents";
+
+// TS：CompositeBackend(default, routes) 位置参数；StoreBackend 用 {namespace} 配置对象
+const agent = await createDeepAgent({
+  model: "openai:gpt-4o-mini",
+  backend: new CompositeBackend(
+    new StateBackend(),                              // 临时内容留在会话内
+    {
+      "/workspace/": new FilesystemBackend({ rootDir: "/path/to/project", virtualMode: true }),
+      "/memories/": new StoreBackend({ namespace: () => ["user", "me"] }),
+    },
+  ),
+});
+```
+
+:::
+
 #### 常见误区
 
 - ❌ 「两条前缀可以指向同一个目录」——会套娃，`glob` 里出现 `/workspace/sub/sub/plan.md`。
 - ❌ 「`delete` 是必实现的」——可选；不实现，工具在请求期静默消失。
-❌ 「改写 `delete` 靠 `hasattr`」——`_supports_delete` 只看**类型**是否重写（`type(backend).delete is not BackendProtocol.delete`），实例级挂载无效。
+- ❌ 「改写 `delete` 靠 `hasattr`」——Python `_supports_delete` 只看**类型**是否重写（`type(backend).delete is not BackendProtocol.delete`），实例级挂载无效；TS `supportsDelete` 看实例方法，运行时挂 `delete` 立即生效。两侧判定层级相反，见课 4 知识点 3。
 
 #### 一句话记住
 
@@ -326,9 +401,11 @@ agent = create_deep_agent(
 | `paths` | glob 数组 | 支持 `**` 递归与 `{a,b}` 交替；必须以 `/` 开头、不能含 `..` / `~` |
 | `mode` | `"allow"`（默认） / `"deny"` / `"interrupt"` | deny 返回错误；interrupt 暂停等人审批（`>=0.6.8`） |
 
-**判定循环（源码 `_check_fs_permission`）：**
+**判定循环**（Python 源码 `_check_fs_permission`；TS 源码 `decidePathAccess` 逻辑相同）：
 
-```python
+::: code-group
+
+```python [Python]
 for rule in rules:
     if operation not in rule.operations:
         continue
@@ -337,35 +414,58 @@ for rule in rules:
 return "allow"   # 兜底是放行，不是拒绝
 ```
 
+```typescript [TypeScript]
+// micromatch + {dot:true}
+function decidePathAccess(rules, operation, path) {
+  for (const rule of rules) {
+    if (!rule.operations.includes(operation)) continue;
+    if (rule.paths.some((p) => micromatch.isMatch(path, p, { dot: true }))) {
+      return rule.mode ?? "allow";
+    }
+  }
+  return "allow";  // 兜底是放行，不是拒绝
+}
+```
+
+:::
+
 **三条边界（都实测过）：**
 
 1. **只管内置文件工具**——自定义工具、MCP 工具照旧能读能写。实测：给一个带 `deny-all` 的 agent 传自定义工具 `peek_env`，它在工具表里依然存在并可被调用。
-2. **对沙箱 `execute` 无效** ——如果你给 `Composite(default=sandbox)` 配了一条覆盖到 `execute` 的权限，构造期直接 `NotImplementedError`：`"Tool-level permissions for the execute tool are not implemented"`。所以权限路径必须全部落在已知的路由前缀内。
+2. **对沙箱 `execute` 无效** ——如果你给 `Composite(default=sandbox)` 配了一条覆盖到 `execute` 的权限，Python 构造期直接 `NotImplementedError`：`"Tool-level permissions for the execute tool are not implemented"`；TS 构造期抛 `ConfigurationError`：`"Filesystem permissions cannot be used with a backend that supports command execution"`。所以权限路径必须全部落在已知的路由前缀内。
 3. **子代理默认继承父代理权限**；子代理 spec 里写了 `permissions`，则**整体替换**父代理的（不是合并）。
 
-**最反直觉的一条：`/**` 盖不住点开头的文件。**
+**最反直觉的一条：`/**` 对点开头文件——两侧相反。**
 
-实测：
+::: code-group
 
-```python
+```python [Python]
 permissions=[FilesystemPermission(operations=["read", "write"], paths=["/**"], mode="deny")]
+# - /notes.md → 拦截
+# - /.env     → 放行（@@ lines 1-1 of 1 @@）
+# - /.aws/credentials → 放行
+# 原因：_FS_WCMATCH_FLAGS = BRACE | GLOBSTAR，没带 DOTMATCH，点开头被排除
+# 要真挡住需补点号：
+# paths=["/**", "/**/.*", "/**/.*/**"]
 ```
 
-- `/notes.md` → 拦截 ✓
-- `/.env` → 放行 ✗（`@@ lines 1-1 of 1 @@`）
-- `/.aws/credentials` → 放行 ✗
-
-原因：`_FS_WCMATCH_FLAGS = wcglob.BRACE | wcglob.GLOBSTAR`，**没带 `DOTMATCH`**，点开头的路径被排除在匹配之外。要真挡住，得显式补上点号：
-
-```python
-paths=["/**", "/**/.*", "/**/.*/**"]
+```typescript [TypeScript]
+permissions: [{ operations: ["read", "write"], paths: ["/**"], mode: "deny" }]
+// - /notes.md → BLOCKED（permission denied）
+// - /.env     → BLOCKED（permission denied）——与 Python 相反！
+// 原因：TS 用 micromatch，dot:true 默认匹配点文件
+// 无需补点号，/** 已覆盖 .env
 ```
+
+:::
 
 **`delete` 的保守规则**：删目录是"all-or-nothing"——只要目标或其任意子孙命中 deny，整棵树拒绝；删单个文件走 first-match-wins，前面更窄的 `allow` 可以救回。
 
 #### 示例演示
 
-```python
+::: code-group
+
+```python [Python]
 from deepagents import FilesystemPermission, create_deep_agent
 
 # 只读 agent：拒绝一切写
@@ -381,16 +481,36 @@ protect_env = [
 ]
 ```
 
+```typescript [TypeScript]
+import { createDeepAgent } from "deepagents";
+
+// 只读 agent：拒绝一切写（TS 用普通对象即可）
+const readOnly = [{ operations: ["write" as const], paths: ["/**"], mode: "deny" as const }];
+
+// 正确顺序：先 deny .env，再 allow workspace，最后 deny 其余
+const protectEnv = [
+  { operations: ["read", "write"] as const, paths: ["/workspace/.env"], mode: "deny" as const },
+  { operations: ["read", "write"] as const, paths: ["/workspace/**"], mode: "allow" as const },
+  { operations: ["read", "write"] as const, paths: ["/**"], mode: "deny" as const },
+];
+
+const agent = await createDeepAgent({ model: "openai:gpt-4o-mini", permissions: readOnly });
+```
+
+:::
+
+> 🇹🇸 **点开头文件：两侧行为相反。** Python 的 `/**` 挡不住点文件——`_FS_WCMATCH_FLAGS` 不带 DOTMATCH，`/.env`、`/.aws/credentials` 会被放行，要真挡住得补 `"/**", "/**/.*", "/**/.*/**"`。TypeScript 用 `micromatch` 且 `dot: true`，点文件默认被 `/**` 覆盖——**同一条 `deny ["/**"]`，Python 放行 `.env`、TS 拦住 `.env`**。跨语言迁移时不要想当然，实测最稳。
+
 #### 常见误区
 
-- ❌ 「`deny /**` 最安全」——挡不住点开头文件，且只挡内置工具。
+- ❌ 「`deny /**` 最安全」——**Python 侧**挡不住点开头文件（无 DOTMATCH），且只挡内置工具；**TS 侧** `/**` 因 `dot:true` 默认就覆盖点文件，反而更严。
 - ❌ 「deny 总优先」——没有这回事，只有"第一条命中"。
 - ❌ 「子代理可以额外叠加权限」——不是叠加，是替换。
 - ❌ 「沙箱里配 `deny /secrets/**` 能防住 shell」——不能，shell 有任意路径读写的口子。
 
 #### 一句话记住
 
-> 规则从上往下问，第一条命中说了算；它只审内置文件工具，不审自定义工具，更不审沙箱的 shell——所以"规则写得再宽，也拦不住它用别的门进去"。
+> 规则从上往下问，第一条命中说了算；它只审内置文件工具，不审自定义工具，更不审沙箱的 shell——所以"规则写得再宽，也拦不住它用别的门进去"。另外，点开头文件两侧行为相反：Python 的 `/**` 放行 `.env`，TS 的 `/**` 拦住 `.env`。
 
 #### 🗣️ 行话对照
 
@@ -410,11 +530,13 @@ protect_env = [
 
 ### 4.1 机制验证：三组探针带你亲手走一遍
 
-> 以下输出均为隔离环境 `/tmp/da-probe` 实测所得，你可直接复制运行。
+> 以下输出中，Python 侧为隔离环境 `/tmp/da-probe` 实测；TypeScript 侧为 `playground-ts/`（`npm run l05`）实测，全程离线构造。两侧代码你可直接运行。
 
 **探针 1：六种后端的能力矩阵**
 
-```python
+::: code-group
+
+```python [Python]
 from deepagents.backends.protocol import BackendProtocol
 from deepagents.middleware import filesystem as fsmod
 from deepagents.middleware.filesystem import FilesystemMiddleware, supports_execution
@@ -427,9 +549,49 @@ class NoDelete(BackendProtocol):
     def grep(self, pattern, path=None, glob=None): return GrepResult(matches=[])
 ```
 
-实测输出：
+```typescript [TypeScript]
+import { createFilesystemMiddleware, StateBackend, FilesystemBackend, LocalShellBackend, CompositeBackend } from "deepagents";
 
+class BareBackend {  // 无 delete、无 execute
+  async ls() { return { files: [] }; }
+  async read() { return { content: "" }; }
+  async write(p: string) { return { path: p }; }
+  async edit(p: string) { return { path: p, occurrences: 1 }; }
+  async glob() { return { files: [] }; }
+  async grep() { return { matches: [] }; }
+  async uploadFiles() { return []; }
+  async downloadFiles() { return []; }
+}
+
+// 读"请求期可见工具"（拦 wrapModelCall，需传真实工具对象）
+async function visible(mw) {
+  const box = {};
+  const handler = async (r) => { box.seen = r.tools; return { content: "ok" }; };
+  await mw.wrapModelCall({ tools: mw.tools }, handler);
+  return (box.seen ?? []).map((t) => t.name);
+}
+
+for (const [tag, be] of [
+  ["State", new StateBackend()],
+  ["Filesystem", new FilesystemBackend({ rootDir: "/tmp/x", virtualMode: true })],
+  ["LocalShell", new LocalShellBackend({ rootDir: "/tmp" })],
+  ["Composite", new CompositeBackend(new StateBackend(), { "/m/": new StateBackend() })],
+  ["Bare(无 delete)", new BareBackend()],
+]) {
+  const mw = createFilesystemMiddleware({ backend: be });
+  const s = mw.tools.map((t) => t.name).sort();
+  const v = await visible(mw);
+  console.log(`${tag}: 静态 ${s.length} | 可见 ${v.length} | 摘掉=[${s.filter((n) => !v.includes(n))}]`);
+}
 ```
+
+:::
+
+实测输出（同一组观察点、两侧口径一致）：
+
+::: code-group
+
+```text [Python]
 StateBackend              delete=True  exec=False 可见7 摘掉=['execute']
 FilesystemBackend         delete=True  exec=False 可见7 摘掉=['execute']
 LocalShellBackend         delete=True  exec=True  可见8 摘掉=[]
@@ -438,18 +600,41 @@ Composite(default=State)  delete=True  exec=False 可见7 摘掉=['execute']
 自定义(无 delete)            delete=False exec=False 可见6 摘掉=['delete', 'execute']
 ```
 
+```text [TypeScript]
+StateBackend      delete=true  exec=false 可见 7 摘掉=[execute]
+FilesystemBackend delete=true  exec=false 可见 7 摘掉=[execute]
+LocalShellBackend delete=true  exec=true  可见 8 摘掉=[]
+Composite(default=磁盘) delete=true  exec=false 可见 7 摘掉=[execute]
+自定义(无 delete)   delete=false exec=false 可见 6 摘掉=[delete,execute]
+自定义(挂 delete)   delete=true  exec=false 可见 7 摘掉=[execute]
+```
+
+:::
+
 **探针 2：跨线程"失忆" vs 持久**
 
-```python
+::: code-group
+
+```python [Python]
 # StateBackend：thread A 写，thread B 读
 #   实测：B 读 → "Error: File '/note.md' not found"
 # StoreBackend：thread C 写，thread D 读
 #   实测：D 读 → "@@ lines 1-1 of 1 @@\nC 的笔记"
 ```
 
-**探针 3：权限守卫的真实行为**
+```typescript [TypeScript]
+// 同一逻辑：StateBackend 用 checkpoint 在 thread 内持久（TS 同样适用）
+// CompositeBackend 的 default 用 StateBackend 即可复现"失忆"；
+// store 需自行注入 BaseStore 实例给 StoreBackend({ store })
+```
 
-```python
+:::
+
+**探针 3：权限守卫的真实行为（双语差异重点）**
+
+::: code-group
+
+```python [Python]
 permissions=[FilesystemPermission(operations=["read"], paths=["/**"], mode="deny")]
 # read /notes.md → Error: permission denied for read on /notes.md
 # read /.env     → '@@ lines 1-1 ...'  （没被挡住！）
@@ -458,7 +643,27 @@ permissions=[FilesystemPermission(operations=["read"], paths=["/**"], mode="deny
 # paths=["/**", "/**/.*", "/**/.*/**"]  → /.env 也被拦
 ```
 
-这几行输出值得你亲手跑一遍——尤其是"deny-all 没挡住 .env"这条，**它和你以为的"安全"直接相关**。
+```typescript [TypeScript]
+// TS 用 micromatch + dot:true，/** 默认就覆盖点文件，行为与 Python 相反：
+// deny-all /notes.md → Error: permission denied for read on /notes.md
+// deny-all /.env     → Error: permission denied for read on /.env   （Python 会放行！）
+// 窄 allow 在前 → /notes.md 放行；/other.md 被宽 deny 拦截
+```
+
+:::
+
+实测输出（TypeScript 侧，`npm run l05`）：
+
+```
+deny-all /notes.md  -> BLOCKED:Error: permission denied for read on /notes.md
+deny-all /.env      -> BLOCKED:Error: permission denied for read on /.env
+deny+点号 /.env     -> BLOCKED:Error: permission denied for read on /.env
+窄allow在前 /notes.md -> OK:@@ lines 1-1 of 1 @@ 普通笔记
+窄allow在前 /other.md -> BLOCKED:Error: permission denied for read on /other.md
+沙箱+/** deny      -> 抛错: Filesystem permissions cannot be used with a backend that supports command execu...
+```
+
+> ⚠️ **最关键的一条**：探针 3 的 `deny-all /.env` 在两侧行为相反。Python 因 `_FS_WCMATCH_FLAGS` 无 DOTMATCH 放行点文件，TS 因 `dot:true` 拦住。**所以"这条权限到底拦不拦 .env"不能想当然，取决于你在哪个生态。**
 
 ### 4.2 应用实战：临时草稿 + 跨会话项目笔记 + 挡住 `.env`（入口）
 
@@ -485,9 +690,9 @@ permissions=[FilesystemPermission(operations=["read"], paths=["/**"], mode="deny
 | 误以为 | 实际 | 怎么排查 |
 |--------|------|---------|
 | "`StateBackend` 就是内存，重启就没了" | 它跟着 checkpoint 走：同 thread 跨 turn 保留，跨 thread 不共享 | 换一个 `thread_id` 试读 |
-| "`/**` deny 最安全" | 挡不住点开头文件，且只管内置工具 | 用 `.env`、`.aws/credentials` 实测 |
+| "`/**` deny 最安全" | Python 挡不住点开头文件（无 DOTMATCH）；TS `dot:true` 默认能拦点文件 | 用 `.env`、`.aws/credentials` 实测（两侧对比） |
 | "权限对自定义/MCP 工具也管用" | 只作用于内置文件工具 | 给带 deny-all 的 agent 挂自定义工具验证 |
-| "沙箱里 deny `/secrets/**` 能防 shell" | `execute` 不做路径检查，构造期直接报 NotImplementedError | 看构造错误文案 |
+| "沙箱里 deny `/secrets/**` 能防 shell" | `execute` 不做路径检查：Python 构造期 `NotImplementedError`；TS `ConfigurationError`| 看构造错误文案 |
 | "子代理权限可以叠加" | spec 里写了 `permissions` 就是整体替换 | 直接打印子代理工具表 |
 
 ### ⏳ 与过时说法对照
@@ -557,7 +762,7 @@ flowchart TD
 
 </details>
 
-**Q4**：以下哪个配置能让 agent **完全无法**读取 `/workspace/.env`？
+**Q4**：以下哪个配置能让 agent **无法**读取 `/workspace/.env`？
 - A. `permissions=[FilesystemPermission(operations=["read"], paths=["/**"], mode="deny")]`
 - B. `permissions=[FilesystemPermission(operations=["read"], paths=["/workspace/.env"], mode="deny")]`
 - C. `permissions=[FilesystemPermission(operations=["read"], paths=["/workspace/**"], mode="deny")]`
@@ -565,7 +770,9 @@ flowchart TD
 
 <details><summary>答案与解析</summary>
 
-**答案：C**。`/**` 不匹配点开头文件（A 挡不住 `.env`）；B 只挡住了 `.env` 这一个文件；C 覆盖整个 `/workspace/` 下的任意路径。若你要隔离的只是 `.env` 本身，B 也够用。
+**Python 答案：C（B 也够，若只隔离 .env 本身）**。`/**` 不匹配点开头文件（A 挡不住 `.env`）；B 只挡住了 `.env` 这一个文件；C 覆盖整个 `/workspace/` 下的任意路径。
+
+**TypeScript 答案：A / B / C 都可以**。因为 TS 的 glob 用 `dot:true`，`/**` 默认就覆盖点开头文件。所以同一条 `deny ["/**"]`，Python 放行 `.env`、TS 拦住 `.env`——这道题的答案取决于你在哪个生态。
 
 </details>
 
