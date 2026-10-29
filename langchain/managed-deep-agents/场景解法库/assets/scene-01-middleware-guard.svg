@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 440" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="c1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5a6b7d"/>
+    </marker>
+    <marker id="c2" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#b91c1c"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="440" fill="#fbfcfd"/>
+
+  <text x="30" y="34" font-size="17" font-weight="700" fill="#1f2937">解法 C：中间件统一拦截——一处在所有工具调用前判，工具不各写一遍</text>
+  <text x="30" y="56" font-size="12" fill="#6b7280">托管层会在你的中间件前后各插一串自己的件，位置决定它能不能被绕过</text>
+
+  <rect x="30" y="80" width="140" height="50" rx="6" fill="#eef6ff" stroke="#1e4b7a" stroke-width="1.5"/>
+  <text x="100" y="110" font-size="12" font-weight="700" fill="#1e4b7a" text-anchor="middle">模型请求</text>
+
+  <rect x="200" y="80" width="160" height="50" rx="6" fill="#fff8ec" stroke="#b45309" stroke-width="1.5"/>
+  <text x="280" y="110" font-size="11" font-weight="700" fill="#b45309" text-anchor="middle">托管前置件</text>
+
+  <rect x="390" y="72" width="220" height="66" rx="6" fill="#f4faf6" stroke="#1f5537" stroke-width="2.5"/>
+  <text x="500" y="96" font-size="12" font-weight="700" fill="#1f5537" text-anchor="middle">你的 awrap_tool_call</text>
+  <text x="500" y="116" font-size="10" fill="#3f6b50" text-anchor="middle">判 principal → 放行 / 拒绝</text>
+
+  <rect x="640" y="80" width="150" height="50" rx="6" fill="#fff8ec" stroke="#b45309" stroke-width="1.5"/>
+  <text x="715" y="110" font-size="11" font-weight="700" fill="#b45309" text-anchor="middle">托管后置件</text>
+
+  <rect x="800" y="80" width="70" height="50" rx="6" fill="#eef6ff" stroke="#1e4b7a" stroke-width="1.5"/>
+  <text x="835" y="110" font-size="12" font-weight="700" fill="#1e4b7a" text-anchor="middle">工具</text>
+
+  <line x1="170" y1="105" x2="196" y2="105" stroke="#5a6b7d" stroke-width="1.5" marker-end="url(#c1)"/>
+  <line x1="360" y1="105" x2="386" y2="105" stroke="#5a6b7d" stroke-width="1.5" marker-end="url(#c1)"/>
+  <line x1="610" y1="105" x2="636" y2="105" stroke="#5a6b7d" stroke-width="1.5" marker-end="url(#c1)"/>
+  <line x1="790" y1="105" x2="796" y2="105" stroke="#5a6b7d" stroke-width="1.5" marker-end="url(#c1)"/>
+
+  <text x="30" y="176" font-size="13" font-weight="700" fill="#1f2937">中间件列表是嵌套栈，不是队列——顺序决定内层能不能被外层看到</text>
+
+  <rect x="30" y="192" width="840" height="66" rx="6" fill="#fbfcfd" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="46" y="214" font-size="12" fill="#1f2937">实测调用顺序：first &gt; second &gt; TOOL &lt; second &lt; first</text>
+  <text x="46" y="238" font-size="12" fill="#6b7280">first 在进入时最先、返回时最后 → 越靠前的中间件包得越外</text>
+
+  <rect x="30" y="274" width="840" height="118" rx="6" fill="#fdf6f6" stroke="#7a2626" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="46" y="296" font-size="13" font-weight="700" fill="#7a2626">此处会失效：拦截层挡不住「不经过工具调用」的路径</text>
+
+  <text x="46" y="320" font-size="12" fill="#7a2626">① 只写同步钩子 → ainvoke 下抛 NotImplementedError，build 不拦，mda dev 启动才崩</text>
+  <text x="46" y="342" font-size="12" fill="#7a2626">② 直接调 backend.read() / backend.write() 的代码不经过 wrap_tool_call → 拦截失效</text>
+  <text x="46" y="364" font-size="12" fill="#7a2626">③ 拦截只能看到「工具参数」；参数里的 team 若来自 context，撒谎仍会被放行 → 必须查 principal 而非参数</text>
+
+  <text x="30" y="416" font-size="11" fill="#6b7280">橙色 = 托管层自己插入的件（源码 _prepend_* / _append_* 五处）</text>
+</svg>

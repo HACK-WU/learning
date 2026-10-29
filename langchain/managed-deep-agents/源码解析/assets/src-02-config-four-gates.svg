@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="900" height="500" fill="#fbfcfd"/>
+  <text x="30" y="34" font-size="17" font-weight="700" fill="#1f2937">一张 config 字典穿过四道边界</text>
+  <text x="30" y="56" font-size="12" fill="#6b7280">define_deep_agent 内部占前两道（定义期当场报错）；后两道分别发生在工厂返回与编译期</text>
+
+  <rect x="30" y="84" width="212" height="150" rx="6" fill="#eef6ff" stroke="#1e4b7a" stroke-width="2"/>
+  <text x="44" y="106" font-size="12" font-weight="700" fill="#1e4b7a">第一道：传参当场拦</text>
+  <text x="44" y="128" font-size="9.5" fill="#3f5b78">define_deep_agent.py:122</text>
+  <text x="44" y="146" font-size="9.5" fill="#3f5b78">name 必须非空字符串</text>
+  <text x="44" y="166" font-size="9.5" fill="#3f5b78">L126-131：kwargs 一旦非空，</text>
+  <text x="44" y="182" font-size="9.5" fill="#3f5b78">查表给迁移指引，或报 unexpected</text>
+  <text x="44" y="202" font-size="9.5" fill="#3f5b78">L133-139：disable_memory 已退役</text>
+  <text x="44" y="224" font-size="9.5" font-weight="700" fill="#1f5537">TypeError，当场可见</text>
+
+  <rect x="280" y="84" width="212" height="150" rx="6" fill="#fff8ec" stroke="#b45309" stroke-width="2"/>
+  <text x="294" y="106" font-size="12" font-weight="700" fill="#7a4f13">第二道：拼 config 时筛</text>
+  <text x="294" y="128" font-size="9.5" fill="#7a4f13">define_deep_agent.py:143-159</text>
+  <text x="294" y="146" font-size="9.5" fill="#7a4f13">八个键只在 value is not None 时写入</text>
+  <text x="294" y="166" font-size="9.5" fill="#7a4f13">L160-165：middleware 只在非空时写</text>
+  <text x="294" y="182" font-size="9.5" fill="#7a4f13">debug 只在 True 时写</text>
+  <text x="294" y="202" font-size="9.5" fill="#7a4f13">L167：五个可选项走</text>
+  <text x="294" y="218" font-size="9.5" fill="#7a4f13">copy_managed_selections</text>
+  <text x="294" y="234" font-size="9.5" font-weight="700" fill="#1f5537">省略 = 键不存在</text>
+
+  <rect x="530" y="84" width="212" height="150" rx="6" fill="#f4faf6" stroke="#1f5537" stroke-width="2"/>
+  <text x="544" y="106" font-size="12" font-weight="700" fill="#1f5537">第三道：工厂返回值进城安检</text>
+  <text x="544" y="128" font-size="9.5" fill="#3f6b50">runtime.py:194-213</text>
+  <text x="544" y="146" font-size="9.5" fill="#3f6b50">L201：name 再查一遍</text>
+  <text x="544" y="166" font-size="9.5" fill="#3f6b50">L203-205：五个托管键出现即拒</text>
+  <text x="544" y="182" font-size="9.5" fill="#3f6b50">L207：整体快照 + 类型校验</text>
+  <text x="544" y="202" font-size="9.5" fill="#3f6b50">L210-212：动态记忆不能带 allow</text>
+  <text x="544" y="224" font-size="9.5" font-weight="700" fill="#7a2626">ValueError 或 TypeError</text>
+
+  <rect x="770" y="84" width="100" height="150" rx="6" fill="#f7f8fa" stroke="#4b5563" stroke-width="1.5"/>
+  <text x="786" y="106" font-size="11" font-weight="700" fill="#374151">第四道</text>
+  <text x="786" y="128" font-size="9.5" fill="#4b5563">merged 拼装</text>
+  <text x="786" y="150" font-size="9.5" fill="#4b5563">runtime.py</text>
+  <text x="786" y="168" font-size="9.5" fill="#4b5563">:858 起</text>
+  <text x="786" y="192" font-size="9.5" fill="#4b5563">这里的校验</text>
+  <text x="786" y="208" font-size="9.5" fill="#4b5563">交给下游</text>
+
+  <path d="M242 159 L280 159" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#b1)"/>
+  <path d="M492 159 L530 159" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#b1)"/>
+  <path d="M742 159 L770 159" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#b1)"/>
+  <defs><marker id="b1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#5a6b7d"/></marker></defs>
+
+  <rect x="30" y="256" width="420" height="112" rx="6" fill="#eef6ff" stroke="#1e4b7a" stroke-width="1.5"/>
+  <text x="46" y="278" font-size="12" font-weight="700" fill="#1e4b7a">静态定义：两道都过，然后直接返回</text>
+  <text x="46" y="300" font-size="10" fill="#3f5b78">agent = define_deep_agent(...) 是一个 DeepAgentDefinition 实例</text>
+  <text x="46" y="320" font-size="10" fill="#3f5b78">resolve_agent_definition（L220-221）见 isinstance 就直接 return</text>
+  <text x="46" y="340" font-size="10" fill="#3f5b78">第三道安检只对 callable 生效</text>
+  <text x="46" y="358" font-size="10" font-weight="700" fill="#1f5537">所以静态定义不会有"工厂返回非法值"这类错</text>
+
+  <rect x="458" y="256" width="412" height="112" rx="6" fill="#f4faf6" stroke="#1f5537" stroke-width="1.5"/>
+  <text x="474" y="278" font-size="12" font-weight="700" fill="#1f5537">工厂：先执行，再三道安检</text>
+  <text x="474" y="300" font-size="10" fill="#3f6b50">L226：entry(runtime) 真的被调用（可能返回 awaitable）</text>
+  <text x="474" y="320" font-size="10" fill="#3f6b50">L229-230：任何异常都被吞成 RuntimeError("agent factory failed")</text>
+  <text x="474" y="340" font-size="10" fill="#3f6b50">L232-233：返回类型不对 → TypeError</text>
+  <text x="474" y="358" font-size="10" font-weight="700" fill="#7a2626">原始堆栈与消息全被吞掉，这是跨信任边界的设计</text>
+
+  <rect x="30" y="386" width="840" height="60" rx="6" fill="#f7f8fa" stroke="#4b5563" stroke-width="1.5"/>
+  <text x="46" y="408" font-size="11.5" font-weight="700" fill="#374151">两条校验路径的报错位置不同，是排查时最容易误判的地方</text>
+  <text x="46" y="430" font-size="10.5" fill="#4b5563">通过 define_deep_agent(system_prompt=...) 传 → 当场 TypeError（第一道）　｜　手搓 DeepAgentDefinition 塞 system_prompt → 工厂返回时才 ValueError（第三道）</text>
+
+  <text x="30" y="470" font-size="9.5" fill="#94a3b8">读图：四个框是同一份 config 经过的四种处理。第一、二道在定义期，第三道在工厂返回期，第四道在编译期 —— 越往后越难在本地发现。</text>
+  <text x="30" y="488" font-size="9" fill="#94a3b8">源码锚点 @ managed-deepagents 0.9.5 ｜ define_deep_agent.py（178 行）与 runtime.py（2472 行）</text>
+</svg>

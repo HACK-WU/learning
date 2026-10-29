@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 620" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="arrowB" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5a6b7d"/>
+    </marker>
+  </defs>
+  <rect width="960" height="620" fill="#fbfcfd"/>
+  <text x="480" y="32" text-anchor="middle" font-size="16.5" font-weight="600" fill="#1f2937">工厂不是一个"只跑一次的初始化函数"</text>
+
+  <text x="480" y="56" text-anchor="middle" font-size="11.5" fill="#64748b">同一个工厂会被反复调用，每次调用都要能"答出同一句话"</text>
+
+  <rect x="40" y="80" width="180" height="120" rx="9" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="130" y="106" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1e4b7a">① 每次运行开始</text>
+  <text x="130" y="130" text-anchor="middle" font-size="10.5" fill="#334155">threads.create_run</text>
+  <text x="130" y="150" text-anchor="middle" font-size="10.5" fill="#334155">execution_runtime 有值</text>
+  <text x="130" y="172" text-anchor="middle" font-size="10" fill="#64748b">context 在这里可读</text>
+
+  <rect x="250" y="80" width="180" height="120" rx="9" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="340" y="106" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1e4b7a">② 恢复 / 重试</text>
+  <text x="340" y="130" text-anchor="middle" font-size="10.5" fill="#334155">中断点之后的续跑</text>
+  <text x="340" y="150" text-anchor="middle" font-size="10.5" fill="#334155">又调一次</text>
+  <text x="340" y="172" text-anchor="middle" font-size="10" fill="#64748b">必须返回同一结构</text>
+
+  <rect x="460" y="80" width="180" height="120" rx="9" fill="#fff8ec" stroke="#e0b877" stroke-width="1.5"/>
+  <text x="550" y="106" text-anchor="middle" font-size="12.5" font-weight="600" fill="#7a4f13">③ 读 schema / state</text>
+  <text x="550" y="130" text-anchor="middle" font-size="10.5" fill="#334155">Agent Server 检查用</text>
+  <text x="550" y="150" text-anchor="middle" font-size="10.5" fill="#334155">不是一次真实运行</text>
+  <text x="550" y="172" text-anchor="middle" font-size="10" fill="#8a6428">execution_runtime = None</text>
+
+  <rect x="670" y="80" width="180" height="120" rx="9" fill="#fff8ec" stroke="#e0b877" stroke-width="1.5"/>
+  <text x="760" y="106" text-anchor="middle" font-size="12.5" font-weight="600" fill="#7a4f13">④ mda build</text>
+  <text x="760" y="130" text-anchor="middle" font-size="10.5" fill="#334155">不执行工厂</text>
+  <text x="760" y="150" text-anchor="middle" font-size="10.5" fill="#334155">只静态读 name</text>
+  <text x="760" y="172" text-anchor="middle" font-size="10" fill="#8a6428">所以副作用不会被发现</text>
+
+  <rect x="40" y="228" width="440" height="150" rx="9" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.3"/>
+  <text x="60" y="254" font-size="12" font-weight="600" fill="#334155">工厂能看到的字段（实测）</text>
+  <text x="60" y="278" font-size="10.5" fill="#475569">真实运行：access_context · user · store ·</text>
+  <text x="60" y="296" font-size="10.5" fill="#475569">context · channel · backend（恒 None）</text>
+  <text x="60" y="314" font-size="10.5" fill="#8a6428">读 schema：连 context 都没有</text>
+  <rect x="60" y="324" width="400" height="42" rx="6" fill="#fdf2f2" stroke="#d99a9a"/>
+  <text x="76" y="342" font-size="10.8" font-weight="600" fill="#7a2626">两种都没有 server_info</text>
+  <text x="76" y="359" font-size="10" fill="#7a2626">工具和中间件都有，唯独工厂没有</text>
+
+  <rect x="500" y="228" width="420" height="150" rx="9" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.3"/>
+  <text x="520" y="254" font-size="12" font-weight="600" fill="#334155">推论：工厂能按什么选配置</text>
+  <text x="520" y="280" font-size="10.8" fill="#1f5537">可以：channel（验过）→ 按来源团队分流</text>
+  <text x="520" y="302" font-size="10.8" fill="#8a6428">可以：context（没验过）→ 只挑行为，不判权限</text>
+  <text x="520" y="324" font-size="10.8" fill="#7a2626">不行：按"他是谁"选配置——工厂看不到身份</text>
+  <text x="520" y="348" font-size="10.2" fill="#64748b">权限必须在工具里用 runtime.server_info 判</text>
+  <text x="520" y="368" font-size="10.2" fill="#64748b">这个分工本身就是一道防线</text>
+
+  <text x="40" y="414" font-size="12.5" font-weight="600" fill="#1f2937">四条"不重复"约束</text>
+
+  <rect x="40" y="426" width="212" height="88" rx="8" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.3"/>
+  <text x="56" y="448" font-size="11.2" font-weight="600" fill="#1e4b7a">① 无副作用</text>
+  <text x="56" y="468" font-size="10" fill="#334155">不建记录、不调外部 API、</text>
+  <text x="56" y="484" font-size="10" fill="#334155">不改共享状态</text>
+  <text x="56" y="503" font-size="9.5" fill="#64748b">同 context 必须同结果</text>
+
+  <rect x="266" y="426" width="212" height="88" rx="8" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.3"/>
+  <text x="282" y="448" font-size="11.2" font-weight="600" fill="#1f5537">② 中断中间件常在</text>
+  <text x="282" y="468" font-size="10" fill="#334155">会中断运行的中间件</text>
+  <text x="282" y="484" font-size="10" fill="#334155">必须在每个配置里都装</text>
+  <text x="282" y="503" font-size="9.5" fill="#64748b">恢复时它还得在，否则接不上</text>
+
+  <rect x="492" y="426" width="212" height="88" rx="8" fill="#fff8ec" stroke="#e0b877" stroke-width="1.3"/>
+  <text x="508" y="448" font-size="11.2" font-weight="600" fill="#7a4f13">③ name 必须内联</text>
+  <text x="508" y="468" font-size="10" fill="#334155">写成字面量，不能算出来</text>
+  <text x="508" y="484" font-size="10" fill="#334155">build 不执行工厂就来读它</text>
+  <text x="508" y="503" font-size="9.5" fill="#64748b">复合语句会被判为动态值</text>
+
+  <rect x="718" y="426" width="202" height="88" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.3"/>
+  <text x="734" y="448" font-size="11.2" font-weight="600" fill="#334155">④ 模型包要装齐</text>
+  <text x="734" y="468" font-size="10" fill="#334155">工厂可能返回的每个模型</text>
+  <text x="734" y="484" font-size="10" fill="#334155">都要装集成包</text>
+  <text x="734" y="503" font-size="9.5" fill="#64748b">build 不会替你检测</text>
+
+  <rect x="40" y="534" width="880" height="66" rx="9" fill="#fdf2f2" stroke="#d99a9a" stroke-width="1.3"/>
+  <text x="60" y="558" font-size="11.5" font-weight="600" fill="#7a2626">最贵的那个坑：在工厂里写条件分支</text>
+  <text x="60" y="580" font-size="10.5" fill="#7f5a5a">官方示例用 <tspan font-family="ui-monospace, monospace" font-size="10">if</tspan> 选 instructions 是运行期合法的；但只要函数体里出现 <tspan font-family="ui-monospace, monospace" font-size="10">if / try / for / with</tspan>，<tspan font-family="ui-monospace, monospace" font-size="10">mda build</tspan> 就判定 name 不是字面量并报错——连官方那种"守卫式 if"也会踩到。绕法是把分支挪到工厂外面查表。</text>
+</svg>

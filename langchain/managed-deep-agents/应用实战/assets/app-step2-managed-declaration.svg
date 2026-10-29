@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 440" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="900" height="440" fill="#fbfcfd"/>
+  <text x="30" y="34" font-size="17" font-weight="700" fill="#1f2937">综合版：交出图纸，运行时替你盖房并加料</text>
+  <text x="30" y="56" font-size="12" fill="#6b7280">同一份逻辑，改为 define_deep_agent 返回声明；编译搬进运行时</text>
+
+  <rect x="30" y="82" width="176" height="70" rx="6" fill="#eef6ff" stroke="#1e4b7a" stroke-width="1.5"/>
+  <text x="118" y="106" font-size="12" font-weight="700" fill="#1e4b7a" text-anchor="middle">agent.py</text>
+  <text x="118" y="126" font-size="10" fill="#5a6b7d" text-anchor="middle">define_deep_agent(...)</text>
+  <text x="118" y="142" font-size="10" fill="#5a6b7d" text-anchor="middle">返回 declaration</text>
+
+  <rect x="238" y="82" width="170" height="70" rx="6" fill="#f4faf6" stroke="#1f5537" stroke-width="1.5"/>
+  <text x="323" y="106" font-size="12" font-weight="700" fill="#1f5537" text-anchor="middle">DeepAgentDefinition</text>
+  <text x="323" y="126" font-size="10" fill="#3f6b50" text-anchor="middle">frozen dataclass</text>
+  <text x="323" y="142" font-size="10" fill="#3f6b50" text-anchor="middle">config: dict</text>
+
+  <rect x="440" y="82" width="200" height="70" rx="6" fill="#eef6ff" stroke="#1e4b7a" stroke-width="1.5"/>
+  <text x="540" y="106" font-size="12" font-weight="700" fill="#1e4b7a" text-anchor="middle">托管运行时</text>
+  <text x="540" y="126" font-size="10" fill="#5a6b7d" text-anchor="middle">compile_managed_agent_async</text>
+  <text x="540" y="142" font-size="10" fill="#5a6b7d" text-anchor="middle">每次运行编译一次</text>
+
+  <rect x="672" y="82" width="198" height="70" rx="6" fill="#f4faf6" stroke="#1f5537" stroke-width="1.5"/>
+  <text x="771" y="106" font-size="12" font-weight="700" fill="#1f5537" text-anchor="middle">CompiledAgent</text>
+  <text x="771" y="126" font-size="10" fill="#3f6b50" text-anchor="middle">create_deep_agent(**merged)</text>
+  <text x="771" y="142" font-size="10" fill="#3f6b50" text-anchor="middle">runtime.py:981</text>
+
+  <path d="M206 117 L238 117" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#b1)"/>
+  <path d="M408 117 L440 117" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#b1)"/>
+  <path d="M640 117 L672 117" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#b1)"/>
+  <defs><marker id="b1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#5a6b7d"/></marker></defs>
+
+  <rect x="238" y="176" width="632" height="96" rx="6" fill="#eef6ff" stroke="#1e4b7a" stroke-width="1.5"/>
+  <text x="254" y="198" font-size="13" font-weight="700" fill="#1e4b7a">运行时替你加进去的料（高亮 = 本步新增）</text>
+  <text x="254" y="220" font-size="11" fill="#5a6b7d">系统提示（instructions.md 拼进 prompt）· skills 挂到 /skills/ · backend / store / checkpointer</text>
+  <text x="254" y="240" font-size="11" fill="#5a6b7d">沙箱 backend · 凭据闸中间件 · Slack 文件中间件 · 调度投递中间件 · 记忆说明中间件</text>
+  <text x="254" y="260" font-size="11" fill="#5a6b7d">你的 middleware 被它们包在中间 —— 你以为在最外层，其实不是</text>
+
+  <rect x="30" y="176" width="190" height="96" rx="6" fill="#fff8ec" stroke="#b45309" stroke-width="1.5"/>
+  <text x="46" y="198" font-size="12" font-weight="700" fill="#7a4f13">你的项目目录</text>
+  <text x="46" y="220" font-size="10" fill="#7a4f13">instructions.md</text>
+  <text x="46" y="238" font-size="10" fill="#7a4f13">skills/ · tools/ · middleware/</text>
+  <text x="46" y="256" font-size="10" fill="#7a4f13">memory.py · sandbox/ · identity.py</text>
+
+  <path d="M220 224 L238 224" stroke="#b45309" stroke-width="1.6" marker-end="url(#b2)"/>
+  <defs><marker id="b2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#b45309"/></marker></defs>
+
+  <rect x="30" y="290" width="840" height="96" rx="6" fill="#fdf6f6" stroke="#7a2626" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="46" y="312" font-size="13" font-weight="700" fill="#7a2626">此处会失效 / 本步的新代价</text>
+  <text x="46" y="334" font-size="12" fill="#7a2626">① 工厂里出现 if / try / for / while / with / assert / del → <tspan font-family="ui-monospace, monospace">mda build</tspan> 报 name 非字面量</text>
+  <text x="46" y="354" font-size="12" fill="#7a2626">② 声明了 sandbox 又写 permissions → permissions 被静默清空（runtime.py:1188）</text>
+  <text x="46" y="374" font-size="12" fill="#7a2626">③ 传 backend / store / checkpointer / system_prompt → 直接 TypeError，这几个归平台所有</text>
+
+  <text x="30" y="428" font-size="10" fill="#94a3b8">读图：左边是目录即配置，中间是声明，右边是编译产物；蓝色大框里的东西你一行都没写，但都在最终图里。</text>
+</svg>

@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 490" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="t1" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#5a6b7d"/>
+    </marker>
+    <marker id="t2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#c2410c"/>
+    </marker>
+  </defs>
+  <rect width="940" height="490" fill="#fbfcfd"/>
+  <text x="470" y="32" text-anchor="middle" font-size="17" font-weight="600" fill="#1f2937">工具：复制进包，不等于注册进 agent</text>
+
+  <rect x="26" y="56" width="220" height="150" rx="10" fill="#f4f0fb" stroke="#c9b6e5" stroke-width="1.5"/>
+  <text x="136" y="80" text-anchor="middle" font-size="11.5" font-weight="600" fill="#4c2f7a">① 写一个工具模块</text>
+  <text x="136" y="102" text-anchor="middle" font-size="10" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#334155">tools/customer.py</text>
+  <text x="136" y="124" text-anchor="middle" font-size="10" fill="#334155">@tool(parse_docstring=True)</text>
+  <text x="136" y="144" text-anchor="middle" font-size="10" fill="#334155">def lookup_customer(...)</text>
+  <text x="136" y="168" text-anchor="middle" font-size="9.5" fill="#6b7280">docstring 会自动变成</text>
+  <text x="136" y="184" text-anchor="middle" font-size="9.5" fill="#6b7280">给模型看的参数说明</text>
+
+  <line x1="246" y1="130" x2="288" y2="130" stroke="#5a6b7d" stroke-width="1.5" marker-end="url(#t1)"/>
+
+  <rect x="292" y="56" width="230" height="150" rx="10" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="407" y="80" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1e4b7a">② 在入口里点名</text>
+  <text x="407" y="102" text-anchor="middle" font-size="10" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#334155">from tools.customer import …</text>
+  <text x="407" y="122" text-anchor="middle" font-size="10" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#334155">tools=[lookup_customer]</text>
+  <text x="407" y="146" text-anchor="middle" font-size="9.5" fill="#9a3412">这一步没有，前面全白做</text>
+  <text x="407" y="168" text-anchor="middle" font-size="9.5" fill="#334155">build 不报错</text>
+  <text x="407" y="186" text-anchor="middle" font-size="9.5" fill="#334155">工具照样被复制进 .mda/build</text>
+
+  <line x1="522" y1="130" x2="564" y2="130" stroke="#5a6b7d" stroke-width="1.5" marker-end="url(#t1)"/>
+
+  <rect x="568" y="56" width="348" height="150" rx="10" fill="#eefaf3" stroke="#7fc9a4" stroke-width="1.5"/>
+  <text x="742" y="80" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1f6b47">③ 编译后真的可用</text>
+  <text x="742" y="104" text-anchor="middle" font-size="10" fill="#334155">定义 config 里出现工具名</text>
+  <text x="742" y="126" text-anchor="middle" font-size="10" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#1f6b47">tools: ['lookup_customer']</text>
+  <text x="742" y="150" text-anchor="middle" font-size="10" fill="#334155">模型能在 tools 节点里调用它</text>
+  <text x="742" y="172" text-anchor="middle" font-size="9.5" fill="#6b7280">TS 侧同样：tools: [ 'lookup_customer' ]</text>
+  <text x="742" y="192" text-anchor="middle" font-size="9" fill="#6b7280">name 是蛇形，即使在 TS 里也照写蛇形</text>
+
+  <rect x="26" y="228" width="430" height="128" rx="10" fill="#fdf2f2" stroke="#e7a6a6" stroke-width="1.4"/>
+  <text x="46" y="252" font-size="11.5" font-weight="600" fill="#8a2f2f">漏了第②步会怎样（实测）</text>
+  <text x="46" y="276" font-size="10" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#334155">tools/customer.py 存在，但 agent.py 没 import</text>
+  <text x="46" y="296" font-size="10" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#334155">mda build → ◇ Managed app compiled  exit=0</text>
+  <text x="46" y="316" font-size="10" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#334155">.mda/build/tools/customer.py  ← 文件在</text>
+  <text x="46" y="336" font-size="10" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#9a3412">config 里没有 "tools" 键   ← 注册没有</text>
+  <text x="46" y="352" font-size="10" fill="#9a3412">"文件在但不生效" 的典型形态</text>
+
+  <rect x="484" y="228" width="430" height="128" rx="10" fill="#fff8ec" stroke="#e0b877" stroke-width="1.4"/>
+  <text x="504" y="252" font-size="11.5" font-weight="600" fill="#7a4f13">保留名：tools/mcp.py 不能当普通工具用</text>
+  <text x="504" y="276" font-size="10" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#334155">把 customer.py 改名成 mcp.py</text>
+  <text x="504" y="296" font-size="10" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#9a3412">error: tools/mcp.py must export a named "mcp"</text>
+  <text x="504" y="314" font-size="10" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#9a3412">       declaration …  exit=1</text>
+  <text x="504" y="336" font-size="10" fill="#334155">TS 侧同一措辞：tools/mcp.ts must export a named "mcp"</text>
+  <text x="504" y="352" font-size="10" fill="#6b7280">这个文件名留给 MCP 连接器声明（课 5 讲）</text>
+
+  <rect x="26" y="374" width="888" height="104" rx="10" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.4"/>
+  <text x="46" y="398" font-size="11.5" font-weight="600" fill="#1e4b7a">和指令、技能的根本差别：工具不会被自动发现</text>
+  <text x="46" y="422" font-size="10.5" fill="#334155">instructions.md 靠「放对位置」生效；skills/ 靠「放对位置 + 标签写对」生效；tools/ 靠「放对位置 + 入口点名」才生效。</text>
+  <text x="46" y="444" font-size="10.5" fill="#334155">前两样属于「托管上下文」，会同步到 Context Hub，能在 LangSmith UI 里改；工具属于「应用代码」，只随代码走，UI 里改不了。</text>
+  <text x="46" y="466" font-size="10.5" fill="#9a3412">所以工具的调试路径是「改代码 → 重启 dev」，不存在不重启就生效的捷径。</text>
+</svg>

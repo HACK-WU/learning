@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 440" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="m1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5a6b7d"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="440" fill="#fbfcfd"/>
+
+  <text x="30" y="34" font-size="17" font-weight="700" fill="#1f2937">解法 A：热冷分层——热记忆只留「每轮都必须看」的那几行</text>
+  <text x="30" y="56" font-size="12" fill="#6b7280">热记忆是固定成本：线程跑多少轮，它就付多少次</text>
+
+  <rect x="30" y="82" width="250" height="76" rx="6" fill="#fdf6f6" stroke="#7a2626" stroke-width="1.5"/>
+  <text x="46" y="104" font-size="12" font-weight="700" fill="#7a2626">热记忆（每轮进上下文）</text>
+  <text x="46" y="126" font-size="11" fill="#7a2626">· 团队值班约定（3 行）</text>
+  <text x="46" y="146" font-size="11" fill="#7a2626">· 告警分级口径（2 行）</text>
+
+  <rect x="310" y="82" width="270" height="76" rx="6" fill="#eef6ff" stroke="#1e4b7a" stroke-width="1.5"/>
+  <text x="326" y="104" font-size="12" font-weight="700" fill="#1e4b7a">冷记忆（按需读文件）</text>
+  <text x="326" y="126" font-size="11" fill="#5a6b7d">· 上季度事故复盘（20 页）</text>
+  <text x="326" y="146" font-size="11" fill="#5a6b7d">· 各系统架构说明（50 页）</text>
+
+  <rect x="610" y="82" width="260" height="76" rx="6" fill="#f4faf6" stroke="#1f5537" stroke-width="1.5"/>
+  <text x="626" y="104" font-size="12" font-weight="700" fill="#1f5537">成本结构</text>
+  <text x="626" y="126" font-size="11" fill="#3f6b50">热：每轮 × 轮数 × 行数</text>
+  <text x="626" y="146" font-size="11" fill="#3f6b50">冷：每次 read 才付一次</text>
+
+  <line x1="280" y1="120" x2="306" y2="120" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3"/>
+  <line x1="580" y1="120" x2="606" y2="120" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3"/>
+
+  <text x="30" y="192" font-size="13" font-weight="700" fill="#1f2937">放进热记忆的判据：不是「重要」，是「每轮都要」</text>
+
+  <rect x="30" y="208" width="260" height="86" rx="6" fill="#f4faf6" stroke="#1f5537" stroke-width="1.5"/>
+  <text x="46" y="230" font-size="11" font-weight="700" fill="#1f5537">✅ 每轮都要</text>
+  <text x="46" y="252" font-size="10" fill="#3f6b50">「公司名不能拼错」</text>
+  <text x="46" y="272" font-size="10" fill="#3f6b50">「P1 必须 5 分钟内升级」</text>
+  <text x="46" y="290" font-size="10" fill="#3f6b50">→ 写进热记忆或 instructions</text>
+
+  <rect x="310" y="208" width="260" height="86" rx="6" fill="#fff8ec" stroke="#b45309" stroke-width="1.5"/>
+  <text x="326" y="230" font-size="11" font-weight="700" fill="#b45309">⚠️ 重要但偶尔用</text>
+  <text x="326" y="252" font-size="10" fill="#7a4f13">「上季度那次数据库事故的</text>
+  <text x="326" y="272" font-size="10" fill="#7a4f13">  完整复盘」</text>
+  <text x="326" y="290" font-size="10" fill="#7a4f13">→ 放冷记忆，用 read_file 取</text>
+
+  <rect x="590" y="208" width="280" height="86" rx="6" fill="#fdf6f6" stroke="#7a2626" stroke-width="1.5"/>
+  <text x="606" y="230" font-size="11" font-weight="700" fill="#7a2626">❌ 什么都不该放</text>
+  <text x="606" y="252" font-size="10" fill="#7a2626">客户手机号、内部凭据</text>
+  <text x="606" y="272" font-size="10" fill="#7a2626">agent 层记忆对</text>
+  <text x="606" y="290" font-size="10" fill="#7a2626">所有调用方可见</text>
+
+  <rect x="30" y="316" width="840" height="100" rx="6" fill="#fdf6f6" stroke="#7a2626" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="46" y="338" font-size="13" font-weight="700" fill="#7a2626">此处会失效：热记忆本身是攻击面</text>
+  <text x="46" y="362" font-size="12" fill="#7a2626">① 普通运行就能写热记忆 → 一个调用方能持久化「指令」给之后所有调用方读（官方已把共享记忆定义为信任边界）</text>
+  <text x="46" y="384" font-size="12" fill="#7a2626">② Anthropic 模型会给热记忆加 cache_control: ephemeral → 内容一变缓存全失效，成本反而跳升</text>
+  <text x="46" y="406" font-size="12" fill="#7a2626">③ 用 shell 写 /memories/ 下的其他路径 → 不报错，运行结束静默丢弃</text>
+
+</svg>

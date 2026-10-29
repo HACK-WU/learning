@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 470" width="900" height="470" role="img" aria-label="三层记忆与默认放行规则">
+  <defs>
+    <marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748b"/>
+    </marker>
+    <style>
+      .t { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
+      .m { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; }
+    </style>
+  </defs>
+
+  <rect width="900" height="470" fill="#ffffff"/>
+
+  <text x="30" y="38" class="t" font-size="17" font-weight="700" fill="#0f172a">「记住」有三种寿命，别混成一件事</text>
+  <text x="30" y="62" class="t" font-size="12" fill="#64748b">这张图只回答：一件事该记多久、记在谁的账上、谁能读</text>
+
+  <rect x="30" y="86" width="200" height="150" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="130" y="112" class="t" font-size="12.5" font-weight="700" fill="#334155" text-anchor="middle">线程状态</text>
+  <text x="130" y="134" class="t" font-size="10.5" fill="#64748b" text-anchor="middle">thread state</text>
+  <line x1="60" y1="146" x2="200" y2="146" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="130" y="168" class="t" font-size="10.5" fill="#4b5563" text-anchor="middle">一个会话里的对话</text>
+  <text x="130" y="188" class="t" font-size="10.5" fill="#4b5563" text-anchor="middle">换了会话就没了</text>
+  <text x="130" y="214" class="m" font-size="10" fill="#94a3b8" text-anchor="middle">默认就有，不用声明</text>
+
+  <rect x="252" y="86" width="290" height="150" rx="10" fill="#eff6ff" stroke="#93b4f0" stroke-width="1.8"/>
+  <text x="397" y="112" class="t" font-size="12.5" font-weight="700" fill="#1e3a8a" text-anchor="middle">agent 记忆</text>
+  <text x="397" y="134" class="m" font-size="10.5" fill="#3b5b9a" text-anchor="middle">/memories/agent/</text>
+  <line x1="282" y1="146" x2="512" y2="146" stroke="#bfdbfe" stroke-width="1"/>
+  <text x="397" y="168" class="t" font-size="10.5" fill="#334155" text-anchor="middle">整个部署共用，跨会话跨部署不丢</text>
+  <text x="397" y="188" class="t" font-size="10.5" fill="#334155" text-anchor="middle">团队约定、可复用流程放这里</text>
+  <text x="397" y="214" class="t" font-size="10" fill="#1e40af" text-anchor="middle">默认放行：所有调用者都能读写同一份</text>
+
+  <rect x="564" y="86" width="306" height="150" rx="10" fill="#f5fdf7" stroke="#8ecfa4" stroke-width="1.8"/>
+  <text x="717" y="112" class="t" font-size="12.5" font-weight="700" fill="#166534" text-anchor="middle">user 记忆</text>
+  <text x="717" y="134" class="m" font-size="10.5" fill="#166534" text-anchor="middle">/memories/user/</text>
+  <line x1="594" y1="146" x2="842" y2="146" stroke="#bbf7d0" stroke-width="1"/>
+  <text x="717" y="168" class="t" font-size="10.5" fill="#334155" text-anchor="middle">只属于发起这次运行的那个人</text>
+  <text x="717" y="188" class="t" font-size="10.5" fill="#334155" text-anchor="middle">个人偏好、只有他能看的上下文</text>
+  <text x="717" y="214" class="t" font-size="10" fill="#166534" text-anchor="middle">默认只在 Slack 一对一私聊放行</text>
+
+  <text x="30" y="272" class="t" font-size="11.5" font-weight="600" fill="#0f172a">为什么 user 层默认这么保守？看这张表就懂</text>
+
+  <rect x="30" y="286" width="840" height="118" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="52" y="308" class="t" font-size="10.5" font-weight="600" fill="#334155">运行来源</text>
+  <text x="420" y="308" class="t" font-size="10.5" font-weight="600" fill="#334155" text-anchor="middle">agent 记忆</text>
+  <text x="720" y="308" class="t" font-size="10.5" font-weight="600" fill="#334155" text-anchor="middle">user 记忆</text>
+  <line x1="52" y1="316" x2="848" y2="316" stroke="#e2e8f0" stroke-width="1"/>
+
+  <text x="52" y="336" class="t" font-size="10.5" fill="#4b5563">Slack 一对一私聊</text>
+  <text x="420" y="336" class="t" font-size="10.5" fill="#166534" text-anchor="middle">放行</text>
+  <text x="720" y="336" class="t" font-size="10.5" fill="#166534" text-anchor="middle">放行</text>
+
+  <text x="52" y="356" class="t" font-size="10.5" fill="#4b5563">Slack 频道 / 群聊</text>
+  <text x="420" y="356" class="t" font-size="10.5" fill="#166534" text-anchor="middle">放行</text>
+  <text x="720" y="356" class="t" font-size="10.5" fill="#b91c1c" text-anchor="middle">拒绝</text>
+
+  <text x="52" y="376" class="t" font-size="10.5" fill="#4b5563">直接 API 调用</text>
+  <text x="420" y="376" class="t" font-size="10.5" fill="#166534" text-anchor="middle">放行</text>
+  <text x="720" y="376" class="t" font-size="10.5" fill="#b91c1c" text-anchor="middle">拒绝</text>
+
+  <text x="52" y="396" class="t" font-size="10.5" fill="#4b5563">Studio 已验证用户</text>
+  <text x="420" y="396" class="t" font-size="10.5" fill="#166534" text-anchor="middle">放行</text>
+  <text x="720" y="396" class="t" font-size="10.5" fill="#166534" text-anchor="middle">放行（策略不判）</text>
+
+  <rect x="30" y="420" width="840" height="32" rx="8" fill="#fff7ed" stroke="#e0b877" stroke-width="1.2"/>
+  <text x="450" y="441" class="t" font-size="11.5" fill="#7a4f13" text-anchor="middle">跑在群聊里的运行，平台从外面看不出它是不是「私密对一个人」——所以宁可不给</text>
+</svg>

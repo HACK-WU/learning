@@ -1,0 +1,105 @@
+
+============================================================
+实验 1  返回值是定义，不是 agent
+============================================================
+  constructor                Object
+  kind                       deep-agent
+  Object.keys                ["kind","config"]
+
+--- 三个存在性检查 ---
+  typeof invoke              undefined
+  typeof stream              undefined
+  typeof config              object
+
+  结论：kind 是 "deep-agent"，但 invoke / stream 都不存在。
+  它是"配方"而不是"做好的菜"——编译器在托管平台侧，不在你本地。
+
+
+============================================================
+实验 2  config 只存你亲口说过的东西
+============================================================
+  config keys                ["model","name"]
+  config 全量                  {"name":"my-agent","model":"openai:gpt-5.5"}
+
+--- 省略 vs 空数组：两种「没有」 ---
+  省略 tools: "tools" in config false
+  省略 tools: config.tools     undefined
+  tools=[]: "tools" in config true
+  tools=[]: config.tools     []
+
+  两者模型侧看到的效果一样（都是零个自有工具），但排查时要分清：
+    "键不存在" = 你压根没提这个字段
+    "键存在且为空" = 你提了，但配成空的
+  JS 侧硬取缺键得到 undefined 而非抛错，所以判断存在性要用 'in'。
+
+
+============================================================
+实验 3  托管自有键：类型禁止 + 运行时抛错
+============================================================
+
+  下面五组在 TS 类型层面本就是 never（写进编辑器就标红），
+  这里用 as any 绕过类型，看运行时会不会兜底：
+
+  传入 backend → 抛错 Error
+      Remove `backend` from defineDeepAgent(...). Configure the sandbox in sandbox/.
+  传入 store → 抛错 Error
+      Remove `store` from defineDeepAgent(...). MDA provides the store automatically.
+  传入 checkpointer → 抛错 Error
+      Remove `checkpointer` from defineDeepAgent(...). MDA provides the checkpointer automatically.
+  传入 systemPrompt → 抛错 Error
+      Remove `systemPrompt` from defineDeepAgent(...). Use `instructions` in a factory entrypoint or put the static prompt in instructions.md.
+  传入 disableMemory → 抛错 Error
+      disableMemory is no longer supported in defineDeepAgent(...). Durable memory is opt-in and declared in memory.ts: export `memory` with `defineMemory({
+
+  五组全部抛错，且报错信息直接告诉你"该挪去哪里"——
+  这不是静默忽略，而是双保险：类型层禁止 + 运行时兜底。
+  与 Python 侧最大的差别就在这里：Python 是类型标注 + 文档，
+  JS 侧把这条限制做成了硬失败。
+
+
+============================================================
+实验 4  托管资源的正确落点：sandbox/ 目录
+============================================================
+  sandbox constructor        Object
+  sandbox keys               ["kind","options"]
+  sandbox 全量                 {"kind":"sandbox","options":{"idleTtlSeconds":600,"defaultTimeout":600}}
+
+  注意形状：{ kind: "sandbox", options: {...} }——
+  它不是配置片段，而是一个带 kind 的声明对象。
+  同期还有 memory.ts / identity.ts / channels/ / schedules/，
+  共同点是"作者声明意图，平台负责执行"。
+
+
+--- 对照：createDeepAgent 的入参里全是「谁拥有」的答案 ---
+
+  直连 deepagents 时你写：
+    createDeepAgent({
+      model, tools,
+      systemPrompt: SYSTEM_PROMPT,      → 搬进 instructions.md
+      skills: ["/skills/research/"],    → 搬进 skills/research/SKILL.md
+      checkpointer,                     → 删掉，运行时给
+    })
+
+  托管版你写：
+    defineDeepAgent({
+      name: "research-assistant",       → 新增，必填
+      model, tools,
+    })
+
+  差别不是"少写几个字段"，而是"这些字段的所有权换了人"。
+  少写 systemPrompt 不是忘写，是它压根不该由你在这里给。
+
+
+============================================================
+实验 5  instructions 是个例外：它是作者该管的
+============================================================
+  带 instructions 的 keys      ["instructions","model","name"]
+
+  instructions 留在 config 里，而 systemPrompt 被拒——
+  区别在于"谁能改"：instructions.md 是你仓库里的文件，
+  部署时由 mda 嵌进系统提示；systemPrompt 是运行时拼装的一部分。
+
+
+============================================================
+完成  课 2 实测结束
+============================================================

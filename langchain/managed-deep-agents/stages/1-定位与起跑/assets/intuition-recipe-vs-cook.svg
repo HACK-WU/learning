@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="i1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5a6b7d"/>
+    </marker>
+    <marker id="i2" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#c2410c"/>
+    </marker>
+  </defs>
+  <rect width="900" height="400" fill="#fbfcfd"/>
+  <text x="450" y="36" text-anchor="middle" font-size="19" font-weight="600" fill="#1f2937">同一桌菜，两种做法</text>
+  <text x="450" y="60" text-anchor="middle" font-size="12" fill="#6b7280">本课要讲清的就是：最后那一步，交给谁做</text>
+
+  <rect x="44" y="86" width="372" height="212" rx="12" fill="#fdf6f6" stroke="#e2b6b6" stroke-width="1.5"/>
+  <text x="230" y="114" text-anchor="middle" font-size="13" font-weight="600" fill="#7a2626">做法一：自己从买料到装盘</text>
+
+  <rect x="76" y="152" width="66" height="42" rx="8" fill="#ffffff" stroke="#c9a1a1" stroke-width="1.4"/>
+  <text x="109" y="178" text-anchor="middle" font-size="12" fill="#7a2626">你</text>
+
+  <line x1="148" y1="173" x2="292" y2="173" stroke="#c9a1a1" stroke-width="1.6" marker-end="url(#i1)"/>
+  <text x="220" y="146" text-anchor="middle" font-size="11" fill="#8a5a5a">买料 · 开火 · 装盘</text>
+  <text x="220" y="196" text-anchor="middle" font-size="10.5" fill="#a97b7b">三件事一件都少不了你</text>
+
+  <rect x="298" y="152" width="82" height="42" rx="8" fill="#ffffff" stroke="#c9a1a1" stroke-width="1.4"/>
+  <text x="339" y="178" text-anchor="middle" font-size="12" fill="#7a2626">一桌菜</text>
+
+  <text x="230" y="238" text-anchor="middle" font-size="11" fill="#8a5a5a">你既要想「吃什么」，也要保证「做得出」</text>
+  <text x="230" y="262" text-anchor="middle" font-size="10.5" fill="#a97b7b">换一家餐厅，这些活还得重来一遍</text>
+
+  <rect x="484" y="86" width="372" height="212" rx="12" fill="#f4faf6" stroke="#9dc9af" stroke-width="1.5"/>
+  <text x="670" y="114" text-anchor="middle" font-size="13" font-weight="600" fill="#1f5537">做法二：只交一张配方卡</text>
+
+  <rect x="500" y="158" width="56" height="42" rx="8" fill="#ffffff" stroke="#8fbfa3" stroke-width="1.4"/>
+  <text x="528" y="184" text-anchor="middle" font-size="12" fill="#1f5537">你</text>
+
+  <line x1="560" y1="179" x2="588" y2="179" stroke="#5f8f74" stroke-width="1.6" marker-end="url(#i1)"/>
+
+  <rect x="594" y="152" width="88" height="54" rx="8" fill="#ffffff" stroke="#c2410c" stroke-width="1.8" stroke-dasharray="5 3"/>
+  <text x="638" y="176" text-anchor="middle" font-size="12" font-weight="600" fill="#9a3412">配方卡</text>
+  <text x="638" y="194" text-anchor="middle" font-size="10" fill="#b45309">要什么 · 有什么</text>
+
+  <line x1="686" y1="179" x2="708" y2="179" stroke="#5f8f74" stroke-width="1.6" marker-end="url(#i1)"/>
+
+  <rect x="714" y="146" width="62" height="66" rx="8" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="745" y="174" text-anchor="middle" font-size="11.5" fill="#1e4b7a">别人</text>
+  <text x="745" y="192" text-anchor="middle" font-size="11.5" fill="#1e4b7a">的厨房</text>
+
+  <line x1="780" y1="179" x2="802" y2="179" stroke="#5f8f74" stroke-width="1.6" marker-end="url(#i1)"/>
+
+  <rect x="808" y="158" width="34" height="42" rx="8" fill="#ffffff" stroke="#8fbfa3" stroke-width="1.4"/>
+  <text x="825" y="184" text-anchor="middle" font-size="11.5" fill="#1f5537">菜</text>
+
+  <text x="670" y="238" text-anchor="middle" font-size="11" fill="#3f6b50">你只回答「要什么」，剩下的流程照卡片自动走</text>
+  <text x="670" y="262" text-anchor="middle" font-size="10.5" fill="#5b8a6e">换一家厨房也不用重写卡片</text>
+
+  <rect x="44" y="320" width="812" height="50" rx="9" fill="#fff8ec" stroke="#e0b877" stroke-width="1.4"/>
+  <text x="450" y="350" text-anchor="middle" font-size="12.5" fill="#7a4f13">左边把「想」和「做」揽在一起；右边只保留「想」，把「做」交出去 —— 但前提是那张卡片写得让厨房看得懂</text>
+
+  <text x="450" y="390" text-anchor="middle" font-size="10.5" fill="#94a3b8">记住这个对比：不是谁更厉害，而是「这一步由谁负责」被彻底分开了</text>
+</svg>

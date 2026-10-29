@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 440" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="900" height="440" fill="#fbfcfd"/>
+  <text x="30" y="34" font-size="17" font-weight="700" fill="#1f2937">基础版：一个巨型 prompt + 一个万能工具</text>
+  <text x="30" y="56" font-size="12" fill="#6b7280">所有流程写进 instructions，所有接口合成一把大工具</text>
+
+  <rect x="30" y="82" width="240" height="120" rx="6" fill="#fff8ec" stroke="#b45309" stroke-width="1.5"/>
+  <text x="46" y="104" font-size="12" font-weight="700" fill="#7a4f13">instructions.md（200 行）</text>
+  <text x="46" y="126" font-size="10" fill="#7a4f13">角色说明 · 升级流程 · 排班规则</text>
+  <text x="46" y="144" font-size="10" fill="#7a4f13">工单字段含义 · 三种告警处置步骤</text>
+  <text x="46" y="162" font-size="10" fill="#7a4f13">追问话术 · 免责声明 ……</text>
+  <text x="46" y="186" font-size="10" font-weight="700" fill="#7a4f13">每轮都全文进 prompt</text>
+
+  <rect x="300" y="82" width="200" height="120" rx="6" fill="#fff8ec" stroke="#b45309" stroke-width="1.5"/>
+  <text x="316" y="104" font-size="12" font-weight="700" fill="#7a4f13">tools/itsm.py</text>
+  <text x="316" y="126" font-size="10" fill="#7a4f13">@tool def itsm_api(</text>
+  <text x="316" y="144" font-size="10" fill="#7a4f13">  action: str,</text>
+  <text x="316" y="162" font-size="10" fill="#7a4f13">  payload: dict)</text>
+  <text x="316" y="186" font-size="10" font-weight="700" fill="#7a4f13">一个工具干所有事</text>
+
+  <rect x="530" y="82" width="180" height="120" rx="6" fill="#eef6ff" stroke="#1e4b7a" stroke-width="1.5"/>
+  <text x="620" y="106" font-size="12" font-weight="700" fill="#1e4b7a" text-anchor="middle">模型</text>
+  <text x="620" y="128" font-size="10" fill="#5a6b7d" text-anchor="middle">参数表只有 itsm_api</text>
+  <text x="620" y="148" font-size="10" fill="#5a6b7d" text-anchor="middle">action 是自由字符串</text>
+  <text x="620" y="168" font-size="10" fill="#5a6b7d" text-anchor="middle">payload 是自由 dict</text>
+
+  <rect x="740" y="82" width="130" height="120" rx="6" fill="#f4faf6" stroke="#1f5537" stroke-width="1.5"/>
+  <text x="805" y="106" font-size="12" font-weight="700" fill="#1f5537" text-anchor="middle">内部工单 API</text>
+  <text x="805" y="128" font-size="10" fill="#3f6b50" text-anchor="middle">创建 / 查询</text>
+  <text x="805" y="146" font-size="10" fill="#3f6b50" text-anchor="middle">升级 / 关闭</text>
+  <text x="805" y="168" font-size="10" fill="#3f6b50" text-anchor="middle">无需 token</text>
+
+  <path d="M270 142 L300 142" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#c1)"/>
+  <path d="M500 142 L530 142" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#c1)"/>
+  <path d="M710 142 L740 142" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#c1)"/>
+  <defs><marker id="c1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#5a6b7d"/></marker></defs>
+
+  <rect x="30" y="224" width="840" height="180" rx="6" fill="#fdf6f6" stroke="#7a2626" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="46" y="246" font-size="13" font-weight="700" fill="#7a2626">此处会失效 / 代价</text>
+  <text x="46" y="270" font-size="12" fill="#7a2626">① 流程塞进 instructions 后每轮全文进 prompt：200 行 → 长会话越跑越贵，且改一处要重读全篇</text>
+  <text x="46" y="292" font-size="12" fill="#7a2626">② 万能工具的参数是自由字符串：模型写 action="creat" 不报错，运行时才 404，排查从"改代码"变成"猜字符串"</text>
+  <text x="46" y="314" font-size="12" fill="#7a2626">③ 工具没 import 进入口 → config 里连 "tools" 键都没有，模型说"我没有这个工具"，而 build 全程 exit=0</text>
+  <text x="46" y="336" font-size="12" fill="#7a2626">④ 权限无从附着：一个工具同时含读写，想"只给只读"只能改代码分叉</text>
+  <text x="46" y="358" font-size="12" fill="#7a2626">⑤ 流程知识没有触发条件 —— 模型不知道"什么时候该翻这段"，只能靠 instructions 里一句"记得看"</text>
+  <text x="46" y="382" font-size="11" fill="#7a2626">这五条里，③ 是<b>静默</b>的（无报错），最危险；①②④⑤ 都是"能跑但很难维护"。</text>
+
+  <text x="30" y="428" font-size="10" fill="#94a3b8">读图：三个阶段都通着，所以这一版"能跑"。问题全在红框里——它们不阻止运行，只阻止它变成能维护的东西。</text>
+</svg>

@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 420" width="880" height="420" role="img" aria-label="三种扩展方式的介入位置对照">
+  <defs>
+    <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748b"/>
+    </marker>
+    <style>
+      .t { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; }
+      .m { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; }
+    </style>
+  </defs>
+
+  <rect width="880" height="420" fill="#ffffff"/>
+
+  <text x="36" y="40" class="t" font-size="17" font-weight="700" fill="#0f172a">同样叫「加上能力」，插在不同位置结果完全不同</text>
+  <text x="36" y="64" class="t" font-size="12" fill="#64748b">这张图只回答一件事：中间件、MCP、检索，各自拦在链路的哪一段</text>
+
+  <line x1="60" y1="150" x2="820" y2="150" stroke="#cbd5e1" stroke-width="2" marker-end="url(#arw)"/>
+
+  <rect x="60" y="112" width="150" height="76" rx="10" fill="#eff6ff" stroke="#93b4f0" stroke-width="1.6"/>
+  <text x="135" y="140" class="t" font-size="12.5" font-weight="600" fill="#1e3a8a" text-anchor="middle">用户提问</text>
+  <text x="135" y="162" class="t" font-size="10.5" fill="#3b5b9a" text-anchor="middle">进上下文之前</text>
+
+  <rect x="248" y="112" width="164" height="76" rx="10" fill="#fef3f2" stroke="#e9a9a2" stroke-width="1.6" stroke-dasharray="6 4"/>
+  <text x="330" y="140" class="t" font-size="12.5" font-weight="600" fill="#8a2f2f" text-anchor="middle">中间件</text>
+  <text x="330" y="162" class="t" font-size="10.5" fill="#8a2f2f" text-anchor="middle">包住每次模型/工具调用</text>
+
+  <rect x="452" y="112" width="150" height="76" rx="10" fill="#eff6ff" stroke="#93b4f0" stroke-width="1.6"/>
+  <text x="527" y="140" class="t" font-size="12.5" font-weight="600" fill="#1e3a8a" text-anchor="middle">模型决策</text>
+  <text x="527" y="162" class="t" font-size="10.5" fill="#3b5b9a" text-anchor="middle">决定要不要调工具</text>
+
+  <rect x="640" y="112" width="170" height="76" rx="10" fill="#f0fdf4" stroke="#8ecfa4" stroke-width="1.6" stroke-dasharray="6 4"/>
+  <text x="725" y="140" class="t" font-size="12.5" font-weight="600" fill="#166534" text-anchor="middle">工具执行</text>
+  <text x="725" y="162" class="t" font-size="10.5" fill="#166534" text-anchor="middle">自有工具 / MCP / 搜索</text>
+
+  <path d="M330 200 L330 232" stroke="#8a2f2f" stroke-width="1.8" marker-end="url(#arw)"/>
+  <path d="M725 200 L725 232" stroke="#166534" stroke-width="1.8" marker-end="url(#arw)"/>
+
+  <rect x="196" y="238" width="268" height="120" rx="10" fill="#fef7f6" stroke="#e9a9a2" stroke-width="1.4"/>
+  <text x="216" y="262" class="t" font-size="11.5" font-weight="600" fill="#8a2f2f">中间件：改变「怎么做」</text>
+  <text x="216" y="284" class="t" font-size="10.5" fill="#4b5563">改写请求、拦截工具调用、限流、脱敏、审计</text>
+  <text x="216" y="304" class="t" font-size="10.5" fill="#4b5563">每一轮都经过，管的是过程</text>
+  <text x="216" y="326" class="t" font-size="10.5" fill="#9a3412">钩子必须 async：同步版在 ainvoke 下抛错</text>
+  <text x="216" y="346" class="t" font-size="10.5" fill="#9a3412">要 import 并传入，不自动发现</text>
+
+  <rect x="500" y="238" width="310" height="120" rx="10" fill="#f5fdf7" stroke="#8ecfa4" stroke-width="1.4"/>
+  <text x="520" y="262" class="t" font-size="11.5" font-weight="600" fill="#166534">MCP / 检索：增加「能做什么」</text>
+  <text x="520" y="284" class="t" font-size="10.5" fill="#4b5563">MCP 把远端服务器上的工具整批搬过来</text>
+  <text x="520" y="304" class="t" font-size="10.5" fill="#4b5563">检索给一个不用自己申请密钥的搜索工具</text>
+  <text x="520" y="326" class="t" font-size="10.5" fill="#9a3412">MCP 只需声明，不 import 进入口</text>
+  <text x="520" y="346" class="t" font-size="10.5" fill="#9a3412">但两端能力都在「工具清单」里说话</text>
+
+  <rect x="36" y="376" width="808" height="30" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.2"/>
+  <text x="440" y="396" class="t" font-size="11.5" fill="#334155" text-anchor="middle">一句话：中间件管过程，MCP 与检索管菜单——前者写错会抛错（同步钩子在异步链路上不可用），后者塞太多会挤占上下文</text>
+</svg>

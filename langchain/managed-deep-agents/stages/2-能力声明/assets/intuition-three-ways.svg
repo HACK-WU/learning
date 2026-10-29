@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 430" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="920" height="430" fill="#fbfcfd"/>
+  <text x="460" y="34" text-anchor="middle" font-size="17" font-weight="600" fill="#1f2937">三样东西，三种交代方式</text>
+
+  <rect x="26" y="56" width="282" height="300" rx="12" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="167" y="82" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1e4b7a">一、每次都说的规矩</text>
+
+  <rect x="46" y="98" width="242" height="72" rx="8" fill="#ffffff" stroke="#a9c9e6" stroke-width="1.3"/>
+  <text x="167" y="122" text-anchor="middle" font-size="11" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#334155">instructions.md</text>
+  <text x="167" y="144" text-anchor="middle" font-size="10" fill="#6b7280">放在项目最外层，一个文件</text>
+  <text x="167" y="161" text-anchor="middle" font-size="10" fill="#6b7280">不写它只会提醒，不会拦住</text>
+
+  <text x="167" y="196" text-anchor="middle" font-size="10.5" fill="#334155">好比店门口贴的员工守则</text>
+  <text x="167" y="216" text-anchor="middle" font-size="10.5" fill="#334155">不管客人点什么都得先看</text>
+
+  <rect x="46" y="234" width="242" height="102" rx="8" fill="#ffffff" stroke="#a9c9e6" stroke-width="1.3" stroke-dasharray="4 3"/>
+  <text x="167" y="258" text-anchor="middle" font-size="10" fill="#1e4b7a">什么时候被读</text>
+  <text x="167" y="280" text-anchor="middle" font-size="10.5" fill="#334155">每一轮都读，一分不少</text>
+  <text x="167" y="302" text-anchor="middle" font-size="10" fill="#9a3412">想改也改不了</text>
+  <text x="167" y="322" text-anchor="middle" font-size="10" fill="#9a3412">它自己动不了这份守则</text>
+
+  <rect x="320" y="56" width="282" height="300" rx="12" fill="#fff8ec" stroke="#e0b877" stroke-width="1.5"/>
+  <text x="461" y="82" text-anchor="middle" font-size="12.5" font-weight="600" fill="#7a4f13">二、遇到特定事才用的手艺</text>
+
+  <rect x="340" y="98" width="242" height="72" rx="8" fill="#ffffff" stroke="#e0b877" stroke-width="1.3"/>
+  <text x="461" y="122" text-anchor="middle" font-size="11" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#334155">skills/&lt;名字&gt;/SKILL.md</text>
+  <text x="461" y="144" text-anchor="middle" font-size="10" fill="#6b7280">一个目录一份，可带附件</text>
+  <text x="461" y="161" text-anchor="middle" font-size="10" fill="#6b7280">开头必须写名字和一句话说明</text>
+
+  <text x="461" y="196" text-anchor="middle" font-size="10.5" fill="#334155">好比墙上挂的菜谱卡</text>
+  <text x="461" y="216" text-anchor="middle" font-size="10.5" fill="#334155">客人点那道菜，才去取那张卡</text>
+
+  <rect x="340" y="234" width="242" height="102" rx="8" fill="#ffffff" stroke="#e0b877" stroke-width="1.3" stroke-dasharray="4 3"/>
+  <text x="461" y="258" text-anchor="middle" font-size="10" fill="#7a4f13">什么时候被读</text>
+  <text x="461" y="280" text-anchor="middle" font-size="10.5" fill="#334155">平时只看到卡上的标签</text>
+  <text x="461" y="302" text-anchor="middle" font-size="10.5" fill="#334155">对上号了才整张翻开</text>
+  <text x="461" y="322" text-anchor="middle" font-size="10" fill="#9a3412">标签写糊 = 永远取不到</text>
+
+  <rect x="614" y="56" width="282" height="300" rx="12" fill="#f4f0fb" stroke="#c9b6e5" stroke-width="1.5"/>
+  <text x="755" y="82" text-anchor="middle" font-size="12.5" font-weight="600" fill="#4c2f7a">三、真能动手的家伙</text>
+
+  <rect x="634" y="98" width="242" height="72" rx="8" fill="#ffffff" stroke="#c9b6e5" stroke-width="1.3"/>
+  <text x="755" y="122" text-anchor="middle" font-size="11" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#334155">tools/&lt;名字&gt;.py</text>
+  <text x="755" y="144" text-anchor="middle" font-size="10" fill="#6b7280">写完还要引到入口里点名</text>
+  <text x="755" y="161" text-anchor="middle" font-size="10" fill="#6b7280">只放进去不点名 = 白放</text>
+
+  <text x="755" y="196" text-anchor="middle" font-size="10.5" fill="#334155">好比后厨的设备</text>
+  <text x="755" y="216" text-anchor="middle" font-size="10.5" fill="#334155">装了不通电，照样不转</text>
+
+  <rect x="634" y="234" width="242" height="102" rx="8" fill="#ffffff" stroke="#c9b6e5" stroke-width="1.3" stroke-dasharray="4 3"/>
+  <text x="755" y="258" text-anchor="middle" font-size="10" fill="#4c2f7a">什么时候被读</text>
+  <text x="755" y="280" text-anchor="middle" font-size="10.5" fill="#334155">只有被点名才会出现</text>
+  <text x="755" y="302" text-anchor="middle" font-size="10" fill="#9a3412">缺失时一声不响</text>
+  <text x="755" y="322" text-anchor="middle" font-size="10" fill="#9a3412">数量变成零，没有报错</text>
+
+  <text x="460" y="384" text-anchor="middle" font-size="11" fill="#5b6472">前两样放进去就算数，第三样必须再「点名」一次——这是本课最容易白干的一步</text>
+  <text x="460" y="408" text-anchor="middle" font-size="10.5" fill="#6b7280">三样东西的共同点：都不在 agent 的参数里显式声明，而是靠「放在哪」被平台发现</text>
+</svg>

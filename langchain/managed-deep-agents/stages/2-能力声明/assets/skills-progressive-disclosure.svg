@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 500" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="s1" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#5a6b7d"/>
+    </marker>
+  </defs>
+  <rect width="940" height="500" fill="#fbfcfd"/>
+  <text x="470" y="32" text-anchor="middle" font-size="17" font-weight="600" fill="#1f2937">渐进披露：标签先出场，正文后才翻开</text>
+
+  <rect x="24" y="54" width="212" height="196" rx="10" fill="#fff8ec" stroke="#e0b877" stroke-width="1.5"/>
+  <text x="130" y="78" text-anchor="middle" font-size="11.5" font-weight="600" fill="#7a4f13">① 启动时</text>
+  <text x="130" y="100" text-anchor="middle" font-size="10" fill="#334155">模型只看到每张卡的标签</text>
+  <rect x="42" y="112" width="176" height="42" rx="6" fill="#ffffff" stroke="#e0b877" stroke-width="1.1"/>
+  <text x="130" y="128" text-anchor="middle" font-size="9.5" fill="#334155">research</text>
+  <text x="130" y="145" text-anchor="middle" font-size="9" fill="#6b7280">Gather and synthesize…</text>
+  <rect x="42" y="160" width="176" height="42" rx="6" fill="#ffffff" stroke="#e0b877" stroke-width="1.1"/>
+  <text x="130" y="176" text-anchor="middle" font-size="9.5" fill="#334155">report</text>
+  <text x="130" y="193" text-anchor="middle" font-size="9" fill="#6b7280">Write a structured report…</text>
+  <text x="130" y="222" text-anchor="middle" font-size="9.5" fill="#9a3412">正文一个字都没进 prompt</text>
+  <text x="130" y="240" text-anchor="middle" font-size="9" fill="#6b7280">省的是 token，不是能力</text>
+
+  <line x1="236" y1="152" x2="278" y2="152" stroke="#5a6b7d" stroke-width="1.5" marker-end="url(#s1)"/>
+
+  <rect x="282" y="54" width="212" height="196" rx="10" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="388" y="78" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1e4b7a">② 任务对上号了</text>
+  <text x="388" y="100" text-anchor="middle" font-size="10" fill="#334155">模型按标签判断「用哪张」</text>
+  <rect x="300" y="112" width="176" height="42" rx="6" fill="#ffffff" stroke="#7fb2e5" stroke-width="1.1"/>
+  <text x="388" y="128" text-anchor="middle" font-size="9.5" fill="#1e4b7a">这一张被选中</text>
+  <text x="388" y="145" text-anchor="middle" font-size="9" fill="#334155">research</text>
+  <rect x="300" y="160" width="176" height="42" rx="6" fill="#f8f9fa" stroke="#d7dbe0" stroke-width="1.1" stroke-dasharray="3 3"/>
+  <text x="388" y="176" text-anchor="middle" font-size="9.5" fill="#9aa1a9">这一张没动</text>
+  <text x="388" y="193" text-anchor="middle" font-size="9" fill="#9aa1a9">report</text>
+  <text x="388" y="222" text-anchor="middle" font-size="9.5" fill="#9a3412">判断依据只有 description</text>
+  <text x="388" y="240" text-anchor="middle" font-size="9" fill="#6b7280">它写糊了，就永远选不中</text>
+
+  <line x1="494" y1="152" x2="536" y2="152" stroke="#5a6b7d" stroke-width="1.5" marker-end="url(#s1)"/>
+
+  <rect x="540" y="54" width="212" height="196" rx="10" fill="#eefaf3" stroke="#7fc9a4" stroke-width="1.5"/>
+  <text x="646" y="78" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1f6b47">③ 整张翻开</text>
+  <text x="646" y="100" text-anchor="middle" font-size="10" fill="#334155">SKILL.md 正文进入上下文</text>
+  <rect x="558" y="112" width="176" height="90" rx="6" fill="#ffffff" stroke="#7fc9a4" stroke-width="1.1"/>
+  <text x="646" y="130" text-anchor="middle" font-size="9" fill="#334155"># Research</text>
+  <text x="646" y="148" text-anchor="middle" font-size="9" fill="#334155">1. Identify what's missing</text>
+  <text x="646" y="164" text-anchor="middle" font-size="9" fill="#334155">2. Use query_db to look up</text>
+  <text x="646" y="180" text-anchor="middle" font-size="9" fill="#334155">3. Summarize before answering</text>
+  <text x="646" y="196" text-anchor="middle" font-size="8.5" fill="#6b7280">（frontmatter 已被剥离）</text>
+  <text x="646" y="222" text-anchor="middle" font-size="9.5" fill="#1f6b47">此后按这套步骤干活</text>
+  <text x="646" y="240" text-anchor="middle" font-size="9" fill="#6b7280">附件仍按需再取</text>
+
+  <line x1="752" y1="152" x2="794" y2="152" stroke="#5a6b7d" stroke-width="1.5" marker-end="url(#s1)"/>
+
+  <rect x="798" y="54" width="118" height="196" rx="10" fill="#f4f0fb" stroke="#c9b6e5" stroke-width="1.5"/>
+  <text x="857" y="78" text-anchor="middle" font-size="11" font-weight="600" fill="#4c2f7a">④ 附件</text>
+  <text x="857" y="100" text-anchor="middle" font-size="9" fill="#334155">templates/</text>
+  <text x="857" y="118" text-anchor="middle" font-size="9" fill="#334155">scripts/</text>
+  <text x="857" y="136" text-anchor="middle" font-size="9" fill="#334155">reference/</text>
+  <text x="857" y="164" text-anchor="middle" font-size="9" fill="#6b7280">正文里提到</text>
+  <text x="857" y="182" text-anchor="middle" font-size="9" fill="#6b7280">才去读</text>
+  <text x="857" y="210" text-anchor="middle" font-size="9" fill="#9a3412">漏了引用</text>
+  <text x="857" y="226" text-anchor="middle" font-size="9" fill="#9a3412">等于没写</text>
+
+  <rect x="24" y="270" width="892" height="102" rx="10" fill="#fdf2f2" stroke="#e7a6a6" stroke-width="1.4"/>
+  <text x="44" y="292" font-size="11.5" font-weight="600" fill="#8a2f2f">实测：frontmatter 七种情况（直接调用解析函数，managed-deepagents 0.9.5）</text>
+  <text x="44" y="314" font-size="9.8" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#334155">无 name        → SKIPPED             无 frontmatter  → SKIPPED            超 10 MB 文件   → SKIPPED</text>
+  <text x="44" y="334" font-size="9.8" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#334155">无 description → SKIPPED             name≠目录名     → 加载 + 警告         name 非小写连字符 → 加载 + 警告</text>
+  <text x="44" y="354" font-size="9.8" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#334155">字段齐全       → 加载                description 超 1024 → 加载但截断</text>
+
+  <rect x="24" y="386" width="892" height="92" rx="10" fill="#fff8ec" stroke="#e0b877" stroke-width="1.4"/>
+  <text x="44" y="410" font-size="11.5" font-weight="600" fill="#7a4f13">最要命的一点</text>
+  <text x="44" y="434" font-size="10.5" fill="#7a4f13">mda build 对上述七种情况全部 exit=0，一个字都不提醒。只有一个空目录 skills/research/ 时也一样绿灯（_has_skills = False）。</text>
+  <text x="44" y="456" font-size="10.5" fill="#9a3412">技能写坏了不会拦住你，只会让你的 agent 在需要时「没有那套手艺」——排查时看日志里的 Skipping 行，别指望构建报错。</text>
+</svg>

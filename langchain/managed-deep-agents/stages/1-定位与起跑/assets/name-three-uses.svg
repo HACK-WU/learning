@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 480" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="n1" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#5a6b7d"/>
+    </marker>
+  </defs>
+  <rect width="940" height="480" fill="#fbfcfd"/>
+  <text x="470" y="32" text-anchor="middle" font-size="17" font-weight="600" fill="#1f2937">一个 name，三处被读走</text>
+
+  <rect x="330" y="58" width="280" height="86" rx="10" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.6"/>
+  <text x="470" y="82" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1e4b7a">agent.py / agent.ts</text>
+  <text x="470" y="104" text-anchor="middle" font-size="13" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#1f2937">name="research-assistant"</text>
+  <text x="470" y="128" text-anchor="middle" font-size="10" fill="#6b7280">必须是内联字面量（写变量会被拒）</text>
+
+  <line x1="470" y1="144" x2="470" y2="172" stroke="#5a6b7d" stroke-width="1.4" marker-end="url(#n1)"/>
+
+  <rect x="300" y="176" width="340" height="46" rx="8" fill="#fff8ec" stroke="#e0b877" stroke-width="1.4"/>
+  <text x="470" y="196" text-anchor="middle" font-size="11" font-weight="600" fill="#7a4f13">mda build 静态扫描把它读走</text>
+  <text x="470" y="214" text-anchor="middle" font-size="10" fill="#7a4f13">注意：不执行你的模块，只读文本</text>
+
+  <line x1="470" y1="222" x2="470" y2="246" stroke="#5a6b7d" stroke-width="1.4" marker-end="url(#n1)"/>
+  <line x1="240" y1="246" x2="700" y2="246" stroke="#5a6b7d" stroke-width="1.4"/>
+  <line x1="240" y1="246" x2="240" y2="272" stroke="#5a6b7d" stroke-width="1.4" marker-end="url(#n1)"/>
+  <line x1="470" y1="246" x2="470" y2="272" stroke="#5a6b7d" stroke-width="1.4" marker-end="url(#n1)"/>
+  <line x1="700" y1="246" x2="700" y2="272" stroke="#5a6b7d" stroke-width="1.4" marker-end="url(#n1)"/>
+
+  <rect x="42" y="276" width="396" height="120" rx="10" fill="#ffffff" stroke="#a9c9e6" stroke-width="1.4"/>
+  <text x="240" y="300" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1e4b7a">① 图 id（graph id）</text>
+  <text x="240" y="322" text-anchor="middle" font-size="10" fill="#334155">写进 .mda/build/langgraph.json 的 graphs 键</text>
+  <text x="240" y="344" text-anchor="middle" font-size="10" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#1f2937">"graphs": {"research-assistant": "./_mda_entry.py:agent"}</text>
+  <text x="240" y="368" text-anchor="middle" font-size="10" fill="#9a3412">运行时按这个键找图，不是按文件名</text>
+  <text x="240" y="386" text-anchor="middle" font-size="10" fill="#9a3412">改 name = 换一个图，旧的调用方全断</text>
+
+  <rect x="502" y="276" width="396" height="120" rx="10" fill="#ffffff" stroke="#a9c9e6" stroke-width="1.4"/>
+  <text x="700" y="300" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1e4b7a">② 默认部署名</text>
+  <text x="700" y="322" text-anchor="middle" font-size="10" fill="#334155">mda deploy 不额外指定时，就用它当部署名</text>
+  <text x="700" y="344" text-anchor="middle" font-size="10" fill="#334155">可以用 mda deploy --name 覆盖</text>
+  <text x="700" y="368" text-anchor="middle" font-size="10" fill="#9a3412">覆盖只改部署名，不改图 id</text>
+  <text x="700" y="386" text-anchor="middle" font-size="10" fill="#334155">两者从此不一样，排查时别混</text>
+
+  <rect x="272" y="414" width="396" height="52" rx="10" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.4"/>
+  <text x="470" y="436" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1e4b7a">③ 客户端调用时的 assistant_id</text>
+  <text x="470" y="456" text-anchor="middle" font-size="10" fill="#334155">调用方传的这个名字，必须和上面 ① 的值逐字一致</text>
+</svg>

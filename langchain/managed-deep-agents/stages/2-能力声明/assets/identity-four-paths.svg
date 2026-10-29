@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" width="900" height="500" role="img" aria-label="身份四条路径与用户记忆的挂载条件">
+  <defs>
+    <marker id="a4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748b"/>
+    </marker>
+    <style>
+      .t { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
+      .m { font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; }
+    </style>
+  </defs>
+
+  <rect width="900" height="500" fill="#ffffff"/>
+
+  <text x="30" y="38" class="t" font-size="17" font-weight="700" fill="#0f172a">四种身份提供方，只解决「你是谁」，不解决「你能看谁的」</text>
+  <text x="30" y="62" class="t" font-size="12" fill="#64748b">身份决定隔离粒度；能看哪个记忆层还要再过一道 principal 检查</text>
+
+  <rect x="30" y="84" width="196" height="112" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.4"/>
+  <text x="128" y="108" class="t" font-size="11.5" font-weight="600" fill="#334155" text-anchor="middle">LangSmith API key</text>
+  <text x="128" y="130" class="t" font-size="10" fill="#64748b" text-anchor="middle">mda init 默认</text>
+  <line x1="52" y1="140" x2="204" y2="140" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="128" y="160" class="m" font-size="9.5" fill="#4b5563" text-anchor="middle">x-api-key</text>
+  <text x="128" y="182" class="t" font-size="10" fill="#b91c1c" text-anchor="middle">共用一把钥匙</text>
+
+  <rect x="244" y="84" width="196" height="112" rx="10" fill="#eff6ff" stroke="#93b4f0" stroke-width="1.6"/>
+  <text x="342" y="108" class="t" font-size="11.5" font-weight="600" fill="#1e3a8a" text-anchor="middle">Supabase</text>
+  <text x="342" y="130" class="t" font-size="10" fill="#64748b" text-anchor="middle">浏览器登录的终端用户</text>
+  <line x1="266" y1="140" x2="418" y2="140" stroke="#bfdbfe" stroke-width="1"/>
+  <text x="342" y="160" class="m" font-size="9.5" fill="#3b5b9a" text-anchor="middle">Bearer &lt;access_token&gt;</text>
+  <text x="342" y="182" class="t" font-size="10" fill="#166534" text-anchor="middle">每人独立会话</text>
+
+  <rect x="458" y="84" width="196" height="112" rx="10" fill="#eff6ff" stroke="#93b4f0" stroke-width="1.6"/>
+  <text x="556" y="108" class="t" font-size="11.5" font-weight="600" fill="#1e3a8a" text-anchor="middle">其他 JWT 提供方</text>
+  <text x="556" y="130" class="t" font-size="10" fill="#64748b" text-anchor="middle">Auth0 / Okta / Clerk</text>
+  <line x1="480" y1="140" x2="632" y2="140" stroke="#bfdbfe" stroke-width="1"/>
+  <text x="556" y="160" class="m" font-size="9.5" fill="#3b5b9a" text-anchor="middle">issuer + audience</text>
+  <text x="556" y="182" class="t" font-size="10" fill="#166534" text-anchor="middle">每人独立会话</text>
+
+  <rect x="672" y="84" width="198" height="112" rx="10" fill="#fff7ed" stroke="#e0b877" stroke-width="1.6"/>
+  <text x="771" y="108" class="t" font-size="11.5" font-weight="600" fill="#7a4f13" text-anchor="middle">自有后端</text>
+  <text x="771" y="130" class="t" font-size="10" fill="#64748b" text-anchor="middle">你的 API 已经验证过</text>
+  <line x1="694" y1="140" x2="848" y2="140" stroke="#fde4bc" stroke-width="1"/>
+  <text x="771" y="160" class="m" font-size="9.5" fill="#7a4f13" text-anchor="middle">x-mda-ingress-secret</text>
+  <text x="771" y="182" class="t" font-size="10" fill="#166534" text-anchor="middle">每人独立会话</text>
+
+  <text x="30" y="226" class="t" font-size="11.5" font-weight="600" fill="#0f172a">user 记忆的挂载还要再过一道：principal 必须是「人」</text>
+
+  <rect x="30" y="240" width="840" height="96" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2"/>
+  <text x="52" y="264" class="m" font-size="10" fill="#334155">resolve_user_memory_principal(configurable)</text>
+  <text x="72" y="284" class="m" font-size="9.5" fill="#4b5563">identity = build_runtime_identity(configurable)   # 读 langgraph_auth_user</text>
+  <text x="72" y="300" class="m" font-size="9.5" fill="#b91c1c">if identity is None:  return None                 # → denied="not_a_person"</text>
+  <text x="72" y="316" class="m" font-size="9.5" fill="#b91c1c">if kind != "person": return None                 # 服务身份，同样拒绝</text>
+  <text x="620" y="316" class="t" font-size="10" fill="#9a3412" text-anchor="middle">API key 验的是服务</text>
+
+  <text x="30" y="366" class="t" font-size="11.5" font-weight="600" fill="#0f172a">实测得到的四种拒绝原因</text>
+
+  <rect x="30" y="380" width="200" height="88" rx="9" fill="#fef2f2" stroke="#e9a9a2" stroke-width="1.3"/>
+  <text x="130" y="404" class="m" font-size="9.5" fill="#8a2f2f" text-anchor="middle">not_a_person</text>
+  <text x="130" y="426" class="t" font-size="9.5" fill="#4b5563" text-anchor="middle">没有 principal</text>
+  <text x="130" y="444" class="t" font-size="9.5" fill="#4b5563" text-anchor="middle">或身份是服务</text>
+  <text x="130" y="460" class="t" font-size="9" fill="#9a3412" text-anchor="middle">最常见的一档</text>
+
+  <rect x="244" y="380" width="200" height="88" rx="9" fill="#fff7ed" stroke="#e0b877" stroke-width="1.3"/>
+  <text x="344" y="404" class="m" font-size="9.5" fill="#7a4f13" text-anchor="middle">not_slack_dm</text>
+  <text x="344" y="426" class="t" font-size="9.5" fill="#4b5563" text-anchor="middle">默认策略下</text>
+  <text x="344" y="444" class="t" font-size="9.5" fill="#4b5563" text-anchor="middle">不是 Slack 一对一</text>
+  <text x="344" y="460" class="t" font-size="9" fill="#9a3412" text-anchor="middle">标准拒绝，不是故障</text>
+
+  <rect x="458" y="380" width="200" height="88" rx="9" fill="#fff7ed" stroke="#e0b877" stroke-width="1.3"/>
+  <text x="558" y="404" class="m" font-size="9.5" fill="#7a4f13" text-anchor="middle">policy_denied</text>
+  <text x="558" y="426" class="t" font-size="9.5" fill="#4b5563" text-anchor="middle">你写的 allow</text>
+  <text x="558" y="444" class="t" font-size="9.5" fill="#4b5563" text-anchor="middle">返回了 False</text>
+  <text x="558" y="460" class="t" font-size="9" fill="#9a3412" text-anchor="middle">你自己的判断</text>
+
+  <rect x="672" y="380" width="198" height="88" rx="9" fill="#f5fdf7" stroke="#8ecfa4" stroke-width="1.3"/>
+  <text x="771" y="404" class="t" font-size="9.5" fill="#166534" text-anchor="middle">（无原因 = 放行）</text>
+  <text x="771" y="426" class="t" font-size="9.5" fill="#4b5563" text-anchor="middle">个人身份 + allow 通过</text>
+  <text x="771" y="444" class="t" font-size="9.5" fill="#4b5563" text-anchor="middle">→ user_id 有值</text>
+  <text x="771" y="460" class="t" font-size="9" fill="#166534" text-anchor="middle">这才是真的挂上了</text>
+</svg>

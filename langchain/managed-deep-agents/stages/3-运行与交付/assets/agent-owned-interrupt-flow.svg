@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 640" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="a3" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="980" height="640" fill="#fbfcfd"/>
+
+  <text x="490" y="34" text-anchor="middle" font-size="17" font-weight="600" fill="#1f2937">主动中断：agent 自己停下来问人</text>
+  <text x="490" y="58" text-anchor="middle" font-size="12" fill="#64748b">它和"平台拦在工具调用前"的中断，是两种完全不同的东西</text>
+
+  <rect x="26" y="82" width="452" height="118" rx="8" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.6"/>
+  <text x="42" y="106" font-size="12.5" font-weight="600" fill="#1e4b7a">平台自己的中断（interrupt_on）</text>
+  <text x="42" y="128" font-size="10.5" fill="#1e4b7a">位置：工具调用之前，由平台拦。</text>
+  <text x="42" y="146" font-size="10.5" fill="#1e4b7a">界面：Slack 或 Studio 帮你渲染审批卡，你不用管长什么样。</text>
+  <text x="42" y="164" font-size="10.5" fill="#1e4b7a">Slack 只支持 approve / reject 两种决策。</text>
+  <text x="42" y="184" font-size="10" fill="#94a3b8">适合：这个危险动作要不要执行。</text>
+
+  <rect x="502" y="82" width="452" height="118" rx="8" fill="#f6f0fa" stroke="#a98cc0" stroke-width="1.6"/>
+  <text x="518" y="106" font-size="12.5" font-weight="600" fill="#4a2f63">你自己的中断（agent-owned interrupt）</text>
+  <text x="518" y="128" font-size="10.5" fill="#4a2f63">位置：你的工具函数里，想停就停。</text>
+  <text x="518" y="146" font-size="10.5" fill="#4a2f63">界面：Block Kit 你自己拼，平台只负责把答案带回来。</text>
+  <text x="518" y="164" font-size="10.5" fill="#4a2f63">能收任何结构化输入：审批、选项、一整张表。</text>
+  <text x="518" y="184" font-size="10" fill="#94a3b8">适合：需要用户填东西、或者问一句"然后呢"。</text>
+
+  <rect x="26" y="220" width="928" height="196" rx="8" fill="#fff" stroke="#cbd5e1"/>
+  <text x="42" y="244" font-size="12.5" font-weight="600" fill="#1f2937">四步闭环：为什么必须带 correlation ID</text>
+
+  <rect x="42" y="258" width="200" height="66" rx="6" fill="#eef6ff" stroke="#a9ccea"/>
+  <text x="142" y="280" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e4b7a">1 · 贴表单</text>
+  <text x="142" y="298" text-anchor="middle" font-size="9.5" fill="#3a6a96">你的工具发 Block Kit</text>
+  <text x="142" y="314" text-anchor="middle" font-size="9.5" fill="#3a6a96">按钮 value 里塞 correlation ID</text>
+
+  <line x1="242" y1="291" x2="272" y2="291" stroke="#64748b" stroke-width="1.3" marker-end="url(#a3)"/>
+
+  <rect x="272" y="258" width="200" height="66" rx="6" fill="#f0f8f2" stroke="#a8d4b8"/>
+  <text x="372" y="280" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1f5537">2 · 停车</text>
+  <text x="372" y="298" text-anchor="middle" font-size="9.5" fill="#357a52">调 interrupt(...)</text>
+  <text x="372" y="314" text-anchor="middle" font-size="9.5" fill="#357a52">这个话题停在检查点</text>
+
+  <line x1="472" y1="291" x2="502" y2="291" stroke="#64748b" stroke-width="1.3" marker-end="url(#a3)"/>
+
+  <rect x="502" y="258" width="200" height="66" rx="6" fill="#fef6e7" stroke="#e6cf9a"/>
+  <text x="602" y="280" text-anchor="middle" font-size="10.5" font-weight="600" fill="#7a5210">3 · 点按钮</text>
+  <text x="602" y="298" text-anchor="middle" font-size="9.5" fill="#8a6a2a">Slack 发 user_prompt_response</text>
+  <text x="602" y="314" text-anchor="middle" font-size="9.5" fill="#8a6a2a">SDK 按 ID 找到停着的那个</text>
+
+  <line x1="702" y1="291" x2="732" y2="291" stroke="#64748b" stroke-width="1.3" marker-end="url(#a3)"/>
+
+  <rect x="732" y="258" width="206" height="66" rx="6" fill="#f6f0fa" stroke="#c9b0d9"/>
+  <text x="835" y="280" text-anchor="middle" font-size="10.5" font-weight="600" fill="#4a2f63">4 · 继续</text>
+  <text x="835" y="298" text-anchor="middle" font-size="9.5" fill="#6b4a85">interrupt() 返回答案</text>
+  <text x="835" y="314" text-anchor="middle" font-size="9.5" fill="#6b4a85">工具从函数第一行重跑</text>
+
+  <text x="42" y="346" font-size="10.5" fill="#334155">「从第一行重跑」是 LangGraph 的标准行为，于是贴表单那行必须自己挡住：判断 channel.event.type != "user_prompt_response" 才发。</text>
+  <text x="42" y="366" font-size="10.5" fill="#334155">不挡的话，一次中断会贴出两张表——第二张是在续跑时贴的，用户会以为要再点一次。</text>
+  <text x="42" y="390" font-size="10" fill="#94a3b8">源码里还有个细节：话题上停着多个中断时，没有 correlation ID 就什么都不跑；有 ID 但对不上或对上多个，也不跑。</text>
+  <text x="42" y="408" font-size="10" fill="#94a3b8">原因是"启动新一轮"会让停着的检查点被抛弃，所以宁可不动。</text>
+
+  <rect x="26" y="432" width="452" height="130" rx="8" fill="#fdf1f1" stroke="#d98c8c" stroke-width="1.6"/>
+  <text x="42" y="456" font-size="12" font-weight="600" fill="#8a2626">五种"没反应"的真实原因</text>
+  <text x="42" y="478" font-size="10" fill="#8a2626">模态框没弹：view JSON 不合规 / 超了限制 / trigger_id 过期（三秒）</text>
+  <text x="42" y="496" font-size="10" fill="#8a2626">用户点了关闭：中断一直停着，没有取消路径、也没有超时</text>
+  <text x="42" y="514" font-size="10" fill="#8a2626">用户改在话题里打字：走普通消息路径，检查点被抛弃</text>
+  <text x="42" y="532" font-size="10" fill="#8a2626">两个人同时点：两次都转发，第一次续跑、第二次新开一轮</text>
+  <text x="42" y="550" font-size="10" fill="#8a2626">表单提交永远不带 correlation ID</text>
+
+  <rect x="502" y="432" width="452" height="130" rx="8" fill="#fef6e7" stroke="#d9a94c" stroke-width="1.6"/>
+  <text x="518" y="456" font-size="12" font-weight="600" fill="#7a5210">几个必须记住的常量与上限</text>
+  <text x="518" y="478" font-size="10" fill="#7a5210">INTERRUPT_CORRELATION_KEY 的值是字符串 "mda_correlation_id"</text>
+  <text x="518" y="496" font-size="10" fill="#7a5210">action_id 以 mda_modal:: 开头 = 点开模态框，永远到不了 agent</text>
+  <text x="518" y="514" font-size="10" fill="#7a5210">按钮 value ≤ 2000 字符，整张 view 必须塞进这个 value</text>
+  <text x="518" y="532" font-size="10" fill="#7a5210">模态框标题 ≤ 24 字符、每张 view ≤ 100 块、callback_id ≤ 255</text>
+  <text x="518" y="550" font-size="10" fill="#7a5210">平台不校验 view，Slack 拒了用户那边什么都不显示</text>
+
+  <text x="490" y="596" text-anchor="middle" font-size="11" fill="#475569">一句话记住区别：平台的中断问"要不要"，你的中断问"填什么"</text>
+  <text x="490" y="620" text-anchor="middle" font-size="10" fill="#94a3b8">只有 Slack 能渲染表单；Studio 里只看到原始的中断值</text>
+</svg>

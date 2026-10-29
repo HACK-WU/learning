@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 660" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="e1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="980" height="660" fill="#fbfcfd"/>
+
+  <text x="490" y="32" text-anchor="middle" font-size="17" font-weight="600" fill="#1f2937">Harbor 评估：一个目录就是一間隔离病房</text>
+  <text x="490" y="56" text-anchor="middle" font-size="12" fill="#64748b">同一个 agent，放进不同的题里跑，每题给一个 0 到 1 的分数</text>
+
+  <rect x="26" y="76" width="180" height="76" rx="8" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.6"/>
+  <text x="116" y="100" text-anchor="middle" font-size="12" font-weight="600" fill="#1e4b7a">mda evals init</text>
+  <text x="116" y="120" text-anchor="middle" font-size="9.5" fill="#3a6a96">建出骨架</text>
+  <text x="116" y="138" text-anchor="middle" font-size="9.5" fill="#3a6a96">不动你的 agent</text>
+
+  <line x1="206" y1="114" x2="234" y2="114" stroke="#64748b" stroke-width="1.3" marker-end="url(#e1)"/>
+
+  <rect x="234" y="66" width="286" height="96" rx="8" fill="#fff" stroke="#cbd5e1"/>
+  <text x="248" y="86" font-size="11" font-weight="600" fill="#1f2937">生成两处东西</text>
+  <text x="248" y="106" font-size="9.5" fill="#334155">evals/harbor-job.json　← 你的，init 只在缺失时写</text>
+  <text x="248" y="124" font-size="9.5" fill="#334155">.mda/evals/runtime.json　← 生成的，记录解释器路径</text>
+  <text x="248" y="142" font-size="9.5" fill="#334155">.mda/evals/harbor-adapter/　← 生成的插件</text>
+  <text x="248" y="158" font-size="9" fill="#94a3b8">实测：-i 在非终端下报错，必须省略才能跑</text>
+
+  <line x1="520" y1="114" x2="548" y2="114" stroke="#64748b" stroke-width="1.3" marker-end="url(#e1)"/>
+
+  <rect x="548" y="66" width="196" height="96" rx="8" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.6"/>
+  <text x="646" y="86" text-anchor="middle" font-size="11" font-weight="600" fill="#1f5537">写任务</text>
+  <text x="646" y="104" text-anchor="middle" font-size="9.5" fill="#357a52">evals/&lt;task&gt;/</text>
+  <text x="646" y="122" text-anchor="middle" font-size="9.5" fill="#357a52">Task.md + instruction.md</text>
+  <text x="646" y="140" text-anchor="middle" font-size="9.5" fill="#357a52">+ task.toml + tests/</text>
+  <text x="646" y="158" text-anchor="middle" font-size="9" fill="#94a3b8">人先审 Task.md</text>
+
+  <line x1="744" y1="114" x2="772" y2="114" stroke="#64748b" stroke-width="1.3" marker-end="url(#e1)"/>
+
+  <rect x="772" y="66" width="182" height="96" rx="8" fill="#f6f0fa" stroke="#a98cc0" stroke-width="1.6"/>
+  <text x="863" y="86" text-anchor="middle" font-size="11" font-weight="600" fill="#4a2f63">harbor run</text>
+  <text x="863" y="104" text-anchor="middle" font-size="9.5" fill="#6b4a85">每题一间 Docker</text>
+  <text x="863" y="122" text-anchor="middle" font-size="9.5" fill="#6b4a85">跑完执行 test.sh</text>
+  <text x="863" y="140" text-anchor="middle" font-size="9.5" fill="#6b4a85">verifier 写 reward</text>
+  <text x="863" y="158" text-anchor="middle" font-size="9" fill="#94a3b8">结果落 .mda/evals/jobs</text>
+
+  <rect x="26" y="182" width="452" height="176" rx="8" fill="#fff" stroke="#cbd5e1"/>
+  <text x="42" y="206" font-size="12" font-weight="600" fill="#1f2937">一个任务目录里到底有什么</text>
+  <text x="42" y="230" font-size="10.5" fill="#334155">Task.md　　　给人看的规格，评审这一份</text>
+  <text x="42" y="250" font-size="10.5" fill="#334155">instruction.md　念给 agent 听的那段话</text>
+  <text x="42" y="270" font-size="10.5" fill="#334155">task.toml　　 题目配置（时间、资源等）</text>
+  <text x="42" y="290" font-size="10.5" fill="#334155">environment/Dockerfile　这间病房怎么搭</text>
+  <text x="42" y="310" font-size="10.5" fill="#334155">tests/test.sh　　跑完怎么判分</text>
+  <text x="42" y="330" font-size="10" fill="#94a3b8">只有"含 instruction 和 tests 的一级子目录"才算任务，其余忽略</text>
+  <text x="42" y="350" font-size="10" fill="#8a2626">判分只认 /logs/verifier/reward.txt 或 reward.json，不写就是 0</text>
+
+  <rect x="502" y="182" width="452" height="176" rx="8" fill="#fef6e7" stroke="#d9a94c" stroke-width="1.6"/>
+  <text x="518" y="206" font-size="12" font-weight="600" fill="#7a5210">harbor-job.json 里实测的几个默认值</text>
+  <text x="518" y="230" font-size="10.5" fill="#7a5210">jobs_dir　　　　　.mda/evals/jobs</text>
+  <text x="518" y="250" font-size="10.5" fill="#7a5210">n_attempts　　　 1　　每題只跑一次</text>
+  <text x="518" y="270" font-size="10.5" fill="#7a5210">n_concurrent_trials　1　　一次只跑一题</text>
+  <text x="518" y="290" font-size="10.5" fill="#7a5210">environment.type　docker　必须有 Docker</text>
+  <text x="518" y="310" font-size="10.5" fill="#7a5210">env　　　　　　　 22 个 provider 变量透传</text>
+  <text x="518" y="330" font-size="10" fill="#8a6a2a">这些值都能改，且 re-init 不会覆盖你的改动</text>
+  <text x="518" y="350" font-size="10" fill="#8a6a2a">n_attempts=1 意味着单次结果波动会被当成结论</text>
+
+  <rect x="26" y="382" width="928" height="120" rx="8" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.6"/>
+  <text x="42" y="406" font-size="12.5" font-weight="600" fill="#1e4b7a">MCP 端点：把部署好的 agent 反过来变成一个工具</text>
+  <text x="42" y="430" font-size="10.5" fill="#1e4b7a">地址永远是 &lt;部署 API URL&gt;/mcp，本地实测 http://127.0.0.1:2024/mcp 直接可用，/v1/mcp 是 404。</text>
+  <text x="42" y="450" font-size="10.5" fill="#1e4b7a">工具名 = agent 的 name；实测 inputSchema 只要求 messages（字符串），不是消息数组。</text>
+  <text x="42" y="470" font-size="10.5" fill="#1e4b7a">本地 dev 不带凭证也能调（给的是无范围本地服务身份）；只有真部署才校验 x-api-key。</text>
+  <text x="42" y="490" font-size="10.5" fill="#8a2626">MCP 请求是无状态的：两次调用不共享话题。要跨调用保留信息，只能开持久记忆——而它对所有调用方共享。</text>
+
+  <rect x="26" y="524" width="928" height="72" rx="8" fill="#fdf1f1" stroke="#d98c8c" stroke-width="1.6"/>
+  <text x="42" y="548" font-size="12" font-weight="600" fill="#8a2626">三种"给 agent 接东西"的方向，别搞混</text>
+  <text x="42" y="570" font-size="10.5" fill="#8a2626">MCP 端点（出）：把 agent 本身暴露成工具给别的客户端用。　MCP 连接器（入）：把远端的工具装进 agent。</text>
+  <text x="42" y="588" font-size="10.5" fill="#8a2626">通道（入）：接外部消息、能启动运行、能回话。MCP 连接器只给工具，不启动运行也不回话。</text>
+
+  <text x="490" y="628" text-anchor="middle" font-size="11" fill="#475569">评估答"做对了没有"，MCP 端点答"别人怎么用它"，部署答"东西送到了没有"</text>
+</svg>

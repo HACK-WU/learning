@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 460" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="900" height="460" fill="#fbfcfd"/>
+  <text x="30" y="34" font-size="17" font-weight="700" fill="#1f2937">基础版：把"记住客户"写进对话，靠模型自己记</text>
+  <text x="30" y="56" font-size="12" fill="#6b7280">memory.py 照抄了模板（agent + user 两层都声明了），但一次也没挂上</text>
+
+  <rect x="30" y="84" width="196" height="110" rx="6" fill="#eef6ff" stroke="#1e4b7a" stroke-width="1.5"/>
+  <text x="44" y="106" font-size="12" font-weight="700" fill="#1e4b7a">memory.py</text>
+  <text x="44" y="128" font-size="9.5" fill="#3f5b78">define_memory(</text>
+  <text x="52" y="144" font-size="9.5" fill="#3f5b78">agent=MemoryLayer(),</text>
+  <text x="52" y="160" font-size="9.5" fill="#3f5b78">user=MemoryLayer(),</text>
+  <text x="44" y="176" font-size="9.5" fill="#3f5b78">)</text>
+  <text x="44" y="188" font-size="9" fill="#1f5537">声明齐全 —— 但只是"可挂载"</text>
+
+  <rect x="256" y="84" width="186" height="110" rx="6" fill="#fff8ec" stroke="#b45309" stroke-width="1.5"/>
+  <text x="270" y="106" font-size="12" font-weight="700" fill="#7a4f13">identity.py</text>
+  <text x="270" y="128" font-size="10" fill="#7a4f13">mda init 的默认值</text>
+  <text x="270" y="148" font-size="10" fill="#7a4f13">LangSmith API key</text>
+  <text x="270" y="176" font-size="10" font-weight="700" fill="#7a2626">身份性质 = service</text>
+
+  <rect x="472" y="84" width="186" height="110" rx="6" fill="#f7f8fa" stroke="#4b5563" stroke-width="1.5"/>
+  <text x="486" y="106" font-size="12" font-weight="700" fill="#374151">运行时决策</text>
+  <text x="486" y="128" font-size="10" fill="#4b5563">agent 层：放行</text>
+  <text x="486" y="148" font-size="10" fill="#7a2626">user 层：not_a_person</text>
+  <text x="486" y="176" font-size="10" fill="#7a2626" font-weight="700">直接拒绝挂载</text>
+
+  <rect x="688" y="84" width="182" height="110" rx="6" fill="#fdf6f6" stroke="#7a2626" stroke-width="1.5"/>
+  <text x="702" y="106" font-size="12" font-weight="700" fill="#7a2626">模型实际行为</text>
+  <text x="702" y="128" font-size="10" fill="#7a2626">把"张先生的偏好"</text>
+  <text x="702" y="146" font-size="10" fill="#7a2626">写进当轮回答</text>
+  <text x="702" y="168" font-size="10" fill="#7a2626">下一轮：全忘</text>
+
+  <path d="M226 139 L256 139" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#c3)"/>
+  <path d="M442 139 L472 139" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#c3)"/>
+  <path d="M658 139 L688 139" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#c3)"/>
+  <defs><marker id="c3" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#5a6b7d"/></marker></defs>
+
+  <rect x="30" y="216" width="840" height="196" rx="6" fill="#fdf6f6" stroke="#7a2626" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="46" y="240" font-size="13" font-weight="700" fill="#7a2626">此处会失效 / 代价</text>
+  <text x="46" y="264" font-size="11.5" fill="#7a2626">① "声明了就等于挂上了"：声明只让记忆层"可挂载"，前面还有 principal 检查（必须是"人"）和 allow 策略两道闸</text>
+  <text x="46" y="286" font-size="11.5" fill="#7a2626">② 默认 API key 身份永远 not_a_person：allow 写成恒真也救不回来，因为 principal 检查在 allow 之前</text>
+  <text x="46" y="308" font-size="11.5" fill="#7a2626">③ 团队记忆与个人记忆混着想：agent 层全部署共用、user 层绑定已验证的人，两者的写入门槛完全不同</text>
+  <text x="46" y="330" font-size="11.5" fill="#7a2626">④ 没有写入纪律：模型每次都想"记下来"，热记忆几分钟就膨胀成几千字，之后每轮全文注入</text>
+  <text x="46" y="352" font-size="11.5" fill="#7a2626">⑤ 声明 sandbox/ 顺带把 permissions 清空了，还以为"我既有 shell 又有权限规则"</text>
+  <text x="46" y="378" font-size="11" fill="#7a2626">五条里有三条是<b>零报错</b>的：①的实际结果是 <tspan font-family="monospace">denied='not_a_person'</tspan>，藏在跟踪里，不在终端里。</text>
+  <text x="46" y="400" font-size="11" fill="#7a2626">mda build 与 mda dev 全程正常，这就是这一版最难自查的地方。</text>
+
+  <text x="30" y="440" font-size="10" fill="#94a3b8">读图：四个框一路畅通，所以"看起来配好了"。真正拦住 user 记忆的是第二个框——身份性质，而不是第一个框里的声明。</text>
+</svg>

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 470" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="900" height="470" fill="#fbfcfd"/>
+  <text x="30" y="34" font-size="17" font-weight="700" fill="#1f2937">基础版：一个静态定义，想服务三个团队</text>
+  <text x="30" y="56" font-size="12" fill="#6b7280">三个团队共用一份 instructions、一个模型、一套工具，靠"让用户自己在消息里说清楚"来区分</text>
+
+  <rect x="30" y="84" width="152" height="70" rx="6" fill="#eef6ff" stroke="#1e4b7a" stroke-width="1.5"/>
+  <text x="44" y="106" font-size="11" font-weight="700" fill="#1e4b7a">客服团队</text>
+  <text x="44" y="126" font-size="9.5" fill="#3f5b78">要礼貌、要话术</text>
+  <text x="44" y="142" font-size="9.5" fill="#3f5b78">模型够用就行</text>
+
+  <rect x="200" y="84" width="152" height="70" rx="6" fill="#f4faf6" stroke="#1f5537" stroke-width="1.5"/>
+  <text x="214" y="106" font-size="11" font-weight="700" fill="#1f5537">运维团队</text>
+  <text x="214" y="126" font-size="9.5" fill="#3f6b50">要简短、要命令</text>
+  <text x="214" y="142" font-size="9.5" fill="#3f6b50">要更强模型</text>
+
+  <rect x="370" y="84" width="152" height="70" rx="6" fill="#fff8ec" stroke="#b45309" stroke-width="1.5"/>
+  <text x="384" y="106" font-size="11" font-weight="700" fill="#7a4f13">财务团队</text>
+  <text x="384" y="126" font-size="9.5" fill="#7a4f13">要引用条款</text>
+  <text x="384" y="142" font-size="9.5" fill="#7a4f13">要审计留痕</text>
+
+  <rect x="560" y="84" width="310" height="70" rx="6" fill="#f7f8fa" stroke="#4b5563" stroke-width="2"/>
+  <text x="574" y="106" font-size="11" font-weight="700" fill="#374151">agent.py：一份静态定义</text>
+  <text x="574" y="126" font-size="9.5" fill="#4b5563">define_deep_agent(name=..., model="...", tools=[...])</text>
+  <text x="574" y="144" font-size="9.5" fill="#7a2626">instructions.md 只有一份</text>
+
+  <path d="M182 119 L200 119" stroke="#5a6b7d" stroke-width="1.4"/>
+  <path d="M522 119 L560 119" stroke="#5a6b7d" stroke-width="1.4"/>
+  <path d="M352 154 Q420 180 560 130" stroke="#5a6b7d" stroke-width="1.4" fill="none"/>
+
+  <rect x="30" y="178" width="840" height="118" rx="6" fill="#fff8ec" stroke="#b45309" stroke-width="1.5"/>
+  <text x="46" y="200" font-size="12" font-weight="700" fill="#7a4f13">你想到的三个"土办法"</text>
+  <text x="46" y="222" font-size="11" fill="#7a4f13">① 在 instructions 里写"如果对方说自己是运维，就用简短风格" —— 靠模型识别，靠不住</text>
+  <text x="46" y="244" font-size="11" fill="#7a4f13">② 部署三份 agent 各配一套 —— 三份 instructions / 三套工具开始漂移，改一处要改三遍</text>
+  <text x="46" y="266" font-size="11" fill="#7a4f13">③ 让调用方在消息里带上团队名 —— 等于把"我是谁"交给调用方自己声明</text>
+  <text x="46" y="286" font-size="10.5" fill="#7a4f13">三个办法有一个共同前提：<tspan font-weight="700">你相信调用方说的"我是谁"</tspan>。</text>
+
+  <rect x="30" y="312" width="840" height="128" rx="6" fill="#fdf6f6" stroke="#7a2626" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="46" y="336" font-size="13" font-weight="700" fill="#7a2626">此处会失效 / 代价</text>
+  <text x="46" y="360" font-size="11.5" fill="#7a2626">① 静态定义改不了任何配置：模型、instructions、工具在编译期就定死了，运行期没有"按团队换"的口子</text>
+  <text x="46" y="382" font-size="11.5" fill="#7a2626">② 云端可写的 context 里塞 identity 键会被剥：13 个保留键（user_id / mda_groups / mda_claims …）全剥</text>
+  <text x="46" y="404" font-size="11.5" fill="#7a2626">③ 真正的身份只在 server_info.principal 里，而工厂读不到它 —— 运行时类型里根本没这个字段</text>
+  <text x="46" y="426" font-size="11.5" fill="#7a2626">④ 一套 tools 服务三个团队：财务要审计、运维要 shell，写权限无从分层（课 4 已埋下这个坑）</text>
+
+  <text x="30" y="458" font-size="10" fill="#94a3b8">读图：上面三个团队的需求是真实的、互相冲突的；下面那份静态定义只能满足其中一种。这张图的重点是"冲突无法靠配置化解"。</text>
+</svg>

@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 640" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="f1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="980" height="640" fill="#fbfcfd"/>
+
+  <text x="490" y="32" text-anchor="middle" font-size="17" font-weight="600" fill="#1f2937">该不该搬：四道硬门槛与两条替代路线</text>
+  <text x="490" y="56" text-anchor="middle" font-size="12" fill="#64748b">先问四道门槛，全过才谈迁移；有一道过不去，就不是"迁移失败"而是"选错了容器"</text>
+
+  <rect x="330" y="74" width="320" height="46" rx="8" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.6"/>
+  <text x="490" y="102" text-anchor="middle" font-size="12" font-weight="600" fill="#1e4b7a">现有 create_deep_agent 项目</text>
+
+  <line x1="490" y1="120" x2="490" y2="146" stroke="#64748b" stroke-width="1.3" marker-end="url(#f1)"/>
+
+  <rect x="130" y="146" width="720" height="112" rx="8" fill="#fff" stroke="#cbd5e1"/>
+  <text x="146" y="170" font-size="12" font-weight="600" fill="#1f2937">四道门槛（逐条问，遇到任何一条"是"就停）</text>
+  <text x="146" y="194" font-size="10.5" fill="#334155">① 自己写了 BackendProtocol 实现？　　　　　　　→ 托管只提供一种沙箱后端，没有别的选择</text>
+  <text x="146" y="214" font-size="10.5" fill="#334155">② 依赖特定 store / checkpointer？　　　　　　　 → 运行时自己管存储与检查点，你的实现没地方放</text>
+  <text x="146" y="234" font-size="10.5" fill="#334155">③ 有自定义路由或应用代码？　　　　　　　　　 → 托管只托管 agent，不托管 web 应用</text>
+  <text x="146" y="254" font-size="10.5" fill="#334155">④ Python 侧用了自定义 state_schema？　　　　　→ define_deep_agent 不接受（TS 的 defineDeepAgent 接受）</text>
+
+  <line x1="380" y1="258" x2="300" y2="300" stroke="#64748b" stroke-width="1.3" marker-end="url(#f1)"/>
+  <line x1="600" y1="258" x2="690" y2="300" stroke="#64748b" stroke-width="1.3" marker-end="url(#f1)"/>
+
+  <rect x="120" y="300" width="360" height="96" rx="8" fill="#fdf1f1" stroke="#d98c8c" stroke-width="1.6"/>
+  <text x="136" y="324" font-size="12" font-weight="600" fill="#8a2626">有任何一条 → 不走托管</text>
+  <text x="136" y="346" font-size="10" fill="#8a2626">改用 LangSmith Deployment：主机你自己定、</text>
+  <text x="136" y="364" font-size="10" fill="#8a2626">路由和应用代码你自己写。</text>
+  <text x="136" y="384" font-size="10" fill="#8a2626">这不是降级方案，是这一层本来就不该由托管提供。</text>
+
+  <rect x="500" y="300" width="360" height="96" rx="8" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.6"/>
+  <text x="516" y="324" font-size="12" font-weight="600" fill="#1f5537">四条都"否" → 可以迁移</text>
+  <text x="516" y="346" font-size="10" fill="#1f5537">工具、中间件、子 agent 原样带走；</text>
+  <text x="516" y="364" font-size="10" fill="#1f5537">改的只是入口文件，外加把提示词/技能/记忆搬进文件。</text>
+  <text x="516" y="384" font-size="10" fill="#1f5537">实测：四个不支持参数都被 SDK 显式拒绝，且提示了替代做法。</text>
+
+  <rect x="26" y="416" width="928" height="126" rx="8" fill="#fef6e7" stroke="#d9a94c" stroke-width="1.6"/>
+  <text x="42" y="440" font-size="12.5" font-weight="600" fill="#7a5210">迁移时四个"参数搬家"的落点（实测拒绝文案全在这里）</text>
+  <text x="42" y="464" font-size="10.5" fill="#7a5210">system_prompt → instructions.md（删掉参数）　　skills → skills/&lt;name&gt;/SKILL.md（删掉参数）</text>
+  <text x="42" y="484" font-size="10.5" fill="#7a5210">memory → 根目录 memory.py 导出 define_memory(scope="agent")　　backend → sandbox/ 里 define_sandbox(...)</text>
+  <text x="42" y="504" font-size="10.5" fill="#8a2626">实测四条拒绝文案：Remove `state_schema` / `backend` / `checkpointer` / `store` from define_deep_agent(...)</text>
+  <text x="42" y="524" font-size="10.5" fill="#8a2626">两条会静默出事的：declare sandbox/ 会让 permissions 被清空（源码置 []，build 不提示）；memory 挂载的是空树，旧内容不会迁过来。</text>
+
+  <rect x="26" y="558" width="928" height="66" rx="8" fill="#fdf1f1" stroke="#d98c8c" stroke-width="1.6"/>
+  <text x="42" y="582" font-size="12" font-weight="600" fill="#8a2626">上线判据：三件事都过了才算交付</text>
+  <text x="42" y="604" font-size="10.5" fill="#8a2626">① 部署到 DEPLOYED 且能回答一条测试消息　② 评估跑过且有分数记录　③ 知道怎么回滚、日志在哪看（mda logs）</text>
+
+  <text x="490" y="640" text-anchor="middle" font-size="10" fill="#94a3b8">"不迁"是一个正式结论，不是拖延——四条门槛的作用就是把这件事提前问清楚</text>
+</svg>

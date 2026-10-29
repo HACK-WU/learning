@@ -1,0 +1,9 @@
+[project]
+name = "duty-assistant"
+version = "0.1.0"
+description = "值班研究助手 —— Managed Deep Agents 结课综合实战项目"
+requires-python = ">=3.12"
+dependencies = [
+    "managed-deepagents==0.9.5",
+    "langchain-core>=1.2.20",
+]

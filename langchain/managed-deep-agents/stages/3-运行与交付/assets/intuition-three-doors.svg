@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 580" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="960" height="580" fill="#fbfcfd"/>
+
+  <text x="480" y="36" text-anchor="middle" font-size="17" font-weight="600" fill="#1f2937">三个门口，进来的方式完全不同</text>
+  <text x="480" y="60" text-anchor="middle" font-size="12" fill="#64748b">先看每个门口"是谁在按铃"，再看"回话该回到哪"</text>
+
+  <rect x="30" y="86" width="288" height="316" rx="10" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.6"/>
+  <text x="174" y="114" text-anchor="middle" font-size="13.5" font-weight="600" fill="#1e4b7a">① 群聊里的机器人</text>
+  <text x="174" y="136" text-anchor="middle" font-size="11" fill="#3a6a96">有人 @ 它，它就干活</text>
+
+  <text x="50" y="170" font-size="11" fill="#1e4b7a">就像办公室里的对讲机：</text>
+  <text x="50" y="189" font-size="11" fill="#1e4b7a">谁按了按钮，声音就传回来</text>
+
+  <rect x="48" y="206" width="252" height="80" rx="6" fill="#fff" stroke="#a9ccea"/>
+  <text x="62" y="226" font-size="10.5" fill="#1e4b7a">门铃谁按的：Slack 群里某个人</text>
+  <text x="62" y="244" font-size="10.5" fill="#1e4b7a">回话去哪：回到那个群的那个话题</text>
+  <text x="62" y="262" font-size="10.5" fill="#1e4b7a">这个门口平台会替你建好机器人</text>
+  <text x="62" y="280" font-size="10.5" fill="#1e4b7a">你只写一行声明</text>
+
+  <text x="174" y="322" text-anchor="middle" font-size="10" fill="#3a6a96">它知道"谁在说话、话回哪里"</text>
+  <text x="174" y="352" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e4b7a">Jargon: channels.slack()</text>
+  <text x="174" y="374" text-anchor="middle" font-size="10" fill="#3a6a96">这条路的地址带 /v1 前缀</text>
+
+  <rect x="336" y="86" width="288" height="316" rx="10" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.6"/>
+  <text x="480" y="114" text-anchor="middle" font-size="13.5" font-weight="600" fill="#1f5537">② 外面系统的传呼机</text>
+  <text x="480" y="136" text-anchor="middle" font-size="11" fill="#357a52">对方系统发条消息来，干完打回去</text>
+
+  <text x="356" y="170" font-size="11" fill="#1f5537">就像餐厅的取餐呼叫器：</text>
+  <text x="356" y="189" font-size="11" fill="#1f5537">你得自己留个号码，不然没法叫你</text>
+
+  <rect x="354" y="206" width="252" height="80" rx="6" fill="#fff" stroke="#a8d4b8"/>
+  <text x="368" y="226" font-size="10.5" fill="#1f5537">门铃谁按的：平台不认识，你说了算</text>
+  <text x="368" y="244" font-size="10.5" fill="#1f5537">回话去哪：你给的 target，自己送去</text>
+  <text x="368" y="262" font-size="10.5" fill="#1f5537">要写三个回调：验签 / 解读 / 回话</text>
+  <text x="368" y="280" font-size="10.5" fill="#1f5537">验签是你唯一的门锁</text>
+
+  <text x="480" y="322" text-anchor="middle" font-size="10" fill="#357a52">它只知道"有东西进来了，内容你解"</text>
+  <text x="480" y="352" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1f5537">Jargon: channels.http()</text>
+  <text x="480" y="374" text-anchor="middle" font-size="10" fill="#357a52">这条路的地址不带 /v1</text>
+
+  <rect x="642" y="86" width="288" height="316" rx="10" fill="#f6f0fa" stroke="#a98cc0" stroke-width="1.6"/>
+  <text x="786" y="114" text-anchor="middle" font-size="13.5" font-weight="600" fill="#4a2f63">③ 墙上的闹钟</text>
+  <text x="786" y="136" text-anchor="middle" font-size="11" fill="#6b4a85">到点自己醒，没人按铃</text>
+
+  <text x="662" y="170" font-size="11" fill="#4a2f63">就像每天早上的闹钟：</text>
+  <text x="662" y="189" font-size="11" fill="#4a2f63">响了就得干活，但屋里没人</text>
+
+  <rect x="660" y="206" width="252" height="80" rx="6" fill="#fff" stroke="#c9b0d9"/>
+  <text x="674" y="226" font-size="10.5" fill="#4a2f63">门铃谁按的：没有人，是时间</text>
+  <text x="674" y="244" font-size="10.5" fill="#4a2f63">回话去哪：默认生成新话题，跑完删掉</text>
+  <text x="674" y="262" font-size="10.5" fill="#4a2f63">想回某个群：得显式告诉它</text>
+  <text x="674" y="280" font-size="10.5" fill="#4a2f63">它自己的身份是"服务"，不是人</text>
+
+  <text x="786" y="322" text-anchor="middle" font-size="10" fill="#6b4a85">"谁在说话"这个问题的答案是：没人</text>
+  <text x="786" y="352" text-anchor="middle" font-size="10.5" font-weight="600" fill="#4a2f63">Jargon: schedules / define_schedule</text>
+  <text x="786" y="374" text-anchor="middle" font-size="10" fill="#6b4a85">它拿到的身份是被平台盖的章</text>
+
+  <rect x="30" y="424" width="900" height="72" rx="8" fill="#fdf1f1" stroke="#d98c8c" stroke-width="1.6"/>
+  <text x="46" y="448" font-size="12" font-weight="600" fill="#8a2626">三个门口共同的坑：都以为"对面有个人在等着回话"</text>
+  <text x="46" y="470" font-size="11" fill="#8a2626">群聊有真人，但真人不一定有权看数据；传呼机是机器在发，它说的话不能当身份；</text>
+  <text x="46" y="488" font-size="11" fill="#8a2626">闹钟根本没有对面。三种情况都要先问"这条消息从哪来、我该拿哪一样当真"。</text>
+
+  <text x="480" y="528" text-anchor="middle" font-size="11" fill="#475569">本课就三件事：认门（通道三件套）、定闹钟（调度与线程策略）、让人回话（主动中断）</text>
+  <text x="480" y="552" text-anchor="middle" font-size="10" fill="#94a3b8">读图顺序：先看三个门口的"谁按铃"，再看底部红框，最后看每栏 Jargon 那行</text>
+</svg>

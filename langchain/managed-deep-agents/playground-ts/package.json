@@ -1,0 +1,28 @@
+{
+  "name": "mda-playground-ts",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Managed Deep Agents 教程 · TypeScript 实操工程（与 Python 侧课文一一对应）",
+  "scripts": {
+    "check": "tsc --noEmit",
+    "probe": "tsx probe-api.ts",
+    "l01": "tsx l01-setup.ts",
+    "l02": "tsx l02-what.ts",
+    "l03": "tsx l03-first-agent.ts",
+    "l04": "tsx l04-tools-skills.ts",
+    "l05": "tsx l05-middleware-mcp.ts",
+    "l06": "tsx l06-memory-sandbox.ts",
+    "l07": "tsx l07-runtime-context.ts",
+    "l08": "tsx l08-channels-schedules.ts",
+    "l09": "tsx l09-deploy-evals.ts"
+  },
+  "dependencies": {
+    "managed-deepagents": "^0.9.5"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
+  }
+}

@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="960" height="600" fill="#fbfcfd"/>
+
+  <text x="480" y="36" text-anchor="middle" font-size="17" font-weight="600" fill="#1f2937">交出成品前的三张单子</text>
+  <text x="480" y="60" text-anchor="middle" font-size="12" fill="#64748b">一张管"怎么交出去"，一张管"交之前测什么"，一张管"要不要交"</text>
+
+  <rect x="26" y="84" width="292" height="330" rx="10" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.6"/>
+  <text x="172" y="112" text-anchor="middle" font-size="13.5" font-weight="600" fill="#1e4b7a">① 发货单</text>
+  <text x="172" y="134" text-anchor="middle" font-size="11" fill="#3a6a96">东西怎么送到对方手里</text>
+
+  <text x="44" y="168" font-size="11" fill="#1e4b7a">就像寄一个组装好的柜子：</text>
+  <text x="44" y="187" font-size="11" fill="#1e4b7a">先清点零件、再打包、再发车</text>
+
+  <rect x="44" y="204" width="256" height="120" rx="6" fill="#fff" stroke="#a9ccea"/>
+  <text x="58" y="224" font-size="10.5" fill="#1e4b7a">十一步流水线，前四步都是"检查"</text>
+  <text x="58" y="242" font-size="10.5" fill="#1e4b7a">第五步同步说明书（可能撞车）</text>
+  <text x="58" y="260" font-size="10.5" fill="#1e4b7a">第六步打包代码</text>
+  <text x="58" y="278" font-size="10.5" fill="#1e4b7a">第九步等对方装好</text>
+  <text x="58" y="296" font-size="10.5" fill="#1e4b7a">第十步才排班表，第十一步才建群机器人</text>
+  <text x="58" y="314" font-size="10" fill="#3a6a96">最容易崩的是第五步，不是打包</text>
+
+  <text x="172" y="348" text-anchor="middle" font-size="10" fill="#3a6a96">它管的是"能不能活着到"</text>
+  <text x="172" y="376" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e4b7a">Jargon: mda deploy</text>
+  <text x="172" y="398" text-anchor="middle" font-size="10" fill="#3a6a96">失败要能说清停在第几步</text>
+
+  <rect x="334" y="84" width="292" height="330" rx="10" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.6"/>
+  <text x="480" y="112" text-anchor="middle" font-size="13.5" font-weight="600" fill="#1f5537">② 体检单</text>
+  <text x="480" y="134" text-anchor="middle" font-size="11" fill="#357a52">交之前先在假场景里演一遍</text>
+
+  <text x="352" y="168" font-size="11" fill="#1f5537">就像新药上市前要过临床试验：</text>
+  <text x="352" y="187" font-size="11" fill="#1f5537">每个病例都装进独立病房跑</text>
+
+  <rect x="352" y="204" width="256" height="120" rx="6" fill="#fff" stroke="#a8d4b8"/>
+  <text x="366" y="224" font-size="10.5" fill="#1f5537">一个任务 = 一间 Docker 病房</text>
+  <text x="366" y="242" font-size="10.5" fill="#1f5537">agent 在里面跑，跑完打分</text>
+  <text x="366" y="260" font-size="10.5" fill="#1f5537">分数写进 reward.txt，0 到 1</text>
+  <text x="366" y="278" font-size="10.5" fill="#1f5537">不写就是 0 分，不是"跳过"</text>
+  <text x="366" y="296" font-size="10.5" fill="#1f5537">Harbor 是那个病房管理员</text>
+  <text x="366" y="314" font-size="10" fill="#357a52">它管的是"做对了没有"</text>
+
+  <text x="480" y="348" text-anchor="middle" font-size="10" fill="#357a52">体检要能重复，还要能追历史</text>
+  <text x="480" y="376" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1f5537">Jargon: mda evals init / harbor run</text>
+  <text x="480" y="398" text-anchor="middle" font-size="10" fill="#357a52">跑完的结果可以记进 LangSmith</text>
+
+  <rect x="642" y="84" width="292" height="330" rx="10" fill="#f6f0fa" stroke="#a98cc0" stroke-width="1.6"/>
+  <text x="788" y="112" text-anchor="middle" font-size="13.5" font-weight="600" fill="#4a2f63">③ 交付决定单</text>
+  <text x="788" y="134" text-anchor="middle" font-size="11" fill="#6b4a85">该不该交、搬到哪、交不交得了</text>
+
+  <text x="660" y="168" font-size="11" fill="#4a2f63">就像搬家前的清点：</text>
+  <text x="660" y="187" font-size="11" fill="#4a2f63">有些家具搬不进去，得先决定</text>
+
+  <rect x="660" y="204" width="256" height="120" rx="6" fill="#fff" stroke="#c9b0d9"/>
+  <text x="674" y="224" font-size="10.5" fill="#4a2f63">四条硬门槛：过不了就别搬</text>
+  <text x="674" y="242" font-size="10.5" fill="#4a2f63">① 自己写的后端实现</text>
+  <text x="674" y="260" font-size="10.5" fill="#4a2f63">② 自己的存储和检查点</text>
+  <text x="674" y="278" font-size="10.5" fill="#4a2f63">③ 自己写的路由和应用代码</text>
+  <text x="674" y="296" font-size="10.5" fill="#4a2f63">④ Python 自定义状态结构</text>
+  <text x="674" y="314" font-size="10" fill="#6b4a85">过不了不是失败，是"选另一条路"</text>
+
+  <text x="788" y="348" text-anchor="middle" font-size="10" fill="#6b4a85">它管的是"该不该走这条路"</text>
+  <text x="788" y="376" text-anchor="middle" font-size="10.5" font-weight="600" fill="#4a2f63">Jargon: migrate 四检查点</text>
+  <text x="788" y="398" text-anchor="middle" font-size="10" fill="#6b4a85">"不搬"是一个正式选项</text>
+
+  <rect x="26" y="434" width="908" height="76" rx="8" fill="#fdf1f1" stroke="#d98c8c" stroke-width="1.6"/>
+  <text x="42" y="458" font-size="12" font-weight="600" fill="#8a2626">三张单子最容易搞反的地方</text>
+  <text x="42" y="480" font-size="11" fill="#8a2626">发货单答"命令跑完没有"，体检单答"跑完做对了没有"，决定单答"根本该不该搬"。命令退出码是 0，不代表 agent 有用。</text>
+  <text x="42" y="500" font-size="11" fill="#8a2626">反过来也成立：体检分数高，不代表能部署成功；能部署成功，也不代表体检该及格。</text>
+
+  <text x="480" y="544" text-anchor="middle" font-size="11" fill="#475569">本课就三件事：走通发货单（部署链路）、跑起体检单（评估与 MCP 端点）、填完决定单（上线判据与迁移）</text>
+  <text x="480" y="570" text-anchor="middle" font-size="10" fill="#94a3b8">读图顺序：先看三栏标题那句"管什么"，再看每栏中间白框，最后看底部红框</text>
+</svg>

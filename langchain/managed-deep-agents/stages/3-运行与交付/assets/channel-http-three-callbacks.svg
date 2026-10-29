@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 660" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="980" height="660" fill="#fbfcfd"/>
+
+  <text x="490" y="34" text-anchor="middle" font-size="17" font-weight="600" fill="#1f2937">HTTP 通道：三个回调把门外的东西变成一次运行</text>
+  <text x="490" y="58" text-anchor="middle" font-size="12" fill="#64748b">verify 说"能不能进"，parse 说"进来的是什么"，post 说"结果送哪去"</text>
+
+  <rect x="26" y="84" width="150" height="60" rx="8" fill="#fef6e7" stroke="#d9a94c" stroke-width="1.6"/>
+  <text x="101" y="108" text-anchor="middle" font-size="12" font-weight="600" fill="#7a5210">外部系统</text>
+  <text x="101" y="128" text-anchor="middle" font-size="10" fill="#8a6a2a">发 webhook</text>
+
+  <line x1="176" y1="114" x2="216" y2="114" stroke="#64748b" stroke-width="1.4" marker-end="url(#ar)"/>
+
+  <rect x="216" y="76" width="176" height="76" rx="8" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.6"/>
+  <text x="304" y="100" text-anchor="middle" font-size="12" font-weight="600" fill="#1e4b7a">① verify</text>
+  <text x="304" y="120" text-anchor="middle" font-size="10" fill="#3a6a96">拿 raw_body 验签名</text>
+  <text x="304" y="138" text-anchor="middle" font-size="10" fill="#3a6a96">返回 True / False</text>
+
+  <line x1="392" y1="114" x2="432" y2="114" stroke="#64748b" stroke-width="1.4" marker-end="url(#ar)"/>
+
+  <rect x="432" y="76" width="176" height="76" rx="8" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.6"/>
+  <text x="520" y="100" text-anchor="middle" font-size="12" font-weight="600" fill="#1f5537">② parse</text>
+  <text x="520" y="120" text-anchor="middle" font-size="10" fill="#357a52">产出 user_id / thread_id</text>
+  <text x="520" y="138" text-anchor="middle" font-size="10" fill="#357a52">/ content / target</text>
+
+  <line x1="608" y1="114" x2="648" y2="114" stroke="#64748b" stroke-width="1.4" marker-end="url(#ar)"/>
+
+  <rect x="648" y="76" width="180" height="76" rx="8" fill="#f6f0fa" stroke="#a98cc0" stroke-width="1.6"/>
+  <text x="738" y="100" text-anchor="middle" font-size="12" font-weight="600" fill="#4a2f63">agent run</text>
+  <text x="738" y="120" text-anchor="middle" font-size="10" fill="#6b4a85">在 thread_id 上跑</text>
+  <text x="738" y="138" text-anchor="middle" font-size="10" fill="#6b4a85">身份是 user_id 解析出的</text>
+
+  <line x1="828" y1="114" x2="868" y2="114" stroke="#64748b" stroke-width="1.4" marker-end="url(#ar)"/>
+
+  <rect x="868" y="76" width="86" height="76" rx="8" fill="#fef6e7" stroke="#d9a94c" stroke-width="1.6"/>
+  <text x="911" y="102" text-anchor="middle" font-size="12" font-weight="600" fill="#7a5210">③ post</text>
+  <text x="911" y="122" text-anchor="middle" font-size="10" fill="#8a6a2a">按 target</text>
+  <text x="911" y="138" text-anchor="middle" font-size="10" fill="#8a6a2a">送回外部</text>
+
+  <rect x="26" y="182" width="450" height="196" rx="8" fill="#fff" stroke="#cbd5e1"/>
+  <text x="42" y="206" font-size="12" font-weight="600" fill="#1f2937">实测：七种请求各得到什么（直调 handler，不经网络）</text>
+  <text x="42" y="232" font-size="10.5" fill="#334155">无签名头 / 签名错      → 401 invalid channel signature</text>
+  <text x="42" y="252" font-size="10.5" fill="#334155">请求体不是 JSON        → 400 invalid channel payload</text>
+  <text x="42" y="272" font-size="10.5" fill="#334155">parse 返回认不出的形状  → 400 invalid channel parse result</text>
+  <text x="42" y="292" font-size="10.5" fill="#334155">thread_id 不是 UUID     → 400 invalid channel message</text>
+  <text x="42" y="312" font-size="10.5" fill="#334155">签名对但没配助手 ID     → 500 channel runtime is not configured</text>
+  <text x="42" y="332" font-size="10.5" fill="#334155">事件类型不关心          → 202 {"status": "ignored"}</text>
+  <text x="42" y="352" font-size="10.5" fill="#334155">全部通过                → 202 {"status": "accepted", "deliveryId": ...}</text>
+  <text x="42" y="370" font-size="10" fill="#94a3b8">202 只代表"已受理"，不代表跑完了；答案稍后经 post 送出</text>
+
+  <rect x="496" y="182" width="458" height="196" rx="8" fill="#fff" stroke="#cbd5e1"/>
+  <text x="512" y="206" font-size="12" font-weight="600" fill="#1f2937">源码里的四道硬校验（文档没写全）</text>
+  <text x="512" y="232" font-size="10.5" fill="#334155">① target 是必填：缺了直接判 invalid channel message</text>
+  <text x="512" y="252" font-size="10.5" fill="#334155">② thread_id 必须匹配 UUID 正则，文档说"非法值 400"</text>
+  <text x="512" y="268" font-size="10.5" fill="#334155">   但实际是在 _valid_message 里先拦，不会走到映射</text>
+  <text x="512" y="288" font-size="10.5" fill="#334155">③ content 只接受非空字符串或非空的内容块数组</text>
+  <text x="512" y="308" font-size="10.5" fill="#334155">④ verify 抛异常是 500，返回 False 才是 401</text>
+  <text x="512" y="332" font-size="10.5" fill="#334155">provider 决定 principal 的空间：不同 provider 同一个</text>
+  <text x="512" y="348" font-size="10.5" fill="#334155">user_id 会被解析成不同的人</text>
+  <text x="512" y="370" font-size="10" fill="#94a3b8">端点没有平台级鉴权，verify 是公网与运行之间唯一的东西</text>
+
+  <rect x="26" y="402" width="928" height="112" rx="8" fill="#fdf1f1" stroke="#d98c8c" stroke-width="1.6"/>
+  <text x="42" y="426" font-size="12" font-weight="600" fill="#8a2626">两条路为什么地址不一样：Trigger Server 型 vs 直连型</text>
+  <text x="42" y="450" font-size="10.5" fill="#8a2626">Slack 的 transport 是 trigger_server，路由挂在 /v1/channels/slack/events；HTTP 通道 transport 为 None，挂在 /channels/orders/events。</text>
+  <text x="42" y="470" font-size="10.5" fill="#8a2626">这个差别不在文档里，而是 _identity_http.py 里一行三元表达式决定的。按文档写 Slack 回调地址会 404，必须用 mda dev 启动横幅里打印的地址。</text>
+  <text x="42" y="490" font-size="10.5" fill="#8a2626">另一处：本地开发服务器总是带 /v1 前缀（上面实测日志就是 /v1/channels/slack/events），云端按上面规则区分。</text>
+
+  <rect x="26" y="530" width="928" height="112" rx="8" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.6"/>
+  <text x="42" y="554" font-size="12" font-weight="600" fill="#1e4b7a">通道与连接器的区别（最常被搞混）</text>
+  <text x="42" y="578" font-size="10.5" fill="#1e4b7a">通道：消息进来能"启动一次运行"，结果能从同一条路回去。它是入口，不是工具。</text>
+  <text x="42" y="598" font-size="10.5" fill="#1e4b7a">连接器（MCP）：给 agent 一堆可调用的工具，它不启动运行，也不负责回话。</text>
+  <text x="42" y="618" font-size="10.5" fill="#1e4b7a">一个项目可以只有通道、只有连接器，或两者都有。搞反了会出现"agent 收到了消息但从不回"或"agent 能查数据但没人叫它查"。</text>
+  <text x="42" y="636" font-size="10" fill="#64748b">判断口诀：会不会"叫醒"agent。会叫醒的是通道，只是"给它手"的是连接器。</text>
+</svg>

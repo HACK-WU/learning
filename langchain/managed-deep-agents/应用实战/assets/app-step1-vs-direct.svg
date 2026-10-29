@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="900" height="420" fill="#fbfcfd"/>
+  <text x="30" y="34" font-size="17" font-weight="700" fill="#1f2937">基础版：你直接调 create_deep_agent，自己拿着 runnable</text>
+  <text x="30" y="56" font-size="12" fill="#6b7280">裸 Deep Agents 的写法——所有东西都在你手里，也都要你自己接</text>
+
+  <rect x="30" y="82" width="150" height="64" rx="6" fill="#eef6ff" stroke="#1e4b7a" stroke-width="1.5"/>
+  <text x="105" y="108" font-size="12" font-weight="700" fill="#1e4b7a" text-anchor="middle">你的代码</text>
+  <text x="105" y="128" font-size="10" fill="#5a6b7d" text-anchor="middle">create_deep_agent(...)</text>
+
+  <rect x="222" y="82" width="160" height="64" rx="6" fill="#f4faf6" stroke="#1f5537" stroke-width="1.5"/>
+  <text x="302" y="108" font-size="12" font-weight="700" fill="#1f5537" text-anchor="middle">CompiledStateGraph</text>
+  <text x="302" y="128" font-size="10" fill="#3f6b50" text-anchor="middle">立刻可 invoke</text>
+
+  <rect x="424" y="82" width="180" height="64" rx="6" fill="#fff8ec" stroke="#b45309" stroke-width="1.5"/>
+  <text x="514" y="106" font-size="12" font-weight="700" fill="#7a4f13" text-anchor="middle">你自备的依赖</text>
+  <text x="514" y="126" font-size="10" fill="#7a4f13" text-anchor="middle">store / checkpointer / backend</text>
+
+  <rect x="646" y="82" width="224" height="64" rx="6" fill="#fff8ec" stroke="#b45309" stroke-width="1.5"/>
+  <text x="758" y="106" font-size="12" font-weight="700" fill="#7a4f13" text-anchor="middle">你自备的运维</text>
+  <text x="758" y="126" font-size="10" fill="#7a4f13" text-anchor="middle">容器 / 扩缩容 / 会话存储 / 鉴权</text>
+
+  <path d="M180 114 L222 114" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#a1)"/>
+  <path d="M382 114 L424 114" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#a1)"/>
+  <path d="M604 114 L646 114" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#a1)"/>
+  <defs><marker id="a1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#5a6b7d"/></marker></defs>
+
+  <rect x="30" y="170" width="840" height="96" rx="6" fill="#f4faf6" stroke="#1f5537" stroke-width="1.5"/>
+  <text x="46" y="192" font-size="13" font-weight="700" fill="#1f5537">这一版换来了什么</text>
+  <text x="46" y="214" font-size="12" fill="#3f6b50">✓ 完全自由：能自定义 store、checkpointer、HTTP 路由、state_schema</text>
+  <text x="46" y="234" font-size="12" fill="#3f6b50">✓ 本地就能跑，不依赖任何云端账号</text>
+  <text x="46" y="254" font-size="12" fill="#3f6b50">✓ 出问题看自己的日志，链路完全透明</text>
+
+  <rect x="30" y="282" width="840" height="104" rx="6" fill="#fdf6f6" stroke="#7a2626" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="46" y="304" font-size="13" font-weight="700" fill="#7a2626">此处会失效 / 代价</text>
+  <text x="46" y="326" font-size="12" fill="#7a2626">① 会话存储、鉴权、调度、通道适配全要自己写 —— 每接一个新入口就重写一遍</text>
+  <text x="46" y="346" font-size="12" fill="#7a2626">② 一次运行一次编译：没有"定义 / 运行时"分层，配置无法跨部署复用</text>
+  <text x="46" y="366" font-size="12" fill="#7a2626">③ 换个人接手，得先读懂你这一整套自建管线才能改一行 prompt</text>
+
+  <text x="30" y="410" font-size="10" fill="#94a3b8">读图：左边是你的代码，中间拿到的是可 invoke 的图，右边那些橙色框全是你自己要背的包袱。红框是这一版真正的成本。</text>
+</svg>

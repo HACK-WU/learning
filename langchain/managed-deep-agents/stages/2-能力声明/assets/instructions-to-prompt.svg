@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 470" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="i1" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#5a6b7d"/>
+    </marker>
+  </defs>
+  <rect width="940" height="470" fill="#fbfcfd"/>
+  <text x="470" y="32" text-anchor="middle" font-size="17" font-weight="600" fill="#1f2937">instructions.md：一条从仓库到 system prompt 的路</text>
+
+  <rect x="28" y="56" width="250" height="120" rx="10" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.6"/>
+  <text x="153" y="80" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1e4b7a">① 仓库里的源文件</text>
+  <text x="153" y="104" text-anchor="middle" font-size="10.5" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#334155">my-agent/instructions.md</text>
+  <text x="153" y="128" text-anchor="middle" font-size="10" fill="#334155">纯 Markdown，无 frontmatter</text>
+  <text x="153" y="150" text-anchor="middle" font-size="10" fill="#9a3412">这里是唯一真源</text>
+  <text x="153" y="168" text-anchor="middle" font-size="9.5" fill="#6b7280">改 UI 上的副本，下次部署会被覆盖</text>
+
+  <line x1="278" y1="116" x2="322" y2="116" stroke="#5a6b7d" stroke-width="1.5" marker-end="url(#i1)"/>
+
+  <rect x="326" y="56" width="250" height="120" rx="10" fill="#fff8ec" stroke="#e0b877" stroke-width="1.6"/>
+  <text x="451" y="80" text-anchor="middle" font-size="11.5" font-weight="600" fill="#7a4f13">② mda build 拷进构建包</text>
+  <text x="451" y="104" text-anchor="middle" font-size="10.5" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#334155">.mda/__contexthub__/instructions.md</text>
+  <text x="451" y="128" text-anchor="middle" font-size="10" fill="#334155">同时写进 .mda/build</text>
+  <text x="451" y="150" text-anchor="middle" font-size="10" fill="#6b7280">缺文件只在 Build warnings 里提一句</text>
+  <text x="451" y="168" text-anchor="middle" font-size="10" fill="#9a3412">exit 仍是 0</text>
+
+  <line x1="576" y1="116" x2="620" y2="116" stroke="#5a6b7d" stroke-width="1.5" marker-end="url(#i1)"/>
+
+  <rect x="624" y="56" width="288" height="120" rx="10" fill="#f4f0fb" stroke="#c9b6e5" stroke-width="1.6"/>
+  <text x="768" y="80" text-anchor="middle" font-size="11.5" font-weight="600" fill="#4c2f7a">③ 编译期塞进 system prompt</text>
+  <text x="768" y="104" text-anchor="middle" font-size="10" fill="#334155">context_root 指向 __contexthub__</text>
+  <text x="768" y="126" text-anchor="middle" font-size="10" fill="#334155">每轮 run 都完整插入一次</text>
+  <text x="768" y="148" text-anchor="middle" font-size="10" fill="#9a3412">agent 无法在运行时改写它</text>
+  <text x="768" y="168" text-anchor="middle" font-size="9.5" fill="#6b7280">与 skills/memory 共用同一个 context_root</text>
+
+  <rect x="28" y="200" width="884" height="106" rx="10" fill="#ffffff" stroke="#a9c9e6" stroke-width="1.4"/>
+  <text x="48" y="224" font-size="12" font-weight="600" fill="#1e4b7a">三角关系：三个都叫「上下文」，加载时机完全不同</text>
+
+  <rect x="48" y="238" width="270" height="52" rx="7" fill="#eef6ff" stroke="#a9c9e6" stroke-width="1.2"/>
+  <text x="183" y="258" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e4b7a">Instructions</text>
+  <text x="183" y="278" text-anchor="middle" font-size="10" fill="#334155">每一轮都加载 · 改不了</text>
+
+  <rect x="334" y="238" width="270" height="52" rx="7" fill="#fff8ec" stroke="#e0b877" stroke-width="1.2"/>
+  <text x="469" y="258" text-anchor="middle" font-size="10.5" font-weight="600" fill="#7a4f13">Skills</text>
+  <text x="469" y="278" text-anchor="middle" font-size="10" fill="#334155">选中才加载 · 改不了</text>
+
+  <rect x="620" y="238" width="270" height="52" rx="7" fill="#eefaf3" stroke="#7fc9a4" stroke-width="1.2"/>
+  <text x="755" y="258" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1f6b47">Memory</text>
+  <text x="755" y="278" text-anchor="middle" font-size="10" fill="#334155">启用后 · agent 自己可写</text>
+
+  <rect x="28" y="324" width="432" height="124" rx="10" fill="#fdf2f2" stroke="#e7a6a6" stroke-width="1.4"/>
+  <text x="48" y="348" font-size="11.5" font-weight="600" fill="#8a2f2f">实测：删掉 instructions.md</text>
+  <text x="48" y="372" font-size="10" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#334155">◇  Build warnings</text>
+  <text x="48" y="390" font-size="10" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#334155">│  instructions.md is missing. Add it next to</text>
+  <text x="48" y="406" font-size="10" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#334155">│  the agent file to set the system prompt.</text>
+  <text x="48" y="428" font-size="10.5" fill="#9a3412">退出码 0 —— 是警告，不是错误</text>
+
+  <rect x="480" y="324" width="432" height="124" rx="10" fill="#eefaf3" stroke="#7fc9a4" stroke-width="1.4"/>
+  <text x="500" y="348" font-size="11.5" font-weight="600" fill="#1f6b47">这意味着什么</text>
+  <text x="500" y="372" font-size="10.5" fill="#334155">缺了它，agent 照样编译、照样能跑</text>
+  <text x="500" y="394" font-size="10.5" fill="#334155">只是 system prompt 里没有你的角色设定</text>
+  <text x="500" y="416" font-size="10.5" fill="#9a3412">「跑起来了」和「按你的规矩跑」是两件事</text>
+  <text x="500" y="438" font-size="10" fill="#6b7280">靠警告提醒，不靠报错拦住</text>
+</svg>

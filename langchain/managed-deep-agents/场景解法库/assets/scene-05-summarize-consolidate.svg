@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 440" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="o1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5a6b7d"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="440" fill="#fbfcfd"/>
+
+  <text x="30" y="34" font-size="17" font-weight="700" fill="#1f2937">解法 C：分层记忆 + 定期摘要——让 agent 自己把旧记忆压成结论</text>
+  <text x="30" y="56" font-size="12" fill="#6b7280">记忆会无限增长，但「结论」不会——压成结论才不会撑爆热记忆</text>
+
+  <rect x="30" y="82" width="180" height="56" rx="6" fill="#eef6ff" stroke="#1e4b7a" stroke-width="1.5"/>
+  <text x="120" y="106" font-size="12" font-weight="700" fill="#1e4b7a" text-anchor="middle">原始记录</text>
+  <text x="120" y="124" font-size="10" fill="#5a6b7d" text-anchor="middle">每次事故的细节</text>
+
+  <rect x="250" y="82" width="200" height="56" rx="6" fill="#fff8ec" stroke="#b45309" stroke-width="2"/>
+  <text x="350" y="106" font-size="12" font-weight="700" fill="#b45309" text-anchor="middle">摘要任务（定时）</text>
+  <text x="350" y="124" font-size="10" fill="#7a4f13" text-anchor="middle">cron，无身份</text>
+
+  <rect x="490" y="82" width="180" height="56" rx="6" fill="#f4faf6" stroke="#1f5537" stroke-width="1.5"/>
+  <text x="580" y="106" font-size="12" font-weight="700" fill="#1f5537" text-anchor="middle">压成结论</text>
+  <text x="580" y="124" font-size="10" fill="#3f6b50" text-anchor="middle">20 页 → 5 行</text>
+
+  <rect x="710" y="82" width="160" height="56" rx="6" fill="#f4faf6" stroke="#1f5537" stroke-width="1.5"/>
+  <text x="790" y="106" font-size="12" font-weight="700" fill="#1f5537" text-anchor="middle">写回热记忆</text>
+  <text x="790" y="124" font-size="10" fill="#3f6b50" text-anchor="middle">替换旧的 5 行</text>
+
+  <line x1="210" y1="110" x2="246" y2="110" stroke="#5a6b7d" stroke-width="1.5" marker-end="url(#o1)"/>
+  <line x1="450" y1="110" x2="486" y2="110" stroke="#5a6b7d" stroke-width="1.5" marker-end="url(#o1)"/>
+  <line x1="670" y1="110" x2="706" y2="110" stroke="#5a6b7d" stroke-width="1.5" marker-end="url(#o1)"/>
+
+  <text x="30" y="176" font-size="13" font-weight="700" fill="#1f2937">关键在「替换」而不是「追加」</text>
+
+  <rect x="30" y="192" width="400" height="106" rx="6" fill="#fdf6f6" stroke="#7a2626" stroke-width="1.5"/>
+  <text x="46" y="214" font-size="12" font-weight="700" fill="#7a2626">❌ 只追加（常见做法）</text>
+  <text x="46" y="238" font-size="11" fill="#7a2626">第 1 周：5 行</text>
+  <text x="46" y="260" font-size="11" fill="#7a2626">第 10 周：50 行（全是重复的旧结论）</text>
+  <text x="46" y="282" font-size="11" fill="#7a2626">第 50 周：250 行 → 热记忆变成主要成本</text>
+
+  <rect x="460" y="192" width="410" height="106" rx="6" fill="#f4faf6" stroke="#1f5537" stroke-width="2"/>
+  <text x="476" y="214" font-size="12" font-weight="700" fill="#1f5537">✅ 替换（正确做法）</text>
+  <text x="476" y="238" font-size="11" fill="#3f6b50">第 1 周：5 行</text>
+  <text x="476" y="260" font-size="11" fill="#3f6b50">第 10 周：仍是 5 行（旧结论被新结论覆盖）</text>
+  <text x="476" y="282" font-size="11" fill="#3f6b50">第 50 周：仍是 5 行 → 成本恒定</text>
+
+  <rect x="30" y="316" width="840" height="100" rx="6" fill="#fdf6f6" stroke="#7a2626" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="46" y="338" font-size="13" font-weight="700" fill="#7a2626">此处会失效</text>
+  <text x="46" y="362" font-size="12" fill="#7a2626">① 摘要任务读不到「人」→ 若摘要需要按人区分，本解法在调度里挂不上 user 层</text>
+  <text x="46" y="384" font-size="12" fill="#7a2626">② 替换用 write_file 覆盖整份文件 → 并发两次摘要会互相覆盖，后写者赢（丢结论）</text>
+  <text x="46" y="406" font-size="12" fill="#7a2626">③ 摘要本身是模型调用 → 它也会读进 20 页全文，等于把成本从每轮摊到「每周一次」，总量没降只换了位置</text>
+
+</svg>

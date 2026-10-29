@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 470" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="s1" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#5a6b7d"/>
+    </marker>
+    <marker id="s2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#c2410c"/>
+    </marker>
+  </defs>
+  <rect width="940" height="470" fill="#fbfcfd"/>
+  <text x="470" y="32" text-anchor="middle" font-size="17" font-weight="600" fill="#1f2937">从一行 define 到能跑的对象：中间隔了三步</text>
+
+  <rect x="30" y="58" width="250" height="330" rx="12" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="155" y="84" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1e4b7a">你写的地方</text>
+  <text x="155" y="102" text-anchor="middle" font-size="10" fill="#5b7fa6">项目目录</text>
+
+  <rect x="50" y="118" width="210" height="76" rx="9" fill="#ffffff" stroke="#a9c9e6" stroke-width="1.4"/>
+  <text x="155" y="140" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1e4b7a">agent.py</text>
+  <text x="155" y="158" text-anchor="middle" font-size="10" fill="#334155">define_deep_agent(...)</text>
+  <text x="155" y="176" text-anchor="middle" font-size="10" fill="#6b7280">返回「定义」，不是 agent</text>
+
+  <rect x="50" y="206" width="210" height="82" rx="9" fill="#ffffff" stroke="#a9c9e6" stroke-width="1.4"/>
+  <text x="155" y="228" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1e4b7a">instructions.md · skills/</text>
+  <text x="155" y="246" text-anchor="middle" font-size="10" fill="#334155">sandbox/ · identity.py</text>
+  <text x="155" y="264" text-anchor="middle" font-size="10" fill="#6b7280">声明式能力，摆在那就会被发现</text>
+  <text x="155" y="280" text-anchor="middle" font-size="10" fill="#9a3412">（注意：不进 define 的参数）</text>
+
+  <rect x="50" y="300" width="210" height="66" rx="9" fill="#fff8ec" stroke="#e0b877" stroke-width="1.4" stroke-dasharray="4 3"/>
+  <text x="155" y="322" text-anchor="middle" font-size="11" font-weight="600" fill="#7a4f13">定义对象里只有两样</text>
+  <text x="155" y="340" text-anchor="middle" font-size="10" fill="#7a4f13">kind = "deep-agent"</text>
+  <text x="155" y="356" text-anchor="middle" font-size="10" fill="#7a4f13">config = {name, model, …}</text>
+
+  <line x1="284" y1="222" x2="318" y2="222" stroke="#5a6b7d" stroke-width="1.8" marker-end="url(#s1)"/>
+  <text x="301" y="206" text-anchor="middle" font-size="10" fill="#5a6b7d">①</text>
+
+  <rect x="326" y="58" width="286" height="330" rx="12" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.5"/>
+  <text x="469" y="84" text-anchor="middle" font-size="12.5" font-weight="600" fill="#1f5537">CLI 干的事</text>
+  <text x="469" y="102" text-anchor="middle" font-size="10" fill="#4b7a5e">mda build</text>
+
+  <rect x="346" y="118" width="246" height="76" rx="9" fill="#ffffff" stroke="#a8ceb8" stroke-width="1.4"/>
+  <text x="469" y="140" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1f5537">静态检查 + 读 name</text>
+  <text x="469" y="158" text-anchor="middle" font-size="10" fill="#334155">只扫文本，不执行你的代码</text>
+  <text x="469" y="176" text-anchor="middle" font-size="10" fill="#6b7280">写错托管参数在这里就报错</text>
+
+  <rect x="346" y="206" width="246" height="82" rx="9" fill="#ffffff" stroke="#a8ceb8" stroke-width="1.4"/>
+  <text x="469" y="228" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1f5537">拼出入口胶水</text>
+  <text x="469" y="246" text-anchor="middle" font-size="10" fill="#334155">.mda/build/_mda_entry.py</text>
+  <text x="469" y="264" text-anchor="middle" font-size="10" fill="#334155">.mda/build/langgraph.json</text>
+  <text x="469" y="282" text-anchor="middle" font-size="10" fill="#6b7280">graph 名 = name 归一化结果</text>
+
+  <rect x="346" y="300" width="246" height="66" rx="9" fill="#fdf2f2" stroke="#d99a9a" stroke-width="1.4"/>
+  <text x="469" y="322" text-anchor="middle" font-size="10.5" font-weight="600" fill="#7a2626">所以 build 过了 ≠ 定义对了</text>
+  <text x="469" y="340" text-anchor="middle" font-size="10" fill="#7f5a5a">坏 import、工厂里抛错</text>
+  <text x="469" y="356" text-anchor="middle" font-size="10" fill="#7f5a5a">都要等加载那一刻才炸</text>
+
+  <line x1="636" y1="222" x2="670" y2="222" stroke="#c2410c" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#s2)"/>
+  <text x="653" y="206" text-anchor="middle" font-size="10" fill="#c2410c">②</text>
+
+  <rect x="678" y="58" width="232" height="330" rx="12" fill="#fff8ec" stroke="#e0b877" stroke-width="1.5"/>
+  <text x="794" y="84" text-anchor="middle" font-size="12.5" font-weight="600" fill="#7a4f13">运行时干的事</text>
+  <text x="794" y="102" text-anchor="middle" font-size="10" fill="#8a6320">mda dev / deploy 时</text>
+
+  <rect x="696" y="118" width="196" height="76" rx="9" fill="#ffffff" stroke="#e6c894" stroke-width="1.4"/>
+  <text x="794" y="140" text-anchor="middle" font-size="11.5" font-weight="600" fill="#7a4f13">补齐你没搬的东西</text>
+  <text x="794" y="158" text-anchor="middle" font-size="10" fill="#334155">提示词 · 技能路径 · 沙箱</text>
+  <text x="794" y="176" text-anchor="middle" font-size="10" fill="#334155">后端 · 存储 · 检查点器</text>
+
+  <rect x="696" y="206" width="196" height="82" rx="9" fill="#ffffff" stroke="#e6c894" stroke-width="1.4"/>
+  <text x="794" y="228" text-anchor="middle" font-size="11.5" font-weight="600" fill="#7a4f13">真正编译</text>
+  <text x="794" y="246" text-anchor="middle" font-size="10" fill="#334155">create_deep_agent(**merged)</text>
+  <text x="794" y="264" text-anchor="middle" font-size="10" fill="#334155">这一刻才出现可执行图</text>
+  <text x="794" y="282" text-anchor="middle" font-size="10" fill="#6b7280">加载期同时还会读 schema</text>
+
+  <rect x="696" y="300" width="196" height="66" rx="9" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="794" y="322" text-anchor="middle" font-size="11.5" font-weight="600" fill="#1e4b7a">能 invoke 的 agent</text>
+  <text x="794" y="342" text-anchor="middle" font-size="10" fill="#334155">thread / run / 流式</text>
+  <text x="794" y="358" text-anchor="middle" font-size="10" fill="#334155">都是它给的</text>
+
+  <text x="470" y="416" text-anchor="middle" font-size="11.5" fill="#475569">① 只产出配置，可以被静态检查；② 只在运行时发生，静态检查看不见</text>
+  <text x="470" y="442" text-anchor="middle" font-size="11" fill="#94a3b8">这条缝就是本课所有困惑的源头：你在左边写，成不成要看右边</text>
+  <text x="470" y="462" text-anchor="middle" font-size="10" fill="#b0bac6">依据：managed_deepagents 0.9.5 实测（DeepAgentDefinition.config 只有 name/model 等声明项；runtime.py 在编译期组装并调用 create_deep_agent）</text>
+</svg>

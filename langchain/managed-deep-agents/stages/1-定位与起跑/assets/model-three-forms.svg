@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 500" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="960" height="500" fill="#fbfcfd"/>
+  <text x="480" y="32" text-anchor="middle" font-size="17" font-weight="600" fill="#1f2937">三种模型写法，谁负责把名字翻译成真模型</text>
+
+  <rect x="28" y="56" width="904" height="128" rx="12" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.5"/>
+  <text x="48" y="82" font-size="12.5" font-weight="600" fill="#1e4b7a">写法一：provider:model 字符串（最常用）</text>
+  <text x="48" y="106" font-size="11" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#1f2937">model = "openai:gpt-5.5"        model = "anthropic:claude-sonnet-4-6"</text>
+  <text x="48" y="130" font-size="11" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#1f2937">model = "google_genai:gemini-3.6-flash"   （TS：google:gemini-3.6-flash）</text>
+  <text x="48" y="154" font-size="10.5" fill="#334155">冒号左边是「哪一家」，右边是「哪个型号」——平台据此去找对应的集成包，再去读对应的环境变量。</text>
+  <text x="48" y="174" font-size="10.5" fill="#9a3412">关键代价：集成包不在默认依赖里。写 openai: 却没装 langchain-openai（TS：@langchain/openai），编译期直接 ImportError。</text>
+
+  <rect x="28" y="196" width="446" height="150" rx="12" fill="#ffffff" stroke="#a9c9e6" stroke-width="1.5"/>
+  <text x="48" y="222" font-size="12.5" font-weight="600" fill="#1e4b7a">写法二：传模型实例（要配参数时）</text>
+  <text x="48" y="246" font-size="10.5" fill="#334155">自己 new 一个 ChatModel / ChatOpenAI，把它当 model 传进去。</text>
+  <text x="48" y="268" font-size="10.5" fill="#334155">好处：temperature、超时、重试、自定义 endpoint 都能写死在代码里。</text>
+  <text x="48" y="290" font-size="10.5" fill="#334155">代价：实例构造在「导入期」发生，密钥缺失会更早炸。</text>
+  <text x="48" y="312" font-size="10.5" fill="#9a3412">静态扫描读不到实例里的型号，排障时看不到「到底用了哪个模型」。</text>
+  <text x="48" y="334" font-size="10.5" fill="#6b7280">适用：Azure / 自建网关 / 需要固定参数的场景。</text>
+
+  <rect x="486" y="196" width="446" height="150" rx="12" fill="#ffffff" stroke="#c9b6e5" stroke-width="1.5"/>
+  <text x="506" y="222" font-size="12.5" font-weight="600" fill="#4c2f7a">写法三：langsmith:provider/model（走网关）</text>
+  <text x="506" y="246" font-size="11" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#1f2937">model = "langsmith:moonshotai/kimi-k3"</text>
+  <text x="506" y="268" font-size="10.5" fill="#334155">注意分隔符变了：网关用斜杠，直连用冒号。</text>
+  <text x="506" y="290" font-size="10.5" fill="#334155">平台托管的型号不需要 provider secret，走 Gateway Credits。</text>
+  <text x="506" y="312" font-size="10.5" fill="#334155">已配置 provider 的型号（如 anthropic/claude-…）仍计费到自己的账号。</text>
+  <text x="506" y="334" font-size="10.5" fill="#6b7280">脚手架可直接生成：mda init my-agent --gateway</text>
+
+  <rect x="28" y="364" width="904" height="112" rx="12" fill="#fff8ec" stroke="#e0b877" stroke-width="1.5"/>
+  <text x="48" y="390" font-size="12.5" font-weight="600" fill="#7a4f13">密钥从哪来：三处，优先级别搞反</text>
+  <text x="48" y="414" font-size="10.5" fill="#7a4f13">① 项目根 .env —— mda dev 会热加载，mda deploy 会把非保留项作为部署密钥传上去（.env 本身不进构建包）</text>
+  <text x="48" y="436" font-size="10.5" fill="#7a4f13">② 进程环境变量 —— 本地临时试验常用；注意它可能盖掉 .env，或反过来被 .env 盖掉</text>
+  <text x="48" y="458" font-size="10.5" fill="#7a4f13">③ LangSmith workspace secrets —— 部署后运行时读这里；沙箱代理也读这里</text>
+</svg>

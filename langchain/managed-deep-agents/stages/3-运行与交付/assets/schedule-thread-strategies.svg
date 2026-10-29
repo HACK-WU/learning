@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 620" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="a2" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="980" height="620" fill="#fbfcfd"/>
+
+  <text x="490" y="34" text-anchor="middle" font-size="17" font-weight="600" fill="#1f2937">同一份声明，三种线程命运</text>
+  <text x="490" y="58" text-anchor="middle" font-size="12" fill="#64748b">关键只有两个词：新不新开话题、跑完删不删</text>
+
+  <rect x="26" y="84" width="300" height="252" rx="10" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.6"/>
+  <text x="176" y="112" text-anchor="middle" font-size="13" font-weight="600" fill="#1e4b7a">A · 部署时声明的调度</text>
+  <text x="176" y="134" text-anchor="middle" font-size="10.5" fill="#3a6a96">schedules/*.py 里的 define_schedule</text>
+
+  <text x="46" y="166" font-size="10.5" fill="#1e4b7a">默认：每次跑都开新话题，跑完删掉</text>
+  <text x="46" y="186" font-size="10.5" fill="#1e4b7a">→ 各次运行互不相干，不留历史</text>
+  <text x="46" y="212" font-size="10.5" fill="#1e4b7a">想累积状态：thread={"mode":"persistent","id":"..."}</text>
+  <text x="46" y="232" font-size="10.5" fill="#1e4b7a">→ id 必须是已存在话题的 UUID</text>
+  <text x="46" y="252" font-size="10.5" fill="#1e4b7a">→ 平台和 CLI 都不会替你建这个话题</text>
+  <text x="46" y="278" font-size="10.5" fill="#1e4b7a">身份：被盖成 service（mda:schedule:&lt;assistant&gt;）</text>
+  <text x="46" y="298" font-size="10.5" fill="#1e4b7a">改声明要重新部署才会同步 cron</text>
+  <text x="46" y="320" font-size="10" fill="#94a3b8">实测：mda dev 横幅打印 daily_digest (0 8 * * 1-5)</text>
+
+  <rect x="340" y="84" width="300" height="252" rx="10" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.6"/>
+  <text x="490" y="112" text-anchor="middle" font-size="13" font-weight="600" fill="#1f5537">B · 运行时创建的周期调度</text>
+  <text x="490" y="134" text-anchor="middle" font-size="10.5" fill="#357a52">runtime.schedules.create(cron=...)</text>
+
+  <text x="360" y="166" font-size="10.5" fill="#1f5537">new_thread 默认 True（cron 才有这个默认）</text>
+  <text x="360" y="186" font-size="10.5" fill="#1f5537">→ 每次响都是新话题、新消息</text>
+  <text x="360" y="212" font-size="10.5" fill="#1f5537">new_thread=False 需要当前有话题</text>
+  <text x="360" y="232" font-size="10.5" fill="#1f5537">→ 报 Same-thread schedules require a current thread</text>
+  <text x="360" y="258" font-size="10.5" fill="#1f5537">在群里创建：继承那个群作为回话目标</text>
+  <text x="360" y="278" font-size="10.5" fill="#1f5537">owner 两种：{type:"user"} 按人 / {type:"agent"} 按 agent</text>
+  <text x="360" y="298" font-size="10.5" fill="#1f5537">agent 所有 + 非新话题 = 直接拒绝</text>
+  <text x="360" y="320" font-size="10" fill="#94a3b8">上限：每个 owner 每个 agent 20 条，暂停的也算</text>
+
+  <rect x="654" y="84" width="300" height="252" rx="10" fill="#f6f0fa" stroke="#a98cc0" stroke-width="1.6"/>
+  <text x="804" y="112" text-anchor="middle" font-size="13" font-weight="600" fill="#4a2f63">C · 运行时创建的一次性调度</text>
+  <text x="804" y="134" text-anchor="middle" font-size="10.5" fill="#6b4a85">runtime.schedules.create(at=...)</text>
+
+  <text x="674" y="166" font-size="10.5" fill="#4a2f63">new_thread 默认 False（at 才有这个默认）</text>
+  <text x="674" y="186" font-size="10.5" fill="#4a2f63">→ 接着当前话题往下聊</text>
+  <text x="674" y="212" font-size="10.5" fill="#4a2f63">实测：at 被取整到下一整分钟</text>
+  <text x="674" y="232" font-size="10.5" fill="#4a2f63">→ 12:00:50 传 +30 秒 → 12:02:00</text>
+  <text x="674" y="258" font-size="10.5" fill="#4a2f63">范围：至少 1 分钟、最多 365 天</text>
+  <text x="674" y="278" font-size="10.5" fill="#4a2f63">实现方式：其实是"cron + 5 分钟后过期"</text>
+  <text x="674" y="298" font-size="10.5" fill="#6b4a85">也接受 ISO 8601 字符串，但必须带 Z 或时区偏移</text>
+  <text x="674" y="320" font-size="10" fill="#94a3b8">过期的一次性调度不计入 20 条上限</text>
+
+  <rect x="26" y="356" width="928" height="88" rx="8" fill="#fef6e7" stroke="#d9a94c" stroke-width="1.6"/>
+  <text x="42" y="380" font-size="12" font-weight="600" fill="#7a5210">三个最容易记反的地方</text>
+  <text x="42" y="402" font-size="10.5" fill="#7a5210">① 只有 cron 的 new_thread 默认是 True，at 的默认是 False——同一个 API 两种默认，写代码时别靠印象。</text>
+  <text x="42" y="422" font-size="10.5" fill="#7a5210">② persistent 话题必须先有：平台不建、CLI 也不建，得你自己去 Studio 建好把 UUID 抄回来。</text>
+  <text x="42" y="440" font-size="10.5" fill="#7a5210">③ 一次性调度不是"定时器"，它落成一条 cron 再加一个五分钟后的 end_time；报错时要去查 cron，不是查定时器。</text>
+
+  <rect x="26" y="462" width="928" height="140" rx="8" fill="#fdf1f1" stroke="#d98c8c" stroke-width="1.6"/>
+  <text x="42" y="486" font-size="12" font-weight="600" fill="#8a2626">调度绝不能"算"出来：三次实测的错误原文</text>
+  <text x="42" y="508" font-size="10.5" fill="#8a2626">读环境变量：error: schedules/bad_d.py schedule is not static: malformed node or string on line 3: &lt;ast.Call ...&gt;</text>
+  <text x="42" y="528" font-size="10.5" fill="#8a2626">调函数取值：error: schedules/bad_e.py schedule is not static: malformed node or string on line 3: &lt;ast.Call ...&gt;</text>
+  <text x="42" y="548" font-size="10.5" fill="#8a2626">**kwargs 展开：error: schedules/bad_l.py schedule is not static: **kwargs are not supported</text>
+  <text x="42" y="568" font-size="10.5" fill="#8a2626">顶层常量引用（CRON = "0 8 * * *" 再传 cron=CRON）是允许的，这是唯一能"间接"的方式。</text>
+  <text x="42" y="588" font-size="10" fill="#94a3b8">和课 7 的 agent name 扫描是两套实现：调度走 AST 字面量比对，agent name 走复合语句黑名单。</text>
+
+  <text x="490" y="618" text-anchor="middle" font-size="10" fill="#94a3b8">记忆口诀：cron 开新话题、at 续老话题、persistent 得先有话题</text>
+</svg>

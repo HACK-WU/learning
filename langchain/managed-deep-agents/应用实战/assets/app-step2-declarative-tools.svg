@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="900" height="500" fill="#fbfcfd"/>
+  <text x="30" y="34" font-size="17" font-weight="700" fill="#1f2937">综合版：三份声明，三种注册机制</text>
+  <text x="30" y="56" font-size="12" fill="#6b7280">流程搬进技能（靠标签触发）、接口拆成三个语义化工具（靠入口点名）、操作人不让模型填</text>
+
+  <rect x="30" y="88" width="200" height="44" rx="6" fill="#eef6ff" stroke="#1e4b7a" stroke-width="1.5"/>
+  <text x="42" y="106" font-size="11" font-weight="700" fill="#1e4b7a">instructions.md</text>
+  <text x="42" y="123" font-size="10" fill="#3f5b78">瘦到 20 行：角色 + 指路</text>
+
+  <rect x="30" y="142" width="200" height="44" rx="6" fill="#fff8ec" stroke="#b45309" stroke-width="1.5"/>
+  <text x="42" y="160" font-size="11" font-weight="700" fill="#7a4f13">skills/escalate/SKILL.md</text>
+  <text x="42" y="177" font-size="10" fill="#7a4f13">流程进这里，靠标签触发</text>
+
+  <rect x="30" y="196" width="200" height="44" rx="6" fill="#f4faf6" stroke="#1f5537" stroke-width="1.5"/>
+  <text x="42" y="214" font-size="11" font-weight="700" fill="#1f5537">tools/itsm.py</text>
+  <text x="42" y="231" font-size="10" fill="#3f6b50">query / prepare / commit</text>
+
+  <rect x="258" y="88" width="246" height="152" rx="6" fill="#eef6ff" stroke="#1e4b7a" stroke-width="2"/>
+  <text x="270" y="108" font-size="12" font-weight="700" fill="#1e4b7a">agent.py：入口点名</text>
+  <text x="270" y="130" font-size="9.5" fill="#3f5b78">from tools.itsm import (</text>
+  <text x="278" y="146" font-size="9.5" fill="#3f5b78">query_ticket,</text>
+  <text x="278" y="161" font-size="9.5" fill="#3f5b78">prepare_escalation,</text>
+  <text x="278" y="176" font-size="9.5" fill="#3f5b78">commit_escalation,</text>
+  <text x="270" y="191" font-size="9.5" fill="#3f5b78">)</text>
+  <text x="270" y="210" font-size="10" font-weight="700" fill="#1e4b7a">tools=[...] 三个都写</text>
+  <text x="270" y="228" font-size="10" fill="#7a2626">漏一个 = 它就不存在</text>
+
+  <rect x="532" y="88" width="338" height="152" rx="6" fill="#f7f8fa" stroke="#4b5563" stroke-width="1.5"/>
+  <text x="546" y="108" font-size="12" font-weight="700" fill="#374151">编译后的 agent 实际拿到什么</text>
+  <text x="546" y="130" font-size="10" fill="#4b5563">工具 3 个：全部出现在模型参数表里</text>
+  <text x="546" y="150" font-size="10" fill="#4b5563">技能 1 个：模型只看得到 name + description</text>
+  <text x="546" y="170" font-size="10" fill="#4b5563">系统提示 = 平台固定前言 + 你的 20 行</text>
+  <text x="546" y="190" font-size="10" fill="#4b5563">runtime 参数已从参数表里剔除</text>
+  <text x="546" y="212" font-size="10" font-weight="700" fill="#1f5537">每轮成本 ≈ 三个工具签名 + 一行技能标签</text>
+  <text x="546" y="230" font-size="10" fill="#1f5537">不再是 200 行流程全文</text>
+
+  <path d="M230 110 L258 110" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#c2)"/>
+  <path d="M230 164 L258 164" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#c2)"/>
+  <path d="M230 218 L258 218" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#c2)"/>
+  <path d="M504 164 L532 164" stroke="#5a6b7d" stroke-width="1.6" marker-end="url(#c2)"/>
+  <defs><marker id="c2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#5a6b7d"/></marker></defs>
+
+  <rect x="30" y="272" width="400" height="190" rx="6" fill="#f4faf6" stroke="#1f5537" stroke-width="2"/>
+  <text x="46" y="296" font-size="13" font-weight="700" fill="#1f5537">本步新增 / 换来了什么</text>
+  <text x="46" y="320" font-size="11" fill="#1f5537">① instructions 从 200 行降到 20 行：流程不再每轮全文灌入</text>
+  <text x="46" y="344" font-size="11" fill="#1f5537">② 流程有了触发条件：description 写明"什么时候该用我"</text>
+  <text x="46" y="368" font-size="11" fill="#1f5537">③ 接口语义化：参数是类型化字段，不再是自由 action + dict</text>
+  <text x="46" y="392" font-size="11" fill="#1f5537">④ 写操作被单独拆出：commit 可单独挂审批闸（课 8 讲）</text>
+  <text x="46" y="416" font-size="11" fill="#1f5537">⑤ 操作人从 principal 取，不再让模型自己填 approver</text>
+  <text x="46" y="442" font-size="10" fill="#3f6b50">前三项对应本课三个知识点，后两项是拆工具顺带带来的红利。</text>
+
+  <rect x="450" y="272" width="420" height="190" rx="6" fill="#fdf6f6" stroke="#7a2626" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="466" y="296" font-size="13" font-weight="700" fill="#7a2626">仍然存在的边界（这里没解决）</text>
+  <text x="466" y="320" font-size="11" fill="#7a2626">① 漏点名依旧静默：build exit=0，config 里连 tools 键都没有</text>
+  <text x="466" y="344" font-size="11" fill="#7a2626">② frontmatter 缺 description 整张跳过，同样 exit=0</text>
+  <text x="466" y="368" font-size="11" fill="#7a2626">③ 拆成三个工具 = 至少三轮调用，延迟与 token 都上升</text>
+  <text x="466" y="392" font-size="11" fill="#7a2626">④ 三个工具都没回答"这个人能不能做这一步"</text>
+  <text x="466" y="416" font-size="11" fill="#7a2626">⑤ 沙箱一旦声明，permissions 会被清空（课 6 讲）</text>
+  <text x="466" y="442" font-size="10" fill="#a05a5a">④ 是权限问题的入口：留到课 7 用三源分离解决。</text>
+
+  <text x="30" y="486" font-size="10" fill="#94a3b8">读图：左边三个文件不是"放进去都算数"——指令放对位置即生效，技能要有签，工具要被点名。中间那道点名闸是唯一会静默吞掉能力的地方。</text>
+</svg>

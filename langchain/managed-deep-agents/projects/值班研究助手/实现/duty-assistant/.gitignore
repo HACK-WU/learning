@@ -1,0 +1,13 @@
+# 构建产物（mda build 生成，可再生）
+.mda/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+
+# 密钥
+.env
+.env.local
+.env.*.local

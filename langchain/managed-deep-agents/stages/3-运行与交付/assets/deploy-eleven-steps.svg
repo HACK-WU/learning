@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 700" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="d1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="980" height="700" fill="#fbfcfd"/>
+
+  <text x="490" y="32" text-anchor="middle" font-size="17" font-weight="600" fill="#1f2937">mda deploy 的十一步，以及每步失败长什么样</text>
+  <text x="490" y="56" text-anchor="middle" font-size="12" fill="#64748b">前四步都是预检，全都发生在"上传任何东西"之前</text>
+
+  <rect x="26" y="76" width="928" height="150" rx="8" fill="#fef6e7" stroke="#d9a94c" stroke-width="1.6"/>
+  <text x="42" y="100" font-size="12.5" font-weight="600" fill="#7a5210">阶段 A · 预检（本地，不上传）</text>
+
+  <rect x="44" y="112" width="204" height="52" rx="6" fill="#fff" stroke="#e6cf9a"/>
+  <text x="146" y="131" text-anchor="middle" font-size="10.5" font-weight="600" fill="#7a5210">1 · 校验目录并载入入口</text>
+  <text x="146" y="150" text-anchor="middle" font-size="9.5" fill="#8a6a2a">error: agent `name` is required</text>
+
+  <line x1="248" y1="138" x2="268" y2="138" stroke="#64748b" stroke-width="1.3" marker-end="url(#d1)"/>
+
+  <rect x="268" y="112" width="204" height="52" rx="6" fill="#fff" stroke="#e6cf9a"/>
+  <text x="370" y="131" text-anchor="middle" font-size="10.5" font-weight="600" fill="#7a5210">2 · 解析 API key / workspace</text>
+  <text x="370" y="150" text-anchor="middle" font-size="9.5" fill="#8a6a2a">No LangSmith API key found</text>
+
+  <line x1="472" y1="138" x2="492" y2="138" stroke="#64748b" stroke-width="1.3" marker-end="url(#d1)"/>
+
+  <rect x="492" y="112" width="204" height="52" rx="6" fill="#fff" stroke="#e6cf9a"/>
+  <text x="594" y="131" text-anchor="middle" font-size="10.5" font-weight="600" fill="#7a5210">3 · 收集非保留 .env 为密钥</text>
+  <text x="594" y="150" text-anchor="middle" font-size="9.5" fill="#8a6a2a">（此步不报错，静默收集）</text>
+
+  <line x1="696" y1="138" x2="716" y2="138" stroke="#64748b" stroke-width="1.3" marker-end="url(#d1)"/>
+
+  <rect x="716" y="112" width="220" height="52" rx="6" fill="#fff" stroke="#e6cf9a"/>
+  <text x="826" y="131" text-anchor="middle" font-size="10.5" font-weight="600" fill="#7a5210">4 · 校验模型 provider key</text>
+  <text x="826" y="150" text-anchor="middle" font-size="9.5" fill="#8a6a2a">requires OPENAI_API_KEY in .env</text>
+
+  <text x="42" y="186" font-size="10.5" fill="#8a2626">实测：模型 key 只认 .env，不认 shell 环境变量——但官方 deploy 文档写的是"shell 环境或工作区密钥也算"，migrate 文档写的是"shell 里 export 的不会被读取"。</text>
+  <text x="42" y="206" font-size="10.5" fill="#475569">结论以实测为准：shell 导出 OPENAI_API_KEY 后仍然失败，同一条 key 写进 .env 才通过预检（走到下一步 403）。</text>
+
+  <rect x="26" y="240" width="928" height="132" rx="8" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.6"/>
+  <text x="42" y="264" font-size="12.5" font-weight="600" fill="#1e4b7a">阶段 B · 同步与打包</text>
+
+  <rect x="44" y="276" width="420" height="80" rx="6" fill="#fff" stroke="#a9ccea"/>
+  <text x="58" y="296" font-size="11" font-weight="600" fill="#1e4b7a">5 · 同步 Context Hub（会撞车）</text>
+  <text x="58" y="314" font-size="9.5" fill="#3a6a96">Hub 里改过 instructions.md 或 skills/ → 交互式问 yes/no，默认 No（保留 Hub）</text>
+  <text x="58" y="330" font-size="9.5" fill="#3a6a96">非交互 → 直接失败，必须带 --context-strategy overwrite / keep-hub</text>
+  <text x="58" y="348" font-size="9.5" fill="#8a2626">只重跑 mda deploy 会反复撞同一堵墙</text>
+
+  <rect x="484" y="276" width="452" height="80" rx="6" fill="#fff" stroke="#a9ccea"/>
+  <text x="498" y="296" font-size="11" font-weight="600" fill="#1e4b7a">6 · 编译到 .mda/build，抽取 schedules/ 与 channels/</text>
+  <text x="498" y="314" font-size="9.5" fill="#3a6a96">静态入口会被 import 并逐个断言，残留参数在这一步就报</text>
+  <text x="498" y="330" font-size="9.5" fill="#3a6a96">工厂入口不被调用 → 体内的问题要等运行时才浮出</text>
+  <text x="498" y="348" font-size="9.5" fill="#8a2626">.env / .env.* 不入归档；但根目录其它文件原样带走</text>
+
+  <rect x="26" y="392" width="928" height="120" rx="8" fill="#f6f0fa" stroke="#a98cc0" stroke-width="1.6"/>
+  <text x="42" y="416" font-size="12.5" font-weight="600" fill="#4a2f63">阶段 C · 远程构建与装配</text>
+
+  <rect x="44" y="428" width="204" height="68" rx="6" fill="#fff" stroke="#c9b0d9"/>
+  <text x="146" y="448" text-anchor="middle" font-size="10.5" font-weight="600" fill="#4a2f63">7 · 按名找/建部署</text>
+  <text x="146" y="466" text-anchor="middle" font-size="9.5" fill="#6b4a85">同名已存在 → -y 覆盖</text>
+  <text x="146" y="483" text-anchor="middle" font-size="9.5" fill="#6b4a85">否则交互询问</text>
+
+  <line x1="248" y1="462" x2="268" y2="462" stroke="#64748b" stroke-width="1.3" marker-end="url(#d1)"/>
+
+  <rect x="268" y="428" width="204" height="68" rx="6" fill="#fff" stroke="#c9b0d9"/>
+  <text x="370" y="448" text-anchor="middle" font-size="10.5" font-weight="600" fill="#4a2f63">8 · 归档并触发远程构建</text>
+  <text x="370" y="466" text-anchor="middle" font-size="9.5" fill="#6b4a85">Build 装依赖、装 Python</text>
+  <text x="370" y="483" text-anchor="middle" font-size="9.5" fill="#6b4a85">失败 → BUILD_FAILED</text>
+
+  <line x1="472" y1="462" x2="492" y2="462" stroke="#64748b" stroke-width="1.3" marker-end="url(#d1)"/>
+
+  <rect x="492" y="428" width="204" height="68" rx="6" fill="#fff" stroke="#c9b0d9"/>
+  <text x="594" y="448" text-anchor="middle" font-size="10.5" font-weight="600" fill="#4a2f63">9 · 轮询直到 DEPLOYED</text>
+  <text x="594" y="466" text-anchor="middle" font-size="9.5" fill="#6b4a85">默认等 1800 秒</text>
+  <text x="594" y="483" text-anchor="middle" font-size="9.5" fill="#6b4a85">--no-wait 直接退出</text>
+
+  <line x1="696" y1="462" x2="716" y2="462" stroke="#64748b" stroke-width="1.3" marker-end="url(#d1)"/>
+
+  <rect x="716" y="428" width="220" height="68" rx="6" fill="#fff" stroke="#c9b0d9"/>
+  <text x="826" y="448" text-anchor="middle" font-size="10.5" font-weight="600" fill="#4a2f63">10 · 同步 cron</text>
+  <text x="826" y="466" text-anchor="middle" font-size="9.5" fill="#6b4a85">+ 11 · 建 Slack 机器人</text>
+  <text x="826" y="483" text-anchor="middle" font-size="9.5" fill="#8a2626">--no-wait 时两步全跳过</text>
+
+  <rect x="26" y="532" width="928" height="76" rx="8" fill="#fdf1f1" stroke="#d98c8c" stroke-width="1.6"/>
+  <text x="42" y="556" font-size="12" font-weight="600" fill="#8a2626">两处文档与实测不一致（本课已按实测写）</text>
+  <text x="42" y="576" font-size="10.5" fill="#8a2626">① migrate 文档：`mda build` 不检查定义调用，残留参数要到 dev 才出现。实测：静态入口在 build 阶段就报 Remove `checkpointer` from ...</text>
+  <text x="42" y="594" font-size="10.5" fill="#8a2626">② deploy 文档：模型 key 可由 shell 环境提供。实测：shell 导出无效，只有 .env 能过预检（见阶段 A 红字）</text>
+
+  <text x="490" y="644" text-anchor="middle" font-size="11" fill="#475569">排障口诀：先问"停在第几步"，再问"这一步读的是哪份文件"</text>
+  <text x="490" y="672" text-anchor="middle" font-size="10" fill="#94a3b8">第 5 步看 Hub，第 6 步看 build 产物，第 8 步看 revision 日志；这三处覆盖了绝大多数部署失败</text>
+</svg>

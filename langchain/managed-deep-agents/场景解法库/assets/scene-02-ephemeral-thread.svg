@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="d1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5a6b7d"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="420" fill="#fbfcfd"/>
+
+  <text x="30" y="34" font-size="17" font-weight="700" fill="#1f2937">解法 A：每次运行新建临时线程——跑完即弃，不进线程列表</text>
+  <text x="30" y="56" font-size="12" fill="#6b7280">晨报是「一次性快照」，昨天的快照没有任何后续价值</text>
+
+  <rect x="30" y="82" width="150" height="52" rx="6" fill="#eef6ff" stroke="#1e4b7a" stroke-width="1.5"/>
+  <text x="105" y="114" font-size="12" font-weight="700" fill="#1e4b7a" text-anchor="middle">cron 触发</text>
+
+  <rect x="210" y="82" width="200" height="52" rx="6" fill="#f4faf6" stroke="#1f5537" stroke-width="1.5"/>
+  <text x="310" y="106" font-size="12" font-weight="700" fill="#1f5537" text-anchor="middle">新线程（默认）</text>
+  <text x="310" y="124" font-size="10" fill="#3f6b50" text-anchor="middle">ephemeral（声明层默认）</text>
+
+  <rect x="440" y="82" width="180" height="52" rx="6" fill="#eef6ff" stroke="#1e4b7a" stroke-width="1.5"/>
+  <text x="530" y="106" font-size="12" font-weight="700" fill="#1e4b7a" text-anchor="middle">执行并产出</text>
+  <text x="530" y="124" font-size="10" fill="#5a6b7d" text-anchor="middle">检查点写在本地</text>
+
+  <rect x="650" y="82" width="110" height="52" rx="6" fill="#f4faf6" stroke="#1f5537" stroke-width="1.5"/>
+  <text x="705" y="114" font-size="12" font-weight="700" fill="#1f5537" text-anchor="middle">发送</text>
+
+  <rect x="790" y="82" width="80" height="52" rx="6" fill="#9a3412" fill-opacity="0.12" stroke="#9a3412" stroke-width="1.5"/>
+  <text x="830" y="106" font-size="11" font-weight="700" fill="#9a3412" text-anchor="middle">线程</text>
+  <text x="830" y="124" font-size="10" fill="#9a3412" text-anchor="middle">丢弃</text>
+
+  <line x1="180" y1="108" x2="206" y2="108" stroke="#5a6b7d" stroke-width="1.5" marker-end="url(#d1)"/>
+  <line x1="410" y1="108" x2="436" y2="108" stroke="#5a6b7d" stroke-width="1.5" marker-end="url(#d1)"/>
+  <line x1="620" y1="108" x2="646" y2="108" stroke="#5a6b7d" stroke-width="1.5" marker-end="url(#d1)"/>
+  <line x1="760" y1="108" x2="786" y2="108" stroke="#5a6b7d" stroke-width="1.5" marker-end="url(#d1)"/>
+
+  <text x="30" y="176" font-size="13" font-weight="700" fill="#1f2937">三个开关的方向，两两互不相同</text>
+
+  <rect x="30" y="192" width="260" height="72" rx="6" fill="#f4faf6" stroke="#1f5537" stroke-width="1.5"/>
+  <text x="46" y="214" font-size="12" font-weight="700" fill="#1f5537">schedules/ 声明式</text>
+  <text x="46" y="236" font-size="11" fill="#3f6b50">不写 thread = 临时（跑完即删）</text>
+  <text x="46" y="254" font-size="11" fill="#3f6b50">无 new_thread 参数（写了 TypeError）</text>
+
+  <rect x="310" y="192" width="270" height="72" rx="6" fill="#eef6ff" stroke="#1e4b7a" stroke-width="1.5"/>
+  <text x="326" y="214" font-size="12" font-weight="700" fill="#1e4b7a">运行时动态创建</text>
+  <text x="326" y="236" font-size="11" fill="#5a6b7d">cron 默认 new_thread=True</text>
+  <text x="326" y="254" font-size="11" fill="#5a6b7d">at 默认 False（方向相反）</text>
+
+  <rect x="600" y="192" width="270" height="72" rx="6" fill="#fff8ec" stroke="#b45309" stroke-width="1.5"/>
+  <text x="616" y="214" font-size="12" font-weight="700" fill="#b45309">显式声明最稳</text>
+  <text x="616" y="236" font-size="11" fill="#7a4f13">timezone 必须写，否则吃平台默认</text>
+  <text x="616" y="254" font-size="11" fill="#7a4f13">cron "0 8 * * *" 在 UTC = 下午 4 点</text>
+
+  <rect x="30" y="290" width="840" height="96" rx="6" fill="#fdf6f6" stroke="#7a2626" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="46" y="312" font-size="13" font-weight="700" fill="#7a2626">此处会失效</text>
+  <text x="46" y="336" font-size="12" fill="#7a2626">① 省略 timezone → ScheduleDefinition.timezone 根本不存在（实测），cron 交给平台默认时区解释</text>
+  <text x="46" y="358" font-size="12" fill="#7a2626">② 声明里读 os.environ / 调函数 → 调度是静态字面量，读环境变量直接失败</text>
+  <text x="46" y="380" font-size="12" fill="#7a2626">③ --no-wait 跳过 cron 同步 → 线程策略写得再对也不会被执行到</text>
+
+  <text x="30" y="408" font-size="11" fill="#6b7280">此图讲「一次性任务」；持久会话任务的线程策略相反，见解法 B</text>
+</svg>

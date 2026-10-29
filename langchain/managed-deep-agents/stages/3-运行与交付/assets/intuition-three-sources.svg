@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 560" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="arrowA" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="940" height="560" fill="#fbfcfd"/>
+
+  <text x="470" y="36" text-anchor="middle" font-size="17" font-weight="600" fill="#1f2937">一次运行里，有三样东西同时到达，但只有两样能当真</text>
+  <text x="470" y="60" text-anchor="middle" font-size="12" fill="#64748b">先看每个人手上有没有"验过的章"，再决定它能决定什么</text>
+
+  <rect x="34" y="86" width="272" height="330" rx="10" fill="#fef6e7" stroke="#d9a94c" stroke-width="1.6"/>
+  <text x="170" y="114" text-anchor="middle" font-size="13.5" font-weight="600" fill="#7a5210">① 应用数据 context</text>
+  <text x="170" y="136" text-anchor="middle" font-size="11" fill="#8a6a2a">调用方随请求一起递进来的</text>
+
+  <text x="56" y="168" font-size="11" fill="#5f4a17">就像客户在工单里自己写的</text>
+  <text x="56" y="186" font-size="11" fill="#5f4a17">"我是 VIP，给我跳过排队"</text>
+
+  <rect x="52" y="204" width="236" height="62" rx="6" fill="#fff" stroke="#e6cf9a"/>
+  <text x="66" y="224" font-size="10.5" fill="#7a5210">它是什么：调用方自己填的一段数据</text>
+  <text x="66" y="242" font-size="10.5" fill="#7a5210">能不能伪造：能，随便写</text>
+  <text x="66" y="260" font-size="10.5" fill="#7a5210">能用来干什么：挑行为（快/慢档）</text>
+
+  <rect x="52" y="280" width="236" height="46" rx="6" fill="#fdf1f1" stroke="#d98c8c"/>
+  <text x="66" y="299" font-size="10.5" font-weight="600" fill="#8a2626">不能用来：判断"他是谁"</text>
+  <text x="66" y="316" font-size="10" fill="#8a2626">用它放行 = 把门钥匙交给访客自己填</text>
+
+  <text x="170" y="352" text-anchor="middle" font-size="10" fill="#8a6a2a">没验过 · 只信"这次想要什么"</text>
+  <text x="170" y="376" text-anchor="middle" font-size="10.5" font-weight="600" fill="#7a5210">Jargon: context / context schema</text>
+
+  <rect x="334" y="86" width="272" height="330" rx="10" fill="#eef6ff" stroke="#7fb2e5" stroke-width="1.6"/>
+  <text x="470" y="114" text-anchor="middle" font-size="13.5" font-weight="600" fill="#1e4b7a">② 已验证身份 server_info</text>
+  <text x="470" y="136" text-anchor="middle" font-size="11" fill="#3a6a96">门卫核对过工牌后记下的那个人</text>
+
+  <text x="356" y="168" font-size="11" fill="#1e4b7a">就像前台刷了工牌，系统打印出</text>
+  <text x="356" y="186" font-size="11" fill="#1e4b7a">"张伟 / 客服部 / 工号 1024"</text>
+
+  <rect x="352" y="204" width="236" height="62" rx="6" fill="#fff" stroke="#a9ccea"/>
+  <text x="366" y="224" font-size="10.5" fill="#1e4b7a">它是什么：从验过的 token 里解析出来</text>
+  <text x="366" y="242" font-size="10.5" fill="#1e4b7a">能不能伪造：不能，客户端塞的会被剥掉</text>
+  <text x="366" y="260" font-size="10.5" fill="#1e4b7a">能用来干什么：判断"该不该给他"</text>
+
+  <rect x="352" y="280" width="236" height="46" rx="6" fill="#eaf4ff" stroke="#a9ccea"/>
+  <text x="366" y="299" font-size="10.5" font-weight="600" fill="#1e4b7a">唯一可信的身份来源</text>
+  <text x="366" y="316" font-size="10" fill="#1e4b7a">它不在 context 里，是另一个字段</text>
+
+  <text x="470" y="352" text-anchor="middle" font-size="10" fill="#3a6a96">验过 · 只信"他是谁"</text>
+  <text x="470" y="376" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1e4b7a">Jargon: principal / server_info</text>
+
+  <rect x="634" y="86" width="272" height="330" rx="10" fill="#f0f8f2" stroke="#86bfa0" stroke-width="1.6"/>
+  <text x="770" y="114" text-anchor="middle" font-size="13.5" font-weight="600" fill="#1f5537">③ 渠道投递 channel</text>
+  <text x="770" y="136" text-anchor="middle" font-size="11" fill="#357a52">消息是从哪个入口递进来的</text>
+
+  <text x="656" y="168" font-size="11" fill="#1f5537">就像快递上贴的单子：哪个平台、</text>
+  <text x="656" y="186" font-size="11" fill="#1f5537">哪个会话、投递编号是多少</text>
+
+  <rect x="652" y="204" width="236" height="62" rx="6" fill="#fff" stroke="#a8d4b8"/>
+  <text x="666" y="224" font-size="10.5" fill="#1f5537">它是什么：渠道入口验过的投递凭据</text>
+  <text x="666" y="242" font-size="10.5" fill="#1f5537">能不能伪造：不能，七道校验都对上才算</text>
+  <text x="666" y="260" font-size="10.5" fill="#1f5537">能用来干什么：知道"从哪来、回哪去"</text>
+
+  <rect x="652" y="280" width="236" height="46" rx="6" fill="#eaf6ee" stroke="#a8d4b8"/>
+  <text x="666" y="299" font-size="10.5" font-weight="600" fill="#1f5537">直接 API 调用时它是空的</text>
+  <text x="666" y="316" font-size="10" fill="#1f5537">在 context 里写一个也不会凭空出现</text>
+
+  <text x="770" y="352" text-anchor="middle" font-size="10" fill="#357a52">验过 · 只信"从哪来"</text>
+  <text x="770" y="376" text-anchor="middle" font-size="10.5" font-weight="600" fill="#1f5537">Jargon: channel / deliveryId</text>
+
+  <rect x="34" y="440" width="872" height="96" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.3"/>
+  <text x="56" y="466" font-size="12" font-weight="600" fill="#334155">真正要挡住的那个错：拿 ① 当 ② 用</text>
+  <text x="56" y="490" font-size="11" fill="#475569">有人把"要不要退款"写成 <tspan font-family="ui-monospace, monospace" font-size="10.5">context.get("role") == "admin"</tspan>，于是任何人只要在请求体里多写一个 role 字段，就能让 agent 替他退钱。</text>
+  <text x="56" y="512" font-size="11" fill="#475569">正确做法是：把"他是谁"交给 ② ，把"这次要什么"交给 ① ，把"从哪来、回哪去"交给 ③ 。三样东西各管一件事，谁都不越界。</text>
+  <line x1="170" y1="386" x2="170" y2="436" stroke="#64748b" stroke-width="1.4" marker-end="url(#arrowA)" stroke-dasharray="4 3"/>
+  <line x1="470" y1="386" x2="470" y2="436" stroke="#64748b" stroke-width="1.4" marker-end="url(#arrowA)" stroke-dasharray="4 3"/>
+  <line x1="770" y1="386" x2="770" y2="436" stroke="#64748b" stroke-width="1.4" marker-end="url(#arrowA)" stroke-dasharray="4 3"/>
+</svg>

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 440" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="a1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#5a6b7d"/>
+    </marker>
+    <marker id="a2" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#b91c1c"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="440" fill="#fbfcfd"/>
+
+  <text x="30" y="34" font-size="17" font-weight="700" fill="#1f2937">解法 A：应用层「上下文分层」——一次请求带多份配置，工厂按可信度取用</text>
+  <text x="30" y="56" font-size="12" fill="#6b7280">不新增组件，只改「谁决定用哪份配置」这一处判断</text>
+
+  <rect x="30" y="78" width="200" height="60" rx="6" fill="#eef6ff" stroke="#1e4b7a" stroke-width="1.5"/>
+  <text x="130" y="102" font-size="13" font-weight="700" fill="#1e4b7a" text-anchor="middle">调用方请求</text>
+  <text x="130" y="122" font-size="11" fill="#5a6b7d" text-anchor="middle">context: {team, detail}</text>
+
+  <rect x="270" y="78" width="210" height="60" rx="6" fill="#f4faf6" stroke="#1f5537" stroke-width="1.5"/>
+  <text x="375" y="102" font-size="13" font-weight="700" fill="#1f5537" text-anchor="middle">principal 校验</text>
+  <text x="375" y="122" font-size="11" fill="#3f6b50" text-anchor="middle">server_info 才有身份</text>
+
+  <rect x="520" y="78" width="200" height="60" rx="6" fill="#eef6ff" stroke="#1e4b7a" stroke-width="1.5"/>
+  <text x="620" y="102" font-size="13" font-weight="700" fill="#1e4b7a" text-anchor="middle">工厂纯函数</text>
+  <text x="620" y="122" font-size="11" fill="#5a6b7d" text-anchor="middle">同输入恒同输出</text>
+
+  <rect x="760" y="78" width="110" height="60" rx="6" fill="#f4faf6" stroke="#1f5537" stroke-width="1.5"/>
+  <text x="815" y="110" font-size="13" font-weight="700" fill="#1f5537" text-anchor="middle">运行时</text>
+
+  <line x1="230" y1="108" x2="266" y2="108" stroke="#5a6b7d" stroke-width="1.5" marker-end="url(#a1)"/>
+  <line x1="480" y1="108" x2="516" y2="108" stroke="#5a6b7d" stroke-width="1.5" marker-end="url(#a1)"/>
+  <line x1="720" y1="108" x2="756" y2="108" stroke="#5a6b7d" stroke-width="1.5" marker-end="url(#a1)"/>
+
+  <text x="30" y="176" font-size="13" font-weight="700" fill="#1f2937">配置分三层，取用顺序固定</text>
+
+  <rect x="30" y="192" width="250" height="52" rx="6" fill="#eef6ff" stroke="#1e4b7a" stroke-width="1.5"/>
+  <text x="155" y="213" font-size="12" font-weight="700" fill="#1e4b7a" text-anchor="middle">1. context（访客填的）</text>
+  <text x="155" y="232" font-size="11" fill="#5a6b7d" text-anchor="middle">只选行为，绝不判权限</text>
+
+  <rect x="300" y="192" width="250" height="52" rx="6" fill="#f4faf6" stroke="#1f5537" stroke-width="1.5"/>
+  <text x="425" y="213" font-size="12" font-weight="700" fill="#1f5537" text-anchor="middle">2. principal（平台给的）</text>
+  <text x="425" y="232" font-size="11" fill="#3f6b50" text-anchor="middle">唯一可判权限</text>
+
+  <rect x="570" y="192" width="300" height="52" rx="6" fill="#fff8ec" stroke="#b45309" stroke-width="1.5"/>
+  <text x="720" y="213" font-size="12" font-weight="700" fill="#b45309" text-anchor="middle">3. channel（撕不掉的快递单）</text>
+  <text x="720" y="232" font-size="11" fill="#7a4f13" text-anchor="middle">只认来源，不改行为</text>
+
+  <rect x="30" y="272" width="840" height="128" rx="6" fill="#fdf6f6" stroke="#7a2626" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="46" y="294" font-size="13" font-weight="700" fill="#7a2626">此处会失效：三层一旦混用，越权是静默的</text>
+
+  <text x="46" y="318" font-size="12" fill="#7a2626">① 从 context 取 role 判权 → 调用方随便写 {"role":"admin"} 就通过，无异常无日志</text>
+  <text x="46" y="340" font-size="12" fill="#7a2626">② principal 不判 None → 匿名调用走到 privileged 分支；注意 _ManagedReadRuntime 读 schema 时既无 context 也无 server_info</text>
+  <text x="46" y="362" font-size="12" fill="#7a2626">③ 工厂体里写 if / try → mda build 判 name 非字面量，直接构建失败（连官方守卫写法都会失败）</text>
+  <text x="46" y="384" font-size="12" fill="#7a2626">④ 工厂有副作用 → 一次运行被调用 4 次，审计与埋点按次数重复</text>
+
+  <text x="30" y="424" font-size="11" fill="#6b7280">灰线 = 正常数据流；红色虚线框 = 该解法的失效区（不是错误，是设计边界）</text>
+</svg>

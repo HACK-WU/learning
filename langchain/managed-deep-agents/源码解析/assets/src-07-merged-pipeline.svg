@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="900" height="520" fill="#fbfcfd"/>
+  <text x="30" y="34" font-size="17" font-weight="700" fill="#1f2937">merged 字典的十一次改动：你写进去的 3 个键，最终变成 12 个</text>
+  <text x="30" y="56" font-size="12" fill="#6b7280">按 runtime.py 的实际执行顺序排列；蓝 = 你写的，绿 = 平台加的，红 = 平台拿掉的</text>
+
+  <rect x="30" y="84" width="128" height="52" rx="5" fill="#eef6ff" stroke="#1e4b7a" stroke-width="1.5"/>
+  <text x="40" y="103" font-size="10" font-weight="700" fill="#1e4b7a">L858 起点</text>
+  <text x="40" y="119" font-size="9" fill="#3f5b78">dict(config)</text>
+  <text x="40" y="132" font-size="9" fill="#3f5b78">name/model/tools</text>
+
+  <rect x="176" y="84" width="128" height="52" rx="5" fill="#fdf6f6" stroke="#7a2626" stroke-width="1.5"/>
+  <text x="186" y="103" font-size="10" font-weight="700" fill="#7a2626">L859-863 pop</text>
+  <text x="186" y="119" font-size="9" fill="#a05a5a">instructions/skills</text>
+  <text x="186" y="132" font-size="9" fill="#a05a5a">memory/mcp/sandbox</text>
+
+  <rect x="322" y="84" width="128" height="52" rx="5" fill="#f4faf6" stroke="#1f5537" stroke-width="1.5"/>
+  <text x="332" y="103" font-size="10" font-weight="700" fill="#1f5537">L864 替换</text>
+  <text x="332" y="119" font-size="9" fill="#3f6b50">context_schema</text>
+  <text x="332" y="132" font-size="9" fill="#3f6b50">= 平台选定的</text>
+
+  <rect x="468" y="84" width="128" height="52" rx="5" fill="#f4faf6" stroke="#1f5537" stroke-width="1.5"/>
+  <text x="478" y="103" font-size="10" font-weight="700" fill="#1f5537">L908 挂载</text>
+  <text x="478" y="119" font-size="9" fill="#3f6b50">backend / 记忆</text>
+  <text x="478" y="132" font-size="9" fill="#3f6b50">skills 后端</text>
+
+  <rect x="614" y="84" width="128" height="52" rx="5" fill="#f4faf6" stroke="#1f5537" stroke-width="1.5"/>
+  <text x="624" y="103" font-size="10" font-weight="700" fill="#1f5537">L921 拼提示</text>
+  <text x="624" y="119" font-size="9" fill="#3f6b50">system_prompt</text>
+  <text x="624" y="132" font-size="9" fill="#3f6b50">前言 + 你的正文</text>
+
+  <rect x="760" y="84" width="110" height="52" rx="5" fill="#f4faf6" stroke="#1f5537" stroke-width="1.5"/>
+  <text x="770" y="103" font-size="10" font-weight="700" fill="#1f5537">L937-938</text>
+  <text x="770" y="119" font-size="9" fill="#3f6b50">skills 路径</text>
+  <text x="770" y="132" font-size="9" fill="#3f6b50">改成 /skills/</text>
+
+  <rect x="30" y="160" width="128" height="52" rx="5" fill="#f4faf6" stroke="#1f5537" stroke-width="1.5"/>
+  <text x="40" y="179" font-size="10" font-weight="700" fill="#1f5537">L944 前置</text>
+  <text x="40" y="195" font-size="9" fill="#3f6b50">凭据闸中间件</text>
+
+  <rect x="176" y="160" width="128" height="52" rx="5" fill="#f4faf6" stroke="#1f5537" stroke-width="1.5"/>
+  <text x="186" y="179" font-size="10" font-weight="700" fill="#1f5537">L947 前置</text>
+  <text x="186" y="195" font-size="9" fill="#3f6b50">Slack 文件中间件</text>
+
+  <rect x="322" y="160" width="128" height="52" rx="5" fill="#f4faf6" stroke="#1f5537" stroke-width="1.5"/>
+  <text x="332" y="179" font-size="10" font-weight="700" fill="#1f5537">L948 塞 backend</text>
+  <text x="332" y="195" font-size="9" fill="#3f6b50">runtime seam</text>
+
+  <rect x="468" y="160" width="128" height="52" rx="5" fill="#f4faf6" stroke="#1f5537" stroke-width="1.5"/>
+  <text x="478" y="179" font-size="10" font-weight="700" fill="#1f5537">L951-961 合并</text>
+  <text x="478" y="195" font-size="9" fill="#3f6b50">连接器工具追加</text>
+
+  <rect x="614" y="160" width="128" height="52" rx="5" fill="#f4faf6" stroke="#1f5537" stroke-width="1.5"/>
+  <text x="624" y="179" font-size="10" font-weight="700" fill="#1f5537">L964-965 追加</text>
+  <text x="624" y="195" font-size="9" fill="#3f6b50">调度 + 渠道中间件</text>
+
+  <rect x="760" y="160" width="110" height="52" rx="5" fill="#f4faf6" stroke="#1f5537" stroke-width="1.5"/>
+  <text x="770" y="179" font-size="10" font-weight="700" fill="#1f5537">L967-974</text>
+  <text x="770" y="195" font-size="9" fill="#3f6b50">记忆说明中间件</text>
+
+  <path d="M158 110 L176 110" stroke="#9ca3af" stroke-width="1.3" marker-end="url(#a1)"/>
+  <path d="M304 110 L322 110" stroke="#9ca3af" stroke-width="1.3" marker-end="url(#a1)"/>
+  <path d="M450 110 L468 110" stroke="#9ca3af" stroke-width="1.3" marker-end="url(#a1)"/>
+  <path d="M596 110 L614 110" stroke="#9ca3af" stroke-width="1.3" marker-end="url(#a1)"/>
+  <path d="M742 110 L760 110" stroke="#9ca3af" stroke-width="1.3" marker-end="url(#a1)"/>
+  <path d="M815 136 Q815 148 94 148 Q94 148 94 160" stroke="#9ca3af" stroke-width="1.3" fill="none" marker-end="url(#a1)"/>
+  <path d="M158 186 L176 186" stroke="#9ca3af" stroke-width="1.3" marker-end="url(#a1)"/>
+  <path d="M304 186 L322 186" stroke="#9ca3af" stroke-width="1.3" marker-end="url(#a1)"/>
+  <path d="M450 186 L468 186" stroke="#9ca3af" stroke-width="1.3" marker-end="url(#a1)"/>
+  <path d="M596 186 L614 186" stroke="#9ca3af" stroke-width="1.3" marker-end="url(#a1)"/>
+  <path d="M742 186 L760 186" stroke="#9ca3af" stroke-width="1.3" marker-end="url(#a1)"/>
+  <defs><marker id="a1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#9ca3af"/></marker></defs>
+
+  <rect x="30" y="236" width="400" height="118" rx="6" fill="#f4faf6" stroke="#1f5537" stroke-width="2"/>
+  <text x="46" y="258" font-size="12" font-weight="700" fill="#1f5537">sandbox 一在，permissions 归零（L1127 / L1188）</text>
+  <text x="46" y="280" font-size="9.5" fill="#3f6b50">if sandbox_backend is not None:</text>
+  <text x="54" y="296" font-size="9.5" fill="#3f6b50">    merged["permissions"] = []</text>
+  <text x="46" y="318" font-size="10" fill="#3f6b50">源码注释给了理由：deepagents 适配 CompositeBackend 时</text>
+  <text x="46" y="334" font-size="10" fill="#3f6b50">会丢掉路由前缀，任何权限规则都会连带禁掉 shell</text>
+  <text x="46" y="348" font-size="10" font-weight="700" fill="#7a2626">两处分别在 _mount_selected_skills 与 _apply_managed_context</text>
+
+  <rect x="458" y="236" width="412" height="118" rx="6" fill="#eef6ff" stroke="#1e4b7a" stroke-width="2"/>
+  <text x="474" y="258" font-size="12" font-weight="700" fill="#1e4b7a">L858-863：五个键被 pop 掉，不是"没用"</text>
+  <text x="474" y="280" font-size="9.5" fill="#3f5b78">instructions / skills：被 pop 后转交专门的挂载逻辑</text>
+  <text x="474" y="298" font-size="9.5" fill="#3f5b78">memory / mcp / sandbox：同理，改由对应的 mount 函数处理</text>
+  <text x="474" y="320" font-size="10" fill="#3f5b78">如果它们留在 merged 里，就会作为 kwarg 传给</text>
+  <text x="474" y="336" font-size="10" fill="#3f5b78">create_deep_agent，而那不是它认识的参数</text>
+  <text x="474" y="350" font-size="10" font-weight="700" fill="#1f5537">pop 的动作本身就是"托管层接管"的证据</text>
+
+  <rect x="30" y="374" width="840" height="86" rx="6" fill="#f7f8fa" stroke="#4b5563" stroke-width="1.5"/>
+  <text x="46" y="396" font-size="12" font-weight="700" fill="#374151">L981：所有注入最终收在一次调用上</text>
+  <text x="46" y="418" font-size="10" fill="#4b5563">agent = create_deep_agent(**cast("Any", merged))　—— 这里有 cast("Any")，因为 merged 是异构参数表，无法用类型表达每个原生关键字</text>
+  <text x="46" y="438" font-size="10" fill="#4b5563">紧接着 L982-986 才把 metadata 挂上 compiled.with_config()，因为 metadata 不是 create_deep_agent 的参数</text>
+  <text x="46" y="456" font-size="10" fill="#4b5563">L989 之后才做 telemetry 观测 —— 也就是说崩溃点都要在这条链上找，注入逻辑本身不抛业务异常</text>
+
+  <rect x="30" y="476" width="840" height="30" rx="6" fill="#fdf6f6" stroke="#7a2626" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <text x="46" y="496" font-size="10.5" fill="#7a2626">读这张图的正确方式：左侧蓝框是你写的东西，其余全是平台加的 —— 你在自己的代码里永远搜不到它们</text>
+
+  <text x="30" y="516" font-size="9" fill="#94a3b8">源码锚点 @ managed-deepagents 0.9.5 ｜ runtime.py ｜ 行号对应本机安装版本，升级后需重新核对</text>
+</svg>

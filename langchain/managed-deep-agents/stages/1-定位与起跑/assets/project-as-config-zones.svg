@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="960" height="540" fill="#fbfcfd"/>
+  <text x="480" y="32" text-anchor="middle" font-size="17" font-weight="600" fill="#1f2937">同一批文件，三种被对待的方式</text>
+  <text x="480" y="54" text-anchor="middle" font-size="11.5" fill="#6b7280">看一个项目结构时，先分类：它会被同步？被 import？还是「存在即开启」？</text>
+
+  <rect x="40" y="76" width="880" height="34" rx="6" fill="#e8eef6" stroke="#c3d2e2" stroke-width="1.2"/>
+  <text x="118" y="98" text-anchor="middle" font-size="11.5" font-weight="600" fill="#334155">路径</text>
+  <text x="392" y="98" text-anchor="middle" font-size="11.5" font-weight="600" fill="#334155">谁读它</text>
+  <text x="626" y="98" text-anchor="middle" font-size="11.5" font-weight="600" fill="#334155">什么时候生效</text>
+  <text x="838" y="98" text-anchor="middle" font-size="11.5" font-weight="600" fill="#334155">写错的后果</text>
+
+  <rect x="40" y="114" width="880" height="126" fill="#f2f8ff" stroke="#b9d5ef" stroke-width="1.2"/>
+  <rect x="40" y="114" width="6" height="126" fill="#4a86c8"/>
+  <text x="58" y="136" font-size="11.5" font-weight="600" fill="#1e4b7a">① 托管上下文</text>
+  <text x="58" y="154" font-size="10" fill="#5b7fa6">会被同步到 Context Hub</text>
+
+  <text x="118" y="140" font-size="11" fill="#1f2937">instructions.md</text>
+  <text x="118" y="160" font-size="10" fill="#6b7280">系统提示词</text>
+  <text x="118" y="186" font-size="11" fill="#1f2937">skills/&lt;name&gt;/SKILL.md</text>
+  <text x="118" y="206" font-size="10" fill="#6b7280">按需加载的说明书</text>
+  <text x="118" y="228" font-size="10" fill="#6b7280">memory 持久内容也存这边</text>
+
+  <text x="392" y="150" font-size="10.5" fill="#334155">运行时读取</text>
+  <text x="392" y="168" font-size="10.5" fill="#334155">每次运行开场就位</text>
+  <text x="392" y="196" font-size="10.5" fill="#334155">同步到云端后</text>
+  <text x="392" y="214" font-size="10.5" fill="#334155">由 agent 自己决定何时看</text>
+
+  <text x="626" y="150" font-size="10.5" fill="#334155">build 时打包</text>
+  <text x="626" y="168" font-size="10.5" fill="#334155">dev / deploy 时同步</text>
+  <text x="626" y="196" font-size="10.5" fill="#334155">部署后第一次运行</text>
+  <text x="626" y="214" font-size="10.5" fill="#334155">就已经在 /skills/ 下</text>
+
+  <text x="838" y="150" font-size="10" fill="#7f5a5a">缺了还能跑，</text>
+  <text x="838" y="166" font-size="10" fill="#7f5a5a">只是没提示词</text>
+  <text x="838" y="196" font-size="10" fill="#7f5a5a">SKILL.md 缺 frontmatter</text>
+  <text x="838" y="212" font-size="10" fill="#7f5a5a">则该技能不被识别</text>
+
+  <rect x="40" y="248" width="880" height="96" fill="#f4faf6" stroke="#b6dcc4" stroke-width="1.2"/>
+  <rect x="40" y="248" width="6" height="96" fill="#4f9b72"/>
+  <text x="58" y="270" font-size="11.5" font-weight="600" fill="#1f5537">② 普通应用代码</text>
+  <text x="58" y="288" font-size="10" fill="#4b7a5e">就是普通模块，没有魔法</text>
+
+  <text x="118" y="274" font-size="11" fill="#1f2937">tools/*.py</text>
+  <text x="118" y="292" font-size="10" fill="#6b7280">（tools/mcp.py 除外）</text>
+  <text x="118" y="318" font-size="11" fill="#1f2937">middleware/*.py</text>
+
+  <text x="392" y="284" font-size="10.5" fill="#334155">你自己在入口里</text>
+  <text x="392" y="302" font-size="10.5" fill="#334155">import 进来才存在</text>
+  <text x="392" y="328" font-size="10.5" fill="#334155">同上，顺序由你给的</text>
+  <text x="392" y="346" font-size="10.5" fill="#334155">列表决定</text>
+
+  <text x="626" y="284" font-size="10.5" fill="#334155">没进 define 的参数</text>
+  <text x="626" y="302" font-size="10.5" fill="#334155">就等于没写</text>
+  <text x="626" y="328" font-size="10.5" fill="#334155">不会因为放在目录里</text>
+  <text x="626" y="346" font-size="10.5" fill="#334155">就自动生效</text>
+
+  <text x="838" y="284" font-size="10" fill="#7f5a5a">考据很安静：</text>
+  <text x="838" y="300" font-size="10" fill="#7f5a5a">agent 只是「不会用」</text>
+
+  <rect x="40" y="352" width="880" height="128" fill="#fffaf0" stroke="#eed7ae" stroke-width="1.2"/>
+  <rect x="40" y="352" width="6" height="128" fill="#c98a2e"/>
+  <text x="58" y="374" font-size="11.5" font-weight="600" fill="#7a4f13">③ 托管声明</text>
+  <text x="58" y="392" font-size="10" fill="#8a6320">这个路径存在，就等于</text>
+  <text x="58" y="408" font-size="10" fill="#8a6320">开了一个开关</text>
+
+  <text x="118" y="376" font-size="10.5" fill="#1f2937">identity.py</text>
+  <text x="118" y="392" font-size="10.5" fill="#1f2937">memory.py</text>
+  <text x="118" y="408" font-size="10.5" fill="#1f2937">tools/mcp.py</text>
+  <text x="118" y="424" font-size="10.5" fill="#1f2937">sandbox/__init__.py</text>
+  <text x="118" y="440" font-size="10.5" fill="#1f2937">channels/&lt;name&gt;.py</text>
+  <text x="118" y="456" font-size="10.5" fill="#1f2937">schedules/&lt;name&gt;.py</text>
+  <text x="118" y="472" font-size="9.5" fill="#b45309">只有直接子文件才算，嵌套的不算</text>
+
+  <text x="392" y="386" font-size="10.5" fill="#334155">CLI 扫描目录</text>
+  <text x="392" y="404" font-size="10.5" fill="#334155">把它们变成运行时契约</text>
+  <text x="392" y="430" font-size="10.5" fill="#334155">你不 import 也能生效</text>
+
+  <text x="626" y="386" font-size="10.5" fill="#334155">build 阶段登记</text>
+  <text x="626" y="404" font-size="10.5" fill="#334155">运行时按需挂载</text>
+  <text x="626" y="430" font-size="10.5" fill="#334155">沙箱是空闲才停</text>
+  <text x="626" y="446" font-size="10.5" fill="#334155">调度要在云端才跑</text>
+
+  <text x="838" y="386" font-size="10" fill="#7f5a5a">把工具放对位置就行，</text>
+  <text x="838" y="402" font-size="10" fill="#7f5a5a">放错位置则什么也不发生</text>
+  <text x="838" y="430" font-size="10" fill="#7f5a5a">沙箱一开，</text>
+  <text x="838" y="446" font-size="10" fill="#7f5a5a">permissions 就被清掉</text>
+
+  <text x="480" y="508" text-anchor="middle" font-size="11.5" fill="#475569">这张表要背下来的只有一句话：目录里放着不等于生效，得看它是「被同步」「被 import」还是「被当开关」</text>
+  <text x="480" y="530" text-anchor="middle" font-size="10" fill="#94a3b8">依据：官方 project-structure 页 + 0.9.5 实测（.mda/__contexthub__/instructions.md 为同步落点）</text>
+</svg>

@@ -1,0 +1,120 @@
+
+============================================================
+实验 1  channels.slack：单个函数，全是可选参数
+============================================================
+  channels 命名空间的键            ["slack","http"]
+  channels.slack 类型          function
+  slack 返回类型                 Object
+  slack kind                 slack
+  slack keys                 ["kind","transport","app","triggerOnAllMessages","allowBotTriggers","reactions"]
+
+  Slack 是唯一"开箱即用"的通道：不用写 verify / parse，
+  平台侧已经处理了签名验证与事件解析。
+  你能调的只有行为开关：
+    name                    通道名（多通道时区分用）
+    triggerOnAllMessages    是否响应所有消息（默认只响应 @ 提及）
+    allowBotTriggers        是否允许其他 bot 触发（防循环）
+    reactions               收到消息后先打什么表情
+
+
+============================================================
+实验 2  channels.http：verify / parse / post 三件套
+============================================================
+  http 通道 kind               orders
+  provider                   undefined
+
+--- 三件套各自的责任边界 ---
+
+  verify(req)   → boolean        验签：这个请求真是对方发的吗
+  parse(req)    → ParseResult    解码：这条事件要不要处理、处理成什么消息
+  post(input)   → PostedMessage  回帖：把 agent 的回复送回对方系统
+
+  分工的关键在"返回 ignore 的能力"：
+    verify 只能整体放行或拒绝（拒绝 = 401）
+    parse 可以"验过了但这条不用管"（返回 { type: "ignore" }）
+  这两种"不处理"在对方看来完全不同，别混用。
+
+
+--- ParseResult 的两种形态 ---
+
+  { type: "message", message: {...}, rawEvent? }
+  { type: "ignore" }
+  只有这两种。message 里四个必填字段：
+    userId    谁说的（映射成 principal 的依据）
+    threadId  落到哪个会话（决定上下文是否延续）
+    content   说了什么
+    target    回帖往哪发（与 threadId 解耦，可以不相等）
+
+
+============================================================
+实验 3  post 与 newThread：定时任务的线程归属
+============================================================
+
+  post(input) 收到的 input 上有个 newThread 标志：
+    普通消息回复   newThread 为假 → 回复进原会话，对话上下文延续
+    定时任务投递   newThread 为真 → 新开一个会话，target 不变
+
+  为什么定时任务要新开会话？
+    定时任务没有"原会话"这个概念（它是时间触发，不是消息触发），
+    硬塞进某个已有会话会污染那段对话的上下文。
+
+
+============================================================
+实验 4  坏适配器：各自在哪一层炸
+============================================================
+  verify 返回非布尔 →             {"kind":"x"}
+  缺少 parse →                 {"kind":"x"}
+  provider 为空串 → 抛错 Error
+      channels.http provider must be a non-empty string
+
+  实测结论（只有一条会炸，其余静默通过）：
+    verify 返回非布尔     → 不抛，返回 { kind: "x" }（缺少其他键）
+    缺少 parse            → 不抛，返回 { kind: "x" }
+    provider: ""          → 抛错：channels.http provider must be a non-empty string
+
+  这个结果比"全都拦"更值得记：
+    通道声明只校验 provider，verify / parse 的函数签名不校验。
+    所以"我的通道起来了但消息全被忽略"多数是 parse 返回了错误的形状，
+    而不是声明阶段报错——声明阶段根本不会告诉你。
+
+  与其他能力对比：sandbox 的互斥会双保险（类型 + 运行时），
+  通道适配器只在 provider 上兜底——同一个包里校验强度并不一致。
+
+
+============================================================
+实验 5  defineSchedule：at 的格式与下界
+============================================================
+  defineSchedule 类型          function
+  defineSchedule arity       1
+
+  调度声明的三个必填概念：
+    schedule   什么时候跑（cron 表达式 或 at 时间点）
+    prompt     跑的时候让 agent 做什么
+    delivery   结果投到哪（target + newThread）
+
+  ⚠️ 两个实测得出的约束（Python 侧同）：
+    ① at 只接受整分钟——秒会被取整，写 "09:30:45" 实际是 09:30
+    ② 距今不足五分钟的 at 会被拒——避免"排一个马上就要跑的任务"
+
+  这两个约束本地只能看定义，真跑要部署；
+  所以本课对调度"只测声明形状"，触发行为标 ⚠️ 未实测。
+
+  调度缺 delivery → 抛错 Error
+      defineSchedule(...) requires `cron` to be a standard 5-field cron expression.
+
+============================================================
+实验 6  调度不能用 current_thread
+============================================================
+
+  投递目标有两个：
+    current_thread   回到"发起这次运行的那个会话"
+    target           指定一个具体目标
+
+  调度没有"发起会话"（时间触发），所以 current_thread 对它无意义。
+  类型定义里 ScheduleDeliveryTarget 已经把 current_thread 排除——
+  排调度时只能给具体 target。
+
+
+============================================================
+完成  课 8 实测结束
+============================================================
