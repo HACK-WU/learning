@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="430" viewBox="0 0 880 430">
+  <defs>
+    <marker id="d10" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#455a64"/>
+    </marker>
+    <marker id="d10p" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#ab47bc"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="880" height="430" fill="#fafafa"/>
+  <text x="30" y="36" font-family="sans-serif" font-size="18" font-weight="bold" fill="#263238">挂起与恢复：跨过虚线，进程就可以消失</text>
+
+  <!-- 左：执行中 -->
+  <rect x="30" y="60" width="330" height="200" rx="9" fill="#e3f2fd" stroke="#42a5f5"/>
+  <text x="46" y="86" font-family="sans-serif" font-size="13" font-weight="bold" fill="#1565c0">执行中（进程活着）</text>
+  <rect x="46" y="98" width="130" height="34" rx="5" fill="#ffffff" stroke="#90caf9"/>
+  <text x="58" y="119" font-family="sans-serif" font-size="10" fill="#37474f">节点 A 跑完</text>
+  <rect x="46" y="142" width="130" height="34" rx="5" fill="#ffffff" stroke="#90caf9"/>
+  <text x="58" y="163" font-family="sans-serif" font-size="10" fill="#37474f">节点 B 跑完</text>
+  <rect x="46" y="186" width="200" height="52" rx="5" fill="#fff8e1" stroke="#ffca28"/>
+  <text x="58" y="206" font-family="monospace" font-size="10" fill="#e65100">interrupt({...})</text>
+  <text x="58" y="226" font-family="sans-serif" font-size="9" fill="#8d6e63">抛出 → 不是阻塞等待</text>
+  <line x1="176" y1="115" x2="176" y2="142" stroke="#1976d2" stroke-width="1.5" marker-end="url(#d10)"/>
+  <line x1="176" y1="176" x2="176" y2="186" stroke="#1976d2" stroke-width="1.5" marker-end="url(#d10)"/>
+
+  <!-- 中间：持久化边界 -->
+  <rect x="380" y="60" width="150" height="200" rx="9" fill="#f3e5f5" stroke="#ab47bc"/>
+  <text x="394" y="86" font-family="sans-serif" font-size="12" font-weight="bold" fill="#6a1b9a">进程可死</text>
+  <line x1="392" y1="104" x2="518" y2="104" stroke="#ab47bc" stroke-width="3" stroke-dasharray="5,4"/>
+  <text x="392" y="128" font-family="sans-serif" font-size="10" fill="#6a1b9a">checkpoint 落库</text>
+  <text x="392" y="148" font-family="monospace" font-size="9" fill="#546e7a">thread_id</text>
+  <text x="392" y="164" font-family="monospace" font-size="9" fill="#546e7a">checkpoint_ns</text>
+  <text x="392" y="180" font-family="monospace" font-size="9" fill="#546e7a">checkpoint_id</text>
+  <line x1="392" y1="196" x2="518" y2="196" stroke="#ab47bc" stroke-width="3" stroke-dasharray="5,4"/>
+  <text x="392" y="220" font-family="sans-serif" font-size="9" font-style="italic" fill="#6a1b9a">0 worker · 0 LLM</text>
+  <text x="392" y="238" font-family="sans-serif" font-size="9" font-style="italic" fill="#6a1b9a">0 连接占用</text>
+
+  <!-- 右：恢复 -->
+  <rect x="560" y="60" width="294" height="200" rx="9" fill="#e8f5e9" stroke="#66bb6a"/>
+  <text x="576" y="86" font-family="sans-serif" font-size="13" font-weight="bold" fill="#2e7d32">恢复（可能是另一台机器）</text>
+  <rect x="576" y="98" width="262" height="34" rx="5" fill="#ffffff" stroke="#a5d6a7"/>
+  <text x="588" y="119" font-family="sans-serif" font-size="10" fill="#37474f">从钉住的 checkpoint 重新进入</text>
+  <rect x="576" y="142" width="262" height="34" rx="5" fill="#ffffff" stroke="#a5d6a7"/>
+  <text x="588" y="163" font-family="sans-serif" font-size="10" fill="#37474f">函数从头重跑（前面代码再执行一次）</text>
+  <rect x="576" y="186" width="262" height="52" rx="5" fill="#ffffff" stroke="#81c784"/>
+  <text x="588" y="206" font-family="sans-serif" font-size="10" fill="#2e7d32">interrupt(...) 这次「返回」而非抛出</text>
+  <text x="588" y="226" font-family="sans-serif" font-size="9" fill="#546e7a">返回值 = 人类给的决策</text>
+  <line x1="707" y1="132" x2="707" y2="142" stroke="#2e7d32" stroke-width="1.5" marker-end="url(#d10)"/>
+  <line x1="707" y1="176" x2="707" y2="186" stroke="#2e7d32" stroke-width="1.5" marker-end="url(#d10)"/>
+
+  <!-- 连接 -->
+  <line x1="246" y1="212" x2="380" y2="180" stroke="#ab47bc" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#d10p)"/>
+  <line x1="530" y1="180" x2="560" y2="170" stroke="#2e7d32" stroke-width="2" marker-end="url(#d10)"/>
+
+  <!-- 底部判据 -->
+  <rect x="30" y="290" width="824" height="112" rx="9" fill="#fff8e1" stroke="#ffca28"/>
+  <text x="46" y="314" font-family="sans-serif" font-size="12" font-weight="bold" fill="#f57f17">为什么不用轮询（源码注释原话）</text>
+  <text x="46" y="336" font-family="monospace" font-size="10" fill="#e65100">"Checkpoints the parent; never keeps a worker or an LLM polling loop alive."</text>
+  <text x="46" y="360" font-family="sans-serif" font-size="10" fill="#546e7a">轮询：成本随等待时长线性增长（1000 审批 × 10 分钟 ÷ 5 秒 ≈ 12 万次查询，仅 1000 次有用）</text>
+  <text x="46" y="380" font-family="sans-serif" font-size="10" fill="#546e7a">挂起：写 1 次 + 读 1 次 = 2000 次 IO，与等待时长无关。且进程重启不丢进度。</text>
+  <text x="46" y="398" font-family="sans-serif" font-size="9" font-style="italic" fill="#8d6e63">代价：需要持久化存储、需要代码版本一致、调试跨进程更复杂。</text>
+</svg>

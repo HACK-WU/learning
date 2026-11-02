@@ -1,0 +1,12 @@
+# 系统 / 编辑器
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# 通用过程残留
+temp/
+*.tmp
+*.log
+node_modules/

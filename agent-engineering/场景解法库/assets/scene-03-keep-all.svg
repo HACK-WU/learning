@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="470" viewBox="0 0 900 470">
+  <defs>
+    <marker id="a03a" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#455a64"/>
+    </marker>
+    <marker id="a03r" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#c62828"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="470" fill="#fafafa"/>
+  <text x="28" y="34" font-family="sans-serif" font-size="18" font-weight="bold" fill="#263238">解法 A · 全量保留，撞墙再截断</text>
+  <text x="28" y="56" font-family="sans-serif" font-size="11" fill="#78909c">最省事的做法：什么都不管，等模型报超长错误再说</text>
+
+  <rect x="40" y="90" width="200" height="70" rx="8" fill="#e3f2fd" stroke="#42a5f5"/>
+  <text x="56" y="114" font-family="sans-serif" font-size="11" font-weight="bold" fill="#1565c0">messages 全量增长</text>
+  <text x="56" y="136" font-family="monospace" font-size="9" fill="#37474f">1k → 10k → 50k tokens</text>
+
+  <rect x="300" y="90" width="200" height="70" rx="8" fill="#fff8e1" stroke="#ffca28"/>
+  <text x="316" y="114" font-family="sans-serif" font-size="11" font-weight="bold" fill="#f57f17">每次全量送给模型</text>
+  <text x="316" y="136" font-family="sans-serif" font-size="9" fill="#546e7a">成本线性涨</text>
+
+  <rect x="560" y="90" width="180" height="70" rx="8" fill="#ffebee" stroke="#c62828"/>
+  <text x="576" y="114" font-family="sans-serif" font-size="11" font-weight="bold" fill="#c62828">撞窗口上限</text>
+  <text x="576" y="136" font-family="monospace" font-size="9" fill="#b71c1c">400 context_length</text>
+
+  <rect x="300" y="200" width="200" height="70" rx="8" fill="#eceff1" stroke="#90a4ae"/>
+  <text x="316" y="224" font-family="sans-serif" font-size="11" font-weight="bold" fill="#455a64">粗暴截断（丢开头）</text>
+  <text x="316" y="246" font-family="sans-serif" font-size="9" fill="#546e7a">系统提示也可能被丢</text>
+
+  <rect x="560" y="200" width="180" height="70" rx="8" fill="#ffebee" stroke="#c62828"/>
+  <text x="576" y="224" font-family="sans-serif" font-size="11" font-weight="bold" fill="#c62828">人格/规则丢失</text>
+  <text x="576" y="246" font-family="sans-serif" font-size="9" fill="#b71c1c">回答风格突变</text>
+
+  <line x1="240" y1="125" x2="300" y2="125" stroke="#455a64" stroke-width="2" marker-end="url(#a03a)"/>
+  <line x1="500" y1="125" x2="560" y2="125" stroke="#455a64" stroke-width="2" marker-end="url(#a03a)"/>
+  <line x1="650" y1="160" x2="500" y2="200" stroke="#c62828" stroke-width="2" marker-end="url(#a03r)"/>
+  <line x1="500" y1="235" x2="560" y2="235" stroke="#c62828" stroke-width="2" marker-end="url(#a03r)"/>
+
+  <rect x="40" y="300" width="830" height="70" rx="8" fill="#eceff1"/>
+  <text x="56" y="324" font-family="sans-serif" font-size="12" font-weight="bold" fill="#37474f">关键代码</text>
+  <text x="56" y="348" font-family="monospace" font-size="10" fill="#37474f">const msgs = state.messages;  // 不处理，直接送</text>
+  <text x="56" y="366" font-family="monospace" font-size="10" fill="#37474f">// 出错后：msgs.slice(-N) —— 开头被丢，系统提示一起走</text>
+
+  <rect x="40" y="386" width="830" height="72" rx="8" fill="#ffebee" stroke="#c62828"/>
+  <text x="56" y="408" font-family="sans-serif" font-size="11" font-weight="bold" fill="#c62828">失效点</text>
+  <text x="56" y="428" font-family="sans-serif" font-size="10" fill="#b71c1c">① 成本在中段就已经失控（不是等到撞墙才失控）；② 截断按条数而非按配对 → 拆散 tool_call 与结果</text>
+  <text x="56" y="446" font-family="sans-serif" font-size="10" fill="#b71c1c">适用：只在原型阶段。任何有真实用户的场景都不该用</text>
+</svg>

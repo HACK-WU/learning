@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="500" viewBox="0 0 900 500">
+  <defs>
+    <marker id="a05c" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#455a64"/>
+    </marker>
+    <marker id="a05cr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#c62828"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="500" fill="#fafafa"/>
+  <text x="28" y="34" font-family="sans-serif" font-size="18" font-weight="bold" fill="#263238">解法 C · 任务拆分：挂起的不是"流程"，是"一步"</text>
+  <text x="28" y="56" font-family="sans-serif" font-size="11" fill="#78909c">把长流程切成"每次只跑一小段"的短任务，用队列驱动，就不存在"长期占着资源"这回事</text>
+
+  <rect x="34" y="82" width="188" height="112" rx="8" fill="#e3f2fd" stroke="#42a5f5"/>
+  <text x="50" y="106" font-family="sans-serif" font-size="11" font-weight="bold" fill="#1565c0">提交阶段</text>
+  <text x="50" y="128" font-family="sans-serif" font-size="9" fill="#37474f">只做"接收 + 校验 + 落库"</text>
+  <text x="50" y="146" font-family="sans-serif" font-size="9" fill="#37474f">耗时 &lt; 1s，同步返回</text>
+  <text x="50" y="168" font-family="monospace" font-size="9" fill="#1565c0">state = PENDING</text>
+  <text x="50" y="184" font-family="sans-serif" font-size="9" font-style="italic" fill="#546e7a">返回的是单号，不是结果</text>
+
+  <rect x="34" y="214" width="188" height="92" rx="8" fill="#fff8e1" stroke="#ffca28"/>
+  <text x="50" y="238" font-family="sans-serif" font-size="11" font-weight="bold" fill="#f57f17">队列（可持久）</text>
+  <text x="50" y="258" font-family="sans-serif" font-size="9" fill="#546e7a">消息里只带 id，不带状态</text>
+  <text x="50" y="276" font-family="sans-serif" font-size="9" fill="#546e7a">消费失败可重投，天然重试</text>
+  <text x="50" y="294" font-family="sans-serif" font-size="9" font-style="italic" fill="#546e7a">队列是"触发器"，不是真相</text>
+
+  <rect x="256" y="82" width="188" height="112" rx="8" fill="#e8f5e9" stroke="#66bb6a"/>
+  <text x="272" y="106" font-family="sans-serif" font-size="11" font-weight="bold" fill="#2e7d32">工人 · 执行一段</text>
+  <text x="272" y="128" font-family="sans-serif" font-size="9" fill="#37474f">起来 → 读库 → 干一件事</text>
+  <text x="272" y="146" font-family="sans-serif" font-size="9" fill="#37474f">→ 写库 → 退出</text>
+  <text x="272" y="166" font-family="monospace" font-size="9" fill="#2e7d32">state 只能前进，不能跳级</text>
+  <text x="272" y="184" font-family="sans-serif" font-size="9" font-style="italic" fill="#546e7a">单次执行 3–10s，进程短命</text>
+
+  <rect x="256" y="214" width="188" height="92" rx="8" fill="#eceff1" stroke="#90a4ae"/>
+  <text x="272" y="238" font-family="sans-serif" font-size="11" font-weight="bold" fill="#37474f">人工环节</text>
+  <text x="272" y="258" font-family="sans-serif" font-size="9" fill="#546e7a">状态停在 WAIT_APPROVAL 而已</text>
+  <text x="272" y="276" font-family="sans-serif" font-size="9" fill="#546e7a">审批动作 = 一次状态迁移</text>
+  <text x="272" y="294" font-family="sans-serif" font-size="9" font-style="italic" fill="#546e7a">没有任何进程在"等"</text>
+
+  <rect x="478" y="82" width="196" height="112" rx="8" fill="#f3e5f5" stroke="#ab47bc"/>
+  <text x="494" y="106" font-family="sans-serif" font-size="11" font-weight="bold" fill="#6a1b9a">状态机（唯一真相）</text>
+  <text x="494" y="128" font-family="monospace" font-size="9" fill="#37474f">PENDING → VALIDATED</text>
+  <text x="494" y="146" font-family="monospace" font-size="9" fill="#37474f">→ WAIT_APPROVAL → APPLIED</text>
+  <text x="494" y="164" font-family="monospace" font-size="9" fill="#37474f">→ FINISHED / REJECTED</text>
+  <text x="494" y="184" font-family="sans-serif" font-size="9" font-style="italic" fill="#6a1b9a">迁移必须带条件，不能盲写</text>
+
+  <rect x="478" y="214" width="196" height="92" rx="8" fill="#ffebee" stroke="#c62828"/>
+  <text x="494" y="238" font-family="sans-serif" font-size="11" font-weight="bold" fill="#c62828">定时扫描 / 超时处理</text>
+  <text x="494" y="258" font-family="sans-serif" font-size="9" fill="#b71c1c">挂太久 → 提醒 / 转交 / 作废</text>
+  <text x="494" y="276" font-family="sans-serif" font-size="9" fill="#b71c1c">扫描按"最后更新时间"取</text>
+  <text x="494" y="294" font-family="sans-serif" font-size="9" font-style="italic" fill="#b71c1c">没有这层，任务会永远躺着</text>
+
+  <rect x="700" y="82" width="166" height="224" rx="8" fill="#eceff1"/>
+  <text x="716" y="106" font-family="sans-serif" font-size="11" font-weight="bold" fill="#37474f">对比解法 B</text>
+  <text x="716" y="130" font-family="sans-serif" font-size="9" fill="#546e7a">B 用"执行快照"表达进度，</text>
+  <text x="716" y="148" font-family="sans-serif" font-size="9" fill="#546e7a">适合"步骤少、状态复杂"</text>
+  <text x="716" y="170" font-family="sans-serif" font-size="9" fill="#546e7a">C 用"业务状态"表达进度，</text>
+  <text x="716" y="188" font-family="sans-serif" font-size="9" fill="#546e7a">适合"步骤多、可查可审"</text>
+  <text x="716" y="214" font-family="sans-serif" font-size="9" fill="#37474f">C 的代价：跨步骤的"上下文"</text>
+  <text x="716" y="232" font-family="sans-serif" font-size="9" fill="#37474f">要显式落到库里，不能靠内存</text>
+  <text x="716" y="254" font-family="sans-serif" font-size="9" fill="#37474f">B 的代价：重跑语义要幂等</text>
+  <text x="716" y="276" font-family="sans-serif" font-size="9" fill="#37474f">两者可叠加：C 管业务态，</text>
+  <text x="716" y="294" font-family="sans-serif" font-size="9" fill="#37474f">B 管单段内的断点续跑</text>
+
+  <line x1="222" y1="138" x2="256" y2="138" stroke="#455a64" stroke-width="2" marker-end="url(#a05c)"/>
+  <line x1="222" y1="260" x2="256" y2="260" stroke="#455a64" stroke-width="2" marker-end="url(#a05c)"/>
+  <line x1="444" y1="138" x2="478" y2="138" stroke="#455a64" stroke-width="2" marker-end="url(#a05c)"/>
+  <line x1="444" y1="260" x2="478" y2="260" stroke="#455a64" stroke-width="2" marker-end="url(#a05c)"/>
+  <path d="M128 194 L128 206 L266 206 L266 214" fill="none" stroke="#455a64" stroke-width="2" marker-end="url(#a05c)"/>
+  <path d="M350 194 L350 206 L500 206 L500 214" fill="none" stroke="#455a64" stroke-width="2" marker-end="url(#a05c)"/>
+
+  <rect x="34" y="326" width="832" height="72" rx="8" fill="#eceff1"/>
+  <text x="50" y="348" font-family="sans-serif" font-size="11" font-weight="bold" fill="#37474f">关键代码</text>
+  <text x="50" y="370" font-family="monospace" font-size="10" fill="#37474f">const n = await db.update({ id, from: 'WAIT_APPROVAL', to: 'APPLIED' });   // 条件迁移</text>
+  <text x="50" y="388" font-family="monospace" font-size="10" fill="#37474f">if (n === 0) return;      // 别人已经改过了，本次是重复消费，直接成功返回</text>
+
+  <rect x="34" y="410" width="832" height="76" rx="8" fill="#ffebee" stroke="#c62828"/>
+  <text x="50" y="432" font-family="sans-serif" font-size="11" font-weight="bold" fill="#c62828">失效点</text>
+  <text x="50" y="452" font-family="sans-serif" font-size="10" fill="#b71c1c">① 用队列消息体当状态 → 消息丢了任务就悬空（队列不是数据库）；② 无超时扫描 → 人工环节永远挂着没人发现</text>
+  <text x="50" y="472" font-family="sans-serif" font-size="10" fill="#b71c1c">③ 状态迁移不带条件 → 重投消息把已完成的单子再执行一遍（和场景 02 同一根因）</text>
+</svg>

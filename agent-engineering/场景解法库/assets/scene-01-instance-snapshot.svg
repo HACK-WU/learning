@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="470" viewBox="0 0 900 470">
+  <defs>
+    <marker id="a01c" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#455a64"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="470" fill="#fafafa"/>
+  <text x="28" y="34" font-family="sans-serif" font-size="18" font-weight="bold" fill="#263238">解法 C · 定义与实例分离：实例是快照（课程主线做法）</text>
+  <text x="28" y="56" font-family="sans-serif" font-size="11" fill="#78909c">定义是模板（可改），实例是某次发布产出的快照（不可改）—— 任务只认实例</text>
+
+  <rect x="28" y="86" width="200" height="76" rx="8" fill="#e3f2fd" stroke="#42a5f5"/>
+  <text x="44" y="110" font-family="sans-serif" font-size="12" font-weight="bold" fill="#1565c0">定义（模板）</text>
+  <text x="44" y="132" font-family="sans-serif" font-size="9" fill="#546e7a">可反复编辑（草稿态）</text>
+  <text x="44" y="150" font-family="sans-serif" font-size="9" fill="#546e7a">编辑不影响任何在跑任务</text>
+
+  <rect x="262" y="86" width="200" height="76" rx="8" fill="#e8f5e9" stroke="#66bb6a"/>
+  <text x="278" y="110" font-family="sans-serif" font-size="12" font-weight="bold" fill="#2e7d32">发布（publish）</text>
+  <text x="278" y="132" font-family="monospace" font-size="10" fill="#37474f">v1 + v2 并存</text>
+  <text x="278" y="150" font-family="sans-serif" font-size="9" fill="#546e7a">版本号让历史可证</text>
+
+  <rect x="496" y="86" width="200" height="76" rx="8" fill="#fff8e1" stroke="#ffca28"/>
+  <text x="512" y="110" font-family="sans-serif" font-size="12" font-weight="bold" fill="#f57f17">实例（快照）</text>
+  <text x="512" y="132" font-family="monospace" font-size="10" fill="#37474f">Object.freeze(...)</text>
+  <text x="512" y="150" font-family="sans-serif" font-size="9" fill="#546e7a">冻结后运行时可读不可写</text>
+
+  <rect x="730" y="86" width="144" height="76" rx="8" fill="#f3e5f5" stroke="#ab47bc"/>
+  <text x="746" y="110" font-family="sans-serif" font-size="12" font-weight="bold" fill="#6a1b9a">任务</text>
+  <text x="746" y="132" font-family="monospace" font-size="9" fill="#37474f">instanceId</text>
+  <text x="746" y="150" font-family="sans-serif" font-size="9" fill="#546e7a">只认快照</text>
+
+  <rect x="28" y="196" width="846" height="60" rx="8" fill="#e8f5e9" stroke="#66bb6a"/>
+  <text x="44" y="220" font-family="sans-serif" font-size="11" font-weight="bold" fill="#2e7d32">关键差异：变更的"影响面"被结构性地限制住了</text>
+  <text x="44" y="242" font-family="sans-serif" font-size="10" fill="#37474f">改定义 → 只是模板变了；要影响任务，必须显式"发布 + 让任务指向新实例"。想改变影响面，就得写一行代码。</text>
+
+  <line x1="228" y1="124" x2="262" y2="124" stroke="#455a64" stroke-width="2" marker-end="url(#a01c)"/>
+  <line x1="462" y1="124" x2="496" y2="124" stroke="#455a64" stroke-width="2" marker-end="url(#a01c)"/>
+  <line x1="696" y1="124" x2="730" y2="124" stroke="#455a64" stroke-width="2" marker-end="url(#a01c)"/>
+
+  <rect x="28" y="274" width="846" height="96" rx="8" fill="#eceff1"/>
+  <text x="44" y="298" font-family="sans-serif" font-size="12" font-weight="bold" fill="#37474f">关键代码</text>
+  <text x="44" y="320" font-family="monospace" font-size="10" fill="#37474f">const published = await repo.publish(draftId);          // 草稿 → 版本</text>
+  <text x="44" y="338" font-family="monospace" font-size="10" fill="#37474f">const instance = Object.freeze({ ...published.definition, tools: [...published.definition.tools] });</text>
+  <text x="44" y="356" font-family="monospace" font-size="10" fill="#37474f">const task = await tasks.create({ instanceId: instance.id });   // 任务引用实例，不引用定义</text>
+
+  <rect x="28" y="386" width="846" height="72" rx="8" fill="#ffebee" stroke="#c62828"/>
+  <text x="44" y="408" font-family="sans-serif" font-size="11" font-weight="bold" fill="#c62828">失效点</text>
+  <text x="44" y="428" font-family="sans-serif" font-size="10" fill="#b71c1c">浅冻结（只冻外层，tools 仍同引用）→ 快照会被运行时改写（见故障模式 1）；</text>
+  <text x="44" y="446" font-family="sans-serif" font-size="10" fill="#b71c1c">发布后仍允许编辑草稿并"原地覆盖"版本内容 → 版本号失去意义，快照形同虚设</text>
+</svg>

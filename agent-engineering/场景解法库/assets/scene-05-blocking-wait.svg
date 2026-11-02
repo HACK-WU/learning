@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="470" viewBox="0 0 900 470">
+  <defs>
+    <marker id="a05a" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#455a64"/>
+    </marker>
+    <marker id="a05ar" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#c62828"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="470" fill="#fafafa"/>
+  <text x="28" y="34" font-family="sans-serif" font-size="18" font-weight="bold" fill="#263238">解法 A · 守着一个进程等：最直觉，也最先崩</text>
+  <text x="28" y="56" font-family="sans-serif" font-size="11" fill="#78909c">把"等待"实现成"进程不退出"，等于把人的三天绑在机器的可用性上</text>
+
+  <rect x="34" y="84" width="252" height="146" rx="8" fill="#ffebee" stroke="#c62828"/>
+  <text x="50" y="108" font-family="sans-serif" font-size="12" font-weight="bold" fill="#c62828">你的服务进程</text>
+  <line x1="50" y1="120" x2="272" y2="120" stroke="#ffcdd2"/>
+  <text x="50" y="142" font-family="sans-serif" font-size="10" fill="#37474f">内存里存着：任务上下文、</text>
+  <text x="50" y="160" font-family="sans-serif" font-size="10" fill="#37474f">已经跑完一半的中间结果</text>
+  <text x="50" y="184" font-family="monospace" font-size="10" fill="#b71c1c">while (!approved) sleep(60s)</text>
+  <text x="50" y="206" font-family="sans-serif" font-size="9" font-style="italic" fill="#c62828">线程 / 协程 / 连接 一直占着</text>
+  <text x="50" y="222" font-family="sans-serif" font-size="9" font-style="italic" fill="#c62828">进程一重启，上面这些都丢</text>
+
+  <text x="316" y="100" font-family="sans-serif" font-size="11" font-weight="bold" fill="#37474f">时间轴</text>
+  <line x1="316" y1="140" x2="612" y2="140" stroke="#455a64" stroke-width="2" marker-end="url(#a05a)"/>
+  <circle cx="320" cy="140" r="4" fill="#455a64"/>
+  <circle cx="456" cy="140" r="4" fill="#ffb300"/>
+  <circle cx="604" cy="140" r="4" fill="#455a64"/>
+  <text x="316" y="164" font-family="sans-serif" font-size="10" fill="#37474f">T+0 提交</text>
+  <text x="418" y="164" font-family="sans-serif" font-size="10" fill="#f57f17">T+1 小时…T+2 天</text>
+  <text x="562" y="164" font-family="sans-serif" font-size="10" fill="#37474f">T+3 天 审批到达</text>
+  <text x="316" y="186" font-family="sans-serif" font-size="10" fill="#546e7a">这段时间进程什么都不做，</text>
+  <text x="316" y="204" font-family="sans-serif" font-size="10" fill="#546e7a">但它占的槽位不能给别人用</text>
+  <text x="316" y="222" font-family="sans-serif" font-size="10" fill="#c62828">100 个待审批 = 100 份资源在空转</text>
+
+  <rect x="632" y="84" width="234" height="68" rx="8" fill="#fff8e1" stroke="#ffca28"/>
+  <text x="648" y="106" font-family="sans-serif" font-size="11" font-weight="bold" fill="#f57f17">为什么第一版都这么写</text>
+  <text x="648" y="126" font-family="sans-serif" font-size="9" fill="#546e7a">代码最短，调试最直观，</text>
+  <text x="648" y="142" font-family="sans-serif" font-size="9" fill="#546e7a">本地跑起来真的能通过</text>
+
+  <rect x="632" y="164" width="234" height="66" rx="8" fill="#eceff1" stroke="#90a4ae"/>
+  <text x="648" y="186" font-family="sans-serif" font-size="11" font-weight="bold" fill="#37474f">它只在一种情况下是对的</text>
+  <text x="648" y="206" font-family="sans-serif" font-size="9" fill="#546e7a">等待是秒级、单机、可丢的</text>
+  <text x="648" y="222" font-family="sans-serif" font-size="9" fill="#546e7a">（比如一次 HTTP 重试）</text>
+
+  <rect x="34" y="246" width="832" height="88" rx="8" fill="#eceff1"/>
+  <text x="50" y="268" font-family="sans-serif" font-size="11" font-weight="bold" fill="#37474f">关键代码（也是它唯一能写的样子）</text>
+  <text x="50" y="290" font-family="monospace" font-size="10" fill="#37474f">const task = await db.load(id);          // 上下文只在内存里</text>
+  <text x="50" y="308" font-family="monospace" font-size="10" fill="#37474f">while (!task.approved) await sleep(60000);   // 进程不退出，就一直等</text>
+  <text x="50" y="326" font-family="monospace" font-size="10" fill="#37474f">await runNextStep(task);                 // 重启过一次，这里就执行不到了</text>
+
+  <rect x="34" y="348" width="832" height="102" rx="8" fill="#ffebee" stroke="#c62828"/>
+  <text x="50" y="370" font-family="sans-serif" font-size="11" font-weight="bold" fill="#c62828">失效点</text>
+  <text x="50" y="390" font-family="sans-serif" font-size="10" fill="#b71c1c">① 发一次版 / 扩缩容一次，所有等待中的任务静默消失，且没有任何报错（最致命，也最常见）</text>
+  <text x="50" y="410" font-family="sans-serif" font-size="10" fill="#b71c1c">② 长连接熬不过中间层：网关、负载均衡、NAT 通常在 60s–5min 就掐断空闲连接</text>
+  <text x="50" y="430" font-family="sans-serif" font-size="10" fill="#b71c1c">③ 容量按"并发等待数"而不是"实际计算量"扩容，成本高一个量级</text>
+  <text x="50" y="446" font-family="sans-serif" font-size="9" fill="#546e7a">结论：这不是"实现得糙"，是模型选错了——人的时间尺度（天）和进程的生命周期（秒到小时）差两个数量级</text>
+</svg>

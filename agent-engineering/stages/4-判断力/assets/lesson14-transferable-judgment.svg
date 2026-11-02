@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="500" viewBox="0 0 900 500">
+  <defs>
+    <marker id="a14" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#455a64"/>
+    </marker>
+    <marker id="a14p" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#7e57c2"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="500" fill="#fafafa"/>
+  <text x="30" y="36" font-family="sans-serif" font-size="18" font-weight="bold" fill="#263238">四条可迁移设计：先看入场券，再看票价</text>
+  <text x="30" y="56" font-family="sans-serif" font-size="11" fill="#607d8b">左侧不成立 → 别搬（不是设计不好，是约束不同）；右侧付不起 → 也别搬</text>
+
+  <!-- 表头 -->
+  <text x="34" y="86" font-family="sans-serif" font-size="11" font-weight="bold" fill="#455a64">依赖的约束（入场券）</text>
+  <text x="352" y="86" font-family="sans-serif" font-size="11" font-weight="bold" fill="#455a64">可迁移设计</text>
+  <text x="640" y="86" font-family="sans-serif" font-size="11" font-weight="bold" fill="#455a64">必须付的代价（票价）</text>
+
+  <!-- 行1 定义与编译分离 -->
+  <rect x="30" y="96" width="300" height="82" rx="6" fill="#e3f2fd" stroke="#42a5f5"/>
+  <text x="44" y="116" font-family="sans-serif" font-size="10" fill="#0d47a1">有非开发者要改行为</text>
+  <text x="44" y="134" font-family="sans-serif" font-size="10" fill="#0d47a1">需灰度 / 回滚</text>
+  <text x="44" y="152" font-family="sans-serif" font-size="10" fill="#0d47a1">同一逻辑服务多租户</text>
+  <text x="44" y="170" font-family="sans-serif" font-size="9" font-style="italic" fill="#546e7a">信号：改提示词要发版成为抱怨</text>
+
+  <rect x="346" y="96" width="276" height="82" rx="6" fill="#ffffff" stroke="#90caf9"/>
+  <text x="360" y="122" font-family="sans-serif" font-size="12" font-weight="bold" fill="#1565c0">定义与编译分离</text>
+  <text x="360" y="144" font-family="sans-serif" font-size="9" fill="#37474f">定义是数据，编译产出可执行图</text>
+  <text x="360" y="162" font-family="sans-serif" font-size="9" font-style="italic" fill="#8d6e63">迁移信号：只改数据不发版成为刚需</text>
+
+  <rect x="638" y="96" width="232" height="82" rx="6" fill="#fff8e1" stroke="#ffca28"/>
+  <text x="652" y="116" font-family="sans-serif" font-size="10" fill="#e65100">表达力必须受限</text>
+  <text x="652" y="134" font-family="sans-serif" font-size="10" fill="#e65100">排障要看三段链路</text>
+  <text x="652" y="152" font-family="sans-serif" font-size="10" fill="#e65100">必须持续拒绝功能请求</text>
+  <text x="652" y="170" font-family="sans-serif" font-size="9" font-style="italic" fill="#8d6e63">否则配置会长成一门语言</text>
+
+  <!-- 行2 状态通道化 -->
+  <rect x="30" y="188" width="300" height="82" rx="6" fill="#e3f2fd" stroke="#42a5f5"/>
+  <text x="44" y="208" font-family="sans-serif" font-size="10" fill="#0d47a1">同一状态被多处写</text>
+  <text x="44" y="226" font-family="sans-serif" font-size="10" fill="#0d47a1">历史与当前要共存</text>
+  <text x="44" y="244" font-family="sans-serif" font-size="10" fill="#0d47a1">需按字段定义合并语义</text>
+  <text x="44" y="262" font-family="sans-serif" font-size="9" font-style="italic" fill="#546e7a">信号：出现"字段被覆盖"的 bug</text>
+
+  <rect x="346" y="188" width="276" height="82" rx="6" fill="#ffffff" stroke="#90caf9"/>
+  <text x="360" y="214" font-family="sans-serif" font-size="12" font-weight="bold" fill="#1565c0">状态通道化</text>
+  <text x="360" y="236" font-family="sans-serif" font-size="9" fill="#37474f">每字段一个归约语义（追加/取新/合并）</text>
+  <text x="360" y="254" font-family="sans-serif" font-size="9" font-style="italic" fill="#8d6e63">信号：开始往消息里塞非消息数据</text>
+
+  <rect x="638" y="188" width="232" height="82" rx="6" fill="#fff8e1" stroke="#ffca28"/>
+  <text x="652" y="208" font-family="sans-serif" font-size="10" fill="#e65100">选错是静默错</text>
+  <text x="652" y="226" font-family="sans-serif" font-size="10" fill="#e65100">并发调试需懂 reducer</text>
+  <text x="652" y="244" font-family="sans-serif" font-size="10" fill="#e65100">心智负担随字段数上升</text>
+  <text x="652" y="262" font-family="sans-serif" font-size="9" font-style="italic" fill="#8d6e63">不报错，只在业务表现上"有点怪"</text>
+
+  <!-- 行3 中间件策略层 -->
+  <rect x="30" y="280" width="300" height="82" rx="6" fill="#e3f2fd" stroke="#42a5f5"/>
+  <text x="44" y="300" font-family="sans-serif" font-size="10" fill="#0d47a1">扩展点 &gt; 3 且还会增加</text>
+  <text x="44" y="318" font-family="sans-serif" font-size="10" fill="#0d47a1">同一能力多租户不同实现</text>
+  <text x="44" y="336" font-family="sans-serif" font-size="10" fill="#0d47a1">已有重复实现</text>
+  <text x="44" y="354" font-family="sans-serif" font-size="9" font-style="italic" fill="#546e7a">信号：主干 &gt;100 行且大半是 if</text>
+
+  <rect x="346" y="280" width="276" height="82" rx="6" fill="#ffffff" stroke="#90caf9"/>
+  <text x="360" y="306" font-family="sans-serif" font-size="12" font-weight="bold" fill="#1565c0">中间件策略层</text>
+  <text x="360" y="328" font-family="sans-serif" font-size="9" fill="#37474f">把"接入方式"从主干 if 改成策略对象</text>
+  <text x="360" y="346" font-family="sans-serif" font-size="9" font-style="italic" fill="#8d6e63">信号：改一处漏一处</text>
+
+  <rect x="638" y="280" width="232" height="82" rx="6" fill="#fff8e1" stroke="#ffca28"/>
+  <text x="652" y="300" font-family="sans-serif" font-size="10" fill="#e65100">多一层间接</text>
+  <text x="652" y="318" font-family="sans-serif" font-size="10" fill="#e65100">一个行为跨四处定位</text>
+  <text x="652" y="336" font-family="sans-serif" font-size="10" fill="#e65100">小改动也要新建文件</text>
+  <text x="652" y="354" font-family="sans-serif" font-size="9" font-style="italic" fill="#8d6e63">固定成本约等于写 3 个 if</text>
+
+  <!-- 行4 持久中断 -->
+  <rect x="30" y="372" width="300" height="82" rx="6" fill="#e3f2fd" stroke="#42a5f5"/>
+  <text x="44" y="392" font-family="sans-serif" font-size="10" fill="#0d47a1">有人工审批 / 确认环节</text>
+  <text x="44" y="410" font-family="sans-serif" font-size="10" fill="#0d47a1">等待从分钟到天</text>
+  <text x="44" y="428" font-family="sans-serif" font-size="10" fill="#0d47a1">重启不能丢进度</text>
+  <text x="44" y="446" font-family="sans-serif" font-size="9" font-style="italic" fill="#546e7a">信号：连接池被等待请求占满</text>
+
+  <rect x="346" y="372" width="276" height="82" rx="6" fill="#ffffff" stroke="#90caf9"/>
+  <text x="360" y="398" font-family="sans-serif" font-size="12" font-weight="bold" fill="#1565c0">持久中断</text>
+  <text x="360" y="420" font-family="sans-serif" font-size="9" fill="#37474f">挂起落 checkpoint，恢复不占线程</text>
+  <text x="360" y="438" font-family="sans-serif" font-size="9" font-style="italic" fill="#8d6e63">信号：重启后流程丢了</text>
+
+  <rect x="638" y="372" width="232" height="82" rx="6" fill="#fff8e1" stroke="#ffca28"/>
+  <text x="652" y="392" font-family="sans-serif" font-size="10" fill="#e65100">必须有持久化存储</text>
+  <text x="652" y="410" font-family="sans-serif" font-size="10" fill="#e65100">恢复时代码版本需一致</text>
+  <text x="652" y="428" font-family="sans-serif" font-size="10" fill="#e65100">调试跨进程跨时间</text>
+  <text x="652" y="446" font-family="sans-serif" font-size="9" font-style="italic" fill="#8d6e63">版本漂移会走到未设计路径</text>
+
+  <text x="30" y="482" font-family="sans-serif" font-size="11" font-style="italic" fill="#7e57c2">共同前提：约束成立 且 代价可承受 —— 两者缺一，不迁移就是正确决定</text>
+</svg>

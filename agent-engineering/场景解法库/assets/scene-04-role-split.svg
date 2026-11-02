@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="490" viewBox="0 0 900 490">
+  <defs>
+    <marker id="a04c" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#455a64"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="490" fill="#fafafa"/>
+  <text x="28" y="34" font-family="sans-serif" font-size="18" font-weight="bold" fill="#263238">解法 C · 按角色分家：主管只带"委派"，工人各带自己的工具</text>
+  <text x="28" y="56" font-family="sans-serif" font-size="11" fill="#78909c">每个 Agent 的上下文里只有自己那几个工具 —— 工具总数不再等于单次可见数</text>
+
+  <rect x="330" y="76" width="240" height="86" rx="10" fill="#263238" stroke="#455a64"/>
+  <text x="350" y="102" font-family="sans-serif" font-size="12" font-weight="bold" fill="#ffffff">主管（leader）</text>
+  <text x="350" y="124" font-family="sans-serif" font-size="10" fill="#b0bec5">可见工具：3 个委派工具</text>
+  <text x="350" y="144" font-family="sans-serif" font-size="9" font-style="italic" fill="#80cbc4">它不做业务，只分派与汇总</text>
+
+  <rect x="40" y="210" width="240" height="96" rx="8" fill="#e3f2fd" stroke="#42a5f5"/>
+  <text x="56" y="234" font-family="sans-serif" font-size="11" font-weight="bold" fill="#1565c0">订单 Agent</text>
+  <text x="56" y="256" font-family="sans-serif" font-size="9" fill="#546e7a">只带订单相关 6 个工具</text>
+  <text x="56" y="276" font-family="sans-serif" font-size="9" fill="#546e7a">上下文里没有物流/退款</text>
+  <text x="56" y="296" font-family="sans-serif" font-size="9" fill="#2e7d32">选择面从 50 降到 6</text>
+
+  <rect x="330" y="210" width="240" height="96" rx="8" fill="#e8f5e9" stroke="#66bb6a"/>
+  <text x="346" y="234" font-family="sans-serif" font-size="11" font-weight="bold" fill="#2e7d32">物流 Agent</text>
+  <text x="346" y="256" font-family="sans-serif" font-size="9" fill="#546e7a">只带物流 5 个工具</text>
+  <text x="346" y="276" font-family="sans-serif" font-size="9" fill="#546e7a">独立子图，跑完返回结果</text>
+  <text x="346" y="296" font-family="sans-serif" font-size="9" fill="#2e7d32">控制权回到主管</text>
+
+  <rect x="620" y="210" width="240" height="96" rx="8" fill="#fff8e1" stroke="#ffca28"/>
+  <text x="636" y="234" font-family="sans-serif" font-size="11" font-weight="bold" fill="#f57f17">售后 Agent</text>
+  <text x="636" y="256" font-family="sans-serif" font-size="9" fill="#546e7a">只带售后 7 个工具</text>
+  <text x="636" y="276" font-family="sans-serif" font-size="9" fill="#546e7a">危险操作要在自己内部再校验</text>
+  <text x="636" y="296" font-family="sans-serif" font-size="9" fill="#2e7d32">权限边界随 Agent 走</text>
+
+  <line x1="400" y1="162" x2="180" y2="210" stroke="#455a64" stroke-width="2" marker-end="url(#a04c)"/>
+  <line x1="450" y1="162" x2="450" y2="210" stroke="#455a64" stroke-width="2" marker-end="url(#a04c)"/>
+  <line x1="500" y1="162" x2="720" y2="210" stroke="#455a64" stroke-width="2" marker-end="url(#a04c)"/>
+
+  <rect x="40" y="332" width="820" height="72" rx="8" fill="#eceff1"/>
+  <text x="56" y="356" font-family="sans-serif" font-size="12" font-weight="bold" fill="#37474f">关键代码</text>
+  <text x="56" y="378" font-family="monospace" font-size="10" fill="#37474f">const leader = createReactAgent({ tools: [delegateTo("order"), delegateTo("logistics"), delegateTo("aftersale")] });</text>
+  <text x="56" y="396" font-family="monospace" font-size="10" fill="#37474f">const orderAgent = createReactAgent({ tools: orderTools });   // 各自只带自己的</text>
+
+  <rect x="40" y="418" width="820" height="66" rx="8" fill="#ffebee" stroke="#c62828"/>
+  <text x="56" y="440" font-family="sans-serif" font-size="11" font-weight="bold" fill="#c62828">失效点</text>
+  <text x="56" y="460" font-family="sans-serif" font-size="10" fill="#b71c1c">① 委派描述写得含糊 → 主管乱派（"这个也像订单"）；② 一次任务要跨 3 个 Agent 时，延迟与 token 都翻倍</text>
+  <text x="56" y="478" font-family="sans-serif" font-size="10" fill="#b71c1c">③ 汇总时上下文可能丢细节（子图只回摘要）→ 主管追问，来回多轮</text>
+</svg>

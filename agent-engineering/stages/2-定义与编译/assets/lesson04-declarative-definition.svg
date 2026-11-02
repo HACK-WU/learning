@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="420" viewBox="0 0 860 420">
+  <defs>
+    <marker id="a4" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#455a64"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="860" height="420" fill="#fafafa"/>
+  <text x="36" y="40" font-family="sans-serif" font-size="18" font-weight="bold" fill="#263238">一份定义，三段旅程：数据 → 校验 → 代码</text>
+
+  <!-- 定义 -->
+  <rect x="36" y="70" width="230" height="270" rx="10" fill="#e8f5e9" stroke="#66bb6a"/>
+  <text x="54" y="96" font-family="sans-serif" font-size="14" font-weight="bold" fill="#2e7d32">① 一份定义（数据）</text>
+  <text x="54" y="122" font-family="sans-serif" font-size="12" fill="#37474f">身份 key / name / title</text>
+  <text x="54" y="144" font-family="sans-serif" font-size="12" fill="#37474f">说话 prompt / promptTemplates</text>
+  <text x="54" y="166" font-family="sans-serif" font-size="12" fill="#37474f">模型 copilotModel</text>
+  <text x="54" y="188" font-family="sans-serif" font-size="12" fill="#37474f">输入输出 parameters</text>
+  <text x="54" y="210" font-family="sans-serif" font-size="12" fill="#37474f">能力 knowledgebaseIds / toolsetIds</text>
+  <text x="54" y="232" font-family="sans-serif" font-size="12" fill="#37474f">协作 leaderKey / followers</text>
+  <text x="54" y="262" font-family="sans-serif" font-size="11" fill="#78909c">+ nodes[] / connections[]</text>
+  <text x="54" y="284" font-family="sans-serif" font-size="11" fill="#78909c">（图结构：谁连谁）</text>
+  <text x="54" y="316" font-family="sans-serif" font-size="11" font-style="italic" fill="#2e7d32">全是可序列化数据，无逻辑</text>
+
+  <!-- 校验 -->
+  <rect x="316" y="70" width="220" height="270" rx="10" fill="#fff3e0" stroke="#ffa726"/>
+  <text x="334" y="96" font-family="sans-serif" font-size="14" font-weight="bold" fill="#ef6c00">② 校验（把关）</text>
+  <text x="334" y="124" font-family="sans-serif" font-size="12" font-weight="bold" fill="#455a64">节点级</text>
+  <text x="334" y="144" font-family="sans-serif" font-size="11" fill="#37474f">结构化输出 × 文件理解冲突</text>
+  <text x="334" y="162" font-family="sans-serif" font-size="11" fill="#37474f">文件理解 × 缺嵌入模型</text>
+  <text x="334" y="180" font-family="sans-serif" font-size="11" fill="#90a4ae">→ ChecklistItem（warning）</text>
+  <text x="334" y="212" font-family="sans-serif" font-size="12" font-weight="bold" fill="#455a64">图级</text>
+  <text x="334" y="232" font-family="sans-serif" font-size="11" fill="#37474f">Agent 构建环</text>
+  <text x="334" y="250" font-family="sans-serif" font-size="11" fill="#90a4ae">→ AGENT_SUBGRAPH_BUILD_CYCLE</text>
+  <text x="334" y="282" font-family="sans-serif" font-size="11" font-style="italic" fill="#ef6c00">只查结构矛盾</text>
+  <text x="334" y="300" font-family="sans-serif" font-size="11" font-style="italic" fill="#ef6c00">不查语义好坏</text>
+  <text x="334" y="322" font-family="sans-serif" font-size="11" fill="#90a4ae">事件触发：ValidateCommand</text>
+
+  <!-- 代码 -->
+  <rect x="596" y="70" width="230" height="270" rx="10" fill="#e3f2fd" stroke="#42a5f5"/>
+  <text x="614" y="96" font-family="sans-serif" font-size="14" font-weight="bold" fill="#1565c0">③ 代码（通用机制）</text>
+  <text x="614" y="124" font-family="sans-serif" font-size="12" fill="#37474f">怎么组装消息</text>
+  <text x="614" y="146" font-family="sans-serif" font-size="12" fill="#37474f">怎么调用模型</text>
+  <text x="614" y="168" font-family="sans-serif" font-size="12" fill="#37474f">怎么执行工具</text>
+  <text x="614" y="190" font-family="sans-serif" font-size="12" fill="#37474f">怎么处理错误</text>
+  <text x="614" y="222" font-family="sans-serif" font-size="11" fill="#78909c">这些对所有 Agent 都一样</text>
+  <text x="614" y="242" font-family="sans-serif" font-size="11" fill="#78909c">所以留在代码里</text>
+  <text x="614" y="274" font-family="sans-serif" font-size="11" font-style="italic" fill="#1565c0">shared/agent + 各中间件</text>
+  <text x="614" y="300" font-family="sans-serif" font-size="11" fill="#90a4ae">编译时读取定义</text>
+  <text x="614" y="318" font-family="sans-serif" font-size="11" fill="#90a4ae">运行时不管定义内容</text>
+
+  <!-- 箭头 -->
+  <line x1="266" y1="205" x2="316" y2="205" stroke="#455a64" stroke-width="2" marker-end="url(#a4)"/>
+  <line x1="536" y1="205" x2="596" y2="205" stroke="#455a64" stroke-width="2" marker-end="url(#a4)"/>
+
+  <text x="36" y="382" font-family="sans-serif" font-size="11" fill="#546e7a">判断一条信息归谁：它是否因 Agent 而异。因 Agent 而异 → 进定义（左）；所有 Agent 都一样 → 留代码（右）。</text>
+  <text x="36" y="400" font-family="sans-serif" font-size="11" fill="#546e7a">校验（中）是两者的接缝：它读定义、但用代码实现，只保证"形状对"，不保证"内容好"。</text>
+</svg>

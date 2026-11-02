@@ -1,0 +1,24 @@
+{
+  "name": "db-change-approval-agent",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Agent 工程解剖 · 结课综合实战项目：数据库变更审批助手（定义 → 编译 → 执行 → 中断 → 恢复）",
+  "scripts": {
+    "demo": "tsx src/main.ts demo",
+    "demo:reject": "tsx src/main.ts reject",
+    "resume": "tsx src/main.ts resume",
+    "check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@langchain/core": "^1.2.20",
+    "@langchain/langgraph": "^1.6.0",
+    "yaml": "^2.8.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "@types/node": "^22.18.0"
+  }
+}

@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 510" width="1000" height="510" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#57606a"/>
+    </marker>
+  </defs>
+
+  <rect width="1000" height="510" fill="#ffffff"/>
+
+  <text x="500" y="34" text-anchor="middle" font-size="22" font-weight="700" fill="#111827">Python 分布式应用开发 学习路径总览</text>
+  <text x="500" y="58" text-anchor="middle" font-size="13" fill="#57606a">4 阶段 / 14 课 / 39 个知识点（课 1 为操作课） · 入门画像 + 动手实操导向 · Python 3.12</text>
+
+  <rect x="24" y="74" width="952" height="42" rx="8" fill="#f6f8fa" stroke="#d0d7de"/>
+  <text x="40" y="92" font-size="12" font-weight="700" fill="#1f2328">🎭 故事主线</text>
+  <text x="40" y="109" font-size="11.5" fill="#1f2328">主角：一个跑在单机上的订单服务　│　冲突：拆到多台机器后，请求会重、账会对不上、坏了查不出</text>
+  <text x="640" y="92" font-size="12" font-weight="700" fill="#1f2328">🎬 收束</text>
+  <text x="640" y="109" font-size="11.5" fill="#1f2328">请求不重 / 数据不丢 / 坏了好查</text>
+
+  <rect x="24" y="140" width="226" height="196" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="137" y="164" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">阶段 1</text>
+  <text x="137" y="184" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">分布式的地基</text>
+  <line x1="42" y1="194" x2="232" y2="194" stroke="#2563eb" stroke-width="1" opacity="0.4"/>
+  <text x="137" y="212" text-anchor="middle" font-size="11" fill="#1f2937">课 1 环境准备</text>
+  <text x="137" y="229" text-anchor="middle" font-size="11" fill="#1f2937">课 2 Python 并发边界</text>
+  <text x="137" y="246" text-anchor="middle" font-size="11" fill="#1f2937">课 3 网络与部分失败</text>
+  <text x="137" y="263" text-anchor="middle" font-size="11" fill="#1f2937">课 4 时钟、顺序与一致性</text>
+  <rect x="60" y="272" width="154" height="20" rx="5" fill="#ffffff" stroke="#2563eb" stroke-width="1"/>
+  <text x="137" y="286" text-anchor="middle" font-size="10" font-weight="700" fill="#1e40af">🔄 进行中 1/4</text>
+  <text x="137" y="303" text-anchor="middle" font-size="10" fill="#1f2937">转折：认出多机的新失败</text>
+  <text x="137" y="318" text-anchor="middle" font-size="10" fill="#57606a">单机思维 → 有分布式词汇</text>
+
+  <rect x="266" y="140" width="226" height="196" rx="10" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="379" y="164" text-anchor="middle" font-size="13" font-weight="700" fill="#14532d">阶段 2</text>
+  <text x="379" y="184" text-anchor="middle" font-size="13" font-weight="700" fill="#14532d">服务之间的通信</text>
+  <line x1="284" y1="194" x2="474" y2="194" stroke="#16a34a" stroke-width="1" opacity="0.4"/>
+  <text x="379" y="212" text-anchor="middle" font-size="11" fill="#1f2937">课 5 接口契约与 gRPC</text>
+  <text x="379" y="229" text-anchor="middle" font-size="11" fill="#1f2937">课 6 超时、重试、幂等</text>
+  <text x="379" y="246" text-anchor="middle" font-size="11" fill="#1f2937">课 7 熔断、限流、隔离</text>
+  <text x="379" y="263" text-anchor="middle" font-size="11" fill="#1f2937">课 8 服务发现与负载均衡</text>
+  <rect x="302" y="272" width="154" height="20" rx="5" fill="#ffffff" stroke="#16a34a" stroke-width="1"/>
+  <text x="379" y="286" text-anchor="middle" font-size="10" font-weight="700" fill="#15803d">⬜ 未开始 0/4</text>
+  <text x="379" y="303" text-anchor="middle" font-size="10" fill="#1f2937">转折：让一次调用变可靠</text>
+  <text x="379" y="318" text-anchor="middle" font-size="10" fill="#57606a">能调通 → 不把自己拖死</text>
+
+  <rect x="508" y="140" width="226" height="196" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="621" y="164" text-anchor="middle" font-size="13" font-weight="700" fill="#78350f">阶段 3</text>
+  <text x="621" y="184" text-anchor="middle" font-size="13" font-weight="700" fill="#78350f">数据一致性</text>
+  <line x1="526" y1="194" x2="716" y2="194" stroke="#d97706" stroke-width="1" opacity="0.4"/>
+  <text x="621" y="212" text-anchor="middle" font-size="11" fill="#1f2937">课 9 分布式事务与 Saga</text>
+  <text x="621" y="229" text-anchor="middle" font-size="11" fill="#1f2937">课 10 发件箱与幂等消费</text>
+  <text x="621" y="246" text-anchor="middle" font-size="11" fill="#1f2937">课 11 分布式锁与 fencing</text>
+  <text x="621" y="263" text-anchor="middle" font-size="11" fill="#1f2937">课 12 分区、复制与读写</text>
+  <rect x="544" y="272" width="154" height="20" rx="5" fill="#ffffff" stroke="#d97706" stroke-width="1"/>
+  <text x="621" y="286" text-anchor="middle" font-size="10" font-weight="700" fill="#b45309">⬜ 未开始 0/4</text>
+  <text x="621" y="303" text-anchor="middle" font-size="10" fill="#1f2937">转折：把账对上</text>
+  <text x="621" y="318" text-anchor="middle" font-size="10" fill="#57606a">写得进去 → 也对得上</text>
+
+  <rect x="750" y="140" width="226" height="196" rx="10" fill="#ccfbf1" stroke="#0d9488" stroke-width="2"/>
+  <text x="863" y="164" text-anchor="middle" font-size="13" font-weight="700" fill="#134e4a">阶段 4</text>
+  <text x="863" y="184" text-anchor="middle" font-size="13" font-weight="700" fill="#134e4a">运行与诊断</text>
+  <line x1="768" y1="194" x2="958" y2="194" stroke="#0d9488" stroke-width="1" opacity="0.4"/>
+  <text x="863" y="212" text-anchor="middle" font-size="11" fill="#1f2937">课 13 分布式任务与选型</text>
+  <text x="863" y="229" text-anchor="middle" font-size="11" fill="#1f2937">课 14 可观测性与定位</text>
+  <rect x="786" y="272" width="154" height="20" rx="5" fill="#ffffff" stroke="#0d9488" stroke-width="1"/>
+  <text x="863" y="286" text-anchor="middle" font-size="10" font-weight="700" fill="#0f766e">⬜ 未开始 0/2</text>
+  <text x="863" y="303" text-anchor="middle" font-size="10" fill="#1f2937">转折：坏了查得出</text>
+  <text x="863" y="318" text-anchor="middle" font-size="10" fill="#57606a">靠猜 → 按 id 顺着走</text>
+
+  <line x1="252" y1="238" x2="263" y2="238" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="494" y1="238" x2="505" y2="238" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="736" y1="238" x2="747" y2="238" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="24" y="352" width="952" height="58" rx="8" fill="#f6f8fa" stroke="#d0d7de"/>
+  <text x="40" y="372" font-size="12" font-weight="700" fill="#1f2328">🪜 能力阶梯（每阶段解决上一章遗留的问题）</text>
+  <text x="40" y="391" font-size="11.5" fill="#1f2937">会写单机服务 → 知道多机多出什么坏法 → 能调通且不被拖垮 → 失败下也留对数据 → 坏了能定位</text>
+  <text x="40" y="404" font-size="10.5" fill="#57606a">依赖链：阶段 1 提供后三阶段共用的词汇；阶段 2 的幂等键与请求 id 是阶段 3、4 的抓手；阶段 3 的补偿与去重依赖阶段 2 的超时与重试认知；阶段 4 用前三阶段埋下的 id 做定位</text>
+
+  <rect x="24" y="422" width="952" height="52" rx="8" fill="#fff7ed" stroke="#ea580c" stroke-width="1.5"/>
+  <text x="40" y="443" font-size="12" font-weight="700" fill="#7c2d12">🏁 终点产物</text>
+  <text x="40" y="462" font-size="11.5" fill="#1f2937">一套能跑起来的跨服务订单系统：下单不重复扣款、消息不丢、锁不误删、慢请求能定位到具体那一段（Phase 3 综合实战项目产出）</text>
+
+  <text x="24" y="496" font-size="10" fill="#57606a">进度说明：✅ 已完成 ｜ 🔄 进行中 ｜ ⬜ 未开始　·　本图为活文档，随学习进度更新（最近更新 2026-11-02：大纲落盘，全部未开始）</text>
+</svg>

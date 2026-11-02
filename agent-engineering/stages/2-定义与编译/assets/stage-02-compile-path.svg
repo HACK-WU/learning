@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="380" viewBox="0 0 860 380">
+  <defs>
+    <marker id="a2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#546e7a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="860" height="380" fill="#fafafa"/>
+  <text x="26" y="36" font-family="sans-serif" font-size="18" font-weight="bold" fill="#263238">阶段 2 路径：从图纸到能跑的东西</text>
+
+  <rect x="26" y="68" width="186" height="96" rx="8" fill="#ffffff" stroke="#42a5f5" stroke-width="2"/>
+  <rect x="26" y="68" width="186" height="28" rx="8" fill="#1565c0"/>
+  <text x="119" y="87" font-family="sans-serif" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">课 4 声明式定义</text>
+  <text x="40" y="118" font-family="sans-serif" font-size="11" fill="#37474f">定义要素 / 实例分离</text>
+  <text x="40" y="138" font-family="sans-serif" font-size="11" fill="#37474f">校验前置</text>
+
+  <line x1="212" y1="116" x2="256" y2="116" stroke="#546e7a" stroke-width="2" marker-end="url(#a2)"/>
+
+  <rect x="262" y="68" width="186" height="96" rx="8" fill="#ffffff" stroke="#42a5f5" stroke-width="2"/>
+  <rect x="262" y="68" width="186" height="28" rx="8" fill="#1565c0"/>
+  <text x="355" y="87" font-family="sans-serif" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">课 5 编译器</text>
+  <text x="276" y="118" font-family="sans-serif" font-size="11" fill="#37474f">76 行入口 / 分支路由</text>
+  <text x="276" y="138" font-family="sans-serif" font-size="11" fill="#37474f">图装配 / 编译产物</text>
+
+  <line x1="448" y1="116" x2="492" y2="116" stroke="#546e7a" stroke-width="2" marker-end="url(#a2)"/>
+
+  <rect x="498" y="68" width="330" height="96" rx="8" fill="#ffffff" stroke="#90a4ae" stroke-dasharray="4 3"/>
+  <rect x="498" y="68" width="330" height="28" rx="8" fill="#455a64"/>
+  <text x="663" y="87" font-family="sans-serif" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">编译产物：CompiledStateGraph</text>
+  <text x="512" y="118" font-family="sans-serif" font-size="11" fill="#37474f">后续所有执行都跑在这个产物上</text>
+
+  <line x1="663" y1="164" x2="663" y2="196" stroke="#546e7a" stroke-width="2" marker-end="url(#a2)"/>
+  <line x1="355" y1="164" x2="355" y2="196" stroke="#546e7a" stroke-width="2" marker-end="url(#a2)"/>
+
+  <rect x="262" y="202" width="186" height="96" rx="8" fill="#ffffff" stroke="#2e7d32" stroke-width="2"/>
+  <rect x="262" y="202" width="186" height="28" rx="8" fill="#2e7d32"/>
+  <text x="355" y="221" font-family="sans-serif" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">课 6 状态通道</text>
+  <text x="276" y="252" font-family="sans-serif" font-size="11" fill="#37474f">10 个通道 / reducer</text>
+  <text x="276" y="272" font-family="sans-serif" font-size="11" fill="#37474f">并发写 / 环境投影</text>
+
+  <rect x="498" y="202" width="186" height="96" rx="8" fill="#ffffff" stroke="#ef6c00" stroke-width="2"/>
+  <rect x="498" y="202" width="186" height="28" rx="8" fill="#ef6c00"/>
+  <text x="591" y="221" font-family="sans-serif" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">课 7 中间件策略层</text>
+  <text x="512" y="252" font-family="sans-serif" font-size="11" fill="#37474f">策略接口 / 6 个钩子</text>
+  <text x="512" y="272" font-family="sans-serif" font-size="11" fill="#37474f">供工具 / 权限拦截</text>
+
+  <rect x="26" y="202" width="210" height="96" rx="8" fill="#fff8e1" stroke="#ffb300"/>
+  <text x="42" y="226" font-family="sans-serif" font-size="12" font-weight="bold" fill="#ef6c00">配实战</text>
+  <text x="42" y="248" font-family="sans-serif" font-size="11" fill="#5d4037">04 硬编码 → 配置驱动</text>
+  <text x="42" y="268" font-family="sans-serif" font-size="11" fill="#5d4037">06 单一 messages → 通道化</text>
+  <text x="42" y="288" font-family="sans-serif" font-size="11" fill="#5d4037">07 if 判断 → 中间件策略</text>
+
+  <rect x="26" y="322" width="808" height="42" rx="6" fill="#ffffff" stroke="#cfd8dc"/>
+  <text x="42" y="348" font-family="sans-serif" font-size="11" fill="#546e7a">读法：课 4 / 5 是骨架（定义怎么变成图），课 6 / 7 是填充（图里的状态与扩展点为什么这样切）。顺序不可颠倒。</text>
+</svg>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="470" viewBox="0 0 900 470">
+  <defs>
+    <marker id="a02b" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#455a64"/>
+    </marker>
+    <marker id="a02r2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#c62828"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="470" fill="#fafafa"/>
+  <text x="28" y="34" font-family="sans-serif" font-size="18" font-weight="bold" fill="#263238">解法 B · 决策幂等表（唯一键 + 指纹）</text>
+  <text x="28" y="56" font-family="sans-serif" font-size="11" fill="#78909c">决策写入之前先"占坑"：同键同输入返回旧结果，同键异输入直接拒绝</text>
+
+  <rect x="30" y="86" width="140" height="66" rx="8" fill="#e3f2fd" stroke="#42a5f5"/>
+  <text x="46" y="110" font-family="sans-serif" font-size="11" font-weight="bold" fill="#1565c0">decision 请求</text>
+  <text x="46" y="132" font-family="monospace" font-size="9" fill="#37474f">{taskId, callId}</text>
+
+  <rect x="204" y="80" width="180" height="78" rx="8" fill="#e8f5e9" stroke="#66bb6a"/>
+  <text x="220" y="104" font-family="sans-serif" font-size="11" font-weight="bold" fill="#2e7d32">算输入指纹</text>
+  <text x="220" y="126" font-family="monospace" font-size="9" fill="#37474f">sha256(decision)</text>
+  <text x="220" y="146" font-family="sans-serif" font-size="9" fill="#546e7a">同键不同决策 → 不同指纹</text>
+
+  <rect x="418" y="80" width="190" height="78" rx="8" fill="#fff8e1" stroke="#ffca28"/>
+  <text x="434" y="104" font-family="sans-serif" font-size="11" font-weight="bold" fill="#f57f17">查幂等表</text>
+  <text x="434" y="126" font-family="monospace" font-size="9" fill="#37474f">UNIQUE(taskId, callId)</text>
+  <text x="434" y="146" font-family="sans-serif" font-size="9" fill="#546e7a">数据库唯一索引兜底</text>
+
+  <rect x="642" y="60" width="228" height="52" rx="8" fill="#e8f5e9" stroke="#66bb6a"/>
+  <text x="658" y="82" font-family="sans-serif" font-size="10" font-weight="bold" fill="#2e7d32">无记录 → 写入并执行</text>
+  <text x="658" y="100" font-family="monospace" font-size="9" fill="#37474f">INSERT ... , then run</text>
+
+  <rect x="642" y="124" width="228" height="52" rx="8" fill="#e3f2fd" stroke="#42a5f5"/>
+  <text x="658" y="146" font-family="sans-serif" font-size="10" font-weight="bold" fill="#1565c0">同键同指纹 → 返回旧结果</text>
+  <text x="658" y="164" font-family="sans-serif" font-size="9" fill="#546e7a">不重复执行，幂等成立</text>
+
+  <rect x="642" y="188" width="228" height="52" rx="8" fill="#ffebee" stroke="#c62828"/>
+  <text x="658" y="210" font-family="sans-serif" font-size="10" font-weight="bold" fill="#c62828">同键异指纹 → 拒绝</text>
+  <text x="658" y="228" font-family="sans-serif" font-size="9" fill="#b71c1c">报冲突，交人工判定</text>
+
+  <line x1="170" y1="119" x2="204" y2="119" stroke="#455a64" stroke-width="2" marker-end="url(#a02b)"/>
+  <line x1="384" y1="119" x2="418" y2="119" stroke="#455a64" stroke-width="2" marker-end="url(#a02b)"/>
+  <line x1="608" y1="105" x2="642" y2="88" stroke="#455a64" stroke-width="2" marker-end="url(#a02b)"/>
+  <line x1="608" y1="120" x2="642" y2="148" stroke="#455a64" stroke-width="2" marker-end="url(#a02b)"/>
+  <line x1="608" y1="135" x2="642" y2="212" stroke="#c62828" stroke-width="2" marker-end="url(#a02r2)"/>
+
+  <rect x="30" y="272" width="840" height="104" rx="8" fill="#eceff1"/>
+  <text x="46" y="296" font-family="sans-serif" font-size="12" font-weight="bold" fill="#37474f">关键代码</text>
+  <text x="46" y="318" font-family="monospace" font-size="10" fill="#37474f">const key = { taskId, callId };  const fp = sha256(JSON.stringify(decision));</text>
+  <text x="46" y="336" font-family="monospace" font-size="10" fill="#37474f">const prev = await decisions.find(key);</text>
+  <text x="46" y="354" font-family="monospace" font-size="10" fill="#37474f">if (prev &amp;&amp; prev.fingerprint !== fp) throw new ConflictError();   // 同键异输入</text>
+  <text x="46" y="372" font-family="monospace" font-size="10" fill="#37474f">if (prev) return prev.result;                                     // 同键同输入：幂等返回</text>
+
+  <rect x="30" y="390" width="840" height="68" rx="8" fill="#ffebee" stroke="#c62828"/>
+  <text x="46" y="412" font-family="sans-serif" font-size="11" font-weight="bold" fill="#c62828">失效点</text>
+  <text x="46" y="432" font-family="sans-serif" font-size="10" fill="#b71c1c">① 唯一索引只建在应用层（内存 Map）→ 多实例部署失效；② "先查再插"不是原子的 → 两个请求同时查到"无记录"</text>
+  <text x="46" y="450" font-family="sans-serif" font-size="10" fill="#b71c1c">→ 必须靠数据库唯一约束兜底（INSERT 冲突即视为"别人先占了"），不能用 SELECT 判空当锁</text>
+</svg>

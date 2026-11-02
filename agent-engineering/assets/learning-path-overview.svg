@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="560" viewBox="0 0 920 560">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#546e7a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="920" height="560" fill="#fafafa"/>
+  <text x="30" y="42" font-family="sans-serif" font-size="22" font-weight="bold" fill="#263238">Agent 工程解剖 · 学习路径</text>
+  <text x="30" y="68" font-family="sans-serif" font-size="13" fill="#607d8b">以通用机制与可运行断言为教材，训练读懂存量系统与判断设计的能力</text>
+
+  <rect x="30" y="96" width="200" height="44" rx="6" fill="#e3f2fd" stroke="#42a5f5"/>
+  <text x="130" y="124" font-family="sans-serif" font-size="14" fill="#1565c0" text-anchor="middle">前置：langchain + langgraph</text>
+
+  <line x1="130" y1="140" x2="130" y2="170" stroke="#546e7a" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="30" y="176" width="420" height="150" rx="8" fill="#ffffff" stroke="#90a4ae"/>
+  <rect x="30" y="176" width="420" height="34" rx="8" fill="#455a64"/>
+  <text x="46" y="199" font-family="sans-serif" font-size="14" font-weight="bold" fill="#ffffff">阶段 1 · 先有地图</text>
+  <text x="46" y="234" font-family="sans-serif" font-size="13" fill="#37474f">课 1 环境准备（附加课）</text>
+  <text x="46" y="258" font-family="sans-serif" font-size="13" fill="#37474f">课 2 平台的四层构成</text>
+  <text x="46" y="282" font-family="sans-serif" font-size="13" fill="#37474f">课 3 一次请求的完整旅程</text>
+  <text x="46" y="310" font-family="sans-serif" font-size="12" fill="#78909c">拿到两张地图：东西在哪 / 事情怎么发生</text>
+
+  <line x1="450" y1="251" x2="500" y2="251" stroke="#546e7a" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="506" y="176" width="384" height="150" rx="8" fill="#ffffff" stroke="#90a4ae"/>
+  <rect x="506" y="176" width="384" height="34" rx="8" fill="#1565c0"/>
+  <text x="522" y="199" font-family="sans-serif" font-size="14" font-weight="bold" fill="#ffffff">阶段 2 · 定义与编译（重心）</text>
+  <text x="522" y="234" font-family="sans-serif" font-size="13" fill="#37474f">课 4 声明式定义　课 5 编译器</text>
+  <text x="522" y="258" font-family="sans-serif" font-size="13" fill="#37474f">课 6 状态通道　课 7 中间件策略层</text>
+  <text x="522" y="286" font-family="sans-serif" font-size="12" fill="#78909c">定义 → 编译 → 可执行图：全课程最可迁移的一层</text>
+  <text x="522" y="310" font-family="sans-serif" font-size="12" fill="#78909c">配实战 04 / 06 / 07</text>
+
+  <line x1="698" y1="326" x2="698" y2="356" stroke="#546e7a" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="506" y="362" width="384" height="150" rx="8" fill="#ffffff" stroke="#90a4ae"/>
+  <rect x="506" y="362" width="384" height="34" rx="8" fill="#2e7d32"/>
+  <text x="522" y="385" font-family="sans-serif" font-size="14" font-weight="bold" fill="#ffffff">阶段 3 · 执行与协作</text>
+  <text x="522" y="420" font-family="sans-serif" font-size="13" fill="#37474f">课 8 模型调用与工具执行</text>
+  <text x="522" y="444" font-family="sans-serif" font-size="13" fill="#37474f">课 9 多 Agent 协作　课 10 持久执行</text>
+  <text x="522" y="468" font-family="sans-serif" font-size="13" fill="#37474f">课 11 调用运行时　课 12 MCP 外部能力接入</text>
+  <text x="522" y="496" font-family="sans-serif" font-size="12" fill="#78909c">配实战 09 / 10</text>
+
+  <line x1="506" y1="437" x2="456" y2="437" stroke="#546e7a" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="30" y="362" width="420" height="150" rx="8" fill="#ffffff" stroke="#90a4ae"/>
+  <rect x="30" y="362" width="420" height="34" rx="8" fill="#ef6c00"/>
+  <text x="46" y="385" font-family="sans-serif" font-size="14" font-weight="bold" fill="#ffffff">阶段 4 · 判断力</text>
+  <text x="46" y="420" font-family="sans-serif" font-size="13" fill="#37474f">课 13 成本与上下文　课 14 设计判断力</text>
+  <text x="46" y="444" font-family="sans-serif" font-size="13" fill="#37474f">课 15 把判断变成可复现的方法</text>
+  <text x="46" y="472" font-family="sans-serif" font-size="12" fill="#78909c">可迁移 / 需改造 / 应放弃 三分类判断</text>
+  <text x="46" y="496" font-family="sans-serif" font-size="12" fill="#78909c">结课综合项目：projects/ 跨阶段重建</text>
+
+  <rect x="30" y="528" width="860" height="1" fill="#cfd8dc"/>
+  <text x="30" y="548" font-family="sans-serif" font-size="11" fill="#90a4ae">机制实验 verify/ 可复现 · 版本与 API 在每课第三段「重述」中按官方文档核对</text>
+</svg>

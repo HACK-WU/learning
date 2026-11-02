@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="490" viewBox="0 0 900 490">
+  <defs>
+    <marker id="a03c" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#455a64"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="490" fill="#fafafa"/>
+  <text x="28" y="34" font-family="sans-serif" font-size="18" font-weight="bold" fill="#263238">解法 C · 外部化：把"记住"从上下文搬到通道 / 存储</text>
+  <text x="28" y="56" font-family="sans-serif" font-size="11" fill="#78909c">不是压得更聪明，而是让一部分东西根本不必待在上下文里</text>
+
+  <rect x="36" y="86" width="250" height="150" rx="8" fill="#e3f2fd" stroke="#42a5f5"/>
+  <text x="52" y="110" font-family="sans-serif" font-size="12" font-weight="bold" fill="#1565c0">上下文（有界窗口）</text>
+  <line x1="52" y1="122" x2="270" y2="122" stroke="#bbdefb"/>
+  <text x="52" y="146" font-family="sans-serif" font-size="10" fill="#37474f">只放"这一步推理需要的"</text>
+  <text x="52" y="168" font-family="sans-serif" font-size="10" fill="#37474f">系统提示 + 最近 3 轮</text>
+  <text x="52" y="190" font-family="sans-serif" font-size="10" fill="#37474f">+ 当前任务摘要</text>
+  <text x="52" y="214" font-family="sans-serif" font-size="9" font-style="italic" fill="#1565c0">目标：恒定大小，不随对话增长</text>
+
+  <rect x="330" y="70" width="240" height="76" rx="8" fill="#e8f5e9" stroke="#66bb6a"/>
+  <text x="346" y="94" font-family="sans-serif" font-size="11" font-weight="bold" fill="#2e7d32">结构化通道</text>
+  <text x="346" y="116" font-family="monospace" font-size="9" fill="#37474f">plan / findings / facts</text>
+  <text x="346" y="136" font-family="sans-serif" font-size="9" fill="#546e7a">每项有明确结构，不进对话</text>
+
+  <rect x="330" y="162" width="240" height="76" rx="8" fill="#fff8e1" stroke="#ffca28"/>
+  <text x="346" y="186" font-family="sans-serif" font-size="11" font-weight="bold" fill="#f57f17">外部存储 + 检索</text>
+  <text x="346" y="208" font-family="monospace" font-size="9" fill="#37474f">store.put / store.search</text>
+  <text x="346" y="228" font-family="sans-serif" font-size="9" fill="#546e7a">需要时按需取回，不常驻</text>
+
+  <rect x="614" y="70" width="250" height="76" rx="8" fill="#f3e5f5" stroke="#ab47bc"/>
+  <text x="630" y="94" font-family="sans-serif" font-size="11" font-weight="bold" fill="#6a1b9a">收益</text>
+  <text x="630" y="116" font-family="sans-serif" font-size="9" fill="#546e7a">上下文大小恒定 → 成本可预测</text>
+  <text x="630" y="134" font-family="sans-serif" font-size="9" fill="#546e7a">长任务不会"越跑越贵"</text>
+
+  <rect x="614" y="162" width="250" height="76" rx="8" fill="#ffebee" stroke="#c62828"/>
+  <text x="630" y="186" font-family="sans-serif" font-size="11" font-weight="bold" fill="#c62828">代价</text>
+  <text x="630" y="208" font-family="sans-serif" font-size="9" fill="#b71c1c">模型可能"忘了去查"</text>
+  <text x="630" y="226" font-family="sans-serif" font-size="9" fill="#b71c1c">要设计"什么时候查什么"</text>
+
+  <line x1="286" y1="140" x2="330" y2="112" stroke="#455a64" stroke-width="2" marker-end="url(#a03c)"/>
+  <line x1="286" y1="170" x2="330" y2="200" stroke="#455a64" stroke-width="2" marker-end="url(#a03c)"/>
+  <line x1="570" y1="108" x2="614" y2="108" stroke="#455a64" stroke-width="2" marker-end="url(#a03c)"/>
+  <line x1="570" y1="200" x2="614" y2="200" stroke="#455a64" stroke-width="2" marker-end="url(#a03c)"/>
+
+  <rect x="36" y="266" width="828" height="96" rx="8" fill="#eceff1"/>
+  <text x="52" y="290" font-family="sans-serif" font-size="12" font-weight="bold" fill="#37474f">关键代码</text>
+  <text x="52" y="312" font-family="monospace" font-size="10" fill="#37474f">// 通道：结构化承接，不进对话历史</text>
+  <text x="52" y="330" font-family="monospace" font-size="10" fill="#37474f">plan: Annotation&lt;PlanEntry[]&gt;({ reducer: (a, b) =&gt; [...a, ...b], default: () =&gt; [] }),</text>
+  <text x="52" y="348" font-family="monospace" font-size="10" fill="#37474f">// 检索：需要时才取回（而不是常驻上下文）</text>
+
+  <rect x="36" y="376" width="828" height="96" rx="8" fill="#ffebee" stroke="#c62828"/>
+  <text x="52" y="398" font-family="sans-serif" font-size="11" font-weight="bold" fill="#c62828">失效点</text>
+  <text x="52" y="418" font-family="sans-serif" font-size="10" fill="#b71c1c">① 外部化了但提示词没告诉模型"你可以去查" → 模型靠残存记忆硬答（自信地编）</text>
+  <text x="52" y="438" font-family="sans-serif" font-size="10" fill="#b71c1c">② 检索没有上限 → 一次取回 200 条，等于没外部化；③ 存进去的东西没有 TTL / 版本 → 取回过期事实</text>
+  <text x="52" y="458" font-family="sans-serif" font-size="10" fill="#546e7a">适用：长对话、长任务、多轮工具调用。代价：要设计检索时机与容量上限</text>
+</svg>

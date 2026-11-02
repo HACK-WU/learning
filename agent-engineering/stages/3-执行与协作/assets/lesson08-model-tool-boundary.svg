@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="420" viewBox="0 0 880 420">
+  <defs>
+    <marker id="m8" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#455a64"/>
+    </marker>
+    <marker id="m8r" markerWidth="10" markerHeight="10" refX="1" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M9,0 L9,6 L1,3 z" fill="#ab47bc"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="880" height="420" fill="#fafafa"/>
+  <text x="30" y="36" font-family="sans-serif" font-size="18" font-weight="bold" fill="#263238">两段式：先选工具，再绑模型，跨线即定型</text>
+
+  <!-- 左侧：选择阶段 -->
+  <rect x="30" y="60" width="300" height="240" rx="10" fill="#e3f2fd" stroke="#42a5f5"/>
+  <text x="46" y="86" font-family="sans-serif" font-size="14" font-weight="bold" fill="#1565c0">选择阶段（中间件）</text>
+  <rect x="46" y="100" width="268" height="36" rx="5" fill="#ffffff" stroke="#90caf9"/>
+  <text x="58" y="122" font-family="sans-serif" font-size="11" fill="#37474f">已注册工具 registeredTools（关口①）</text>
+  <rect x="46" y="146" width="268" height="36" rx="5" fill="#ffffff" stroke="#90caf9"/>
+  <text x="58" y="168" font-family="sans-serif" font-size="11" fill="#37474f">中间件裁剪 / 过滤 / 注入（关口②）</text>
+  <rect x="46" y="192" width="268" height="36" rx="5" fill="#ffffff" stroke="#90caf9"/>
+  <text x="58" y="214" font-family="sans-serif" font-size="11" fill="#37474f">快照 snapshot 一次调用一份</text>
+  <text x="46" y="252" font-family="sans-serif" font-size="10" fill="#1565c0">不变量①：中间件在绑定前选工具</text>
+  <text x="46" y="272" font-family="sans-serif" font-size="10" fill="#1565c0">不变量②：每次调用独立快照</text>
+  <text x="46" y="290" font-family="sans-serif" font-size="10" fill="#1565c0">不变量③：适配消息不改历史</text>
+
+  <!-- 中间：terminal boundary -->
+  <rect x="362" y="60" width="180" height="240" rx="10" fill="#fff8e1" stroke="#ffca28"/>
+  <text x="380" y="86" font-family="sans-serif" font-size="13" font-weight="bold" fill="#f57f17">终端边界</text>
+  <text x="380" y="110" font-family="monospace" font-size="10" fill="#e65100">bindTools()</text>
+  <text x="380" y="132" font-family="sans-serif" font-size="10" fill="#37474f">唯一能绑定的地方</text>
+  <text x="380" y="156" font-family="sans-serif" font-size="10" fill="#37474f">跨线即定型</text>
+  <line x1="380" y1="180" x2="520" y2="180" stroke="#ffb300" stroke-width="4" stroke-dasharray="6,4" marker-end="url(#m8)"/>
+  <text x="380" y="222" font-family="sans-serif" font-size="9" font-style="italic" fill="#e65100">授权不在此层</text>
+  <text x="380" y="240" font-family="sans-serif" font-size="9" fill="#90a4ae">Execution authorization =</text>
+  <text x="380" y="256" font-family="sans-serif" font-size="9" fill="#90a4ae">tool execution boundary 负责</text>
+
+  <!-- 右侧：执行阶段 -->
+  <rect x="574" y="60" width="280" height="240" rx="10" fill="#e8f5e9" stroke="#66bb6a"/>
+  <text x="590" y="86" font-family="sans-serif" font-size="14" font-weight="bold" fill="#2e7d32">执行阶段</text>
+  <rect x="590" y="100" width="248" height="32" rx="5" fill="#ffffff" stroke="#a5d6a7"/>
+  <text x="602" y="121" font-family="sans-serif" font-size="10" fill="#37474f">模型产出 tool_calls</text>
+  <rect x="590" y="140" width="248" height="32" rx="5" fill="#ffffff" stroke="#a5d6a7"/>
+  <text x="602" y="161" font-family="sans-serif" font-size="10" fill="#37474f">Send 按 name 扇出到各 ToolNode</text>
+  <rect x="644" y="180" width="54" height="30" rx="4" fill="#e8f5e9" stroke="#81c784"/>
+  <text x="652" y="200" font-family="monospace" font-size="8" fill="#2e7d32">t1</text>
+  <rect x="704" y="180" width="54" height="30" rx="4" fill="#e8f5e9" stroke="#81c784"/>
+  <text x="712" y="200" font-family="monospace" font-size="8" fill="#2e7d32">t2</text>
+  <rect x="590" y="218" width="248" height="32" rx="5" fill="#ffffff" stroke="#a5d6a7"/>
+  <text x="602" y="238" font-family="sans-serif" font-size="10" fill="#37474f">按 tool_call_id 回填 ToolMessage</text>
+  <text x="590" y="270" font-family="sans-serif" font-size="9" font-style="italic" fill="#2e7d32">并行（Promise.all）+ 中断必抛</text>
+
+  <!-- 执行面守卫 -->
+  <rect x="85" y="320" width="700" height="56" rx="8" fill="#eceff1" stroke="#90a4ae"/>
+  <text x="100" y="342" font-family="sans-serif" font-size="11" font-weight="bold" fill="#455a64">执行面守卫（不只一层）</text>
+  <text x="100" y="362" font-family="sans-serif" font-size="10" fill="#546e7a">XpFileSystem: ensureAllowed(操作) + ensureInScope(路径) —— 构造注入权限，任何调用路径都绕不过</text>
+
+  <text x="30" y="396" font-family="sans-serif" font-size="11" fill="#546e7a">本课要点：工具清单在"选择阶段"定型；跨过中间虚线后不可再改（bindTools 不可变）。授权不归这里管。</text>
+</svg>

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 360" width="920" height="360" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#57606a"/>
+    </marker>
+  </defs>
+
+  <rect width="920" height="360" fill="#ffffff"/>
+
+  <text x="460" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#111827">阶段 4 · 运行与诊断</text>
+  <text x="460" y="54" text-anchor="middle" font-size="12.5" fill="#57606a">2 课 / 6 知识点 · 章节定位：坏了查得出 —— 上线之后才是开始</text>
+
+  <rect x="24" y="68" width="872" height="38" rx="8" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+  <text x="40" y="86" font-size="12" font-weight="700" fill="#78350f">🎬 本章节的故事转折</text>
+  <text x="40" y="102" font-size="11.5" fill="#1f2937">从"先让它跑起来"到"跑起来之后还看得见它"　│　状态变化：出问题靠猜 → 按一个 id 顺着链路走到出问题那一行</text>
+
+  <rect x="24" y="122" width="430" height="196" rx="10" fill="#ccfbf1" stroke="#0d9488" stroke-width="2"/>
+  <text x="40" y="147" font-size="13" font-weight="700" fill="#134e4a">课 13 · 分布式任务与计算选型（事前判断）</text>
+  <rect x="40" y="158" width="398" height="44" rx="6" fill="#ffffff" stroke="#5eead4"/>
+  <text x="52" y="175" font-size="10" font-weight="700" fill="#0f766e">① 三类运行时的边界</text>
+  <text x="52" y="191" font-size="9.5" fill="#1f2937">任务队列排队执行 / 分布式计算并行算 / 流处理持续算 —— 判错类别，后面怎么调都白费力</text>
+  <rect x="40" y="208" width="398" height="44" rx="6" fill="#ffffff" stroke="#5eead4"/>
+  <text x="52" y="225" font-size="10" font-weight="700" fill="#0f766e">② 选型的五个判断维度</text>
+  <text x="52" y="241" font-size="9.5" fill="#1f2937">任务时长 / 触发方式 / 依赖关系 / 状态规模 / 失败能否重跑 —— 五问答完，选型基本没悬念</text>
+  <rect x="40" y="258" width="398" height="44" rx="6" fill="#ffffff" stroke="#5eead4"/>
+  <text x="52" y="275" font-size="10" font-weight="700" fill="#0f766e">③ 任务语义：至少一次与恰好一次</text>
+  <text x="52" y="291" font-size="9.5" fill="#1f2937">端到端恰好一次 = 至少一次投递 + 消费端幂等；缺任一环，这个承诺就断了</text>
+
+  <rect x="466" y="122" width="430" height="196" rx="10" fill="#ccfbf1" stroke="#0d9488" stroke-width="2"/>
+  <text x="482" y="147" font-size="13" font-weight="700" fill="#134e4a">课 14 · 跨服务可观测性与故障定位（事后定位）</text>
+  <rect x="482" y="158" width="398" height="44" rx="6" fill="#ffffff" stroke="#5eead4"/>
+  <text x="494" y="175" font-size="10" font-weight="700" fill="#0f766e">① 单服务日志的三处空白</text>
+  <text x="494" y="191" font-size="9.5" fill="#1f2937">排队、网络、下游等待——每一段都发生在自己进程之外，本机日志里就是空白</text>
+  <rect x="482" y="208" width="398" height="44" rx="6" fill="#ffffff" stroke="#5eead4"/>
+  <text x="494" y="225" font-size="10" font-weight="700" fill="#0f766e">② traceId 与上下文传播</text>
+  <text x="494" y="241" font-size="9.5" fill="#1f2937">穿过线程池、asyncio、HTTP/gRPC 都要带上；用 contextvar 而不是传参</text>
+  <rect x="482" y="258" width="398" height="44" rx="6" fill="#ffffff" stroke="#5eead4"/>
+  <text x="494" y="275" font-size="10" font-weight="700" fill="#0f766e">③ 指标 / 日志 / 链路三件套联动</text>
+  <text x="494" y="291" font-size="9.5" fill="#1f2937">指标说"变慢了"→ 链路说"慢在哪段"→ 日志说"那段里发生了什么"</text>
+
+  <line x1="454" y1="220" x2="463" y2="220" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="24" y="334" width="872" height="18" rx="4" fill="#f6f8fa" stroke="#d0d7de"/>
+  <text x="40" y="347" font-size="11" fill="#1f2937">➡️ 本阶段出口能力：能为任务选对运行时并说清放弃理由；能把一次跨服务慢请求拆到具体那一段</text>
+</svg>

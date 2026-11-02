@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 380" width="920" height="380" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#57606a"/>
+    </marker>
+  </defs>
+
+  <rect width="920" height="380" fill="#ffffff"/>
+
+  <text x="460" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#111827">阶段 3 · 数据一致性</text>
+  <text x="460" y="54" text-anchor="middle" font-size="12.5" fill="#57606a">4 课 / 12 知识点 · 章节定位：把账对上 —— 到处对不上的账</text>
+
+  <rect x="24" y="68" width="872" height="38" rx="8" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+  <text x="40" y="86" font-size="12" font-weight="700" fill="#78350f">🎬 本章节的故事转折</text>
+  <text x="40" y="102" font-size="11.5" fill="#1f2937">从"写进去了"到"过一会儿还对得上"　│　状态变化：相信本地事务 → 知道它在哪失效，并能用补偿与去重兜住</text>
+
+  <rect x="24" y="122" width="210" height="190" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="40" y="147" font-size="13" font-weight="700" fill="#78350f">课 9 · 事务与 Saga</text>
+  <rect x="40" y="158" width="178" height="44" rx="6" fill="#ffffff" stroke="#fcd34d"/>
+  <text x="52" y="175" font-size="10" font-weight="700" fill="#b45309">① 本地事务的边界</text>
+  <text x="52" y="191" font-size="9.5" fill="#1f2937">一个 atomic 只保护一个库</text>
+  <rect x="40" y="208" width="178" height="44" rx="6" fill="#ffffff" stroke="#fcd34d"/>
+  <text x="52" y="225" font-size="10" font-weight="700" fill="#b45309">② 两阶段提交的代价</text>
+  <text x="52" y="241" font-size="9.5" fill="#1f2937">阻塞 + 协调者单点</text>
+  <rect x="40" y="258" width="178" height="44" rx="6" fill="#ffffff" stroke="#fcd34d"/>
+  <text x="52" y="275" font-size="10" font-weight="700" fill="#b45309">③ Saga 与补偿</text>
+  <text x="52" y="291" font-size="9.5" fill="#1f2937">补偿不总是可行</text>
+
+  <rect x="244" y="122" width="210" height="190" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="260" y="147" font-size="13" font-weight="700" fill="#78350f">课 10 · 发件箱与幂等消费</text>
+  <rect x="260" y="158" width="178" height="44" rx="6" fill="#ffffff" stroke="#fcd34d"/>
+  <text x="272" y="175" font-size="10" font-weight="700" fill="#b45309">① 双写的四种失败</text>
+  <text x="272" y="191" font-size="9.5" fill="#1f2937">写库与发消息各自会挂</text>
+  <rect x="260" y="208" width="178" height="44" rx="6" fill="#ffffff" stroke="#fcd34d"/>
+  <text x="272" y="225" font-size="10" font-weight="700" fill="#b45309">② 事务性发件箱</text>
+  <text x="272" y="241" font-size="9.5" fill="#1f2937">业务写与待发同一事务</text>
+  <rect x="260" y="258" width="178" height="44" rx="6" fill="#ffffff" stroke="#fcd34d"/>
+  <text x="272" y="275" font-size="10" font-weight="700" fill="#b45309">③ 去重表</text>
+  <text x="272" y="291" font-size="9.5" fill="#1f2937">至少一次投递的兜底</text>
+
+  <rect x="464" y="122" width="210" height="190" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="480" y="147" font-size="13" font-weight="700" fill="#78350f">课 11 · 分布式锁与 fencing</text>
+  <rect x="480" y="158" width="178" height="44" rx="6" fill="#ffffff" stroke="#fcd34d"/>
+  <text x="492" y="175" font-size="10" font-weight="700" fill="#b45309">① 四个必答问题</text>
+  <text x="492" y="191" font-size="9.5" fill="#1f2937">SET NX PX 而非 SETNX+EXPIRE</text>
+  <rect x="480" y="208" width="178" height="44" rx="6" fill="#ffffff" stroke="#fcd34d"/>
+  <text x="492" y="225" font-size="10" font-weight="700" fill="#b45309">② 续期与误删</text>
+  <text x="492" y="241" font-size="9.5" fill="#1f2937">value 校验 + Lua</text>
+  <rect x="480" y="258" width="178" height="44" rx="6" fill="#ffffff" stroke="#fcd34d"/>
+  <text x="492" y="275" font-size="10" font-weight="700" fill="#b45309">③ fencing token</text>
+  <text x="492" y="291" font-size="9.5" fill="#1f2937">让过期持有者失效</text>
+
+  <rect x="684" y="122" width="212" height="190" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="700" y="147" font-size="13" font-weight="700" fill="#78350f">课 12 · 分区、复制与读写</text>
+  <rect x="700" y="158" width="180" height="44" rx="6" fill="#ffffff" stroke="#fcd34d"/>
+  <text x="712" y="175" font-size="10" font-weight="700" fill="#b45309">① 分片键怎么选</text>
+  <text x="712" y="191" font-size="9.5" fill="#1f2937">热点与跨片查询的代价</text>
+  <rect x="700" y="208" width="180" height="44" rx="6" fill="#ffffff" stroke="#fcd34d"/>
+  <text x="712" y="225" font-size="10" font-weight="700" fill="#b45309">② 复制滞后</text>
+  <text x="712" y="241" font-size="9.5" fill="#1f2937">改完刷新还是旧值</text>
+  <rect x="700" y="258" width="180" height="44" rx="6" fill="#ffffff" stroke="#fcd34d"/>
+  <text x="712" y="275" font-size="10" font-weight="700" fill="#b45309">③ 读己之写</text>
+  <text x="712" y="291" font-size="9.5" fill="#1f2937">两种实现路径的代价</text>
+
+  <line x1="236" y1="215" x2="243" y2="215" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="456" y1="215" x2="463" y2="215" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="676" y1="215" x2="683" y2="215" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="24" y="328" width="872" height="38" rx="8" fill="#f6f8fa" stroke="#d0d7de"/>
+  <text x="40" y="346" font-size="11.5" font-weight="700" fill="#1f2328">➡️ 本阶段出口能力</text>
+  <text x="40" y="359" font-size="11" fill="#1f2937">能为跨服务流程画出补偿路径；能写出不会误删他人锁的锁实现　│　下一阶段：阶段 4《运行与诊断》</text>
+</svg>

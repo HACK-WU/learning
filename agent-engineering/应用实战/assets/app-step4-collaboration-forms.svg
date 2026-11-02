@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="400" viewBox="0 0 880 400">
+  <defs>
+    <marker id="c9" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#546e7a"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="880" height="400" fill="#fafafa"/>
+  <text x="28" y="36" font-family="sans-serif" font-size="17" font-weight="bold" fill="#263238">三种协作形态：控制权不同，行为就不同</text>
+
+  <!-- 子图 -->
+  <rect x="28" y="60" width="256" height="230" rx="8" fill="#e8f5e9" stroke="#66bb6a"/>
+  <text x="44" y="86" font-family="sans-serif" font-size="13" font-weight="bold" fill="#2e7d32">子图委派：要结果</text>
+  <rect x="44" y="100" width="104" height="84" rx="6" fill="#ffffff" stroke="#a5d6a7"/>
+  <text x="54" y="120" font-family="sans-serif" font-size="10" font-weight="bold" fill="#263238">父 Agent</text>
+  <text x="54" y="142" font-family="sans-serif" font-size="9" fill="#546e7a">派活+拿结果</text>
+  <text x="54" y="160" font-family="sans-serif" font-size="9" fill="#546e7a">继续处理</text>
+  <rect x="176" y="100" width="92" height="84" rx="6" fill="#e8f5e9" stroke="#81c784"/>
+  <text x="186" y="120" font-family="sans-serif" font-size="10" font-weight="bold" fill="#263238">子 Agent</text>
+  <text x="186" y="142" font-family="sans-serif" font-size="9" fill="#546e7a">独立通道</text>
+  <text x="186" y="160" font-family="sans-serif" font-size="9" fill="#546e7a">结果写父</text>
+  <line x1="148" y1="142" x2="176" y2="142" stroke="#2e7d32" stroke-width="2" marker-end="url(#c9)"/>
+  <line x1="176" y1="168" x2="148" y2="168" stroke="#66bb6a" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#c9)"/>
+  <text x="44" y="214" font-family="sans-serif" font-size="10" fill="#546e7a">结果 = ToolMessage 塞回父通道</text>
+  <text x="44" y="234" font-family="sans-serif" font-size="10" fill="#546e7a">父控制权不丢，接着跑</text>
+  <text x="44" y="258" font-family="sans-serif" font-size="9" font-style="italic" fill="#2e7d32">判据：C 需要 A/B 的结果 → 子图</text>
+
+  <!-- 协作者 -->
+  <rect x="312" y="60" width="256" height="230" rx="8" fill="#e3f2fd" stroke="#42a5f5"/>
+  <text x="328" y="86" font-family="sans-serif" font-size="13" font-weight="bold" fill="#1565c0">协作者：外部已发布依赖</text>
+  <rect x="328" y="104" width="104" height="70" rx="6" fill="#ffffff" stroke="#90caf9"/>
+  <text x="338" y="126" font-family="sans-serif" font-size="10" font-weight="bold" fill="#263238">调用方</text>
+  <text x="338" y="146" font-family="sans-serif" font-size="9" fill="#546e7a">见 schema 委托</text>
+  <text x="338" y="162" font-family="sans-serif" font-size="9" fill="#546e7a">锁版本</text>
+  <rect x="460" y="104" width="92" height="70" rx="6" fill="#e3f2fd" stroke="#64b5f6"/>
+  <text x="470" y="126" font-family="sans-serif" font-size="10" font-weight="bold" fill="#263238">已发布 Agent</text>
+  <text x="470" y="146" font-family="sans-serif" font-size="9" fill="#546e7a">version 固定</text>
+  <text x="470" y="162" font-family="sans-serif" font-size="9" fill="#546e7a">scope 校验</text>
+  <line x1="432" y1="139" x2="460" y2="139" stroke="#1565c0" stroke-width="2" marker-end="url(#c9)"/>
+  <text x="328" y="214" font-family="sans-serif" font-size="10" fill="#546e7a">schema 描述 + 路由执行（声明分离）</text>
+  <text x="328" y="234" font-family="sans-serif" font-size="10" fill="#546e7a">锁版本保可复现，验 scope 控授权</text>
+  <text x="328" y="258" font-family="sans-serif" font-size="9" font-style="italic" fill="#1565c0">判据：til 确定性依赖 → 协作者</text>
+
+  <!-- Swarm -->
+  <rect x="596" y="60" width="256" height="230" rx="8" fill="#f3e5f5" stroke="#ab47bc"/>
+  <text x="612" y="86" font-family="sans-serif" font-size="13" font-weight="bold" fill="#6a1b9a">Swarm 交接：让出控制权</text>
+  <rect x="612" y="100" width="80" height="70" rx="6" fill="#ffffff" stroke="#ce93d8"/>
+  <text x="620" y="124" font-family="monospace" font-size="10" font-weight="bold" fill="#263238">Agent A</text>
+  <rect x="700" y="100" width="80" height="70" rx="6" fill="#f3e5f5" stroke="#ba68c8"/>
+  <text x="708" y="124" font-family="monospace" font-size="10" font-weight="bold" fill="#263238">Agent B</text>
+  <text x="708" y="150" font-family="sans-serif" font-size="9" fill="#6a1b9a">activeAgent=B</text>
+  <rect x="696" y="178" width="90" height="44" rx="6" fill="#f3e5f5" stroke="#ba68c8"/>
+  <text x="704" y="198" font-family="monospace" font-size="10" font-weight="bold" fill="#263238">Agent C</text>
+  <text x="704" y="214" font-family="sans-serif" font-size="9" fill="#6a1b9a">activeAgent=C</text>
+  <line x1="692" y1="135" x2="700" y2="135" stroke="#ab47bc" stroke-width="2" marker-end="url(#c9)"/>
+  <line x1="700" y1="170" x2="700" y2="200" stroke="#ab47bc" stroke-width="2" marker-end="url(#c9)"/>
+  <text x="612" y="258" font-family="sans-serif" font-size="9" font-style="italic" fill="#6a1b9a">判据：要整段交接 → Swarm</text>
+
+  <!-- 底部判据 -->
+  <rect x="28" y="312" width="824" height="60" rx="8" fill="#fff8e1" stroke="#ffca28"/>
+  <text x="44" y="336" font-family="sans-serif" font-size="11" font-weight="bold" fill="#f57f17">核心判据：做完这件事，我还需要继续处理它的结果吗？</text>
+  <text x="44" y="356" font-family="sans-serif" font-size="10" fill="#546e7a">是 → 子图 / 协作者；否（整个交给别人作主）→ Swarm。先问控制权归谁，再定形态。</text>
+</svg>

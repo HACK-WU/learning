@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 380" width="920" height="380" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#57606a"/>
+    </marker>
+  </defs>
+
+  <rect width="920" height="380" fill="#ffffff"/>
+
+  <text x="460" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#111827">阶段 2 · 服务之间的通信</text>
+  <text x="460" y="54" text-anchor="middle" font-size="12.5" fill="#57606a">4 课 / 12 知识点 · 章节定位：让两台机器说上话 —— 契约、时限与退路</text>
+
+  <rect x="24" y="68" width="872" height="38" rx="8" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+  <text x="40" y="86" font-size="12" font-weight="700" fill="#78350f">🎬 本章节的故事转折</text>
+  <text x="40" y="102" font-size="11.5" fill="#1f2937">从"能调通"到"对方挂了我不跟着挂"　│　状态变化：写死地址直接调 → 有契约、有时限、有退路的一整条调用链</text>
+
+  <rect x="24" y="122" width="210" height="190" rx="10" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="40" y="147" font-size="13" font-weight="700" fill="#14532d">课 5 · 接口契约与 gRPC</text>
+  <rect x="40" y="158" width="178" height="44" rx="6" fill="#ffffff" stroke="#86efac"/>
+  <text x="52" y="175" font-size="10" font-weight="700" fill="#15803d">① 为什么值得一份 IDL</text>
+  <text x="52" y="191" font-size="9.5" fill="#1f2937">契约先于实现</text>
+  <rect x="40" y="208" width="178" height="44" rx="6" fill="#ffffff" stroke="#86efac"/>
+  <text x="52" y="225" font-size="10" font-weight="700" fill="#15803d">② 四种调用形态</text>
+  <text x="52" y="241" font-size="9.5" fill="#1f2937">一元 / 三种流</text>
+  <rect x="40" y="258" width="178" height="44" rx="6" fill="#ffffff" stroke="#86efac"/>
+  <text x="52" y="275" font-size="10" font-weight="700" fill="#15803d">③ 字段号与兼容</text>
+  <text x="52" y="291" font-size="9.5" fill="#1f2937">改字段不炸老客户端</text>
+
+  <rect x="244" y="122" width="210" height="190" rx="10" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="260" y="147" font-size="13" font-weight="700" fill="#14532d">课 6 · 超时、重试、幂等</text>
+  <rect x="260" y="158" width="178" height="44" rx="6" fill="#ffffff" stroke="#86efac"/>
+  <text x="272" y="175" font-size="10" font-weight="700" fill="#15803d">① 超时预算与传播</text>
+  <text x="272" y="191" font-size="9.5" fill="#1f2937">上游 3s → 下游 500ms</text>
+  <rect x="260" y="208" width="178" height="44" rx="6" fill="#ffffff" stroke="#86efac"/>
+  <text x="272" y="225" font-size="10" font-weight="700" fill="#15803d">② 重试的三个前提</text>
+  <text x="272" y="241" font-size="9.5" fill="#1f2937">幂等 / 上限 / 退避</text>
+  <rect x="260" y="258" width="178" height="44" rx="6" fill="#ffffff" stroke="#86efac"/>
+  <text x="272" y="275" font-size="10" font-weight="700" fill="#15803d">③ 幂等键的设计</text>
+  <text x="272" y="291" font-size="9.5" fill="#1f2937">同一个键不重复扣款</text>
+
+  <rect x="464" y="122" width="210" height="190" rx="10" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="480" y="147" font-size="13" font-weight="700" fill="#14532d">课 7 · 熔断、限流、隔离</text>
+  <rect x="480" y="158" width="178" height="44" rx="6" fill="#ffffff" stroke="#86efac"/>
+  <text x="492" y="175" font-size="10" font-weight="700" fill="#15803d">① 雪崩怎么发生</text>
+  <text x="492" y="191" font-size="9.5" fill="#1f2937">线程被慢调用占满</text>
+  <rect x="480" y="208" width="178" height="44" rx="6" fill="#ffffff" stroke="#86efac"/>
+  <text x="492" y="225" font-size="10" font-weight="700" fill="#15803d">② 熔断器三态</text>
+  <text x="492" y="241" font-size="9.5" fill="#1f2937">闭合 / 打开 / 半开</text>
+  <rect x="480" y="258" width="178" height="44" rx="6" fill="#ffffff" stroke="#86efac"/>
+  <text x="492" y="275" font-size="10" font-weight="700" fill="#15803d">③ 限流与舱壁</text>
+  <text x="492" y="291" font-size="9.5" fill="#1f2937">令牌桶 / 漏桶 / 分池</text>
+
+  <rect x="684" y="122" width="212" height="190" rx="10" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="700" y="147" font-size="13" font-weight="700" fill="#14532d">课 8 · 服务发现与负载均衡</text>
+  <rect x="700" y="158" width="180" height="44" rx="6" fill="#ffffff" stroke="#86efac"/>
+  <text x="712" y="175" font-size="10" font-weight="700" fill="#15803d">① 发现要解决什么</text>
+  <text x="712" y="191" font-size="9.5" fill="#1f2937">实例会扩缩容、会漂移</text>
+  <rect x="700" y="208" width="180" height="44" rx="6" fill="#ffffff" stroke="#86efac"/>
+  <text x="712" y="225" font-size="10" font-weight="700" fill="#15803d">② 客户端 LB vs 代理</text>
+  <text x="712" y="241" font-size="9.5" fill="#1f2937">谁来做均衡、代价在哪</text>
+  <rect x="700" y="258" width="180" height="44" rx="6" fill="#ffffff" stroke="#86efac"/>
+  <text x="712" y="275" font-size="10" font-weight="700" fill="#15803d">③ 存活 vs 就绪</text>
+  <text x="712" y="291" font-size="9.5" fill="#1f2937">探针错用会把流量送错</text>
+
+  <line x1="236" y1="215" x2="243" y2="215" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="456" y1="215" x2="463" y2="215" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="676" y1="215" x2="683" y2="215" stroke="#57606a" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="24" y="328" width="872" height="38" rx="8" fill="#f6f8fa" stroke="#d0d7de"/>
+  <text x="40" y="346" font-size="11.5" font-weight="700" fill="#1f2328">➡️ 本阶段出口能力</text>
+  <text x="40" y="359" font-size="11" fill="#1f2937">能写出带 deadline 与重试策略的 gRPC 客户端；能设计一个真正幂等的下单接口　│　下一阶段：阶段 3《数据一致性》</text>
+</svg>

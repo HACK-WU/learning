@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="840" height="330" viewBox="0 0 840 330">
+  <defs>
+    <marker id="a4" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#546e7a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="840" height="330" fill="#fafafa"/>
+  <text x="26" y="36" font-family="sans-serif" font-size="18" font-weight="bold" fill="#263238">阶段 4 路径：从读懂它到判断它</text>
+
+  <rect x="26" y="68" width="230" height="104" rx="8" fill="#ffffff" stroke="#90a4ae"/>
+  <rect x="26" y="68" width="230" height="28" rx="8" fill="#455a64"/>
+  <text x="141" y="87" font-family="sans-serif" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">课 13 补齐工程细节</text>
+  <text x="40" y="120" font-family="sans-serif" font-size="11" fill="#37474f">上下文压缩 / 沙箱与产物</text>
+  <text x="40" y="140" font-family="sans-serif" font-size="11" fill="#37474f">技能与插件</text>
+  <text x="40" y="160" font-family="sans-serif" font-size="11" fill="#78909c">解决「长期跑下去」</text>
+
+  <line x1="256" y1="120" x2="300" y2="120" stroke="#546e7a" stroke-width="2" marker-end="url(#a4)"/>
+
+  <rect x="306" y="68" width="230" height="104" rx="8" fill="#ffffff" stroke="#ef6c00" stroke-width="2"/>
+  <rect x="306" y="68" width="230" height="28" rx="8" fill="#ef6c00"/>
+  <text x="421" y="87" font-family="sans-serif" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">课 14 横向归纳</text>
+  <text x="320" y="120" font-family="sans-serif" font-size="11" fill="#37474f">可迁移清单（4 条）</text>
+  <text x="320" y="140" font-family="sans-serif" font-size="11" fill="#37474f">历史包袱识别（约束还原法）</text>
+  <text x="320" y="160" font-family="sans-serif" font-size="11" fill="#78909c">解决「哪些该带走」</text>
+
+  <line x1="536" y1="120" x2="580" y2="120" stroke="#546e7a" stroke-width="2" marker-end="url(#a4)"/>
+
+  <rect x="586" y="68" width="228" height="104" rx="8" fill="#ffffff" stroke="#2e7d32" stroke-width="2"/>
+  <rect x="586" y="68" width="228" height="28" rx="8" fill="#2e7d32"/>
+  <text x="700" y="87" font-family="sans-serif" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">课 15 落到手上</text>
+  <text x="600" y="120" font-family="sans-serif" font-size="11" fill="#37474f">三分类判断 / 约束还原</text>
+  <text x="600" y="140" font-family="sans-serif" font-size="11" fill="#37474f">迁移决策清单</text>
+  <text x="600" y="160" font-family="sans-serif" font-size="11" fill="#78909c">解决「换个项目也能剖」</text>
+
+  <rect x="26" y="196" width="788" height="106" rx="8" fill="#ffffff" stroke="#cfd8dc"/>
+  <text x="42" y="220" font-family="sans-serif" font-size="12" font-weight="bold" fill="#455a64">顺序不可颠倒的原因</text>
+  <text x="42" y="244" font-family="sans-serif" font-size="11" fill="#546e7a">没有课 13 的材料（压缩、沙箱、插件），课 14 的"可迁移判断"缺少两个维度的输入；</text>
+  <text x="42" y="264" font-family="sans-serif" font-size="11" fill="#546e7a">没有课 14 的归纳，课 15 的方法只是空壳——它要用课 14 的四条结论做练习题；</text>
+  <text x="42" y="284" font-family="sans-serif" font-size="11" fill="#78909c">方法的真正检验在 projects/ 结课综合实战项目：跨阶段重建一条完整链路。</text>
+</svg>

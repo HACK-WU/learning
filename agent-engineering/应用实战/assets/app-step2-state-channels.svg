@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="400" viewBox="0 0 880 400">
+  <defs>
+    <marker id="b6" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#546e7a"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="880" height="400" fill="#fafafa"/>
+  <text x="28" y="34" font-family="sans-serif" font-size="17" font-weight="bold" fill="#263238">状态设计：从一个袋子，到十个格子</text>
+
+  <!-- 左：单通道 -->
+  <rect x="28" y="58" width="230" height="250" rx="8" fill="#ffebee" stroke="#e57373"/>
+  <text x="44" y="82" font-family="sans-serif" font-size="13" font-weight="bold" fill="#c62828">改造前：单通道</text>
+  <rect x="44" y="96" width="198" height="150" rx="5" fill="#ffffff" stroke="#ef9a9a"/>
+  <text x="58" y="116" font-family="monospace" font-size="10" fill="#c62828">messages: []</text>
+  <text x="58" y="138" font-family="sans-serif" font-size="9" fill="#546e7a">├ 系统提示（被当对话）</text>
+  <text x="58" y="156" font-family="sans-serif" font-size="9" fill="#546e7a">├ 用户输入</text>
+  <text x="58" y="174" font-family="sans-serif" font-size="9" fill="#546e7a">├ 对话摘要（混在一起）</text>
+  <text x="58" y="192" font-family="sans-serif" font-size="9" fill="#546e7a">├ 想传的临时变量</text>
+  <text x="58" y="210" font-family="sans-serif" font-size="9" fill="#546e7a">├ 想加的短标题</text>
+  <text x="58" y="228" font-family="sans-serif" font-size="9" fill="#546e7a">└ 工具结果</text>
+  <text x="44" y="272" font-family="sans-serif" font-size="10" fill="#c62828">模型分不清哪条是真对话</text>
+  <text x="44" y="290" font-family="sans-serif" font-size="10" fill="#c62828">摘要越压越乱</text>
+
+  <!-- 中：加临时通道 -->
+  <rect x="290" y="58" width="230" height="250" rx="8" fill="#fff8e1" stroke="#ffca28"/>
+  <text x="306" y="82" font-family="sans-serif" font-size="13" font-weight="bold" fill="#f57f17">第一步：加便条通道</text>
+  <rect x="306" y="96" width="198" height="86" rx="5" fill="#ffffff" stroke="#ffe082"/>
+  <text x="320" y="116" font-family="monospace" font-size="10" fill="#37474f">messages: []</text>
+  <text x="320" y="136" font-family="sans-serif" font-size="9" fill="#546e7a">（只剩真对话）</text>
+  <text x="320" y="160" font-family="monospace" font-size="10" fill="#e65100">scratch: {}</text>
+  <text x="320" y="176" font-family="sans-serif" font-size="9" fill="#546e7a">（临时值，不进历史）</text>
+  <text x="306" y="204" font-family="sans-serif" font-size="10" fill="#2e7d32">✓ 变量不污染对话</text>
+  <text x="306" y="224" font-family="sans-serif" font-size="10" fill="#c62828">✗ 所有临时数据挤一格</text>
+  <text x="306" y="244" font-family="sans-serif" font-size="10" fill="#c62828">✗ 无生命周期，会残留</text>
+  <text x="306" y="264" font-family="sans-serif" font-size="10" fill="#c62828">✗ messages 仍是大杂烩</text>
+  <text x="306" y="288" font-family="sans-serif" font-size="9" font-style="italic" fill="#90a4ae">关键转折：意识到"不是所有数据都该进历史"</text>
+
+  <!-- 右：多通道 -->
+  <rect x="552" y="58" width="300" height="250" rx="8" fill="#e8f5e9" stroke="#66bb6a"/>
+  <text x="568" y="82" font-family="sans-serif" font-size="13" font-weight="bold" fill="#2e7d32">终态：按生命周期分通道</text>
+  <text x="568" y="106" font-family="monospace" font-size="9" fill="#1565c0">messages</text>
+  <text x="700" y="106" font-family="sans-serif" font-size="9" fill="#2e7d32">追加</text>
+  <text x="568" y="126" font-family="monospace" font-size="9" fill="#1565c0">input</text>
+  <text x="700" y="126" font-family="sans-serif" font-size="9" fill="#e65100">取新值</text>
+  <text x="568" y="146" font-family="monospace" font-size="9" fill="#1565c0">sys</text>
+  <text x="700" y="146" font-family="sans-serif" font-size="9" fill="#2e7d32">浅合并</text>
+  <text x="568" y="166" font-family="monospace" font-size="9" fill="#1565c0">title</text>
+  <text x="700" y="166" font-family="sans-serif" font-size="9" fill="#e65100">取新值</text>
+  <text x="568" y="186" font-family="monospace" font-size="9" fill="#1565c0">summary</text>
+  <text x="700" y="186" font-family="sans-serif" font-size="9" fill="#e65100">取新值</text>
+  <text x="568" y="206" font-family="monospace" font-size="9" fill="#1565c0">toolCall</text>
+  <text x="700" y="206" font-family="sans-serif" font-size="9" fill="#e65100">取新值</text>
+  <text x="568" y="232" font-family="sans-serif" font-size="10" fill="#2e7d32">✓ 标题不再污染对话</text>
+  <text x="568" y="250" font-family="sans-serif" font-size="10" fill="#2e7d32">✓ 摘要可独立压缩</text>
+  <text x="568" y="268" font-family="sans-serif" font-size="10" fill="#2e7d32">✓ 环境用投影不进状态</text>
+  <text x="568" y="288" font-family="sans-serif" font-size="9" font-style="italic" fill="#90a4ae">每格有自己的合并规则</text>
+
+  <line x1="258" y1="183" x2="290" y2="183" stroke="#546e7a" stroke-width="2" marker-end="url(#b6)"/>
+  <line x1="520" y1="183" x2="552" y2="183" stroke="#546e7a" stroke-width="2" marker-end="url(#b6)"/>
+
+  <text x="28" y="340" font-family="sans-serif" font-size="11" fill="#546e7a">判断一格数据该去哪：问它"是累积的、还是最新的、还是多来源拼的"。</text>
+  <text x="28" y="362" font-family="sans-serif" font-size="11" fill="#546e7a">累积→追加；最新→取新值；多来源→浅合并。标不出来的，说明还没想清楚。</text>
+  <text x="28" y="384" font-family="sans-serif" font-size="11" fill="#90a4ae">变化标注：红=污染；黄=缓解但未分类；绿=分类完成。</text>
+</svg>

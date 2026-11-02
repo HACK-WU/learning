@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="460" viewBox="0 0 880 460">
+  <defs>
+    <marker id="a5" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#455a64"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="880" height="460" fill="#fafafa"/>
+  <text x="34" y="38" font-family="sans-serif" font-size="18" font-weight="bold" fill="#263238">编译入口：76 行，一次判断，两条路</text>
+
+  <!-- 输入 -->
+  <rect x="34" y="180" width="150" height="70" rx="8" fill="#e8f5e9" stroke="#66bb6a"/>
+  <text x="50" y="206" font-family="sans-serif" font-size="12" font-weight="bold" fill="#2e7d32">一份定义</text>
+  <text x="50" y="226" font-family="sans-serif" font-size="10" fill="#37474f">团队 + 节点 + 连线</text>
+  <text x="50" y="242" font-family="sans-serif" font-size="10" fill="#78909c">nodes + connections</text>
+
+  <!-- 取定义 -->
+  <rect x="214" y="180" width="140" height="70" rx="8" fill="#ffffff" stroke="#90a4ae"/>
+  <text x="230" y="204" font-family="sans-serif" font-size="11" font-weight="bold" fill="#37474f">① 取定义</text>
+  <text x="230" y="222" font-family="sans-serif" font-size="9" fill="#546e7a">resolveExecutionWorkflow</text>
+  <text x="230" y="238" font-family="sans-serif" font-size="9" fill="#90a4ae">isDraft 决定读草稿/发布</text>
+
+  <!-- 判伙伴 -->
+  <polygon points="450,165 530,215 450,265 370,215" fill="#fff8e1" stroke="#ffca28" stroke-width="2"/>
+  <text x="418" y="208" font-family="sans-serif" font-size="11" font-weight="bold" fill="#f57f17">② 数伙伴</text>
+  <text x="404" y="226" font-family="sans-serif" font-size="10" fill="#37474f">partners &gt; 1 ?</text>
+
+  <!-- Swarm -->
+  <rect x="590" y="70" width="250" height="80" rx="8" fill="#f3e5f5" stroke="#ab47bc"/>
+  <text x="606" y="94" font-family="sans-serif" font-size="12" font-weight="bold" fill="#6a1b9a">③a Swarm（多 Agent 协作）</text>
+  <text x="606" y="114" font-family="sans-serif" font-size="10" fill="#37474f">群体协作产物</text>
+  <text x="606" y="132" font-family="sans-serif" font-size="9" fill="#78909c">双向委派关系才构成群体</text>
+
+  <!-- 子图 -->
+  <rect x="590" y="270" width="250" height="90" rx="8" fill="#e3f2fd" stroke="#42a5f5"/>
+  <text x="606" y="294" font-family="sans-serif" font-size="12" font-weight="bold" fill="#1565c0">③b 子图（单 Agent）</text>
+  <text x="606" y="314" font-family="sans-serif" font-size="10" fill="#37474f">委派子图产物</text>
+  <text x="606" y="332" font-family="sans-serif" font-size="9" fill="#78909c">2423 行装配细节在这里</text>
+  <text x="606" y="348" font-family="sans-serif" font-size="9" fill="#78909c">addNode → addEdge → compile</text>
+
+  <!-- 产物 -->
+  <rect x="590" y="390" width="250" height="52" rx="8" fill="#eceff1" stroke="#546e7a"/>
+  <text x="606" y="412" font-family="sans-serif" font-size="12" font-weight="bold" fill="#263238">④ CompiledStateGraph</text>
+  <text x="606" y="430" font-family="sans-serif" font-size="9" fill="#546e7a">checkpointer / interruptBefore / store</text>
+
+  <!-- 箭头 -->
+  <line x1="184" y1="215" x2="214" y2="215" stroke="#455a64" stroke-width="2" marker-end="url(#a5)"/>
+  <line x1="354" y1="215" x2="370" y2="215" stroke="#455a64" stroke-width="2" marker-end="url(#a5)"/>
+  <line x1="500" y1="185" x2="590" y2="115" stroke="#ab47bc" stroke-width="2" marker-end="url(#a5)"/>
+  <line x1="500" y1="245" x2="590" y2="305" stroke="#42a5f5" stroke-width="2" marker-end="url(#a5)"/>
+  <line x1="715" y1="150" x2="715" y2="270" stroke="#546e7a" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#a5)"/>
+  <line x1="715" y1="360" x2="715" y2="390" stroke="#546e7a" stroke-width="1.5" marker-end="url(#a5)"/>
+
+  <text x="34" y="330" font-family="sans-serif" font-size="11" font-weight="bold" fill="#455a64">为什么入口只有 76 行？</text>
+  <text x="34" y="350" font-family="sans-serif" font-size="11" fill="#546e7a">因为它只做"分派"。真正的装配细节沉在</text>
+  <text x="34" y="368" font-family="sans-serif" font-size="11" fill="#546e7a">subgraph.handler.ts（2423 行）与 swarm handler 里。</text>
+  <text x="34" y="392" font-family="sans-serif" font-size="11" fill="#546e7a">入口越薄越不容易改坏；细节越集中越容易测试。</text>
+  <text x="34" y="416" font-family="sans-serif" font-size="11" font-style="italic" fill="#90a4ae">注：平台无图级缓存，每次请求都走一遍这 76 行。</text>
+</svg>

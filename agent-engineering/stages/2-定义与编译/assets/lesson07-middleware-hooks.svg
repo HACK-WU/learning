@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="500" viewBox="0 0 880 500">
+  <defs>
+    <marker id="a7" markerWidth="9" markerHeight="9" refX="8" refY="2.5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,5 L8,2.5 z" fill="#455a64"/>
+    </marker>
+    <marker id="a7r" markerWidth="9" markerHeight="9" refX="1" refY="2.5" orient="auto" markerUnits="strokeWidth">
+      <path d="M9,0 L9,5 L1,2.5 z" fill="#ab47bc"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="880" height="500" fill="#fafafa"/>
+  <text x="30" y="36" font-family="sans-serif" font-size="18" font-weight="bold" fill="#263238">六个钩子：进正序，出反序（洋葱模型）</text>
+
+  <!-- 中央执行链 -->
+  <rect x="330" y="60" width="220" height="52" rx="8" fill="#e8f5e9" stroke="#66bb6a"/>
+  <text x="346" y="82" font-family="sans-serif" font-size="12" font-weight="bold" fill="#2e7d32">Agent 开始</text>
+  <text x="346" y="100" font-family="sans-serif" font-size="9" fill="#78909c">每请求 1 次</text>
+
+  <rect x="330" y="140" width="220" height="52" rx="8" fill="#e3f2fd" stroke="#42a5f5"/>
+  <text x="346" y="162" font-family="sans-serif" font-size="12" font-weight="bold" fill="#1565c0">模型节点</text>
+  <text x="346" y="180" font-family="sans-serif" font-size="9" fill="#78909c">callModel → toolCall</text>
+
+  <rect x="330" y="240" width="220" height="52" rx="8" fill="#fff3e0" stroke="#ffa726"/>
+  <text x="346" y="262" font-family="sans-serif" font-size="12" font-weight="bold" fill="#e65100">工具节点</text>
+  <text x="346" y="280" font-family="sans-serif" font-size="9" fill="#78909c">执行 → ToolMessage 回填</text>
+
+  <rect x="330" y="400" width="220" height="52" rx="8" fill="#eceff1" stroke="#546e7a"/>
+  <text x="346" y="422" font-family="sans-serif" font-size="12" font-weight="bold" fill="#263238">Agent 结束</text>
+  <text x="346" y="440" font-family="sans-serif" font-size="9" fill="#78909c">每请求 1 次</text>
+
+  <!-- 主链箭头 -->
+  <line x1="440" y1="112" x2="440" y2="140" stroke="#455a64" stroke-width="2" marker-end="url(#a7)"/>
+  <line x1="440" y1="192" x2="440" y2="240" stroke="#455a64" stroke-width="2" marker-end="url(#a7)"/>
+  <line x1="440" y1="292" x2="440" y2="330" stroke="#455a64" stroke-width="2" marker-end="url(#a7)"/>
+  <line x1="550" y1="330" x2="550" y2="160" stroke="#78909c" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#a7)"/>
+  <text x="562" y="250" font-family="sans-serif" font-size="9" fill="#78909c">有 toolCall 则循环</text>
+  <line x1="440" y1="360" x2="440" y2="400" stroke="#455a64" stroke-width="2" marker-end="url(#a7)"/>
+
+  <!-- 左侧钩子（before，正序） -->
+  <rect x="30" y="44" width="260" height="40" rx="6" fill="#f3e5f5" stroke="#ab47bc"/>
+  <text x="44" y="62" font-family="monospace" font-size="11" font-weight="bold" fill="#6a1b9a">beforeAgent</text>
+  <text x="44" y="77" font-family="sans-serif" font-size="9" fill="#546e7a">加载资源 / 注入系统提示</text>
+  <line x1="290" y1="76" x2="330" y2="80" stroke="#ab47bc" stroke-width="2" marker-end="url(#a7r)"/>
+
+  <rect x="30" y="124" width="260" height="40" rx="6" fill="#f3e5f5" stroke="#ab47bc"/>
+  <text x="44" y="142" font-family="monospace" font-size="11" font-weight="bold" fill="#6a1b9a">beforeModel</text>
+  <text x="44" y="157" font-family="sans-serif" font-size="9" fill="#546e7a">拼提示词 / 注入记忆 / 裁剪历史</text>
+  <line x1="290" y1="152" x2="330" y2="160" stroke="#ab47bc" stroke-width="2" marker-end="url(#a7r)"/>
+
+  <rect x="30" y="184" width="260" height="40" rx="6" fill="#f3e5f5" stroke="#ab47bc"/>
+  <text x="44" y="202" font-family="monospace" font-size="11" font-weight="bold" fill="#6a1b9a">wrapModelCall</text>
+  <text x="44" y="217" font-family="sans-serif" font-size="9" fill="#546e7a">重试 / 降级 / 录制 / 计费</text>
+  <line x1="290" y1="208" x2="330" y2="176" stroke="#ab47bc" stroke-width="2" marker-end="url(#a7r)"/>
+
+  <rect x="30" y="264" width="260" height="40" rx="6" fill="#f3e5f5" stroke="#ab47bc"/>
+  <text x="44" y="282" font-family="monospace" font-size="11" font-weight="bold" fill="#6a1b9a">wrapToolCall</text>
+  <text x="44" y="297" font-family="sans-serif" font-size="9" fill="#546e7a">权限 / 改参数 / 短路返回</text>
+  <line x1="290" y1="284" x2="330" y2="266" stroke="#ab47bc" stroke-width="2" marker-end="url(#a7r)"/>
+
+  <!-- 右侧钩子（after，反序） -->
+  <rect x="590" y="124" width="260" height="40" rx="6" fill="#fff8e1" stroke="#ffca28"/>
+  <text x="604" y="142" font-family="monospace" font-size="11" font-weight="bold" fill="#f57f17">afterModel（反序）</text>
+  <text x="604" y="157" font-family="sans-serif" font-size="9" fill="#546e7a">解析结构化输出 / 提取 toolCall</text>
+  <line x1="550" y1="166" x2="590" y2="150" stroke="#ffb300" stroke-width="2" marker-end="url(#a7)"/>
+
+  <rect x="590" y="400" width="260" height="40" rx="6" fill="#fff8e1" stroke="#ffca28"/>
+  <text x="604" y="418" font-family="monospace" font-size="11" font-weight="bold" fill="#f57f17">afterAgent（反序）</text>
+  <text x="604" y="433" font-family="sans-serif" font-size="9" fill="#546e7a">释放资源 / 落库总结 / 清理</text>
+  <line x1="550" y1="424" x2="590" y2="424" stroke="#ffb300" stroke-width="2" marker-end="url(#a7)"/>
+
+  <!-- 底部说明 -->
+  <rect x="30" y="330" width="260" height="140" rx="8" fill="#ffffff" stroke="#90a4ae"/>
+  <text x="46" y="352" font-family="sans-serif" font-size="11" font-weight="bold" fill="#263238">为什么 after 要反序</text>
+  <text x="46" y="374" font-family="sans-serif" font-size="10" fill="#546e7a">策略 A 开了连接，策略 B 依赖它。</text>
+  <text x="46" y="392" font-family="sans-serif" font-size="10" fill="#546e7a">退出时必须 B 先清理、A 后清理。</text>
+  <text x="46" y="414" font-family="sans-serif" font-size="10" fill="#546e7a">这是栈语义：后进先出。</text>
+  <text x="46" y="440" font-family="sans-serif" font-size="10" fill="#e65100">源码：[...hooks].reverse()</text>
+  <text x="46" y="460" font-family="sans-serif" font-size="9" fill="#90a4ae">正序会导致"B 还在用，A 已关"</text>
+</svg>

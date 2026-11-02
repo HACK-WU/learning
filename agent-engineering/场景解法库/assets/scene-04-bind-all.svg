@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="470" viewBox="0 0 900 470">
+  <defs>
+    <marker id="a04a" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#455a64"/>
+    </marker>
+    <marker id="a04r" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#c62828"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="470" fill="#fafafa"/>
+  <text x="28" y="34" font-family="sans-serif" font-size="18" font-weight="bold" fill="#263238">解法 A · 全塞给模型</text>
+  <text x="28" y="56" font-family="sans-serif" font-size="11" fill="#78909c">5 个工具时没问题 —— 50 个工具时，选择本身变成主要成本</text>
+
+  <rect x="40" y="86" width="170" height="90" rx="8" fill="#e3f2fd" stroke="#42a5f5"/>
+  <text x="56" y="110" font-family="sans-serif" font-size="11" font-weight="bold" fill="#1565c0">50 个工具</text>
+  <text x="56" y="132" font-family="sans-serif" font-size="9" fill="#546e7a">含 8 个名字极像的</text>
+  <text x="56" y="150" font-family="sans-serif" font-size="9" fill="#546e7a">"查订单/查订单详情"</text>
+  <text x="56" y="168" font-family="sans-serif" font-size="9" fill="#546e7a">schema 共 ~6k tokens</text>
+
+  <rect x="250" y="86" width="170" height="90" rx="8" fill="#fff8e1" stroke="#ffca28"/>
+  <text x="266" y="110" font-family="sans-serif" font-size="11" font-weight="bold" fill="#f57f17">全部绑定给模型</text>
+  <text x="266" y="132" font-family="monospace" font-size="9" fill="#37474f">bindTools(all50)</text>
+  <text x="266" y="152" font-family="sans-serif" font-size="9" fill="#546e7a">每轮都付这 6k tokens</text>
+
+  <rect x="460" y="86" width="180" height="90" rx="8" fill="#ffebee" stroke="#c62828"/>
+  <text x="476" y="110" font-family="sans-serif" font-size="11" font-weight="bold" fill="#c62828">选错率上升</text>
+  <text x="476" y="132" font-family="sans-serif" font-size="9" fill="#b71c1c">相似描述之间犹豫</text>
+  <text x="476" y="152" font-family="sans-serif" font-size="9" fill="#b71c1c">参数填给了错工具</text>
+  <text x="476" y="170" font-family="sans-serif" font-size="9" fill="#b71c1c">很难定位是哪一步错</text>
+
+  <rect x="680" y="86" width="180" height="90" rx="8" fill="#eceff1" stroke="#90a4ae"/>
+  <text x="696" y="110" font-family="sans-serif" font-size="11" font-weight="bold" fill="#455a64">可观测症状</text>
+  <text x="696" y="132" font-family="monospace" font-size="9" fill="#37474f">tool_calls 数量正常</text>
+  <text x="696" y="152" font-family="monospace" font-size="9" fill="#37474f">但 tool 名称不匹配意图</text>
+  <text x="696" y="172" font-family="sans-serif" font-size="9" fill="#546e7a">token 成本是 5 工具时的数倍</text>
+
+  <line x1="210" y1="131" x2="250" y2="131" stroke="#455a64" stroke-width="2" marker-end="url(#a04a)"/>
+  <line x1="420" y1="131" x2="460" y2="131" stroke="#455a64" stroke-width="2" marker-end="url(#a04a)"/>
+  <line x1="640" y1="131" x2="680" y2="131" stroke="#455a64" stroke-width="2" marker-end="url(#a04a)"/>
+
+  <rect x="40" y="212" width="820" height="72" rx="8" fill="#eceff1"/>
+  <text x="56" y="236" font-family="sans-serif" font-size="12" font-weight="bold" fill="#37474f">关键代码</text>
+  <text x="56" y="258" font-family="monospace" font-size="10" fill="#37474f">const model = baseModel.bindTools(tools);          // 50 个全绑</text>
+  <text x="56" y="276" font-family="monospace" font-size="10" fill="#37474f">// 每轮请求都把 50 份 schema 送上去，token 与选择难度同时线性增长</text>
+
+  <rect x="40" y="300" width="820" height="78" rx="8" fill="#ffebee" stroke="#c62828"/>
+  <text x="56" y="322" font-family="sans-serif" font-size="11" font-weight="bold" fill="#c62828">失效点</text>
+  <text x="56" y="342" font-family="sans-serif" font-size="10" fill="#b71c1c">① "能看"等于"能选"，暴露面完全等于能力面 —— 越权与误用同源；② 成本随工具数线性涨，且是每轮都付</text>
+  <text x="56" y="362" font-family="sans-serif" font-size="10" fill="#b71c1c">③ 50 个工具里真正会用的可能只有 5 个，剩下 45 个纯属噪音</text>
+</svg>

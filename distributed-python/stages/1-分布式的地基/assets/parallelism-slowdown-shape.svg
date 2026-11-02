@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 580" width="920" height="580" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="ax" markerWidth="8" markerHeight="8" refX="7" refY="2.5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,5 L7,2.5 z" fill="#9ca3af"/>
+    </marker>
+  </defs>
+
+  <rect width="920" height="580" fill="#ffffff"/>
+
+  <text x="460" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#111827">加人手的三种结局：加速、白干、倒挂</text>
+  <text x="460" y="52" text-anchor="middle" font-size="12" fill="#57606a">三张图各自一套坐标，横轴都是"人手"，纵轴都是"这件事的总耗时"——看曲线往哪走</text>
+
+  <rect x="24" y="72" width="286" height="300" rx="10" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.8"/>
+  <text x="167" y="98" text-anchor="middle" font-size="13" font-weight="700" fill="#14532d">① 加速：人多了真的快</text>
+  <text x="167" y="118" text-anchor="middle" font-size="10" fill="#166534">活儿在烧 CPU，彼此不相干</text>
+
+  <line x1="56" y1="306" x2="278" y2="306" stroke="#9ca3af" stroke-width="1.4" marker-end="url(#ax)"/>
+  <line x1="56" y1="306" x2="56" y2="146" stroke="#9ca3af" stroke-width="1.4" marker-end="url(#ax)"/>
+  <text x="167" y="326" text-anchor="middle" font-size="9.5" fill="#6b7280">人手 1 → 8</text>
+  <text x="46" y="226" text-anchor="middle" font-size="9.5" fill="#6b7280" transform="rotate(-90 46 226)">耗时</text>
+
+  <polyline points="64,164 100,204 140,244 184,274 232,290 268,296" fill="none" stroke="#16a34a" stroke-width="2.6"/>
+  <circle cx="64" cy="164" r="4" fill="#16a34a"/>
+  <circle cx="268" cy="296" r="4" fill="#16a34a"/>
+  <text x="78" y="158" font-size="9.5" fill="#15803d">0.38s</text>
+  <text x="228" y="316" font-size="9.5" font-weight="700" fill="#15803d">0.06s</text>
+
+  <rect x="56" y="340" width="222" height="20" rx="4" fill="#dcfce7"/>
+  <text x="167" y="354" text-anchor="middle" font-size="10" font-weight="700" fill="#14532d">8 份活儿：6.5 倍，接近线性</text>
+
+  <rect x="318" y="72" width="286" height="300" rx="10" fill="#fffbeb" stroke="#d97706" stroke-width="1.8"/>
+  <text x="461" y="98" text-anchor="middle" font-size="13" font-weight="700" fill="#78350f">② 白干：人多了没变快</text>
+  <text x="461" y="118" text-anchor="middle" font-size="10" fill="#9a3412">活儿也在烧 CPU，但全挤在一个进程里</text>
+
+  <line x1="350" y1="306" x2="572" y2="306" stroke="#9ca3af" stroke-width="1.4" marker-end="url(#ax)"/>
+  <line x1="350" y1="306" x2="350" y2="146" stroke="#9ca3af" stroke-width="1.4" marker-end="url(#ax)"/>
+  <text x="461" y="326" text-anchor="middle" font-size="9.5" fill="#6b7280">人手 1 → 8</text>
+  <text x="340" y="226" text-anchor="middle" font-size="9.5" fill="#6b7280" transform="rotate(-90 340 226)">耗时</text>
+
+  <polyline points="358,166 400,168 446,170 494,172 540,174 562,176" fill="none" stroke="#d97706" stroke-width="2.6" stroke-dasharray="7 4"/>
+  <circle cx="358" cy="166" r="4" fill="#d97706"/>
+  <circle cx="562" cy="176" r="4" fill="#d97706"/>
+  <text x="372" y="160" font-size="9.5" fill="#b45309">0.38s</text>
+  <text x="510" y="200" font-size="9.5" font-weight="700" fill="#b45309">0.38s</text>
+  <text x="358" y="228" font-size="9.5" fill="#9a3412">几乎是条水平线</text>
+
+  <rect x="350" y="340" width="222" height="20" rx="4" fill="#fef3c7"/>
+  <text x="461" y="354" text-anchor="middle" font-size="10" font-weight="700" fill="#78350f">8 份活儿：1.1 倍，白忙</text>
+
+  <rect x="612" y="72" width="284" height="300" rx="10" fill="#fef2f2" stroke="#dc2626" stroke-width="1.8"/>
+  <text x="754" y="98" text-anchor="middle" font-size="13" font-weight="700" fill="#991b1b">③ 倒挂：人越多越糟</text>
+  <text x="754" y="118" text-anchor="middle" font-size="10" fill="#b91c1c">根本不卡 CPU，卡在对面能接多少</text>
+
+  <line x1="644" y1="306" x2="864" y2="306" stroke="#9ca3af" stroke-width="1.4" marker-end="url(#ax)"/>
+  <line x1="644" y1="306" x2="644" y2="146" stroke="#9ca3af" stroke-width="1.4" marker-end="url(#ax)"/>
+  <text x="754" y="326" text-anchor="middle" font-size="9.5" fill="#6b7280">人手 4 → 128</text>
+  <text x="634" y="226" text-anchor="middle" font-size="9.5" fill="#6b7280" transform="rotate(-90 634 226)">总耗时</text>
+
+  <polyline points="652,284 700,284 748,285 796,286 844,288" fill="none" stroke="#dc2626" stroke-width="2.6"/>
+  <circle cx="652" cy="284" r="4" fill="#dc2626"/>
+  <circle cx="844" cy="288" r="4" fill="#dc2626"/>
+  <text x="664" y="278" font-size="9.5" fill="#b91c1c">1.01s</text>
+  <text x="792" y="280" font-size="9.5" font-weight="700" fill="#b91c1c">1.02s</text>
+
+  <polyline points="652,266 700,250 748,232 796,214 844,196" fill="none" stroke="#b91c1c" stroke-width="2.2" stroke-dasharray="5 4"/>
+  <text x="700" y="212" font-size="9.5" fill="#b91c1c">单个人等得越来越久</text>
+  <text x="790" y="234" font-size="9.5" font-weight="700" fill="#b91c1c">20ms → 441ms</text>
+
+  <rect x="644" y="340" width="222" height="20" rx="4" fill="#fee2e2"/>
+  <text x="755" y="354" text-anchor="middle" font-size="10" font-weight="700" fill="#991b1b">吞吐 198 req/s 一动不动</text>
+
+  <rect x="24" y="392" width="872" height="80" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.6"/>
+  <text x="44" y="416" font-size="12" font-weight="700" fill="#1e3a8a">三种结局，三个不同的病根</text>
+  <rect x="44" y="428" width="13" height="13" rx="3" fill="#16a34a"/>
+  <text x="65" y="439" font-size="10.5" font-weight="700" fill="#1f2937">加速</text>
+  <text x="107" y="439" font-size="10.5" fill="#1f2937">卡 CPU，且各份活儿互不依赖 → 分给多个核，真变快</text>
+  <rect x="44" y="448" width="13" height="13" rx="3" fill="#d97706"/>
+  <text x="65" y="459" font-size="10.5" font-weight="700" fill="#1f2937">白干</text>
+  <text x="107" y="459" font-size="10.5" fill="#1f2937">卡 CPU，但都挤在一个进程里 → 换人快，手没多出来</text>
+
+  <rect x="520" y="428" width="13" height="13" rx="3" fill="#dc2626"/>
+  <text x="541" y="439" font-size="10.5" font-weight="700" fill="#1f2937">倒挂</text>
+  <text x="583" y="439" font-size="10.5" fill="#1f2937">不卡 CPU，卡在对面能接多少 → 加人只是加排队</text>
+  <text x="520" y="460" font-size="10" fill="#6b7280">判据不在代码长短，在"这件事到底卡在哪一道"。</text>
+
+  <rect x="24" y="488" width="872" height="76" rx="8" fill="#fffbeb" stroke="#d97706" stroke-width="1.5"/>
+  <text x="44" y="512" font-size="12" font-weight="700" fill="#78350f">先量一件事：这段时间里，机器到底在干活还是在等</text>
+  <text x="44" y="533" font-size="10.5" fill="#1f2937">把「墙上时钟走过的时间」和「CPU 真正被占用累加的时间」放在一起比：前者是感觉，后者是体力。</text>
+  <text x="44" y="552" font-size="10" font-weight="700" fill="#9a3412">实测比值：串行 1.00x ｜ 8 线程 0.98x ｜ 8 进程 7.08x ｜ 100 次纯等待 0.00x</text>
+</svg>

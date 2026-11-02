@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="470" viewBox="0 0 900 470">
+  <defs>
+    <marker id="a13" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#455a64"/>
+    </marker>
+    <marker id="a13w" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#ef6c00"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="470" fill="#fafafa"/>
+  <text x="30" y="36" font-family="sans-serif" font-size="18" font-weight="bold" fill="#263238">成本与上下文：两种会无限增长的资源</text>
+
+  <!-- 上半：上下文 -->
+  <rect x="30" y="58" width="840" height="182" rx="9" fill="#e3f2fd" stroke="#42a5f5"/>
+  <text x="46" y="82" font-family="sans-serif" font-size="13" font-weight="bold" fill="#1565c0">内存侧：消息链只会变长</text>
+
+  <rect x="46" y="94" width="120" height="36" rx="4" fill="#c8e6c9" stroke="#66bb6a"/>
+  <text x="58" y="117" font-family="sans-serif" font-size="10" fill="#1b5e20">系统提示（永不压）</text>
+
+  <rect x="174" y="94" width="120" height="36" rx="4" fill="#ffffff" stroke="#90caf9"/>
+  <text x="186" y="117" font-family="sans-serif" font-size="10" fill="#37474f">早期轮次 → 摘要</text>
+
+  <rect x="302" y="94" width="120" height="36" rx="4" fill="#ffffff" stroke="#90caf9"/>
+  <text x="314" y="117" font-family="sans-serif" font-size="10" fill="#37474f">中期轮次 → 丢弃</text>
+
+  <rect x="430" y="94" width="120" height="36" rx="4" fill="#fff8e1" stroke="#ffca28"/>
+  <text x="442" y="117" font-family="sans-serif" font-size="10" fill="#e65100">最近 K 轮（原样）</text>
+
+  <rect x="558" y="94" width="90" height="36" rx="4" fill="#ffffff" stroke="#90caf9"/>
+  <text x="570" y="117" font-family="sans-serif" font-size="10" fill="#37474f">新消息…</text>
+
+  <text x="664" y="112" font-family="sans-serif" font-size="10" fill="#1565c0">长度 → 线性增长</text>
+  <text x="664" y="126" font-family="sans-serif" font-size="9" font-style="italic" fill="#546e7a">窗口是硬上限</text>
+
+  <rect x="46" y="146" width="808" height="76" rx="5" fill="#ffffff" stroke="#64b5f6"/>
+  <text x="60" y="166" font-family="sans-serif" font-size="10" fill="#0d47a1">触发：输入 token 超窗口 70%（按占比，不按轮次）</text>
+  <text x="60" y="184" font-family="sans-serif" font-size="10" fill="#0d47a1">保护：系统提示 + 最近 K 轮 + 工具调用与结果必须配对（孤儿 tool 退回待压区）</text>
+  <text x="60" y="202" font-family="sans-serif" font-size="10" fill="#0d47a1">留痕：before / after / strategy / dropped_message_ids —— 丢了什么必须可查</text>
+  <text x="60" y="218" font-family="sans-serif" font-size="9" font-style="italic" fill="#8d6e63">压不动时选择不压：宁可报错，也不产出结构非法的历史</text>
+
+  <!-- 下半：沙箱 -->
+  <rect x="30" y="254" width="840" height="150" rx="9" fill="#e8f5e9" stroke="#66bb6a"/>
+  <text x="46" y="278" font-family="sans-serif" font-size="13" font-weight="bold" fill="#2e7d32">磁盘侧：产物只会变多</text>
+
+  <rect x="46" y="290" width="180" height="52" rx="4" fill="#ffffff" stroke="#a5d6a7"/>
+  <text x="58" y="310" font-family="sans-serif" font-size="10" fill="#1b5e20">沙箱边界（三层）</text>
+  <text x="58" y="326" font-family="monospace" font-size="9" fill="#546e7a">进程 / 路径 / 配额</text>
+
+  <rect x="242" y="290" width="180" height="52" rx="4" fill="#ffffff" stroke="#a5d6a7"/>
+  <text x="254" y="310" font-family="sans-serif" font-size="10" fill="#1b5e20">读写分权</text>
+  <text x="254" y="326" font-family="monospace" font-size="9" fill="#546e7a">read_roots / write_roots</text>
+
+  <rect x="438" y="290" width="180" height="52" rx="4" fill="#ffffff" stroke="#a5d6a7"/>
+  <text x="450" y="310" font-family="sans-serif" font-size="10" fill="#1b5e20">路径校验</text>
+  <text x="450" y="326" font-family="monospace" font-size="9" fill="#546e7a">realpath + 补分隔符</text>
+
+  <rect x="634" y="290" width="220" height="52" rx="4" fill="#fff8e1" stroke="#ffca28"/>
+  <text x="646" y="310" font-family="sans-serif" font-size="10" fill="#e65100">回收三时机</text>
+  <text x="646" y="326" font-family="monospace" font-size="9" fill="#8d6e63">结束 / 取消 / 启动清扫</text>
+
+  <line x1="226" y1="316" x2="242" y2="316" stroke="#455a64" stroke-width="1.5" marker-end="url(#a13)"/>
+  <line x1="422" y1="316" x2="438" y2="316" stroke="#455a64" stroke-width="1.5" marker-end="url(#a13)"/>
+  <line x1="618" y1="316" x2="634" y2="316" stroke="#ef6c00" stroke-width="1.5" marker-end="url(#a13w)"/>
+
+  <text x="46" y="366" font-family="sans-serif" font-size="10" fill="#2e7d32">杀手场景：进程被 kill -9 / OOM —— 会话结束与取消回调都不会执行</text>
+  <text x="46" y="384" font-family="sans-serif" font-size="10" fill="#2e7d32">唯一兜底：下次启动时按 TTL 扫一遍工作区（多副本并发清扫属预期内，需容忍）</text>
+
+  <!-- 底部判据 -->
+  <rect x="30" y="416" width="840" height="40" rx="6" fill="#f3e5f5" stroke="#ab47bc"/>
+  <text x="46" y="441" font-family="sans-serif" font-size="11" fill="#6a1b9a">共同前提：任何随使用量增长的东西，都必须有明确上界 + 确定的回收路径；否则不是"会不会出问题"，而是"多久出问题"</text>
+</svg>

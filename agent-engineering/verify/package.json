@@ -1,0 +1,21 @@
+{
+  "name": "agent-engineering-verify",
+  "private": true,
+  "type": "module",
+  "description": "课程 4.1 机制验证脚本集：脚本输出即课文实测留痕的依据",
+  "scripts": {
+    "check": "tsc --noEmit",
+    "core": "tsx verify-core.ts",
+    "run": "tsx verify-run.ts"
+  },
+  "dependencies": {
+    "@langchain/core": "^1.2.20",
+    "@langchain/langgraph": "^1.6.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^22.18.0",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  }
+}

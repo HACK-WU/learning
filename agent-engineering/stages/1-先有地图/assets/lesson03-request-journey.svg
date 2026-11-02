@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="560" viewBox="0 0 880 560">
+  <defs>
+    <marker id="m3" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#455a64"/>
+    </marker>
+  </defs>
+
+  <!-- 泳道分区 -->
+  <rect x="0" y="0" width="880" height="560" fill="#fafafa"/>
+
+  <!-- 泳道 1: 接入层 -->
+  <rect x="0" y="40" width="180" height="500" fill="#eceff1"/>
+  <text x="18" y="62" font-family="sans-serif" font-size="13" font-weight="bold" fill="#455a64">接入层</text>
+
+  <!-- 泳道 2: 编译面 -->
+  <rect x="180" y="40" width="180" height="500" fill="#fff3e0"/>
+  <text x="198" y="62" font-family="sans-serif" font-size="13" font-weight="bold" fill="#ef6c00">编译面</text>
+
+  <!-- 泳道 3: 执行面 -->
+  <rect x="360" y="40" width="260" height="500" fill="#e3f2fd"/>
+  <text x="378" y="62" font-family="sans-serif" font-size="13" font-weight="bold" fill="#1565c0">执行面</text>
+
+  <!-- 泳道 4: 账本面 -->
+  <rect x="620" y="40" width="260" height="500" fill="#f3e5f5"/>
+  <text x="638" y="62" font-family="sans-serif" font-size="13" font-weight="bold" fill="#6a1b9a">账本面</text>
+
+  <text x="18" y="92" font-family="sans-serif" font-size="12" font-weight="bold" fill="#455a64">① 用户发送</text>
+  <rect x="18" y="100" width="144" height="46" rx="6" fill="#ffffff" stroke="#90a4ae"/>
+  <text x="34" y="124" font-family="sans-serif" font-size="11" fill="#37474f">"查退款订单"</text>
+  <text x="34" y="140" font-family="sans-serif" font-size="11" fill="#90a4ae">(HTTP POST)</text>
+
+  <text x="18" y="182" font-family="sans-serif" font-size="12" font-weight="bold" fill="#455a64">② 控制器</text>
+  <rect x="18" y="190" width="144" height="46" rx="6" fill="#ffffff" stroke="#90a4ae"/>
+  <text x="34" y="210" font-family="sans-serif" font-size="11" fill="#37474f">chat.controller.ts</text>
+  <text x="34" y="227" font-family="sans-serif" font-size="11" fill="#90a4ae">声明星流式 SSE</text>
+
+  <text x="18" y="272" font-family="sans-serif" font-size="12" font-weight="bold" fill="#455a64">③ CQRS 分发</text>
+  <rect x="18" y="280" width="144" height="46" rx="6" fill="#ffffff" stroke="#90a4ae"/>
+  <text x="34" y="300" font-family="sans-serif" font-size="11" fill="#37474f">CommandBus</text>
+  <text x="34" y="317" font-family="sans-serif" font-size="11" fill="#90a4ae">InvokeCommand</text>
+
+  <text x="198" y="150" font-family="sans-serif" font-size="12" font-weight="bold" fill="#ef6c00">④ 编译</text>
+  <rect x="198" y="158" width="150" height="52" rx="6" fill="#ffffff" stroke="#ffa726"/>
+  <text x="214" y="180" font-family="sans-serif" font-size="11" fill="#37474f">CompileGraphCommand</text>
+  <text x="214" y="197" font-family="sans-serif" font-size="11" fill="#90a4ae">每请求重编译 →</text>
+
+  <text x="378" y="150" font-family="sans-serif" font-size="12" font-weight="bold" fill="#1565c0">⑤ 驱动已编译图</text>
+  <rect x="378" y="158" width="220" height="52" rx="6" fill="#ffffff" stroke="#42a5f5"/>
+  <text x="394" y="180" font-family="sans-serif" font-size="11" fill="#37474f">CompiledStateGraph.invoke</text>
+  <text x="394" y="197" font-family="sans-serif" font-size="11" fill="#90a4ae">在图里跑（见下方细节）</text>
+
+  <text x="378" y="246" font-family="sans-serif" font-size="12" font-weight="bold" fill="#1565c0">图内循环（⑥⑦⑧）</text>
+  <rect x="378" y="254" width="220" height="120" rx="6" fill="#ffffff" stroke="#90a4ae"/>
+
+  <rect x="394" y="266" width="100" height="42" rx="5" fill="#e8f5e9" stroke="#66bb6a"/>
+  <text x="404" y="286" font-family="sans-serif" font-size="10" fill="#2e7d32">⑦ 模型节点</text>
+  <text x="404" y="302" font-family="sans-serif" font-size="9" fill="#78909c">产出 toolCall</text>
+
+  <rect x="500" y="266" width="88" height="42" rx="5" fill="#fff8e1" stroke="#ffca28"/>
+  <text x="510" y="286" font-family="sans-serif" font-size="10" fill="#f57f17">⑧ 条件边</text>
+  <text x="510" y="302" font-family="sans-serif" font-size="9" fill="#90a400">调工具? 回答?</text>
+
+  <rect x="394" y="320" width="100" height="42" rx="5" fill="#fff3e0" stroke="#ffa726"/>
+  <text x="404" y="340" font-family="sans-serif" font-size="10" fill="#e65100">⑥ 工具节点</text>
+  <text x="404" y="356" font-family="sans-serif" font-size="9" fill="#90a4ae">回填 ToolMessage→模型</text>
+
+  <line x1="500" y1="287" x2="500" y2="330" stroke="#ffa726" stroke-width="1.5" marker-end="url(#m3)"/>
+  <line x1="494" y1="309" x2="494" y2="320" stroke="#42a5f5" stroke-width="1.5" marker-end="url(#m3)"/>
+
+  <text x="378" y="410" font-family="sans-serif" font-size="12" font-weight="bold" fill="#1565c0">⑨ 流式回传</text>
+  <rect x="378" y="418" width="220" height="52" rx="6" fill="#ffffff" stroke="#42a5f5"/>
+  <text x="394" y="440" font-family="sans-serif" font-size="11" fill="#37474f">subscriber.next → SSE 逐字</text>
+  <text x="394" y="457" font-family="sans-serif" font-size="11" fill="#90a4ae">dispatchCustomEvent 事件</text>
+
+  <text x="638" y="150" font-family="sans-serif" font-size="12" font-weight="bold" fill="#6a1b9a">⑩ 结束时记账</text>
+  <rect x="638" y="158" width="224" height="52" rx="6" fill="#ffffff" stroke="#ab47bc"/>
+  <text x="654" y="180" font-family="sans-serif" font-size="11" fill="#37474f">ExecutionUpsert</text>
+  <text x="654" y="197" font-family="sans-serif" font-size="11" fill="#90a4ae">SUCCESS / ERROR 结案</text>
+
+  <text x="638" y="246" font-family="sans-serif" font-size="12" font-weight="bold" fill="#6a1b9a">⑪ 用量采集</text>
+  <rect x="638" y="254" width="224" height="52" rx="6" fill="#ffffff" stroke="#ab47bc"/>
+  <text x="654" y="276" font-family="sans-serif" font-size="11" fill="#37474f">token 用量叠加到记录</text>
+  <text x="654" y="293" font-family="sans-serif" font-size="11" fill="#90a4ae">支撑计费 / 审计 / 可观测</text>
+
+  <!-- 主流程箭头 -->
+  <line x1="162" y1="214" x2="198" y2="184" stroke="#455a64" stroke-width="2" marker-end="url(#m3)"/>
+  <line x1="348" y1="184" x2="378" y2="184" stroke="#455a64" stroke-width="2" marker-end="url(#m3)"/>
+  <line x1="620" y1="184" x2="638" y2="184" stroke="#455a64" stroke-width="2" marker-end="url(#m3)"/>
+  <line x1="598" y1="444" x2="638" y2="184" stroke="#455a64" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#m3)"/>
+  <line x1="598" y1="280" x2="638" y2="280" stroke="#455a64" stroke-width="2" marker-end="url(#m3)"/>
+
+  <text x="30" y="500" font-family="sans-serif" font-size="11" font-weight="bold" fill="#455a64">终态回扣：</text>
+  <text x="30" y="518" font-family="sans-serif" font-size="11" fill="#546e7a">请求从接入层进入，被翻译成图（编译面），在图上绕圈直到产出（执行面），</text>
+  <text x="30" y="536" font-family="sans-serif" font-size="11" fill="#546e7a">逐字流式返回，结束时在账本面结案并记录用量——四层完整走了一遍。</text>
+</svg>

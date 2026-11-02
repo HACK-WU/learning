@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="480" viewBox="0 0 900 480">
+  <defs>
+    <marker id="a04b" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#455a64"/>
+    </marker>
+    <marker id="a04r2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#c62828"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="900" height="480" fill="#fafafa"/>
+  <text x="28" y="34" font-family="sans-serif" font-size="18" font-weight="bold" fill="#263238">解法 B · 两阶段选择：先选工具集，再在集内选具体工具</text>
+  <text x="28" y="56" font-family="sans-serif" font-size="11" fill="#78909c">把"选 50 个里的 1 个"降级成"选 5 个组里的 1 组 + 组内 5 选 1"</text>
+
+  <rect x="30" y="86" width="150" height="76" rx="8" fill="#e3f2fd" stroke="#42a5f5"/>
+  <text x="46" y="110" font-family="sans-serif" font-size="11" font-weight="bold" fill="#1565c0">用户意图</text>
+  <text x="46" y="132" font-family="sans-serif" font-size="9" fill="#546e7a">"查一下上周的订单"</text>
+
+  <rect x="216" y="86" width="180" height="76" rx="8" fill="#e8f5e9" stroke="#66bb6a"/>
+  <text x="232" y="110" font-family="sans-serif" font-size="11" font-weight="bold" fill="#2e7d32">① 选工具集</text>
+  <text x="232" y="132" font-family="monospace" font-size="9" fill="#37474f">10 组选 1 组</text>
+  <text x="232" y="150" font-family="sans-serif" font-size="9" fill="#546e7a">组描述 = 一句话</text>
+
+  <rect x="432" y="86" width="180" height="76" rx="8" fill="#fff8e1" stroke="#ffca28"/>
+  <text x="448" y="110" font-family="sans-serif" font-size="11" font-weight="bold" fill="#f57f17">② 组内选工具</text>
+  <text x="448" y="132" font-family="monospace" font-size="9" fill="#37474f">5 选 1</text>
+  <text x="448" y="150" font-family="sans-serif" font-size="9" fill="#546e7a">只绑这 5 个的 schema</text>
+
+  <rect x="648" y="86" width="216" height="76" rx="8" fill="#f3e5f5" stroke="#ab47bc"/>
+  <text x="664" y="110" font-family="sans-serif" font-size="11" font-weight="bold" fill="#6a1b9a">③ 执行</text>
+  <text x="664" y="132" font-family="sans-serif" font-size="9" fill="#546e7a">token 从 6k 降到 ~1k</text>
+  <text x="664" y="150" font-family="sans-serif" font-size="9" fill="#546e7a">选择难度从 50 降到 5</text>
+
+  <line x1="180" y1="124" x2="216" y2="124" stroke="#455a64" stroke-width="2" marker-end="url(#a04b)"/>
+  <line x1="396" y1="124" x2="432" y2="124" stroke="#455a64" stroke-width="2" marker-end="url(#a04b)"/>
+  <line x1="612" y1="124" x2="648" y2="124" stroke="#455a64" stroke-width="2" marker-end="url(#a04b)"/>
+
+  <rect x="30" y="186" width="834" height="34" rx="6" fill="#eceff1"/>
+  <text x="46" y="208" font-family="sans-serif" font-size="10" fill="#37474f">分组维度可选：按业务域（订单/物流/售后）、按副作用（只读/写/危险）、按数据源（内部/MCP/OpenAPI）</text>
+
+  <rect x="30" y="240" width="834" height="96" rx="8" fill="#eceff1"/>
+  <text x="46" y="264" font-family="sans-serif" font-size="12" font-weight="bold" fill="#37474f">关键代码</text>
+  <text x="46" y="286" font-family="monospace" font-size="10" fill="#37474f">const group = await pickGroup(intent, groups);              // 第一次：只给组描述</text>
+  <text x="46" y="304" font-family="monospace" font-size="10" fill="#37474f">const tools = toolsByGroup[group].slice(0, 5);              // 组内裁剪到 5</text>
+  <text x="46" y="322" font-family="monospace" font-size="10" fill="#37474f">const model = baseModel.bindTools(tools);                   // 只绑这 5 个</text>
+
+  <rect x="30" y="356" width="834" height="102" rx="8" fill="#ffebee" stroke="#c62828"/>
+  <text x="46" y="378" font-family="sans-serif" font-size="11" font-weight="bold" fill="#c62828">失效点</text>
+  <text x="46" y="398" font-family="sans-serif" font-size="10" fill="#b71c1c">① 意图跨组（"查订单还要退款"）→ 一次只能进一组，得靠多轮或允许"选两组"</text>
+  <text x="46" y="418" font-family="sans-serif" font-size="10" fill="#b71c1c">② 分组本身需要维护：新工具忘了归类 → 永远选不到（静默失效，最难查）</text>
+  <text x="46" y="438" font-family="sans-serif" font-size="10" fill="#b71c1c">③ 多一次模型往返 → 延迟上升；短任务上这笔开销可能不划算（判据：工具数 &gt; 15 再考虑）</text>
+  <text x="46" y="456" font-family="sans-serif" font-size="10" fill="#546e7a">适用：工具数 15-200、分组边界清晰。代价：多一跳延迟 + 分组维护成本</text>
+</svg>

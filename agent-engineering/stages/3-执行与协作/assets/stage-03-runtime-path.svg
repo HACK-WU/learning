@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="530" viewBox="0 0 880 530">
+  <defs>
+    <marker id="a3" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#546e7a"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="880" height="530" fill="#fafafa"/>
+  <text x="26" y="36" font-family="sans-serif" font-size="18" font-weight="bold" fill="#263238">阶段 3 路径：从内到外四层展开</text>
+
+  <rect x="26" y="56" width="800" height="72" rx="8" fill="#e8f5e9" stroke="#66bb6a"/>
+  <text x="42" y="80" font-family="sans-serif" font-size="12" font-weight="bold" fill="#2e7d32">课 8 · 单个 Agent 内部怎么跑</text>
+  <text x="42" y="102" font-family="sans-serif" font-size="11" fill="#37474f">模型调用准备（工具选择先于绑定）→ 工具节点 → 工具从哪来（四源统一）→ 授权与暴露分离</text>
+  <text x="42" y="120" font-family="sans-serif" font-size="11" fill="#78909c">核心问题：谁绑定工具、谁执行工具、谁负责授权——三件事必须分开</text>
+
+  <line x1="426" y1="128" x2="426" y2="144" stroke="#546e7a" stroke-width="2" marker-end="url(#a3)"/>
+
+  <rect x="26" y="150" width="800" height="72" rx="8" fill="#e3f2fd" stroke="#42a5f5"/>
+  <text x="42" y="174" font-family="sans-serif" font-size="12" font-weight="bold" fill="#1565c0">课 9 · 多个 Agent 之间怎么配合</text>
+  <text x="42" y="196" font-family="sans-serif" font-size="11" fill="#37474f">子图委派（要结果回传）/ Swarm 交接（要控制权转移）/ 已发布 Agent 作协作者（跨版本可复现）</text>
+  <text x="42" y="214" font-family="sans-serif" font-size="11" fill="#78909c">核心问题：三种形态不是复杂度递进，是控制流语义不同——选错代价在后期才显现</text>
+
+  <line x1="426" y1="222" x2="426" y2="238" stroke="#546e7a" stroke-width="2" marker-end="url(#a3)"/>
+
+  <rect x="26" y="244" width="800" height="72" rx="8" fill="#fff3e0" stroke="#ffa726"/>
+  <text x="42" y="268" font-family="sans-serif" font-size="12" font-weight="bold" fill="#ef6c00">课 10 · 人不在这儿的时候怎么办</text>
+  <text x="42" y="290" font-family="sans-serif" font-size="11" fill="#37474f">checkpoint（thread 命名空间）→ interrupt（抛出与恢复）→ 挂起不占 worker / 不维持轮询循环</text>
+  <text x="42" y="308" font-family="sans-serif" font-size="11" fill="#78909c">核心问题：轮询等审批是 demo 做法；生产必须挂起，代价是必须有持久化 checkpoint 存储</text>
+
+  <line x1="426" y1="316" x2="426" y2="332" stroke="#546e7a" stroke-width="2" marker-end="url(#a3)"/>
+
+  <rect x="26" y="338" width="800" height="72" rx="8" fill="#f3e5f5" stroke="#ab47bc"/>
+  <text x="42" y="362" font-family="sans-serif" font-size="12" font-weight="bold" fill="#6a1b9a">课 12 · 能力不够用时怎么向外借</text>
+  <text x="42" y="384" font-family="sans-serif" font-size="11" fill="#37474f">协议而非 SDK → 能力发现与降级 → elicitation 反向请求 → 长任务与工具过滤</text>
+  <text x="42" y="402" font-family="sans-serif" font-size="11" fill="#78909c">核心问题：外部服务端不可控，防御责任转移到消费方——半坏着能用、工具面要裁剪</text>
+
+  <rect x="26" y="428" width="800" height="46" rx="8" fill="#ffffff" stroke="#cfd8dc"/>
+  <text x="42" y="448" font-family="sans-serif" font-size="11" font-weight="bold" fill="#455a64">课 11 · 横向收口（贯穿课 8–12）</text>
+  <text x="42" y="466" font-family="sans-serif" font-size="11" fill="#546e7a">这些跑动怎么被记账、管控、限预算（Invocation 状态机 / 幂等 / 账本三面 / 用量与预算）</text>
+
+  <text x="26" y="504" font-family="sans-serif" font-size="11" fill="#90a4ae">读图：课 8 到课 12 是逐层向外（自己家 → 多 Agent → 等人 → 院墙外），课 11 则横切前四课，把发生的事记进账本。</text>
+</svg>
