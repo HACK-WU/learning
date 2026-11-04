@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="620" viewBox="0 0 940 620" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="s1a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#64748b"/></marker>
+    <marker id="s1r" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#dc2626"/></marker>
+    <marker id="s1g" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#16a34a"/></marker>
+  </defs>
+  <rect x="0" y="0" width="940" height="620" fill="#ffffff"/>
+  <text x="470" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#0f172a">演进第 1 步：地址写死在代码里</text>
+  <text x="470" y="58" text-anchor="middle" font-size="12" fill="#64748b">服务实例有 5 个，客户端代码里只有一个常量 —— 这两件事从一开始就不该对上</text>
+
+  <!-- 客户端代码 -->
+  <rect x="30" y="88" width="300" height="126" rx="10" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.8"/>
+  <text x="50" y="112" font-size="12.5" font-weight="bold" fill="#334155">下单服务的客户端代码</text>
+  <rect x="46" y="124" width="268" height="72" rx="5" fill="#0f172a"/>
+  <text x="58" y="145" font-size="11.5" fill="#94a3b8" font-family="monospace">SERVER_PORT</text>
+  <text x="152" y="145" font-size="11.5" fill="#f8fafc" font-family="monospace">= 33077</text>
+  <text x="58" y="166" font-size="11" fill="#64748b" font-family="monospace"># 从配置文件抄来的</text>
+  <text x="58" y="186" font-size="11" fill="#64748b" font-family="monospace"># 上线时填一次，之后没人动</text>
+  <text x="50" y="210" font-size="11" fill="#b91c1c">这个常量决定了「永远只有一个人在干活」</text>
+
+  <!-- 实例列表 -->
+  <text x="380" y="106" font-size="12.5" font-weight="bold" fill="#334155">集群里实际有 5 个实例</text>
+
+  <rect x="380" y="118" width="150" height="44" rx="7" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="455" y="138" text-anchor="middle" font-size="12" font-weight="bold" fill="#15803d">n1 : 33077</text>
+  <text x="455" y="154" text-anchor="middle" font-size="10" fill="#15803d">被写死的就是它</text>
+
+  <rect x="546" y="118" width="150" height="44" rx="7" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="621" y="138" text-anchor="middle" font-size="12" fill="#64748b">n2 : 41275</text>
+  <text x="621" y="154" text-anchor="middle" font-size="10" fill="#94a3b8">零流量</text>
+
+  <rect x="712" y="118" width="150" height="44" rx="7" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="787" y="138" text-anchor="middle" font-size="12" fill="#64748b">n3 : 34711</text>
+  <text x="787" y="154" text-anchor="middle" font-size="10" fill="#94a3b8">零流量</text>
+
+  <rect x="546" y="170" width="150" height="44" rx="7" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="621" y="190" text-anchor="middle" font-size="12" fill="#64748b">n4 : 34831</text>
+  <text x="621" y="206" text-anchor="middle" font-size="10" fill="#94a3b8">扩容新起，零流量</text>
+
+  <rect x="712" y="170" width="150" height="44" rx="7" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="787" y="190" text-anchor="middle" font-size="12" fill="#64748b">n5 : 40937</text>
+  <text x="787" y="206" text-anchor="middle" font-size="10" fill="#94a3b8">扩容新起，零流量</text>
+
+  <line x1="332" y1="140" x2="374" y2="140" stroke="#16a34a" stroke-width="2.5" marker-end="url(#s1g)"/>
+  <text x="353" y="130" text-anchor="middle" font-size="10" fill="#15803d">30/30</text>
+
+  <text x="380" y="234" font-size="11" fill="#b91c1c">5 个实例 × 各能干 1 份活 = 集群容量 5 份，但客户端只认 1 个，实际只用掉 20.0%</text>
+
+  <!-- 四幕实测 -->
+  <rect x="30" y="256" width="880" height="196" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="2"/>
+  <text x="52" y="282" font-size="14.5" font-weight="bold" fill="#b91c1c">同一份代码，四个场景本机实测（每幕 30 次调用）</text>
+
+  <text x="52" y="310" font-size="12" fill="#7f1d1d">幕 1　3 个实例都健康</text>
+  <text x="300" y="310" font-size="12" font-weight="bold" fill="#dc2626">30/30 成功，但 30 次全打在 n1</text>
+  <text x="620" y="310" font-size="11.5" fill="#7f1d1d">→ 利用率 33.3%，n2/n3 白占资源</text>
+
+  <text x="52" y="338" font-size="12" fill="#7f1d1d">幕 2　扩容到 5 个</text>
+  <text x="300" y="338" font-size="12" font-weight="bold" fill="#dc2626">30/30 成功，30 次还是全打在 n1</text>
+  <text x="620" y="338" font-size="11.5" fill="#7f1d1d">→ 有效容量 20.0%，扩了等于没扩</text>
+
+  <text x="52" y="366" font-size="12" fill="#7f1d1d">幕 3　n1 不可用</text>
+  <text x="300" y="366" font-size="12" font-weight="bold" fill="#dc2626">0/30 成功，另 4 个实例活着也没用</text>
+  <text x="620" y="366" font-size="11.5" fill="#7f1d1d">→ 客户端只认识一个端口号</text>
+
+  <text x="52" y="394" font-size="12" fill="#7f1d1d">幕 4　n1 恢复</text>
+  <text x="300" y="394" font-size="12" font-weight="bold" fill="#15803d">30/30 成功</text>
+  <text x="620" y="394" font-size="11.5" fill="#7f1d1d">→ 但靠的是「端口恰好没变」</text>
+
+  <line x1="46" y1="410" x2="894" y2="410" stroke="#fca5a5" stroke-width="1"/>
+  <text x="52" y="434" font-size="12" font-weight="bold" fill="#dc2626">真正的问题不是「只有 1 个地址」，而是「地址被当成了配置」——它其实是运行期才确定的、还会变的数据。</text>
+
+  <!-- 三个根因 -->
+  <rect x="30" y="468" width="880" height="132" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="52" y="492" font-size="13" font-weight="bold" fill="#0f172a">同一个常量，三个方向都会失灵</text>
+  <text x="52" y="518" font-size="11.5" fill="#334155">① 扩了不会用 —— 新实例起来了，但没人告诉客户端「还有别人」，它们永远接不到请求</text>
+  <text x="52" y="542" font-size="11.5" fill="#334155">② 扩容完全无效 —— 有效容量 = 实例数 × 被用到比例，比例是 1/N 时，N 再大也没用</text>
+  <text x="52" y="566" font-size="11.5" fill="#334155">③ 一重启就全断 —— 滚动升级会换端口，换完的那一刻写死的地址指向空气</text>
+  <text x="52" y="590" font-size="11.5" font-weight="bold" fill="#b91c1c">三条的共同解法只有一句：把「连谁」的决定，从编译期挪到调用发生的那一刻。</text>
+</svg>

@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 620" width="940" height="620" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <rect width="940" height="620" fill="#ffffff"/>
+
+  <text x="470" y="32" text-anchor="middle" font-size="18" font-weight="700" fill="#111827">两种"给事件编号"的办法：一个保因果，一个能判并发</text>
+  <text x="470" y="54" text-anchor="middle" font-size="12" fill="#57606a">左边便宜但会给出假先后，右边精确但要按节点数付空间 —— 这就是顺序问题的全部取舍</text>
+
+  <rect x="26" y="76" width="420" height="258" rx="8" fill="#fef2f2" stroke="#dc2626" stroke-width="1.4"/>
+  <text x="236" y="100" text-anchor="middle" font-size="13" font-weight="700" fill="#991b1b">Lamport 时钟：一个整数</text>
+  <text x="236" y="118" text-anchor="middle" font-size="10.5" fill="#b91c1c">能保因果 · 但分不清并发</text>
+  <line x1="42" y1="130" x2="430" y2="130" stroke="#fca5a5" stroke-width="1"/>
+
+  <text x="42" y="152" font-size="10.5" fill="#1f2937">本地发生一件事 → C = C + 1</text>
+  <text x="42" y="180" font-size="10.5" fill="#1f2937">发送消息 → C = C + 1，把 C 一起发出去</text>
+  <text x="42" y="208" font-size="10.5" fill="#1f2937">接收消息（收到 T）→ C = max(C, T) + 1</text>
+
+  <rect x="42" y="226" width="388" height="94" rx="6" fill="#ffffff" stroke="#fca5a5"/>
+  <text x="54" y="246" font-size="10" fill="#7f1d1d">A：C=1 ── C=2，随消息发出 ──▶</text>
+  <text x="54" y="266" font-size="10" fill="#7f1d1d">B：　　　　　　　　　收到 2 → max(0,2)+1 = 3</text>
+  <text x="54" y="288" font-size="10" font-weight="700" fill="#065f46">2 &lt; 3，所以"发出"早于"接收" ✅ 没骗人</text>
+  <text x="54" y="308" font-size="10" font-weight="700" fill="#991b1b">但 A 的 C=1 与 B 的 C=1，谁先？它答不出来</text>
+
+  <rect x="494" y="76" width="420" height="258" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.4"/>
+  <text x="704" y="100" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">向量时钟：N 个整数</text>
+  <text x="704" y="118" text-anchor="middle" font-size="10.5" fill="#1d4ed8">双向精确 · 但按节点数付空间</text>
+  <line x1="510" y1="130" x2="898" y2="130" stroke="#93c5fd" stroke-width="1"/>
+
+  <text x="510" y="152" font-size="10.5" fill="#1f2937">进程 i 本地发生一件事 → V[i] = V[i] + 1</text>
+  <text x="510" y="180" font-size="10.5" fill="#1f2937">发送消息 → 把整个向量一起发出去</text>
+  <text x="510" y="208" font-size="10.5" fill="#1f2937">接收消息（收到 W）→ 逐分量取 max，再 V[i] += 1</text>
+
+  <rect x="510" y="226" width="388" height="94" rx="6" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="522" y="246" font-size="10" fill="#1e3a8a">A：[1,0,0] ── [2,0,0] 随消息发出 ──▶</text>
+  <text x="522" y="266" font-size="10" fill="#1e3a8a">B：　　　　　　　　收到 → [2,0,1]</text>
+  <text x="522" y="288" font-size="10" fill="#1e3a8a">判定：a→b 当且仅当 V(a) ≤ V(b) 且 V(a) ≠ V(b)</text>
+  <text x="522" y="308" font-size="10" font-weight="700" fill="#065f46">两个方向都不满足 = 并发（不是"不知道"，是"没定义"）</text>
+
+  <rect x="26" y="350" width="270" height="30" rx="5" fill="#f6f8fa" stroke="#d0d7de"/>
+  <text x="161" y="370" text-anchor="middle" font-size="11" font-weight="700" fill="#1f2328">它到底承诺了什么</text>
+  <rect x="302" y="350" width="300" height="30" rx="5" fill="#fef2f2" stroke="#dc2626" stroke-width="1.2"/>
+  <text x="452" y="370" text-anchor="middle" font-size="11" font-weight="700" fill="#991b1b">Lamport 时钟</text>
+  <rect x="608" y="350" width="306" height="30" rx="5" fill="#eff6ff" stroke="#2563eb" stroke-width="1.2"/>
+  <text x="761" y="370" text-anchor="middle" font-size="11" font-weight="700" fill="#1e3a8a">向量时钟</text>
+
+  <rect x="26" y="384" width="270" height="42" rx="5" fill="#ffffff" stroke="#d0d7de"/>
+  <text x="38" y="404" font-size="10.5" font-weight="700" fill="#1f2328">有因果 ⟹ 数值必不同？</text>
+  <text x="38" y="420" font-size="9.5" fill="#57606a">（a → b 则 C(a) &lt; C(b)）</text>
+  <rect x="302" y="384" width="300" height="42" rx="5" fill="#dcfce7" stroke="#059669" stroke-width="1.2"/>
+  <text x="316" y="404" font-size="10.5" font-weight="700" fill="#065f46">✅ 恒成立</text>
+  <text x="316" y="420" font-size="9.5" fill="#047857">本课 682 个有因果的事件对，一次没违反</text>
+  <rect x="608" y="384" width="306" height="42" rx="5" fill="#dcfce7" stroke="#059669" stroke-width="1.2"/>
+  <text x="622" y="404" font-size="10.5" font-weight="700" fill="#065f46">✅ 成立，而且反向也成立</text>
+  <text x="622" y="420" font-size="9.5" fill="#047857">≤ 且 ≠ 就是 happened-before 的定义本身</text>
+
+  <rect x="26" y="428" width="270" height="42" rx="5" fill="#ffffff" stroke="#d0d7de"/>
+  <text x="38" y="448" font-size="10.5" font-weight="700" fill="#1f2328">数值不同 ⟹ 一定有因果？</text>
+  <text x="38" y="464" font-size="9.5" fill="#57606a">（这是它能不能判并发的关键）</text>
+  <rect x="302" y="428" width="300" height="42" rx="5" fill="#fef2f2" stroke="#dc2626" stroke-width="1.2"/>
+  <text x="316" y="448" font-size="10.5" font-weight="700" fill="#991b1b">❌ 不成立</text>
+  <text x="316" y="464" font-size="9.5" fill="#b91c1c">221 对并发里，它排错 189 对；余 32 对靠节点号硬分</text>
+  <rect x="608" y="428" width="306" height="42" rx="5" fill="#dcfce7" stroke="#059669" stroke-width="1.2"/>
+  <text x="622" y="448" font-size="10.5" font-weight="700" fill="#065f46">✅ 精确判定</text>
+  <text x="622" y="464" font-size="9.5" fill="#047857">误判 0 次、漏判 0 次（同一批 43 个事件实测）</text>
+
+  <rect x="26" y="486" width="888" height="114" rx="8" fill="#fff7ed" stroke="#ea580c" stroke-width="1.5"/>
+  <text x="42" y="506" font-size="11.5" font-weight="700" fill="#9a3412">代价：这条消息要多带几个整数</text>
+  <text x="42" y="528" font-size="10.5" fill="#1f2937">Lamport：1 个整数。3 个进程、43 个事件的规模上，这点开销可以忽略</text>
+  <text x="42" y="548" font-size="10.5" fill="#1f2937">向量：N 个整数 —— N=3 → 24 B ｜ N=10 → 80 B ｜ N=100 → 800 B ｜ N=1000 → 8 KB</text>
+  <text x="42" y="570" font-size="10.5" font-weight="700" fill="#9a3412">1000 事件/秒、N=100 时，单是"排顺序"每秒就要多传 800 KB —— 这就是真实系统改用 HLC 折中的原因</text>
+  <text x="42" y="590" font-size="10" fill="#7c2d12">记住一句：Lamport 给你一个"看起来完整"的全序，代价是其中 189/221 是编出来的；向量给你真相，代价是 N 倍带宽</text>
+</svg>

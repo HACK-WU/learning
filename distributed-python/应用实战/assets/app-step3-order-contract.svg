@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="560" viewBox="0 0 900 560" font-family="PingFang SC, Microsoft YaHei, Segoe UI, sans-serif">
+  <rect width="900" height="560" fill="#ffffff"/>
+  <text x="30" y="34" font-size="17" font-weight="700" fill="#111827">step3 演进 2：REST"一次一坨" → gRPC 按需流动</text>
+  <text x="30" y="56" font-size="12" fill="#6b7280">用四种调用形态，分别应对"查一件 / 拉一批 / 传一批 / 实时对话"四种真实需求。判断标准 = 消息次数。</text>
+
+  <!-- 四个形态 -->
+  <rect x="40" y="86" width="410" height="200" rx="10" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="60" y="112" font-size="13" font-weight="700" fill="#1e40af">按"发几条 / 收几条"选形态</text>
+
+  <rect x="60" y="126" width="180" height="52" rx="8" fill="#ffffff" stroke="#bfdbfe"/>
+  <text x="150" y="146" font-size="11.5" text-anchor="middle" fill="#111827">GetOrder（一元）</text>
+  <text x="150" y="164" font-size="10.5" text-anchor="middle" fill="#6b7280">1 请求 → 1 响应</text>
+
+  <rect x="250" y="126" width="180" height="52" rx="8" fill="#ffffff" stroke="#bfdbfe"/>
+  <text x="340" y="146" font-size="11.5" text-anchor="middle" fill="#111827">ListOrders（服务端流）</text>
+  <text x="340" y="164" font-size="10.5" text-anchor="middle" fill="#6b7280">1 请求 → N 响应</text>
+
+  <rect x="60" y="188" width="180" height="52" rx="8" fill="#ffffff" stroke="#bfdbfe"/>
+  <text x="150" y="208" font-size="11.5" text-anchor="middle" fill="#111827">UploadOrders（客户端流）</text>
+  <text x="150" y="226" font-size="10.5" text-anchor="middle" fill="#6b7280">N 请求 → 1 响应</text>
+
+  <rect x="250" y="188" width="180" height="52" rx="8" fill="#ffffff" stroke="#bfdbfe"/>
+  <text x="340" y="208" font-size="11.5" text-anchor="middle" fill="#111827">SyncOrders（双向流）</text>
+  <text x="340" y="226" font-size="10.5" text-anchor="middle" fill="#6b7280">N ↔ M，两侧独立</text>
+
+  <text x="60" y="268" font-size="11" fill="#6b7280">流内顺序有保证；双向流不保证配对（要配对得</text>
+  <text x="60" y="286" font-size="11" fill="#6b7280">靠消息里带 id）。这决定"实时对话"怎么设计。</text>
+
+  <!-- 右侧：从 REST 迁移 -->
+  <rect x="470" y="86" width="390" height="200" rx="10" fill="#fef2f2" stroke="#fca5a5"/>
+  <text x="490" y="112" font-size="13" font-weight="700" fill="#b91c1c">REST 的局限</text>
+  <text x="490" y="136" font-size="11.5" fill="#7f1d1d">· "拉一万笔订单"要么一次返回超大 JSON（撞 4 MiB</text>
+  <text x="490" y="158" font-size="11.5" fill="#7f1d1d">上限），要么反复轮询分页接口，每条都得自己做</text>
+  <text x="490" y="180" font-size="11.5" fill="#7f1d1d">· 客户端无法"边收边处理"，必须等整批到齐</text>
+  <text x="490" y="202" font-size="11.5" fill="#7f1d1d">· 实时推送只能靠"客户端短轮询"，很不优雅</text>
+  <text x="490" y="232" font-size="11.5" fill="#7f1d1d">gRPC 把这个"一次一坨"模型，变成"按需流"——</text>
+  <text x="490" y="254" font-size="11.5" fill="#7f1d1d">该分页的分页（礼貌）、该流式就流式（边到边）。</text>
+
+  <!-- 底部：实测教训 -->
+  <rect x="40" y="300" width="820" height="150" rx="10" fill="#fffbeb" stroke="#fcd34d"/>
+  <text x="60" y="326" font-size="13" font-weight="700" fill="#92400e">⚡ 实测踩坑：别以为"流一定比批量快"</text>
+  <text x="60" y="352" font-size="12" fill="#78350f">拉 10000 条订单（本机回环，M13）：</text>
+  <text x="60" y="376" font-size="11.5" font-family="ui-monospace, Menlo, monospace" fill="#78350f">HTTP/1.1 分页     40.3 ms   （100 往返）</text>
+  <text x="60" y="396" font-size="11.5" font-family="ui-monospace, Menlo, monospace" fill="#78350f">gRPC 服务端流   1267.7 ms   （1 往返）</text>
+  <text x="420" y="376" font-size="11.5" fill="#78350f">→ 瓶颈是【每条消息的处理成本】（约 120-175 µs/条），</text>
+  <text x="420" y="396" font-size="11.5" fill="#78350f">不是往返次数。分页的意义在"限流礼貌"，不是性能。</text>
+  <text x="60" y="426" font-size="11.5" fill="#b45309">服务端流真正的价值在"边到边 + 首条快"（双向流首条 0.98ms vs 分页全量 1387ms）与"天生流式场景"。</text>
+
+  <text x="30" y="480" font-size="12" font-weight="700" fill="#b91c1c">成果：一份契约 + 四种形态，三种需求各得其所 —— 查一条、拉一批、实时看，都能表达，且都受同一份 IDL 约束。</text>
+  <text x="30" y="504" font-size="12" fill="#6b7280">最终判断：每一步改动都有代码 + 主 agent 正确性 review；规约保持"名字是注释、号是位置、规则封闭可 CI"三条红线。</text>
+</svg>

@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 570" width="900" height="570" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="s3G" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#1e8449"/>
+    </marker>
+    <marker id="s3R" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#c0392b"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="570" fill="#fbfbf9"/>
+  <text x="450" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#1c2833">第 3 步：加幂等消费</text>
+  <text x="450" y="58" text-anchor="middle" font-size="12" fill="#7f8c8d">比第 2 步只多了一张去重表 —— 但重复从此被吸收在门口</text>
+
+  <!-- 左：消费端三条路径 -->
+  <rect x="24" y="80" width="404" height="268" rx="11" fill="#f1f8f2" stroke="#a9d3b4" stroke-width="1.6"/>
+  <text x="46" y="108" font-size="13" font-weight="700" fill="#1e8449">改了什么：消费端</text>
+
+  <rect x="42" y="122" width="368" height="34" rx="6" fill="#fff" stroke="#a9d3b4"/>
+  <text x="56" y="143" font-size="10" fill="#2c3e50" font-family="monospace">INSERT INTO inbox(msg_id)  ← 唯一主键</text>
+
+  <path d="M 226 156 L 226 172" fill="none" stroke="#1e8449" stroke-width="2" marker-end="url(#s3G)"/>
+
+  <rect x="42" y="178" width="176" height="72" rx="6" fill="#eaf5ec" stroke="#7fb889" stroke-width="1.6"/>
+  <text x="130" y="198" text-anchor="middle" font-size="10" font-weight="700" fill="#1e8449">插得进</text>
+  <text x="130" y="218" text-anchor="middle" font-size="9" fill="#2c3e50">第一次 → 扣库存</text>
+  <text x="130" y="236" text-anchor="middle" font-size="9" fill="#2c3e50">同一个事务里 COMMIT</text>
+
+  <rect x="234" y="178" width="176" height="72" rx="6" fill="#eaf5ec" stroke="#7fb889" stroke-width="1.6"/>
+  <text x="322" y="198" text-anchor="middle" font-size="10" font-weight="700" fill="#1e8449">撞主键</text>
+  <text x="322" y="218" text-anchor="middle" font-size="9" fill="#2c3e50">办过了 → 整体回滚</text>
+  <text x="322" y="236" text-anchor="middle" font-size="9" fill="#2c3e50">不执行 UPDATE</text>
+
+  <rect x="42" y="260" width="368" height="52" rx="6" fill="#fdeceb" stroke="#e8b4ac"/>
+  <text x="56" y="280" font-size="10" font-weight="700" fill="#a93226">崩溃在 COMMIT 之前</text>
+  <text x="56" y="298" font-size="9" fill="#2c3e50">两件事一起回滚 → outbox 不标记 → 重投后正常扣</text>
+
+  <text x="46" y="334" font-size="9" fill="#7f8c8d">红线：去重表与业务必须同事务，否则「说做过了、其实没做」</text>
+
+  <!-- 右：三张表的关系 -->
+  <rect x="442" y="80" width="434" height="268" rx="11" fill="#fff" stroke="#ccc" stroke-width="1.5"/>
+  <text x="464" y="108" font-size="13" font-weight="700" fill="#566573">三张表，各管一件事</text>
+
+  <rect x="464" y="122" width="118" height="62" rx="6" fill="#eaf5ec" stroke="#a9d3b4"/>
+  <text x="523" y="144" text-anchor="middle" font-size="11" font-weight="700" fill="#1e8449">orders</text>
+  <text x="523" y="162" text-anchor="middle" font-size="9" fill="#2c3e50">业务数据</text>
+  <text x="523" y="176" text-anchor="middle" font-size="8" fill="#7f8c8d">订单本身</text>
+
+  <rect x="600" y="122" width="118" height="62" rx="6" fill="#fff8f0" stroke="#e0c3a0"/>
+  <text x="659" y="144" text-anchor="middle" font-size="11" font-weight="700" fill="#a04000">outbox</text>
+  <text x="659" y="162" text-anchor="middle" font-size="9" fill="#2c3e50">欠的债</text>
+  <text x="659" y="176" text-anchor="middle" font-size="8" fill="#7f8c8d">还没发的事件</text>
+
+  <rect x="736" y="122" width="118" height="62" rx="6" fill="#eaf5ec" stroke="#a9d3b4"/>
+  <text x="795" y="144" text-anchor="middle" font-size="11" font-weight="700" fill="#1e8449">inbox</text>
+  <text x="795" y="162" text-anchor="middle" font-size="9" fill="#2c3e50">办过的证</text>
+  <text x="795" y="176" text-anchor="middle" font-size="8" fill="#7f8c8d">处理过的消息</text>
+
+  <path d="M 582 153 L 600 153" fill="none" stroke="#7f8c8d" stroke-width="1.6" marker-end="url(#s3G)"/>
+  <path d="M 718 153 L 736 153" fill="none" stroke="#7f8c8d" stroke-width="1.6"/>
+
+  <rect x="464" y="200" width="390" height="76" rx="6" fill="#f5f5f5" stroke="#ccc"/>
+  <text x="480" y="220" font-size="10" font-weight="700" fill="#566573">去重键怎么选（最容易错的一处）</text>
+  <text x="480" y="240" font-size="9" fill="#a93226">✗ 投递序号（自增/时间戳）→ 每次都是新键 → 表形同虚设</text>
+  <text x="480" y="258" font-size="9" fill="#1e8449">✓ 消息身份（event_id / 业务键）→ 重发时同一个 → 挡得住</text>
+  <text x="480" y="272" font-size="8" fill="#7f8c8d">注意：每次重试都重新生成 UUID，就退化成了投递序号</text>
+
+  <rect x="464" y="290" width="390" height="44" rx="6" fill="#fff" stroke="#a9d3b4"/>
+  <text x="480" y="308" font-size="9" fill="#2c3e50">两张表都要按保留期清理：outbox 已发布行、inbox 已办行</text>
+  <text x="480" y="326" font-size="9" fill="#7f8c8d">保留期不能短于「消息最长可能延迟多久后重投」</text>
+
+  <!-- 底部实测 -->
+  <line x1="24" y1="368" x2="876" y2="368" stroke="#ddd" stroke-width="1.5"/>
+  <text x="450" y="396" text-anchor="middle" font-size="13" font-weight="700" fill="#1c2833">四幕实测（200 笔，同一份故障脚本）</text>
+
+  <rect x="24" y="412" width="404" height="98" rx="8" fill="#f5f5f5" stroke="#ccc"/>
+  <text x="44" y="434" font-size="11" font-weight="700" fill="#566573">幕 1-4：重复被逐个挡住</text>
+  <text x="44" y="456" font-size="10" fill="#2c3e50">重复消息进来 → 撞主键 → 不重复扣</text>
+  <text x="44" y="474" font-size="10" fill="#2c3e50">消费端提交前崩溃 → 整体回滚 → 重投正常扣</text>
+  <text x="44" y="492" font-size="10" fill="#2c3e50">中继重发 → 消息 id 不变 → 被去重表挡住</text>
+  <text x="44" y="508" font-size="9" fill="#7f8c8d">幕 4：200 次扣减 = 200 笔唯一订单</text>
+
+  <rect x="442" y="412" width="434" height="98" rx="8" fill="#f1f8f2" stroke="#a9d3b4"/>
+  <text x="462" y="434" font-size="11" font-weight="700" fill="#1e8449">合计：两道关都过了</text>
+  <text x="462" y="458" font-size="11" fill="#2c3e50">订单 <tspan font-weight="700">200</tspan> 笔｜库存扣减 <tspan font-weight="700" fill="#1e8449">200</tspan> 件｜应扣 200｜偏差 <tspan font-weight="700" fill="#1e8449">0</tspan></text>
+  <text x="462" y="480" font-size="10" fill="#2c3e50">待发 0 条 → 不丢</text>
+  <text x="462" y="500" font-size="10" fill="#1e8449">执行 200 次 = 200 笔唯一订单 → 不重</text>
+
+  <text x="24" y="532" font-size="10" fill="#7f8c8d">本步结论：唯一约束是那颗螺丝 —— 把「至少一次」收成「实际一次」的最后一环</text>
+  <text x="24" y="552" font-size="10" fill="#7f8c8d">三道关一起看：第 1 步偏差 +3（两错相抵）、第 2 步 +30（只堵了丢）、第 3 步 0（都堵住）</text>
+  <text x="24" y="570" font-size="10" fill="#7f8c8d">⚠️ 端到端的「恰好一次」是两段机制拼出来的，不是传输层给的保证</text>
+</svg>

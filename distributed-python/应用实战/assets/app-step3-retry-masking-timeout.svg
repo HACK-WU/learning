@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 520" width="920" height="520" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="as3" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#6b7280"/>
+    </marker>
+    <marker id="as3r" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#dc2626"/>
+    </marker>
+    <marker id="as3g" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#059669"/>
+    </marker>
+  </defs>
+
+  <rect width="920" height="520" fill="#ffffff"/>
+
+  <text x="460" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#111827">step 3 · 幂等键 + 有界重试 + 预算传播：客户端与账本终于一致</text>
+  <text x="460" y="52" text-anchor="middle" font-size="12" fill="#57606a">高亮 = 本步新增。三处改动分别对应本课三个知识点，缺一条就会退回 step 2 的结果</text>
+
+  <rect x="24" y="72" width="286" height="330" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="167" y="96" text-anchor="middle" font-size="12.5" font-weight="700" fill="#334155">订单服务（客户端侧）</text>
+
+  <rect x="42" y="110" width="250" height="58" rx="6" fill="#f0f9ff" stroke="#2563eb" stroke-width="1.8"/>
+  <text x="167" y="129" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1e40af">① deadline = now + 1.0s</text>
+  <text x="167" y="147" text-anchor="middle" font-size="9.5" fill="#1e3a8a">新增：一条总预算，所有重试共用</text>
+  <text x="167" y="161" text-anchor="middle" font-size="9" fill="#6b7280">对应知识点 3「同预算」</text>
+
+  <rect x="42" y="178" width="250" height="58" rx="6" fill="#f0f9ff" stroke="#2563eb" stroke-width="1.8"/>
+  <text x="167" y="197" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1e40af">② timeout = min(0.15, 剩余)</text>
+  <text x="167" y="215" text-anchor="middle" font-size="9.5" fill="#1e3a8a">新增：子超时从剩余预算里扣</text>
+  <text x="167" y="229" text-anchor="middle" font-size="9" fill="#6b7280">对应知识点 2「未知的比例」</text>
+
+  <rect x="42" y="246" width="250" height="58" rx="6" fill="#ecfdf5" stroke="#059669" stroke-width="1.8"/>
+  <text x="167" y="265" text-anchor="middle" font-size="10.5" font-weight="700" fill="#065f46">③ Idempotency-Key: 订单号</text>
+  <text x="167" y="283" text-anchor="middle" font-size="9.5" fill="#065f46">新增：让重复执行无害</text>
+  <text x="167" y="297" text-anchor="middle" font-size="9" fill="#6b7280">对应知识点 3「幂等性」</text>
+
+  <rect x="42" y="314" width="250" height="58" rx="6" fill="#ecfdf5" stroke="#059669" stroke-width="1.8"/>
+  <text x="167" y="333" text-anchor="middle" font-size="10.5" font-weight="700" fill="#065f46">④ backoff = random(0, 50ms·2^i)</text>
+  <text x="167" y="351" text-anchor="middle" font-size="9.5" fill="#065f46">新增：Full Jitter + 上限 3 次</text>
+  <text x="167" y="365" text-anchor="middle" font-size="9" fill="#6b7280">对应知识点 3「有界」</text>
+
+  <line x1="296" y1="275" x2="366" y2="275" stroke="#6b7280" stroke-width="1.8" marker-end="url(#as3)"/>
+  <text x="331" y="264" text-anchor="middle" font-size="9" fill="#6b7280">带键重试</text>
+
+  <rect x="374" y="72" width="522" height="330" rx="10" fill="#ecfdf5" stroke="#059669" stroke-width="1.5"/>
+  <text x="635" y="96" text-anchor="middle" font-size="12.5" font-weight="700" fill="#065f46">支付网关（服务端侧，本步新增幂等表）</text>
+
+  <rect x="392" y="110" width="486" height="70" rx="6" fill="#ffffff" stroke="#a7f3d0"/>
+  <text x="404" y="130" font-size="10.5" font-weight="700" fill="#065f46">收到请求：先查幂等表</text>
+  <text x="404" y="149" font-size="10" fill="#1f2937">key 已在表里（done）→ 直接返回上次的 charge_id，不重复扣款</text>
+  <text x="404" y="167" font-size="10" fill="#1f2937">key 已在表里（inflight）→ 回"处理中"，让客户端等或稍后查</text>
+
+  <rect x="392" y="190" width="486" height="70" rx="6" fill="#ffffff" stroke="#a7f3d0"/>
+  <text x="404" y="210" font-size="10.5" font-weight="700" fill="#065f46">key 不在表里：立刻写 inflight，再开始干活</text>
+  <text x="404" y="229" font-size="10" fill="#991b1b">⚠️ 顺序不能反：先占位，再干活</text>
+  <text x="404" y="247" font-size="10" fill="#6b7280">（先检查→干活→后登记，会在并发下 0 次命中，本课实测）</text>
+
+  <rect x="392" y="270" width="486" height="52" rx="6" fill="#ffffff" stroke="#a7f3d0"/>
+  <text x="404" y="290" font-size="10.5" font-weight="700" fill="#065f46">干完活：写扣款流水，把 charge_id 记进幂等表</text>
+  <text x="404" y="309" font-size="10" fill="#1f2937">同一个 key 之后的任何请求都拿到同一个 charge_id</text>
+
+  <rect x="392" y="332" width="486" height="56" rx="6" fill="#f0fdf4" stroke="#059669" stroke-width="1.6"/>
+  <text x="404" y="352" font-size="10.5" font-weight="700" fill="#065f46">实测结果</text>
+  <text x="404" y="371" font-size="10" fill="#1f2937">客户端尝试 2 次（1 次超时 + 1 次重试）｜ 服务端只扣 1 次 ｜ 幂等挡下 1 次</text>
+
+  <rect x="24" y="418" width="872" height="88" rx="8" fill="#f0f9ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="44" y="440" font-size="11.5" font-weight="700" fill="#1e3a8a">本步变化（三处，缺一不可）</text>
+  <text x="44" y="460" font-size="10.5" fill="#1f2937">① 幂等键：把"可能重复执行"变成"重复执行无害"。没有它，重试永远在赌运气。</text>
+  <text x="44" y="478" font-size="10.5" fill="#1f2937">② 有界 + 抖动：最多 3 次、每次等待随机化。没有它，下游故障时会变成永久放大器、并形成同步尖峰。</text>
+  <text x="44" y="496" font-size="10.5" fill="#1f2937">③ 预算传播：所有重试共用 1.0s 总预算，子超时从剩余里扣。没有它，父返回 504 之后子还在写库——孤儿写。</text>
+</svg>

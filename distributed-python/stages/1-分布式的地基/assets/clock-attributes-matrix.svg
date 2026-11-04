@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 560" width="940" height="560" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <rect width="940" height="560" fill="#ffffff"/>
+
+  <text x="470" y="32" text-anchor="middle" font-size="18" font-weight="700" fill="#111827">四种时钟的保证不一样，选错就会在最要命的地方出错</text>
+  <text x="470" y="54" text-anchor="middle" font-size="12" fill="#57606a">本机实测（Linux / Python 3.12.3）：下表每一格都能用 time.get_clock_info() 查到</text>
+
+  <rect x="26" y="72" width="230" height="34" rx="6" fill="#f6f8fa" stroke="#d0d7de"/>
+  <text x="141" y="94" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1f2328">你关心的问题</text>
+
+  <rect x="264" y="72" width="158" height="34" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="1.4"/>
+  <text x="343" y="88" text-anchor="middle" font-size="11" font-weight="700" fill="#991b1b">time</text>
+  <text x="343" y="101" text-anchor="middle" font-size="9.5" fill="#991b1b">CLOCK_REALTIME</text>
+
+  <rect x="430" y="72" width="158" height="34" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.4"/>
+  <text x="509" y="88" text-anchor="middle" font-size="11" font-weight="700" fill="#1e3a8a">monotonic</text>
+  <text x="509" y="101" text-anchor="middle" font-size="9.5" fill="#1e3a8a">CLOCK_MONOTONIC</text>
+
+  <rect x="596" y="72" width="158" height="34" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.4"/>
+  <text x="675" y="88" text-anchor="middle" font-size="11" font-weight="700" fill="#1e3a8a">perf_counter</text>
+  <text x="675" y="101" text-anchor="middle" font-size="9.5" fill="#1e3a8a">最高分辨率</text>
+
+  <rect x="762" y="72" width="152" height="34" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.4"/>
+  <text x="838" y="88" text-anchor="middle" font-size="11" font-weight="700" fill="#1e3a8a">process_time</text>
+  <text x="838" y="101" text-anchor="middle" font-size="9.5" fill="#1e3a8a">CLOCK_PROCESS_CPUTIME</text>
+
+  <line x1="26" y1="106" x2="914" y2="106" stroke="#d0d7de" stroke-width="1"/>
+
+  <text x="26" y="134" font-size="11.5" font-weight="700" fill="#1f2328">1. 对应日历时间吗</text>
+  <rect x="264" y="118" width="158" height="26" rx="4" fill="#dcfce7" stroke="#059669" stroke-width="1.2"/>
+  <text x="343" y="136" text-anchor="middle" font-size="10.5" font-weight="700" fill="#065f46">是</text>
+  <rect x="430" y="118" width="158" height="26" rx="4" fill="#f3f4f6" stroke="#d1d5db"/>
+  <text x="509" y="136" text-anchor="middle" font-size="10.5" fill="#6b7280">否</text>
+  <rect x="596" y="118" width="158" height="26" rx="4" fill="#f3f4f6" stroke="#d1d5db"/>
+  <text x="675" y="136" text-anchor="middle" font-size="10.5" fill="#6b7280">否</text>
+  <rect x="762" y="118" width="152" height="26" rx="4" fill="#f3f4f6" stroke="#d1d5db"/>
+  <text x="838" y="136" text-anchor="middle" font-size="10.5" fill="#6b7280">否</text>
+
+  <text x="26" y="168" font-size="11.5" font-weight="700" fill="#1f2328">2. 会往回跳吗</text>
+  <rect x="264" y="152" width="158" height="26" rx="4" fill="#fef2f2" stroke="#dc2626" stroke-width="1.2"/>
+  <text x="343" y="170" text-anchor="middle" font-size="10.5" font-weight="700" fill="#991b1b">会</text>
+  <rect x="430" y="152" width="158" height="26" rx="4" fill="#dcfce7" stroke="#059669" stroke-width="1.2"/>
+  <text x="509" y="170" text-anchor="middle" font-size="10.5" font-weight="700" fill="#065f46">不会</text>
+  <rect x="596" y="152" width="158" height="26" rx="4" fill="#dcfce7" stroke="#059669" stroke-width="1.2"/>
+  <text x="675" y="170" text-anchor="middle" font-size="10.5" font-weight="700" fill="#065f46">不会</text>
+  <rect x="762" y="152" width="152" height="26" rx="4" fill="#dcfce7" stroke="#059669" stroke-width="1.2"/>
+  <text x="838" y="170" text-anchor="middle" font-size="10.5" font-weight="700" fill="#065f46">不会</text>
+
+  <text x="26" y="202" font-size="11.5" font-weight="700" fill="#1f2328">3. 能被外部调整吗</text>
+  <rect x="264" y="186" width="158" height="26" rx="4" fill="#fef2f2" stroke="#dc2626" stroke-width="1.2"/>
+  <text x="343" y="204" text-anchor="middle" font-size="10.5" font-weight="700" fill="#991b1b">能（NTP / date -s）</text>
+  <rect x="430" y="186" width="158" height="26" rx="4" fill="#dcfce7" stroke="#059669" stroke-width="1.2"/>
+  <text x="509" y="204" text-anchor="middle" font-size="10.5" font-weight="700" fill="#065f46">不能</text>
+  <rect x="596" y="186" width="158" height="26" rx="4" fill="#dcfce7" stroke="#059669" stroke-width="1.2"/>
+  <text x="675" y="204" text-anchor="middle" font-size="10.5" font-weight="700" fill="#065f46">不能</text>
+  <rect x="762" y="186" width="152" height="26" rx="4" fill="#dcfce7" stroke="#059669" stroke-width="1.2"/>
+  <text x="838" y="204" text-anchor="middle" font-size="10.5" font-weight="700" fill="#065f46">不能</text>
+
+  <text x="26" y="236" font-size="11.5" font-weight="700" fill="#1f2328">4. 两台机器能比吗</text>
+  <rect x="264" y="220" width="158" height="26" rx="4" fill="#fef2f2" stroke="#dc2626" stroke-width="1.2"/>
+  <text x="343" y="238" text-anchor="middle" font-size="10.5" font-weight="700" fill="#991b1b">不能（有偏移）</text>
+  <rect x="430" y="220" width="158" height="26" rx="4" fill="#fef2f2" stroke="#dc2626" stroke-width="1.2"/>
+  <text x="509" y="238" text-anchor="middle" font-size="10.5" font-weight="700" fill="#991b1b">不能（起点不同）</text>
+  <rect x="596" y="220" width="158" height="26" rx="4" fill="#fef2f2" stroke="#dc2626" stroke-width="1.2"/>
+  <text x="675" y="238" text-anchor="middle" font-size="10.5" font-weight="700" fill="#991b1b">不能</text>
+  <rect x="762" y="220" width="152" height="26" rx="4" fill="#fef2f2" stroke="#dc2626" stroke-width="1.2"/>
+  <text x="838" y="238" text-anchor="middle" font-size="10.5" font-weight="700" fill="#991b1b">不能</text>
+
+  <text x="26" y="270" font-size="11.5" font-weight="700" fill="#1f2328">5. 能存进数据库当时间戳吗</text>
+  <rect x="264" y="254" width="158" height="26" rx="4" fill="#dcfce7" stroke="#059669" stroke-width="1.2"/>
+  <text x="343" y="272" text-anchor="middle" font-size="10.5" font-weight="700" fill="#065f46">能</text>
+  <rect x="430" y="254" width="158" height="26" rx="4" fill="#fef2f2" stroke="#dc2626" stroke-width="1.2"/>
+  <text x="509" y="272" text-anchor="middle" font-size="10.5" font-weight="700" fill="#991b1b">不能（无意义）</text>
+  <rect x="596" y="254" width="158" height="26" rx="4" fill="#fef2f2" stroke="#dc2626" stroke-width="1.2"/>
+  <text x="675" y="272" text-anchor="middle" font-size="10.5" font-weight="700" fill="#991b1b">不能（无意义）</text>
+  <rect x="762" y="254" width="152" height="26" rx="4" fill="#fef2f2" stroke="#dc2626" stroke-width="1.2"/>
+  <text x="838" y="272" text-anchor="middle" font-size="10.5" font-weight="700" fill="#991b1b">不能（是 CPU 秒）</text>
+
+  <line x1="26" y1="292" x2="914" y2="292" stroke="#d0d7de" stroke-width="1"/>
+
+  <text x="26" y="316" font-size="11.5" font-weight="700" fill="#1f2328">该用在哪</text>
+  <rect x="264" y="300" width="158" height="52" rx="4" fill="#fef2f2" stroke="#fca5a5"/>
+  <text x="343" y="318" text-anchor="middle" font-size="10" fill="#7f1d1d">给人看的日历时间</text>
+  <text x="343" y="334" text-anchor="middle" font-size="10" fill="#7f1d1d">日志 / 创建时间字段</text>
+  <text x="343" y="347" text-anchor="middle" font-size="9.5" fill="#991b1b">⚠️ 不要拿来排跨机顺序</text>
+  <rect x="430" y="300" width="158" height="52" rx="4" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="509" y="318" text-anchor="middle" font-size="10" fill="#1e3a8a">超时 / 截止时间</text>
+  <text x="509" y="334" text-anchor="middle" font-size="10" fill="#1e3a8a">两次读数之差</text>
+  <text x="509" y="347" text-anchor="middle" font-size="9.5" fill="#1e40af">✅ 只取差值</text>
+  <rect x="596" y="300" width="158" height="52" rx="4" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="675" y="318" text-anchor="middle" font-size="10" fill="#1e3a8a">性能测量</text>
+  <text x="675" y="334" text-anchor="middle" font-size="10" fill="#1e3a8a">benchmark / 耗时统计</text>
+  <text x="675" y="347" text-anchor="middle" font-size="9.5" fill="#1e40af">✅ 分辨率最高</text>
+  <rect x="762" y="300" width="152" height="52" rx="4" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="838" y="318" text-anchor="middle" font-size="10" fill="#1e3a8a">量 CPU 占用</text>
+  <text x="838" y="334" text-anchor="middle" font-size="10" fill="#1e3a8a">算 CPU/墙钟比值</text>
+  <text x="838" y="347" text-anchor="middle" font-size="9.5" fill="#1e40af">✅ 不含等待</text>
+
+  <rect x="26" y="368" width="888" height="72" rx="8" fill="#fff7ed" stroke="#ea580c" stroke-width="1.5"/>
+  <text x="42" y="388" font-size="11.5" font-weight="700" fill="#9a3412">第 4 行是全课的转折点</text>
+  <text x="42" y="407" font-size="10.5" fill="#1f2937">四种钟里，没有任何一种能跨机器比大小 —— 包括看起来最靠谱的单调钟。不同机器的单调钟起点各不相同，同一台机器重启后也重新计。</text>
+  <text x="42" y="425" font-size="10.5" fill="#9a3412">所以"用钟排顺序"这条路不是"精度不够"，是"这条路不存在"。要排先后，只能换一套不依赖钟的办法（知识点 2）。</text>
+
+  <rect x="26" y="452" width="888" height="86" rx="8" fill="#f6f8fa" stroke="#d0d7de"/>
+  <text x="42" y="472" font-size="11.5" font-weight="700" fill="#1f2328">本机实测的两个数字，解释了为什么这件事不能靠"调准一点"解决</text>
+  <text x="42" y="492" font-size="10.5" fill="#1f2937">时钟误差界：内核报告 2008 微秒，60 秒内实测在 8 ~ 3508 微秒之间随 NTP 同步周期锯齿波动（每 10 秒涨约 1000 微秒，同步时归零）</text>
+  <text x="42" y="510" font-size="10.5" fill="#1f2937">本机单程延迟：TCP 回环 15 微秒。两者相差 <tspan font-weight="700" fill="#991b1b">133 倍</tspan></text>
+  <text x="42" y="528" font-size="10.5" fill="#9a3412">差 133 倍意味着：一条消息的传播时间，比两块表的偏差小两个数量级 —— 按表排序必然倒挂，且稳定复现</text>
+</svg>

@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="900" height="560" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="s1R" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#c0392b"/>
+    </marker>
+    <marker id="s1D" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 z" fill="#7f8c8d"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="560" fill="#fbfbf9"/>
+  <text x="450" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#1c2833">第 1 步：写完库直接发消息（双写）</text>
+  <text x="450" y="58" text-anchor="middle" font-size="12" fill="#7f8c8d">两段独立动作，中间那道缝会掉东西 —— 而且掉了没人喊</text>
+
+  <!-- 左：代码路径 -->
+  <rect x="24" y="80" width="404" height="248" rx="11" fill="#fff" stroke="#ccc" stroke-width="1.5"/>
+  <text x="46" y="108" font-size="13" font-weight="700" fill="#566573">这一版长什么样</text>
+
+  <rect x="42" y="122" width="368" height="62" rx="7" fill="#eaf5ec" stroke="#a9d3b4"/>
+  <text x="56" y="142" font-size="10" fill="#7f8c8d" font-family="monospace">with conn(ORDER_DB) as c:</text>
+  <text x="66" y="160" font-size="10" fill="#1e8449" font-family="monospace">INSERT INTO orders …</text>
+  <text x="56" y="176" font-size="9" fill="#7f8c8d">提交返回，账落到纸上（擦不掉）</text>
+
+  <path d="M 226 186 L 226 206" fill="none" stroke="#c0392b" stroke-width="2" stroke-dasharray="5,4"/>
+  <text x="238" y="200" font-size="9" fill="#c0392b">缝：可能没了</text>
+
+  <rect x="42" y="210" width="368" height="58" rx="7" fill="#fdeceb" stroke="#e8b4ac"/>
+  <text x="56" y="230" font-size="10" fill="#7f8c8d" font-family="monospace">broker.publish("OrderCreated", …)</text>
+  <text x="56" y="248" font-size="9" fill="#a93226">另一个系统：抛异常 / 被吞 / 进程没了</text>
+  <text x="56" y="262" font-size="9" fill="#7f8c8d">两种写法 + 两道不同的事务日志</text>
+
+  <text x="46" y="292" font-size="10" fill="#2c3e50">没有任何地方记着「这里还欠一条消息」</text>
+  <text x="46" y="312" font-size="10" fill="#a93226">→ 进程一重启，这笔债蒸发</text>
+
+  <!-- 右：两个系统 -->
+  <rect x="442" y="80" width="434" height="248" rx="11" fill="#fdf2f0" stroke="#e8b4ac" stroke-width="1.5"/>
+  <text x="464" y="108" font-size="13" font-weight="700" fill="#a93226">真实世界是三个部门</text>
+
+  <rect x="464" y="122" width="184" height="72" rx="7" fill="#fff" stroke="#d5a6a0" stroke-width="1.6"/>
+  <text x="556" y="146" text-anchor="middle" font-size="12" font-weight="700" fill="#a93226">订单服务</text>
+  <text x="556" y="166" text-anchor="middle" font-size="10" fill="#2c3e50" font-family="monospace">orders 表</text>
+  <text x="556" y="182" text-anchor="middle" font-size="9" fill="#7f8c8d">已提交 ✓</text>
+
+  <rect x="672" y="122" width="184" height="72" rx="7" fill="#fff" stroke="#d5a6a0" stroke-width="1.6"/>
+  <text x="764" y="146" text-anchor="middle" font-size="12" font-weight="700" fill="#a93226">消息队列</text>
+  <text x="764" y="166" text-anchor="middle" font-size="10" fill="#2c3e50">OrderCreated</text>
+  <text x="764" y="182" text-anchor="middle" font-size="9" fill="#a93226">没收到 ✗</text>
+
+  <path d="M 650 158 L 670 158" fill="none" stroke="#c0392b" stroke-width="2" stroke-dasharray="5,4"/>
+  <text x="660" y="146" text-anchor="middle" font-size="14" fill="#c0392b">✕</text>
+
+  <rect x="464" y="212" width="392" height="96" rx="7" fill="#fff" stroke="#e8b4ac"/>
+  <text x="480" y="234" font-size="10" font-weight="700" fill="#a93226">下游（库存服务）会看到什么</text>
+  <text x="480" y="254" font-size="10" fill="#2c3e50">一部分订单收到 1 次 → 正常扣 1 件</text>
+  <text x="480" y="272" font-size="10" fill="#2c3e50">一部分订单收到 0 次 → 永远不扣（有单无货）</text>
+  <text x="480" y="290" font-size="10" fill="#a93226">一部分订单收到 2 次 → 重复扣</text>
+
+  <!-- 底部实测 -->
+  <line x1="24" y1="348" x2="876" y2="348" stroke="#ddd" stroke-width="1.5"/>
+  <text x="450" y="376" text-anchor="middle" font-size="13" font-weight="700" fill="#1c2833">四幕实测（200 笔，同一份故障脚本）</text>
+
+  <rect x="24" y="392" width="404" height="86" rx="8" fill="#f5f5f5" stroke="#ccc"/>
+  <text x="44" y="414" font-size="11" font-weight="700" fill="#566573">幕 1-3：故障逐个注入</text>
+  <text x="44" y="436" font-size="10" fill="#2c3e50">提交后崩溃 5% → 这批订单永远卡 created</text>
+  <text x="44" y="454" font-size="10" fill="#2c3e50">通道不可用 8% → publish 抛异常被吞</text>
+  <text x="44" y="472" font-size="10" fill="#2c3e50">重复投递 15% → 下游收到两次</text>
+
+  <rect x="442" y="392" width="434" height="86" rx="8" fill="#fdf2f0" stroke="#e8b4ac"/>
+  <text x="462" y="414" font-size="11" font-weight="700" fill="#a93226">幕 4：合计（注意这个数字有多骗人）</text>
+  <text x="462" y="438" font-size="11" fill="#2c3e50">订单 <tspan font-weight="700">200</tspan> 笔｜库存扣减 <tspan font-weight="700" fill="#a93226">203</tspan> 件｜应扣 200｜净偏差 <tspan font-weight="700" fill="#a93226">+3</tspan></text>
+  <text x="462" y="460" font-size="10" fill="#a93226">+3 是「少扣」与「多扣」互相抵消的净值，账面其实已经错了</text>
+  <text x="462" y="476" font-size="9" fill="#7f8c8d">只看总量核对，这一步会伪装成「基本没问题」</text>
+
+  <text x="24" y="508" font-size="10" fill="#7f8c8d">本步结论：不是「某一步会失败」，而是这两步之间没有任何东西保证它们一起成功</text>
+  <text x="24" y="528" font-size="10" fill="#7f8c8d">下一版要改的：不再「发消息」，而是把「要发什么」先写进自己库里 —— 见第 2 步</text>
+  <text x="24" y="548" font-size="10" fill="#7f8c8d">⚠️ 别把 publish 挪到 commit 前面：那只是把「丢事件」换成「幽灵事件」</text>
+</svg>

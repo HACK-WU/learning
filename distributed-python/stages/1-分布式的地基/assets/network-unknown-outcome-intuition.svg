@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 500" width="920" height="500" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="ar3a" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#57606a"/>
+    </marker>
+    <marker id="ar3aRed" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+
+  <rect width="920" height="500" fill="#ffffff"/>
+
+  <text x="460" y="32" text-anchor="middle" font-size="19" font-weight="700" fill="#111827">没听见回话，不等于对方没办</text>
+  <text x="460" y="56" text-anchor="middle" font-size="12.5" fill="#57606a">左边是大多数人的习惯；右边是本课要你先承认的一件事</text>
+
+  <rect x="24" y="74" width="404" height="352" rx="12" fill="#fef2f2" stroke="#dc2626" stroke-width="1.8"/>
+  <text x="44" y="99" font-size="13" font-weight="700" fill="#991b1b">习惯做法：没回话就再喊一遍</text>
+
+  <circle cx="96" cy="150" r="15" fill="#fecaca" stroke="#dc2626" stroke-width="1.4"/>
+  <text x="96" y="155" text-anchor="middle" font-size="11" font-weight="700" fill="#7f1d1d">你</text>
+  <circle cx="300" cy="150" r="15" fill="#ffffff" stroke="#9ca3af" stroke-width="1.4"/>
+  <text x="300" y="155" text-anchor="middle" font-size="10.5" fill="#374151">对方</text>
+  <line x1="113" y1="146" x2="283" y2="146" stroke="#dc2626" stroke-width="1.6" marker-end="url(#ar3aRed)"/>
+  <text x="198" y="138" text-anchor="middle" font-size="10.5" fill="#991b1b">托他办事</text>
+  <line x1="283" y1="158" x2="118" y2="158" stroke="#9ca3af" stroke-width="1.4" stroke-dasharray="4 3"/>
+  <text x="198" y="174" text-anchor="middle" font-size="10" fill="#6b7280">回话没到</text>
+
+  <rect x="56" y="196" width="340" height="52" rx="6" fill="#ffffff" stroke="#fca5a5"/>
+  <text x="68" y="215" font-size="11" font-weight="700" fill="#991b1b">脑子里的结论</text>
+  <text x="68" y="234" font-size="11" fill="#1f2937">"他没收到 / 他没办，我再喊一遍"</text>
+
+  <line x1="113" y1="252" x2="283" y2="252" stroke="#dc2626" stroke-width="1.6" marker-end="url(#ar3aRed)"/>
+  <text x="198" y="244" text-anchor="middle" font-size="10.5" fill="#991b1b">再喊一遍</text>
+
+  <rect x="56" y="270" width="340" height="76" rx="6" fill="#fff7ed" stroke="#ea580c"/>
+  <text x="68" y="289" font-size="11" font-weight="700" fill="#9a3412">真正的后果</text>
+  <text x="68" y="308" font-size="10.5" fill="#1f2937">他其实已经办了，只是回话丢了</text>
+  <text x="68" y="326" font-size="10.5" fill="#1f2937">你这一遍喊下去，他就又办了一次</text>
+  <text x="68" y="342" font-size="10.5" fill="#6b7280">事办了两遍，而你始终以为只办了一遍</text>
+
+  <rect x="444" y="74" width="452" height="352" rx="12" fill="#eff6ff" stroke="#2563eb" stroke-width="1.8"/>
+  <text x="464" y="99" font-size="13" font-weight="700" fill="#1e3a8a">本课：先承认"我其实不知道"</text>
+
+  <rect x="464" y="114" width="412" height="40" rx="6" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="476" y="139" font-size="11" fill="#1f2937">你只知道一件事：<tspan font-weight="700" fill="#1e40af">我还没拿到回话</tspan></text>
+
+  <text x="464" y="176" font-size="11" font-weight="700" fill="#1e3a8a">而"没拿到回话"背后至少有三种情况</text>
+
+  <rect x="464" y="188" width="130" height="66" rx="6" fill="#ecfdf5" stroke="#059669" stroke-width="1.4"/>
+  <text x="529" y="208" text-anchor="middle" font-size="10.5" font-weight="700" fill="#065f46">话没送到</text>
+  <text x="529" y="226" text-anchor="middle" font-size="10" fill="#1f2937">他根本没听见</text>
+  <text x="529" y="243" text-anchor="middle" font-size="10" fill="#065f46">再喊一遍是对的</text>
+
+  <rect x="606" y="188" width="130" height="66" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="1.4"/>
+  <text x="671" y="208" text-anchor="middle" font-size="10.5" font-weight="700" fill="#991b1b">话送到了</text>
+  <text x="671" y="226" text-anchor="middle" font-size="10" fill="#1f2937">他正在办</text>
+  <text x="671" y="243" text-anchor="middle" font-size="10" fill="#991b1b">再喊会办两遍</text>
+
+  <rect x="746" y="188" width="130" height="66" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="1.4"/>
+  <text x="811" y="208" text-anchor="middle" font-size="10.5" font-weight="700" fill="#991b1b">办完了</text>
+  <text x="811" y="226" text-anchor="middle" font-size="10" fill="#1f2937">回话在路上丢了</text>
+  <text x="811" y="243" text-anchor="middle" font-size="10" fill="#991b1b">再喊会办两遍</text>
+
+  <text x="529" y="272" text-anchor="middle" font-size="18" font-weight="700" fill="#059669">可以再喊</text>
+  <text x="671" y="272" text-anchor="middle" font-size="18" font-weight="700" fill="#dc2626">不能</text>
+  <text x="811" y="272" text-anchor="middle" font-size="18" font-weight="700" fill="#dc2626">不能</text>
+
+  <rect x="464" y="290" width="412" height="56" rx="6" fill="#ffffff" stroke="#93c5fd"/>
+  <text x="476" y="309" font-size="11" font-weight="700" fill="#1e3a8a">问题就在这儿</text>
+  <text x="476" y="328" font-size="10.5" fill="#1f2937">这三种情况，你从"没拿到回话"这一个现象里<tspan font-weight="700">分不出来</tspan></text>
+  <text x="476" y="343" font-size="10.5" fill="#6b7280">于是"要不要再喊"这个决定，就失去了可靠的依据</text>
+
+  <rect x="464" y="356" width="412" height="56" rx="6" fill="#f0f9ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="476" y="375" font-size="11" font-weight="700" fill="#1e40af">本课的出路</text>
+  <text x="476" y="394" font-size="10.5" fill="#1f2937">不追求"分清"，改成"就算他办了第二遍，也跟第一遍一样"</text>
+  <text x="476" y="408" font-size="10" fill="#6b7280">这样"再喊一遍"就不再危险</text>
+
+  <rect x="24" y="440" width="872" height="46" rx="8" fill="#f6f8fa" stroke="#d0d7de"/>
+  <text x="44" y="461" font-size="11.5" font-weight="700" fill="#1f2328">顺序反过来</text>
+  <text x="44" y="477" font-size="11" fill="#1f2937">先承认"分不清"　│　再让"重复"变得无害　│　最后才决定要不要再喊、喊几次</text>
+</svg>

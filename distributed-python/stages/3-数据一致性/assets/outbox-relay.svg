@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 620" width="980" height="620" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="obG" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#1e8449"/>
+    </marker>
+    <marker id="obD" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 z" fill="#7f8c8d"/>
+    </marker>
+  </defs>
+
+  <rect width="980" height="620" fill="#fbfbf9"/>
+  <text x="490" y="36" text-anchor="middle" font-size="22" font-weight="700" fill="#1c2833">事务性发件箱：把第二件事先变成数据</text>
+  <text x="490" y="62" text-anchor="middle" font-size="13" fill="#7f8c8d">业务行与待发行同一次落笔 —— 一起在，或一起不在；中间没有缝</text>
+
+  <!-- 左：写侧 -->
+  <rect x="26" y="86" width="300" height="330" rx="12" fill="#f1f8f2" stroke="#a9d3b4" stroke-width="1.6"/>
+  <text x="50" y="116" font-size="14" font-weight="700" fill="#1e8449">写侧：一个本地事务</text>
+
+  <rect x="46" y="132" width="260" height="128" rx="8" fill="#fff" stroke="#7fb889" stroke-width="1.8"/>
+  <text x="176" y="154" text-anchor="middle" font-size="11" fill="#7f8c8d">BEGIN … COMMIT</text>
+
+  <rect x="64" y="164" width="224" height="38" rx="5" fill="#eaf5ec" stroke="#a9d3b4"/>
+  <text x="176" y="180" text-anchor="middle" font-size="11" fill="#1e8449" font-family="monospace">INSERT orders</text>
+  <text x="176" y="195" text-anchor="middle" font-size="9" fill="#7f8c8d">订单 1001，A-1 × 1</text>
+
+  <rect x="64" y="208" width="224" height="38" rx="5" fill="#eaf5ec" stroke="#a9d3b4"/>
+  <text x="176" y="224" text-anchor="middle" font-size="11" fill="#1e8449" font-family="monospace">INSERT outbox</text>
+  <text x="176" y="239" text-anchor="middle" font-size="9" fill="#7f8c8d">OrderCreated:1001</text>
+
+  <text x="50" y="284" font-size="11" fill="#2c3e50">业务提交 → 两行都在</text>
+  <text x="50" y="306" font-size="11" fill="#2c3e50">业务回滚 → 两行都不在</text>
+  <text x="50" y="332" font-size="10" fill="#7f8c8d">实测：qty=0 撞约束时</text>
+  <text x="50" y="350" font-size="10" fill="#7f8c8d">订单 0 行、outbox 0 行</text>
+
+  <rect x="46" y="366" width="260" height="36" rx="6" fill="#fff" stroke="#a9d3b4"/>
+  <text x="176" y="389" text-anchor="middle" font-size="10" fill="#1e8449">事件存在 ⟺ 业务提交（同一个布尔值）</text>
+
+  <!-- 箭头 -->
+  <line x1="330" y1="250" x2="360" y2="250" stroke="#7f8c8d" stroke-width="2.5" marker-end="url(#obD)"/>
+
+  <!-- 中：中继 -->
+  <rect x="366" y="86" width="248" height="330" rx="12" fill="#fff8f0" stroke="#e0c3a0" stroke-width="1.6"/>
+  <text x="390" y="116" font-size="14" font-weight="700" fill="#a04000">中继：后台搬运</text>
+
+  <rect x="386" y="132" width="208" height="40" rx="6" fill="#fff" stroke="#e0c3a0"/>
+  <text x="490" y="149" text-anchor="middle" font-size="11" fill="#2c3e50">① 扫未发布</text>
+  <text x="490" y="165" text-anchor="middle" font-size="9" fill="#7f8c8d" font-family="monospace">WHERE published_at IS NULL</text>
+
+  <rect x="386" y="180" width="208" height="40" rx="6" fill="#fff" stroke="#e0c3a0"/>
+  <text x="490" y="197" text-anchor="middle" font-size="11" fill="#2c3e50">② 发出去</text>
+  <text x="490" y="213" text-anchor="middle" font-size="9" fill="#7f8c8d">走网络，靠不住</text>
+
+  <!-- 缺口 -->
+  <path d="M 490 222 L 490 250" fill="none" stroke="#c0392b" stroke-width="2" stroke-dasharray="5,4"/>
+  <text x="502" y="242" font-size="9" fill="#c0392b">崩溃窗口</text>
+
+  <rect x="386" y="252" width="208" height="40" rx="6" fill="#fff" stroke="#e0c3a0"/>
+  <text x="490" y="269" text-anchor="middle" font-size="11" fill="#2c3e50">③ 标记已发布</text>
+  <text x="490" y="285" text-anchor="middle" font-size="9" fill="#7f8c8d" font-family="monospace">published_at = now</text>
+
+  <rect x="386" y="304" width="208" height="62" rx="6" fill="#fdeceb" stroke="#e8b4ac"/>
+  <text x="490" y="324" text-anchor="middle" font-size="10" font-weight="700" fill="#a93226">②与③不是原子的</text>
+  <text x="490" y="342" text-anchor="middle" font-size="9" fill="#2c3e50">发成功了、标记之前崩 → 重启重发</text>
+  <text x="490" y="358" text-anchor="middle" font-size="9" fill="#a93226">实测：同一条被投递 2 次</text>
+
+  <text x="386" y="390" font-size="10" fill="#7f8c8d">结论：只能是 at-least-once</text>
+
+  <!-- 箭头 -->
+  <line x1="614" y1="250" x2="644" y2="250" stroke="#7f8c8d" stroke-width="2.5" marker-end="url(#obD)"/>
+
+  <!-- 右：消费端 -->
+  <rect x="650" y="86" width="304" height="330" rx="12" fill="#f1f8f2" stroke="#a9d3b4" stroke-width="1.6"/>
+  <text x="674" y="116" font-size="14" font-weight="700" fill="#1e8449">消费端：把重复挡住</text>
+
+  <rect x="670" y="132" width="264" height="34" rx="6" fill="#fff" stroke="#a9d3b4"/>
+  <text x="802" y="153" text-anchor="middle" font-size="10" fill="#2c3e50" font-family="monospace">OrderCreated:1001</text>
+
+  <path d="M 802 166 L 802 186" fill="none" stroke="#1e8449" stroke-width="2" marker-end="url(#obG)"/>
+
+  <rect x="670" y="190" width="264" height="46" rx="6" fill="#eaf5ec" stroke="#a9d3b4"/>
+  <text x="802" y="208" text-anchor="middle" font-size="11" font-weight="700" fill="#1e8449">查去重表（唯一主键）</text>
+  <text x="802" y="226" text-anchor="middle" font-size="9" fill="#7f8c8d">插得进去 = 第一次；撞键 = 办过了</text>
+
+  <rect x="670" y="246" width="126" height="52" rx="6" fill="#fff" stroke="#a9d3b4"/>
+  <text x="733" y="266" text-anchor="middle" font-size="10" font-weight="700" fill="#1e8449">插得进</text>
+  <text x="733" y="284" text-anchor="middle" font-size="9" fill="#2c3e50">扣库存 + 提交</text>
+
+  <rect x="808" y="246" width="126" height="52" rx="6" fill="#fff" stroke="#a9d3b4"/>
+  <text x="871" y="266" text-anchor="middle" font-size="10" font-weight="700" fill="#1e8449">撞主键</text>
+  <text x="871" y="284" text-anchor="middle" font-size="9" fill="#2c3e50">整体回滚、跳过</text>
+
+  <rect x="670" y="310" width="264" height="56" rx="6" fill="#eaf5ec" stroke="#a9d3b4"/>
+  <text x="802" y="330" text-anchor="middle" font-size="10" font-weight="700" fill="#1e8449">关键：必须与业务同事务</text>
+  <text x="802" y="348" text-anchor="middle" font-size="9" fill="#2c3e50">否则会「说做过了、其实没做」</text>
+  <text x="802" y="362" text-anchor="middle" font-size="9" fill="#7f8c8d">实测 999 vs 998</text>
+
+  <!-- 第二条重复消息 -->
+  <rect x="670" y="378" width="264" height="28" rx="6" fill="#fdeceb" stroke="#e8b4ac" stroke-dasharray="4,3"/>
+  <text x="802" y="397" text-anchor="middle" font-size="10" fill="#a93226" font-family="monospace">OrderCreated:1001（重复）</text>
+
+  <!-- 底部 -->
+  <rect x="26" y="440" width="928" height="80" rx="10" fill="#fff" stroke="#ccc" stroke-width="1.5"/>
+  <text x="490" y="468" text-anchor="middle" font-size="14" font-weight="700" fill="#1c2833">发件箱负责「不丢」，去重表负责「不重」—— 两段机制拼出端到端的「一次」</text>
+  <text x="490" y="492" text-anchor="middle" font-size="11" fill="#2c3e50">它不是传输层给的保证：中间任何一段被绕过（比如中继按 id 高水位扫、去重表与业务分事务），效果立刻退化</text>
+  <text x="490" y="510" text-anchor="middle" font-size="10" fill="#7f8c8d">读图：左框是同一次落笔，中间红色虚线是唯一消不掉的缝，右框用唯一约束把缝的后果吸收掉</text>
+
+  <text x="26" y="552" font-size="11" fill="#7f8c8d">注意中间那只画了虚线的「崩溃窗口」：它不可能被消除，因为「发出去」发生在数据库之外，无法与「标记」放进同一个事务</text>
+  <text x="26" y="576" font-size="11" fill="#7f8c8d">所有「发件箱保证恰好一次」的说法，都把右边这一半偷偷省掉了</text>
+  <text x="26" y="600" font-size="11" fill="#7f8c8d">实测出处：M2 的 R1（丢 vs 不丢）、R2（重复 2 次）、R4（两个中继 → 投递 40 次）</text>
+</svg>

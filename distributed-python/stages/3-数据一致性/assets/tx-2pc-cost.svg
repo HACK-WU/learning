@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 660" width="980" height="660" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="bR" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#c0392b"/>
+    </marker>
+    <marker id="bG" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#1e8449"/>
+    </marker>
+    <marker id="bD" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 z" fill="#7f8c8d"/>
+    </marker>
+  </defs>
+
+  <rect width="980" height="660" fill="#fbfbf9"/>
+  <text x="490" y="36" text-anchor="middle" font-size="22" font-weight="700" fill="#1c2833">两阶段提交：它买到的「一致」，是用「锁」和「等」换的</text>
+  <text x="490" y="62" text-anchor="middle" font-size="13" fill="#7f8c8d">上：一切正常时它很快。下：中间人走神的那一下，所有本子都被钉住 —— 这才是它的代价</text>
+
+  <!-- 上：正常路径 -->
+  <rect x="26" y="84" width="928" height="228" rx="12" fill="#f1f8f2" stroke="#a9d3b4" stroke-width="1.5"/>
+  <text x="50" y="112" font-size="15" font-weight="700" fill="#1e8449">正常路径：12 条消息、30.7ms（并行发投票）</text>
+
+  <!-- 协调者 -->
+  <rect x="60" y="130" width="130" height="86" rx="8" fill="#fff" stroke="#7fb889" stroke-width="1.8"/>
+  <text x="125" y="156" text-anchor="middle" font-size="13" font-weight="700" fill="#1e8449">记账总管</text>
+  <text x="125" y="178" text-anchor="middle" font-size="11" fill="#7f8c8d">先问「行不行」</text>
+  <text x="125" y="198" text-anchor="middle" font-size="11" fill="#7f8c8d">再通知「记吧」</text>
+
+  <!-- 阶段1 箭头 -->
+  <line x1="196" y1="158" x2="252" y2="158" stroke="#1e8449" stroke-width="2" marker-end="url(#bG)"/>
+  <text x="224" y="150" text-anchor="middle" font-size="10" fill="#1e8449">①问</text>
+  <line x1="252" y1="182" x2="196" y2="182" stroke="#1e8449" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#bG)"/>
+  <text x="224" y="196" text-anchor="middle" font-size="10" fill="#1e8449">答</text>
+
+  <!-- 三个参与者 -->
+  <rect x="264" y="130" width="130" height="86" rx="8" fill="#fff" stroke="#a9d3b4"/>
+  <text x="329" y="158" text-anchor="middle" font-size="12" font-weight="700" fill="#566573">订单本</text>
+  <text x="329" y="180" text-anchor="middle" font-size="11" fill="#1e8449">先占住位置</text>
+  <text x="329" y="200" text-anchor="middle" font-size="11" fill="#7f8c8d">答「可以」</text>
+
+  <rect x="414" y="130" width="130" height="86" rx="8" fill="#fff" stroke="#a9d3b4"/>
+  <text x="479" y="158" text-anchor="middle" font-size="12" font-weight="700" fill="#566573">库存本</text>
+  <text x="479" y="180" text-anchor="middle" font-size="11" fill="#1e8449">先占住位置</text>
+  <text x="479" y="200" text-anchor="middle" font-size="11" fill="#7f8c8d">答「可以」</text>
+
+  <rect x="564" y="130" width="130" height="86" rx="8" fill="#fff" stroke="#a9d3b4"/>
+  <text x="629" y="158" text-anchor="middle" font-size="12" font-weight="700" fill="#566573">钱本</text>
+  <text x="629" y="180" text-anchor="middle" font-size="11" fill="#1e8449">先占住位置</text>
+  <text x="629" y="200" text-anchor="middle" font-size="11" fill="#7f8c8d">答「可以」</text>
+
+  <!-- 阶段2 -->
+  <line x1="712" y1="158" x2="760" y2="158" stroke="#1e8449" stroke-width="2" marker-end="url(#bG)"/>
+  <text x="736" y="150" text-anchor="middle" font-size="10" fill="#1e8449">②通知</text>
+
+  <rect x="772" y="130" width="156" height="86" rx="8" fill="#eaf5ec" stroke="#7fb889" stroke-width="1.5"/>
+  <text x="850" y="156" text-anchor="middle" font-size="12" font-weight="700" fill="#1e8449">全部记上</text>
+  <text x="850" y="180" text-anchor="middle" font-size="11" fill="#2c3e50">三人同时落笔</text>
+  <text x="850" y="200" text-anchor="middle" font-size="11" fill="#7f8c8d">放锁、对外可见</text>
+
+  <!-- 数字 -->
+  <rect x="60" y="234" width="868" height="62" rx="8" fill="#fff" stroke="#a9d3b4"/>
+  <text x="80" y="258" font-size="12" fill="#2c3e50">代价公式：1 个总管 + n 个本子 = <tspan font-weight="700" fill="#1e8449">4n 条消息</tspan>、<tspan font-weight="700" fill="#1e8449">2n+2 次强制落盘</tspan>（R1：n=3 → 12 条）</text>
+  <text x="80" y="282" font-size="12" fill="#2c3e50">并行能把耗时压到「最慢那个」（90.4ms → 30.7ms），但<tspan font-weight="700" fill="#c0392b">消息一条都省不掉</tspan>：不管并行串行，都是 12 条</text>
+
+  <!-- 下：崩溃 -->
+  <rect x="26" y="326" width="928" height="240" rx="12" fill="#fdf2f0" stroke="#e8b4ac" stroke-width="1.5"/>
+  <text x="50" y="354" font-size="15" font-weight="700" fill="#a93226">代价现形：总管在「问完」和「通知」之间不见了（R2 实测，阻塞 2000.1ms）</text>
+
+  <!-- 时间线 -->
+  <line x1="70" y1="392" x2="900" y2="392" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#bD)"/>
+
+  <!-- t0 -->
+  <circle cx="110" cy="392" r="5" fill="#1e8449"/>
+  <text x="110" y="378" text-anchor="middle" font-size="11" fill="#1e8449">t=0</text>
+  <text x="110" y="414" text-anchor="middle" font-size="11" fill="#2c3e50">开始问</text>
+
+  <!-- t1 -->
+  <circle cx="300" cy="392" r="5" fill="#e67e22"/>
+  <text x="300" y="378" text-anchor="middle" font-size="11" fill="#a04000">t=31ms</text>
+  <text x="300" y="414" text-anchor="middle" font-size="11" fill="#2c3e50">三人齐答「可以」</text>
+  <text x="300" y="432" text-anchor="middle" font-size="10" fill="#a04000">3 把锁已占住</text>
+
+  <!-- 崩溃 -->
+  <rect x="330" y="360" width="140" height="22" rx="4" fill="#fdeceb" stroke="#c0392b"/>
+  <text x="400" y="376" text-anchor="middle" font-size="11" font-weight="700" fill="#a93226">总管不见了</text>
+
+  <!-- 空白等待 -->
+  <rect x="330" y="388" width="440" height="8" rx="4" fill="#f5dcd8"/>
+  <text x="550" y="382" text-anchor="middle" font-size="11" fill="#a93226">等 2000ms —— 数据已写好、锁已拿着，但没人说该记还是该撤</text>
+
+  <!-- t2 -->
+  <circle cx="790" cy="392" r="5" fill="#c0392b"/>
+  <text x="790" y="378" text-anchor="middle" font-size="11" fill="#a93226">t=2031ms</text>
+  <text x="790" y="414" text-anchor="middle" font-size="11" fill="#2c3e50">人工拉起才继续</text>
+
+  <!-- 两条指标 -->
+  <rect x="70" y="452" width="410" height="98" rx="8" fill="#fff" stroke="#e8b4ac"/>
+  <text x="90" y="476" font-size="13" font-weight="700" fill="#a93226">「锁被占多久」</text>
+  <text x="90" y="500" font-size="12" fill="#2c3e50">正常：30.4ms　崩溃：2030.6ms</text>
+  <text x="90" y="524" font-size="12" fill="#2c3e50">这期间别人一个都改不了这三个本子</text>
+  <text x="90" y="542" font-size="11" fill="#7f8c8d">n 越大，被钉住的业务越多：16 个本子 = 16 把锁</text>
+
+  <rect x="500" y="452" width="428" height="98" rx="8" fill="#fff" stroke="#e8b4ac"/>
+  <text x="520" y="476" font-size="13" font-weight="700" fill="#a93226">「不知道该怎么办」</text>
+  <text x="520" y="500" font-size="12" fill="#2c3e50">正常：0.3ms　崩溃：2000.4ms</text>
+  <text x="520" y="524" font-size="12" fill="#2c3e50">差的那 2000ms 不是算力，是纯等待</text>
+  <text x="520" y="542" font-size="11" fill="#7f8c8d">这才是「阻塞协议」的确切位置：不是慢，是可能永不结束</text>
+
+  <!-- 底部 -->
+  <rect x="26" y="584" width="928" height="52" rx="8" fill="#eef4fb" stroke="#b6cde8"/>
+  <text x="490" y="608" text-anchor="middle" font-size="13" fill="#1f4e79">参与者自己定个超时就撤（R3）：换来了「不阻塞」，代价是同一笔生意有人记了、有人没记 —— 比僵住更糟。</text>
+  <text x="490" y="628" text-anchor="middle" font-size="12" fill="#7f8c8d">所以真实系统宁可僵住等人工，也不敢让每个本子自己猜。</text>
+</svg>

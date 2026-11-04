@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 560" width="920" height="560" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="ar3c" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#57606a"/>
+    </marker>
+  </defs>
+
+  <rect width="920" height="560" fill="#ffffff"/>
+
+  <text x="460" y="32" text-anchor="middle" font-size="19" font-weight="700" fill="#111827">超时把"无限等"换成"有限等 + 一段未知"</text>
+  <text x="460" y="56" text-anchor="middle" font-size="12.5" fill="#57606a">上半是两条时间轴：客户端那条断在超时点，服务端那条还在继续往后走</text>
+
+  <rect x="24" y="72" width="872" height="176" rx="10" fill="#fafafa" stroke="#d0d7de"/>
+  <text x="44" y="94" font-size="12" font-weight="700" fill="#1f2328">不设超时 vs 设 150ms 超时（同一次 350ms 的调用）</text>
+
+  <text x="44" y="122" font-size="10.5" fill="#6b7280">客户端</text>
+  <line x1="110" y1="118" x2="850" y2="118" stroke="#d0d7de" stroke-width="1"/>
+  <line x1="110" y1="118" x2="850" y2="118" stroke="#2563eb" stroke-width="2"/>
+  <circle cx="850" cy="118" r="4" fill="#2563eb"/>
+  <text x="858" y="112" font-size="9.5" fill="#1e40af">350ms</text>
+  <text x="300" y="112" font-size="10" fill="#1e40af">一直等到有结果（这次等到了）</text>
+
+  <text x="44" y="152" font-size="10.5" fill="#6b7280">服务端</text>
+  <line x1="110" y1="148" x2="850" y2="148" stroke="#d0d7de" stroke-width="1"/>
+  <rect x="110" y="142" width="548" height="12" rx="3" fill="#dcfce7" stroke="#059669"/>
+  <text x="384" y="152" text-anchor="middle" font-size="9.5" fill="#065f46">在干活 350ms</text>
+  <circle cx="662" cy="148" r="4" fill="#059669"/>
+  <text x="672" y="152" font-size="9.5" fill="#065f46">提交完成</text>
+
+  <line x1="110" y1="186" x2="850" y2="186" stroke="#d0d7de" stroke-width="1"/>
+  <text x="44" y="190" font-size="10.5" fill="#6b7280">客户端</text>
+  <line x1="110" y1="186" x2="348" y2="186" stroke="#2563eb" stroke-width="2"/>
+  <line x1="348" y1="180" x2="348" y2="192" stroke="#dc2626" stroke-width="2.4"/>
+  <text x="356" y="184" font-size="9.5" fill="#991b1b">150ms 放弃</text>
+
+  <text x="44" y="218" font-size="10.5" fill="#6b7280">服务端</text>
+  <line x1="110" y1="214" x2="850" y2="214" stroke="#d0d7de" stroke-width="1"/>
+  <rect x="110" y="208" width="548" height="12" rx="3" fill="#dcfce7" stroke="#059669"/>
+  <circle cx="662" cy="214" r="4" fill="#059669"/>
+  <text x="672" y="218" font-size="9.5" fill="#065f46">提交完成（没人等它了）</text>
+
+  <rect x="348" y="196" width="314" height="30" rx="4" fill="#fef2f2" stroke="#dc2626" stroke-width="1.4"/>
+  <text x="505" y="216" text-anchor="middle" font-size="10" font-weight="700" fill="#991b1b">这段就是"已经做了却没人知道"的窗口</text>
+
+  <text x="44" y="240" font-size="10" fill="#6b7280">超时值调大只是把这个断点往右挪，窗口变窄但永远不会消失。</text>
+
+  <text x="460" y="280" text-anchor="middle" font-size="13" font-weight="700" fill="#1f2328">四种失败形态，按"对面到底做没做"重新排队</text>
+
+  <rect x="24" y="296" width="430" height="200" rx="10" fill="#ecfdf5" stroke="#059669" stroke-width="1.6"/>
+  <text x="44" y="320" font-size="12" font-weight="700" fill="#065f46">确定没做 —— 可以无脑重试</text>
+
+  <rect x="44" y="332" width="390" height="52" rx="6" fill="#ffffff" stroke="#a7f3d0"/>
+  <text x="56" y="350" font-size="10.5" font-weight="700" fill="#065f46">连接建立失败</text>
+  <text x="56" y="368" font-size="10" fill="#1f2937">ConnectionError：端口没人监听 / 主机不可达</text>
+  <text x="56" y="380" font-size="9.5" fill="#6b7280">TCP 都没握上手，对面一无所知</text>
+
+  <rect x="44" y="392" width="390" height="52" rx="6" fill="#ffffff" stroke="#a7f3d0"/>
+  <text x="56" y="410" font-size="10.5" font-weight="700" fill="#065f46">连接阶段超时</text>
+  <text x="56" y="428" font-size="10" fill="#1f2937">ConnectTimeout：握手阶段就超了</text>
+  <text x="56" y="440" font-size="9.5" fill="#6b7280">请求字节一个都没发出去</text>
+
+  <rect x="44" y="452" width="390" height="32" rx="6" fill="#f0fdf4" stroke="#059669"/>
+  <text x="56" y="472" font-size="10" fill="#065f46">这两类即使重试 100 次，副作用也只有一份</text>
+
+  <rect x="466" y="296" width="430" height="200" rx="10" fill="#fef2f2" stroke="#dc2626" stroke-width="1.6"/>
+  <text x="486" y="320" font-size="12" font-weight="700" fill="#991b1b">可能已经做了 —— 必须先有幂等才能重试</text>
+
+  <rect x="486" y="332" width="390" height="52" rx="6" fill="#ffffff" stroke="#fca5a5"/>
+  <text x="498" y="350" font-size="10.5" font-weight="700" fill="#991b1b">读超时</text>
+  <text x="498" y="368" font-size="10" fill="#1f2937">ReadTimeout：连上了，等回应等到放弃</text>
+  <text x="498" y="380" font-size="9.5" fill="#6b7280">本课实测：20 次超时，服务端 20 次全提交</text>
+
+  <rect x="486" y="392" width="390" height="52" rx="6" fill="#ffffff" stroke="#fca5a5"/>
+  <text x="498" y="410" font-size="10.5" font-weight="700" fill="#991b1b">回包途中连接被断</text>
+  <text x="498" y="428" font-size="10" fill="#1f2937">ConnectionError，内含 RemoteDisconnected</text>
+  <text x="498" y="440" font-size="9.5" fill="#6b7280">本课实测：5 次全断，服务端 5 次全提交</text>
+
+  <rect x="486" y="452" width="390" height="32" rx="6" fill="#fff1f2" stroke="#dc2626"/>
+  <text x="498" y="472" font-size="10" fill="#991b1b">注意：这两个和左边两个共用 ConnectionError 大类，别按大类写重试</text>
+
+  <rect x="24" y="508" width="872" height="40" rx="8" fill="#f6f8fa" stroke="#d0d7de"/>
+  <text x="44" y="533" font-size="11" fill="#1f2328">判断顺序：先问"我拿到回应了吗"（没有就继续问）→ 再问"哪个阶段的失败"（决定确定/不确定）→ 最后问"这个请求能安全重复吗"（决定要不要重试）</text>
+</svg>

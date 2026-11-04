@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="520" viewBox="0 0 940 520" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="arr2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#64748b"/></marker>
+  </defs>
+  <rect x="0" y="0" width="940" height="520" fill="#ffffff"/>
+  <text x="470" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#0f172a">超时预算怎么分（三层链：A → B → C）</text>
+
+  <!-- 时间轴 -->
+  <line x1="60" y1="250" x2="880" y2="250" stroke="#cbd5e1" stroke-width="3"/>
+  <text x="60" y="232" font-size="13" fill="#475569">t₀ 开始</text>
+  <text x="860" y="232" text-anchor="end" font-size="13" fill="#475569">t₀+1000ms 必须返回</text>
+
+  <!-- 总预算条 -->
+  <rect x="170" y="262" width="650" height="34" rx="6" fill="#e0f2fe" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="495" y="284" text-anchor="middle" font-size="14" font-weight="bold" fill="#1d4ed8">用户给的总预算 = 1000ms（deadline）</text>
+
+  <!-- 左分块 -->
+  <rect x="60" y="90" width="400" height="105" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="2"/>
+  <text x="72" y="116" font-size="16" font-weight="bold" fill="#b91c1c">❌ 坏做法：各层独自分</text>
+  <rect x="80" y="130" width="110" height="34" rx="6" fill="#fee2e2" stroke="#f87171"/>
+  <text x="135" y="152" text-anchor="middle" font-size="13" fill="#7f1d1d">A 800ms</text>
+  <rect x="200" y="130" width="110" height="34" rx="6" fill="#fee2e2" stroke="#f87171"/>
+  <text x="255" y="152" text-anchor="middle" font-size="13" fill="#7f1d1d">B 800ms</text>
+  <rect x="320" y="130" width="110" height="34" rx="6" fill="#fee2e2" stroke="#f87171"/>
+  <text x="375" y="152" text-anchor="middle" font-size="13" fill="#7f1d1d">C 800ms</text>
+  <text x="135" y="176" text-anchor="middle" font-size="11" fill="#dc2626">各层都设"自己舒服的 800ms"</text>
+  <text x="250" y="190" text-anchor="middle" font-size="11" fill="#dc2626">→ 最坏叠加到 2.4s，用户等的其实是它</text>
+
+  <!-- 右分块 -->
+  <rect x="490" y="90" width="400" height="105" rx="10" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+  <text x="502" y="116" font-size="16" font-weight="bold" fill="#1d4ed8">✅ 好做法：一条预算向下传递</text>
+  <rect x="510" y="130" width="90" height="34" rx="6" fill="#dbeafe" stroke="#60a5fa"/>
+  <text x="555" y="152" text-anchor="middle" font-size="13" fill="#1e3a8a">A 1000ms</text>
+  <rect x="618" y="130" width="90" height="34" rx="6" fill="#dbeafe" stroke="#60a5fa"/>
+  <text x="663" y="152" text-anchor="middle" font-size="13" fill="#1e3a8a">B 剩余</text>
+  <rect x="726" y="130" width="90" height="34" rx="6" fill="#dbeafe" stroke="#60a5fa"/>
+  <text x="771" y="152" text-anchor="middle" font-size="13" fill="#1e3a8a">C 再剩余</text>
+  <text x="605" y="176" text-anchor="middle" font-size="11" fill="#2563eb">同一根链条，只有一个总终点</text>
+  <text x="605" y="190" text-anchor="middle" font-size="11" fill="#2563eb">每一环只拿"还剩多少"，不独立自设</text>
+
+  <!-- 底部区别 -->
+  <rect x="60" y="320" width="840" height="120" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="80" y="348" font-size="15" font-weight="bold" fill="#334155">为什么"各层都设"是错的：</text>
+  <text x="80" y="374" font-size="13" fill="#475569">· 用户说"最迟 1 秒"，但三层各自 800ms，实际最坏 2.4s——配置与承诺脱节</text>
+  <text x="80" y="396" font-size="13" fill="#475569">· 某一层超时后，下游还在继续干活（浪费算力），直到它的超时才停</text>
+  <text x="80" y="418" font-size="13" fill="#475569">· deadline 是"绝对时刻"，跨机器传原始时刻会被时钟偏差坑到 → 换成"剩余时长"传递</text>
+
+  <text x="470" y="480" text-anchor="middle" font-size="13" fill="#64748b">关键：超时不是"每层各设一个数"，是一条要分配的总预算</text>
+</svg>

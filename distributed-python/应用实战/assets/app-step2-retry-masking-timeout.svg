@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" width="900" height="480" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="as2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#dc2626"/>
+    </marker>
+    <marker id="as2g" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#059669"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="480" fill="#ffffff"/>
+
+  <text x="450" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#111827">step 2 · 加超时 + 失败就重试：问题反而变大了</text>
+  <text x="450" y="52" text-anchor="middle" font-size="12" fill="#57606a">高亮 = 本步新增。加了边界是好事，但把"超时"当成"失败"，就把它变成了重复扣款机</text>
+
+  <rect x="30" y="76" width="250" height="330" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="155" y="100" text-anchor="middle" font-size="12.5" font-weight="700" fill="#334155">订单服务（本步新增重试循环）</text>
+
+  <rect x="48" y="114" width="214" height="40" rx="6" fill="#ffffff" stroke="#94a3b8"/>
+  <text x="155" y="139" text-anchor="middle" font-size="10.5" fill="#334155">for i in range(2)</text>
+
+  <rect x="48" y="164" width="214" height="52" rx="6" fill="#fff7ed" stroke="#ea580c" stroke-width="1.8"/>
+  <text x="155" y="184" text-anchor="middle" font-size="10.5" font-weight="700" fill="#9a3412">timeout=0.15</text>
+  <text x="155" y="201" text-anchor="middle" font-size="9.5" fill="#7f1d1d">新增：给调用加边界</text>
+
+  <rect x="48" y="226" width="214" height="52" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="1.8"/>
+  <text x="155" y="246" text-anchor="middle" font-size="10.5" font-weight="700" fill="#991b1b">except RequestException</text>
+  <text x="155" y="263" text-anchor="middle" font-size="9.5" fill="#7f1d1d">新增：把所有异常都当"失败"</text>
+
+  <rect x="48" y="288" width="214" height="52" rx="6" fill="#fef2f2" stroke="#dc2626" stroke-width="1.8"/>
+  <text x="155" y="308" text-anchor="middle" font-size="10.5" font-weight="700" fill="#991b1b">continue → 再发一次</text>
+  <text x="155" y="325" text-anchor="middle" font-size="9.5" fill="#7f1d1d">新增：无条件重试</text>
+
+  <rect x="48" y="350" width="214" height="44" rx="6" fill="#ffffff" stroke="#94a3b8"/>
+  <text x="155" y="369" text-anchor="middle" font-size="10.5" fill="#334155">两次都失败 → 报"支付失败"</text>
+  <text x="155" y="385" text-anchor="middle" font-size="9.5" fill="#6b7280">用户会自己再点一次</text>
+
+  <line x1="280" y1="190" x2="368" y2="160" stroke="#dc2626" stroke-width="2" marker-end="url(#as2)"/>
+  <text x="322" y="145" text-anchor="middle" font-size="9.5" fill="#991b1b">第 1 次</text>
+  <line x1="280" y1="312" x2="368" y2="300" stroke="#dc2626" stroke-width="2" marker-end="url(#as2)"/>
+  <text x="322" y="288" text-anchor="middle" font-size="9.5" fill="#991b1b">第 2 次</text>
+
+  <rect x="376" y="76" width="494" height="330" rx="10" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="623" y="100" text-anchor="middle" font-size="12.5" font-weight="700" fill="#991b1b">支付网关（它不知道这两次是同一笔单）</text>
+
+  <line x1="396" y1="118" x2="850" y2="118" stroke="#fca5a5" stroke-width="1"/>
+  <text x="404" y="134" font-size="9.5" fill="#6b7280">时间轴 →</text>
+
+  <rect x="396" y="146" width="200" height="38" rx="5" fill="#ffffff" stroke="#fca5a5"/>
+  <text x="496" y="170" text-anchor="middle" font-size="10" fill="#7f1d1d">第 1 次：处理 350ms，写 ch_1</text>
+  <rect x="396" y="190" width="200" height="26" rx="5" fill="#dcfce7" stroke="#059669"/>
+  <text x="496" y="207" text-anchor="middle" font-size="9.5" fill="#065f46">客户端 150ms 已放弃</text>
+  <text x="620" y="168" font-size="9.5" fill="#991b1b">客户端看不到 →</text>
+
+  <rect x="396" y="236" width="200" height="38" rx="5" fill="#ffffff" stroke="#fca5a5"/>
+  <text x="496" y="260" text-anchor="middle" font-size="10" fill="#7f1d1d">第 2 次：处理 350ms，写 ch_2</text>
+  <rect x="396" y="280" width="200" height="26" rx="5" fill="#dcfce7" stroke="#059669"/>
+  <text x="496" y="297" text-anchor="middle" font-size="9.5" fill="#065f46">客户端 150ms 又放弃</text>
+
+  <rect x="620" y="238" width="228" height="86" rx="6" fill="#ffffff" stroke="#dc2626" stroke-width="1.6"/>
+  <text x="634" y="257" font-size="10.5" font-weight="700" fill="#991b1b">账本最终状态</text>
+  <text x="634" y="276" font-size="10" fill="#1f2937">这个订单有 ch_1、ch_2 两条流水</text>
+  <text x="634" y="295" font-size="10" fill="#1f2937">用户被扣了 2 次</text>
+  <text x="634" y="314" font-size="10" fill="#991b1b">而客户端告诉用户"支付失败"</text>
+
+  <rect x="620" y="146" width="228" height="78" rx="6" fill="#fff7ed" stroke="#ea580c" stroke-width="1.5"/>
+  <text x="634" y="165" font-size="10.5" font-weight="700" fill="#9a3412">实测数据</text>
+  <text x="634" y="184" font-size="10" fill="#1f2937">客户端尝试 2 次，异常：</text>
+  <text x="634" y="201" font-size="10" fill="#1f2937">ReadTimeout / ReadTimeout</text>
+  <text x="634" y="218" font-size="10" fill="#991b1b">服务端扣款 2 次：ch_1、ch_2</text>
+
+  <rect x="30" y="420" width="860" height="46" rx="8" fill="#f0f9ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="46" y="440" font-size="11" font-weight="700" fill="#1e3a8a">本步变化</text>
+  <text x="46" y="457" font-size="10.5" fill="#1f2937">新增了 timeout=0.15 与一个无条件的重试循环。超时让客户端不再无限等（好事），但 except 把"超时"当成了"失败"——于是两次都重发，两次都被服务端执行。</text>
+</svg>

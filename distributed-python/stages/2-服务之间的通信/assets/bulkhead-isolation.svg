@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="620" viewBox="0 0 960 620" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="bh" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto"><path d="M0,0 L7,3.2 L0,6.4 Z" fill="#475569"/></marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="620" fill="#ffffff"/>
+  <text x="480" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#0f172a">舱壁隔离：把「一个依赖坏掉」限制在它自己的船舱里</text>
+  <text x="480" y="58" text-anchor="middle" font-size="12" fill="#64748b">同样的 8 个 worker，两种划分方式，无关接口的可用性天差地别（本机实测）</text>
+
+  <!-- 左：无隔离 -->
+  <rect x="40" y="76" width="430" height="318" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="2"/>
+  <text x="60" y="102" font-size="14.5" font-weight="bold" fill="#b91c1c">不隔离：所有人抢同一池</text>
+
+  <rect x="60" y="116" width="390" height="70" rx="8" fill="#ffffff" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="75" y="138" font-size="11.5" fill="#7f1d1d">共享 worker 池（8 个位子）</text>
+  <g>
+    <rect x="76" y="150" width="34" height="24" rx="3" fill="#fecaca" stroke="#dc2626" stroke-width="1.3"/>
+    <rect x="116" y="150" width="34" height="24" rx="3" fill="#fecaca" stroke="#dc2626" stroke-width="1.3"/>
+    <rect x="156" y="150" width="34" height="24" rx="3" fill="#fecaca" stroke="#dc2626" stroke-width="1.3"/>
+    <rect x="196" y="150" width="34" height="24" rx="3" fill="#fecaca" stroke="#dc2626" stroke-width="1.3"/>
+    <rect x="236" y="150" width="34" height="24" rx="3" fill="#fecaca" stroke="#dc2626" stroke-width="1.3"/>
+    <rect x="276" y="150" width="34" height="24" rx="3" fill="#fecaca" stroke="#dc2626" stroke-width="1.3"/>
+    <rect x="316" y="150" width="34" height="24" rx="3" fill="#fecaca" stroke="#dc2626" stroke-width="1.3"/>
+    <rect x="356" y="150" width="34" height="24" rx="3" fill="#fecaca" stroke="#dc2626" stroke-width="1.3"/>
+  </g>
+  <text x="404" y="167" font-size="10.5" fill="#b91c1c">全满</text>
+
+  <rect x="60" y="200" width="180" height="52" rx="6" fill="#fff7ed" stroke="#fb923c" stroke-width="1.5"/>
+  <text x="150" y="221" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#9a3412">/search（慢依赖）</text>
+  <text x="150" y="240" text-anchor="middle" font-size="10.5" fill="#9a3412">疯狂占用 worker</text>
+  <rect x="262" y="200" width="180" height="52" rx="6" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="352" y="221" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#334155">/order（无关接口）</text>
+  <text x="352" y="240" text-anchor="middle" font-size="10.5" fill="#475569">拿不到位子</text>
+
+  <line x1="150" y1="196" x2="150" y2="188" stroke="#fb923c" stroke-width="1.8"/>
+  <line x1="352" y1="200" x2="352" y2="188" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="4 3"/>
+
+  <line x1="60" y1="272" x2="440" y2="272" stroke="#fecaca" stroke-width="1.5"/>
+  <text x="60" y="296" font-size="12.5" fill="#7f1d1d">/order 成功率：<tspan font-weight="bold" fill="#dc2626">69.7%</tspan>（成功 198 / 失败 86）</text>
+  <text x="60" y="320" font-size="12.5" fill="#7f1d1d">/order 耗时 P50 / P99：<tspan font-weight="bold" fill="#dc2626">40 / 300 ms</tspan></text>
+  <text x="60" y="346" font-size="11.5" fill="#991b1b">/search 慢 → 8 个位子被它占满 → /order 只能排队等</text>
+  <text x="60" y="368" font-size="11.5" fill="#991b1b">注意 /order 与 /search 之间没有任何业务关系，它纯粹被牵连</text>
+
+  <!-- 右：有隔离 -->
+  <rect x="490" y="76" width="430" height="318" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
+  <text x="510" y="102" font-size="14.5" font-weight="bold" fill="#15803d">有隔离：各走各的通道</text>
+
+  <rect x="510" y="116" width="180" height="70" rx="8" fill="#ffffff" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="600" y="136" text-anchor="middle" font-size="11" fill="#14532d">/search 专用（3 个）</text>
+  <g>
+    <rect x="532" y="150" width="36" height="24" rx="3" fill="#fecaca" stroke="#dc2626" stroke-width="1.3"/>
+    <rect x="576" y="150" width="36" height="24" rx="3" fill="#fecaca" stroke="#dc2626" stroke-width="1.3"/>
+    <rect x="620" y="150" width="36" height="24" rx="3" fill="#fecaca" stroke="#dc2626" stroke-width="1.3"/>
+  </g>
+  <text x="684" y="167" font-size="10.5" fill="#b91c1c">占满也只到这</text>
+
+  <rect x="730" y="116" width="180" height="70" rx="8" fill="#ffffff" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="820" y="136" text-anchor="middle" font-size="11" fill="#14532d">/order 专用（5 个）</text>
+  <g>
+    <rect x="742" y="150" width="30" height="24" rx="3" fill="#bbf7d0" stroke="#22c55e" stroke-width="1.3"/>
+    <rect x="778" y="150" width="30" height="24" rx="3" fill="#bbf7d0" stroke="#22c55e" stroke-width="1.3"/>
+    <rect x="814" y="150" width="30" height="24" rx="3" fill="#bbf7d0" stroke="#22c55e" stroke-width="1.3"/>
+    <rect x="850" y="150" width="30" height="24" rx="3" fill="#bbf7d0" stroke="#22c55e" stroke-width="1.3"/>
+    <rect x="880" y="150" width="24" height="24" rx="3" fill="#bbf7d0" stroke="#22c55e" stroke-width="1.3"/>
+  </g>
+  <text x="820" y="176" text-anchor="middle" font-size="10.5" fill="#15803d">基本空闲</text>
+
+  <rect x="510" y="200" width="180" height="52" rx="6" fill="#fff7ed" stroke="#fb923c" stroke-width="1.5"/>
+  <text x="600" y="221" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#9a3412">/search 自己慢</text>
+  <text x="600" y="240" text-anchor="middle" font-size="10.5" fill="#9a3412">只影响自己</text>
+  <rect x="730" y="200" width="180" height="52" rx="6" fill="#f0fdf4" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="820" y="221" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#15803d">/order 照常</text>
+  <text x="820" y="240" text-anchor="middle" font-size="10.5" fill="#166534">不受牵连</text>
+
+  <line x1="510" y1="272" x2="890" y2="272" stroke="#bbf7d0" stroke-width="1.5"/>
+  <text x="510" y="296" font-size="12.5" fill="#14532d">/order 成功率：<tspan font-weight="bold" fill="#15803d">100.0%</tspan>（成功 2343 / 失败 0）</text>
+  <text x="510" y="320" font-size="12.5" fill="#14532d">/order 耗时 P50 / P99：<tspan font-weight="bold" fill="#15803d">5 / 6 ms</tspan></text>
+  <text x="510" y="346" font-size="11.5" fill="#166534">/search 依然失败 72 次 —— 隔离不修下游，只是不让它扩散</text>
+  <text x="510" y="368" font-size="11.5" fill="#166534">这是可用性设计，不是性能优化</text>
+
+  <!-- 底部 -->
+  <rect x="40" y="412" width="880" height="98" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="480" y="436" text-anchor="middle" font-size="13.5" font-weight="bold" fill="#0f172a">隔离粒度的三个层次</text>
+  <text x="60" y="462" font-size="12" fill="#334155">① 按依赖分（最常见）：给每个下游或每类下游一条独立通道，如「搜索」「支付」「推荐」各一组连接池</text>
+  <text x="60" y="484" font-size="12" fill="#334155">② 按接口重要性分：核心链路（下单、支付）与旁路（推荐、评论）分开，旁路可以被牺牲</text>
+  <text x="60" y="506" font-size="12" fill="#334155">③ 按租户 / 用户分：防单个大客户打满共享资源（多租户 SaaS 必备）</text>
+
+  <!-- 实现方式 -->
+  <rect x="40" y="524" width="880" height="76" rx="10" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="60" y="548" font-size="12.5" font-weight="bold" fill="#1e40af">Python 侧三种隔离载体</text>
+  <text x="60" y="570" font-size="11.5" fill="#1e3a8a">threading.BoundedSemaphore(n) —— 本机单进程最直接；n 就是这个依赖能占的位子上限</text>
+  <text x="60" y="590" font-size="11.5" fill="#1e3a8a">独立连接池 / 独立 ThreadPoolExecutor —— 天然隔离，但要显式限制每池上限；独立进程或容器 —— 隔离最彻底，代价最大</text>
+</svg>

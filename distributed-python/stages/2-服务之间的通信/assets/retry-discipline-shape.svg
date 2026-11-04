@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="540" viewBox="0 0 940 540" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="arr3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#64748b"/></marker>
+  </defs>
+  <rect x="0" y="0" width="940" height="540" fill="#ffffff"/>
+  <text x="470" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#0f172a">重试：不是"失败了就再来一次"，是一套要定纪律的流程</text>
+
+  <!-- 左：要判的三件事 -->
+  <rect x="30" y="70" width="410" height="410" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="235" y="100" text-anchor="middle" font-size="17" font-weight="bold" fill="#334155">动手前先回答三个问题</text>
+
+  <rect x="55" y="120" width="360" height="92" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="72" y="146" font-size="14" font-weight="bold" fill="#1e293b">① 这个失败值得重试吗？</text>
+  <text x="72" y="170" font-size="12.5" fill="#475569">网络闪断 → 值得；参数写错 → 重试一万次也没用</text>
+  <text x="72" y="194" font-size="12" fill="#94a3b8">看状态码 / 异常类型：不是所有失败都该试</text>
+
+  <rect x="55" y="228" width="360" height="92" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="72" y="254" font-size="14" font-weight="bold" fill="#1e293b">② 重试会重复吗？（幂等）</text>
+  <text x="72" y="278" font-size="12.5" fill="#475569">不确定 → 先补一把"幂等钥匙"再敢重试</text>
+  <text x="72" y="302" font-size="12" fill="#94a3b8">不幂等的调用，重试就是在制造重复</text>
+
+  <rect x="55" y="336" width="360" height="92" rx="8" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="72" y="362" font-size="14" font-weight="bold" fill="#1e293b">③ 最多几轮？间隔多久？</text>
+  <text x="72" y="386" font-size="12.5" fill="#475569">没有上限的重试，会把"慢"放大成"挂"</text>
+  <text x="72" y="410" font-size="12" fill="#94a3b8">要退避 + 抖动 + 总预算（见左侧预算图）</text>
+
+  <!-- 右：重试形状 -->
+  <rect x="460" y="70" width="450" height="410" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="685" y="100" text-anchor="middle" font-size="17" font-weight="bold" fill="#334155">重试的"形状"决定它是好是坏</text>
+
+  <!-- 三个形状 -->
+  <text x="480" y="138" font-size="14" font-weight="bold" fill="#b91c1c">✗ 同步重试（最糟）</text>
+  <rect x="660" y="118" width="220" height="24" rx="4" fill="#fee2e2"/>
+  <text x="690" y="135" font-size="11" fill="#7f1d1d">所有客户端同时打上来</text>
+
+  <text x="480" y="212" font-size="14" font-weight="bold" fill="#b45309">△ 固定间隔（仍是同步）</text>
+  <rect x="660" y="192" width="220" height="28" rx="4" fill="#fef3c7"/>
+  <text x="690" y="211" font-size="11" fill="#92400e">都等同样的 1s → 还是同窗</text>
+
+  <text x="480" y="288" font-size="14" font-weight="bold" fill="#1d4ed8">○ 退避 + 抖动（正确）</text>
+  <rect x="660" y="266" width="220" height="34" rx="4" fill="#dbeafe"/>
+  <text x="690" y="288" font-size="11" fill="#1e3a8a">指数增长 + 随机，错峰重试</text>
+
+  <line x1="700" y1="330" x2="700" y2="400" stroke="#64748b" stroke-width="0" />
+  <text x="480" y="344" font-size="12.5" fill="#475569">退避公式（gRPC 官方形状）：</text>
+  <rect x="480" y="358" width="400" height="44" rx="6" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="500" y="378" font-size="13" fill="#1e293b" font-family="monospace">等待 = min(base·2^(n-1), 上限) × 抖动(±20%)</text>
+  <text x="500" y="396" font-size="11.5" fill="#64748b">抖动是"错峰"的关键：没有它，再多客户端都在同一秒打回来</text>
+
+  <text x="685" y="440" text-anchor="middle" font-size="12.5" fill="#475569">重试是放大器——纪律齐了才是修复器</text>
+</svg>

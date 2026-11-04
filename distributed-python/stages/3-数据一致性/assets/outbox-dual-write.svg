@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 600" width="980" height="600" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="dwG" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#1e8449"/>
+    </marker>
+    <marker id="dwR" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#c0392b"/>
+    </marker>
+  </defs>
+
+  <rect width="980" height="600" fill="#fbfbf9"/>
+  <text x="490" y="36" text-anchor="middle" font-size="22" font-weight="700" fill="#1c2833">双写的四种组合：坏的两格，最安静</text>
+  <text x="490" y="62" text-anchor="middle" font-size="13" fill="#7f8c8d">一边成了、一边没成的那两格，不会触发任何告警 —— 两边的日志都是干净的</text>
+
+  <!-- 表头 -->
+  <text x="196" y="100" text-anchor="middle" font-size="12" font-weight="700" fill="#566573">库（订单表）</text>
+  <text x="392" y="100" text-anchor="middle" font-size="12" font-weight="700" fill="#566573">消息（下游）</text>
+  <text x="596" y="100" text-anchor="middle" font-size="12" font-weight="700" fill="#566573">结果</text>
+  <text x="828" y="100" text-anchor="middle" font-size="12" font-weight="700" fill="#566573">监控能看到吗</text>
+
+  <!-- C1 绿 -->
+  <rect x="34" y="114" width="912" height="82" rx="9" fill="#f1f8f2" stroke="#a9d3b4" stroke-width="1.6"/>
+  <text x="60" y="146" font-size="13" font-weight="700" fill="#1e8449">C1</text>
+  <rect x="120" y="126" width="152" height="34" rx="5" fill="#eaf5ec" stroke="#a9d3b4"/>
+  <text x="196" y="148" text-anchor="middle" font-size="12" fill="#1e8449" font-family="monospace">INSERT 提交 ✓</text>
+  <rect x="316" y="126" width="152" height="34" rx="5" fill="#eaf5ec" stroke="#a9d3b4"/>
+  <text x="392" y="148" text-anchor="middle" font-size="12" fill="#1e8449" font-family="monospace">publish ✓</text>
+  <text x="596" y="148" text-anchor="middle" font-size="12" font-weight="700" fill="#1e8449">一致</text>
+  <text x="828" y="148" text-anchor="middle" font-size="11" fill="#7f8c8d">不需要看</text>
+  <text x="60" y="180" font-size="11" fill="#2c3e50">账上有单、下游也知道了 —— 顺利路径</text>
+
+  <!-- C2 红 -->
+  <rect x="34" y="206" width="912" height="82" rx="9" fill="#fdf2f0" stroke="#e8b4ac" stroke-width="1.6"/>
+  <text x="60" y="238" font-size="13" font-weight="700" fill="#a93226">C2</text>
+  <rect x="120" y="218" width="152" height="34" rx="5" fill="#eaf5ec" stroke="#a9d3b4"/>
+  <text x="196" y="240" text-anchor="middle" font-size="12" fill="#1e8449" font-family="monospace">INSERT 提交 ✓</text>
+  <rect x="316" y="218" width="152" height="34" rx="5" fill="#fdeceb" stroke="#e8b4ac" stroke-dasharray="4,3"/>
+  <text x="392" y="240" text-anchor="middle" font-size="12" fill="#a93226" font-family="monospace">publish ✗</text>
+  <text x="596" y="240" text-anchor="middle" font-size="12" font-weight="700" fill="#a93226">丢事件</text>
+  <text x="828" y="240" text-anchor="middle" font-size="11" font-weight="700" fill="#a93226">不能</text>
+  <text x="60" y="272" font-size="11" fill="#2c3e50">有单无货：账上有、下游永远不知道。实测 1 行订单 / 0 条消息</text>
+
+  <!-- C3 红 -->
+  <rect x="34" y="298" width="912" height="82" rx="9" fill="#fdf2f0" stroke="#e8b4ac" stroke-width="1.6"/>
+  <text x="60" y="330" font-size="13" font-weight="700" fill="#a93226">C3</text>
+  <rect x="120" y="310" width="152" height="34" rx="5" fill="#fdeceb" stroke="#e8b4ac" stroke-dasharray="4,3"/>
+  <text x="196" y="332" text-anchor="middle" font-size="12" fill="#a93226" font-family="monospace">INSERT ✗</text>
+  <rect x="316" y="310" width="152" height="34" rx="5" fill="#eaf5ec" stroke="#a9d3b4"/>
+  <text x="392" y="332" text-anchor="middle" font-size="12" fill="#1e8449" font-family="monospace">publish ✓</text>
+  <text x="596" y="332" text-anchor="middle" font-size="12" font-weight="700" fill="#a93226">幽灵事件</text>
+  <text x="828" y="332" text-anchor="middle" font-size="11" font-weight="700" fill="#a93226">不能</text>
+  <text x="60" y="364" font-size="11" fill="#2c3e50">下游扣了库存、本地查无此单。先发后写就会掉进这一格</text>
+
+  <!-- C4 绿 -->
+  <rect x="34" y="390" width="912" height="82" rx="9" fill="#f1f8f2" stroke="#a9d3b4" stroke-width="1.6"/>
+  <text x="60" y="422" font-size="13" font-weight="700" fill="#1e8449">C4</text>
+  <rect x="120" y="402" width="152" height="34" rx="5" fill="#eaf5ec" stroke="#a9d3b4"/>
+  <text x="196" y="424" text-anchor="middle" font-size="12" fill="#1e8449" font-family="monospace">INSERT ✗</text>
+  <rect x="316" y="402" width="152" height="34" rx="5" fill="#eaf5ec" stroke="#a9d3b4"/>
+  <text x="392" y="424" text-anchor="middle" font-size="12" fill="#1e8449" font-family="monospace">publish ✗</text>
+  <text x="596" y="424" text-anchor="middle" font-size="12" font-weight="700" fill="#1e8449">一致</text>
+  <text x="828" y="424" text-anchor="middle" font-size="11" fill="#7f8c8d">不需要看</text>
+  <text x="60" y="456" font-size="11" fill="#2c3e50">两边都没发生 —— 失败的失败，账是平的</text>
+
+  <!-- 底部放大 -->
+  <line x1="34" y1="492" x2="946" y2="492" stroke="#ddd" stroke-width="1.5"/>
+  <text x="490" y="518" text-anchor="middle" font-size="13" font-weight="700" fill="#1c2833">放大到 500 笔（提交后崩溃 5%｜通道抖动 8%｜先发后写 3%）</text>
+  <text x="490" y="544" text-anchor="middle" font-size="13" fill="#2c3e50">丢事件 <tspan font-weight="700" fill="#a93226">69</tspan> 笔　+　幽灵事件 <tspan font-weight="700" fill="#a93226">10</tspan> 笔　=　静默不一致 <tspan font-weight="700" fill="#a93226">79</tspan> 笔（15.8%）　→　告警数 <tspan font-weight="700" fill="#1e8449">0</tspan></text>
+  <text x="490" y="572" text-anchor="middle" font-size="11" fill="#7f8c8d">这 79 笔里没有一笔会让监控响；它们只会在月底盘点或客户投诉时冒出来</text>
+</svg>

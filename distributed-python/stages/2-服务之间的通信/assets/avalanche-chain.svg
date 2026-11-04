@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="600" viewBox="0 0 960 600" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="a2" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto"><path d="M0,0 L7,3.2 L0,6.4 Z" fill="#475569"/></marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="600" fill="#ffffff"/>
+  <text x="480" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#0f172a">雪崩：慢下游是怎么一层层把上游拖垮的</text>
+
+  <!-- 顶部：正常态 -->
+  <rect x="40" y="56" width="880" height="118" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
+  <text x="56" y="80" font-size="15" font-weight="bold" fill="#15803d">正常时：8 个位子，20ms 一个来回，50 个请求排一会儿队就都过了</text>
+
+  <rect x="60" y="96" width="120" height="60" rx="8" fill="#ffffff" stroke="#22c55e" stroke-width="1.8"/>
+  <text x="120" y="120" text-anchor="middle" font-size="12" fill="#14532d">50 个用户请求</text>
+  <text x="120" y="140" text-anchor="middle" font-size="11" fill="#166534">陆续到达</text>
+
+  <rect x="230" y="96" width="150" height="60" rx="8" fill="#dcfce7" stroke="#22c55e" stroke-width="1.8"/>
+  <text x="305" y="120" text-anchor="middle" font-size="12" fill="#14532d">你的服务</text>
+  <text x="305" y="140" text-anchor="middle" font-size="11" fill="#166534">8 个位子轮转使用</text>
+
+  <rect x="430" y="96" width="130" height="60" rx="8" fill="#ffffff" stroke="#22c55e" stroke-width="1.8"/>
+  <text x="495" y="120" text-anchor="middle" font-size="12" fill="#14532d">下游</text>
+  <text x="495" y="140" text-anchor="middle" font-size="11" fill="#166534">20ms 就回</text>
+
+  <line x1="182" y1="126" x2="226" y2="126" stroke="#475569" stroke-width="2" marker-end="url(#a2)"/>
+  <line x1="382" y1="126" x2="426" y2="126" stroke="#475569" stroke-width="2" marker-end="url(#a2)"/>
+  <text x="580" y="120" font-size="12" fill="#15803d">P50 = 183ms</text>
+  <text x="580" y="140" font-size="12" fill="#15803d">50 个全部成功</text>
+
+  <!-- 中部：恶化 -->
+  <rect x="40" y="190" width="880" height="180" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="2"/>
+  <text x="56" y="214" font-size="15" font-weight="bold" fill="#b91c1c">下游慢到 1000ms：位子被一个个钉死</text>
+
+  <!-- 8 个 worker 小格 -->
+  <text x="56" y="240" font-size="12" fill="#7f1d1d">你的 8 个位子：</text>
+  <g>
+    <rect x="160" y="228" width="40" height="26" rx="4" fill="#fecaca" stroke="#dc2626" stroke-width="1.5"/>
+    <rect x="206" y="228" width="40" height="26" rx="4" fill="#fecaca" stroke="#dc2626" stroke-width="1.5"/>
+    <rect x="252" y="228" width="40" height="26" rx="4" fill="#fecaca" stroke="#dc2626" stroke-width="1.5"/>
+    <rect x="298" y="228" width="40" height="26" rx="4" fill="#fecaca" stroke="#dc2626" stroke-width="1.5"/>
+    <rect x="344" y="228" width="40" height="26" rx="4" fill="#fecaca" stroke="#dc2626" stroke-width="1.5"/>
+    <rect x="390" y="228" width="40" height="26" rx="4" fill="#fecaca" stroke="#dc2626" stroke-width="1.5"/>
+    <rect x="436" y="228" width="40" height="26" rx="4" fill="#fecaca" stroke="#dc2626" stroke-width="1.5"/>
+    <rect x="482" y="228" width="40" height="26" rx="4" fill="#fecaca" stroke="#dc2626" stroke-width="1.5"/>
+  </g>
+  <text x="540" y="246" font-size="11" fill="#b91c1c">← 全部卡在"等下游回话"</text>
+
+  <text x="56" y="282" font-size="12" fill="#7f1d1d">后面来的 42 个请求：</text>
+  <rect x="160" y="266" width="362" height="26" rx="4" fill="#fff7ed" stroke="#fb923c" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <text x="341" y="284" text-anchor="middle" font-size="11" fill="#9a3412">全在门口排队，连下游都没碰到</text>
+
+  <text x="56" y="322" font-size="12" fill="#7f1d1d">下游实际被打：</text>
+  <text x="160" y="322" font-size="12" font-weight="bold" fill="#dc2626">只有 8 次</text>
+  <text x="248" y="322" font-size="12" fill="#475569">—— 却有 42 个用户拿到超时。这 8 次对用户 100% 无用。</text>
+  <text x="56" y="348" font-size="12" fill="#7f1d1d">用户看到的：</text>
+  <text x="160" y="348" font-size="12" font-weight="bold" fill="#dc2626">50 个里 0 个成功</text>
+
+  <!-- 下部：更糟 -->
+  <rect x="40" y="386" width="880" height="120" rx="10" fill="#fff1f2" stroke="#fda4af" stroke-width="2"/>
+  <text x="56" y="410" font-size="15" font-weight="bold" fill="#9f1239">最扎心的一段：下游已经恢复了，你还在超时</text>
+  <text x="56" y="436" font-size="12" fill="#881337">· 那 8 个位子还在替上一批请求等 1000ms，它们不知道下游已经好了</text>
+  <text x="56" y="458" font-size="12" fill="#881337">· 新来的请求继续排队 → 继续超时 → 下游这轮 0 次被打</text>
+  <text x="56" y="482" font-size="12" font-weight="bold" fill="#dc2626">故障的生命周期，比故障本身长得多 —— 这才是"雪崩"的含义</text>
+
+  <!-- 底部：三个成因 -->
+  <rect x="40" y="520" width="880" height="62" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="480" y="542" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f172a">三个成因缺一不可</text>
+  <text x="480" y="566" text-anchor="middle" font-size="12" fill="#475569">① 上游对下游不设（或设得离谱的）超时　② 上游没有并发上限，请求无限堆积　③ 上游不知道下游已坏，每次都完整地试一遍</text>
+</svg>

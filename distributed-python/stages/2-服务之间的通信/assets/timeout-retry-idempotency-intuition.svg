@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="560" viewBox="0 0 940 560" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#64748b"/></marker>
+  </defs>
+  <rect x="0" y="0" width="940" height="560" fill="#ffffff"/>
+  <text x="470" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#0f172a">问题：同一件事，没法确定到底做没做成</text>
+
+  <!-- 左侧：出问题的世界 -->
+  <rect x="30" y="70" width="420" height="430" rx="12" fill="#fef2f2" stroke="#fca5a5" stroke-width="2"/>
+  <text x="240" y="102" text-anchor="middle" font-size="18" font-weight="bold" fill="#b91c1c">现在：请求走丢了</text>
+
+  <!-- 客户端 -->
+  <rect x="60" y="130" width="150" height="70" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="2"/>
+  <text x="135" y="160" text-anchor="middle" font-size="15" font-weight="bold" fill="#334155">你的服务</text>
+  <text x="135" y="182" text-anchor="middle" font-size="13" fill="#64748b">（上游）</text>
+
+  <!-- 服务端 -->
+  <rect x="270" y="130" width="150" height="70" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="2"/>
+  <text x="345" y="160" text-anchor="middle" font-size="15" font-weight="bold" fill="#334155">对端服务</text>
+  <text x="345" y="182" text-anchor="middle" font-size="13" fill="#64748b">（下游）</text>
+
+  <line x1="212" y1="165" x2="266" y2="165" stroke="#b91c1c" stroke-width="2.5" marker-end="url(#arr)"/>
+  <text x="240" y="150" text-anchor="middle" font-size="12" fill="#b91c1c">发了请求</text>
+  <line x1="212" y1="235" x2="280" y2="235" stroke="#ef4444" stroke-width="2.5" stroke-dasharray="5,4" marker-end="url(#arr)"/>
+  <text x="240" y="252" text-anchor="middle" font-size="12" fill="#ef4444">没等到回复</text>
+
+  <!-- 问号 -->
+  <text x="470" y="200" text-anchor="middle" font-size="60" fill="#b45309" font-weight="bold">?</text>
+  <text x="470" y="250" text-anchor="middle" font-size="14" fill="#92400e">超时了？还是根本没发到？</text>
+  <text x="470" y="272" text-anchor="middle" font-size="14" fill="#92400e">重试会重复吗？</text>
+
+  <!-- 右侧：解决的世界 -->
+  <rect x="490" y="70" width="420" height="430" rx="12" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+  <text x="700" y="102" text-anchor="middle" font-size="18" font-weight="bold" fill="#1d4ed8">三件事一起做：不再走丢</text>
+
+  <!-- 三条解决措施 -->
+  <rect x="520" y="130" width="360" height="100" rx="8" fill="#ffffff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="542" y="158" font-size="15" font-weight="bold" fill="#1e40af">① 定个停止等的时间</text>
+  <text x="542" y="182" font-size="13" fill="#475569">——调用必须有终点（deadline）</text>
+  <text x="542" y="204" font-size="12" fill="#94a3b8">"最多等多久、超了就放弃"</text>
+
+  <rect x="520" y="246" width="360" height="100" rx="8" fill="#ffffff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="542" y="274" font-size="15" font-weight="bold" fill="#1e40af">② 想重试可以，但要讲规矩</text>
+  <text x="542" y="298" font-size="13" fill="#475569">——有上限、有退避、不是所有失败都该试</text>
+  <text x="542" y="320" font-size="12" fill="#94a3b8">"哪些错误能重试、最多几次、间隔多久"</text>
+
+  <rect x="520" y="362" width="360" height="100" rx="8" fill="#ffffff" stroke="#93c5fd" stroke-width="1.5"/>
+  <text x="542" y="390" font-size="15" font-weight="bold" fill="#1e40af">③ 给请求带同一把钥匙</text>
+  <text x="542" y="414" font-size="13" fill="#475569">——重试多少次都不会重复扣款</text>
+  <text x="542" y="436" font-size="12" fill="#94a3b8">"同一个订单的扣款，只发生一次"</text>
+
+  <text x="700" y="488" text-anchor="middle" font-size="13" fill="#1d4ed8">单次调用 · 自己这一环</text>
+</svg>

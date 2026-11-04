@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="620" viewBox="0 0 940 620" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="a3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#64748b"/></marker>
+    <marker id="a3r" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#dc2626"/></marker>
+  </defs>
+  <rect x="0" y="0" width="940" height="620" fill="#ffffff"/>
+  <text x="470" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#0f172a">演进第 3 步：熔断 + 舱壁 + 限流（综合实现）</text>
+  <text x="470" y="58" text-anchor="middle" font-size="12" fill="#64748b">高亮 = 相比第 2 步新增的三道门；每道门解决一个第 2 步留下的缺口</text>
+
+  <!-- 用户 -->
+  <rect x="24" y="120" width="100" height="56" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.8"/>
+  <text x="74" y="144" text-anchor="middle" font-size="12" fill="#334155">用户请求</text>
+  <text x="74" y="162" text-anchor="middle" font-size="10" fill="#64748b">50 并发</text>
+
+  <!-- 三道门 -->
+  <rect x="160" y="86" width="440" height="200" rx="10" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <text x="380" y="110" text-anchor="middle" font-size="14" font-weight="bold" fill="#1d4ed8">下单服务：三道门依次过</text>
+
+  <!-- 门1 限流 -->
+  <rect x="176" y="122" width="408" height="42" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.8"/>
+  <text x="190" y="140" font-size="12" font-weight="bold" fill="#15803d">① 限流：入口 100 QPS，超了就 429</text>
+  <text x="190" y="157" font-size="10.5" fill="#166534">★ 新增：洪峰在门口就被削掉，不会进来才发现扛不住</text>
+
+  <!-- 门2 舱壁 -->
+  <rect x="176" y="172" width="408" height="46" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.8"/>
+  <text x="190" y="190" font-size="12" font-weight="bold" fill="#15803d">② 舱壁：推荐 3 / 支付 4 / 库存 3（共 10 个位子）</text>
+  <text x="190" y="207" font-size="10.5" fill="#166534">★ 新增：推荐最多占 3 个，核心链路永远有保底</text>
+
+  <!-- 门3 熔断 -->
+  <rect x="176" y="226" width="408" height="46" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.8"/>
+  <text x="190" y="244" font-size="12" font-weight="bold" fill="#15803d">③ 熔断：连续 5 次失败（含慢 &gt;300ms）跳闸 10s</text>
+  <text x="190" y="261" font-size="10.5" fill="#166534">★ 新增：明知推荐已坏，0ms 拒绝，连 worker 都不占</text>
+
+  <!-- 依赖 -->
+  <rect x="660" y="86" width="260" height="52" rx="8" fill="#fff7ed" stroke="#fb923c" stroke-width="1.8"/>
+  <text x="790" y="107" text-anchor="middle" font-size="12" font-weight="bold" fill="#9a3412">推荐 /recommend</text>
+  <text x="790" y="126" text-anchor="middle" font-size="10" fill="#b45309">最多占 3 个位子，坏了就跳闸</text>
+
+  <rect x="660" y="148" width="260" height="52" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.8"/>
+  <text x="790" y="169" text-anchor="middle" font-size="12" fill="#334155">支付 /pay</text>
+  <text x="790" y="188" text-anchor="middle" font-size="10" fill="#64748b">独占 4 个，不受推荐影响</text>
+
+  <rect x="660" y="210" width="260" height="52" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.8"/>
+  <text x="790" y="231" text-anchor="middle" font-size="12" fill="#334155">库存 /stock</text>
+  <text x="790" y="250" text-anchor="middle" font-size="10" fill="#64748b">独占 3 个，不受推荐影响</text>
+
+  <line x1="127" y1="148" x2="155" y2="148" stroke="#64748b" stroke-width="2" marker-end="url(#a3)"/>
+  <line x1="600" y1="112" x2="655" y2="112" stroke="#dc2626" stroke-width="2" marker-end="url(#a3r)"/>
+  <line x1="600" y1="174" x2="655" y2="174" stroke="#64748b" stroke-width="2" marker-end="url(#a3)"/>
+  <line x1="600" y1="236" x2="655" y2="236" stroke="#64748b" stroke-width="2" marker-end="url(#a3)"/>
+
+  <!-- 熔断状态机小图 -->
+  <rect x="160" y="300" width="440" height="128" rx="10" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.8"/>
+  <text x="380" y="324" text-anchor="middle" font-size="13" font-weight="bold" fill="#78350f">推荐那一路的熔断器状态机</text>
+
+  <rect x="180" y="342" width="104" height="36" rx="5" fill="#dcfce7" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="232" y="365" text-anchor="middle" font-size="11" fill="#14532d">Closed</text>
+  <rect x="316" y="342" width="104" height="36" rx="5" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="368" y="365" text-anchor="middle" font-size="11" fill="#7f1d1d">Open</text>
+  <rect x="452" y="342" width="120" height="36" rx="5" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="512" y="365" text-anchor="middle" font-size="11" fill="#78350f">Half-Open</text>
+
+  <line x1="286" y1="360" x2="312" y2="360" stroke="#dc2626" stroke-width="1.8" marker-end="url(#a3r)"/>
+  <text x="299" y="352" text-anchor="middle" font-size="9" fill="#dc2626">≤5 次</text>
+  <line x1="422" y1="360" x2="448" y2="360" stroke="#475569" stroke-width="1.8" marker-end="url(#a3)"/>
+  <text x="435" y="352" text-anchor="middle" font-size="9" fill="#475569">10s</text>
+  <path d="M 512,380 C 512,404 232,404 232,382" fill="none" stroke="#16a34a" stroke-width="1.8" marker-end="url(#a3)"/>
+  <text x="372" y="412" text-anchor="middle" font-size="9.5" fill="#15803d">探针成功 → 回 Closed，计数清零</text>
+
+  <rect x="620" y="300" width="300" height="128" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="640" y="324" font-size="12.5" font-weight="bold" fill="#0f172a">"什么算失败"必须先定义</text>
+  <text x="640" y="346" font-size="11" fill="#334155">① 抛异常 / 连接失败</text>
+  <text x="640" y="366" font-size="11" fill="#334155">② 5xx</text>
+  <text x="640" y="386" font-size="11" fill="#b91c1c">③ 耗时 &gt; 300ms（慢调用，最关键）</text>
+  <text x="640" y="408" font-size="10" fill="#64748b">漏掉 ③ → 慢下游是盲区，跳闸 0 次</text>
+
+  <!-- 效果 -->
+  <rect x="24" y="452" width="896" height="148" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
+  <text x="46" y="478" font-size="14.5" font-weight="bold" fill="#15803d">三个版本放在一起看（本机实测数字）</text>
+
+  <text x="46" y="504" font-size="12" fill="#166534">第 1 步（无保护）　推荐拖死全部：50 个请求 0 成功，支付/库存一起排队</text>
+  <text x="46" y="526" font-size="12" fill="#166534">第 2 步（+超时）　　能自己爬起来了，但仍 42/50 排队超时、下游每次被打满 8 次</text>
+  <text x="46" y="548" font-size="12" font-weight="bold" fill="#15803d">第 3 步（+三道门）推荐坏掉时，支付/库存成功率 100.0%、P99 6ms；下游被打锁在配额内</text>
+
+  <text x="46" y="574" font-size="11.5" fill="#334155">代价：推荐自己的成功率不会变好（甚至更差，因为它只有 3 个位子）—— 这是刻意的取舍</text>
+  <text x="46" y="592" font-size="11.5" fill="#0f172a">判据：一个依赖坏掉时，你愿意让哪些功能跟着一起坏？</text>
+</svg>

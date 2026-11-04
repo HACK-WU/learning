@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 620" width="980" height="620" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="oG" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#1e8449"/>
+    </marker>
+    <marker id="oR" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#c0392b"/>
+    </marker>
+    <marker id="oD" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 z" fill="#7f8c8d"/>
+    </marker>
+  </defs>
+
+  <rect width="980" height="620" fill="#fbfbf9"/>
+  <text x="490" y="38" text-anchor="middle" font-size="22" font-weight="700" fill="#1c2833">双写与发件箱：你要做两件事，它们归两个部门管</text>
+  <text x="490" y="64" text-anchor="middle" font-size="13" fill="#7f8c8d">不是让两件事变成一件，而是把第二件先变成自己账本上的一行</text>
+
+  <!-- 左：现在的处境 -->
+  <rect x="26" y="88" width="452" height="330" rx="12" fill="#fdf2f0" stroke="#e8b4ac" stroke-width="1.5"/>
+  <text x="50" y="118" font-size="15" font-weight="700" fill="#a93226">现在的处境：中间那道缝会掉东西</text>
+
+  <rect x="52" y="140" width="176" height="70" rx="8" fill="#fff" stroke="#d5a6a0" stroke-width="1.8"/>
+  <text x="140" y="166" text-anchor="middle" font-size="13" font-weight="700" fill="#a93226">自己的账本</text>
+  <text x="140" y="188" text-anchor="middle" font-size="11" fill="#2c3e50">orders 表</text>
+  <text x="140" y="202" text-anchor="middle" font-size="10" fill="#7f8c8d">写完就擦不掉</text>
+
+  <rect x="276" y="140" width="176" height="70" rx="8" fill="#fff" stroke="#d5a6a0" stroke-width="1.8"/>
+  <text x="364" y="166" text-anchor="middle" font-size="13" font-weight="700" fill="#a93226">楼下的仓库</text>
+  <text x="364" y="188" text-anchor="middle" font-size="11" fill="#2c3e50">消息队列</text>
+  <text x="364" y="202" text-anchor="middle" font-size="10" fill="#7f8c8d">它不回话</text>
+
+  <!-- 裂缝 -->
+  <path d="M 228 164 L 276 164" fill="none" stroke="#c0392b" stroke-width="2" stroke-dasharray="5,4"/>
+  <text x="252" y="156" text-anchor="middle" font-size="16" fill="#c0392b">✕</text>
+  <text x="252" y="258" text-anchor="middle" font-size="10" fill="#c0392b">缝</text>
+
+  <rect x="52" y="228" width="400" height="82" rx="8" fill="#fff" stroke="#e8b4ac"/>
+  <text x="70" y="252" font-size="12" font-weight="700" fill="#a93226">掉下去的是这几种：</text>
+  <text x="70" y="274" font-size="11" fill="#2c3e50">账记了、通知没发 → 有单无货</text>
+  <text x="70" y="294" font-size="11" fill="#2c3e50">通知发了、账没记 → 仓库白扣一件</text>
+
+  <rect x="52" y="324" width="400" height="72" rx="8" fill="#fdeceb" stroke="#e8b4ac"/>
+  <text x="70" y="348" font-size="12" font-weight="700" fill="#a93226">最麻烦的是：两边都不报错</text>
+  <text x="70" y="370" font-size="11" fill="#2c3e50">账本说「我提交了」，队列说「我没被调用过」</text>
+  <text x="70" y="388" font-size="11" fill="#7f8c8d">于是没有任何一处会喊「这里少了一条」</text>
+
+  <!-- 右：本课三件事 -->
+  <rect x="502" y="88" width="452" height="330" rx="12" fill="#f1f8f2" stroke="#a9d3b4" stroke-width="1.5"/>
+  <text x="526" y="118" font-size="15" font-weight="700" fill="#1e8449">本课要做的三件事</text>
+
+  <rect x="528" y="136" width="400" height="76" rx="8" fill="#fff" stroke="#a9d3b4"/>
+  <text x="546" y="160" font-size="12" font-weight="700" fill="#1e8449">① 先看清缝在哪、掉的哪几种</text>
+  <text x="546" y="182" font-size="11" fill="#2c3e50">四种组合里坏两格：丢事件、幽灵事件</text>
+  <text x="546" y="200" font-size="10" fill="#7f8c8d">知识点 1：双写不一致的根源</text>
+
+  <rect x="528" y="226" width="400" height="76" rx="8" fill="#fff" stroke="#a9d3b4"/>
+  <text x="546" y="250" font-size="12" font-weight="700" fill="#1e8449">② 把「要通知的事」写进自己账本</text>
+  <text x="546" y="272" font-size="11" fill="#2c3e50">和记账同一次落笔，写成就一定在</text>
+  <text x="546" y="290" font-size="10" fill="#7f8c8d">知识点 2：事务性发件箱</text>
+
+  <rect x="528" y="316" width="400" height="80" rx="8" fill="#fff" stroke="#a9d3b4"/>
+  <text x="546" y="340" font-size="12" font-weight="700" fill="#1e8449">③ 对方收到两遍怎么办</text>
+  <text x="546" y="362" font-size="11" fill="#2c3e50">让它认得出「这条我办过了」</text>
+  <text x="546" y="380" font-size="10" fill="#7f8c8d">知识点 3：幂等消费与去重表</text>
+
+  <!-- 箭头 -->
+  <line x1="452" y1="200" x2="494" y2="200" stroke="#7f8c8d" stroke-width="2.5" marker-end="url(#oD)"/>
+
+  <!-- 底部本质 -->
+  <rect x="26" y="440" width="928" height="86" rx="10" fill="#fff" stroke="#ccc" stroke-width="1.5"/>
+  <text x="490" y="470" text-anchor="middle" font-size="15" font-weight="700" fill="#1c2833">一句话：把第二件事从「网络调用」换成「自己库里的一行」</text>
+  <text x="490" y="496" text-anchor="middle" font-size="12" fill="#2c3e50">它没消除「两个系统」这个事实，只是让「还没还的债」第一次变得可见、可重放、可核对</text>
+  <text x="490" y="516" text-anchor="middle" font-size="11" fill="#7f8c8d">代价：债能补上了，但可能补两遍 —— 所以还差最后一颗螺丝（去重表）</text>
+
+  <!-- 读图指引 -->
+  <text x="26" y="556" font-size="11" fill="#7f8c8d">看图顺序：左边认出那道缝 → 右边三步依次解决 → 底部那句话是本课的本质</text>
+  <text x="26" y="578" font-size="11" fill="#7f8c8d">左边红色虚线就是「缝」：账已经落到纸上，通知还在手上，而手可能会松</text>
+  <text x="26" y="600" font-size="11" fill="#7f8c8d">注意：右边三步不是三个可选项，是必须依次做完的三件事 —— 少做一步，账就是错的</text>
+</svg>

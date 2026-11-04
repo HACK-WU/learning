@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 720" width="980" height="720" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="a3" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <path d="M0,0 L9,3.5 L0,7 z" fill="#5d6d7e"/>
+    </marker>
+  </defs>
+
+  <rect width="980" height="680" fill="#fbfbf9"/>
+  <text x="490" y="38" text-anchor="middle" font-size="22" font-weight="700" fill="#1c2833">三种探针：可逆与不可逆的分界线</text>
+  <text x="490" y="62" text-anchor="middle" font-size="13" fill="#7f8c8d">同样叫"检查失败"，后果完全不同——一个是摘流，一个是杀进程</text>
+
+  <!-- 三列 -->
+  <!-- startup -->
+  <rect x="30" y="86" width="296" height="272" rx="10" fill="#fff" stroke="#cfd8dc" stroke-width="1.5"/>
+  <rect x="30" y="86" width="296" height="40" rx="10" fill="#f4f6f7"/>
+  <text x="178" y="112" text-anchor="middle" font-size="15" font-weight="700" fill="#34495e">startupProbe</text>
+  <text x="178" y="152" text-anchor="middle" font-size="12" fill="#566573">问：应用启动完了吗？</text>
+  <line x1="50" y1="166" x2="306" y2="166" stroke="#e5e8e8"/>
+  <text x="50" y="192" font-size="12" font-weight="700" fill="#2c3e50">失败后：杀掉容器</text>
+  <text x="50" y="216" font-size="12" fill="#c0392b">可逆吗：否（进程没了）</text>
+  <text x="50" y="244" font-size="12" fill="#2c3e50">用在：启动很慢的应用</text>
+  <text x="50" y="268" font-size="11" fill="#7f8c8d">成功之前 liveness 与 readiness</text>
+  <text x="50" y="286" font-size="11" fill="#7f8c8d">都不执行</text>
+  <rect x="50" y="302" width="256" height="42" rx="6" fill="#eaf2f8" stroke="#85b8d8"/>
+  <text x="178" y="320" text-anchor="middle" font-size="11" fill="#1f4e79">没有它：慢启动实例永远起不来</text>
+  <text x="178" y="336" text-anchor="middle" font-size="11" fill="#1f4e79">（M5 场景 3：25s 启动 / 3s 被判死）</text>
+
+  <!-- liveness -->
+  <rect x="342" y="86" width="296" height="272" rx="10" fill="#fdf2f0" stroke="#e8b4ac" stroke-width="2"/>
+  <rect x="342" y="86" width="296" height="40" rx="10" fill="#fadbd8"/>
+  <text x="490" y="112" text-anchor="middle" font-size="15" font-weight="700" fill="#a93226">livenessProbe</text>
+  <text x="490" y="152" text-anchor="middle" font-size="12" fill="#7b241c">问：这个进程还有救吗？</text>
+  <line x1="362" y1="166" x2="618" y2="166" stroke="#e8d5d2"/>
+  <text x="362" y="192" font-size="12" font-weight="700" fill="#a93226">失败后：重启容器</text>
+  <text x="362" y="216" font-size="12" font-weight="700" fill="#c0392b">可逆吗：否（进程没了 + 冷启动）</text>
+  <text x="362" y="244" font-size="12" fill="#2c3e50">用在：死锁、僵死、无法自愈</text>
+  <text x="362" y="272" font-size="11" fill="#c0392b">绝不能查下游 / DB / 队列</text>
+  <rect x="362" y="288" width="256" height="56" rx="6" fill="#fff" stroke="#e8b4ac"/>
+  <text x="490" y="306" text-anchor="middle" font-size="11" font-weight="700" fill="#a93226">M4 实测：liveness 查依赖</text>
+  <text x="490" y="322" text-anchor="middle" font-size="11" fill="#7b241c">3 秒重启 45 次 ｜ 冷启动损失 67.5 秒·实例</text>
+  <text x="490" y="338" text-anchor="middle" font-size="11" font-weight="700" fill="#7b241c">下游恢复时可用实例 0 / 3</text>
+
+  <!-- readiness -->
+  <rect x="654" y="86" width="296" height="272" rx="10" fill="#f1f8f2" stroke="#a9d3b4" stroke-width="2"/>
+  <rect x="654" y="86" width="296" height="40" rx="10" fill="#d5f5e3"/>
+  <text x="802" y="112" text-anchor="middle" font-size="15" font-weight="700" fill="#145a32">readinessProbe</text>
+  <text x="802" y="152" text-anchor="middle" font-size="12" fill="#145a32">问：现在能接流量吗？</text>
+  <line x1="674" y1="166" x2="930" y2="166" stroke="#c8e6d0"/>
+  <text x="674" y="192" font-size="12" font-weight="700" fill="#1e8449">失败后：从名单摘除（不重启）</text>
+  <text x="674" y="216" font-size="12" font-weight="700" fill="#1e8449">可逆吗：是（进程还在，恢复即时）</text>
+  <text x="674" y="244" font-size="12" fill="#2c3e50">用在：预热、依赖暂不可用、维护下线</text>
+  <text x="674" y="272" font-size="11" fill="#1e8449">依赖状态只能挂在这里</text>
+  <rect x="674" y="288" width="256" height="56" rx="6" fill="#fff" stroke="#a9d3b4"/>
+  <text x="802" y="306" text-anchor="middle" font-size="11" font-weight="700" fill="#1e8449">M4 实测：只查自己</text>
+  <text x="802" y="322" text-anchor="middle" font-size="11" fill="#145a32">重启 0 次 ｜ 冷启动损失 0</text>
+  <text x="802" y="338" text-anchor="middle" font-size="11" font-weight="700" fill="#145a32">下游恢复时可用实例 3 / 3</text>
+
+  <!-- 分界线 -->
+  <line x1="339" y1="380" x2="339" y2="640" stroke="#c0392b" stroke-width="2" stroke-dasharray="6 4"/>
+  <text x="339" y="396" text-anchor="middle" font-size="11" font-weight="700" fill="#c0392b">不可逆｜可逆</text>
+
+  <!-- 判断标准 -->
+  <rect x="30" y="374" width="920" height="58" rx="10" fill="#eef4fb" stroke="#b6cde8"/>
+  <text x="490" y="398" text-anchor="middle" font-size="14" font-weight="700" fill="#1f4e79">判断标准只有一句话</text>
+  <text x="490" y="420" text-anchor="middle" font-size="13" fill="#2c3e50">"这个进程自己不可救药了吗？" → liveness ｜ "外部条件暂时不满足吗？" → readiness，永远不要用 liveness</text>
+
+  <!-- 时序坑 -->
+  <text x="30" y="466" font-size="15" font-weight="700" fill="#1c2833">两个时序坑（都不是"检查写错"，而是"时机错"）</text>
+
+  <rect x="30" y="480" width="452" height="184" rx="10" fill="#fff" stroke="#cfd8dc" stroke-width="1.5"/>
+  <text x="52" y="506" font-size="13" font-weight="700" fill="#a93226">坑 1：readiness 通过 ≠ 立刻扛得住</text>
+  <text x="52" y="530" font-size="11" fill="#566573">实例启动 200ms、预热 1800ms（M5 场景 1）</text>
+
+  <line x1="70" y1="560" x2="456" y2="560" stroke="#bdc3c7" stroke-width="1.4"/>
+  <text x="70" y="556" font-size="9" fill="#7f8c8d">t=0</text>
+  <text x="446" y="556" font-size="9" fill="#7f8c8d" text-anchor="end">t=3000ms</text>
+
+  <line x1="200" y1="552" x2="200" y2="568" stroke="#5d6d7e"/>
+  <text x="200" y="582" text-anchor="middle" font-size="9" fill="#566573">1200ms 开始接流</text>
+
+  <line x1="300" y1="552" x2="300" y2="568" stroke="#1e8449"/>
+  <text x="300" y="596" text-anchor="middle" font-size="9" fill="#1e8449">2000ms 真正扛得住</text>
+
+  <rect x="200" y="554" width="100" height="8" fill="#e74c3c" opacity="0.5"/>
+  <text x="250" y="614" text-anchor="middle" font-size="10" font-weight="700" fill="#c0392b">⚠️ 800ms 危险窗口</text>
+
+  <text x="52" y="642" font-size="11" fill="#1e8449">✅ 改成校验预热完成 → 最早接流 3000ms，窗口消失</text>
+
+  <rect x="498" y="480" width="452" height="184" rx="10" fill="#fff" stroke="#cfd8dc" stroke-width="1.5"/>
+  <text x="520" y="506" font-size="13" font-weight="700" fill="#a93226">坑 2：先 SIGTERM 再摘流</text>
+  <text x="520" y="530" font-size="11" fill="#566573">摘除传播 200ms、在途请求 300ms（M5 场景 2）</text>
+
+  <rect x="520" y="544" width="410" height="40" rx="6" fill="#fadbd8" stroke="#e8b4ac"/>
+  <text x="536" y="561" font-size="10" fill="#7b241c">错误：t=0 杀进程 → t=200ms 摘流生效</text>
+  <text x="536" y="577" font-size="10" fill="#c0392b">这 200ms 里 LB 仍在派新请求，在途请求被硬断</text>
+
+  <rect x="520" y="592" width="410" height="40" rx="6" fill="#d5f5e3" stroke="#a9d3b4"/>
+  <text x="536" y="609" font-size="10" fill="#145a32">正确：t=200ms 摘流生效 → 再 SIGTERM</text>
+  <text x="536" y="625" font-size="10" fill="#1e8449">在途请求能在优雅退出期内跑完</text>
+
+  <text x="520" y="652" font-size="10" fill="#7f8c8d">K8s 官方：删 Pod 时端点 ready 条件会被置 false，但传播是异步的</text>
+
+  <!-- 收尾结论 -->
+  <rect x="30" y="668" width="920" height="24" rx="5" fill="#f1f8f2" stroke="#a9d3b4"/>
+  <text x="490" y="684" text-anchor="middle" font-size="10.5" fill="#145a32">摘流只是把流量移走，实例还在；所以它必须可逆 —— readiness 失败能自动恢复，liveness 失败只能重启</text>
+</svg>

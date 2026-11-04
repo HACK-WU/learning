@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 660" width="980" height="660" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="cR" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#c0392b"/>
+    </marker>
+    <marker id="cG" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#1e8449"/>
+    </marker>
+    <marker id="cO" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto">
+      <path d="M0,0 L9,3.5 L0,7 z" fill="#e67e22"/>
+    </marker>
+  </defs>
+
+  <rect width="980" height="660" fill="#fbfbf9"/>
+  <text x="490" y="36" text-anchor="middle" font-size="22" font-weight="700" fill="#1c2833">Saga：不擦掉，而是再记一笔抵消 —— 以及「抵消」这件事的三个坑</text>
+  <text x="490" y="62" text-anchor="middle" font-size="13" fill="#7f8c8d">上：倒退着补的顺序。中：三种补偿写法的命运差别。下：最后一个不用补，和补不回来的那一步</text>
+
+  <!-- 上：补偿链 -->
+  <rect x="26" y="84" width="928" height="188" rx="12" fill="#f1f8f2" stroke="#a9d3b4" stroke-width="1.5"/>
+  <text x="50" y="112" font-size="15" font-weight="700" fill="#1e8449">补偿链：往前走一步一个，往回补时倒着来</text>
+
+  <!-- 四个步骤 -->
+  <rect x="56" y="132" width="150" height="66" rx="7" fill="#fff" stroke="#a9d3b4" stroke-width="1.5"/>
+  <text x="131" y="156" text-anchor="middle" font-size="12" font-weight="700" fill="#566573">① 建订单</text>
+  <text x="131" y="180" text-anchor="middle" font-size="11" fill="#7f8c8d">记一笔「卖出」</text>
+
+  <rect x="226" y="132" width="150" height="66" rx="7" fill="#fff" stroke="#a9d3b4" stroke-width="1.5"/>
+  <text x="301" y="156" text-anchor="middle" font-size="12" font-weight="700" fill="#566573">② 扣库存</text>
+  <text x="301" y="180" text-anchor="middle" font-size="11" fill="#7f8c8d">划掉 1 件</text>
+
+  <rect x="396" y="132" width="150" height="66" rx="7" fill="#fff" stroke="#a9d3b4" stroke-width="1.5"/>
+  <text x="471" y="156" text-anchor="middle" font-size="12" font-weight="700" fill="#566573">③ 扣款</text>
+  <text x="471" y="180" text-anchor="middle" font-size="11" fill="#7f8c8d">收 100 元</text>
+
+  <rect x="566" y="132" width="150" height="66" rx="7" fill="#fff8f0" stroke="#e0c3a0" stroke-width="1.8"/>
+  <text x="641" y="156" text-anchor="middle" font-size="12" font-weight="700" fill="#a04000">④ 发货</text>
+  <text x="641" y="180" text-anchor="middle" font-size="11" fill="#a04000">货出门了</text>
+
+  <line x1="208" y1="165" x2="222" y2="165" stroke="#1e8449" stroke-width="2" marker-end="url(#cG)"/>
+  <line x1="378" y1="165" x2="392" y2="165" stroke="#1e8449" stroke-width="2" marker-end="url(#cG)"/>
+  <line x1="548" y1="165" x2="562" y2="165" stroke="#1e8449" stroke-width="2" marker-end="url(#cG)"/>
+
+  <!-- 虚线回落 -->
+  <path d="M 471 200 L 471 214 L 301 214" fill="none" stroke="#c0392b" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#cR)"/>
+  <path d="M 301 214 L 301 226 L 131 226" fill="none" stroke="#c0392b" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#cR)"/>
+  <text x="300" y="238" text-anchor="middle" font-size="11" fill="#a93226">③失败 → 先补②（库存加回来）→ 再补①（订单撤掉）</text>
+
+  <!-- 最后一步说明 -->
+  <rect x="736" y="132" width="196" height="66" rx="7" fill="#fff8f0" stroke="#e0c3a0"/>
+  <text x="834" y="154" text-anchor="middle" font-size="11" font-weight="700" fill="#a04000">第④步不需要补偿</text>
+  <text x="834" y="174" text-anchor="middle" font-size="11" fill="#7f8c8d">它成功了 Saga 就结束了</text>
+  <text x="834" y="192" text-anchor="middle" font-size="11" fill="#c0392b">它失败就只能重试到底</text>
+
+  <text x="56" y="260" font-size="11" fill="#7f8c8d">原文口径（1987）：「要么 T1..Tn 全成，要么 T1..Tj, Cj..C1」—— 注意下标只到 n-1，最后一步没有 C。</text>
+
+  <!-- 中：三种补偿 -->
+  <rect x="26" y="288" width="928" height="196" rx="12" fill="#fbfbf9" stroke="#ccc" stroke-width="1.2"/>
+  <text x="50" y="316" font-size="15" font-weight="700" fill="#1c2833">「补一笔」不是「撤销」：三种写法，三种命运（S2 实测，每条补偿投递 2 次）</text>
+
+  <!-- 三种 -->
+  <rect x="56" y="336" width="286" height="130" rx="8" fill="#fff" stroke="#a9d3b4" stroke-width="1.5"/>
+  <text x="76" y="360" font-size="12" font-weight="700" fill="#1e8449">撤订单：删掉那一行</text>
+  <text x="76" y="384" font-size="11" fill="#2c3e50">投两次 = 删两次</text>
+  <text x="76" y="406" font-size="11" fill="#2c3e50">结果一样：那一行不存在</text>
+  <text x="76" y="432" font-size="11" fill="#1e8449">✓ 天生幂等</text>
+  <text x="76" y="454" font-size="11" fill="#7f8c8d">投 80 次，80 次一样</text>
+
+  <rect x="356" y="336" width="286" height="130" rx="8" fill="#fff" stroke="#e0c3a0" stroke-width="1.5"/>
+  <text x="376" y="360" font-size="12" font-weight="700" fill="#a04000">退款：把「已收」改成「已退」</text>
+  <text x="376" y="384" font-size="11" fill="#2c3e50">第二次找不到可退的</text>
+  <text x="376" y="406" font-size="11" fill="#2c3e50">它报错</text>
+  <text x="376" y="432" font-size="11" fill="#a04000">△ 不幂等，但它「会响」</text>
+  <text x="376" y="454" font-size="11" fill="#7f8c8d">至少能被监控发现（3 次）</text>
+
+  <rect x="656" y="336" width="276" height="130" rx="8" fill="#fdf2f0" stroke="#e8b4ac" stroke-width="1.8"/>
+  <text x="676" y="360" font-size="12" font-weight="700" fill="#a93226">还库存：数字加回去</text>
+  <text x="676" y="384" font-size="11" fill="#2c3e50">第二次照样加</text>
+  <text x="676" y="406" font-size="11" fill="#2c3e50">它不报错</text>
+  <text x="676" y="432" font-size="11" font-weight="700" fill="#c0392b">✗ 不幂等，而且「不响」</text>
+  <text x="676" y="454" font-size="11" fill="#7f8c8d">多还 32 件，账面上看不出来</text>
+
+  <!-- 下 -->
+  <rect x="26" y="500" width="928" height="136" rx="12" fill="#eef4fb" stroke="#b6cde8" stroke-width="1.5"/>
+  <text x="490" y="528" text-anchor="middle" font-size="15" font-weight="700" fill="#1f4e79">三段对照（同一份失败清单，成功/失败笔数完全相同）</text>
+
+  <text x="70" y="558" font-size="12" fill="#2c3e50">S1 什么都没补</text>
+  <text x="230" y="558" font-size="12" font-weight="700" fill="#c0392b">偏差 8（少扣了）</text>
+  <text x="400" y="558" font-size="12" fill="#2c3e50">有单无货，客户投诉</text>
+
+  <text x="70" y="582" font-size="12" fill="#2c3e50">S2 补了但不幂等</text>
+  <text x="230" y="582" font-size="12" font-weight="700" fill="#c0392b">偏差 32（多还了）</text>
+  <text x="400" y="582" font-size="12" fill="#2c3e50">库存虚增，越退越多</text>
+
+  <text x="70" y="606" font-size="12" fill="#2c3e50">S3 补了且幂等</text>
+  <text x="230" y="606" font-size="12" font-weight="700" fill="#1e8449">偏差 0</text>
+  <text x="400" y="606" font-size="12" fill="#2c3e50">账对得上</text>
+
+  <text x="70" y="628" font-size="11" fill="#7f8c8d">同一批 100 笔、同一组失败点（库存失败 8 / 支付失败 29 / 发货失败 3 / 全成功 60）—— 差别只在补偿怎么写。</text>
+</svg>

@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="560" viewBox="0 0 900 560" font-family="PingFang SC, Microsoft YaHei, Segoe UI, sans-serif">
+  <rect width="900" height="560" fill="#ffffff"/>
+  <text x="30" y="34" font-size="17" font-weight="700" fill="#111827">step2 演进 1：docs/内文档 → 一份 .proto 契约</text>
+  <text x="30" y="56" font-size="12" fill="#6b7280">把"约定"从人脑搬进一份机器可读、可检查、可进 CI 的文件。字段名降级成注释，字段号成为唯一事实。</text>
+
+  <!-- 左：proto 文件 -->
+  <rect x="40" y="86" width="300" height="360" rx="10" fill="#f0fdf4" stroke="#86efac"/>
+  <text x="60" y="112" font-size="13" font-weight="700" fill="#047857">一份 .proto（IDL）—— 唯一事实源</text>
+  <rect x="60" y="128" width="260" height="212" rx="8" fill="#ffffff" stroke="#a7f3d0"/>
+  <text x="76" y="150" font-size="11" font-family="ui-monospace, Menlo, monospace" fill="#111827">syntax = "proto3";</text>
+  <text x="76" y="170" font-size="11" font-family="ui-monospace, Menlo, monospace" fill="#111827">message Order {</text>
+  <text x="76" y="190" font-size="11" font-family="ui-monospace, Menlo, monospace" fill="#047857">  string order_id = 1;</text>
+  <text x="76" y="210" font-size="11" font-family="ui-monospace, Menlo, monospace" fill="#047857">  int64 amount_cents = 2;</text>
+  <text x="76" y="230" font-size="11" font-family="ui-monospace, Menlo, monospace" fill="#047857">  string status = 3;</text>
+  <text x="76" y="250" font-size="11" font-family="ui-monospace, Menlo, monospace" fill="#047857">  repeated Item items = 4;</text>
+  <text x="76" y="270" font-size="11" font-family="ui-monospace, Menlo, monospace" fill="#047857">  int64 created_at_ms = 5;</text>
+  <text x="76" y="290" font-size="11" font-family="ui-monospace, Menlo, monospace" fill="#047857">  string currency = 6;</text>
+  <text x="76" y="310" font-size="11" font-family="ui-monospace, Menlo, monospace" fill="#047857">}</text>
+  <text x="76" y="330" font-size="10.5" fill="#6b7280">字段名只活在文件里 —— 号才是线格式</text>
+
+  <text x="60" y="366" font-size="12" font-weight="700" fill="#047857">protoc 编译 → 生成两种语言的桩代码</text>
+  <text x="60" y="388" font-size="11" fill="#065f46">order_pb2.py   (Python 调用方)</text>
+  <text x="60" y="406" font-size="11" fill="#065f46">order.pb.go     (Java/Go 调用方)</text>
+  <text x="60" y="428" font-size="11" fill="#065f46">字段名、类型、编号 —— 在生成期锁死</text>
+
+  <!-- 右：效果 -->
+  <rect x="380" y="86" width="480" height="360" rx="10" fill="#eff6ff" stroke="#93c5fd"/>
+  <text x="400" y="112" font-size="13" font-weight="700" fill="#1e40af">改动了什么 / 收获了什么</text>
+
+  <rect x="400" y="126" width="440" height="72" rx="8" fill="#ffffff" stroke="#bfdbfe"/>
+  <text x="416" y="148" font-size="11.5" font-weight="700" fill="#1e40af">① 改名不再需要通知任何人</text>
+  <text x="416" y="168" font-size="11" fill="#374151">amount → amount_cents 只要号 2 不变，旧调用方照样读对（实测：读到 1990）</text>
+  <text x="416" y="188" font-size="11" fill="#6b7280">—— 名字是注释，位置是编号</text>
+
+  <rect x="400" y="206" width="440" height="72" rx="8" fill="#ffffff" stroke="#bfdbfe"/>
+  <text x="416" y="228" font-size="11.5" font-weight="700" fill="#1e40af">② 类型错误被前移到生成期</text>
+  <text x="416" y="248" font-size="11" fill="#374151">某侧字段类型写错，protoc 编译就报，而不是线上解析炸出格式错</text>
+  <text x="416" y="268" font-size="11" fill="#6b7280">—— 错误从运行期 → 生成期</text>
+
+  <rect x="400" y="286" width="440" height="72" rx="8" fill="#ffffff" stroke="#bfdbfe"/>
+  <text x="416" y="308" font-size="11.5" font-weight="700" fill="#1e40af">③ 兼容规则封闭 → 能写进 CI</text>
+  <text x="416" y="328" font-size="11" fill="#374151">"加字段安全 / 改号危险 / 复用号禁止"是有限条规则</text>
+  <text x="416" y="348" font-size="11" fill="#374151">每次改 .proto 的 MR 自动检查，破坏性变更合并前被拦</text>
+  <text x="416" y="368" font-size="11" fill="#6b7280">—— 兼容性从"人的记忆"变成"脚本"</text>
+
+  <text x="400" y="418" font-size="11.5" fill="#065f46">注意：这一步只改了"怎么表达契约"，还没改"怎么传输"（仍是 JSON over HTTP）——那在 step3。</text>
+
+  <text x="30" y="476" font-size="12" font-weight="700" fill="#047857">收获：三服务接入问题焊死 —— 字段名随便改、类型生成期锁死、不兼容改动 CI 拦截。</text>
+  <text x="30" y="500" font-size="12" fill="#6b7280">触发演进 2：大批量数据要传（1 万笔订单），逐条 JSON 体积大、无类型 —— 想用 gRPC 的四种形态解决"怎么流"。</text>
+</svg>

@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="560" viewBox="0 0 940 560" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="a2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#64748b"/></marker>
+    <marker id="a2r" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#dc2626"/></marker>
+  </defs>
+  <rect x="0" y="0" width="940" height="560" fill="#ffffff"/>
+  <text x="470" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#0f172a">演进第 2 步：加超时（解决了"无限等"，但没解决"等得太多"）</text>
+  <text x="470" y="58" text-anchor="middle" font-size="12" fill="#64748b">高亮 = 这一步唯一新增的东西；其余结构原样不动</text>
+
+  <!-- 用户 -->
+  <rect x="30" y="110" width="120" height="60" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.8"/>
+  <text x="90" y="136" text-anchor="middle" font-size="12.5" fill="#334155">用户请求</text>
+  <text x="90" y="155" text-anchor="middle" font-size="10.5" fill="#64748b">峰值 50 并发</text>
+
+  <!-- 下单服务 -->
+  <rect x="200" y="86" width="300" height="200" rx="10" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <text x="350" y="112" text-anchor="middle" font-size="14" font-weight="bold" fill="#1d4ed8">下单服务</text>
+  <text x="350" y="132" text-anchor="middle" font-size="10.5" fill="#3b82f6">8 个 worker，仍然全部共享</text>
+
+  <text x="218" y="158" font-size="11" fill="#1e40af">worker 池（8）</text>
+  <g>
+    <rect x="218" y="168" width="30" height="22" rx="3" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.2"/>
+    <rect x="254" y="168" width="30" height="22" rx="3" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.2"/>
+    <rect x="290" y="168" width="30" height="22" rx="3" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.2"/>
+    <rect x="326" y="168" width="30" height="22" rx="3" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.2"/>
+    <rect x="362" y="168" width="30" height="22" rx="3" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.2"/>
+    <rect x="398" y="168" width="30" height="22" rx="3" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.2"/>
+    <rect x="434" y="168" width="30" height="22" rx="3" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.2"/>
+    <rect x="462" y="168" width="24" height="22" rx="3" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.2"/>
+  </g>
+
+  <!-- 新增：超时 -->
+  <rect x="218" y="200" width="266" height="34" rx="5" fill="#dcfce7" stroke="#16a34a" stroke-width="1.8"/>
+  <text x="231" y="222" font-size="11.5" font-weight="bold" fill="#15803d">★ 新增：每个调用 timeout=300ms（共享 deadline）</text>
+
+  <text x="218" y="254" font-size="11" fill="#334155">仍然没有：按依赖限并发、熔断</text>
+  <text x="218" y="274" font-size="11" fill="#334155">入口队列还是"来多少排多少"，没有上限</text>
+
+  <!-- 依赖 -->
+  <rect x="620" y="86" width="290" height="56" rx="8" fill="#fff7ed" stroke="#fb923c" stroke-width="1.8"/>
+  <text x="765" y="108" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#9a3412">推荐服务 /recommend</text>
+  <text x="765" y="130" text-anchor="middle" font-size="10.5" fill="#b45309">慢到 1000ms，会超时</text>
+
+  <rect x="620" y="158" width="290" height="56" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.8"/>
+  <text x="765" y="180" text-anchor="middle" font-size="12.5" fill="#334155">支付服务 /pay</text>
+  <text x="765" y="202" text-anchor="middle" font-size="10.5" fill="#64748b">核心链路，稳定 40ms</text>
+
+  <rect x="620" y="230" width="290" height="56" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.8"/>
+  <text x="765" y="252" text-anchor="middle" font-size="12.5" fill="#334155">库存服务 /stock</text>
+  <text x="765" y="274" text-anchor="middle" font-size="10.5" fill="#64748b">核心链路，稳定 15ms</text>
+
+  <line x1="505" y1="114" x2="614" y2="114" stroke="#dc2626" stroke-width="2" marker-end="url(#a2r)"/>
+  <line x1="505" y1="186" x2="614" y2="186" stroke="#64748b" stroke-width="2" marker-end="url(#a2)"/>
+  <line x1="505" y1="258" x2="614" y2="258" stroke="#64748b" stroke-width="2" marker-end="url(#a2)"/>
+  <line x1="152" y1="140" x2="196" y2="140" stroke="#64748b" stroke-width="2" marker-end="url(#a2)"/>
+
+  <!-- 改善了什么 -->
+  <rect x="30" y="308" width="430" height="112" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
+  <text x="52" y="334" font-size="14" font-weight="bold" fill="#15803d">这一步改善了什么（实测）</text>
+  <text x="52" y="360" font-size="12" fill="#166534">· worker 不再永久钉死：300ms 到点就还回来</text>
+  <text x="52" y="382" font-size="12" fill="#166534">· 单次调用的最坏耗时可预测（不再"等到天荒地老"）</text>
+  <text x="52" y="404" font-size="12" fill="#166534">· 相比第 1 步，系统从"不可恢复"变成"能自己爬起来"</text>
+
+  <!-- 没解决 -->
+  <rect x="480" y="308" width="430" height="112" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="2"/>
+  <text x="502" y="334" font-size="14" font-weight="bold" fill="#b91c1c">这一步没解决什么（实测）</text>
+  <text x="502" y="360" font-size="12" fill="#7f1d1d">· 300ms 预算配 8 个 worker、50 并发 → 队列照样积压</text>
+  <text x="502" y="382" font-size="12" fill="#7f1d1d">· 实测：50 个请求 42 个 QUEUE_TIMEOUT、0 成功</text>
+  <text x="502" y="404" font-size="12" fill="#7f1d1d">· 下游每次都被打满 8 次——明知它在慢，还是每次都试</text>
+
+  <!-- 为什么 -->
+  <rect x="30" y="436" width="880" height="100" rx="10" fill="#fffbeb" stroke="#fcd34d" stroke-width="1.8"/>
+  <text x="52" y="460" font-size="13" font-weight="bold" fill="#78350f">为什么超时不够：它只决定"什么时候放手"，不决定"还要不要伸手"</text>
+  <text x="52" y="484" font-size="11.5" fill="#92400e">超时把"永久等"变成"等 300ms"，但 50 个并发 × 300ms 需要 15 个 worker-秒，而只有 8 个位子</text>
+  <text x="52" y="506" font-size="11.5" fill="#92400e">→ 缺口没被填上，只是从"无限积压"变成"稳定积压"。要治它，得让一部分请求根本不发出去</text>
+  <text x="52" y="528" font-size="11.5" font-weight="bold" fill="#b45309">这就是第 3 步要做的两件事：熔断（别试）+ 舱壁（限占用）</text>
+</svg>

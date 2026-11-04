@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="560" viewBox="0 0 940 560" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="a1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#64748b"/></marker>
+    <marker id="a1r" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#dc2626"/></marker>
+  </defs>
+  <rect x="0" y="0" width="940" height="560" fill="#ffffff"/>
+  <text x="470" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#0f172a">演进第 1 步：直接调下游，什么保护都没有</text>
+  <text x="470" y="58" text-anchor="middle" font-size="12" fill="#64748b">下单服务 8 个 worker 共用一个大池子，每个请求都直接去敲三个依赖</text>
+
+  <!-- 用户 -->
+  <rect x="30" y="110" width="120" height="60" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.8"/>
+  <text x="90" y="136" text-anchor="middle" font-size="12.5" fill="#334155">用户请求</text>
+  <text x="90" y="155" text-anchor="middle" font-size="10.5" fill="#64748b">峰值 50 并发</text>
+
+  <!-- 下单服务 -->
+  <rect x="200" y="86" width="300" height="200" rx="10" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <text x="350" y="112" text-anchor="middle" font-size="14" font-weight="bold" fill="#1d4ed8">下单服务</text>
+  <text x="350" y="132" text-anchor="middle" font-size="10.5" fill="#3b82f6">8 个 worker，全部共享</text>
+
+  <text x="218" y="158" font-size="11" fill="#1e40af">worker 池（8）</text>
+  <g>
+    <rect x="218" y="168" width="30" height="22" rx="3" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.2"/>
+    <rect x="254" y="168" width="30" height="22" rx="3" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.2"/>
+    <rect x="290" y="168" width="30" height="22" rx="3" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.2"/>
+    <rect x="326" y="168" width="30" height="22" rx="3" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.2"/>
+    <rect x="362" y="168" width="30" height="22" rx="3" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.2"/>
+    <rect x="398" y="168" width="30" height="22" rx="3" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.2"/>
+    <rect x="434" y="168" width="30" height="22" rx="3" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.2"/>
+    <rect x="462" y="168" width="24" height="22" rx="3" fill="#bfdbfe" stroke="#3b82f6" stroke-width="1.2"/>
+  </g>
+  <text x="218" y="212" font-size="11" fill="#1e40af">入口队列：</text>
+  <rect x="284" y="198" width="202" height="22" rx="3" fill="#fff7ed" stroke="#fb923c" stroke-width="1.2" stroke-dasharray="4 3"/>
+  <text x="385" y="214" text-anchor="middle" font-size="10" fill="#9a3412">没有上限，来多少排多少</text>
+
+  <text x="218" y="240" font-size="11" fill="#334155">没有超时 · 没有按依赖限并发 · 没有熔断</text>
+  <text x="218" y="262" font-size="11" fill="#334155">请求进来就一路往下，等到天荒地老</text>
+
+  <!-- 依赖 -->
+  <rect x="620" y="86" width="290" height="56" rx="8" fill="#fff7ed" stroke="#fb923c" stroke-width="1.8"/>
+  <text x="765" y="108" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#9a3412">推荐服务 /recommend</text>
+  <text x="765" y="130" text-anchor="middle" font-size="10.5" fill="#b45309">旁路功能，平时 20ms，出事 1000ms</text>
+
+  <rect x="620" y="158" width="290" height="56" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.8"/>
+  <text x="765" y="180" text-anchor="middle" font-size="12.5" fill="#334155">支付服务 /pay</text>
+  <text x="765" y="202" text-anchor="middle" font-size="10.5" fill="#64748b">核心链路，稳定 40ms</text>
+
+  <rect x="620" y="230" width="290" height="56" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.8"/>
+  <text x="765" y="252" text-anchor="middle" font-size="12.5" fill="#334155">库存服务 /stock</text>
+  <text x="765" y="274" text-anchor="middle" font-size="10.5" fill="#64748b">核心链路，稳定 15ms</text>
+
+  <line x1="505" y1="114" x2="614" y2="114" stroke="#dc2626" stroke-width="2" marker-end="url(#a1r)"/>
+  <line x1="505" y1="186" x2="614" y2="186" stroke="#64748b" stroke-width="2" marker-end="url(#a1)"/>
+  <line x1="505" y1="258" x2="614" y2="258" stroke="#64748b" stroke-width="2" marker-end="url(#a1)"/>
+  <line x1="152" y1="140" x2="196" y2="140" stroke="#64748b" stroke-width="2" marker-end="url(#a1)"/>
+
+  <text x="545" y="106" font-size="10.5" fill="#dc2626">都往这打</text>
+
+  <!-- 出事后 -->
+  <rect x="30" y="308" width="880" height="112" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="2"/>
+  <text x="52" y="334" font-size="14.5" font-weight="bold" fill="#b91c1c">推荐服务慢到 1000ms 之后，这一版会怎样（本机实测）</text>
+  <text x="52" y="360" font-size="12.5" fill="#7f1d1d">· 8 个 worker 全被推荐请求钉死 → 剩余 42 个请求在入口排队，连下游都没碰到就超时</text>
+  <text x="52" y="382" font-size="12.5" fill="#7f1d1d">· 推荐服务总共只被打 8 次，用户拿到 0 个有用结果（8 次全超时）</text>
+  <text x="52" y="404" font-size="12.5" font-weight="bold" fill="#dc2626">· 最糟的是支付与库存也一起排队——它们 40ms / 15ms 就回的，却排在推荐后面等死</text>
+
+  <!-- 三个问题 -->
+  <rect x="30" y="436" width="880" height="100" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="52" y="460" font-size="13" font-weight="bold" fill="#0f172a">这一版为什么必然出事（三个坑）</text>
+  <text x="52" y="484" font-size="11.5" fill="#334155">① 不设超时 → "等多久"由下游决定，worker 永远不会主动归还</text>
+  <text x="52" y="506" font-size="11.5" fill="#334155">② 不按依赖限并发 → 一个旁路功能可以把 8 个位子全吃光，核心链路没有保底</text>
+  <text x="52" y="528" font-size="11.5" fill="#334155">③ 不知道下游已坏 → 即使推荐 100% 失败，每个请求还是老老实实去敲一遍</text>
+</svg>

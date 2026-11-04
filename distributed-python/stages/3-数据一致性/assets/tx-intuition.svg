@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 620" width="980" height="620" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="arrR" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#c0392b"/>
+    </marker>
+    <marker id="arrG" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#1e8449"/>
+    </marker>
+    <marker id="arrD" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 z" fill="#7f8c8d"/>
+    </marker>
+  </defs>
+
+  <rect width="980" height="620" fill="#fbfbf9"/>
+
+  <text x="490" y="38" text-anchor="middle" font-size="23" font-weight="700" fill="#1c2833">分布式事务与 Saga：一本账 vs 三本账</text>
+  <text x="490" y="64" text-anchor="middle" font-size="13" fill="#7f8c8d">左边是「一笔生意要记三个本子」的处境，右边是本课要认清的三件事</text>
+
+  <!-- 左：三本账 -->
+  <rect x="26" y="90" width="452" height="446" rx="12" fill="#fdf2f0" stroke="#e8b4ac" stroke-width="1.5"/>
+  <text x="252" y="122" text-anchor="middle" font-size="16" font-weight="700" fill="#a93226">现在：一笔生意，三个本子，各记各的</text>
+
+  <!-- 三个本子 -->
+  <rect x="56" y="142" width="118" height="86" rx="7" fill="#fff" stroke="#d5a6a0"/>
+  <text x="115" y="166" text-anchor="middle" font-size="13" font-weight="700" fill="#566573">订单本</text>
+  <text x="115" y="188" text-anchor="middle" font-size="11" fill="#7f8c8d">卖出 1 件</text>
+  <text x="115" y="210" text-anchor="middle" font-size="11" fill="#1e8449">✓ 记上了</text>
+
+  <rect x="190" y="142" width="118" height="86" rx="7" fill="#fff" stroke="#d5a6a0"/>
+  <text x="249" y="166" text-anchor="middle" font-size="13" font-weight="700" fill="#566573">库存本</text>
+  <text x="249" y="188" text-anchor="middle" font-size="11" fill="#7f8c8d">划掉 1 件</text>
+  <text x="249" y="210" text-anchor="middle" font-size="11" fill="#c0392b">✗ 柜子锁了</text>
+
+  <rect x="324" y="142" width="118" height="86" rx="7" fill="#fff" stroke="#d5a6a0"/>
+  <text x="383" y="166" text-anchor="middle" font-size="13" font-weight="700" fill="#566573">钱本</text>
+  <text x="383" y="188" text-anchor="middle" font-size="11" fill="#7f8c8d">收 100 元</text>
+  <text x="383" y="210" text-anchor="middle" font-size="11" fill="#7f8c8d">没轮到</text>
+
+  <line x1="174" y1="185" x2="188" y2="185" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arrD)"/>
+  <line x1="308" y1="185" x2="322" y2="185" stroke="#7f8c8d" stroke-width="1.5" stroke-dasharray="3 3" marker-end="url(#arrD)"/>
+
+  <!-- 结果 -->
+  <rect x="56" y="248" width="392" height="112" rx="8" fill="#fff" stroke="#d5a6a0"/>
+  <text x="76" y="274" font-size="13" font-weight="700" fill="#a93226">账本之间对不上</text>
+  <text x="76" y="298" font-size="12" fill="#2c3e50">订单本上有一笔「卖出」</text>
+  <text x="76" y="320" font-size="12" fill="#2c3e50">库存本上一个都没少</text>
+  <text x="76" y="344" font-size="12" fill="#c0392b">→ 给了货才算亏，不给货就是客户投诉</text>
+
+  <!-- 为什么护不住 -->
+  <rect x="56" y="374" width="392" height="86" rx="8" fill="#fff8f0" stroke="#e0c3a0"/>
+  <text x="76" y="398" font-size="13" font-weight="700" fill="#a04000">为什么「撤销」这件事做不到</text>
+  <text x="76" y="420" font-size="12" fill="#2c3e50">撤销靠的是「还没落盘之前改主意」</text>
+  <text x="76" y="442" font-size="12" fill="#2c3e50">一旦写进自己那本、并且已经提交，就撤不动了</text>
+
+  <!-- 实测 -->
+  <rect x="56" y="474" width="392" height="46" rx="7" fill="#fdeceb" stroke="#e8b4ac"/>
+  <text x="76" y="502" font-size="12" fill="#a93226">实测：200 笔里 20 笔出现这种错账，占 10.0%</text>
+
+  <!-- 中间箭头 -->
+  <line x1="484" y1="312" x2="518" y2="312" stroke="#7f8c8d" stroke-width="2.5" marker-end="url(#arrG)"/>
+  <text x="501" y="300" text-anchor="middle" font-size="11" fill="#7f8c8d">改成</text>
+
+  <!-- 右：三件事 -->
+  <rect x="524" y="90" width="430" height="446" rx="12" fill="#f1f8f2" stroke="#a9d3b4" stroke-width="1.5"/>
+  <text x="739" y="122" text-anchor="middle" font-size="16" font-weight="700" fill="#1e8449">改成：先认边界，再选路子</text>
+
+  <!-- 块 1 -->
+  <rect x="550" y="142" width="378" height="104" rx="8" fill="#fff" stroke="#a9d3b4" stroke-width="1.5"/>
+  <rect x="550" y="142" width="6" height="104" rx="3" fill="#1e8449"/>
+  <text x="572" y="168" font-size="14" font-weight="700" fill="#1e8449">① 认清一个本子的边界</text>
+  <text x="572" y="192" font-size="12" fill="#2c3e50">一次记账只能护住一个本子，护不住第二个</text>
+  <text x="572" y="214" font-size="11" fill="#7f8c8d">这是物理限制，不是框架不够强</text>
+  <text x="572" y="236" font-size="11" fill="#7f8c8d">（为什么本地事务不够用）</text>
+
+  <!-- 块 2 -->
+  <rect x="550" y="258" width="378" height="104" rx="8" fill="#fff" stroke="#a9d3b4" stroke-width="1.5"/>
+  <rect x="550" y="258" width="6" height="104" rx="3" fill="#1e8449"/>
+  <text x="572" y="284" font-size="14" font-weight="700" fill="#1e8449">② 让三个本子一起点头</text>
+  <text x="572" y="308" font-size="12" fill="#2c3e50">都说「可以」才一起记，有一个说不行就全不记</text>
+  <text x="572" y="330" font-size="11" fill="#7f8c8d">代价：点头之后就都不能动，中间人一走神就永远僵在那</text>
+  <text x="572" y="352" font-size="11" fill="#7f8c8d">（两阶段提交的代价）</text>
+
+  <!-- 块 3 -->
+  <rect x="550" y="374" width="378" height="104" rx="8" fill="#fff" stroke="#a9d3b4" stroke-width="1.5"/>
+  <rect x="550" y="374" width="6" height="104" rx="3" fill="#1e8449"/>
+  <text x="572" y="400" font-size="14" font-weight="700" fill="#1e8449">③ 一步步记，错了补一笔相反的</text>
+  <text x="572" y="424" font-size="12" fill="#2c3e50">记错了不擦掉，而是再记一笔把它抵消</text>
+  <text x="572" y="446" font-size="11" fill="#7f8c8d">代价：别人能看见你只记了一半；补的那笔可能补过头</text>
+  <text x="572" y="468" font-size="11" fill="#7f8c8d">（Saga 与补偿设计）</text>
+
+  <!-- 右下方一句 -->
+  <rect x="550" y="490" width="378" height="30" rx="6" fill="#eef4fb" stroke="#b6cde8"/>
+  <text x="739" y="510" text-anchor="middle" font-size="11" fill="#1f4e79">②求「一次就对」，③求「错了能改」，代价完全不同</text>
+
+  <!-- 底部一句话 -->
+  <rect x="26" y="552" width="928" height="46" rx="8" fill="#eef4fb" stroke="#b6cde8"/>
+  <text x="490" y="580" text-anchor="middle" font-size="13" fill="#1f4e79">没有「免费的一致」：要么在记之前把所有人问一遍（有人可能一直不回答），要么记完再补（补的时候可能有人已经看见了）。</text>
+</svg>

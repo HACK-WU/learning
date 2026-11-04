@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" width="900" height="420" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="as1" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+
+  <rect width="900" height="420" fill="#ffffff"/>
+
+  <text x="450" y="30" text-anchor="middle" font-size="18" font-weight="700" fill="#111827">step 1 · 基础版：一个函数直接把请求发出去</text>
+  <text x="450" y="52" text-anchor="middle" font-size="12" fill="#57606a">没有超时、没有重试、没有幂等键——能跑通，但没有任何边界</text>
+
+  <rect x="30" y="76" width="220" height="270" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <text x="140" y="100" text-anchor="middle" font-size="12.5" font-weight="700" fill="#334155">订单服务</text>
+
+  <rect x="50" y="114" width="180" height="54" rx="6" fill="#ffffff" stroke="#94a3b8"/>
+  <text x="140" y="134" text-anchor="middle" font-size="10.5" fill="#334155">place_order()</text>
+  <text x="140" y="151" text-anchor="middle" font-size="9.5" fill="#6b7280">组装扣款请求</text>
+
+  <rect x="50" y="180" width="180" height="54" rx="6" fill="#ffffff" stroke="#94a3b8"/>
+  <text x="140" y="200" text-anchor="middle" font-size="10.5" fill="#991b1b">requests.post()</text>
+  <text x="140" y="217" text-anchor="middle" font-size="9.5" fill="#dc2626" font-weight="700">没写 timeout=</text>
+
+  <rect x="50" y="246" width="180" height="54" rx="6" fill="#ffffff" stroke="#94a3b8"/>
+  <text x="140" y="266" text-anchor="middle" font-size="10.5" fill="#334155">写本地订单状态</text>
+  <text x="140" y="283" text-anchor="middle" font-size="9.5" fill="#6b7280">成功就写"已支付"</text>
+
+  <line x1="230" y1="207" x2="330" y2="207" stroke="#6b7280" stroke-width="1.8" marker-end="url(#as1)"/>
+  <text x="280" y="198" text-anchor="middle" font-size="9.5" fill="#6b7280">POST /charge</text>
+
+  <path d="M338 207 L430 207" stroke="#6b7280" stroke-width="1.8" stroke-dasharray="6 4"/>
+  <text x="384" y="198" text-anchor="middle" font-size="9" fill="#9ca3af">网络</text>
+
+  <rect x="440" y="76" width="440" height="270" rx="10" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="660" y="100" text-anchor="middle" font-size="12.5" font-weight="700" fill="#991b1b">支付网关</text>
+
+  <rect x="462" y="114" width="396" height="44" rx="6" fill="#ffffff" stroke="#fca5a5"/>
+  <text x="660" y="141" text-anchor="middle" font-size="10.5" fill="#7f1d1d">处理耗时 350ms（本例固定值）</text>
+
+  <rect x="462" y="170" width="396" height="44" rx="6" fill="#ffffff" stroke="#fca5a5"/>
+  <text x="660" y="197" text-anchor="middle" font-size="10.5" fill="#7f1d1d">写扣款流水 ch_1</text>
+
+  <rect x="462" y="226" width="396" height="44" rx="6" fill="#ffffff" stroke="#fca5a5"/>
+  <text x="660" y="253" text-anchor="middle" font-size="10.5" fill="#7f1d1d">回 200 {"charge_id": "ch_1"}</text>
+
+  <rect x="462" y="284" width="396" height="50" rx="6" fill="#fff7ed" stroke="#ea580c" stroke-width="1.6"/>
+  <text x="474" y="303" font-size="10.5" font-weight="700" fill="#9a3412">这一版的行为</text>
+  <text x="474" y="321" font-size="10" fill="#1f2937">对面多久回，客户端就等多久。正常时 0.35s，异常时可能等到天荒地老。</text>
+
+  <rect x="30" y="360" width="850" height="44" rx="8" fill="#f0f9ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="46" y="380" font-size="11" font-weight="700" fill="#1e3a8a">本步变化</text>
+  <text x="46" y="396" font-size="10.5" fill="#1f2937">第一版，从零开始：只有一个 HTTP 调用。它与"可靠"无关，只与"能跑"有关——没有超时意味着对面卡住时，你的线程一直挂在 read 上。</text>
+</svg>

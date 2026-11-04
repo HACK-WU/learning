@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="680" viewBox="0 0 960 680" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <rect x="0" y="0" width="960" height="680" fill="#ffffff"/>
+  <text x="480" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#0f172a">四种限流算法：同一句「每秒 10 次」，四种不同的实际行为</text>
+  <text x="480" y="58" text-anchor="middle" font-size="12" fill="#64748b">限额统一设为 10 次/秒；下面是「200ms 内突然来 20 次」时的放行结果（本机实测）</text>
+
+  <!-- 1 固定窗口 -->
+  <rect x="40" y="74" width="440" height="196" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="2"/>
+  <text x="60" y="100" font-size="15" font-weight="bold" fill="#b91c1c">① 固定窗口（计数器）</text>
+  <text x="60" y="122" font-size="11.5" fill="#7f1d1d">每 1 秒一个格子，格子一翻就清零重数</text>
+
+  <!-- window boxes -->
+  <rect x="60" y="134" width="180" height="46" rx="5" fill="#ffffff" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="150" y="152" text-anchor="middle" font-size="11" fill="#991b1b">窗口 1（0.0–1.0s）</text>
+  <text x="150" y="170" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#dc2626">放了 10 次</text>
+  <rect x="258" y="134" width="180" height="46" rx="5" fill="#ffffff" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="348" y="152" text-anchor="middle" font-size="11" fill="#991b1b">窗口 2（1.0–2.0s）</text>
+  <text x="348" y="170" text-anchor="middle" font-size="11.5" font-weight="bold" fill="#dc2626">又放了 10 次</text>
+  <text x="60" y="200" font-size="11" fill="#7f1d1d">请求刻意落在 0.90–1.09s，横跨那条分界线 ↓</text>
+
+  <line x1="60" y1="216" x2="438" y2="216" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="60" y="236" font-size="12.5" font-weight="bold" fill="#b91c1c">通过 20 / 20 —— 是限额的 2 倍</text>
+  <text x="60" y="258" font-size="11.5" fill="#475569">内存：一个整数｜缺陷：格子边界处可放过双倍</text>
+
+  <!-- 2 滑动窗口日志 -->
+  <rect x="480" y="74" width="440" height="196" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="500" y="100" font-size="15" font-weight="bold" fill="#0f172a">② 滑动窗口日志</text>
+  <text x="500" y="122" font-size="11.5" fill="#475569">每个通过的请求都存一条时间戳，永远看「最近 1 秒」</text>
+
+  <g>
+    <circle cx="510" cy="158" r="4" fill="#475569"/><circle cx="522" cy="158" r="4" fill="#475569"/>
+    <circle cx="534" cy="158" r="4" fill="#475569"/><circle cx="546" cy="158" r="4" fill="#475569"/>
+    <circle cx="558" cy="158" r="4" fill="#475569"/><circle cx="570" cy="158" r="4" fill="#475569"/>
+    <circle cx="582" cy="158" r="4" fill="#475569"/><circle cx="594" cy="158" r="4" fill="#475569"/>
+    <circle cx="606" cy="158" r="4" fill="#475569"/><circle cx="618" cy="158" r="4" fill="#475569"/>
+    <circle cx="640" cy="158" r="4" fill="#dc2626"/><circle cx="652" cy="158" r="4" fill="#dc2626"/>
+    <circle cx="664" cy="158" r="4" fill="#dc2626"/><circle cx="676" cy="158" r="4" fill="#dc2626"/>
+  </g>
+  <rect x="628" y="140" width="80" height="36" rx="4" fill="none" stroke="#dc2626" stroke-width="1.6" stroke-dasharray="4 3"/>
+  <text x="668" y="192" text-anchor="middle" font-size="10.5" fill="#b91c1c">最近 1 秒窗口</text>
+  <text x="500" y="212" font-size="10.5" fill="#64748b">前面 10 个 timestamp 落在窗口外 → 不再计数</text>
+
+  <line x1="500" y1="220" x2="878" y2="220" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="500" y="240" font-size="12.5" font-weight="bold" fill="#15803d">通过 10 / 20 —— 精确，边界无缺陷</text>
+  <text x="500" y="262" font-size="11.5" fill="#475569">内存：随 QPS 线性增长（每秒 10 万次＝存 10 万个时间戳）</text>
+
+  <!-- 3 滑动窗口计数 -->
+  <rect x="40" y="288" width="440" height="180" rx="10" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="60" y="314" font-size="15" font-weight="bold" fill="#0f172a">③ 滑动窗口计数（双桶加权）</text>
+  <text x="60" y="336" font-size="11.5" fill="#475569">只存「当前桶」和「上一桶」两个整数，按时间比例加权</text>
+
+  <rect x="60" y="350" width="150" height="42" rx="5" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="135" y="368" text-anchor="middle" font-size="11" fill="#334155">上一桶</text>
+  <text x="135" y="384" text-anchor="middle" font-size="11" fill="#334155">按剩余比例折算</text>
+  <rect x="218" y="350" width="150" height="42" rx="5" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="293" y="368" text-anchor="middle" font-size="11" fill="#1e40af">当前桶</text>
+  <text x="293" y="384" text-anchor="middle" font-size="11" fill="#1e40af">全额计入</text>
+  <text x="60" y="416" font-size="11" fill="#334155">估算值 = 当前桶 + 上一桶 × (1 − 已过去比例)</text>
+
+  <line x1="60" y1="426" x2="438" y2="426" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="60" y="446" font-size="12.5" font-weight="bold" fill="#15803d">通过 10 / 20 —— 内存恒定，边界近似</text>
+  <text x="60" y="464" font-size="11.5" fill="#475569">代价：不是精确值，是估算（但误差有上限，工程上够用）</text>
+
+  <!-- 4 令牌桶 -->
+  <rect x="480" y="288" width="440" height="180" rx="10" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+  <text x="500" y="314" font-size="15" font-weight="bold" fill="#1e40af">④ 令牌桶</text>
+  <text x="500" y="336" font-size="11.5" fill="#1e3a8a">每秒往桶里放 10 个令牌；攒满即止；来一个请求取一个</text>
+
+  <path d="M 510,352 L 510,392 L 590,392 L 590,352" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+  <text x="550" y="378" text-anchor="middle" font-size="11" fill="#1e40af">桶（容量 10）</text>
+  <text x="604" y="366" font-size="11" fill="#1e40af">← 每秒补 10 个</text>
+  <text x="604" y="386" font-size="11" fill="#1e40af">← 空桶时请求被拒</text>
+  <text x="500" y="416" font-size="11" fill="#1e3a8a">tokens = min(burst, tokens + Δt × rate)</text>
+
+  <line x1="500" y1="426" x2="878" y2="426" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="500" y="446" font-size="12.5" font-weight="bold" fill="#2563eb">burst=10 → 通过 11/20；burst=20 → 通过 20/20</text>
+  <text x="500" y="464" font-size="11.5" fill="#475569">允许「攒下来的突发」，长期速率仍被 rate 卡死</text>
+
+  <!-- 底部：选型 -->
+  <rect x="40" y="488" width="880" height="172" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
+  <text x="60" y="514" font-size="14.5" font-weight="bold" fill="#15803d">怎么选：先问「你要的是不准突发，还是不准总量」</text>
+  <text x="60" y="542" font-size="12.5" fill="#166534">· 只要不把下游打穿、允许正常突发 → 令牌桶（网关默认选择，burst 设成下游能扛的瞬时值）</text>
+  <text x="60" y="566" font-size="12.5" fill="#166534">· 对外计费 / 配额，绝不能超卖 → 滑动窗口日志（精确优先，接受内存代价）</text>
+  <text x="60" y="590" font-size="12.5" fill="#166534">· 高 QPS 又不想存时间戳 → 滑动窗口计数（内存恒定，误差可控）</text>
+  <text x="60" y="614" font-size="12.5" fill="#b91c1c">· 别用固定窗口做严肃限流：边界双倍是结构性的，不是偶发 bug</text>
+  <text x="60" y="642" font-size="12" font-weight="bold" fill="#0f172a">四种算法都只解决「放多少」，不解决「放在哪」—— 限流点必须落在被保护资源的入口</text>
+</svg>

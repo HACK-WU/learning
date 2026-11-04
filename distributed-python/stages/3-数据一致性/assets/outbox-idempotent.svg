@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 620" width="980" height="620" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <rect width="980" height="620" fill="#fbfbf9"/>
+  <text x="490" y="36" text-anchor="middle" font-size="22" font-weight="700" fill="#1c2833">幂等消费：唯一约束是那颗螺丝</text>
+  <text x="490" y="62" text-anchor="middle" font-size="13" fill="#7f8c8d">四种写法，串行跑起来几乎一样 —— 差别只在崩溃与并发时才显形</text>
+
+  <!-- 左：四种写法 -->
+  <rect x="26" y="86" width="470" height="300" rx="12" fill="#fff" stroke="#ccc" stroke-width="1.5"/>
+  <text x="50" y="116" font-size="14" font-weight="700" fill="#1c2833">四种写法（18 次投递 / 10 条唯一消息）</text>
+
+  <text x="50" y="146" font-size="10" fill="#7f8c8d">写法</text>
+  <text x="290" y="146" text-anchor="middle" font-size="10" fill="#7f8c8d">串行</text>
+  <text x="360" y="146" text-anchor="middle" font-size="10" fill="#7f8c8d">并发</text>
+  <text x="430" y="146" text-anchor="middle" font-size="10" fill="#7f8c8d">崩溃</text>
+
+  <!-- S1 -->
+  <rect x="42" y="156" width="438" height="46" rx="6" fill="#fdeceb" stroke="#e8b4ac"/>
+  <text x="56" y="176" font-size="11" font-weight="700" fill="#a93226">S1 裸消费</text>
+  <text x="56" y="193" font-size="9" fill="#2c3e50">收到就扣，无防线 → 扣 18 次</text>
+  <text x="290" y="184" text-anchor="middle" font-size="13" fill="#a93226">✗</text>
+  <text x="360" y="184" text-anchor="middle" font-size="13" fill="#a93226">✗</text>
+  <text x="430" y="184" text-anchor="middle" font-size="11" fill="#7f8c8d">—</text>
+
+  <!-- S2 -->
+  <rect x="42" y="208" width="438" height="46" rx="6" fill="#fff8f0" stroke="#e0c3a0"/>
+  <text x="56" y="228" font-size="11" font-weight="700" fill="#a04000">S2 先查再改</text>
+  <text x="56" y="245" font-size="9" fill="#2c3e50">SELECT 后 UPDATE，两步无原子性</text>
+  <text x="290" y="236" text-anchor="middle" font-size="13" fill="#1e8449">✓</text>
+  <text x="360" y="236" text-anchor="middle" font-size="13" fill="#a93226">✗</text>
+  <text x="430" y="236" text-anchor="middle" font-size="13" fill="#a93226">✗</text>
+
+  <!-- S3 -->
+  <rect x="42" y="260" width="438" height="46" rx="6" fill="#fff8f0" stroke="#e0c3a0"/>
+  <text x="56" y="280" font-size="11" font-weight="700" fill="#a04000">S3 去重表 + 业务分两个事务</text>
+  <text x="56" y="297" font-size="9" fill="#2c3e50">标记先提交，业务后做</text>
+  <text x="290" y="288" text-anchor="middle" font-size="13" fill="#1e8449">✓</text>
+  <text x="360" y="288" text-anchor="middle" font-size="13" fill="#1e8449">✓</text>
+  <text x="430" y="288" text-anchor="middle" font-size="13" fill="#a93226">✗</text>
+
+  <!-- S4 -->
+  <rect x="42" y="312" width="438" height="52" rx="6" fill="#eaf5ec" stroke="#7fb889" stroke-width="1.8"/>
+  <text x="56" y="332" font-size="11" font-weight="700" fill="#1e8449">S4 去重表 + 业务同事务</text>
+  <text x="56" y="349" font-size="9" fill="#2c3e50">唯一主键拒绝第二个，整体回滚</text>
+  <text x="290" y="342" text-anchor="middle" font-size="13" fill="#1e8449">✓</text>
+  <text x="360" y="342" text-anchor="middle" font-size="13" fill="#1e8449">✓</text>
+  <text x="430" y="342" text-anchor="middle" font-size="13" fill="#1e8449">✓</text>
+
+  <text x="50" y="378" font-size="10" fill="#7f8c8d">只有 S4 四列全绿 —— 它在两个方向上都堵住了</text>
+
+  <!-- 右：S3 崩溃窗口 -->
+  <rect x="512" y="86" width="442" height="300" rx="12" fill="#fdf2f0" stroke="#e8b4ac" stroke-width="1.5"/>
+  <text x="536" y="116" font-size="14" font-weight="700" fill="#a93226">S3 的致命窗口：说做过了，其实没做</text>
+
+  <rect x="536" y="132" width="188" height="66" rx="6" fill="#fff" stroke="#a9d3b4"/>
+  <text x="630" y="154" text-anchor="middle" font-size="10" fill="#7f8c8d">去重表（已提交）</text>
+  <text x="630" y="176" text-anchor="middle" font-size="11" fill="#1e8449" font-family="monospace">m2 ✓</text>
+  <text x="630" y="190" text-anchor="middle" font-size="9" fill="#7f8c8d">标记落盘了</text>
+
+  <rect x="742" y="132" width="188" height="66" rx="6" fill="#fff" stroke="#e8b4ac" stroke-dasharray="5,4"/>
+  <text x="836" y="154" text-anchor="middle" font-size="10" fill="#7f8c8d">业务（未发生）</text>
+  <text x="836" y="176" text-anchor="middle" font-size="11" fill="#a93226" font-family="monospace">stock ✗</text>
+  <text x="836" y="190" text-anchor="middle" font-size="9" fill="#a93226">库存没扣</text>
+
+  <path d="M 724 165 L 742 165" fill="none" stroke="#c0392b" stroke-width="2" stroke-dasharray="5,4"/>
+  <text x="733" y="128" text-anchor="middle" font-size="14" fill="#c0392b">✕</text>
+
+  <rect x="536" y="212" width="394" height="80" rx="6" fill="#fff" stroke="#e8b4ac"/>
+  <text x="552" y="234" font-size="10" font-weight="700" fill="#a93226">崩溃重投后发生的事</text>
+  <text x="552" y="254" font-size="10" fill="#2c3e50">m2 再来 → 去重表说「处理过了」→ 直接跳过</text>
+  <text x="552" y="274" font-size="10" fill="#a93226">库存永远停在 999，应为 998 → 永久少扣一次</text>
+
+  <rect x="536" y="302" width="394" height="66" rx="6" fill="#eaf5ec" stroke="#a9d3b4"/>
+  <text x="552" y="322" font-size="10" font-weight="700" fill="#1e8449">S4 同事务：一起回滚，重投还能正常做</text>
+  <text x="552" y="342" font-size="10" fill="#2c3e50">m2 提交前崩溃 → ROLLBACK → 重投 deducted</text>
+  <text x="552" y="360" font-size="10" fill="#1e8449">最终 998 ✓</text>
+
+  <!-- 底部：去重键 -->
+  <line x1="26" y1="402" x2="954" y2="402" stroke="#ddd" stroke-width="1.5"/>
+  <text x="490" y="428" text-anchor="middle" font-size="13" font-weight="700" fill="#1c2833">去重键必须用「消息自己的身份」，不能用「这次投递的身份」</text>
+
+  <rect x="26" y="444" width="452" height="94" rx="8" fill="#fdf2f0" stroke="#e8b4ac"/>
+  <text x="46" y="466" font-size="11" font-weight="700" fill="#a93226">✗ 用投递序号（自增 / 时间戳）</text>
+  <text x="46" y="488" font-size="10" fill="#2c3e50" font-family="monospace">inbox(delivery_no PK) → (1,m1) (2,m1) (3,m1) (4,m1)</text>
+  <text x="46" y="508" font-size="10" fill="#a93226">同一条 m1 投 4 次 → 去重表 4 行 → 库存扣 4 次</text>
+  <text x="46" y="526" font-size="9" fill="#7f8c8d">主键永远不冲突，去重表形同虚设</text>
+
+  <rect x="502" y="444" width="452" height="94" rx="8" fill="#eaf5ec" stroke="#a9d3b4"/>
+  <text x="522" y="466" font-size="11" font-weight="700" fill="#1e8449">✓ 用消息身份（event_id / 业务键）</text>
+  <text x="522" y="488" font-size="10" fill="#2c3e50" font-family="monospace">inbox(msg_id PK) → (m1)</text>
+  <text x="522" y="508" font-size="10" fill="#1e8449">同一条 m1 投 4 次 → 去重表 1 行 → 库存扣 1 次</text>
+  <text x="522" y="526" font-size="9" fill="#7f8c8d">重发必须带同一个 id —— 每次重试换 UUID 就退化了</text>
+
+  <text x="26" y="566" font-size="11" fill="#7f8c8d">注意 S2 和 S3 在「串行」一列都是 ✓：本地跑一遍看不出问题，上线才炸 —— 这是幂等最常见的踩坑方式</text>
+  <text x="26" y="590" font-size="11" fill="#7f8c8d">去重表也要按保留期清理；保留期不能短于「消息最长可能延迟多久后重投」，否则会把老消息当新的重做</text>
+</svg>

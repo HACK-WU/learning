@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 560" width="980" height="560" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <marker id="arrR" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#c0392b"/>
+    </marker>
+    <marker id="arrG" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 z" fill="#1e8449"/>
+    </marker>
+  </defs>
+
+  <rect width="980" height="560" fill="#fbfbf9"/>
+
+  <text x="490" y="40" text-anchor="middle" font-size="23" font-weight="700" fill="#1c2833">服务发现与负载均衡：一本过期的通讯录 vs 一本会自己更新的通讯录</text>
+  <text x="490" y="66" text-anchor="middle" font-size="13" fill="#7f8c8d">左边是"地址抄在纸上"的处境，右边是本课要装上的三件事</text>
+
+  <!-- 左：过期通讯录 -->
+  <rect x="30" y="96" width="440" height="400" rx="12" fill="#fdf2f0" stroke="#e8b4ac" stroke-width="1.5"/>
+  <text x="250" y="130" text-anchor="middle" font-size="16" font-weight="700" fill="#a93226">现在：手里抄着三个号码</text>
+
+  <!-- 通讯录卡片 -->
+  <rect x="70" y="152" width="360" height="196" rx="8" fill="#fff" stroke="#d5a6a0"/>
+  <text x="90" y="180" font-size="13" font-weight="700" fill="#566573">我的通讯录（三年前抄的）</text>
+  <line x1="90" y1="190" x2="410" y2="190" stroke="#e8d5d2"/>
+
+  <!-- 三个号码 -->
+  <text x="90" y="216" font-size="13" fill="#2c3e50" font-family="monospace">订单服务  →  10.2.3.41:8080</text>
+  <text x="380" y="216" font-size="11" fill="#c0392b" text-anchor="end">已停机</text>
+
+  <text x="90" y="246" font-size="13" fill="#2c3e50" font-family="monospace">订单服务  →  10.2.3.42:8080</text>
+  <text x="380" y="246" font-size="11" fill="#c0392b" text-anchor="end">已换端口</text>
+
+  <text x="90" y="276" font-size="13" fill="#2c3e50" font-family="monospace">订单服务  →  10.2.3.43:8080</text>
+  <text x="380" y="276" font-size="11" fill="#c0392b" text-anchor="end">已缩容</text>
+
+  <line x1="90" y1="294" x2="410" y2="294" stroke="#e8d5d2"/>
+  <text x="90" y="318" font-size="12" fill="#7f8c8d">现在真实有 6 个实例，你却只知道这 3 个（还都是旧的）</text>
+  <text x="90" y="338" font-size="12" fill="#c0392b">→ 电话一直打给停机的那几个</text>
+
+  <!-- 后果三条 -->
+  <rect x="70" y="366" width="360" height="108" rx="8" fill="#fff" stroke="#d5a6a0"/>
+  <text x="90" y="392" font-size="13" font-weight="700" fill="#a93226">三个后果（都实测过）</text>
+  <text x="90" y="416" font-size="12" fill="#2c3e50">· 扩了不用：5 个实例只有 1 个收流量</text>
+  <text x="90" y="438" font-size="12" fill="#2c3e50">· 扩容无效：有效容量 1/5 = 20%</text>
+  <text x="90" y="460" font-size="12" fill="#2c3e50">· 重启全挂：换端口后 30/30 全失败</text>
+
+  <!-- 中间箭头 -->
+  <line x1="486" y1="300" x2="522" y2="300" stroke="#7f8c8d" stroke-width="2.5" marker-end="url(#arrG)"/>
+  <text x="504" y="288" text-anchor="middle" font-size="11" fill="#7f8c8d">改成</text>
+
+  <!-- 右：正确姿态 -->
+  <rect x="530" y="96" width="420" height="400" rx="12" fill="#f1f8f2" stroke="#a9d3b4" stroke-width="1.5"/>
+  <text x="740" y="130" text-anchor="middle" font-size="16" font-weight="700" fill="#1e8449">改成：三件事各管一段</text>
+
+  <!-- 三块 -->
+  <!-- 块 1 -->
+  <rect x="558" y="150" width="364" height="90" rx="8" fill="#fff" stroke="#a9d3b4" stroke-width="1.5"/>
+  <rect x="558" y="150" width="6" height="90" rx="3" fill="#1e8449"/>
+  <text x="580" y="176" font-size="14" font-weight="700" fill="#1e8449">① 会自己更新的通讯录</text>
+  <text x="580" y="198" font-size="12" fill="#2c3e50">实例来了登记、走了移除，你每次问都有新名单</text>
+  <text x="580" y="220" font-size="11" fill="#7f8c8d">解决：现在到底有谁（服务发现）</text>
+  <text x="580" y="236" font-size="11" fill="#7f8c8d">名字不变，地址每次重新解析</text>
+
+  <!-- 块 2 -->
+  <rect x="558" y="252" width="364" height="90" rx="8" fill="#fff" stroke="#a9d3b4" stroke-width="1.5"/>
+  <rect x="558" y="252" width="6" height="90" rx="3" fill="#1e8449"/>
+  <text x="580" y="278" font-size="14" font-weight="700" fill="#1e8449">② 一个知道谁闲谁忙的接线员</text>
+  <text x="580" y="300" font-size="12" fill="#2c3e50">名单里有 6 个，这通电话给谁？</text>
+  <text x="580" y="322" font-size="11" fill="#7f8c8d">解决：这次选哪个（负载均衡）</text>
+  <text x="580" y="338" font-size="11" fill="#7f8c8d">关键：按每次请求选，不是按每条连接</text>
+
+  <!-- 块 3 -->
+  <rect x="558" y="354" width="364" height="90" rx="8" fill="#fff" stroke="#a9d3b4" stroke-width="1.5"/>
+  <rect x="558" y="354" width="6" height="90" rx="3" fill="#1e8449"/>
+  <text x="580" y="380" font-size="14" font-weight="700" fill="#1e8449">③ 一句"现在能接活吗"</text>
+  <text x="580" y="402" font-size="12" fill="#2c3e50">名单上的还算不算数？能摘也能放回来</text>
+  <text x="580" y="424" font-size="11" fill="#7f8c8d">解决：这个还能不能给活（健康检查与摘流）</text>
+  <text x="580" y="440" font-size="11" fill="#7f8c8d">关键：不能接活 ≠ 已经死了</text>
+
+  <!-- 底部一句话 -->
+  <rect x="30" y="510" width="920" height="34" rx="8" fill="#eef4fb" stroke="#b6cde8"/>
+  <text x="490" y="532" text-anchor="middle" font-size="13" fill="#1f4e79">三件事缺一不可：只有名单没有选择，你永远打第一个；只有选择没有判断，你会把活派给已经走的人。</text>
+</svg>

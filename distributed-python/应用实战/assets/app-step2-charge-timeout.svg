@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="500" viewBox="0 0 940 500" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="as2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#64748b"/></marker>
+  </defs>
+  <rect x="0" y="0" width="940" height="500" fill="#ffffff"/>
+  <text x="470" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#0f172a">演进第 2 步：加超时，但盲目重试（引入了新的坑）</text>
+
+  <!-- 客户端 -->
+  <rect x="70" y="120" width="200" height="90" rx="10" fill="#fefce8" stroke="#facc15" stroke-width="2"/>
+  <text x="170" y="152" text-anchor="middle" font-size="14" font-weight="bold" fill="#92400e">订单服务（改造）</text>
+  <text x="170" y="173" text-anchor="middle" font-size="11.5" fill="#a16207">timeout=50ms<br/>超时→重试 3 次</text>
+  <text x="170" y="197" text-anchor="middle" font-size="10.5" fill="#b45309">新增元素高亮：超时 + 重试</text>
+
+  <!-- 扣款服务 -->
+  <rect x="620" y="120" width="230" height="90" rx="10" fill="#ffffff" stroke="#64748b" stroke-width="2"/>
+  <text x="735" y="152" text-anchor="middle" font-size="14" font-weight="bold" fill="#334155">扣款服务</text>
+  <text x="735" y="173" text-anchor="middle" font-size="11.5" fill="#64748b">处理 80ms</text>
+  <text x="666" y="105" text-anchor="middle" font-size="10.5" fill="#dc2626">⚠️ 已扣款（响应还在路上被丢）</text>
+
+  <line x1="272" y1="150" x2="616" y2="150" stroke="#b45309" stroke-width="2.5" marker-end="url(#as2)"/>
+  <text x="444" y="135" text-anchor="middle" font-size="11.5" fill="#a16207">Charge#1 超时</text>
+  <line x1="272" y1="182" x2="616" y2="182" stroke="#dc2626" stroke-width="2" marker-end="url(#as2)"/>
+  <text x="444" y="200" text-anchor="middle" font-size="11.5" fill="#dc2626">重试 Charge#2 → 又扣一笔</text>
+
+  <!-- 新坑 -->
+  <rect x="70" y="270" width="780" height="150" rx="10" fill="#fef2f2" stroke="#f87171" stroke-width="2"/>
+  <text x="92" y="300" font-size="15" font-weight="bold" fill="#b91c1c">加了超时后，新引入的问题</text>
+  <text x="92" y="326" font-size="13" fill="#7f1d1d">· 超时设太紧（50ms）→ 正常的偶发 80ms 也被判失败，于是重试</text>
+  <text x="92" y="350" font-size="13" fill="#7f1d1d">· 盲目重试 + 不幂等 → 每个 80ms 请求可能被重试成多笔，产生重复扣款</text>
+  <text x="92" y="374" font-size="13" fill="#7f1d1d">· 重试无上限、无退避 → 下游一旦真抖，请求量翻倍直接放大风险</text>
+  <text x="92" y="402" font-size="12.5" fill="#b91c1c">→ 第 3 步：超时预算 + 幂等键 + 有纪律的重试</text>
+</svg>

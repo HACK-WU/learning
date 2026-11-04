@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="660" viewBox="0 0 940 660" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="s3a" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#64748b"/></marker>
+    <marker id="s3g" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#16a34a"/></marker>
+    <marker id="s3r" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#dc2626"/></marker>
+  </defs>
+  <rect x="0" y="0" width="940" height="660" fill="#ffffff"/>
+  <text x="470" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#0f172a">演进第 3 步：客户端自己判断「能不能接活」</text>
+  <text x="470" y="58" text-anchor="middle" font-size="12" fill="#64748b">名单照旧来自注册中心，但每个端点多了三个状态字段 —— 摘流发生在客户端本地</text>
+
+  <!-- Endpoint 结构 -->
+  <rect x="30" y="82" width="330" height="150" rx="10" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.8"/>
+  <text x="50" y="106" font-size="12.5" font-weight="bold" fill="#334155">每个端点（Endpoint）多记住三件事</text>
+  <text x="50" y="132" font-size="11" fill="#1e40af" font-family="monospace">inflight</text>
+  <text x="150" y="132" font-size="11" fill="#334155">在途请求数 → P2C 比大小用</text>
+  <text x="50" y="158" font-size="11" fill="#b91c1c" font-family="monospace">strikes</text>
+  <text x="150" y="158" font-size="11" fill="#334155">连续失败次数 → 到 2 就摘</text>
+  <text x="50" y="184" font-size="11" fill="#15803d" font-family="monospace">ejected_until</text>
+  <text x="150" y="184" font-size="11" fill="#334155">摘到什么时候 → 到期放回</text>
+  <text x="50" y="212" font-size="10.5" fill="#64748b">注意：注册中心的名单可以照旧，摘流只改本地这层</text>
+
+  <!-- 注册中心 -->
+  <rect x="420" y="100" width="150" height="72" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="1.8"/>
+  <text x="495" y="126" text-anchor="middle" font-size="12" font-weight="bold" fill="#1d4ed8">注册中心</text>
+  <text x="495" y="146" text-anchor="middle" font-size="10" fill="#2563eb">名单里仍然有 n1</text>
+  <text x="495" y="162" text-anchor="middle" font-size="10" fill="#2563eb">（它心跳是正常的）</text>
+
+  <line x1="364" y1="136" x2="416" y2="136" stroke="#2563eb" stroke-width="2" marker-end="url(#s3a)"/>
+
+  <!-- 选择流程 -->
+  <rect x="620" y="82" width="290" height="150" rx="10" fill="#f1f8f2" stroke="#16a34a" stroke-width="2"/>
+  <text x="640" y="106" font-size="12.5" font-weight="bold" fill="#15803d">选一个：先过滤，再比在途</text>
+  <text x="640" y="130" font-size="11" fill="#166534">① 过滤掉 ejected_until 未到期的</text>
+  <text x="640" y="152" font-size="11" fill="#166534">② 随机抽两个，选 inflight 小的</text>
+  <text x="640" y="174" font-size="11" fill="#166534">③ 全被摘时，放一个做半开探测</text>
+  <text x="640" y="198" font-size="10.5" fill="#b91c1c">③ 是关键：没有它，全员被摘后永久黑洞</text>
+  <text x="640" y="218" font-size="10.5" fill="#64748b">P2C = Power of Two Choices</text>
+
+  <!-- 四幕 -->
+  <rect x="30" y="252" width="880" height="188" rx="10" fill="#eff6ff" stroke="#93c5fd" stroke-width="2"/>
+  <text x="52" y="278" font-size="14.5" font-weight="bold" fill="#1d4ed8">同样的四个场景，装上健康检查之后</text>
+
+  <text x="52" y="306" font-size="12" fill="#1e3a8a">幕 1　5 个实例常态</text>
+  <text x="264" y="306" font-size="12" font-weight="bold" fill="#15803d">30/30 成功</text>
+  <text x="420" y="306" font-size="11.5" fill="#1e40af">健康 5/5</text>
+  <text x="600" y="306" font-size="11.5" fill="#1e40af">→ P2C 让快的多干，分布不再硬均分</text>
+
+  <text x="52" y="334" font-size="12" fill="#1e3a8a">幕 2　n1 半死（503）</text>
+  <text x="264" y="334" font-size="12" font-weight="bold" fill="#15803d">143 次，失败 0</text>
+  <text x="420" y="334" font-size="11.5" fill="#1d4ed8">健康 4/5</text>
+  <text x="600" y="334" font-size="11.5" fill="#1e40af">→ n1 只被白打 4 次就被摘（上一版 29 次）</text>
+
+  <text x="52" y="362" font-size="12" fill="#1e3a8a">幕 3　n1 全死（无心跳）</text>
+  <text x="264" y="362" font-size="12" font-weight="bold" fill="#15803d">143 次，失败 0</text>
+  <text x="420" y="362" font-size="11.5" fill="#1d4ed8">白打 0 次</text>
+  <text x="600" y="362" font-size="11.5" fill="#1e40af">→ 上一版 10.5% 失败，这里一次都没打到</text>
+
+  <text x="52" y="390" font-size="12" fill="#1e3a8a">幕 4　n1 换新端口回来</text>
+  <text x="264" y="390" font-size="12" font-weight="bold" fill="#15803d">40/40 成功</text>
+  <text x="420" y="390" font-size="11.5" fill="#1d4ed8">健康 5/5</text>
+  <text x="600" y="390" font-size="11.5" fill="#1e40af">→ 摘除期过 + 探测成功，自己回来</text>
+
+  <line x1="46" y1="404" x2="894" y2="404" stroke="#93c5fd" stroke-width="1"/>
+  <text x="52" y="424" font-size="11.5" font-weight="bold" fill="#b91c1c">幕 2 是这一步唯一真正的价值：注册中心看不出来的事，客户端用真实调用结果看出来了。</text>
+
+  <!-- 三个坑 -->
+  <rect x="30" y="456" width="430" height="180" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.8"/>
+  <text x="50" y="480" font-size="12.5" font-weight="bold" fill="#b91c1c">三个参数配错，等于没装</text>
+  <text x="50" y="506" font-size="11" fill="#7f1d1d">· strike_limit = 1</text>
+  <text x="50" y="526" font-size="10.5" fill="#b45309">一次网络抖动就摘掉健康实例，自己造故障</text>
+  <text x="50" y="552" font-size="11" fill="#7f1d1d">· eject_seconds 不设期限</text>
+  <text x="50" y="572" font-size="10.5" fill="#b45309">修好的实例永远回不来，集群越跑越小</text>
+  <text x="50" y="598" font-size="11" fill="#7f1d1d">· 全员被摘时不允许探测</text>
+  <text x="50" y="618" font-size="10.5" fill="#b45309">永久黑洞：明明有实例活着，却没有一个能试</text>
+
+  <rect x="480" y="456" width="430" height="180" rx="10" fill="#f1f8f2" stroke="#a9d3b4" stroke-width="1.8"/>
+  <text x="500" y="480" font-size="12.5" font-weight="bold" fill="#15803d">和课 7 熔断器是同一个机制</text>
+  <text x="500" y="506" font-size="11" fill="#166534">Closed → 正常分发</text>
+  <text x="500" y="528" font-size="11" fill="#166534">Open → 摘掉，不再选中</text>
+  <text x="500" y="550" font-size="11" fill="#166534">Half-Open → 放一个探针试</text>
+  <text x="500" y="576" font-size="11" fill="#166534">探测成功 → Closed（strikes 归零）</text>
+  <text x="500" y="598" font-size="11" fill="#166534">探测失败 → 立刻重新 Open</text>
+  <text x="500" y="620" font-size="10.5" fill="#b91c1c">差别只在粒度：熔断整个下游 vs 摘掉某个实例</text>
+</svg>

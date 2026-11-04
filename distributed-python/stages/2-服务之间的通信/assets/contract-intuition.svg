@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="580" viewBox="0 0 940 580" font-family="PingFang SC, Microsoft YaHei, Segoe UI, sans-serif">
+  <rect width="940" height="580" fill="#ffffff"/>
+
+  <text x="30" y="36" font-size="19" font-weight="700" fill="#111827">两个屋子交换清单：口头说一遍 vs 先定一张表格</text>
+  <text x="30" y="60" font-size="12.5" fill="#6b7280">本课要解决的事：怎么让"约定"变成一件机器能检查、还能安全改动的事</text>
+
+  <!-- 上：口头约定 -->
+  <rect x="30" y="78" width="880" height="190" rx="10" fill="#fef2f2" stroke="#fecaca" stroke-width="1"/>
+  <text x="48" y="104" font-size="14" font-weight="700" fill="#b91c1c">① 每次口头重说一遍（双方心里没有同一张模板）</text>
+
+  <rect x="70" y="124" width="150" height="56" rx="8" fill="#ffffff" stroke="#f87171"/>
+  <text x="145" y="157" font-size="13" text-anchor="middle" fill="#111827">我这边</text>
+
+  <rect x="720" y="124" width="150" height="56" rx="8" fill="#ffffff" stroke="#f87171"/>
+  <text x="795" y="157" font-size="13" text-anchor="middle" fill="#111827">你那边</text>
+
+  <line x1="222" y1="152" x2="322" y2="152" stroke="#dc2626" stroke-width="1.6"/>
+  <polygon points="330,152 322,148 322,156" fill="#dc2626"/>
+  <line x1="618" y1="152" x2="712" y2="152" stroke="#dc2626" stroke-width="1.6"/>
+  <polygon points="720,152 712,148 712,156" fill="#dc2626"/>
+
+  <rect x="330" y="128" width="288" height="48" rx="6" fill="#fff1f2" stroke="#dc2626" stroke-dasharray="4 3"/>
+  <text x="474" y="148" font-size="12.5" text-anchor="middle" fill="#7f1d1d">"橘子 3 个，单价 5 元"</text>
+  <text x="474" y="166" font-size="11.5" text-anchor="middle" fill="#9ca3af">这次这么写，下次该怎么写？没人知道</text>
+
+  <text x="70" y="208" font-size="12.5" fill="#7f1d1d">· 我把"橘子"写成"桔子"，你收到后无法判断这是不是同一栏</text>
+  <text x="70" y="230" font-size="12.5" fill="#7f1d1d">· 我少写一项、你多写一项，双方都没有任何机制能发现</text>
+  <text x="70" y="252" font-size="12.5" fill="#7f1d1d">· 想加一个新项，只能挨个通知所有人改代码——而总有人的代码没改</text>
+
+  <!-- 下：表格模板 -->
+  <rect x="30" y="282" width="880" height="238" rx="10" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
+  <text x="48" y="308" font-size="14" font-weight="700" fill="#1d4ed8">② 先约定一张空表格：只约定"第几栏放什么"，不约定"这栏叫什么名字"</text>
+
+  <rect x="70" y="322" width="380" height="144" fill="#ffffff" stroke="#93c5fd"/>
+  <line x1="220" y1="322" x2="220" y2="466" stroke="#93c5fd"/>
+  <line x1="320" y1="322" x2="320" y2="466" stroke="#93c5fd"/>
+  <line x1="70" y1="358" x2="450" y2="358" stroke="#93c5fd"/>
+  <line x1="70" y1="394" x2="450" y2="394" stroke="#93c5fd"/>
+  <line x1="70" y1="430" x2="450" y2="430" stroke="#93c5fd"/>
+
+  <rect x="70" y="322" width="380" height="36" fill="#dbeafe"/>
+  <text x="145" y="345" font-size="12.5" text-anchor="middle" font-weight="700" fill="#1e3a8a">第 1 栏</text>
+  <text x="270" y="345" font-size="12.5" text-anchor="middle" font-weight="700" fill="#1e3a8a">第 2 栏</text>
+  <text x="385" y="345" font-size="12.5" text-anchor="middle" font-weight="700" fill="#1e3a8a">第 3 栏</text>
+
+  <text x="145" y="381" font-size="12.5" text-anchor="middle" fill="#111827">橘子</text>
+  <text x="270" y="381" font-size="12.5" text-anchor="middle" fill="#111827">3</text>
+  <text x="385" y="381" font-size="12.5" text-anchor="middle" fill="#111827">5 元</text>
+
+  <text x="145" y="417" font-size="12.5" text-anchor="middle" fill="#111827">苹果</text>
+  <text x="270" y="417" font-size="12.5" text-anchor="middle" fill="#111827">2</text>
+  <text x="385" y="417" font-size="12.5" text-anchor="middle" fill="#111827">6 元</text>
+
+  <text x="145" y="453" font-size="12.5" text-anchor="middle" fill="#111827">梨</text>
+  <text x="270" y="453" font-size="12.5" text-anchor="middle" fill="#111827">4</text>
+  <text x="385" y="453" font-size="12.5" text-anchor="middle" fill="#111827">3 元</text>
+
+  <rect x="500" y="322" width="390" height="66" rx="8" fill="#ecfdf5" stroke="#6ee7b7"/>
+  <text x="516" y="344" font-size="12.5" font-weight="700" fill="#047857">只改名字、不动栏号 → 对方照旧读对</text>
+  <text x="516" y="366" font-size="12" fill="#065f46">我把"品名"改成"title"，还是第 1 栏，你按第 1 栏读</text>
+
+  <rect x="500" y="400" width="390" height="66" rx="8" fill="#fff7ed" stroke="#fdba74"/>
+  <text x="516" y="422" font-size="12.5" font-weight="700" fill="#c2410c">把新东西塞进旧栏 → 对方按老读法读出荒唐值</text>
+  <text x="516" y="444" font-size="12" fill="#9a3412">我把"产地"塞进第 3 栏，你按"单价"读，读到"山东"</text>
+
+  <text x="30" y="552" font-size="13" font-weight="700" fill="#1f2937">图的结论：约定的对象不是"名字"，是"位置"。位置不动的改动，对方感觉不到；位置被占用的改动，对方读错也不会报错。</text>
+  <text x="30" y="572" font-size="11.5" fill="#9ca3af">（这张图里没有任何术语。下一节开始才出现 proto / IDL / wire format 这些词）</text>
+</svg>

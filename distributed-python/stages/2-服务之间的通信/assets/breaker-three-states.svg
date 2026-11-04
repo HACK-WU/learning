@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="720" viewBox="0 0 960 720" font-family="'PingFang SC','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="cb-s" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto"><path d="M0,0 L7,3.2 L0,6.4 Z" fill="#475569"/></marker>
+    <marker id="cb-r" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto"><path d="M0,0 L7,3.2 L0,6.4 Z" fill="#dc2626"/></marker>
+    <marker id="cb-g" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto"><path d="M0,0 L7,3.2 L0,6.4 Z" fill="#16a34a"/></marker>
+  </defs>
+  <rect x="0" y="0" width="960" height="720" fill="#ffffff"/>
+
+  <text x="480" y="34" text-anchor="middle" font-size="22" font-weight="bold" fill="#0f172a">熔断器的三个状态：什么时候还试，什么时候别试</text>
+  <text x="480" y="58" text-anchor="middle" font-size="12" fill="#64748b">前提：「什么算失败」必须自己定义 —— 只算异常和 5xx 时，「慢但最后成功」的下游是熔断器的完全盲区（实测跳闸 0 次）</text>
+
+  <!-- ===== Closed ===== -->
+  <rect x="70" y="76" width="820" height="146" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="2"/>
+  <rect x="86" y="92" width="150" height="112" rx="8" fill="#dcfce7" stroke="#22c55e" stroke-width="1.8"/>
+  <circle cx="161" cy="114" r="7" fill="#22c55e"/>
+  <text x="161" y="142" text-anchor="middle" font-size="15" font-weight="bold" fill="#14532d">① Closed</text>
+  <text x="161" y="163" text-anchor="middle" font-size="11.5" fill="#166534">关着＝正常放行</text>
+  <text x="161" y="184" text-anchor="middle" font-size="10.5" fill="#15803d">默认状态</text>
+
+  <text x="252" y="106" font-size="12.5" fill="#334155">做什么：请求照常发往下游，不做任何拦截</text>
+  <text x="252" y="131" font-size="12.5" fill="#334155">记什么：时间窗内累计失败次数；窗口到期，计数自动清零（不是「永不重置」）</text>
+  <text x="252" y="156" font-size="12.5" fill="#334155">什么时候走：计数 ≥ 阈值 → 跳闸，进 Open</text>
+  <text x="252" y="181" font-size="12.5" font-weight="bold" fill="#b91c1c">实测：t=0.080s，连续第 3 次失败 → fails=3 ≥ 阈值 3 → Open</text>
+  <text x="252" y="204" font-size="11.5" fill="#64748b">注意：阈值判的是「时间窗内的失败次数」，不是「失败率」也不是「连续成功数」</text>
+
+  <!-- arrow Closed -> Open -->
+  <line x1="150" y1="222" x2="150" y2="262" stroke="#475569" stroke-width="2" marker-end="url(#cb-s)"/>
+  <text x="170" y="248" font-size="12" font-weight="bold" fill="#b91c1c">时间窗内失败次数 ≥ 阈值（例：连续 3 次）→ 跳闸</text>
+
+  <!-- ===== Open ===== -->
+  <rect x="70" y="268" width="820" height="146" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="2"/>
+  <rect x="86" y="284" width="150" height="112" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="1.8"/>
+  <circle cx="161" cy="306" r="7" fill="#dc2626"/>
+  <text x="161" y="334" text-anchor="middle" font-size="15" font-weight="bold" fill="#7f1d1d">② Open</text>
+  <text x="161" y="355" text-anchor="middle" font-size="11.5" fill="#991b1b">打开＝一律拒绝</text>
+  <text x="161" y="376" text-anchor="middle" font-size="10.5" fill="#b91c1c">跳闸状态</text>
+
+  <text x="252" y="298" font-size="12.5" fill="#334155">做什么：请求根本不发往下游，立即返回失败（快速失败 / fail fast）</text>
+  <text x="252" y="323" font-size="12.5" font-weight="bold" fill="#b91c1c">实测：Open 期间 5 次调用共 0.00 ms；下游被打 0 次</text>
+  <text x="252" y="348" font-size="12.5" fill="#334155">价值：把「还在替下游等」的 worker 全部释放出来 —— 这才是它救你的方式</text>
+  <text x="252" y="373" font-size="12.5" fill="#334155">什么时候走：open_seconds 到点（例 500ms）→ 放一个探针，进 Half-Open</text>
+  <text x="252" y="396" font-size="11.5" fill="#64748b">它不修下游，只是让上游别再陪着一起死；计时器到点不会自动恢复，必须经过试探</text>
+
+  <!-- arrow Open -> Half-Open -->
+  <line x1="150" y1="414" x2="150" y2="454" stroke="#475569" stroke-width="2" marker-end="url(#cb-s)"/>
+  <text x="170" y="440" font-size="12" font-weight="bold" fill="#b45309">open_seconds 到点 → 只放一个探针去试，不放开全部流量</text>
+
+  <!-- ===== Half-Open ===== -->
+  <rect x="70" y="460" width="820" height="146" rx="10" fill="#fffbeb" stroke="#fcd34d" stroke-width="2"/>
+  <rect x="86" y="476" width="150" height="112" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.8"/>
+  <circle cx="161" cy="498" r="7" fill="#f59e0b"/>
+  <text x="161" y="526" text-anchor="middle" font-size="15" font-weight="bold" fill="#78350f">③ Half-Open</text>
+  <text x="161" y="547" text-anchor="middle" font-size="11.5" fill="#92400e">半开＝只放探针</text>
+  <text x="161" y="568" text-anchor="middle" font-size="10.5" fill="#b45309">试探状态</text>
+
+  <text x="252" y="490" font-size="12.5" fill="#334155">做什么：只放 1 个（或指定 N 个）探针请求，其余请求照旧直接拒绝</text>
+  <text x="252" y="515" font-size="12.5" fill="#15803d">探针全部成功 → 回 Closed，并把失败计数清零（不是「减一」）</text>
+  <text x="252" y="540" font-size="12.5" fill="#b91c1c">任一探针失败 → 立刻回 Open，计时器重新开始</text>
+  <text x="252" y="565" font-size="12.5" fill="#334155">为什么不能直接回 Closed：刚爬起来的服务最脆弱，一拥而上会二次压死它</text>
+  <text x="252" y="588" font-size="12.5" font-weight="bold" fill="#78350f">实测：t=0.622s 探针失败 → 回 Open；t=1.154s 探针成功 → Closed，fails=0</text>
+
+  <!-- arrows down to branch band -->
+  <line x1="270" y1="606" x2="270" y2="620" stroke="#16a34a" stroke-width="2" marker-end="url(#cb-g)"/>
+  <line x1="690" y1="606" x2="690" y2="620" stroke="#dc2626" stroke-width="2" marker-end="url(#cb-r)"/>
+
+  <!-- branch band -->
+  <rect x="70" y="624" width="400" height="68" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="1.8"/>
+  <text x="270" y="648" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#15803d">探针全部成功</text>
+  <text x="270" y="670" text-anchor="middle" font-size="11.5" fill="#166534">→ 回 Closed，失败计数清零（实测 t=1.154s）</text>
+
+  <rect x="490" y="624" width="400" height="68" rx="10" fill="#fef2f2" stroke="#fca5a5" stroke-width="1.8"/>
+  <text x="690" y="648" text-anchor="middle" font-size="12.5" font-weight="bold" fill="#b91c1c">任一探针失败</text>
+  <text x="690" y="670" text-anchor="middle" font-size="11.5" fill="#991b1b">→ 回 Open，计时器重启（实测 t=0.622s）</text>
+
+  <!-- return loops -->
+  <path d="M 70,660 C 34,660 34,149 62,149" fill="none" stroke="#16a34a" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#cb-g)"/>
+  <path d="M 890,660 C 926,660 926,341 898,341" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#cb-r)"/>
+</svg>

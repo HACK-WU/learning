@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="672" viewBox="0 0 940 672" font-family="PingFang SC, Microsoft YaHei, Segoe UI, sans-serif">
+  <rect width="940" height="672" fill="#ffffff"/>
+
+  <text x="30" y="34" font-size="18" font-weight="700" fill="#111827">JSON 约定 vs proto 契约：三件具体的事不一样</text>
+  <text x="30" y="56" font-size="12" fill="#6b7280">左半是"文档里写一段话"，右半是"一份机器可读的定义"。差别不在格式好不好看，在下面三件事上。</text>
+
+  <!-- 优势 1 -->
+  <rect x="30" y="76" width="286" height="302" rx="10" fill="#f9fafb" stroke="#d1d5db"/>
+  <rect x="30" y="76" width="286" height="36" rx="10" fill="#e5e7eb"/>
+  <text x="46" y="100" font-size="13" font-weight="700" fill="#111827">① 名字不上线，只有号上线</text>
+
+  <text x="46" y="132" font-size="12" font-weight="700" fill="#9ca3af">JSON 的做法</text>
+  <text x="46" y="152" font-size="11.5" fill="#374151">字段名就是接口本身。</text>
+  <text x="46" y="170" font-size="11.5" fill="#374151">amount 和 amount_cents</text>
+  <text x="46" y="188" font-size="11.5" fill="#374151">是两个互不相干的键。</text>
+
+  <text x="46" y="216" font-size="12" font-weight="700" fill="#9ca3af">proto 的做法</text>
+  <text x="46" y="236" font-size="11.5" fill="#374151">线上只有字段号，名字</text>
+  <text x="46" y="254" font-size="11.5" fill="#374151">只活在 .proto 文件里。</text>
+  <text x="46" y="272" font-size="11.5" fill="#374151">改名字 = 改文档注释。</text>
+
+  <line x1="46" y1="290" x2="300" y2="290" stroke="#e5e7eb"/>
+  <text x="46" y="310" font-size="11.5" fill="#047857">实测：改名后旧定义仍读到 1990</text>
+  <text x="46" y="330" font-size="11.5" fill="#b91c1c">JSON 侧直接抛 no field named</text>
+  <text x="46" y="352" font-size="11.5" fill="#6b7280">→ 同一个改动，两种结局</text>
+
+  <!-- 优势 2 -->
+  <rect x="326" y="76" width="286" height="302" rx="10" fill="#f9fafb" stroke="#d1d5db"/>
+  <rect x="326" y="76" width="286" height="36" rx="10" fill="#e5e7eb"/>
+  <text x="342" y="100" font-size="13" font-weight="700" fill="#111827">② 一份定义，多语言生成</text>
+
+  <text x="342" y="132" font-size="12" font-weight="700" fill="#9ca3af">JSON 的做法</text>
+  <text x="342" y="152" font-size="11.5" fill="#374151">schema 是文档里一段话，</text>
+  <text x="342" y="170" font-size="11.5" fill="#374151">每个语言的调用方各自</text>
+  <text x="342" y="188" font-size="11.5" fill="#374151">实现一遍，谁也没法验证。</text>
+
+  <text x="342" y="216" font-size="12" font-weight="700" fill="#9ca3af">proto 的做法</text>
+  <text x="342" y="236" font-size="11.5" fill="#374151">同一份 .proto 生成 Python</text>
+  <text x="342" y="254" font-size="11.5" fill="#374151">/ Java / Go 的桩代码，</text>
+  <text x="342" y="272" font-size="11.5" fill="#374151">字段名与类型在生成期锁死。</text>
+
+  <line x1="342" y1="290" x2="596" y2="290" stroke="#e5e7eb"/>
+  <text x="342" y="310" font-size="11.5" fill="#374151">类型写错，protoc 就报，</text>
+  <text x="342" y="330" font-size="11.5" fill="#374151">不用等到线上跑出格式错。</text>
+  <text x="342" y="352" font-size="11.5" fill="#6b7280">→ 错误从运行期前移到生成期</text>
+
+  <!-- 优势 3 -->
+  <rect x="622" y="76" width="288" height="302" rx="10" fill="#f9fafb" stroke="#d1d5db"/>
+  <rect x="622" y="76" width="288" height="36" rx="10" fill="#e5e7eb"/>
+  <text x="638" y="100" font-size="13" font-weight="700" fill="#111827">③ 演进规则是封闭的</text>
+
+  <text x="638" y="132" font-size="12" font-weight="700" fill="#9ca3af">JSON 的做法</text>
+  <text x="638" y="152" font-size="11.5" fill="#374151">"删这个字段算不算破坏</text>
+  <text x="638" y="170" font-size="11.5" fill="#374151">兼容？"只能去问还有谁</text>
+  <text x="638" y="188" font-size="11.5" fill="#374151">在读，答不出静态结论。</text>
+
+  <text x="638" y="216" font-size="12" font-weight="700" fill="#9ca3af">proto 的做法</text>
+  <text x="638" y="236" font-size="11.5" fill="#374151">加字段安全 / 改号危险 /</text>
+  <text x="638" y="254" font-size="11.5" fill="#374151">同号不得复用。规则有限</text>
+  <text x="638" y="272" font-size="11.5" fill="#374151">条，可以逐条判定。</text>
+
+  <line x1="638" y1="290" x2="894" y2="290" stroke="#e5e7eb"/>
+  <text x="638" y="310" font-size="11.5" fill="#374151">所以能写成 CI 检查：</text>
+  <text x="638" y="330" font-size="11.5" fill="#374151">不兼容的改动在合并前被拦下。</text>
+  <text x="638" y="352" font-size="11.5" fill="#6b7280">→ 兼容性从"人的记忆"变成"脚本"</text>
+
+  <!-- 顺带的好处 -->
+  <rect x="30" y="396" width="440" height="240" rx="10" fill="#ecfdf5" stroke="#6ee7b7"/>
+  <text x="48" y="422" font-size="13.5" font-weight="700" fill="#047857">顺带得到的好处（但不是你买它的理由）</text>
+
+  <text x="48" y="452" font-size="12" fill="#065f46">100 条目订单：JSON 5828 B → protobuf 1845 B，占 31.7%</text>
+  <text x="48" y="474" font-size="12" fill="#065f46">序列化：protobuf 快 13.98x（20.3 → 1.5 微秒）</text>
+  <text x="48" y="496" font-size="12" fill="#065f46">反序列化：protobuf 快 10.78x（19.9 → 1.8 微秒）</text>
+  <text x="48" y="518" font-size="12" fill="#065f46">规模越大比值越稳：1 条目 34.1% → 100 条目 31.7%</text>
+
+  <rect x="48" y="538" width="404" height="80" rx="8" fill="#ffffff" stroke="#a7f3d0"/>
+  <text x="62" y="560" font-size="11.5" fill="#065f46">注意：这是"编码层"的数字，不是"端到端"的数字。</text>
+  <text x="62" y="580" font-size="11.5" fill="#065f46">编码省下的那点时间，会先被传输层和运行时开销吃掉一部分。</text>
+  <text x="62" y="600" font-size="11.5" fill="#065f46">端到端到底快不快，见右下——答案可能和你预期相反。</text>
+
+  <!-- 买不到的东西 -->
+  <rect x="490" y="396" width="420" height="240" rx="10" fill="#fff7ed" stroke="#fdba74"/>
+  <text x="508" y="422" font-size="13.5" font-weight="700" fill="#c2410c">它买不到的东西：端到端不一定更快</text>
+
+  <text x="508" y="452" font-size="12" fill="#9a3412">本机回环、同一份 20 条目订单、两侧都真解析：</text>
+
+  <text x="508" y="478" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#7c2d12">HTTP/1.1 + JSON     0.184 ms</text>
+  <text x="508" y="500" font-size="12" font-family="ui-monospace, Menlo, Consolas, monospace" fill="#7c2d12">gRPC unary          0.386 ms   ← 慢 2.10x</text>
+
+  <rect x="508" y="518" width="384" height="100" rx="8" fill="#ffffff" stroke="#fdba74"/>
+  <text x="522" y="540" font-size="11.5" fill="#9a3412">为什么：回环上没有网络往返，HTTP/2 的多路复用、</text>
+  <text x="522" y="560" font-size="11.5" fill="#9a3412">头部压缩都用不上；而 grpcio 每次调用要过一层</text>
+  <text x="522" y="580" font-size="11.5" fill="#9a3412">C-core 与 Python 对象互转。小消息上这层开销占比高，</text>
+  <text x="522" y="600" font-size="11.5" fill="#9a3412">把编码省下的时间全摊掉了。</text>
+
+  <text x="30" y="662" font-size="11.5" fill="#9ca3af">读法：上面三栏是"为什么要契约"，下面两栏是"契约给你什么、不给你什么"。别把编码优势当成整体性能结论。</text>
+</svg>
