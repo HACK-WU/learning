@@ -10,6 +10,7 @@
 - 说清 init 容器解决什么问题，以及它与主容器的执行顺序关系
 - 区分"普通 sidecar"与"原生 sidecar"，理解后者为何是 Job 场景的关键
 - 掌握优雅终止的完整时序，能解释"为什么我的 Pod 删除要等 30 秒"
+变更测试
 
 ---
 
@@ -490,7 +491,7 @@ kubectl get pod native-sidecar -o jsonpath='{range .status.containerStatuses[*]}
 
 #### 一句话记住
 
-> **普通 sidecar 与主容器"同生但不同死"（Job 永不完成）；原生 sidecar 保证"先起后停"，让 Pod 能真正走到终态。**
+> **普通 sidecar 写在 `containers` 里：与主容器并发启动、无先后保证，主容器退出后它仍在跑，所以 Job 永远无法完成；原生 sidecar 是 `initContainers` 里配了 `restartPolicy: Always` 的那一项：先于主容器启动、主容器全部结束后被关闭，所以 Pod 才能走到 `Succeeded` 终态（STATUS 列显示 `Completed`）。**
 
 #### 官方文档
 
